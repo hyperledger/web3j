@@ -1,0 +1,17 @@
+group 'org.conor10'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.httpcomponents:httpclient:4.5.2',
+            'com.fasterxml.jackson.core:jackson-databind:2.8.1'
+    testCompile 'junit:junit:4.11',
+            'org.mockito:mockito-core:1.10.19'
+}

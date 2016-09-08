@@ -29,3 +29,7 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 .idea
+geth.sh
+gradle/
+src/main/resources/
+src/test/resources/
