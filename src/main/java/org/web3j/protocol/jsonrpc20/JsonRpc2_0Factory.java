@@ -505,10 +505,10 @@ public class JsonRpc2_0Factory implements RequestFactory {
     }
 
     @Override
-    public Request shhPost(WhisperPost whisperPost) {
+    public Request shhPost(SshPost sshPost) {
         return new Request<>(
                 "shh_post",
-                Arrays.asList(whisperPost),
+                Arrays.asList(sshPost),
                 1
         );
     }
@@ -559,10 +559,10 @@ public class JsonRpc2_0Factory implements RequestFactory {
     }
 
     @Override
-    public Request shhNewFilter(WhisperFilter whisperFilter) {
+    public Request shhNewFilter(SshFilter sshFilter) {
         return new Request<>(
                 "shh_newFilter",
-                Arrays.asList(whisperFilter),
+                Arrays.asList(sshFilter),
                 1
         );
     }

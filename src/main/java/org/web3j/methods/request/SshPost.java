@@ -10,7 +10,7 @@ import java.util.List;
  * https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_post
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class WhisperPost {
+public class SshPost {
     private String from;
     private String to;
     private List<String> topics;
@@ -18,16 +18,16 @@ public class WhisperPost {
     private BigInteger priority;
     private BigInteger ttl;
 
-    public WhisperPost(List<String> topics, String payload, BigInteger priority,
-                       BigInteger ttl) {
+    public SshPost(List<String> topics, String payload, BigInteger priority,
+                   BigInteger ttl) {
         this.topics = topics;
         this.payload = payload;
         this.priority = priority;
         this.ttl = ttl;
     }
 
-    public WhisperPost(String from, String to, List<String> topics, String payload,
-                       BigInteger priority, BigInteger ttl) {
+    public SshPost(String from, String to, List<String> topics, String payload,
+                   BigInteger priority, BigInteger ttl) {
         this.from = from;
         this.to = to;
         this.topics = topics;

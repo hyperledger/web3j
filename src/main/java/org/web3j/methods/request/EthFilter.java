@@ -43,6 +43,4 @@ public class EthFilter extends Filter {
     public List<String> getAddress() {
         return address;
     }
-
-
 }

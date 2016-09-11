@@ -19,6 +19,7 @@ public interface RequestFactory {
     Request ethProtocolVersion();
     Request ethCoinbase();
     Request ethSyncing();
+
     Request ethMining();
     Request ethHashrate();
     Request ethGasPrice();
@@ -28,7 +29,6 @@ public interface RequestFactory {
     Request ethGetStorageAt(String address, BigInteger position,
                             DefaultBlockParameter defaultBlockParameter);
     Request ethGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter);
-
     Request ethGetBlockTransactionCountByHash(String blockHash);
     Request ethGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter);
     Request ethGetUncleCountByBlockHash(String blockHash);
@@ -69,13 +69,13 @@ public interface RequestFactory {
     Request dbGetString(String databaseName, String keyName);
     Request dbPutHex(String databaseName, String keyName, String dataToStore);
     Request dbGetHex(String databaseName, String keyName);
-    Request shhPost(WhisperPost whisperPost);
+    Request shhPost(SshPost sshPost);
     Request shhVersion();
     Request shhNewIdentity();
     Request shhHasIdentity(String identityAddress);
     Request shhNewGroup();
     Request shhAddToGroup(String identityAddress);
-    Request shhNewFilter(WhisperFilter whisperFilter);
+    Request shhNewFilter(SshFilter sshFilter);
     Request shhUninstallFilter(BigInteger filterId);
     Request shhGetFilterChanges(BigInteger filterId);
     Request shhGetMessages(BigInteger filterId);

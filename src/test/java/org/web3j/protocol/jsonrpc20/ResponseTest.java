@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Protocol tests.
+ * Protocol Response tests.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ResponseTest {
@@ -740,9 +741,465 @@ public class ResponseTest {
                 equalTo(transactionReceipt));
     }
 
-//    public <T> void validate(Class<T> type, ) {
-//        T response = deserialiseResponse(type);
-//        assertThat(ethGetUncleCountByBlockHash.getUncleCount(),
-//                equalTo(BigInteger.valueOf(1)));
-//    }
+    @Test
+    public void testEthGetCompilers() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": [\"solidity\", \"lll\", \"serpent\"]\n" +
+                "}"
+        );
+
+        EthGetCompilers ethGetCompilers = deserialiseResponse(EthGetCompilers.class);
+        assertThat(ethGetCompilers.getCompilers(), equalTo(Arrays.asList(
+            "solidity", "lll", "serpent"
+        )));
+    }
+
+    @Test
+    public void testEthCompileSolidity() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": {\n" +
+                "      \"code\": \"0x605880600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b603d6004803590602001506047565b8060005260206000f35b60006007820290506053565b91905056\",\n" +
+                "      \"info\": {\n" +
+                "        \"source\": \"contract test {\\n   function multiply(uint a) constant returns(uint d) {\\n       return a * 7;\\n   }\\n}\\n\",\n" +
+                "        \"language\": \"Solidity\",\n" +
+                "        \"languageVersion\": \"0\",\n" +
+                "        \"compilerVersion\": \"0.9.19\",\n" +
+                "        \"abiDefinition\": [\n" +
+                "          {\n" +
+                "            \"constant\": true,\n" +
+                "            \"inputs\": [\n" +
+                "              {\n" +
+                "                \"name\": \"a\",\n" +
+                "                \"type\": \"uint256\"\n" +
+                "              }\n" +
+                "            ],\n" +
+                "            \"name\": \"multiply\",\n" +
+                "            \"outputs\": [\n" +
+                "              {\n" +
+                "                \"name\": \"d\",\n" +
+                "                \"type\": \"uint256\"\n" +
+                "              }\n" +
+                "            ],\n" +
+                "            \"type\": \"function\"\n" +
+                "          }\n" +
+                "        ],\n" +
+                "        \"userDoc\": {\n" +
+                "          \"methods\": {}\n" +
+                "        },\n" +
+                "        \"developerDoc\": {\n" +
+                "          \"methods\": {}\n" +
+                "        }\n" +
+                "      }\n" +
+                "   }\n" +
+                "}"
+        );
+
+        EthCompileSolidity.CompiledSolidity compiledSolidity =
+                new EthCompileSolidity.CompiledSolidity(
+                        "0x605880600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b603d6004803590602001506047565b8060005260206000f35b60006007820290506053565b91905056",
+                        new EthCompileSolidity.SolidityInfo(
+                                "contract test {\n   function multiply(uint a) constant returns(uint d) {\n       return a * 7;\n   }\n}\n",
+                                "Solidity",
+                                "0",
+                                "0.9.19",
+                                Arrays.asList(new EthCompileSolidity.AbiDefinition(
+                                        true,
+                                        Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("a", "uint256")),
+                                        "multiply",
+                                        Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("d", "uint256")),
+                                        "function"
+                                )),
+                                new EthCompileSolidity.Documentation(),
+                                new EthCompileSolidity.Documentation()
+                        )
+                );
+
+        EthCompileSolidity ethCompileSolidity = deserialiseResponse(EthCompileSolidity.class);
+        assertThat(ethCompileSolidity.getCompiledSolidity(), equalTo(compiledSolidity));
+    }
+
+    @Test
+    public void testEthCompileLLL() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": \"0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b6021600435602b565b8060005260206000f35b600081600702905091905056\"\n" +
+                "}"
+        );
+
+        EthCompileLLL ethCompileLLL = deserialiseResponse(EthCompileLLL.class);
+        assertThat(ethCompileLLL.getCompiledSourceCode(), is("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b6021600435602b565b8060005260206000f35b600081600702905091905056"));
+    }
+
+    @Test
+    public void testEthCompileSerpent() {
+        buildResponse(
+                "{\n" +
+                        "  \"id\":1,\n" +
+                        "  \"jsonrpc\": \"2.0\",\n" +
+                        "  \"result\": \"0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b6021600435602b565b8060005260206000f35b600081600702905091905056\"\n" +
+                        "}"
+        );
+
+        EthCompileSerpent ethCompileSerpent = deserialiseResponse(EthCompileSerpent.class);
+        assertThat(ethCompileSerpent.getCompiledSourceCode(), is("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b6021600435602b565b8060005260206000f35b600081600702905091905056"));
+    }
+
+    @Test
+    public void testEthNewFilter() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": \"0x1\"\n" +
+                "}"
+        );
+
+        EthNewFilter ethNewFilter = deserialiseResponse(EthNewFilter.class);
+        assertThat(ethNewFilter.getFilterId(), is(BigInteger.valueOf(1)));
+    }
+
+    @Test
+    public void testEthNewBlockFilter() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": \"0x1\"\n" +
+                "}"
+        );
+
+        EthNewBlockFilter ethNewBlockFilter = deserialiseResponse(EthNewBlockFilter.class);
+        assertThat(ethNewBlockFilter.getFilterId(), is(BigInteger.valueOf(1)));
+    }
+
+    @Test
+    public void testEthNewPendingTransactionFilter() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": \"0x1\"\n" +
+                "}"
+        );
+
+        EthNewPendingTransactionFilter ethNewPendingTransactionFilter =
+                deserialiseResponse(EthNewPendingTransactionFilter.class);
+        assertThat(ethNewPendingTransactionFilter.getFilterId(), is(BigInteger.valueOf(1)));
+    }
+
+    @Test
+    public void testEthUninstallFilter() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        EthUninstallFilter ethUninstallFilter = deserialiseResponse(EthUninstallFilter.class);
+        assertThat(ethUninstallFilter.isUninstalled(), is(true));
+    }
+
+    @Test
+    public void testEthLog() {
+        buildResponse(
+                "{\n" +
+                "    \"id\":1,\n" +
+                "    \"jsonrpc\":\"2.0\",\n" +
+                "    \"result\": [{\n" +
+                "        \"removed\": false,\n" +
+                "        \"logIndex\": \"0x1\",\n" +
+                "        \"transactionIndex\": \"0x0\",\n" +
+                "        \"transactionHash\": \"0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf\",\n" +
+                "        \"blockHash\": \"0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" +
+                "        \"blockNumber\":\"0x1b4\",\n" +
+                "        \"address\": \"0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" +
+                "        \"data\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\n" +
+                "        \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]" +
+                "    }]" +
+                "}"
+        );
+
+        List<Log> logs = Arrays.asList(
+                new Log(
+                        false,
+                        "0x1",
+                        "0x0",
+                        "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf",
+                        "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                        "0x1b4",
+                        "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                        "0x0000000000000000000000000000000000000000000000000000000000000000",
+                        Arrays.asList(
+                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
+                        )
+                )
+        );
+
+        EthGetFilterChanges ethGetFilterChanges = deserialiseResponse(EthGetFilterChanges.class);
+        assertThat(ethGetFilterChanges.getLogObjects(), is(logs));
+    }
+
+    @Test
+    public void testEthGetWork() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": [\n" +
+                "      \"0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\",\n" +
+                "      \"0x5EED00000000000000000000000000005EED0000000000000000000000000000\",\n" +
+                "      \"0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000\"\n" +
+                "    ]\n" +
+                "}"
+        );
+
+        EthGetWork ethGetWork = deserialiseResponse(EthGetWork.class);
+        assertThat(ethGetWork.getCurrentBlockHeaderPowHash(), is("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"));
+        assertThat(ethGetWork.getSeedHashForDag(), is("0x5EED00000000000000000000000000005EED0000000000000000000000000000"));
+        assertThat(ethGetWork.getBoundaryCondition(), is("0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000"));
+    }
+
+    @Test
+    public void testEthSubmitWork() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        EthSubmitWork ethSubmitWork = deserialiseResponse(EthSubmitWork.class);
+        assertThat(ethSubmitWork.solutionValid(), is(true));
+    }
+
+    @Test
+    public void testEthSubmitHashrate() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        EthSubmitHashrate ethSubmitHashrate = deserialiseResponse(EthSubmitHashrate.class);
+        assertThat(ethSubmitHashrate.submissionSuccessful(), is(true));
+    }
+
+    @Test
+    public void testDbPutString() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        DbPutString dbPutString = deserialiseResponse(DbPutString.class);
+        assertThat(dbPutString.valueStored(), is(true));
+    }
+
+    @Test
+    public void testDbGetString() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": \"myString\"\n" +
+                "}"
+        );
+
+        DbGetString dbGetString = deserialiseResponse(DbGetString.class);
+        assertThat(dbGetString.getStoredValue(), is("myString"));
+    }
+
+    @Test
+    public void testDbPutHex() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        DbPutHex dbPutHex = deserialiseResponse(DbPutHex.class);
+        assertThat(dbPutHex.valueStored(), is(true));
+    }
+
+    @Test
+    public void testDbGetHex() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": \"0x68656c6c6f20776f726c64\"\n" +
+                "}"
+        );
+
+        DbGetHex dbGetHex = deserialiseResponse(DbGetHex.class);
+        assertThat(dbGetHex.getStoredValue(), is("0x68656c6c6f20776f726c64"));
+    }
+
+    @Test
+    public void testSshVersion() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":67,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": \"2\"\n" +
+                "}"
+        );
+
+        SshVersion sshVersion = deserialiseResponse(SshVersion.class);
+        assertThat(sshVersion.getVersion(), is("2"));
+    }
+
+    @Test
+    public void testSshPost() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        SshPost sshPost = deserialiseResponse(SshPost.class);
+        assertThat(sshPost.messageSent(), is(true));
+    }
+
+    @Test
+    public void testSshNewIdentity() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": \"0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca9007d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf\"\n" +
+                "}"
+        );
+
+        SshNewIdentity sshNewIdentity = deserialiseResponse(SshNewIdentity.class);
+        assertThat(sshNewIdentity.getAddress(), is("0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca9007d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf"));
+    }
+
+    @Test
+    public void testSshHasIdentity() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        SshHasIdentity sshHasIdentity = deserialiseResponse(SshHasIdentity.class);
+        assertThat(sshHasIdentity.hasPrivateKeyForIdentity(), is(true));
+    }
+
+    @Test
+    public void testSshNewGroup() {
+        buildResponse(
+                "{\n" +
+                        "  \"id\":1,\n" +
+                        "  \"jsonrpc\": \"2.0\",\n" +
+                        "  \"result\": \"0xc65f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca90931d93e97ab07fe42d923478ba2407d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf\"\n" +
+                        "}"
+        );
+
+        SshNewGroup sshNewGroup = deserialiseResponse(SshNewGroup.class);
+        assertThat(sshNewGroup.getAddress(), is("0xc65f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca90931d93e97ab07fe42d923478ba2407d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf"));
+    }
+
+    @Test
+    public void testSshAddToGroup() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        SshAddToGroup sshAddToGroup = deserialiseResponse(SshAddToGroup.class);
+        assertThat(sshAddToGroup.addedToGroup(), is(true));
+    }
+
+    @Test
+    public void testSshNewFilter() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": \"0x7\"\n" +
+                "}"
+        );
+
+        SshNewFilter sshNewFilter = deserialiseResponse(SshNewFilter.class);
+        assertThat(sshNewFilter.getFilterId(), is(BigInteger.valueOf(7)));
+    }
+
+    @Test
+    public void testSshUninstallFilter() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": true\n" +
+                "}"
+        );
+
+        SshUninstallFilter sshUninstallFilter = deserialiseResponse(SshUninstallFilter.class);
+        assertThat(sshUninstallFilter.isUninstalled(), is(true));
+    }
+
+    @Test
+    public void testSshMessages() {
+        buildResponse(
+                "{\n" +
+                "  \"id\":1,\n" +
+                "  \"jsonrpc\":\"2.0\",\n" +
+                "  \"result\": [{\n" +
+                "    \"hash\": \"0x33eb2da77bf3527e28f8bf493650b1879b08c4f2a362beae4ba2f71bafcd91f9\",\n" +
+                "    \"from\": \"0x3ec052fc33...\",\n" +
+                "    \"to\": \"0x87gdf76g8d7fgdfg...\",\n" +
+                "    \"expiry\": \"0x54caa50a\",\n" +
+                "    \"ttl\": \"0x64\",\n" +
+                "    \"sent\": \"0x54ca9ea2\",\n" +
+                "    \"topics\": [\"0x6578616d\"],\n" +
+                "    \"payload\": \"0x7b2274797065223a226d657373616765222c2263686...\",\n" +
+                "    \"workProved\": \"0x0\"\n" +
+                "    }]\n" +
+                "}"
+        );
+
+        List<SshMessages.SshMessage> messages = Arrays.asList(
+                new SshMessages.SshMessage(
+                    "0x33eb2da77bf3527e28f8bf493650b1879b08c4f2a362beae4ba2f71bafcd91f9",
+                    "0x3ec052fc33...",
+                    "0x87gdf76g8d7fgdfg...",
+                    "0x54caa50a",
+                    "0x64",
+                    "0x54ca9ea2",
+                    Arrays.asList("0x6578616d"),
+                    "0x7b2274797065223a226d657373616765222c2263686...",
+                    "0x0"
+                )
+        );
+
+        SshMessages sshMessages = deserialiseResponse(SshMessages.class);
+        assertThat(sshMessages.getMessages(), equalTo(messages));
+    }
 }
