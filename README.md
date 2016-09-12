@@ -3,7 +3,7 @@
 
 web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
 
-[ Your application ] + [ web3j ] <---> [ Ethereum node ]
+[ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 
 It only has two runtime dependencies:
 
@@ -55,13 +55,13 @@ It provides type safe access to all responses. Optional or null responses are wr
 
 Async requests are handled using Java 8's [CompletableFutures](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html).
 
-Quantity data types are returned as [BigInteger](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html)'s. For simple results, you can obtain the quantity as a String via org.web3j.protocol.jsonrpc20.Response.getResult().
+Quantity data types are returned as [BigInteger](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html)'s. For simple results, you can obtain the quantity as a String via `org.web3j.protocol.jsonrpc20.Response.getResult()`.
 
 
 ## Tested clients
 
 Geth
-* 1.4.10-stable-5f55d95a
+* 1.4.10-stable-5f55d95a (in progress)
 
 More coming soon.
 
