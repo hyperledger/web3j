@@ -30,6 +30,5 @@ gradle-app.setting
 
 .idea
 geth.sh
-gradle/
 src/main/resources/
 src/test/resources/
