@@ -3,11 +3,11 @@ package org.web3j.methods.response;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
- * shh_newGroup
+ * shh_uninstallFilter
  */
-public class SshNewGroup extends Response<String> {
+public class ShhUninstallFilter extends Response<Boolean> {
 
-    public String getAddress() {
+    public boolean isUninstalled() {
         return getResult();
     }
 }

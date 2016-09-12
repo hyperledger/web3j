@@ -1,6 +1,8 @@
 package org.web3j.methods.response;
 
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -8,14 +10,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import org.web3j.protocol.Utils;
 import org.web3j.protocol.jsonrpc20.Response;
 
-import java.io.IOException;
-
 /**
  * eth_syncing
- *
+ * <p>
  * Returns an object with data about the sync status or false.
  */
 public class EthSyncing extends Response<EthSyncing.Result> {
@@ -33,8 +34,9 @@ public class EthSyncing extends Response<EthSyncing.Result> {
     public static class Result {
         private boolean isSyncing = true;
 
-        public Result() { }
-        
+        public Result() {
+        }
+
         public boolean isSyncing() {
             return isSyncing;
         }
@@ -44,7 +46,8 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         }
     }
 
-    @JsonIgnoreProperties({ "knownStates", "pulledStates" })  // these fields although not present in the RPC specification are returned by Geth 1.4.10
+    @JsonIgnoreProperties({"knownStates", "pulledStates"})
+    // these fields although not present in the RPC specification are returned by Geth 1.4.10
     public static class Syncing extends Result {
 
         private String startingBlock;

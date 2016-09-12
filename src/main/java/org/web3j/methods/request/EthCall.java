@@ -1,8 +1,8 @@
 package org.web3j.methods.request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.math.BigInteger;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.web3j.protocol.Utils;
 

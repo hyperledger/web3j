@@ -3,11 +3,11 @@ package org.web3j.methods.response;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
- * shh_version
+ * shh_newIdentity
  */
-public class SshVersion extends Response<String> {
+public class ShhNewIdentity extends Response<String> {
 
-    public String getVersion() {
+    public String getAddress() {
         return getResult();
     }
 }

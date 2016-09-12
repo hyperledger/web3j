@@ -1,8 +1,8 @@
 package org.web3j.methods.response;
 
-import org.web3j.protocol.Utils;
-
 import java.math.BigInteger;
+
+import org.web3j.protocol.Utils;
 
 /**
  * Transaction object used by both {@link EthTransaction} and {@link EthBlock}.
@@ -20,7 +20,8 @@ public class Transaction {
     private String gas;
     private String input;
 
-    public Transaction() { }
+    public Transaction() {
+    }
 
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,

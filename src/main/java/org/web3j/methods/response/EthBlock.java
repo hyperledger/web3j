@@ -1,5 +1,12 @@
 package org.web3j.methods.response;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -10,23 +17,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.web3j.protocol.Utils;
 import org.web3j.protocol.jsonrpc20.Response;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * <p>Block object returned by:
  * <ul>
- *     <li>eth_getBlockByHash</li>
- *     <li>eth_getBlockByNumber</li>
- *     <li>eth_getUncleByBlockHashAndIndex</li>
- *     <li>eth_getUncleByBlockNumberAndIndex</li>
+ * <li>eth_getBlockByHash</li>
+ * <li>eth_getBlockByNumber</li>
+ * <li>eth_getUncleByBlockHashAndIndex</li>
+ * <li>eth_getUncleByBlockNumberAndIndex</li>
  * </ul>
  * </p>
- *
+ * <p>
  * <p>See
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash">docs</a>
  * for further details.</p>
@@ -64,7 +64,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         private List<TransactionResult> transactions;
         private List<String> uncles;
 
-        public Block() { }
+        public Block() {
+        }
 
         public Block(String number, String hash, String parentHash, String nonce,
                      String sha3Uncles, String logsBloom, String transactionsRoot,
@@ -320,7 +321,8 @@ public class EthBlock extends Response<EthBlock.Block> {
     public static class TransactionHash implements TransactionResult<String> {
         private String value;
 
-        public TransactionHash() { }
+        public TransactionHash() {
+        }
 
         public TransactionHash(String value) {
             this.value = value;
@@ -384,7 +386,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 while (transactionObjectIterator.hasNext()) {
                     transactionResults.add(transactionObjectIterator.next());
                 }
-            } else if (nextToken == JsonToken.VALUE_STRING){
+            } else if (nextToken == JsonToken.VALUE_STRING) {
                 jsonParser.getValueAsString();
 
                 Iterator<TransactionHash> transactionHashIterator =

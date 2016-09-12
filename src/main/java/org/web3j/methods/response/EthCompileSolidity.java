@@ -1,10 +1,10 @@
 package org.web3j.methods.response;
 
-import org.web3j.protocol.jsonrpc20.Response;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import org.web3j.protocol.jsonrpc20.Response;
 
 /**
  * eth_compileSolidity
@@ -19,7 +19,8 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         private String code;
         private SolidityInfo info;
 
-        public CompiledSolidity() { }
+        public CompiledSolidity() {
+        }
 
         public CompiledSolidity(String code, SolidityInfo info) {
             this.code = code;
@@ -71,7 +72,8 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         private Documentation userDoc;
         private Documentation developerDoc;
 
-        public SolidityInfo() { }
+        public SolidityInfo() {
+        }
 
         public SolidityInfo(String source, String language, String languageVersion,
                             String compilerVersion, List<AbiDefinition> abiDefinition,
@@ -183,7 +185,8 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         private List<NamedType> outputs;
         private String type;
 
-        public AbiDefinition() { }
+        public AbiDefinition() {
+        }
 
         public AbiDefinition(boolean constant, List<NamedType> inputs, String name,
                              List<NamedType> outputs, String type) {
@@ -264,7 +267,8 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
             private String name;
             private String type;
 
-            public NamedType() { }
+            public NamedType() {
+            }
 
             public NamedType(String name, String type) {
                 this.name = name;
@@ -313,6 +317,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         // No documentation available
         // See https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_compilesolidity
         private Map<String, String> methods;  // unknown object type
+
         public Documentation() {
             this.methods = Collections.EMPTY_MAP;
         }

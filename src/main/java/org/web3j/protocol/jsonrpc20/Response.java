@@ -9,7 +9,8 @@ public class Response<T> {
     private String jsonrpc;
     private T result;
 
-    public Response() { }
+    public Response() {
+    }
 
     public Response(long id, String jsonrpc, T result) {
         this.id = id;

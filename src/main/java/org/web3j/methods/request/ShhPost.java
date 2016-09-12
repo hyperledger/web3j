@@ -1,16 +1,17 @@
 package org.web3j.methods.request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.web3j.protocol.Utils;
-
 import java.math.BigInteger;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import org.web3j.protocol.Utils;
 
 /**
  * https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_post
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SshPost {
+public class ShhPost {
     private String from;
     private String to;
     private List<String> topics;
@@ -18,7 +19,7 @@ public class SshPost {
     private BigInteger priority;
     private BigInteger ttl;
 
-    public SshPost(List<String> topics, String payload, BigInteger priority,
+    public ShhPost(List<String> topics, String payload, BigInteger priority,
                    BigInteger ttl) {
         this.topics = topics;
         this.payload = payload;
@@ -26,7 +27,7 @@ public class SshPost {
         this.ttl = ttl;
     }
 
-    public SshPost(String from, String to, List<String> topics, String payload,
+    public ShhPost(String from, String to, List<String> topics, String payload,
                    BigInteger priority, BigInteger ttl) {
         this.from = from;
         this.to = to;

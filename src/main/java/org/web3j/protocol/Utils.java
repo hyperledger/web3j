@@ -1,20 +1,22 @@
 package org.web3j.protocol;
 
+import java.math.BigInteger;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import java.math.BigInteger;
-
 /**
- * Utility functions.
+ * <p>Utility functions.</p>
  *
- * Implementation as per https://github.com/ethereum/wiki/wiki/JSON-RPC#hex-value-encoding
+ * <p>Implementation as per https://github.com/ethereum/wiki/wiki/JSON-RPC#hex-value-encoding</p>
  */
 public final class Utils {
-    private Utils() { }
+    private Utils() {
+    }
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
     static {
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
     }

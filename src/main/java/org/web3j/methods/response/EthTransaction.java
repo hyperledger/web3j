@@ -1,27 +1,27 @@
 package org.web3j.methods.response;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
+
 import org.web3j.protocol.Utils;
 import org.web3j.protocol.jsonrpc20.Response;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Optional;
 
 /**
  * <p>Transaction object returned by:
  * <ul>
- *     <li>eth_getTransactionByHash</li>
- *     <li>eth_getTransactionByBlockHashAndIndex</li>
- *     <li>eth_getTransactionByBlockNumberAndIndex</li>
+ * <li>eth_getTransactionByHash</li>
+ * <li>eth_getTransactionByBlockHashAndIndex</li>
+ * <li>eth_getTransactionByBlockNumberAndIndex</li>
  * </ul>
  * </p>
  * <p>This differs slightly from the request {@link EthSendTransaction} Transaction object.</p>
- *
+ * <p>
  * <p>See
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash">docs</a>
  * for further details.</p>

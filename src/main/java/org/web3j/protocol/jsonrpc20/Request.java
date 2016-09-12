@@ -9,7 +9,8 @@ public class Request<T> {
     private List<T> params;
     private long id;
 
-    public Request() { }
+    public Request() {
+    }
 
     public Request(String method, List<T> params, long id) {
         this.method = method;

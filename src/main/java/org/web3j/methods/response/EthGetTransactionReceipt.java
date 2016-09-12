@@ -1,17 +1,18 @@
 package org.web3j.methods.response;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Optional;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
+
 import org.web3j.protocol.Utils;
 import org.web3j.protocol.jsonrpc20.Response;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * eth_getTransactionReceipt
@@ -32,7 +33,8 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         private String contractAddress;
         private List<Log> logs;
 
-        public TransactionReceipt() { }
+        public TransactionReceipt() {
+        }
 
         public TransactionReceipt(String transactionHash, String transactionIndex,
                                   String blockHash, String blockNumber, String cumulativeGasUsed,

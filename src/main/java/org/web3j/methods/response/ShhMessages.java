@@ -1,24 +1,24 @@
 package org.web3j.methods.response;
 
-import org.web3j.protocol.Utils;
-import org.web3j.protocol.jsonrpc20.Response;
-
 import java.math.BigInteger;
 import java.util.List;
+
+import org.web3j.protocol.Utils;
+import org.web3j.protocol.jsonrpc20.Response;
 
 /**
  * <p>Whisper messages returned by:
  * <ul>
- *     <li>shh_getFilterChanges</li>
- *     <li>shh_getMessages</li>
+ * <li>shh_getFilterChanges</li>
+ * <li>shh_getMessages</li>
  * </ul>
  * </p>
- *
+ * <p>
  * <p>See
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_getfilterchanges">docs</a>
  * for further details.</p>
  */
-public class SshMessages extends Response<List<SshMessages.SshMessage>> {
+public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
 
     public List<SshMessage> getMessages() {
         return getResult();
@@ -35,7 +35,8 @@ public class SshMessages extends Response<List<SshMessages.SshMessage>> {
         private String payload;
         private String workProved;
 
-        public SshMessage() { }
+        public SshMessage() {
+        }
 
         public SshMessage(String hash, String from, String to, String expiry, String ttl,
                           String sent, List<String> topics, String payload, String workProved) {

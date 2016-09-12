@@ -1,14 +1,14 @@
 package org.web3j.methods.response;
 
-import org.web3j.protocol.Utils;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
+import org.web3j.protocol.Utils;
+
 /**
  * <p>Log object used by {@link EthLog} and {@link EthGetTransactionReceipt}.</p>
- *
+ * <p>
  * <p>It's not clear in the
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
  * If only a list of hashes are returned for filters created with eth_newBlockFilter or
@@ -25,7 +25,8 @@ public class Log {
     private String data;
     private List<String> topics;
 
-    public Log() { }
+    public Log() {
+    }
 
     public Log(boolean removed, String logIndex, String transactionIndex, String transactionHash,
                String blockHash, String blockNumber, String address, String data,

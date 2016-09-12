@@ -59,7 +59,7 @@ public abstract class Filter {
 
         public ListTopic(String... optionalTopics) {
             topics = new ArrayList<>();
-            for (String topic:optionalTopics) {
+            for (String topic : optionalTopics) {
                 if (topic != null) {
                     topics.add(new SingleTopic<>(topic));
                 } else {

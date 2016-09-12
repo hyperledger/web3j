@@ -3,11 +3,11 @@ package org.web3j.methods.response;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
- * shh_post
+ * shh_newGroup
  */
-public class SshPost extends Response<Boolean> {
+public class ShhNewGroup extends Response<String> {
 
-    public boolean messageSent() {
+    public String getAddress() {
         return getResult();
     }
 }

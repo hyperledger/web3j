@@ -1,15 +1,15 @@
 package org.web3j.protocol;
 
-import org.junit.Test;
-
 import java.math.BigInteger;
+
+import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class TestUtils {
+public class UtilsTest {
 
     @Test
     public void testQuantityDecode() {

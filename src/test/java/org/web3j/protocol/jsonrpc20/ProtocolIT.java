@@ -1,11 +1,12 @@
 package org.web3j.protocol.jsonrpc20;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.web3j.Web3jService;
 import org.web3j.methods.response.*;
-
-import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -19,7 +20,7 @@ public class ProtocolIT {
 
     @Before
     public void setUp() {
-        this.web3jService = new Web3jService("http://localhost:8545/");
+        this.web3jService = new Web3jService();
     }
 
     @Test
