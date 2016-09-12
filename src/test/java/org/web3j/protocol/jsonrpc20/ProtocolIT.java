@@ -1,14 +1,20 @@
 package org.web3j.protocol.jsonrpc20;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.web3j.Web3jService;
+import org.web3j.methods.request.*;
 import org.web3j.methods.response.*;
+import org.web3j.methods.response.EthCall;
+import org.web3j.methods.response.ShhPost;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -26,7 +32,7 @@ public class ProtocolIT {
     @Test
     public void testWeb3ClientVersion() throws IOException {
         Web3ClientVersion web3ClientVersion = web3jService.web3ClientVersion();
-        assertThat(web3ClientVersion.getJsonrpc(), is("Geth/v1.4.10-stable-5f55d95a/darwin/go1.6.2"));
+        assertNotNull(web3ClientVersion.getJsonrpc());
     }
 
     @Test
@@ -39,36 +45,323 @@ public class ProtocolIT {
     @Test
     public void testNetVersion() throws IOException {
         NetVersion netVersion = web3jService.netVersion();
-        assertThat(netVersion.getJsonrpc(), is("8192"));
+        assertNotNull(netVersion.getJsonrpc());
     }
 
     @Test
     public void testNetListening() throws IOException {
         NetListening netListening = web3jService.netListening();
-        assertThat(netListening.isListening(), is(true));
+        assertNotNull(netListening.isListening());
     }
 
     @Test
     public void testNetPeerCount() throws IOException {
         NetPeerCount netPeerCount = web3jService.netPeerCount();
-        assertThat(netPeerCount.getQuantity(), is(0));
+        assertNotNull(netPeerCount.getQuantity());
     }
 
     @Test
     public void testEthProtocolVersion() throws IOException {
         EthProtocolVersion ethProtocolVersion = web3jService.ethProtocolVersion();
-        assertThat(ethProtocolVersion.getJsonrpc(), is("0x3f"));
+        assertNotNull(ethProtocolVersion.getProtocolVersion());
     }
 
     @Test
     public void testEthSyncing() throws IOException {
         EthSyncing ethSyncing = web3jService.ethSyncing();
-        assertThat(ethSyncing.getResult(), is(false));
+        assertNotNull(ethSyncing.getResult());
     }
 
     @Test
     public void testEthCoinbase() throws IOException {
         EthCoinbase ethCoinbase = web3jService.ethCoinbase();
-        assertThat(ethCoinbase.getAddress(), is("0x4a8ca6a9548a0a629652365a313e39a18a74d737"));
+        assertNotNull(ethCoinbase.getAddress());
+    }
+
+    @Test
+    public void testEthMining() throws IOException {
+        EthMining ethMining = web3jService.ethMining();
+        assertNotNull(ethMining.isMining());
+    }
+
+    @Test
+    public void testEthHashrate() throws IOException {
+        EthHashrate ethHashrate = web3jService.ethHashrate();
+        assertNotNull(ethHashrate.getHashrate());
+    }
+
+    @Test
+    public void testEthGasPrice() throws IOException {
+        EthGasPrice ethGasPrice = web3jService.ethGasPrice();
+        assertNotNull(ethGasPrice.getGasPrice());
+    }
+
+    @Test
+    public void testEthAccounts() throws IOException {
+        EthAccounts ethAccounts = web3jService.ethAccounts();
+        assertNotNull(ethAccounts.getAccounts());
+    }
+
+    @Test
+    public void testEthBlockNumber() throws IOException {
+        EthBlockNumber ethBlockNumber = web3jService.ethBlockNumber();
+        assertNotNull(ethBlockNumber.getBlockNumber());
+    }
+
+    @Test
+    public void testEthGetBalance() throws IOException {
+//        EthGetBalance ethGetBalance = web3jService.ethGetBalance();
+//        assertNotNull(ethGetBalance.getBalance());
+    }
+
+    @Test
+    public void testEthGetStorageAt() throws IOException {
+//        EthGetStorageAt ethGetStorageAt = web3jService.ethGetStorageAt();
+//        assertNotNull(ethGetStorageAt.getData());
+    }
+
+    @Test
+    public void testEthGetTransactionCount() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetBlockTransactionCountByHash() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetBlockTransactionCountByNumber() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetUncleCountByBlockHash() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetUncleCountByBlockNumber() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetCode() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthSign() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthSendTransaction() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthSendRawTransaction() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthCall() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthEstimateGas() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetBlockByHash() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetBlockByNumber() throws IOException {
+        
+    }
+
+    @Test
+    public void testEthGetTransactionByHash() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetTransactionByBlockHashAndIndex() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetTransactionByBlockNumberAndIndex() {
+        
+    }
+
+    @Test
+    public void testEthGetTransactionReceipt() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetUncleByBlockHashAndIndex() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetUncleByBlockNumberAndIndex() throws IOException {
+        
+    }
+
+    @Test
+    public void testEthGetCompilers() throws IOException {
+        EthGetCompilers ethGetCompilers = web3jService.ethGetCompilers();
+        assertNotNull(ethGetCompilers.getCompilers());
+    }
+
+    @Test
+    public void testEthCompileLLL() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthCompileSolidity() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthCompileSerpent() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthNewFilter() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthNewBlockFilter() throws IOException {
+        EthNewBlockFilter ethNewBlockFilter = web3jService.ethNewBlockFilter();
+        assertNotNull(ethNewBlockFilter.getFilterId());
+    }
+
+    @Test
+    public void testEthNewPendingTransactionFilter() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthUninstallFilter() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetFilterChanges() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetFilterLogs() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetLogs() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthGetWork() throws IOException {
+        EthGetWork ethGetWork = web3jService.ethGetWork();
+        assertNotNull(ethGetWork.getResult());
+    }
+
+    @Test
+    public void testEthSubmitWork() throws IOException {
+    
+    }
+
+    @Test
+    public void testEthSubmitHashrate() throws IOException {
+    
+    }
+
+    @Test
+    public void testDbPutString() throws IOException {
+    
+    }
+
+    @Test
+    public void testDbGetString() throws IOException {
+    
+    }
+
+    @Test
+    public void testDbPutHex() throws IOException {
+    
+    }
+
+    @Test
+    public void testDbGetHex() throws IOException {
+    
+    }
+
+    @Test
+    public void testShhPost() throws IOException {
+    
+    }
+
+    @Ignore // {"jsonrpc":"2.0","id":67,"error":{"code":-32601,"message":"The method shh_version does not exist/is not available"}}
+    @Test
+    public void testShhVersion() throws IOException {
+        ShhVersion shhVersion = web3jService.shhVersion();
+        assertNotNull(shhVersion.getVersion());
+    }
+
+    @Ignore  // {"jsonrpc":"2.0","id":73,"error":{"code":-32601,"message":"The method shh_newIdentity does not exist/is not available"}}
+    @Test
+    public void testShhNewIdentity() throws IOException {
+        ShhNewIdentity shhNewIdentity = web3jService.shhNewIdentity();
+        assertNotNull(shhNewIdentity.getAddress());
+    }
+
+    @Test
+    public void testShhHasIdentity() throws IOException {
+    
+    }
+
+    @Ignore  // {"jsonrpc":"2.0","id":73,"error":{"code":-32601,"message":"The method shh_newIdentity does not exist/is not available"}}
+    @Test
+    public void testShhNewGroup() throws IOException {
+        ShhNewGroup shhNewGroup = web3jService.shhNewGroup();
+        assertNotNull(shhNewGroup.getAddress());
+    }
+
+    @Ignore  // {"jsonrpc":"2.0","id":73,"error":{"code":-32601,"message":"The method shh_addToGroup does not exist/is not available"}}
+    @Test
+    public void testShhAddToGroup() throws IOException {
+
+    }
+
+    @Test
+    public void testShhNewFilter() throws IOException {
+    
+    }
+
+    @Test
+    public void testShhUninstallFilter() throws IOException {
+    
+    }
+
+    @Test
+    public void testShhGetFilterChanges() throws IOException {
+    
+    }
+
+    @Test
+    public void testShhGetMessages() throws IOException {
+    
     }
 }

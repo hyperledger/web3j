@@ -98,7 +98,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
     @Override
     public Request ethHashrate() {
         return new Request<>(
-                "eth_syncing",
+                "eth_hashrate",
                 Collections.<String>emptyList(),
                 1
         );
