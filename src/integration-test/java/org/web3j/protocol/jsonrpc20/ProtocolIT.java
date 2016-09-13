@@ -1,6 +1,7 @@
 package org.web3j.protocol.jsonrpc20;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.web3j.Web3jService;
 import org.web3j.methods.response.*;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -19,6 +21,12 @@ import static org.junit.Assert.assertThat;
 public class ProtocolIT {
 
     private Web3jService web3jService;
+
+    public ProtocolIT() {
+        System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+    }
 
     @Before
     public void setUp() {
@@ -106,19 +114,26 @@ public class ProtocolIT {
 
     @Test
     public void testEthGetBalance() throws IOException {
-//        EthGetBalance ethGetBalance = web3jService.ethGetBalance();
-//        assertNotNull(ethGetBalance.getBalance());
+        EthGetBalance ethGetBalance = web3jService.ethGetBalance(
+                "0x407d73d8a49eeb85d32cf465507dd71d507100c1", DefaultBlockParameter.valueOf("latest"));
+        assertThat(ethGetBalance.getBalance(), equalTo(BigInteger.valueOf(0)));
     }
 
     @Test
     public void testEthGetStorageAt() throws IOException {
-//        EthGetStorageAt ethGetStorageAt = web3jService.ethGetStorageAt();
-//        assertNotNull(ethGetStorageAt.getData());
+        EthGetStorageAt ethGetStorageAt = web3jService.ethGetStorageAt(
+                "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                BigInteger.valueOf(0),
+                DefaultBlockParameter.valueOf("latest"));
+        assertNotNull(ethGetStorageAt.getData());
     }
 
     @Test
     public void testEthGetTransactionCount() throws IOException {
-    
+        EthGetTransactionCount ethGetTransactionCount = web3jService.ethGetTransactionCount(
+                "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                DefaultBlockParameter.valueOf("latest"));
+        assertNotNull(ethGetTransactionCount.getTransactionCount());
     }
 
     @Test

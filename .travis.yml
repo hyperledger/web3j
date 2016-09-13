@@ -14,3 +14,7 @@ cache:
 
 # Don't run integrationTests as they require a live Ethereum client to be running
 script: ./gradlew -x integrationTest check
+
+# Upload code coverage metrics
+after_success:
+- bash <(curl -s https://codecov.io/bash)

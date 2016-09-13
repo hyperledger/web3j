@@ -1,7 +1,13 @@
-group 'org.conor10'
-version '1.0-SNAPSHOT'
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'maven-publish'
+
+group 'org.web3j'
+version '0.1'
 
 sourceCompatibility = 1.8
 
@@ -11,6 +17,12 @@ compileJava {
 }
 compileTestJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 repositories {
@@ -58,4 +70,30 @@ integrationTest.mustRunAfter test
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    publications = ['mavenJava']
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = 'org.web3j'
+        desc = 'web3j is a lightweight Java library for integration with Ethereum clients'
+        userOrg = 'conor10'
+        licenses = ['MIT']
+        issueTrackerUrl = 'https://github.com/conor10/web3j/issues'
+        vcsUrl = 'https://github.com/conor10/web3j.git'
+        websiteUrl = 'http://web3j.org'
+        publicDownloadNumbers = true
+    }
 }

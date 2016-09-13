@@ -18,4 +18,16 @@ public enum DefaultBlockParameterName implements DefaultBlockParameter {
     public String getValue() {
         return name;
     }
+
+    public static DefaultBlockParameterName fromString(String name) {
+        if (name != null) {
+            for (DefaultBlockParameterName defaultBlockParameterName:
+                    DefaultBlockParameterName.values()) {
+                if (name.equalsIgnoreCase(defaultBlockParameterName.name)) {
+                    return defaultBlockParameterName;
+                }
+            }
+        }
+        return valueOf(name);
+    }
 }

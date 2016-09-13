@@ -134,7 +134,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
     @Override
     public Request ethGetBalance(String address, DefaultBlockParameter defaultBlockParameter) {
         return new Request<>(
-                "eth_syncing",
+                "eth_getBalance",
                 Arrays.asList(address, defaultBlockParameter.getValue()),
                 1
         );

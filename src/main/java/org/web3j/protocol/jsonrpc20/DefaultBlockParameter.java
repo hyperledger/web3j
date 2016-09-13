@@ -13,7 +13,7 @@ public interface DefaultBlockParameter {
     }
 
     static DefaultBlockParameter valueOf(String blockName) {
-        return DefaultBlockParameterName.valueOf(blockName);
+        return DefaultBlockParameterName.fromString(blockName);
     }
 
     String getValue();

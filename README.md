@@ -1,7 +1,10 @@
 # web3j 
-## Web3 Java Ðapp API 
+## Web3 Java Ðapp API
 
 web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
+
+[![Build Status](https://travis-ci.org/conor10/web3j.svg?branch=master)](https://travis-ci.org/conor10/web3j)
+[![codecov.io](http://codecov.io/github/conor10/web3j/coverage.svg?branch=master)](http://codecov.io/github/conor10/web3j?branch=master)
 
 [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 
@@ -17,11 +20,30 @@ Add the following dependency to your project:
 
 ### Maven
 
-tbc
+```
+   <repositories>
+     <repository>
+       <id>oss.jfrog.org</id>
+       <name>Repository from Bintray</name>
+       <url>http://dl.bintray.com/conor10/maven</url>
+     </repository>
+   </repositories>
+
+   <dependency>
+     <groupId>org.web3j</groupId>
+     <artifactId>core</artifactId>
+     <version>1.0.0-RELEASE</version>
+   </dependency>
+```
 
 ### Gradle
 
-tbc
+```
+repositories {
+   maven {url "http://dl.bintray.com/conor10/maven"}
+}
+compile ("org.web3j:core:1.0.0-RELEASE")
+```
 
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
