@@ -3,7 +3,7 @@ package org.web3j.methods.response;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.utils.Codec;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
@@ -76,7 +76,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         }
 
         public BigInteger getExpiry() {
-            return Utils.decodeQuantity(expiry);
+            return Codec.decodeQuantity(expiry);
         }
 
         public void setExpiry(String expiry) {
@@ -84,7 +84,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         }
 
         public BigInteger getTtl() {
-            return Utils.decodeQuantity(ttl);
+            return Codec.decodeQuantity(ttl);
         }
 
         public void setTtl(String ttl) {
@@ -92,7 +92,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         }
 
         public BigInteger getSent() {
-            return Utils.decodeQuantity(sent);
+            return Codec.decodeQuantity(sent);
         }
 
         public void setSent(String sent) {
@@ -116,7 +116,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         }
 
         public BigInteger getWorkProved() {
-            return Utils.decodeQuantity(workProved);
+            return Codec.decodeQuantity(workProved);
         }
 
         public void setWorkProved(String workProved) {

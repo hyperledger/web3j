@@ -5,8 +5,34 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+// We don't want any compiler warnings
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+compileTestJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
 repositories {
     mavenCentral()
+}
+
+// See https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
+// exclude with: gradle clean build -x integrationTest
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -14,4 +40,22 @@ dependencies {
             'com.fasterxml.jackson.core:jackson-databind:2.8.1'
     testCompile 'junit:junit:4.11',
             'org.mockito:mockito-core:1.10.19'
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }  // always run integration tests regardless of if up to date
+
+    // view status of integration tests
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
 }

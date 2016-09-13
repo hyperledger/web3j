@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.utils.Codec;
 
 /**
  * https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_post
@@ -63,7 +63,7 @@ public class ShhPost {
 
     private String convert(BigInteger value) {
         if (value != null) {
-            return Utils.encodeQuantity(value);
+            return Codec.encodeQuantity(value);
         } else {
             return null;
         }

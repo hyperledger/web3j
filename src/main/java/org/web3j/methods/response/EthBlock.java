@@ -14,7 +14,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.ObjectMapperFactory;
+import org.web3j.protocol.utils.Codec;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
@@ -95,7 +96,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getNumber() {
-            return Utils.decodeQuantity(number);
+            return Codec.decodeQuantity(number);
         }
 
         public void setNumber(String number) {
@@ -175,7 +176,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getDifficulty() {
-            return Utils.decodeQuantity(difficulty);
+            return Codec.decodeQuantity(difficulty);
         }
 
         public void setDifficulty(String difficulty) {
@@ -183,7 +184,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getTotalDifficulty() {
-            return Utils.decodeQuantity(totalDifficulty);
+            return Codec.decodeQuantity(totalDifficulty);
         }
 
         public void setTotalDifficulty(String totalDifficulty) {
@@ -199,7 +200,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getSize() {
-            return Utils.decodeQuantity(size);
+            return Codec.decodeQuantity(size);
         }
 
         public void setSize(String size) {
@@ -207,7 +208,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getGasLimit() {
-            return Utils.decodeQuantity(gasLimit);
+            return Codec.decodeQuantity(gasLimit);
         }
 
         public void setGasLimit(String gasLimit) {
@@ -215,7 +216,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getGasUsed() {
-            return Utils.decodeQuantity(gasUsed);
+            return Codec.decodeQuantity(gasUsed);
         }
 
         public void setGasUsed(String gasUsed) {
@@ -223,7 +224,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getTimestamp() {
-            return Utils.decodeQuantity(timestamp);
+            return Codec.decodeQuantity(timestamp);
         }
 
         public void setTimestamp(String timestamp) {
@@ -370,7 +371,7 @@ public class EthBlock extends Response<EthBlock.Block> {
 
     public static class ResultTransactionDeserialiser extends JsonDeserializer<List<TransactionResult>> {
 
-        private ObjectReader objectReader = Utils.getObjectReader();
+        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public List<TransactionResult> deserialize(
@@ -402,7 +403,7 @@ public class EthBlock extends Response<EthBlock.Block> {
 
     public static class ResponseDeserialiser extends JsonDeserializer<Block> {
 
-        private ObjectReader objectReader = Utils.getObjectReader();
+        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public Block deserialize(

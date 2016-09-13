@@ -11,7 +11,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.ObjectMapperFactory;
+import org.web3j.protocol.utils.Codec;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
@@ -58,7 +59,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getTransactionIndex() {
-            return Utils.decodeQuantity(transactionIndex);
+            return Codec.decodeQuantity(transactionIndex);
         }
 
         public void setTransactionIndex(String transactionIndex) {
@@ -74,7 +75,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getBlockNumber() {
-            return Utils.decodeQuantity(blockNumber);
+            return Codec.decodeQuantity(blockNumber);
         }
 
         public void setBlockNumber(String blockNumber) {
@@ -82,7 +83,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getCumulativeGasUsed() {
-            return Utils.decodeQuantity(cumulativeGasUsed);
+            return Codec.decodeQuantity(cumulativeGasUsed);
         }
 
         public void setCumulativeGasUsed(String cumulativeGasUsed) {
@@ -90,7 +91,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getGasUsed() {
-            return Utils.decodeQuantity(gasUsed);
+            return Codec.decodeQuantity(gasUsed);
         }
 
         public void setGasUsed(String gasUsed) {
@@ -154,7 +155,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
 
     public static class ResponseDeserialiser extends JsonDeserializer<TransactionReceipt> {
 
-        private ObjectReader objectReader = Utils.getObjectReader();
+        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public TransactionReceipt deserialize(

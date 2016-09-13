@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
@@ -34,7 +34,7 @@ public class EthTransaction extends Response<Transaction> {
 
     public static class ResponseDeserialiser extends JsonDeserializer<Transaction> {
 
-        private ObjectReader objectReader = Utils.getObjectReader();
+        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public Transaction deserialize(

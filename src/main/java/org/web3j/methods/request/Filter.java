@@ -14,7 +14,7 @@ public abstract class Filter {
     }
 
     public Filter addSingleTopic(String topic) {
-        topics.add(new SingleTopic(topic));
+        topics.add(new SingleTopic<>(topic));
         return this;
     }
 

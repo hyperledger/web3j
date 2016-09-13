@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.jsonrpc20.Response;
 
 /**
@@ -123,7 +123,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
 
     public static class ResponseDeserialiser extends JsonDeserializer<EthSyncing.Result> {
 
-        private ObjectReader objectReader = Utils.getObjectReader();
+        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public Result deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)

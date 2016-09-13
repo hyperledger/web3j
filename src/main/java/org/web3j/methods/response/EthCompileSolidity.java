@@ -319,7 +319,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         private Map<String, String> methods;  // unknown object type
 
         public Documentation() {
-            this.methods = Collections.EMPTY_MAP;
+            this.methods = Collections.emptyMap();
         }
 
         public Map<String, String> getMethods() {

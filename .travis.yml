@@ -11,3 +11,6 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+# Don't run integrationTests as they require a live Ethereum client to be running
+script: ./gradlew -x integrationTest check

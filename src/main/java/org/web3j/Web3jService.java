@@ -16,8 +16,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.web3j.methods.request.EthFilter;
 import org.web3j.methods.request.ShhFilter;
 import org.web3j.methods.response.*;
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.RequestFactory;
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.utils.Codec;
 import org.web3j.protocol.jsonrpc20.DefaultBlockParameter;
 import org.web3j.protocol.jsonrpc20.JsonRpc2_0Factory;
 import org.web3j.protocol.jsonrpc20.Request;
@@ -30,7 +31,7 @@ public class Web3jService {
 
     private RequestFactory requestFactory = new JsonRpc2_0Factory();
     private CloseableHttpClient httpclient = HttpClients.createDefault();
-    private ObjectMapper objectMapper = Utils.getObjectMapper();
+    private ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
     private final String url;
 

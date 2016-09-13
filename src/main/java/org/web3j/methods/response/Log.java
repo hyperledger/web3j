@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.utils.Codec;
 
 /**
  * <p>Log object used by {@link EthLog} and {@link EthGetTransactionReceipt}.</p>
@@ -116,7 +116,7 @@ public class Log {
 
     private Optional<BigInteger> convert(String value) {
         if (value != null) {
-            return Optional.of(Utils.decodeQuantity(value));
+            return Optional.of(Codec.decodeQuantity(value));
         } else {
             return Optional.empty();
         }

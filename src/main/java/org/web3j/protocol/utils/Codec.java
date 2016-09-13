@@ -1,32 +1,14 @@
-package org.web3j.protocol;
+package org.web3j.protocol.utils;
 
 import java.math.BigInteger;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-
 /**
- * <p>Utility functions.</p>
+ * <p>Message codec functions.</p>
  *
  * <p>Implementation as per https://github.com/ethereum/wiki/wiki/JSON-RPC#hex-value-encoding</p>
  */
-public final class Utils {
-    private Utils() {
-    }
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    static {
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-    }
-
-    public static ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
-    public static ObjectReader getObjectReader() {
-        return objectMapper.reader();
+public final class Codec {
+    private Codec() {
     }
 
     public static final String encodeQuantity(BigInteger value) {

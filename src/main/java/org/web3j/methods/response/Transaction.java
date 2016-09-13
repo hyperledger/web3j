@@ -2,7 +2,7 @@ package org.web3j.methods.response;
 
 import java.math.BigInteger;
 
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.utils.Codec;
 
 /**
  * Transaction object used by both {@link EthTransaction} and {@link EthBlock}.
@@ -48,7 +48,7 @@ public class Transaction {
     }
 
     public BigInteger getNonce() {
-        return Utils.decodeQuantity(nonce);
+        return Codec.decodeQuantity(nonce);
     }
 
     public void setNonce(String nonce) {
@@ -64,7 +64,7 @@ public class Transaction {
     }
 
     public BigInteger getBlockNumber() {
-        return Utils.decodeQuantity(blockNumber);
+        return Codec.decodeQuantity(blockNumber);
     }
 
     public void setBlockNumber(String blockNumber) {
@@ -72,7 +72,7 @@ public class Transaction {
     }
 
     public BigInteger getTransactionIndex() {
-        return Utils.decodeQuantity(transactionIndex);
+        return Codec.decodeQuantity(transactionIndex);
     }
 
     public void setTransactionIndex(String transactionIndex) {
@@ -96,7 +96,7 @@ public class Transaction {
     }
 
     public BigInteger getValue() {
-        return Utils.decodeQuantity(value);
+        return Codec.decodeQuantity(value);
     }
 
     public void setValue(String value) {
@@ -104,7 +104,7 @@ public class Transaction {
     }
 
     public BigInteger getGasPrice() {
-        return Utils.decodeQuantity(gasPrice);
+        return Codec.decodeQuantity(gasPrice);
     }
 
     public void setGasPrice(String gasPrice) {
@@ -112,7 +112,7 @@ public class Transaction {
     }
 
     public BigInteger getGas() {
-        return Utils.decodeQuantity(gas);
+        return Codec.decodeQuantity(gas);
     }
 
     public void setGas(String gas) {

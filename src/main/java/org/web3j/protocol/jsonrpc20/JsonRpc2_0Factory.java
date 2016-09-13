@@ -7,7 +7,7 @@ import java.util.Collections;
 
 import org.web3j.methods.request.*;
 import org.web3j.protocol.RequestFactory;
-import org.web3j.protocol.Utils;
+import org.web3j.protocol.utils.Codec;
 
 /**
  * JSON-RPC 2.0 factory implementation.
@@ -147,7 +147,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
                 "eth_getStorageAt",
                 Arrays.asList(
                         address,
-                        Utils.encodeQuantity(position),
+                        Codec.encodeQuantity(position),
                         defaultBlockParameter.getValue()),
                 1
         );
@@ -293,7 +293,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
                 "eth_getTransactionByBlockHashAndIndex",
                 Arrays.asList(
                         blockHash,
-                        Utils.encodeQuantity(transactionIndex)),
+                        Codec.encodeQuantity(transactionIndex)),
                 1
         );
     }
@@ -305,7 +305,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
                 "eth_getTransactionByBlockNumberAndIndex",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
-                        Utils.encodeQuantity(transactionIndex)),
+                        Codec.encodeQuantity(transactionIndex)),
                 1
         );
     }
@@ -325,7 +325,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
                 "eth_getUncleByBlockHashAndIndex",
                 Arrays.asList(
                         blockHash,
-                        Utils.encodeQuantity(transactionIndex)),
+                        Codec.encodeQuantity(transactionIndex)),
                 1
         );
     }
@@ -337,7 +337,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
                 "eth_getUncleByBlockNumberAndIndex",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
-                        Utils.encodeQuantity(uncleIndex)),
+                        Codec.encodeQuantity(uncleIndex)),
                 1
         );
     }
@@ -409,7 +409,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
     public Request ethUninstallFilter(BigInteger filterId) {
         return new Request<>(
                 "eth_uninstallFilter",
-                Arrays.asList(Utils.encodeQuantity(filterId)),
+                Arrays.asList(Codec.encodeQuantity(filterId)),
                 1
         );
     }
@@ -418,7 +418,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
     public Request ethGetFilterChanges(BigInteger filterId) {
         return new Request<>(
                 "eth_getFilterChanges",
-                Arrays.asList(Utils.encodeQuantity(filterId)),
+                Arrays.asList(Codec.encodeQuantity(filterId)),
                 1
         );
     }
@@ -427,7 +427,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
     public Request ethGetFilterLogs(BigInteger filterId) {
         return new Request<>(
                 "eth_getFilterLogs",
-                Arrays.asList(Utils.encodeQuantity(filterId)),
+                Arrays.asList(Codec.encodeQuantity(filterId)),
                 1
         );
     }
