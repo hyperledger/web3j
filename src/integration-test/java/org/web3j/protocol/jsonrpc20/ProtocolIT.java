@@ -1,4 +1,4 @@
-package org.web3j;
+package org.web3j.protocol.jsonrpc20;
 
 import java.io.IOException;
 
@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.web3j.Web3jService;
 import org.web3j.methods.response.*;
 
 import static org.hamcrest.CoreMatchers.is;
