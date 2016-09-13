@@ -16,5 +16,12 @@ cache:
 script: ./gradlew -x integrationTest check
 
 # Upload code coverage metrics
+#after_success:
+#- bash <(curl -s https://codecov.io/bash)
+sudo: false # faster builds
+
+before_install:
+  - pip install --user codecov
+
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - codecov
