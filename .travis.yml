@@ -3,6 +3,8 @@ language: java
 jdk:
   - oraclejdk8
 
+sudo: false  # as per http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
+
 # Avoid uploading cache after every build with Gradle - see https://docs.travis-ci.com/user/languages/java/#Caching
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -16,12 +18,5 @@ cache:
 script: ./gradlew -x integrationTest check
 
 # Upload code coverage metrics
-#after_success:
-#- bash <(curl -s https://codecov.io/bash)
-sudo: false # faster builds
-
-before_install:
-  - pip install --user codecov
-
 after_success:
-  - codecov
+- bash <(curl -s https://codecov.io/bash)

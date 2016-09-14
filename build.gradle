@@ -19,6 +19,10 @@ compileTestJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
+jacoco {
+    toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
+}
+
 jacocoTestReport {
     reports {
         xml.enabled true

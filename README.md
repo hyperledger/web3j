@@ -101,7 +101,7 @@ You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT`
 
 For a .NET implementation, check out [Nethereum](https://github.com/Nethereum/Nethereum).
  
-For a pure Java implementations of Ethereum, check out the great work that [EthereumJ](https://github.com/ethereum/ethereumj) are doing.
+For a pure Java implementation of the Ethereum client, check out [EthereumJ](https://github.com/ethereum/ethereumj) and the work of [Ether.Camp](https://github.com/ether-camp/).
 
 
 ## Thanks and Credits
@@ -109,4 +109,4 @@ For a pure Java implementations of Ethereum, check out the great work that [Ethe
 * The [Nethereum](https://github.com/Nethereum/Nethereum) project for the inspiration
 * [Othera](https://www.othera.com.au/) for the great things they are building on the platform
 * The [Finhaus](http://finhaus.com.au/) guys for putting me onto Nethereum
-* Everyone involved in the Ethererum project and surrounding ecosystem
+* Everyone involved in the Ethererum project and its surrounding ecosystem
