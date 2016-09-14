@@ -61,7 +61,7 @@ public interface RequestFactory {
 
     Request ethCall(EthCall ethCall, DefaultBlockParameter defaultBlockParameter);
 
-    Request ethEstimateGas(EthCall ethCall, DefaultBlockParameter defaultBlockParameter);
+    Request ethEstimateGas(EthCall ethCall);
 
     Request ethGetBlockByHash(String blockHash, boolean returnFullTransactionObjects);
 

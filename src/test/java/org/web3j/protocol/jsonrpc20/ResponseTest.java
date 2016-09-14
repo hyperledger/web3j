@@ -479,7 +479,7 @@ public class ResponseTest {
                         "    \"logsBloom\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\",\n" +
                         "    \"transactionsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
                         "    \"stateRoot\": \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\",\n" +
-                        "    \"receiptsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"receiptRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
                         "    \"miner\": \"0x4e65fda2159562a496f9f3522f89122a3088497a\",\n" +
                         "    \"difficulty\": \"0x027f07\",\n" +
                         "    \"totalDifficulty\":  \"0x027f07\",\n" +
@@ -547,7 +547,7 @@ public class ResponseTest {
                         "    \"logsBloom\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\",\n" +
                         "    \"transactionsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
                         "    \"stateRoot\": \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\",\n" +
-                        "    \"receiptsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"receiptRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
                         "    \"miner\": \"0x4e65fda2159562a496f9f3522f89122a3088497a\",\n" +
                         "    \"difficulty\": \"0x027f07\",\n" +
                         "    \"totalDifficulty\":  \"0x027f07\",\n" +
@@ -696,6 +696,9 @@ public class ResponseTest {
                         "        \"cumulativeGasUsed\": \"0x33bc\",\n" +
                         "        \"gasUsed\": \"0x4dc\",\n" +
                         "        \"contractAddress\": \"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\n" +
+                        "        \"root\": \"9307ba10e41ecf3d40507fc908655fe72fc129d46f6d99baf7605d0e29184911\",\n" +
+                        "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n" +
+                        "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n" +
                         "        \"logs\": [{\n" +
                         "            \"removed\": false,\n" +
                         "            \"logIndex\": \"0x1\",\n" +
@@ -720,6 +723,9 @@ public class ResponseTest {
                         "0x33bc",
                         "0x4dc",
                         "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+                        "9307ba10e41ecf3d40507fc908655fe72fc129d46f6d99baf7605d0e29184911",
+                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                        "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
                         Arrays.asList(
                                 new Log(
                                         false,
@@ -767,59 +773,66 @@ public class ResponseTest {
                         "  \"id\":1,\n" +
                         "  \"jsonrpc\": \"2.0\",\n" +
                         "  \"result\": {\n" +
-                        "      \"code\": \"0x605880600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b603d6004803590602001506047565b8060005260206000f35b60006007820290506053565b91905056\",\n" +
-                        "      \"info\": {\n" +
-                        "        \"source\": \"contract test {\\n   function multiply(uint a) constant returns(uint d) {\\n       return a * 7;\\n   }\\n}\\n\",\n" +
-                        "        \"language\": \"Solidity\",\n" +
-                        "        \"languageVersion\": \"0\",\n" +
-                        "        \"compilerVersion\": \"0.9.19\",\n" +
-                        "        \"abiDefinition\": [\n" +
-                        "          {\n" +
-                        "            \"constant\": true,\n" +
-                        "            \"inputs\": [\n" +
-                        "              {\n" +
-                        "                \"name\": \"a\",\n" +
-                        "                \"type\": \"uint256\"\n" +
-                        "              }\n" +
-                        "            ],\n" +
-                        "            \"name\": \"multiply\",\n" +
-                        "            \"outputs\": [\n" +
-                        "              {\n" +
-                        "                \"name\": \"d\",\n" +
-                        "                \"type\": \"uint256\"\n" +
-                        "              }\n" +
-                        "            ],\n" +
-                        "            \"type\": \"function\"\n" +
-                        "          }\n" +
-                        "        ],\n" +
-                        "        \"userDoc\": {\n" +
-                        "          \"methods\": {}\n" +
-                        "        },\n" +
-                        "        \"developerDoc\": {\n" +
-                        "          \"methods\": {}\n" +
-                        "        }\n" +
-                        "      }\n" +
-                        "   }\n" +
+                        "    \"test\": {\n"   +
+                        "      \"code\": \"0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056\",\n"   +
+                        "      \"info\": {\n"   +
+                        "        \"source\": \"contract test {\\n\\tfunction multiply(uint a) returns(uint d) {\\n\\t\\treturn a * 7;\\n\\t}\\n}\\n\",\n"   +
+                        "        \"language\": \"Solidity\",\n"   +
+                        "        \"languageVersion\": \"0\",\n"   +
+                        "        \"compilerVersion\": \"0.8.2\",\n"   +
+                        "        \"compilerOptions\": \"--bin --abi --userdoc --devdoc --add-std --optimize -o /var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951\",\n"   +
+                        "        \"abiDefinition\": [\n"   +
+                        "          {\n"   +
+                        "            \"constant\": false,\n"   +
+                        "            \"inputs\": [\n"   +
+                        "              {\n"   +
+                        "                \"name\": \"a\",\n"   +
+                        "                \"type\": \"uint256\"\n"   +
+                        "              }\n"   +
+                        "            ],\n"   +
+                        "            \"name\": \"multiply\",\n"   +
+                        "            \"outputs\": [\n"   +
+                        "              {\n"   +
+                        "                \"name\": \"d\",\n"   +
+                        "                \"type\": \"uint256\"\n"   +
+                        "              }\n"   +
+                        "            ],\n"   +
+                        "            \"type\": \"function\"\n"   +
+                        "          }\n"   +
+                        "        ],\n"   +
+                        "        \"userDoc\": {\n"   +
+                        "          \"methods\": {}\n"   +
+                        "        },\n"   +
+                        "        \"developerDoc\": {\n"   +
+                        "          \"methods\": {}\n"   +
+                        "        }\n"   +
+                        "      }\n"   +
+                        "    }\n"   +
+                        "    }"   +
+                        "  }\n" +
                         "}"
         );
 
         EthCompileSolidity.CompiledSolidity compiledSolidity =
                 new EthCompileSolidity.CompiledSolidity(
-                        "0x605880600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b603d6004803590602001506047565b8060005260206000f35b60006007820290506053565b91905056",
-                        new EthCompileSolidity.SolidityInfo(
-                                "contract test {\n   function multiply(uint a) constant returns(uint d) {\n       return a * 7;\n   }\n}\n",
-                                "Solidity",
-                                "0",
-                                "0.9.19",
-                                Arrays.asList(new EthCompileSolidity.AbiDefinition(
-                                        true,
-                                        Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("a", "uint256")),
-                                        "multiply",
-                                        Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("d", "uint256")),
-                                        "function"
-                                )),
-                                new EthCompileSolidity.Documentation(),
-                                new EthCompileSolidity.Documentation()
+                        new EthCompileSolidity.Code(
+                            "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
+                            new EthCompileSolidity.SolidityInfo(
+                                    "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n\t\treturn a * 7;\n\t}\n}\n",
+                                    "Solidity",
+                                    "0",
+                                    "0.8.2",
+                                    "--bin --abi --userdoc --devdoc --add-std --optimize -o /var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
+                                    Arrays.asList(new EthCompileSolidity.AbiDefinition(
+                                            false,
+                                            Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("a", "uint256")),
+                                            "multiply",
+                                            Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("d", "uint256")),
+                                            "function"
+                                    )),
+                                    new EthCompileSolidity.Documentation(),
+                                    new EthCompileSolidity.Documentation()
+                            )
                         )
                 );
 

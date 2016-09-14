@@ -31,7 +31,10 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         private String blockNumber;
         private String cumulativeGasUsed;
         private String gasUsed;
-        private String contractAddress;
+        private String contractAddress;  // this is present in the spec
+        private String root;
+        private String from;
+        private String to;
         private List<Log> logs;
 
         public TransactionReceipt() {
@@ -39,7 +42,8 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
 
         public TransactionReceipt(String transactionHash, String transactionIndex,
                                   String blockHash, String blockNumber, String cumulativeGasUsed,
-                                  String gasUsed, String contractAddress, List<Log> logs) {
+                                  String gasUsed, String contractAddress, String root, String from,
+                                  String to, List<Log> logs) {
             this.transactionHash = transactionHash;
             this.transactionIndex = transactionIndex;
             this.blockHash = blockHash;
@@ -47,6 +51,9 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
             this.cumulativeGasUsed = cumulativeGasUsed;
             this.gasUsed = gasUsed;
             this.contractAddress = contractAddress;
+            this.root = root;
+            this.from = from;
+            this.to = to;
             this.logs = logs;
         }
 
@@ -106,6 +113,30 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
             this.contractAddress = contractAddress;
         }
 
+        public String getRoot() {
+            return root;
+        }
+
+        public void setRoot(String root) {
+            this.root = root;
+        }
+
+        public String getFrom() {
+            return from;
+        }
+
+        public void setFrom(String from) {
+            this.from = from;
+        }
+
+        public String getTo() {
+            return to;
+        }
+
+        public void setTo(String to) {
+            this.to = to;
+        }
+
         public List<Log> getLogs() {
             return logs;
         }
@@ -135,6 +166,9 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
                 return false;
             if (contractAddress != null ? !contractAddress.equals(that.contractAddress) : that.contractAddress != null)
                 return false;
+            if (root != null ? !root.equals(that.root) : that.root != null) return false;
+            if (from != null ? !from.equals(that.from) : that.from != null) return false;
+            if (to != null ? !to.equals(that.to) : that.to != null) return false;
             return logs != null ? logs.equals(that.logs) : that.logs == null;
 
         }
@@ -148,6 +182,9 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
             result = 31 * result + (cumulativeGasUsed != null ? cumulativeGasUsed.hashCode() : 0);
             result = 31 * result + (gasUsed != null ? gasUsed.hashCode() : 0);
             result = 31 * result + (contractAddress != null ? contractAddress.hashCode() : 0);
+            result = 31 * result + (root != null ? root.hashCode() : 0);
+            result = 31 * result + (from != null ? from.hashCode() : 0);
+            result = 31 * result + (to != null ? to.hashCode() : 0);
             result = 31 * result + (logs != null ? logs.hashCode() : 0);
             return result;
         }

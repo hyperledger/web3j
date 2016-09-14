@@ -3,6 +3,8 @@ package org.web3j;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
@@ -81,6 +83,12 @@ public class Web3jService {
             }
         };
     }
+
+
+//    private <T extends Response> Future<T> sendRequestAsync(
+//            Request jsonRpc20Request, Class<T> type) throws IOException {
+//        return CompletableFuture.<T>supplyAsync(() -> sendRequest(jsonRpc20Request, type));
+//    }
 
     public Web3ClientVersion web3ClientVersion() throws IOException {
         Request jsonRpc20Request = requestFactory.web3ClientVersion();
@@ -221,9 +229,8 @@ public class Web3jService {
     }
 
     public EthEstimateGas ethEstimateGas(
-            org.web3j.methods.request.EthCall ethCall,
-            DefaultBlockParameter defaultBlockParameter) throws IOException {
-        Request request = requestFactory.ethEstimateGas(ethCall, defaultBlockParameter);
+            org.web3j.methods.request.EthCall ethCall) throws IOException {
+        Request request = requestFactory.ethEstimateGas(ethCall);
         return sendRequest(request, EthEstimateGas.class);
     }
 

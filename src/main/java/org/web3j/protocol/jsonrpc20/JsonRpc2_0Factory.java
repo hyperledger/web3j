@@ -245,10 +245,10 @@ public class JsonRpc2_0Factory implements RequestFactory {
     }
 
     @Override
-    public Request ethEstimateGas(EthCall ethCall, DefaultBlockParameter defaultBlockParameter) {
+    public Request ethEstimateGas(EthCall ethCall) {
         return new Request<>(
                 "eth_estimateGas",
-                Arrays.asList(ethCall, defaultBlockParameter),
+                Arrays.asList(ethCall),
                 1
         );
     }
@@ -260,7 +260,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
                 "eth_getBlockByHash",
                 Arrays.asList(
                         blockHash,
-                        Boolean.toString(returnFullTransactionObjects)),
+                        returnFullTransactionObjects),
                 1
         );
     }
@@ -273,7 +273,7 @@ public class JsonRpc2_0Factory implements RequestFactory {
                 "eth_getBlockByNumber",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
-                        Boolean.toString(returnFullTransactionObjects)),
+                        returnFullTransactionObjects),
                 1
         );
     }

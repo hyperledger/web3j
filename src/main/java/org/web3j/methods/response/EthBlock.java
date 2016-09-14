@@ -53,7 +53,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String logsBloom;
         private String transactionsRoot;
         private String stateRoot;
-        private String receiptsRoot;
+        private String receiptRoot;
         private String miner;
         private String difficulty;
         private String totalDifficulty;
@@ -70,7 +70,7 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         public Block(String number, String hash, String parentHash, String nonce,
                      String sha3Uncles, String logsBloom, String transactionsRoot,
-                     String stateRoot, String receiptsRoot, String miner, String difficulty,
+                     String stateRoot, String receiptRoot, String miner, String difficulty,
                      String totalDifficulty, String extraData, String size, String gasLimit,
                      String gasUsed, String timestamp, List<TransactionResult> transactions,
                      List<String> uncles) {
@@ -82,7 +82,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.logsBloom = logsBloom;
             this.transactionsRoot = transactionsRoot;
             this.stateRoot = stateRoot;
-            this.receiptsRoot = receiptsRoot;
+            this.receiptRoot = receiptRoot;
             this.miner = miner;
             this.difficulty = difficulty;
             this.totalDifficulty = totalDifficulty;
@@ -159,12 +159,12 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.stateRoot = stateRoot;
         }
 
-        public String getReceiptsRoot() {
-            return receiptsRoot;
+        public String getReceiptRoot() {
+            return receiptRoot;
         }
 
-        public void setReceiptsRoot(String receiptsRoot) {
-            this.receiptsRoot = receiptsRoot;
+        public void setReceiptRoot(String receiptRoot) {
+            this.receiptRoot = receiptRoot;
         }
 
         public String getMiner() {
@@ -268,7 +268,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             if (stateRoot != null ? !stateRoot.equals(that.stateRoot) : that.stateRoot != null)
                 return false;
-            if (receiptsRoot != null ? !receiptsRoot.equals(that.receiptsRoot) : that.receiptsRoot != null)
+            if (receiptRoot != null ? !receiptRoot.equals(that.receiptRoot) : that.receiptRoot != null)
                 return false;
             if (miner != null ? !miner.equals(that.miner) : that.miner != null) return false;
             if (difficulty != null ? !difficulty.equals(that.difficulty) : that.difficulty != null)
@@ -300,7 +300,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             result = 31 * result + (logsBloom != null ? logsBloom.hashCode() : 0);
             result = 31 * result + (transactionsRoot != null ? transactionsRoot.hashCode() : 0);
             result = 31 * result + (stateRoot != null ? stateRoot.hashCode() : 0);
-            result = 31 * result + (receiptsRoot != null ? receiptsRoot.hashCode() : 0);
+            result = 31 * result + (receiptRoot != null ? receiptRoot.hashCode() : 0);
             result = 31 * result + (miner != null ? miner.hashCode() : 0);
             result = 31 * result + (difficulty != null ? difficulty.hashCode() : 0);
             result = 31 * result + (totalDifficulty != null ? totalDifficulty.hashCode() : 0);

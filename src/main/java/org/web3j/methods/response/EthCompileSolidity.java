@@ -16,13 +16,47 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
     }
 
     public static class CompiledSolidity {
+        private Code test;
+
+        public CompiledSolidity() { }
+
+        public CompiledSolidity(Code test) {
+            this.test = test;
+        }
+
+        public Code getTest() {
+            return test;
+        }
+
+        public void setTest(Code test) {
+            this.test = test;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            CompiledSolidity that = (CompiledSolidity) o;
+
+            return test != null ? test.equals(that.test) : that.test == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            return test != null ? test.hashCode() : 0;
+        }
+    }
+
+    public static class Code {
         private String code;
         private SolidityInfo info;
 
-        public CompiledSolidity() {
+        public Code() {
         }
 
-        public CompiledSolidity(String code, SolidityInfo info) {
+        public Code(String code, SolidityInfo info) {
             this.code = code;
             this.info = info;
         }
@@ -48,7 +82,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            CompiledSolidity that = (CompiledSolidity) o;
+            Code that = (Code) o;
 
             if (code != null ? !code.equals(that.code) : that.code != null) return false;
             return info != null ? info.equals(that.info) : that.info == null;
@@ -68,6 +102,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         private String language;
         private String languageVersion;
         private String compilerVersion;
+        private String compilerOptions;
         private List<AbiDefinition> abiDefinition;
         private Documentation userDoc;
         private Documentation developerDoc;
@@ -76,12 +111,14 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         }
 
         public SolidityInfo(String source, String language, String languageVersion,
-                            String compilerVersion, List<AbiDefinition> abiDefinition,
-                            Documentation userDoc, Documentation developerDoc) {
+                            String compilerVersion, String compilerOptions,
+                            List<AbiDefinition> abiDefinition, Documentation userDoc,
+                            Documentation developerDoc) {
             this.source = source;
             this.language = language;
             this.languageVersion = languageVersion;
             this.compilerVersion = compilerVersion;
+            this.compilerOptions = compilerOptions;
             this.abiDefinition = abiDefinition;
             this.userDoc = userDoc;
             this.developerDoc = developerDoc;
@@ -117,6 +154,14 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
 
         public void setCompilerVersion(String compilerVersion) {
             this.compilerVersion = compilerVersion;
+        }
+
+        public String getCompilerOptions() {
+            return compilerOptions;
+        }
+
+        public void setCompilerOptions(String compilerOptions) {
+            this.compilerOptions = compilerOptions;
         }
 
         public List<AbiDefinition> getAbiDefinition() {
@@ -157,6 +202,8 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
                 return false;
             if (compilerVersion != null ? !compilerVersion.equals(that.compilerVersion) : that.compilerVersion != null)
                 return false;
+            if (compilerOptions != null ? !compilerOptions.equals(that.compilerOptions) : that.compilerOptions != null)
+                return false;
             if (abiDefinition != null ? !abiDefinition.equals(that.abiDefinition) : that.abiDefinition != null)
                 return false;
             if (userDoc != null ? !userDoc.equals(that.userDoc) : that.userDoc != null)
@@ -171,6 +218,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
             result = 31 * result + (language != null ? language.hashCode() : 0);
             result = 31 * result + (languageVersion != null ? languageVersion.hashCode() : 0);
             result = 31 * result + (compilerVersion != null ? compilerVersion.hashCode() : 0);
+            result = 31 * result + (compilerOptions != null ? compilerOptions.hashCode() : 0);
             result = 31 * result + (abiDefinition != null ? abiDefinition.hashCode() : 0);
             result = 31 * result + (userDoc != null ? userDoc.hashCode() : 0);
             result = 31 * result + (developerDoc != null ? developerDoc.hashCode() : 0);
