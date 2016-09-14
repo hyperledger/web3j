@@ -4,7 +4,8 @@
 web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
 
 [![Build Status](https://travis-ci.org/conor10/web3j.svg?branch=master)](https://travis-ci.org/conor10/web3j)
-[![codecov.io](http://codecov.io/github/conor10/web3j/coverage.svg?branch=master)](http://codecov.io/github/conor10/web3j?branch=master)
+[![codecov](https://codecov.io/gh/conor10/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/conor10/web3j)
+
 
 [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 

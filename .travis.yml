@@ -19,4 +19,4 @@ script: ./gradlew -x integrationTest check
 
 # Upload code coverage metrics
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
