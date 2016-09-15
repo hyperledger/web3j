@@ -1,6 +1,8 @@
 # web3j 
 ## Web3 Java Ðapp API
 
+[![Join the chat at https://gitter.im/web3j/web3j](https://badges.gitter.im/web3j/web3j.svg)](https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
 
 [![Build Status](https://travis-ci.org/conor10/web3j.svg?branch=master)](https://travis-ci.org/conor10/web3j)
