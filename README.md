@@ -32,7 +32,7 @@ Add the following dependency to your project:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.1.0</version>
+     <version>0.1.1</version>
    </dependency>
 ```
 
@@ -42,7 +42,7 @@ Add the following dependency to your project:
 repositories {
    maven {url "http://dl.bintray.com/web3j/maven"}
 }
-compile ("org.web3j:core:0.1.0")
+compile ("org.web3j:core:0.1.1")
 ```
 
 
