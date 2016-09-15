@@ -56,8 +56,8 @@ To send asynchronous requests using a Future:
 
 ```java
 Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-Web3ClientVersion clientVersion = web3.web3ClientVersion().sendAsync().get();
-String clientVersion = clientVersion.getWeb3ClientVersion();
+Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
+String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 ```
 
 
@@ -65,10 +65,11 @@ To send synchronous requests:
 
 ```java
 Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-Web3ClientVersion clientVersion = web3.web3ClientVersion().send();
-String clientVersion = clientVersion.getWeb3ClientVersion();
+Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
+String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 ```
 
+An example project is available at [web3j-example](https://github.com/web3j/web3j-example)
 
 ## Further Details
 
