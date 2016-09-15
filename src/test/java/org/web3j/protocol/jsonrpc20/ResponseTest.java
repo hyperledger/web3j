@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -23,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import org.web3j.Web3jService;
+import org.web3j.protocol.http.HttpService;
 import org.web3j.methods.response.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -40,7 +38,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ResponseTest {
 
-    private Web3jService web3jService;
+    private HttpService web3jService;
 
     private CloseableHttpClient closeableHttpClient;
     private CloseableHttpResponse httpResponse;
@@ -49,7 +47,7 @@ public class ResponseTest {
     @Before
     public void setUp() {
         closeableHttpClient = mock(CloseableHttpClient.class);
-        web3jService = new Web3jService("", closeableHttpClient);
+        web3jService = new HttpService("", closeableHttpClient);
 
         httpResponse = mock(CloseableHttpResponse.class);
         entity = mock(HttpEntity.class);

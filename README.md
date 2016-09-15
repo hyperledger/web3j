@@ -52,21 +52,22 @@ Start up an Ethereum client if you don't already have one running, such as [Geth
 geth --rpc --testnet
 
 
-To send synchronous requests:
 
+To send asynchronous requests using a [ComposableFuture](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html):
 
 ```java
-Web3jService web3 = new Web3jService();  // defaults to http://localhost:8545/
-Web3ClientVersion clientVersion = web3.web3ClientVersion().send();
-clientVersion.getWeb3ClientVersion();
+Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+Web3ClientVersion clientVersion = web3.web3ClientVersion().sendAsync().get();
+String clientVersion = clientVersion.getWeb3ClientVersion();
 ```
 
-To send asynchronous requests using a Future:
+
+To send synchronous requests:
 
 ```java
-Web3jService web3 = new Web3jService();
-Web3ClientVersion clientVersion = web3.web3ClientVersion().sendAsync().get();
-clientVersion.getWeb3ClientVersion();
+Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+Web3ClientVersion clientVersion = web3.web3ClientVersion().send();
+String clientVersion = clientVersion.getWeb3ClientVersion();
 ```
 
 
