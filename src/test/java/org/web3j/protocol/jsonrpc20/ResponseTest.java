@@ -27,6 +27,7 @@ import org.web3j.methods.response.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
@@ -79,6 +80,25 @@ public class ResponseTest {
 
     private InputStream buildInputStream(String input) {
         return new ByteArrayInputStream(input.getBytes());
+    }
+
+    @Test
+    public void testErrorResponse() {
+        buildResponse(
+                "{" +
+                        "  \"jsonrpc\":\"2.0\"," +
+                        "  \"id\":1," +
+                        "  \"error\":{" +
+                        "    \"code\":-32602," +
+                        "    \"message\":\"Invalid address length, expected 40 got 64 bytes\"" +
+                        "  }" +
+                        "}"
+        );
+
+        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        assertTrue(ethBlock.hasError());
+        assertThat(ethBlock.getError(), equalTo(
+                new Response.Error(-32602, "Invalid address length, expected 40 got 64 bytes")));
     }
 
     @Test
