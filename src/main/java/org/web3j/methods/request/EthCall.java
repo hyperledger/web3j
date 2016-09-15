@@ -18,8 +18,8 @@ public class EthCall {
     private BigInteger value;
     private String data;
 
-    public EthCall(String fromAddress, String data) {
-        this.fromAddress = fromAddress;
+    public EthCall(String toAddress, String data) {
+        this.toAddress = toAddress;
         this.data = data;
     }
 
