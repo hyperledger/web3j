@@ -64,12 +64,12 @@ public class Request<S, T extends Response> {
         this.id = id;
     }
 
-    public T sendRequest() throws IOException {
-        return web3jService.sendRequest(this, responseType);
+    public T send() throws IOException {
+        return web3jService.send(this, responseType);
     }
 
-    public CompletableFuture<T> sendRequestAsync() {
-        return  web3jService.sendRequestAsync(this, responseType);
+    public CompletableFuture<T> sendAsync() {
+        return  web3jService.sendAsync(this, responseType);
     }
 
 }

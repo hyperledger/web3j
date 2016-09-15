@@ -42,8 +42,8 @@ public class HttpService implements Web3jService {
     }
 
     @Override
-    public <T extends Response> T sendRequest(
-            Request request, Class<T> type) throws IOException {
+    public <T extends Response> T send(
+            Request request, Class<T> responseType) throws IOException {
 
         byte[] payload = objectMapper.writeValueAsBytes(request);
 
@@ -51,7 +51,7 @@ public class HttpService implements Web3jService {
         httpPost.setEntity(new ByteArrayEntity(payload));
         httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
 
-        ResponseHandler<T> responseHandler = getResponseHandler(type);
+        ResponseHandler<T> responseHandler = getResponseHandler(responseType);
         try {
             return httpclient.execute(httpPost, responseHandler);
         } finally {
@@ -77,12 +77,12 @@ public class HttpService implements Web3jService {
     }
 
     @Override
-    public <T extends Response> CompletableFuture<T> sendRequestAsync(
-            Request jsonRpc20Request, Class<T> type) {
+    public <T extends Response> CompletableFuture<T> sendAsync(
+            Request jsonRpc20Request, Class<T> responseType) {
         CompletableFuture<T> result = new CompletableFuture<>();
         CompletableFuture.runAsync(() -> {
             try {
-                result.complete(sendRequest(jsonRpc20Request, type));
+                result.complete(send(jsonRpc20Request, responseType));
             } catch (IOException e) {
                 result.completeExceptionally(e);
             }

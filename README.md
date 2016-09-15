@@ -1,11 +1,10 @@
-# web3j 
-## Web3 Java Ðapp API
-
-web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
+# web3j: Web3 Java Ðapp API
 
 [![Build Status](https://travis-ci.org/conor10/web3j.svg?branch=master)](https://travis-ci.org/conor10/web3j)
 [![codecov](https://codecov.io/gh/conor10/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/conor10/web3j)
+[![Join the chat at https://gitter.im/web3j/web3j](https://badges.gitter.im/web3j/web3j.svg)](https://gitter.im/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
 
 [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 
@@ -26,14 +25,14 @@ Add the following dependency to your project:
      <repository>
        <id>oss.jfrog.org</id>
        <name>Repository from Bintray</name>
-       <url>http://dl.bintray.com/conor10/maven</url>
+       <url>http://dl.bintray.com/web3j/maven</url>
      </repository>
    </repositories>
 
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.0-RELEASE</version>
+     <version>0.1.0</version>
    </dependency>
 ```
 
@@ -41,9 +40,9 @@ Add the following dependency to your project:
 
 ```
 repositories {
-   maven {url "http://dl.bintray.com/conor10/maven"}
+   maven {url "http://dl.bintray.com/web3j/maven"}
 }
-compile ("org.web3j:core:1.0.0-RELEASE")
+compile ("org.web3j:core:0.1.0")
 ```
 
 
@@ -53,7 +52,7 @@ geth --rpc --testnet
 
 
 
-To send asynchronous requests using a [ComposableFuture](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html):
+To send asynchronous requests using a Future:
 
 ```java
 Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
