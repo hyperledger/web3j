@@ -1,18 +1,20 @@
-# web3j 
-## Web3 Java Ðapp API
+# web3j: Web3 Java Ðapp API
+
+[![Join the chat at https://gitter.im/web3j/web3j](https://badges.gitter.im/web3j/web3j.svg)](https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Build Status](https://travis-ci.org/web3j/web3j.svg?branch=master)](https://travis-ci.org/web3j/web3j)
+[![codecov](https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/web3j/web3j)
+[![Join the chat at https://gitter.im/web3j/web3j](https://badges.gitter.im/web3j/web3j.svg)](https://gitter.im/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
 
-[![Build Status](https://travis-ci.org/conor10/web3j.svg?branch=master)](https://travis-ci.org/conor10/web3j)
-[![codecov](https://codecov.io/gh/conor10/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/conor10/web3j)
-
-
 [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 
-It only has two runtime dependencies:
+It only has three runtime dependencies:
 
-* Apache HTTP Client 
-* Jackson Core for fast JSON serialisation/deserialisation
+* [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-ga/index.html)
+* [Jackson Core](https://github.com/FasterXML/jackson-core) for fast JSON serialisation/deserialisation
+* [Bouncy Castle](https://www.bouncycastle.org/) for crypto
 
 
 ## Getting Started
@@ -26,14 +28,14 @@ Add the following dependency to your project:
      <repository>
        <id>oss.jfrog.org</id>
        <name>Repository from Bintray</name>
-       <url>http://dl.bintray.com/conor10/maven</url>
+       <url>http://dl.bintray.com/web3j/maven</url>
      </repository>
    </repositories>
 
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.0-RELEASE</version>
+     <version>0.1.1</version>
    </dependency>
 ```
 
@@ -41,24 +43,23 @@ Add the following dependency to your project:
 
 ```
 repositories {
-   maven {url "http://dl.bintray.com/conor10/maven"}
+   maven {url "http://dl.bintray.com/web3j/maven"}
 }
-compile ("org.web3j:core:1.0.0-RELEASE")
+compile ("org.web3j:core:0.1.1")
 ```
-
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
 
-geth --rpc --testnet
+`geth --rpc --testnet`
 
 
 
-To send asynchronous requests using a [ComposableFuture](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html):
+To send asynchronous requests using a Future:
 
 ```java
 Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-Web3ClientVersion clientVersion = web3.web3ClientVersion().sendAsync().get();
-String clientVersion = clientVersion.getWeb3ClientVersion();
+Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
+String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 ```
 
 
@@ -66,9 +67,11 @@ To send synchronous requests:
 
 ```java
 Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-Web3ClientVersion clientVersion = web3.web3ClientVersion().send();
-String clientVersion = clientVersion.getWeb3ClientVersion();
+Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
+String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 ```
+
+An example project is available at [web3j-example](https://github.com/web3j/web3j-example)
 
 
 ## Further Details
@@ -94,6 +97,8 @@ You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT`
 
 ## Coming Soon
 
+* ABI encoding/decoding
+* Geth Management API support
 * Offline transaction signing
 * IPC interface support
 * WebSocket interface support
