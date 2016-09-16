@@ -107,7 +107,7 @@ public class ProtocolIT {
     @Test
     public void testEthAccounts() throws Exception {
         EthAccounts ethAccounts = web3j.ethAccounts().send();
-        assertFalse(ethAccounts.getAccounts().isEmpty());
+        assertNotNull(ethAccounts.getAccounts());
     }
 
     @Test
