@@ -11,24 +11,24 @@ import org.web3j.protocol.utils.Codec;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EthSendTransaction {
-    private String fromAddress;
-    private String toAddress;
+    private String from;
+    private String to;
     private BigInteger gas;
     private BigInteger gasPrice;
     private BigInteger value;
     private String data;
     private BigInteger nonce;
 
-    public EthSendTransaction(String fromAddress, String data) {
-        this.fromAddress = fromAddress;
+    public EthSendTransaction(String from, String data) {
+        this.from = from;
         this.data = data;
     }
 
-    public EthSendTransaction(String fromAddress, String toAddress,
+    public EthSendTransaction(String from, String to,
                               BigInteger gas, BigInteger gasPrice,
                               BigInteger value, String data, BigInteger nonce) {
-        this.fromAddress = fromAddress;
-        this.toAddress = toAddress;
+        this.from = from;
+        this.to = to;
         this.gas = gas;
         this.gasPrice = gasPrice;
         this.value = value;
@@ -36,12 +36,12 @@ public class EthSendTransaction {
         this.nonce = nonce;
     }
 
-    public String getFromAddress() {
-        return fromAddress;
+    public String getFrom() {
+        return from;
     }
 
-    public String getToAddress() {
-        return toAddress;
+    public String getTo() {
+        return to;
     }
 
     public String getGas() {

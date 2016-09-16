@@ -11,35 +11,35 @@ import org.web3j.protocol.utils.Codec;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EthCall {
-    private String fromAddress;
-    private String toAddress;
+    private String from;
+    private String to;
     private BigInteger gas;
     private BigInteger gasPrice;
     private BigInteger value;
     private String data;
 
-    public EthCall(String toAddress, String data) {
-        this.toAddress = toAddress;
+    public EthCall(String to, String data) {
+        this.to = to;
         this.data = data;
     }
 
-    public EthCall(String fromAddress, String toAddress,
+    public EthCall(String from, String to,
                    BigInteger gas, BigInteger gasPrice,
                    BigInteger value, String data) {
-        this.fromAddress = fromAddress;
-        this.toAddress = toAddress;
+        this.from = from;
+        this.to = to;
         this.gas = gas;
         this.gasPrice = gasPrice;
         this.value = value;
         this.data = data;
     }
 
-    public String getFromAddress() {
-        return fromAddress;
+    public String getFrom() {
+        return from;
     }
 
-    public String getToAddress() {
-        return toAddress;
+    public String getTo() {
+        return to;
     }
 
     public String getGas() {

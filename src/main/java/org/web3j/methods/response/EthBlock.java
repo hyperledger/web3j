@@ -359,8 +359,11 @@ public class EthBlock extends Response<EthBlock.Block> {
         public TransactionObject() {
         }
 
-        public TransactionObject(String hash, String nonce, String blockHash, String blockNumber, String transactionIndex, String fromAddress, String toAddress, String value, String gasPrice, String gas, String input) {
-            super(hash, nonce, blockHash, blockNumber, transactionIndex, fromAddress, toAddress, value, gasPrice, gas, input);
+        public TransactionObject(String hash, String nonce, String blockHash, String blockNumber,
+                                 String transactionIndex, String from, String to, String value,
+                                 String gasPrice, String gas, String input) {
+            super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value,
+                    gasPrice, gas, input);
         }
 
         @Override

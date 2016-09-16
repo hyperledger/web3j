@@ -217,7 +217,7 @@ public class ProtocolIT {
     public void testEthEstimateGas() throws Exception {
         EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(config.ethCall())
                 .send();
-        assertThat(ethEstimateGas.getAmountUsed(), equalTo(BigInteger.valueOf(50000000)));
+        assertTrue(ethEstimateGas.getAmountUsed().signum() == 1);
     }
 
     @Test

@@ -41,7 +41,7 @@ public class RequestTest {
         web3j.ethCall(new EthCall("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", "0x0"),
                 DefaultBlockParameter.valueOf("latest")).send();
 
-        verifyResult("{\"jsonRpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"toAddress\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"data\":\"0x0\"},\"latest\"],\"id\":1}");
+        verifyResult("{\"jsonRpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"data\":\"0x0\"},\"latest\"],\"id\":1}");
     }
 
     private void verifyResult(String expected) throws Exception {
