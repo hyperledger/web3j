@@ -5,22 +5,22 @@ import java.math.BigDecimal;
 /**
  * Ethereum unit conversion functions.
  */
-public class Convert {
+public final class Convert {
     private Convert() { }
 
-    public static final BigDecimal fromWei(String number, Unit unit) {
+    public static BigDecimal fromWei(String number, Unit unit) {
         return fromWei(new BigDecimal(number), unit);
     }
 
-    public static final BigDecimal fromWei(BigDecimal number, Unit unit) {
+    public static BigDecimal fromWei(BigDecimal number, Unit unit) {
         return number.divide(unit.getWeiFactor());
     }
 
-    public static final BigDecimal toWei(String number, Unit unit) {
+    public static BigDecimal toWei(String number, Unit unit) {
         return toWei(new BigDecimal(number), unit);
     }
 
-    public static final BigDecimal toWei(BigDecimal number, Unit unit) {
+    public static BigDecimal toWei(BigDecimal number, Unit unit) {
         return number.multiply(unit.getWeiFactor());
     }
 

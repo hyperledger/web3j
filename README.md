@@ -8,10 +8,11 @@ web3j is a lightweight Java library for integrating with clients (nodes) on the 
 
 [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 
-It only has two runtime dependencies:
+It only has three runtime dependencies:
 
-* Apache HTTP Client 
-* Jackson Core for fast JSON serialisation/deserialisation
+* [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-ga/index.html) 
+* [Jackson Core](https://github.com/FasterXML/jackson-core) for fast JSON serialisation/deserialisation
+* [Bouncy Castle](https://www.bouncycastle.org/) for crypto
 
 
 ## Getting Started
@@ -45,10 +46,9 @@ repositories {
 compile ("org.web3j:core:0.1.1")
 ```
 
-
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
 
-geth --rpc --testnet
+`geth --rpc --testnet`
 
 
 
@@ -70,6 +70,7 @@ String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 ```
 
 An example project is available at [web3j-example](https://github.com/web3j/web3j-example)
+
 
 ## Further Details
 
@@ -94,6 +95,8 @@ You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT`
 
 ## Coming Soon
 
+* ABI encoding/decoding
+* Geth Management API support
 * Offline transaction signing
 * IPC interface support
 * WebSocket interface support

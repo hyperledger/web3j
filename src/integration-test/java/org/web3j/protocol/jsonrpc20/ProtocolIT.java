@@ -185,7 +185,7 @@ public class ProtocolIT {
     @Ignore  // TODO: Once account unlock functionality is available
     @Test
     public void testEthSign() throws Exception {
-
+//        EthSign ethSign = web3j.ethSign();
     }
 
     @Ignore  // TODO: Once account unlock functionality is available
@@ -193,7 +193,7 @@ public class ProtocolIT {
     public void testEthSendTransaction() throws Exception {
         EthSendTransaction ethSendTransaction = web3j.ethSendTransaction(
                 config.ethSendTransaction()).send();
-        assertThat(ethSendTransaction.getTransactionHash(), is(""));
+        assertFalse(ethSendTransaction.getTransactionHash().isEmpty());
     }
 
     @Ignore  // TODO: Once account unlock functionality is available

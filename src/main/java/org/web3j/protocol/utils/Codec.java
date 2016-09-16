@@ -11,7 +11,7 @@ public final class Codec {
     private Codec() {
     }
 
-    public static final String encodeQuantity(BigInteger value) {
+    public static String encodeQuantity(BigInteger value) {
         if (value.signum() != -1) {
             return "0x" + value.toString(16);
         } else {
@@ -19,7 +19,7 @@ public final class Codec {
         }
     }
 
-    public static final BigInteger decodeQuantity(String value) {
+    public static BigInteger decodeQuantity(String value) {
         if (!isValidHexQuantity(value)) {
             throw new MessageDecodingException("Value must be in format 0x[1-9]+[0-9]* or 0x0");
         }
