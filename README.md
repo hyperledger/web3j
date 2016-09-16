@@ -1,7 +1,7 @@
 # web3j: Web3 Java Ðapp API
 
-[![Build Status](https://travis-ci.org/conor10/web3j.svg?branch=master)](https://travis-ci.org/conor10/web3j)
-[![codecov](https://codecov.io/gh/conor10/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/conor10/web3j)
+[![Build Status](https://travis-ci.org/web3j/web3j.svg?branch=master)](https://travis-ci.org/web3j/web3j)
+[![codecov](https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/web3j/web3j)
 [![Join the chat at https://gitter.im/web3j/web3j](https://badges.gitter.im/web3j/web3j.svg)](https://gitter.im/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
@@ -10,7 +10,7 @@ web3j is a lightweight Java library for integrating with clients (nodes) on the 
 
 It only has three runtime dependencies:
 
-* [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-ga/index.html) 
+* [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-ga/index.html)
 * [Jackson Core](https://github.com/FasterXML/jackson-core) for fast JSON serialisation/deserialisation
 * [Bouncy Castle](https://www.bouncycastle.org/) for crypto
 
