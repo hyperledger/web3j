@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.web3j.methods.response.EthCall;
+import org.web3j.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.methods.response.*;
 import org.web3j.protocol.Web3j;
@@ -202,13 +204,13 @@ public class ProtocolIT {
 
     }
 
-    @Ignore  // TODO: Complete
     @Test
     public void testEthCall() throws Exception {
         EthCall ethCall = web3j.ethCall(config.ethCall(),
-                DefaultBlockParameter.valueOf(config.validBlock())).send();
-        assertThat(ethCall.getValue(), is(""));
+                DefaultBlockParameter.valueOf("latest")).send();
 
+        assertThat(DefaultBlockParameterName.LATEST.getValue(), is("latest"));
+        assertThat(ethCall.getValue(), is("0x"));
     }
 
     @Test

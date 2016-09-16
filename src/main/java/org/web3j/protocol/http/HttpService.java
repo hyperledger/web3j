@@ -23,7 +23,9 @@ import org.web3j.protocol.jsonrpc20.Response;
  */
 public class HttpService implements Web3jService {
 
-    private CloseableHttpClient httpclient = HttpClients.createDefault();
+    private CloseableHttpClient httpClient =
+            HttpClients.custom().setConnectionManagerShared(true).build();
+
     private ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
     private final String url;
@@ -38,7 +40,7 @@ public class HttpService implements Web3jService {
 
     public HttpService(String url, CloseableHttpClient httpClient) {
         this.url = url;
-        this.httpclient = httpClient;
+        this.httpClient = httpClient;
     }
 
     @Override
@@ -53,9 +55,9 @@ public class HttpService implements Web3jService {
 
         ResponseHandler<T> responseHandler = getResponseHandler(responseType);
         try {
-            return httpclient.execute(httpPost, responseHandler);
+            return httpClient.execute(httpPost, responseHandler);
         } finally {
-            httpclient.close();
+            httpClient.close();
         }
     }
 
