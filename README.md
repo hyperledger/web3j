@@ -21,25 +21,25 @@ Add the following dependency to your project:
 
 ### Maven
 
-```
-   <repositories>
-     <repository>
-       <id>oss.jfrog.org</id>
-       <value>Repository from Bintray</value>
-       <url>http://dl.bintray.com/web3j/maven</url>
-     </repository>
-   </repositories>
+```xml
+<repositories>
+  <repository>
+    <id>oss.jfrog.org</id>
+    <value>Repository from Bintray</value>
+    <url>http://dl.bintray.com/web3j/maven</url>
+  </repository>
+</repositories>
 
-   <dependency>
-     <groupId>org.web3j</groupId>
-     <artifactId>core</artifactId>
-     <version>0.1.3</version>
-   </dependency>
+<dependency>
+  <groupId>org.web3j</groupId>
+  <artifactId>core</artifactId>
+  <version>0.1.3</version>
+</dependency>
 ```
 
 ### Gradle
 
-```
+```groovy
 repositories {
    maven {url "http://dl.bintray.com/web3j/maven"}
 }
