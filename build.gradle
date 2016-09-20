@@ -109,7 +109,7 @@ bintray {
         name = 'org.web3j'
         desc = 'web3j is a lightweight Java library for integration with Ethereum clients'
         userOrg = 'web3j'
-        licenses = ['MIT']
+        licenses = ['Apache-2.0']
         issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
         vcsUrl = 'https://github.com/web3j/web3j.git'
         websiteUrl = 'http://web3j.org'
