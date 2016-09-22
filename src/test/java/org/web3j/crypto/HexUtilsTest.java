@@ -35,12 +35,4 @@ public class HexUtilsTest {
         assertThat(HexUtils.toHexString(new byte[] { 0x1 }), is("0x01"));
         assertThat(HexUtils.toHexString(hexRangeArray), is(hexRangeString));
     }
-
-    @Test
-    public void testCleanHexPrefix() {
-        assertThat(HexUtils.cleanHexPrefix(""), is(""));
-        assertThat(HexUtils.cleanHexPrefix("0123456789abcdef"), is("0123456789abcdef"));
-        assertThat(HexUtils.cleanHexPrefix("0x"), is(""));
-        assertThat(HexUtils.cleanHexPrefix("0x0123456789abcdef"), is("0123456789abcdef"));
-    }
 }

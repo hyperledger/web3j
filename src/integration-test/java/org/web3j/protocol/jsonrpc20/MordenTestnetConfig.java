@@ -34,14 +34,14 @@ public class MordenTestnetConfig extends IntegrationTestConfig {
 
     @Override
     public String validAccount() {
-        https://testnet.etherscan.io/address/0xCB10FBad79F5e602699fFf2Bb4919Fbd87AbC8CC
-        return "0xCB10FBad79F5e602699fFf2Bb4919Fbd87AbC8CC";
+        // https://testnet.etherscan.io/address/0xCB10FBad79F5e602699fFf2Bb4919Fbd87AbC8CC
+        return "0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc";
     }
 
     @Override
     public String validContractAddress() {
-        https://testnet.etherscan.io/address/0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338
-        return "0xBe5422D15F39373Eb0a97Ff8c10Fbd0e40e29338";
+        // https://testnet.etherscan.io/address/0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338
+        return "0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338";
     }
 
     @Override

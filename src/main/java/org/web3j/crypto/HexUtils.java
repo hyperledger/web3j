@@ -1,5 +1,7 @@
 package org.web3j.crypto;
 
+import org.web3j.protocol.utils.Codec;
+
 /**
  * Crypto library utility functions.
  */
@@ -8,7 +10,7 @@ public final class HexUtils {
     }
 
     public static byte[] hexStringToByteArray(String input) {
-        String cleanInput = cleanHexPrefix(input);
+        String cleanInput = Codec.cleanHexPrefix(input);
 
         int len = cleanInput.length();
 
@@ -27,22 +29,24 @@ public final class HexUtils {
         return data;
     }
 
-    static String cleanHexPrefix(String input) {
-        if (input.length()  > 1 && input.charAt(0) == '0' && input.charAt(1) == 'x') {
-            return input.substring(2);
-        } else {
-            return input;
+    public static String toHexString(byte[] input, int offset, int length, boolean withPrefix) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (withPrefix) {
+            stringBuilder.append("0x");
         }
+        for (int i = offset; i < offset + length; i++) {
+            stringBuilder.append(String.format("%02x", input[i] & 0xFF));
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public static String toHexStringNoPrefix(byte[] input) {
+        return toHexString(input, 0, input.length, false);
     }
 
     public static String toHexString(byte[] input) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("0x");
-        for (byte b:input) {
-            stringBuffer.append(String.format("%02x", b & 0xFF));
-        }
-
-        return stringBuffer.toString();
+        return toHexString(input, 0, input.length, true);
     }
 
     static byte b(int m, int n) {

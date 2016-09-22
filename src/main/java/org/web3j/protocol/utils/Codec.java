@@ -49,4 +49,17 @@ public final class Codec {
 
         return true;
     }
+
+    public static String cleanHexPrefix(String input) {
+        if (input.length()  > 1 && input.charAt(0) == '0' && input.charAt(1) == 'x') {
+            return input.substring(2);
+        } else {
+            return input;
+        }
+    }
+
+    public static BigInteger toBigInt(String hexValue) {
+        String cleanValue = cleanHexPrefix(hexValue);
+        return new BigInteger(cleanValue, 16);
+    }
 }

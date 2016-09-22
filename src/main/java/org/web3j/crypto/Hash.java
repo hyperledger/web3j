@@ -30,9 +30,13 @@ public class Hash {
      * @return
      *     hash value
      */
-    public static byte[] sha3(byte[] input) {
+    public static byte[] sha3(byte[] input, int offset, int length) {
         Keccak.DigestKeccak kecc = new Keccak.Digest256();
-        kecc.update(input);
+        kecc.update(input, offset, length);
         return kecc.digest();
+    }
+
+    public static byte[] sha3(byte[] input) {
+        return sha3(input, 0, input.length);
     }
 }

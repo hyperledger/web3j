@@ -95,7 +95,6 @@ You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT`
 
 ## Coming Soon
 
-* ABI encoding/decoding
 * Geth Management API support
 * Offline transaction signing
 * IPC interface support

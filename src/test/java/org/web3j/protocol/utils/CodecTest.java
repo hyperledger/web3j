@@ -2,7 +2,10 @@ package org.web3j.protocol.utils;
 
 import java.math.BigInteger;
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import org.web3j.crypto.HexUtils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -45,5 +48,13 @@ public class CodecTest {
     @Test(expected = MessageEncodingException.class)
     public void testQuantityEncodeNegative() {
         Codec.encodeQuantity(BigInteger.valueOf(-1));
+    }
+
+    @Test
+    public void testCleanHexPrefix() {
+        Assert.assertThat(Codec.cleanHexPrefix(""), is(""));
+        Assert.assertThat(Codec.cleanHexPrefix("0123456789abcdef"), is("0123456789abcdef"));
+        Assert.assertThat(Codec.cleanHexPrefix("0x"), is(""));
+        Assert.assertThat(Codec.cleanHexPrefix("0x0123456789abcdef"), is("0123456789abcdef"));
     }
 }
