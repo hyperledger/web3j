@@ -9,7 +9,7 @@ import org.web3j.protocol.Web3jService;
 
 
 public class Request<S, T extends Response> {
-    private String jsonRpc = "2.0";
+    private String jsonrpc = "2.0";
     private String method;
     private List<S> params;
     private long id;
@@ -32,12 +32,12 @@ public class Request<S, T extends Response> {
         this.responseType = type;
     }
 
-    public String getJsonRpc() {
-        return jsonRpc;
+    public String getJsonrpc() {
+        return jsonrpc;
     }
 
-    public void setJsonRpc(String jsonRpc) {
-        this.jsonRpc = jsonRpc;
+    public void setJsonrpc(String jsonrpc) {
+        this.jsonrpc = jsonrpc;
     }
 
     public String getMethod() {
