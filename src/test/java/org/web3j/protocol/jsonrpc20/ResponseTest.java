@@ -90,7 +90,8 @@ public class ResponseTest {
                         "  \"id\":1," +
                         "  \"error\":{" +
                         "    \"code\":-32602," +
-                        "    \"message\":\"Invalid address length, expected 40 got 64 bytes\"" +
+                        "    \"message\":\"Invalid address length, expected 40 got 64 bytes\"," +
+                        "    \"data\":null" +
                         "  }" +
                         "}"
         );

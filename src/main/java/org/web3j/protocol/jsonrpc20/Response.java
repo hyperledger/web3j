@@ -52,6 +52,7 @@ public class Response<T> {
     public static class Error {
         private int code;
         private String message;
+        private String data;
 
         public Error() {
         }
@@ -75,6 +76,14 @@ public class Response<T> {
 
         public void setMessage(String message) {
             this.message = message;
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
         }
 
         @Override
