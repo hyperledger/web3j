@@ -48,7 +48,7 @@ compile ("org.web3j:core:0.2.0")
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
 
-`geth --rpc --testnet`
+`geth --rpcapi personal,db,eth,net,web3 --rpc --testnet`
 
 Or [Parity](https://github.com/ethcore/parity)
 
