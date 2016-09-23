@@ -2,8 +2,8 @@ package org.web3j.protocol.jsonrpc20;
 
 import java.math.BigInteger;
 
-import org.web3j.methods.request.EthCall;
-import org.web3j.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.EthCall;
+import org.web3j.protocol.core.methods.request.EthSendTransaction;
 
 /**
  * Common values used by integration tests.

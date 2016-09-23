@@ -33,7 +33,7 @@ Add the following dependency to your project:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>0.1.5</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
@@ -43,7 +43,7 @@ Add the following dependency to your project:
 repositories {
    maven {url "http://dl.bintray.com/web3j/maven"}
 }
-compile ("org.web3j:core:0.1.5")
+compile ("org.web3j:core:0.2.0")
 ```
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
@@ -73,6 +73,16 @@ Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
 String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 ```
 
+To use Parity commands:
+```java
+Parity parity = Parity.build(new HttpService());  // defaults to http://localhost:8545/
+PersonalUnlockAccount personalUnlockAccount = parity.personalUnlockAccount("0x000...", "a password").sendAsync().get();
+if (personalUnlockAccount.accountUnlocked()) {
+    // send a transaction, or use parity.personalSignAndSendTransaction() to do it all in one
+}
+```
+
+
 An example project is available at [web3j-example](https://github.com/web3j/web3j-example)
 
 
@@ -80,11 +90,13 @@ An example project is available at [web3j-example](https://github.com/web3j/web3
 
 web3j is based on specifications from the [JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) and [web3.js](https://github.com/ethereum/web3.js) projects. 
 
+Parity's [Personal JSON-RPC](https://github.com/ethcore/parity/wiki/JSONRPC-personal-module) module is supported for managing accounts, and creating transactions.
+
 It provides type safe access to all responses. Optional or null responses are wrapped in Java 8's [Optional](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html) type.
 
 Async requests are handled using Java 8's [CompletableFutures](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html).
 
-Quantity data types are returned as [BigInteger](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html)'s. For simple results, you can obtain the quantity as a String via `org.web3j.protocol.jsonrpc20.Response.getResult()`.
+Quantity payload types are returned as [BigInteger](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html)'s. For simple results, you can obtain the quantity as a String via `org.web3j.protocol.jsonrpc20.Response.getResult()`.
 
 
 ## Tested clients

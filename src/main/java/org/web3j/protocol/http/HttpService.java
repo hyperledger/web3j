@@ -15,8 +15,8 @@ import org.apache.http.impl.client.HttpClients;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.jsonrpc20.Request;
-import org.web3j.protocol.jsonrpc20.Response;
+import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.Response;
 
 /**
  * HTTP implementation of our services API.

@@ -3,8 +3,8 @@ package org.web3j.protocol;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-import org.web3j.protocol.jsonrpc20.Request;
-import org.web3j.protocol.jsonrpc20.Response;
+import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.Response;
 
 /**
  * Services API.

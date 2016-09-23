@@ -2,14 +2,14 @@ package org.web3j.protocol;
 
 import java.math.BigInteger;
 
-import org.web3j.methods.request.*;
-import org.web3j.methods.request.EthCall;
-import org.web3j.methods.request.EthSendTransaction;
-import org.web3j.methods.request.ShhPost;
-import org.web3j.methods.response.*;
-import org.web3j.protocol.jsonrpc20.DefaultBlockParameter;
-import org.web3j.protocol.jsonrpc20.JsonRpc2_0Web3j;
-import org.web3j.protocol.jsonrpc20.Request;
+import org.web3j.protocol.core.methods.request.*;
+import org.web3j.protocol.core.methods.request.EthCall;
+import org.web3j.protocol.core.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.ShhPost;
+import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.JsonRpc2_0Web3j;
+import org.web3j.protocol.core.Request;
 
 /**
  * JSON-RPC Request object building factory.
@@ -64,11 +64,11 @@ public interface Web3j {
 
     Request<?, EthSign> ethSign(String address, String sha3HashOfDataToSign);
 
-    Request<?, org.web3j.methods.response.EthSendTransaction> ethSendTransaction(EthSendTransaction transaction);
+    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(EthSendTransaction transaction);
 
-    Request<?, org.web3j.methods.response.EthSendTransaction> ethSendRawTransaction(String signedTransactionData);
+    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(String signedTransactionData);
 
-    Request<?, org.web3j.methods.response.EthCall> ethCall(EthCall ethCall, DefaultBlockParameter defaultBlockParameter);
+    Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(EthCall ethCall, DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthEstimateGas> ethEstimateGas(EthCall ethCall);
 
@@ -128,7 +128,7 @@ public interface Web3j {
 
     Request<?, DbGetHex> dbGetHex(String databaseName, String keyName);
 
-    Request<?, org.web3j.methods.response.ShhPost> shhPost(ShhPost shhPost);
+    Request<?, org.web3j.protocol.core.methods.response.ShhPost> shhPost(ShhPost shhPost);
 
     Request<?, ShhVersion> shhVersion();
 

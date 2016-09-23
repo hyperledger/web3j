@@ -6,10 +6,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.web3j.methods.response.EthCall;
-import org.web3j.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.methods.response.*;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
 
 import static junit.framework.TestCase.assertFalse;
