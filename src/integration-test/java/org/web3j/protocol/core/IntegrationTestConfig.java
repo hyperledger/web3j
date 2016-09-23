@@ -1,4 +1,4 @@
-package org.web3j.protocol.jsonrpc20;
+package org.web3j.protocol.core;
 
 import java.math.BigInteger;
 

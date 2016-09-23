@@ -1,4 +1,4 @@
-package org.web3j.protocol.jsonrpc20;
+package org.web3j.protocol.core;
 
 import java.math.BigInteger;
 
@@ -8,8 +8,6 @@ import org.junit.Test;
 
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
@@ -24,13 +22,13 @@ import static org.junit.Assert.assertTrue;
 /**
  * JSON-RPC 2.0 Integration Tests.
  */
-public class ProtocolIT {
+public class CoreIT {
 
     private Web3j web3j;
 
     private IntegrationTestConfig config = new MordenTestnetConfig();
 
-    public ProtocolIT() {
+    public CoreIT() {
         System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
