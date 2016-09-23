@@ -50,6 +50,10 @@ Start up an Ethereum client if you don't already have one running, such as [Geth
 
 `geth --rpc --testnet`
 
+Or [Parity](https://github.com/ethcore/parity)
+
+`parity --chain testnet`
+
 
 
 To send asynchronous requests using a Future:
@@ -88,14 +92,17 @@ Quantity data types are returned as [BigInteger](https://docs.oracle.com/javase/
 Geth
 * 1.4.10-stable-5f55d95a (in progress)
 
+Parity
+* v1.2.4-stable-77ecf4d-20160905 (in progress)
+
 More coming soon.
 
-You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT` verify other clients.
+You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT` to verify clients.
 
 
 ## Coming Soon
 
-* Geth Management API support
+* Geth & Parity Management API support
 * Offline transaction signing
 * IPC interface support
 * WebSocket interface support
@@ -106,6 +113,23 @@ You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT`
 For a .NET implementation, check out [Nethereum](https://github.com/Nethereum/Nethereum).
  
 For a pure Java implementation of the Ethereum client, check out [EthereumJ](https://github.com/ethereum/ethereumj) and the work of [Ether.Camp](https://github.com/ether-camp/).
+
+
+## Build instructions
+
+web3j includes integration tests for running against a live Ethereum client. If you do not have a client running, you can exclude their execution as per the below instructions. 
+
+To run a full build including integration tests:
+
+```
+./gradlew check
+```
+
+To run excluding integration tests:
+
+```
+./gradlew -x integrationTest check 
+```
 
 
 ## Thanks and Credits
