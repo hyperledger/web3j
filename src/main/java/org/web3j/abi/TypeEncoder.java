@@ -2,10 +2,8 @@ package org.web3j.abi;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.web3j.abi.datatypes.*;
-import org.web3j.crypto.Hash;
 import org.web3j.crypto.HexUtils;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
@@ -22,7 +20,7 @@ public class TypeEncoder {
     private TypeEncoder() { }
 
     static boolean isDynamic(Type parameter) {
-        return parameter instanceof DynamicBytes ||
+        return parameter instanceof DynamicBytesType ||
                 parameter instanceof Utf8String ||
                 parameter instanceof DynamicArray;
     }
@@ -32,10 +30,10 @@ public class TypeEncoder {
             return encodeNumeric(((NumericType) parameter));
         } else if (parameter instanceof Bool) {
             return encodeBool((Bool) parameter);
-        } else if (parameter instanceof StaticBytes) {
-            return encodeBytes((StaticBytes) parameter);
-        } else if (parameter instanceof DynamicBytes) {
-            return encodeDynamicBytes((DynamicBytes) parameter);
+        } else if (parameter instanceof Bytes) {
+            return encodeBytes((Bytes) parameter);
+        } else if (parameter instanceof DynamicBytesType) {
+            return encodeDynamicBytes((DynamicBytesType) parameter);
         } else if (parameter instanceof Utf8String) {
             return encodeString((Utf8String) parameter);
         } else if (parameter instanceof StaticArray) {
@@ -95,8 +93,8 @@ public class TypeEncoder {
         return HexUtils.toHexStringNoPrefix(rawValue);
     }
 
-    static String encodeBytes(Bytes bytes) {
-        byte[] value = bytes.getValue();
+    static String encodeBytes(BytesType bytesType) {
+        byte[] value = bytesType.getValue();
         int length = value.length;
         int mod = length % MAX_BYTE_LENGTH;
 
@@ -111,7 +109,7 @@ public class TypeEncoder {
         return HexUtils.toHexStringNoPrefix(dest);
     }
 
-    static String encodeDynamicBytes(DynamicBytes dynamicBytes) {
+    static String encodeDynamicBytes(DynamicBytesType dynamicBytes) {
         int size = dynamicBytes.getValue().length;
         String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
         String encodedValue = encodeBytes(dynamicBytes);
@@ -124,7 +122,7 @@ public class TypeEncoder {
 
     static String encodeString(Utf8String string) {
         byte[] utfEncoded = string.getValue().getBytes(StandardCharsets.UTF_8);
-        return encodeDynamicBytes(new DynamicBytes(utfEncoded));
+        return encodeDynamicBytes(new DynamicBytesType(utfEncoded));
     }
 
     static <T extends Type> String encodeArrayValues(Array<T> value) {

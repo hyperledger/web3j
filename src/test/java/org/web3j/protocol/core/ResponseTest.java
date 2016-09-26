@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.*;
-import org.web3j.protocol.core.Response;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -756,7 +755,8 @@ public class ResponseTest extends ResponseTester {
                         "                \"type\": \"uint256\"\n"   +
                         "              }\n"   +
                         "            ],\n"   +
-                        "            \"type\": \"function\"\n"   +
+                        "            \"type\": \"function\",\n"   +
+                        "            \"payable\": false\n"   +
                         "          }\n"   +
                         "        ],\n"   +
                         "        \"userDoc\": {\n"   +
@@ -782,12 +782,13 @@ public class ResponseTest extends ResponseTester {
                                     "0",
                                     "0.8.2",
                                     "--bin --abi --userdoc --devdoc --add-std --optimize -o /var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
-                                    Arrays.asList(new EthCompileSolidity.AbiDefinition(
+                                    Arrays.asList(new AbiDefinition(
                                             false,
-                                            Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("a", "uint256")),
+                                            Arrays.asList(new AbiDefinition.NamedType("a", "uint256")),
                                             "multiply",
-                                            Arrays.asList(new EthCompileSolidity.AbiDefinition.NamedType("d", "uint256")),
-                                            "function"
+                                            Arrays.asList(new AbiDefinition.NamedType("d", "uint256")),
+                                            "function",
+                                            false
                                     )),
                                     new EthCompileSolidity.Documentation(),
                                     new EthCompileSolidity.Documentation()

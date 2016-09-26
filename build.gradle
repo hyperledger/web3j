@@ -54,7 +54,8 @@ configurations {
 dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5.2',
             'com.fasterxml.jackson.core:jackson-databind:2.8.1',
-            'org.bouncycastle:bcprov-jdk15on:1.54'
+            'org.bouncycastle:bcprov-jdk15on:1.54',
+            'com.squareup:javapoet:1.7.0'
     testCompile 'junit:junit:4.11',
             'org.mockito:mockito-core:1.10.19'
 }
@@ -76,11 +77,6 @@ integrationTest.mustRunAfter test
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
 }
-
-//task sourcesJar(type: Jar, dependsOn: classes) {
-//    classifier = 'sources'
-//    from sourceSets.main.allSource
-//}
 
 task sourceJar(type: Jar) {
     classifier = 'sources'

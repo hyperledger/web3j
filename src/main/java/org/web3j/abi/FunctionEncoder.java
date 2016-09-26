@@ -2,6 +2,7 @@ package org.web3j.abi;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
@@ -22,14 +23,8 @@ public class FunctionEncoder {
 
     public static String encode(Function function) {
         List<Type> parameters = function.getParameters();
-        String expectedSignature = function.getFullSignature();
 
         String methodSignature = buildMethodSignature(function.getName(), parameters);
-        if (!isValidSignature(expectedSignature, methodSignature)) {
-            throw new UnsupportedOperationException(
-                    "Method signature: " + methodSignature +
-                            " does not match expected: " + expectedSignature);
-        }
         String methodId = buildMethodId(methodSignature);
 
         StringBuilder result = new StringBuilder();
@@ -75,15 +70,10 @@ public class FunctionEncoder {
         result.append("(");
         String params = parameters.stream()
                 .map(Type::getTypeAsString)
-                .reduce((acc, s) -> acc + "," + s)
-                .orElse("");
+                .collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();
-    }
-
-    private static boolean isValidSignature(String signature, String methodSignature) {
-        return signature.equals(methodSignature);
     }
 
     static String buildMethodId(String methodSignature) {

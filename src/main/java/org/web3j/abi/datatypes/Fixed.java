@@ -7,8 +7,10 @@ import java.math.BigInteger;
  */
 public class Fixed extends FixedPointType {
 
-    public Fixed(int mBitSize, int nBitSize, BigInteger value) {
-        super("fixed", mBitSize, nBitSize, value);
+    public static final String TYPE_NAME = "fixed";
+
+    protected Fixed(int mBitSize, int nBitSize, BigInteger value) {
+        super(TYPE_NAME , mBitSize, nBitSize, value);
     }
 
     public Fixed(BigInteger value) {
@@ -19,7 +21,7 @@ public class Fixed extends FixedPointType {
         this(convert(m, n));
     }
 
-    public Fixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+    protected Fixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
         this(convert(mBitSize, nBitSize, m, n));
     }
 }

@@ -8,6 +8,8 @@ import java.util.Collections;
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.generated.Bytes10;
+import org.web3j.abi.datatypes.generated.Uint32;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -25,7 +27,7 @@ public class FunctionEncoderTest {
                 FunctionEncoder.buildMethodSignature(
                         "baz",
                         Arrays.asList(
-                                new Uint(32, BigInteger.valueOf(69)),
+                                new Uint32(BigInteger.valueOf(69)),
                                 new Bool(true))
                 ),
                 is("baz(uint32,bool)"));
@@ -42,8 +44,7 @@ public class FunctionEncoderTest {
     public void testFunctionSimpleEncode1() {
         Function function = new Function(
                 "baz",
-                "(uint32,bool)",
-                new Uint(32, BigInteger.valueOf(69)),
+                new Uint32(BigInteger.valueOf(69)),
                 new Bool(true));
 
         assertThat(FunctionEncoder.encode(function),
@@ -57,8 +58,7 @@ public class FunctionEncoderTest {
     public void testFunctionMDynamicArrayEncode1() {
         Function function = new Function(
                 "sam",
-                "(bytes,bool,uint256[])",
-                new DynamicBytes("dave".getBytes()),
+                new DynamicBytesType("dave".getBytes()),
                 new Bool(true),
                 new DynamicArray<>(
                         new Uint(BigInteger.ONE),
@@ -83,14 +83,13 @@ public class FunctionEncoderTest {
     public void testFunctionMDynamicArrayEncode2() {
         Function function = new Function(
                 "f",
-                "(uint256,uint32[],bytes10,bytes)",
                 new Uint(BigInteger.valueOf(0x123)),
                 new DynamicArray<>(
-                        new Uint(32, BigInteger.valueOf(0x456)),
-                        new Uint(32, BigInteger.valueOf(0x789))
+                        new Uint32(BigInteger.valueOf(0x456)),
+                        new Uint32(BigInteger.valueOf(0x789))
                 ),
-                new StaticBytes("1234567890".getBytes()),
-                new DynamicBytes("Hello, world!".getBytes())
+                new Bytes10("1234567890".getBytes()),
+                new DynamicBytesType("Hello, world!".getBytes())
         );
 
         assertThat(FunctionEncoder.encode(function),

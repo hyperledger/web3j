@@ -1,25 +1,22 @@
 package org.web3j.abi.datatypes;
 
 /**
- * Binary sequence of bytes.
+ * Statically allocated sequence of bytes.
  */
-public class Bytes implements Type<byte[]> {
+public class Bytes extends BytesType {
 
-    private byte[] value;
-    private String type;
+    public static final String TYPE_NAME = "bytes";
 
-    public Bytes(byte[] src, String type) {
-        this.value = src;
-        this.type = type;
+    protected Bytes(int byteSize, byte[] value) {
+        super(value, TYPE_NAME + value.length);
+        if (!isValid(byteSize, value)) {
+            throw new UnsupportedOperationException(
+                    "Input byte array must be in range 0 < M <= 32 and length must match type");
+        }
     }
 
-    @Override
-    public byte[] getValue() {
-        return value;
-    }
-
-    @Override
-    public String getTypeAsString() {
-        return type;
+    private boolean isValid(int byteSize, byte[] value) {
+        int length = value.length;
+        return length > 0 && length <= 32 && length == byteSize;
     }
 }

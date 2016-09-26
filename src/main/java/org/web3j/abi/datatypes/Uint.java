@@ -7,12 +7,17 @@ import java.math.BigInteger;
  */
 public class Uint extends IntType {
 
+    public static final String TYPE_NAME = "uint";
+
+    /**
+     * This constructor is required by the {@link Address} type.
+     */
     Uint(String typePrefix, int bitSize, BigInteger value) {
         super(typePrefix, bitSize, value);
     }
 
-    public Uint(int bitSize, BigInteger value) {
-        this("uint", bitSize, value);
+    protected Uint(int bitSize, BigInteger value) {
+        this(TYPE_NAME, bitSize, value);
     }
 
     public Uint(BigInteger value) {

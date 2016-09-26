@@ -7,8 +7,10 @@ import java.math.BigInteger;
  */
 public class Ufixed extends FixedPointType {
 
-    public Ufixed(int mBitSize, int nBitSize, BigInteger value) {
-        super("ufixed", mBitSize, nBitSize, value);
+    public static final String TYPE_NAME = "ufixed";
+
+    protected Ufixed(int mBitSize, int nBitSize, BigInteger value) {
+        super(TYPE_NAME, mBitSize, nBitSize, value);
     }
 
     public Ufixed(BigInteger value) {
@@ -19,7 +21,7 @@ public class Ufixed extends FixedPointType {
         this(convert(m, n));
     }
 
-    public Ufixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+     protected Ufixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
         this(convert(mBitSize, nBitSize, m, n));
     }
 

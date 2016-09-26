@@ -29,7 +29,7 @@ public class MordenTestnetConfig extends IntegrationTestConfig {
 
     @Override
     public BigInteger validBlockUncleCount() {
-        return BigInteger.ZERO;
+        return BigInteger.ONE;
     }
 
     @Override
