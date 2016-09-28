@@ -15,11 +15,11 @@ import org.web3j.abi.datatypes.*;
 /**
  * Generator class for creating all the different numeric type variants.
  */
-public class AbiTypesGenerator {
+public class AbiTypesGenerator extends Generator {
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
             "<strong>Do not modifiy!</strong><br>\n" +
-            "Please use Generator located in project X to update.</p>\n";
+            "Please use {@link " + AbiTypesGenerator.class.getName() + "} to update.</p>\n";
 
     public static void main(String[] args) throws Exception {
         new AbiTypesGenerator()
@@ -73,9 +73,6 @@ public class AbiTypesGenerator {
                 if (mBitSize + nBitSize > Type.MAX_BIT_LENGTH) {
                     break inner;
                 }
-//        for (int mBitSize = 8, nBitSize = Type.MAX_BIT_LENGTH - 8;
-//             mBitSize < Type.MAX_BIT_LENGTH && nBitSize > 0;
-//             mBitSize += 8, nBitSize -= 8) {
 
                 MethodSpec constructorSpec1 = MethodSpec.constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)

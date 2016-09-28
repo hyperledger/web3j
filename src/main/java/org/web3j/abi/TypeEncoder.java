@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 import org.web3j.abi.datatypes.*;
-import org.web3j.crypto.HexUtils;
+import org.web3j.utils.Hex;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
 import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
@@ -20,7 +20,7 @@ public class TypeEncoder {
     private TypeEncoder() { }
 
     static boolean isDynamic(Type parameter) {
-        return parameter instanceof DynamicBytesType ||
+        return parameter instanceof DynamicBytes ||
                 parameter instanceof Utf8String ||
                 parameter instanceof DynamicArray;
     }
@@ -32,8 +32,8 @@ public class TypeEncoder {
             return encodeBool((Bool) parameter);
         } else if (parameter instanceof Bytes) {
             return encodeBytes((Bytes) parameter);
-        } else if (parameter instanceof DynamicBytesType) {
-            return encodeDynamicBytes((DynamicBytesType) parameter);
+        } else if (parameter instanceof DynamicBytes) {
+            return encodeDynamicBytes((DynamicBytes) parameter);
         } else if (parameter instanceof Utf8String) {
             return encodeString((Utf8String) parameter);
         } else if (parameter instanceof StaticArray) {
@@ -60,7 +60,7 @@ public class TypeEncoder {
                 rawValue, 0,
                 paddedRawValue, MAX_BYTE_LENGTH - rawValue.length,
                 rawValue.length);
-        return HexUtils.toHexStringNoPrefix(paddedRawValue);
+        return Hex.toHexStringNoPrefix(paddedRawValue);
     }
 
     private static byte getPaddingValue(NumericType numericType) {
@@ -90,7 +90,7 @@ public class TypeEncoder {
         if (value.getValue()) {
             rawValue[rawValue.length - 1] = 1;
         }
-        return HexUtils.toHexStringNoPrefix(rawValue);
+        return Hex.toHexStringNoPrefix(rawValue);
     }
 
     static String encodeBytes(BytesType bytesType) {
@@ -106,10 +106,10 @@ public class TypeEncoder {
         } else {
             dest = value;
         }
-        return HexUtils.toHexStringNoPrefix(dest);
+        return Hex.toHexStringNoPrefix(dest);
     }
 
-    static String encodeDynamicBytes(DynamicBytesType dynamicBytes) {
+    static String encodeDynamicBytes(DynamicBytes dynamicBytes) {
         int size = dynamicBytes.getValue().length;
         String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
         String encodedValue = encodeBytes(dynamicBytes);
@@ -122,7 +122,7 @@ public class TypeEncoder {
 
     static String encodeString(Utf8String string) {
         byte[] utfEncoded = string.getValue().getBytes(StandardCharsets.UTF_8);
-        return encodeDynamicBytes(new DynamicBytesType(utfEncoded));
+        return encodeDynamicBytes(new DynamicBytes(utfEncoded));
     }
 
     static <T extends Type> String encodeArrayValues(Array<T> value) {

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 
 import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 import org.web3j.protocol.core.Response;
 
 /**
@@ -66,7 +66,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getTransactionIndex() {
-            return Codec.decodeQuantity(transactionIndex);
+            return Numeric.decodeQuantity(transactionIndex);
         }
 
         public void setTransactionIndex(String transactionIndex) {
@@ -82,7 +82,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getBlockNumber() {
-            return Codec.decodeQuantity(blockNumber);
+            return Numeric.decodeQuantity(blockNumber);
         }
 
         public void setBlockNumber(String blockNumber) {
@@ -90,7 +90,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getCumulativeGasUsed() {
-            return Codec.decodeQuantity(cumulativeGasUsed);
+            return Numeric.decodeQuantity(cumulativeGasUsed);
         }
 
         public void setCumulativeGasUsed(String cumulativeGasUsed) {
@@ -98,7 +98,7 @@ public class EthGetTransactionReceipt extends Response<EthGetTransactionReceipt.
         }
 
         public BigInteger getGasUsed() {
-            return Codec.decodeQuantity(gasUsed);
+            return Numeric.decodeQuantity(gasUsed);
         }
 
         public void setGasUsed(String gasUsed) {

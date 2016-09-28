@@ -141,7 +141,7 @@ public class RequestTest extends RequestTester {
                 "password"
         ).send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_confirmRequest\",\"params\":[\"0x1\",{\"from\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_confirmRequest\",\"params\":[\"0x1\",{\"from\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"gas\":\"0x2328\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
     }
 
     @Test

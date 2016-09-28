@@ -11,7 +11,7 @@ import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.parity.methods.request.Wallet;
 import org.web3j.protocol.parity.methods.response.*;
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 
 /**
  * JSON-RPC 2.0 factory implementation for Parity.
@@ -76,7 +76,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password, BigInteger duration) {
         String encodedDuration = null;  // send null if no duration is provided
         if (duration != null) {
-            encodedDuration = Codec.encodeQuantity(duration);
+            encodedDuration = Numeric.encodeQuantity(duration);
         }
 
         return new Request<>(

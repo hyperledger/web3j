@@ -1,12 +1,12 @@
-package org.web3j.crypto;
+package org.web3j.utils;
 
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.crypto.HexUtils.b;
+import static org.web3j.utils.Hex.b;
 
-public class HexUtilsTest {
+public class HexTest {
 
     private final byte[] hexRangeArray = new byte[] {
             b(0x0, 0x1),
@@ -23,16 +23,16 @@ public class HexUtilsTest {
 
     @Test
     public void testHexStringToByteArray() {
-        assertThat(HexUtils.hexStringToByteArray("0"), is(new byte[] { 0 }));
-        assertThat(HexUtils.hexStringToByteArray("1"), is(new byte[] { 0x1 }));
-        assertThat(HexUtils.hexStringToByteArray(hexRangeString),
+        assertThat(Hex.hexStringToByteArray("0"), is(new byte[] { 0 }));
+        assertThat(Hex.hexStringToByteArray("1"), is(new byte[] { 0x1 }));
+        assertThat(Hex.hexStringToByteArray(hexRangeString),
                 is(hexRangeArray));
     }
 
     @Test
     public void testToHexString() {
-        assertThat(HexUtils.toHexString(new byte[] {}), is("0x"));
-        assertThat(HexUtils.toHexString(new byte[] { 0x1 }), is("0x01"));
-        assertThat(HexUtils.toHexString(hexRangeArray), is(hexRangeString));
+        assertThat(Hex.toHexString(new byte[] {}), is("0x"));
+        assertThat(Hex.toHexString(new byte[] { 0x1 }), is("0x01"));
+        assertThat(Hex.toHexString(hexRangeArray), is(hexRangeString));
     }
 }

@@ -44,8 +44,9 @@ public class FunctionEncoderTest {
     public void testFunctionSimpleEncode1() {
         Function function = new Function(
                 "baz",
-                new Uint32(BigInteger.valueOf(69)),
-                new Bool(true));
+                Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),
+                Collections.<Class<? extends Type>>emptyList()
+        );
 
         assertThat(FunctionEncoder.encode(function),
                 is("0xcdcd77c0" +
@@ -58,12 +59,14 @@ public class FunctionEncoderTest {
     public void testFunctionMDynamicArrayEncode1() {
         Function function = new Function(
                 "sam",
-                new DynamicBytesType("dave".getBytes()),
-                new Bool(true),
-                new DynamicArray<>(
-                        new Uint(BigInteger.ONE),
-                        new Uint(BigInteger.valueOf(2)),
-                        new Uint(BigInteger.valueOf(3)))
+                Arrays.asList(
+                    new DynamicBytes("dave".getBytes()),
+                    new Bool(true),
+                    new DynamicArray<>(
+                            new Uint(BigInteger.ONE),
+                            new Uint(BigInteger.valueOf(2)),
+                            new Uint(BigInteger.valueOf(3)))),
+                Collections.<Class<? extends Type>>emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),
@@ -83,13 +86,15 @@ public class FunctionEncoderTest {
     public void testFunctionMDynamicArrayEncode2() {
         Function function = new Function(
                 "f",
-                new Uint(BigInteger.valueOf(0x123)),
-                new DynamicArray<>(
-                        new Uint32(BigInteger.valueOf(0x456)),
-                        new Uint32(BigInteger.valueOf(0x789))
-                ),
-                new Bytes10("1234567890".getBytes()),
-                new DynamicBytesType("Hello, world!".getBytes())
+                Arrays.asList(
+                    new Uint(BigInteger.valueOf(0x123)),
+                    new DynamicArray<>(
+                            new Uint32(BigInteger.valueOf(0x456)),
+                            new Uint32(BigInteger.valueOf(0x789))
+                    ),
+                    new Bytes10("1234567890".getBytes()),
+                    new DynamicBytes("Hello, world!".getBytes())),
+                Collections.<Class<? extends Type>>emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),

@@ -1,14 +1,17 @@
-package org.web3j.protocol.utils;
+package org.web3j.utils;
 
 import java.math.BigInteger;
+
+import org.web3j.protocol.exceptions.MessageDecodingException;
+import org.web3j.protocol.exceptions.MessageEncodingException;
 
 /**
  * <p>Message codec functions.</p>
  *
  * <p>Implementation as per https://github.com/ethereum/wiki/wiki/JSON-RPC#hex-value-encoding</p>
  */
-public final class Codec {
-    private Codec() {
+public final class Numeric {
+    private Numeric() {
     }
 
     public static String encodeQuantity(BigInteger value) {

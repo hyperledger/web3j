@@ -1,27 +1,30 @@
 package org.web3j.abi.datatypes;
 
-import java.util.Arrays;
 import java.util.List;
-
-import org.web3j.abi.FunctionEncoder;
 
 /**
  * Function wrapper
  */
-public class Function {
+public class Function<T extends Type> {
     private String name;
-    private List<Type> parameters;
+    private List<Type> inputParameters;
+    private List<Class<T>> outputParameters;
 
-    public Function(String name, Type... parameters) {
+    public Function(String name, List<Type> inputParameters, List<Class<T>> outputParameters) {
         this.name = name;
-        this.parameters = Arrays.asList(parameters);
+        this.inputParameters = inputParameters;
+        this.outputParameters = outputParameters;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Type> getParameters() {
-        return parameters;
+    public List<Type> getInputParameters() {
+        return inputParameters;
+    }
+
+    public List<Class<T>> getOutputParameters() {
+        return outputParameters;
     }
 }

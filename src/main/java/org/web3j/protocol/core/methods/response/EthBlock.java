@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 import org.web3j.protocol.core.Response;
 
 /**
@@ -96,7 +96,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getNumber() {
-            return Codec.decodeQuantity(number);
+            return Numeric.decodeQuantity(number);
         }
 
         public void setNumber(String number) {
@@ -176,7 +176,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getDifficulty() {
-            return Codec.decodeQuantity(difficulty);
+            return Numeric.decodeQuantity(difficulty);
         }
 
         public void setDifficulty(String difficulty) {
@@ -184,7 +184,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getTotalDifficulty() {
-            return Codec.decodeQuantity(totalDifficulty);
+            return Numeric.decodeQuantity(totalDifficulty);
         }
 
         public void setTotalDifficulty(String totalDifficulty) {
@@ -200,7 +200,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getSize() {
-            return Codec.decodeQuantity(size);
+            return Numeric.decodeQuantity(size);
         }
 
         public void setSize(String size) {
@@ -208,7 +208,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getGasLimit() {
-            return Codec.decodeQuantity(gasLimit);
+            return Numeric.decodeQuantity(gasLimit);
         }
 
         public void setGasLimit(String gasLimit) {
@@ -216,7 +216,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getGasUsed() {
-            return Codec.decodeQuantity(gasUsed);
+            return Numeric.decodeQuantity(gasUsed);
         }
 
         public void setGasUsed(String gasUsed) {
@@ -224,7 +224,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getTimestamp() {
-            return Codec.decodeQuantity(timestamp);
+            return Numeric.decodeQuantity(timestamp);
         }
 
         public void setTimestamp(String timestamp) {

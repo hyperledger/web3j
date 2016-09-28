@@ -5,17 +5,18 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 
 import org.web3j.abi.Contract;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -24,15 +25,21 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 /**
  * Java wrapper source code generator for Solidity ABI format.
  */
-public class Solidity {
+public class SolidityFunctionWrapperGenerator extends Generator {
+
+    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
+            "<strong>Do not modifiy!</strong><br>\n" +
+            "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() + "} to update.</p>\n";
 
     private String absFileLocation;
-    private String destinationDirLocation;
+    private Path destinationDirLocation;
     private String basePackageName;
 
-    private Solidity(String absFileLocation, String destinationDirLocation, String basePackageName) {
+    private SolidityFunctionWrapperGenerator(
+            String absFileLocation, String destinationDirLocation, String basePackageName) {
+
         this.absFileLocation = absFileLocation;
-        this.destinationDirLocation = destinationDirLocation;
+        this.destinationDirLocation = Paths.get(destinationDirLocation);
         this.basePackageName = basePackageName;
     }
 
@@ -52,7 +59,7 @@ public class Solidity {
             exitError(usage());
         }
 
-        new Solidity(
+        new SolidityFunctionWrapperGenerator(
                 absFileLocation.get(),
                 destinationDirLocation.get(),
                 basePackageName.get())
@@ -88,18 +95,19 @@ public class Solidity {
     }
 
     private static String usage() throws URISyntaxException {
-        String className = new java.io.File(Solidity.class.getProtectionDomain()
+        String className = new java.io.File(SolidityFunctionWrapperGenerator.class.getProtectionDomain()
                 .getCodeSource()
                 .getLocation()
                 .toURI()
                 .getPath())
                 .getName();
 
-        return String.format("Usage: %s <input abi file>.abi [-p|--package <base package name>] -o|--output <destination directory>\n",
+        return String.format("Usage: %s <input abi file>.abi [-p|--package <base package name>] " +
+                        "-o|--output <destination base directory>\n",
                 className);
     }
 
-    public void generate() throws IOException {
+    private void generate() throws IOException {
 
         File absFile = new File(absFileLocation);
         if (!absFile.exists() || !absFile.canRead()) {
@@ -129,12 +137,15 @@ public class Solidity {
         return splitName[0];
     }
 
-    private static void generateSolidityWrappers(String contractName, List<AbiDefinition> functionDefinitions, String basePackageName) throws IOException {
+    private void generateSolidityWrappers(
+            String contractName, List<AbiDefinition> functionDefinitions,
+            String basePackageName) throws IOException {
 
         String className = contractName.substring(0, 1).toUpperCase() + contractName.substring(1);
 
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addJavadoc(CODEGEN_WARNING)
                 .superclass(Contract.class);
 
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
@@ -145,6 +156,17 @@ public class Solidity {
                 .build();
         classBuilder.addMethod(constructorSpec);
 
+        classBuilder = createFunctionDefinitions(functionDefinitions, classBuilder);
+
+        JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
+                .build();
+
+        javaFile.writeTo(destinationDirLocation);
+    }
+
+    private static TypeSpec.Builder createFunctionDefinitions(
+            List<AbiDefinition> functionDefinitions, TypeSpec.Builder classBuilder) {
+
         for (AbiDefinition functionDefinition:functionDefinitions) {
             if (!functionDefinition.getType().equals("function")) {
                 continue;
@@ -154,42 +176,81 @@ public class Solidity {
 
             MethodSpec.Builder methodBuilder =
                     MethodSpec.methodBuilder(functionName)
-                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                    .addException(InterruptedException.class)
-                    .addException(ExecutionException.class);
+                            .addModifiers(Modifier.PUBLIC)
+                            .addException(InterruptedException.class)
+                            .addException(ExecutionException.class);
 
-            List<String> parameterNames = new ArrayList<>();
+            List<String> inputParameterNames = new ArrayList<>();
 
             for (AbiDefinition.NamedType namedType:functionDefinition.getInputs()) {
                 String name = namedType.getName();
                 Class<?> type = AbiTypes.getType(namedType.getType());
                 methodBuilder.addParameter(type, name);
-                parameterNames.add(name);
+                inputParameterNames.add(name);
             }
 
-            List<AbiDefinition.NamedType> outputs = functionDefinition.getOutputs();
-            if (outputs.isEmpty()) {
-                methodBuilder.returns(void.class);
-            } else if (outputs.size() == 1) {
-                AbiDefinition.NamedType namedType = outputs.get(0);
+            List<Class<?>> outputParameterTypes = new ArrayList<>();
+            for (AbiDefinition.NamedType namedType:functionDefinition.getOutputs()) {
                 Class<?> type = AbiTypes.getType(namedType.getType());
-                methodBuilder.returns(type);
-            } else {
-                // TODO: Add support for tuple returns
-                throw new UnsupportedOperationException("Multiple returns are not yet supported");
+                outputParameterTypes.add(type);
             }
 
-            String params = parameterNames.stream().collect(Collectors.joining(", "));
-            methodBuilder.addStatement("$T function = new $T($S, $L)",
-                    Function.class, Function.class, functionName, params);
-            methodBuilder.addStatement("return execute(function)");
+            String inputParams = inputParameterNames.stream().collect(Collectors.joining(", "));
+
+            TypeVariableName typeVariableName = TypeVariableName.get("T", Type.class);
+
+            if (outputParameterTypes.isEmpty()) {
+                methodBuilder.returns(void.class);
+
+                methodBuilder.addStatement("$T function = new $T($S, $T.asList($L), $T.emptyList())",
+                        Function.class, Function.class, functionName,
+                        Arrays.class, inputParams, Collections.class);
+                methodBuilder.addStatement("return executeSingleValueReturn(function)");
+
+            } else if (outputParameterTypes.size() == 1) {
+                methodBuilder.returns(outputParameterTypes.get(0));
+
+                methodBuilder.addStatement("$T function = new $T($S, $T.asList($L), $T.asList($T.class))",
+                        Function.class, Function.class, functionName,
+                        Arrays.class, inputParams, Arrays.class, outputParameterTypes.get(0));
+                methodBuilder.addStatement("return executeSingleValueReturn(function)");
+
+            } else {
+                methodBuilder.addTypeVariable(typeVariableName);
+                methodBuilder.returns(
+                        ParameterizedTypeName.get(ClassName.get(List.class), typeVariableName));
+
+                buildVariableLengthReturnFunctionConstructor(
+                        methodBuilder, functionName, inputParams, outputParameterTypes);
+
+                methodBuilder.addStatement("return executeMultipleValueReturn(function)");
+            }
 
             classBuilder.addMethod(methodBuilder.build());
         }
 
-        JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
-                .build();
+        return classBuilder;
+    }
 
-        javaFile.writeTo(System.out);
+    private static void buildVariableLengthReturnFunctionConstructor(
+            MethodSpec.Builder methodBuilder, String functionName, String inputParameters,
+            List<Class<?>> outputParameterTypes) {
+
+        Object[] objects = new Object[6 + outputParameterTypes.size()];
+        objects[0] = Function.class;
+        objects[1] = Function.class;
+        objects[2] = functionName;
+        objects[3] = Arrays.class;
+        objects[4] = inputParameters;
+        objects[5] = Arrays.class;
+        for (int i = 0; i < outputParameterTypes.size(); i++) {
+            objects[i + 6] = outputParameterTypes.get(i);
+        }
+
+        String asListParams = outputParameterTypes.stream().map(p -> "$T.class")
+                .collect(Collectors.joining(", "));
+
+        methodBuilder.addStatement("$T function = new $T($S, $T.asList($L), $T.asList(" +
+                        asListParams + "))", objects);
     }
 }

@@ -1,16 +1,14 @@
-package org.web3j.crypto;
-
-import org.web3j.protocol.utils.Codec;
+package org.web3j.utils;
 
 /**
  * Crypto library utility functions.
  */
-public final class HexUtils {
-    private HexUtils() {
+public final class Hex {
+    private Hex() {
     }
 
     public static byte[] hexStringToByteArray(String input) {
-        String cleanInput = Codec.cleanHexPrefix(input);
+        String cleanInput = Numeric.cleanHexPrefix(input);
 
         int len = cleanInput.length();
 
@@ -49,7 +47,7 @@ public final class HexUtils {
         return toHexString(input, 0, input.length, true);
     }
 
-    static byte b(int m, int n) {
+    public static byte b(int m, int n) {
         return (byte) ( (m << 4) | n);
     }
 }

@@ -1,8 +1,10 @@
 package org.web3j.abi;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthCall;
@@ -20,17 +22,23 @@ public abstract class Contract {
         this.web3j = web3j;
     }
 
-    <T> T execute(Function function) throws InterruptedException, ExecutionException {
+    protected <T extends Type> T executeSingleValueReturn(Function function) throws InterruptedException, ExecutionException {
+        List<T> values = execute(function);
+        return values.get(0);
+    }
+
+    protected <T extends Type> List<T> executeMultipleValueReturn(Function function) throws InterruptedException, ExecutionException {
+        return execute(function);
+    }
+
+    private <T extends Type> List<T> execute(Function function) throws InterruptedException, ExecutionException {
         String encoded = FunctionEncoder.encode(function);
-        // where to get web3j instance from?
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
                 new EthCall(contractAddress, encoded),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();
 
         String value = ethCall.getValue();
-        // decode
-        // return value
-        return null;
+        return FunctionReturnDecoder.decode(value, function);
     }
 }

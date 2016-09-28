@@ -4,13 +4,16 @@ import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 
 /**
  * eth_sendTransaction object
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EthSendTransaction {
+    // default as per https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction
+    private static final BigInteger DEFAULT_GAS = BigInteger.valueOf(9000);
+
     private String from;
     private String to;
     private BigInteger gas;
@@ -21,6 +24,13 @@ public class EthSendTransaction {
 
     public EthSendTransaction(String from, String data) {
         this.from = from;
+        this.data = data;
+        this.gas = DEFAULT_GAS;
+    }
+
+    public EthSendTransaction(String from, BigInteger gas, String data) {
+        this.from = from;
+        this.gas = gas;
         this.data = data;
     }
 
@@ -66,7 +76,7 @@ public class EthSendTransaction {
 
     private static String convert(BigInteger value) {
         if (value != null) {
-            return Codec.encodeQuantity(value);
+            return Numeric.encodeQuantity(value);
         } else {
             return null;  // we don't want the field to be encoded if not present
         }

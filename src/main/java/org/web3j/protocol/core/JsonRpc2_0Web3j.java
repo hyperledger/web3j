@@ -12,7 +12,7 @@ import org.web3j.protocol.core.methods.request.EthSendTransaction;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 
 /**
  * JSON-RPC 2.0 factory implementation.
@@ -175,7 +175,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 "eth_getStorageAt",
                 Arrays.asList(
                         address,
-                        Codec.encodeQuantity(position),
+                        Numeric.encodeQuantity(position),
                         defaultBlockParameter.getValue()),
                 ID,
                 web3jService,
@@ -344,7 +344,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 "eth_getTransactionByBlockHashAndIndex",
                 Arrays.asList(
                         blockHash,
-                        Codec.encodeQuantity(transactionIndex)),
+                        Numeric.encodeQuantity(transactionIndex)),
                 ID,
                 web3jService,
                 EthTransaction.class);
@@ -357,7 +357,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 "eth_getTransactionByBlockNumberAndIndex",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
-                        Codec.encodeQuantity(transactionIndex)),
+                        Numeric.encodeQuantity(transactionIndex)),
                 ID,
                 web3jService,
                 EthTransaction.class);
@@ -380,7 +380,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 "eth_getUncleByBlockHashAndIndex",
                 Arrays.asList(
                         blockHash,
-                        Codec.encodeQuantity(transactionIndex)),
+                        Numeric.encodeQuantity(transactionIndex)),
                 ID,
                 web3jService,
                 EthBlock.class);
@@ -393,7 +393,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 "eth_getUncleByBlockNumberAndIndex",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
-                        Codec.encodeQuantity(uncleIndex)),
+                        Numeric.encodeQuantity(uncleIndex)),
                 ID,
                 web3jService,
                 EthBlock.class);
@@ -473,7 +473,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthUninstallFilter> ethUninstallFilter(BigInteger filterId) {
         return new Request<>(
                 "eth_uninstallFilter",
-                Arrays.asList(Codec.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
                 web3jService,
                 EthUninstallFilter.class);
@@ -483,7 +483,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetFilterChanges(BigInteger filterId) {
         return new Request<>(
                 "eth_getFilterChanges",
-                Arrays.asList(Codec.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
                 web3jService,
                 EthLog.class);
@@ -493,7 +493,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetFilterLogs(BigInteger filterId) {
         return new Request<>(
                 "eth_getFilterLogs",
-                Arrays.asList(Codec.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
                 web3jService,
                 EthLog.class);

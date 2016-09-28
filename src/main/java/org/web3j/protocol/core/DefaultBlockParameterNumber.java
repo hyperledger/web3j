@@ -2,7 +2,7 @@ package org.web3j.protocol.core;
 
 import java.math.BigInteger;
 
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 
 /**
  * DefaultBlockParameter implementation that takes a numeric value.
@@ -17,6 +17,6 @@ public class DefaultBlockParameterNumber implements DefaultBlockParameter {
 
     @Override
     public String getValue() {
-        return Codec.encodeQuantity(blockNumber);
+        return Numeric.encodeQuantity(blockNumber);
     }
 }

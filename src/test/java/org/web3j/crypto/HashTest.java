@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.crypto.HexUtils.b;
+import static org.web3j.utils.Hex.b;
 
 public class HashTest {
 

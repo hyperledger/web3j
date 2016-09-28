@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 
 /**
  * eth_sendTransaction object
@@ -60,7 +60,7 @@ public class EthCall {
 
     private static String convert(BigInteger value) {
         if (value != null) {
-            return Codec.encodeQuantity(value);
+            return Numeric.encodeQuantity(value);
         } else {
             return null;  // we don't want the field to be encoded if not present
         }

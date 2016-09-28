@@ -9,7 +9,7 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
-import org.web3j.crypto.HexUtils;
+import org.web3j.utils.Hex;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
@@ -22,7 +22,7 @@ public class FunctionEncoder {
     private FunctionEncoder() { }
 
     public static String encode(Function function) {
-        List<Type> parameters = function.getParameters();
+        List<Type> parameters = function.getInputParameters();
 
         String methodSignature = buildMethodSignature(function.getName(), parameters);
         String methodId = buildMethodId(methodSignature);
@@ -30,7 +30,7 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodId);
 
-        int dynamicDataOffset = getLength(parameters) * 32;
+        int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
         StringBuilder dynamicData = new StringBuilder();
 
         for (Type parameter:parameters) {
@@ -63,7 +63,6 @@ public class FunctionEncoder {
         return count;
     }
 
-
     static String buildMethodSignature(String methodName, List<Type> parameters) {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
@@ -79,6 +78,6 @@ public class FunctionEncoder {
     static String buildMethodId(String methodSignature) {
         byte[] input = methodSignature.getBytes();
         byte[] hash = Hash.sha3(input);
-        return HexUtils.toHexString(hash).substring(0, 10);
+        return Hex.toHexString(hash).substring(0, 10);
     }
 }

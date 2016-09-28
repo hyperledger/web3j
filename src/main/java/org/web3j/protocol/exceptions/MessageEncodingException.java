@@ -1,4 +1,4 @@
-package org.web3j.protocol.utils;
+package org.web3j.protocol.exceptions;
 
 /**
  * Encoding exception.

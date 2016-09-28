@@ -2,17 +2,25 @@ package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
 
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 
 /**
  * Address type, which is equivalent to uint160.
  */
 public class Address extends Uint {
+    public static final String TYPE_NAME = "address";
+    public static final int LENGTH = 160;
+
     public Address(BigInteger value) {
-        super("address", 160, value);
+        super(TYPE_NAME, LENGTH, value);
     }
 
     public Address(String hexValue) {
-        this(Codec.toBigInt(hexValue));
+        this(Numeric.toBigInt(hexValue));
+    }
+
+    @Override
+    public String getTypeAsString() {
+        return TYPE_NAME;
     }
 }

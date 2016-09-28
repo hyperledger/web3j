@@ -115,17 +115,17 @@ public class TypeEncoderTest {
 
     @Test
     public void testDynamicBytes() {
-        DynamicBytesType staticBytes = new DynamicBytesType(new byte[] { 0, 1, 2, 3, 4, 5 });
-        assertThat(TypeEncoder.encodeDynamicBytes(staticBytes),
+        DynamicBytes dynamicBytes = new DynamicBytes(new byte[] { 0, 1, 2, 3, 4, 5 });
+        assertThat(TypeEncoder.encodeDynamicBytes(dynamicBytes),
                 is("0000000000000000000000000000000000000000000000000000000000000006" +
                         "0001020304050000000000000000000000000000000000000000000000000000"));
 
-        DynamicBytesType empty = new DynamicBytesType(new byte[] { 0 });
+        DynamicBytes empty = new DynamicBytes(new byte[] { 0 });
         assertThat(TypeEncoder.encodeDynamicBytes(empty),
                 is("0000000000000000000000000000000000000000000000000000000000000001" +
                         "0000000000000000000000000000000000000000000000000000000000000000"));
 
-        DynamicBytesType dave = new DynamicBytesType("dave".getBytes());
+        DynamicBytes dave = new DynamicBytes("dave".getBytes());
         assertThat(TypeEncoder.encodeDynamicBytes(dave),
                 is("0000000000000000000000000000000000000000000000000000000000000004" +
                         "6461766500000000000000000000000000000000000000000000000000000000"));
@@ -134,7 +134,7 @@ public class TypeEncoderTest {
     @Test
     public void testAddress() {
         Address address = new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338");
-        assertThat(address.getTypeAsString(), is("address160"));
+        assertThat(address.getTypeAsString(), is("address"));
         assertThat(TypeEncoder.encodeNumeric(address), is("000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"));
     }
 

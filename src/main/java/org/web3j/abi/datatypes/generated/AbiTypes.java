@@ -1,9 +1,14 @@
 package org.web3j.abi.datatypes.generated;
 
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Utf8String;
+
 /**
  * <p>Auto generated code.<br>
  * <strong>Do not modifiy!</strong><br>
- * Please use Generator located in project X to update.</p>
+ * Please use {@link org.web3j.codegen.AbiTypesMapperGenerator} to update.</p>
  */
 public final class AbiTypes {
   private AbiTypes() {
@@ -11,6 +16,14 @@ public final class AbiTypes {
 
   public static Class<?> getType(String type) {
     switch (type) {
+      case "address":
+          return Address.class;
+      case "bool":
+          return Bool.class;
+      case "string":
+          return Utf8String.class;
+      case "bytes":
+          return DynamicBytes.class;
       case "uint8":
           return Uint8.class;
       case "int8":

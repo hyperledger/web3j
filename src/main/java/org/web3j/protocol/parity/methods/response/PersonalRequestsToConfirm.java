@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
-import org.web3j.protocol.utils.Codec;
+import org.web3j.utils.Numeric;
 
 /**
  * personal_requestsToConfirm
@@ -230,15 +230,15 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
         }
 
         public BigInteger getGas() {
-            return Codec.decodeQuantity(gas);
+            return Numeric.decodeQuantity(gas);
         }
 
         public BigInteger getGasPrice() {
-            return Codec.decodeQuantity(gasPrice);
+            return Numeric.decodeQuantity(gasPrice);
         }
 
         public BigInteger getValue() {
-            return Codec.decodeQuantity(value);
+            return Numeric.decodeQuantity(value);
         }
 
         public String getData() {
@@ -246,7 +246,7 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
         }
 
         public BigInteger getNonce() {
-            return Codec.decodeQuantity(nonce);
+            return Numeric.decodeQuantity(nonce);
         }
 
         @Override
