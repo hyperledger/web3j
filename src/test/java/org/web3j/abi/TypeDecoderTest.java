@@ -69,6 +69,12 @@ public class TypeDecoderTest {
 
         assertThat(TypeDecoder.decodeNumeric(
                 "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                Int64.class
+                ),
+                is(new Int64(BigInteger.valueOf(-1))));
+
+        assertThat(TypeDecoder.decodeNumeric(
+                "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                 Int256.class
                 ),
                 is(new Int256(BigInteger.valueOf(-1))));
