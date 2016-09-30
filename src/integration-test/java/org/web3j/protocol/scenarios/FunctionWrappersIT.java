@@ -16,7 +16,8 @@ import static org.junit.Assert.assertThat;
  * Test Fibonacci contract generated wrappers.
  *
  * Generated via running {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} with params:
- * <project-home>/src/test/resources/solidity/fibonacci.abi -o <project-home>/src/integration-test/java -p org.web3j.generated
+ * <project-home>/src/test/resources/solidity/fibonacci.abi -o
+ * <project-home>/src/integration-test/java -p org.web3j.generated
  */
 public class FunctionWrappersIT {
 

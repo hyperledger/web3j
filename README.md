@@ -4,15 +4,18 @@
 [![codecov](https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/web3j/web3j)
 [![Join the chat at https://gitter.im/web3j/web3j](https://badges.gitter.im/web3j/web3j.svg)](https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-web3j is a lightweight Java library for integrating with clients (nodes) on the Ethereum network.
+web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the Ethereum network.
 
 [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 
-It only has three runtime dependencies:
+It can generate Java smart contract wrappers so you can interact with a smart contract like it's native Java code. 
+
+It only has four runtime dependencies:
 
 * [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-ga/index.html)
 * [Jackson Core](https://github.com/FasterXML/jackson-core) for fast JSON serialisation/deserialisation
 * [Bouncy Castle](https://www.bouncycastle.org/) for crypto
+* [JavaPoet](https://github.com/square/javapoet) for generating smart contract wrappers
 
 
 ## Getting Started
@@ -99,6 +102,20 @@ Async requests are handled using Java 8's [CompletableFutures](https://docs.orac
 Quantity payload types are returned as [BigInteger](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html)'s. For simple results, you can obtain the quantity as a String via `org.web3j.protocol.jsonrpc20.Response.getResult()`.
 
 
+## Generating smart contract wrappers in Java
+
+The library also supports the auto-generation of smart contract function wrappers in Java from Solidity ABI files.
+
+This can be achieved by running:
+
+```
+org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.abi -o /path/to/src/dir/java -p com.your.organisation.name
+```
+
+See `org.web3j.protocol.scenarios.FunctionWrappersIT` for an example of using a generated smart contract Java wrapper.
+
+
+
 ## Tested clients
 
 Geth
@@ -109,7 +126,7 @@ Parity
 
 More coming soon.
 
-You can run the integration test class `org.web3j.protocol.jsonrpc20.ProtocolIT` to verify clients.
+You can run the integration test class `org.web3j.protocol.core.CoreIT` to verify clients.
 
 
 ## Coming Soon

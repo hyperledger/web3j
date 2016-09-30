@@ -202,7 +202,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             if (outputParameterTypes.isEmpty()) {
                 methodBuilder.returns(void.class);
 
-                methodBuilder.addStatement("$T function = new $T($S, $T.asList($L), $T.emptyList())",
+                methodBuilder.addStatement("$T function = new $T<>($S, $T.asList($L), $T.emptyList())",
                         Function.class, Function.class, functionName,
                         Arrays.class, inputParams, Collections.class);
                 methodBuilder.addStatement("return executeSingleValueReturn(function)");
@@ -210,7 +210,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             } else if (outputParameterTypes.size() == 1) {
                 methodBuilder.returns(outputParameterTypes.get(0));
 
-                methodBuilder.addStatement("$T function = new $T($S, $T.asList($L), $T.asList($T.class))",
+                methodBuilder.addStatement("$T function = new $T<>($S, $T.asList($L), $T.asList($T.class))",
                         Function.class, Function.class, functionName,
                         Arrays.class, inputParams, Arrays.class, outputParameterTypes.get(0));
                 methodBuilder.addStatement("return executeSingleValueReturn(function)");
@@ -250,7 +250,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         String asListParams = outputParameterTypes.stream().map(p -> "$T.class")
                 .collect(Collectors.joining(", "));
 
-        methodBuilder.addStatement("$T function = new $T($S, $T.asList($L), $T.asList(" +
+        methodBuilder.addStatement("$T function = new $T<>($S, $T.asList($L), $T.asList(" +
                         asListParams + "))", objects);
     }
 }
