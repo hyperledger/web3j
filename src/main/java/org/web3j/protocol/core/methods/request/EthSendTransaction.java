@@ -34,6 +34,20 @@ public class EthSendTransaction {
         this.data = data;
     }
 
+    public EthSendTransaction(String from, String to, String data) {
+        this.from = from;
+        this.to = to;
+        this.data = data;
+        this.gas = DEFAULT_GAS;
+    }
+
+    public EthSendTransaction(String from, String to, BigInteger gas, String data) {
+        this.from = from;
+        this.to = to;
+        this.gas = gas;
+        this.data = data;
+    }
+
     public EthSendTransaction(String from, String to,
                               BigInteger gas, BigInteger gasPrice,
                               BigInteger value, String data, BigInteger nonce) {

@@ -20,7 +20,10 @@ public class NumericTest {
         assertThat(Numeric.decodeQuantity("0x0"), equalTo(BigInteger.valueOf(0L)));
         assertThat(Numeric.decodeQuantity("0x400"), equalTo(BigInteger.valueOf((1024L))));
         assertThat(Numeric.decodeQuantity("0x0"), equalTo(BigInteger.valueOf((0L))));
-        assertThat(Numeric.decodeQuantity("0x7fffffffffffffff"), equalTo(BigInteger.valueOf((Long.MAX_VALUE))));
+        assertThat(Numeric.decodeQuantity(
+                "0x7fffffffffffffff"), equalTo(BigInteger.valueOf((Long.MAX_VALUE))));
+        assertThat(Numeric.decodeQuantity("0x99dc848b94efc27edfad28def049810f"),
+                equalTo(new BigInteger("204516877000845695339750056077105398031")));
     }
 
     @Test(expected = MessageDecodingException.class)
@@ -43,7 +46,11 @@ public class NumericTest {
         assertThat(Numeric.encodeQuantity(BigInteger.valueOf(0)), is("0x0"));
         assertThat(Numeric.encodeQuantity(BigInteger.valueOf(1)), is("0x1"));
         assertThat(Numeric.encodeQuantity(BigInteger.valueOf(1024)), is("0x400"));
-        assertThat(Numeric.encodeQuantity(BigInteger.valueOf(Long.MAX_VALUE)), is("0x7fffffffffffffff"));
+        assertThat(Numeric.encodeQuantity(
+                BigInteger.valueOf(Long.MAX_VALUE)), is("0x7fffffffffffffff"));
+        assertThat(Numeric.encodeQuantity(
+                new BigInteger("204516877000845695339750056077105398031")),
+                is("0x99dc848b94efc27edfad28def049810f"));
     }
 
     @Test(expected = MessageEncodingException.class)
@@ -53,9 +60,9 @@ public class NumericTest {
 
     @Test
     public void testCleanHexPrefix() {
-        Assert.assertThat(Numeric.cleanHexPrefix(""), is(""));
-        Assert.assertThat(Numeric.cleanHexPrefix("0123456789abcdef"), is("0123456789abcdef"));
-        Assert.assertThat(Numeric.cleanHexPrefix("0x"), is(""));
-        Assert.assertThat(Numeric.cleanHexPrefix("0x0123456789abcdef"), is("0123456789abcdef"));
+        assertThat(Numeric.cleanHexPrefix(""), is(""));
+        assertThat(Numeric.cleanHexPrefix("0123456789abcdef"), is("0123456789abcdef"));
+        assertThat(Numeric.cleanHexPrefix("0x"), is(""));
+        assertThat(Numeric.cleanHexPrefix("0x0123456789abcdef"), is("0123456789abcdef"));
     }
 }

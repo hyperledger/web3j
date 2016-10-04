@@ -3,38 +3,48 @@ package org.web3j.protocol.core.methods.request;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Filter implementation as per <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
  */
-public abstract class Filter {
-    public List<FilterTopic> topics;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public abstract class Filter<T extends Filter> {
 
-    public Filter() {
+    private T thisObj;
+    private List<FilterTopic> topics;
+
+    Filter() {
+        thisObj = getThis();
         topics = new ArrayList<>();
     }
 
-    public Filter addSingleTopic(String topic) {
+    public T addSingleTopic(String topic) {
         topics.add(new SingleTopic<>(topic));
-        return this;
+        return getThis();
     }
 
-    public Filter addNullTopic() {
+    public T addNullTopic() {
         topics.add(new SingleTopic<>());
-        return this;
+        return getThis();
     }
 
     // how to pass in null topic?
-    public Filter addOptionalTopics(String... optionalTopics) {
+    public T addOptionalTopics(String... optionalTopics) {
         topics.add(new ListTopic(optionalTopics));
-        return this;
+        return getThis();
     }
 
     public List<FilterTopic> getTopics() {
         return topics;
     }
 
+    abstract <T extends Filter> T getThis();
+
     public interface FilterTopic<T> {
-        T getTopic();
+        @JsonValue
+        T getValue();
     }
 
     public static class SingleTopic<String> implements FilterTopic {
@@ -49,7 +59,7 @@ public abstract class Filter {
         }
 
         @Override
-        public String getTopic() {
+        public String getValue() {
             return topic;
         }
     }
@@ -69,8 +79,8 @@ public abstract class Filter {
         }
 
         @Override
-        public List<SingleTopic<String>> getTopic() {
-            return null;
+        public List<SingleTopic<String>> getValue() {
+            return topics;
         }
     }
 }

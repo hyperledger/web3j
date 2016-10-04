@@ -6,6 +6,9 @@ import org.junit.Test;
 import org.web3j.protocol.core.methods.request.EthCall;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.request.Filter;
+import org.web3j.protocol.core.methods.response.EthNewFilter;
 import org.web3j.protocol.http.HttpService;
 
 
@@ -123,5 +126,15 @@ public class RequestTest extends RequestTester {
                 DefaultBlockParameter.valueOf("latest")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"data\":\"0x0\"},\"latest\"],\"id\":1}");
+    }
+
+    @Test
+    public void testEthNewFilter() throws Exception {
+        EthFilter ethFilter = new EthFilter()
+                .addSingleTopic("0x12341234");
+
+        web3j.ethNewFilter(ethFilter).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_newFilter\",\"params\":[{\"topics\":[\"0x12341234\"]}],\"id\":1}");
     }
 }

@@ -1,14 +1,18 @@
 package org.web3j.protocol.core;
 
 import java.math.BigInteger;
+import java.util.Collections;
 
+import org.web3j.abi.EventEncoder;
+import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.datatypes.Uint;
 import org.web3j.protocol.core.methods.request.EthCall;
 import org.web3j.protocol.core.methods.request.EthSendTransaction;
 
 /**
  * Mordon Testnet Configuration.
  */
-public class MordenTestnetConfig extends IntegrationTestConfig {
+public class MordenTestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {
@@ -40,8 +44,8 @@ public class MordenTestnetConfig extends IntegrationTestConfig {
 
     @Override
     public String validContractAddress() {
-        // https://testnet.etherscan.io/address/0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338
-        return "0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338";
+        // Deployed fibonacci example
+        return "0x3c05b2564139fb55820b18b72e94b2178eaace7d";
     }
 
     @Override
@@ -83,5 +87,15 @@ public class MordenTestnetConfig extends IntegrationTestConfig {
     @Override
     public BigInteger validUncleBlock() {
         return BigInteger.valueOf(1640092);
+    }
+
+    @Override
+    public String encodedEvent() {
+
+        Event event = new Event<>("Notify",
+                Collections.singletonList(Uint.class),
+                Collections.singletonList(Uint.class));
+
+        return EventEncoder.encode(event);
     }
 }

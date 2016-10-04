@@ -30,23 +30,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration test demonstrating the full contract deployment workflow.
  */
-public class DeployContractIT {
-    private static final String ADDRESS = "";
-    private static final String PASSWORD = "";
-    private static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
-
-    private Parity parity;
-
-    public DeployContractIT() {
-        System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
-    }
-
-    @Before
-    public void setUp() {
-        this.parity = Parity.build(new HttpService());
-    }
+public class DeployContractIT extends Scenario {
 
     @Test
     public void testContractCreation() throws Exception {
@@ -54,20 +38,11 @@ public class DeployContractIT {
         assertTrue(accountUnlocked);
 
         String transactionHash = sendTransaction();
+//        String transactionHash = "0xb4820c8369a4061187d18a2114919ca2357996923c6d59ffa024a71cc9ce3ad8";
         assertFalse(transactionHash.isEmpty());
 
-        int sleepDuration = 10000;
-        int attempts = 10;
-
-        Optional<EthGetTransactionReceipt.TransactionReceipt> transactionReceiptOptional =
-                getTransactionReceipt(transactionHash, sleepDuration, attempts);
-
-        if (!transactionReceiptOptional.isPresent()) {
-            fail("Transaction reciept not generated after " + attempts + " attempts");
-        }
-
         EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
-                transactionReceiptOptional.get();
+                waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
         Optional<String> contractAddressOptional = transactionReceipt.getContractAddress();
@@ -80,16 +55,9 @@ public class DeployContractIT {
         String responseValue = callSmartContractFunction(function, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Uint> uint = FunctionReturnDecoder.decode(responseValue, function);
+        List<Uint> uint = FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
         assertThat(uint.size(), is(1));
         assertThat(uint.get(0).getValue(), equalTo(BigInteger.valueOf(55)));
-    }
-
-    private boolean unlockAccount() throws Exception {
-        PersonalUnlockAccount personalUnlockAccount =
-                parity.personalUnlockAccount(ADDRESS, PASSWORD, ACCOUNT_UNLOCK_DURATION)
-                        .sendAsync().get();
-        return personalUnlockAccount.accountUnlocked();
     }
 
     private String sendTransaction() throws Exception {
@@ -106,31 +74,6 @@ public class DeployContractIT {
         return transactionResponse.getTransactionHash();
     }
 
-    private Optional<EthGetTransactionReceipt.TransactionReceipt> getTransactionReceipt(
-            String transactionHash, int sleepDuration, int attempts) throws Exception {
-
-        Optional<EthGetTransactionReceipt.TransactionReceipt> receiptOptional =
-                sendTransactionReceiptRequest(transactionHash);
-        for (int i = 0; i < attempts; i++) {
-            if (!receiptOptional.isPresent()) {
-                Thread.sleep(sleepDuration);
-                receiptOptional = sendTransactionReceiptRequest(transactionHash);
-            } else {
-                break;
-            }
-        }
-
-        return receiptOptional;
-    }
-
-    private Optional<EthGetTransactionReceipt.TransactionReceipt> sendTransactionReceiptRequest(
-            String transactionHash) throws Exception {
-        EthGetTransactionReceipt transactionReceipt =
-                parity.ethGetTransactionReceipt(transactionHash).sendAsync().get();
-
-        return transactionReceipt.getTransactionReceipt();
-    }
-
     private String callSmartContractFunction(
             Function function, String contractAddress) throws Exception {
 
@@ -142,12 +85,5 @@ public class DeployContractIT {
                 .sendAsync().get();
 
         return response.getValue();
-    }
-
-    private Function createFibonacciFunction() {
-        return new Function<>(
-                "fibonacci",
-                Arrays.asList(new Uint(BigInteger.valueOf(10))),
-                Arrays.asList(Uint.class));
     }
 }

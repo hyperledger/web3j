@@ -29,4 +29,13 @@ public class FunctionWrappersIT {
         Uint256 result = fibonacci.fibonacci(new Uint256(BigInteger.valueOf(10)));
         assertThat(result.getValue(), equalTo(BigInteger.valueOf(55)));
     }
+
+    @Test
+    public void testFibonacciNotify() throws Exception {
+        Fibonacci fibonacci = new Fibonacci(
+                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()));
+
+        Uint256 result = fibonacci.fibonacciNotify(new Uint256(BigInteger.valueOf(15)));
+        assertThat(result.getValue(), equalTo(BigInteger.valueOf(610)));
+    }
 }

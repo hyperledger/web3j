@@ -26,6 +26,23 @@ public class FunctionReturnDecoderTest {
 
         assertThat(FunctionReturnDecoder.decode(
                 "0x0000000000000000000000000000000000000000000000000000000000000037",
-                function), equalTo(Collections.singletonList(new Uint(BigInteger.valueOf(55)))));
+                function.getOutputParameters()),
+                equalTo(Collections.singletonList(new Uint(BigInteger.valueOf(55)))));
+    }
+
+    @Test
+    public void testMultipleResultFunctionDecode() {
+        Function function = new Function<>(
+                "test",
+                Collections.<Type>emptyList(),
+                Arrays.asList(Uint.class, Uint.class)
+        );
+
+        assertThat(FunctionReturnDecoder.decode(
+                "0x0000000000000000000000000000000000000000000000000000000000000037" +
+                "0000000000000000000000000000000000000000000000000000000000000007",
+                function.getOutputParameters()),
+                equalTo(Arrays.asList(new Uint(BigInteger.valueOf(55)),
+                        new Uint(BigInteger.valueOf(7)))));
     }
 }

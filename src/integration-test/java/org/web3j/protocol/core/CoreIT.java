@@ -1,11 +1,13 @@
 package org.web3j.protocol.core;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
@@ -17,6 +19,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -358,8 +361,31 @@ public class CoreIT {
     }
 
     @Test
-    public void testEthNewFilter() throws Exception {
+    public void testFiltersByFilterId() throws Exception {
+        EthFilter ethFilter = new EthFilter(
+                DefaultBlockParameterName.EARLIEST,
+                DefaultBlockParameterName.LATEST,
+                config.validContractAddress());
 
+        String eventSignature = config.encodedEvent();
+        ethFilter.addSingleTopic(eventSignature);
+
+        // eth_newFilter
+        EthNewFilter ethNewFilter = web3j.ethNewFilter(ethFilter).send();
+        BigInteger filterId = ethNewFilter.getFilterId();
+
+        // eth_getFilterLogs
+        EthLog ethFilterLogs = web3j.ethGetFilterLogs(filterId).send();
+        List<EthLog.LogResult> filterLogs = ethFilterLogs.getLogs();
+        assertFalse(filterLogs.isEmpty());
+
+        // eth_getFilterChanges - nothing will have changed in this interval
+        EthLog ethLog = web3j.ethGetFilterChanges(filterId).send();
+        assertNull(ethLog.getLogs());
+
+        // eth_uninstallFilter
+        EthUninstallFilter ethUninstallFilter = web3j.ethUninstallFilter(filterId).send();
+        assertTrue(ethUninstallFilter.isUninstalled());
     }
 
     @Test
@@ -370,27 +396,24 @@ public class CoreIT {
 
     @Test
     public void testEthNewPendingTransactionFilter() throws Exception {
-    
-    }
-
-    @Test
-    public void testEthUninstallFilter() throws Exception {
-    
-    }
-
-    @Test
-    public void testEthGetFilterChanges() throws Exception {
-    
-    }
-
-    @Test
-    public void testEthGetFilterLogs() throws Exception {
-    
+        EthNewPendingTransactionFilter ethNewPendingTransactionFilter =
+                web3j.ethNewPendingTransactionFilter().send();
+        assertNotNull(ethNewPendingTransactionFilter.getFilterId());
     }
 
     @Test
     public void testEthGetLogs() throws Exception {
-    
+        EthFilter ethFilter = new EthFilter(
+                DefaultBlockParameterName.EARLIEST,
+                DefaultBlockParameterName.LATEST,
+                config.validContractAddress()
+        );
+
+        ethFilter.addSingleTopic(config.encodedEvent());
+
+        EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
+        List<EthLog.LogResult> logs = ethLog.getLogs();
+        assertFalse(logs.isEmpty());
     }
 
 //    @Test

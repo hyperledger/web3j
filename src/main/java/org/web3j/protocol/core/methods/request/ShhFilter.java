@@ -14,4 +14,9 @@ public class ShhFilter extends Filter {
     public String getToBlock() {
         return toBlock;
     }
+
+    @Override
+    Filter getThis() {
+        return this;
+    }
 }

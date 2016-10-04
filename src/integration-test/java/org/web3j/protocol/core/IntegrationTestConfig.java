@@ -8,18 +8,19 @@ import org.web3j.protocol.core.methods.request.EthSendTransaction;
 /**
  * Common values used by integration tests.
  */
-public abstract class IntegrationTestConfig {
-    public abstract String validBlockHash();
-    public abstract BigInteger validBlock();
-    public abstract BigInteger validBlockTransactionCount();
-    public abstract BigInteger validBlockUncleCount();
-    public abstract String validAccount();
-    public abstract String validContractAddress();
-    public abstract String validContractAddressPositionZero();
-    public abstract String validContractCode();
-    public abstract EthSendTransaction ethSendTransaction();
-    public abstract EthCall ethCall();
-    public abstract String validTransactionHash();
-    public abstract String validUncleBlockHash();
-    public abstract BigInteger validUncleBlock();
+public interface IntegrationTestConfig {
+    String validBlockHash();
+    BigInteger validBlock();
+    BigInteger validBlockTransactionCount();
+    BigInteger validBlockUncleCount();
+    String validAccount();
+    String validContractAddress();
+    String validContractAddressPositionZero();
+    String validContractCode();
+    EthSendTransaction ethSendTransaction();
+    EthCall ethCall();
+    String validTransactionHash();
+    String validUncleBlockHash();
+    BigInteger validUncleBlock();
+    String encodedEvent();
 }

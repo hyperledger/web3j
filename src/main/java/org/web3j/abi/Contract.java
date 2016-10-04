@@ -39,6 +39,6 @@ public abstract class Contract {
                 .sendAsync().get();
 
         String value = ethCall.getValue();
-        return FunctionReturnDecoder.decode(value, function);
+        return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 }

@@ -54,7 +54,7 @@ public class TypeDecoder {
                 resultByteArray[0] = inputByteArray[0];  // take MSB as sign bit
             }
 
-            int valueOffset = inputByteArray.length - typeLengthAsBytes;
+            int valueOffset = Type.MAX_BYTE_LENGTH - typeLengthAsBytes;
             System.arraycopy(inputByteArray, valueOffset, resultByteArray, 1, typeLengthAsBytes);
 
             BigInteger numericValue = new BigInteger(resultByteArray);

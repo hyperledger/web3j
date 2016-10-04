@@ -8,15 +8,13 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 /**
  * Filter implementation as per <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
  */
-public class EthFilter extends Filter {
-    private DefaultBlockParameter fromBlock;
+public class EthFilter extends Filter<EthFilter> {
+    private DefaultBlockParameter fromBlock;  // optional, params - defaults to latest for both
     private DefaultBlockParameter toBlock;
     private List<String> address;  // specification implies this can be single address as string or list
 
     public EthFilter() {
         super();
-        fromBlock = DefaultBlockParameter.valueOf("latest");
-        toBlock = DefaultBlockParameter.valueOf("latest");
     }
 
     public EthFilter(DefaultBlockParameter fromBlock, DefaultBlockParameter toBlock,
@@ -42,5 +40,10 @@ public class EthFilter extends Filter {
 
     public List<String> getAddress() {
         return address;
+    }
+
+    @Override
+    Filter getThis() {
+        return this;
     }
 }

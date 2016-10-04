@@ -8,16 +8,16 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.utils.Numeric;
 
 /**
- * Decodes values returned by function call.
+ * Decodes values returned by function or event calls.
  */
 public class FunctionReturnDecoder {
 
     private FunctionReturnDecoder() { }
 
-    public static <T extends Type> List<T> decode(String rawInput, Function function) {
+    public static <T extends Type> List<T> decode(
+            String rawInput, List<Class<T>> outputParameters) {
         String input = Numeric.cleanHexPrefix(rawInput);
 
-        List<Class<T>> outputParameters = function.getOutputParameters();
         List<T> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
@@ -29,6 +29,4 @@ public class FunctionReturnDecoder {
 
         return results;
     }
-
-
 }
