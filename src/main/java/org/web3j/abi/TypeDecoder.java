@@ -1,10 +1,15 @@
 package org.web3j.abi;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
 
 import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Array;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.utils.Hex;
 import org.web3j.utils.Numeric;
 
@@ -18,9 +23,16 @@ public class TypeDecoder {
 
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
-    /**
-     * Note - array types are not yet supported.
-     */
+    static <T extends Type> int getSingleElementLength(String input, int offset, Class<T> type) {
+        if (DynamicBytes.class.isAssignableFrom(type)
+                || Utf8String.class.isAssignableFrom(type)) {
+            // length field + data value
+            return (decodeUintAsInt(input, offset) / Type.MAX_BYTE_LENGTH) + 2;
+        } else {
+            return 1;
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends Type> T decode(String input, int offset, Class<T> type) {
         if (NumericType.class.isAssignableFrom(type)) {
@@ -33,9 +45,24 @@ public class TypeDecoder {
             return (T) decodeDynamicBytes(input, offset);
         } else if (Utf8String.class.isAssignableFrom(type)) {
             return (T) decodeUtf8String(input, offset);
+        } else if (Array.class.isAssignableFrom(type)) {
+            throw new UnsupportedOperationException(
+                    "Array types must be wrapped in a TypeReference");
         } else {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + type.getClass());
+        }
+    }
+
+    public static <T extends Array> T decode(String input, int offset, TypeReference<T> typeReference) {
+        Class cls = ((ParameterizedType) typeReference.getType()).getRawType().getClass();
+        if (StaticArray.class.isAssignableFrom(cls)) {
+            return decodeStaticArray(input, offset, typeReference, 1);
+        } else if (DynamicArray.class.isAssignableFrom(cls)) {
+            return decodeDynamicArray(input, offset, typeReference);
+        } else {
+            throw new UnsupportedOperationException("Unsupported TypeReference: " +
+                    cls.getName() + ", only Array types can be passed as TypeReferences");
         }
     }
 
@@ -121,13 +148,10 @@ public class TypeDecoder {
     }
 
     static DynamicBytes decodeDynamicBytes(String input, int offset) {
-        int dataOffset = decodeUintAsInt(input, offset);
-        int hexStringDataOffset = dataOffset * MAX_BYTE_LENGTH_FOR_HEX_STRING;
-
-        int encodedLength = decodeUintAsInt(input, hexStringDataOffset);
+        int encodedLength = decodeUintAsInt(input, offset);
         int hexStringEncodedLength = encodedLength << 1;
 
-        int valueOffset = hexStringDataOffset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
+        int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
         String data = input.substring(valueOffset,
                 valueOffset + hexStringEncodedLength);
@@ -141,5 +165,74 @@ public class TypeDecoder {
         byte[] bytes = dynamicBytesResult.getValue();
 
         return new Utf8String(new String(bytes, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Static array length cannot be passed as a type.
+     */
+    @SuppressWarnings("unchecked")
+    static <T extends Type> T decodeStaticArray(
+            String input, int offset, TypeReference<T> typeReference, int length) {
+
+        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
+            if (elements.isEmpty()) {
+                throw new UnsupportedOperationException("Zero length fixed array is invalid type");
+            } else {
+                return (T) new StaticArray<>(elements);
+            }
+        };
+
+        return decodeArrayElements(input, offset, typeReference, length, function);
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T extends Type> T decodeDynamicArray(
+            String input, int offset, TypeReference<T> typeReference) {
+
+        int length = decodeUintAsInt(input, offset);
+
+        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
+            if (elements.isEmpty()) {
+                return (T) DynamicArray.empty(typeName);
+            } else {
+                return (T) new DynamicArray<>(elements);
+            }
+        };
+
+        int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
+
+        return decodeArrayElements(input, valueOffset, typeReference, length, function);
+    }
+
+    private static <T extends Type> T decodeArrayElements(
+            String input, int offset, TypeReference<T> typeReference, int length,
+            BiFunction<List<T>, String, T> consumer) {
+
+        try {
+            Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
+            if (Array.class.isAssignableFrom(cls)) {
+                throw new UnsupportedOperationException(
+                        "Arrays of arrays are not currently supported for external functions, " +
+                                "see http://solidity.readthedocs.io/en/develop/types.html#members");
+            } else {
+                List<T> elements = new ArrayList<>(length);
+
+                for (int i = 0, currOffset = offset;
+                     i < length;
+                     i++, currOffset += getSingleElementLength(input, currOffset, cls)
+                             * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
+                    T value = decode(input, currOffset, cls);
+                    elements.add(value);
+                }
+
+                String typeName = Utils.getSimpleTypeName(cls);
+
+                return consumer.apply(elements, typeName);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new UnsupportedOperationException(
+                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    e);
+        }
     }
 }

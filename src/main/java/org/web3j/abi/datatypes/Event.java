@@ -2,15 +2,18 @@ package org.web3j.abi.datatypes;
 
 import java.util.List;
 
+import org.web3j.abi.TypeReference;
+
 /**
  * Event wrapper
  */
 public class Event<T extends Type> {
     private String name;
-    private List<Class<T>> indexedParameters;
-    private List<Class<T>> nonIndexedParameters;
+    private List<TypeReference<T>> indexedParameters;
+    private List<TypeReference<T>> nonIndexedParameters;
 
-    public Event(String name, List<Class<T>> indexedParameters, List<Class<T>> nonIndexedParameters) {
+    public Event(String name, List<TypeReference<T>> indexedParameters,
+                 List<TypeReference<T>> nonIndexedParameters) {
         this.name = name;
         this.indexedParameters = indexedParameters;
         this.nonIndexedParameters = nonIndexedParameters;
@@ -20,11 +23,11 @@ public class Event<T extends Type> {
         return name;
     }
 
-    public List<Class<T>> getIndexedParameters() {
+    public List<TypeReference<T>> getIndexedParameters() {
         return indexedParameters;
     }
 
-    public List<Class<T>> getNonIndexedParameters() {
+    public List<TypeReference<T>> getNonIndexedParameters() {
         return nonIndexedParameters;
     }
 }

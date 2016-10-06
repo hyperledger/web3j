@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.*;
 
 import org.web3j.abi.Contract;
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.AbiTypes;
@@ -107,7 +108,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 className);
     }
 
-    private void generate() throws IOException {
+    private void generate() throws IOException, ClassNotFoundException {
 
         File absFile = new File(absFileLocation);
         if (!absFile.exists() || !absFile.canRead()) {
@@ -139,7 +140,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
     private void generateSolidityWrappers(
             String contractName, List<AbiDefinition> functionDefinitions,
-            String basePackageName) throws IOException {
+            String basePackageName) throws IOException, ClassNotFoundException {
 
         String className = contractName.substring(0, 1).toUpperCase() + contractName.substring(1);
 
@@ -165,7 +166,8 @@ public class SolidityFunctionWrapperGenerator extends Generator {
     }
 
     private static TypeSpec.Builder createFunctionDefinitions(
-            List<AbiDefinition> functionDefinitions, TypeSpec.Builder classBuilder) {
+            List<AbiDefinition> functionDefinitions,
+            TypeSpec.Builder classBuilder) throws ClassNotFoundException {
 
         for (AbiDefinition functionDefinition:functionDefinitions) {
             if (!functionDefinition.getType().equals("function")) {
@@ -210,9 +212,11 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             } else if (outputParameterTypes.size() == 1) {
                 methodBuilder.returns(outputParameterTypes.get(0));
 
-                methodBuilder.addStatement("$T function = new $T<>($S, $T.asList($L), $T.asList($T.class))",
+                methodBuilder.addStatement("$T function = " +
+                                "new $T<>($S, $T.asList($L), $T.asList(new $T<$T>() {}))",
                         Function.class, Function.class, functionName,
-                        Arrays.class, inputParams, Arrays.class, outputParameterTypes.get(0));
+                        Arrays.class, inputParams, Arrays.class, TypeReference.class,
+                        outputParameterTypes.get(0));
                 methodBuilder.addStatement("return executeSingleValueReturn(function)");
 
             } else {
@@ -234,9 +238,9 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
     private static void buildVariableLengthReturnFunctionConstructor(
             MethodSpec.Builder methodBuilder, String functionName, String inputParameters,
-            List<Class<?>> outputParameterTypes) {
+            List<Class<?>> outputParameterTypes) throws ClassNotFoundException {
 
-        Object[] objects = new Object[6 + outputParameterTypes.size()];
+        Object[] objects = new Object[6 + (outputParameterTypes.size() << 1)];
         objects[0] = Function.class;
         objects[1] = Function.class;
         objects[2] = functionName;
@@ -244,10 +248,11 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         objects[4] = inputParameters;
         objects[5] = Arrays.class;
         for (int i = 0; i < outputParameterTypes.size(); i++) {
-            objects[i + 6] = outputParameterTypes.get(i);
+            objects[i + 6] = TypeReference.class;
+            objects[i + 7] = outputParameterTypes.get(i);
         }
 
-        String asListParams = outputParameterTypes.stream().map(p -> "$T.class")
+        String asListParams = outputParameterTypes.stream().map(p -> "new $T<$T>() {}")
                 .collect(Collectors.joining(", "));
 
         methodBuilder.addStatement("$T function = new $T<>($S, $T.asList($L), $T.asList(" +

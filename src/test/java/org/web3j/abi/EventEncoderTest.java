@@ -20,18 +20,4 @@ public class EventEncoderTest {
         assertThat(EventEncoder.buildEventSignature("Notify(uint256,uint256)"),
                 is("0x71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed"));
     }
-
-    @Test
-    public void testGetTypeName() {
-        assertThat(EventEncoder.getTypeName(Uint.class), is("uint256"));
-        assertThat(EventEncoder.getTypeName(Int.class), is("int256"));
-        assertThat(EventEncoder.getTypeName(Ufixed.class), is("ufixed256"));
-        assertThat(EventEncoder.getTypeName(Fixed.class), is("fixed256"));
-
-        assertThat(EventEncoder.getTypeName(Uint64.class), is("uint64"));
-        assertThat(EventEncoder.getTypeName(Int64.class), is("int64"));
-        assertThat(EventEncoder.getTypeName(Bool.class), is("bool"));
-        assertThat(EventEncoder.getTypeName(Utf8String.class), is("string"));
-        assertThat(EventEncoder.getTypeName(DynamicBytes.class), is("bytes"));
-    }
 }

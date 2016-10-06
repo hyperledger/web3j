@@ -21,7 +21,7 @@ public class FunctionReturnDecoderTest {
         Function function = new Function<>(
                 "test",
                 Collections.<Type>emptyList(),
-                Collections.singletonList(Uint.class)
+                Collections.singletonList(new TypeReference<Uint>(){})
         );
 
         assertThat(FunctionReturnDecoder.decode(
@@ -35,7 +35,7 @@ public class FunctionReturnDecoderTest {
         Function function = new Function<>(
                 "test",
                 Collections.<Type>emptyList(),
-                Arrays.asList(Uint.class, Uint.class)
+                Arrays.asList(new TypeReference<Uint>() { }, new TypeReference<Uint>() { })
         );
 
         assertThat(FunctionReturnDecoder.decode(

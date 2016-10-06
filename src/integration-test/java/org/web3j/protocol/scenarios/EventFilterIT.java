@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
@@ -55,7 +56,7 @@ public class EventFilterIT extends Scenario {
 
         Event event = new Event<>("Notify",
                 Collections.emptyList(),
-                Arrays.asList(Uint256.class, Uint256.class));
+                Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example

@@ -1,15 +1,14 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.Before;
 
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Uint;
-import org.web3j.protocol.core.methods.request.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.Parity;
@@ -91,6 +90,6 @@ public class Scenario {
         return new Function<>(
                 "fibonacciNotify",
                 Collections.singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.singletonList(Uint.class));
+                Collections.singletonList(new TypeReference<Uint>() {}));
     }
 }

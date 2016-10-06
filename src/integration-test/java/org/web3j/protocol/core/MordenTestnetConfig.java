@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 
 import org.web3j.abi.EventEncoder;
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.protocol.core.methods.request.EthCall;
@@ -93,8 +94,8 @@ public class MordenTestnetConfig implements IntegrationTestConfig {
     public String encodedEvent() {
 
         Event event = new Event<>("Notify",
-                Collections.singletonList(Uint.class),
-                Collections.singletonList(Uint.class));
+                Collections.singletonList(new TypeReference<Uint>() {}),
+                Collections.singletonList(new TypeReference<Uint>() {}));
 
         return EventEncoder.encode(event);
     }
