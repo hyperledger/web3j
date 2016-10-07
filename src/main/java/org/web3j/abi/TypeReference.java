@@ -11,6 +11,10 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  *
  * <p>See <a href="http://gafter.blogspot.com.au/2006/12/super-type-tokens.html">this blog post</a>
  * for further details.</p>
+ *
+ * <p>It may make sense to switch to using Java's reflection
+ * <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Type.html">Type</a> to
+ * avoid working around this fundamental generics limitation.</p>
  */
 public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type> implements Comparable<TypeReference<T>> {
 

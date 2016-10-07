@@ -28,5 +28,8 @@ public class UtilsTest {
         assertThat(Utils.getTypeName(
                 new TypeReference.StaticArrayTypeReference<StaticArray<Uint>>(5){}),
                 is("uint256[5]"));
+        assertThat(Utils.getTypeName(
+                new TypeReference<DynamicArray<Uint>>(){}),
+                is("uint256[]"));
     }
 }

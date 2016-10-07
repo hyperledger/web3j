@@ -16,8 +16,7 @@ import com.squareup.javapoet.*;
 
 import org.web3j.abi.Contract;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -186,15 +185,20 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
             for (AbiDefinition.NamedType namedType:functionDefinition.getInputs()) {
                 String name = namedType.getName();
-                Class<?> type = AbiTypes.getType(namedType.getType());
-                methodBuilder.addParameter(type, name);
+                String type = namedType.getType();
+
+                TypeName typeName = buildTypeName(type);
+                methodBuilder.addParameter(typeName, name);
+
                 inputParameterNames.add(name);
             }
 
-            List<Class<?>> outputParameterTypes = new ArrayList<>();
+            List<TypeName> outputParameterTypes = new ArrayList<>();
             for (AbiDefinition.NamedType namedType:functionDefinition.getOutputs()) {
-                Class<?> type = AbiTypes.getType(namedType.getType());
-                outputParameterTypes.add(type);
+                String type = namedType.getType();
+
+                TypeName typeName = buildTypeName(type);
+                outputParameterTypes.add(typeName);
             }
 
             String inputParams = inputParameterNames.stream().collect(Collectors.joining(", "));
@@ -213,7 +217,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 methodBuilder.returns(outputParameterTypes.get(0));
 
                 methodBuilder.addStatement("$T function = " +
-                                "new $T<>($S, $T.asList($L), $T.asList(new $T<$T>() {}))",
+                                "new $T<>($S, \n$T.asList($L), \n$T.asList(new $T<$T>() {}))",
                         Function.class, Function.class, functionName,
                         Arrays.class, inputParams, Arrays.class, TypeReference.class,
                         outputParameterTypes.get(0));
@@ -236,9 +240,28 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         return classBuilder;
     }
 
+    static TypeName buildTypeName(String type) {
+        if (type.endsWith("]")) {
+            String[] splitType = type.split("\\[");
+            Class<?> baseType = AbiTypes.getType(splitType[0]);
+
+            TypeName typeName;
+            if (splitType[1].length() == 1) {
+                typeName = ParameterizedTypeName.get(DynamicArray.class, baseType);
+            } else {
+                // Unfortunately we can't encode it's length as a type
+                typeName = ParameterizedTypeName.get(StaticArray.class, baseType);
+            }
+            return typeName;
+        } else {
+            Class<?> cls = AbiTypes.getType(type);
+            return ClassName.get(cls);
+        }
+    }
+
     private static void buildVariableLengthReturnFunctionConstructor(
             MethodSpec.Builder methodBuilder, String functionName, String inputParameters,
-            List<Class<?>> outputParameterTypes) throws ClassNotFoundException {
+            List<TypeName> outputParameterTypes) throws ClassNotFoundException {
 
         Object[] objects = new Object[6 + (outputParameterTypes.size() << 1)];
         objects[0] = Function.class;
@@ -255,7 +278,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         String asListParams = outputParameterTypes.stream().map(p -> "new $T<$T>() {}")
                 .collect(Collectors.joining(", "));
 
-        methodBuilder.addStatement("$T function = new $T<>($S, $T.asList($L), $T.asList(" +
+        methodBuilder.addStatement("$T function = new $T<>($S, \n$T.asList($L), \n$T.asList(" +
                         asListParams + "))", objects);
     }
 }

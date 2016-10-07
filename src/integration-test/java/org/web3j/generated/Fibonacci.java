@@ -21,12 +21,16 @@ public final class Fibonacci extends Contract {
   }
 
   public Uint256 fibonacciNotify(Uint256 number) throws InterruptedException, ExecutionException {
-    Function function = new Function<>("fibonacciNotify", Arrays.asList(number), Arrays.asList(new TypeReference<Uint256>() {}));
+    Function function = new Function<>("fibonacciNotify", 
+        Arrays.asList(number), 
+        Arrays.asList(new TypeReference<Uint256>() {}));
     return executeSingleValueReturn(function);
   }
 
   public Uint256 fibonacci(Uint256 number) throws InterruptedException, ExecutionException {
-    Function function = new Function<>("fibonacci", Arrays.asList(number), Arrays.asList(new TypeReference<Uint256>() {}));
+    Function function = new Function<>("fibonacci", 
+        Arrays.asList(number), 
+        Arrays.asList(new TypeReference<Uint256>() {}));
     return executeSingleValueReturn(function);
   }
 }

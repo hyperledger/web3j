@@ -135,11 +135,11 @@ public class AbiTypesGenerator extends Generator {
         javaFile.writeTo(destination);
     }
 
-    static String createPackageName(Class<?> clazz) {
-        return getPackageName(clazz) + ".generated";
+    static String createPackageName(Class<?> cls) {
+        return getPackageName(cls) + ".generated";
     }
 
-    static String getPackageName(Class<?> clazz) {
-        return clazz.getPackage().getName();
+    static String getPackageName(Class<?> cls) {
+        return cls.getPackage().getName();
     }
 }
