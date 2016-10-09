@@ -54,11 +54,15 @@ public final class Numeric {
     }
 
     public static String cleanHexPrefix(String input) {
-        if (input.length()  > 1 && input.charAt(0) == '0' && input.charAt(1) == 'x') {
+        if (containsHexPrefix(input)) {
             return input.substring(2);
         } else {
             return input;
         }
+    }
+
+    public static boolean containsHexPrefix(String input) {
+        return input.length() > 1 && input.charAt(0) == '0' && input.charAt(1) == 'x';
     }
 
     public static BigInteger toBigInt(String hexValue) {
