@@ -3,11 +3,11 @@ package org.web3j.rlp;
 import java.util.Arrays;
 import java.util.List;
 
-import org.web3j.utils.Hex;
-import org.web3j.utils.Numeric;
-
 /**
- * <p>Recursive Length Prefix (RLP) encoder. For </p>
+ * <p>Recursive Length Prefix (RLP) encoder.</p>
+ *
+ * <p>For the specification, refer to p16 of the <a href="http://gavwood.com/paper.pdf">
+ * yellow paper</a> and <a href="https://github.com/ethereum/wiki/wiki/RLP">here</a>.</p>
  */
 public class RlpEncoder {
 
@@ -23,16 +23,7 @@ public class RlpEncoder {
     }
 
     static byte[] encodeString(RlpString value) {
-        String stringValue = value.getValue();
-
-        byte[] bytesValue;
-        if (Numeric.containsHexPrefix(stringValue)) {
-            bytesValue = Hex.hexStringToByteArray(stringValue);
-        } else {
-            bytesValue = stringValue.getBytes();
-        }
-
-        return encode(bytesValue, STRING_OFFSET);
+        return encode(value.getBytes(), STRING_OFFSET);
     }
 
     private static byte[] encode(byte[] bytesValue, int offset) {

@@ -2,7 +2,6 @@ package org.web3j.utils;
 
 import java.math.BigInteger;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import org.web3j.protocol.exceptions.MessageDecodingException;
@@ -64,5 +63,32 @@ public class NumericTest {
         assertThat(Numeric.cleanHexPrefix("0123456789abcdef"), is("0123456789abcdef"));
         assertThat(Numeric.cleanHexPrefix("0x"), is(""));
         assertThat(Numeric.cleanHexPrefix("0x0123456789abcdef"), is("0123456789abcdef"));
+    }
+
+    @Test
+    public void testToHexStringWithPrefix() {
+        assertThat(Numeric.toHexStringWithPrefix(BigInteger.TEN), is("0xa"));
+    }
+
+    @Test
+    public void testToHexStringNoPrefix() {
+        assertThat(Numeric.toHexStringNoPrefix(BigInteger.TEN), is("a"));
+    }
+
+    @Test
+    public void testToBytesPadded() {
+        assertThat(Numeric.toBytesPadded(BigInteger.TEN, 1),
+                is(new byte[] { 0xa }));
+
+        assertThat(Numeric.toBytesPadded(BigInteger.TEN, 8),
+                is(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0xa }));
+
+        assertThat(Numeric.toBytesPadded(BigInteger.valueOf(Integer.MAX_VALUE), 4),
+                is(new byte[] { 0x7f, (byte) 0xff, (byte) 0xff, (byte) 0xff }));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testToBytesPaddedInvalid() {
+        Numeric.toBytesPadded(BigInteger.valueOf(Long.MAX_VALUE), 7);
     }
 }

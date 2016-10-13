@@ -15,13 +15,20 @@ public final class Hex {
         if (len == 0) {
             return new byte[] {};
         }
-        if (len == 1) {
-            return new byte[] { (byte) Character.digit(cleanInput.charAt(0), 16) };
+
+        byte[] data;
+        int startIdx;
+        if (len % 2 != 0) {
+            data = new byte[(len / 2) + 1];
+            data[0] = (byte) Character.digit(cleanInput.charAt(0), 16);
+            startIdx = 1;
+        } else {
+            data = new byte[len / 2];
+            startIdx = 0;
         }
 
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(cleanInput.charAt(i), 16) << 4)
+        for (int i = startIdx; i < len; i += 2) {
+            data[(i + 1) / 2] = (byte) ((Character.digit(cleanInput.charAt(i), 16) << 4)
                     + Character.digit(cleanInput.charAt(i+1), 16));
         }
         return data;

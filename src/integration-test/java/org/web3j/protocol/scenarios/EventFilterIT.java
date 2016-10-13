@@ -41,10 +41,17 @@ public class EventFilterIT extends Scenario {
     public void testEventFilter() throws Exception {
         unlockAccount();
 
-        String transactionHash = sendTransaction();
+        Function function = createFibonacciFunction();
+        String encodedFunction = FunctionEncoder.encode(function);
+
+        BigInteger gas = estimateGas(encodedFunction);
+        String transactionHash = sendTransaction(gas, encodedFunction);
 
         EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
                 waitForTransactionReceipt(transactionHash);
+
+        assertFalse("Transaction execution ran out of gas",
+                gas.equals(transactionReceipt.getGasUsed()));
 
         List<Log> logs = transactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
@@ -75,18 +82,16 @@ public class EventFilterIT extends Scenario {
         assertFalse(filterLogs.isEmpty());
     }
 
-    private String sendTransaction() throws Exception {
-        Function function = createFibonacciFunction();
-
-        String encodedFunction = FunctionEncoder.encode(function);
-
+    private BigInteger estimateGas(String encodedFunction) throws Exception {
         EthEstimateGas ethEstimateGas = parity.ethEstimateGas(new EthCall(null, encodedFunction))
                 .sendAsync().get();
         // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388 - see eth.getBlock("latest")
-        BigInteger requiredGas = ethEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
+        return ethEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
+    }
 
+    private String sendTransaction(BigInteger gas, String encodedFunction) throws Exception {
         EthSendTransaction ethSendTransaction = new EthSendTransaction(
-                ADDRESS, CONTRACT_ADDRESS, requiredGas, encodedFunction);
+                ADDRESS, CONTRACT_ADDRESS, gas, encodedFunction);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
                 parity.ethSendTransaction(ethSendTransaction).sendAsync().get();

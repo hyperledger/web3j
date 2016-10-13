@@ -23,10 +23,14 @@ public class HexTest {
 
     @Test
     public void testHexStringToByteArray() {
+        assertThat(Hex.hexStringToByteArray(""), is(new byte[] { }));
         assertThat(Hex.hexStringToByteArray("0"), is(new byte[] { 0 }));
         assertThat(Hex.hexStringToByteArray("1"), is(new byte[] { 0x1 }));
         assertThat(Hex.hexStringToByteArray(hexRangeString),
                 is(hexRangeArray));
+
+        assertThat(Hex.hexStringToByteArray("0x123"),
+                is(new byte[] { 0x1, 0x23 }));
     }
 
     @Test
