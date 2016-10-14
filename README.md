@@ -99,7 +99,7 @@ It provides type safe access to all responses. Optional or null responses are wr
 
 Async requests are handled using Java 8's [CompletableFutures](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html).
 
-Quantity payload types are returned as [BigInteger](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html)'s. For simple results, you can obtain the quantity as a String via `org.web3j.protocol.jsonrpc20.Response.getResult()`.
+Quantity payload types are returned as [BigInteger](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html)'s. For simple results, you can obtain the quantity as a String via `org.web3j.protocol.core.Response.getResult()`.
 
 
 ## Generating smart contract wrappers in Java
@@ -135,8 +135,7 @@ You can run the integration test class `org.web3j.protocol.core.CoreIT` to verif
 
 ## Coming Soon
 
-* Geth & Parity Management API support
-* Offline transaction signing
+* External key
 * IPC interface support
 * WebSocket interface support
 
@@ -172,4 +171,4 @@ To run excluding integration tests:
 * The [Finhaus](http://finhaus.com.au/) guys for putting me onto Nethereum
 * Everyone involved in the Ethererum project and its surrounding ecosystem
 * And of course the users of the library, who've provided valuable input & feedback -
-[@ice09](https://github.com/ice09), [@adridadou](https://github.com/adridadou), [@nickmelis](https://github.com/nickmelis)
+[@ice09](https://github.com/ice09), [@adridadou](https://github.com/adridadou), [@nickmelis](https://github.com/nickmelis), [@basavk](https://github.com/basavk)
