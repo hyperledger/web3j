@@ -48,7 +48,7 @@ Or `Parity <https://github.com/ethcore/parity>`_:
 
    $ parity --chain testnet
 
-If you don't want to run an Ethereum client, you can use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further information refer to the :doc:`Using Infura <infura>` section.
+If you don't want to run an Ethereum client, you can use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further information refer to the :doc:`infura` section.
 
 
 Start sending requests

@@ -28,13 +28,13 @@ Alternatively, you can use SSL (this will only download the first certificate in
 
 .. code-block:: bash
 
-   openssl s_client -connect morden.infura.io:443 -showcerts </dev/null 2>/dev/null|openssl x509 -outform PEM > infura-morden.pem
+   $ openssl s_client -connect morden.infura.io:443 -showcerts </dev/null 2>/dev/null|openssl x509 -outform PEM > infura-morden.pem
 
 Once you have downloaded it, then install it into your keystore (for Windows/Linux hosts the paths will differ slightly):
 
 .. code-block:: bash
 
-   $JAVA_HOME/Contents/Home/jre/bin/keytool -import -noprompt -trustcacerts -alias morden.infura.io -file  ~/Downloads/morden.infura.io -keystore $JAVA_HOME/Contents/Home/jre/lib/security/cacerts -storepass changeit
+   $ $JAVA_HOME/Contents/Home/jre/bin/keytool -import -noprompt -trustcacerts -alias morden.infura.io -file  ~/Downloads/morden.infura.io -keystore $JAVA_HOME/Contents/Home/jre/lib/security/cacerts -storepass changeit
 
 
 Connecting
