@@ -1,5 +1,6 @@
 # web3j: Web3 Java Ðapp API
 
+[![Documentation Status](https://readthedocs.org/projects/web3j/badge/?version=latest)](http://web3j.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.org/web3j/web3j.svg?branch=master)](https://travis-ci.org/web3j/web3j)
 [![codecov](https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/web3j/web3j)
 [![Join the chat at https://gitter.im/web3j/web3j](https://badges.gitter.im/web3j/web3j.svg)](https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -16,6 +17,8 @@ It only has four runtime dependencies:
 * [Jackson Core](https://github.com/FasterXML/jackson-core) for fast JSON serialisation/deserialisation
 * [Bouncy Castle](https://www.bouncycastle.org/) for crypto
 * [JavaPoet](https://github.com/square/javapoet) for generating smart contract wrappers
+
+Project documentation is available [here](https://web3j.readthedocs.io/en/latest/)
 
 
 ## Getting Started
