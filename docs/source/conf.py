@@ -122,8 +122,8 @@ html_theme_options = {
     'travis_button': 'true',
     'codecov_button': 'true',
     'description': 'Lightweight Java library for integration with Ethereum clients',
-    'canonical_url': 'http://web3j.io/',
-    # 'analytics_id': 'UA-',
+    'canonical_url': 'https://web3j.readthedocs.io/',
+    'analytics_id': 'UA-85710619-1',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
