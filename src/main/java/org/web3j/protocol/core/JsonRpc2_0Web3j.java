@@ -654,7 +654,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhUninstallFilter> shhUninstallFilter(BigInteger filterId) {
         return new Request<>(
                 "shh_uninstallFilter",
-                Arrays.asList(filterId),
+                Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
                 web3jService,
                 ShhUninstallFilter.class);
@@ -664,7 +664,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId) {
         return new Request<>(
                 "shh_getFilterChanges",
-                Arrays.asList(filterId),
+                Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
                 web3jService,
                 ShhMessages.class);
@@ -673,8 +673,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, ShhMessages> shhGetMessages(BigInteger filterId) {
         return new Request<>(
-                "shh_getFilterChanges",
-                Arrays.asList(filterId),
+                "shh_getMessages",
+                Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
                 web3jService,
                 ShhMessages.class);

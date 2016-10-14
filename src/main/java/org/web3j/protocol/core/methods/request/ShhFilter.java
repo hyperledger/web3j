@@ -3,16 +3,16 @@ package org.web3j.protocol.core.methods.request;
 /**
  * Filter implementation as per <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
  */
-public class ShhFilter extends Filter {
-    private String toBlock;
+public class ShhFilter extends Filter<ShhFilter> {
+    private String to;
 
-    public ShhFilter(String toBlock) {
+    public ShhFilter(String to) {
         super();
-        this.toBlock = toBlock;
+        this.to = to;
     }
 
-    public String getToBlock() {
-        return toBlock;
+    public String getTo() {
+        return to;
     }
 
     @Override
