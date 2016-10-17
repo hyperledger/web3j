@@ -19,7 +19,7 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.5.0</version>
+     <version>0.5.1</version>
    </dependency>
 
 Gradle
@@ -30,7 +30,7 @@ Gradle
    repositories {
      maven {url "http://dl.bintray.com/web3j/maven"}
    }
-   compile ("org.web3j:core:0.5.0")
+   compile ("org.web3j:core:0.5.1")
 
 
 Start a client
