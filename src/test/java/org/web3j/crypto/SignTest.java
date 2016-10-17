@@ -37,4 +37,10 @@ public class SignTest {
         BigInteger key = Sign.signedMessageToKey(TEST_MESSAGE, signatureData);
         assertThat(key, equalTo(SampleKeys.PUBLIC_KEY));
     }
+
+    @Test
+    public void testPublicKeyFromPrivateKey() {
+        assertThat(Sign.publicKeyFromPrivate(SampleKeys.PRIVATE_KEY),
+                equalTo(SampleKeys.PUBLIC_KEY));
+    }
 }
