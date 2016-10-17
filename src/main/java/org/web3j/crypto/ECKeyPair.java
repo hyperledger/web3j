@@ -43,4 +43,28 @@ public class ECKeyPair {
 
         return new ECKeyPair(privateKeyValue, publicKeyValue);
     }
+
+    public static ECKeyPair create(BigInteger privateKey) {
+        return new ECKeyPair(privateKey, Sign.publicKeyFromPrivate(privateKey));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ECKeyPair ecKeyPair = (ECKeyPair) o;
+
+        if (privateKey != null ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null)
+            return false;
+        return publicKey != null ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = privateKey != null ? privateKey.hashCode() : 0;
+        result = 31 * result + (publicKey != null ? publicKey.hashCode() : 0);
+        return result;
+    }
 }
