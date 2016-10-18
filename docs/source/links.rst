@@ -1,6 +1,7 @@
 Links and Useful Resources
 ==========================
 
+- Ethereum `Homestead Documentation <https://ethereum-homestead.readthedocs.io/en/latest/>`_
 - Ethereum `Wiki <https://github.com/ethereum/wiki/wiki>`_
 - Ethereum `JSON-RPC specification <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
 - Ethereum `Yellow Paper <gavwood.com/paper.pdf>`_ and `GitHub <https://github.com/ethereum/yellowpaper>`_ repository

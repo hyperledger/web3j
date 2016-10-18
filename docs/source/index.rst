@@ -43,7 +43,7 @@ Contents:
    introduction.rst
    getting_started.rst
    contract_creation.rst
-   sending_transactions.rst
+   transactions.rst
    filters.rst
    signing_transactions.rst
    callbacks.rst
