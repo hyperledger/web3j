@@ -62,7 +62,7 @@ public class DeployContractIT extends Scenario {
 
     private String sendTransaction(BigInteger gas) throws Exception {
         EthSendTransaction ethSendTransaction = new EthSendTransaction(
-                ADDRESS,
+                WALLET_ADDRESS,
                 gas,
                 getFibonacciSolidityBinary()
         );

@@ -20,8 +20,8 @@ import static junit.framework.TestCase.fail;
  * Common methods & settings used accross scenarios.
  */
 public class Scenario {
-    static final String ADDRESS = "";
-    private static final String PASSWORD = "";
+    static final String WALLET_ADDRESS = "0x";  // 20 byte hex address - must have 0x prefix
+    private static final String WALLET_PASSWORD = "";
 
     private static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
 
@@ -43,7 +43,7 @@ public class Scenario {
 
     boolean unlockAccount() throws Exception {
         PersonalUnlockAccount personalUnlockAccount =
-                parity.personalUnlockAccount(ADDRESS, PASSWORD, ACCOUNT_UNLOCK_DURATION)
+                parity.personalUnlockAccount(WALLET_ADDRESS, WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
                         .sendAsync().get();
         return personalUnlockAccount.accountUnlocked();
     }

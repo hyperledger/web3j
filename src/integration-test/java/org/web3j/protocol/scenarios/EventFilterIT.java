@@ -91,7 +91,7 @@ public class EventFilterIT extends Scenario {
 
     private String sendTransaction(BigInteger gas, String encodedFunction) throws Exception {
         EthSendTransaction ethSendTransaction = new EthSendTransaction(
-                ADDRESS, CONTRACT_ADDRESS, gas, encodedFunction);
+                WALLET_ADDRESS, CONTRACT_ADDRESS, gas, encodedFunction);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
                 parity.ethSendTransaction(ethSendTransaction).sendAsync().get();

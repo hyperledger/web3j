@@ -24,21 +24,23 @@ import static org.junit.Assert.*;
  */
 public class CreateRawTransactionIT extends Scenario {
 
-    // 13/10/2016 Due to DOS attacks testnet gas prices have gone through the roof
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(10000000000000L);
+    private static final BigInteger GAS_PRICE = BigInteger.valueOf(10000000000L);
     private static final BigInteger GAS_LIMIT = BigInteger.valueOf(1000000);
 
     // testnet
     private static final String PRIVATE_KEY = "";  // 32 byte hex value
-    private static final String PUBLIC_KEY = "";  // 64 byte hex value
+    private static final String PUBLIC_KEY = "0x";  // 64 byte hex value
+
+    private static final String TO_ADDRESS = "0x";  // 20 byte hex value
 
     private static final ECKeyPair KEY_PAIR = new ECKeyPair(
             Numeric.toBigInt(PRIVATE_KEY), Numeric.toBigInt(PUBLIC_KEY));
 
     @Test
     public void testTransferEther() throws Exception {
-        BigInteger nonce = getNonce(ADDRESS);
-        Transaction transaction = createEtherTransaction(nonce);
+        BigInteger nonce = getNonce(WALLET_ADDRESS);
+        Transaction transaction = createEtherTransaction(
+                nonce, TO_ADDRESS);
 
         byte[] signedMessage = TransactionEncoder.signMessage(transaction, KEY_PAIR);
         String hexValue = Hex.toHexString(signedMessage);
@@ -57,7 +59,7 @@ public class CreateRawTransactionIT extends Scenario {
 
     @Test
     public void testDeploySmartContract() throws Exception {
-        BigInteger nonce = getNonce(ADDRESS);
+        BigInteger nonce = getNonce(WALLET_ADDRESS);
         Transaction transaction = createSmartContractTransaction(nonce);
 
         byte[] signedMessage = TransactionEncoder.signMessage(transaction, KEY_PAIR);
@@ -78,11 +80,11 @@ public class CreateRawTransactionIT extends Scenario {
                 transaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
     }
 
-    private static Transaction createEtherTransaction(BigInteger nonce) {
+    private static Transaction createEtherTransaction(BigInteger nonce, String toAddress) {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
         return Transaction.createEtherTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, "0x9C98E381Edc5Fe1Ac514935F3Cc3eDAA764cf004", value);
+                nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
     }
 
     private static Transaction createSmartContractTransaction(BigInteger nonce) {
