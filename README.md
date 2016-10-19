@@ -39,7 +39,7 @@ Add the following dependency to your project:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>0.5.1</version>
+  <version>0.5.2</version>
 </dependency>
 ```
 
@@ -47,9 +47,9 @@ Add the following dependency to your project:
 
 ```groovy
 repositories {
-   maven {url "http://dl.bintray.com/web3j/maven"}
+   maven {url 'http://dl.bintray.com/web3j/maven'}
 }
-compile ("org.web3j:core:0.5.1")
+compile ('org.web3j:core:0.5.2')
 ```
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
@@ -126,19 +126,17 @@ See `org.web3j.protocol.scenarios.EventFilterIT` for an example.
 ## Tested clients
 
 Geth
-* 1.4.10-stable-5f55d95a (in progress)
+* 1.4.18-stable-ef9265d0
 
 Parity
-* v1.2.4-stable-77ecf4d-20160905 (in progress)
-
-More coming soon.
+* Parity/v1.3.8-beta/x86_64-linux-gnu/rustc1.12.0
 
 You can run the integration test class `org.web3j.protocol.core.CoreIT` to verify clients.
 
 
 ## Coming Soon
 
-* External key
+* External key store support
 * IPC interface support
 * WebSocket interface support
 

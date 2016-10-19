@@ -438,7 +438,8 @@ public class ResponseTest extends ResponseTester {
                         "    \"logsBloom\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\",\n" +
                         "    \"transactionsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
                         "    \"stateRoot\": \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\",\n" +
-                        "    \"receiptRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"receiptsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"author\": \"0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6\",\n" +
                         "    \"miner\": \"0x4e65fda2159562a496f9f3522f89122a3088497a\",\n" +
                         "    \"difficulty\": \"0x027f07\",\n" +
                         "    \"totalDifficulty\":  \"0x027f07\",\n" +
@@ -454,6 +455,10 @@ public class ResponseTest extends ResponseTester {
                         "    \"uncles\": [\n" +
                         "       \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n" +
                         "       \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\"\n" +
+                        "    ],\n" +
+                        "    \"sealFields\": [\n" +
+                        "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n" +
+                        "       \"0x39a3eb432fbef1fc\"\n" +
                         "    ]\n" +
                         "  }\n" +
                         "}"
@@ -470,6 +475,7 @@ public class ResponseTest extends ResponseTester {
                 "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
                 "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
                 "0x4e65fda2159562a496f9f3522f89122a3088497a",
                 "0x027f07",
                 "0x027f07",
@@ -485,6 +491,10 @@ public class ResponseTest extends ResponseTester {
                 Arrays.asList(
                         "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                         "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"
+                ),
+                Arrays.asList(
+                        "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
+                        "0x39a3eb432fbef1fc"
                 )
         );
         assertThat(ethBlock.getBlock().get(),
@@ -506,7 +516,8 @@ public class ResponseTest extends ResponseTester {
                         "    \"logsBloom\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\",\n" +
                         "    \"transactionsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
                         "    \"stateRoot\": \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\",\n" +
-                        "    \"receiptRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"receiptsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"author\": \"0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6\",\n" +
                         "    \"miner\": \"0x4e65fda2159562a496f9f3522f89122a3088497a\",\n" +
                         "    \"difficulty\": \"0x027f07\",\n" +
                         "    \"totalDifficulty\":  \"0x027f07\",\n" +
@@ -526,11 +537,18 @@ public class ResponseTest extends ResponseTester {
                         "        \"value\":\"0x7f110\",\n" +
                         "        \"gas\": \"0x7f110\",\n" +
                         "        \"gasPrice\":\"0x09184e72a000\",\n" +
-                        "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\"" +
+                        "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\"," +
+                        "        \"creates\":null,\n" +
+                        "        \"publicKey\":\"0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b\",\n" +
+                        "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\"\n" +
                         "    }], \n" +
                         "    \"uncles\": [\n" +
                         "       \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n" +
                         "       \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\"\n" +
+                        "    ],\n" +
+                        "    \"sealFields\": [\n" +
+                        "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n" +
+                        "       \"0x39a3eb432fbef1fc\"\n" +
                         "    ]\n" +
                         "  }\n" +
                         "}"
@@ -547,6 +565,7 @@ public class ResponseTest extends ResponseTester {
                 "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
                 "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
                 "0x4e65fda2159562a496f9f3522f89122a3088497a",
                 "0x027f07",
                 "0x027f07",
@@ -566,12 +585,19 @@ public class ResponseTest extends ResponseTester {
                                 "0x7f110",
                                 "0x7f110",
                                 "0x09184e72a000",
-                                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360"
+                                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                                null,
+                                "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
+                                "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62"
                         )
                 ),
                 Arrays.asList(
                         "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                         "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"
+                ),
+                Arrays.asList(
+                        "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
+                        "0x39a3eb432fbef1fc"
                 )
         );
         assertThat(ethBlock.getBlock().get(),
@@ -607,7 +633,10 @@ public class ResponseTest extends ResponseTester {
                         "        \"value\":\"0x7f110\",\n" +
                         "        \"gas\": \"0x7f110\",\n" +
                         "        \"gasPrice\":\"0x09184e72a000\",\n" +
-                        "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\"\n" +
+                        "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\",\n" +
+                        "        \"creates\":null,\n" +
+                        "        \"publicKey\":\"0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b\",\n" +
+                        "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\"\n" +
                         "  }\n" +
                         "}"
         );
@@ -622,7 +651,10 @@ public class ResponseTest extends ResponseTester {
                 "0x7f110",
                 "0x7f110",
                 "0x09184e72a000",
-                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360"
+                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                null,
+                "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
+                "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62"
         );
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
@@ -667,6 +699,7 @@ public class ResponseTest extends ResponseTester {
                         "            \"blockNumber\":\"0x1b4\",\n" +
                         "            \"address\": \"0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" +
                         "            \"data\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\n" +
+                        "            \"type\":\"mined\",\n" +
                         "            \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]" +
                         "        }]\n" +
                         "  }\n" +
@@ -695,6 +728,7 @@ public class ResponseTest extends ResponseTester {
                                         "0x1b4",
                                         "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                        "mined",
                                         Arrays.asList(
                                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
                                         )
@@ -901,6 +935,7 @@ public class ResponseTest extends ResponseTester {
                         "        \"blockNumber\":\"0x1b4\",\n" +
                         "        \"address\": \"0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" +
                         "        \"data\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\n" +
+                        "        \"type\":\"mined\",\n" +
                         "        \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]" +
                         "    }]" +
                         "}"
@@ -916,6 +951,7 @@ public class ResponseTest extends ResponseTester {
                         "0x1b4",
                         "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
                         "0x0000000000000000000000000000000000000000000000000000000000000000",
+                        "mined",
                         Collections.singletonList(
                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
                         )

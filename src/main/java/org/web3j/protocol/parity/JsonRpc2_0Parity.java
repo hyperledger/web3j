@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
@@ -94,7 +95,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, EthSendTransaction> personalSignAndSendTransaction(
-            org.web3j.protocol.core.methods.request.EthSendTransaction transaction, String password) {
+            Transaction transaction, String password) {
         return new Request<>(
                 "personal_signAndSendTransaction",
                 Arrays.asList(transaction, password),
@@ -145,7 +146,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     }
 
     @Override
-    public Request<?, EthSendTransaction> personalConfirmRequest(String requestId, org.web3j.protocol.core.methods.request.EthSendTransaction transaction, String password) {
+    public Request<?, EthSendTransaction> personalConfirmRequest(String requestId, Transaction transaction, String password) {
         return new Request<>(
                 "personal_confirmRequest",
                 Arrays.asList(requestId, transaction, password),

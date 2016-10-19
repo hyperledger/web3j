@@ -7,7 +7,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.EthCall;
+import org.web3j.protocol.core.methods.request.Transaction;
 
 
 /**
@@ -34,7 +34,7 @@ public abstract class Contract {
     private <T extends Type> List<T> execute(Function function) throws InterruptedException, ExecutionException {
         String encoded = FunctionEncoder.encode(function);
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
-                new EthCall(contractAddress, encoded),
+                Transaction.createEthCallTransaction(contractAddress, encoded),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();
 

@@ -11,8 +11,7 @@ import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.EthCall;
-import org.web3j.protocol.core.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
@@ -61,14 +60,11 @@ public class DeployContractIT extends Scenario {
     }
 
     private String sendTransaction(BigInteger gas) throws Exception {
-        EthSendTransaction ethSendTransaction = new EthSendTransaction(
-                WALLET_ADDRESS,
-                gas,
-                getFibonacciSolidityBinary()
-        );
+        Transaction transaction = Transaction.createContractTransaction(
+                WALLET_ADDRESS, gas, getFibonacciSolidityBinary());
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = parity.ethSendTransaction(ethSendTransaction)
+                transactionResponse = parity.ethSendTransaction(transaction)
                 .sendAsync().get();
 
         return transactionResponse.getTransactionHash();
@@ -80,7 +76,7 @@ public class DeployContractIT extends Scenario {
         String encodedFunction = FunctionEncoder.encode(function);
 
         org.web3j.protocol.core.methods.response.EthCall response = parity.ethCall(
-                new EthCall(contractAddress, encodedFunction),
+                Transaction.createEthCallTransaction(contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();
 

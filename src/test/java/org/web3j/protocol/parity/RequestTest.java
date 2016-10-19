@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import org.web3j.protocol.core.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.methods.request.Wallet;
@@ -88,14 +88,14 @@ public class RequestTest extends RequestTester {
     @Test
     public void testPersonalSignAndSendTransaction() throws Exception {
         web3j.personalSignAndSendTransaction(
-                new EthSendTransaction(
+                new Transaction(
                         "FROM",
-                        "TO",
                         BigInteger.ONE,
                         BigInteger.TEN,
+                        BigInteger.ONE,
+                        "TO",
                         BigInteger.ZERO,
-                        "DATA",
-                        BigInteger.ONE
+                        "DATA"
                 ),
                 "password"
         ).send();
@@ -137,11 +137,11 @@ public class RequestTest extends RequestTester {
     public void testPersonalConfirmRequest() throws Exception {
         web3j.personalConfirmRequest(
                 "0x1",
-                new EthSendTransaction("0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc", "0x0"),
+                Transaction.createEthCallTransaction("0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc", "0x0"),
                 "password"
         ).send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_confirmRequest\",\"params\":[\"0x1\",{\"from\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"gas\":\"0x2328\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_confirmRequest\",\"params\":[\"0x1\",{\"to\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
     }
 
     @Test

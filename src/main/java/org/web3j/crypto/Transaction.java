@@ -10,6 +10,7 @@ import org.web3j.utils.Numeric;
  * yellow paper</a>.</p>
  */
 public class Transaction {
+    // default as per https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction
     public static final String DEFAULT_GAS = Numeric.toHexStringWithPrefix(BigInteger.valueOf(9000));
 
     private BigInteger nonce;
@@ -44,7 +45,7 @@ public class Transaction {
 
     }
 
-    public static Transaction createMessageCallTransaction(
+    public static Transaction createFunctionCallTransaction(
             BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
             BigInteger value, String data) {
 

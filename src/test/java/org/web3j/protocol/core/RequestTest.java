@@ -183,14 +183,14 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEthSendTransaction() throws Exception {
-        web3j.ethSendTransaction(new EthSendTransaction(
+        web3j.ethSendTransaction(new Transaction(
                 "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
-                "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
-                Numeric.toBigInt("0x76c0"),
+                BigInteger.ONE,
                 Numeric.toBigInt("0x9184e72a000"),
+                Numeric.toBigInt("0x76c0"),
+                "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
                 Numeric.toBigInt("0x9184e72a"),
-                "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
-                BigInteger.ONE)).send();
+                "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendTransaction\",\"params\":[{\"from\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"gas\":\"0x76c0\",\"gasPrice\":\"0x9184e72a000\",\"value\":\"0x9184e72a\",\"data\":\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\",\"nonce\":\"0x1\"}],\"id\":1}");
     }
@@ -205,16 +205,17 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEthCall() throws Exception {
-        web3j.ethCall(new EthCall("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", "0x0"),
+        web3j.ethCall(Transaction.createEthCallTransaction("0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+                        "0x0"),
                 DefaultBlockParameter.valueOf("latest")).send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"data\":\"0x0\"},\"latest\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"data\":\"0x0\"},\"latest\"],\"id\":1}");
     }
 
     @Test
     public void testEthEstimateGas() throws Exception {
         web3j.ethEstimateGas(
-                new EthCall("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", "0x0")).send();
+                Transaction.createEthCallTransaction("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", "0x0")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_estimateGas\",\"params\":[{\"to\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"data\":\"0x0\"}],\"id\":1}");
     }

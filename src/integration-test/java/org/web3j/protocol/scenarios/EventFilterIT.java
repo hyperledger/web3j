@@ -16,9 +16,8 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.EthCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
-import org.web3j.protocol.core.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthEstimateGas;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthLog;
@@ -83,18 +82,19 @@ public class EventFilterIT extends Scenario {
     }
 
     private BigInteger estimateGas(String encodedFunction) throws Exception {
-        EthEstimateGas ethEstimateGas = parity.ethEstimateGas(new EthCall(null, encodedFunction))
+        EthEstimateGas ethEstimateGas = parity.ethEstimateGas(
+                Transaction.createEthCallTransaction(null, encodedFunction))
                 .sendAsync().get();
         // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388 - see eth.getBlock("latest")
         return ethEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
     }
 
     private String sendTransaction(BigInteger gas, String encodedFunction) throws Exception {
-        EthSendTransaction ethSendTransaction = new EthSendTransaction(
-                WALLET_ADDRESS, CONTRACT_ADDRESS, gas, encodedFunction);
+        Transaction transaction = Transaction.createFunctionCallTransaction(
+                WALLET_ADDRESS, Transaction.DEFAULT_GAS, gas, CONTRACT_ADDRESS, null, encodedFunction);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
-                parity.ethSendTransaction(ethSendTransaction).sendAsync().get();
+                parity.ethSendTransaction(transaction).sendAsync().get();
 
         assertFalse(transactionResponse.hasError());
 

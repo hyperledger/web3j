@@ -19,7 +19,7 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.5.1</version>
+     <version>0.5.2</version>
    </dependency>
 
 Gradle
@@ -28,9 +28,9 @@ Gradle
 .. code-block:: groovy
 
    repositories {
-     maven {url "http://dl.bintray.com/web3j/maven"}
+     maven {url 'http://dl.bintray.com/web3j/maven'}
    }
-   compile ("org.web3j:core:0.5.1")
+   compile ('org.web3j:core:0.5.2')
 
 
 Start a client

@@ -3,8 +3,7 @@ package org.web3j.protocol;
 import java.math.BigInteger;
 
 import org.web3j.protocol.core.methods.request.*;
-import org.web3j.protocol.core.methods.request.EthCall;
-import org.web3j.protocol.core.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -64,13 +63,13 @@ public interface Web3j {
 
     Request<?, EthSign> ethSign(String address, String sha3HashOfDataToSign);
 
-    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(EthSendTransaction transaction);
+    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(Transaction transaction);
 
     Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(String signedTransactionData);
 
-    Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(EthCall ethCall, DefaultBlockParameter defaultBlockParameter);
+    Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(Transaction transaction, DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, EthEstimateGas> ethEstimateGas(EthCall ethCall);
+    Request<?, EthEstimateGas> ethEstimateGas(Transaction transaction);
 
     Request<?, EthBlock> ethGetBlockByHash(String blockHash, boolean returnFullTransactionObjects);
 

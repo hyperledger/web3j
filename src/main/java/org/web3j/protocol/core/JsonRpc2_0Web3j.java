@@ -7,8 +7,7 @@ import java.util.Collections;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.methods.request.*;
-import org.web3j.protocol.core.methods.request.EthCall;
-import org.web3j.protocol.core.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
@@ -259,7 +258,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(
-            EthSendTransaction transaction) {
+            Transaction transaction) {
         return new Request<>(
                 "eth_sendTransaction",
                 Arrays.asList(transaction),
@@ -281,20 +280,20 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
-            EthCall ethCall, DefaultBlockParameter defaultBlockParameter) {
+            Transaction transaction, DefaultBlockParameter defaultBlockParameter) {
         return new Request<>(
                 "eth_call",
-                Arrays.asList(ethCall, defaultBlockParameter),
+                Arrays.asList(transaction, defaultBlockParameter),
                 ID,
                 web3jService,
                 org.web3j.protocol.core.methods.response.EthCall.class);
     }
 
     @Override
-    public Request<?, EthEstimateGas> ethEstimateGas(EthCall ethCall) {
+    public Request<?, EthEstimateGas> ethEstimateGas(Transaction transaction) {
         return new Request<>(
                 "eth_estimateGas",
-                Arrays.asList(ethCall),
+                Arrays.asList(transaction),
                 ID,
                 web3jService,
                 EthEstimateGas.class);

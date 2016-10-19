@@ -19,13 +19,17 @@ public class Transaction {
     private String gasPrice;
     private String gas;
     private String input;
+    private String creates;
+    private String publicKey;
+    private String raw;
 
     public Transaction() {
     }
 
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,
-                       String gas, String gasPrice, String input) {
+                       String gas, String gasPrice, String input, String creates,
+                       String publicKey, String raw) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -37,6 +41,9 @@ public class Transaction {
         this.gasPrice = gasPrice;
         this.gas = gas;
         this.input = input;
+        this.creates = creates;
+        this.publicKey = publicKey;
+        this.raw = raw;
     }
 
     public String getHash() {
@@ -127,6 +134,30 @@ public class Transaction {
         this.input = input;
     }
 
+    public String getCreates() {
+        return creates;
+    }
+
+    public void setCreates(String creates) {
+        this.creates = creates;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public String getRaw() {
+        return raw;
+    }
+
+    public void setRaw(String raw) {
+        this.raw = raw;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -148,7 +179,11 @@ public class Transaction {
         if (gasPrice != null ? !gasPrice.equals(that.gasPrice) : that.gasPrice != null)
             return false;
         if (gas != null ? !gas.equals(that.gas) : that.gas != null) return false;
-        return input != null ? input.equals(that.input) : that.input == null;
+        if (input != null ? !input.equals(that.input) : that.input != null) return false;
+        if (creates != null ? !creates.equals(that.creates) : that.creates != null) return false;
+        if (publicKey != null ? !publicKey.equals(that.publicKey) : that.publicKey != null)
+            return false;
+        return raw != null ? raw.equals(that.raw) : that.raw == null;
 
     }
 
@@ -165,6 +200,9 @@ public class Transaction {
         result = 31 * result + (gasPrice != null ? gasPrice.hashCode() : 0);
         result = 31 * result + (gas != null ? gas.hashCode() : 0);
         result = 31 * result + (input != null ? input.hashCode() : 0);
+        result = 31 * result + (creates != null ? creates.hashCode() : 0);
+        result = 31 * result + (publicKey != null ? publicKey.hashCode() : 0);
+        result = 31 * result + (raw != null ? raw.hashCode() : 0);
         return result;
     }
 }

@@ -27,10 +27,13 @@ import org.web3j.protocol.core.Response;
  * <li>eth_getUncleByBlockNumberAndIndex</li>
  * </ul>
  * </p>
- * <p>
+ *
  * <p>See
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash">docs</a>
  * for further details.</p>
+ *
+ * <p>See the following <a href="https://github.com/ethcore/parity/issues/2401">issue</a> for
+ * details on additional Parity fields present in EthBlock.</p>
  */
 public class EthBlock extends Response<EthBlock.Block> {
 
@@ -53,7 +56,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String logsBloom;
         private String transactionsRoot;
         private String stateRoot;
-        private String receiptRoot;
+        private String receiptsRoot;  // geth has this wrong currently, see https://github.com/ethereum/go-ethereum/issues/3084
+        private String author;
         private String miner;
         private String difficulty;
         private String totalDifficulty;
@@ -64,16 +68,18 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String timestamp;
         private List<TransactionResult> transactions;
         private List<String> uncles;
+        private List<String> sealFields;
 
         public Block() {
         }
 
         public Block(String number, String hash, String parentHash, String nonce,
                      String sha3Uncles, String logsBloom, String transactionsRoot,
-                     String stateRoot, String receiptRoot, String miner, String difficulty,
-                     String totalDifficulty, String extraData, String size, String gasLimit,
-                     String gasUsed, String timestamp, List<TransactionResult> transactions,
-                     List<String> uncles) {
+                     String stateRoot, String receiptsRoot, String author, String miner,
+                     String difficulty, String totalDifficulty, String extraData, String size,
+                     String gasLimit, String gasUsed, String timestamp,
+                     List<TransactionResult> transactions, List<String> uncles,
+                     List<String> sealFields) {
             this.number = number;
             this.hash = hash;
             this.parentHash = parentHash;
@@ -82,7 +88,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.logsBloom = logsBloom;
             this.transactionsRoot = transactionsRoot;
             this.stateRoot = stateRoot;
-            this.receiptRoot = receiptRoot;
+            this.receiptsRoot = receiptsRoot;
+            this.author = author;
             this.miner = miner;
             this.difficulty = difficulty;
             this.totalDifficulty = totalDifficulty;
@@ -93,6 +100,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.timestamp = timestamp;
             this.transactions = transactions;
             this.uncles = uncles;
+            this.sealFields = sealFields;
         }
 
         public BigInteger getNumber() {
@@ -159,12 +167,20 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.stateRoot = stateRoot;
         }
 
-        public String getReceiptRoot() {
-            return receiptRoot;
+        public String getReceiptsRoot() {
+            return receiptsRoot;
         }
 
-        public void setReceiptRoot(String receiptRoot) {
-            this.receiptRoot = receiptRoot;
+        public void setReceiptsRoot(String receiptsRoot) {
+            this.receiptsRoot = receiptsRoot;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
         }
 
         public String getMiner() {
@@ -248,6 +264,14 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.uncles = uncles;
         }
 
+        public List<String> getSealFields() {
+            return sealFields;
+        }
+
+        public void setSealFields(List<String> sealFields) {
+            this.sealFields = sealFields;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -268,8 +292,9 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             if (stateRoot != null ? !stateRoot.equals(that.stateRoot) : that.stateRoot != null)
                 return false;
-            if (receiptRoot != null ? !receiptRoot.equals(that.receiptRoot) : that.receiptRoot != null)
+            if (receiptsRoot != null ? !receiptsRoot.equals(that.receiptsRoot) : that.receiptsRoot != null)
                 return false;
+            if (author != null ? !author.equals(that.author) : that.author != null) return false;
             if (miner != null ? !miner.equals(that.miner) : that.miner != null) return false;
             if (difficulty != null ? !difficulty.equals(that.difficulty) : that.difficulty != null)
                 return false;
@@ -286,7 +311,9 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             if (transactions != null ? !transactions.equals(that.transactions) : that.transactions != null)
                 return false;
-            return uncles != null ? uncles.equals(that.uncles) : that.uncles == null;
+            if (uncles != null ? !uncles.equals(that.uncles) : that.uncles != null)
+                return false;
+            return sealFields != null ? sealFields.equals(that.sealFields) : that.sealFields == null;
 
         }
 
@@ -300,7 +327,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             result = 31 * result + (logsBloom != null ? logsBloom.hashCode() : 0);
             result = 31 * result + (transactionsRoot != null ? transactionsRoot.hashCode() : 0);
             result = 31 * result + (stateRoot != null ? stateRoot.hashCode() : 0);
-            result = 31 * result + (receiptRoot != null ? receiptRoot.hashCode() : 0);
+            result = 31 * result + (receiptsRoot != null ? receiptsRoot.hashCode() : 0);
+            result = 31 * result + (author != null ? author.hashCode() : 0);
             result = 31 * result + (miner != null ? miner.hashCode() : 0);
             result = 31 * result + (difficulty != null ? difficulty.hashCode() : 0);
             result = 31 * result + (totalDifficulty != null ? totalDifficulty.hashCode() : 0);
@@ -311,6 +339,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
             result = 31 * result + (transactions != null ? transactions.hashCode() : 0);
             result = 31 * result + (uncles != null ? uncles.hashCode() : 0);
+            result = 31 * result + (sealFields != null ? sealFields.hashCode() : 0);
             return result;
         }
     }
@@ -361,9 +390,10 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         public TransactionObject(String hash, String nonce, String blockHash, String blockNumber,
                                  String transactionIndex, String from, String to, String value,
-                                 String gasPrice, String gas, String input) {
+                                 String gasPrice, String gas, String input, String creates,
+                                 String publicKey, String raw) {
             super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value,
-                    gasPrice, gas, input);
+                    gasPrice, gas, input, creates, publicKey, raw);
         }
 
         @Override

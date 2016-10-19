@@ -23,13 +23,14 @@ public class Log {
     private String blockNumber;
     private String address;
     private String data;
+    private String type;
     private List<String> topics;
 
     public Log() {
     }
 
     public Log(boolean removed, String logIndex, String transactionIndex, String transactionHash,
-               String blockHash, String blockNumber, String address, String data,
+               String blockHash, String blockNumber, String address, String data, String type,
                List<String> topics) {
         this.removed = removed;
         this.logIndex = logIndex;
@@ -39,6 +40,7 @@ public class Log {
         this.blockNumber = blockNumber;
         this.address = address;
         this.data = data;
+        this.type = type;
         this.topics = topics;
     }
 
@@ -106,6 +108,14 @@ public class Log {
         this.data = data;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public List<String> getTopics() {
         return topics;
     }
@@ -141,6 +151,7 @@ public class Log {
             return false;
         if (address != null ? !address.equals(log.address) : log.address != null) return false;
         if (data != null ? !data.equals(log.data) : log.data != null) return false;
+        if (type != null ? !type.equals(log.type) : log.type != null) return false;
         return topics != null ? topics.equals(log.topics) : log.topics == null;
 
     }
@@ -155,6 +166,7 @@ public class Log {
         result = 31 * result + (blockNumber != null ? blockNumber.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (data != null ? data.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (topics != null ? topics.hashCode() : 0);
         return result;
     }

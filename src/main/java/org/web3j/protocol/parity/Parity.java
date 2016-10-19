@@ -3,7 +3,7 @@ package org.web3j.protocol.parity;
 import java.math.BigInteger;
 import java.util.Map;
 
-import org.web3j.protocol.core.methods.request.EthSendTransaction;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
@@ -34,7 +34,7 @@ public interface Parity extends Web3j {
     Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password);
 
     Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> personalSignAndSendTransaction(
-            EthSendTransaction transaction, String password);
+            Transaction transaction, String password);
 
     Request<?, VoidResponse> personalSetAccountName(
             String accountId, String newAccountName);
@@ -46,7 +46,7 @@ public interface Parity extends Web3j {
     Request<?, PersonalRequestsToConfirm> personalRequestsToConfirm();
 
     Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> personalConfirmRequest(
-            String requestId, EthSendTransaction transaction, String password);
+            String requestId, Transaction transaction, String password);
 
     Request<?, PersonalRejectRequest> personalRejectRequest(String requestId);
 }
