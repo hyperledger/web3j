@@ -3,8 +3,6 @@ Transactions
 
 There are three types transactions which are undertaken on the Ethereum blockchain.
 
-These are:
-
 #. :ref:`transfer-of-ether`
 #. :ref:`creation-of-smart-contract`
 #. :ref:`transacting-with-contract`
@@ -139,12 +137,13 @@ Then you can unlock the account, and providing this was successful, send a trans
 
 
 Transactions for sending in this manner should be created via
-`org.web3j.protocol.core.methods.request.EthSendTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/EthSendTransaction.java>`_::
+`org.web3j.protocol.core.methods.request.EthSendTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/EthSendTransaction.java>`_,
+with the `org.web3j.protocol.core.methods.request.Transaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_ type::
 
-  EthSendTransaction ethSendTransaction = new EthSendTransaction(
-                <to address>,
+  Transaction transaction = Transaction.createContractTransaction(
+                <from address>,
                 BigInteger.valueOf(<gas price>),
-                "0x...<code to execute>"
+                "0x...<smart contract code to execute>"
         );
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
@@ -153,10 +152,10 @@ Transactions for sending in this manner should be created via
 
         String transactionHash = transactionResponse.getTransactionHash();
 
-        // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash)
+        // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
 
 Please refer to the integration test
-`org.web3j.protocol.scenarios <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_
+`org.web3j.protocol.scenarios.DeployContractIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_
 and its superclass
 `org.web3j.protocol.scenarios.Scenario <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/Scenario.java>`_
 for further details of this transaction workflow.
@@ -181,6 +180,95 @@ transaction out to other nodes, provided it is a valid transaction.
 The downside of offline transaction signing is that you have to provide additional information in
 the transaction.
 
+Generating key pairs
+--------------------
+
+In order to sign transactions offline, you need to have the public and private keys associated with
+an Ethereum wallet/account.
+
+By default your Ethereum wallet is encrypted, however, you can head over to
+http://www.myetherwallet.com/ to use client side JavaScript to decode your key, or generate a new
+account/set of keys if you don't already have one.
+
+Alternatively you can create your own keypair using web3j, via
+`org.web3j.crypto.Keys <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/Keys.java>`::
+
+   ECKeyPair ecKeyPair = Keys.createEcKeyPair();
+
+
+Signing transactions
+--------------------
+
+Transactions to be used in an offline signing capacity, should use the
+`org.web3j.protocol.core.methods.request.RawTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_
+type for this purpose. The RawTransaction is similar to the previously mentioned Transaction type,
+however it does not require a *from* address, as this can be inferred from the signature.
+
+In order to create and sign a raw transaction, the sequence of events is as follows:
+
+#. Identify the next available nonce for the sender account
+#. Create the RawTransaction object
+#. Encode the RawTransaction object
+#. Sign the RawTransaction object
+#. Send the RawTransaction object to a node for processing
+
+The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
+can only be used once and until a transaction is mined, it is possible to send multiple versions of
+a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
+
+You can obtain the next available nonce via the
+`eth_getTransactionCount <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount>`_ method::
+
+   EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+
+        BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+
+The nonce can then be used to create your transaction object::
+
+   RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
+                nonce, <gas price>, <gas limit>, <toAddress>, <value>);
+
+The transaction can then be signed and encoded::
+
+   byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <ECKeyPair>);
+   String hexValue = Hex.toHexString(signedMessage);
+
+Where `org.web3j.crypto.ECKeyPair <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/ECKeyPair.java>`_ contains your Elliptic Curve SECP-256k1 private and public keys.
+
+The transaction is then sent using `eth_sendRawTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction>`_::
+
+   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+   String transactionHash = ethSendTransaction.getTransactionHash();
+   // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
+
+
+Please refer to the integration test
+`org.web3j.protocol.scenarios.CreateRawTransactionIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/CreateRawTransactionIT.java>`_
+for a full example of creating and sending a raw transaction.
+
+
+Transaction types
+-----------------
+
+The different types of transaction in web3j work with both Transaction and RawTransaction objects.
+The key difference is that Transaction objects must always have a from address, so that the
+Ethereum client which processes the
+`eth_sendTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction>`_
+request know which wallet to use in order to sign and send the transaction on the message senders
+behalf. As mentioned :ref:`above <offline-signing>`, this is not necessary for raw transactions
+which are signed offline.
+
+The subsequent sections outline the key transaction attributes required for the different
+transaction types. The following attributes remain constant for all:
+
+- Gas price
+- Gas limit
+- Nonce
+- From
+
+The differences between using Transaction versus RawTransaction objects for the below examples are
+minimal.
 
 
 .. _transfer-of-ether:
@@ -191,9 +279,18 @@ Transfer of Ether from one party to another
 The sending of Ether between two parties requires a minimal number of details of the transaction
 object:
 
-- from - the sender wallet address
-- to - the destination wallet address
-- value - the amount of Ether you wish to send to the destination address
+*to*
+  the destination wallet address
+
+*value*
+  the amount of Ether you wish to send to the destination address
+
+::
+
+   BigInteger value = Convert.toWei("1.0", Convert.Unit.ETHER).toBigInteger();
+   RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
+                <nonce>, <gas price>, <gas limit>, <toAddress>, value);
+   // send...
 
 
 .. _creation-of-smart-contract:
@@ -203,10 +300,23 @@ Creation of a smart contract
 
 To deploy a new smart contract, the following attributes will need to be provided
 
-- from - the sender wallet address
-- value - the amount you wish to deposit in the smart contract (assumes zero if not provided)
-- data - the hex formatted, compiled smart contract creation code
+*value*
+  the amount of Ether you wish to deposit in the smart contract (assumes zero if not provided)
 
+*data*
+  the hex formatted, compiled smart contract creation code
+
+::
+
+   RawTransaction rawTransaction = RawTransaction.createContractTransaction(
+                <nonce>, <gasPrice>, <gasLimit>,
+                <value>, "0x <compield smart contract code>");
+   // send...
+
+   // get contract address
+   EthGetTransactionReceipt.TransactionReceipt transactionReceipt = sendTransactionReceiptRequest(transactionHash);
+
+   Optional<String> contractAddressOptional = transactionReceipt.getContractAddress();
 
 .. _transacting-with-contract:
 
@@ -215,13 +325,39 @@ Transacting with a smart contract
 
 To transact with an existing smart contract, the following attributes will need to be provided:
 
-- from - the sender wallet address
-- value - the amount you wish to deposit in the smart contract (assumes zero if not provided)
-- data - the encoded function selector and parameter arguments
+*to*
+  the smart contract address
+
+*value*
+  the amount of Ether you wish to deposit in the smart contract (assumes zero if not provided)
+
+*data*
+  the encoded function selector and parameter arguments
 
 web3j takes care of the function encoding for you, further details are available in the
 `Ethereum Contract ABI <https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#function-selector-and-argument-encoding>`_
 section of the Ethereum Wiki.
+
+::
+
+   Function function = new Function<>(
+                "functionName",  // function we're calling
+                Arrays.asList(new Type(value)),  // Parameters to pass as Solidity Types
+                Arrays.asList(new TypeReference<Type>() {}, ...));
+
+   String encodedFunction = FunctionEncoder.encode(function)
+   Transaction transaction = Transaction.createFunctionCallTransaction(
+                <from>, <gasPrice>, <gasLimit>, contractAddress, <funds>, encodedFunction);
+
+   org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
+                web3j.ethSendTransaction(transaction).sendAsync().get();
+
+   String transactionHash = transactionResponse.getTransactionHash();
+
+   // wait for response using EthGetTransactionReceipt...
+
+To obtain values returned via a transactional function call, please return to the :doc:`filters`
+section for details.
 
 
 .. _querying-state:
@@ -234,5 +370,18 @@ JSON-RPC call.
 
 eth_call allows you to call a method on a smart contract to query a value. There is no transaction
 cost associated with this function, this is because it does not change the state of any smart
-contract method's called, it simply returns the value from them.
+contract method's called, it simply returns the value from them::
 
+   Function function = new Function<>(
+                "functionName",
+                Arrays.asList(new Type(value)),  // Solidity Types in smart contract functions
+                Arrays.asList(new TypeReference<Type>() {}, ...));
+
+   String encodedFunction = FunctionEncoder.encode(function)
+   org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
+                Transaction.createEthCallTransaction(contractAddress, encodedFunction),
+                DefaultBlockParameterName.LATEST)
+                .sendAsync().get();
+
+   List<Type> someTypes = FunctionReturnDecoder.decode(
+                responseValue, function.getOutputParameters());

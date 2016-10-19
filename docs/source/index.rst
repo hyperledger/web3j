@@ -45,7 +45,6 @@ Contents:
    contract_creation.rst
    transactions.rst
    filters.rst
-   signing_transactions.rst
    callbacks.rst
    solidity_wrappers.rst
    rlp.rst

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Hex;
@@ -14,7 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class TransactionEncoderTest {
+public class RawTransactionEncoderTest {
 
     @Test
     public void testSignMessage() {
@@ -44,14 +45,14 @@ public class TransactionEncoderTest {
         assertThat(rlpStrings.get(3), is(RlpString.create("")));
     }
 
-    private static Transaction createEtherTransaction() {
-        return Transaction.createEtherTransaction(
+    private static RawTransaction createEtherTransaction() {
+        return RawTransaction.createEtherTransaction(
                 BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, "0xadd5355",
                 BigInteger.valueOf(Long.MAX_VALUE));
     }
 
-    private static Transaction createContractTransaction() {
-        return Transaction.createContractTransaction(
+    private static RawTransaction createContractTransaction() {
+        return RawTransaction.createContractTransaction(
                 BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, BigInteger.valueOf(Long.MAX_VALUE),
                 "01234566789");
     }

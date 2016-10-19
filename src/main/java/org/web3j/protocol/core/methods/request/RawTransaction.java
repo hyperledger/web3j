@@ -1,4 +1,4 @@
-package org.web3j.crypto;
+package org.web3j.protocol.core.methods.request;
 
 import java.math.BigInteger;
 
@@ -9,7 +9,7 @@ import org.web3j.utils.Numeric;
  * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">
  * yellow paper</a>.</p>
  */
-public class Transaction {
+public class RawTransaction {
     // default as per https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction
     public static final String DEFAULT_GAS = Numeric.toHexStringWithPrefix(BigInteger.valueOf(9000));
 
@@ -20,8 +20,8 @@ public class Transaction {
     private BigInteger value;
     private String data;
 
-    private Transaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-                        BigInteger value, String data) {
+    private RawTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+                           BigInteger value, String data) {
         this.nonce = nonce;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
@@ -30,26 +30,26 @@ public class Transaction {
         this.data = data;
     }
 
-    public static Transaction createContractTransaction(
+    public static RawTransaction createContractTransaction(
             BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
             String init) {
 
-        return new Transaction(nonce, gasPrice, gasLimit, "", value, init);
+        return new RawTransaction(nonce, gasPrice, gasLimit, "", value, init);
     }
 
-    public static Transaction createEtherTransaction(
+    public static RawTransaction createEtherTransaction(
             BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
             BigInteger value) {
 
-        return new Transaction(nonce, gasPrice, gasLimit, to, value, "");
+        return new RawTransaction(nonce, gasPrice, gasLimit, to, value, "");
 
     }
 
-    public static Transaction createFunctionCallTransaction(
+    public static RawTransaction createFunctionCallTransaction(
             BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
             BigInteger value, String data) {
 
-        return new Transaction(nonce, gasPrice, gasLimit, to, value, data);
+        return new RawTransaction(nonce, gasPrice, gasLimit, to, value, data);
     }
 
     public BigInteger getNonce() {

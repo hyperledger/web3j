@@ -29,7 +29,8 @@ public class KeysTest {
     @Test
     public void testCreateEcKeyPair() throws Exception {
         ECKeyPair ecKeyPair = Keys.createEcKeyPair();
-        ecKeyPair.getPublicKey();
+        assertThat(ecKeyPair.getPublicKey().signum(), is(1));
+        assertThat(ecKeyPair.getPrivateKey().signum(), is(1));
     }
 
     @Test

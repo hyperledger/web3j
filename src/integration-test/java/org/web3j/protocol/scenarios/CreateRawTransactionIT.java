@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import org.junit.Test;
 
 import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.Transaction;
+import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
@@ -39,10 +39,10 @@ public class CreateRawTransactionIT extends Scenario {
     @Test
     public void testTransferEther() throws Exception {
         BigInteger nonce = getNonce(WALLET_ADDRESS);
-        Transaction transaction = createEtherTransaction(
+        RawTransaction rawTransaction = createEtherTransaction(
                 nonce, TO_ADDRESS);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(transaction, KEY_PAIR);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, KEY_PAIR);
         String hexValue = Hex.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -60,9 +60,9 @@ public class CreateRawTransactionIT extends Scenario {
     @Test
     public void testDeploySmartContract() throws Exception {
         BigInteger nonce = getNonce(WALLET_ADDRESS);
-        Transaction transaction = createSmartContractTransaction(nonce);
+        RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(transaction, KEY_PAIR);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, KEY_PAIR);
         String hexValue = Hex.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -77,18 +77,18 @@ public class CreateRawTransactionIT extends Scenario {
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
 
         assertFalse("Contract execution ran out of gas",
-                transaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
+                rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
     }
 
-    private static Transaction createEtherTransaction(BigInteger nonce, String toAddress) {
+    private static RawTransaction createEtherTransaction(BigInteger nonce, String toAddress) {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
-        return Transaction.createEtherTransaction(
+        return RawTransaction.createEtherTransaction(
                 nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
     }
 
-    private static Transaction createSmartContractTransaction(BigInteger nonce) {
-        return Transaction.createContractTransaction(
+    private static RawTransaction createSmartContractTransaction(BigInteger nonce) {
+        return RawTransaction.createContractTransaction(
                 nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
     }
 
