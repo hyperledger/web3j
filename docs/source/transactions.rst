@@ -76,7 +76,7 @@ are used to dictate how much Ether you wish to spend in order for a tranaction t
 *Gas price*
 
   This is the amount you are prepared in Ether per unit of gas. It defaults to a price of 9000 Wei
-  (9 x 10^-15 Ether).
+  (9 x 10\ :sup:`-15` Ether).
 
 
 *Gas limit*
