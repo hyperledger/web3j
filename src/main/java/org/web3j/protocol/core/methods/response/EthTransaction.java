@@ -13,15 +13,15 @@ import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 
 /**
- * <p>Transaction object returned by:
+ * Transaction object returned by:
  * <ul>
  * <li>eth_getTransactionByHash</li>
  * <li>eth_getTransactionByBlockHashAndIndex</li>
  * <li>eth_getTransactionByBlockNumberAndIndex</li>
  * </ul>
- * </p>
+ *
  * <p>This differs slightly from the request {@link EthSendTransaction} Transaction object.</p>
- * <p>
+ *
  * <p>See
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash">docs</a>
  * for further details.</p>

@@ -8,6 +8,7 @@ import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
+import org.web3j.utils.Hex;
 import org.web3j.utils.Numeric;
 
 /**
@@ -51,7 +52,10 @@ public class TransactionEncoder {
         }
 
         result.add(RlpString.create(rawTransaction.getValue()));
-        result.add(RlpString.create(rawTransaction.getData()));
+
+        // value field will already be hex encoded, so we need to convert into binary first
+        byte[] data = Hex.hexStringToByteArray(rawTransaction.getData());
+        result.add(RlpString.create(data));
 
         if (signatureData != null) {
             result.add(RlpString.create(signatureData.getV()));

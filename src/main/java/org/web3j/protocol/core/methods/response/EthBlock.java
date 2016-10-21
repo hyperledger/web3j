@@ -19,14 +19,13 @@ import org.web3j.utils.Numeric;
 import org.web3j.protocol.core.Response;
 
 /**
- * <p>Block object returned by:
+ * Block object returned by:
  * <ul>
  * <li>eth_getBlockByHash</li>
  * <li>eth_getBlockByNumber</li>
  * <li>eth_getUncleByBlockHashAndIndex</li>
  * <li>eth_getUncleByBlockNumberAndIndex</li>
  * </ul>
- * </p>
  *
  * <p>See
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash">docs</a>

@@ -28,28 +28,17 @@ Add the following dependency to your project:
 ### Maven
 
 ```xml
-<repositories>
-  <repository>
-    <id>oss.jfrog.org</id>
-    <value>Repository from Bintray</value>
-    <url>http://dl.bintray.com/web3j/maven</url>
-  </repository>
-</repositories>
-
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>0.5.2</version>
+  <version>0.5.3</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-repositories {
-   maven {url 'http://dl.bintray.com/web3j/maven'}
-}
-compile ('org.web3j:core:0.5.2')
+compile ('org.web3j:core:0.5.3')
 ```
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
@@ -172,4 +161,4 @@ To run excluding integration tests:
 * The [Finhaus](http://finhaus.com.au/) guys for putting me onto Nethereum
 * Everyone involved in the Ethererum project and its surrounding ecosystem
 * And of course the users of the library, who've provided valuable input & feedback -
-[@ice09](https://github.com/ice09), [@adridadou](https://github.com/adridadou), [@nickmelis](https://github.com/nickmelis), [@basavk](https://github.com/basavk)
+[@ice09](https://github.com/ice09), [@adridadou](https://github.com/adridadou), [@nickmelis](https://github.com/nickmelis), [@basavk](https://github.com/basavk), Kasimir B

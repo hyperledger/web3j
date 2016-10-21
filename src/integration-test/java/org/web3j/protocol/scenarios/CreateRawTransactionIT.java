@@ -24,9 +24,6 @@ import static org.junit.Assert.*;
  */
 public class CreateRawTransactionIT extends Scenario {
 
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(10000000000L);
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(1000000);
-
     // testnet
     private static final String PRIVATE_KEY = "";  // 32 byte hex value
     private static final String PUBLIC_KEY = "0x";  // 64 byte hex value

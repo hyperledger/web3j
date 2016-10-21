@@ -30,9 +30,7 @@ public class DeployContractIT extends Scenario {
         boolean accountUnlocked = unlockAccount();
         assertTrue(accountUnlocked);
 
-        BigInteger gas = BigInteger.valueOf(500000);
-
-        String transactionHash = sendTransaction(gas);
+        String transactionHash = sendTransaction(GAS_LIMIT);
         assertFalse(transactionHash.isEmpty());
 
         EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
@@ -41,7 +39,7 @@ public class DeployContractIT extends Scenario {
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
 
         assertFalse("Contract execution ran out of gas",
-                transactionReceipt.getGasUsed().equals(gas));
+                transactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
         Optional<String> contractAddressOptional = transactionReceipt.getContractAddress();
 

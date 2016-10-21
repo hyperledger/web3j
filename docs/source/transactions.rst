@@ -1,7 +1,7 @@
 Transactions
 ============
 
-There are three types transactions which are undertaken on the Ethereum blockchain.
+Broadly speaking there are three types transactions supported on Ethereum:
 
 #. :ref:`transfer-of-ether`
 #. :ref:`creation-of-smart-contract`

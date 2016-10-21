@@ -61,6 +61,14 @@ public final class Numeric {
         }
     }
 
+    public static String appendHexPrefix(String input) {
+        if (!containsHexPrefix(input)) {
+            return "0x" + input;
+        } else {
+            return input;
+        }
+    }
+
     public static boolean containsHexPrefix(String input) {
         return input.length() > 1 && input.charAt(0) == '0' && input.charAt(1) == 'x';
     }

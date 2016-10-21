@@ -7,13 +7,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.web3j.utils.Numeric;
 
 /**
-` * <p>Transaction request object used by:
+ * Transaction request object used by:
  * <ol>
  *     <li>eth_call</li>
  *     <li>eth_sendTransaction</li>
  *     <li>eth_estimateGas</li>
  * </ol>
- * </p>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
@@ -35,7 +34,11 @@ public class Transaction {
         this.gas = gasLimit;
         this.gasPrice = gasPrice;
         this.value = value;
-        this.data = data;
+
+        if (data != null) {
+            this.data = Numeric.appendHexPrefix(data);
+        }
+
         this.nonce = nonce;
     }
 
@@ -56,7 +59,7 @@ public class Transaction {
             String from, BigInteger gasPrice, BigInteger gasLimit, String to,
             BigInteger value) {
 
-        return new Transaction(from, null, gasPrice, gasLimit, to, value, "");
+        return new Transaction(from, null, gasPrice, gasLimit, to, value, null);
     }
 
     public static Transaction createFunctionCallTransaction(

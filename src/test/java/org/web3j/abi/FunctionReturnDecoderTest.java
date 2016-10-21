@@ -4,13 +4,16 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -28,6 +31,23 @@ public class FunctionReturnDecoderTest {
                 "0x0000000000000000000000000000000000000000000000000000000000000037",
                 function.getOutputParameters()),
                 equalTo(Collections.singletonList(new Uint(BigInteger.valueOf(55)))));
+    }
+
+    @Test
+    public void testSimpleFunctionStringResultDecode() {
+        Function function = new Function("simple",
+                Arrays.asList(),
+                Collections.singletonList(new TypeReference<Utf8String>() {
+                }));
+
+        List<Utf8String> utf8Strings = FunctionReturnDecoder.decode(
+
+                "0x0000000000000000000000000000000000000000000000000000000000000020" +
+                        "000000000000000000000000000000000000000000000000000000000000000d" +
+                        "6f6e65206d6f72652074696d6500000000000000000000000000000000000000",
+                function.getOutputParameters());
+
+        assertThat(utf8Strings.get(0).getValue(), is("one more time"));
     }
 
     @Test

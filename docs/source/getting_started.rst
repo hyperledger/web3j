@@ -7,30 +7,17 @@ Maven
 -----
 
 .. code-block:: xml
-
-   <repositories>
-     <repository>
-       <id>oss.jfrog.org</id>
-       <value>Repository from Bintray</value>
-       <url>http://dl.bintray.com/web3j/maven</url>
-     </repository>
-   </repositories>
-
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.5.2</version>
+     <version>0.5.3</version>
    </dependency>
 
 Gradle
 ------
 
 .. code-block:: groovy
-
-   repositories {
-     maven {url 'http://dl.bintray.com/web3j/maven'}
-   }
-   compile ('org.web3j:core:0.5.2')
+   compile ('org.web3j:core:0.5.3')
 
 
 Start a client

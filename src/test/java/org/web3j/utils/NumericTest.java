@@ -66,6 +66,14 @@ public class NumericTest {
     }
 
     @Test
+    public void testAppendHexPrefix() {
+        assertThat(Numeric.appendHexPrefix(""), is("0x"));
+        assertThat(Numeric.appendHexPrefix("0x0123456789abcdef"), is("0x0123456789abcdef"));
+        assertThat(Numeric.appendHexPrefix("0x"), is("0x"));
+        assertThat(Numeric.appendHexPrefix("0123456789abcdef"), is("0x0123456789abcdef"));
+    }
+
+    @Test
     public void testToHexStringWithPrefix() {
         assertThat(Numeric.toHexStringWithPrefix(BigInteger.TEN), is("0xa"));
     }

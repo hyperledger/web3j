@@ -40,7 +40,10 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type> impl
 
     /**
      * Workaround to ensure type does not come back as T due to erasure, this enables you to
-     * create a TypeReference via Class<T>.
+     * create a TypeReference via {@link Class Class&lt;T&gt;}.
+     *
+     * @return the parameterized Class type if applicable, otherwise a regular class
+     * @throws ClassNotFoundException if the class type cannot be determined
      */
     @SuppressWarnings("unchecked")
     public Class<T> getClassType() throws ClassNotFoundException {

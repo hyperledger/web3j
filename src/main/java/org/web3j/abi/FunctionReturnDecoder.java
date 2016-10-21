@@ -57,7 +57,7 @@ public class FunctionReturnDecoder {
         if (DynamicBytes.class.isAssignableFrom(type)
                 || Utf8String.class.isAssignableFrom(type)
                 || DynamicArray.class.isAssignableFrom(type)) {
-            return TypeDecoder.decodeUintAsInt(input, offset) * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+            return TypeDecoder.decodeUintAsInt(input, offset) << 1;
         } else {
             return offset;
         }

@@ -1,13 +1,29 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+    }
+}
+
 plugins {
     id "com.jfrog.bintray" version "1.7"
 }
 
 apply plugin: 'java'
+// Required for JFrog Artifactory repository
 apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
+// Required for Maven Nexus repository
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'idea'
+apply plugin: 'io.codearte.nexus-staging'
+
 group 'org.web3j'
-version '0.5.2'
+version '0.5.3'
 
 sourceCompatibility = 1.8
 
@@ -85,7 +101,12 @@ tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
-task sourceJar(type: Jar) {
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
@@ -95,7 +116,7 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
 
-            artifact sourceJar {
+            artifact sourcesJar {
                 classifier "sources"
             }
         }
@@ -117,5 +138,53 @@ bintray {
         vcsUrl = 'https://github.com/web3j/web3j.git'
         websiteUrl = 'http://web3j.org'
         publicDownloadNumbers = true
+    }
+}
+
+
+artifacts {
+    archives sourcesJar, javadocJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'web3j'
+                packaging 'jar'
+                description 'web3j is a lightweight Java library for integration with Ethereum clients'
+                url 'http://web3j.org'
+
+                scm {
+                    connection 'scm:git:https://github.com/web3j/web3j.git'
+                    url 'https://github.com/web3j/web3j.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'conor10'
+                        name 'Conor Svensson'
+                        email 'conor10@gmail.com'
+                    }
+                }
+            }
+        }
     }
 }

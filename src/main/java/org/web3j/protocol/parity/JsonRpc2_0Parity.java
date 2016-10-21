@@ -1,10 +1,9 @@
 package org.web3j.protocol.parity;
 
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
+import org.web3j.abi.datatypes.Array;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.Web3jService;
@@ -75,14 +74,19 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password, BigInteger duration) {
-        String encodedDuration = null;  // send null if no duration is provided
+        List<Object> attributes = new ArrayList<>(3);
+        attributes.add(accountId);
+        attributes.add(password);
+
         if (duration != null) {
-            encodedDuration = Numeric.encodeQuantity(duration);
+            // Parity has a bug where it won't support a duration
+            // See https://github.com/ethcore/parity/issues/1215
+            attributes.add(duration.longValue());
         }
 
         return new Request<>(
                 "personal_unlockAccount",
-                Arrays.asList(accountId, password, encodedDuration),
+                attributes,
                 ID,
                 web3jService,
                 PersonalUnlockAccount.class);

@@ -172,6 +172,7 @@ public class Sign {
      *
      * @param message RLP encoded message.
      * @param signatureData The message signature components
+     * @return the public key used to sign the message
      * @throws SignatureException If the public key could not be recovered or if there was a
      *     signature format error.
      */
@@ -195,7 +196,10 @@ public class Sign {
     }
 
     /**
-     * Returns public key bytes from the given private key.
+     * Returns public key from the given private key.
+     *
+     * @param privKey the private key to derive the public key from
+     * @return BigInteger encoded public key
      */
     public static BigInteger publicKeyFromPrivate(BigInteger privKey) {
         ECPoint point = publicPointFromPrivate(privKey);

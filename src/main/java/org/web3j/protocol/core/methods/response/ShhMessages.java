@@ -7,13 +7,12 @@ import org.web3j.utils.Numeric;
 import org.web3j.protocol.core.Response;
 
 /**
- * <p>Whisper messages returned by:
+ * Whisper messages returned by:
  * <ul>
  * <li>shh_getFilterChanges</li>
  * <li>shh_getMessages</li>
  * </ul>
- * </p>
- * <p>
+ *
  * <p>See
  * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_getfilterchanges">docs</a>
  * for further details.</p>
