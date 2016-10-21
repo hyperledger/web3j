@@ -50,6 +50,10 @@ public class Keys {
         return hash.substring(hash.length() - 40);  // right most 160 bits
     }
 
+    public static String getAddress(BigInteger publicKey) {
+        return getAddress(Numeric.toHexStringWithPrefix(publicKey));
+    }
+
     public static byte[] getAddress(byte[] publicKey) {
         byte[] hash = Hash.sha3(publicKey);
         return Arrays.copyOfRange(hash, hash.length - 20, hash.length);  // right most 160 bits
