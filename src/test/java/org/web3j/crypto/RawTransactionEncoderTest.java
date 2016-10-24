@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.Hex;
+import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -21,7 +21,7 @@ public class RawTransactionEncoderTest {
     public void testSignMessage() {
         byte[] signedMessage = TransactionEncoder.signMessage(
                 createEtherTransaction(), SampleKeys.KEY_PAIR);
-        String hexMessage = Hex.toHexString(signedMessage);
+        String hexMessage = Numeric.toHexString(signedMessage);
         assertThat(hexMessage,
                 is("0xf85580010a840add5355887fffffffffffffff80" +
                         "1c" +

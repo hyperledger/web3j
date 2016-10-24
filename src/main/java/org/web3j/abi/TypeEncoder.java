@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 import org.web3j.abi.datatypes.*;
-import org.web3j.utils.Hex;
+import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
 import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
@@ -60,7 +60,7 @@ public class TypeEncoder {
                 rawValue, 0,
                 paddedRawValue, MAX_BYTE_LENGTH - rawValue.length,
                 rawValue.length);
-        return Hex.toHexStringNoPrefix(paddedRawValue);
+        return Numeric.toHexStringNoPrefix(paddedRawValue);
     }
 
     private static byte getPaddingValue(NumericType numericType) {
@@ -90,7 +90,7 @@ public class TypeEncoder {
         if (value.getValue()) {
             rawValue[rawValue.length - 1] = 1;
         }
-        return Hex.toHexStringNoPrefix(rawValue);
+        return Numeric.toHexStringNoPrefix(rawValue);
     }
 
     static String encodeBytes(BytesType bytesType) {
@@ -106,7 +106,7 @@ public class TypeEncoder {
         } else {
             dest = value;
         }
-        return Hex.toHexStringNoPrefix(dest);
+        return Numeric.toHexStringNoPrefix(dest);
     }
 
     static String encodeDynamicBytes(DynamicBytes dynamicBytes) {

@@ -13,6 +13,9 @@ import org.web3j.utils.Numeric;
  */
 public class Keys {
 
+    private static final int PRIVATE_KEY_SIZE = 32;
+    private static final int PUBLIC_KEY_SIZE = 64;
+
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
@@ -57,5 +60,25 @@ public class Keys {
     public static byte[] getAddress(byte[] publicKey) {
         byte[] hash = Hash.sha3(publicKey);
         return Arrays.copyOfRange(hash, hash.length - 20, hash.length);  // right most 160 bits
+    }
+
+    public static byte[] serialize(ECKeyPair ecKeyPair) {
+        byte[] privateKey = Numeric.toBytesPadded(ecKeyPair.getPrivateKey(), PRIVATE_KEY_SIZE);
+        byte[] publicKey = Numeric.toBytesPadded(ecKeyPair.getPublicKey(), PUBLIC_KEY_SIZE);
+
+        byte[] result = Arrays.copyOf(privateKey, PRIVATE_KEY_SIZE + PUBLIC_KEY_SIZE);
+        System.arraycopy(publicKey, 0, result, PRIVATE_KEY_SIZE, PUBLIC_KEY_SIZE);
+        return result;
+    }
+
+    public static ECKeyPair deserialize(byte[] input) {
+        if (input.length != PRIVATE_KEY_SIZE + PUBLIC_KEY_SIZE) {
+            throw new RuntimeException("Invalid input key size");
+        }
+
+        BigInteger privateKey = Numeric.toBigInt(input, 0, PRIVATE_KEY_SIZE);
+        BigInteger publicKey = Numeric.toBigInt(input, PRIVATE_KEY_SIZE, PUBLIC_KEY_SIZE);
+
+        return new ECKeyPair(privateKey, publicKey);
     }
 }

@@ -1,10 +1,10 @@
 package org.web3j.crypto;
 
 
-import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -15,6 +15,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class KeysTest {
+
+    private static final byte[] ENCODED;
+
+    static {
+        byte[] privateKey = Numeric.hexStringToByteArray(SampleKeys.PRIVATE_KEY_STRING);
+        byte[] publicKey = Numeric.hexStringToByteArray(SampleKeys.PUBLIC_KEY_STRING);
+        ENCODED = Arrays.copyOf(privateKey, privateKey.length + publicKey.length);
+        System.arraycopy(publicKey, 0, ENCODED, privateKey.length, publicKey.length);
+    }
 
     @Test
     public void testCreateSecp256k1KeyPair() throws Exception {
@@ -38,15 +47,27 @@ public class KeysTest {
 
     @Test
     public void testGetAddressString() {
-        String publicKey = "0x54c8cda130d3bfda86bd698cee738e5e502abc1fcb9e45709ee1fe38e855cda3" +
-                "34ca6f9288ab6d867f6baa2b2afeced0478e6a7225a5b1bb263ab21611817507";
-        assertThat(Keys.getAddress(publicKey), is("9c98e381edc5fe1ac514935f3cc3edaa764cf004"));
+        String publicKey = SampleKeys.PUBLIC_KEY_STRING;
+        assertThat(Keys.getAddress(publicKey), is(SampleKeys.ADDRESS));
     }
 
     @Test
     public void testGetAddressBigInteger() {
-        BigInteger publicKey = Numeric.toBigInt("0x54c8cda130d3bfda86bd698cee738e5e502abc1fcb9e45709ee1fe38e855cda3" +
-                "34ca6f9288ab6d867f6baa2b2afeced0478e6a7225a5b1bb263ab21611817507");
-        assertThat(Keys.getAddress(publicKey), is("9c98e381edc5fe1ac514935f3cc3edaa764cf004"));
+        assertThat(Keys.getAddress(SampleKeys.PUBLIC_KEY), is(SampleKeys.ADDRESS));
+    }
+
+    @Test
+    public void testSerializeECKey() {
+        assertThat(Keys.serialize(SampleKeys.KEY_PAIR), is(ENCODED));
+    }
+
+    @Test
+    public void testDeserializeECKey() {
+        assertThat(Keys.deserialize(ENCODED), is(SampleKeys.KEY_PAIR));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testDeserializeInvalidKey() {
+        Keys.deserialize(new byte[0]);
     }
 }

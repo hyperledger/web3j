@@ -9,7 +9,7 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
-import org.web3j.utils.Hex;
+import org.web3j.utils.Numeric;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
@@ -78,6 +78,6 @@ public class FunctionEncoder {
     static String buildMethodId(String methodSignature) {
         byte[] input = methodSignature.getBytes();
         byte[] hash = Hash.sha3(input);
-        return Hex.toHexString(hash).substring(0, 10);
+        return Numeric.toHexString(hash).substring(0, 10);
     }
 }

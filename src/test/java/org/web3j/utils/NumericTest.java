@@ -2,6 +2,7 @@ package org.web3j.utils;
 
 import java.math.BigInteger;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.web3j.protocol.exceptions.MessageDecodingException;
@@ -10,9 +11,24 @@ import org.web3j.protocol.exceptions.MessageEncodingException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.web3j.utils.Numeric.b;
 
 
 public class NumericTest {
+
+    private final byte[] HEX_RANGE_ARRAY = new byte[] {
+            b(0x0, 0x1),
+            b(0x2, 0x3),
+            b(0x4, 0x5),
+            b(0x6, 0x7),
+            b(0x8, 0x9),
+            b(0xa, 0xb),
+            b(0xc, 0xd),
+            b(0xe, 0xf)
+    };
+
+    private String HEX_RANGE_STRING = "0x0123456789abcdef";
+
 
     @Test
     public void testQuantityDecode() {
@@ -98,5 +114,24 @@ public class NumericTest {
     @Test(expected = RuntimeException.class)
     public void testToBytesPaddedInvalid() {
         Numeric.toBytesPadded(BigInteger.valueOf(Long.MAX_VALUE), 7);
+    }
+
+    @Test
+    public void testHexStringToByteArray() {
+        Assert.assertThat(Numeric.hexStringToByteArray(""), is(new byte[] { }));
+        Assert.assertThat(Numeric.hexStringToByteArray("0"), is(new byte[] { 0 }));
+        Assert.assertThat(Numeric.hexStringToByteArray("1"), is(new byte[] { 0x1 }));
+        Assert.assertThat(Numeric.hexStringToByteArray(HEX_RANGE_STRING),
+                is(HEX_RANGE_ARRAY));
+
+        Assert.assertThat(Numeric.hexStringToByteArray("0x123"),
+                is(new byte[] { 0x1, 0x23 }));
+    }
+
+    @Test
+    public void testToHexString() {
+        Assert.assertThat(Numeric.toHexString(new byte[] {}), is("0x"));
+        Assert.assertThat(Numeric.toHexString(new byte[] { 0x1 }), is("0x01"));
+        Assert.assertThat(Numeric.toHexString(HEX_RANGE_ARRAY), is(HEX_RANGE_STRING));
     }
 }

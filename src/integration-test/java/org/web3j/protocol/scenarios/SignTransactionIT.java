@@ -9,7 +9,7 @@ import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.utils.Convert;
-import org.web3j.utils.Hex;
+import org.web3j.utils.Numeric;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -30,7 +30,7 @@ public class SignTransactionIT extends Scenario {
         byte[] encoded = TransactionEncoder.encode(rawTransaction);
         byte[] hashed = Hash.sha3(encoded);
 
-        EthSign ethSign = parity.ethSign(WALLET_ADDRESS, Hex.toHexString(hashed)).sendAsync().get();
+        EthSign ethSign = parity.ethSign(WALLET_ADDRESS, Numeric.toHexString(hashed)).sendAsync().get();
 
         String signature = ethSign.getSignature();
         assertNotNull(signature);

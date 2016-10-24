@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.*;
 import org.web3j.crypto.Hash;
-import org.web3j.utils.Hex;
+import org.web3j.utils.Numeric;
 
 /**
  * <p>Ethereum filter encoding.
@@ -50,6 +50,6 @@ public class EventEncoder {
     static String buildEventSignature(String methodSignature) {
         byte[] input = methodSignature.getBytes();
         byte[] hash = Hash.sha3(input);
-        return Hex.toHexString(hash);
+        return Numeric.toHexString(hash);
     }
 }

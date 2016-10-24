@@ -2,7 +2,7 @@ package org.web3j.crypto;
 
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 
-import org.web3j.utils.Hex;
+import org.web3j.utils.Numeric;
 
 /**
  * Crypto related functions.
@@ -17,9 +17,9 @@ public class Hash {
      * @return hash value as hex encoded string
      */
     public static String sha3(String hexInput) {
-        byte[] bytes = Hex.hexStringToByteArray(hexInput);
+        byte[] bytes = Numeric.hexStringToByteArray(hexInput);
         byte[] result = sha3(bytes);
-        return Hex.toHexString(result);
+        return Numeric.toHexString(result);
     }
 
     /**

@@ -10,14 +10,14 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.5.3</version>
+     <version>0.5.4</version>
    </dependency>
 
 Gradle
 ------
 
 .. code-block:: groovy
-   compile ('org.web3j:core:0.5.3')
+   compile ('org.web3j:core:0.5.4')
 
 
 Start a client

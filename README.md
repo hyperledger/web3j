@@ -31,14 +31,14 @@ Add the following dependency to your project:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>0.5.3</version>
+  <version>0.5.4</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-compile ('org.web3j:core:0.5.3')
+compile ('org.web3j:core:0.5.4')
 ```
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
@@ -159,6 +159,7 @@ To run excluding integration tests:
 * The [Nethereum](https://github.com/Nethereum/Nethereum) project for the inspiration
 * [Othera](https://www.othera.com.au/) for the great things they are building on the platform
 * The [Finhaus](http://finhaus.com.au/) guys for putting me onto Nethereum
+* [bitcoinj](https://bitcoinj.github.io/) for the reference Elliptic Curve crypto implementation 
 * Everyone involved in the Ethererum project and its surrounding ecosystem
 * And of course the users of the library, who've provided valuable input & feedback -
-[@ice09](https://github.com/ice09), [@adridadou](https://github.com/adridadou), [@nickmelis](https://github.com/nickmelis), [@basavk](https://github.com/basavk), Kasimir B
+[@ice09](https://github.com/ice09), [@adridadou](https://github.com/adridadou), [@nickmelis](https://github.com/nickmelis), [@basavk](https://github.com/basavk), [@kabl](https://github.com/kabl)

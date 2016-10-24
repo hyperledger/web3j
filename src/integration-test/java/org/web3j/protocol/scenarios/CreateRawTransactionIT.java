@@ -12,7 +12,6 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.utils.Convert;
-import org.web3j.utils.Hex;
 import org.web3j.utils.Numeric;
 
 import static junit.framework.TestCase.assertFalse;
@@ -40,7 +39,7 @@ public class CreateRawTransactionIT extends Scenario {
                 nonce, TO_ADDRESS);
 
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, KEY_PAIR);
-        String hexValue = Hex.toHexString(signedMessage);
+        String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
                 parity.ethSendRawTransaction(hexValue).sendAsync().get();
@@ -60,7 +59,7 @@ public class CreateRawTransactionIT extends Scenario {
         RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, KEY_PAIR);
-        String hexValue = Hex.toHexString(signedMessage);
+        String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
                 parity.ethSendRawTransaction(hexValue).sendAsync().get();

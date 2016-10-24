@@ -23,7 +23,7 @@ apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
 
 group 'org.web3j'
-version '0.5.3'
+version '0.5.4'
 
 sourceCompatibility = 1.8
 

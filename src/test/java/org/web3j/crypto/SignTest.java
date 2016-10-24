@@ -6,7 +6,7 @@ import java.security.SignatureException;
 
 import org.junit.Test;
 
-import org.web3j.utils.Hex;
+import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -22,9 +22,9 @@ public class SignTest {
 
         Sign.SignatureData expected = new Sign.SignatureData(
                 (byte) 28,
-                Hex.hexStringToByteArray(
+                Numeric.hexStringToByteArray(
                         "0xde7a0b9fa2b476d6fa0e6c67f291473ea9dc09a5abaf8d163742bac01c637d16"),
-                Hex.hexStringToByteArray(
+                Numeric.hexStringToByteArray(
                         "0x744797b826dfd4a6f5549a4f8f693fda3a1c10421220471119574dd2f31441f")
         );
 

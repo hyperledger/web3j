@@ -10,7 +10,6 @@ import java.util.function.BiFunction;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.utils.Hex;
 import org.web3j.utils.Numeric;
 
 /**
@@ -72,7 +71,7 @@ public class TypeDecoder {
 
     static <T extends NumericType> T decodeNumeric(String input, Class<T> type) {
         try {
-            byte[] inputByteArray = Hex.hexStringToByteArray(input);
+            byte[] inputByteArray = Numeric.hexStringToByteArray(input);
             int typeLengthAsBytes = getTypeLengthInBytes(type);
 
             byte[] resultByteArray = new byte[typeLengthAsBytes + 1];
@@ -137,7 +136,7 @@ public class TypeDecoder {
             int length = Integer.parseInt(splitName[1]);
             int hexStringLength = length << 1;
 
-            byte[] bytes = Hex.hexStringToByteArray(input.substring(0, hexStringLength));
+            byte[] bytes = Numeric.hexStringToByteArray(input.substring(0, hexStringLength));
             return type.getConstructor(byte[].class).newInstance(bytes);
         } catch (NoSuchMethodException | SecurityException |
                 InstantiationException | IllegalAccessException |
@@ -155,7 +154,7 @@ public class TypeDecoder {
 
         String data = input.substring(valueOffset,
                 valueOffset + hexStringEncodedLength);
-        byte[] bytes = Hex.hexStringToByteArray(data);
+        byte[] bytes = Numeric.hexStringToByteArray(data);
 
         return new DynamicBytes(bytes);
     }
