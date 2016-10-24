@@ -31,14 +31,14 @@ Add the following dependency to your project:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>0.5.4</version>
+  <version>0.5.5</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-compile ('org.web3j:core:0.5.4')
+compile ('org.web3j:core:0.5.5')
 ```
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):
