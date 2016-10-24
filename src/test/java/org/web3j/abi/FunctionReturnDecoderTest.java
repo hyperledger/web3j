@@ -51,6 +51,21 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
+    public void testFunctionEmptyStringResultDecode() {
+        Function function = new Function("test",
+                Collections.emptyList(),
+                Collections.singletonList(new TypeReference<Utf8String>() {
+                }));
+
+        List<Utf8String> utf8Strings = FunctionReturnDecoder.decode(
+                "0x0000000000000000000000000000000000000000000000000000000000000020" +
+                        "0000000000000000000000000000000000000000000000000000000000000000",
+                function.getOutputParameters());
+
+        assertThat(utf8Strings.get(0).getValue(), is(""));
+    }
+
+    @Test
     public void testMultipleResultFunctionDecode() {
         Function function = new Function<>(
                 "test",
@@ -64,5 +79,16 @@ public class FunctionReturnDecoderTest {
                 function.getOutputParameters()),
                 equalTo(Arrays.asList(new Uint(BigInteger.valueOf(55)),
                         new Uint(BigInteger.valueOf(7)))));
+    }
+
+    @Test
+    public void testVoidResultFunctionDecode() {
+        Function function = new Function<>(
+                "test",
+                Collections.emptyList(),
+                Collections.emptyList());
+
+        assertThat(FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
+                is(Collections.emptyList()));
     }
 }

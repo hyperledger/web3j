@@ -23,7 +23,9 @@ public class TypeDecoder {
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
     static <T extends Type> int getSingleElementLength(String input, int offset, Class<T> type) {
-        if (DynamicBytes.class.isAssignableFrom(type)
+        if (input.length() == offset) {
+            return 0;
+        } else if (DynamicBytes.class.isAssignableFrom(type)
                 || Utf8String.class.isAssignableFrom(type)) {
             // length field + data value
             return (decodeUintAsInt(input, offset) / Type.MAX_BYTE_LENGTH) + 2;
