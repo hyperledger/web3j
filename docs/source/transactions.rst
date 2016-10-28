@@ -427,7 +427,7 @@ contract method's called, it simply returns the value from them::
                 .sendAsync().get();
 
    List<Type> someTypes = FunctionReturnDecoder.decode(
-                responseValue, function.getOutputParameters());
+                response.getValue(), function.getOutputParameters());
 
 **Note:** If an invalid function call is made, or a null result is obtained, the return value will
 be an instance of `Collections.emptyList() <https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList-->`_
