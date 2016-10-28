@@ -30,7 +30,7 @@ public class DeployContractIT extends Scenario {
         boolean accountUnlocked = unlockAccount();
         assertTrue(accountUnlocked);
 
-        String transactionHash = sendTransaction(GAS_LIMIT);
+        String transactionHash = sendTransaction();
         assertFalse(transactionHash.isEmpty());
 
         EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
@@ -57,9 +57,16 @@ public class DeployContractIT extends Scenario {
         assertThat(uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
     }
 
-    private String sendTransaction(BigInteger gas) throws Exception {
+    private String sendTransaction() throws Exception {
+        BigInteger nonce = getNonce(ALICE.getAddress());
+
         Transaction transaction = Transaction.createContractTransaction(
-                WALLET_ADDRESS, gas, getFibonacciSolidityBinary());
+                ALICE.getAddress(),
+                nonce,
+                GAS_PRICE,
+                GAS_LIMIT,
+                BigInteger.ZERO,
+                getFibonacciSolidityBinary());
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
                 transactionResponse = parity.ethSendTransaction(transaction)

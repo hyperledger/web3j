@@ -62,6 +62,7 @@ public class MordenTestnetConfig implements IntegrationTestConfig {
     public Transaction buildTransaction() {
         return Transaction.createContractTransaction(
                 validAccount(),
+                BigInteger.ZERO,  // nonce
                 Transaction.DEFAULT_GAS,
                 validContractCode()
         );

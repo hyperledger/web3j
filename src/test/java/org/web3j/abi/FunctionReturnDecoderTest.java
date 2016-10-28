@@ -91,4 +91,15 @@ public class FunctionReturnDecoderTest {
         assertThat(FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
                 is(Collections.emptyList()));
     }
+
+    @Test
+    public void testEmptyResultFunctionDecode() {
+        Function function = new Function<>(
+                "test",
+                Collections.emptyList(),
+                Collections.singletonList(new TypeReference<Uint>() { }));
+
+        assertThat(FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
+                is(Collections.emptyList()));
+    }
 }

@@ -7,17 +7,19 @@ Maven
 -----
 
 .. code-block:: xml
+
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.5.5</version>
+     <version>0.6.0</version>
    </dependency>
 
 Gradle
 ------
 
 .. code-block:: groovy
-   compile ('org.web3j:core:0.5.5')
+
+   compile ('org.web3j:core:0.6.0')
 
 
 Start a client
@@ -67,6 +69,11 @@ To use client admin commands::
 
 Further details
 ---------------
-- web3j provides type safe access to all responses. Optional or null responses are wrapped in Java 8's `Optional <https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html>`_ type.
-- Async requests are handled using Java 8's `CompletableFutures <https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>`_.
-- Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_. For simple results, you can obtain the quantity as a String via `org.web3j.protocol.core.Response <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().
+- web3j provides type safe access to all responses. Optional or null responses are wrapped in
+  Java 8's
+  `Optional <https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html>`_ type.
+- Async requests are handled using Java 8's
+  `CompletableFutures <https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>`_.
+- Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
+  For simple results, you can obtain the quantity as a String via
+  `Response <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().

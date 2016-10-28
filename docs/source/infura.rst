@@ -18,19 +18,23 @@ Test Ethereum Network (Morden):
 Certificate installation
 ------------------------
 
-As the Infura nodes are accessed over TLS, you will need to install the relevant certificates into your Java Virtual Machine's keystore.
+As the Infura nodes are accessed over TLS, you will need to install the relevant certificates into
+your Java Virtual Machine's keystore.
 
-You can obtain the certificate using the `Firefox <https://www.mozilla.org/en-US/firefox/new/>`_ web browser:
+You can obtain the certificate using the `Firefox <https://www.mozilla.org/en-US/firefox/new/>`_
+web browser:
 
 .. image:: /images/infura_cert.png
 
-Alternatively, you can use SSL (this will only download the first certificate in the chain, which should be adequate).
+Alternatively, you can use SSL (this will only download the first certificate in the chain, which
+should be adequate).
 
 .. code-block:: bash
 
    $ openssl s_client -connect morden.infura.io:443 -showcerts </dev/null 2>/dev/null|openssl x509 -outform PEM > infura-morden.pem
 
-Once you have downloaded it, then install it into your keystore (for Windows/Linux hosts the paths will differ slightly):
+Once you have downloaded it, then install it into your keystore (for Windows/Linux hosts the paths
+will differ slightly):
 
 .. code-block:: bash
 
@@ -53,12 +57,16 @@ You can now use Infura to work with the Ethereum blockchain.
    Parity//v1.3.5-beta/x86_64-linux-gnu/rustc1.12.0
 
 
-If you want to test a number of the JSON-RPC calls against Infura, update the integration test `org.web3j.protocol.core.CoreIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/core/CoreIT.java>`_ with your Infura URL & run it.
+If you want to test a number of the JSON-RPC calls against Infura, update the integration test
+`CoreIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/core/CoreIT.java>`_
+with your Infura URL & run it.
 
 
 Transactions
 ------------
 
-In order to transact with Infura nodes, you will need to create and sign transactions offline before sending them, as Infura nodes have no visibility of your encrypted Ethereum key files, which are required to unlock accounts via the Personal Geth/Parity admin commands.
+In order to transact with Infura nodes, you will need to create and sign transactions offline
+before sending them, as Infura nodes have no visibility of your encrypted Ethereum key files, which
+are required to unlock accounts via the Personal Geth/Parity admin commands.
 
 Refer to the :doc:`signing_transactions` and :doc:`management_apis` sections for further details.

@@ -1,4 +1,4 @@
-# web3j: Web3 Java Ðapp API
+# web3j: Web3 Java Ethereum Ðapp API
 
 [![Documentation Status](https://readthedocs.org/projects/web3j/badge/?version=latest)](http://web3j.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.org/web3j/web3j.svg?branch=master)](https://travis-ci.org/web3j/web3j)
@@ -31,14 +31,14 @@ Add the following dependency to your project:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>0.5.5</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-compile ('org.web3j:core:0.5.5')
+compile ('org.web3j:core:0.6.0')
 ```
 
 Start up an Ethereum client if you don't already have one running, such as [Geth](https://github.com/ethereum/go-ethereum/wiki/geth):

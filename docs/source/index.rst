@@ -42,15 +42,15 @@ Contents:
 
    introduction.rst
    getting_started.rst
-   contract_creation.rst
    transactions.rst
+   smart_contracts.rst
    filters.rst
    callbacks.rst
-   solidity_wrappers.rst
    rlp.rst
    abi.rst
    management_apis.rst
    infura.rst
+   trouble.rst
    development.rst
    links.rst
    credits.rst

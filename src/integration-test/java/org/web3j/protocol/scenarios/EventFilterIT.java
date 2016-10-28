@@ -15,6 +15,7 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -44,7 +45,7 @@ public class EventFilterIT extends Scenario {
         String encodedFunction = FunctionEncoder.encode(function);
 
         BigInteger gas = estimateGas(encodedFunction);
-        String transactionHash = sendTransaction(gas, encodedFunction);
+        String transactionHash = sendTransaction(ALICE, CONTRACT_ADDRESS, gas, encodedFunction);
 
         EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
                 waitForTransactionReceipt(transactionHash);
@@ -77,7 +78,8 @@ public class EventFilterIT extends Scenario {
                 new Uint256(BigInteger.valueOf(7)), new Uint256(BigInteger.valueOf(13)))));
 
         // finally check it shows up in the event filter
-        List<EthLog.LogResult> filterLogs = createFilterForEvent(encodedEventSignature);
+        List<EthLog.LogResult> filterLogs = createFilterForEvent(
+                encodedEventSignature, CONTRACT_ADDRESS);
         assertFalse(filterLogs.isEmpty());
     }
 
@@ -89,9 +91,13 @@ public class EventFilterIT extends Scenario {
         return ethEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
     }
 
-    private String sendTransaction(BigInteger gas, String encodedFunction) throws Exception {
+    private String sendTransaction(
+            Credentials credentials, String contractAddress, BigInteger gas,
+            String encodedFunction) throws Exception {
+        BigInteger nonce = getNonce(credentials.getAddress());
         Transaction transaction = Transaction.createFunctionCallTransaction(
-                WALLET_ADDRESS, Transaction.DEFAULT_GAS, gas, CONTRACT_ADDRESS, null, encodedFunction);
+                credentials.getAddress(), nonce, Transaction.DEFAULT_GAS, gas, contractAddress,
+                encodedFunction);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
                 parity.ethSendTransaction(transaction).sendAsync().get();
@@ -101,11 +107,12 @@ public class EventFilterIT extends Scenario {
         return transactionResponse.getTransactionHash();
     }
 
-    private List<EthLog.LogResult> createFilterForEvent(String encodedEventSignature) throws Exception {
+    private List<EthLog.LogResult> createFilterForEvent(
+            String encodedEventSignature, String contractAddress) throws Exception {
         EthFilter ethFilter = new EthFilter(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST,
-                CONTRACT_ADDRESS
+                contractAddress
         );
 
         ethFilter.addSingleTopic(encodedEventSignature);

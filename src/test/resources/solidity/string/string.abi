@@ -1,1 +1,0 @@
-[{"constant":true,"inputs":[],"name":"simple","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"lorem","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"empty","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"}]

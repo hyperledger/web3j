@@ -49,6 +49,11 @@ public class RawTransaction {
     }
 
     public static RawTransaction createFunctionCallTransaction(
+            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, String data) {
+        return createFunctionCallTransaction(nonce, gasPrice, gasLimit, to, BigInteger.ZERO, data);
+    }
+
+    public static RawTransaction createFunctionCallTransaction(
             BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
             BigInteger value, String data) {
 

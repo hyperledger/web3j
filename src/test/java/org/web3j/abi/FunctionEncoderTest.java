@@ -41,7 +41,29 @@ public class FunctionEncoderTest {
     }
 
     @Test
-    public void testFunctionSimpleEncode1() {
+    public void testEncodeConstructorEmpty() {
+        assertThat(FunctionEncoder.encodeConstructor(Collections.emptyList()), is(""));
+    }
+
+    @Test
+    public void testEncodeConstructorString() {
+        assertThat(FunctionEncoder.encodeConstructor(
+                Collections.singletonList(new Utf8String("Greetings!"))),
+                is("0000000000000000000000000000000000000000000000000000000000000020" +
+                        "000000000000000000000000000000000000000000000000000000000000000a" +
+                        "4772656574696e67732100000000000000000000000000000000000000000000"));
+    }
+
+    @Test
+    public void testEncodeConstructorUint() {
+        assertThat(FunctionEncoder.encodeConstructor(
+                Arrays.asList(new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(0x20)))),
+                is("0000000000000000000000000000000000000000000000000000000000000001" +
+                        "0000000000000000000000000000000000000000000000000000000000000020"));
+    }
+
+    @Test
+    public void testFunctionSimpleEncode() {
         Function function = new Function(
                 "baz",
                 Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),

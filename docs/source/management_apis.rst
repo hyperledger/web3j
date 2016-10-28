@@ -18,4 +18,4 @@ As Parity provides a superset of the personal admin commands offered by Geth, yo
        // send a transaction, or use parity.personalSignAndSendTransaction() to do it all in one
    }
 
-Refer to the integration test `org.web3j.protocol.parity.ParityIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/parity/ParityIT.java>`_ for further implementation details.
+Refer to the integration test `ParityIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/parity/ParityIT.java>`_ for further implementation details.

@@ -4,7 +4,6 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import org.web3j.crypto.ECKeyPair;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -23,22 +22,13 @@ import static org.junit.Assert.*;
  */
 public class CreateRawTransactionIT extends Scenario {
 
-    // testnet
-    private static final String PRIVATE_KEY = "";  // 32 byte hex value
-    private static final String PUBLIC_KEY = "0x";  // 64 byte hex value
-
-    private static final String TO_ADDRESS = "0x";  // 20 byte hex value
-
-    private static final ECKeyPair KEY_PAIR = new ECKeyPair(
-            Numeric.toBigInt(PRIVATE_KEY), Numeric.toBigInt(PUBLIC_KEY));
-
     @Test
     public void testTransferEther() throws Exception {
-        BigInteger nonce = getNonce(WALLET_ADDRESS);
+        BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createEtherTransaction(
-                nonce, TO_ADDRESS);
+                nonce, BOB.getAddress());
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, KEY_PAIR);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE.getEcKeyPair());
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -55,10 +45,10 @@ public class CreateRawTransactionIT extends Scenario {
 
     @Test
     public void testDeploySmartContract() throws Exception {
-        BigInteger nonce = getNonce(WALLET_ADDRESS);
+        BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, KEY_PAIR);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE.getEcKeyPair());
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -83,12 +73,12 @@ public class CreateRawTransactionIT extends Scenario {
                 nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
     }
 
-    private static RawTransaction createSmartContractTransaction(BigInteger nonce) {
+    private static RawTransaction createSmartContractTransaction(BigInteger nonce) throws Exception {
         return RawTransaction.createContractTransaction(
                 nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
     }
 
-    private BigInteger getNonce(String address) throws Exception {
+    BigInteger getNonce(String address) throws Exception {
         EthGetTransactionCount ethGetTransactionCount = parity.ethGetTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
 

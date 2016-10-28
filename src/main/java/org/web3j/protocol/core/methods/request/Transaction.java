@@ -43,30 +43,37 @@ public class Transaction {
     }
 
     public static Transaction createContractTransaction(
-            String from, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
-            String init) {
+            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
+            BigInteger value, String init) {
 
-        return new Transaction(from, null, gasPrice, gasLimit, null, value, init);
+        return new Transaction(from, nonce, gasPrice, gasLimit, null, value, init);
     }
 
     public static Transaction createContractTransaction(
-            String from, BigInteger gasPrice, String init) {
+            String from, BigInteger nonce, BigInteger gasPrice, String init) {
 
-        return createContractTransaction(from, gasPrice, null, null, init);
+        return createContractTransaction(from, nonce, gasPrice, null, null, init);
     }
 
     public static Transaction createEtherTransaction(
-            String from, BigInteger gasPrice, BigInteger gasLimit, String to,
+            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
             BigInteger value) {
 
-        return new Transaction(from, null, gasPrice, gasLimit, to, value, null);
+        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, null);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger gasPrice, BigInteger gasLimit, String to,
+            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
             BigInteger value, String data) {
 
-        return new Transaction(from, null, gasPrice, gasLimit, to, value, data);
+        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, data);
+    }
+
+    public static Transaction createFunctionCallTransaction(
+            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            String data) {
+
+        return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data);
     }
 
     public static Transaction createEthCallTransaction(String to, String data) {

@@ -137,11 +137,12 @@ Then you can unlock the account, and providing this was successful, send a trans
 
 
 Transactions for sending in this manner should be created via
-`org.web3j.protocol.core.methods.request.EthSendTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/EthSendTransaction.java>`_,
-with the `org.web3j.protocol.core.methods.request.Transaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_ type::
+`EthSendTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/EthSendTransaction.java>`_,
+with the `Transaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_ type::
 
   Transaction transaction = Transaction.createContractTransaction(
                 <from address>,
+                <nonce>,
                 BigInteger.valueOf(<gas price>),
                 "0x...<smart contract code to execute>"
         );
@@ -154,10 +155,12 @@ with the `org.web3j.protocol.core.methods.request.Transaction <https://github.co
 
         // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
 
+Where the *<nonce>* value is obtained as per :ref:`below <nonce>`.
+
 Please refer to the integration test
-`org.web3j.protocol.scenarios.DeployContractIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_
+`DeployContractIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_
 and its superclass
-`org.web3j.protocol.scenarios.Scenario <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/Scenario.java>`_
+`Scenario <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/Scenario.java>`_
 for further details of this transaction workflow.
 
 Further details of working with the different admin commands supported by web3j are available in
@@ -187,11 +190,11 @@ In order to sign transactions offline, you need to have the public and private k
 an Ethereum wallet/account.
 
 By default your Ethereum wallet is encrypted, however, you can head over to
-http://www.myetherwallet.com/ to use client side JavaScript to decode your key, or generate a new
-account/set of keys if you don't already have one.
+`MyEtherWallet <http://www.myetherwallet.com/>`_ to use client side JavaScript to decode your key,
+or generate a new account/set of keys if you don't already have one.
 
 Alternatively you can create your own keypair using web3j, via
-`org.web3j.crypto.Keys <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/Keys.java>`::
+`Keys <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/Keys.java>`_::
 
    ECKeyPair ecKeyPair = Keys.createEcKeyPair();
 
@@ -200,17 +203,51 @@ Signing transactions
 --------------------
 
 Transactions to be used in an offline signing capacity, should use the
-`org.web3j.protocol.core.methods.request.RawTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_
+`RawTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_
 type for this purpose. The RawTransaction is similar to the previously mentioned Transaction type,
 however it does not require a *from* address, as this can be inferred from the signature.
 
 In order to create and sign a raw transaction, the sequence of events is as follows:
 
-#. Identify the next available nonce for the sender account
+#. Identify the next available :ref:`nonce <nonce>` for the sender account
 #. Create the RawTransaction object
 #. Encode the RawTransaction object
 #. Sign the RawTransaction object
 #. Send the RawTransaction object to a node for processing
+
+The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
+can only be used once and until a transaction is mined, it is possible to send multiple versions of
+a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
+
+Once you have obtained the next available :ref:`nonce <nonce>`, the value can then be used to
+create your transaction object::
+
+   RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
+                nonce, <gas price>, <gas limit>, <toAddress>, <value>);
+
+The transaction can then be signed and encoded::
+
+   byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <ECKeyPair>);
+   String hexValue = Hex.toHexString(signedMessage);
+
+Where `ECKeyPair <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/ECKeyPair.java>`_ contains your Elliptic Curve SECP-256k1 private and public keys.
+
+The transaction is then sent using `eth_sendRawTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction>`_::
+
+   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+   String transactionHash = ethSendTransaction.getTransactionHash();
+   // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
+
+
+Please refer to the integration test
+`CreateRawTransactionIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/CreateRawTransactionIT.java>`_
+for a full example of creating and sending a raw transaction.
+
+
+.. _nonce:
+
+The transaction nonce
+---------------------
 
 The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
 can only be used once and until a transaction is mined, it is possible to send multiple versions of
@@ -229,23 +266,7 @@ The nonce can then be used to create your transaction object::
    RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
 
-The transaction can then be signed and encoded::
 
-   byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <ECKeyPair>);
-   String hexValue = Hex.toHexString(signedMessage);
-
-Where `org.web3j.crypto.ECKeyPair <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/ECKeyPair.java>`_ contains your Elliptic Curve SECP-256k1 private and public keys.
-
-The transaction is then sent using `eth_sendRawTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction>`_::
-
-   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
-   String transactionHash = ethSendTransaction.getTransactionHash();
-   // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
-
-
-Please refer to the integration test
-`org.web3j.protocol.scenarios.CreateRawTransactionIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/CreateRawTransactionIT.java>`_
-for a full example of creating and sending a raw transaction.
 
 
 Transaction types
@@ -267,8 +288,7 @@ transaction types. The following attributes remain constant for all:
 - Nonce
 - From
 
-The differences between using Transaction versus RawTransaction objects for the below examples are
-minimal.
+Transaction and RawTransaction objects are used interchangeably in all of the subsequent examples.
 
 
 .. _transfer-of-ether:
@@ -308,15 +328,37 @@ To deploy a new smart contract, the following attributes will need to be provide
 
 ::
 
+   // using a raw transaction
    RawTransaction rawTransaction = RawTransaction.createContractTransaction(
-                <nonce>, <gasPrice>, <gasLimit>,
-                <value>, "0x <compield smart contract code>");
+           <nonce>,
+           <gasPrice>,
+           <gasLimit>,
+           <value>,
+           "0x <compiled smart contract code>");
    // send...
 
    // get contract address
    EthGetTransactionReceipt.TransactionReceipt transactionReceipt = sendTransactionReceiptRequest(transactionHash);
 
    Optional<String> contractAddressOptional = transactionReceipt.getContractAddress();
+
+If the smart contract contains a constructor, the associated constructor field values must be
+encoded and appended to the *compiled smart contract code*::
+
+   String encodedConstructor =
+                FunctionEncoder.encodeConstructor(Arrays.asList(new Type(value), ...));
+
+   // using a regular transaction
+   Transaction transaction = Transaction.createContractTransaction(
+           <fromAddress>,
+           <nonce>,
+           <gasPrice>,
+           <gasLimit>,
+           <value>,
+           "0x <compiled smart contract code>" + encodedConstructor);
+
+   // send...
+
 
 .. _transacting-with-contract:
 
@@ -342,7 +384,7 @@ section of the Ethereum Wiki.
 
    Function function = new Function<>(
                 "functionName",  // function we're calling
-                Arrays.asList(new Type(value)),  // Parameters to pass as Solidity Types
+                Arrays.asList(new Type(value), ...),  // Parameters to pass as Solidity Types
                 Arrays.asList(new TypeReference<Type>() {}, ...));
 
    String encodedFunction = FunctionEncoder.encode(function)
@@ -356,8 +398,9 @@ section of the Ethereum Wiki.
 
    // wait for response using EthGetTransactionReceipt...
 
-To obtain values returned via a transactional function call, please return to the :doc:`filters`
-section for details.
+It is not possible to return values from transactional functional calls, regardless of the return
+type of the message signature. However, it is possible to capture values returned by functions
+using filters. Please refer to the :doc:`filters` section for details.
 
 
 .. _querying-state:
@@ -385,3 +428,6 @@ contract method's called, it simply returns the value from them::
 
    List<Type> someTypes = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
+
+**Note:** If an invalid function call is made, or a null result is obtained, the return value will
+be an instance of `Collections.emptyList() <https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList-->`_

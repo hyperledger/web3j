@@ -30,6 +30,14 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodId);
 
+        return encodeParameters(parameters, result);
+    }
+
+    public static String encodeConstructor(List<Type> parameters) {
+        return encodeParameters(parameters, new StringBuilder());
+    }
+
+    private static String encodeParameters(List<Type> parameters, StringBuilder result) {
         int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
         StringBuilder dynamicData = new StringBuilder();
 
