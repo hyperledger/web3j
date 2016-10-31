@@ -23,4 +23,9 @@ public class Address extends Uint {
     public String getTypeAsString() {
         return TYPE_NAME;
     }
+
+    @Override
+    public String toString() {
+        return Numeric.toHexStringNoPrefix(value);
+    }
 }
