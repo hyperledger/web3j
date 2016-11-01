@@ -35,3 +35,4 @@ src/main/resources/
 
 # Sphinx generated docs
 docs/build
+/.nb-gradle/

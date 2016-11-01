@@ -1,6 +1,7 @@
 package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Common numeric type.
@@ -11,6 +12,9 @@ public abstract class NumericType implements Type<BigInteger> {
     BigInteger value;
 
     public NumericType(String type, BigInteger value) {
+        requireNonNull(type, "type must not be null");
+        requireNonNull(value, "value must not be null");
+
         this.type = type;
         this.value = value;
     }
@@ -42,5 +46,10 @@ public abstract class NumericType implements Type<BigInteger> {
         int result = type.hashCode();
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString(){
+        return value.toString();
     }
 }

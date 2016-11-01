@@ -1,5 +1,7 @@
 package org.web3j.abi.datatypes;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * UTF-8 encoded string type.
  */
@@ -10,6 +12,7 @@ public class Utf8String implements Type<String> {
     private String value;
 
     public Utf8String(String value) {
+        requireNonNull(value, "type must not be null");
         this.value = value;
     }
 
@@ -37,5 +40,10 @@ public class Utf8String implements Type<String> {
     @Override
     public int hashCode() {
         return value != null ? value.hashCode() : 0;
+    }
+
+    @Override
+    public String toString(){
+        return value;
     }
 }
