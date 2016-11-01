@@ -59,7 +59,7 @@ Gradle
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:0.6.0')
+   compile ('org.web3j:core:0.7.0')
 
 
 Start up an Ethereum client if you don't already have one running, such as `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
