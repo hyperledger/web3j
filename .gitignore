@@ -35,3 +35,7 @@ src/main/resources/
 
 # Sphinx generated docs
 docs/build
+
+# OS X
+.DS_Store
+
