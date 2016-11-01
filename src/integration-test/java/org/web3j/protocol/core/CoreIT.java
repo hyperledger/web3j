@@ -311,7 +311,7 @@ public class CoreIT {
         EthGetTransactionReceipt ethGetTransactionReceipt = web3j.ethGetTransactionReceipt(
                 config.validTransactionHash()).send();
         assertTrue(ethGetTransactionReceipt.getTransactionReceipt().isPresent());
-        EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
+        TransactionReceipt transactionReceipt =
                 ethGetTransactionReceipt.getTransactionReceipt().get();
         assertThat(transactionReceipt.getTransactionHash(), is(config.validTransactionHash()));
     }

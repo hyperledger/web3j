@@ -18,15 +18,14 @@ public class EventEncoder {
 
     private EventEncoder() { }
 
-    public static <T extends Type> String encode(Event<T> function) {
-        List<TypeReference<T>> indexedParameters = function.getIndexedParameters();
-        List<TypeReference<T>> nonIndexedParameters = function.getNonIndexedParameters();
+    public static String encode(Event function) {
+        List<TypeReference<Type>> indexedParameters = function.getIndexedParameters();
+        List<TypeReference<Type>> nonIndexedParameters = function.getNonIndexedParameters();
 
         String methodSignature = buildMethodSignature(function.getName(),
                 indexedParameters, nonIndexedParameters);
-        String eventSignature = buildEventSignature(methodSignature);
 
-        return eventSignature;
+        return buildEventSignature(methodSignature);
     }
 
     static <T extends Type> String buildMethodSignature(

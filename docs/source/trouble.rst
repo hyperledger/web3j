@@ -34,3 +34,12 @@ If there is no sign of it then the transaction has vanished into the ether (sorr
 cause of this is likely to be to do with the transaction's nonce either not being set, or
 being too low. Please refer to the section :ref:`nonce` for more information.
 
+
+I want to see details of the JSON-RPC requests and responses
+------------------------------------------------------------
+
+Set the following system properties in your main class::
+
+   System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+   System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+   System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");

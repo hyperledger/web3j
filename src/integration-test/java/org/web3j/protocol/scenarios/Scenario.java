@@ -18,6 +18,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.Parity;
 import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
@@ -75,10 +76,10 @@ public class Scenario {
         return personalUnlockAccount.accountUnlocked();
     }
 
-    EthGetTransactionReceipt.TransactionReceipt waitForTransactionReceipt(
+    TransactionReceipt waitForTransactionReceipt(
             String transactionHash) throws Exception {
 
-        Optional<EthGetTransactionReceipt.TransactionReceipt> transactionReceiptOptional =
+        Optional<TransactionReceipt> transactionReceiptOptional =
                 getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
 
         if (!transactionReceiptOptional.isPresent()) {
@@ -88,10 +89,10 @@ public class Scenario {
         return transactionReceiptOptional.get();
     }
 
-    private Optional<EthGetTransactionReceipt.TransactionReceipt> getTransactionReceipt(
+    private Optional<TransactionReceipt> getTransactionReceipt(
             String transactionHash, int sleepDuration, int attempts) throws Exception {
 
-        Optional<EthGetTransactionReceipt.TransactionReceipt> receiptOptional =
+        Optional<TransactionReceipt> receiptOptional =
                 sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
@@ -105,7 +106,7 @@ public class Scenario {
         return receiptOptional;
     }
 
-    private Optional<EthGetTransactionReceipt.TransactionReceipt> sendTransactionReceiptRequest(
+    private Optional<TransactionReceipt> sendTransactionReceiptRequest(
             String transactionHash) throws Exception {
         EthGetTransactionReceipt transactionReceipt =
                 parity.ethGetTransactionReceipt(transactionHash).sendAsync().get();

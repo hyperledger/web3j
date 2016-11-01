@@ -51,7 +51,7 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.6.0</version>
+     <version>0.7.0</version>
    </dependency>
 
 Gradle
@@ -126,10 +126,10 @@ This can be achieved by running:
 
 .. code-block:: bash
 
-   $ org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.abi -o /path/to/src/dir/java -p com.your.organisation.name
+   $ org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/dir/java -p com.your.organisation.name
 
 
-See `FunctionWrappersIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/FunctionWrappersIT.java>`_
+See `HumanStandardTokenGeneratedIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/HumanStandardTokenGeneratedIT.java>`_
 for an example of using a generated smart contract Java wrapper.
 
 

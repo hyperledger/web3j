@@ -20,9 +20,9 @@ import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
 import static junit.framework.TestCase.assertFalse;
@@ -126,7 +126,7 @@ public class HumanStandardTokenIT extends Scenario {
         String createTransactionHash = sendCreateContractTransaction(credentials, initialSupply);
         assertFalse(createTransactionHash.isEmpty());
 
-        EthGetTransactionReceipt.TransactionReceipt createTransactionReceipt =
+        TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
         assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
@@ -174,7 +174,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = transfer(to, qty);
         String functionHash = execute(credentials, function, contractAddress);
 
-        EthGetTransactionReceipt.TransactionReceipt transferTransactionReceipt =
+        TransactionReceipt transferTransactionReceipt =
                 waitForTransactionReceipt(functionHash);
         assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
 
@@ -195,14 +195,10 @@ public class HumanStandardTokenIT extends Scenario {
         assertThat(new Address(topics.get(1)), is(new Address(credentials.getAddress())));
         assertThat(new Address(topics.get(2)), is(new Address(to)));
 
-
-        // TODO: Add FunctionReturnDecoder support for Events
-
         // verify qty transferred
         List<Type> results = FunctionReturnDecoder.decode(
                 log.getData(), transferEvent.getNonIndexedParameters());
         assertThat(results, equalTo(Collections.singletonList(new Uint256(qty))));
-
     }
 
     private void sendApproveTransaction(
@@ -211,7 +207,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = approve(spender, value);
         String functionHash = execute(credentials, function, contractAddress);
 
-        EthGetTransactionReceipt.TransactionReceipt transferTransactionReceipt =
+        TransactionReceipt transferTransactionReceipt =
                 waitForTransactionReceipt(functionHash);
         assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
 
@@ -246,7 +242,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = transferFrom(from, to, value);
         String functionHash = execute(credentials, function, contractAddress);
 
-        EthGetTransactionReceipt.TransactionReceipt transferTransactionReceipt =
+        TransactionReceipt transferTransactionReceipt =
                 waitForTransactionReceipt(functionHash);
         assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
 

@@ -11,11 +11,10 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
@@ -40,7 +39,7 @@ public class GreeterContractIT extends Scenario {
         String createTransactionHash = sendCreateContractTransaction();
         assertFalse(createTransactionHash.isEmpty());
 
-        EthGetTransactionReceipt.TransactionReceipt createTransactionReceipt =
+        TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
         assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));

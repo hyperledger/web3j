@@ -8,8 +8,8 @@ import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
@@ -37,7 +37,7 @@ public class CreateRawTransactionIT extends Scenario {
 
         assertFalse(transactionHash.isEmpty());
 
-        EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
+        TransactionReceipt transactionReceipt =
                 waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
@@ -57,7 +57,7 @@ public class CreateRawTransactionIT extends Scenario {
 
         assertFalse(transactionHash.isEmpty());
 
-        EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
+        TransactionReceipt transactionReceipt =
                 waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));

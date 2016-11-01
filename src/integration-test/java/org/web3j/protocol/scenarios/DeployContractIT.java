@@ -12,7 +12,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
@@ -33,7 +33,7 @@ public class DeployContractIT extends Scenario {
         String transactionHash = sendTransaction();
         assertFalse(transactionHash.isEmpty());
 
-        EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
+        TransactionReceipt transactionReceipt =
                 waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));

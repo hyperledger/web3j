@@ -18,7 +18,7 @@ import org.web3j.utils.Numeric;
  * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  * </p>
  */
-public class TypeDecoder {
+class TypeDecoder {
 
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
@@ -35,7 +35,7 @@ public class TypeDecoder {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Type> T decode(String input, int offset, Class<T> type) {
+    static <T extends Type> T decode(String input, int offset, Class<T> type) {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
         } else if (Bool.class.isAssignableFrom(type)) {
@@ -67,7 +67,7 @@ public class TypeDecoder {
         }
     }
 
-    public static <T extends Type> T decode(String input, Class<T> type) {
+    static <T extends Type> T decode(String input, Class<T> type) {
         return decode(input, 0, type);
     }
 

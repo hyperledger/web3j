@@ -8,10 +8,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.crypto.Hash;
+import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -101,5 +102,52 @@ public class FunctionReturnDecoderTest {
 
         assertThat(FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
                 is(Collections.emptyList()));
+    }
+
+    @Test
+    public void testDecodeIndexedUint256Value() {
+        Uint256 value = new Uint256(BigInteger.TEN);
+        String encoded = TypeEncoder.encodeNumeric(value);
+
+        assertThat(FunctionReturnDecoder.decodeIndexedValue(
+                encoded,
+                new TypeReference<Uint256>() {}),
+                equalTo(value));
+    }
+
+    @Test
+    public void testDecodeIndexedStringValue() {
+        Utf8String string = new Utf8String("some text");
+        String encoded = TypeEncoder.encodeString(string);
+        String hash = Hash.sha3(encoded);
+
+        assertThat(FunctionReturnDecoder.decodeIndexedValue(
+                hash,
+                new TypeReference<Utf8String>() {}),
+                equalTo(new Bytes32(Numeric.hexStringToByteArray(hash))));
+    }
+
+    @Test
+    public void testDecodeIndexedDynamicBytesValue() {
+        DynamicBytes bytes = new DynamicBytes(new byte[]{ 1, 2, 3, 4, 5});
+        String encoded = TypeEncoder.encodeDynamicBytes(bytes);
+        String hash = Hash.sha3(encoded);
+
+        assertThat(FunctionReturnDecoder.decodeIndexedValue(
+                hash,
+                new TypeReference<DynamicBytes>() {}),
+                equalTo(new Bytes32(Numeric.hexStringToByteArray(hash))));
+    }
+
+    @Test
+    public void testDecodeIndexedDynamicArrayValue() {
+        DynamicArray<Uint256> array = new DynamicArray<>(new Uint256(BigInteger.TEN));
+        String encoded = TypeEncoder.encodeDynamicArray(array);
+        String hash = Hash.sha3(encoded);
+
+        assertThat(FunctionReturnDecoder.decodeIndexedValue(
+                hash,
+                new TypeReference<DynamicArray>() {}),
+                equalTo(new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 }

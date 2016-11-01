@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Ethereum unit conversion functions.
  */
-public final class Convert {
+public final class  Convert {
     private Convert() { }
 
     public static BigDecimal fromWei(String number, Unit unit) {

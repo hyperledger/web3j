@@ -706,8 +706,8 @@ public class ResponseTest extends ResponseTester {
                         "}"
         );
 
-        EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
-                new EthGetTransactionReceipt.TransactionReceipt(
+        TransactionReceipt transactionReceipt =
+                new TransactionReceipt(
                         "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238",
                         "0x1",
                         "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",

@@ -36,6 +36,7 @@ good place to start:
 - `Writing a contract <https://ethereum-homestead.readthedocs.io/en/latest/contracts-and-transactions/contracts.html#writing-a-contract>`_
   in the Ethereum Homestead Guide
 
+.. _compiling-solidity:
 
 Compiling Solidity source code
 ------------------------------
@@ -86,10 +87,16 @@ in the Homestead documentation.
 
 
 Deploying and interacting with smart contracts
--------------------------------------
+----------------------------------------------
 
-Please refer to the sections :ref:`creation-of-smart-contract`, :ref:`transacting-with-contract`
-and :ref:`querying-state` for details.
+If you want to avoid the underlying implementation detail for working with smart contracts, web3j
+provides :ref:`smart-contract-wrappers` which enable you to interact directly with all of a smart
+contract's methods via a generated wrapper object.
+
+Alternatively, if you wish to send regular transactions or have more control over your
+interactions with your smart contracts, please refer to the sections
+:ref:`creation-of-smart-contract`, :ref:`transacting-with-contract` and :ref:`querying-state`
+for details.
 
 
 Smart contract examples
@@ -102,6 +109,8 @@ It also provides integration tests for demonstrating the deploying and working w
 contracts in the project directory
 `src/integration-test/java/org/web3j/protocol/scenarios <https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios>`_.
 
+
+.. _eip:
 
 EIP-20 Ethereum token standard smart contract
 ---------------------------------------------
@@ -116,9 +125,17 @@ However, there is an implementation provided in
 which has been taken from Consensys' implementation on
 `GitHub <https://github.com/ConsenSys/Tokens>`_.
 
-The integration test
+There are two integration tests that have been written to fully demonstrate the functionality of
+this token smart contract.
+
+`HumanStandardTokenGeneratedIT <https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios/HumanStandardTokenGeneratedIT.java>`_
+uses the generated
+`HumanStandardTokenGenerated <https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/generated/HumanStandardTokenGenerated.java>`_
+:ref:`smart contract wrapper <smart-contract-wrappers>` to demonstrate this.
+
+Alternatively, if you do not wish to use a smart contract wrapper and would like to work directly
+with the JSON-RPC calls, please refer to
 `HumanStandardTokenIT <https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios/HumanStandardTokenIT.java>`_.
-has been been written to fully demonstrate the functionality of this token standard smart contract.
 
 
 .. _smart-contract-wrappers:
@@ -128,18 +145,93 @@ Solidity smart contract wrappers
 
 web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI files.
 
-This can be achieved by running:
-
 .. code-block:: bash
 
    org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.abi -o /path/to/src/dir/java -p com.your.organisation.name
 
-See `FunctionWrappersIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/FunctionWrappersIT.java>`_
-for an example of using a generated smart contract Java wrapper.
+Where the *bin* and *abi* are obtained as per :ref:`compiling-solidity`.
 
-**Note:** at present the wrappers invoke smart contracts via
-`EthCall <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call>`_,
-so a transaction does not take place. Transaction support is imminent.
+The smart contract wrappers support all common operations for working with smart contracts:
 
-For an example of how to call a smart contracts via a transaction, refer to
-`DeployContractIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_.
+- :ref:`construction-and-deployment`
+- :ref:`invoking-transactions`
+- :ref:`constant-methods`
+
+Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
+avoid blocking.
+
+
+.. _construction-and-deployment:
+
+Construction and deployment
+---------------------------
+
+Construction and deployment of smart contracts happens with the *deploy* method::
+
+   YourSmartContract contract = YourSmartContract.deploy(
+           <web3j>, <credentials>, <initialValue>,
+           <param1>, ..., <paramN>) {
+
+This will create a new instance of the smart contract on the Ethereum blockchain using the
+supplied credentials, and constructor parameter values.
+
+It returns a new smart contract wrapper instance which contains the underlying address of the
+smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
+smart contract, simply pass in it's address::
+
+   YourSmartContract contract = new YourSmartContract("0x...", web3j, credentials);
+
+
+.. _invoking-transactions:
+
+Invoking transactions and events
+--------------------------------
+
+All transactional smart contract methods are named identically to their Solidity methods, taking
+the same parameter values. Transactional calls do not return any values, regardless of the return
+type specified on the method. Hence, for all transactional methods the
+`Transaction Receipt <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt>`_
+associated with the transaction is returned.::
+
+   TransactionReceipt transactionReceipt = contract.someMethod(
+                new Type(...),
+                ...).get();
+
+
+The transaction receipt is useful for two reasons:
+
+#. It provides details of the mined block that the transaction resides in
+#. `Solidity events <http://solidity.readthedocs.io/en/develop/contracts.html?highlight=events#events>`_ that
+   are called will be logged as part of the transaction, which can then be extracted
+
+Any events defined within a smart contract will be represented in the smart contract wrapper with
+a method named *process<Event Name>Event*, which takes the Transaction Receipt and from this
+extracts the indexed and non-indexed event parameters, which are returned decoded in an instance of
+the
+`EventValues <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/abi/EventValues.java>`_
+object.::
+
+   EventValues eventValues = contract.processSomeEvent(transactionReceipt);
+
+**Remember** that for any indexed array, bytes and string Solidity parameter
+types, a Keccak-256 hash of their values will be returned, see the
+`documentation <http://solidity.readthedocs.io/en/latest/contracts.html#events>`_
+for further information.
+
+
+.. _constant-methods:
+
+Calling constant methods
+------------------------
+
+Constant methods are those that read a value in a smart contract, and do not alter the state of
+the smart contract. These methods are available with the same method signature as the smart
+contract they were generated from, the only addition is that the call is wrapped in a Future.::
+
+   Type result = contract.someMethod(new Type(...), ...).get();
+
+
+Examples
+--------
+
+Please refer to :ref:`eip`.

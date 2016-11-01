@@ -19,10 +19,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthEstimateGas;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.EthLog;
-import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.*;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,7 +44,7 @@ public class EventFilterIT extends Scenario {
         BigInteger gas = estimateGas(encodedFunction);
         String transactionHash = sendTransaction(ALICE, CONTRACT_ADDRESS, gas, encodedFunction);
 
-        EthGetTransactionReceipt.TransactionReceipt transactionReceipt =
+        TransactionReceipt transactionReceipt =
                 waitForTransactionReceipt(transactionHash);
 
         assertFalse("Transaction execution ran out of gas",
@@ -61,7 +58,7 @@ public class EventFilterIT extends Scenario {
         List<String> topics = log.getTopics();
         assertThat(topics.size(), is(1));
 
-        Event event = new Event<>("Notify",
+        Event event = new Event("Notify",
                 Collections.emptyList(),
                 Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
 
