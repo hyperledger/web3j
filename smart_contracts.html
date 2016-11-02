@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Smart Contracts &mdash; web3j 0.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="web3j 0.5.0 documentation" href="index.html" />
+    <link rel="next" title="Filters" href="filters.html" />
+    <link rel="prev" title="Transactions" href="transactions.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+    <link rel="canonical" href="https://web3j.readthedocs.io/smart_contracts.html"/>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="smart-contracts">
+<h1>Smart Contracts<a class="headerlink" href="#smart-contracts" title="Permalink to this headline">¶</a></h1>
+<p>Developers have the choice of three languages for writing smart contracts:</p>
+<dl class="docutils">
+<dt><a class="reference external" href="https://solidity.readthedocs.io/">Solidity</a></dt>
+<dd>The flagship language of Ethereum, and most popular language for smart contracts.</dd>
+<dt><a class="reference external" href="https://github.com/ethereum/wiki/wiki/Serpent">Serpent</a></dt>
+<dd>A Python like language for writing smart contracts.</dd>
+<dt>LISP Like Language (LLL)</dt>
+<dd>A low level language, Serpent provides a superset of LLL. There&#8217;s not a great deal of information
+for working with LLL, the following blog <a class="reference external" href="http://blog.syrinx.net/">/var/log/syrinx</a> and
+associated <a class="reference external" href="https://github.com/zigguratt/lll-resurrected">Github</a> is a good place to start.</dd>
+</dl>
+<p>In order to deploy a smart contract onto the Ethereum blockchain, it must first be compiled into
+a bytecode format, then it can be sent as part of a transaction request as detailed in
+<a class="reference internal" href="transactions.html#creation-of-smart-contract"><span>Creation of a smart contract</span></a>.</p>
+<p>Given that Solidity is the language of choice for writing smart contracts, it is the language
+supported by web3j, and is used for all subsequent examples.</p>
+<div class="section" id="getting-started-with-solidity">
+<h2>Getting started with Solidity<a class="headerlink" href="#getting-started-with-solidity" title="Permalink to this headline">¶</a></h2>
+<p>An overview of Solidity is beyond the scope of these docs, however, the following resources are a
+good place to start:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial">Contract Tutorial</a> on the Go
+Ethereum Wiki</li>
+<li><a class="reference external" href="http://solidity.readthedocs.io/en/develop/introduction-to-smart-contracts.html">Introduction to Smart Contracts</a>
+in the Solidity project documentation</li>
+<li><a class="reference external" href="https://ethereum-homestead.readthedocs.io/en/latest/contracts-and-transactions/contracts.html#writing-a-contract">Writing a contract</a>
+in the Ethereum Homestead Guide</li>
+</ul>
+</div>
+<div class="section" id="compiling-solidity-source-code">
+<span id="compiling-solidity"></span><h2>Compiling Solidity source code<a class="headerlink" href="#compiling-solidity-source-code" title="Permalink to this headline">¶</a></h2>
+<p>Compilation to bytecode is performed by the Solidity compiler, <em>solc</em>. You can install the compiler,
+locally following the instructions as per
+<a class="reference external" href="https://solidity.readthedocs.io/en/latest/installing-solidity.html">the project documentation</a>.</p>
+<p>To compile the solidity code run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>solc &lt;contract&gt;.sol --bin --abi --optimize -o &lt;output-dir&gt;/
+</pre></div>
+</div>
+<p><strong>Note</strong>: there are issues with installing solc via homebrew on OS X currently, please see the
+following <a class="reference external" href="https://github.com/ethereum/cpp-ethereum/issues/3173#issuecomment-255991056">thread</a>
+for further information.</p>
+<p>The <em>&#8211;bin</em> and <em>&#8211;abi</em> compiler arguments are both required to take full advantage of working
+with smart contracts from web3j.</p>
+<dl class="docutils">
+<dt><em>&#8211;bin</em></dt>
+<dd>Outputs a Solidity binary file containing the hex-encoded binary to provide with the transaction
+request (as per <a class="reference internal" href="transactions.html#creation-of-smart-contract"><span>Creation of a smart contract</span></a>).</dd>
+<dt><em>&#8211;abi</em></dt>
+<dd>Outputs a solidity application binary interface (ABI) file which details all of the publicly
+acessible contract methods and their associated parameters. These details along with the
+contract address are crucial for interacting with smart contracts. The ABI file is also used for
+the generation of <a class="reference internal" href="#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a>.</dd>
+</dl>
+<p>There is also a <em>&#8211;gas</em> argument for providing estimates of the <a class="reference internal" href="transactions.html#gas"><span>Gas</span></a> required to create a
+contract and transact with its methods.</p>
+<p>Alternatively, you can write and compile solidity code in your browser via the
+<a class="reference external" href="https://ethereum.github.io/browser-solidity/">Browser-Solidity</a>. Browser-Solidity is great for
+smaller smart contracts, but you may run into issues working with larger contracts.</p>
+<p>You can also compile solidity code via Ethereum clients such as Geth and Parity, using the JSON-RPC
+method <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_compilesolidity">eth_compileSolidity</a>
+which is also supported in web3j. However, the Solidity compiler must be installed on the client
+for this to work.</p>
+<p>There are further options available, please refer to the
+<a class="reference external" href="https://ethereum-homestead.readthedocs.io/en/latest/contracts-and-transactions/contracts.html#compiling-a-contract">relevant section</a>
+in the Homestead documentation.</p>
+</div>
+<div class="section" id="deploying-and-interacting-with-smart-contracts">
+<h2>Deploying and interacting with smart contracts<a class="headerlink" href="#deploying-and-interacting-with-smart-contracts" title="Permalink to this headline">¶</a></h2>
+<p>If you want to avoid the underlying implementation detail for working with smart contracts, web3j
+provides <a class="reference internal" href="#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a> which enable you to interact directly with all of a smart
+contract&#8217;s methods via a generated wrapper object.</p>
+<p>Alternatively, if you wish to send regular transactions or have more control over your
+interactions with your smart contracts, please refer to the sections
+<a class="reference internal" href="transactions.html#creation-of-smart-contract"><span>Creation of a smart contract</span></a>, <a class="reference internal" href="transactions.html#transacting-with-contract"><span>Transacting with a smart contract</span></a> and <a class="reference internal" href="transactions.html#querying-state"><span>Querying the state of a smart contract</span></a>
+for details.</p>
+</div>
+<div class="section" id="smart-contract-examples">
+<h2>Smart contract examples<a class="headerlink" href="#smart-contract-examples" title="Permalink to this headline">¶</a></h2>
+<p>web3j provides a number of smart contract examples in the project directory
+<a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/test/resources/solidity">src/test/resources/solidity</a></p>
+<p>It also provides integration tests for demonstrating the deploying and working with those smart
+contracts in the project directory
+<a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios">src/integration-test/java/org/web3j/protocol/scenarios</a>.</p>
+</div>
+<div class="section" id="eip-20-ethereum-token-standard-smart-contract">
+<span id="eip"></span><h2>EIP-20 Ethereum token standard smart contract<a class="headerlink" href="#eip-20-ethereum-token-standard-smart-contract" title="Permalink to this headline">¶</a></h2>
+<p>There is an active <a class="reference external" href="https://github.com/ethereum/EIPs">Ethereum Improvement Proposal (EIP)</a>,
+<a class="reference external" href="https://github.com/ethereum/EIPs/issues/20">EIP-20</a> that has been created to define the standard
+functions that a smart contract providing tokens can implement.</p>
+<p>The EIP-20 proposal provides function definitions, but does not provide an implementation example.
+However, there is an implementation provided in
+<a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/test/resources/solidity/contracts">src/test/resources/solidity/contracts</a>,
+which has been taken from Consensys&#8217; implementation on
+<a class="reference external" href="https://github.com/ConsenSys/Tokens">GitHub</a>.</p>
+<p>There are two integration tests that have been written to fully demonstrate the functionality of
+this token smart contract.</p>
+<p><a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios/HumanStandardTokenGeneratedIT.java">HumanStandardTokenGeneratedIT</a>
+uses the generated
+<a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/generated/HumanStandardTokenGenerated.java">HumanStandardTokenGenerated</a>
+<a class="reference internal" href="#smart-contract-wrappers"><span>smart contract wrapper</span></a> to demonstrate this.</p>
+<p>Alternatively, if you do not wish to use a smart contract wrapper and would like to work directly
+with the JSON-RPC calls, please refer to
+<a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios/HumanStandardTokenIT.java">HumanStandardTokenIT</a>.</p>
+</div>
+<div class="section" id="solidity-smart-contract-wrappers">
+<span id="smart-contract-wrappers"></span><h2>Solidity smart contract wrappers<a class="headerlink" href="#solidity-smart-contract-wrappers" title="Permalink to this headline">¶</a></h2>
+<p>web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI files.</p>
+<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/dir/java -p com.your.organisation.name
+</pre></div>
+</div>
+<p>Where the <em>bin</em> and <em>abi</em> are obtained as per <a class="reference internal" href="#compiling-solidity"><span>Compiling Solidity source code</span></a>.</p>
+<p>The smart contract wrappers support all common operations for working with smart contracts:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#construction-and-deployment"><span>Construction and deployment</span></a></li>
+<li><a class="reference internal" href="#invoking-transactions"><span>Invoking transactions and events</span></a></li>
+<li><a class="reference internal" href="#constant-methods"><span>Calling constant methods</span></a></li>
+</ul>
+<p>Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
+avoid blocking.</p>
+</div>
+<div class="section" id="construction-and-deployment">
+<span id="id2"></span><h2>Construction and deployment<a class="headerlink" href="#construction-and-deployment" title="Permalink to this headline">¶</a></h2>
+<p>Construction and deployment of smart contracts happens with the <em>deploy</em> method:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">initialValue</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...,</span> <span class="o">&lt;</span><span class="n">paramN</span><span class="o">&gt;)</span> <span class="o">{</span>
+</pre></div>
+</div>
+<p>This will create a new instance of the smart contract on the Ethereum blockchain using the
+supplied credentials, and constructor parameter values.</p>
+<p>It returns a new smart contract wrapper instance which contains the underlying address of the
+smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
+smart contract, simply pass in it&#8217;s address:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="k">new</span> <span class="n">YourSmartContract</span><span class="o">(</span><span class="s">&quot;0x...&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="invoking-transactions-and-events">
+<span id="invoking-transactions"></span><h2>Invoking transactions and events<a class="headerlink" href="#invoking-transactions-and-events" title="Permalink to this headline">¶</a></h2>
+<p>All transactional smart contract methods are named identically to their Solidity methods, taking
+the same parameter values. Transactional calls do not return any values, regardless of the return
+type specified on the method. Hence, for all transactional methods the
+<a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">Transaction Receipt</a>
+associated with the transaction is returned.:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span>
+             <span class="k">new</span> <span class="n">Type</span><span class="o">(...),</span>
+             <span class="o">...).</span><span class="na">get</span><span class="o">();</span>
+</pre></div>
+</div>
+<p>The transaction receipt is useful for two reasons:</p>
+<ol class="arabic simple">
+<li>It provides details of the mined block that the transaction resides in</li>
+<li><a class="reference external" href="http://solidity.readthedocs.io/en/develop/contracts.html?highlight=events#events">Solidity events</a> that
+are called will be logged as part of the transaction, which can then be extracted</li>
+</ol>
+<p>Any events defined within a smart contract will be represented in the smart contract wrapper with
+a method named <em>process&lt;Event Name&gt;Event</em>, which takes the Transaction Receipt and from this
+extracts the indexed and non-indexed event parameters, which are returned decoded in an instance of
+the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/abi/EventValues.java">EventValues</a>
+object.:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">EventValues</span> <span class="n">eventValues</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">processSomeEvent</span><span class="o">(</span><span class="n">transactionReceipt</span><span class="o">);</span>
+</pre></div>
+</div>
+<p><strong>Remember</strong> that for any indexed array, bytes and string Solidity parameter
+types, a Keccak-256 hash of their values will be returned, see the
+<a class="reference external" href="http://solidity.readthedocs.io/en/latest/contracts.html#events">documentation</a>
+for further information.</p>
+</div>
+<div class="section" id="calling-constant-methods">
+<span id="constant-methods"></span><h2>Calling constant methods<a class="headerlink" href="#calling-constant-methods" title="Permalink to this headline">¶</a></h2>
+<p>Constant methods are those that read a value in a smart contract, and do not alter the state of
+the smart contract. These methods are available with the same method signature as the smart
+contract they were generated from, the only addition is that the call is wrapped in a Future.:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Type</span> <span class="n">result</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span><span class="k">new</span> <span class="n">Type</span><span class="o">(...),</span> <span class="o">...).</span><span class="na">get</span><span class="o">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Please refer to <a class="reference internal" href="#eip"><span>EIP-20 Ethereum token standard smart contract</span></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/web3j.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">web3j</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Lightweight Java library for integration with Ethereum clients</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=web3j&repo=web3j&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/web3j/web3j">
+    <img
+        alt="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
+        src="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
+    />
+</a>
+</p>
+
+
+
+
+    
+
+<p>
+<a href="https://codecov.io/github/web3j/web3j">
+    <img
+    alt="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
+    src="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
+    />
+</a>
+</p>
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Smart Contracts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started-with-solidity">Getting started with Solidity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiling-solidity-source-code">Compiling Solidity source code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-and-interacting-with-smart-contracts">Deploying and interacting with smart contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#smart-contract-examples">Smart contract examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eip-20-ethereum-token-standard-smart-contract">EIP-20 Ethereum token standard smart contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solidity-smart-contract-wrappers">Solidity smart contract wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#construction-and-deployment">Construction and deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#invoking-transactions-and-events">Invoking transactions and events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calling-constant-methods">Calling constant methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Links and Useful Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Thanks and Credits</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="transactions.html" title="previous chapter">Transactions</a></li>
+      <li>Next: <a href="filters.html" title="next chapter">Filters</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Conor Svensson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/smart_contracts.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/web3j/web3j" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-85710619-1']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    
+  </body>
+</html>

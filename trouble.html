@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Troubleshooting &mdash; web3j 0.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="web3j 0.5.0 documentation" href="index.html" />
+    <link rel="next" title="Developer Guide" href="development.html" />
+    <link rel="prev" title="Using Infura with web3j" href="infura.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+    <link rel="canonical" href="https://web3j.readthedocs.io/trouble.html"/>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="i-m-submitting-a-transaction-but-it-s-not-being-mined">
+<h2>I&#8217;m submitting a transaction, but it&#8217;s not being mined<a class="headerlink" href="#i-m-submitting-a-transaction-but-it-s-not-being-mined" title="Permalink to this headline">¶</a></h2>
+<p>After creating and sending a transaction, you receive a transaction hash, however calling
+<a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">eth_getTransactionReciept</a>
+always returns a blank value, indicating the transaction has not been mined:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">sendTransaction</span><span class="o">(...);</span>
+
+<span class="c1">// you loop through the following expecting to eventually get a receipt once the transaction</span>
+<span class="c1">// is mined</span>
+<span class="n">EthGetTransactionReceipt</span><span class="o">.</span><span class="na">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span>
+        <span class="n">web3j</span><span class="o">.</span><span class="na">ethGetTransactionReceipt</span><span class="o">(</span><span class="n">transactionHash</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+
+<span class="k">if</span> <span class="o">(!</span><span class="n">transactionReceipt</span><span class="o">.</span><span class="na">isPresent</span><span class="o">())</span> <span class="o">{</span>
+    <span class="c1">// try again, ad infinitum</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>However, you never receive a transaction receipt. Unfortunately there may not be a an error
+in your Ethereum client indicating any issues with the transaction:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">I1025</span> <span class="mi">18</span><span class="o">:</span><span class="mi">13</span><span class="o">:</span><span class="mf">32.817691</span> <span class="n">eth</span><span class="o">/</span><span class="n">api</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mi">1185</span><span class="o">]</span> <span class="n">Tx</span><span class="o">(</span><span class="mh">0xeaac9aab7f9aeab189acd8714c5a60c7424f86820884b815c4448cfcd4d9fc79</span><span class="o">)</span> <span class="nl">to:</span> <span class="mh">0x9c98e381edc5fe1ac514935f3cc3edaa764cf004</span>
+</pre></div>
+</div>
+<p>The easiest way to see if the submission is waiting to mined is to refer to Etherscan
+and search for the address the transaction was sent using <a class="reference external" href="https://testnet.etherscan.io/address/0x">https://testnet.etherscan.io/address/0x</a>...
+If the submission has been successful it should be visible in Etherscan within seconds of you
+performing the transaction submission. The wait is for the mining to take place.</p>
+<img alt="_images/pending_transaction.png" src="_images/pending_transaction.png" />
+<p>If there is no sign of it then the transaction has vanished into the ether (sorry). The likely
+cause of this is likely to be to do with the transaction&#8217;s nonce either not being set, or
+being too low. Please refer to the section <a class="reference internal" href="transactions.html#nonce"><span>The transaction nonce</span></a> for more information.</p>
+</div>
+<div class="section" id="i-want-to-see-details-of-the-json-rpc-requests-and-responses">
+<h2>I want to see details of the JSON-RPC requests and responses<a class="headerlink" href="#i-want-to-see-details-of-the-json-rpc-requests-and-responses" title="Permalink to this headline">¶</a></h2>
+<p>Set the following system properties in your main class:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;org.apache.commons.logging.Log&quot;</span><span class="o">,</span><span class="s">&quot;org.apache.commons.logging.impl.SimpleLog&quot;</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;org.apache.commons.logging.simplelog.showdatetime&quot;</span><span class="o">,</span> <span class="s">&quot;true&quot;</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;org.apache.commons.logging.simplelog.log.org.apache.http.wire&quot;</span><span class="o">,</span> <span class="s">&quot;DEBUG&quot;</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/web3j.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">web3j</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Lightweight Java library for integration with Ethereum clients</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=web3j&repo=web3j&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/web3j/web3j">
+    <img
+        alt="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
+        src="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
+    />
+</a>
+</p>
+
+
+
+
+    
+
+<p>
+<a href="https://codecov.io/github/web3j/web3j">
+    <img
+    alt="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
+    src="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
+    />
+</a>
+</p>
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#i-m-submitting-a-transaction-but-it-s-not-being-mined">I&#8217;m submitting a transaction, but it&#8217;s not being mined</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#i-want-to-see-details-of-the-json-rpc-requests-and-responses">I want to see details of the JSON-RPC requests and responses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Links and Useful Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Thanks and Credits</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="infura.html" title="previous chapter">Using Infura with web3j</a></li>
+      <li>Next: <a href="development.html" title="next chapter">Developer Guide</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Conor Svensson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/trouble.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/web3j/web3j" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-85710619-1']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    
+  </body>
+</html>

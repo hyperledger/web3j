@@ -1,0 +1,552 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Transactions &mdash; web3j 0.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="web3j 0.5.0 documentation" href="index.html" />
+    <link rel="next" title="Smart Contracts" href="smart_contracts.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+    <link rel="canonical" href="https://web3j.readthedocs.io/transactions.html"/>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="transactions">
+<h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
+<p>Broadly speaking there are three types transactions supported on Ethereum:</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="#transfer-of-ether"><span>Transfer of Ether from one party to another</span></a></li>
+<li><a class="reference internal" href="#creation-of-smart-contract"><span>Creation of a smart contract</span></a></li>
+<li><a class="reference internal" href="#transacting-with-contract"><span>Transacting with a smart contract</span></a></li>
+</ol>
+<p>To undertake any of these transactions, it is necessary to have Ether (the fuel of the Ethereum
+blockchain) residing in the Ethereum account which the transactions are taking place from. This is
+to pay for the <a class="reference internal" href="#gas"><span>Gas</span></a> costs, which is the transaction execution cost for the Ethereum client that
+performs the transaction on your behalf, comitting the result to the Ethereum blockchain.
+Instructions for obtaining Ether are described below in <a class="reference internal" href="#obtaining-ether"><span>Obtaining Ether</span></a>.</p>
+<p>Additionally, it is possible to query the state of a smart contract, this is described in
+<a class="reference internal" href="#querying-state"><span>Querying the state of a smart contract</span></a>.</p>
+<div class="section" id="obtaining-ether">
+<span id="id1"></span><h2>Obtaining Ether<a class="headerlink" href="#obtaining-ether" title="Permalink to this headline">¶</a></h2>
+<p>To obtain Ether you have two options:</p>
+<ol class="arabic simple">
+<li>Mine it yourself</li>
+<li>Buy Ether from another party</li>
+</ol>
+<p>Mining it yourself in a private environment, or the public tet environment (testnet) is very
+straight forwards. However, in the main live environment (mainnet) it requires significant
+dedicated GPU time which is not likely to be feasible unless you already have a gaming PC with
+multiple dedicated GPUs. If you wish to use a private environment, there is some guidance on the
+<a class="reference external" href="https://ethereum-homestead.readthedocs.io/en/latest/network/test-networks.html#id3">Homestead documentation</a>.</p>
+<p>To purchase Ether you will need to go via an exchange. As different regions have different
+exchanges, you will need to research the best location for this yourself. The
+<a class="reference external" href="https://ethereum-homestead.readthedocs.io/en/latest/ether.html#list-of-centralised-exchange-marketplaces">Homestead documentation</a>
+contains a number of exchanges which is a good place to start.</p>
+</div>
+<div class="section" id="mining-on-testnet-private-blockchains">
+<h2>Mining on testnet/private blockchains<a class="headerlink" href="#mining-on-testnet-private-blockchains" title="Permalink to this headline">¶</a></h2>
+<p>In the Ethereum test environment (testnet), the mining difficulty is set lower then the main
+environment (mainnet). This means that you can mine new Ether with a regular CPU, such as your
+laptop. What you&#8217;ll need to do is run an Ethereum client such as Geth or Parity to start building
+up reserves. Further instructions are available on the respective sites.</p>
+<dl class="docutils">
+<dt>Geth</dt>
+<dd><a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Mining">https://github.com/ethereum/go-ethereum/wiki/Mining</a></dd>
+<dt>Parity</dt>
+<dd><a class="reference external" href="https://github.com/ethcore/parity/wiki/Mining">https://github.com/ethcore/parity/wiki/Mining</a></dd>
+</dl>
+<p>Once you have mined some Ether, you can start transacting with the blockchain.</p>
+</div>
+<div class="section" id="gas">
+<span id="id2"></span><h2>Gas<a class="headerlink" href="#gas" title="Permalink to this headline">¶</a></h2>
+<p>When a transaction takes place in Ethereum, a transaction cost must be paid to the client that
+executes the transaction on your behalf, committing the output of this transaction to the Ethereum
+blockchain.</p>
+<p>This cost is measure in gas, where gas is the number of instructions used to execute a transaction
+in the Ethereum Virtual Machine. Please refer to the
+<a class="reference external" href="http://ethdocs.org/en/latest/contracts-and-transactions/account-types-gas-and-transactions.html?highlight=gas#what-is-gas">Homestead documentation</a>
+for further information.</p>
+<p>What this means for you when working with Ethereum clients is that there are two parameters which
+are used to dictate how much Ether you wish to spend in order for a tranaction to complete:</p>
+<p><em>Gas price</em></p>
+<blockquote>
+<div>This is the amount you are prepared in Ether per unit of gas. It defaults to a price of 9000 Wei
+(9 x 10<sup>-15</sup> Ether).</div></blockquote>
+<p><em>Gas limit</em></p>
+<blockquote>
+<div>This is the total amount of gas you are happy to spend on the transaction execution. There is an
+upper limit of how large a single transaction can be in an Ethereum block which restricts this
+value typically to less then 1,500,000. The current gas limit is visible at <a class="reference external" href="https://ethstats.net/">https://ethstats.net/</a>.</div></blockquote>
+<p>These parameters taken together dictate the maximum amount of Ether you are willing to spend on
+transaction costs. i.e. you can spend no more then <em>gas price * gas limit</em>. The gas price can also
+affect how quickly a transaction takes place depending on what other transactions are available
+with a more profitable gas price for miners.</p>
+<p>You may need to adjust these parameters to ensure that transactions take place in a timely manner.</p>
+</div>
+<div class="section" id="transaction-mechanisms">
+<h2>Transaction mechanisms<a class="headerlink" href="#transaction-mechanisms" title="Permalink to this headline">¶</a></h2>
+<p>When you have a valid account created with some Ether, there are two mechanisms you can use to
+transact with Ethereum.</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="#signing-via-client"><span>Transaction signing via an Ethereum client</span></a></li>
+<li><a class="reference internal" href="#offline-signing"><span>Offline transaction signing</span></a></li>
+</ol>
+<p>Both mechanisms are supported via web3j.</p>
+</div>
+<div class="section" id="transaction-signing-via-an-ethereum-client">
+<span id="signing-via-client"></span><h2>Transaction signing via an Ethereum client<a class="headerlink" href="#transaction-signing-via-an-ethereum-client" title="Permalink to this headline">¶</a></h2>
+<p>In order to transact via an Ethereum client, you first need to ensure that the client you&#8217;re
+transacting with knows about your wallet address. You are best off running your own Ethereum client
+such as Geth/Parity in order to do this. Once you have a client running, you can create a wallet
+via:</p>
+<ul class="simple">
+<li>The <a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Managing-your-accounts">Geth Wiki</a> contains
+a good run down of the different mechanisms Geth supports such as importing private key files,
+and creating a new account via it&#8217;s console</li>
+<li>Alternatively you can use a JSON-RPC admin command for your client, such as personal_newAccount
+for <a class="reference external" href="https://github.com/ethcore/parity/wiki/JSONRPC-personal-module#personal_newaccount">Parity</a>
+or <a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_newaccount">Geth</a></li>
+</ul>
+<p>With your wallet file created, you can unlock your account via web3j by first of all creating an
+instance of web3j that supports Parity/Geth admin commands:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Parity</span> <span class="n">parity</span> <span class="o">=</span> <span class="n">Parity</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>
+</pre></div>
+</div>
+<p>Then you can unlock the account, and providing this was successful, send a transaction:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">PersonalUnlockAccount</span> <span class="n">personalUnlockAccount</span> <span class="o">=</span> <span class="n">parity</span><span class="o">.</span><span class="na">personalUnlockAccount</span><span class="o">(</span><span class="s">&quot;0x000...&quot;</span><span class="o">,</span> <span class="s">&quot;a password&quot;</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">personalUnlockAccount</span><span class="o">.</span><span class="na">accountUnlocked</span><span class="o">())</span> <span class="o">{</span>
+    <span class="c1">// send a transaction</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Transactions for sending in this manner should be created via
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/EthSendTransaction.java">EthSendTransaction</a>,
+with the <a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java">Transaction</a> type:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Transaction</span> <span class="n">transaction</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="na">createContractTransaction</span><span class="o">(</span>
+              <span class="o">&lt;</span><span class="n">from</span> <span class="n">address</span><span class="o">&gt;,</span>
+              <span class="o">&lt;</span><span class="n">nonce</span><span class="o">&gt;,</span>
+              <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(&lt;</span><span class="n">gas</span> <span class="n">price</span><span class="o">&gt;),</span>
+              <span class="s">&quot;0x...&lt;smart contract code to execute&gt;&quot;</span>
+      <span class="o">);</span>
+
+      <span class="n">org</span><span class="o">.</span><span class="na">web3j</span><span class="o">.</span><span class="na">protocol</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">methods</span><span class="o">.</span><span class="na">response</span><span class="o">.</span><span class="na">EthSendTransaction</span>
+              <span class="n">transactionResponse</span> <span class="o">=</span> <span class="n">parity</span><span class="o">.</span><span class="na">ethSendTransaction</span><span class="o">(</span><span class="n">ethSendTransaction</span><span class="o">)</span>
+              <span class="o">.</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+
+      <span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">transactionResponse</span><span class="o">.</span><span class="na">getTransactionHash</span><span class="o">();</span>
+
+      <span class="c1">// poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(&lt;txHash&gt;)</span>
+</pre></div>
+</div>
+<p>Where the <em>&lt;nonce&gt;</em> value is obtained as per <a class="reference internal" href="#nonce"><span>below</span></a>.</p>
+<p>Please refer to the integration test
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/DeployContractIT.java">DeployContractIT</a>
+and its superclass
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/Scenario.java">Scenario</a>
+for further details of this transaction workflow.</p>
+<p>Further details of working with the different admin commands supported by web3j are available in
+the section <a class="reference internal" href="management_apis.html"><em>Management APIs</em></a>.</p>
+</div>
+<div class="section" id="offline-transaction-signing">
+<span id="offline-signing"></span><h2>Offline transaction signing<a class="headerlink" href="#offline-transaction-signing" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;d prefer not to manage your own Ethereum client, or do not want to provide wallet details
+such as your password to an Ethereum client, then offline transaction signing is the way to go.</p>
+<p>Offline transaction signing allows you to sign a transaction using your Ethereum private key from
+within web3j, allowing you to have complete control over your private key. A transaction created
+offline can then be sent to any Ethereum client on the network, which will propogate the
+transaction out to other nodes, provided it is a valid transaction.</p>
+<p>The downside of offline transaction signing is that you have to provide additional information in
+the transaction.</p>
+</div>
+<div class="section" id="generating-key-pairs">
+<h2>Generating key pairs<a class="headerlink" href="#generating-key-pairs" title="Permalink to this headline">¶</a></h2>
+<p>In order to sign transactions offline, you need to have the public and private keys associated with
+an Ethereum wallet/account.</p>
+<p>By default your Ethereum wallet is encrypted, however, you can head over to
+<a class="reference external" href="http://www.myetherwallet.com/">MyEtherWallet</a> to use client side JavaScript to decode your key,
+or generate a new account/set of keys if you don&#8217;t already have one.</p>
+<p>Alternatively you can create your own keypair using web3j, via
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/Keys.java">Keys</a>:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">ECKeyPair</span> <span class="n">ecKeyPair</span> <span class="o">=</span> <span class="n">Keys</span><span class="o">.</span><span class="na">createEcKeyPair</span><span class="o">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="signing-transactions">
+<h2>Signing transactions<a class="headerlink" href="#signing-transactions" title="Permalink to this headline">¶</a></h2>
+<p>Transactions to be used in an offline signing capacity, should use the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java">RawTransaction</a>
+type for this purpose. The RawTransaction is similar to the previously mentioned Transaction type,
+however it does not require a <em>from</em> address, as this can be inferred from the signature.</p>
+<p>In order to create and sign a raw transaction, the sequence of events is as follows:</p>
+<ol class="arabic simple">
+<li>Identify the next available <a class="reference internal" href="#nonce"><span>nonce</span></a> for the sender account</li>
+<li>Create the RawTransaction object</li>
+<li>Encode the RawTransaction object</li>
+<li>Sign the RawTransaction object</li>
+<li>Send the RawTransaction object to a node for processing</li>
+</ol>
+<p>The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
+can only be used once and until a transaction is mined, it is possible to send multiple versions of
+a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.</p>
+<p>Once you have obtained the next available <a class="reference internal" href="#nonce"><span>nonce</span></a>, the value can then be used to
+create your transaction object:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">RawTransaction</span> <span class="n">rawTransaction</span>  <span class="o">=</span> <span class="n">RawTransaction</span><span class="o">.</span><span class="na">createEtherTransaction</span><span class="o">(</span>
+             <span class="n">nonce</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">price</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">limit</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">toAddress</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;);</span>
+</pre></div>
+</div>
+<p>The transaction can then be signed and encoded:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kt">byte</span><span class="o">[]</span> <span class="n">signedMessage</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="o">.</span><span class="na">signMessage</span><span class="o">(</span><span class="n">rawTransaction</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">ECKeyPair</span><span class="o">&gt;);</span>
+<span class="n">String</span> <span class="n">hexValue</span> <span class="o">=</span> <span class="n">Hex</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">signedMessage</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>Where <a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/ECKeyPair.java">ECKeyPair</a> contains your Elliptic Curve SECP-256k1 private and public keys.</p>
+<p>The transaction is then sent using <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction">eth_sendRawTransaction</a>:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">EthSendTransaction</span> <span class="n">ethSendTransaction</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">ethSendRawTransaction</span><span class="o">(</span><span class="n">hexValue</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+<span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">ethSendTransaction</span><span class="o">.</span><span class="na">getTransactionHash</span><span class="o">();</span>
+<span class="c1">// poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(&lt;txHash&gt;)</span>
+</pre></div>
+</div>
+<p>Please refer to the integration test
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/CreateRawTransactionIT.java">CreateRawTransactionIT</a>
+for a full example of creating and sending a raw transaction.</p>
+</div>
+<div class="section" id="the-transaction-nonce">
+<span id="nonce"></span><h2>The transaction nonce<a class="headerlink" href="#the-transaction-nonce" title="Permalink to this headline">¶</a></h2>
+<p>The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
+can only be used once and until a transaction is mined, it is possible to send multiple versions of
+a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.</p>
+<p>You can obtain the next available nonce via the
+<a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount">eth_getTransactionCount</a> method:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">EthGetTransactionCount</span> <span class="n">ethGetTransactionCount</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">ethGetTransactionCount</span><span class="o">(</span>
+             <span class="n">address</span><span class="o">,</span> <span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">LATEST</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+
+     <span class="n">BigInteger</span> <span class="n">nonce</span> <span class="o">=</span> <span class="n">ethGetTransactionCount</span><span class="o">.</span><span class="na">getTransactionCount</span><span class="o">();</span>
+</pre></div>
+</div>
+<p>The nonce can then be used to create your transaction object:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">RawTransaction</span> <span class="n">rawTransaction</span>  <span class="o">=</span> <span class="n">RawTransaction</span><span class="o">.</span><span class="na">createEtherTransaction</span><span class="o">(</span>
+             <span class="n">nonce</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">price</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">limit</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">toAddress</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="transaction-types">
+<h2>Transaction types<a class="headerlink" href="#transaction-types" title="Permalink to this headline">¶</a></h2>
+<p>The different types of transaction in web3j work with both Transaction and RawTransaction objects.
+The key difference is that Transaction objects must always have a from address, so that the
+Ethereum client which processes the
+<a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction">eth_sendTransaction</a>
+request know which wallet to use in order to sign and send the transaction on the message senders
+behalf. As mentioned <a class="reference internal" href="#offline-signing"><span>above</span></a>, this is not necessary for raw transactions
+which are signed offline.</p>
+<p>The subsequent sections outline the key transaction attributes required for the different
+transaction types. The following attributes remain constant for all:</p>
+<ul class="simple">
+<li>Gas price</li>
+<li>Gas limit</li>
+<li>Nonce</li>
+<li>From</li>
+</ul>
+<p>Transaction and RawTransaction objects are used interchangeably in all of the subsequent examples.</p>
+</div>
+<div class="section" id="transfer-of-ether-from-one-party-to-another">
+<span id="transfer-of-ether"></span><h2>Transfer of Ether from one party to another<a class="headerlink" href="#transfer-of-ether-from-one-party-to-another" title="Permalink to this headline">¶</a></h2>
+<p>The sending of Ether between two parties requires a minimal number of details of the transaction
+object:</p>
+<dl class="docutils">
+<dt><em>to</em></dt>
+<dd>the destination wallet address</dd>
+<dt><em>value</em></dt>
+<dd>the amount of Ether you wish to send to the destination address</dd>
+</dl>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">BigInteger</span> <span class="n">value</span> <span class="o">=</span> <span class="n">Convert</span><span class="o">.</span><span class="na">toWei</span><span class="o">(</span><span class="s">&quot;1.0&quot;</span><span class="o">,</span> <span class="n">Convert</span><span class="o">.</span><span class="na">Unit</span><span class="o">.</span><span class="na">ETHER</span><span class="o">).</span><span class="na">toBigInteger</span><span class="o">();</span>
+<span class="n">RawTransaction</span> <span class="n">rawTransaction</span>  <span class="o">=</span> <span class="n">RawTransaction</span><span class="o">.</span><span class="na">createEtherTransaction</span><span class="o">(</span>
+             <span class="o">&lt;</span><span class="n">nonce</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">price</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">limit</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">toAddress</span><span class="o">&gt;,</span> <span class="n">value</span><span class="o">);</span>
+<span class="c1">// send...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creation-of-a-smart-contract">
+<span id="creation-of-smart-contract"></span><h2>Creation of a smart contract<a class="headerlink" href="#creation-of-a-smart-contract" title="Permalink to this headline">¶</a></h2>
+<p>To deploy a new smart contract, the following attributes will need to be provided</p>
+<dl class="docutils">
+<dt><em>value</em></dt>
+<dd>the amount of Ether you wish to deposit in the smart contract (assumes zero if not provided)</dd>
+<dt><em>data</em></dt>
+<dd>the hex formatted, compiled smart contract creation code</dd>
+</dl>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// using a raw transaction</span>
+<span class="n">RawTransaction</span> <span class="n">rawTransaction</span> <span class="o">=</span> <span class="n">RawTransaction</span><span class="o">.</span><span class="na">createContractTransaction</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">nonce</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">gasPrice</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">gasLimit</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;,</span>
+        <span class="s">&quot;0x &lt;compiled smart contract code&gt;&quot;</span><span class="o">);</span>
+<span class="c1">// send...</span>
+
+<span class="c1">// get contract address</span>
+<span class="n">EthGetTransactionReceipt</span><span class="o">.</span><span class="na">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">sendTransactionReceiptRequest</span><span class="o">(</span><span class="n">transactionHash</span><span class="o">);</span>
+
+<span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">contractAddressOptional</span> <span class="o">=</span> <span class="n">transactionReceipt</span><span class="o">.</span><span class="na">getContractAddress</span><span class="o">();</span>
+</pre></div>
+</div>
+<p>If the smart contract contains a constructor, the associated constructor field values must be
+encoded and appended to the <em>compiled smart contract code</em>:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">encodedConstructor</span> <span class="o">=</span>
+             <span class="n">FunctionEncoder</span><span class="o">.</span><span class="na">encodeConstructor</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Type</span><span class="o">(</span><span class="n">value</span><span class="o">),</span> <span class="o">...));</span>
+
+<span class="c1">// using a regular transaction</span>
+<span class="n">Transaction</span> <span class="n">transaction</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="na">createContractTransaction</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">fromAddress</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">nonce</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">gasPrice</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">gasLimit</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;,</span>
+        <span class="s">&quot;0x &lt;compiled smart contract code&gt;&quot;</span> <span class="o">+</span> <span class="n">encodedConstructor</span><span class="o">);</span>
+
+<span class="c1">// send...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="transacting-with-a-smart-contract">
+<span id="transacting-with-contract"></span><h2>Transacting with a smart contract<a class="headerlink" href="#transacting-with-a-smart-contract" title="Permalink to this headline">¶</a></h2>
+<p>To transact with an existing smart contract, the following attributes will need to be provided:</p>
+<dl class="docutils">
+<dt><em>to</em></dt>
+<dd>the smart contract address</dd>
+<dt><em>value</em></dt>
+<dd>the amount of Ether you wish to deposit in the smart contract (assumes zero if not provided)</dd>
+<dt><em>data</em></dt>
+<dd>the encoded function selector and parameter arguments</dd>
+</dl>
+<p>web3j takes care of the function encoding for you, further details are available in the
+<a class="reference external" href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#function-selector-and-argument-encoding">Ethereum Contract ABI</a>
+section of the Ethereum Wiki.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Function</span> <span class="n">function</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;&gt;(</span>
+             <span class="s">&quot;functionName&quot;</span><span class="o">,</span>  <span class="c1">// function we&#39;re calling</span>
+             <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Type</span><span class="o">(</span><span class="n">value</span><span class="o">),</span> <span class="o">...),</span>  <span class="c1">// Parameters to pass as Solidity Types</span>
+             <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">TypeReference</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;()</span> <span class="o">{},</span> <span class="o">...));</span>
+
+<span class="n">String</span> <span class="n">encodedFunction</span> <span class="o">=</span> <span class="n">FunctionEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">function</span><span class="o">)</span>
+<span class="n">Transaction</span> <span class="n">transaction</span> <span class="o">=</span> <span class="n">Transaction</span><span class="o">.</span><span class="na">createFunctionCallTransaction</span><span class="o">(</span>
+             <span class="o">&lt;</span><span class="n">from</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">gasPrice</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">gasLimit</span><span class="o">&gt;,</span> <span class="n">contractAddress</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">funds</span><span class="o">&gt;,</span> <span class="n">encodedFunction</span><span class="o">);</span>
+
+<span class="n">org</span><span class="o">.</span><span class="na">web3j</span><span class="o">.</span><span class="na">protocol</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">methods</span><span class="o">.</span><span class="na">response</span><span class="o">.</span><span class="na">EthSendTransaction</span> <span class="n">transactionResponse</span> <span class="o">=</span>
+             <span class="n">web3j</span><span class="o">.</span><span class="na">ethSendTransaction</span><span class="o">(</span><span class="n">transaction</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+
+<span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">transactionResponse</span><span class="o">.</span><span class="na">getTransactionHash</span><span class="o">();</span>
+
+<span class="c1">// wait for response using EthGetTransactionReceipt...</span>
+</pre></div>
+</div>
+<p>It is not possible to return values from transactional functional calls, regardless of the return
+type of the message signature. However, it is possible to capture values returned by functions
+using filters. Please refer to the <a class="reference internal" href="filters.html"><em>Filters</em></a> section for details.</p>
+</div>
+<div class="section" id="querying-the-state-of-a-smart-contract">
+<span id="querying-state"></span><h2>Querying the state of a smart contract<a class="headerlink" href="#querying-the-state-of-a-smart-contract" title="Permalink to this headline">¶</a></h2>
+<p>This functionality is facilitated by the <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call">eth_call</a>
+JSON-RPC call.</p>
+<p>eth_call allows you to call a method on a smart contract to query a value. There is no transaction
+cost associated with this function, this is because it does not change the state of any smart
+contract method&#8217;s called, it simply returns the value from them:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Function</span> <span class="n">function</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;&gt;(</span>
+             <span class="s">&quot;functionName&quot;</span><span class="o">,</span>
+             <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Type</span><span class="o">(</span><span class="n">value</span><span class="o">)),</span>  <span class="c1">// Solidity Types in smart contract functions</span>
+             <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">TypeReference</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;()</span> <span class="o">{},</span> <span class="o">...));</span>
+
+<span class="n">String</span> <span class="n">encodedFunction</span> <span class="o">=</span> <span class="n">FunctionEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">function</span><span class="o">)</span>
+<span class="n">org</span><span class="o">.</span><span class="na">web3j</span><span class="o">.</span><span class="na">protocol</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">methods</span><span class="o">.</span><span class="na">response</span><span class="o">.</span><span class="na">EthCall</span> <span class="n">response</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">ethCall</span><span class="o">(</span>
+             <span class="n">Transaction</span><span class="o">.</span><span class="na">createEthCallTransaction</span><span class="o">(</span><span class="n">contractAddress</span><span class="o">,</span> <span class="n">encodedFunction</span><span class="o">),</span>
+             <span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">LATEST</span><span class="o">)</span>
+             <span class="o">.</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;</span> <span class="n">someTypes</span> <span class="o">=</span> <span class="n">FunctionReturnDecoder</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span>
+             <span class="n">response</span><span class="o">.</span><span class="na">getValue</span><span class="o">(),</span> <span class="n">function</span><span class="o">.</span><span class="na">getOutputParameters</span><span class="o">());</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> If an invalid function call is made, or a null result is obtained, the return value will
+be an instance of <a class="reference external" href="https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList--">Collections.emptyList()</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/web3j.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">web3j</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Lightweight Java library for integration with Ethereum clients</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=web3j&repo=web3j&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/web3j/web3j">
+    <img
+        alt="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
+        src="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
+    />
+</a>
+</p>
+
+
+
+
+    
+
+<p>
+<a href="https://codecov.io/github/web3j/web3j">
+    <img
+    alt="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
+    src="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
+    />
+</a>
+</p>
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Transactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#obtaining-ether">Obtaining Ether</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mining-on-testnet-private-blockchains">Mining on testnet/private blockchains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gas">Gas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transaction-mechanisms">Transaction mechanisms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transaction-signing-via-an-ethereum-client">Transaction signing via an Ethereum client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#offline-transaction-signing">Offline transaction signing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-key-pairs">Generating key pairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#signing-transactions">Signing transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-transaction-nonce">The transaction nonce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transaction-types">Transaction types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transfer-of-ether-from-one-party-to-another">Transfer of Ether from one party to another</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creation-of-a-smart-contract">Creation of a smart contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transacting-with-a-smart-contract">Transacting with a smart contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-the-state-of-a-smart-contract">Querying the state of a smart contract</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Links and Useful Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Thanks and Credits</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="getting_started.html" title="previous chapter">Getting Started</a></li>
+      <li>Next: <a href="smart_contracts.html" title="next chapter">Smart Contracts</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Conor Svensson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/transactions.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/web3j/web3j" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-85710619-1']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    
+  </body>
+</html>
