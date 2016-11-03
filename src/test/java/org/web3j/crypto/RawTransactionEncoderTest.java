@@ -25,8 +25,8 @@ public class RawTransactionEncoderTest {
         assertThat(hexMessage,
                 is("0xf85580010a840add5355887fffffffffffffff80" +
                         "1c" +
-                        "a0b782531e6ed4ae8f066f1ed9ec468c775a1a7b6f4f52d257eb89f16d133e4952" +
-                        "a048a0c1403a88c087a1b9dd73143eb4de5c565b17a8151e1d06118495ec75eab9"));
+                        "a046360b50498ddf5566551ce1ce69c46c565f1f478bb0ee680caf31fbc08ab727" +
+                        "a01b2f1432de16d110407d544f519fc91b84c8e16d3b6ec899592d486a94974cd0"));
     }
 
     @Test

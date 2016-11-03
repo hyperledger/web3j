@@ -1,0 +1,96 @@
+package org.web3j.crypto;
+
+
+import java.io.File;
+import java.nio.file.Files;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.web3j.crypto.SampleKeys.*;
+
+
+public class WalletUtilsTest {
+
+    private File tempDir;
+
+    @Before
+    public void setUp() throws Exception {
+        tempDir = createTempDir();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        for (File file:tempDir.listFiles()) {
+            file.delete();
+        }
+        tempDir.delete();
+    }
+
+    @Test
+    public void testGenerateNewWalletFile() throws Exception {
+        File tempDir = createTempDir();
+        String fileName = WalletUtils.generateNewWalletFile(PASSWORD, tempDir);
+
+        WalletUtils.loadCredentials(PASSWORD, new File(tempDir, fileName));
+    }
+
+    @Test
+    public void testGenerateWalletFile() throws Exception {
+        File tempDir = Files.createTempDirectory("testkeys").toFile();
+        String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir);
+
+        Credentials credentials = WalletUtils.loadCredentials(
+                PASSWORD, new File(tempDir, fileName));
+
+        assertThat(credentials, equalTo(CREDENTIALS));
+    }
+
+    @Test
+    public void testLoadCredentials() throws Exception {
+        Credentials credentials = WalletUtils.loadCredentials(
+                PASSWORD,
+                new File(WalletUtilsTest.class.getResource("/keyfiles/" +
+                        "UTC--2016-11-03T05-55-06." +
+                        "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile()));
+
+        assertThat(credentials, equalTo(CREDENTIALS));
+    }
+
+    @Ignore  // enable if users need to work with MyEtherWallet
+    @Test
+    public void testLoadCredentialsMyEtherWallet() throws Exception {
+        Credentials credentials = WalletUtils.loadCredentials(
+                PASSWORD,
+                new File(WalletUtilsTest.class.getResource("/keyfiles/" +
+                        "UTC--2016-11-03T07-47-45." +
+                        "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818").getFile()));
+
+        assertThat(credentials, equalTo(
+                Credentials.create(
+                        "6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9")));
+    }
+
+    @Test
+    public void testGetDefaultKeyDirectory() {
+        assertTrue(WalletUtils.getDefaultKeyDirectory("Mac OS X").endsWith("/Library/Ethereum"));
+        assertTrue(WalletUtils.getDefaultKeyDirectory("Windows").endsWith("/Ethereum"));
+        assertTrue(WalletUtils.getDefaultKeyDirectory("Linux").endsWith("/.ethereum"));
+    }
+
+    @Test
+    public void testGetTestnetKeyDirectory() {
+        assertTrue(WalletUtils.getMainnetKeyDirectory().endsWith("/keystore"));
+        assertTrue(WalletUtils.getTestnetKeyDirectory().endsWith("/testnet/keystore"));
+    }
+
+    private static File createTempDir() throws Exception {
+        return Files.createTempDirectory(
+                WalletUtilsTest.class.getSimpleName() + "-testkeys").toFile();
+    }
+}

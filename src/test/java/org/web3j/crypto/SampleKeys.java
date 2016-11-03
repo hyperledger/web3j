@@ -9,17 +9,20 @@ import org.web3j.utils.Numeric;
  */
 public class SampleKeys {
 
-    static final String PRIVATE_KEY_STRING =
-            "a2d27ba84871112bb2ab87d849b8bce790667762fd7f30981ea775880c691e45";
+    static final String PRIVATE_KEY_STRING = "a392604efc2fad9c0b3da43b5f698a2e3f270f170d859912be0d54742275c5f6";
     static final String PUBLIC_KEY_STRING =
-            "0x54c8cda130d3bfda86bd698cee738e5e502abc1fcb9e45709ee1fe38e855cda" +
-            "334ca6f9288ab6d867f6baa2b2afeced0478e6a7225a5b1bb263ab21611817507";
-    static final String ADDRESS = "9c98e381edc5fe1ac514935f3cc3edaa764cf004";
+            "0x506bc1dc099358e5137292f4efdd57e400f29ba5132aa5d12b18dac1c1f6aab" +
+            "a645c0b7b58158babbfa6c6cd5a48aa7340a8749176b120e8516216787a13dc76";
+    static final String ADDRESS = "ef678007d18427e6022059dbc264f27507cd1ffc";
+
+    static final String PASSWORD = "Insecure Pa55w0rd";
 
     static final BigInteger PRIVATE_KEY = Numeric.toBigInt(PRIVATE_KEY_STRING);
     static final BigInteger PUBLIC_KEY = Numeric.toBigInt(PUBLIC_KEY_STRING);
 
     static final ECKeyPair KEY_PAIR = new ECKeyPair(PRIVATE_KEY, PUBLIC_KEY);
+
+    static final Credentials CREDENTIALS = Credentials.create(KEY_PAIR);
 
     private SampleKeys() {}
 }

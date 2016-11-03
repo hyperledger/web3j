@@ -30,4 +30,12 @@ public class SolidityFunctionWrapperGeneratorTest {
         assertThat(SolidityFunctionWrapperGenerator.buildTypeName("uint256[10]"),
                 is(ParameterizedTypeName.get(StaticArray.class, Uint256.class)));
     }
+
+    @Test
+    public void testGetFileNoExtension() {
+        assertThat(SolidityFunctionWrapperGenerator.getFileNameNoExtension(""), is(""));
+        assertThat(SolidityFunctionWrapperGenerator.getFileNameNoExtension("file"), is("file"));
+        assertThat(SolidityFunctionWrapperGenerator.getFileNameNoExtension("file."), is("file"));
+        assertThat(SolidityFunctionWrapperGenerator.getFileNameNoExtension("file.txt"), is("file"));
+    }
 }

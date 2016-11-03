@@ -21,11 +21,11 @@ public class SignTest {
         Sign.SignatureData signatureData = Sign.signMessage(TEST_MESSAGE, SampleKeys.KEY_PAIR);
 
         Sign.SignatureData expected = new Sign.SignatureData(
-                (byte) 28,
+                (byte) 27,
                 Numeric.hexStringToByteArray(
-                        "0xde7a0b9fa2b476d6fa0e6c67f291473ea9dc09a5abaf8d163742bac01c637d16"),
+                        "0x9631f6d21dec448a213585a4a41a28ef3d4337548aa34734478b563036163786"),
                 Numeric.hexStringToByteArray(
-                        "0x744797b826dfd4a6f5549a4f8f693fda3a1c10421220471119574dd2f31441f")
+                        "0x2ff816ee6bbb82719e983ecd8a33a4b45d32a4b58377ef1381163d75eedc900b")
         );
 
         assertThat(signatureData, is(expected));

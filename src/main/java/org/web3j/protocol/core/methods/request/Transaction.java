@@ -27,8 +27,8 @@ public class Transaction {
     private String data;
     private BigInteger nonce;  // nonce field is not present on eth_call/eth_estimateGas
 
-    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-                        BigInteger value, String data) {
+    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
+                       String to, BigInteger value, String data) {
         this.from = from;
         this.to = to;
         this.gas = gasLimit;

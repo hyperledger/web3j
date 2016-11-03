@@ -3,7 +3,6 @@ package org.web3j.protocol.parity;
 import java.math.BigInteger;
 import java.util.*;
 
-import org.web3j.abi.datatypes.Array;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.Web3jService;
@@ -11,7 +10,6 @@ import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.parity.methods.request.Wallet;
 import org.web3j.protocol.parity.methods.response.*;
-import org.web3j.utils.Numeric;
 
 /**
  * JSON-RPC 2.0 factory implementation for Parity.

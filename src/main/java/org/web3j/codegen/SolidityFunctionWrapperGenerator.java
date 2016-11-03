@@ -164,8 +164,8 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         return Arrays.asList(abiDefinition);
     }
 
-    private static String getFileNameNoExtension(String fileName) {
-        String[] splitName = fileName.split("\\.(?=[^\\.]+$)");
+    static String getFileNameNoExtension(String fileName) {
+        String[] splitName = fileName.split("\\.(?=[^\\.]*$)");
         return splitName[0];
     }
 

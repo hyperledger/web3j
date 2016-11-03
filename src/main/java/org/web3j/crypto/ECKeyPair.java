@@ -7,6 +7,8 @@ import java.util.Arrays;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
+import org.web3j.utils.Numeric;
+
 /**
  * Elliptic Curve SECP-256k1 generated key pair.
  */
@@ -46,6 +48,10 @@ public class ECKeyPair {
 
     public static ECKeyPair create(BigInteger privateKey) {
         return new ECKeyPair(privateKey, Sign.publicKeyFromPrivate(privateKey));
+    }
+
+    public static ECKeyPair create(byte[] privateKey) {
+        return create(Numeric.toBigInt(privateKey));
     }
 
     @Override

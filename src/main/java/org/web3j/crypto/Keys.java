@@ -13,7 +13,7 @@ import org.web3j.utils.Numeric;
  */
 public class Keys {
 
-    private static final int PRIVATE_KEY_SIZE = 32;
+    static final int PRIVATE_KEY_SIZE = 32;
     private static final int PUBLIC_KEY_SIZE = 64;
 
     static {
