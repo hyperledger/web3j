@@ -52,14 +52,14 @@
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>0.7.0<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="gradle">
 <h2>Gradle<a class="headerlink" href="#gradle" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:0.7.0&#39;</span><span class="o">)</span>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:1.0.0&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
@@ -89,7 +89,35 @@
 <span class="n">String</span> <span class="n">clientVersion</span> <span class="o">=</span> <span class="n">web3ClientVersion</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">();</span>
 </pre></div>
 </div>
-<p>To use client admin commands:</p>
+</div>
+<div class="section" id="sending-transactions">
+<h2>Sending transactions<a class="headerlink" href="#sending-transactions" title="Permalink to this headline">¶</a></h2>
+<p>web3j provides support for both working with Ethereum wallet files and Ethereum client admin
+commands for sending transactions.</p>
+<p>Using an Ethereum wallet file:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span><span class="s">&quot;password&quot;</span><span class="o">,</span> <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
+
+<span class="c1">// get the next available nonce</span>
+<span class="n">EthGetTransactionCount</span> <span class="n">ethGetTransactionCount</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">ethGetTransactionCount</span><span class="o">(</span>
+             <span class="n">address</span><span class="o">,</span> <span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">LATEST</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+<span class="n">BigInteger</span> <span class="n">nonce</span> <span class="o">=</span> <span class="n">ethGetTransactionCount</span><span class="o">.</span><span class="na">getTransactionCount</span><span class="o">();</span>
+
+<span class="c1">// create our transaction</span>
+<span class="n">RawTransaction</span> <span class="n">rawTransaction</span>  <span class="o">=</span> <span class="n">RawTransaction</span><span class="o">.</span><span class="na">createEtherTransaction</span><span class="o">(</span>
+             <span class="n">nonce</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">price</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">gas</span> <span class="n">limit</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">toAddress</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;);</span>
+
+<span class="c1">// sign &amp; sendn our transaction</span>
+<span class="kt">byte</span><span class="o">[]</span> <span class="n">signedMessage</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="o">.</span><span class="na">signMessage</span><span class="o">(</span><span class="n">rawTransaction</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">hexValue</span> <span class="o">=</span> <span class="n">Hex</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">signedMessage</span><span class="o">);</span>
+<span class="n">EthSendTransaction</span> <span class="n">ethSendTransaction</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">ethSendRawTransaction</span><span class="o">(</span><span class="n">hexValue</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+<span class="c1">// ...</span>
+</pre></div>
+</div>
+<p>Although it&#8217;s far simpler using web3j&#8217;s
+<a class="reference internal" href="#smart-contract-wrappers-summary"><span>smart contract wrappers</span></a>.</p>
+<p>Using an Ethereum client&#8217;s admin commands (make sure you have your wallet in the client&#8217;s
+keystore):</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Parity</span> <span class="n">parity</span> <span class="o">=</span> <span class="n">Parity</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">PersonalUnlockAccount</span> <span class="n">personalUnlockAccount</span> <span class="o">=</span> <span class="n">parity</span><span class="o">.</span><span class="na">personalUnlockAccount</span><span class="o">(</span><span class="s">&quot;0x000...&quot;</span><span class="o">,</span> <span class="s">&quot;a password&quot;</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
 <span class="k">if</span> <span class="o">(</span><span class="n">personalUnlockAccount</span><span class="o">.</span><span class="na">accountUnlocked</span><span class="o">())</span> <span class="o">{</span>
@@ -97,6 +125,44 @@
 <span class="o">}</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="working-with-smart-contracts-with-java-smart-contract-wrappers">
+<span id="smart-contract-wrappers-summary"></span><h2>Working with smart contracts with Java smart contract wrappers<a class="headerlink" href="#working-with-smart-contracts-with-java-smart-contract-wrappers" title="Permalink to this headline">¶</a></h2>
+<p>web3j can auto-generate smart contract wrapper code to deploy and interact with smart contracts
+without leaving Java.</p>
+<p>To generate the wrapper code, compile your smart contract:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>solc &lt;contract&gt;.sol --bin --abi --optimize -o &lt;output-dir&gt;/
+</pre></div>
+</div>
+<p>Then generate the wrapper code:</p>
+<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+</pre></div>
+</div>
+<p>Then you can then create and deploy a smart contract:::</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span><span class="s">&quot;password&quot;</span><span class="o">,</span> <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
+
+<span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">initialEtherValue</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...,</span> <span class="o">&lt;</span><span class="n">paramN</span><span class="o">&gt;).</span><span class="na">get</span><span class="o">();</span>  <span class="c1">// constructor params</span>
+</pre></div>
+</div>
+<p>Or use an existing:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
+        <span class="s">&quot;0x&lt;address&gt;&quot;</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;);</span>
+</pre></div>
+</div>
+<p>To transact with a smart contract:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span>
+             <span class="k">new</span> <span class="n">Type</span><span class="o">(...),</span>
+             <span class="o">...).</span><span class="na">get</span><span class="o">();</span>
+</pre></div>
+</div>
+<p>To call a smart contract:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Type</span> <span class="n">result</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span><span class="k">new</span> <span class="n">Type</span><span class="o">(...),</span> <span class="o">...).</span><span class="na">get</span><span class="o">();</span>
+</pre></div>
+</div>
+<p>For more information refer to <a class="reference internal" href="smart_contracts.html#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a>.</p>
 </div>
 <div class="section" id="further-details">
 <h2>Further details<a class="headerlink" href="#further-details" title="Permalink to this headline">¶</a></h2>
@@ -175,6 +241,8 @@ For simple results, you can obtain the quantity as a String via
 <li class="toctree-l2"><a class="reference internal" href="#gradle">Gradle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#start-a-client">Start a client</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#start-sending-requests">Start sending requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sending-transactions">Sending transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-smart-contracts-with-java-smart-contract-wrappers">Working with smart contracts with Java smart contract wrappers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#further-details">Further details</a></li>
 </ul>
 </li>

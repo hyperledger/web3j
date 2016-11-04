@@ -45,30 +45,38 @@
             
   <div class="section" id="web3j">
 <h1>web3j<a class="headerlink" href="#web3j" title="Permalink to this headline">¶</a></h1>
-<p>web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the Ethereum network:</p>
+<p>web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the
+Ethereum network:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="o">[</span> JVM application <span class="o">]</span> + <span class="o">[</span> web3j <span class="o">]</span> &lt;---&gt; <span class="o">[</span> Ethereum node <span class="o">]</span>
 </pre></div>
 </div>
-<p>This allows you to work with the <a class="reference external" href="https://www.ethereum.org/">Ethereum</a> blockchain, without the additional overhead of having to write your own integration code for the platform.</p>
+<p>This allows you to work with the <a class="reference external" href="https://www.ethereum.org/">Ethereum</a> blockchain, without the
+additional overhead of having to write your own integration code for the platform.</p>
 </div>
 <div class="section" id="features">
 <h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Full support for the Ethereum <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC">JSON-RPC</a> specification</li>
-<li>Offline transaciton signing</li>
-<li>Generation of Java smart contract wrappers to interact with a smart contract via native Java code.</li>
-<li>Support for Parity&#8217;s <a class="reference external" href="https://github.com/ethcore/parity/wiki/JSONRPC-personal-module">Personal</a>, and Geth&#8217;s <a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal">Personal</a> APIs</li>
+<li>Complete implementation of Ethereum&#8217;s <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC">JSON-RPC</a>
+client API</li>
+<li>Ethereum wallet support</li>
+<li>Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
+contracts from native Java code</li>
+<li>Support for Parity&#8217;s
+<a class="reference external" href="https://github.com/ethcore/parity/wiki/JSONRPC-personal-module">Personal</a>, and Geth&#8217;s
+<a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal">Personal</a> client APIs</li>
 <li>Support for <a class="reference external" href="https://infura.io/">Infura</a>, so you don&#8217;t have to run an Ethereum client yourself</li>
 <li>Comprehensive integration tests demonstrating a number of the above scenarios</li>
 </ul>
 </div>
 <div class="section" id="dependencies">
 <h1>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h1>
-<p>It only has four runtime dependencies:</p>
+<p>It only has five runtime dependencies:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://hc.apache.org/httpcomponents-client-ga/index.html">Apache HTTP Client</a></li>
-<li><a class="reference external" href="https://github.com/FasterXML/jackson-core">Jackson Core</a> for fast JSON serialisation/deserialisation</li>
-<li><a class="reference external" href="https://www.bouncycastle.org/">Bouncy Castle</a> for crypto</li>
+<li><a class="reference external" href="https://github.com/FasterXML/jackson-core">Jackson Core</a> for fast JSON
+serialisation/deserialisation</li>
+<li><a class="reference external" href="https://www.bouncycastle.org/">Bouncy Castle</a> and
+<a class="reference external" href="https://github.com/wg/scrypt">Java Scrypt</a> for crypto</li>
 <li><a class="reference external" href="https://github.com/square/javapoet">JavaPoet</a> for generating smart contract wrappers</li>
 </ul>
 </div>
@@ -81,6 +89,8 @@
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#gradle">Gradle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#start-a-client">Start a client</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#start-sending-requests">Start sending requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#sending-transactions">Sending transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#working-with-smart-contracts-with-java-smart-contract-wrappers">Working with smart contracts with Java smart contract wrappers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#further-details">Further details</a></li>
 </ul>
 </li>
@@ -91,7 +101,7 @@
 <li class="toctree-l2"><a class="reference internal" href="transactions.html#transaction-mechanisms">Transaction mechanisms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transactions.html#transaction-signing-via-an-ethereum-client">Transaction signing via an Ethereum client</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transactions.html#offline-transaction-signing">Offline transaction signing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transactions.html#generating-key-pairs">Generating key pairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transactions.html#creating-and-working-with-wallet-files">Creating and working with wallet files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transactions.html#signing-transactions">Signing transactions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transactions.html#the-transaction-nonce">The transaction nonce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transactions.html#transaction-types">Transaction types</a></li>

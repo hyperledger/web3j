@@ -69,4 +69,4 @@ In order to transact with Infura nodes, you will need to create and sign transac
 before sending them, as Infura nodes have no visibility of your encrypted Ethereum key files, which
 are required to unlock accounts via the Personal Geth/Parity admin commands.
 
-Refer to the :doc:`signing_transactions` and :doc:`management_apis` sections for further details.
+Refer to the :ref:`offline-signing` and :doc:`management_apis` sections for further details.

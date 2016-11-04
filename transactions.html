@@ -184,25 +184,33 @@ the section <a class="reference internal" href="management_apis.html"><em>Manage
 <span id="offline-signing"></span><h2>Offline transaction signing<a class="headerlink" href="#offline-transaction-signing" title="Permalink to this headline">¶</a></h2>
 <p>If you&#8217;d prefer not to manage your own Ethereum client, or do not want to provide wallet details
 such as your password to an Ethereum client, then offline transaction signing is the way to go.</p>
-<p>Offline transaction signing allows you to sign a transaction using your Ethereum private key from
-within web3j, allowing you to have complete control over your private key. A transaction created
-offline can then be sent to any Ethereum client on the network, which will propogate the
+<p>Offline transaction signing allows you to sign a transaction using your Ethereum Ethereum wallet
+within web3j, allowing you to have complete control over your private credentials. A transaction
+created offline can then be sent to any Ethereum client on the network, which will propagate the
 transaction out to other nodes, provided it is a valid transaction.</p>
-<p>The downside of offline transaction signing is that you have to provide additional information in
-the transaction.</p>
 </div>
-<div class="section" id="generating-key-pairs">
-<h2>Generating key pairs<a class="headerlink" href="#generating-key-pairs" title="Permalink to this headline">¶</a></h2>
-<p>In order to sign transactions offline, you need to have the public and private keys associated with
-an Ethereum wallet/account.</p>
-<p>By default your Ethereum wallet is encrypted, however, you can head over to
-<a class="reference external" href="http://www.myetherwallet.com/">MyEtherWallet</a> to use client side JavaScript to decode your key,
-or generate a new account/set of keys if you don&#8217;t already have one.</p>
-<p>Alternatively you can create your own keypair using web3j, via
-<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/Keys.java">Keys</a>:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">ECKeyPair</span> <span class="n">ecKeyPair</span> <span class="o">=</span> <span class="n">Keys</span><span class="o">.</span><span class="na">createEcKeyPair</span><span class="o">();</span>
+<div class="section" id="creating-and-working-with-wallet-files">
+<span id="wallet-files"></span><h2>Creating and working with wallet files<a class="headerlink" href="#creating-and-working-with-wallet-files" title="Permalink to this headline">¶</a></h2>
+<p>In order to sign transactions offline, you need to have either your Ethereum wallet file or the
+public and private keys associated with an Ethereum wallet/account.</p>
+<p>web3j is able to both generate a new secure Ethereum wallet file for you, or work with an existing
+wallet file.</p>
+<p>To create a new wallet file:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">generateNewWalletFile</span><span class="o">(</span>
+        <span class="s">&quot;your password&quot;</span><span class="o">,</span>
+        <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">&quot;/path/to/destination&quot;</span><span class="o">));</span>
 </pre></div>
 </div>
+<p>To load the credentials from a wallet file:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span>
+        <span class="s">&quot;your password&quot;</span><span class="o">,</span>
+        <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>These credentials are then used to sign transactions.</p>
+<p>Please refer to the
+<a class="reference external" href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition">Web3 Secret Storage Definition</a>
+for the full wallet file specification.</p>
 </div>
 <div class="section" id="signing-transactions">
 <h2>Signing transactions<a class="headerlink" href="#signing-transactions" title="Permalink to this headline">¶</a></h2>
@@ -228,11 +236,11 @@ create your transaction object:</p>
 </pre></div>
 </div>
 <p>The transaction can then be signed and encoded:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="kt">byte</span><span class="o">[]</span> <span class="n">signedMessage</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="o">.</span><span class="na">signMessage</span><span class="o">(</span><span class="n">rawTransaction</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">ECKeyPair</span><span class="o">&gt;);</span>
+<div class="highlight-java"><div class="highlight"><pre><span class="kt">byte</span><span class="o">[]</span> <span class="n">signedMessage</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="o">.</span><span class="na">signMessage</span><span class="o">(</span><span class="n">rawTransaction</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;);</span>
 <span class="n">String</span> <span class="n">hexValue</span> <span class="o">=</span> <span class="n">Hex</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">signedMessage</span><span class="o">);</span>
 </pre></div>
 </div>
-<p>Where <a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/ECKeyPair.java">ECKeyPair</a> contains your Elliptic Curve SECP-256k1 private and public keys.</p>
+<p>Where the credentials are those loaded as per <a class="reference internal" href="#wallet-files"><span>Creating and working with wallet files</span></a>.</p>
 <p>The transaction is then sent using <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction">eth_sendRawTransaction</a>:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">EthSendTransaction</span> <span class="n">ethSendTransaction</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">ethSendRawTransaction</span><span class="o">(</span><span class="n">hexValue</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
 <span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">ethSendTransaction</span><span class="o">.</span><span class="na">getTransactionHash</span><span class="o">();</span>
@@ -467,7 +475,7 @@ be an instance of <a class="reference external" href="https://docs.oracle.com/ja
 <li class="toctree-l2"><a class="reference internal" href="#transaction-mechanisms">Transaction mechanisms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transaction-signing-via-an-ethereum-client">Transaction signing via an Ethereum client</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#offline-transaction-signing">Offline transaction signing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-key-pairs">Generating key pairs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-and-working-with-wallet-files">Creating and working with wallet files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#signing-transactions">Signing transactions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-transaction-nonce">The transaction nonce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transaction-types">Transaction types</a></li>

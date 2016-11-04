@@ -55,7 +55,7 @@
 <dt>LISP Like Language (LLL)</dt>
 <dd>A low level language, Serpent provides a superset of LLL. There&#8217;s not a great deal of information
 for working with LLL, the following blog <a class="reference external" href="http://blog.syrinx.net/">/var/log/syrinx</a> and
-associated <a class="reference external" href="https://github.com/zigguratt/lll-resurrected">Github</a> is a good place to start.</dd>
+associated <a class="reference external" href="https://github.com/zigguratt/lll-resurrected">GitHub</a> is a good place to start.</dd>
 </dl>
 <p>In order to deploy a smart contract onto the Ethereum blockchain, it must first be compiled into
 a bytecode format, then it can be sent as part of a transaction request as detailed in
@@ -138,8 +138,8 @@ functions that a smart contract providing tokens can implement.</p>
 <p>The EIP-20 proposal provides function definitions, but does not provide an implementation example.
 However, there is an implementation provided in
 <a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/test/resources/solidity/contracts">src/test/resources/solidity/contracts</a>,
-which has been taken from Consensys&#8217; implementation on
-<a class="reference external" href="https://github.com/ConsenSys/Tokens">GitHub</a>.</p>
+which has been taken from Consensys&#8217;
+<a class="reference external" href="https://github.com/ConsenSys/Tokens">Tokens project</a>.</p>
 <p>There are two integration tests that have been written to fully demonstrate the functionality of
 this token smart contract.</p>
 <p><a class="reference external" href="https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios/HumanStandardTokenGeneratedIT.java">HumanStandardTokenGeneratedIT</a>
@@ -153,7 +153,7 @@ with the JSON-RPC calls, please refer to
 <div class="section" id="solidity-smart-contract-wrappers">
 <span id="smart-contract-wrappers"></span><h2>Solidity smart contract wrappers<a class="headerlink" href="#solidity-smart-contract-wrappers" title="Permalink to this headline">¶</a></h2>
 <p>web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI files.</p>
-<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/dir/java -p com.your.organisation.name
+<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
 <p>Where the <em>bin</em> and <em>abi</em> are obtained as per <a class="reference internal" href="#compiling-solidity"><span>Compiling Solidity source code</span></a>.</p>
@@ -167,11 +167,11 @@ with the JSON-RPC calls, please refer to
 avoid blocking.</p>
 </div>
 <div class="section" id="construction-and-deployment">
-<span id="id2"></span><h2>Construction and deployment<a class="headerlink" href="#construction-and-deployment" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Construction and deployment<a class="headerlink" href="#construction-and-deployment" title="Permalink to this headline">¶</a></h2>
 <p>Construction and deployment of smart contracts happens with the <em>deploy</em> method:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
         <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">initialValue</span><span class="o">&gt;,</span>
-        <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...,</span> <span class="o">&lt;</span><span class="n">paramN</span><span class="o">&gt;)</span> <span class="o">{</span>
+        <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...,</span> <span class="o">&lt;</span><span class="n">paramN</span><span class="o">&gt;);</span>
 </pre></div>
 </div>
 <p>This will create a new instance of the smart contract on the Ethereum blockchain using the

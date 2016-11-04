@@ -175,28 +175,40 @@ Offline transaction signing
 If you'd prefer not to manage your own Ethereum client, or do not want to provide wallet details
 such as your password to an Ethereum client, then offline transaction signing is the way to go.
 
-Offline transaction signing allows you to sign a transaction using your Ethereum private key from
-within web3j, allowing you to have complete control over your private key. A transaction created
-offline can then be sent to any Ethereum client on the network, which will propogate the
+Offline transaction signing allows you to sign a transaction using your Ethereum Ethereum wallet
+within web3j, allowing you to have complete control over your private credentials. A transaction
+created offline can then be sent to any Ethereum client on the network, which will propagate the
 transaction out to other nodes, provided it is a valid transaction.
 
-The downside of offline transaction signing is that you have to provide additional information in
-the transaction.
 
-Generating key pairs
---------------------
+.. _wallet-files:
 
-In order to sign transactions offline, you need to have the public and private keys associated with
-an Ethereum wallet/account.
+Creating and working with wallet files
+--------------------------------------
 
-By default your Ethereum wallet is encrypted, however, you can head over to
-`MyEtherWallet <http://www.myetherwallet.com/>`_ to use client side JavaScript to decode your key,
-or generate a new account/set of keys if you don't already have one.
+In order to sign transactions offline, you need to have either your Ethereum wallet file or the
+public and private keys associated with an Ethereum wallet/account.
 
-Alternatively you can create your own keypair using web3j, via
-`Keys <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/Keys.java>`_::
+web3j is able to both generate a new secure Ethereum wallet file for you, or work with an existing
+wallet file.
 
-   ECKeyPair ecKeyPair = Keys.createEcKeyPair();
+To create a new wallet file::
+
+   String fileName = WalletUtils.generateNewWalletFile(
+           "your password",
+           new File("/path/to/destination"));
+
+To load the credentials from a wallet file::
+
+   Credentials credentials = WalletUtils.loadCredentials(
+           "your password",
+           "/path/to/walletfile");
+
+These credentials are then used to sign transactions.
+
+Please refer to the
+`Web3 Secret Storage Definition <https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition>`_
+for the full wallet file specification.
 
 
 Signing transactions
@@ -227,10 +239,10 @@ create your transaction object::
 
 The transaction can then be signed and encoded::
 
-   byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <ECKeyPair>);
+   byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <credentials>);
    String hexValue = Hex.toHexString(signedMessage);
 
-Where `ECKeyPair <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/crypto/ECKeyPair.java>`_ contains your Elliptic Curve SECP-256k1 private and public keys.
+Where the credentials are those loaded as per :ref:`wallet-files`.
 
 The transaction is then sent using `eth_sendRawTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction>`_::
 
