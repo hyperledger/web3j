@@ -27,7 +27,7 @@ public class FunctionWrappersIT extends Scenario {
 
     @Test
     public void testFibonacci() throws Exception {
-        Fibonacci fibonacci = new Fibonacci(
+        Fibonacci fibonacci = Fibonacci.load(
                 "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()), ALICE);
 
         Uint256 result = fibonacci.fibonacci(new Uint256(BigInteger.valueOf(10))).get();
@@ -36,7 +36,7 @@ public class FunctionWrappersIT extends Scenario {
 
     @Test
     public void testFibonacciNotify() throws Exception {
-        Fibonacci fibonacci = new Fibonacci(
+        Fibonacci fibonacci = Fibonacci.load(
                 "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()), ALICE);
 
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(

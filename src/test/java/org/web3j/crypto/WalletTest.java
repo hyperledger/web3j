@@ -18,7 +18,7 @@ public class WalletTest {
     @Test
     public void testCreate() throws Exception {
         WalletFile walletFile = Wallet.create(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR);
-        assertThat(walletFile.getAddress(), is(SampleKeys.ADDRESS));
+        assertThat(walletFile.getAddress(), is(SampleKeys.ADDRESS_NO_PREFIX));
     }
 
     @Test

@@ -24,7 +24,7 @@ public class Credentials {
     }
 
     public static Credentials create(ECKeyPair ecKeyPair) {
-        String address = Keys.getAddress(ecKeyPair);
+        String address = Numeric.prependHexPrefix(Keys.getAddress(ecKeyPair));
         return new Credentials(ecKeyPair, address);
     }
 

@@ -82,11 +82,11 @@ public class NumericTest {
     }
 
     @Test
-    public void testAppendHexPrefix() {
-        assertThat(Numeric.appendHexPrefix(""), is("0x"));
-        assertThat(Numeric.appendHexPrefix("0x0123456789abcdef"), is("0x0123456789abcdef"));
-        assertThat(Numeric.appendHexPrefix("0x"), is("0x"));
-        assertThat(Numeric.appendHexPrefix("0123456789abcdef"), is("0x0123456789abcdef"));
+    public void testPrependHexPrefix() {
+        assertThat(Numeric.prependHexPrefix(""), is("0x"));
+        assertThat(Numeric.prependHexPrefix("0x0123456789abcdef"), is("0x0123456789abcdef"));
+        assertThat(Numeric.prependHexPrefix("0x"), is("0x"));
+        assertThat(Numeric.prependHexPrefix("0123456789abcdef"), is("0x0123456789abcdef"));
     }
 
     @Test

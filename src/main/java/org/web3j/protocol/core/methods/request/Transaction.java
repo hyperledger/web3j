@@ -36,7 +36,7 @@ public class Transaction {
         this.value = value;
 
         if (data != null) {
-            this.data = Numeric.appendHexPrefix(data);
+            this.data = Numeric.prependHexPrefix(data);
         }
 
         this.nonce = nonce;

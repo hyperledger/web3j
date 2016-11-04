@@ -84,7 +84,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         // Bob requires his own contract instance
         HumanStandardToken bobsContract =
-                new HumanStandardToken(contract.getContractAddress(), parity, BOB);
+                HumanStandardToken.load(contract.getContractAddress(), parity, BOB);
 
         TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
                 new Address(ALICE.getAddress()),

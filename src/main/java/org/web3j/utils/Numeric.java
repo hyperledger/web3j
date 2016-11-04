@@ -65,7 +65,7 @@ public final class Numeric {
         }
     }
 
-    public static String appendHexPrefix(String input) {
+    public static String prependHexPrefix(String input) {
         if (!containsHexPrefix(input)) {
             return HEX_PREFIX + input;
         } else {

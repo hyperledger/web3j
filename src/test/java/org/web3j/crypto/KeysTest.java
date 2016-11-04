@@ -48,12 +48,13 @@ public class KeysTest {
     @Test
     public void testGetAddressString() {
         String publicKey = SampleKeys.PUBLIC_KEY_STRING;
-        assertThat(Keys.getAddress(publicKey), is(SampleKeys.ADDRESS));
+        assertThat(Keys.getAddress(publicKey), is(SampleKeys.ADDRESS_NO_PREFIX));
     }
 
     @Test
     public void testGetAddressBigInteger() {
-        assertThat(Keys.getAddress(SampleKeys.PUBLIC_KEY), is(SampleKeys.ADDRESS));
+        assertThat(Keys.getAddress(SampleKeys.PUBLIC_KEY),
+                is(SampleKeys.ADDRESS_NO_PREFIX));
     }
 
     @Test
