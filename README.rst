@@ -83,7 +83,8 @@ Gradle
 Start a client
 --------------
 
-Start up an Ethereum client if you don't already have one running, such as `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
+Start up an Ethereum client if you don't already have one running, such as
+`Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
 
 .. code-block:: bash
 
@@ -95,6 +96,13 @@ Or `Parity <https://github.com/ethcore/parity>`_:
 
    $ parity --chain testnet
 
+
+Or use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further
+information refer to the `Infura <https://web3j.github.io/web3j/infura.html>`_ section.
+
+
+Start sending requests
+----------------------
 
 To send asynchronous requests using a Future:
 

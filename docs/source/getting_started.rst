@@ -25,7 +25,8 @@ Gradle
 Start a client
 --------------
 
-Start up an Ethereum client if you don't already have one running, such as `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
+Start up an Ethereum client if you don't already have one running, such as
+`Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
 
 .. code-block:: bash
 
@@ -37,7 +38,8 @@ Or `Parity <https://github.com/ethcore/parity>`_:
 
    $ parity --chain testnet
 
-If you don't want to run an Ethereum client, you can use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further information refer to the :doc:`infura` section.
+Or use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further
+information refer to the :doc:`infura` section.
 
 
 Start sending requests
