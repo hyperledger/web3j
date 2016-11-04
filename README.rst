@@ -79,7 +79,6 @@ Gradle
    compile ('org.web3j:core:1.0.1')
 
 
-
 Start a client
 --------------
 
@@ -230,13 +229,8 @@ for an example.
 Tested Clients
 --------------
 
-Geth
-
-- 1.4.18-stable-ef9265d0
-
-Parity
-
-- Parity/v1.3.8-beta/x86_64-linux-gnu/rustc1.12.0
+- Geth
+- Parity
 
 You can run the integration test class
 `CoreIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/core/CoreIT.java>`_

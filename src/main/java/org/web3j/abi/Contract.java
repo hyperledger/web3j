@@ -116,12 +116,14 @@ public abstract class Contract {
      *
      * @param function to transact with
      * @return {@link Optional} containing our transaction receipt
-     * @throws InterruptedException
-     * @throws ExecutionException
-     * @throws TransactionTimeoutException
+     * @throws ExecutionException if the computation threw an
+     * exception
+     * @throws InterruptedException if the current thread was interrupted
+     * while waiting
+     * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     protected TransactionReceipt executeTransaction(
-            Function function) throws InterruptedException, ExecutionException,
+            Function function) throws ExecutionException, InterruptedException,
             TransactionTimeoutException {
         BigInteger nonce = getNonce(credentials.getAddress());
         String encodedFunction = FunctionEncoder.encode(function);
