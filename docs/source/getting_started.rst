@@ -39,7 +39,7 @@ Or `Parity <https://github.com/ethcore/parity>`_:
    $ parity --chain testnet
 
 Or use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further
-information refer to the :doc:`infura` section.
+information refer to :doc:`infura`.
 
 
 Start sending requests

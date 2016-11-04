@@ -98,7 +98,7 @@ Or `Parity <https://github.com/ethcore/parity>`_:
 
 
 Or use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further
-information refer to the `Infura <https://web3j.github.io/web3j/infura.html>`_ section.
+information refer to `Using Infura with web3j <https://web3j.github.io/web3j/infura.html>`_.
 
 
 Start sending requests
