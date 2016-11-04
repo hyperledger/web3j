@@ -71,7 +71,8 @@ public class Scenario {
 
     boolean unlockAccount() throws Exception {
         PersonalUnlockAccount personalUnlockAccount =
-                parity.personalUnlockAccount(ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
+                parity.personalUnlockAccount(
+                        ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
                         .sendAsync().get();
         return personalUnlockAccount.accountUnlocked();
     }

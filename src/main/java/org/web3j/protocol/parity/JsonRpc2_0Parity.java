@@ -71,7 +71,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     }
 
     @Override
-    public Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password, BigInteger duration) {
+    public Request<?, PersonalUnlockAccount> personalUnlockAccount(
+            String accountId, String password, BigInteger duration) {
         List<Object> attributes = new ArrayList<>(3);
         attributes.add(accountId);
         attributes.add(password);
@@ -80,6 +81,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
             // Parity has a bug where it won't support a duration
             // See https://github.com/ethcore/parity/issues/1215
             attributes.add(duration.longValue());
+        } else {
+            attributes.add(null);  // we still need to include the null value, otherwise Parity rejects
         }
 
         return new Request<>(

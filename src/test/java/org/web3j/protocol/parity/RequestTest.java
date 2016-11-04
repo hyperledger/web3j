@@ -94,7 +94,7 @@ public class RequestTest extends RequestTester {
     public void testPersonalUnlockAccountNoDuration() throws Exception {
         web3j.personalUnlockAccount("0xfc390d8a8ddb591b010fda52f4db4945742c3809", "hunter2").send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_unlockAccount\",\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"hunter2\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_unlockAccount\",\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"hunter2\",null],\"id\":1}");
     }
 
     @Test
