@@ -3,12 +3,12 @@ package org.web3j.protocol.parity;
 import java.math.BigInteger;
 import java.util.*;
 
+import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
-import org.web3j.protocol.parity.methods.request.Wallet;
 import org.web3j.protocol.parity.methods.response.*;
 
 /**
@@ -61,10 +61,10 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     }
 
     @Override
-    public Request<?, NewAccountIdentifier> personalNewAccountFromWallet(Wallet wallet, String password) {
+    public Request<?, NewAccountIdentifier> personalNewAccountFromWallet(WalletFile walletFile, String password) {
         return new Request<>(
                 "personal_newAccountFromWallet",
-                Arrays.asList(wallet, password),
+                Arrays.asList(walletFile, password),
                 ID,
                 web3jService,
                 NewAccountIdentifier.class);

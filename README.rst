@@ -5,7 +5,7 @@ web3j: Web3 Java Ethereum Ðapp API
 ==================================
 
 .. image:: https://readthedocs.org/projects/web3j/badge/?version=latest
-   :target: http://web3j.readthedocs.io/en/latest/?badge=latest
+   :target: http://docs.web3j.io
    :alt: Documentation Status
 
 .. image:: https://travis-ci.org/web3j/web3j.svg?branch=master
@@ -26,22 +26,37 @@ web3j is a lightweight, type safe Java library for integrating with clients (nod
 
 It can generate Java smart contract wrappers so you can interact with a smart contract like it's native Java code. 
 
-It only has four runtime dependencies:
+Features
+--------
+
+- Full support for the Ethereum `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
+  specification
+- Full Ethereum wallet support for transaction signing
+- Generation of Java smart contract wrappers to create, deploy, transact and call smart contracts
+  via native Java code
+- Support for Parity's
+  `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
+  `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ APIs
+- Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
+- Comprehensive integration tests demonstrating a number of the above scenarios
+
+It only has five runtime dependencies:
 
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_ for crypto
+- `Bouncy Castle <https://www.bouncycastle.org/>`_ and
+  `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
 - `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
 
 Full project documentation is available at
-`Read the Docs <https://web3j.readthedocs.io/en/latest/>`_.
+`Read the Docs <http://docs.web3j.io>`_.
 
 
 Getting Started
 ---------------
 
-Add the following dependency to your project:
+Add the relevant dependency to your project:
 
 Maven
 -----
@@ -51,7 +66,7 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>0.7.0</version>
+     <version>1.0.0</version>
    </dependency>
 
 Gradle
@@ -59,7 +74,7 @@ Gradle
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:0.7.0')
+   compile ('org.web3j:core:1.0.0')
 
 
 Start up an Ethereum client if you don't already have one running, such as `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
@@ -93,15 +108,90 @@ To send synchronous requests:
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
-To use Parity commands:
 
-.. code-block:: java
+Sending transactions
+--------------------
+
+web3j provides support for both working with Ethereum wallet files and Ethereum client admin
+commands for sending transactions.
+
+Using an Ethereum wallet file::
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
+
+   // get the next available nonce
+   EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+   BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+
+   // create our transaction
+   RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
+                nonce, <gas price>, <gas limit>, <toAddress>, <value>);
+
+   // sign & sendn our transaction
+   byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+   String hexValue = Hex.toHexString(signedMessage);
+   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+   // ...
+
+Although it's far simpler using web3j's
+`Java smart contract wrappers`_.
+
+
+Using an Ethereum client's admin commands (make sure you have your wallet in the client's
+keystore)::
 
    Parity parity = Parity.build(new HttpService());  // defaults to http://localhost:8545/
    PersonalUnlockAccount personalUnlockAccount = parity.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
        // send a transaction, or use parity.personalSignAndSendTransaction() to do it all in one
    }
+
+
+Java smart contract wrappers
+----------------------------
+
+web3j can auto-generate smart contract wrapper code to deploy and interact with smart contracts
+without leaving Java.
+
+To generate the wrapper code, compile your smart contract:
+
+.. code-block:: bash
+
+   $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
+
+Then generate the wrapper code:
+
+.. code-block:: bash
+
+   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+
+Then you can then create and deploy a smart contract::
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
+
+   YourSmartContract contract = YourSmartContract.deploy(
+           <web3j>, <credentials>, <initialEtherValue>,
+           <param1>, ..., <paramN>).get();  // constructor params
+
+Or use an existing::
+
+   YourSmartContract contract = YourSmartContract.load(
+           "0x<address>", <web3j>, <credentials>);
+
+To Transact with a smart contract::
+
+   TransactionReceipt transactionReceipt = contract.someMethod(
+                new Type(...),
+                ...).get();
+
+To call a smart contract::
+
+   Type result = contract.someMethod(new Type(...), ...).get();
+
+For more information refer to the `documentation <http://docs.web3j.io/>`_.
 
 
 Further Details
@@ -115,22 +205,6 @@ Further Details
 - Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
   For simple results, you can obtain the quantity as a String via
   `Response <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().
-
-
-Generating smart contract wrappers in Java
-------------------------------------------
-
-The library also supports the auto-generation of smart contract function wrappers in Java from Solidity ABI files.
-
-This can be achieved by running:
-
-.. code-block:: bash
-
-   $ org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/dir/java -p com.your.organisation.name
-
-
-See `HumanStandardTokenGeneratedIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/HumanStandardTokenGeneratedIT.java>`_
-for an example of using a generated smart contract Java wrapper.
 
 
 Working with filters
@@ -199,6 +273,7 @@ Thanks and Credits
 - The `Nethereum <https://github.com/Nethereum/Nethereum>`_ project for the inspiration
 - `Othera <https://www.othera.com.au/>`_ for the great things they are building on the platform
 - `Finhaus <http://finhaus.com.au/>`_ guys for putting me onto Nethereum
+- `bitcoinj <https://bitcoinj.github.io/>`_ for the reference Elliptic Curve crypto implementation
 - Everyone involved in the Ethererum project and its surrounding ecosystem
 - And of course the users of the library, who've provided valuable input & feedback -
   `@ice09 <https://github.com/ice09>`_, `@adridadou <https://github.com/adridadou>`_,

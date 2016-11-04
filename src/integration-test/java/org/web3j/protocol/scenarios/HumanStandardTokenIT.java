@@ -159,8 +159,7 @@ public class HumanStandardTokenIT extends Scenario {
                 BigInteger.ZERO,
                 getHumanStandardTokenBinary() + encodedConstructor);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(
-                rawTransaction, credentials.getEcKeyPair());
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse = parity.ethSendRawTransaction(hexValue)
@@ -279,8 +278,7 @@ public class HumanStandardTokenIT extends Scenario {
                 contractAddress,
                 encodedFunction);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(
-                rawTransaction, credentials.getEcKeyPair());
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse = parity.ethSendRawTransaction(hexValue)

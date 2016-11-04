@@ -12,7 +12,7 @@ Developers have the choice of three languages for writing smart contracts:
 LISP Like Language (LLL)
   A low level language, Serpent provides a superset of LLL. There's not a great deal of information
   for working with LLL, the following blog `/var/log/syrinx <http://blog.syrinx.net/>`_ and
-  associated `Github <https://github.com/zigguratt/lll-resurrected>`_ is a good place to start.
+  associated `GitHub <https://github.com/zigguratt/lll-resurrected>`_ is a good place to start.
 
 
 In order to deploy a smart contract onto the Ethereum blockchain, it must first be compiled into
@@ -122,8 +122,8 @@ functions that a smart contract providing tokens can implement.
 The EIP-20 proposal provides function definitions, but does not provide an implementation example.
 However, there is an implementation provided in
 `src/test/resources/solidity/contracts <https://github.com/web3j/web3j/tree/master/src/test/resources/solidity/contracts>`_,
-which has been taken from Consensys' implementation on
-`GitHub <https://github.com/ConsenSys/Tokens>`_.
+which has been taken from Consensys'
+`Tokens project <https://github.com/ConsenSys/Tokens>`_.
 
 There are two integration tests that have been written to fully demonstrate the functionality of
 this token smart contract.
@@ -147,7 +147,7 @@ web3j supports the auto-generation of smart contract function wrappers in Java f
 
 .. code-block:: bash
 
-   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.abi -o /path/to/src/dir/java -p com.your.organisation.name
+   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Where the *bin* and *abi* are obtained as per :ref:`compiling-solidity`.
 
@@ -170,7 +170,7 @@ Construction and deployment of smart contracts happens with the *deploy* method:
 
    YourSmartContract contract = YourSmartContract.deploy(
            <web3j>, <credentials>, <initialValue>,
-           <param1>, ..., <paramN>) {
+           <param1>, ..., <paramN>);
 
 This will create a new instance of the smart contract on the Ethereum blockchain using the
 supplied credentials, and constructor parameter values.

@@ -38,7 +38,7 @@ public abstract class Contract {
     private Web3j web3j;
     private Credentials credentials;
 
-    public Contract(String contractAddress, Web3j web3j, Credentials credentials) {
+    protected Contract(String contractAddress, Web3j web3j, Credentials credentials) {
         this.contractAddress = contractAddress;
         this.web3j = web3j;
         this.credentials = credentials;
@@ -138,8 +138,7 @@ public abstract class Contract {
 
     private TransactionReceipt signAndSend(RawTransaction rawTransaction)
             throws InterruptedException, ExecutionException, TransactionTimeoutException{
-        byte[] signedMessage = TransactionEncoder.signMessage(
-                rawTransaction, credentials.getEcKeyPair());
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
         // This might be a good candidate for using functional composition with CompletableFutures

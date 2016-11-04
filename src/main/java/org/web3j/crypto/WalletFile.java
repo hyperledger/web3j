@@ -3,12 +3,10 @@ package org.web3j.crypto;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
@@ -55,7 +53,7 @@ public class WalletFile {
         this.version = version;
     }
 
-    static class Crypto {
+    public static class Crypto {
         private String cipher;
         private String ciphertext;
         private CipherParams cipherparams;
@@ -112,8 +110,10 @@ public class WalletFile {
                 @JsonSubTypes.Type(value = Aes128CtrKdfParams.class, name = Wallet.AES_128_CTR),
                 @JsonSubTypes.Type(value = ScryptKdfParams.class, name = Wallet.SCRYPT)
         })
-        // To support my Ether Wallet keys uncomment this & comment out the above
+        // To support my Ether Wallet keys uncomment this annotation & comment out the above
 //        @JsonDeserialize(using = KdfParamsDeserialiser.class)
+        // Also add the following to the ObjectMapperFactory
+        // objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
         public void setKdfparams(KdfParams kdfparams) {
             this.kdfparams = kdfparams;
         }
@@ -127,7 +127,7 @@ public class WalletFile {
         }
     }
 
-    static class CipherParams {
+    public static class CipherParams {
         private String iv;
 
         public CipherParams() {
@@ -147,7 +147,7 @@ public class WalletFile {
         String getSalt();
     }
 
-    static class Aes128CtrKdfParams implements KdfParams {
+    public static class Aes128CtrKdfParams implements KdfParams {
         private int dklen;
         private int c;
         private String prf;
@@ -189,7 +189,7 @@ public class WalletFile {
         }
     }
 
-    static class ScryptKdfParams implements KdfParams {
+    public static class ScryptKdfParams implements KdfParams {
         private int dklen;
         private int n;
         private int p;

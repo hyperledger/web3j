@@ -16,10 +16,10 @@ import org.web3j.utils.Numeric;
  */
 public class TransactionEncoder {
 
-    public static byte[] signMessage(RawTransaction rawTransaction, ECKeyPair keyPair) {
+    public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
         Sign.SignatureData signatureData = Sign.signMessage(
-                encodedTransaction, keyPair);
+                encodedTransaction, credentials.getEcKeyPair());
 
         return encode(rawTransaction, signatureData);
     }

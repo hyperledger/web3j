@@ -41,6 +41,11 @@ public class WalletUtils {
         return fileName;
     }
 
+    public static Credentials loadCredentials(String password, String source)
+            throws IOException, CipherException {
+        return loadCredentials(password, new File(source));
+    }
+
     public static Credentials loadCredentials(String password, File source)
             throws IOException, CipherException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();

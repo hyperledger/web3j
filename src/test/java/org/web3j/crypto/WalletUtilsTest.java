@@ -34,7 +34,6 @@ public class WalletUtilsTest {
 
     @Test
     public void testGenerateNewWalletFile() throws Exception {
-        File tempDir = createTempDir();
         String fileName = WalletUtils.generateNewWalletFile(PASSWORD, tempDir);
 
         WalletUtils.loadCredentials(PASSWORD, new File(tempDir, fileName));
@@ -42,7 +41,6 @@ public class WalletUtilsTest {
 
     @Test
     public void testGenerateWalletFile() throws Exception {
-        File tempDir = Files.createTempDirectory("testkeys").toFile();
         String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir);
 
         Credentials credentials = WalletUtils.loadCredentials(
@@ -52,12 +50,23 @@ public class WalletUtilsTest {
     }
 
     @Test
-    public void testLoadCredentials() throws Exception {
+    public void testLoadCredentialsFromFile() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
                 new File(WalletUtilsTest.class.getResource("/keyfiles/" +
                         "UTC--2016-11-03T05-55-06." +
                         "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile()));
+
+        assertThat(credentials, equalTo(CREDENTIALS));
+    }
+
+    @Test
+    public void testLoadCredentialsFromString() throws Exception {
+        Credentials credentials = WalletUtils.loadCredentials(
+                PASSWORD,
+                WalletUtilsTest.class.getResource("/keyfiles/" +
+                        "UTC--2016-11-03T05-55-06." +
+                        "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
 
         assertThat(credentials, equalTo(CREDENTIALS));
     }

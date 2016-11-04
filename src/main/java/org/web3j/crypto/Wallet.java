@@ -172,7 +172,6 @@ public class Wallet {
 
         WalletFile.KdfParams kdfParams = crypto.getKdfparams();
         if (kdfParams instanceof WalletFile.ScryptKdfParams) {
-//        if (kdf.equals(SCRYPT)) {
             WalletFile.ScryptKdfParams scryptKdfParams =
                     (WalletFile.ScryptKdfParams) crypto.getKdfparams();
             int dklen = scryptKdfParams.getDklen();
@@ -182,7 +181,6 @@ public class Wallet {
             byte[] salt = Numeric.hexStringToByteArray(scryptKdfParams.getSalt());
             derivedKey = generateDerivedScryptKey(password.getBytes(UTF_8), salt, n, r, p, dklen);
         } else if (kdfParams instanceof WalletFile.Aes128CtrKdfParams) {
-//        } else if (kdf.equals(AES_128_CTR)) {
             WalletFile.Aes128CtrKdfParams aes128CtrKdfParams =
                     (WalletFile.Aes128CtrKdfParams) crypto.getKdfparams();
             int c = aes128CtrKdfParams.getC();
@@ -191,7 +189,7 @@ public class Wallet {
 
             derivedKey = generateAes128CtrDerivedKey(password.getBytes(UTF_8), salt, c, prf);
         } else {
-            throw new CipherException("Unsupported KDF type: " + crypto.getKdf());
+            throw new CipherException("Unable to deserialize params: " + crypto.getKdf());
         }
 
         byte[] derivedMac = generateMac(derivedKey, cipherText);
@@ -214,6 +212,10 @@ public class Wallet {
 
         if (!crypto.getCipher().equals(CIPHER)) {
             throw new CipherException("Wallet cipher is not supported");
+        }
+
+        if (!crypto.getKdf().equals(AES_128_CTR) && !crypto.getKdf().equals(SCRYPT)) {
+            throw new CipherException("KDF type is not supported");
         }
     }
 

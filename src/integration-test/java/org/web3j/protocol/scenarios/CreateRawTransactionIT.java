@@ -28,7 +28,7 @@ public class CreateRawTransactionIT extends Scenario {
         RawTransaction rawTransaction = createEtherTransaction(
                 nonce, BOB.getAddress());
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE.getEcKeyPair());
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -48,7 +48,7 @@ public class CreateRawTransactionIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE.getEcKeyPair());
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =

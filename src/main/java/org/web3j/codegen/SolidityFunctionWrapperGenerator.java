@@ -23,7 +23,6 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.ECKeyPair;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
@@ -38,6 +37,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
     private static final String WEB3J = "web3j";
     private static final String CREDENTIALS = "credentials";
     private static final String INITIAL_VALUE = "initialValue";
+    private static final String CONTRACT_ADDRESS = "contractAddress";
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
             "<strong>Do not modifiy!</strong><br>\n" +
@@ -175,28 +175,24 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         String className = contractName.substring(0, 1).toUpperCase() + contractName.substring(1);
 
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addJavadoc(CODEGEN_WARNING)
-                .superclass(Contract.class)
-                .addField(createBinaryDefinition(binary));
-
-        MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(String.class, "contractAddress")
-                .addParameter(Web3j.class, WEB3J)
-                .addParameter(Credentials.class, CREDENTIALS)
-                .addStatement("super($N, $N, $N)", "contractAddress", WEB3J, CREDENTIALS)
-                .build();
-        classBuilder.addMethod(constructorSpec);
-
-        classBuilder = createFunctionDefinitions(className, functionDefinitions, classBuilder);
+        TypeSpec.Builder classBuilder = createClassBuilder(className, binary);
+        classBuilder.addMethod(buildConstructor());
+        classBuilder.addMethods(buildFunctionDefinitions(className, functionDefinitions));
+        classBuilder.addMethod(buildLoad(className));
 
         JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
                 .indent("    ")  // default indentation is two spaces
                 .build();
 
         javaFile.writeTo(destinationDirLocation);
+    }
+
+    private TypeSpec.Builder createClassBuilder(String className, String binary) {
+        return TypeSpec.classBuilder(className)
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addJavadoc(CODEGEN_WARNING)
+                .superclass(Contract.class)
+                .addField(createBinaryDefinition(binary));
     }
 
     private FieldSpec createBinaryDefinition(String binary) {
@@ -206,53 +202,93 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 .build();
     }
 
-    private static TypeSpec.Builder createFunctionDefinitions(
+    private static List<MethodSpec> buildFunctionDefinitions(
             String className,
-            List<AbiDefinition> functionDefinitions,
-            TypeSpec.Builder classBuilder) throws ClassNotFoundException {
+            List<AbiDefinition> functionDefinitions) throws ClassNotFoundException {
+
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        boolean constructor = false;
 
         for (AbiDefinition functionDefinition:functionDefinitions) {
-            MethodSpec.Builder methodBuilder;
-
             switch (functionDefinition.getType()) {
                 case "function":
-                    methodBuilder = buildFunction(functionDefinition);
-                    classBuilder.addMethod(methodBuilder.build());
+                    methodSpecs.add(buildFunction(functionDefinition));
                     break;
                 case "event":
-                    classBuilder.addMethod(buildEventFunction(functionDefinition));
+                    methodSpecs.add(buildEventFunction(functionDefinition));
                     break;
                 case "constructor":
-                    classBuilder.addMethod(buildConstructor(className, functionDefinition));
+                    constructor = true;
+                    methodSpecs.add(buildDeploy(className, functionDefinition));
                     break;
             }
         }
 
-        return classBuilder;
+        // constructor will not be specified in ABI file if its empty
+        if (!constructor) {
+            methodSpecs.add(buildDeploy(className));
+        }
+
+        return methodSpecs;
     }
 
+    private static MethodSpec buildConstructor() {
+        return MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PRIVATE)
+                .addParameter(String.class, CONTRACT_ADDRESS)
+                .addParameter(Web3j.class, WEB3J)
+                .addParameter(Credentials.class, CREDENTIALS)
+                .addStatement("super($N, $N, $N)", CONTRACT_ADDRESS, WEB3J, CREDENTIALS)
+                .build();
+    }
 
-    private static MethodSpec buildConstructor(
+    private static MethodSpec buildDeploy(
             String className, AbiDefinition functionDefinition) {
 
-        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("deploy")
+        MethodSpec.Builder methodBuilder = getDeployMethodSpec(className);
+
+        String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
+        if (!inputParams.isEmpty()) {
+            methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor(" +
+                            "$T.asList($L)" +
+                            ")",
+                    String.class, FunctionEncoder.class, Arrays.class, inputParams);
+        }
+
+        methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, encodedConstructor, $L)",
+                className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
+
+        return methodBuilder.build();
+    }
+
+    private static MethodSpec buildDeploy(String className) {
+        MethodSpec.Builder methodBuilder = getDeployMethodSpec(className);
+        methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, \"\", $L)",
+                className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
+
+        return methodBuilder.build();
+    }
+
+    private static MethodSpec.Builder getDeployMethodSpec(String className) {
+        return MethodSpec.methodBuilder("deploy")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(ParameterizedTypeName.get(
                         ClassName.get(Future.class), TypeVariableName.get(className, Type.class)))
                 .addParameter(Web3j.class, WEB3J)
                 .addParameter(Credentials.class, CREDENTIALS)
                 .addParameter(BigInteger.class, INITIAL_VALUE);
+    }
 
-        String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
-        methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor(" +
-                        "$T.asList($L)" +
-                        ")",
-                String.class, FunctionEncoder.class, Arrays.class, inputParams);
-
-        methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, encodedConstructor, $L)",
-                className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
-
-        return methodBuilder.build();
+    private static MethodSpec buildLoad(String className) {
+        return MethodSpec.methodBuilder("load")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(TypeVariableName.get(className, Type.class))
+                .addParameter(String.class, CONTRACT_ADDRESS)
+                .addParameter(Web3j.class, WEB3J)
+                .addParameter(Credentials.class, CREDENTIALS)
+                .addStatement("return new $L($L, $L, $L)",
+                        className, CONTRACT_ADDRESS, WEB3J, CREDENTIALS)
+                .build();
     }
 
     private static String addParameters(
@@ -273,7 +309,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         return paramNames.stream().collect(Collectors.joining(", "));
     }
 
-    private static MethodSpec.Builder buildFunction(
+    private static MethodSpec buildFunction(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
 
@@ -299,7 +335,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                     functionDefinition, methodBuilder, inputParams);
         }
 
-        return methodBuilder;
+        return methodBuilder.build();
     }
 
     private static MethodSpec.Builder  buildConstantFunction(

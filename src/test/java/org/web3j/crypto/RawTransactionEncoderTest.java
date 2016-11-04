@@ -20,7 +20,7 @@ public class RawTransactionEncoderTest {
     @Test
     public void testSignMessage() {
         byte[] signedMessage = TransactionEncoder.signMessage(
-                createEtherTransaction(), SampleKeys.KEY_PAIR);
+                createEtherTransaction(), SampleKeys.CREDENTIALS);
         String hexMessage = Numeric.toHexString(signedMessage);
         assertThat(hexMessage,
                 is("0xf85580010a840add5355887fffffffffffffff80" +

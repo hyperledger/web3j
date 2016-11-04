@@ -6,7 +6,6 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = build
-GH_PAGES_SOURCES = docs/source docs/Makefile
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -114,7 +113,7 @@ devhelp:
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/web3j"
+	@echo "# mkdir -prf $$HOME/.local/share/devhelp/web3j"
 	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/web3j"
 	@echo "# devhelp"
 
@@ -215,18 +214,3 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
-
-# Custom target for building documentation for GitHub pages. Based on http://nikhilism.com/post/2012/automatic-github-pages-generation-from/
-gh-pages:
-	git checkout gh-pages
-	rm -rf . || true
-	git checkout master $(GH_PAGES_SOURCES)
-	git reset HEAD
-	cd docs
-	make html
-	mv -fv build/html/* ../
-	cd ../
-	rm -rf docs
-	git add -A
-	git ci -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
-

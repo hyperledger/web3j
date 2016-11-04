@@ -2,16 +2,15 @@ package org.web3j.protocol.parity;
 
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.parity.methods.request.Wallet;
 
 
 public class RequestTest extends RequestTester {
@@ -53,22 +52,35 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalNewAccountFromWallet() throws Exception {
-        web3j.personalNewAccountFromWallet(
-                new Wallet(
-                        "0x12345",
-                        new Wallet.Crypto(
-                                "CIPHER",
-                                "CIPHERTEXT",
-                                Collections.<String, String>emptyMap(),
-                                "KDF",
-                                Collections.<String, String>emptyMap(),
-                                "MAC"
-                        ),
-                        "0x1"
-                ), "password"
-        ).send();
+        WalletFile walletFile = new WalletFile();
+        walletFile.setAddress("0x...");
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_newAccountFromWallet\",\"params\":[{\"address\":\"0x12345\",\"crypto\":{\"cipher\":\"CIPHER\",\"ciphertext\":\"CIPHERTEXT\",\"cipherparams\":{},\"kdf\":\"KDF\",\"kdfparams\":{},\"mac\":\"MAC\"},\"id\":\"0x1\"},\"password\"],\"id\":1}");
+        WalletFile.Crypto crypto = new WalletFile.Crypto();
+        crypto.setCipher("CIPHER");
+        crypto.setCiphertext("CIPHERTEXT");
+        walletFile.setCrypto(crypto);
+
+        WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();
+        cipherParams.setIv("IV");
+        crypto.setCipherparams(cipherParams);
+
+        crypto.setKdf("KDF");
+        WalletFile.ScryptKdfParams kdfParams = new WalletFile.ScryptKdfParams();
+        kdfParams.setDklen(32);
+        kdfParams.setN(1);
+        kdfParams.setP(10);
+        kdfParams.setR(100);
+        kdfParams.setSalt("SALT");
+        crypto.setKdfparams(kdfParams);
+
+        crypto.setMac("MAC");
+        walletFile.setCrypto(crypto);
+        walletFile.setId("cab06c9e-79a9-48ea-afc7-d3bdb3a59526");
+        walletFile.setVersion(1);
+
+        web3j.personalNewAccountFromWallet(walletFile, "password").send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_newAccountFromWallet\",\"params\":[{\"address\":\"0x...\",\"crypto\":{\"cipher\":\"CIPHER\",\"ciphertext\":\"CIPHERTEXT\",\"cipherparams\":{\"iv\":\"IV\"},\"kdf\":\"KDF\",\"kdfparams\":{\"dklen\":32,\"n\":1,\"p\":10,\"r\":100,\"salt\":\"SALT\"},\"mac\":\"MAC\"},\"id\":\"cab06c9e-79a9-48ea-afc7-d3bdb3a59526\",\"version\":1},\"password\"],\"id\":1}");
     }
 
     @Test

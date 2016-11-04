@@ -3,11 +3,11 @@ package org.web3j.protocol.parity;
 import java.math.BigInteger;
 import java.util.Map;
 
+import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
-import org.web3j.protocol.parity.methods.request.Wallet;
 import org.web3j.protocol.parity.methods.response.*;
 
 /**
@@ -26,7 +26,7 @@ public interface Parity extends Web3j {
 
     Request<?, NewAccountIdentifier> personalNewAccountFromPhrase(String phrase, String password);
 
-    Request<?, NewAccountIdentifier> personalNewAccountFromWallet(Wallet wallet, String password);
+    Request<?, NewAccountIdentifier> personalNewAccountFromWallet(WalletFile walletFile, String password);
 
     Request<?, PersonalUnlockAccount> personalUnlockAccount(
             String accountId, String password, BigInteger duration);
