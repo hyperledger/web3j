@@ -20,23 +20,25 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
-web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the Ethereum network::
+web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the
+Ethereum network::
 
    [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
 
-It can generate Java smart contract wrappers so you can interact with a smart contract like it's native Java code. 
+This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
+additional overhead of having to write your own integration code for the platform.
 
 Features
 --------
 
-- Full support for the Ethereum `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
-  specification
-- Full Ethereum wallet support for transaction signing
-- Generation of Java smart contract wrappers to create, deploy, transact and call smart contracts
-  via native Java code
+- Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
+  client API
+- Ethereum wallet support
+- Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
+  contracts from native Java code
 - Support for Parity's
   `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
-  `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ APIs
+  `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
 
@@ -129,7 +131,7 @@ Using an Ethereum wallet file::
    RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
 
-   // sign & sendn our transaction
+   // sign & send our transaction
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
    String hexValue = Hex.toHexString(signedMessage);
    EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();

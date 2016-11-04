@@ -17,14 +17,14 @@ additional overhead of having to write your own integration code for the platfor
 Features
 ========
 
-- Full support for the Ethereum `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
-  specification
-- Full Ethereum wallet support for transaction signing
-- Generation of Java smart contract wrappers to create, deploy, transact and call smart contracts
-  via native Java code
+- Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
+  client API
+- Ethereum wallet support
+- Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
+  contracts from native Java code
 - Support for Parity's
   `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
-  `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ APIs
+  `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
 
