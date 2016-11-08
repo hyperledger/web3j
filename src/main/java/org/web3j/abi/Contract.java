@@ -13,35 +13,27 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
-import org.web3j.utils.Numeric;
 
 
 /**
  * Solidity contract type abstraction for interacting with smart contracts via native Java types.
  */
-public abstract class Contract {
+public abstract class Contract extends ManagedTransaction {
 
     private static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
     private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
 
-    private static final int SLEEP_DURATION = 15000;
-    private static final int ATTEMPTS = 40;
-
     private String contractAddress;
-    private Web3j web3j;
-    private Credentials credentials;
 
     protected Contract(String contractAddress, Web3j web3j, Credentials credentials) {
+        super(web3j, credentials);
         this.contractAddress = contractAddress;
-        this.web3j = web3j;
-        this.credentials = credentials;
     }
 
     public String getContractAddress() {
@@ -138,21 +130,6 @@ public abstract class Contract {
         return signAndSend(rawTransaction);
     }
 
-    private TransactionReceipt signAndSend(RawTransaction rawTransaction)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException{
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-        String hexValue = Numeric.toHexString(signedMessage);
-
-        // This might be a good candidate for using functional composition with CompletableFutures
-        EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
-                .sendAsync().get();
-
-        String transactionHash = transactionResponse.getTransactionHash();
-
-        return waitForTransactionReceipt(transactionHash);
-    }
-
-
     /**
      * Execute the provided function as a transaction asynchronously.
      *
@@ -171,47 +148,6 @@ public abstract class Contract {
             }
         });
         return result;
-    }
-
-    private BigInteger getNonce(String address) throws InterruptedException, ExecutionException {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                address, DefaultBlockParameterName.LATEST).sendAsync().get();
-
-        return ethGetTransactionCount.getTransactionCount();
-    }
-
-    private TransactionReceipt waitForTransactionReceipt(
-            String transactionHash) throws InterruptedException, ExecutionException,
-            TransactionTimeoutException {
-
-        return getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
-    }
-
-    private TransactionReceipt getTransactionReceipt(
-            String transactionHash, int sleepDuration, int attempts)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
-
-        Optional<TransactionReceipt> receiptOptional =
-                sendTransactionReceiptRequest(transactionHash);
-        for (int i = 0; i < attempts; i++) {
-            if (!receiptOptional.isPresent()) {
-                Thread.sleep(sleepDuration);
-                receiptOptional = sendTransactionReceiptRequest(transactionHash);
-            } else {
-                return receiptOptional.get();
-            }
-        }
-
-        throw new TransactionTimeoutException("Transaction receipt was not generated after " +
-                ((sleepDuration * attempts) / 1000 + " seconds"));
-    }
-
-    private Optional<TransactionReceipt> sendTransactionReceiptRequest(
-            String transactionHash) throws InterruptedException, ExecutionException {
-        EthGetTransactionReceipt transactionReceipt =
-                web3j.ethGetTransactionReceipt(transactionHash).sendAsync().get();
-
-        return transactionReceipt.getTransactionReceipt();
     }
 
     protected EventValues extractEventParameters(

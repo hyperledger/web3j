@@ -1,5 +1,6 @@
 package org.web3j.utils;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.junit.Assert;
@@ -8,9 +9,11 @@ import org.junit.Test;
 import org.web3j.protocol.exceptions.MessageDecodingException;
 import org.web3j.protocol.exceptions.MessageEncodingException;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.web3j.utils.Numeric.b;
 
 
@@ -118,20 +121,37 @@ public class NumericTest {
 
     @Test
     public void testHexStringToByteArray() {
-        Assert.assertThat(Numeric.hexStringToByteArray(""), is(new byte[] { }));
-        Assert.assertThat(Numeric.hexStringToByteArray("0"), is(new byte[] { 0 }));
-        Assert.assertThat(Numeric.hexStringToByteArray("1"), is(new byte[] { 0x1 }));
-        Assert.assertThat(Numeric.hexStringToByteArray(HEX_RANGE_STRING),
+        assertThat(Numeric.hexStringToByteArray(""), is(new byte[] { }));
+        assertThat(Numeric.hexStringToByteArray("0"), is(new byte[] { 0 }));
+        assertThat(Numeric.hexStringToByteArray("1"), is(new byte[] { 0x1 }));
+        assertThat(Numeric.hexStringToByteArray(HEX_RANGE_STRING),
                 is(HEX_RANGE_ARRAY));
 
-        Assert.assertThat(Numeric.hexStringToByteArray("0x123"),
+        assertThat(Numeric.hexStringToByteArray("0x123"),
                 is(new byte[] { 0x1, 0x23 }));
     }
 
     @Test
     public void testToHexString() {
-        Assert.assertThat(Numeric.toHexString(new byte[] {}), is("0x"));
-        Assert.assertThat(Numeric.toHexString(new byte[] { 0x1 }), is("0x01"));
-        Assert.assertThat(Numeric.toHexString(HEX_RANGE_ARRAY), is(HEX_RANGE_STRING));
+        assertThat(Numeric.toHexString(new byte[] {}), is("0x"));
+        assertThat(Numeric.toHexString(new byte[] { 0x1 }), is("0x01"));
+        assertThat(Numeric.toHexString(HEX_RANGE_ARRAY), is(HEX_RANGE_STRING));
+    }
+
+    @Test
+    public void testIsIntegerValue() {
+        assertTrue(Numeric.isIntegerValue(BigDecimal.ZERO));
+        assertTrue(Numeric.isIntegerValue(BigDecimal.ZERO));
+        assertTrue(Numeric.isIntegerValue(BigDecimal.valueOf(Long.MAX_VALUE)));
+        assertTrue(Numeric.isIntegerValue(BigDecimal.valueOf(Long.MIN_VALUE)));
+        assertTrue(Numeric.isIntegerValue(new BigDecimal(
+                "9999999999999999999999999999999999999999999999999999999999999999.0")));
+        assertTrue(Numeric.isIntegerValue(new BigDecimal(
+                "-9999999999999999999999999999999999999999999999999999999999999999.0")));
+
+        assertFalse(Numeric.isIntegerValue(BigDecimal.valueOf(0.1)));
+        assertFalse(Numeric.isIntegerValue(BigDecimal.valueOf(-0.1)));
+        assertFalse(Numeric.isIntegerValue(BigDecimal.valueOf(1.1)));
+        assertFalse(Numeric.isIntegerValue(BigDecimal.valueOf(-1.1)));
     }
 }

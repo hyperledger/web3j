@@ -3,7 +3,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+        classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
 
@@ -21,9 +22,10 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 group 'org.web3j'
-version '1.0.1'
+version '1.0.2'
 
 sourceCompatibility = 1.8
 
@@ -59,6 +61,7 @@ ext {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 // See https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
