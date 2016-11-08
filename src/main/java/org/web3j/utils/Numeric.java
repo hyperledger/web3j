@@ -1,5 +1,6 @@
 package org.web3j.utils;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -170,5 +171,11 @@ public final class Numeric {
 
     public static byte b(int m, int n) {
         return (byte) ( (m << 4) | n);
+    }
+
+    public static boolean isIntegerValue(BigDecimal value) {
+        return value.signum() == 0 ||
+                value.scale() <= 0 ||
+                value.stripTrailingZeros().scale() <= 0;
     }
 }

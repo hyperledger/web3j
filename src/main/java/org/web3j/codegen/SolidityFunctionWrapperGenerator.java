@@ -246,8 +246,8 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             String className, AbiDefinition functionDefinition) {
 
         MethodSpec.Builder methodBuilder = getDeployMethodSpec(className);
-
         String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
+
         if (!inputParams.isEmpty()) {
             methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor(" +
                             "$T.asList($L)" +
@@ -291,22 +291,52 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 .build();
     }
 
-    private static String addParameters(
-            MethodSpec.Builder builder, List<AbiDefinition.NamedType> inputs) {
+    static String addParameters(
+            MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes) {
 
-        List<String> paramNames = new ArrayList<>(inputs.size());
+        List<ParameterSpec> inputParameterTypes = buildParameterTypes(namedTypes);
+        methodBuilder.addParameters(inputParameterTypes);
 
-        for (AbiDefinition.NamedType namedType:inputs) {
-            String name = namedType.getName();
-            String type = namedType.getType();
+        return inputParameterTypes.stream()
+                .map(p -> p.name)
+                .collect(Collectors.joining(", "));
+    }
 
-            TypeName typeName = buildTypeName(type);
-            builder.addParameter(typeName, name);
+    static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes) {
+        List<ParameterSpec> result = new ArrayList<>(namedTypes.size());
+        for (int i = 0; i < namedTypes.size(); i++) {
+            AbiDefinition.NamedType namedType = namedTypes.get(i);
 
-            paramNames.add(name);
+            String name = createValidParamName(namedType.getName(), i);
+            String type = namedTypes.get(i).getType();
+
+            result.add(ParameterSpec.builder(buildTypeName(type), name).build());
         }
+        return result;
+    }
 
-        return paramNames.stream().collect(Collectors.joining(", "));
+    /**
+     * Public Solidity arrays and maps require an unnamed input parameter - multiple if they
+     * require a struct type
+     *
+     * @param name
+     * @param idx
+     * @return non-empty parameter name
+     */
+    static String createValidParamName(String name, int idx) {
+        if (name.equals("")) {
+            return "param" + idx;
+        } else {
+            return name;
+        }
+    }
+
+    static List<TypeName> buildTypeNames(List<AbiDefinition.NamedType> namedTypes) {
+        List<TypeName> result = new ArrayList<>(namedTypes.size());
+        for (AbiDefinition.NamedType namedType : namedTypes) {
+            result.add(buildTypeName(namedType.getType()));
+        }
+        return result;
     }
 
     private static MethodSpec buildFunction(
@@ -319,14 +349,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
 
-        List<TypeName> outputParameterTypes = new ArrayList<>();
-        for (AbiDefinition.NamedType namedType:functionDefinition.getOutputs()) {
-            String type = namedType.getType();
-
-            TypeName typeName = buildTypeName(type);
-            outputParameterTypes.add(typeName);
-        }
-
+        List<TypeName> outputParameterTypes = buildTypeNames(functionDefinition.getOutputs());
         if (functionDefinition.isConstant()) {
             methodBuilder = buildConstantFunction(
                     functionDefinition, methodBuilder, outputParameterTypes, inputParams);
