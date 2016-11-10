@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Thanks and Credits &mdash; web3j 0.5.0 documentation</title>
+    <title>Command Line Tools &mdash; web3j 0.5.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,12 +25,13 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="web3j 0.5.0 documentation" href="index.html" />
-    <link rel="prev" title="Links and Useful Resources" href="links.html" />
+    <link rel="next" title="Management APIs" href="management_apis.html" />
+    <link rel="prev" title="Filters" href="filters.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
-    <link rel="canonical" href="https://web3j.readthedocs.io/credits.html"/>
+    <link rel="canonical" href="https://web3j.readthedocs.io/command_line.html"/>
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -43,19 +44,89 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="thanks-and-credits">
-<h1>Thanks and Credits<a class="headerlink" href="#thanks-and-credits" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="command-line-tools">
+<h1>Command Line Tools<a class="headerlink" href="#command-line-tools" title="Permalink to this headline">¶</a></h1>
+<p>A web3j fat jar is distributed with each release providing command line tools. The command line
+allow you to use some of the functionality of web3j from your terminal:</p>
+<p>These tools provide:</p>
 <ul class="simple">
-<li>The <a class="reference external" href="https://github.com/Nethereum/Nethereum">Nethereum</a> project for the inspiration</li>
-<li><a class="reference external" href="https://www.othera.com.au/">Othera</a> for the great things they are building on the platform</li>
-<li><a class="reference external" href="http://finhaus.com.au/">Finhaus</a> guys for putting me onto Nethereum</li>
-<li><a class="reference external" href="https://bitcoinj.github.io/">bitcoinj</a> for the reference Elliptic Curve crypto implementation</li>
-<li>Everyone involved in the Ethererum project and its surrounding ecosystem</li>
-<li>And of course the users of the library, who&#8217;ve provided valuable input &amp; feedback -
-<a class="reference external" href="https://github.com/ice09">&#64;ice09</a>, <a class="reference external" href="https://github.com/adridadou">&#64;adridadou</a>,
-<a class="reference external" href="https://github.com/nickmelis">&#64;nickmelis</a>, <a class="reference external" href="https://github.com/basavk">&#64;basavk</a>,
-<a class="reference external" href="https://github.com/kabl">&#64;kabl</a></li>
+<li>Wallet creation</li>
+<li>Change wallet password</li>
+<li>Ether transfer from one wallet to another</li>
+<li>Generation of Solidity smart contract wrappers</li>
 </ul>
+<p>The command line tools can be obtained as a zipfile from the
+<a class="reference external" href="https://github.com/web3j/web3j/releases/latest">releases</a> page of the project repository, under
+the <strong>Downloads</strong> section.</p>
+<p>To run, simply extract the zipfile and run the binary:</p>
+<div class="highlight-bash"><div class="highlight"><pre>$ unzip web3j-&lt;version&gt;
+   creating: web3j-1.0.2/lib/
+  inflating: web3j-1.0.2/lib/core-1.0.2-all.jar
+   creating: web3j-1.0.2/bin/
+  inflating: web3j-1.0.2/bin/web3j
+  inflating: web3j-1.0.2/bin/web3j.bat
+$ ./web3j-&lt;version&gt;/bin/web3j
+
+              _      _____ _     _
+             | |    |____ (_)   (_)
+__      _____| |__      / /_     _   ___
+\ \ /\ / / _ \ &#39;_ \     \ \ |   | | / _ \
+ \ V  V /  __/ |_) |.___/ / | _ | || (_) |
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/
+                         _/ |
+                        |__/
+
+Usage: web3j wallet|solidity ...
+</pre></div>
+</div>
+<div class="section" id="wallet-tools">
+<h2>Wallet tools<a class="headerlink" href="#wallet-tools" title="Permalink to this headline">¶</a></h2>
+<p>To generate a new Ethereum wallet:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j wallet create
+</pre></div>
+</div>
+<p>To update the password for an existing wallet:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j wallet update &lt;walletfile&gt;
+</pre></div>
+</div>
+<p>To send Ether to another address:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j wallet send &lt;walletfile&gt; &lt;destination-address&gt;
+</pre></div>
+</div>
+<p>When sending Ether to another address you will be asked a series of questions before the
+transaction takes place. See the below for a full example</p>
+<p>The following example demonstrates using web3j to send Ether to another wallet.</p>
+<div class="highlight-bash"><div class="highlight"><pre>$ ./web3j-&lt;version&gt;/bin/web3j wallet send &lt;keyfile&gt;
+
+              _      _____ _     _
+             | |    |____ (_)   (_)
+__      _____| |__      / /_     _   ___
+\ \ /\ / / _ \ &#39;_ \     \ \ |   | | / _ \
+ \ V  V /  __/ |_) |.___/ / | _ | || (_) |
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/
+                         _/ |
+                        |__/
+
+Please enter your existing your wallet file password:
+Wallet for address 0x19e03255f667bdfd50a32722df860b1eeaf4d635 loaded
+Please confirm address of running Ethereum client you wish to send the transfer request to [http://localhost:8545/]:
+Connected successfully to client: Geth/v1.4.18-stable-c72f5459/darwin/go1.7.3
+What amound would you like to transfer (please enter a numeric value): 0.000001
+Please specify the unit (ether, wei, ...) [ether]:
+Please confim that you wish to transfer 0.000001 ether (1000000000000 wei) to address 0x9c98e381edc5fe1ac514935f3cc3edaa764cf004
+Please type &#39;yes&#39; to proceed: yes
+Commencing transfer (this may take a few minutes).................................................................................................................................................................................................................$
+
+Funds have been successfully transferred from 0x19e03255f667bdfd50a32722df860b1eeaf4d635 to 0x9c98e381edc5fe1ac514935f3cc3edaa764cf004
+Transaction hash: 0xb00afc5c2bb92a76d03e17bd3a0175b80609e877cb124c02d19000d529390530
+Mined block number: 1849039
+</pre></div>
+</div>
+</div>
+<div class="section" id="solidity-smart-contract-wrapper-generator">
+<h2>Solidity smart contract wrapper generator<a class="headerlink" href="#solidity-smart-contract-wrapper-generator" title="Permalink to this headline">¶</a></h2>
+<p>Please refer to <a class="reference internal" href="smart_contracts.html#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a>.</p>
+</div>
 </div>
 
 
@@ -119,20 +190,25 @@
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Command Line Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#wallet-tools">Wallet tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solidity-smart-contract-wrapper-generator">Solidity smart contract wrapper generator</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Links and Useful Resources</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Thanks and Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Thanks and Credits</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="links.html" title="previous chapter">Links and Useful Resources</a></li>
+      <li>Previous: <a href="filters.html" title="previous chapter">Filters</a></li>
+      <li>Next: <a href="management_apis.html" title="next chapter">Management APIs</a></li>
   </ul></li>
 </ul>
 </div>
@@ -161,7 +237,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/credits.txt"
+      <a href="_sources/command_line.txt"
           rel="nofollow">Page source</a>
     </div>
 

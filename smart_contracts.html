@@ -152,7 +152,16 @@ with the JSON-RPC calls, please refer to
 </div>
 <div class="section" id="solidity-smart-contract-wrappers">
 <span id="smart-contract-wrappers"></span><h2>Solidity smart contract wrappers<a class="headerlink" href="#solidity-smart-contract-wrappers" title="Permalink to this headline">¶</a></h2>
-<p>web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI files.</p>
+<p>web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI
+files.</p>
+<p>The web3j <a class="reference internal" href="command_line.html"><em>Command Line Tools</em></a> tools ship with a command line utility for generating the smart contract function wrappers:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j solidity generate /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+</pre></div>
+</div>
+<p>Or by calling the Java class directly:</p>
+<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+</pre></div>
+</div>
 <div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
@@ -303,6 +312,7 @@ contract they were generated from, the only addition is that the call is wrapped
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>

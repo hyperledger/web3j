@@ -143,7 +143,20 @@ with the JSON-RPC calls, please refer to
 Solidity smart contract wrappers
 --------------------------------
 
-web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI files.
+web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI
+files.
+
+The web3j :doc:`command_line` tools ship with a command line utility for generating the smart contract function wrappers:
+
+.. code-block:: bash
+
+   $ web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+
+Or by calling the Java class directly:
+
+.. code-block:: bash
+
+   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 .. code-block:: bash
 

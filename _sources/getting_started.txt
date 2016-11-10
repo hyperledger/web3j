@@ -11,7 +11,7 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.0</version>
+     <version>1.0.3</version>
    </dependency>
 
 Gradle
@@ -19,13 +19,14 @@ Gradle
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.0')
+   compile ('org.web3j:core:1.0.3')
 
 
 Start a client
 --------------
 
-Start up an Ethereum client if you don't already have one running, such as `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
+Start up an Ethereum client if you don't already have one running, such as
+`Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
 
 .. code-block:: bash
 
@@ -37,7 +38,8 @@ Or `Parity <https://github.com/ethcore/parity>`_:
 
    $ parity --chain testnet
 
-If you don't want to run an Ethereum client, you can use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further information refer to the :doc:`infura` section.
+Or use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further
+information refer to :doc:`infura`.
 
 
 Start sending requests
@@ -116,7 +118,7 @@ Then generate the wrapper code:
 
    org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
-Then you can then create and deploy a smart contract::::
+Now you can create and deploy your smart contract::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
