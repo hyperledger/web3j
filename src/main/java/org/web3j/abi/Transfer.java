@@ -102,11 +102,11 @@ public class Transfer extends ManagedTransaction {
         return new Transfer(web3j, credentials).send(toAddress, value, unit);
     }
 
-    public static TransactionReceipt sendFundsAsync(
+    public static Future<TransactionReceipt> sendFundsAsync(
             Web3j web3j, Credentials credentials,
             String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
             ExecutionException, TransactionTimeoutException {
 
-        return new Transfer(web3j, credentials).send(toAddress, value, unit);
+        return new Transfer(web3j, credentials).sendFundsAsync(toAddress, value, unit);
     }
 }

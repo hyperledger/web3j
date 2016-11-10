@@ -8,6 +8,7 @@ import java.security.NoSuchProviderException;
 
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.utils.Console;
 
 /**
  * Simple class for creating a wallet file.
@@ -29,7 +30,7 @@ public class WalletCreator extends WalletManager {
                     " successfully created in: " + destinationDir + "\n");
         } catch (CipherException|IOException|InvalidAlgorithmParameterException|
                 NoSuchAlgorithmException|NoSuchProviderException e) {
-            exitError(e);
+            Console.exitError(e);
         }
     }
 }

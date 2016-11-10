@@ -23,6 +23,8 @@ import org.web3j.protocol.core.Response;
  */
 public class HttpService implements Web3jService {
 
+    public static final String DEFAULT_URL = "http://localhost:8545/";
+
     private CloseableHttpClient httpClient =
             HttpClients.custom().setConnectionManagerShared(true).build();
 
@@ -31,7 +33,7 @@ public class HttpService implements Web3jService {
     private final String url;
 
     public HttpService() {
-        this.url = "http://localhost:8545/";
+        this.url = DEFAULT_URL;
     }
 
     public HttpService(String url) {

@@ -22,9 +22,6 @@ import org.web3j.utils.Numeric;
  */
 public abstract class ManagedTransaction {
 
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
-
     private static final int SLEEP_DURATION = 15000;
     private static final int ATTEMPTS = 40;
 

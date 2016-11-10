@@ -3,6 +3,7 @@ package org.web3j.crypto;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonParser;
@@ -33,7 +34,13 @@ public class WalletFile {
         return crypto;
     }
 
+    @JsonSetter("crypto")
     public void setCrypto(Crypto crypto) {
+        this.crypto = crypto;
+    }
+
+    @JsonSetter("Crypto")  // older wallet files may have this attribute name
+    public void setCryptoV1(Crypto crypto) {
         this.crypto = crypto;
     }
 

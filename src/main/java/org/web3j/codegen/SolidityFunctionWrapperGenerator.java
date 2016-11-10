@@ -5,7 +5,6 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,6 +43,11 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
             "} to update.</p>\n";
 
+    private static final String USAGE = "solidity " +
+            "<input binary file>.bin <input abi file>.abi " +
+            "[-p|--package <base package name>] " +
+            "-o|--output <destination base directory>";
+
     private String binaryFileLocation;
     private String absFileLocation;
     private Path destinationDirLocation;
@@ -64,7 +68,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
     public static void main(String[] args) throws Exception {
 
         if (args.length != 6) {
-            exitError(usage());
+            exitError(USAGE);
         }
 
         Optional<String> binaryFileLocation = parsePositionalArg(args, 0);
@@ -76,7 +80,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 || !absFileLocation.isPresent()
                 || !destinationDirLocation.isPresent()
                 || !basePackageName.isPresent()) {
-            exitError(usage());
+            exitError(USAGE);
         }
 
         new SolidityFunctionWrapperGenerator(
@@ -113,22 +117,6 @@ public class SolidityFunctionWrapperGenerator extends Generator {
     private static void exitError(String message) {
         System.err.println(message);
         System.exit(1);
-    }
-
-    private static String usage() throws URISyntaxException {
-        String className = new java.io.File(
-                SolidityFunctionWrapperGenerator.class.getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .toURI()
-                .getPath())
-                .getName();
-
-        return String.format("Usage: %s " +
-                        "<input binary file>.bin <input abi file>.abi " +
-                        "[-p|--package <base package name>] " +
-                        "-o|--output <destination base directory>\n",
-                className);
     }
 
     private void generate() throws IOException, ClassNotFoundException {
@@ -180,11 +168,14 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         classBuilder.addMethods(buildFunctionDefinitions(className, functionDefinitions));
         classBuilder.addMethod(buildLoad(className));
 
+        System.out.printf("Generating " + basePackageName + "." + className + " ... ");
         JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
                 .indent("    ")  // default indentation is two spaces
                 .build();
+        System.out.println("complete");
 
         javaFile.writeTo(destinationDirLocation);
+        System.out.println("File written to " + destinationDirLocation.toString() + "\n");
     }
 
     private TypeSpec.Builder createClassBuilder(String className, String binary) {

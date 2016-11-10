@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.crypto.SampleKeys.*;
 
 
-public class WalletUtilsTest {
+public class WalletConsoleTest {
 
     private File tempDir;
 
@@ -53,7 +53,7 @@ public class WalletUtilsTest {
     public void testLoadCredentialsFromFile() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
-                new File(WalletUtilsTest.class.getResource("/keyfiles/" +
+                new File(WalletConsoleTest.class.getResource("/keyfiles/" +
                         "UTC--2016-11-03T05-55-06." +
                         "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile()));
 
@@ -64,7 +64,7 @@ public class WalletUtilsTest {
     public void testLoadCredentialsFromString() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
-                WalletUtilsTest.class.getResource("/keyfiles/" +
+                WalletConsoleTest.class.getResource("/keyfiles/" +
                         "UTC--2016-11-03T05-55-06." +
                         "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
 
@@ -76,7 +76,7 @@ public class WalletUtilsTest {
     public void testLoadCredentialsMyEtherWallet() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
-                new File(WalletUtilsTest.class.getResource("/keyfiles/" +
+                new File(WalletConsoleTest.class.getResource("/keyfiles/" +
                         "UTC--2016-11-03T07-47-45." +
                         "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818").getFile()));
 
@@ -100,6 +100,6 @@ public class WalletUtilsTest {
 
     private static File createTempDir() throws Exception {
         return Files.createTempDirectory(
-                WalletUtilsTest.class.getSimpleName() + "-testkeys").toFile();
+                WalletConsoleTest.class.getSimpleName() + "-testkeys").toFile();
     }
 }

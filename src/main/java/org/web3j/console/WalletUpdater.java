@@ -7,6 +7,8 @@ import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 
+import static org.web3j.utils.Console.exitError;
+
 /**
  * Simple class for creating a wallet file.
  */
@@ -14,7 +16,7 @@ public class WalletUpdater extends WalletManager {
 
     public static void main(String[] args) {
         if (args.length != 1) {
-            exitError("You must provide an exising wallet file");
+            exitError("You must provide an existing wallet file");
         } else {
             new WalletUpdater().run(args[0]);
         }
@@ -47,21 +49,6 @@ public class WalletUpdater extends WalletManager {
                 exitError("Unable to remove wallet file\n");
             } else {
                 console.printf("File successfully removed\n");
-            }
-        }
-    }
-
-    private Credentials getCredentials(File walletFile) {
-        while (true) {
-            char[] password = console.readPassword(
-                    "Please enter your existing your wallet file password: ");
-            String currentPassword = new String(password);
-            try {
-                return WalletUtils.loadCredentials(currentPassword, walletFile);
-            } catch (CipherException e) {
-                console.printf("Invalid password specified\n");
-            } catch (IOException e) {
-                exitError("Unable to load wallet file: " + walletFile);
             }
         }
     }
