@@ -27,6 +27,8 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import static org.web3j.utils.Collection.tail;
+
 /**
  * Java wrapper source code generator for Solidity ABI format.
  */
@@ -43,7 +45,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
             "} to update.</p>\n";
 
-    private static final String USAGE = "solidity " +
+    private static final String USAGE = "solidity generate " +
             "<input binary file>.bin <input abi file>.abi " +
             "[-p|--package <base package name>] " +
             "-o|--output <destination base directory>";
@@ -63,6 +65,14 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         this.absFileLocation = absFileLocation;
         this.destinationDirLocation = Paths.get(destinationDirLocation);
         this.basePackageName = basePackageName;
+    }
+
+    public static void run(String[] args) throws Exception {
+        if (args.length < 1 || !args[0].equals("generate")) {
+            exitError(USAGE);
+        } else {
+            main(tail(args));
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -244,11 +254,12 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                             "$T.asList($L)" +
                             ")",
                     String.class, FunctionEncoder.class, Arrays.class, inputParams);
+            methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, encodedConstructor, $L)",
+                    className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
+        } else {
+            methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, \"\", $L)",
+                    className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
         }
-
-        methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, encodedConstructor, $L)",
-                className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
-
         return methodBuilder.build();
     }
 

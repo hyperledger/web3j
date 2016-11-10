@@ -30,10 +30,10 @@ public class Runner {
         } else {
             switch (args[0]) {
                 case "wallet":
-                    WalletRunner.main(tail(args));
+                    WalletRunner.run(tail(args));
                     break;
                 case "solidity":
-                    SolidityFunctionWrapperGenerator.main(tail(args));
+                    SolidityFunctionWrapperGenerator.run(tail(args));
                     break;
                 default:
                     Console.exitError(USAGE);

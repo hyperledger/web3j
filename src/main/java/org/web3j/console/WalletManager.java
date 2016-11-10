@@ -70,6 +70,13 @@ abstract class WalletManager {
     }
 
     Credentials getCredentials(File walletFile) {
+        if (!walletFile.exists() || !walletFile.isFile()) {
+            exitError("Unable to read wallet file: " + walletFile);
+        }
+        return loadWalletFile(walletFile);
+    }
+
+    private Credentials loadWalletFile(File walletFile) {
         while (true) {
             char[] password = console.readPassword(
                     "Please enter your existing your wallet file password: ");

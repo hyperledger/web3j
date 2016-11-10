@@ -48,7 +48,7 @@ public class WalletUpdater extends WalletManager {
             if (!walletFile.delete()) {
                 exitError("Unable to remove wallet file\n");
             } else {
-                console.printf("File successfully removed\n");
+                console.printf("Deleted previous wallet file: %s\n", walletFile.getName());
             }
         }
     }

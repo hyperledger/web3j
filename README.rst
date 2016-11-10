@@ -69,7 +69,7 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.3</version>
+     <version>1.0.4</version>
    </dependency>
 
 Gradle
@@ -77,7 +77,7 @@ Gradle
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.3')
+   compile ('org.web3j:core:1.0.4')
 
 
 Start a client

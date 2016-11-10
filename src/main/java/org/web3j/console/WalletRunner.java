@@ -10,6 +10,10 @@ import static org.web3j.utils.Collection.tail;
 public class WalletRunner {
     private static final String USAGE = "wallet create|update|send";
 
+    public static void run(String[] args) {
+        main(args);
+    }
+
     public static void main(String[] args) {
         if (args.length < 1) {
             Console.exitError(USAGE);

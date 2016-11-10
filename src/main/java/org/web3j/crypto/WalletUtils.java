@@ -55,7 +55,7 @@ public class WalletUtils {
 
     private static String getWalletFileName(WalletFile walletFile) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern(
-                "'UTC--'yyyy-MM-dd'T'hh-mm-ss.nVV'--'");
+                "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
 
         return now.format(format) + walletFile.getAddress() + ".json";
