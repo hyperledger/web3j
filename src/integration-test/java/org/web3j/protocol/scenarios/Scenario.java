@@ -84,7 +84,7 @@ public class Scenario {
                 getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
 
         if (!transactionReceiptOptional.isPresent()) {
-            fail("Transaction reciept not generated after " + ATTEMPTS + " attempts");
+            fail("Transaction receipt not generated after " + ATTEMPTS + " attempts");
         }
 
         return transactionReceiptOptional.get();
