@@ -218,11 +218,11 @@ Command line tools
 ------------------
 
 A web3j fat jar is distributed with each release providing command line tools. The command line
-allow you to use some of the functionality of web3j from your terminal:
+tools allow you to use some of the functionality of web3j from the command line:
 
-- Create wallet
-- Change wallet password
-- Transfer funds from one wallet to another
+- Wallet creation
+- Wallet password management
+- Transfer of funds from one wallet to another
 - Generate Solidity smart contract function wrappers
 
 Please refer to the `documentation <http://docs.web3j.io/command_line.html>`_ for further

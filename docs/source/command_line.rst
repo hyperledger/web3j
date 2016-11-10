@@ -7,11 +7,11 @@ allow you to use some of the functionality of web3j from your terminal:
 These tools provide:
 
 - Wallet creation
-- Change wallet password
+- Wallet password management
 - Ether transfer from one wallet to another
 - Generation of Solidity smart contract wrappers
 
-The command line tools can be obtained as a zipfile from the
+The command line tools can be obtained as a zipfile/tarball from the
 `releases <https://github.com/web3j/web3j/releases/latest>`_ page of the project repository, under
 the **Downloads** section.
 
@@ -19,7 +19,7 @@ To run, simply extract the zipfile and run the binary:
 
 .. code-block:: bash
 
-   $ unzip web3j-<version>
+   $ unzip web3j-<version>.zip
       creating: web3j-1.0.2/lib/
      inflating: web3j-1.0.2/lib/core-1.0.2-all.jar
       creating: web3j-1.0.2/bin/
@@ -67,7 +67,7 @@ The following example demonstrates using web3j to send Ether to another wallet.
 
 .. code-block:: bash
 
-   $ ./web3j-<version>/bin/web3j wallet send <keyfile>
+   $ ./web3j-<version>/bin/web3j wallet send <walletfile> <destination-address>
 
                  _      _____ _     _
                 | |    |____ (_)   (_)
@@ -86,7 +86,7 @@ The following example demonstrates using web3j to send Ether to another wallet.
    Please specify the unit (ether, wei, ...) [ether]:
    Please confim that you wish to transfer 0.000001 ether (1000000000000 wei) to address 0x9c98e381edc5fe1ac514935f3cc3edaa764cf004
    Please type 'yes' to proceed: yes
-   Commencing transfer (this may take a few minutes).................................................................................................................................................................................................................$
+   Commencing transfer (this may take a few minutes)...................................................................................................................$
 
    Funds have been successfully transferred from 0x19e03255f667bdfd50a32722df860b1eeaf4d635 to 0x9c98e381edc5fe1ac514935f3cc3edaa764cf004
    Transaction hash: 0xb00afc5c2bb92a76d03e17bd3a0175b80609e877cb124c02d19000d529390530

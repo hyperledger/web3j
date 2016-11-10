@@ -112,11 +112,11 @@ To generate the wrapper code, compile your smart contract:
 
    $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
 
-Then generate the wrapper code:
+Then generate the wrapper code using web3j's :ref:`command_line`:
 
 .. code-block:: bash
 
-   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Now you can create and deploy your smart contract::
 
