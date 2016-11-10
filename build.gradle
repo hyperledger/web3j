@@ -207,3 +207,23 @@ uploadArchives {
 // Build command line library release with target distShadowZip
 mainClassName = 'org.web3j.console.Runner'
 applicationName = 'web3j'
+
+task release {
+    // remove once integration tests are running as part of the build
+    check.dependsOn.remove(integrationTest)
+
+    dependsOn 'clean'
+    dependsOn 'build'
+    dependsOn 'uploadArchives'
+    dependsOn 'closeAndPromoteRepository'
+    dependsOn 'bintrayUpload'
+    dependsOn 'distShadowZip'
+
+    tasks.findByName('build').mustRunAfter 'clean'
+
+    tasks.findByName('uploadArchives').mustRunAfter 'build'
+    tasks.findByName('closeAndPromoteRepository').mustRunAfter 'uploadArchives'
+
+    tasks.findByName('bintrayUpload').mustRunAfter 'build'
+    tasks.findByName('distShadowZip').mustRunAfter 'build'
+}
