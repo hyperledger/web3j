@@ -41,7 +41,7 @@ public class WalletFile {
 
     @JsonSetter("Crypto")  // older wallet files may have this attribute name
     public void setCryptoV1(Crypto crypto) {
-        this.crypto = crypto;
+        setCrypto(crypto);
     }
 
     public String getId() {
