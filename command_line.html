@@ -51,15 +51,15 @@ allow you to use some of the functionality of web3j from your terminal:</p>
 <p>These tools provide:</p>
 <ul class="simple">
 <li>Wallet creation</li>
-<li>Change wallet password</li>
+<li>Wallet password management</li>
 <li>Ether transfer from one wallet to another</li>
 <li>Generation of Solidity smart contract wrappers</li>
 </ul>
-<p>The command line tools can be obtained as a zipfile from the
+<p>The command line tools can be obtained as a zipfile/tarball from the
 <a class="reference external" href="https://github.com/web3j/web3j/releases/latest">releases</a> page of the project repository, under
 the <strong>Downloads</strong> section.</p>
 <p>To run, simply extract the zipfile and run the binary:</p>
-<div class="highlight-bash"><div class="highlight"><pre>$ unzip web3j-&lt;version&gt;
+<div class="highlight-bash"><div class="highlight"><pre>$ unzip web3j-&lt;version&gt;.zip
    creating: web3j-1.0.2/lib/
   inflating: web3j-1.0.2/lib/core-1.0.2-all.jar
    creating: web3j-1.0.2/bin/
@@ -96,7 +96,7 @@ Usage: web3j wallet|solidity ...
 <p>When sending Ether to another address you will be asked a series of questions before the
 transaction takes place. See the below for a full example</p>
 <p>The following example demonstrates using web3j to send Ether to another wallet.</p>
-<div class="highlight-bash"><div class="highlight"><pre>$ ./web3j-&lt;version&gt;/bin/web3j wallet send &lt;keyfile&gt;
+<div class="highlight-bash"><div class="highlight"><pre>$ ./web3j-&lt;version&gt;/bin/web3j wallet send &lt;walletfile&gt; &lt;destination-address&gt;
 
               _      _____ _     _
              | |    |____ (_)   (_)
@@ -115,7 +115,7 @@ What amound would you like to transfer (please enter a numeric value): 0.000001
 Please specify the unit (ether, wei, ...) [ether]:
 Please confim that you wish to transfer 0.000001 ether (1000000000000 wei) to address 0x9c98e381edc5fe1ac514935f3cc3edaa764cf004
 Please type &#39;yes&#39; to proceed: yes
-Commencing transfer (this may take a few minutes).................................................................................................................................................................................................................$
+Commencing transfer (this may take a few minutes)...................................................................................................................$
 
 Funds have been successfully transferred from 0x19e03255f667bdfd50a32722df860b1eeaf4d635 to 0x9c98e381edc5fe1ac514935f3cc3edaa764cf004
 Transaction hash: 0xb00afc5c2bb92a76d03e17bd3a0175b80609e877cb124c02d19000d529390530

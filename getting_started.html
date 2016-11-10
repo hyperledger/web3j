@@ -136,8 +136,8 @@ without leaving Java.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>solc &lt;contract&gt;.sol --bin --abi --optimize -o &lt;output-dir&gt;/
 </pre></div>
 </div>
-<p>Then generate the wrapper code:</p>
-<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+<p>Then generate the wrapper code using web3j&#8217;s <span class="xref std std-ref">command_line</span>:</p>
+<div class="highlight-bash"><div class="highlight"><pre>web3j solidity generate /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
 <p>Now you can create and deploy your smart contract:</p>
