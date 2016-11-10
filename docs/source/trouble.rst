@@ -4,7 +4,7 @@ Troubleshooting
 I'm submitting a transaction, but it's not being mined
 ------------------------------------------------------
 After creating and sending a transaction, you receive a transaction hash, however calling
-`eth_getTransactionReciept <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt>`_
+`eth_getTransactionReceipt <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt>`_
 always returns a blank value, indicating the transaction has not been mined::
 
    String transactionHash = sendTransaction(...);
