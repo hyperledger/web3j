@@ -4,7 +4,11 @@
 web3j: Web3 Java Ethereum Ðapp API
 ==================================
 
-.. image:: https://readthedocs.org/projects/web3j/badge/?version=latest
+.. Will revert back to web3j badge (https://readthedocs.org/projects/web3j/badge/?version=latest),
+   when they finally fix their build server issues for the project, see
+   https://github.com/rtfd/readthedocs.org/issues/2476 for further information
+
+.. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
    :target: http://docs.web3j.io
    :alt: Documentation Status
 
