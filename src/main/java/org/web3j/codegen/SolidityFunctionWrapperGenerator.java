@@ -134,7 +134,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         File binaryFile = new File(binaryFileLocation);
         if (!binaryFile.exists()) {
-            exitError("Invalid input binary file specified");
+            exitError("Invalid input binary file specified: " + binaryFileLocation);
         }
 
         byte[] bytes = Files.readAllBytes(Paths.get(binaryFile.toURI()));
@@ -142,7 +142,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         File absFile = new File(absFileLocation);
         if (!absFile.exists() || !absFile.canRead()) {
-            exitError("Invalid input ABI file specified");
+            exitError("Invalid input ABI file specified: " + absFileLocation);
         }
         String fileName = absFile.getName();
         String contractName = getFileNameNoExtension(fileName);
