@@ -46,6 +46,20 @@ public abstract class ManagedTransaction {
 
         return waitForTransactionReceipt(transactionHash);
     }
+    
+    protected String signAndSendWithoutReceipt(RawTransaction rawTransaction)
+            throws InterruptedException, ExecutionException, TransactionTimeoutException{
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        String hexValue = Numeric.toHexString(signedMessage);
+
+        // This might be a good candidate for using functional composition with CompletableFutures
+        EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
+                .sendAsync().get();
+
+        String transactionHash = transactionResponse.getTransactionHash();
+
+        return transactionHash;
+    }
 
     protected BigInteger getNonce(String address) throws InterruptedException, ExecutionException {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
