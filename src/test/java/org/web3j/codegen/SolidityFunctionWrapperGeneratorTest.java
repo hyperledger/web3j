@@ -94,7 +94,7 @@ public class SolidityFunctionWrapperGeneratorTest {
 
     @Test
     public void testSimpleStorageGeneration() throws Exception {
-        testCodeGeneration("simpleStorage", "SimpleStorage");
+        testCodeGeneration("simplestorage", "SimpleStorage");
     }
 
     @Test
