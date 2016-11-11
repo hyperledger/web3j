@@ -143,7 +143,7 @@ public abstract class Contract extends ManagedTransaction {
      * while waiting
      * @throws TransactionTimeoutException if the transaction was not processed while waiting
      */
-    protected TransactionReceipt executeTransactionWithoutWaiting(
+    protected String executeTransactionWithoutWaiting(
             Function function) throws ExecutionException, InterruptedException,
             TransactionTimeoutException {
         BigInteger nonce = getNonce(credentials.getAddress());
