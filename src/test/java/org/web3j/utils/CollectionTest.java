@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Collection.*;
 import static org.web3j.utils.Collection.EMPTY_STRING_ARRAY;
 
-public class CollectionTests {
+public class CollectionTest {
 
     @Test
     public void testTail() {

@@ -26,6 +26,7 @@ import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.utils.Strings;
 
 import static org.web3j.utils.Collection.tail;
 
@@ -171,7 +172,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             String binary, String contractName, List<AbiDefinition> functionDefinitions,
             String basePackageName) throws IOException, ClassNotFoundException {
 
-        String className = contractName.substring(0, 1).toUpperCase() + contractName.substring(1);
+        String className = Strings.capitaliseFirstLetter(contractName);
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, binary);
         classBuilder.addMethod(buildConstructor());
@@ -422,9 +423,8 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             AbiDefinition functionDefinition) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
-        String generatedFunctionName = "process" +
-                functionName.substring(0, 1).toUpperCase() +
-                functionName.substring(1) + "Event";
+        String generatedFunctionName =
+                "process" + Strings.capitaliseFirstLetter(functionName) + "Event";
 
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(generatedFunctionName)
                 .addModifiers(Modifier.PUBLIC)

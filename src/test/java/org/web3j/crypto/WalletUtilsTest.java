@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.crypto.SampleKeys.*;
 
 
-public class WalletConsoleTest {
+public class WalletUtilsTest {
 
     private File tempDir;
 
@@ -53,7 +53,7 @@ public class WalletConsoleTest {
     public void testLoadCredentialsFromFile() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
-                new File(WalletConsoleTest.class.getResource("/keyfiles/" +
+                new File(WalletUtilsTest.class.getResource("/keyfiles/" +
                         "UTC--2016-11-03T05-55-06." +
                         "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile()));
 
@@ -64,7 +64,7 @@ public class WalletConsoleTest {
     public void testLoadCredentialsFromString() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
-                WalletConsoleTest.class.getResource("/keyfiles/" +
+                WalletUtilsTest.class.getResource("/keyfiles/" +
                         "UTC--2016-11-03T05-55-06." +
                         "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
 
@@ -76,7 +76,7 @@ public class WalletConsoleTest {
     public void testLoadCredentialsMyEtherWallet() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
-                new File(WalletConsoleTest.class.getResource("/keyfiles/" +
+                new File(WalletUtilsTest.class.getResource("/keyfiles/" +
                         "UTC--2016-11-03T07-47-45." +
                         "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818").getFile()));
 
@@ -100,6 +100,6 @@ public class WalletConsoleTest {
 
     private static File createTempDir() throws Exception {
         return Files.createTempDirectory(
-                WalletConsoleTest.class.getSimpleName() + "-testkeys").toFile();
+                WalletUtilsTest.class.getSimpleName() + "-testkeys").toFile();
     }
 }
