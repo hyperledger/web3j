@@ -25,7 +25,7 @@ web3j: Web3 Java Ethereum Ðapp API
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
 web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the
-Ethereum network::
+Ethereum network:
 
 .. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j-network.png
 
