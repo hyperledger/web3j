@@ -79,7 +79,7 @@ abstract class WalletManager {
     private Credentials loadWalletFile(File walletFile) {
         while (true) {
             char[] password = console.readPassword(
-                    "Please enter your existing your wallet file password: ");
+                    "Please enter your existing wallet file password: ");
             String currentPassword = new String(password);
             try {
                 return WalletUtils.loadCredentials(currentPassword, walletFile);

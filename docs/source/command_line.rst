@@ -78,7 +78,7 @@ The following example demonstrates using web3j to send Ether to another wallet.
                             _/ |
                            |__/
 
-   Please enter your existing your wallet file password:
+   Please enter your existing wallet file password:
    Wallet for address 0x19e03255f667bdfd50a32722df860b1eeaf4d635 loaded
    Please confirm address of running Ethereum client you wish to send the transfer request to [http://localhost:8545/]:
    Connected successfully to client: Geth/v1.4.18-stable-c72f5459/darwin/go1.7.3
