@@ -39,7 +39,7 @@ Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.5')
+   compile ('org.web3j:core-android:1.0.5')
 
 
 Start a client
