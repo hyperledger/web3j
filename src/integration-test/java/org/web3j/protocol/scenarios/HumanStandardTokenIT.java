@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 
@@ -29,7 +28,7 @@ import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Integration test demonstrating integration with
@@ -134,10 +133,10 @@ public class HumanStandardTokenIT extends Scenario {
         assertFalse("Contract execution ran out of gas",
                 createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        Optional<String> contractAddressOptional = createTransactionReceipt.getContractAddress();
+        String contractAddress = createTransactionReceipt.getContractAddress();
 
-        assertTrue(contractAddressOptional.isPresent());
-        return contractAddressOptional.get();
+        assertNotNull(contractAddress);
+        return contractAddress;
     }
 
     private String sendCreateContractTransaction(
@@ -146,7 +145,7 @@ public class HumanStandardTokenIT extends Scenario {
 
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(
-                        Arrays.asList(
+                        Arrays.<Type>asList(
                                 new Uint256(initialSupply),
                                 new Utf8String("web3j tokens"),
                                 new Uint8(BigInteger.TEN),
@@ -197,7 +196,7 @@ public class HumanStandardTokenIT extends Scenario {
         // verify qty transferred
         List<Type> results = FunctionReturnDecoder.decode(
                 log.getData(), transferEvent.getNonIndexedParameters());
-        assertThat(results, equalTo(Collections.singletonList(new Uint256(qty))));
+        assertThat(results, equalTo(Collections.<Type>singletonList(new Uint256(qty))));
     }
 
     private void sendApproveTransaction(
@@ -231,7 +230,7 @@ public class HumanStandardTokenIT extends Scenario {
         // verify our two event parameters
         List<Type> results = FunctionReturnDecoder.decode(
                 log.getData(), event.getNonIndexedParameters());
-        assertThat(results, equalTo(Collections.singletonList(new Uint256(value))));
+        assertThat(results, equalTo(Collections.<Type>singletonList(new Uint256(value))));
     }
 
     public void sendTransferFromTransaction(
@@ -262,7 +261,7 @@ public class HumanStandardTokenIT extends Scenario {
         // verify qty transferred
         List<Type> results = FunctionReturnDecoder.decode(
                 log.getData(), transferEvent.getNonIndexedParameters());
-        assertThat(results, equalTo(Collections.singletonList(new Uint256(value))));
+        assertThat(results, equalTo(Collections.<Type>singletonList(new Uint256(value))));
     }
 
     private String execute(
@@ -300,42 +299,42 @@ public class HumanStandardTokenIT extends Scenario {
     }
 
     private Function totalSupply() {
-        return new Function<>(
+        return new Function(
                 "totalSupply",
                 Collections.emptyList(),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function balanceOf(String owner) {
-        return new Function<>(
+        return new Function(
                 "balanceOf",
                 Collections.singletonList(new Address(owner)),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function transfer(String to, BigInteger value) {
-        return new Function<>(
+        return new Function(
                 "transfer",
                 Arrays.asList(new Address(to), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
     private Function allowance(String owner, String spender) {
-        return new Function<>(
+        return new Function(
                 "allowance",
                 Arrays.asList(new Address(owner), new Address(spender)),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function approve(String spender, BigInteger value) {
-        return new Function<>(
+        return new Function(
                 "approve",
                 Arrays.asList(new Address(spender), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
     private Function transferFrom(String from, String to, BigInteger value) {
-        return new Function<>(
+        return new Function(
                 "transferFrom",
                 Arrays.asList(new Address(from), new Address(to), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));
@@ -344,15 +343,17 @@ public class HumanStandardTokenIT extends Scenario {
     private Event transferEvent() {
         return new Event(
                 "Transfer",
-                Arrays.asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Collections.singletonList(new TypeReference<Uint256>() {}));
+                Arrays.<TypeReference<?>>asList(
+                        new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Event approvalEvent() {
         return new Event(
                 "Approval",
-                Arrays.asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Collections.singletonList(new TypeReference<Uint256>() {}));
+                Arrays.<TypeReference<?>>asList(
+                        new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint256>() {}));
     }
 
     private static String getHumanStandardTokenBinary() throws Exception {

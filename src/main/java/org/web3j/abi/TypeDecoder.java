@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.Array;
@@ -175,15 +174,7 @@ class TypeDecoder {
     static <T extends Type> T decodeStaticArray(
             String input, int offset, TypeReference<T> typeReference, int length) {
 
-        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
-            if (elements.isEmpty()) {
-                throw new UnsupportedOperationException("Zero length fixed array is invalid type");
-            } else {
-                return (T) new StaticArray<>(elements);
-            }
-        };
-
-        return decodeArrayElements(input, offset, typeReference, length, function);
+        return decodeArrayElements(input, offset, typeReference, length, false);
     }
 
     @SuppressWarnings("unchecked")
@@ -191,23 +182,14 @@ class TypeDecoder {
             String input, int offset, TypeReference<T> typeReference) {
 
         int length = decodeUintAsInt(input, offset);
-
-        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
-            if (elements.isEmpty()) {
-                return (T) DynamicArray.empty(typeName);
-            } else {
-                return (T) new DynamicArray<>(elements);
-            }
-        };
-
         int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
-        return decodeArrayElements(input, valueOffset, typeReference, length, function);
+        return decodeArrayElements(input, valueOffset, typeReference, length, true);
     }
 
     private static <T extends Type> T decodeArrayElements(
             String input, int offset, TypeReference<T> typeReference, int length,
-            BiFunction<List<T>, String, T> consumer) {
+            boolean isDynamic) {
 
         try {
             Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
@@ -228,11 +210,23 @@ class TypeDecoder {
 
                 String typeName = Utils.getSimpleTypeName(cls);
 
-                return consumer.apply(elements, typeName);
+                if (isDynamic) {
+                    if (elements.isEmpty()) {
+                        return (T) DynamicArray.empty(typeName);
+                    } else {
+                        return (T) new DynamicArray<>(elements);
+                    }
+                } else {
+                    if (elements.isEmpty()) {
+                        throw new UnsupportedOperationException("Zero length fixed array is invalid type");
+                    } else {
+                        return (T) new StaticArray<>(elements);
+                    }
+                }
             }
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type " + typeReference.getType().toString(),
                     e);
         }
     }

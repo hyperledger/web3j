@@ -4,8 +4,8 @@ import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -19,6 +19,7 @@ import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.utils.Async;
 
 
 /**
@@ -62,33 +63,23 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected <T extends Type> Future<T> executeCallSingleValueReturnAsync(
-            Function function) {
-        CompletableFuture<T> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(executeCallSingleValueReturn(function));
-            } catch (InterruptedException|ExecutionException e) {
-                result.completeExceptionally(e);
+            final Function function) {
+        return Async.run(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return executeCallSingleValueReturn(function);
             }
         });
-        return result;
     }
 
     protected <T extends Type> Future<List<T>> executeCallMultipleValueReturnAsync(
-            Function function) {
-        CompletableFuture<List<T>> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(executeCallMultipleValueReturn(function));
-            } catch (InterruptedException|ExecutionException e) {
-                result.completeExceptionally(e);
+            final Function function) {
+        return Async.run(new Callable<List<T>>() {
+            @Override
+            public List<T> call() throws Exception {
+                return executeCallMultipleValueReturn(function);
             }
         });
-        return result;
     }
 
     protected <T extends Type> T executeCallSingleValueReturn(
@@ -107,7 +98,7 @@ public abstract class Contract extends ManagedTransaction {
      * recommended via {@link Contract#executeTransactionAsync}.
      *
      * @param function to transact with
-     * @return {@link Optional} containing our transaction receipt
+     * @return the transaction receipt
      * @throws ExecutionException if the computation threw an
      * exception
      * @throws InterruptedException if the current thread was interrupted
@@ -136,18 +127,13 @@ public abstract class Contract extends ManagedTransaction {
      * @param function to transact with
      * @return {@link Future} containing executing transaction
      */
-    protected Future<TransactionReceipt> executeTransactionAsync(Function function) {
-        CompletableFuture<TransactionReceipt> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(executeTransaction(function));
-            } catch (InterruptedException|ExecutionException|TransactionTimeoutException e) {
-                result.completeExceptionally(e);
+    protected Future<TransactionReceipt> executeTransactionAsync(final Function function) {
+        return Async.run(new Callable<TransactionReceipt>() {
+            @Override
+            public TransactionReceipt call() throws Exception {
+                return executeTransaction(function);
             }
         });
-        return result;
     }
 
     protected EventValues extractEventParameters(
@@ -194,12 +180,9 @@ public abstract class Contract extends ManagedTransaction {
                 binary + encodedConstructor);
 
         TransactionReceipt transactionReceipt = contract.signAndSend(rawTransaction);
-        Optional<String> contractAddress = transactionReceipt.getContractAddress();
-        if (contractAddress.isPresent()) {
-            return contractAddress.get();
-        } else {
-            throw new RuntimeException("Empty contract address returned");
-        }
+        String contractAddress = transactionReceipt.getContractAddress();
+        Objects.requireNonNull(contractAddress);
+        return contractAddress;
     }
 
     protected static <T extends Contract> T deploy(Class<T> type,
@@ -214,19 +197,15 @@ public abstract class Contract extends ManagedTransaction {
         return constructor.newInstance(contractAddress, web3j, credentials);
     }
 
-    protected static <T extends Contract> CompletableFuture<T> deployAsync(
-            Class<T> type, Web3j web3j, Credentials credentials,
-            String binary, String encodedConstructor, BigInteger value) {
-        CompletableFuture<T> result = new CompletableFuture<>();
+    protected static <T extends Contract> Future<T> deployAsync(
+            final Class<T> type, final Web3j web3j, final Credentials credentials,
+            final String binary, final String encodedConstructor, final BigInteger value) {
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(
-                        deploy(type, web3j, credentials, binary, encodedConstructor, value));
-            } catch (Throwable e) {
-                result.completeExceptionally(e);
+        return Async.run(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return deploy(type, web3j, credentials, binary, encodedConstructor, value);
             }
         });
-        return result;
     }
 }

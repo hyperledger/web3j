@@ -14,6 +14,7 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -59,8 +60,9 @@ public class EventFilterIT extends Scenario {
         assertThat(topics.size(), is(1));
 
         Event event = new Event("Notify",
-                Collections.emptyList(),
-                Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+                Collections.<TypeReference<?>>emptyList(),
+                Arrays.<TypeReference<?>>asList(
+                        new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
@@ -71,7 +73,7 @@ public class EventFilterIT extends Scenario {
         // verify our two event parameters
         List<Type> results = FunctionReturnDecoder.decode(
                 log.getData(), event.getNonIndexedParameters());
-        assertThat(results, equalTo(Arrays.asList(
+        assertThat(results, equalTo(Arrays.<Type>asList(
                 new Uint256(BigInteger.valueOf(7)), new Uint256(BigInteger.valueOf(13)))));
 
         // finally check it shows up in the event filter

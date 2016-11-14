@@ -26,7 +26,7 @@ public class FunctionEncoderTest {
         assertThat(
                 FunctionEncoder.buildMethodSignature(
                         "baz",
-                        Arrays.asList(
+                        Arrays.<Type>asList(
                                 new Uint32(BigInteger.valueOf(69)),
                                 new Bool(true))
                 ),
@@ -36,19 +36,19 @@ public class FunctionEncoderTest {
     @Test
     public void testBuildEmptyMethodSignature() {
         assertThat(
-                FunctionEncoder.buildMethodSignature("empty", Collections.emptyList()),
+                FunctionEncoder.buildMethodSignature("empty", Collections.<Type>emptyList()),
                 is("empty()"));
     }
 
     @Test
     public void testEncodeConstructorEmpty() {
-        assertThat(FunctionEncoder.encodeConstructor(Collections.emptyList()), is(""));
+        assertThat(FunctionEncoder.encodeConstructor(Collections.<Type>emptyList()), is(""));
     }
 
     @Test
     public void testEncodeConstructorString() {
         assertThat(FunctionEncoder.encodeConstructor(
-                Collections.singletonList(new Utf8String("Greetings!"))),
+                Collections.<Type>singletonList(new Utf8String("Greetings!"))),
                 is("0000000000000000000000000000000000000000000000000000000000000020" +
                         "000000000000000000000000000000000000000000000000000000000000000a" +
                         "4772656574696e67732100000000000000000000000000000000000000000000"));
@@ -57,7 +57,7 @@ public class FunctionEncoderTest {
     @Test
     public void testEncodeConstructorUint() {
         assertThat(FunctionEncoder.encodeConstructor(
-                Arrays.asList(new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(0x20)))),
+                Arrays.<Type>asList(new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(0x20)))),
                 is("0000000000000000000000000000000000000000000000000000000000000001" +
                         "0000000000000000000000000000000000000000000000000000000000000020"));
     }
@@ -66,8 +66,8 @@ public class FunctionEncoderTest {
     public void testFunctionSimpleEncode() {
         Function function = new Function(
                 "baz",
-                Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),
-                Collections.<Class<? extends Type>>emptyList()
+                Arrays.<Type>asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),
+                Collections.<TypeReference<Type>>emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),
@@ -81,7 +81,7 @@ public class FunctionEncoderTest {
     public void testFunctionMDynamicArrayEncode1() {
         Function function = new Function(
                 "sam",
-                Arrays.asList(
+                Arrays.<Type>asList(
                     new DynamicBytes("dave".getBytes()),
                     new Bool(true),
                     new DynamicArray<>(
@@ -108,7 +108,7 @@ public class FunctionEncoderTest {
     public void testFunctionMDynamicArrayEncode2() {
         Function function = new Function(
                 "f",
-                Arrays.asList(
+                Arrays.<Type>asList(
                     new Uint(BigInteger.valueOf(0x123)),
                     new DynamicArray<>(
                             new Uint32(BigInteger.valueOf(0x456)),

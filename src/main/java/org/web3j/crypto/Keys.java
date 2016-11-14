@@ -5,6 +5,8 @@ import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Arrays;
 
+import org.spongycastle.jce.provider.BouncyCastleProvider;
+
 import org.web3j.utils.Numeric;
 
 
@@ -17,7 +19,7 @@ public class Keys {
     private static final int PUBLIC_KEY_SIZE = 64;
 
     static {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     private Keys() { }
@@ -31,7 +33,7 @@ public class Keys {
     static KeyPair createSecp256k1KeyPair() throws NoSuchProviderException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "SC");
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
         keyPairGenerator.initialize(ecGenParameterSpec, new SecureRandom());
         return keyPairGenerator.generateKeyPair();

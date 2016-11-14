@@ -32,7 +32,7 @@ public class ParityIT {
 
     @Before
     public void setUp() {
-        this.parity = Parity.build(new HttpService());
+        this.parity = ParityFactory.build(new HttpService());
     }
 
     @Test

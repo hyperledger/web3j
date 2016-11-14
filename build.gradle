@@ -27,7 +27,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 group 'org.web3j'
 version '1.0.2'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 
 // We don't want any compiler warnings
 compileJava {
@@ -85,7 +85,8 @@ configurations {
 dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5.2',
             'com.fasterxml.jackson.core:jackson-databind:2.8.1',
-            'org.bouncycastle:bcprov-jdk15on:1.54',
+            'io.reactivex:rxjava:1.2.2',
+            'com.madgag.spongycastle:prov:1.54.0.0',
             'com.lambdaworks:scrypt:1.4.0',
             'com.squareup:javapoet:1.7.0'
     testCompile 'junit:junit:4.11',

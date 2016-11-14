@@ -14,9 +14,6 @@ import org.web3j.protocol.core.Request;
  * JSON-RPC Request object building factory.
  */
 public interface Web3j {
-    static Web3j build(Web3jService web3jService) {
-        return new JsonRpc2_0Web3j(web3jService);
-    }
 
     Request<?, Web3ClientVersion> web3ClientVersion();
 

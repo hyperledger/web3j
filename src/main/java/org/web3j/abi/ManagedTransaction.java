@@ -1,7 +1,6 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.web3j.crypto.Credentials;
@@ -68,14 +67,14 @@ public abstract class ManagedTransaction {
             String transactionHash, int sleepDuration, int attempts)
             throws InterruptedException, ExecutionException, TransactionTimeoutException {
 
-        Optional<TransactionReceipt> receiptOptional =
+        TransactionReceipt receiptOptional =
                 sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
-            if (!receiptOptional.isPresent()) {
+            if (receiptOptional == null) {
                 Thread.sleep(sleepDuration);
                 receiptOptional = sendTransactionReceiptRequest(transactionHash);
             } else {
-                return receiptOptional.get();
+                return receiptOptional;
             }
         }
 
@@ -83,7 +82,7 @@ public abstract class ManagedTransaction {
                 ((sleepDuration * attempts) / 1000 + " seconds"));
     }
 
-    private Optional<TransactionReceipt> sendTransactionReceiptRequest(
+    private TransactionReceipt sendTransactionReceiptRequest(
             String transactionHash) throws InterruptedException, ExecutionException {
         EthGetTransactionReceipt transactionReceipt =
                 web3j.ethGetTransactionReceipt(transactionHash).sendAsync().get();

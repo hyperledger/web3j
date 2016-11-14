@@ -5,8 +5,8 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
@@ -14,6 +14,7 @@ import org.web3j.protocol.core.methods.response.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -146,7 +147,8 @@ public class ResponseTest extends ResponseTester {
 
         EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
 
-        assertThat(ethSyncing.getResult(), equalTo(new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
+        assertThat(ethSyncing.getResult(),
+                CoreMatchers.<EthSyncing.Result>equalTo(new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
     }
 
     @Test
@@ -484,7 +486,7 @@ public class ResponseTest extends ResponseTester {
                 "0x9f759",
                 "0x9f759",
                 "0x54e34e8e",
-                Arrays.asList(
+                Arrays.<EthBlock.TransactionResult>asList(
                         new EthBlock.TransactionHash("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"),
                         new EthBlock.TransactionHash("0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1df")
                 ),
@@ -497,7 +499,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
+        assertThat(ethBlock.getBlock(),
                 equalTo(block));
     }
 
@@ -574,7 +576,7 @@ public class ResponseTest extends ResponseTester {
                 "0x9f759",
                 "0x9f759",
                 "0x54e34e8e",
-                Arrays.asList(new EthBlock.TransactionObject(
+                Arrays.<EthBlock.TransactionResult>asList(new EthBlock.TransactionObject(
                                 "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
                                 "0x",
                                 "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
@@ -600,7 +602,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
+        assertThat(ethBlock.getBlock(),
                 equalTo(block));
     }
 
@@ -613,7 +615,7 @@ public class ResponseTest extends ResponseTester {
         );
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        assertThat(ethBlock.getBlock(), is(Optional.empty()));
+        assertNull(ethBlock.getBlock());
     }
 
     @Test
@@ -658,7 +660,7 @@ public class ResponseTest extends ResponseTester {
         );
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
-        assertThat(ethTransaction.getTransaction().get(), equalTo(transaction));
+        assertThat(ethTransaction.getTransaction(), equalTo(transaction));
     }
 
     @Test
@@ -670,7 +672,7 @@ public class ResponseTest extends ResponseTester {
         );
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
-        assertThat(ethTransaction.getTransaction(), is(Optional.empty()));
+        assertNull(ethTransaction.getTransaction());
     }
 
     @Test
@@ -739,7 +741,7 @@ public class ResponseTest extends ResponseTester {
 
         EthGetTransactionReceipt ethGetTransactionReceipt = deserialiseResponse(
                 EthGetTransactionReceipt.class);
-        assertThat(ethGetTransactionReceipt.getTransactionReceipt().get(),
+        assertThat(ethGetTransactionReceipt.getTransactionReceipt(),
                 equalTo(transactionReceipt));
     }
 
@@ -941,7 +943,7 @@ public class ResponseTest extends ResponseTester {
                         "}"
         );
 
-        List<Log> logs = Collections.singletonList(
+        List<EthLog.LogResult> logs = Collections.<EthLog.LogResult>singletonList(
                 new EthLog.LogObject(
                         false,
                         "0x1",

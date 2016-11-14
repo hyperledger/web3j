@@ -1,6 +1,6 @@
 package org.web3j.crypto;
 
-import org.bouncycastle.jcajce.provider.digest.Keccak;
+import org.spongycastle.jcajce.provider.digest.Keccak;
 
 import org.web3j.utils.Numeric;
 

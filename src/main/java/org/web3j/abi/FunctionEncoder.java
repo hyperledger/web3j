@@ -1,15 +1,17 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
+import org.web3j.utils.Collection;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Strings;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
@@ -75,9 +77,21 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
-                .map(Type::getTypeAsString)
-                .collect(Collectors.joining(","));
+
+        List<String> types = new ArrayList<>(parameters.size());
+        String params = "";
+
+        for (int i = 0; i < parameters.size(); i++) {
+            Type type = parameters.get(i);
+
+            params += type.getTypeAsString();
+            if (i + 1 < parameters.size()) {
+                params += ",";  // no whitespace
+            }
+
+            types.add(type.getTypeAsString());
+        }
+
         result.append(params);
         result.append(")");
         return result.toString();

@@ -20,7 +20,7 @@ public class Utils {
                 type = ((ParameterizedTypeImpl) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
             } else {
-                type = Class.forName(reflectedType.getTypeName());
+                type = Class.forName(((Class) reflectedType).getName());
                 return getSimpleTypeName(type);
             }
         } catch (ClassNotFoundException e) {
@@ -73,7 +73,7 @@ public class Utils {
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedTypeImpl) type).getActualTypeArguments();
 
-        String parameterizedTypeName = typeArguments[0].getTypeName();
+        String parameterizedTypeName = ((Class) typeArguments[0]).getName();
         return (Class<T>) Class.forName(parameterizedTypeName);
     }
 }

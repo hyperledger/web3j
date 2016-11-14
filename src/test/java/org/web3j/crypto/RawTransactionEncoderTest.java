@@ -4,6 +4,8 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
 import org.web3j.protocol.core.methods.request.RawTransaction;
@@ -12,7 +14,6 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class RawTransactionEncoderTest {
@@ -34,7 +35,8 @@ public class RawTransactionEncoderTest {
         List<RlpType> rlpStrings = TransactionEncoder.asRlpValues(createEtherTransaction(),
                 new Sign.SignatureData((byte) 0, new byte[32], new byte[32]));
         assertThat(rlpStrings.size(), is(9));
-        assertThat(rlpStrings.get(3), equalTo(RlpString.create(new BigInteger("add5355", 16))));
+        assertThat(rlpStrings.get(3),
+                IsEqual.<RlpType>equalTo(RlpString.create(new BigInteger("add5355", 16))));
     }
 
     @Test
@@ -42,7 +44,8 @@ public class RawTransactionEncoderTest {
         List<RlpType> rlpStrings = TransactionEncoder.asRlpValues(
                 createContractTransaction(), null);
         assertThat(rlpStrings.size(), is(6));
-        assertThat(rlpStrings.get(3), is(RlpString.create("")));
+        assertThat(rlpStrings.get(3),
+                CoreMatchers.<RlpType>is(RlpString.create("")));
     }
 
     private static RawTransaction createEtherTransaction() {

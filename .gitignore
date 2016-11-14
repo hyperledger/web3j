@@ -14,7 +14,7 @@
 hs_err_pid*
 ### Gradle template
 .gradle
-build/
+/build
 gradle.properties
 
 # Ignore Gradle GUI config
@@ -30,6 +30,8 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 .idea
+*.iml
+
 geth.sh
 src/main/resources/
 

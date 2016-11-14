@@ -3,7 +3,6 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 
@@ -11,6 +10,7 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -18,6 +18,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -47,10 +48,9 @@ public class GreeterContractIT extends Scenario {
         assertFalse("Contract execution ran out of gas",
                 createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        Optional<String> contractAddressOptional = createTransactionReceipt.getContractAddress();
+        String contractAddress = createTransactionReceipt.getContractAddress();
 
-        assertTrue(contractAddressOptional.isPresent());
-        String contractAddress = contractAddressOptional.get();
+        assertNotNull(contractAddress);
 
         // call our getter
         Function getFunction = createGreetFunction();
@@ -66,8 +66,8 @@ public class GreeterContractIT extends Scenario {
     private String sendCreateContractTransaction() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
 
-        String encodedConstructor =
-                FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
+        String encodedConstructor = FunctionEncoder.encodeConstructor(
+                        Collections.<Type>singletonList(new Utf8String(VALUE)));
 
         Transaction transaction = Transaction.createContractTransaction(
                 ALICE.getAddress(),
@@ -102,7 +102,7 @@ public class GreeterContractIT extends Scenario {
     }
 
     Function createGreetFunction() {
-        return new Function<>(
+        return new Function(
                 "greet",
                 Collections.emptyList(),
                 Collections.singletonList(new TypeReference<Utf8String>() {}));

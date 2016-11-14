@@ -3,8 +3,7 @@ package org.web3j.abi;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -13,6 +12,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.utils.Async;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
@@ -37,7 +37,7 @@ public class Transfer extends ManagedTransaction {
      * @param value amount to send
      * @param unit of specified send
      *
-     * @return {@link Optional} containing our transaction receipt
+     * @return the transaction receipt
      * @throws ExecutionException if the computation threw an
      * exception
      * @throws InterruptedException if the current thread was interrupted
@@ -79,19 +79,14 @@ public class Transfer extends ManagedTransaction {
      * @return {@link Future} containing executing transaction
      */
     public Future<TransactionReceipt> sendFundsAsync(
-            String toAddress, BigDecimal value, Convert.Unit unit) {
+            final String toAddress, final BigDecimal value, final Convert.Unit unit) {
 
-        CompletableFuture<TransactionReceipt> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(send(toAddress, value, unit));
-            } catch (InterruptedException|ExecutionException|TransactionTimeoutException e) {
-                result.completeExceptionally(e);
+        return Async.run(new Callable<TransactionReceipt>() {
+            @Override
+            public TransactionReceipt call() throws Exception {
+                return send(toAddress, value, unit);
             }
         });
-        return result;
     }
 
     public static TransactionReceipt sendFunds(

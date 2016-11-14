@@ -2,7 +2,6 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 
@@ -19,6 +18,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Integration test demonstrating the full contract deployment workflow.
@@ -41,10 +41,8 @@ public class DeployContractIT extends Scenario {
         assertFalse("Contract execution ran out of gas",
                 transactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        Optional<String> contractAddressOptional = transactionReceipt.getContractAddress();
-
-        assertTrue(contractAddressOptional.isPresent());
-        String contractAddress = contractAddressOptional.get();
+        String contractAddress = transactionReceipt.getContractAddress();
+        assertNotNull(contractAddress);
 
         Function function = createFibonacciFunction();
 

@@ -73,7 +73,7 @@ public abstract class Filter<T extends Filter> {
                 if (topic != null) {
                     topics.add(new SingleTopic<>(topic));
                 } else {
-                    topics.add(new SingleTopic<>());
+                    topics.add(new SingleTopic());
                 }
             }
         }

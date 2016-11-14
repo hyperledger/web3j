@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import org.web3j.abi.EventValues;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
@@ -51,11 +52,11 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         EventValues aliceTransferEventValues = contract.processTransferEvent(aliceTransferReceipt);
         assertThat(aliceTransferEventValues.getIndexedValues(),
-                equalTo(Arrays.asList(
+                equalTo(Arrays.<Type>asList(
                         new Address(ALICE.getAddress()),
                         new Address(BOB.getAddress()))));
         assertThat(aliceTransferEventValues.getNonIndexedValues(),
-                equalTo(Collections.singletonList(
+                equalTo(Collections.<Type>singletonList(
                         new Uint256(transferQuantity))));
 
         // set an allowance
@@ -68,11 +69,11 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         EventValues approvalEventValues = contract.processApprovalEvent(approveReceipt);
         assertThat(approvalEventValues.getIndexedValues(),
-                equalTo(Arrays.asList(
+                equalTo(Arrays.<Type>asList(
                         new Address(ALICE.getAddress()),
                         new Address(BOB.getAddress()))));
         assertThat(approvalEventValues.getNonIndexedValues(),
-                equalTo(Collections.singletonList(
+                equalTo(Collections.<Type>singletonList(
                         new Uint256(transferQuantity))));
 
         assertThat(contract.allowance(
@@ -101,11 +102,11 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         EventValues bobTransferEventValues = contract.processTransferEvent(bobTransferReceipt);
         assertThat(bobTransferEventValues.getIndexedValues(),
-                equalTo(Arrays.asList(
+                equalTo(Arrays.<Type>asList(
                         new Address(ALICE.getAddress()),
                         new Address(BOB.getAddress()))));
         assertThat(bobTransferEventValues.getNonIndexedValues(),
-                equalTo(Collections.singletonList(
+                equalTo(Collections.<Type>singletonList(
                         new Uint256(transferQuantity))));
     }
 }

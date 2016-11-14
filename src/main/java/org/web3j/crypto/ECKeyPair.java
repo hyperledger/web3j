@@ -4,8 +4,8 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.util.Arrays;
 
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
+import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
 import org.web3j.utils.Numeric;
 

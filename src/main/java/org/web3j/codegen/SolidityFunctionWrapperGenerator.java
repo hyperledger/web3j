@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.*;
@@ -27,6 +26,8 @@ import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.utils.*;
+import org.web3j.utils.Collection;
 
 /**
  * Java wrapper source code generator for Solidity ABI format.
@@ -67,47 +68,47 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             exitError(usage());
         }
 
-        Optional<String> binaryFileLocation = parsePositionalArg(args, 0);
-        Optional<String> absFileLocation = parsePositionalArg(args, 1);
-        Optional<String> destinationDirLocation = parseParameterArgument(args, "-o", "--outputDir");
-        Optional<String> basePackageName = parseParameterArgument(args, "-p", "--package");
+        String binaryFileLocation = parsePositionalArg(args, 0);
+        String absFileLocation = parsePositionalArg(args, 1);
+        String destinationDirLocation = parseParameterArgument(args, "-o", "--outputDir");
+        String basePackageName = parseParameterArgument(args, "-p", "--package");
 
-        if (!binaryFileLocation.isPresent()
-                || !absFileLocation.isPresent()
-                || !destinationDirLocation.isPresent()
-                || !basePackageName.isPresent()) {
+        if (binaryFileLocation.equals("")
+                || absFileLocation.equals("")
+                || destinationDirLocation.equals("")
+                || basePackageName.equals("")) {
             exitError(usage());
         }
 
         new SolidityFunctionWrapperGenerator(
-                binaryFileLocation.get(),
-                absFileLocation.get(),
-                destinationDirLocation.get(),
-                basePackageName.get())
+                binaryFileLocation,
+                absFileLocation,
+                destinationDirLocation,
+                basePackageName)
         .generate();
     }
 
-    private static Optional<String> parsePositionalArg(String[] args, int idx) {
+    private static String parsePositionalArg(String[] args, int idx) {
         if (args != null && args.length > idx) {
-            return Optional.of(args[idx]);
+            return args[idx];
         } else {
-            return Optional.empty();
+            return "";
         }
     }
 
-    private static Optional<String> parseParameterArgument(String[] args, String... parameters) {
+    private static String parseParameterArgument(String[] args, String... parameters) {
         for (String parameter:parameters) {
             for (int i = 0; i < args.length; i++) {
                 if (args[i].equals(parameter)
                         && i + 1 < args.length) {
                     String parameterValue = args[i+1];
                     if (!parameterValue.startsWith("-")) {
-                        return Optional.of(parameterValue);
+                        return parameterValue;
                     }
                 }
             }
         }
-        return Optional.empty();
+        return "";
     }
 
     private static void exitError(String message) {
@@ -173,7 +174,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             String binary, String contractName, List<AbiDefinition> functionDefinitions,
             String basePackageName) throws IOException, ClassNotFoundException {
 
-        String className = contractName.substring(0, 1).toUpperCase() + contractName.substring(1);
+        String className = Strings.capitaliseFirstLetter(contractName);
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, binary);
         classBuilder.addMethod(buildConstructor());
@@ -250,9 +251,9 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         if (!inputParams.isEmpty()) {
             methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor(" +
-                            "$T.asList($L)" +
+                            "$T.<$T>asList($L)" +
                             ")",
-                    String.class, FunctionEncoder.class, Arrays.class, inputParams);
+                    String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         }
 
         methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, encodedConstructor, $L)",
@@ -297,9 +298,15 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         List<ParameterSpec> inputParameterTypes = buildParameterTypes(namedTypes);
         methodBuilder.addParameters(inputParameterTypes);
 
-        return inputParameterTypes.stream()
-                .map(p -> p.name)
-                .collect(Collectors.joining(", "));
+        return org.web3j.utils.Collection.join(
+                inputParameterTypes,
+                ", ",
+                new Collection.Function<ParameterSpec, String>() {
+                    @Override
+                    public String apply(ParameterSpec parameterSpec) {
+                        return parameterSpec.name;
+                    }
+        });
     }
 
     static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes) {
@@ -377,10 +384,11 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                     ClassName.get(Future.class), outputParameterTypes.get(0)));
 
             methodBuilder.addStatement("$T function = " +
-                            "new $T<>($S, \n$T.asList($L), \n$T.asList(new $T<$T>() {}))",
+                            "new $T<>($S, \n$T.<$T>asList($L), \n$T.<$T<$T>>asList(new $T<$T>() {}))",
                     Function.class, Function.class, functionName,
-                    Arrays.class, inputParams, Arrays.class, TypeReference.class,
-                    outputParameterTypes.get(0));
+                    Arrays.class, Type.class, inputParams,
+                    Arrays.class, TypeReference.class,
+                    outputParameterTypes.get(0), TypeReference.class, outputParameterTypes.get(0));
             methodBuilder.addStatement("return executeCallSingleValueReturnAsync(function)");
 
         } else {
@@ -408,9 +416,10 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         methodBuilder.returns(ParameterizedTypeName.get(Future.class, TransactionReceipt.class));
 
-        methodBuilder.addStatement("$T function = new $T<>($S, $T.asList($L), $T.emptyList())",
+        methodBuilder.addStatement("$T function = new $T<>($S, $T.<$T>asList($L), $T.<$T<$T>>emptyList())",
                 Function.class, Function.class, functionName,
-                Arrays.class, inputParams, Collections.class);
+                Arrays.class, Type.class, inputParams, Collections.class,
+                TypeReference.class, Type.class);
         methodBuilder.addStatement("return executeTransactionAsync(function)");
 
         return methodBuilder;
@@ -420,9 +429,8 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             AbiDefinition functionDefinition) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
-        String generatedFunctionName = "process" +
-                functionName.substring(0, 1).toUpperCase() +
-                functionName.substring(1) + "Event";
+        String generatedFunctionName =
+                "process" + Strings.capitaliseFirstLetter(functionName) + "Event";
 
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(generatedFunctionName)
                 .addModifiers(Modifier.PUBLIC)
@@ -434,13 +442,13 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         List<TypeName> indexedParameters = new ArrayList<>();
         List<TypeName> nonIndexedParameters = new ArrayList<>();
 
-        inputs.forEach(namedType -> {
+        for (AbiDefinition.NamedType namedType:inputs) {
             if (namedType.isIndexed()) {
                 indexedParameters.add(buildTypeName(namedType.getType()));
             } else {
                 nonIndexedParameters.add(buildTypeName(namedType.getType()));
             }
-        });
+        }
 
         buildVariableLengthEventConstructor(
                 methodBuilder, functionName, indexedParameters, nonIndexedParameters);
@@ -479,18 +487,27 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         objects.add(functionName);
 
         objects.add(Arrays.class);
+        objects.add(Type.class);
         objects.add(inputParameters);
 
         objects.add(Arrays.class);
+        objects.add(TypeReference.class);
         for (TypeName outputParameterType: outputParameterTypes) {
             objects.add(TypeReference.class);
             objects.add(outputParameterType);
         }
 
-        String asListParams = outputParameterTypes.stream().map(p -> "new $T<$T>() {}")
-                .collect(Collectors.joining(", "));
+        String asListParams = Collection.join(
+                outputParameterTypes,
+                ", ",
+                new Collection.Function<TypeName, String>() {
+                    @Override
+                    public String apply(TypeName typeName) {
+                        return "new $T<$T>() {}";
+                    }
+                });
 
-        methodBuilder.addStatement("$T function = new $T<>($S, \n$T.asList($L), \n$T.asList(" +
+        methodBuilder.addStatement("$T function = new $T<>($S, \n$T<$T>.asList($L), \n$T<$T<?>>.asList(" +
                         asListParams + "))", objects.toArray());
     }
 
@@ -504,24 +521,41 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         objects.add(eventName);
 
         objects.add(Arrays.class);
+        objects.add(TypeReference.class);
         for (TypeName indexedParameterType: indexedParameterTypes) {
             objects.add(TypeReference.class);
             objects.add(indexedParameterType);
         }
 
         objects.add(Arrays.class);
+        objects.add(TypeReference.class);
         for (TypeName indexedParameterType: nonIndexedParameterTypes) {
             objects.add(TypeReference.class);
             objects.add(indexedParameterType);
         }
 
-        String indexedAsListParams = indexedParameterTypes.stream().map(p -> "new $T<$T>() {}")
-                .collect(Collectors.joining(", "));
-        String nonIndexedAsListParams = nonIndexedParameterTypes.stream().map(p -> "new $T<$T>() {}")
-                .collect(Collectors.joining(", "));
+        String indexedAsListParams = Collection.join(
+                indexedParameterTypes,
+                ", ",
+                new Collection.Function<TypeName, String>() {
+                    @Override
+                    public String apply(TypeName typeName) {
+                        return "new $T<$T>() {}";
+                    }
+                });
+
+        String nonIndexedAsListParams = Collection.join(
+                nonIndexedParameterTypes,
+                ", ",
+                new Collection.Function<TypeName, String>() {
+                    @Override
+                    public String apply(TypeName typeName) {
+                        return "new $T<$T>() {}";
+                    }
+                });
 
         methodBuilder.addStatement("$T event = new $T($S, \n" +
-                "$T.asList(" + indexedAsListParams + "),\n" +
-                "$T.asList(" + nonIndexedAsListParams + "))", objects.toArray());
+                "$T.<$T<?>>asList(" + indexedAsListParams + "),\n" +
+                "$T.<$T<?>>asList(" + nonIndexedAsListParams + "))", objects.toArray());
     }
 }

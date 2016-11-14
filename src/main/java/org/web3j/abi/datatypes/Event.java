@@ -2,7 +2,6 @@ package org.web3j.abi.datatypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.TypeReference;
 
@@ -39,9 +38,11 @@ public class Event {
     @SuppressWarnings("unchecked")
     private static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
         List<TypeReference<Type>> result = new ArrayList<>(input.size());
-        result.addAll(input.stream()
-                .map(typeReference -> (TypeReference<Type>) typeReference)
-                .collect(Collectors.toList()));
+
+        for (TypeReference<?> typeReference:input) {
+            result.add((TypeReference<Type>) typeReference);
+        }
+
         return result;
     }
 }

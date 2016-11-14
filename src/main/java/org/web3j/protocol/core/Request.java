@@ -3,7 +3,7 @@ package org.web3j.protocol.core;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 import org.web3j.protocol.Web3jService;
 
@@ -68,7 +68,7 @@ public class Request<S, T extends Response> {
         return web3jService.send(this, responseType);
     }
 
-    public CompletableFuture<T> sendAsync() {
+    public Future<T> sendAsync() {
         return  web3jService.sendAsync(this, responseType);
     }
 

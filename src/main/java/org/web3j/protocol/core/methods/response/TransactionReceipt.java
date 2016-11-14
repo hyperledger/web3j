@@ -2,7 +2,6 @@ package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
 import org.web3j.utils.Numeric;
 
@@ -90,8 +89,8 @@ public class TransactionReceipt {
         this.gasUsed = gasUsed;
     }
 
-    public Optional<String> getContractAddress() {
-        return Optional.ofNullable(contractAddress);
+    public String getContractAddress() {
+        return contractAddress;
     }
 
     public void setContractAddress(String contractAddress) {

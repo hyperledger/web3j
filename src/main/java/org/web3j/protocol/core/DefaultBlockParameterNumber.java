@@ -19,4 +19,8 @@ public class DefaultBlockParameterNumber implements DefaultBlockParameter {
     public String getValue() {
         return Numeric.encodeQuantity(blockNumber);
     }
+
+    static DefaultBlockParameter valueOf(BigInteger blockNumber) {
+        return new DefaultBlockParameterNumber(blockNumber);
+    }
 }

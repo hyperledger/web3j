@@ -4,18 +4,18 @@ import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
 
-import org.bouncycastle.asn1.x9.X9ECParameters;
-import org.bouncycastle.asn1.x9.X9IntegerConverter;
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.ec.CustomNamedCurves;
-import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
-import org.bouncycastle.crypto.signers.ECDSASigner;
-import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
-import org.bouncycastle.math.ec.ECAlgorithms;
-import org.bouncycastle.math.ec.ECPoint;
-import org.bouncycastle.math.ec.FixedPointCombMultiplier;
-import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
+import org.spongycastle.asn1.x9.X9ECParameters;
+import org.spongycastle.asn1.x9.X9IntegerConverter;
+import org.spongycastle.crypto.digests.SHA256Digest;
+import org.spongycastle.crypto.ec.CustomNamedCurves;
+import org.spongycastle.crypto.params.ECDomainParameters;
+import org.spongycastle.crypto.params.ECPrivateKeyParameters;
+import org.spongycastle.crypto.signers.ECDSASigner;
+import org.spongycastle.crypto.signers.HMacDSAKCalculator;
+import org.spongycastle.math.ec.ECAlgorithms;
+import org.spongycastle.math.ec.ECPoint;
+import org.spongycastle.math.ec.FixedPointCombMultiplier;
+import org.spongycastle.math.ec.custom.sec.SecP256K1Curve;
 
 import org.web3j.utils.Numeric;
 

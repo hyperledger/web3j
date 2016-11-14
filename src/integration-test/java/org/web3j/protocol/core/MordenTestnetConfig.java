@@ -85,10 +85,9 @@ public class MordenTestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String encodedEvent() {
-
         Event event = new Event("Notify",
-                Collections.singletonList(new TypeReference<Uint>() {}),
-                Collections.singletonList(new TypeReference<Uint>() {}));
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {}),
+                Collections.<TypeReference<?>>singletonList((new TypeReference<Uint>() {})));
 
         return EventEncoder.encode(event);
     }

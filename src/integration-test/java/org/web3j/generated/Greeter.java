@@ -9,6 +9,7 @@ import org.web3j.abi.Contract;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -27,19 +28,19 @@ public final class Greeter extends Contract {
     }
 
     public Future<TransactionReceipt> kill() {
-        Function function = new Function<>("kill", Arrays.asList(), Collections.emptyList());
+        Function function = new Function<>("kill", Arrays.<Type>asList(), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Utf8String> greet() {
         Function function = new Function<>("greet", 
-                Arrays.asList(), 
-                Arrays.asList(new TypeReference<Utf8String>() {}));
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public static Future<Greeter> deploy(Web3j web3j, Credentials credentials, BigInteger initialValue, Utf8String _greeting) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(_greeting));
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(_greeting));
         return deployAsync(Greeter.class, web3j, credentials, BINARY, encodedConstructor, initialValue);
     }
 

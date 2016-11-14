@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -42,8 +41,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         super.setResult(result);
     }
 
-    public Optional<Block> getBlock() {
-        return Optional.ofNullable(getResult());
+    public Block getBlock() {
+        return getResult();
     }
 
     public static class Block {

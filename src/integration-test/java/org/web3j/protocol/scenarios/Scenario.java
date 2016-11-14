@@ -7,7 +7,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.Optional;
 
 import org.junit.Before;
 
@@ -21,6 +20,7 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.Parity;
+import org.web3j.protocol.parity.ParityFactory;
 import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
 
 import static junit.framework.TestCase.fail;
@@ -66,7 +66,7 @@ public class Scenario {
 
     @Before
     public void setUp() {
-        this.parity = Parity.build(new HttpService());
+        this.parity = ParityFactory.build(new HttpService());
     }
 
     boolean unlockAccount() throws Exception {
@@ -80,23 +80,23 @@ public class Scenario {
     TransactionReceipt waitForTransactionReceipt(
             String transactionHash) throws Exception {
 
-        Optional<TransactionReceipt> transactionReceiptOptional =
+        TransactionReceipt transactionReceipt =
                 getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
 
-        if (!transactionReceiptOptional.isPresent()) {
+        if (transactionReceipt == null) {
             fail("Transaction reciept not generated after " + ATTEMPTS + " attempts");
         }
 
-        return transactionReceiptOptional.get();
+        return transactionReceipt;
     }
 
-    private Optional<TransactionReceipt> getTransactionReceipt(
+    private TransactionReceipt getTransactionReceipt(
             String transactionHash, int sleepDuration, int attempts) throws Exception {
 
-        Optional<TransactionReceipt> receiptOptional =
+        TransactionReceipt receiptOptional =
                 sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
-            if (!receiptOptional.isPresent()) {
+            if (receiptOptional == null) {
                 Thread.sleep(sleepDuration);
                 receiptOptional = sendTransactionReceiptRequest(transactionHash);
             } else {
@@ -107,7 +107,7 @@ public class Scenario {
         return receiptOptional;
     }
 
-    private Optional<TransactionReceipt> sendTransactionReceiptRequest(
+    private TransactionReceipt sendTransactionReceiptRequest(
             String transactionHash) throws Exception {
         EthGetTransactionReceipt transactionReceipt =
                 parity.ethGetTransactionReceipt(transactionHash).sendAsync().get();
@@ -123,7 +123,7 @@ public class Scenario {
     }
 
     Function createFibonacciFunction() {
-        return new Function<>(
+        return new Function(
                 "fibonacciNotify",
                 Collections.singletonList(new Uint(BigInteger.valueOf(7))),
                 Collections.singletonList(new TypeReference<Uint>() {}));

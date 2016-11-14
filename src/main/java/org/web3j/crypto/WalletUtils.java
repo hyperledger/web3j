@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,11 +53,8 @@ public class WalletUtils {
     }
 
     private static String getWalletFileName(WalletFile walletFile) {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern(
-                "'UTC--'yyyy-MM-dd'T'hh-mm-ss.nVV'--'");
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-
-        return now.format(format) + walletFile.getAddress() + ".json";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'UTC--'yyyy-MM-dd'T'hh-mm-ss.S'--'");
+        return dateFormat.format(new Date()) + walletFile.getAddress() + ".json";
     }
 
     public static String getDefaultKeyDirectory() {

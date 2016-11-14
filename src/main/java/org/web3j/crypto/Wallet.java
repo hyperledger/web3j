@@ -8,9 +8,9 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import com.lambdaworks.crypto.SCrypt;
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
-import org.bouncycastle.crypto.params.KeyParameter;
+import org.spongycastle.crypto.digests.SHA256Digest;
+import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.spongycastle.crypto.params.KeyParameter;
 
 import org.web3j.utils.Numeric;
 
@@ -24,7 +24,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * Go Ethereum client implementation</a>.</p>
  *
  * <p><strong>Note:</strong> we don't use the Bouncy Castle Scrypt implementation
- * {@link org.bouncycastle.crypto.generators.SCrypt}, as the following parameter assertion results
+ * {@link org.spongycastle.crypto.generators.SCrypt}, as the following parameter assertion results
  * in failure of the Ethereum reference
  * <a href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#scrypt">
  * Scrypt test vector</a>:</p>

@@ -237,11 +237,11 @@ public class TypeDecoderTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testEmptyStaticArray() {
-        assertThat(TypeDecoder.decodeStaticArray(
+        TypeDecoder.decodeStaticArray(
                 "0000000000000000000000000000000000000000000000000000000000000000",
                 0,
                 new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(0) {},
-                0), is("invalid"));
+                0);
     }
 
     @Test

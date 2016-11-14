@@ -10,6 +10,7 @@ import org.web3j.abi.EventValues;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -28,21 +29,21 @@ public final class Fibonacci extends Contract {
     }
 
     public Future<TransactionReceipt> fibonacciNotify(Uint256 number) {
-        Function function = new Function<>("fibonacciNotify", Arrays.asList(number), Collections.emptyList());
+        Function function = new Function<>("fibonacciNotify", Arrays.<Type>asList(number), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint256> fibonacci(Uint256 number) {
         Function function = new Function<>("fibonacci", 
-                Arrays.asList(number), 
-                Arrays.asList(new TypeReference<Uint256>() {}));
+                Arrays.<Type>asList(number), 
+                Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public EventValues processNotifyEvent(TransactionReceipt transactionReceipt) {
         Event event = new Event("Notify", 
-                Arrays.asList(),
-                Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+                Arrays.<TypeReference<?>>asList(),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
         return extractEventParameters(event, transactionReceipt);
     }
 

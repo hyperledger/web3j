@@ -2,10 +2,12 @@ package org.web3j.protocol.http;
 
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -17,6 +19,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
+import org.web3j.utils.Async;
 
 /**
  * HTTP implementation of our services API.
@@ -61,34 +64,35 @@ public class HttpService implements Web3jService {
         }
     }
 
-    public <T> ResponseHandler<T> getResponseHandler(Class<T> type) {
-        return response -> {
-            int status = response.getStatusLine().getStatusCode();
-            if (status >= 200 && status < 300) {
-                HttpEntity entity = response.getEntity();
+    public <T> ResponseHandler<T> getResponseHandler(final Class<T> type) {
+        return new ResponseHandler<T>() {
+            @Override
+            public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+                int status = response.getStatusLine().getStatusCode();
+                if (status >= 200 && status < 300) {
+                    HttpEntity entity = response.getEntity();
 
-                if (entity != null) {
-                    return objectMapper.readValue(response.getEntity().getContent(), type);
+                    if (entity != null) {
+                        return objectMapper.readValue(response.getEntity().getContent(), type);
+                    } else {
+                        return null;
+                    }
                 } else {
-                    return null;
+                    throw new ClientProtocolException("Unexpected response status: " + status);
                 }
-            } else {
-                throw new ClientProtocolException("Unexpected response status: " + status);
             }
         };
     }
 
     @Override
-    public <T extends Response> CompletableFuture<T> sendAsync(
-            Request jsonRpc20Request, Class<T> responseType) {
-        CompletableFuture<T> result = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(send(jsonRpc20Request, responseType));
-            } catch (IOException e) {
-                result.completeExceptionally(e);
+    public <T extends Response> Future<T> sendAsync(
+            final Request jsonRpc20Request, final Class<T> responseType) {
+
+        return Async.run(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return send(jsonRpc20Request, responseType);
             }
         });
-        return result;
     }
 }
