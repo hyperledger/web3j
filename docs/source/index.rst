@@ -3,12 +3,10 @@
 web3j
 =====
 
-web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the
-Ethereum network:
+web3j is a lightweight, type safe Java and Android library for integrating with clients (nodes) on
+the Ethereum network:
 
-.. code-block:: bash
-
-   [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
+.. image:: /images/web3j_network.png
 
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
