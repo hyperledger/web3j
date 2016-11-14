@@ -6,20 +6,40 @@ Add the latest web3j version to your project build configuration.
 Maven
 -----
 
+Java 8:
+
 .. code-block:: xml
 
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.4</version>
+     <version>1.0.5</version>
+   </dependency>
+
+Android:
+
+.. code-block:: xml
+
+   <dependency>
+     <groupId>org.web3j</groupId>
+     <artifactId>core-android</artifactId>
+     <version>1.0.5</version>
    </dependency>
 
 Gradle
 ------
 
+Java 8:
+
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.4')
+   compile ('org.web3j:core:1.0.5')
+
+Android:
+
+.. code-block:: groovy
+
+   compile ('org.web3j:core:1.0.5')
 
 
 Start a client
@@ -57,6 +77,13 @@ To send synchronous requests::
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+
+**Note:** for Android use:
+
+.. code-block:: java
+
+   Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
+   ...
 
 
 Sending transactions
@@ -147,11 +174,16 @@ For more information refer to :ref:`smart-contract-wrappers`.
 
 Further details
 ---------------
-- web3j provides type safe access to all responses. Optional or null responses are wrapped in
-  Java 8's
+In the Java 8 build:
+
+- web3j provides type safe access to all responses. Optional or null responses
+  are wrapped in Java 8's
   `Optional <https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html>`_ type.
 - Async requests are handled using Java 8's
   `CompletableFutures <https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>`_.
+
+In both the Java 8 and Andriod builds:
+
 - Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
   For simple results, you can obtain the quantity as a String via
   `Response <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().

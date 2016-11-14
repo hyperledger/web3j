@@ -28,6 +28,7 @@ Features
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
+- Android compatible
 
 
 Dependencies

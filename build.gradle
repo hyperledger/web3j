@@ -26,7 +26,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '1.0.4'
+version '1.0.5'
 
 sourceCompatibility = 1.8
 
@@ -159,7 +159,6 @@ artifacts {
 
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
-    sign configurations.archives
 }
 
 uploadArchives {
@@ -217,7 +216,6 @@ task release {
     dependsOn 'uploadArchives'
     dependsOn 'closeAndPromoteRepository'
     dependsOn 'bintrayUpload'
-    dependsOn 'distShadowZip'
 
     tasks.findByName('build').mustRunAfter 'clean'
 
@@ -225,5 +223,4 @@ task release {
     tasks.findByName('closeAndPromoteRepository').mustRunAfter 'uploadArchives'
 
     tasks.findByName('bintrayUpload').mustRunAfter 'build'
-    tasks.findByName('distShadowZip').mustRunAfter 'build'
 }

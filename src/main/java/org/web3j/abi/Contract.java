@@ -209,7 +209,8 @@ public abstract class Contract extends ManagedTransaction {
         String contractAddress = create(web3j, credentials, binary, encodedConstructor, value);
 
         Constructor<T> constructor =
-                type.getConstructor(String.class, Web3j.class, Credentials.class);
+                type.getDeclaredConstructor(String.class, Web3j.class, Credentials.class);
+        constructor.setAccessible(true);
 
         return constructor.newInstance(contractAddress, web3j, credentials);
     }

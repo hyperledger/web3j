@@ -13,6 +13,7 @@ import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
@@ -33,90 +34,90 @@ public final class HumanStandardToken extends Contract {
     }
 
     public Future<Utf8String> name() {
-        Function function = new Function<>("name", 
-                Arrays.asList(), 
-                Arrays.asList(new TypeReference<Utf8String>() {}));
+        Function function = new Function<Utf8String>("name", 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<TransactionReceipt> approve(Address _spender, Uint256 _value) {
-        Function function = new Function<>("approve", Arrays.asList(_spender, _value), Collections.emptyList());
+        Function function = new Function<Type>("approve", Arrays.<Type>asList(_spender, _value), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint256> totalSupply() {
-        Function function = new Function<>("totalSupply", 
-                Arrays.asList(), 
-                Arrays.asList(new TypeReference<Uint256>() {}));
+        Function function = new Function<Uint256>("totalSupply", 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<TransactionReceipt> transferFrom(Address _from, Address _to, Uint256 _value) {
-        Function function = new Function<>("transferFrom", Arrays.asList(_from, _to, _value), Collections.emptyList());
+        Function function = new Function<Type>("transferFrom", Arrays.<Type>asList(_from, _to, _value), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint8> decimals() {
-        Function function = new Function<>("decimals", 
-                Arrays.asList(), 
-                Arrays.asList(new TypeReference<Uint8>() {}));
+        Function function = new Function<Uint8>("decimals", 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<Uint8>>asList(new TypeReference<Uint8>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<Utf8String> version() {
-        Function function = new Function<>("version", 
-                Arrays.asList(), 
-                Arrays.asList(new TypeReference<Utf8String>() {}));
+        Function function = new Function<Utf8String>("version", 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<Uint256> balanceOf(Address _owner) {
-        Function function = new Function<>("balanceOf", 
-                Arrays.asList(_owner), 
-                Arrays.asList(new TypeReference<Uint256>() {}));
+        Function function = new Function<Uint256>("balanceOf", 
+                Arrays.<Type>asList(_owner), 
+                Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<Utf8String> symbol() {
-        Function function = new Function<>("symbol", 
-                Arrays.asList(), 
-                Arrays.asList(new TypeReference<Utf8String>() {}));
+        Function function = new Function<Utf8String>("symbol", 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<TransactionReceipt> transfer(Address _to, Uint256 _value) {
-        Function function = new Function<>("transfer", Arrays.asList(_to, _value), Collections.emptyList());
+        Function function = new Function<Type>("transfer", Arrays.<Type>asList(_to, _value), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<TransactionReceipt> approveAndCall(Address _spender, Uint256 _value, DynamicBytes _extraData) {
-        Function function = new Function<>("approveAndCall", Arrays.asList(_spender, _value, _extraData), Collections.emptyList());
+        Function function = new Function<Type>("approveAndCall", Arrays.<Type>asList(_spender, _value, _extraData), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint256> allowance(Address _owner, Address _spender) {
-        Function function = new Function<>("allowance", 
-                Arrays.asList(_owner, _spender), 
-                Arrays.asList(new TypeReference<Uint256>() {}));
+        Function function = new Function<Uint256>("allowance", 
+                Arrays.<Type>asList(_owner, _spender), 
+                Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public static Future<HumanStandardToken> deploy(Web3j web3j, Credentials credentials, BigInteger initialValue, Uint256 _initialAmount, Utf8String _tokenName, Uint8 _decimalUnits, Utf8String _tokenSymbol) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(_initialAmount, _tokenName, _decimalUnits, _tokenSymbol));
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(_initialAmount, _tokenName, _decimalUnits, _tokenSymbol));
         return deployAsync(HumanStandardToken.class, web3j, credentials, BINARY, encodedConstructor, initialValue);
     }
 
     public EventValues processTransferEvent(TransactionReceipt transactionReceipt) {
         Event event = new Event("Transfer", 
-                Arrays.asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Arrays.asList(new TypeReference<Uint256>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return extractEventParameters(event, transactionReceipt);
     }
 
     public EventValues processApprovalEvent(TransactionReceipt transactionReceipt) {
         Event event = new Event("Approval", 
-                Arrays.asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Arrays.asList(new TypeReference<Uint256>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return extractEventParameters(event, transactionReceipt);
     }
 
