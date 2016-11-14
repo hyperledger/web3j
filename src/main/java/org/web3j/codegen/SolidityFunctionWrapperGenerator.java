@@ -97,7 +97,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 absFileLocation,
                 destinationDirLocation,
                 basePackageName)
-        .generate();
+            .generate();
     }
 
     private static String parsePositionalArg(String[] args, int idx) {
@@ -304,7 +304,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                     public String apply(ParameterSpec parameterSpec) {
                         return parameterSpec.name;
                     }
-        });
+                });
     }
 
     static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes) {
@@ -393,9 +393,9 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         } else {
             methodBuilder.addTypeVariable(typeVariableName);
             methodBuilder.returns(ParameterizedTypeName.get(
-                            ClassName.get(Future.class),
-                            ParameterizedTypeName.get(
-                                    ClassName.get(List.class), typeVariableName)));
+                    ClassName.get(Future.class),
+                    ParameterizedTypeName.get(
+                            ClassName.get(List.class), typeVariableName)));
 
             buildVariableLengthReturnFunctionConstructor(
                     methodBuilder, functionName, inputParams, outputParameterTypes);
@@ -510,7 +510,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 });
 
         methodBuilder.addStatement("$T function = new $T<$T>($S, \n$T<$T>.asList($L), \n$T<$T<?>>.asList(" +
-                        asListParams + "))", objects.toArray());
+                asListParams + "))", objects.toArray());
     }
 
     private static void buildVariableLengthEventConstructor(
