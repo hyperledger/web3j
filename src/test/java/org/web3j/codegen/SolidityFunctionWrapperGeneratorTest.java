@@ -43,8 +43,8 @@ public class SolidityFunctionWrapperGeneratorTest {
 
     @Before
     public void setUp() throws Exception {
-        tempDir = Files.createTempDirectory(
-                SolidityFunctionWrapperGeneratorTest.class.getSimpleName()).toFile();
+        tempDir = folder.newFolder(
+                SolidityFunctionWrapperGeneratorTest.class.getSimpleName());
         tempDirPath = tempDir.getPath();
 
         URL url = SolidityFunctionWrapperGeneratorTest.class.getClass().getResource("/solidity");

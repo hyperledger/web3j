@@ -8,7 +8,8 @@ import java.security.NoSuchProviderException;
 
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.WalletUtils;
-import org.web3j.utils.Console;
+
+import static org.web3j.utils.Console.exitError;
 
 /**
  * Simple class for creating a wallet file.

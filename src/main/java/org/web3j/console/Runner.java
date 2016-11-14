@@ -28,15 +28,15 @@ public class Runner {
         if (args.length < 1) {
             Console.exitError(USAGE);
         } else {
-            switch (args[0]) {
-                case "wallet":
-                    WalletRunner.run(tail(args));
-                    break;
-                case "solidity":
-                    SolidityFunctionWrapperGenerator.run(tail(args));
-                    break;
-                default:
-                    Console.exitError(USAGE);
+            String arg = args[0];
+            if (arg.equals("wallet")) {
+                WalletRunner.run(tail(args));
+
+            } else if (arg.equals("solidity")) {
+                SolidityFunctionWrapperGenerator.run(tail(args));
+
+            } else {
+                Console.exitError(USAGE);
             }
         }
     }

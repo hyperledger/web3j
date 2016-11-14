@@ -9,6 +9,7 @@ import org.web3j.abi.Transfer;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Keys;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
@@ -114,9 +115,17 @@ public class WalletSendFunds extends WalletManager {
             }
             console.printf("$%n%n");
             return future.get();
-        } catch (InterruptedException | ExecutionException | TransactionTimeoutException e) {
-            exitError("Problem encountered transferring funds: " + e.getMessage());
+        } catch (InterruptedException e) {
+            return errorTransferringFunds(e);
+        } catch (ExecutionException e) {
+            return errorTransferringFunds(e);
+        } catch (TransactionTimeoutException e) {
+            return errorTransferringFunds(e);
         }
+    }
+
+    private TransactionReceipt errorTransferringFunds(Exception e) {
+        exitError("Problem encountered transferring funds: " + e.getMessage());
         throw new RuntimeException("Application exit failure");
     }
 
@@ -127,9 +136,9 @@ public class WalletSendFunds extends WalletManager {
 
         Web3j web3j;
         if (clientAddress.equals("")) {
-            web3j = Web3j.build(new HttpService());
+            web3j = Web3jFactory.build(new HttpService());
         } else {
-            web3j = Web3j.build(new HttpService(clientAddress));
+            web3j = Web3jFactory.build(new HttpService(clientAddress));
         }
 
         try {
@@ -142,7 +151,9 @@ public class WalletSendFunds extends WalletManager {
                         web3ClientVersion.getWeb3ClientVersion());
                 return web3j;
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            exitError("Problem encountered verifying client: " + e.getMessage());
+        } catch (ExecutionException e) {
             exitError("Problem encountered verifying client: " + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");

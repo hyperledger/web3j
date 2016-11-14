@@ -18,18 +18,18 @@ public class WalletRunner {
         if (args.length < 1) {
             Console.exitError(USAGE);
         } else {
-            switch (args[0]) {
-                case "create":
-                    WalletCreator.main(new String[] {});
-                    break;
-                case "update":
-                    WalletUpdater.main(tail(args));
-                    break;
-                case "send":
-                    WalletSendFunds.main(tail(args));
-                    break;
-                default:
-                    Console.exitError(USAGE);
+            String arg = args[0];
+            if (arg.equals("create")) {
+                WalletCreator.main(new String[]{});
+
+            } else if (arg.equals("update")) {
+                WalletUpdater.main(tail(args));
+
+            } else if (arg.equals("send")) {
+                WalletSendFunds.main(tail(args));
+
+            } else {
+                Console.exitError(USAGE);
             }
         }
     }
