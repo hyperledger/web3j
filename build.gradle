@@ -9,7 +9,7 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.7"
+    id "com.jfrog.bintray" version "1.6"  // version 1.7 requires JDK8
 }
 
 apply plugin: 'java'
@@ -218,12 +218,12 @@ task release {
     dependsOn 'build'
     dependsOn 'uploadArchives'
     dependsOn 'closeAndPromoteRepository'
-//    dependsOn 'bintrayUpload'  // doesn't work with JDK7
+    dependsOn 'bintrayUpload'  // doesn't work with JDK7
 
     tasks.findByName('build').mustRunAfter 'clean'
 
     tasks.findByName('uploadArchives').mustRunAfter 'build'
     tasks.findByName('closeAndPromoteRepository').mustRunAfter 'uploadArchives'
 
-//    tasks.findByName('bintrayUpload').mustRunAfter 'build'
+    tasks.findByName('bintrayUpload').mustRunAfter 'build'
 }
