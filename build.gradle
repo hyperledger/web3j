@@ -159,6 +159,7 @@ artifacts {
 
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
+    sign configurations.archives
 }
 
 uploadArchives {
