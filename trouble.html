@@ -49,7 +49,7 @@
 <div class="section" id="i-m-submitting-a-transaction-but-it-s-not-being-mined">
 <h2>I&#8217;m submitting a transaction, but it&#8217;s not being mined<a class="headerlink" href="#i-m-submitting-a-transaction-but-it-s-not-being-mined" title="Permalink to this headline">¶</a></h2>
 <p>After creating and sending a transaction, you receive a transaction hash, however calling
-<a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">eth_getTransactionReciept</a>
+<a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">eth_getTransactionReceipt</a>
 always returns a blank value, indicating the transaction has not been mined:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">sendTransaction</span><span class="o">(...);</span>
 
