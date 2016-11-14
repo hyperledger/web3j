@@ -1,10 +1,9 @@
 package org.web3j.codegen;
 
 import javax.lang.model.element.Modifier;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -27,7 +26,7 @@ public class AbiTypesGenerator extends Generator {
     }
 
     private void generate() throws IOException {
-        Path path = Paths.get(System.getProperty("user.dir") + "/src/main/java/");
+        File path = new File(System.getProperty("user.dir") + "/src/main/java/");
 
         generateIntTypes(Int.class, path);
         generateIntTypes(Uint.class, path);
@@ -37,7 +36,7 @@ public class AbiTypesGenerator extends Generator {
     }
 
     private <T extends Type> void generateIntTypes(
-            Class<T> superclass, Path path) throws IOException {
+            Class<T> superclass, File path) throws IOException {
         String packageName = createPackageName(superclass);
 
         for (int bitSize = 8; bitSize <= Type.MAX_BIT_LENGTH; bitSize += 8) {
@@ -63,7 +62,7 @@ public class AbiTypesGenerator extends Generator {
     }
 
     private <T extends Type> void generateFixedTypes(
-            Class<T> superclass, Path path) throws IOException {
+            Class<T> superclass, File path) throws IOException {
         String packageName = createPackageName(superclass);
 
         for (int mBitSize = 8; mBitSize < Type.MAX_BIT_LENGTH; mBitSize += 8) {
@@ -104,7 +103,7 @@ public class AbiTypesGenerator extends Generator {
     }
 
     private <T extends Type> void generateBytesTypes(
-            Class<T> superclass, Path path) throws IOException {
+            Class<T> superclass, File path) throws IOException {
         String packageName = createPackageName(superclass);
 
         for (int byteSize = 1; byteSize <= 32; byteSize++) {
@@ -127,7 +126,7 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private void write(String packageName, TypeSpec typeSpec, Path destination) throws IOException {
+    private void write(String packageName, TypeSpec typeSpec, File destination) throws IOException {
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
                 .skipJavaLangImports(true)
                 .build();

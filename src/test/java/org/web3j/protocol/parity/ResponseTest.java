@@ -99,7 +99,8 @@ public class ResponseTest extends ResponseTester {
                 "    }\n" +
                 "}");
 
-        Map<String, PersonalAccountsInfo.AccountsInfo> accountsInfoMap = new HashMap<>(1);
+        Map<String, PersonalAccountsInfo.AccountsInfo> accountsInfoMap =
+                new HashMap<String, PersonalAccountsInfo.AccountsInfo>(1);
         accountsInfoMap.put("0xfc390d8a8ddb591b010fda52f4db4945742c3809",
                 new PersonalAccountsInfo.AccountsInfo(
                         "Savings",

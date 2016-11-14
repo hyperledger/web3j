@@ -34,69 +34,69 @@ public final class HumanStandardToken extends Contract {
     }
 
     public Future<Utf8String> name() {
-        Function function = new Function<>("name", 
+        Function function = new Function<Utf8String>("name", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<TransactionReceipt> approve(Address _spender, Uint256 _value) {
-        Function function = new Function<>("approve", Arrays.<Type>asList(_spender, _value), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function<Type>("approve", Arrays.<Type>asList(_spender, _value), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint256> totalSupply() {
-        Function function = new Function<>("totalSupply", 
+        Function function = new Function<Uint256>("totalSupply", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<TransactionReceipt> transferFrom(Address _from, Address _to, Uint256 _value) {
-        Function function = new Function<>("transferFrom", Arrays.<Type>asList(_from, _to, _value), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function<Type>("transferFrom", Arrays.<Type>asList(_from, _to, _value), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint8> decimals() {
-        Function function = new Function<>("decimals", 
+        Function function = new Function<Uint8>("decimals", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<Uint8>>asList(new TypeReference<Uint8>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<Utf8String> version() {
-        Function function = new Function<>("version", 
+        Function function = new Function<Utf8String>("version", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<Uint256> balanceOf(Address _owner) {
-        Function function = new Function<>("balanceOf", 
+        Function function = new Function<Uint256>("balanceOf", 
                 Arrays.<Type>asList(_owner), 
                 Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<Utf8String> symbol() {
-        Function function = new Function<>("symbol", 
+        Function function = new Function<Utf8String>("symbol", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 
     public Future<TransactionReceipt> transfer(Address _to, Uint256 _value) {
-        Function function = new Function<>("transfer", Arrays.<Type>asList(_to, _value), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function<Type>("transfer", Arrays.<Type>asList(_to, _value), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<TransactionReceipt> approveAndCall(Address _spender, Uint256 _value, DynamicBytes _extraData) {
-        Function function = new Function<>("approveAndCall", Arrays.<Type>asList(_spender, _value, _extraData), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function<Type>("approveAndCall", Arrays.<Type>asList(_spender, _value, _extraData), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint256> allowance(Address _owner, Address _spender) {
-        Function function = new Function<>("allowance", 
+        Function function = new Function<Uint256>("allowance", 
                 Arrays.<Type>asList(_owner, _spender), 
                 Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);

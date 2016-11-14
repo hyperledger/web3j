@@ -36,7 +36,9 @@ public class WalletUpdater extends WalletManager {
                     newPassword, credentials.getEcKeyPair(), destination);
             console.printf("New wallet file " + walletFileName +
                     " successfully created in: " + destinationDir + "\n");
-        } catch (CipherException|IOException e) {
+        } catch (CipherException e) {
+            exitError(e);
+        } catch (IOException e) {
             exitError(e);
         }
 

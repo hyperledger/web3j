@@ -22,7 +22,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, PersonalSignerEnabled> personalSignerEnabled() {
-        return new Request<>(
+        return new Request<String, PersonalSignerEnabled>(
                 "personal_signerEnabled",
                 Collections.<String>emptyList(),
                 ID,
@@ -32,7 +32,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, PersonalListAccounts> personalListAccounts() {
-        return new Request<>(
+        return new Request<String, PersonalListAccounts>(
                 "personal_listAccounts",
                 Collections.<String>emptyList(),
                 ID,
@@ -42,7 +42,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, NewAccountIdentifier> personalNewAccount(String password) {
-        return new Request<>(
+        return new Request<String, NewAccountIdentifier>(
                 "personal_newAccount",
                 Arrays.asList(password),
                 ID,
@@ -52,7 +52,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, NewAccountIdentifier> personalNewAccountFromPhrase(String phrase, String password) {
-        return new Request<>(
+        return new Request<String, NewAccountIdentifier>(
                 "personal_newAccountFromPhrase",
                 Arrays.asList(phrase, password),
                 ID,
@@ -62,7 +62,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, NewAccountIdentifier> personalNewAccountFromWallet(WalletFile walletFile, String password) {
-        return new Request<>(
+        return new Request<Object, NewAccountIdentifier>(
                 "personal_newAccountFromWallet",
                 Arrays.asList(walletFile, password),
                 ID,
@@ -73,7 +73,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     @Override
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(
             String accountId, String password, BigInteger duration) {
-        List<Object> attributes = new ArrayList<>(3);
+        List<Object> attributes = new ArrayList<Object>(3);
         attributes.add(accountId);
         attributes.add(password);
 
@@ -85,7 +85,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
             attributes.add(null);  // we still need to include the null value, otherwise Parity rejects
         }
 
-        return new Request<>(
+        return new Request<Object, PersonalUnlockAccount>(
                 "personal_unlockAccount",
                 attributes,
                 ID,
@@ -101,7 +101,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     @Override
     public Request<?, EthSendTransaction> personalSignAndSendTransaction(
             Transaction transaction, String password) {
-        return new Request<>(
+        return new Request<Object, EthSendTransaction>(
                 "personal_signAndSendTransaction",
                 Arrays.asList(transaction, password),
                 ID,
@@ -111,7 +111,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, VoidResponse> personalSetAccountName(String accountId, String newAccountName) {
-        return new Request<>(
+        return new Request<String, VoidResponse>(
                 "personal_setAccountName",
                 Arrays.asList(accountId, newAccountName),
                 ID,
@@ -122,7 +122,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     @Override
     public Request<?, VoidResponse> personalSetAccountMeta(
             String accountId, Map<String, Object> metadata) {
-        return new Request<>(
+        return new Request<Object, VoidResponse>(
                 "personal_setAccountMeta",
                 Arrays.asList(accountId, metadata),
                 ID,
@@ -132,7 +132,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, PersonalAccountsInfo> personalAccountsInfo() {
-        return new Request<>(
+        return new Request<String, PersonalAccountsInfo>(
                 "personal_accountsInfo",
                 Collections.<String>emptyList(),
                 ID,
@@ -142,7 +142,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, PersonalRequestsToConfirm> personalRequestsToConfirm() {
-        return new Request<>(
+        return new Request<String, PersonalRequestsToConfirm>(
                 "personal_requestsToConfirm",
                 Collections.<String>emptyList(),
                 ID,
@@ -152,7 +152,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, EthSendTransaction> personalConfirmRequest(String requestId, Transaction transaction, String password) {
-        return new Request<>(
+        return new Request<Object, EthSendTransaction>(
                 "personal_confirmRequest",
                 Arrays.asList(requestId, transaction, password),
                 ID,
@@ -162,7 +162,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
 
     @Override
     public Request<?, PersonalRejectRequest> personalRejectRequest(String requestId) {
-        return new Request<>(
+        return new Request<String, PersonalRejectRequest>(
                 "personal_rejectRequest",
                 Arrays.asList(requestId),
                 ID,

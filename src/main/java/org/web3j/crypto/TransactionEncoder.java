@@ -36,7 +36,7 @@ public class TransactionEncoder {
 
     static List<RlpType> asRlpValues(
             RawTransaction rawTransaction, Sign.SignatureData signatureData) {
-        List<RlpType> result = new ArrayList<>();
+        List<RlpType> result = new ArrayList<RlpType>();
 
         result.add(RlpString.create(rawTransaction.getNonce()));
         result.add(RlpString.create(rawTransaction.getGasPrice()));

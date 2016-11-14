@@ -27,8 +27,15 @@ public class WalletCreator extends WalletManager {
             String walletFileName = WalletUtils.generateNewWalletFile(password, destination);
             console.printf("Wallet file " + walletFileName +
                     " successfully created in: " + destinationDir + "\n");
-        } catch (CipherException|IOException|InvalidAlgorithmParameterException|
-                NoSuchAlgorithmException|NoSuchProviderException e) {
+        } catch (CipherException e) {
+            exitError(e);
+        } catch (IOException e) {
+            exitError(e);
+        } catch (InvalidAlgorithmParameterException e) {
+            exitError(e);
+        } catch (NoSuchAlgorithmException e) {
+            exitError(e);
+        } catch (NoSuchProviderException e) {
             exitError(e);
         }
     }

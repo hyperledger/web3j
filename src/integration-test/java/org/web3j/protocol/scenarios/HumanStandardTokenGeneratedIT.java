@@ -25,7 +25,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
     @Test
     public void testContract() throws Exception {
-        BigInteger aliceQty = BigInteger.valueOf(1_000_000);
+        BigInteger aliceQty = BigInteger.valueOf(1000000);
         BigInteger bobQty = BigInteger.ZERO;
 
         HumanStandardToken contract = HumanStandardToken.deploy(parity, ALICE, BigInteger.ZERO,
@@ -38,7 +38,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                 equalTo(new Uint256(aliceQty)));
 
         // transfer tokens
-        BigInteger transferQuantity = BigInteger.valueOf(100_000);
+        BigInteger transferQuantity = BigInteger.valueOf(100000);
 
         TransactionReceipt aliceTransferReceipt = contract.transfer(new Address(BOB.getAddress()), new Uint256(transferQuantity)).get();
 

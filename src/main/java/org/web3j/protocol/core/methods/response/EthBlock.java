@@ -409,7 +409,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 JsonParser jsonParser,
                 DeserializationContext deserializationContext) throws IOException {
 
-            List<TransactionResult> transactionResults = new ArrayList<>();
+            List<TransactionResult> transactionResults = new ArrayList<TransactionResult>();
             JsonToken nextToken = jsonParser.nextToken();
 
             if (nextToken == JsonToken.START_OBJECT) {

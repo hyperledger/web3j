@@ -28,12 +28,12 @@ public final class Arrays extends Contract {
     }
 
     public Future<TransactionReceipt> fixedReverse(StaticArray<Uint256> input) {
-        Function function = new Function<>("fixedReverse", java.util.Arrays.<Type>asList(input), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function<Type>("fixedReverse", java.util.Arrays.<Type>asList(input), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<TransactionReceipt> dynamicReverse(DynamicArray<Uint256> input) {
-        Function function = new Function<>("dynamicReverse", java.util.Arrays.<Type>asList(input), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function<Type>("dynamicReverse", java.util.Arrays.<Type>asList(input), Collections.<TypeReference<Type>>emptyList());
         return executeTransactionAsync(function);
     }
 

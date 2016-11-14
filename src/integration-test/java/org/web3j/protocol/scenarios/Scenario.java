@@ -1,17 +1,17 @@
 package org.web3j.protocol.scenarios;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 
 import org.junit.Before;
 
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -22,6 +22,7 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.Parity;
 import org.web3j.protocol.parity.ParityFactory;
 import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
+import org.web3j.utils.Files;
 
 import static junit.framework.TestCase.fail;
 
@@ -30,8 +31,8 @@ import static junit.framework.TestCase.fail;
  */
 public class Scenario {
 
-    static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
-    static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
+    static final BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
+    static final BigInteger GAS_LIMIT = BigInteger.valueOf(2000000);
 
     // testnet
     private static final String WALLET_PASSWORD = "";
@@ -123,15 +124,15 @@ public class Scenario {
     }
 
     Function createFibonacciFunction() {
-        return new Function(
+        return new Function<Uint>(
                 "fibonacciNotify",
-                Collections.singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.singletonList(new TypeReference<Uint>() {}));
+                Collections.<Type>singletonList(new Uint(BigInteger.valueOf(7))),
+                Collections.<TypeReference<Uint>>singletonList(new TypeReference<Uint>() {}));
     }
 
     static String load(String filePath) throws URISyntaxException, IOException {
         URL url = Scenario.class.getClass().getResource(filePath);
-        byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
+        byte[] bytes = Files.readBytes(new File(url.toURI()));
         return new String(bytes);
     }
 

@@ -78,7 +78,7 @@ public class FunctionEncoder {
         result.append(methodName);
         result.append("(");
 
-        List<String> types = new ArrayList<>(parameters.size());
+        List<String> types = new ArrayList<String>(parameters.size());
         String params = "";
 
         for (int i = 0; i < parameters.size(); i++) {

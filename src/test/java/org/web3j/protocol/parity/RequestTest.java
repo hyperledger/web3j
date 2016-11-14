@@ -124,7 +124,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalSetAccountMeta() throws Exception {
-        Map<String, Object> meta = new HashMap<>(1);
+        Map<String, Object> meta = new HashMap<String, Object>(1);
         meta.put("foo", "bar");
         web3j.personalSetAccountMeta("0xfc390d8a8ddb591b010fda52f4db4945742c3809", meta).send();
 

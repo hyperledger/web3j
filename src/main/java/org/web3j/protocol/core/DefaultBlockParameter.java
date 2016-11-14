@@ -6,5 +6,5 @@ package org.web3j.protocol.core;
  * See the <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#the-default-block-parameter">specification</a> for further information.
  */
 public interface DefaultBlockParameter {
-    abstract String getValue();
+    String getValue();
 }

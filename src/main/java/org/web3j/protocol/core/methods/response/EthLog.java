@@ -107,7 +107,7 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
                 JsonParser jsonParser,
                 DeserializationContext deserializationContext) throws IOException {
 
-            List<LogResult> logResults = new ArrayList<>();
+            List<LogResult> logResults = new ArrayList<LogResult>();
             JsonToken nextToken = jsonParser.nextToken();
 
             if (nextToken == JsonToken.START_OBJECT) {

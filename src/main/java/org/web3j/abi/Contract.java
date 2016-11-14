@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -27,8 +26,8 @@ import org.web3j.utils.Async;
  */
 public abstract class Contract extends ManagedTransaction {
 
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
+    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
+    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2000000);
 
     private String contractAddress;
 
@@ -141,8 +140,8 @@ public abstract class Contract extends ManagedTransaction {
 
         List<Log> logs = transactionReceipt.getLogs();
 
-        List<Type> indexedValues = new ArrayList<>();
-        List<Type> nonIndexedValues = new ArrayList<>();
+        List<Type> indexedValues = new ArrayList<Type>();
+        List<Type> nonIndexedValues = new ArrayList<Type>();
 
         for (Log log:logs) {
             List<String> topics = log.getTopics();
@@ -181,7 +180,10 @@ public abstract class Contract extends ManagedTransaction {
 
         TransactionReceipt transactionReceipt = contract.signAndSend(rawTransaction);
         String contractAddress = transactionReceipt.getContractAddress();
-        Objects.requireNonNull(contractAddress);
+
+        if (contractAddress == null) {
+            throw new IllegalArgumentException("Contract address cannot be null");
+        }
         return contractAddress;
     }
 
@@ -191,8 +193,10 @@ public abstract class Contract extends ManagedTransaction {
 
         String contractAddress = create(web3j, credentials, binary, encodedConstructor, value);
 
+        // For Java 7+ you can use getConstructor and don't need to set accessible
         Constructor<T> constructor =
-                type.getConstructor(String.class, Web3j.class, Credentials.class);
+                type.getDeclaredConstructor(String.class, Web3j.class, Credentials.class);
+        constructor.setAccessible(true);
 
         return constructor.newInstance(contractAddress, web3j, credentials);
     }

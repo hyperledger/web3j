@@ -23,7 +23,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testSimpleFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function<Uint>(
                 "test",
                 Collections.<Type>emptyList(),
                 Collections.<TypeReference<Uint>>singletonList(new TypeReference<Uint>(){})
@@ -37,7 +37,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testSimpleFunctionStringResultDecode() {
-        Function function = new Function<>("simple",
+        Function function = new Function<Utf8String>("simple",
                 Arrays.<Type>asList(),
                 Collections.<TypeReference<Utf8String>>singletonList(new TypeReference<Utf8String>() {
                 }));
@@ -54,7 +54,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testFunctionEmptyStringResultDecode() {
-        Function function = new Function<>("test",
+        Function function = new Function<Utf8String>("test",
                 Collections.<Type>emptyList(),
                 Collections.<TypeReference<Utf8String>>singletonList(new TypeReference<Utf8String>() {
                 }));
@@ -69,7 +69,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testMultipleResultFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function<Uint>(
                 "test",
                 Collections.<Type>emptyList(),
                 Arrays.asList(new TypeReference<Uint>() { }, new TypeReference<Uint>() { })
@@ -85,7 +85,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testVoidResultFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function<Type>(
                 "test",
                 Collections.<Type>emptyList(),
                 Collections.<TypeReference<Type>>emptyList());
@@ -96,7 +96,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testEmptyResultFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function<Uint>(
                 "test",
                 Collections.<Type>emptyList(),
                 Collections.<TypeReference<Uint>>singletonList(new TypeReference<Uint>() { }));
@@ -142,7 +142,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedDynamicArrayValue() {
-        DynamicArray<Uint256> array = new DynamicArray<>(new Uint256(BigInteger.TEN));
+        DynamicArray<Uint256> array = new DynamicArray<Uint256>(new Uint256(BigInteger.TEN));
         String encoded = TypeEncoder.encodeDynamicArray(array);
         String hash = Hash.sha3(encoded);
 

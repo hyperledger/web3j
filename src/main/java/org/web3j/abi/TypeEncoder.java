@@ -1,7 +1,7 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 import org.web3j.abi.datatypes.*;
 import org.web3j.utils.Numeric;
@@ -121,7 +121,7 @@ public class TypeEncoder {
     }
 
     static String encodeString(Utf8String string) {
-        byte[] utfEncoded = string.getValue().getBytes(StandardCharsets.UTF_8);
+        byte[] utfEncoded = string.getValue().getBytes(Charset.forName("UTF-8"));
         return encodeDynamicBytes(new DynamicBytes(utfEncoded));
     }
 

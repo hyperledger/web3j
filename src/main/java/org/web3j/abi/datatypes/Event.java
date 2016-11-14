@@ -37,7 +37,7 @@ public class Event {
     // sustainable if we want to support returning a mixture of any return values
     @SuppressWarnings("unchecked")
     private static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
-        List<TypeReference<Type>> result = new ArrayList<>(input.size());
+        List<TypeReference<Type>> result = new ArrayList<TypeReference<Type>>(input.size());
 
         for (TypeReference<?> typeReference:input) {
             result.add((TypeReference<Type>) typeReference);

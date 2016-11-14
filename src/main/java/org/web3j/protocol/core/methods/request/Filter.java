@@ -17,16 +17,16 @@ public abstract class Filter<T extends Filter> {
 
     Filter() {
         thisObj = getThis();
-        topics = new ArrayList<>();
+        topics = new ArrayList<FilterTopic>();
     }
 
     public T addSingleTopic(String topic) {
-        topics.add(new SingleTopic<>(topic));
+        topics.add(new SingleTopic<String>(topic));
         return getThis();
     }
 
     public T addNullTopic() {
-        topics.add(new SingleTopic<>());
+        topics.add(new SingleTopic<Object>());
         return getThis();
     }
 
@@ -68,10 +68,10 @@ public abstract class Filter<T extends Filter> {
         private List<SingleTopic<String>> topics;
 
         public ListTopic(String... optionalTopics) {
-            topics = new ArrayList<>();
+            topics = new ArrayList<SingleTopic<String>>();
             for (String topic : optionalTopics) {
                 if (topic != null) {
-                    topics.add(new SingleTopic<>(topic));
+                    topics.add(new SingleTopic<String>(topic));
                 } else {
                     topics.add(new SingleTopic());
                 }

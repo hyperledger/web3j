@@ -27,7 +27,8 @@ apply plugin: 'com.github.johnrengelman.shadow'
 group 'org.web3j'
 version '1.0.2'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
 // We don't want any compiler warnings
 compileJava {

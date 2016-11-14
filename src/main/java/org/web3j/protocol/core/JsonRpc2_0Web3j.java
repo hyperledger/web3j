@@ -28,7 +28,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, Web3ClientVersion> web3ClientVersion() {
-        return new Request<>(
+        return new Request<String, Web3ClientVersion>(
                 "web3_clientVersion",
                 Collections.<String>emptyList(),
                 ID,
@@ -38,7 +38,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, Web3Sha3> web3Sha3(String data) {
-        return new Request<>(
+        return new Request<String, Web3Sha3>(
                 "web3_sha3",
                 Arrays.asList(data),
                 ID,
@@ -48,7 +48,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, NetVersion> netVersion() {
-        return new Request<>(
+        return new Request<String, NetVersion>(
                 "net_version",
                 Collections.<String>emptyList(),
                 ID,
@@ -58,7 +58,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, NetListening> netListening() {
-        return new Request<>(
+        return new Request<String, NetListening>(
                 "net_listening",
                 Collections.<String>emptyList(),
                 ID,
@@ -68,7 +68,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, NetPeerCount> netPeerCount() {
-        return new Request<>(
+        return new Request<String, NetPeerCount>(
                 "net_peerCount",
                 Collections.<String>emptyList(),
                 ID,
@@ -78,7 +78,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthProtocolVersion> ethProtocolVersion() {
-        return new Request<>(
+        return new Request<String, EthProtocolVersion>(
                 "eth_protocolVersion",
                 Collections.<String>emptyList(),
                 ID,
@@ -88,7 +88,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthCoinbase> ethCoinbase() {
-        return new Request<>(
+        return new Request<String, EthCoinbase>(
                 "eth_coinbase",
                 Collections.<String>emptyList(),
                 ID,
@@ -98,7 +98,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthSyncing> ethSyncing() {
-        return new Request<>(
+        return new Request<String, EthSyncing>(
                 "eth_syncing",
                 Collections.<String>emptyList(),
                 ID,
@@ -108,7 +108,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthMining> ethMining() {
-        return new Request<>(
+        return new Request<String, EthMining>(
                 "eth_mining",
                 Collections.<String>emptyList(),
                 ID,
@@ -118,7 +118,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthHashrate> ethHashrate() {
-        return new Request<>(
+        return new Request<String, EthHashrate>(
                 "eth_hashrate",
                 Collections.<String>emptyList(),
                 ID,
@@ -128,7 +128,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthGasPrice> ethGasPrice() {
-        return new Request<>(
+        return new Request<String, EthGasPrice>(
                 "eth_gasPrice",
                 Collections.<String>emptyList(),
                 ID,
@@ -138,7 +138,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthAccounts> ethAccounts() {
-        return new Request<>(
+        return new Request<String, EthAccounts>(
                 "eth_accounts",
                 Collections.<String>emptyList(),
                 ID,
@@ -148,7 +148,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthBlockNumber> ethBlockNumber() {
-        return new Request<>(
+        return new Request<String, EthBlockNumber>(
                 "eth_blockNumber",
                 Collections.<String>emptyList(),
                 ID,
@@ -159,7 +159,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthGetBalance> ethGetBalance(
             String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<String, EthGetBalance>(
                 "eth_getBalance",
                 Arrays.asList(address, defaultBlockParameter.getValue()),
                 ID,
@@ -170,7 +170,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthGetStorageAt> ethGetStorageAt(
             String address, BigInteger position, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<String, EthGetStorageAt>(
                 "eth_getStorageAt",
                 Arrays.asList(
                         address,
@@ -184,7 +184,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthGetTransactionCount> ethGetTransactionCount(
             String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<String, EthGetTransactionCount>(
                 "eth_getTransactionCount",
                 Arrays.asList(address, defaultBlockParameter.getValue()),
                 ID,
@@ -195,7 +195,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthGetBlockTransactionCountByHash> ethGetBlockTransactionCountByHash(
             String blockHash) {
-        return new Request<>(
+        return new Request<String, EthGetBlockTransactionCountByHash>(
                 "eth_getBlockTransactionCountByHash",
                 Arrays.asList(blockHash),
                 ID,
@@ -206,7 +206,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthGetBlockTransactionCountByNumber> ethGetBlockTransactionCountByNumber(
             DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<String, EthGetBlockTransactionCountByNumber>(
                 "eth_getBlockTransactionCountByNumber",
                 Arrays.asList(defaultBlockParameter.getValue()),
                 ID,
@@ -216,7 +216,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthGetUncleCountByBlockHash> ethGetUncleCountByBlockHash(String blockHash) {
-        return new Request<>(
+        return new Request<String, EthGetUncleCountByBlockHash>(
                 "eth_getUncleCountByBlockHash",
                 Arrays.asList(blockHash),
                 ID,
@@ -227,7 +227,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthGetUncleCountByBlockNumber> ethGetUncleCountByBlockNumber(
             DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<String, EthGetUncleCountByBlockNumber>(
                 "eth_getUncleCountByBlockNumber",
                 Arrays.asList(defaultBlockParameter.getValue()),
                 ID,
@@ -238,7 +238,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthGetCode> ethGetCode(
             String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<String, EthGetCode>(
                 "eth_getCode",
                 Arrays.asList(address, defaultBlockParameter.getValue()),
                 ID,
@@ -248,7 +248,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthSign> ethSign(String address, String sha3HashOfDataToSign) {
-        return new Request<>(
+        return new Request<String, EthSign>(
                 "eth_sign",
                 Arrays.asList(address, sha3HashOfDataToSign),
                 ID,
@@ -259,7 +259,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(
             Transaction transaction) {
-        return new Request<>(
+        return new Request<Transaction, EthSendTransaction>(
                 "eth_sendTransaction",
                 Arrays.asList(transaction),
                 ID,
@@ -270,7 +270,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(
             String signedTransactionData) {
-        return new Request<>(
+        return new Request<String, EthSendTransaction>(
                 "eth_sendRawTransaction",
                 Arrays.asList(signedTransactionData),
                 ID,
@@ -281,7 +281,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
             Transaction transaction, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<Object, EthCall>(
                 "eth_call",
                 Arrays.asList(transaction, defaultBlockParameter),
                 ID,
@@ -291,7 +291,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthEstimateGas> ethEstimateGas(Transaction transaction) {
-        return new Request<>(
+        return new Request<Transaction, EthEstimateGas>(
                 "eth_estimateGas",
                 Arrays.asList(transaction),
                 ID,
@@ -302,9 +302,9 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthBlock> ethGetBlockByHash(
             String blockHash, boolean returnFullTransactionObjects) {
-        return new Request<>(
+        return new Request<Object, EthBlock>(
                 "eth_getBlockByHash",
-                Arrays.asList(
+                Arrays.<Object>asList(
                         blockHash,
                         returnFullTransactionObjects),
                 ID,
@@ -316,9 +316,9 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthBlock> ethGetBlockByNumber(
             DefaultBlockParameter defaultBlockParameter,
             boolean returnFullTransactionObjects) {
-        return new Request<>(
+        return new Request<Object, EthBlock>(
                 "eth_getBlockByNumber",
-                Arrays.asList(
+                Arrays.<Object>asList(
                         defaultBlockParameter.getValue(),
                         returnFullTransactionObjects),
                 ID,
@@ -328,7 +328,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthTransaction> ethGetTransactionByHash(String transactionHash) {
-        return new Request<>(
+        return new Request<String, EthTransaction>(
                 "eth_getTransactionByHash",
                 Arrays.asList(transactionHash),
                 ID,
@@ -339,7 +339,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthTransaction> ethGetTransactionByBlockHashAndIndex(
             String blockHash, BigInteger transactionIndex) {
-        return new Request<>(
+        return new Request<String, EthTransaction>(
                 "eth_getTransactionByBlockHashAndIndex",
                 Arrays.asList(
                         blockHash,
@@ -352,7 +352,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthTransaction> ethGetTransactionByBlockNumberAndIndex(
             DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex) {
-        return new Request<>(
+        return new Request<String, EthTransaction>(
                 "eth_getTransactionByBlockNumberAndIndex",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
@@ -364,7 +364,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthGetTransactionReceipt> ethGetTransactionReceipt(String transactionHash) {
-        return new Request<>(
+        return new Request<String, EthGetTransactionReceipt>(
                 "eth_getTransactionReceipt",
                 Arrays.asList(transactionHash),
                 ID,
@@ -375,7 +375,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthBlock> ethGetUncleByBlockHashAndIndex(
             String blockHash, BigInteger transactionIndex) {
-        return new Request<>(
+        return new Request<String, EthBlock>(
                 "eth_getUncleByBlockHashAndIndex",
                 Arrays.asList(
                         blockHash,
@@ -388,7 +388,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthBlock> ethGetUncleByBlockNumberAndIndex(
             DefaultBlockParameter defaultBlockParameter, BigInteger uncleIndex) {
-        return new Request<>(
+        return new Request<String, EthBlock>(
                 "eth_getUncleByBlockNumberAndIndex",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
@@ -400,7 +400,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthGetCompilers> ethGetCompilers() {
-        return new Request<>(
+        return new Request<String, EthGetCompilers>(
                 "eth_getCompilers",
                 Collections.<String>emptyList(),
                 ID,
@@ -410,7 +410,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthCompileLLL> ethCompileLLL(String sourceCode) {
-        return new Request<>(
+        return new Request<String, EthCompileLLL>(
                 "eth_compileLLL",
                 Arrays.asList(sourceCode),
                 ID,
@@ -420,7 +420,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthCompileSolidity> ethCompileSolidity(String sourceCode) {
-        return new Request<>(
+        return new Request<String, EthCompileSolidity>(
                 "eth_compileSolidity",
                 Arrays.asList(sourceCode),
                 ID,
@@ -430,7 +430,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthCompileSerpent> ethCompileSerpent(String sourceCode) {
-        return new Request<>(
+        return new Request<String, EthCompileSerpent>(
                 "eth_compileSerpent",
                 Arrays.asList(sourceCode),
                 ID,
@@ -440,7 +440,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthNewFilter> ethNewFilter(EthFilter ethFilter) {
-        return new Request<>(
+        return new Request<EthFilter, EthNewFilter>(
                 "eth_newFilter",
                 Arrays.asList(ethFilter),
                 ID,
@@ -450,7 +450,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthNewBlockFilter> ethNewBlockFilter() {
-        return new Request<>(
+        return new Request<String, EthNewBlockFilter>(
                 "eth_newBlockFilter",
                 Collections.<String>emptyList(),
                 ID,
@@ -460,7 +460,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthNewPendingTransactionFilter> ethNewPendingTransactionFilter() {
-        return new Request<>(
+        return new Request<String, EthNewPendingTransactionFilter>(
                 "eth_newPendingTransactionFilter",
                 Collections.<String>emptyList(),
                 ID,
@@ -470,7 +470,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthUninstallFilter> ethUninstallFilter(BigInteger filterId) {
-        return new Request<>(
+        return new Request<String, EthUninstallFilter>(
                 "eth_uninstallFilter",
                 Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
@@ -480,7 +480,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthLog> ethGetFilterChanges(BigInteger filterId) {
-        return new Request<>(
+        return new Request<String, EthLog>(
                 "eth_getFilterChanges",
                 Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
@@ -490,7 +490,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthLog> ethGetFilterLogs(BigInteger filterId) {
-        return new Request<>(
+        return new Request<String, EthLog>(
                 "eth_getFilterLogs",
                 Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
@@ -500,7 +500,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthLog> ethGetLogs(EthFilter ethFilter) {
-        return new Request<>(
+        return new Request<EthFilter, EthLog>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),
                 ID,
@@ -510,7 +510,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthGetWork> ethGetWork() {
-        return new Request<>(
+        return new Request<String, EthGetWork>(
                 "eth_getWork",
                 Collections.<String>emptyList(),
                 ID,
@@ -520,7 +520,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthSubmitWork> ethSubmitWork(String nonce, String headerPowHash, String mixDigest) {
-        return new Request<>(
+        return new Request<String, EthSubmitWork>(
                 "eth_submitWork",
                 Arrays.asList(nonce, headerPowHash, mixDigest),
                 ID,
@@ -530,7 +530,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthSubmitHashrate> ethSubmitHashrate(String hashrate, String clientId) {
-        return new Request<>(
+        return new Request<String, EthSubmitHashrate>(
                 "eth_submitHashrate",
                 Arrays.asList(hashrate, clientId),
                 ID,
@@ -541,7 +541,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, DbPutString> dbPutString(
             String databaseName, String keyName, String stringToStore) {
-        return new Request<>(
+        return new Request<String, DbPutString>(
                 "db_putString",
                 Arrays.asList(databaseName, keyName, stringToStore),
                 ID,
@@ -551,7 +551,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, DbGetString> dbGetString(String databaseName, String keyName) {
-        return new Request<>(
+        return new Request<String, DbGetString>(
                 "db_getString",
                 Arrays.asList(databaseName, keyName),
                 ID,
@@ -561,7 +561,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, DbPutHex> dbPutHex(String databaseName, String keyName, String dataToStore) {
-        return new Request<>(
+        return new Request<String, DbPutHex>(
                 "db_putHex",
                 Arrays.asList(databaseName, keyName, dataToStore),
                 ID,
@@ -571,7 +571,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, DbGetHex> dbGetHex(String databaseName, String keyName) {
-        return new Request<>(
+        return new Request<String, DbGetHex>(
                 "db_getHex",
                 Arrays.asList(databaseName, keyName),
                 ID,
@@ -581,7 +581,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.ShhPost> shhPost(ShhPost shhPost) {
-        return new Request<>(
+        return new Request<ShhPost, org.web3j.protocol.core.methods.response.ShhPost>(
                 "shh_post",
                 Arrays.asList(shhPost),
                 ID,
@@ -591,7 +591,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhVersion> shhVersion() {
-        return new Request<>(
+        return new Request<String, ShhVersion>(
                 "shh_version",
                 Collections.<String>emptyList(),
                 ID,
@@ -601,7 +601,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhNewIdentity> shhNewIdentity() {
-        return new Request<>(
+        return new Request<String, ShhNewIdentity>(
                 "shh_newIdentity",
                 Collections.<String>emptyList(),
                 ID,
@@ -611,7 +611,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhHasIdentity> shhHasIdentity(String identityAddress) {
-        return new Request<>(
+        return new Request<String, ShhHasIdentity>(
                 "shh_hasIdentity",
                 Arrays.asList(identityAddress),
                 ID,
@@ -621,7 +621,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhNewGroup> shhNewGroup() {
-        return new Request<>(
+        return new Request<String, ShhNewGroup>(
                 "shh_newGroup",
                 Collections.<String>emptyList(),
                 ID,
@@ -631,7 +631,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhAddToGroup> shhAddToGroup(String identityAddress) {
-        return new Request<>(
+        return new Request<String, ShhAddToGroup>(
                 "shh_addToGroup",
                 Arrays.asList(identityAddress),
                 ID,
@@ -641,7 +641,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhNewFilter> shhNewFilter(ShhFilter shhFilter) {
-        return new Request<>(
+        return new Request<ShhFilter, ShhNewFilter>(
                 "shh_newFilter",
                 Arrays.asList(shhFilter),
                 ID,
@@ -651,7 +651,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhUninstallFilter> shhUninstallFilter(BigInteger filterId) {
-        return new Request<>(
+        return new Request<String, ShhUninstallFilter>(
                 "shh_uninstallFilter",
                 Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
@@ -661,7 +661,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId) {
-        return new Request<>(
+        return new Request<String, ShhMessages>(
                 "shh_getFilterChanges",
                 Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,
@@ -671,7 +671,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, ShhMessages> shhGetMessages(BigInteger filterId) {
-        return new Request<>(
+        return new Request<String, ShhMessages>(
                 "shh_getMessages",
                 Arrays.asList(Numeric.encodeQuantity(filterId)),
                 ID,

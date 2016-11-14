@@ -15,333 +15,497 @@ public final class AbiTypes {
   }
 
   public static Class<?> getType(String type) {
-    switch (type) {
-      case "address":
-          return Address.class;
-      case "bool":
-          return Bool.class;
-      case "string":
-          return Utf8String.class;
-      case "bytes":
-          return DynamicBytes.class;
-      case "uint8":
-          return Uint8.class;
-      case "int8":
-          return Int8.class;
-      case "uint16":
-          return Uint16.class;
-      case "int16":
-          return Int16.class;
-      case "uint24":
-          return Uint24.class;
-      case "int24":
-          return Int24.class;
-      case "uint32":
-          return Uint32.class;
-      case "int32":
-          return Int32.class;
-      case "uint40":
-          return Uint40.class;
-      case "int40":
-          return Int40.class;
-      case "uint48":
-          return Uint48.class;
-      case "int48":
-          return Int48.class;
-      case "uint56":
-          return Uint56.class;
-      case "int56":
-          return Int56.class;
-      case "uint64":
-          return Uint64.class;
-      case "int64":
-          return Int64.class;
-      case "uint72":
-          return Uint72.class;
-      case "int72":
-          return Int72.class;
-      case "uint80":
-          return Uint80.class;
-      case "int80":
-          return Int80.class;
-      case "uint88":
-          return Uint88.class;
-      case "int88":
-          return Int88.class;
-      case "uint96":
-          return Uint96.class;
-      case "int96":
-          return Int96.class;
-      case "uint104":
-          return Uint104.class;
-      case "int104":
-          return Int104.class;
-      case "uint112":
-          return Uint112.class;
-      case "int112":
-          return Int112.class;
-      case "uint120":
-          return Uint120.class;
-      case "int120":
-          return Int120.class;
-      case "uint128":
-          return Uint128.class;
-      case "int128":
-          return Int128.class;
-      case "uint136":
-          return Uint136.class;
-      case "int136":
-          return Int136.class;
-      case "uint144":
-          return Uint144.class;
-      case "int144":
-          return Int144.class;
-      case "uint152":
-          return Uint152.class;
-      case "int152":
-          return Int152.class;
-      case "uint160":
-          return Uint160.class;
-      case "int160":
-          return Int160.class;
-      case "uint168":
-          return Uint168.class;
-      case "int168":
-          return Int168.class;
-      case "uint176":
-          return Uint176.class;
-      case "int176":
-          return Int176.class;
-      case "uint184":
-          return Uint184.class;
-      case "int184":
-          return Int184.class;
-      case "uint192":
-          return Uint192.class;
-      case "int192":
-          return Int192.class;
-      case "uint200":
-          return Uint200.class;
-      case "int200":
-          return Int200.class;
-      case "uint208":
-          return Uint208.class;
-      case "int208":
-          return Int208.class;
-      case "uint216":
-          return Uint216.class;
-      case "int216":
-          return Int216.class;
-      case "uint224":
-          return Uint224.class;
-      case "int224":
-          return Int224.class;
-      case "uint232":
-          return Uint232.class;
-      case "int232":
-          return Int232.class;
-      case "uint240":
-          return Uint240.class;
-      case "int240":
-          return Int240.class;
-      case "uint248":
-          return Uint248.class;
-      case "int248":
-          return Int248.class;
-      case "uint256":
-          return Uint256.class;
-      case "int256":
-          return Int256.class;
-      case "ufixed8x248":
-          return Ufixed8x248.class;
-      case "fixed8x248":
-          return Fixed8x248.class;
-      case "ufixed16x240":
-          return Ufixed16x240.class;
-      case "fixed16x240":
-          return Fixed16x240.class;
-      case "ufixed24x232":
-          return Ufixed24x232.class;
-      case "fixed24x232":
-          return Fixed24x232.class;
-      case "ufixed32x224":
-          return Ufixed32x224.class;
-      case "fixed32x224":
-          return Fixed32x224.class;
-      case "ufixed40x216":
-          return Ufixed40x216.class;
-      case "fixed40x216":
-          return Fixed40x216.class;
-      case "ufixed48x208":
-          return Ufixed48x208.class;
-      case "fixed48x208":
-          return Fixed48x208.class;
-      case "ufixed56x200":
-          return Ufixed56x200.class;
-      case "fixed56x200":
-          return Fixed56x200.class;
-      case "ufixed64x192":
-          return Ufixed64x192.class;
-      case "fixed64x192":
-          return Fixed64x192.class;
-      case "ufixed72x184":
-          return Ufixed72x184.class;
-      case "fixed72x184":
-          return Fixed72x184.class;
-      case "ufixed80x176":
-          return Ufixed80x176.class;
-      case "fixed80x176":
-          return Fixed80x176.class;
-      case "ufixed88x168":
-          return Ufixed88x168.class;
-      case "fixed88x168":
-          return Fixed88x168.class;
-      case "ufixed96x160":
-          return Ufixed96x160.class;
-      case "fixed96x160":
-          return Fixed96x160.class;
-      case "ufixed104x152":
-          return Ufixed104x152.class;
-      case "fixed104x152":
-          return Fixed104x152.class;
-      case "ufixed112x144":
-          return Ufixed112x144.class;
-      case "fixed112x144":
-          return Fixed112x144.class;
-      case "ufixed120x136":
-          return Ufixed120x136.class;
-      case "fixed120x136":
-          return Fixed120x136.class;
-      case "ufixed128x128":
-          return Ufixed128x128.class;
-      case "fixed128x128":
-          return Fixed128x128.class;
-      case "ufixed136x120":
-          return Ufixed136x120.class;
-      case "fixed136x120":
-          return Fixed136x120.class;
-      case "ufixed144x112":
-          return Ufixed144x112.class;
-      case "fixed144x112":
-          return Fixed144x112.class;
-      case "ufixed152x104":
-          return Ufixed152x104.class;
-      case "fixed152x104":
-          return Fixed152x104.class;
-      case "ufixed160x96":
-          return Ufixed160x96.class;
-      case "fixed160x96":
-          return Fixed160x96.class;
-      case "ufixed168x88":
-          return Ufixed168x88.class;
-      case "fixed168x88":
-          return Fixed168x88.class;
-      case "ufixed176x80":
-          return Ufixed176x80.class;
-      case "fixed176x80":
-          return Fixed176x80.class;
-      case "ufixed184x72":
-          return Ufixed184x72.class;
-      case "fixed184x72":
-          return Fixed184x72.class;
-      case "ufixed192x64":
-          return Ufixed192x64.class;
-      case "fixed192x64":
-          return Fixed192x64.class;
-      case "ufixed200x56":
-          return Ufixed200x56.class;
-      case "fixed200x56":
-          return Fixed200x56.class;
-      case "ufixed208x48":
-          return Ufixed208x48.class;
-      case "fixed208x48":
-          return Fixed208x48.class;
-      case "ufixed216x40":
-          return Ufixed216x40.class;
-      case "fixed216x40":
-          return Fixed216x40.class;
-      case "ufixed224x32":
-          return Ufixed224x32.class;
-      case "fixed224x32":
-          return Fixed224x32.class;
-      case "ufixed232x24":
-          return Ufixed232x24.class;
-      case "fixed232x24":
-          return Fixed232x24.class;
-      case "ufixed240x16":
-          return Ufixed240x16.class;
-      case "fixed240x16":
-          return Fixed240x16.class;
-      case "ufixed248x8":
-          return Ufixed248x8.class;
-      case "fixed248x8":
-          return Fixed248x8.class;
-      case "bytes1":
-          return Bytes1.class;
-      case "bytes2":
-          return Bytes2.class;
-      case "bytes3":
-          return Bytes3.class;
-      case "bytes4":
-          return Bytes4.class;
-      case "bytes5":
-          return Bytes5.class;
-      case "bytes6":
-          return Bytes6.class;
-      case "bytes7":
-          return Bytes7.class;
-      case "bytes8":
-          return Bytes8.class;
-      case "bytes9":
-          return Bytes9.class;
-      case "bytes10":
-          return Bytes10.class;
-      case "bytes11":
-          return Bytes11.class;
-      case "bytes12":
-          return Bytes12.class;
-      case "bytes13":
-          return Bytes13.class;
-      case "bytes14":
-          return Bytes14.class;
-      case "bytes15":
-          return Bytes15.class;
-      case "bytes16":
-          return Bytes16.class;
-      case "bytes17":
-          return Bytes17.class;
-      case "bytes18":
-          return Bytes18.class;
-      case "bytes19":
-          return Bytes19.class;
-      case "bytes20":
-          return Bytes20.class;
-      case "bytes21":
-          return Bytes21.class;
-      case "bytes22":
-          return Bytes22.class;
-      case "bytes23":
-          return Bytes23.class;
-      case "bytes24":
-          return Bytes24.class;
-      case "bytes25":
-          return Bytes25.class;
-      case "bytes26":
-          return Bytes26.class;
-      case "bytes27":
-          return Bytes27.class;
-      case "bytes28":
-          return Bytes28.class;
-      case "bytes29":
-          return Bytes29.class;
-      case "bytes30":
-          return Bytes30.class;
-      case "bytes31":
-          return Bytes31.class;
-      case "bytes32":
-          return Bytes32.class;
-      default:
-          throw new UnsupportedOperationException("Unsupported type encountered: " + type);
+    if (type == null || type.equals("")) {
+      throw new UnsupportedOperationException("Type must not be empty or null");
+    }
+    else if ("address".equals(type)) {
+      return Address.class;
+    }
+    else if ("bool".equals(type)) {
+      return Bool.class;
+    }
+    else if ("string".equals(type)) {
+      return Utf8String.class;
+    }
+    else if ("bytes".equals(type)) {
+      return DynamicBytes.class;
+    }
+    else if ("uint8".equals(type)) {
+      return Uint8.class;
+    }
+    else if ("int8".equals(type)) {
+      return Int8.class;
+    }
+    else if ("uint16".equals(type)) {
+      return Uint16.class;
+    }
+    else if ("int16".equals(type)) {
+      return Int16.class;
+    }
+    else if ("uint24".equals(type)) {
+      return Uint24.class;
+    }
+    else if ("int24".equals(type)) {
+      return Int24.class;
+    }
+    else if ("uint32".equals(type)) {
+      return Uint32.class;
+    }
+    else if ("int32".equals(type)) {
+      return Int32.class;
+    }
+    else if ("uint40".equals(type)) {
+      return Uint40.class;
+    }
+    else if ("int40".equals(type)) {
+      return Int40.class;
+    }
+    else if ("uint48".equals(type)) {
+      return Uint48.class;
+    }
+    else if ("int48".equals(type)) {
+      return Int48.class;
+    }
+    else if ("uint56".equals(type)) {
+      return Uint56.class;
+    }
+    else if ("int56".equals(type)) {
+      return Int56.class;
+    }
+    else if ("uint64".equals(type)) {
+      return Uint64.class;
+    }
+    else if ("int64".equals(type)) {
+      return Int64.class;
+    }
+    else if ("uint72".equals(type)) {
+      return Uint72.class;
+    }
+    else if ("int72".equals(type)) {
+      return Int72.class;
+    }
+    else if ("uint80".equals(type)) {
+      return Uint80.class;
+    }
+    else if ("int80".equals(type)) {
+      return Int80.class;
+    }
+    else if ("uint88".equals(type)) {
+      return Uint88.class;
+    }
+    else if ("int88".equals(type)) {
+      return Int88.class;
+    }
+    else if ("uint96".equals(type)) {
+      return Uint96.class;
+    }
+    else if ("int96".equals(type)) {
+      return Int96.class;
+    }
+    else if ("uint104".equals(type)) {
+      return Uint104.class;
+    }
+    else if ("int104".equals(type)) {
+      return Int104.class;
+    }
+    else if ("uint112".equals(type)) {
+      return Uint112.class;
+    }
+    else if ("int112".equals(type)) {
+      return Int112.class;
+    }
+    else if ("uint120".equals(type)) {
+      return Uint120.class;
+    }
+    else if ("int120".equals(type)) {
+      return Int120.class;
+    }
+    else if ("uint128".equals(type)) {
+      return Uint128.class;
+    }
+    else if ("int128".equals(type)) {
+      return Int128.class;
+    }
+    else if ("uint136".equals(type)) {
+      return Uint136.class;
+    }
+    else if ("int136".equals(type)) {
+      return Int136.class;
+    }
+    else if ("uint144".equals(type)) {
+      return Uint144.class;
+    }
+    else if ("int144".equals(type)) {
+      return Int144.class;
+    }
+    else if ("uint152".equals(type)) {
+      return Uint152.class;
+    }
+    else if ("int152".equals(type)) {
+      return Int152.class;
+    }
+    else if ("uint160".equals(type)) {
+      return Uint160.class;
+    }
+    else if ("int160".equals(type)) {
+      return Int160.class;
+    }
+    else if ("uint168".equals(type)) {
+      return Uint168.class;
+    }
+    else if ("int168".equals(type)) {
+      return Int168.class;
+    }
+    else if ("uint176".equals(type)) {
+      return Uint176.class;
+    }
+    else if ("int176".equals(type)) {
+      return Int176.class;
+    }
+    else if ("uint184".equals(type)) {
+      return Uint184.class;
+    }
+    else if ("int184".equals(type)) {
+      return Int184.class;
+    }
+    else if ("uint192".equals(type)) {
+      return Uint192.class;
+    }
+    else if ("int192".equals(type)) {
+      return Int192.class;
+    }
+    else if ("uint200".equals(type)) {
+      return Uint200.class;
+    }
+    else if ("int200".equals(type)) {
+      return Int200.class;
+    }
+    else if ("uint208".equals(type)) {
+      return Uint208.class;
+    }
+    else if ("int208".equals(type)) {
+      return Int208.class;
+    }
+    else if ("uint216".equals(type)) {
+      return Uint216.class;
+    }
+    else if ("int216".equals(type)) {
+      return Int216.class;
+    }
+    else if ("uint224".equals(type)) {
+      return Uint224.class;
+    }
+    else if ("int224".equals(type)) {
+      return Int224.class;
+    }
+    else if ("uint232".equals(type)) {
+      return Uint232.class;
+    }
+    else if ("int232".equals(type)) {
+      return Int232.class;
+    }
+    else if ("uint240".equals(type)) {
+      return Uint240.class;
+    }
+    else if ("int240".equals(type)) {
+      return Int240.class;
+    }
+    else if ("uint248".equals(type)) {
+      return Uint248.class;
+    }
+    else if ("int248".equals(type)) {
+      return Int248.class;
+    }
+    else if ("uint256".equals(type)) {
+      return Uint256.class;
+    }
+    else if ("int256".equals(type)) {
+      return Int256.class;
+    }
+    else if ("ufixed8x248".equals(type)) {
+      return Ufixed8x248.class;
+    }
+    else if ("fixed8x248".equals(type)) {
+      return Fixed8x248.class;
+    }
+    else if ("ufixed16x240".equals(type)) {
+      return Ufixed16x240.class;
+    }
+    else if ("fixed16x240".equals(type)) {
+      return Fixed16x240.class;
+    }
+    else if ("ufixed24x232".equals(type)) {
+      return Ufixed24x232.class;
+    }
+    else if ("fixed24x232".equals(type)) {
+      return Fixed24x232.class;
+    }
+    else if ("ufixed32x224".equals(type)) {
+      return Ufixed32x224.class;
+    }
+    else if ("fixed32x224".equals(type)) {
+      return Fixed32x224.class;
+    }
+    else if ("ufixed40x216".equals(type)) {
+      return Ufixed40x216.class;
+    }
+    else if ("fixed40x216".equals(type)) {
+      return Fixed40x216.class;
+    }
+    else if ("ufixed48x208".equals(type)) {
+      return Ufixed48x208.class;
+    }
+    else if ("fixed48x208".equals(type)) {
+      return Fixed48x208.class;
+    }
+    else if ("ufixed56x200".equals(type)) {
+      return Ufixed56x200.class;
+    }
+    else if ("fixed56x200".equals(type)) {
+      return Fixed56x200.class;
+    }
+    else if ("ufixed64x192".equals(type)) {
+      return Ufixed64x192.class;
+    }
+    else if ("fixed64x192".equals(type)) {
+      return Fixed64x192.class;
+    }
+    else if ("ufixed72x184".equals(type)) {
+      return Ufixed72x184.class;
+    }
+    else if ("fixed72x184".equals(type)) {
+      return Fixed72x184.class;
+    }
+    else if ("ufixed80x176".equals(type)) {
+      return Ufixed80x176.class;
+    }
+    else if ("fixed80x176".equals(type)) {
+      return Fixed80x176.class;
+    }
+    else if ("ufixed88x168".equals(type)) {
+      return Ufixed88x168.class;
+    }
+    else if ("fixed88x168".equals(type)) {
+      return Fixed88x168.class;
+    }
+    else if ("ufixed96x160".equals(type)) {
+      return Ufixed96x160.class;
+    }
+    else if ("fixed96x160".equals(type)) {
+      return Fixed96x160.class;
+    }
+    else if ("ufixed104x152".equals(type)) {
+      return Ufixed104x152.class;
+    }
+    else if ("fixed104x152".equals(type)) {
+      return Fixed104x152.class;
+    }
+    else if ("ufixed112x144".equals(type)) {
+      return Ufixed112x144.class;
+    }
+    else if ("fixed112x144".equals(type)) {
+      return Fixed112x144.class;
+    }
+    else if ("ufixed120x136".equals(type)) {
+      return Ufixed120x136.class;
+    }
+    else if ("fixed120x136".equals(type)) {
+      return Fixed120x136.class;
+    }
+    else if ("ufixed128x128".equals(type)) {
+      return Ufixed128x128.class;
+    }
+    else if ("fixed128x128".equals(type)) {
+      return Fixed128x128.class;
+    }
+    else if ("ufixed136x120".equals(type)) {
+      return Ufixed136x120.class;
+    }
+    else if ("fixed136x120".equals(type)) {
+      return Fixed136x120.class;
+    }
+    else if ("ufixed144x112".equals(type)) {
+      return Ufixed144x112.class;
+    }
+    else if ("fixed144x112".equals(type)) {
+      return Fixed144x112.class;
+    }
+    else if ("ufixed152x104".equals(type)) {
+      return Ufixed152x104.class;
+    }
+    else if ("fixed152x104".equals(type)) {
+      return Fixed152x104.class;
+    }
+    else if ("ufixed160x96".equals(type)) {
+      return Ufixed160x96.class;
+    }
+    else if ("fixed160x96".equals(type)) {
+      return Fixed160x96.class;
+    }
+    else if ("ufixed168x88".equals(type)) {
+      return Ufixed168x88.class;
+    }
+    else if ("fixed168x88".equals(type)) {
+      return Fixed168x88.class;
+    }
+    else if ("ufixed176x80".equals(type)) {
+      return Ufixed176x80.class;
+    }
+    else if ("fixed176x80".equals(type)) {
+      return Fixed176x80.class;
+    }
+    else if ("ufixed184x72".equals(type)) {
+      return Ufixed184x72.class;
+    }
+    else if ("fixed184x72".equals(type)) {
+      return Fixed184x72.class;
+    }
+    else if ("ufixed192x64".equals(type)) {
+      return Ufixed192x64.class;
+    }
+    else if ("fixed192x64".equals(type)) {
+      return Fixed192x64.class;
+    }
+    else if ("ufixed200x56".equals(type)) {
+      return Ufixed200x56.class;
+    }
+    else if ("fixed200x56".equals(type)) {
+      return Fixed200x56.class;
+    }
+    else if ("ufixed208x48".equals(type)) {
+      return Ufixed208x48.class;
+    }
+    else if ("fixed208x48".equals(type)) {
+      return Fixed208x48.class;
+    }
+    else if ("ufixed216x40".equals(type)) {
+      return Ufixed216x40.class;
+    }
+    else if ("fixed216x40".equals(type)) {
+      return Fixed216x40.class;
+    }
+    else if ("ufixed224x32".equals(type)) {
+      return Ufixed224x32.class;
+    }
+    else if ("fixed224x32".equals(type)) {
+      return Fixed224x32.class;
+    }
+    else if ("ufixed232x24".equals(type)) {
+      return Ufixed232x24.class;
+    }
+    else if ("fixed232x24".equals(type)) {
+      return Fixed232x24.class;
+    }
+    else if ("ufixed240x16".equals(type)) {
+      return Ufixed240x16.class;
+    }
+    else if ("fixed240x16".equals(type)) {
+      return Fixed240x16.class;
+    }
+    else if ("ufixed248x8".equals(type)) {
+      return Ufixed248x8.class;
+    }
+    else if ("fixed248x8".equals(type)) {
+      return Fixed248x8.class;
+    }
+    else if ("bytes1".equals(type)) {
+      return Bytes1.class;
+    }
+    else if ("bytes2".equals(type)) {
+      return Bytes2.class;
+    }
+    else if ("bytes3".equals(type)) {
+      return Bytes3.class;
+    }
+    else if ("bytes4".equals(type)) {
+      return Bytes4.class;
+    }
+    else if ("bytes5".equals(type)) {
+      return Bytes5.class;
+    }
+    else if ("bytes6".equals(type)) {
+      return Bytes6.class;
+    }
+    else if ("bytes7".equals(type)) {
+      return Bytes7.class;
+    }
+    else if ("bytes8".equals(type)) {
+      return Bytes8.class;
+    }
+    else if ("bytes9".equals(type)) {
+      return Bytes9.class;
+    }
+    else if ("bytes10".equals(type)) {
+      return Bytes10.class;
+    }
+    else if ("bytes11".equals(type)) {
+      return Bytes11.class;
+    }
+    else if ("bytes12".equals(type)) {
+      return Bytes12.class;
+    }
+    else if ("bytes13".equals(type)) {
+      return Bytes13.class;
+    }
+    else if ("bytes14".equals(type)) {
+      return Bytes14.class;
+    }
+    else if ("bytes15".equals(type)) {
+      return Bytes15.class;
+    }
+    else if ("bytes16".equals(type)) {
+      return Bytes16.class;
+    }
+    else if ("bytes17".equals(type)) {
+      return Bytes17.class;
+    }
+    else if ("bytes18".equals(type)) {
+      return Bytes18.class;
+    }
+    else if ("bytes19".equals(type)) {
+      return Bytes19.class;
+    }
+    else if ("bytes20".equals(type)) {
+      return Bytes20.class;
+    }
+    else if ("bytes21".equals(type)) {
+      return Bytes21.class;
+    }
+    else if ("bytes22".equals(type)) {
+      return Bytes22.class;
+    }
+    else if ("bytes23".equals(type)) {
+      return Bytes23.class;
+    }
+    else if ("bytes24".equals(type)) {
+      return Bytes24.class;
+    }
+    else if ("bytes25".equals(type)) {
+      return Bytes25.class;
+    }
+    else if ("bytes26".equals(type)) {
+      return Bytes26.class;
+    }
+    else if ("bytes27".equals(type)) {
+      return Bytes27.class;
+    }
+    else if ("bytes28".equals(type)) {
+      return Bytes28.class;
+    }
+    else if ("bytes29".equals(type)) {
+      return Bytes29.class;
+    }
+    else if ("bytes30".equals(type)) {
+      return Bytes30.class;
+    }
+    else if ("bytes31".equals(type)) {
+      return Bytes31.class;
+    }
+    else if ("bytes32".equals(type)) {
+      return Bytes32.class;
+    }
+    else  {
+      throw new UnsupportedOperationException("Unsupported type encountered");
     }
   }
 }

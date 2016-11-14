@@ -173,7 +173,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testFixedArray() {
-        StaticArray<Ufixed> array = new StaticArray<>(
+        StaticArray<Ufixed> array = new StaticArray<Ufixed>(
                 new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
                 new Ufixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8))
         );
@@ -185,7 +185,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testDynamicArray() {
-        DynamicArray<Uint> array = new DynamicArray<>(
+        DynamicArray<Uint> array = new DynamicArray<Uint>(
                 new Uint(BigInteger.ONE),
                 new Uint(BigInteger.valueOf(2)),
                 new Uint(BigInteger.valueOf(3))

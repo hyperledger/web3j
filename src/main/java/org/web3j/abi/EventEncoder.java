@@ -31,7 +31,7 @@ public class EventEncoder {
             String methodName, List<TypeReference<T>> indexParameters,
             List<TypeReference<T>> nonIndexedParameters) {
 
-        List<TypeReference<T>> parameters = new ArrayList<>(indexParameters);
+        List<TypeReference<T>> parameters = new ArrayList<TypeReference<T>>(indexParameters);
         parameters.addAll(nonIndexedParameters);
 
         StringBuilder result = new StringBuilder();

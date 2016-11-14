@@ -1,8 +1,8 @@
 package org.web3j.abi;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.*;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +70,7 @@ class TypeDecoder {
         return decode(input, 0, type);
     }
 
-    static <T extends NumericType> T decodeNumeric(String input, Class<T> type) {
+    static <T extends NumericType> T decodeNumeric(String input, Class<T> type) throws UnsupportedOperationException {
         try {
             byte[] inputByteArray = Numeric.hexStringToByteArray(input);
             int typeLengthAsBytes = getTypeLengthInBytes(type);
@@ -87,12 +87,24 @@ class TypeDecoder {
             BigInteger numericValue = new BigInteger(resultByteArray);
             return type.getConstructor(BigInteger.class).newInstance(numericValue);
 
-        } catch (NoSuchMethodException | SecurityException |
-                InstantiationException | IllegalAccessException |
-                IllegalArgumentException | InvocationTargetException e) {
-            throw new UnsupportedOperationException(
-                    "Unable to create instance of " + type.getName(), e);
+        } catch (NoSuchMethodException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (SecurityException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InstantiationException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalAccessException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalArgumentException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InvocationTargetException e) {
+            return throwUnsupportedOperation(e, type);
         }
+    }
+
+    private static <T> T throwUnsupportedOperation(Exception e, Class<T> type) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(
+                "Unable to create instance of " + type.getName(), e);
     }
 
     static <T extends NumericType> int getTypeLengthInBytes(Class<T> type) {
@@ -139,11 +151,18 @@ class TypeDecoder {
 
             byte[] bytes = Numeric.hexStringToByteArray(input.substring(0, hexStringLength));
             return type.getConstructor(byte[].class).newInstance(bytes);
-        } catch (NoSuchMethodException | SecurityException |
-                InstantiationException | IllegalAccessException |
-                IllegalArgumentException | InvocationTargetException e) {
-            throw new UnsupportedOperationException(
-                    "Unable to create instance of " + type.getName(), e);
+        } catch (NoSuchMethodException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (SecurityException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InstantiationException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalAccessException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalArgumentException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InvocationTargetException e) {
+            return throwUnsupportedOperation(e, type);
         }
     }
 
@@ -164,7 +183,11 @@ class TypeDecoder {
         DynamicBytes dynamicBytesResult = decodeDynamicBytes(input, offset);
         byte[] bytes = dynamicBytesResult.getValue();
 
-        return new Utf8String(new String(bytes, StandardCharsets.UTF_8));
+        try {
+            return new Utf8String(new String(bytes, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            return throwUnsupportedOperation(e, Utf8String.class);
+        }
     }
 
     /**
@@ -198,7 +221,7 @@ class TypeDecoder {
                         "Arrays of arrays are not currently supported for external functions, " +
                                 "see http://solidity.readthedocs.io/en/develop/types.html#members");
             } else {
-                List<T> elements = new ArrayList<>(length);
+                List<T> elements = new ArrayList<T>(length);
 
                 for (int i = 0, currOffset = offset;
                      i < length;
@@ -214,13 +237,13 @@ class TypeDecoder {
                     if (elements.isEmpty()) {
                         return (T) DynamicArray.empty(typeName);
                     } else {
-                        return (T) new DynamicArray<>(elements);
+                        return (T) new DynamicArray<T>(elements);
                     }
                 } else {
                     if (elements.isEmpty()) {
                         throw new UnsupportedOperationException("Zero length fixed array is invalid type");
                     } else {
-                        return (T) new StaticArray<>(elements);
+                        return (T) new StaticArray<T>(elements);
                     }
                 }
             }

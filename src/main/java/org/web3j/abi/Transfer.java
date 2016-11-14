@@ -22,8 +22,8 @@ import org.web3j.utils.Numeric;
  */
 public class Transfer extends ManagedTransaction {
 
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
+    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
+    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2000000);
 
     private Transfer(Web3j web3j, Credentials credentials) {
         super(web3j, credentials);

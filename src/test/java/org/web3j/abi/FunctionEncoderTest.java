@@ -84,7 +84,7 @@ public class FunctionEncoderTest {
                 Arrays.<Type>asList(
                     new DynamicBytes("dave".getBytes()),
                     new Bool(true),
-                    new DynamicArray<>(
+                    new DynamicArray<Uint>(
                             new Uint(BigInteger.ONE),
                             new Uint(BigInteger.valueOf(2)),
                             new Uint(BigInteger.valueOf(3)))),
@@ -110,7 +110,7 @@ public class FunctionEncoderTest {
                 "f",
                 Arrays.<Type>asList(
                     new Uint(BigInteger.valueOf(0x123)),
-                    new DynamicArray<>(
+                    new DynamicArray<Uint32>(
                             new Uint32(BigInteger.valueOf(0x456)),
                             new Uint32(BigInteger.valueOf(0x789))
                     ),
