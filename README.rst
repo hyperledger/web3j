@@ -4,7 +4,11 @@
 web3j: Web3 Java Ethereum Ðapp API
 ==================================
 
-.. image:: https://readthedocs.org/projects/web3j/badge/?version=latest
+.. Will revert back to web3j badge (https://readthedocs.org/projects/web3j/badge/?version=latest),
+   when they finally fix their build server issues for the project, see
+   https://github.com/rtfd/readthedocs.org/issues/2476 for further information
+
+.. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
    :target: http://docs.web3j.io
    :alt: Documentation Status
 
@@ -21,9 +25,9 @@ web3j: Web3 Java Ethereum Ðapp API
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
 web3j is a lightweight, type safe Java library for integrating with clients (nodes) on the
-Ethereum network::
+Ethereum network:
 
-   [ JVM application ] + [ web3j ] <---> [ Ethereum node ]
+.. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j-network.png
 
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
@@ -41,6 +45,7 @@ Features
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
+- Command line tools
 
 It only has five runtime dependencies:
 
@@ -55,7 +60,7 @@ Full project documentation is available at
 `Read the Docs <http://docs.web3j.io>`_.
 
 
-Getting Started
+Getting started
 ---------------
 
 Add the relevant dependency to your project:
@@ -68,7 +73,7 @@ Maven
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.2</version>
+     <version>1.0.4</version>
    </dependency>
 
 Gradle
@@ -76,7 +81,7 @@ Gradle
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.2')
+   compile ('org.web3j:core:1.0.4')
 
 
 Start a client
@@ -173,11 +178,18 @@ To generate the wrapper code, compile your smart contract:
 
    $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
 
-Then generate the wrapper code:
+Then generate the wrapper code using web3j's `Command line tools`_:
+
+.. code-block:: bash
+
+   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+
+Or in code:
 
 .. code-block:: bash
 
    org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+
 
 Now you can create and deploy your smart contract::
 
@@ -206,7 +218,21 @@ To call a smart contract::
 For more information refer to the `documentation <http://docs.web3j.io/>`_.
 
 
-Further Details
+Command line tools
+------------------
+
+A web3j fat jar is distributed with each release providing command line tools. The command line
+tools allow you to use some of the functionality of web3j from the command line:
+
+- Wallet creation
+- Wallet password management
+- Transfer of funds from one wallet to another
+- Generate Solidity smart contract function wrappers
+
+Please refer to the `documentation <http://docs.web3j.io/command_line.html>`_ for further
+information.
+
+Further details
 ---------------
 
 - web3j provides type safe access to all responses. Optional or null responses are wrapped in
@@ -226,7 +252,7 @@ See `EventFilterIT <https://github.com/web3j/web3j/blob/master/src/integration-t
 for an example.
 
 
-Tested Clients
+Tested clients
 --------------
 
 - Geth
@@ -237,7 +263,7 @@ You can run the integration test class
 to verify clients.
 
 
-Coming Soon
+Coming soon
 -----------
 
 - External key store support
@@ -245,7 +271,7 @@ Coming Soon
 - WebSocket interface support
 
 
-Related Projects
+Related projects
 ----------------
 
 For a .NET implementation, check out `Nethereum <https://github.com/Nethereum/Nethereum>`_.
@@ -255,7 +281,7 @@ For a pure Java implementation of the Ethereum client, check out
 `Ether.Camp <https://github.com/ether-camp/>`_.
 
 
-Build Instructions
+Build instructions
 ------------------
 
 web3j includes integration tests for running against a live Ethereum client. If you do not have a
@@ -274,7 +300,7 @@ To run excluding integration tests:
 
    $ ./gradlew -x integrationTest check
 
-Thanks and Credits
+Thanks and credits
 ------------------
 
 - The `Nethereum <https://github.com/Nethereum/Nethereum>`_ project for the inspiration

@@ -43,7 +43,7 @@ public class SendEtherIT extends Scenario {
     }
 
     /*
-    Valid transaction reciept:
+    Valid transaction receipt:
     "{"jsonrpc":"2.0",
         "id":1,
         "result":{

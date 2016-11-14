@@ -18,6 +18,8 @@ public class Keys {
     static final int PRIVATE_KEY_SIZE = 32;
     private static final int PUBLIC_KEY_SIZE = 64;
 
+    public static final int ADDRESS_LENGTH_IN_HEX = 40;
+
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
@@ -52,7 +54,7 @@ public class Keys {
 
     public static String getAddress(String publicKey) {
         String hash = Hash.sha3(publicKey);
-        return hash.substring(hash.length() - 40);  // right most 160 bits
+        return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX);  // right most 160 bits
     }
 
     public static String getAddress(BigInteger publicKey) {

@@ -27,6 +27,7 @@ Features
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
+- Command line tools
 
 
 Dependencies
@@ -56,6 +57,7 @@ Contents:
    callbacks.rst
    rlp.rst
    abi.rst
+   command_line.rst
    management_apis.rst
    infura.rst
    trouble.rst

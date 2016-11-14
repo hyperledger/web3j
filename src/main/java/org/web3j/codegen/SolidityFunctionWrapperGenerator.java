@@ -25,6 +25,9 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.*;
 import org.web3j.utils.Collection;
+import org.web3j.utils.Strings;
+
+import static org.web3j.utils.Collection.tail;
 
 /**
  * Java wrapper source code generator for Solidity ABI format.
@@ -41,6 +44,11 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             "<strong>Do not modifiy!</strong><br>\n" +
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
             "} to update.</p>\n";
+
+    private static final String USAGE = "solidity generate " +
+            "<input binary file>.bin <input abi file>.abi " +
+            "[-p|--package <base package name>] " +
+            "-o|--output <destination base directory>";
 
     private String binaryFileLocation;
     private String absFileLocation;
@@ -59,10 +67,18 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         this.basePackageName = basePackageName;
     }
 
+    public static void run(String[] args) throws Exception {
+        if (args.length < 1 || !args[0].equals("generate")) {
+            exitError(USAGE);
+        } else {
+            main(tail(args));
+        }
+    }
+
     public static void main(String[] args) throws Exception {
 
         if (args.length != 6) {
-            exitError(usage());
+            exitError(USAGE);
         }
 
         String binaryFileLocation = parsePositionalArg(args, 0);
@@ -74,7 +90,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                 || absFileLocation.equals("")
                 || destinationDirLocation.equals("")
                 || basePackageName.equals("")) {
-            exitError(usage());
+            exitError(USAGE);
         }
 
         new SolidityFunctionWrapperGenerator(
@@ -113,27 +129,11 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         System.exit(1);
     }
 
-    private static String usage() throws URISyntaxException {
-        String className = new java.io.File(
-                SolidityFunctionWrapperGenerator.class.getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .toURI()
-                .getPath())
-                .getName();
-
-        return String.format("Usage: %s " +
-                        "<input binary file>.bin <input abi file>.abi " +
-                        "[-p|--package <base package name>] " +
-                        "-o|--output <destination base directory>\n",
-                className);
-    }
-
     private void generate() throws IOException, ClassNotFoundException {
 
         File binaryFile = new File(binaryFileLocation);
         if (!binaryFile.exists()) {
-            exitError("Invalid input binary file specified");
+            exitError("Invalid input binary file specified: " + binaryFileLocation);
         }
 
         byte[] bytes = Files.readBytes(new File(binaryFile.toURI()));
@@ -141,7 +141,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         File absFile = new File(absFileLocation);
         if (!absFile.exists() || !absFile.canRead()) {
-            exitError("Invalid input ABI file specified");
+            exitError("Invalid input ABI file specified: " + absFileLocation);
         }
         String fileName = absFile.getName();
         String contractName = getFileNameNoExtension(fileName);
@@ -178,11 +178,14 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         classBuilder.addMethods(buildFunctionDefinitions(className, functionDefinitions));
         classBuilder.addMethod(buildLoad(className));
 
+        System.out.printf("Generating " + basePackageName + "." + className + " ... ");
         JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
                 .indent("    ")  // default indentation is two spaces
                 .build();
+        System.out.println("complete");
 
         javaFile.writeTo(destinationDirLocation);
+        System.out.println("File written to " + destinationDirLocation.toString() + "\n");
     }
 
     private TypeSpec.Builder createClassBuilder(String className, String binary) {
@@ -249,11 +252,12 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                             "$T.<$T>asList($L)" +
                             ")",
                     String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
+            methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, encodedConstructor, $L)",
+                    className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
+        } else {
+            methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, \"\", $L)",
+                    className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
         }
-
-        methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, encodedConstructor, $L)",
-                className, WEB3J, CREDENTIALS, BINARY, INITIAL_VALUE);
-
         return methodBuilder.build();
     }
 

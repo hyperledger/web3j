@@ -10,7 +10,7 @@ import org.web3j.abi.datatypes.generated.Uint64;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class UtilsTest {
+public class ConsoleTest {
 
     @Test
     public void testGetTypeName() throws ClassNotFoundException {

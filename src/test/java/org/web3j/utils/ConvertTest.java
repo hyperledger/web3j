@@ -37,4 +37,11 @@ public class ConvertTest {
         assertThat(Convert.toWei("21", Convert.Unit.METHER), is(new BigDecimal("21000000000000000000000000")));
         assertThat(Convert.toWei("21", Convert.Unit.GETHER), is(new BigDecimal("21000000000000000000000000000")));
     }
+
+    @Test
+    public void testUnit() {
+        assertThat(Convert.Unit.fromString("ether"), is(Convert.Unit.ETHER));
+        assertThat(Convert.Unit.fromString("ETHER"), is(Convert.Unit.ETHER));
+        assertThat(Convert.Unit.fromString("wei"), is(Convert.Unit.WEI));
+    }
 }

@@ -1,5 +1,6 @@
 package org.web3j.utils;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -7,7 +8,21 @@ import java.util.List;
  */
 public class Collection {
 
+    static String[] EMPTY_STRING_ARRAY = { };
+
     private Collection() { }
+
+    public static String[] tail(String[] args) {
+        if (args.length == 0) {
+            return EMPTY_STRING_ARRAY;
+        } else {
+            return Arrays.copyOfRange(args, 1, args.length);
+        }
+    }
+
+    public static <T> T[] create(T... args) {
+        return args;
+    }
 
     public static <T> String join(List<T> list, String separator, Function<T, String> function) {
         String result = "";

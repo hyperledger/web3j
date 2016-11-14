@@ -10,6 +10,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Strings.*;
 import static org.web3j.utils.Strings.capitaliseFirstLetter;
+import static org.web3j.utils.Strings.capitaliseFirstLetter;
+import static org.web3j.utils.Strings.join;
+import static org.web3j.utils.Strings.toCsv;
+
 
 public class StringsTest {
 

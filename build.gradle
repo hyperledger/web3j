@@ -26,7 +26,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '1.0.2'
+version '1.0.4'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -130,7 +130,7 @@ publishing {
             from components.java
 
             artifact sourcesJar {
-                classifier "sources"
+                classifier 'sources'
             }
         }
     }
@@ -205,10 +205,9 @@ uploadArchives {
     }
 }
 
-
 // Build command line library release with target distShadowZip
 mainClassName = 'org.web3j.console.Runner'
-applicationName = 'web3j'
+applicationName = 'web3j-android'
 
 task release {
     // remove once integration tests are running as part of the build

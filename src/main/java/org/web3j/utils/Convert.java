@@ -52,5 +52,16 @@ public final class  Convert {
         public String toString() {
             return name;
         }
+
+        public static Unit fromString(String name) {
+            if (name != null) {
+                for (Unit unit : Unit.values()) {
+                    if (name.equalsIgnoreCase(unit.name)) {
+                        return unit;
+                    }
+                }
+            }
+            return Unit.valueOf(name);
+        }
     }
 }
