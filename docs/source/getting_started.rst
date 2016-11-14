@@ -139,7 +139,7 @@ To generate the wrapper code, compile your smart contract:
 
    $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
 
-Then generate the wrapper code using web3j's :ref:`command_line`:
+Then generate the wrapper code using web3j's :doc:`command_line`:
 
 .. code-block:: bash
 
