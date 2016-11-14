@@ -23,6 +23,7 @@ apply plugin: 'signing'
 apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'application'
 
 group 'org.web3j'
 version '1.0.2'
@@ -160,7 +161,6 @@ artifacts {
 
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
-    sign configurations.archives
 }
 
 uploadArchives {
@@ -203,4 +203,27 @@ uploadArchives {
             }
         }
     }
+}
+
+
+// Build command line library release with target distShadowZip
+mainClassName = 'org.web3j.console.Runner'
+applicationName = 'web3j'
+
+task release {
+    // remove once integration tests are running as part of the build
+    check.dependsOn.remove(integrationTest)
+
+    dependsOn 'clean'
+    dependsOn 'build'
+    dependsOn 'uploadArchives'
+    dependsOn 'closeAndPromoteRepository'
+//    dependsOn 'bintrayUpload'  // doesn't work with JDK7
+
+    tasks.findByName('build').mustRunAfter 'clean'
+
+    tasks.findByName('uploadArchives').mustRunAfter 'build'
+    tasks.findByName('closeAndPromoteRepository').mustRunAfter 'uploadArchives'
+
+//    tasks.findByName('bintrayUpload').mustRunAfter 'build'
 }
