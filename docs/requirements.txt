@@ -1,2 +1,1 @@
 Sphinx==1.3.6
-watchdog==0.8.3
