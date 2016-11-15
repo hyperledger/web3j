@@ -113,7 +113,7 @@ devhelp:
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -prf $$HOME/.local/share/devhelp/web3j"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/web3j"
 	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/web3j"
 	@echo "# devhelp"
 
