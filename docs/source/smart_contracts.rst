@@ -182,7 +182,8 @@ Construction and deployment
 Construction and deployment of smart contracts happens with the *deploy* method::
 
    YourSmartContract contract = YourSmartContract.deploy(
-           <web3j>, <credentials>, <initialValue>,
+           <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT,
+           <initialValue>,
            <param1>, ..., <paramN>);
 
 This will create a new instance of the smart contract on the Ethereum blockchain using the
@@ -192,7 +193,8 @@ It returns a new smart contract wrapper instance which contains the underlying a
 smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
 smart contract, simply pass in it's address::
 
-   YourSmartContract contract = new YourSmartContract("0x...", web3j, credentials);
+   YourSmartContract contract = new YourSmartContract(
+           "0x...", web3j, credentials, GAS_PRICE, GAS_LIMIT);
 
 
 .. _invoking-transactions:

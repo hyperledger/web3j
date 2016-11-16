@@ -26,13 +26,12 @@ import org.web3j.protocol.exceptions.TransactionTimeoutException;
  */
 public abstract class Contract extends ManagedTransaction {
 
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
-
     private String contractAddress;
 
-    protected Contract(String contractAddress, Web3j web3j, Credentials credentials) {
-        super(web3j, credentials);
+    protected Contract(String contractAddress, Web3j web3j, Credentials credentials,
+                       BigInteger gasPrice, BigInteger gasLimit) {
+        super(web3j, credentials, gasPrice, gasLimit);
+
         this.contractAddress = contractAddress;
     }
 
@@ -122,8 +121,8 @@ public abstract class Contract extends ManagedTransaction {
 
         RawTransaction rawTransaction = RawTransaction.createFunctionCallTransaction(
                 nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
+                gasPrice,
+                gasLimit,
                 contractAddress,
                 encodedFunction);
 
@@ -180,16 +179,17 @@ public abstract class Contract extends ManagedTransaction {
 
     private static String create(
             Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value)
             throws InterruptedException, ExecutionException, TransactionTimeoutException {
 
-        Contract contract = new Contract("", web3j, credentials) { };
+        Contract contract = new Contract("", web3j, credentials, gasPrice, gasLimit) { };
 
         BigInteger nonce = contract.getNonce(contract.credentials.getAddress());
         RawTransaction rawTransaction = RawTransaction.createContractTransaction(
                 nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
+                gasPrice,
+                gasLimit,
                 value,
                 binary + encodedConstructor);
 
@@ -202,28 +202,33 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
-    protected static <T extends Contract> T deploy(Class<T> type,
+    protected static <T extends Contract> T deploy(
+            Class<T> type,
             Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
-        String contractAddress = create(web3j, credentials, binary, encodedConstructor, value);
+        String contractAddress = create(web3j, credentials, gasPrice, gasLimit,
+                binary, encodedConstructor, value);
 
-        Constructor<T> constructor =
-                type.getDeclaredConstructor(String.class, Web3j.class, Credentials.class);
+        Constructor<T> constructor = type.getDeclaredConstructor(
+                String.class, Web3j.class, Credentials.class, BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
-        return constructor.newInstance(contractAddress, web3j, credentials);
+        return constructor.newInstance(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     protected static <T extends Contract> CompletableFuture<T> deployAsync(
             Class<T> type, Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value) {
         CompletableFuture<T> result = new CompletableFuture<>();
 
         CompletableFuture.runAsync(() -> {
             try {
                 result.complete(
-                        deploy(type, web3j, credentials, binary, encodedConstructor, value));
+                        deploy(type, web3j, credentials, gasPrice, gasLimit,
+                                binary, encodedConstructor, value));
             } catch (Throwable e) {
                 result.completeExceptionally(e);
             }
