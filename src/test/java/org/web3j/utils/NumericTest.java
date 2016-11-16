@@ -3,9 +3,9 @@ package org.web3j.utils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.junit.Assert;
 import org.junit.Test;
 
+import org.web3j.crypto.Keys;
 import org.web3j.protocol.exceptions.MessageDecodingException;
 import org.web3j.protocol.exceptions.MessageEncodingException;
 
@@ -136,6 +136,58 @@ public class NumericTest {
         assertThat(Numeric.toHexString(new byte[] {}), is("0x"));
         assertThat(Numeric.toHexString(new byte[] { 0x1 }), is("0x01"));
         assertThat(Numeric.toHexString(HEX_RANGE_ARRAY), is(HEX_RANGE_STRING));
+    }
+
+    @Test
+    public void testToHexStringNoPrefixZeroPadded() {
+        assertThat(
+                Numeric.toHexStringNoPrefixZeroPadded(
+                        BigInteger.ZERO,
+                        5),
+                is("00000"));
+
+        assertThat(
+                Numeric.toHexStringNoPrefixZeroPadded(
+                        new BigInteger("11c52b08330e05d731e38c856c1043288f7d9744", 16),
+                        Keys.ADDRESS_LENGTH_IN_HEX),
+                is("11c52b08330e05d731e38c856c1043288f7d9744"));
+
+        assertThat(
+                Numeric.toHexStringNoPrefixZeroPadded(
+                        new BigInteger("01c52b08330e05d731e38c856c1043288f7d9744", 16),
+                        Keys.ADDRESS_LENGTH_IN_HEX),
+                is("01c52b08330e05d731e38c856c1043288f7d9744"));
+    }
+
+    @Test
+    public void testToHexStringWithPrefixZeroPadded() {
+        assertThat(
+                Numeric.toHexStringWithPrefixZeroPadded(
+                        BigInteger.ZERO,
+                        5),
+                is("0x00000"));
+
+        assertThat(
+                Numeric.toHexStringWithPrefixZeroPadded(
+                        new BigInteger("01c52b08330e05d731e38c856c1043288f7d9744", 16),
+                        Keys.ADDRESS_LENGTH_IN_HEX),
+                is("0x01c52b08330e05d731e38c856c1043288f7d9744"));
+
+        assertThat(
+                Numeric.toHexStringWithPrefixZeroPadded(
+                        new BigInteger("01c52b08330e05d731e38c856c1043288f7d9744", 16),
+                        Keys.ADDRESS_LENGTH_IN_HEX),
+                is("0x01c52b08330e05d731e38c856c1043288f7d9744"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testToHexStringZeroPaddedNegative() {
+        Numeric.toHexStringNoPrefixZeroPadded(BigInteger.valueOf(-1), 20);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testToHexStringZeroPaddedTooLargs() {
+        Numeric.toHexStringNoPrefixZeroPadded(BigInteger.valueOf(-1), 5);
     }
 
     @Test

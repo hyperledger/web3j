@@ -1,6 +1,5 @@
 package org.web3j.utils;
 
-
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -9,10 +8,6 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Strings.*;
-import static org.web3j.utils.Strings.capitaliseFirstLetter;
-import static org.web3j.utils.Strings.capitaliseFirstLetter;
-import static org.web3j.utils.Strings.join;
-import static org.web3j.utils.Strings.toCsv;
 
 
 public class StringsTest {
@@ -36,5 +31,17 @@ public class StringsTest {
         assertThat(capitaliseFirstLetter("aa"), is("Aa"));
         assertThat(capitaliseFirstLetter("A"), is("A"));
         assertThat(capitaliseFirstLetter("Ab"), is("Ab"));
+    }
+
+    @Test
+    public void testRepeat() {
+        assertThat(repeat('0', 0), is(""));
+        assertThat(repeat('1', 3), is("111"));
+    }
+
+    @Test
+    public void testZeros() {
+        assertThat(zeros(0), is(""));
+        assertThat(zeros(3), is("000"));
     }
 }

@@ -22,11 +22,13 @@ import org.web3j.utils.Numeric;
  */
 public class Transfer extends ManagedTransaction {
 
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2000000);
+    private Transfer(Web3j web3j, Credentials credentials,
+                     BigInteger gasPrice, BigInteger gasLimit) {
+        super(web3j, credentials, gasPrice, gasLimit);
+    }
 
     private Transfer(Web3j web3j, Credentials credentials) {
-        super(web3j, credentials);
+        this(web3j, credentials, GAS_PRICE, GAS_LIMIT);
     }
 
     /**
@@ -60,8 +62,8 @@ public class Transfer extends ManagedTransaction {
 
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
                 nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
+                gasPrice,
+                gasLimit,
                 toAddress,
                 weiValue.toBigIntegerExact());
 
@@ -70,7 +72,7 @@ public class Transfer extends ManagedTransaction {
 
     /**
      * Execute the provided function as a transaction asynchronously. This is intended for one-off
-     * fund transfers. For multiple, create an insta
+     * fund transfers. For multiple, create an instance.
      *
      * @param toAddress destination address
      * @param value amount to send
@@ -97,11 +99,28 @@ public class Transfer extends ManagedTransaction {
         return new Transfer(web3j, credentials).send(toAddress, value, unit);
     }
 
+    public static TransactionReceipt sendFunds(
+            Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit,
+            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
+            ExecutionException, TransactionTimeoutException {
+
+        return new Transfer(web3j, credentials, gasPrice, gasLimit).send(toAddress, value, unit);
+    }
+
     public static Future<TransactionReceipt> sendFundsAsync(
             Web3j web3j, Credentials credentials,
             String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
             ExecutionException, TransactionTimeoutException {
 
         return new Transfer(web3j, credentials).sendFundsAsync(toAddress, value, unit);
+    }
+
+    public static Future<TransactionReceipt> sendFundsAsync(
+            Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit,
+            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
+            ExecutionException, TransactionTimeoutException {
+
+        return new Transfer(web3j, credentials, gasPrice, gasLimit)
+                .sendFundsAsync(toAddress, value, unit);
     }
 }

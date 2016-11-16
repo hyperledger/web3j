@@ -86,13 +86,20 @@ To send synchronous requests::
    ...
 
 
-Sending transactions
---------------------
+Transactions
+------------
 
-web3j provides support for both working with Ethereum wallet files and Ethereum client admin
-commands for sending transactions.
+web3j provides support for both working with Ethereum wallet files (recommended) and Ethereum
+client admin commands for sending transactions.
 
-Using an Ethereum wallet file::
+To send Ether to another party using your Ethereum wallet file::
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
+   TransactionReceipt transactionReceipt = Transfer.sendFunds(
+           web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER);
+
+Or if you wish to create your own custom transaction::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
@@ -106,7 +113,7 @@ Using an Ethereum wallet file::
    RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
 
-   // sign & sendn our transaction
+   // sign & send our transaction
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
    String hexValue = Hex.toHexString(signedMessage);
    EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
@@ -114,7 +121,6 @@ Using an Ethereum wallet file::
 
 Although it's far simpler using web3j's
 :ref:`smart contract wrappers <smart-contract-wrappers-summary>`.
-
 
 Using an Ethereum client's admin commands (make sure you have your wallet in the client's
 keystore)::
@@ -139,7 +145,7 @@ To generate the wrapper code, compile your smart contract:
 
    $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
 
-Then generate the wrapper code using web3j's :ref:`command_line`:
+Then generate the wrapper code using web3j's :doc:`command_line`:
 
 .. code-block:: bash
 
@@ -151,13 +157,15 @@ Now you can create and deploy your smart contract::
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
 
    YourSmartContract contract = YourSmartContract.deploy(
-           <web3j>, <credentials>, <initialEtherValue>,
+           <web3j>, <credentials>,
+           GAS_PRICE, GAS_LIMIT,
+           <initialEtherValue>,
            <param1>, ..., <paramN>).get();  // constructor params
 
 Or use an existing::
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>", <web3j>, <credentials>);
+           "0x<address>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
 
 To transact with a smart contract::
 

@@ -31,4 +31,12 @@ public class Strings {
             return string.substring(0, 1).toUpperCase() + string.substring(1);
         }
     }
+
+    public static String zeros(int n) {
+        return repeat('0', n);
+    }
+
+    public static String repeat(char value, int n) {
+        return new String(new char[n]).replace("\0", String.valueOf(value));
+    }
 }

@@ -26,13 +26,12 @@ import org.web3j.utils.Async;
  */
 public abstract class Contract extends ManagedTransaction {
 
-    private static final BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(2000000);
-
     private String contractAddress;
 
-    protected Contract(String contractAddress, Web3j web3j, Credentials credentials) {
-        super(web3j, credentials);
+    protected Contract(String contractAddress, Web3j web3j, Credentials credentials,
+                       BigInteger gasPrice, BigInteger gasLimit) {
+        super(web3j, credentials, gasPrice, gasLimit);
+
         this.contractAddress = contractAddress;
     }
 
@@ -133,6 +132,7 @@ public abstract class Contract extends ManagedTransaction {
                 return executeTransaction(function);
             }
         });
+        return result;
     }
 
     protected EventValues extractEventParameters(
@@ -165,16 +165,17 @@ public abstract class Contract extends ManagedTransaction {
 
     private static String create(
             Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value)
             throws InterruptedException, ExecutionException, TransactionTimeoutException {
 
-        Contract contract = new Contract("", web3j, credentials) { };
+        Contract contract = new Contract("", web3j, credentials, gasPrice, gasLimit) { };
 
         BigInteger nonce = contract.getNonce(contract.credentials.getAddress());
         RawTransaction rawTransaction = RawTransaction.createContractTransaction(
                 nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
+                gasPrice,
+                gasLimit,
                 value,
                 binary + encodedConstructor);
 
@@ -187,28 +188,32 @@ public abstract class Contract extends ManagedTransaction {
         return contractAddress;
     }
 
-    protected static <T extends Contract> T deploy(Class<T> type,
+    protected static <T extends Contract> T deploy(
+            Class<T> type,
             Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
-        String contractAddress = create(web3j, credentials, binary, encodedConstructor, value);
+        String contractAddress = create(web3j, credentials, gasPrice, gasLimit,
+                binary, encodedConstructor, value);
 
-        // For Java 7+ you can use getConstructor and don't need to set accessible
-        Constructor<T> constructor =
-                type.getDeclaredConstructor(String.class, Web3j.class, Credentials.class);
+        Constructor<T> constructor = type.getDeclaredConstructor(
+                String.class, Web3j.class, Credentials.class, BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
-        return constructor.newInstance(contractAddress, web3j, credentials);
+        return constructor.newInstance(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     protected static <T extends Contract> Future<T> deployAsync(
             final Class<T> type, final Web3j web3j, final Credentials credentials,
+            final BigInteger gasPrice, final BigInteger gasLimit,
             final String binary, final String encodedConstructor, final BigInteger value) {
 
         return Async.run(new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return deploy(type, web3j, credentials, binary, encodedConstructor, value);
+                return deploy(type, web3j, credentials, gasPrice, gasLimit,
+                        binary, encodedConstructor, value);
             }
         });
     }

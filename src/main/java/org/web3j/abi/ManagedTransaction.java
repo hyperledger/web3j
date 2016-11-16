@@ -21,15 +21,46 @@ import org.web3j.utils.Numeric;
  */
 public abstract class ManagedTransaction {
 
+    // Sensible defaults as of November 2016...
+    public static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
+    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
+
     private static final int SLEEP_DURATION = 15000;
     private static final int ATTEMPTS = 40;
 
     protected Web3j web3j;
     protected Credentials credentials;
 
-    protected ManagedTransaction(Web3j web3j, Credentials credentials) {
+    protected BigInteger gasPrice;
+    protected BigInteger gasLimit;
+
+    private int sleepDuration = SLEEP_DURATION;
+    private int attempts = ATTEMPTS;
+
+    protected ManagedTransaction(Web3j web3j, Credentials credentials,
+                                 BigInteger gasPrice, BigInteger gasLimit) {
         this.web3j = web3j;
         this.credentials = credentials;
+
+        this.gasPrice = gasPrice;
+        this.gasLimit = gasLimit;
+    }
+
+    // In case anyone wishes to override the defaults
+    public int getSleepDuration() {
+        return sleepDuration;
+    }
+
+    public void setSleepDuration(int sleepDuration) {
+        this.sleepDuration = sleepDuration;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(int attempts) {
+        this.attempts = attempts;
     }
 
     protected TransactionReceipt signAndSend(RawTransaction rawTransaction)
@@ -57,7 +88,7 @@ public abstract class ManagedTransaction {
             String transactionHash) throws InterruptedException, ExecutionException,
             TransactionTimeoutException {
 
-        return getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
+        return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
     private TransactionReceipt getTransactionReceipt(

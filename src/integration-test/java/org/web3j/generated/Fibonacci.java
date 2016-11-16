@@ -24,8 +24,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 public final class Fibonacci extends Contract {
     private static final String BINARY = "606060405260d18060106000396000f3606060405260e060020a60003504633c7fdc708114602657806361047ff4146044575b6002565b34600257605160043560006063825b600081151560a75750600060a2565b3460025760516004356035565b60408051918252519081900360200190f35b604080518481526020810183905281519293507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed929081900390910190a15b919050565b816001141560b65750600160a2565b60c0600283036035565b60ca600184036035565b01905060a256";
 
-    private Fibonacci(String contractAddress, Web3j web3j, Credentials credentials) {
-        super(contractAddress, web3j, credentials);
+    private Fibonacci(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        super(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     public Future<TransactionReceipt> fibonacciNotify(Uint256 number) {
@@ -47,11 +47,11 @@ public final class Fibonacci extends Contract {
         return extractEventParameters(event, transactionReceipt);
     }
 
-    public static Future<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger initialValue) {
-        return deployAsync(Fibonacci.class, web3j, credentials, BINARY, "", initialValue);
+    public static Future<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {
+        return deployAsync(Fibonacci.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialValue);
     }
 
-    public static Fibonacci load(String contractAddress, Web3j web3j, Credentials credentials) {
-        return new Fibonacci(contractAddress, web3j, credentials);
+    public static Fibonacci load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return new Fibonacci(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 }

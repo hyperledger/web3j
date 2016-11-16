@@ -8,6 +8,7 @@ import java.util.Arrays;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Strings;
 
 
 /**
@@ -16,9 +17,10 @@ import org.web3j.utils.Numeric;
 public class Keys {
 
     static final int PRIVATE_KEY_SIZE = 32;
-    private static final int PUBLIC_KEY_SIZE = 64;
+    static final int PUBLIC_KEY_SIZE = 64;
 
     public static final int ADDRESS_LENGTH_IN_HEX = 40;
+    static final int PUBLIC_KEY_SIZE_IN_HEX = 64 << 1;
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -48,17 +50,24 @@ public class Keys {
     }
 
     public static String getAddress(ECKeyPair ecKeyPair) {
-        BigInteger publicKey = ecKeyPair.getPublicKey();
-        return getAddress(Numeric.toHexStringWithPrefix(publicKey));
-    }
-
-    public static String getAddress(String publicKey) {
-        String hash = Hash.sha3(publicKey);
-        return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX);  // right most 160 bits
+        return getAddress(ecKeyPair.getPublicKey());
     }
 
     public static String getAddress(BigInteger publicKey) {
-        return getAddress(Numeric.toHexStringWithPrefix(publicKey));
+        return getAddress(
+                Numeric.toHexStringWithPrefixZeroPadded(publicKey, PUBLIC_KEY_SIZE_IN_HEX));
+    }
+
+    public static String getAddress(String publicKey) {
+        String publicKeyNoPrefix = Numeric.cleanHexPrefix(publicKey);
+
+        if (publicKeyNoPrefix.length() < PUBLIC_KEY_SIZE_IN_HEX) {
+            publicKeyNoPrefix = Strings.zeros(
+                    PUBLIC_KEY_SIZE_IN_HEX - publicKeyNoPrefix.length()) +
+                    publicKeyNoPrefix;
+        }
+        String hash = Hash.sha3(publicKeyNoPrefix);
+        return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX);  // right most 160 bits
     }
 
     public static byte[] getAddress(byte[] publicKey) {

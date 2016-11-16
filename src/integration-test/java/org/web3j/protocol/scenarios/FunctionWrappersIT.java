@@ -30,7 +30,9 @@ public class FunctionWrappersIT extends Scenario {
     @Test
     public void testFibonacci() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
-                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3jFactory.build(new HttpService()), ALICE);
+                "0x3c05b2564139fb55820b18b72e94b2178eaace7d",
+                Web3jFactory.build(new HttpService()),
+                ALICE, GAS_PRICE, GAS_LIMIT);
 
         Uint256 result = fibonacci.fibonacci(new Uint256(BigInteger.valueOf(10))).get();
         assertThat(result.getValue(), equalTo(BigInteger.valueOf(55)));
@@ -39,7 +41,9 @@ public class FunctionWrappersIT extends Scenario {
     @Test
     public void testFibonacciNotify() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
-                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3jFactory.build(new HttpService()), ALICE);
+                "0x3c05b2564139fb55820b18b72e94b2178eaace7d",
+                Web3jFactory.build(new HttpService()),
+                ALICE, GAS_PRICE, GAS_LIMIT);
 
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(
                 new Uint256(BigInteger.valueOf(15))).get();

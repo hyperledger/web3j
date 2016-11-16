@@ -7,6 +7,7 @@ import java.util.Collections;
 import org.junit.Test;
 
 import org.web3j.abi.EventValues;
+import org.web3j.abi.ManagedTransaction;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
@@ -28,7 +29,9 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         BigInteger aliceQty = BigInteger.valueOf(1000000);
         BigInteger bobQty = BigInteger.ZERO;
 
-        HumanStandardToken contract = HumanStandardToken.deploy(parity, ALICE, BigInteger.ZERO,
+        HumanStandardToken contract = HumanStandardToken.deploy(parity, ALICE,
+                GAS_PRICE, GAS_LIMIT,
+                BigInteger.ZERO,
                 new Uint256(aliceQty), new Utf8String("web3j tokens"),
                 new Uint8(BigInteger.TEN), new Utf8String("w3j$")).get();
 
@@ -84,8 +87,8 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         transferQuantity = BigInteger.valueOf(25);
 
         // Bob requires his own contract instance
-        HumanStandardToken bobsContract =
-                HumanStandardToken.load(contract.getContractAddress(), parity, BOB);
+        HumanStandardToken bobsContract = HumanStandardToken.load(
+                contract.getContractAddress(), parity, BOB, GAS_PRICE, GAS_LIMIT);
 
         TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
                 new Address(ALICE.getAddress()),
