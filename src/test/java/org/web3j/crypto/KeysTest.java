@@ -1,6 +1,7 @@
 package org.web3j.crypto;
 
 
+import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -9,7 +10,9 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Strings;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -55,6 +58,27 @@ public class KeysTest {
     public void testGetAddressBigInteger() {
         assertThat(Keys.getAddress(SampleKeys.PUBLIC_KEY),
                 is(SampleKeys.ADDRESS_NO_PREFIX));
+    }
+
+    @Test
+    public void testGetAddressSmallPublicKey() {
+        byte[] address = Keys.getAddress(
+                Numeric.toBytesPadded(BigInteger.valueOf(0x1234), Keys.PUBLIC_KEY_SIZE));
+        String expected = Numeric.toHexStringNoPrefix(address);
+
+        assertThat(Keys.getAddress("0x1234"), equalTo(expected));
+    }
+
+    @Test
+    public void testGetAddressZeroPadded() {
+        byte[] address = Keys.getAddress(
+                Numeric.toBytesPadded(BigInteger.valueOf(0x1234), Keys.PUBLIC_KEY_SIZE));
+        String expected = Numeric.toHexStringNoPrefix(address);
+
+        String value = "1234";
+        assertThat(Keys.getAddress("0x" +
+                        Strings.zeros(Keys.PUBLIC_KEY_SIZE_IN_HEX - value.length()) + value),
+                equalTo(expected));
     }
 
     @Test

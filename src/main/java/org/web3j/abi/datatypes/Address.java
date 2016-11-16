@@ -2,6 +2,7 @@ package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
 
+import org.web3j.crypto.Keys;
 import org.web3j.utils.Numeric;
 
 /**
@@ -22,5 +23,10 @@ public class Address extends Uint {
     @Override
     public String getTypeAsString() {
         return TYPE_NAME;
+    }
+
+    @Override
+    public String toString() {
+        return Numeric.toHexStringWithPrefixZeroPadded(value, Keys.ADDRESS_LENGTH_IN_HEX);
     }
 }
