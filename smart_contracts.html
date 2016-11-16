@@ -179,7 +179,8 @@ avoid blocking.</p>
 <span id="id1"></span><h2>Construction and deployment<a class="headerlink" href="#construction-and-deployment" title="Permalink to this headline">¶</a></h2>
 <p>Construction and deployment of smart contracts happens with the <em>deploy</em> method:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
-        <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">initialValue</span><span class="o">&gt;,</span>
+        <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">,</span>
+        <span class="o">&lt;</span><span class="n">initialValue</span><span class="o">&gt;,</span>
         <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...,</span> <span class="o">&lt;</span><span class="n">paramN</span><span class="o">&gt;);</span>
 </pre></div>
 </div>
@@ -188,7 +189,8 @@ supplied credentials, and constructor parameter values.</p>
 <p>It returns a new smart contract wrapper instance which contains the underlying address of the
 smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
 smart contract, simply pass in it&#8217;s address:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="k">new</span> <span class="n">YourSmartContract</span><span class="o">(</span><span class="s">&quot;0x...&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="k">new</span> <span class="n">YourSmartContract</span><span class="o">(</span>
+        <span class="s">&quot;0x...&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
 </pre></div>
 </div>
 </div>
