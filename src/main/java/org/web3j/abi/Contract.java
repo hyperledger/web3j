@@ -132,7 +132,6 @@ public abstract class Contract extends ManagedTransaction {
                 return executeTransaction(function);
             }
         });
-        return result;
     }
 
     protected EventValues extractEventParameters(
