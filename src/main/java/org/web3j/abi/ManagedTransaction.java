@@ -22,6 +22,7 @@ import org.web3j.utils.Numeric;
  */
 public abstract class ManagedTransaction {
 
+    // Sensible defaults as of November 2016...
     public static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
 

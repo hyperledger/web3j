@@ -72,7 +72,7 @@ public class Transfer extends ManagedTransaction {
 
     /**
      * Execute the provided function as a transaction asynchronously. This is intended for one-off
-     * fund transfers. For multiple, create an insta
+     * fund transfers. For multiple, create an instance.
      *
      * @param toAddress destination address
      * @param value amount to send

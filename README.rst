@@ -153,8 +153,8 @@ To send synchronous requests:
    Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
    ...
 
-Sending transactions
---------------------
+Transactions
+------------
 
 web3j provides support for both working with Ethereum wallet files (recommended) and Ethereum
 client admin commands for sending transactions.
