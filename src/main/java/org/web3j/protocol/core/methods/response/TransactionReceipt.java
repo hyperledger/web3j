@@ -21,6 +21,7 @@ public class TransactionReceipt {
     private String from;
     private String to;
     private List<Log> logs;
+    private String logsBloom;
 
     public TransactionReceipt() {
     }
@@ -28,7 +29,7 @@ public class TransactionReceipt {
     public TransactionReceipt(String transactionHash, String transactionIndex,
                               String blockHash, String blockNumber, String cumulativeGasUsed,
                               String gasUsed, String contractAddress, String root, String from,
-                              String to, List<Log> logs) {
+                              String to, List<Log> logs, String logsBloom) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -40,6 +41,7 @@ public class TransactionReceipt {
         this.from = from;
         this.to = to;
         this.logs = logs;
+        this.logsBloom = logsBloom;
     }
 
     public String getTransactionHash() {
@@ -130,6 +132,14 @@ public class TransactionReceipt {
         this.logs = logs;
     }
 
+    public String getLogsBloom() {
+        return logsBloom;
+    }
+
+    public void setLogsBloom(String logsBloom) {
+        this.logsBloom = logsBloom;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -147,15 +157,14 @@ public class TransactionReceipt {
             return false;
         if (cumulativeGasUsed != null ? !cumulativeGasUsed.equals(that.cumulativeGasUsed) : that.cumulativeGasUsed != null)
             return false;
-        if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null)
-            return false;
+        if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null) return false;
         if (contractAddress != null ? !contractAddress.equals(that.contractAddress) : that.contractAddress != null)
             return false;
         if (root != null ? !root.equals(that.root) : that.root != null) return false;
         if (from != null ? !from.equals(that.from) : that.from != null) return false;
         if (to != null ? !to.equals(that.to) : that.to != null) return false;
-        return logs != null ? logs.equals(that.logs) : that.logs == null;
-
+        if (logs != null ? !logs.equals(that.logs) : that.logs != null) return false;
+        return logsBloom != null ? logsBloom.equals(that.logsBloom) : that.logsBloom == null;
     }
 
     @Override
@@ -171,6 +180,7 @@ public class TransactionReceipt {
         result = 31 * result + (from != null ? from.hashCode() : 0);
         result = 31 * result + (to != null ? to.hashCode() : 0);
         result = 31 * result + (logs != null ? logs.hashCode() : 0);
+        result = 31 * result + (logsBloom != null ? logsBloom.hashCode() : 0);
         return result;
     }
 }

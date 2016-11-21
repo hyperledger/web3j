@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.http.Header;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -25,7 +26,7 @@ public class InfuraHttpService extends HttpService {
 
     private static final char[] TEMP_KEY_STORE_PASSWORD = "web3j runtime cert store".toCharArray();
 
-    private final Header clientVersionHeader;
+    private final Optional<Header> clientVersionHeader;
 
     public InfuraHttpService(String url, String clientVersion, boolean required) {
         super(url);
@@ -37,23 +38,27 @@ public class InfuraHttpService extends HttpService {
         this(url, clientVersion, true);
     }
 
+    public InfuraHttpService(String url) {
+        this(url, "", false);
+    }
+
     @Override
     protected void addHeaders(List<Header> headers) {
-        if (clientVersionHeader != null) {
-            headers.add(clientVersionHeader);
+        if (clientVersionHeader.isPresent()) {
+            headers.add(clientVersionHeader.get());
         }
     }
 
-    static Header buildHeader(String clientVersion, boolean required) {
+    static Optional<Header> buildHeader(String clientVersion, boolean required) {
         if (clientVersion == null || clientVersion.equals("")) {
-            return null;
+            return Optional.empty();
         }
 
         if (required) {
-            return new BasicHeader(INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion);
+            return Optional.of(new BasicHeader(INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion));
         } else {
-            return new BasicHeader(
-                    INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion + "; required=false");
+            return Optional.of(new BasicHeader(
+                    INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion + "; required=false"));
         }
     }
 
