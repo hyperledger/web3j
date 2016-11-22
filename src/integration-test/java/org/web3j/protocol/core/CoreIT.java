@@ -20,7 +20,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -30,7 +29,7 @@ public class CoreIT {
 
     private Web3j web3j;
 
-    private IntegrationTestConfig config = new MordenTestnetConfig();
+    private IntegrationTestConfig config = new TestnetConfig();
 
     public CoreIT() {
         System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
@@ -384,7 +383,7 @@ public class CoreIT {
 
         // eth_getFilterChanges - nothing will have changed in this interval
         EthLog ethLog = web3j.ethGetFilterChanges(filterId).send();
-        assertNull(ethLog.getLogs());
+        assertTrue(ethLog.getLogs().isEmpty());
 
         // eth_uninstallFilter
         EthUninstallFilter ethUninstallFilter = web3j.ethUninstallFilter(filterId).send();

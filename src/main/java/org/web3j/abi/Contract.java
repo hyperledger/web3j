@@ -43,12 +43,11 @@ public abstract class Contract extends ManagedTransaction {
      * Execute constant function call - i.e. a call that does not change state of the contract
      *
      * @param function to call
-     * @param <T> Generic type of return values
      * @return {@link List} of values returned by function call
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    private <T extends Type> List<T> executeCall(
+    private List<Type> executeCall(
             Function function) throws InterruptedException, ExecutionException {
         String encodedFunction = FunctionEncoder.encode(function);
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
@@ -70,11 +69,11 @@ public abstract class Contract extends ManagedTransaction {
         });
     }
 
-    protected <T extends Type> Future<List<T>> executeCallMultipleValueReturnAsync(
+    protected <Type> Future<List<T>> executeCallMultipleValueReturnAsync(
             final Function function) {
         return Async.run(new Callable<List<T>>() {
             @Override
-            public List<T> call() throws Exception {
+            public List<Type> call() throws Exception {
                 return executeCallMultipleValueReturn(function);
             }
         });
@@ -82,11 +81,11 @@ public abstract class Contract extends ManagedTransaction {
 
     protected <T extends Type> T executeCallSingleValueReturn(
             Function function) throws InterruptedException, ExecutionException {
-        List<T> values = executeCall(function);
-        return values.get(0);
+        List<Type> values = executeCall(function);
+        return (T) values.get(0);
     }
 
-    protected <T extends Type> List<T> executeCallMultipleValueReturn(
+    protected List<Type> executeCallMultipleValueReturn(
             Function function) throws InterruptedException, ExecutionException {
         return executeCall(function);
     }
@@ -111,8 +110,8 @@ public abstract class Contract extends ManagedTransaction {
 
         RawTransaction rawTransaction = RawTransaction.createFunctionCallTransaction(
                 nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
+                gasPrice,
+                gasLimit,
                 contractAddress,
                 encodedFunction);
 

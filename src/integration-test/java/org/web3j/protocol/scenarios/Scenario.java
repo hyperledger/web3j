@@ -124,10 +124,10 @@ public class Scenario {
     }
 
     Function createFibonacciFunction() {
-        return new Function<Uint>(
+        return new Function(
                 "fibonacciNotify",
                 Collections.<Type>singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.<TypeReference<Uint>>singletonList(new TypeReference<Uint>() {}));
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {}));
     }
 
     static String load(String filePath) throws URISyntaxException, IOException {

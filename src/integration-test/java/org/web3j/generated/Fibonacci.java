@@ -29,14 +29,14 @@ public final class Fibonacci extends Contract {
     }
 
     public Future<TransactionReceipt> fibonacciNotify(Uint256 number) {
-        Function function = new Function<Type>("fibonacciNotify", Arrays.<Type>asList(number), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function("fibonacciNotify", Arrays.<Type>asList(number), Collections.<TypeReference<?>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint256> fibonacci(Uint256 number) {
-        Function function = new Function<Uint256>("fibonacci", 
+        Function function = new Function("fibonacci", 
                 Arrays.<Type>asList(number), 
-                Arrays.<TypeReference<Uint256>>asList(new TypeReference<Uint256>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 

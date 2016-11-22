@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.6</version>
+     <version>1.0.7</version>
    </dependency>
 
 Android:
@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>1.0.6</version>
+     <version>1.0.7</version>
    </dependency>
 
 Gradle
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.6')
+   compile ('org.web3j:core:1.0.7')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:1.0.6')
+   compile ('org.web3j:core-android:1.0.7')
 
 
 Start a client
@@ -58,8 +58,13 @@ Or `Parity <https://github.com/ethcore/parity>`_:
 
    $ parity --chain testnet
 
-Or use `Infura <https://infura.io/>`_, which provides clients running in the cloud. For further
-information refer to :doc:`infura`.
+Or use `Infura <https://infura.io/>`_, which provides **free clients** running in the cloud:
+
+.. code-block:: java
+
+   Web3j web3 = Web3j.build(new InfuraHttpService("https://morden.infura.io/your-token"));
+
+For further information refer to :doc:`infura`.
 
 
 Start sending requests

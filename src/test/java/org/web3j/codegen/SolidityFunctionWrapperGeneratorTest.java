@@ -113,6 +113,11 @@ public class SolidityFunctionWrapperGeneratorTest {
         testCodeGeneration("arrays", "Arrays");
     }
 
+    @Test
+    public void testShipIt() throws Exception {
+        testCodeGeneration("shipit", "ShipIt");
+    }
+
     private void testCodeGeneration(String contractName, String inputFileName) throws Exception {
         SolidityFunctionWrapperGenerator.main(Arrays.asList(
                 solidityBaseDir + "/" + contractName + "/build/" + inputFileName + ".bin",

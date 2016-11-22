@@ -387,7 +387,6 @@ public class SolidityFunctionWrapperGenerator extends Generator {
             String inputParams) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
-        TypeVariableName typeVariableName = TypeVariableName.get("T", Type.class);
 
         if (outputParameterTypes.isEmpty()) {
             throw new RuntimeException("Only transactional methods should have void return types");
@@ -397,19 +396,18 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
             TypeName typeName = outputParameterTypes.get(0);
             methodBuilder.addStatement("$T function = " +
-                            "new $T<$T>($S, \n$T.<$T>asList($L), \n$T.<$T<$T>>asList(new $T<$T>() {}))",
-                    Function.class, Function.class, typeName, functionName,
+                            "new $T($S, \n$T.<$T>asList($L), \n$T.<$T<?>>asList(new $T<$T>() {}))",
+                    Function.class, Function.class, functionName,
                     Arrays.class, Type.class, inputParams,
                     Arrays.class, TypeReference.class,
-                    typeName, TypeReference.class, typeName);
+                    TypeReference.class, typeName);
             methodBuilder.addStatement("return executeCallSingleValueReturnAsync(function)");
 
         } else {
-            methodBuilder.addTypeVariable(typeVariableName);
             methodBuilder.returns(ParameterizedTypeName.get(
                     ClassName.get(Future.class),
                     ParameterizedTypeName.get(
-                            ClassName.get(List.class), typeVariableName)));
+                            ClassName.get(List.class), ClassName.get(Type.class))));
 
             buildVariableLengthReturnFunctionConstructor(
                     methodBuilder, functionName, inputParams, outputParameterTypes);
@@ -429,10 +427,10 @@ public class SolidityFunctionWrapperGenerator extends Generator {
 
         methodBuilder.returns(ParameterizedTypeName.get(Future.class, TransactionReceipt.class));
 
-        methodBuilder.addStatement("$T function = new $T<$T>($S, $T.<$T>asList($L), $T.<$T<$T>>emptyList())",
-                Function.class, Function.class, Type.class, functionName,
+        methodBuilder.addStatement("$T function = new $T($S, $T.<$T>asList($L), $T.<$T<?>>emptyList())",
+                Function.class, Function.class, functionName,
                 Arrays.class, Type.class, inputParams, Collections.class,
-                TypeReference.class, Type.class);
+                TypeReference.class);
         methodBuilder.addStatement("return executeTransactionAsync(function)");
 
         return methodBuilder;
@@ -497,7 +495,6 @@ public class SolidityFunctionWrapperGenerator extends Generator {
         List<Object> objects = new ArrayList<Object>();
         objects.add(Function.class);
         objects.add(Function.class);
-        objects.add(Type.class);
         objects.add(functionName);
 
         objects.add(Arrays.class);
@@ -523,7 +520,7 @@ public class SolidityFunctionWrapperGenerator extends Generator {
                     }
                 });
 
-        methodBuilder.addStatement("$T function = new $T<$T>($S, \n$T<$T>.asList($L), \n$T<$T<?>>.asList(" +
+        methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T.<$T<?>>asList(" +
                 asListParams + "))", objects.toArray());
     }
 

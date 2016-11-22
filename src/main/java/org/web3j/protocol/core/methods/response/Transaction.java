@@ -22,6 +22,9 @@ public class Transaction {
     private String creates;
     private String publicKey;
     private String raw;
+    private String r;
+    private String s;
+    private byte v;
 
     public Transaction() {
     }
@@ -29,7 +32,7 @@ public class Transaction {
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,
                        String gas, String gasPrice, String input, String creates,
-                       String publicKey, String raw) {
+                       String publicKey, String raw, String r, String s, byte v) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -44,6 +47,9 @@ public class Transaction {
         this.creates = creates;
         this.publicKey = publicKey;
         this.raw = raw;
+        this.r = r;
+        this.s = s;
+        this.v = v;
     }
 
     public String getHash() {
@@ -158,6 +164,30 @@ public class Transaction {
         this.raw = raw;
     }
 
+    public String getR() {
+        return r;
+    }
+
+    public void setR(String r) {
+        this.r = r;
+    }
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
+    }
+
+    public byte getV() {
+        return v;
+    }
+
+    public void setV(byte v) {
+        this.v = v;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -165,6 +195,7 @@ public class Transaction {
 
         Transaction that = (Transaction) o;
 
+        if (v != that.v) return false;
         if (hash != null ? !hash.equals(that.hash) : that.hash != null) return false;
         if (nonce != null ? !nonce.equals(that.nonce) : that.nonce != null) return false;
         if (blockHash != null ? !blockHash.equals(that.blockHash) : that.blockHash != null)
@@ -183,7 +214,9 @@ public class Transaction {
         if (creates != null ? !creates.equals(that.creates) : that.creates != null) return false;
         if (publicKey != null ? !publicKey.equals(that.publicKey) : that.publicKey != null)
             return false;
-        return raw != null ? raw.equals(that.raw) : that.raw == null;
+        if (raw != null ? !raw.equals(that.raw) : that.raw != null) return false;
+        if (r != null ? !r.equals(that.r) : that.r != null) return false;
+        return s != null ? s.equals(that.s) : that.s == null;
 
     }
 
@@ -203,6 +236,9 @@ public class Transaction {
         result = 31 * result + (creates != null ? creates.hashCode() : 0);
         result = 31 * result + (publicKey != null ? publicKey.hashCode() : 0);
         result = 31 * result + (raw != null ? raw.hashCode() : 0);
+        result = 31 * result + (r != null ? r.hashCode() : 0);
+        result = 31 * result + (s != null ? s.hashCode() : 0);
+        result = 31 * result + (int) v;
         return result;
     }
 }

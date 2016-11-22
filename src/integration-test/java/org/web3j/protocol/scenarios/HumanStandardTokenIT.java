@@ -90,11 +90,11 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = totalSupply();
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Uint256> response = FunctionReturnDecoder.decode(
+        List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
 
         assertThat(response.size(), is(1));
-        return response.get(0).getValue();
+        return (BigInteger) response.get(0).getValue();
     }
 
     private void confirmBalance(
@@ -102,7 +102,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = balanceOf(address);
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Uint256> response = FunctionReturnDecoder.decode(
+        List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
         assertThat(response.size(), is(1));
         assertThat(response.get(0), equalTo(new Uint256(expected)));
@@ -113,7 +113,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = allowance(owner, spender);
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Uint256> response = FunctionReturnDecoder.decode(
+        List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
 
         assertThat(response.size(), is(function.getOutputParameters().size()));

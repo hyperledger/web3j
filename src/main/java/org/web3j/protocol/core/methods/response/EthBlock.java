@@ -57,6 +57,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String receiptsRoot;  // geth has this wrong currently, see https://github.com/ethereum/go-ethereum/issues/3084
         private String author;
         private String miner;
+        private String mixHash;
         private String difficulty;
         private String totalDifficulty;
         private String extraData;
@@ -73,9 +74,9 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         public Block(String number, String hash, String parentHash, String nonce,
                      String sha3Uncles, String logsBloom, String transactionsRoot,
-                     String stateRoot, String receiptsRoot, String author, String miner,
-                     String difficulty, String totalDifficulty, String extraData, String size,
-                     String gasLimit, String gasUsed, String timestamp,
+                     String stateRoot, String receiptsRoot, String author, String miner, 
+                     String mixHash, String difficulty, String totalDifficulty, String extraData, 
+                     String size, String gasLimit, String gasUsed, String timestamp,
                      List<TransactionResult> transactions, List<String> uncles,
                      List<String> sealFields) {
             this.number = number;
@@ -89,6 +90,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.receiptsRoot = receiptsRoot;
             this.author = author;
             this.miner = miner;
+            this.mixHash = mixHash;
             this.difficulty = difficulty;
             this.totalDifficulty = totalDifficulty;
             this.extraData = extraData;
@@ -187,6 +189,14 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         public void setMiner(String miner) {
             this.miner = miner;
+        }
+
+        public String getMixHash() {
+            return mixHash;
+        }
+
+        public void setMixHash(String mixHash) {
+            this.mixHash = mixHash;
         }
 
         public BigInteger getDifficulty() {
@@ -294,6 +304,8 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             if (author != null ? !author.equals(that.author) : that.author != null) return false;
             if (miner != null ? !miner.equals(that.miner) : that.miner != null) return false;
+            if (mixHash != null ? !mixHash.equals(that.mixHash) : that.mixHash != null)
+                return false;
             if (difficulty != null ? !difficulty.equals(that.difficulty) : that.difficulty != null)
                 return false;
             if (totalDifficulty != null ? !totalDifficulty.equals(that.totalDifficulty) : that.totalDifficulty != null)
@@ -328,6 +340,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             result = 31 * result + (receiptsRoot != null ? receiptsRoot.hashCode() : 0);
             result = 31 * result + (author != null ? author.hashCode() : 0);
             result = 31 * result + (miner != null ? miner.hashCode() : 0);
+            result = 31 * result + (mixHash != null ? mixHash.hashCode() : 0);
             result = 31 * result + (difficulty != null ? difficulty.hashCode() : 0);
             result = 31 * result + (totalDifficulty != null ? totalDifficulty.hashCode() : 0);
             result = 31 * result + (extraData != null ? extraData.hashCode() : 0);
@@ -389,9 +402,9 @@ public class EthBlock extends Response<EthBlock.Block> {
         public TransactionObject(String hash, String nonce, String blockHash, String blockNumber,
                                  String transactionIndex, String from, String to, String value,
                                  String gasPrice, String gas, String input, String creates,
-                                 String publicKey, String raw) {
+                                 String publicKey, String raw, String r, String s, byte v) {
             super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value,
-                    gasPrice, gas, input, creates, publicKey, raw);
+                    gasPrice, gas, input, creates, publicKey, raw, r, s, v);
         }
 
         @Override

@@ -3,8 +3,6 @@ package org.web3j.protocol.parity;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.protocol.core.IntegrationTestConfig;
-import org.web3j.protocol.core.MordenTestnetConfig;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.parity.methods.response.PersonalListAccounts;

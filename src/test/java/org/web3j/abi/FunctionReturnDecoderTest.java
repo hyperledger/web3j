@@ -23,10 +23,10 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testSimpleFunctionDecode() {
-        Function function = new Function<Uint>(
+        Function function = new Function(
                 "test",
                 Collections.<Type>emptyList(),
-                Collections.<TypeReference<Uint>>singletonList(new TypeReference<Uint>(){})
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>(){})
         );
 
         assertThat(FunctionReturnDecoder.decode(
@@ -37,12 +37,12 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testSimpleFunctionStringResultDecode() {
-        Function function = new Function<Utf8String>("simple",
+        Function function = new Function("simple",
                 Arrays.<Type>asList(),
-                Collections.<TypeReference<Utf8String>>singletonList(new TypeReference<Utf8String>() {
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Utf8String>() {
                 }));
 
-        List<Utf8String> utf8Strings = FunctionReturnDecoder.decode(
+        List<Type> utf8Strings = FunctionReturnDecoder.decode(
 
                 "0x0000000000000000000000000000000000000000000000000000000000000020" +
                         "000000000000000000000000000000000000000000000000000000000000000d" +
@@ -54,12 +54,12 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testFunctionEmptyStringResultDecode() {
-        Function function = new Function<Utf8String>("test",
+        Function function = new Function("test",
                 Collections.<Type>emptyList(),
-                Collections.<TypeReference<Utf8String>>singletonList(new TypeReference<Utf8String>() {
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Utf8String>() {
                 }));
 
-        List<Utf8String> utf8Strings = FunctionReturnDecoder.decode(
+        List<Type> utf8Strings = FunctionReturnDecoder.decode(
                 "0x0000000000000000000000000000000000000000000000000000000000000020" +
                         "0000000000000000000000000000000000000000000000000000000000000000",
                 function.getOutputParameters());
@@ -69,7 +69,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testMultipleResultFunctionDecode() {
-        Function function = new Function<Uint>(
+        Function function = new Function(
                 "test",
                 Collections.<Type>emptyList(),
                 Arrays.asList(new TypeReference<Uint>() { }, new TypeReference<Uint>() { })
@@ -85,10 +85,10 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testVoidResultFunctionDecode() {
-        Function function = new Function<Type>(
+        Function function = new Function(
                 "test",
                 Collections.<Type>emptyList(),
-                Collections.<TypeReference<Type>>emptyList());
+                Collections.<TypeReference<?>>emptyList());
 
         assertThat(FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
                 CoreMatchers.<List>is(Collections.emptyList()));
@@ -96,10 +96,10 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testEmptyResultFunctionDecode() {
-        Function function = new Function<Uint>(
+        Function function = new Function(
                 "test",
                 Collections.<Type>emptyList(),
-                Collections.<TypeReference<Uint>>singletonList(new TypeReference<Uint>() { }));
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() { }));
 
         assertThat(FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
                 CoreMatchers.<List>is(Collections.emptyList()));

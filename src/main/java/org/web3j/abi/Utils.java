@@ -1,5 +1,9 @@
 package org.web3j.abi;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import org.web3j.abi.datatypes.*;
@@ -75,5 +79,14 @@ public class Utils {
 
         String parameterizedTypeName = ((Class) typeArguments[0]).getName();
         return (Class<T>) Class.forName(parameterizedTypeName);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
+        List<TypeReference<Type>> result = new ArrayList<>(input.size());
+        result.addAll(input.stream()
+                .map(typeReference -> (TypeReference<Type>) typeReference)
+                .collect(Collectors.toList()));
+        return result;
     }
 }
