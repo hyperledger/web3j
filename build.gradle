@@ -105,9 +105,8 @@ task integrationTest(type: Test) {
     }
 }
 
-// remove once integration tests are running as part of the build
-//check.dependsOn integrationTest
-//integrationTest.mustRunAfter test
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
@@ -211,6 +210,9 @@ applicationName = 'web3j'
 
 
 task release {
+    // remove once integration tests are running as part of the build
+    check.dependsOn.remove(integrationTest)
+
     dependsOn 'clean'
     dependsOn 'build'
     dependsOn 'uploadArchives'
