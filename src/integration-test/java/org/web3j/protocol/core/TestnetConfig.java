@@ -12,7 +12,7 @@ import org.web3j.protocol.core.methods.request.Transaction;
 /**
  * Mordon Testnet Configuration.
  */
-public class MordenTestnetConfig implements IntegrationTestConfig {
+public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {

@@ -1,10 +1,11 @@
 package org.web3j.abi.datatypes;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.TypeReference;
+
+import static org.web3j.abi.Utils.convert;
 
 /**
  * Event wrapper
@@ -31,17 +32,5 @@ public class Event {
 
     public List<TypeReference<Type>> getNonIndexedParameters() {
         return nonIndexedParameters;
-    }
-
-    // TODO: We're going to need to use a similar approach for managing function return values
-    // as the current function implementation is using Type as an upper type bound, which is not
-    // sustainable if we want to support returning a mixture of any return values
-    @SuppressWarnings("unchecked")
-    private static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
-        List<TypeReference<Type>> result = new ArrayList<>(input.size());
-        result.addAll(input.stream()
-                .map(typeReference -> (TypeReference<Type>) typeReference)
-                .collect(Collectors.toList()));
-        return result;
     }
 }

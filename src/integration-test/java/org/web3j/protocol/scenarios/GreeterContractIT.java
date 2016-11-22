@@ -11,6 +11,7 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -57,7 +58,7 @@ public class GreeterContractIT extends Scenario {
         String responseValue = callSmartContractFunction(getFunction, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Utf8String> response = FunctionReturnDecoder.decode(
+        List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, getFunction.getOutputParameters());
         assertThat(response.size(), is(1));
         assertThat(response.get(0).getValue(), is(VALUE));
@@ -102,7 +103,7 @@ public class GreeterContractIT extends Scenario {
     }
 
     Function createGreetFunction() {
-        return new Function<>(
+        return new Function(
                 "greet",
                 Collections.emptyList(),
                 Collections.singletonList(new TypeReference<Utf8String>() {}));

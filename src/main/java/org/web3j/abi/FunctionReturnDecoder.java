@@ -22,12 +22,11 @@ public class FunctionReturnDecoder {
      *
      * @param rawInput ABI encoded input
      * @param outputParameters list of return types as {@link TypeReference}
-     * @param <T> types returned
      * @return {@link List} of values returned by function, {@link Collections#emptyList()} if
      *         invalid response
      */
-    public static <T extends Type> List<T> decode(
-            String rawInput, List<TypeReference<T>> outputParameters) {
+    public static List<Type> decode(
+            String rawInput, List<TypeReference<Type>> outputParameters) {
         String input = Numeric.cleanHexPrefix(rawInput);
 
         if (input.isEmpty()) {
@@ -79,18 +78,18 @@ public class FunctionReturnDecoder {
         }
     }
 
-    private static <T extends Type> List<T> build(
-            String input, List<TypeReference<T>> outputParameters) {
-        List<T> results = new ArrayList<>(outputParameters.size());
+    private static List<Type> build(
+            String input, List<TypeReference<Type>> outputParameters) {
+        List<Type> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
-        for (TypeReference<T> typeReference:outputParameters) {
+        for (TypeReference<?> typeReference:outputParameters) {
             try {
-                Class<T> type = typeReference.getClassType();
+                Class<Type> type = (Class<Type>) typeReference.getClassType();
 
                 int hexStringDataOffset = getDataOffset(input, offset, type);
 
-                T result;
+                Type result;
                 if (DynamicArray.class.isAssignableFrom(type)) {
                     result = TypeDecoder.decodeDynamicArray(
                             input, hexStringDataOffset, typeReference);

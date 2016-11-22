@@ -26,7 +26,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '1.0.6'
+version '1.0.7'
 
 sourceCompatibility = 1.8
 
@@ -105,8 +105,9 @@ task integrationTest(type: Test) {
     }
 }
 
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
+// remove once integration tests are running as part of the build
+//check.dependsOn integrationTest
+//integrationTest.mustRunAfter test
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
@@ -208,10 +209,8 @@ uploadArchives {
 mainClassName = 'org.web3j.console.Runner'
 applicationName = 'web3j'
 
-task release {
-    // remove once integration tests are running as part of the build
-    check.dependsOn.remove(integrationTest)
 
+task release {
     dependsOn 'clean'
     dependsOn 'build'
     dependsOn 'uploadArchives'

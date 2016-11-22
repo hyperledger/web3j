@@ -91,11 +91,11 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = totalSupply();
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Uint256> response = FunctionReturnDecoder.decode(
+        List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
 
         assertThat(response.size(), is(1));
-        return response.get(0).getValue();
+        return (BigInteger) response.get(0).getValue();
     }
 
     private void confirmBalance(
@@ -103,7 +103,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = balanceOf(address);
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Uint256> response = FunctionReturnDecoder.decode(
+        List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
         assertThat(response.size(), is(1));
         assertThat(response.get(0), equalTo(new Uint256(expected)));
@@ -114,7 +114,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = allowance(owner, spender);
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Uint256> response = FunctionReturnDecoder.decode(
+        List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
 
         assertThat(response.size(), is(function.getOutputParameters().size()));
@@ -300,42 +300,42 @@ public class HumanStandardTokenIT extends Scenario {
     }
 
     private Function totalSupply() {
-        return new Function<>(
+        return new Function(
                 "totalSupply",
                 Collections.emptyList(),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function balanceOf(String owner) {
-        return new Function<>(
+        return new Function(
                 "balanceOf",
                 Collections.singletonList(new Address(owner)),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function transfer(String to, BigInteger value) {
-        return new Function<>(
+        return new Function(
                 "transfer",
                 Arrays.asList(new Address(to), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
     private Function allowance(String owner, String spender) {
-        return new Function<>(
+        return new Function(
                 "allowance",
                 Arrays.asList(new Address(owner), new Address(spender)),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function approve(String spender, BigInteger value) {
-        return new Function<>(
+        return new Function(
                 "approve",
                 Arrays.asList(new Address(spender), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
     private Function transferFrom(String from, String to, BigInteger value) {
-        return new Function<>(
+        return new Function(
                 "transferFrom",
                 Arrays.asList(new Address(from), new Address(to), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));

@@ -110,6 +110,8 @@ contracts in the project directory
 `src/integration-test/java/org/web3j/protocol/scenarios <https://github.com/web3j/web3j/tree/master/src/integration-test/java/org/web3j/protocol/scenarios>`_.
 
 
+.. image:: /images/smart_contract.png
+
 .. _eip:
 
 EIP-20 Ethereum token standard smart contract
@@ -153,10 +155,6 @@ The web3j :doc:`command_line` tools ship with a command line utility for generat
    $ web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Or by calling the Java class directly:
-
-.. code-block:: bash
-
-   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 .. code-block:: bash
 

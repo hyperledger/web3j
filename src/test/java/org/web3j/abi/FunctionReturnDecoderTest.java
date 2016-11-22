@@ -22,7 +22,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testSimpleFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function(
                 "test",
                 Collections.<Type>emptyList(),
                 Collections.singletonList(new TypeReference<Uint>(){})
@@ -41,7 +41,7 @@ public class FunctionReturnDecoderTest {
                 Collections.singletonList(new TypeReference<Utf8String>() {
                 }));
 
-        List<Utf8String> utf8Strings = FunctionReturnDecoder.decode(
+        List<Type> utf8Strings = FunctionReturnDecoder.decode(
 
                 "0x0000000000000000000000000000000000000000000000000000000000000020" +
                         "000000000000000000000000000000000000000000000000000000000000000d" +
@@ -58,7 +58,7 @@ public class FunctionReturnDecoderTest {
                 Collections.singletonList(new TypeReference<Utf8String>() {
                 }));
 
-        List<Utf8String> utf8Strings = FunctionReturnDecoder.decode(
+        List<Type> utf8Strings = FunctionReturnDecoder.decode(
                 "0x0000000000000000000000000000000000000000000000000000000000000020" +
                         "0000000000000000000000000000000000000000000000000000000000000000",
                 function.getOutputParameters());
@@ -68,7 +68,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testMultipleResultFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function(
                 "test",
                 Collections.<Type>emptyList(),
                 Arrays.asList(new TypeReference<Uint>() { }, new TypeReference<Uint>() { })
@@ -84,7 +84,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testVoidResultFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function(
                 "test",
                 Collections.emptyList(),
                 Collections.emptyList());
@@ -95,7 +95,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testEmptyResultFunctionDecode() {
-        Function function = new Function<>(
+        Function function = new Function(
                 "test",
                 Collections.emptyList(),
                 Collections.singletonList(new TypeReference<Uint>() { }));

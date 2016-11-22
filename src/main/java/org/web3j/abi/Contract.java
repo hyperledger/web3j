@@ -43,12 +43,11 @@ public abstract class Contract extends ManagedTransaction {
      * Execute constant function call - i.e. a call that does not change state of the contract
      *
      * @param function to call
-     * @param <T> Generic type of return values
      * @return {@link List} of values returned by function call
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    private <T extends Type> List<T> executeCall(
+    private List<Type> executeCall(
             Function function) throws InterruptedException, ExecutionException {
         String encodedFunction = FunctionEncoder.encode(function);
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
@@ -75,9 +74,9 @@ public abstract class Contract extends ManagedTransaction {
         return result;
     }
 
-    protected <T extends Type> Future<List<T>> executeCallMultipleValueReturnAsync(
+    protected Future<List<Type>> executeCallMultipleValueReturnAsync(
             Function function) {
-        CompletableFuture<List<T>> result =
+        CompletableFuture<List<Type>> result =
                 new CompletableFuture<>();
 
         CompletableFuture.runAsync(() -> {
@@ -92,11 +91,11 @@ public abstract class Contract extends ManagedTransaction {
 
     protected <T extends Type> T executeCallSingleValueReturn(
             Function function) throws InterruptedException, ExecutionException {
-        List<T> values = executeCall(function);
-        return values.get(0);
+        List<Type> values = executeCall(function);
+        return (T) values.get(0);
     }
 
-    protected <T extends Type> List<T> executeCallMultipleValueReturn(
+    protected List<Type> executeCallMultipleValueReturn(
             Function function) throws InterruptedException, ExecutionException {
         return executeCall(function);
     }

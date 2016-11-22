@@ -67,7 +67,7 @@ public class FunctionEncoderTest {
         Function function = new Function(
                 "baz",
                 Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),
-                Collections.<Class<? extends Type>>emptyList()
+                Collections.<TypeReference<?>>emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),
@@ -88,7 +88,7 @@ public class FunctionEncoderTest {
                             new Uint(BigInteger.ONE),
                             new Uint(BigInteger.valueOf(2)),
                             new Uint(BigInteger.valueOf(3)))),
-                Collections.<Class<? extends Type>>emptyList()
+                Collections.<TypeReference<?>>emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),
@@ -116,7 +116,7 @@ public class FunctionEncoderTest {
                     ),
                     new Bytes10("1234567890".getBytes()),
                     new DynamicBytes("Hello, world!".getBytes())),
-                Collections.<Class<? extends Type>>emptyList()
+                Collections.<TypeReference<?>>emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),

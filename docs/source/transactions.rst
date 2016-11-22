@@ -16,6 +16,9 @@ Instructions for obtaining Ether are described below in :ref:`obtaining-ether`.
 Additionally, it is possible to query the state of a smart contract, this is described in
 :ref:`querying-state`.
 
+.. image:: /images/web3j_transaction.png
+   :scale: 20%
+
 
 .. _obtaining-ether:
 
@@ -37,6 +40,10 @@ To purchase Ether you will need to go via an exchange. As different regions have
 exchanges, you will need to research the best location for this yourself. The
 `Homestead documentation <https://ethereum-homestead.readthedocs.io/en/latest/ether.html#list-of-centralised-exchange-marketplaces>`__
 contains a number of exchanges which is a good place to start.
+
+Alternatively, if you need some Ether on testnet to get started, please post a message with your
+wallet address to the `web3j Gitter channel <https://gitter.im/web3j/web3j>`_ and I'll send you
+some.
 
 
 Mining on testnet/private blockchains

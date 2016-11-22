@@ -28,14 +28,14 @@ public final class Greeter extends Contract {
     }
 
     public Future<TransactionReceipt> kill() {
-        Function function = new Function<Type>("kill", Arrays.<Type>asList(), Collections.<TypeReference<Type>>emptyList());
+        Function function = new Function("kill", Arrays.<Type>asList(), Collections.<TypeReference<?>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Utf8String> greet() {
-        Function function = new Function<Utf8String>("greet", 
+        Function function = new Function("greet", 
                 Arrays.<Type>asList(), 
-                Arrays.<TypeReference<Utf8String>>asList(new TypeReference<Utf8String>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
         return executeCallSingleValueReturnAsync(function);
     }
 

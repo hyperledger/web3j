@@ -4,19 +4,21 @@ import java.util.List;
 
 import org.web3j.abi.TypeReference;
 
+import static org.web3j.abi.Utils.convert;
+
 /**
  * Function wrapper
  */
-public class Function<T extends Type> {
+public class Function {
     private String name;
     private List<Type> inputParameters;
-    private List<TypeReference<T>> outputParameters;
+    private List<TypeReference<Type>> outputParameters;
 
     public Function(String name, List<Type> inputParameters,
-                    List<TypeReference<T>> outputParameters) {
+                    List<TypeReference<?>> outputParameters) {
         this.name = name;
         this.inputParameters = inputParameters;
-        this.outputParameters = outputParameters;
+        this.outputParameters = convert(outputParameters);
     }
 
     public String getName() {
@@ -27,7 +29,7 @@ public class Function<T extends Type> {
         return inputParameters;
     }
 
-    public List<TypeReference<T>> getOutputParameters() {
+    public List<TypeReference<Type>> getOutputParameters() {
         return outputParameters;
     }
 }

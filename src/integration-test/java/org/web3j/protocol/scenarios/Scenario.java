@@ -123,7 +123,7 @@ public class Scenario {
     }
 
     Function createFibonacciFunction() {
-        return new Function<>(
+        return new Function(
                 "fibonacciNotify",
                 Collections.singletonList(new Uint(BigInteger.valueOf(7))),
                 Collections.singletonList(new TypeReference<Uint>() {}));
