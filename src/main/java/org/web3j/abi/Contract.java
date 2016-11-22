@@ -69,9 +69,9 @@ public abstract class Contract extends ManagedTransaction {
         });
     }
 
-    protected <Type> Future<List<T>> executeCallMultipleValueReturnAsync(
+    protected Future<List<Type>> executeCallMultipleValueReturnAsync(
             final Function function) {
-        return Async.run(new Callable<List<T>>() {
+        return Async.run(new Callable<List<Type>>() {
             @Override
             public List<Type> call() throws Exception {
                 return executeCallMultipleValueReturn(function);

@@ -49,7 +49,7 @@ public class FunctionReturnDecoderTest {
                         "6f6e65206d6f72652074696d6500000000000000000000000000000000000000",
                 function.getOutputParameters());
 
-        assertThat(utf8Strings.get(0).getValue(), is("one more time"));
+        assertThat((String) utf8Strings.get(0).getValue(), is("one more time"));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class FunctionReturnDecoderTest {
                         "0000000000000000000000000000000000000000000000000000000000000000",
                 function.getOutputParameters());
 
-        assertThat(utf8Strings.get(0).getValue(), is(""));
+        assertThat((String) utf8Strings.get(0).getValue(), is(""));
     }
 
     @Test
@@ -72,7 +72,8 @@ public class FunctionReturnDecoderTest {
         Function function = new Function(
                 "test",
                 Collections.<Type>emptyList(),
-                Arrays.asList(new TypeReference<Uint>() { }, new TypeReference<Uint>() { })
+                Arrays.<TypeReference<?>>asList(
+                        new TypeReference<Uint>() { }, new TypeReference<Uint>() { })
         );
 
         assertThat(FunctionReturnDecoder.decode(

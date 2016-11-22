@@ -53,7 +53,7 @@ public class DeployContractIT extends Scenario {
         List<Type> uint = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
         assertThat(uint.size(), is(1));
-        assertThat(uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
+        assertThat((BigInteger) uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
     }
 
     private String sendTransaction() throws Exception {

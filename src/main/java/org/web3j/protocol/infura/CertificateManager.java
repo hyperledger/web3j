@@ -100,7 +100,7 @@ public class CertificateManager {
         }
     }
 
-    private static void deleteFileOnShutdown(File file) {
+    private static void deleteFileOnShutdown(final File file) {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {

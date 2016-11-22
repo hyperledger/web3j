@@ -60,7 +60,7 @@ public class GreeterContractIT extends Scenario {
         List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, getFunction.getOutputParameters());
         assertThat(response.size(), is(1));
-        assertThat(response.get(0).getValue(), is(VALUE));
+        assertThat((String) response.get(0).getValue(), is(VALUE));
     }
 
     private String sendCreateContractTransaction() throws Exception {
@@ -104,7 +104,7 @@ public class GreeterContractIT extends Scenario {
     Function createGreetFunction() {
         return new Function(
                 "greet",
-                Collections.emptyList(),
-                Collections.singletonList(new TypeReference<Utf8String>() {}));
+                Collections.<Type>emptyList(),
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Utf8String>() {}));
     }
 }
