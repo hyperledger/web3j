@@ -4,9 +4,11 @@ Using Infura with web3j
 Signing up
 ----------
 
-The `Infura <https://infura.io/>`_ service by `Consensys <https://consensys.net/>`_, provides Ethereum clients running in the cloud, so you don't have to run one yourself to work with Ethereum.
+The `Infura <https://infura.io/>`_ service by `Consensys <https://consensys.net/>`_, provides
+Ethereum clients running in the cloud, so you don't have to run one yourself to work with Ethereum.
 
-When you sign up to the service you are provided with a token you can use to connect to the relvant Ethereum network:
+When you sign up to the service you are provided with a token you can use to connect to the
+relevant Ethereum network:
 
 Main Ethereum Network:
   https://mainnet.infura.io/your-token
@@ -14,6 +16,26 @@ Main Ethereum Network:
 Test Ethereum Network (Morden):
   https://morden.infura.io/your-token
 
+If you need some Ether on testnet to get started, please post a message with your wallet address
+to the `web3j Gitter channel <https://gitter.im/web3j/web3j>`_ and I'll send you some.
+
+InfuraHttpClient
+----------------
+
+web3j comes with an Infura HTTP client
+(`InfuraHttpService <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/infura/InfuraHttpService.java>`_)
+so you don't need to concern yourself with installing an HTTP certificate into your JVM. Upon
+startup web3j will connect to the Infura endpoint you have specified and downloads the Infura
+node TLS certificate to a temporary local key store which exists for the duration of your
+application runtime::
+
+   Web3j web3 = Web3j.build(new InfuraHttpService("https://morden.infura.io/your-token"));
+
+Alternatively, if you'd rather install the key permanently in your JVM keystore, see
+:ref:`below <certificate-installation>`.
+
+
+.. _certificate-installation:
 
 Certificate installation
 ------------------------
