@@ -2,6 +2,7 @@ package org.web3j.abi;
 
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -80,6 +81,54 @@ public class FunctionReturnDecoderTest {
                 function.getOutputParameters()),
                 equalTo(Arrays.asList(new Uint(BigInteger.valueOf(55)),
                         new Uint(BigInteger.valueOf(7)))));
+    }
+
+    @Test
+    public void testDecodeMultipleStringValues() {
+        Function function = new Function("function",
+                Collections.<Type>emptyList(),
+                Arrays.asList(
+                        new TypeReference<Utf8String>() { }, new TypeReference<Utf8String>() { },
+                        new TypeReference<Utf8String>() { }, new TypeReference<Utf8String>() { }));
+
+        assertThat(FunctionReturnDecoder.decode(
+                "0x0000000000000000000000000000000000000000000000000000000000000080" +
+                        "00000000000000000000000000000000000000000000000000000000000000c0" +
+                        "0000000000000000000000000000000000000000000000000000000000000100" +
+                        "0000000000000000000000000000000000000000000000000000000000000140" +
+                        "0000000000000000000000000000000000000000000000000000000000000004" +
+                        "6465663100000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000004" +
+                        "6768693100000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000004" +
+                        "6a6b6c3100000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000004" +
+                        "6d6e6f3200000000000000000000000000000000000000000000000000000000",
+                function.getOutputParameters()),
+                equalTo(Arrays.asList(
+                        new Utf8String("def1"), new Utf8String("ghi1"),
+                        new Utf8String("jkl1"), new Utf8String("mno2"))));
+    }
+
+
+    @Test
+    public void testDecodeStaticArrayValue() {
+        List<TypeReference<Type>> outputParameters = new ArrayList<>(1);
+        outputParameters.add((TypeReference)
+                new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {});
+        outputParameters.add((TypeReference) new TypeReference<Uint256>() {});
+
+
+        List<Type> decoded = FunctionReturnDecoder.decode(
+                "0x0000000000000000000000000000000000000000000000000000000000000037" +
+                        "0000000000000000000000000000000000000000000000000000000000000001" +
+                        "000000000000000000000000000000000000000000000000000000000000000a",
+                outputParameters);
+
+        List<Type> expected = Arrays.asList(
+                new StaticArray<>(new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE)),
+                new Uint256(BigInteger.TEN));
+        assertThat(decoded, equalTo(expected));
     }
 
     @Test
