@@ -12,6 +12,7 @@ plugins {
     id "com.jfrog.bintray" version "1.7.3"
 }
 
+apply plugin: 'eclipse'
 apply plugin: 'java'
 // Required for JFrog Artifactory repository
 apply plugin: 'jacoco'
