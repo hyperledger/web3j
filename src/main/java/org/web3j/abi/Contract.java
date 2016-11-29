@@ -26,6 +26,8 @@ import org.web3j.utils.Async;
  */
 public abstract class Contract extends ManagedTransaction {
 
+    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(3000000);
+
     private String contractAddress;
 
     protected Contract(String contractAddress, Web3j web3j, Credentials credentials,

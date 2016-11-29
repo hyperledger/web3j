@@ -93,18 +93,18 @@ public class FunctionReturnDecoder {
                 if (DynamicArray.class.isAssignableFrom(type)) {
                     result = TypeDecoder.decodeDynamicArray(
                             input, hexStringDataOffset, typeReference);
+                    offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 } else if (StaticArray.class.isAssignableFrom(type)) {
                     int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
                     result = TypeDecoder.decodeStaticArray(
                             input, hexStringDataOffset, typeReference, length);
+                    offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 } else {
                     result = TypeDecoder.decode(input, hexStringDataOffset, type);
+                    offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 }
                 results.add(result);
 
-                offset += TypeDecoder.getSingleElementLength(
-                        input, hexStringDataOffset + MAX_BYTE_LENGTH_FOR_HEX_STRING, type)
-                        * MAX_BYTE_LENGTH_FOR_HEX_STRING;
             } catch (ClassNotFoundException e) {
                 throw new UnsupportedOperationException("Invalid class reference provided", e);
             }

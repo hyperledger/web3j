@@ -22,6 +22,9 @@ import org.web3j.utils.Numeric;
  */
 public class Transfer extends ManagedTransaction {
 
+    // This is the cost to send Ether between parties
+    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(21000);
+
     private Transfer(Web3j web3j, Credentials credentials,
                      BigInteger gasPrice, BigInteger gasLimit) {
         super(web3j, credentials, gasPrice, gasLimit);
@@ -47,7 +50,8 @@ public class Transfer extends ManagedTransaction {
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     private TransactionReceipt send(
-            String toAddress, BigDecimal value, Convert.Unit unit) throws ExecutionException, InterruptedException,
+            String toAddress, BigDecimal value, Convert.Unit unit)
+            throws ExecutionException, InterruptedException,
             TransactionTimeoutException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
@@ -59,6 +63,7 @@ public class Transfer extends ManagedTransaction {
         }
 
         BigInteger nonce = getNonce(credentials.getAddress());
+        BigInteger gasPrice = getGasPrice();
 
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
                 nonce,
