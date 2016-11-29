@@ -44,14 +44,15 @@ public class NumericTest {
                 equalTo(new BigInteger("204516877000845695339750056077105398031")));
     }
 
-    @Test(expected = MessageDecodingException.class)
-    public void testQuantityDecodeMissingPrefix() {
-        Numeric.decodeQuantity("ff");
+    @Test
+    public void testQuantityDecodeLeadingZero() {
+        assertThat(Numeric.decodeQuantity("0x0400"), equalTo(BigInteger.valueOf(1024L)));
+        assertThat(Numeric.decodeQuantity("0x001"), equalTo(BigInteger.valueOf(1L)));
     }
 
     @Test(expected = MessageDecodingException.class)
-    public void testQuantityDecodeLeadingZero() {
-        Numeric.decodeQuantity("0x0400");
+    public void testQuantityDecodeMissingPrefix() {
+        Numeric.decodeQuantity("ff");
     }
 
     @Test(expected = MessageDecodingException.class)
