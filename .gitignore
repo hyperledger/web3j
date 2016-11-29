@@ -41,3 +41,5 @@ docs/build
 # OS X
 .DS_Store
 
+/bin/
+/target/

@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.ResponseHandler;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
+import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClients;
+import cz.msebera.android.httpclient.message.BasicHeader;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.ObjectMapperFactory;
@@ -32,7 +33,7 @@ public class HttpService implements Web3jService {
 
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
-    private CloseableHttpClient httpClient;
+    private cz.msebera.android.httpclient.impl.client.CloseableHttpClient httpClient;
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 

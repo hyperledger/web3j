@@ -12,6 +12,7 @@ plugins {
     id "com.jfrog.bintray" version "1.7.3"
 }
 
+apply plugin: 'eclipse'
 apply plugin: 'java'
 // Required for JFrog Artifactory repository
 apply plugin: 'jacoco'
@@ -85,7 +86,7 @@ configurations {
 }
 
 dependencies {
-    compile 'org.apache.httpcomponents:httpclient:4.5.2',
+    compile 'cz.msebera.android:httpclient:4.4.1.2',
             'com.fasterxml.jackson.core:jackson-databind:2.8.1',
             'io.reactivex:rxjava:1.2.2',
             'com.madgag.spongycastle:prov:1.54.0.0',

@@ -1,19 +1,20 @@
 package org.web3j.protocol.infura;
 
 import javax.net.ssl.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.List;
 
-import org.apache.http.Header;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.ssl.SSLContexts;
-
 import org.web3j.protocol.http.HttpService;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClients;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.ssl.SSLContexts;
 
 /**
  * HttpService for working with <a href="https://infura.io/">Infura</a> clients.
@@ -98,7 +99,7 @@ public class InfuraHttpService extends HttpService {
 
         return HttpClients.custom()
                 .setConnectionManagerShared(true)
-                .setSSLContext(sslContext)
+                .setSslcontext(sslContext)
                 .build();
     }
 }
