@@ -5,6 +5,8 @@ import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Arrays;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
@@ -21,7 +23,7 @@ public class Keys {
     static final int PUBLIC_KEY_SIZE_IN_HEX = 64 << 1;
 
     static {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     private Keys() { }

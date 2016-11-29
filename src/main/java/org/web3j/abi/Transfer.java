@@ -4,7 +4,6 @@ package org.web3j.abi;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -13,6 +12,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.utils.Async;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
@@ -21,6 +21,9 @@ import org.web3j.utils.Numeric;
  * Class for performing Ether transactions on the Ethereum blockchain.
  */
 public class Transfer extends ManagedTransaction {
+
+    // This is the cost to send Ether between parties
+    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(21000);
 
     private Transfer(Web3j web3j, Credentials credentials,
                      BigInteger gasPrice, BigInteger gasLimit) {
@@ -47,7 +50,8 @@ public class Transfer extends ManagedTransaction {
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     private TransactionReceipt send(
-            String toAddress, BigDecimal value, Convert.Unit unit) throws ExecutionException, InterruptedException,
+            String toAddress, BigDecimal value, Convert.Unit unit)
+            throws ExecutionException, InterruptedException,
             TransactionTimeoutException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
@@ -59,6 +63,7 @@ public class Transfer extends ManagedTransaction {
         }
 
         BigInteger nonce = getNonce(credentials.getAddress());
+        BigInteger gasPrice = getGasPrice();
 
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
                 nonce,
@@ -82,18 +87,7 @@ public class Transfer extends ManagedTransaction {
      */
     public Future<TransactionReceipt> sendFundsAsync(
             String toAddress, BigDecimal value, Convert.Unit unit) {
-
-        CompletableFuture<TransactionReceipt> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(send(toAddress, value, unit));
-            } catch (InterruptedException|ExecutionException|TransactionTimeoutException e) {
-                result.completeExceptionally(e);
-            }
-        });
-        return result;
+        return Async.run(() -> send(toAddress, value, unit));
     }
 
     public static TransactionReceipt sendFunds(

@@ -13,6 +13,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.protocol.infura.InfuraHttpService;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
@@ -63,7 +64,8 @@ public class WalletSendFunds extends WalletManager {
 
     private BigDecimal getAmountToTransfer() {
         String amount = console.readLine("What amound would you like to transfer " +
-                "(please enter a numeric value): ");
+                "(please enter a numeric value): ")
+                .trim();
         try {
             return new BigDecimal(amount);
         } catch (NumberFormatException e) {
@@ -73,7 +75,8 @@ public class WalletSendFunds extends WalletManager {
     }
 
     private Convert.Unit getTransferUnit() {
-        String unit = console.readLine("Please specify the unit (ether, wei, ...) [ether]: ");
+        String unit = console.readLine("Please specify the unit (ether, wei, ...) [ether]: ")
+                .trim();
 
         Convert.Unit transferUnit;
         if (unit.equals("")) {
@@ -93,7 +96,7 @@ public class WalletSendFunds extends WalletManager {
                 amountToTransfer.stripTrailingZeros().toPlainString(), transferUnit,
                 amountInWei.stripTrailingZeros().toPlainString(),
                 Convert.Unit.WEI, destinationAddress);
-        String confirm = console.readLine("Please type 'yes' to proceed: ");
+        String confirm = console.readLine("Please type 'yes' to proceed: ").trim();
         if (!confirm.toLowerCase().equals("yes")) {
             exitError("OK, some other time perhaps...");
         }
@@ -115,7 +118,7 @@ public class WalletSendFunds extends WalletManager {
             console.printf("$%n%n");
             return future.get();
         } catch (InterruptedException | ExecutionException | TransactionTimeoutException e) {
-            exitError("Problem encountered transferring funds: " + e.getMessage());
+            exitError("Problem encountered transferring funds: \n" + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");
     }
@@ -123,11 +126,14 @@ public class WalletSendFunds extends WalletManager {
     private Web3j getEthereumClient() {
         String clientAddress = console.readLine("" +
                 "Please confirm address of running Ethereum client you wish to send " +
-                "the transfer request to [" + HttpService.DEFAULT_URL + "]: ");
+                "the transfer request to [" + HttpService.DEFAULT_URL + "]: ")
+                .trim();
 
         Web3j web3j;
         if (clientAddress.equals("")) {
             web3j = Web3j.build(new HttpService());
+        } else if (clientAddress.contains("infura.io")) {
+            web3j = Web3j.build(new InfuraHttpService(clientAddress));
         } else {
             web3j = Web3j.build(new HttpService(clientAddress));
         }

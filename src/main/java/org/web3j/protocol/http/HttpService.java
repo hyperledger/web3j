@@ -21,6 +21,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
+import org.web3j.utils.Async;
 
 /**
  * HTTP implementation of our services API.
@@ -100,14 +101,6 @@ public class HttpService implements Web3jService {
     @Override
     public <T extends Response> CompletableFuture<T> sendAsync(
             Request jsonRpc20Request, Class<T> responseType) {
-        CompletableFuture<T> result = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(send(jsonRpc20Request, responseType));
-            } catch (IOException e) {
-                result.completeExceptionally(e);
-            }
-        });
-        return result;
+        return Async.run(() -> send(jsonRpc20Request, responseType));
     }
 }

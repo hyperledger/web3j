@@ -19,12 +19,15 @@ import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.utils.Async;
 
 
 /**
  * Solidity contract type abstraction for interacting with smart contracts via native Java types.
  */
 public abstract class Contract extends ManagedTransaction {
+
+    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(3_000_000);
 
     private String contractAddress;
 
@@ -61,32 +64,12 @@ public abstract class Contract extends ManagedTransaction {
 
     protected <T extends Type> Future<T> executeCallSingleValueReturnAsync(
             Function function) {
-        CompletableFuture<T> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(executeCallSingleValueReturn(function));
-            } catch (InterruptedException|ExecutionException e) {
-                result.completeExceptionally(e);
-            }
-        });
-        return result;
+        return Async.run(() -> executeCallSingleValueReturn(function));
     }
 
     protected Future<List<Type>> executeCallMultipleValueReturnAsync(
             Function function) {
-        CompletableFuture<List<Type>> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(executeCallMultipleValueReturn(function));
-            } catch (InterruptedException|ExecutionException e) {
-                result.completeExceptionally(e);
-            }
-        });
-        return result;
+        return Async.run(() -> executeCallMultipleValueReturn(function));
     }
 
     protected <T extends Type> T executeCallSingleValueReturn(
@@ -135,17 +118,7 @@ public abstract class Contract extends ManagedTransaction {
      * @return {@link Future} containing executing transaction
      */
     protected Future<TransactionReceipt> executeTransactionAsync(Function function) {
-        CompletableFuture<TransactionReceipt> result =
-                new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(executeTransaction(function));
-            } catch (InterruptedException|ExecutionException|TransactionTimeoutException e) {
-                result.completeExceptionally(e);
-            }
-        });
-        return result;
+        return Async.run(() -> executeTransaction(function));
     }
 
     protected EventValues extractEventParameters(
@@ -221,17 +194,8 @@ public abstract class Contract extends ManagedTransaction {
             Class<T> type, Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value) {
-        CompletableFuture<T> result = new CompletableFuture<>();
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.complete(
-                        deploy(type, web3j, credentials, gasPrice, gasLimit,
-                                binary, encodedConstructor, value));
-            } catch (Throwable e) {
-                result.completeExceptionally(e);
-            }
-        });
-        return result;
+        return Async.run(() -> deploy(type, web3j, credentials, gasPrice, gasLimit,
+                binary, encodedConstructor, value));
     }
 }
