@@ -18,6 +18,7 @@ import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class FunctionReturnDecoderTest {
@@ -89,7 +90,7 @@ public class FunctionReturnDecoderTest {
     public void testDecodeMultipleStringValues() {
         Function function = new Function("function",
                 Collections.<Type>emptyList(),
-                Arrays.asList(
+                Arrays.<TypeReference<?>>asList(
                         new TypeReference<Utf8String>() { }, new TypeReference<Utf8String>() { },
                         new TypeReference<Utf8String>() { }, new TypeReference<Utf8String>() { }));
 
@@ -107,15 +108,17 @@ public class FunctionReturnDecoderTest {
                         "0000000000000000000000000000000000000000000000000000000000000004" +
                         "6d6e6f3200000000000000000000000000000000000000000000000000000000",
                 function.getOutputParameters()),
-                equalTo(Arrays.asList(
+                equalTo(Arrays.<Type>asList(
                         new Utf8String("def1"), new Utf8String("ghi1"),
                         new Utf8String("jkl1"), new Utf8String("mno2"))));
     }
 
 
+
+
     @Test
     public void testDecodeStaticArrayValue() {
-        List<TypeReference<Type>> outputParameters = new ArrayList<>(1);
+        List<TypeReference<Type>> outputParameters = new ArrayList<TypeReference<Type>>(1);
         outputParameters.add((TypeReference)
                 new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {});
         outputParameters.add((TypeReference) new TypeReference<Uint256>() {});
@@ -127,10 +130,12 @@ public class FunctionReturnDecoderTest {
                         "000000000000000000000000000000000000000000000000000000000000000a",
                 outputParameters);
 
-        List<Type> expected = Arrays.asList(
-                new StaticArray<>(new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE)),
+        List<Type> expected = Arrays.<Type>asList(
+                new StaticArray<Uint256>(new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE)),
                 new Uint256(BigInteger.TEN));
-        assertThat(decoded, equalTo(expected));
+
+
+        assertThat(decoded, is(expected));
     }
 
     @Test
