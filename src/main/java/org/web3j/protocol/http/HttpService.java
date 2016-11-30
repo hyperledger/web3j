@@ -33,7 +33,7 @@ public class HttpService implements Web3jService {
 
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
-    private cz.msebera.android.httpclient.impl.client.CloseableHttpClient httpClient;
+    private CloseableHttpClient httpClient;
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
