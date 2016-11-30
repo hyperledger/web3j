@@ -8,17 +8,9 @@ import java.util.concurrent.*;
 public class Async {
 
     private static ExecutorService executorService;
-
-    private static int additionalCpus = getCpuCount() - 1;
-
+    
     static {
-        if (additionalCpus > 1) {
-            // Fork join pool is preferable for Java 7
-            // CompletableFutures for Java 8
-            executorService = Executors.newFixedThreadPool(additionalCpus);
-        } else {
-            throw new RuntimeException("More then one core is required for operation");
-        }
+        executorService = Executors.newFixedThreadPool(getCpuCount());
     }
 
     public static <T> Future<T> run(Callable<T> callable) {
