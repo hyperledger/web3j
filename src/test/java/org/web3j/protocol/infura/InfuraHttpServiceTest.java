@@ -1,9 +1,9 @@
 package org.web3j.protocol.infura;
 
 
+import cz.msebera.android.httpclient.message.BasicHeader;
 import org.junit.Test;
 
-import cz.msebera.android.httpclient.message.BasicHeader;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;

@@ -1,20 +1,22 @@
 package org.web3j.protocol.infura;
 
-import javax.net.ssl.*;
-
+import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.List;
-
-import org.web3j.protocol.http.HttpService;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.ssl.SSLContexts;
+
+import org.web3j.protocol.http.HttpService;
 
 /**
  * HttpService for working with <a href="https://infura.io/">Infura</a> clients.

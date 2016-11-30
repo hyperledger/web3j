@@ -7,7 +7,6 @@ import java.util.Collections;
 import org.junit.Test;
 
 import org.web3j.abi.EventValues;
-import org.web3j.abi.ManagedTransaction;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
