@@ -17,7 +17,8 @@ public class Async {
             // CompletableFutures for Java 8
             executorService = Executors.newFixedThreadPool(additionalCpus);
         } else {
-            throw new RuntimeException("More then one core is required for operation");
+            //throw new RuntimeException("More then one core is required for operation");
+            executorService = Executors.newFixedThreadPool(1);
         }
     }
 
