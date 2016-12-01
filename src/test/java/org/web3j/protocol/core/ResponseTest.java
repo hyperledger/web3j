@@ -506,7 +506,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEthBlockFullTransactions() {
+    public void testEthBlockFullTransactionsParity() {
         buildResponse(
                 "{\n" +
                         "\"id\":1,\n" +
@@ -613,6 +613,118 @@ public class ResponseTest extends ResponseTester {
                 )
         );
         assertThat(ethBlock.getBlock(),
+                equalTo(block));
+    }
+
+    // Remove once Geth & Parity return the same v value in transactions
+    @Test
+    public void testEthBlockFullTransactionsGeth() {
+        buildResponse(
+                "{\n" +
+                        "\"id\":1,\n" +
+                        "\"jsonrpc\":\"2.0\",\n" +
+                        "\"result\": {\n" +
+                        "    \"number\": \"0x1b4\",\n" +
+                        "    \"hash\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\",\n" +
+                        "    \"parentHash\": \"0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5\",\n" +
+                        "    \"nonce\": \"0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2\",\n" +
+                        "    \"sha3Uncles\": \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n" +
+                        "    \"logsBloom\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\",\n" +
+                        "    \"transactionsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"stateRoot\": \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\",\n" +
+                        "    \"receiptsRoot\": \"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\n" +
+                        "    \"author\": \"0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6\",\n" +
+                        "    \"miner\": \"0x4e65fda2159562a496f9f3522f89122a3088497a\",\n" +
+                        "    \"mixHash\": \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n" +
+                        "    \"difficulty\": \"0x027f07\",\n" +
+                        "    \"totalDifficulty\":  \"0x027f07\",\n" +
+                        "    \"extraData\": \"0x0000000000000000000000000000000000000000000000000000000000000000\",\n" +
+                        "    \"size\":  \"0x027f07\",\n" +
+                        "    \"gasLimit\": \"0x9f759\",\n" +
+                        "    \"gasUsed\": \"0x9f759\",\n" +
+                        "    \"timestamp\": \"0x54e34e8e\",\n" +
+                        "    \"transactions\": [{" +
+                        "        \"hash\":\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n" +
+                        "        \"nonce\":\"0x\",\n" +
+                        "        \"blockHash\": \"0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b\",\n" +
+                        "        \"blockNumber\": \"0x15df\",\n" +
+                        "        \"transactionIndex\":  \"0x1\",\n" +
+                        "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n" +
+                        "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n" +
+                        "        \"value\":\"0x7f110\",\n" +
+                        "        \"gas\": \"0x7f110\",\n" +
+                        "        \"gasPrice\":\"0x09184e72a000\",\n" +
+                        "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\"," +
+                        "        \"creates\":null,\n" +
+                        "        \"publicKey\":\"0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b\",\n" +
+                        "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n" +
+                        "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n" +
+                        "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n" +
+                        "        \"v\":\"0x0\"\n" +
+                        "    }], \n" +
+                        "    \"uncles\": [\n" +
+                        "       \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n" +
+                        "       \"0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff\"\n" +
+                        "    ],\n" +
+                        "    \"sealFields\": [\n" +
+                        "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n" +
+                        "       \"0x39a3eb432fbef1fc\"\n" +
+                        "    ]\n" +
+                        "  }\n" +
+                        "}"
+        );
+
+        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        EthBlock.Block block = new EthBlock.Block(
+                "0x1b4",
+                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
+                "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
+                "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
+                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
+                "0x4e65fda2159562a496f9f3522f89122a3088497a",
+                "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
+                "0x027f07",
+                "0x027f07",
+                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "0x027f07",
+                "0x9f759",
+                "0x9f759",
+                "0x54e34e8e",
+                Arrays.asList(new EthBlock.TransactionObject(
+                                "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+                                "0x",
+                                "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
+                                "0x15df",
+                                "0x1",
+                                "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                                "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                                "0x7f110",
+                                "0x7f110",
+                                "0x09184e72a000",
+                                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                                null,
+                                "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
+                                "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                                "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
+                                "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                                (byte) 0
+                        )
+                ),
+                Arrays.asList(
+                        "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"
+                ),
+                Arrays.asList(
+                        "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
+                        "0x39a3eb432fbef1fc"
+                )
+        );
+        assertThat(ethBlock.getBlock().get(),
                 equalTo(block));
     }
 
