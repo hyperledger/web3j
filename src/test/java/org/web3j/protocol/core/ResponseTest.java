@@ -695,7 +695,7 @@ public class ResponseTest extends ResponseTester {
                 "0x9f759",
                 "0x9f759",
                 "0x54e34e8e",
-                Arrays.asList(new EthBlock.TransactionObject(
+                Arrays.<EthBlock.TransactionResult>asList(new EthBlock.TransactionObject(
                                 "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
                                 "0x",
                                 "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
@@ -724,7 +724,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
+        assertThat(ethBlock.getBlock(),
                 equalTo(block));
     }
 

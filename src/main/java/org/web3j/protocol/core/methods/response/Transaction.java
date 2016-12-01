@@ -193,7 +193,7 @@ public class Transaction {
     // https://github.com/ethereum/go-ethereum/issues/3339
     public void setV(Object v) {
         if (v instanceof String) {
-            this.v = Numeric.toBigInt((String) v).byteValueExact();
+            this.v = Numeric.toBigInt((String) v).byteValue();
         } else {
             this.v = ((Integer) v).byteValue();
         }
