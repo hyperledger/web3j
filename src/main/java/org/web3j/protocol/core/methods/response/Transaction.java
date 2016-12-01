@@ -184,8 +184,19 @@ public class Transaction {
         return v;
     }
 
-    public void setV(byte v) {
-        this.v = v;
+//    public void setV(byte v) {
+//        this.v = v;
+//    }
+
+    // Workaround until Geth & Parity return consistent values. At present
+    // Parity returns a byte value, Geth returns a hex-encoded string
+    // https://github.com/ethereum/go-ethereum/issues/3339
+    public void setV(Object v) {
+        if (v instanceof String) {
+            this.v = Numeric.toBigInt((String) v).byteValueExact();
+        } else {
+            this.v = ((Integer) v).byteValue();
+        }
     }
 
     @Override

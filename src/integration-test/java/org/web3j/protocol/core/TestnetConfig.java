@@ -22,13 +22,13 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public BigInteger validBlock() {
-        https://testnet.etherscan.io/block/1627453
-        return BigInteger.valueOf(1627453);
+        // https://testnet.etherscan.io/block/71032
+        return BigInteger.valueOf(71032);
     }
 
     @Override
     public BigInteger validBlockTransactionCount() {
-        return BigInteger.valueOf(7);
+        return BigInteger.valueOf(3);
     }
 
     @Override
