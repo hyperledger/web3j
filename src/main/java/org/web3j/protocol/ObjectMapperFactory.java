@@ -1,7 +1,7 @@
 package org.web3j.protocol;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
@@ -14,6 +14,7 @@ public class ObjectMapperFactory {
 
     static {
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public static ObjectMapper getObjectMapper() {
