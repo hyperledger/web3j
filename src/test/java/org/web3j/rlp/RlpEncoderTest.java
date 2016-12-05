@@ -26,6 +26,9 @@ public class RlpEncoderTest {
         assertThat(RlpEncoder.encode(RlpString.create("")),
                 is(new byte[]{ (byte) 0x80 }));
 
+        assertThat(RlpEncoder.encode(RlpString.create(new byte[] {})),
+                is(new byte[]{ (byte) 0x80 }));
+
         assertThat(RlpEncoder.encode(new RlpList()),
                 is(new byte[]{ (byte) 0xc0 }));
 

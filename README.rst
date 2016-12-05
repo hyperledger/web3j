@@ -357,4 +357,5 @@ Thanks and credits
 - And of course the users of the library, who've provided valuable input & feedback -
   `@ice09 <https://github.com/ice09>`_, `@adridadou <https://github.com/adridadou>`_,
   `@nickmelis <https://github.com/nickmelis>`_, `@basavk <https://github.com/basavk>`_,
-  `@kabl <https://github.com/kabl>`_, `@MaxBinnewies <https://github.com/MaxBinnewies>`_
+  `@kabl <https://github.com/kabl>`_, `@MaxBinnewies <https://github.com/MaxBinnewies>`_,
+  `@vikulin <https://github.com/vikulin>`_
