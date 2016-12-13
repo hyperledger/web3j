@@ -8,7 +8,7 @@ import org.web3j.protocol.core.Response;
 /**
  * eth_newFilter
  */
-public class EthNewFilter extends Response<String> {
+public class EthFilter extends Response<String> {
     public BigInteger getFilterId() {
         return Numeric.decodeQuantity(getResult());
     }

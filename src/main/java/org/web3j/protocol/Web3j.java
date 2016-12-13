@@ -9,6 +9,7 @@ import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.EthFilter;
 
 /**
  * JSON-RPC Request object building factory.
@@ -99,11 +100,11 @@ public interface Web3j {
 
     Request<?, EthCompileSerpent> ethCompileSerpent(String sourceCode);
 
-    Request<?, EthNewFilter> ethNewFilter(EthFilter ethFilter);
+    Request<?, EthFilter> ethNewFilter(org.web3j.protocol.core.methods.request.EthFilter ethFilter);
 
-    Request<?, EthNewBlockFilter> ethNewBlockFilter();
+    Request<?, EthFilter> ethNewBlockFilter();
 
-    Request<?, EthNewPendingTransactionFilter> ethNewPendingTransactionFilter();
+    Request<?, EthFilter> ethNewPendingTransactionFilter();
 
     Request<?, EthUninstallFilter> ethUninstallFilter(BigInteger filterId);
 
@@ -111,7 +112,7 @@ public interface Web3j {
 
     Request<?, EthLog> ethGetFilterLogs(BigInteger filterId);
 
-    Request<?, EthLog> ethGetLogs(EthFilter ethFilter);
+    Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter);
 
     Request<?, EthGetWork> ethGetWork();
 

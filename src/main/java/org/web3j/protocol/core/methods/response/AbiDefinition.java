@@ -80,7 +80,7 @@ public class AbiDefinition {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AbiDefinition)) return false;
 
         AbiDefinition that = (AbiDefinition) o;
 
@@ -144,7 +144,7 @@ public class AbiDefinition {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof NamedType)) return false;
 
             NamedType namedType = (NamedType) o;
 

@@ -35,7 +35,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof CompiledSolidity)) return false;
 
             CompiledSolidity that = (CompiledSolidity) o;
 
@@ -80,7 +80,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof Code)) return false;
 
             Code that = (Code) o;
 
@@ -191,7 +191,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof SolidityInfo)) return false;
 
             SolidityInfo that = (SolidityInfo) o;
 
@@ -248,7 +248,7 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof Documentation)) return false;
 
             Documentation that = (Documentation) o;
 

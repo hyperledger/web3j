@@ -11,6 +11,7 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.utils.Numeric;
 
 /**
@@ -439,33 +440,34 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthNewFilter> ethNewFilter(EthFilter ethFilter) {
+    public Request<?, EthFilter> ethNewFilter(
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<>(
                 "eth_newFilter",
                 Arrays.asList(ethFilter),
                 ID,
                 web3jService,
-                EthNewFilter.class);
+                EthFilter.class);
     }
 
     @Override
-    public Request<?, EthNewBlockFilter> ethNewBlockFilter() {
+    public Request<?, EthFilter> ethNewBlockFilter() {
         return new Request<>(
                 "eth_newBlockFilter",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                EthNewBlockFilter.class);
+                EthFilter.class);
     }
 
     @Override
-    public Request<?, EthNewPendingTransactionFilter> ethNewPendingTransactionFilter() {
+    public Request<?, EthFilter> ethNewPendingTransactionFilter() {
         return new Request<>(
                 "eth_newPendingTransactionFilter",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                EthNewPendingTransactionFilter.class);
+                EthFilter.class);
     }
 
     @Override
@@ -499,7 +501,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthLog> ethGetLogs(EthFilter ethFilter) {
+    public Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),

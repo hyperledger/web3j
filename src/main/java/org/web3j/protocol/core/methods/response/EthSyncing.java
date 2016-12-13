@@ -94,10 +94,11 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof Syncing)) return false;
 
             Syncing syncing = (Syncing) o;
 
+            if (isSyncing() != syncing.isSyncing()) return false;
             if (startingBlock != null ? !startingBlock.equals(syncing.startingBlock) : syncing.startingBlock != null)
                 return false;
             if (currentBlock != null ? !currentBlock.equals(syncing.currentBlock) : syncing.currentBlock != null)
@@ -113,6 +114,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         @Override
         public int hashCode() {
             int result = startingBlock != null ? startingBlock.hashCode() : 0;
+            result = 31 * result + Boolean.hashCode(isSyncing());
             result = 31 * result + (currentBlock != null ? currentBlock.hashCode() : 0);
             result = 31 * result + (highestBlock != null ? highestBlock.hashCode() : 0);
             result = 31 * result + (knownStates != null ? knownStates.hashCode() : 0);
