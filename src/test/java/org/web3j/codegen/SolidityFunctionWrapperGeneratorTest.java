@@ -28,29 +28,16 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.*;
 
 
-public class SolidityFunctionWrapperGeneratorTest {
-
-    private File tempDir;
-    private String tempDirPath;
+public class SolidityFunctionWrapperGeneratorTest extends GeneratorBase {
 
     private String solidityBaseDir;
 
-    @Before
+    @Override
     public void setUp() throws Exception {
-        tempDir = Files.createTempDirectory(
-                SolidityFunctionWrapperGeneratorTest.class.getSimpleName()).toFile();
-        tempDirPath = tempDir.getPath();
+        super.setUp();
 
         URL url = SolidityFunctionWrapperGeneratorTest.class.getClass().getResource("/solidity");
         solidityBaseDir = url.getPath();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        for (File file:tempDir.listFiles()) {
-            file.delete();
-        }
-        tempDir.delete();
     }
 
     @Test
