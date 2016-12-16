@@ -41,7 +41,7 @@ class TypeDecoder {
         } else if (Bool.class.isAssignableFrom(type)) {
             return (T) decodeBool(input);
         } else if (Bytes.class.isAssignableFrom(type)) {
-            return (T) decodeBytes(input, (Class<Bytes>) type);
+            return (T) decodeBytes(input, offset, (Class<Bytes>) type);
         } else if (DynamicBytes.class.isAssignableFrom(type)) {
             return (T) decodeDynamicBytes(input, offset);
         } else if (Utf8String.class.isAssignableFrom(type)) {
@@ -132,13 +132,17 @@ class TypeDecoder {
     }
 
     static <T extends Bytes> T decodeBytes(String input, Class<T> type) {
+    	return decodeBytes(input, 0, type);
+    }
+    
+    static <T extends Bytes> T decodeBytes(String input, int offset, Class<T> type) {
         try {
             String simpleName = type.getSimpleName();
             String[] splitName = simpleName.split(Bytes.class.getSimpleName());
             int length = Integer.parseInt(splitName[1]);
             int hexStringLength = length << 1;
 
-            byte[] bytes = Numeric.hexStringToByteArray(input.substring(0, hexStringLength));
+            byte[] bytes = Numeric.hexStringToByteArray(input.substring(offset, offset+hexStringLength));
             return type.getConstructor(byte[].class).newInstance(bytes);
         } catch (NoSuchMethodException | SecurityException |
                 InstantiationException | IllegalAccessException |
