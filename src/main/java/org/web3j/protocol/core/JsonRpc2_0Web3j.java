@@ -9,15 +9,13 @@ import java.util.concurrent.ExecutorService;
 import rx.Observable;
 
 import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.filters.*;
-import org.web3j.protocol.core.filters.Filter;
 import org.web3j.protocol.core.methods.request.*;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthFilter;
-import org.web3j.protocol.core.rx.JsonRpc2_0Rx;
+import org.web3j.protocol.rx.JsonRpc2_0Rx;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -31,7 +29,6 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     protected final Web3jService web3jService;
     private final JsonRpc2_0Rx web3jRx;
-    private final ExecutorService executorService;
     private final long blockTime;
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
@@ -42,7 +39,6 @@ public class JsonRpc2_0Web3j implements Web3j {
             Web3jService web3jService, long pollingInterval, ExecutorService executorService) {
         this.web3jService = web3jService;
         this.web3jRx = new JsonRpc2_0Rx(this, executorService);
-        this.executorService = executorService;
         this.blockTime = pollingInterval;
     }
 
@@ -467,26 +463,6 @@ public class JsonRpc2_0Web3j implements Web3j {
                 ID,
                 web3jService,
                 EthFilter.class);
-    }
-
-    public org.web3j.protocol.core.filters.Filter ethNewFilter(
-            org.web3j.protocol.core.methods.request.EthFilter ethFilter,
-            Callback<Log> callback) {
-        return run(new LogFilter(this, callback, ethFilter));
-    }
-
-    public org.web3j.protocol.core.filters.Filter ethNewBlockFilter(Callback<String> callback) {
-        return run(new BlockFilter(this, callback));
-    }
-
-    public org.web3j.protocol.core.filters.Filter ethNewPendingTransactionFilter(
-            Callback<String> callback) {
-        return run(new PendingTransactionFilter(this, callback));
-    }
-
-    private Filter run(Filter filter) {
-        executorService.submit(() -> filter.run(blockTime));
-        return filter;
     }
 
     @Override

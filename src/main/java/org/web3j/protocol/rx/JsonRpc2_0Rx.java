@@ -1,4 +1,4 @@
-package org.web3j.protocol.core.rx;
+package org.web3j.protocol.rx;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -72,7 +72,6 @@ public class JsonRpc2_0Rx {
         return ethPendingTransactionHashObservable(pollingInterval)
                 .flatMap(transactionHash ->
                         web3j.ethGetTransactionByHash(transactionHash).observable())
-                .filter(ethTransaction -> ethTransaction.getTransaction().isPresent())
                 .map(ethTransaction -> ethTransaction.getTransaction().get());
     }
 

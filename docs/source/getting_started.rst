@@ -77,6 +77,14 @@ To send asynchronous requests using a Future::
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
 
+To use an RxJava Observable::
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   web3j.web3ClientVersion().observable().subscribe(x -> {
+       String clientVersion = x.getWeb3ClientVersion();
+       ...
+   });
+
 To send synchronous requests::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
@@ -85,10 +93,51 @@ To send synchronous requests::
 
 **Note:** for Android use:
 
-.. code-block:: java
-
    Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
    ...
+
+
+Filters
+-------
+
+web3j functional-reactive nature makes it really simple to setup observers that notify subscribers
+of events taking place on the blockchain.
+
+To receive all new blocks as they are added to the blockchain::
+
+   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+       ...
+   });
+
+To receive all new transactions as they are added to the blockchain::
+
+   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+       ...
+   });
+
+To receive all pending transactions as they are submitted to the network (i.e. before they have
+been grouped into a block together)::
+
+   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+       ...
+   });
+
+Topic filters are also supported::
+
+   EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
+           DefaultBlockParameterName.LATEST, <contract-address>)
+                .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
+   web3j.ethLogObservable(filter).subscribe(log -> {
+       ...
+   });
+
+Subscriptions should always be cancelled when no longer required::
+
+   subscription.unsubscribe();
+
+**Note:** filters are not supported on Infura.
+
+For further information refer to :doc:`filters`.
 
 
 Transactions

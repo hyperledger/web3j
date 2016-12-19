@@ -1,4 +1,4 @@
-package org.web3j.protocol.core.rx;
+package org.web3j.protocol.rx;
 
 import rx.Observable;
 

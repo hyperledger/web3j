@@ -24,7 +24,7 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
-web3j is a lightweight, type safe Java and Android library for integrating with clients (nodes) on
+web3j is a lightweight, reactive, type safe Java and Android library for integrating with clients (nodes) on
 the Ethereum network:
 
 .. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j_network.png
@@ -40,6 +40,7 @@ Features
 - Ethereum wallet support
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
+- Reactive-functional API for working with filters
 - Support for Parity's
   `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
@@ -48,8 +49,9 @@ Features
 - Command line tools
 - Android compatible
 
-It only has five runtime dependencies:
+It has six runtime dependencies:
 
+- `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
@@ -143,6 +145,16 @@ To send asynchronous requests using a Future:
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
+To use an RxJava Observable:
+
+.. code-block:: java
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   web3j.web3ClientVersion().observable().subscribe(x -> {
+       String clientVersion = x.getWeb3ClientVersion();
+       ...
+   });
+
 
 To send synchronous requests:
 
@@ -158,6 +170,60 @@ To send synchronous requests:
 
    Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
    ...
+
+
+Filters
+-------
+
+web3j functional-reactive nature makes it really simple to setup observers that notify subscribers
+of events taking place on the blockchain.
+
+To receive all new blocks as they are added to the blockchain:
+
+.. code-block:: java
+
+   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+       ...
+   });
+
+To receive all new transactions as they are added to the blockchain:
+
+.. code-block:: java
+
+   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+       ...
+   });
+
+To receive all pending transactions as they are submitted to the network (i.e. before they have
+been grouped into a block together):
+
+.. code-block:: java
+
+   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+       ...
+   });
+
+Topic filters are also supported:
+
+.. code-block:: java
+
+   EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
+           DefaultBlockParameterName.LATEST, <contract-address>)
+                .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
+   web3j.ethLogObservable(filter).subscribe(log -> {
+       ...
+   });
+
+Subscriptions should always be cancelled when no longer required:
+
+.. code-block:: java
+
+   subscription.unsubscribe();
+
+**Note:** filters are not supported on Infura.
+
+For further information refer to `Filters and Events <http://docs.web3j.io/filters.html`_.
+
 
 Transactions
 ------------
