@@ -1,7 +1,9 @@
 package org.web3j.protocol;
 
 import java.math.BigInteger;
+import java.util.concurrent.ExecutorService;
 
+import org.web3j.protocol.core.rx.Web3jRx;
 import org.web3j.protocol.core.methods.request.*;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.ShhPost;
@@ -14,9 +16,13 @@ import org.web3j.protocol.core.methods.response.EthFilter;
 /**
  * JSON-RPC Request object building factory.
  */
-public interface Web3j {
+public interface Web3j extends Web3jRx {
     static Web3j build(Web3jService web3jService) {
         return new JsonRpc2_0Web3j(web3jService);
+    }
+
+    static Web3j build(Web3jService web3jService, long pollingInterval, ExecutorService executorService) {
+        return new JsonRpc2_0Web3j(web3jService, pollingInterval, executorService);
     }
 
     Request<?, Web3ClientVersion> web3ClientVersion();
@@ -80,17 +86,18 @@ public interface Web3j {
 
     Request<?, EthTransaction> ethGetTransactionByHash(String transactionHash);
 
-    Request<?, EthTransaction> ethGetTransactionByBlockHashAndIndex(String blockHash, BigInteger transactionIndex);
+    Request<?, EthTransaction> ethGetTransactionByBlockHashAndIndex(
+            String blockHash, BigInteger transactionIndex);
 
-    Request<?, EthTransaction> ethGetTransactionByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter,
-                                                   BigInteger transactionIndex);
+    Request<?, EthTransaction> ethGetTransactionByBlockNumberAndIndex(
+            DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex);
 
     Request<?, EthGetTransactionReceipt> ethGetTransactionReceipt(String transactionHash);
 
     Request<?, EthBlock> ethGetUncleByBlockHashAndIndex(String blockHash, BigInteger transactionIndex);
 
-    Request<?, EthBlock> ethGetUncleByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter,
-                                             BigInteger transactionIndex);
+    Request<?, EthBlock> ethGetUncleByBlockNumberAndIndex(
+            DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex);
 
     Request<?, EthGetCompilers> ethGetCompilers();
 

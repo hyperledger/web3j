@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
@@ -363,7 +362,8 @@ public class CoreIT {
 
     @Test
     public void testFiltersByFilterId() throws Exception {
-        EthFilter ethFilter = new EthFilter(
+        org.web3j.protocol.core.methods.request.EthFilter ethFilter =
+                new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST,
                 config.validContractAddress());
@@ -372,7 +372,7 @@ public class CoreIT {
         ethFilter.addSingleTopic(eventSignature);
 
         // eth_newFilter
-        EthNewFilter ethNewFilter = web3j.ethNewFilter(ethFilter).send();
+        EthFilter ethNewFilter = web3j.ethNewFilter(ethFilter).send();
         BigInteger filterId = ethNewFilter.getFilterId();
 
         // eth_getFilterLogs
@@ -391,20 +391,20 @@ public class CoreIT {
 
     @Test
     public void testEthNewBlockFilter() throws Exception {
-        EthNewBlockFilter ethNewBlockFilter = web3j.ethNewBlockFilter().send();
+        EthFilter ethNewBlockFilter = web3j.ethNewBlockFilter().send();
         assertNotNull(ethNewBlockFilter.getFilterId());
     }
 
     @Test
     public void testEthNewPendingTransactionFilter() throws Exception {
-        EthNewPendingTransactionFilter ethNewPendingTransactionFilter =
+        EthFilter ethNewPendingTransactionFilter =
                 web3j.ethNewPendingTransactionFilter().send();
         assertNotNull(ethNewPendingTransactionFilter.getFilterId());
     }
 
     @Test
     public void testEthGetLogs() throws Exception {
-        EthFilter ethFilter = new EthFilter(
+        org.web3j.protocol.core.methods.request.EthFilter ethFilter = new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST,
                 config.validContractAddress()

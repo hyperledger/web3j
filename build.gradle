@@ -26,7 +26,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '1.0.9'
+version '1.1.0'
 
 sourceCompatibility = 1.8
 
@@ -88,7 +88,8 @@ dependencies {
             'com.fasterxml.jackson.core:jackson-databind:2.8.1',
             'org.bouncycastle:bcprov-jdk15on:1.54',
             'com.lambdaworks:scrypt:1.4.0',
-            'com.squareup:javapoet:1.7.0'
+            'com.squareup:javapoet:1.7.0',
+            'io.reactivex:rxjava:1.2.4'
     testCompile 'junit:junit:4.11',
             'org.mockito:mockito-core:1.10.19',
             'nl.jqno.equalsverifier:equalsverifier:2.1.7'

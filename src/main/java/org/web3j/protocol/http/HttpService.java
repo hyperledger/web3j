@@ -81,7 +81,7 @@ public class HttpService implements Web3jService {
 
     protected void addHeaders(List<Header> headers) { }
 
-    public <T> ResponseHandler<T> getResponseHandler(Class<T> type) {
+    public <T extends Response> ResponseHandler<T> getResponseHandler(Class<T> type) {
         return response -> {
             int status = response.getStatusLine().getStatusCode();
             if (status >= 200 && status < 300) {
