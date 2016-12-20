@@ -286,7 +286,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'web3j', u'web3j Documentation',
-     author, 'web3j', 'One line description of project.',
+     author, 'web3j', 'Lightweight Java library for integration with Ethereum clients.',
      'Miscellaneous'),
 ]
 

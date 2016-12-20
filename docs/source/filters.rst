@@ -106,7 +106,7 @@ In addition to *send()* and *sendAsync*, all JSON-RPC method implementations in 
 very straight forwards to compose JSON-RPC calls together into new functions.
 
 For instance, the
-`blockObservable <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/rx/JsonRpc2_0Rx.java>`_ is
+`blockObservable <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/JsonRpc2_0Rx.java>`_ is
 itself composed of a number of separate JSON-RPC calls::
 
    public Observable<EthBlock> blockObservable(
