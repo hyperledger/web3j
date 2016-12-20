@@ -11,7 +11,7 @@ import org.web3j.abi.datatypes.*;
 /**
  * Generator class for creating all the different numeric type variants.
  */
-public class AbiTypesMapperGenerator extends Generator {
+public class AbiTypesMapperGenerator {
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
             "<strong>Do not modifiy!</strong><br>\n" +

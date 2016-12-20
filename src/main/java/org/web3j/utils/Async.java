@@ -1,6 +1,10 @@
 package org.web3j.utils;
 
-import java.util.concurrent.*;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Async task facilitation.
