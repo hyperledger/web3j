@@ -81,7 +81,7 @@ on. Where the individual topics represent indexed parameters on the smart contra
 
    EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
            DefaultBlockParameterName.LATEST, <contract-address>)
-                .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
+                [.addSingleTopic(...) | .addOptionalTopics(..., ...) | ...];
 
 This filter can then be created using a similar syntax to the block and transaction filters above::
 
