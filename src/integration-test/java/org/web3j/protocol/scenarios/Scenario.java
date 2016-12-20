@@ -31,8 +31,9 @@ import static junit.framework.TestCase.fail;
  */
 public class Scenario {
 
-    static final BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
-    static final BigInteger GAS_LIMIT = BigInteger.valueOf(2000000);
+    // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
+    static final BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+    static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
 
     // testnet
     private static final String WALLET_PASSWORD = "";

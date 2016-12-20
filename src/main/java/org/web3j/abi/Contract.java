@@ -26,7 +26,8 @@ import org.web3j.utils.Async;
  */
 public abstract class Contract extends ManagedTransaction {
 
-    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(3000000);
+    // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
+    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
 
     private String contractAddress;
 

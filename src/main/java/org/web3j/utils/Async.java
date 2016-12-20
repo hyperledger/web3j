@@ -8,7 +8,7 @@ import java.util.concurrent.*;
 public class Async {
 
     private static ExecutorService executorService;
-    
+
     static {
         executorService = Executors.newFixedThreadPool(getCpuCount());
     }
@@ -19,5 +19,9 @@ public class Async {
 
     private static int getCpuCount() {
         return Runtime.getRuntime().availableProcessors();
+    }
+
+    public static ExecutorService defaultExecutorService() {
+        return executorService;
     }
 }

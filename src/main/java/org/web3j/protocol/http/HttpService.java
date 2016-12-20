@@ -19,8 +19,8 @@ import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicHeader;
 
-import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.utils.Async;
@@ -84,7 +84,7 @@ public class HttpService implements Web3jService {
     protected void addHeaders(List<Header> headers) { }
 
 
-    public <T> ResponseHandler<T> getResponseHandler(final Class<T> type) {
+    public <T extends Response> ResponseHandler<T> getResponseHandler(final Class<T> type) {
         return new ResponseHandler<T>() {
             @Override
             public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {

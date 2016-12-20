@@ -283,7 +283,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof Block)) return false;
 
             Block that = (Block) o;
 
@@ -381,7 +381,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof TransactionHash)) return false;
 
             TransactionHash that = (TransactionHash) o;
 

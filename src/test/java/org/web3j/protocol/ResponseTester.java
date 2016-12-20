@@ -16,9 +16,10 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import org.web3j.protocol.core.Response;
 import org.web3j.protocol.http.HttpService;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -49,7 +50,7 @@ public abstract class ResponseTester {
         when(httpResponse.getEntity()).thenReturn(entity);
     }
 
-    protected <T> T deserialiseResponse(Class<T> type) {
+    protected <T extends Response> T deserialiseResponse(Class<T> type) {
         T response = null;
         try {
             response = web3jService.getResponseHandler(type).handleResponse(httpResponse);

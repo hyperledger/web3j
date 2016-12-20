@@ -21,11 +21,15 @@ public class AbiTypesGenerator extends Generator {
             "Please use {@link " + AbiTypesGenerator.class.getName() + "} to update.</p>\n";
 
     public static void main(String[] args) throws Exception {
-        new AbiTypesGenerator()
-            .generate();
+        AbiTypesGenerator abiTypesGenerator = new AbiTypesGenerator();
+        if (args.length == 1) {
+            abiTypesGenerator.generate(args[0]);
+        } else {
+            abiTypesGenerator.generate(System.getProperty("user.dir") + "/src/main/java/");
+        }
     }
 
-    private void generate() throws IOException {
+    private void generate(String destinationDir) throws IOException {
         File path = new File(System.getProperty("user.dir") + "/src/main/java/");
 
         generateIntTypes(Int.class, path);

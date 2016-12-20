@@ -996,7 +996,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEthNewFilter() {
+    public void testEthFilter() {
         buildResponse(
                 "{\n" +
                         "  \"id\":1,\n" +
@@ -1005,37 +1005,8 @@ public class ResponseTest extends ResponseTester {
                         "}"
         );
 
-        EthNewFilter ethNewFilter = deserialiseResponse(EthNewFilter.class);
-        assertThat(ethNewFilter.getFilterId(), is(BigInteger.valueOf(1)));
-    }
-
-    @Test
-    public void testEthNewBlockFilter() {
-        buildResponse(
-                "{\n" +
-                        "  \"id\":1,\n" +
-                        "  \"jsonrpc\": \"2.0\",\n" +
-                        "  \"result\": \"0x1\"\n" +
-                        "}"
-        );
-
-        EthNewBlockFilter ethNewBlockFilter = deserialiseResponse(EthNewBlockFilter.class);
-        assertThat(ethNewBlockFilter.getFilterId(), is(BigInteger.valueOf(1)));
-    }
-
-    @Test
-    public void testEthNewPendingTransactionFilter() {
-        buildResponse(
-                "{\n" +
-                        "  \"id\":1,\n" +
-                        "  \"jsonrpc\": \"2.0\",\n" +
-                        "  \"result\": \"0x1\"\n" +
-                        "}"
-        );
-
-        EthNewPendingTransactionFilter ethNewPendingTransactionFilter =
-                deserialiseResponse(EthNewPendingTransactionFilter.class);
-        assertThat(ethNewPendingTransactionFilter.getFilterId(), is(BigInteger.valueOf(1)));
+        EthFilter ethFilter = deserialiseResponse(EthFilter.class);
+        assertThat(ethFilter.getFilterId(), is(BigInteger.valueOf(1)));
     }
 
     @Test

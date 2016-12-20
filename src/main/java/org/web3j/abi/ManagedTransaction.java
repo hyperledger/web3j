@@ -18,8 +18,8 @@ import org.web3j.utils.Numeric;
  */
 public abstract class ManagedTransaction {
 
-    // Sensible default as of November 2016...
-    public static final BigInteger GAS_PRICE = BigInteger.valueOf(22000000000L);
+    // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
+    public static final BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
 
     private static final int SLEEP_DURATION = 15000;
     private static final int ATTEMPTS = 40;

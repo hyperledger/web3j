@@ -16,7 +16,7 @@ import org.web3j.utils.Numeric;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class RawTransactionEncoderTest {
+public class TransactionEncoderTest {
 
     @Test
     public void testSignMessage() {
@@ -48,6 +48,24 @@ public class RawTransactionEncoderTest {
                 CoreMatchers.<RlpType>is(RlpString.create("")));
     }
 
+    @Test
+    public void testEip155Encode() {
+        assertThat(TransactionEncoder.encode(createEip155RawTransaction(), (byte) 1),
+                is(Numeric.hexStringToByteArray("0xec098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a764000080018080")));
+    }
+
+    @Test
+    public void testEip155Transaction() {
+        // https://github.com/ethereum/EIPs/issues/155
+        Credentials credentials = Credentials.create(
+                "0x4646464646464646464646464646464646464646464646464646464646464646");
+
+        assertThat(TransactionEncoder.signMessage(
+                createEip155RawTransaction(), (byte) 1, credentials),
+                is(Numeric.hexStringToByteArray(
+                        "0xf86c098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83")));
+    }
+
     private static RawTransaction createEtherTransaction() {
         return RawTransaction.createEtherTransaction(
                 BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, "0xadd5355",
@@ -58,5 +76,12 @@ public class RawTransactionEncoderTest {
         return RawTransaction.createContractTransaction(
                 BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, BigInteger.valueOf(Long.MAX_VALUE),
                 "01234566789");
+    }
+
+    public static RawTransaction createEip155RawTransaction() {
+        return RawTransaction.createEtherTransaction(
+                BigInteger.valueOf(9), BigInteger.valueOf(20000000000L),
+                BigInteger.valueOf(21000), "0x3535353535353535353535353535353535353535",
+                BigInteger.valueOf(1000000000000000000L));
     }
 }

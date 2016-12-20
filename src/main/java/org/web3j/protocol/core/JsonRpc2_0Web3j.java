@@ -4,6 +4,9 @@ package org.web3j.protocol.core;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+
+import rx.Observable;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.methods.request.*;
@@ -11,6 +14,9 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.EthFilter;
+import org.web3j.protocol.rx.JsonRpc2_0Rx;
+import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
 /**
@@ -19,11 +25,21 @@ import org.web3j.utils.Numeric;
 public class JsonRpc2_0Web3j implements Web3j {
 
     protected static final long ID = 1;
-    
-    protected Web3jService web3jService;
+    static final int BLOCK_TIME = 15 * 1000;
+
+    protected final Web3jService web3jService;
+    private final JsonRpc2_0Rx web3jRx;
+    private final long blockTime;
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
+        this(web3jService, BLOCK_TIME, Async.defaultExecutorService());
+    }
+
+    public JsonRpc2_0Web3j(
+            Web3jService web3jService, long pollingInterval, ExecutorService executorService) {
         this.web3jService = web3jService;
+        this.web3jRx = new JsonRpc2_0Rx(this, executorService);
+        this.blockTime = pollingInterval;
     }
 
     @Override
@@ -439,33 +455,34 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthNewFilter> ethNewFilter(EthFilter ethFilter) {
-        return new Request<EthFilter, EthNewFilter>(
+    public Request<?, EthFilter> ethNewFilter(
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+        return new Request<>(
                 "eth_newFilter",
                 Arrays.asList(ethFilter),
                 ID,
                 web3jService,
-                EthNewFilter.class);
+                EthFilter.class);
     }
 
     @Override
-    public Request<?, EthNewBlockFilter> ethNewBlockFilter() {
-        return new Request<String, EthNewBlockFilter>(
+    public Request<?, EthFilter> ethNewBlockFilter() {
+        return new Request<String, EthFilter>(
                 "eth_newBlockFilter",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                EthNewBlockFilter.class);
+                EthFilter.class);
     }
 
     @Override
     public Request<?, EthNewPendingTransactionFilter> ethNewPendingTransactionFilter() {
-        return new Request<String, EthNewPendingTransactionFilter>(
+        return new Request<String, EthFilter>(
                 "eth_newPendingTransactionFilter",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                EthNewPendingTransactionFilter.class);
+                EthFilter.class);
     }
 
     @Override
@@ -499,7 +516,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthLog> ethGetLogs(EthFilter ethFilter) {
+    public Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<EthFilter, EthLog>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),
@@ -677,5 +694,38 @@ public class JsonRpc2_0Web3j implements Web3j {
                 ID,
                 web3jService,
                 ShhMessages.class);
+    }
+
+    @Override
+    public Observable<String> ethBlockHashObservable() {
+        return web3jRx.ethBlockHashObservable(blockTime);
+    }
+
+    @Override
+    public Observable<String> ethPendingTransactionHashObservable() {
+        return web3jRx.ethPendingTransactionHashObservable(blockTime);
+    }
+
+    @Override
+    public Observable<Log> ethLogObservable(
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+        return web3jRx.ethLogObservable(ethFilter, blockTime);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+            transactionObservable() {
+        return web3jRx.transactionObservable(blockTime);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+            pendingTransactionObservable() {
+        return web3jRx.pendingTransactionObservable(blockTime);
+    }
+
+    @Override
+    public Observable<EthBlock> blockObservable(boolean fullTransactionObjects) {
+        return web3jRx.blockObservable(fullTransactionObjects, blockTime);
     }
 }

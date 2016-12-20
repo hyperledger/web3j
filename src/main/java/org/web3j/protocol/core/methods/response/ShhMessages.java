@@ -125,7 +125,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof SshMessage)) return false;
 
             SshMessage that = (SshMessage) o;
 

@@ -57,7 +57,7 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof RequestsToConfirm)) return false;
 
             RequestsToConfirm that = (RequestsToConfirm) o;
 
@@ -96,7 +96,7 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof SignPayload)) return false;
 
             SignPayload signPayload = (SignPayload) o;
 
@@ -140,7 +140,7 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof SignRequest)) return false;
 
             SignRequest that = (SignRequest) o;
 
@@ -178,7 +178,7 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof TransactionPayload)) return false;
 
             TransactionPayload that = (TransactionPayload) o;
 
@@ -252,7 +252,7 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (!(o instanceof TransactionRequestType)) return false;
 
             TransactionRequestType that = (TransactionRequestType) o;
 

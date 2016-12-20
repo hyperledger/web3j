@@ -3,8 +3,8 @@
 web3j
 =====
 
-web3j is a lightweight, type safe Java and Android library for integrating with clients (nodes) on
-the Ethereum network:
+web3j is a lightweight, reactive, type safe Java and Android library for integrating with clients
+(nodes) on the Ethereum network:
 
 .. image:: /images/web3j_network.png
 
@@ -18,6 +18,7 @@ Features
 - Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
   client API
 - Ethereum wallet support
+- Reactive-functional API for working with filters
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
 - Support for Parity's
@@ -32,8 +33,9 @@ Features
 Dependencies
 ============
 
-It only has five runtime dependencies:
+It has six runtime dependencies:
 
+- `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
@@ -53,7 +55,6 @@ Contents:
    transactions.rst
    smart_contracts.rst
    filters.rst
-   callbacks.rst
    rlp.rst
    abi.rst
    command_line.rst

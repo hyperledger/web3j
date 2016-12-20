@@ -16,7 +16,6 @@ import com.squareup.javapoet.TypeName;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
@@ -31,32 +30,16 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.*;
 
 
-public class SolidityFunctionWrapperGeneratorTest {
-
-    private File tempDir;
-    private String tempDirPath;
+public class SolidityFunctionWrapperGeneratorTest extends GeneratorBase {
 
     private String solidityBaseDir;
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
-    @Before
+    @Override
     public void setUp() throws Exception {
-        tempDir = folder.newFolder(
-                SolidityFunctionWrapperGeneratorTest.class.getSimpleName());
-        tempDirPath = tempDir.getPath();
+        super.setUp();
 
         URL url = SolidityFunctionWrapperGeneratorTest.class.getClass().getResource("/solidity");
         solidityBaseDir = url.getPath();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        for (File file:tempDir.listFiles()) {
-            file.delete();
-        }
-        tempDir.delete();
     }
 
     @Test
