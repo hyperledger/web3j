@@ -45,8 +45,8 @@
             
   <div class="section" id="web3j">
 <h1>web3j<a class="headerlink" href="#web3j" title="Permalink to this headline">¶</a></h1>
-<p>web3j is a lightweight, type safe Java and Android library for integrating with clients (nodes) on
-the Ethereum network:</p>
+<p>web3j is a lightweight, reactive, type safe Java and Android library for integrating with clients
+(nodes) on the Ethereum network:</p>
 <img alt="_images/web3j_network.png" src="_images/web3j_network.png" />
 <p>This allows you to work with the <a class="reference external" href="https://www.ethereum.org/">Ethereum</a> blockchain, without the
 additional overhead of having to write your own integration code for the platform.</p>
@@ -57,6 +57,7 @@ additional overhead of having to write your own integration code for the platfor
 <li>Complete implementation of Ethereum&#8217;s <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC">JSON-RPC</a>
 client API</li>
 <li>Ethereum wallet support</li>
+<li>Reactive-functional API for working with filters</li>
 <li>Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
 contracts from native Java code</li>
 <li>Support for Parity&#8217;s
@@ -70,8 +71,9 @@ contracts from native Java code</li>
 </div>
 <div class="section" id="dependencies">
 <h1>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h1>
-<p>It only has five runtime dependencies:</p>
+<p>It has six runtime dependencies:</p>
 <ul class="simple">
+<li><a class="reference external" href="https://github.com/ReactiveX/RxJava">RxJava</a> for its reactive-functional API</li>
 <li><a class="reference external" href="https://hc.apache.org/httpcomponents-client-ga/index.html">Apache HTTP Client</a></li>
 <li><a class="reference external" href="https://github.com/FasterXML/jackson-core">Jackson Core</a> for fast JSON
 serialisation/deserialisation</li>
@@ -89,6 +91,7 @@ serialisation/deserialisation</li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#gradle">Gradle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#start-a-client">Start a client</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#start-sending-requests">Start sending requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#filters">Filters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#transactions">Transactions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#working-with-smart-contracts-with-java-smart-contract-wrappers">Working with smart contracts with Java smart contract wrappers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#further-details">Further details</a></li>
@@ -124,7 +127,13 @@ serialisation/deserialisation</li>
 <li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters and Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filters.html#block-and-transaction-filters">Block and transaction filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters.html#topic-filters-and-evm-events">Topic filters and EVM events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters.html#a-note-on-functional-composition">A note on functional composition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters.html#further-examples">Further examples</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="command_line.html#wallet-tools">Wallet tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="command_line.html#solidity-smart-contract-wrapper-generator">Solidity smart contract wrapper generator</a></li>
@@ -215,7 +224,7 @@ serialisation/deserialisation</li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters and Events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>

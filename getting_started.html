@@ -53,7 +53,7 @@
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>1.0.9<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.1.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -61,7 +61,7 @@
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core-android<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>1.0.9<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.1.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -69,11 +69,11 @@
 <div class="section" id="gradle">
 <h2>Gradle<a class="headerlink" href="#gradle" title="Permalink to this headline">¶</a></h2>
 <p>Java 8:</p>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:1.0.9&#39;</span><span class="o">)</span>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:1.1.0&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Android:</p>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core-android:1.0.9&#39;</span><span class="o">)</span>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core-android:1.1.0&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
@@ -102,6 +102,14 @@
 <span class="n">String</span> <span class="n">clientVersion</span> <span class="o">=</span> <span class="n">web3ClientVersion</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">();</span>
 </pre></div>
 </div>
+<p>To use an RxJava Observable:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<span class="n">web3j</span><span class="o">.</span><span class="na">web3ClientVersion</span><span class="o">().</span><span class="na">observable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">clientVersion</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">();</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
 <p>To send synchronous requests:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Web3ClientVersion</span> <span class="n">web3ClientVersion</span> <span class="o">=</span> <span class="n">web3</span><span class="o">.</span><span class="na">web3ClientVersion</span><span class="o">().</span><span class="na">send</span><span class="o">();</span>
@@ -109,10 +117,48 @@
 </pre></div>
 </div>
 <p><strong>Note:</strong> for Android use:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3jFactory</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
-<span class="o">...</span>
+<blockquote>
+<div>Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to <a class="reference external" href="http://localhost:8545/">http://localhost:8545/</a>
+...</div></blockquote>
+</div>
+<div class="section" id="filters">
+<h2>Filters<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h2>
+<p>web3j functional-reactive nature makes it really simple to setup observers that notify subscribers
+of events taking place on the blockchain.</p>
+<p>To receive all new blocks as they are added to the blockchain:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">blockObservable</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
 </pre></div>
 </div>
+<p>To receive all new transactions as they are added to the blockchain:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">transactionObservable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>To receive all pending transactions as they are submitted to the network (i.e. before they have
+been grouped into a block together):</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">pendingTransactionObservable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>Topic filters are also supported:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">EthFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EthFilter</span><span class="o">(</span><span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">EARLIEST</span><span class="o">,</span>
+        <span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">LATEST</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">contract</span><span class="o">-</span><span class="n">address</span><span class="o">&gt;)</span>
+             <span class="o">.</span><span class="na">addSingleTopic</span><span class="o">(...)|.</span><span class="na">addOptionalTopics</span><span class="o">(...,</span> <span class="o">...)|...;</span>
+<span class="n">web3j</span><span class="o">.</span><span class="na">ethLogObservable</span><span class="o">(</span><span class="n">filter</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">log</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>Subscriptions should always be cancelled when no longer required:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">subscription</span><span class="o">.</span><span class="na">unsubscribe</span><span class="o">();</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> filters are not supported on Infura.</p>
+<p>For further information refer to <a class="reference internal" href="filters.html"><em>Filters and Events</em></a>.</p>
 </div>
 <div class="section" id="transactions">
 <h2>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h2>
@@ -278,6 +324,7 @@ For simple results, you can obtain the quantity as a String via
 <li class="toctree-l2"><a class="reference internal" href="#gradle">Gradle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#start-a-client">Start a client</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#start-sending-requests">Start sending requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filters">Filters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transactions">Transactions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#working-with-smart-contracts-with-java-smart-contract-wrappers">Working with smart contracts with Java smart contract wrappers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#further-details">Further details</a></li>
@@ -285,7 +332,7 @@ For simple results, you can obtain the quantity as a String via
 </li>
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters and Events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
