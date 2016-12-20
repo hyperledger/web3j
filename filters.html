@@ -114,7 +114,7 @@ the smart contract you wish to apply the filter to. You can also provide specifi
 on. Where the individual topics represent indexed parameters on the smart contract:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">EthFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EthFilter</span><span class="o">(</span><span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">EARLIEST</span><span class="o">,</span>
         <span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">LATEST</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">contract</span><span class="o">-</span><span class="n">address</span><span class="o">&gt;)</span>
-             <span class="o">.</span><span class="na">addSingleTopic</span><span class="o">(...)|.</span><span class="na">addOptionalTopics</span><span class="o">(...,</span> <span class="o">...)|...;</span>
+             <span class="o">[.</span><span class="na">addSingleTopic</span><span class="o">(...)</span> <span class="o">|</span> <span class="o">.</span><span class="na">addOptionalTopics</span><span class="o">(...,</span> <span class="o">...)</span> <span class="o">|</span> <span class="o">...];</span>
 </pre></div>
 </div>
 <p>This filter can then be created using a similar syntax to the block and transaction filters above:</p>
