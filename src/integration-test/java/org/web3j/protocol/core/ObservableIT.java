@@ -7,8 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.http.HttpService;
 
@@ -31,7 +34,7 @@ public class ObservableIT {
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService());
+        this.web3j = Web3jFactory.build(new HttpService());
     }
 
     @Test
@@ -55,13 +58,28 @@ public class ObservableIT {
     }
 
     private <T> void run(Observable<T> observable) throws Exception {
-        CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
-        CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
+        final CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
+        final CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
 
         Subscription subscription = observable.subscribe(
-                x -> countDownLatch.countDown(),
-                Throwable::printStackTrace,
-                completedLatch::countDown
+                new Action1<T>() {
+                    @Override
+                    public void call(final T x) {
+                        countDownLatch.countDown();
+                    }
+                },
+                new Action1<Throwable>() {
+                    @Override
+                    public void call(final Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                },
+                new Action0() {
+                    @Override
+                    public void call() {
+                        completedLatch.countDown();
+                    }
+                }
         );
 
         countDownLatch.await(5, TimeUnit.MINUTES);

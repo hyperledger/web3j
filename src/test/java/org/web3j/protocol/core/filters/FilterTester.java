@@ -3,15 +3,18 @@ package org.web3j.protocol.core.filters;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
@@ -19,7 +22,6 @@ import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -39,7 +41,7 @@ public abstract class FilterTester {
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService, 1000, executorService);
+        web3j = Web3jFactory.build(web3jService, 1000, executorService);
     }
 
     <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {
@@ -53,12 +55,12 @@ public abstract class FilterTester {
         EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 
-        List<T> expected = createExpected(ethLog);
-        Set<T> results = Collections.synchronizedSet(new HashSet<T>());
+        final List<T> expected = createExpected(ethLog);
+        final Set<T> results = Collections.synchronizedSet(new HashSet<T>());
 
-        CountDownLatch transactionLatch = new CountDownLatch(expected.size());
+        final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
 
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
         when(web3jService.sendAsync(any(Request.class), eq(EthFilter.class)))
                 .thenReturn(future(ethFilter));
@@ -68,15 +70,28 @@ public abstract class FilterTester {
                 .thenReturn(future(ethUninstallFilter));
 
         Subscription subscription = observable.subscribe(
-                result -> {
-                    results.add(result);
-                    transactionLatch.countDown();
+                new Action1<T>() {
+                    @Override
+                    public void call(T result) {
+                        results.add(result);
+                        transactionLatch.countDown();
+                    }
                 },
-                throwable -> fail(throwable.getMessage()),
-                () -> completedLatch.countDown());
+                new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        fail(throwable.getMessage());
+                    }
+                },
+                new Action0() {
+                    @Override
+                    public void call() {
+                        completedLatch.countDown();
+                    }
+                });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(new HashSet<>(expected)));
+        assertThat(results, CoreMatchers.<Set<T>>equalTo(new HashSet<T>(expected)));
 
         subscription.unsubscribe();
 
@@ -90,13 +105,19 @@ public abstract class FilterTester {
             fail("Results cannot be empty");
         }
 
-        return ethLog.getLogs().stream()
-                .map(t -> t.get()).collect(Collectors.toList());
+        List expected = new ArrayList();
+        for (EthLog.LogResult logResult : ethLog.getLogs()) {
+            expected.add(logResult.get());
+        }
+        return expected;
     }
 
-    private <T extends Response> CompletableFuture<T> future(T value) {
-        CompletableFuture<T> future = new CompletableFuture<>();
-        executorService.submit((Runnable) () -> future.complete(value));
-        return future;
+    private <T extends Response> Future<T> future(final T value) {
+        return executorService.submit(new Callable<T>() {
+            @Override
+            public T call() {
+                return value;
+            }
+        });
     }
 }

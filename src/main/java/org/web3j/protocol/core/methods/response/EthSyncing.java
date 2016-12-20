@@ -114,7 +114,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         @Override
         public int hashCode() {
             int result = startingBlock != null ? startingBlock.hashCode() : 0;
-            result = 31 * result + Boolean.hashCode(isSyncing());
+            result = 31 * result + (isSyncing() ? 1231 : 1237);  // From JDK8 Boolean.hashCode()
             result = 31 * result + (currentBlock != null ? currentBlock.hashCode() : 0);
             result = 31 * result + (highestBlock != null ? highestBlock.hashCode() : 0);
             result = 31 * result + (knownStates != null ? knownStates.hashCode() : 0);

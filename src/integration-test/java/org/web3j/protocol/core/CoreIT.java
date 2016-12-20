@@ -8,7 +8,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import org.web3j.protocol.Web3jFactory;
-import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
@@ -374,7 +373,8 @@ public class CoreIT {
         ethFilter.addSingleTopic(eventSignature);
 
         // eth_newFilter
-        EthFilter ethNewFilter = web3j.ethNewFilter(ethFilter).send();
+        EthFilter ethNewFilter =
+                web3j.ethNewFilter(ethFilter).send();
         BigInteger filterId = ethNewFilter.getFilterId();
 
         // eth_getFilterLogs
@@ -406,7 +406,8 @@ public class CoreIT {
 
     @Test
     public void testEthGetLogs() throws Exception {
-        org.web3j.protocol.core.methods.request.EthFilter ethFilter = new org.web3j.protocol.core.methods.request.EthFilter(
+        org.web3j.protocol.core.methods.request.EthFilter ethFilter =
+                new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST,
                 config.validContractAddress()

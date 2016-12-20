@@ -17,6 +17,8 @@ public class AbiTypesMapperGenerator extends Generator {
             "<strong>Do not modifiy!</strong><br>\n" +
             "Please use {@link " + AbiTypesMapperGenerator.class.getName() + "} to update.</p>\n";
 
+    private static final String TYPE = "type";
+
     public static void main(String[] args) throws Exception {
         AbiTypesMapperGenerator abiTypesMapperGenerator = new AbiTypesMapperGenerator();
         if (args.length == 1) {

@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
+import rx.Subscriber;
 
 import org.web3j.protocol.Web3jService;
 
@@ -77,13 +78,16 @@ public class Request<S, T extends Response> {
 
     public Observable<T> observable() {
         return Observable.create(
-                subscriber -> {
-                    try {
-                        subscriber.onNext(sendAsync().get());
-                    } catch (InterruptedException e) {
-                        subscriber.onError(e);
-                    } catch (ExecutionException e) {
-                        subscriber.onError(e);
+                new Observable.OnSubscribe<T>() {
+                    @Override
+                    public void call(final Subscriber<? super T> subscriber) {
+                        try {
+                            subscriber.onNext(Request.this.sendAsync().get());
+                        } catch (InterruptedException e) {
+                            subscriber.onError(e);
+                        } catch (ExecutionException e) {
+                            subscriber.onError(e);
+                        }
                     }
                 }
         );

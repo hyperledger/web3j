@@ -46,7 +46,9 @@ public abstract class Filter<T> {
 
                 Thread.sleep(blockTime);
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            throwException(e);
+        } catch (ExecutionException e) {
             throwException(e);
         }
     }
@@ -61,7 +63,9 @@ public abstract class Filter<T> {
         EthUninstallFilter ethUninstallFilter = null;
         try {
             ethUninstallFilter = web3j.ethUninstallFilter(filterId).sendAsync().get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            throwException(e);
+        } catch (ExecutionException e) {
             throwException(e);
         }
 

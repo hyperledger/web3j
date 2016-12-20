@@ -457,7 +457,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthFilter> ethNewFilter(
             org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
-        return new Request<>(
+        return new Request<org.web3j.protocol.core.methods.request.EthFilter, EthFilter>(
                 "eth_newFilter",
                 Arrays.asList(ethFilter),
                 ID,
@@ -476,7 +476,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthNewPendingTransactionFilter> ethNewPendingTransactionFilter() {
+    public Request<?, EthFilter> ethNewPendingTransactionFilter() {
         return new Request<String, EthFilter>(
                 "eth_newPendingTransactionFilter",
                 Collections.<String>emptyList(),
@@ -517,7 +517,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
-        return new Request<EthFilter, EthLog>(
+        return new Request<org.web3j.protocol.core.methods.request.EthFilter, EthLog>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),
                 ID,
