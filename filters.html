@@ -136,7 +136,7 @@ the network will be captured by the filter.</p>
 <em>observable()</em> method to create an Observable to execute the request asynchronously. This makes it
 very straight forwards to compose JSON-RPC calls together into new functions.</p>
 <p>For instance, the
-<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/rx/JsonRpc2_0Rx.java">blockObservable</a> is
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/JsonRpc2_0Rx.java">blockObservable</a> is
 itself composed of a number of separate JSON-RPC calls:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="kd">public</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">EthBlock</span><span class="o">&gt;</span> <span class="n">blockObservable</span><span class="o">(</span>
         <span class="kt">boolean</span> <span class="n">fullTransactionObjects</span><span class="o">,</span> <span class="kt">long</span> <span class="n">pollingInterval</span><span class="o">)</span> <span class="o">{</span>
