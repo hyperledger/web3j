@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.9</version>
+     <version>1.1.0</version>
    </dependency>
 
 Android:
@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>1.0.9</version>
+     <version>1.1.0</version>
    </dependency>
 
 Gradle
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.9')
+   compile ('org.web3j:core:1.1.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:1.0.9')
+   compile ('org.web3j:core-android:1.1.0')
 
 
 Start a client
@@ -75,7 +75,6 @@ To send asynchronous requests using a Future::
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-
 
 To use an RxJava Observable::
 

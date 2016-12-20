@@ -25,7 +25,11 @@ public class Async {
         return result;
     }
 
+    private static int getCpuCount() {
+        return Runtime.getRuntime().availableProcessors();
+    }
+
     public static ExecutorService defaultExecutorService() {
-        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        return Executors.newFixedThreadPool(getCpuCount());
     }
 }

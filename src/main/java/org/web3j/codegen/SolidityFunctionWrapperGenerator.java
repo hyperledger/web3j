@@ -31,7 +31,7 @@ import static org.web3j.utils.Collection.tail;
 /**
  * Java wrapper source code generator for Solidity ABI format.
  */
-public class SolidityFunctionWrapperGenerator extends Generator {
+public class SolidityFunctionWrapperGenerator {
 
     private static final String BINARY = "BINARY";
     private static final String WEB3J = "web3j";
