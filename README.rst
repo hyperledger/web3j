@@ -221,7 +221,7 @@ Subscriptions should always be cancelled when no longer required:
 
 **Note:** filters are not supported on Infura.
 
-For further information refer to `Filters and Events <http://docs.web3j.io/filters.html`_.
+For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_.
 
 
 Transactions

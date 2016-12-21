@@ -77,7 +77,7 @@ public class JsonRpc2_0Rx {
 
     public Observable<EthBlock> blockObservable(
             boolean fullTransactionObjects, long pollingInterval) {
-        return this.ethBlockHashObservable(pollingInterval)
+        return ethBlockHashObservable(pollingInterval)
                 .flatMap(blockHash ->
                         web3j.ethGetBlockByHash(blockHash, fullTransactionObjects).observable());
     }
