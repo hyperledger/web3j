@@ -30,6 +30,7 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 .idea
+*.iml
 geth.sh
 src/main/resources/
 
