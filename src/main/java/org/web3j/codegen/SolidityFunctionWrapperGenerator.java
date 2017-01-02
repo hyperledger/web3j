@@ -164,7 +164,7 @@ public class SolidityFunctionWrapperGenerator {
     }
 
     static String getFileNameNoExtension(String fileName) {
-        String[] splitName = fileName.split("\\.(?=[^\\.]*$)");
+        String[] splitName = fileName.split("\\.(?=[^.]*$)");
         return splitName[0];
     }
 
