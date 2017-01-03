@@ -430,11 +430,9 @@ public class SolidityFunctionWrapperGenerator {
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
         methodBuilder.addStatement("return executeTransactionAsync(function)");
-
-        return methodBuilder;
     }
 
-    private static void buildEventFunction(
+    private static MethodSpec buildEventFunction(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
