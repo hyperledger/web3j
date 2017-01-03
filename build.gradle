@@ -26,7 +26,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '1.1.0'
+version '1.1.1'
 
 sourceCompatibility = 1.8
 
@@ -62,7 +62,7 @@ ext {
 
 repositories {
     mavenCentral()
-    jcenter()
+    jcenter()  // Shadow resides on JCenter
 }
 
 // See https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
@@ -124,6 +124,11 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+task testJar(type: Jar) {
+    classifier = 'tests'
+    from sourceSets.test.output
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -131,6 +136,10 @@ publishing {
 
             artifact sourcesJar {
                 classifier 'sources'
+            }
+
+            artifact testJar {
+                classifier 'tests'
             }
         }
     }
@@ -156,7 +165,7 @@ bintray {
 
 
 artifacts {
-    archives sourcesJar, javadocJar
+    archives sourcesJar, javadocJar, testJar
 }
 
 signing {

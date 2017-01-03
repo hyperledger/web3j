@@ -358,7 +358,7 @@ public class SolidityFunctionWrapperGenerator {
         return result;
     }
 
-    private static MethodSpec buildFunction(
+    static MethodSpec buildFunction(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
 
@@ -370,17 +370,17 @@ public class SolidityFunctionWrapperGenerator {
 
         List<TypeName> outputParameterTypes = buildTypeNames(functionDefinition.getOutputs());
         if (functionDefinition.isConstant()) {
-            methodBuilder = buildConstantFunction(
+            buildConstantFunction(
                     functionDefinition, methodBuilder, outputParameterTypes, inputParams);
         } else {
-            methodBuilder = buildTransactionFunction(
+            buildTransactionFunction(
                     functionDefinition, methodBuilder, inputParams);
         }
 
         return methodBuilder.build();
     }
 
-    private static MethodSpec.Builder  buildConstantFunction(
+    private static void buildConstantFunction(
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             List<TypeName> outputParameterTypes,
@@ -414,11 +414,9 @@ public class SolidityFunctionWrapperGenerator {
 
             methodBuilder.addStatement("return executeCallMultipleValueReturnAsync(function)");
         }
-
-        return methodBuilder;
     }
 
-    private static MethodSpec.Builder buildTransactionFunction(
+    private static void buildTransactionFunction(
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             String inputParams) throws ClassNotFoundException {
@@ -436,7 +434,7 @@ public class SolidityFunctionWrapperGenerator {
         return methodBuilder;
     }
 
-    private static MethodSpec buildEventFunction(
+    private static void buildEventFunction(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
@@ -506,8 +504,6 @@ public class SolidityFunctionWrapperGenerator {
         for (TypeName outputParameterType: outputParameterTypes) {
             objects.add(TypeReference.class);
             objects.add(outputParameterType);
-            // workaround for parameterizing the function constructor
-            objects.set(2, outputParameterType);
         }
 
         String asListParams = Collection.join(

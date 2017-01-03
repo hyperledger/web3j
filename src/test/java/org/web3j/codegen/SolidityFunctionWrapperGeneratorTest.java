@@ -3,16 +3,14 @@ package org.web3j.codegen;
 
 import javax.tools.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
 
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.DynamicArray;
@@ -20,6 +18,7 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
+import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.utils.Strings;
 
 import static org.hamcrest.core.Is.is;
@@ -67,6 +66,92 @@ public class SolidityFunctionWrapperGeneratorTest extends GeneratorBase {
         assertThat(getFileNameNoExtension("file"), is("file"));
         assertThat(getFileNameNoExtension("file."), is("file"));
         assertThat(getFileNameNoExtension("file.txt"), is("file"));
+    }
+
+    @Test
+    public void testBuildFunctionTransaction() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                false,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8")),
+                "functionName",
+                Collections.emptyList(),
+                "type",
+                false);
+
+        MethodSpec methodSpec = buildFunction(functionDefinition);
+
+        String expected = "public java.util.concurrent.Future<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(org.web3j.abi.datatypes.generated.Uint8 param) {\n" +
+                "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(param), java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n" +
+                "  return executeTransactionAsync(function);\n" +
+                "}\n";
+
+        assertThat(methodSpec.toString(), is(expected));
+    }
+
+    @Test
+    public void testBuildFunctionConstantSingleValueReturn() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                true,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8")),
+                "functionName",
+                Arrays.asList(
+                        new AbiDefinition.NamedType("result", "int8")),
+                "type",
+                false);
+
+        MethodSpec methodSpec = buildFunction(functionDefinition);
+
+        String expected = "public java.util.concurrent.Future<org.web3j.abi.datatypes.generated.Int8> functionName(org.web3j.abi.datatypes.generated.Uint8 param) {\n" +
+                "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n" +
+                "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(param), \n" +
+                "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n" +
+                "  return executeCallSingleValueReturnAsync(function);\n" +
+                "}\n";
+
+        assertThat(methodSpec.toString(), is(expected));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testBuildFunctionConstantInvalid() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                true,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8")),
+                "functionName",
+                Collections.emptyList(),
+                "type",
+                false);
+
+        buildFunction(functionDefinition);
+    }
+
+    @Test
+    public void testBuildFunctionConstantMultipleValueReturn() throws Exception {
+
+        AbiDefinition functionDefinition = new AbiDefinition(
+                true,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param1", "uint8"),
+                        new AbiDefinition.NamedType("param2", "uint32")),
+                "functionName",
+                Arrays.asList(
+                        new AbiDefinition.NamedType("result1", "int8"),
+                        new AbiDefinition.NamedType("result2", "int32")),
+                "type",
+                false);
+
+        MethodSpec methodSpec = buildFunction(functionDefinition);
+
+        String expected = "public java.util.concurrent.Future<java.util.List<org.web3j.abi.datatypes.Type>> functionName(org.web3j.abi.datatypes.generated.Uint8 param1, org.web3j.abi.datatypes.generated.Uint32 param2) {\n" +
+                "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n" +
+                "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(param1, param2), \n" +
+                "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n" +
+                "  return executeCallMultipleValueReturnAsync(function);\n" +
+                "}\n";
+
+        assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
