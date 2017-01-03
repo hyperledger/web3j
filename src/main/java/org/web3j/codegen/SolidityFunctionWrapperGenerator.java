@@ -42,7 +42,7 @@ public class SolidityFunctionWrapperGenerator {
     private static final String GAS_LIMIT = "gasLimit";
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
-            "<strong>Do not modifiy!</strong><br>\n" +
+            "<strong>Do not modify!</strong><br>\n" +
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
             "} to update.</p>\n";
 
@@ -164,7 +164,7 @@ public class SolidityFunctionWrapperGenerator {
     }
 
     static String getFileNameNoExtension(String fileName) {
-        String[] splitName = fileName.split("\\.(?=[^\\.]*$)");
+        String[] splitName = fileName.split("\\.(?=[^.]*$)");
         return splitName[0];
     }
 
