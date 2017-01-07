@@ -5,6 +5,7 @@ import java.util.*;
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
+import org.web3j.protocol.core.methods.response.VoidResponse;
 import org.web3j.protocol.parity.methods.response.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;

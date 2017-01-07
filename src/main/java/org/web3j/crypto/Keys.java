@@ -20,7 +20,8 @@ public class Keys {
     static final int PUBLIC_KEY_SIZE = 64;
 
     public static final int ADDRESS_LENGTH_IN_HEX = 40;
-    static final int PUBLIC_KEY_SIZE_IN_HEX = 64 << 1;
+    static final int PUBLIC_KEY_LENGTH_IN_HEX = PUBLIC_KEY_SIZE << 1;
+    public static final int PRIVATE_KEY_LENGTH_IN_HEX = PRIVATE_KEY_SIZE << 1;
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -55,15 +56,15 @@ public class Keys {
 
     public static String getAddress(BigInteger publicKey) {
         return getAddress(
-                Numeric.toHexStringWithPrefixZeroPadded(publicKey, PUBLIC_KEY_SIZE_IN_HEX));
+                Numeric.toHexStringWithPrefixZeroPadded(publicKey, PUBLIC_KEY_LENGTH_IN_HEX));
     }
 
     public static String getAddress(String publicKey) {
         String publicKeyNoPrefix = Numeric.cleanHexPrefix(publicKey);
 
-        if (publicKeyNoPrefix.length() < PUBLIC_KEY_SIZE_IN_HEX) {
+        if (publicKeyNoPrefix.length() < PUBLIC_KEY_LENGTH_IN_HEX) {
             publicKeyNoPrefix = Strings.zeros(
-                    PUBLIC_KEY_SIZE_IN_HEX - publicKeyNoPrefix.length()) +
+                    PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length()) +
                     publicKeyNoPrefix;
         }
         String hash = Hash.sha3(publicKeyNoPrefix);

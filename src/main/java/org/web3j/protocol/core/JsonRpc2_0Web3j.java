@@ -297,7 +297,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
             Transaction transaction, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<Object, EthCall>(
                 "eth_call",
                 Arrays.asList(transaction, defaultBlockParameter),
                 ID,

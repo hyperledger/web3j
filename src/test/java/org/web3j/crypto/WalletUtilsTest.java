@@ -9,10 +9,14 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.web3j.utils.Numeric;
+
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.web3j.crypto.SampleKeys.*;
+import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
 
 
 public class WalletUtilsTest {
@@ -101,5 +105,15 @@ public class WalletUtilsTest {
     private static File createTempDir() throws Exception {
         return Files.createTempDirectory(
                 WalletUtilsTest.class.getSimpleName() + "-testkeys").toFile();
+    }
+
+    @Test
+    public void testIsValidPrivateKey() {
+        assertTrue(isValidPrivateKey(SampleKeys.PRIVATE_KEY_STRING));
+        assertTrue(isValidPrivateKey(Numeric.prependHexPrefix(SampleKeys.PRIVATE_KEY_STRING)));
+
+        assertFalse(isValidPrivateKey(""));
+        assertFalse(isValidPrivateKey(SampleKeys.PRIVATE_KEY_STRING + "a"));
+        assertFalse(isValidPrivateKey(SampleKeys.PRIVATE_KEY_STRING.substring(1)));
     }
 }

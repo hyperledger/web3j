@@ -86,7 +86,7 @@ public class KeysTest {
 
         String value = "1234";
         assertThat(Keys.getAddress("0x" +
-                        Strings.zeros(Keys.PUBLIC_KEY_SIZE_IN_HEX - value.length()) + value),
+                        Strings.zeros(Keys.PUBLIC_KEY_LENGTH_IN_HEX - value.length()) + value),
                 equalTo(expected));
     }
 

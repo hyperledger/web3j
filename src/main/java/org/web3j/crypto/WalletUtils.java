@@ -13,6 +13,9 @@ import java.time.format.DateTimeFormatter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.protocol.ObjectMapperFactory;
+import org.web3j.utils.Numeric;
+
+import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 
 /**
  * Utility functions for working with Wallet files.
@@ -83,5 +86,10 @@ public class WalletUtils {
 
     public static String getMainnetKeyDirectory() {
         return getDefaultKeyDirectory() + "/keystore";
+    }
+
+    public static boolean isValidPrivateKey(String privateKey) {
+        String cleanPrivateKey = Numeric.cleanHexPrefix(privateKey);
+        return cleanPrivateKey.length() == PRIVATE_KEY_LENGTH_IN_HEX;
     }
 }

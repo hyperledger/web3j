@@ -23,7 +23,7 @@ public class SampleKeys {
 
     static final ECKeyPair KEY_PAIR = new ECKeyPair(PRIVATE_KEY, PUBLIC_KEY);
 
-    static final Credentials CREDENTIALS = Credentials.create(KEY_PAIR);
+    public static final Credentials CREDENTIALS = Credentials.create(KEY_PAIR);
 
     private SampleKeys() {}
 }

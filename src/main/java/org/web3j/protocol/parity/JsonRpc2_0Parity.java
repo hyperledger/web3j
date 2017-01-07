@@ -9,6 +9,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.VoidResponse;
 import org.web3j.protocol.parity.methods.response.*;
 
 /**
