@@ -16,15 +16,19 @@ import static org.web3j.utils.Console.exitError;
  */
 abstract class WalletManager {
 
-    final java.io.Console console;
+    final IODevice console;
 
     WalletManager() {
-        console = System.console();
+        console = new ConsoleDevice();
 
         if (console == null) {
             Console.exitError("Unable to access console - please ensure you are running " +
                     "from the command line");
         }
+    }
+
+    WalletManager(IODevice console) {
+        this.console = console;
     }
 
     String getPassword(String initialPrompt) {

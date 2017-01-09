@@ -30,10 +30,6 @@ public class Transfer extends ManagedTransaction {
         super(web3j, credentials, gasPrice, gasLimit);
     }
 
-    private Transfer(Web3j web3j, Credentials credentials) {
-        this(web3j, credentials, GAS_PRICE, GAS_LIMIT);
-    }
-
     /**
      * Given the duration required to execute a transaction, asyncronous execution is strongly
      * recommended via {@link Transfer#sendFundsAsync(String, BigDecimal, Convert.Unit)}.
@@ -95,7 +91,7 @@ public class Transfer extends ManagedTransaction {
             String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
             ExecutionException, TransactionTimeoutException {
 
-        return new Transfer(web3j, credentials).send(toAddress, value, unit);
+        return sendFunds(web3j, credentials, GAS_PRICE, GAS_LIMIT, toAddress, value, unit);
     }
 
     public static TransactionReceipt sendFunds(
@@ -107,19 +103,19 @@ public class Transfer extends ManagedTransaction {
     }
 
     public static Future<TransactionReceipt> sendFundsAsync(
-            Web3j web3j, Credentials credentials,
-            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
-            ExecutionException, TransactionTimeoutException {
-
-        return new Transfer(web3j, credentials).sendFundsAsync(toAddress, value, unit);
-    }
-
-    public static Future<TransactionReceipt> sendFundsAsync(
             Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit,
             String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
             ExecutionException, TransactionTimeoutException {
 
         return new Transfer(web3j, credentials, gasPrice, gasLimit)
                 .sendFundsAsync(toAddress, value, unit);
+    }
+
+    public static Future<TransactionReceipt> sendFundsAsync(
+            Web3j web3j, Credentials credentials,
+            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
+            ExecutionException, TransactionTimeoutException {
+
+        return sendFundsAsync(web3j, credentials, GAS_PRICE, GAS_LIMIT, toAddress, value, unit);
     }
 }

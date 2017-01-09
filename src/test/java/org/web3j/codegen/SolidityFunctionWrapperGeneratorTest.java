@@ -13,6 +13,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import org.junit.Test;
 
+import org.web3j.TempFileProvider;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Utf8String;
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.*;
 
 
-public class SolidityFunctionWrapperGeneratorTest extends GeneratorBase {
+public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     private String solidityBaseDir;
 

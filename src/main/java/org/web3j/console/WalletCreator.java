@@ -15,8 +15,19 @@ import org.web3j.utils.Console;
  */
 public class WalletCreator extends WalletManager {
 
+    public WalletCreator() {
+    }
+
+    public WalletCreator(IODevice console) {
+        super(console);
+    }
+
     public static void main(String[] args) {
         new WalletCreator().run();
+    }
+
+    static void main(IODevice console) {
+        new WalletCreator(console).run();
     }
 
     private void run() {

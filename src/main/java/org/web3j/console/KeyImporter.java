@@ -16,12 +16,23 @@ import static org.web3j.utils.Console.exitError;
  */
 public class KeyImporter extends WalletManager {
 
+    public KeyImporter() {
+    }
+
+    public KeyImporter(IODevice console) {
+        super(console);
+    }
+
     public static void main(String[] args) {
         if (args.length == 1) {
             new KeyImporter().run(args[0]);
         } else {
             new KeyImporter().run();
         }
+    }
+
+    static void main(IODevice console) {
+        new KeyImporter(console).run();
     }
 
     private void run(String input) {

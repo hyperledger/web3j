@@ -16,6 +16,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.web3j.crypto.SampleKeys.*;
+import static org.web3j.crypto.WalletUtils.isValidAddress;
 import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
 
 
@@ -115,5 +116,15 @@ public class WalletUtilsTest {
         assertFalse(isValidPrivateKey(""));
         assertFalse(isValidPrivateKey(SampleKeys.PRIVATE_KEY_STRING + "a"));
         assertFalse(isValidPrivateKey(SampleKeys.PRIVATE_KEY_STRING.substring(1)));
+    }
+
+    @Test
+    public void testIsValidAddress() {
+        assertTrue(isValidAddress(SampleKeys.ADDRESS));
+        assertTrue(isValidAddress(SampleKeys.ADDRESS_NO_PREFIX));
+
+        assertFalse(isValidAddress(""));
+        assertFalse(isValidAddress(SampleKeys.ADDRESS + 'a'));
+        assertFalse(isValidAddress(SampleKeys.ADDRESS.substring(1)));
     }
 }

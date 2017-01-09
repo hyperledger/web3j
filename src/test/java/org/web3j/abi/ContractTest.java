@@ -18,8 +18,10 @@ import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -31,25 +33,22 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class ContractTest {
+public class ContractTest extends ManagedTransactionTester {
 
-    private static final String CONTRACT_ADDRESS = "0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a";
-    private static final String TRANSACTION_HASH = "0xHASH";
-
-    private Web3j web3j;
     private TestContract contract;
 
     @Before
     public void setUp() {
-        web3j = mock(Web3j.class);
+        super.setUp();
+
         contract = new TestContract(
-                CONTRACT_ADDRESS, web3j, SampleKeys.CREDENTIALS,
+                ADDRESS, web3j, SampleKeys.CREDENTIALS,
                 Contract.GAS_PRICE, Contract.GAS_LIMIT);
     }
 
     @Test
     public void testGetContractAddress() {
-        assertThat(contract.getContractAddress(), is(CONTRACT_ADDRESS));
+        assertThat(contract.getContractAddress(), is(ADDRESS));
     }
 
     @Test
@@ -57,7 +56,7 @@ public class ContractTest {
 
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setContractAddress(CONTRACT_ADDRESS);
+        transactionReceipt.setContractAddress(ADDRESS);
 
         prepareTransaction(transactionReceipt);
 
@@ -68,39 +67,29 @@ public class ContractTest {
                 TestContract.class, web3j, SampleKeys.CREDENTIALS,
                 ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                 "0xcafed00d" , encodedConstructor, BigInteger.ZERO).get();
-        assertThat(deployedContract.getContractAddress(), is(CONTRACT_ADDRESS));
+        assertThat(deployedContract.getContractAddress(), is(ADDRESS));
     }
 
-    private void prepareTransaction(TransactionReceipt transactionReceipt) {
+    @Test(expected = RuntimeException.class)
+    public void testDeployInvalidContractAddress() throws Throwable {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
 
-        // Respond to nonce request
-        EthGetTransactionCount ethGetTransactionCount = new EthGetTransactionCount();
-        ethGetTransactionCount.setResult("0x1");
+        prepareTransaction(transactionReceipt);
 
-        Request transactionCountRequest = mock(Request.class);
-        when(transactionCountRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionCount));
-        when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.LATEST))
-                .thenReturn(transactionCountRequest);
+        String encodedConstructor = FunctionEncoder.encodeConstructor(
+                Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
 
-        // Send transaction request
-        EthSendTransaction ethSendTransaction = new EthSendTransaction();
-        ethSendTransaction.setResult(TRANSACTION_HASH);
-
-        Request rawTransactionRequest = mock(Request.class);
-        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
-        when(web3j.ethSendRawTransaction(any(String.class)))
-                .thenReturn(rawTransactionRequest);
-
-        // Query for transaction receipt
-        EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
-        ethGetTransactionReceipt.setResult(transactionReceipt);
-
-        Request getTransactionReceiptRequest = mock(Request.class);
-        when(getTransactionReceiptRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionReceipt));
-        when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
-                .thenReturn(getTransactionReceiptRequest);
+        try {
+            TestContract.deployAsync(
+                    TestContract.class, web3j, SampleKeys.CREDENTIALS,
+                    ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
+                    "0xcafed00d" , encodedConstructor, BigInteger.ZERO).get();
+        } catch (InterruptedException e) {
+            throw e;
+        } catch (ExecutionException e) {
+            throw e.getCause();
+        }
     }
 
     @Test
@@ -168,15 +157,70 @@ public class ContractTest {
                 equalTo(Collections.singletonList(new Uint256(BigInteger.ONE))));
     }
 
-    @Test(expected = ExecutionException.class)
-    public void testTimeout() throws Exception {
+    @Test(expected = TransactionTimeoutException.class)
+    public void testTimeout() throws Throwable {
         prepareTransaction(null);
 
         contract.setAttempts(1);
         contract.setSleepDuration(1);
 
-        contract.performTransaction(
-                new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).get();
+        testErrorScenario();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvalidTransactionResponse() throws Throwable {
+        prepareNonceRequest();
+
+        EthSendTransaction ethSendTransaction = new EthSendTransaction();
+        ethSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
+
+        Request rawTransactionRequest = mock(Request.class);
+        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
+        when(web3j.ethSendRawTransaction(any(String.class)))
+                .thenReturn(rawTransactionRequest);
+
+        testErrorScenario();
+    }
+
+
+    @Test(expected = RuntimeException.class)
+    public void testInvalidTransactionReceipt() throws Throwable {
+        prepareNonceRequest();
+        prepareTransactionRequest();
+
+        EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
+        ethGetTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
+
+        Request getTransactionReceiptRequest = mock(Request.class);
+        when(getTransactionReceiptRequest.sendAsync())
+                .thenReturn(Async.run(() -> ethGetTransactionReceipt));
+        when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
+                .thenReturn(getTransactionReceiptRequest);
+
+        testErrorScenario();
+    }
+
+    @Test
+    public void testGetSleepDuration() {
+        contract.setSleepDuration(1);
+        assertThat(contract.getSleepDuration(), is(1));
+    }
+
+    @Test
+    public void testGetAttempts() {
+        contract.setAttempts(1);
+        assertThat(contract.getAttempts(), is(1));
+    }
+
+    void testErrorScenario() throws Throwable {
+        try {
+            contract.performTransaction(
+                    new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).get();
+        } catch (InterruptedException e) {
+            throw e;
+        } catch (ExecutionException e) {
+            throw e.getCause();
+        }
     }
 
     private static class TestContract extends Contract {

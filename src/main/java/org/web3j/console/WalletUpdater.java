@@ -14,12 +14,23 @@ import static org.web3j.utils.Console.exitError;
  */
 public class WalletUpdater extends WalletManager {
 
+    public WalletUpdater() {
+    }
+
+    public WalletUpdater(IODevice console) {
+        super(console);
+    }
+
     public static void main(String[] args) {
         if (args.length != 1) {
             exitError("You must provide an existing wallet file");
         } else {
             new WalletUpdater().run(args[0]);
         }
+    }
+
+    public static void main(IODevice console, String walletFileLocation) {
+        new WalletUpdater(console).run(walletFileLocation);
     }
 
     private void run(String walletFileLocation) {
