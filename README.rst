@@ -150,7 +150,7 @@ To use an RxJava Observable:
 .. code-block:: java
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3j.web3ClientVersion().observable().subscribe(x -> {
+   web3.web3ClientVersion().observable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -386,7 +386,7 @@ Related projects
 ----------------
 
 For a .NET implementation, check out `Nethereum <https://github.com/Nethereum/Nethereum>`_.
- 
+
 For a pure Java implementation of the Ethereum client, check out
 `EthereumJ <https://github.com/ethereum/ethereumj>`_ and the work of
 `Ether.Camp <https://github.com/ether-camp/>`_.
