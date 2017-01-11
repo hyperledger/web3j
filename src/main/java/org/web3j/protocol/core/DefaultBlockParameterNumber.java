@@ -1,5 +1,7 @@
 package org.web3j.protocol.core;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.math.BigInteger;
 
 import org.web3j.utils.Numeric;
@@ -16,6 +18,7 @@ public class DefaultBlockParameterNumber implements DefaultBlockParameter {
     }
 
     @Override
+    @JsonValue
     public String getValue() {
         return Numeric.encodeQuantity(blockNumber);
     }
