@@ -369,6 +369,15 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthGetLogsWithNumericBlockRange() throws Exception {
+        web3j.ethGetLogs(new EthFilter(DefaultBlockParameter.valueOf(Numeric.toBigInt
+            ("0xe8")), DefaultBlockParameter.valueOf("latest"), "")).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getLogs\",\"params\":[{\"topics\":[]," +
+            "\"fromBlock\":\"0xe8\",\"toBlock\":\"latest\",\"address\":[\"\"]}],\"id\":1}");
+    }
+
+    @Test
     public void testEthGetWork() throws Exception {
         web3j.ethGetWork().send();
 
