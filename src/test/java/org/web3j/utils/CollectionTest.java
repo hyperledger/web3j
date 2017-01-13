@@ -33,7 +33,10 @@ public class CollectionTest {
         assertThat(join(Arrays.asList("a", "b", "c", "d"), ","), is("a,b,c,d"));
         assertThat(join(Arrays.asList("a  ", "b ", " c "), ", "), is("a, b, c"));
         assertThat(join(Arrays.asList("a", "b", "c", "d"), ", "), is("a, b, c, d"));
+    }
 
+    @Test
+    public void testJoinWithFunction() {
         final List<FakeSpec> specs1 = Arrays.asList(
                 new FakeSpec("a"),
                 new FakeSpec("b"),
@@ -58,6 +61,7 @@ public class CollectionTest {
                 new FakeSpec(" c "));
         assertThat(join(specs4, ", ", FakeSpec::getName), is("a, b, c"));
     }
+
 
     /**
      * Fake object to test {@link Collection#join(List, String, Function)}

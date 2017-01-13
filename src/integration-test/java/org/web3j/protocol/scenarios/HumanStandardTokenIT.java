@@ -28,8 +28,8 @@ import org.web3j.utils.Numeric;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Integration test demonstrating integration with
@@ -134,10 +134,10 @@ public class HumanStandardTokenIT extends Scenario {
         assertFalse("Contract execution ran out of gas",
                 createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        Optional<String> contractAddressOptional = createTransactionReceipt.getContractAddress();
+        String contractAddress = createTransactionReceipt.getContractAddress();
 
-        assertTrue(contractAddressOptional.isPresent());
-        return contractAddressOptional.get();
+        assertNotNull(contractAddress);
+        return contractAddress;
     }
 
     private String sendCreateContractTransaction(
@@ -271,7 +271,7 @@ public class HumanStandardTokenIT extends Scenario {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        RawTransaction rawTransaction = RawTransaction.createFunctionCallTransaction(
+        RawTransaction rawTransaction = RawTransaction.createTransaction(
                 nonce,
                 GAS_PRICE,
                 GAS_LIMIT,

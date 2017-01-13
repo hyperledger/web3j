@@ -2,7 +2,6 @@ package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
 import org.web3j.utils.Numeric;
 
@@ -51,7 +50,7 @@ public class Log {
         this.removed = removed;
     }
 
-    public Optional<BigInteger> getLogIndex() {
+    public BigInteger getLogIndex() {
         return convert(logIndex);
     }
 
@@ -59,7 +58,7 @@ public class Log {
         this.logIndex = logIndex;
     }
 
-    public Optional<BigInteger> getTransactionIndex() {
+    public BigInteger getTransactionIndex() {
         return convert(transactionIndex);
     }
 
@@ -67,23 +66,23 @@ public class Log {
         this.transactionIndex = transactionIndex;
     }
 
-    public Optional<String> getTransactionHash() {
-        return Optional.ofNullable(transactionHash);
+    public String getTransactionHash() {
+        return transactionHash;
     }
 
     public void setTransactionHash(String transactionHash) {
         this.transactionHash = transactionHash;
     }
 
-    public Optional<String> getBlockHash() {
-        return Optional.ofNullable(blockHash);
+    public String getBlockHash() {
+        return blockHash;
     }
 
     public void setBlockHash(String blockHash) {
         this.blockHash = blockHash;
     }
 
-    public Optional<BigInteger> getBlockNumber() {
+    public BigInteger getBlockNumber() {
         return convert(blockNumber);
     }
 
@@ -123,11 +122,11 @@ public class Log {
         this.topics = topics;
     }
 
-    private Optional<BigInteger> convert(String value) {
+    private BigInteger convert(String value) {
         if (value != null) {
-            return Optional.of(Numeric.decodeQuantity(value));
+            return Numeric.decodeQuantity(value);
         } else {
-            return Optional.empty();
+            return null;
         }
     }
 

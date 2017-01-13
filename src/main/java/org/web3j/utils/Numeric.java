@@ -51,6 +51,12 @@ public final class Numeric {
             return false;
         }
 
+        // If TestRpc resolves the following issue, we can reinstate this code
+        // https://github.com/ethereumjs/testrpc/issues/220
+//        if (value.length() > 3 && value.charAt(2) == '0') {
+//            return false;
+//        }
+
         return true;
     }
 

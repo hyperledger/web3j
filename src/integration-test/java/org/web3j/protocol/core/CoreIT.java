@@ -425,7 +425,7 @@ public class CoreIT {
 
     @Test
     public void testEthSubmitWork() throws Exception {
-    
+
     }
 
     @Test

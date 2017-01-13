@@ -70,6 +70,11 @@ public abstract class ManagedTransaction {
         EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
                 .sendAsync().get();
 
+        return processResponse(transactionResponse);
+    }
+
+    protected TransactionReceipt processResponse(EthSendTransaction transactionResponse)
+            throws InterruptedException, ExecutionException, TransactionTimeoutException {
         if (transactionResponse.hasError()) {
             throw new RuntimeException("Error processing transaction request: " +
                     transactionResponse.getError().getMessage());

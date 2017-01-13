@@ -39,6 +39,10 @@ public abstract class Contract extends ManagedTransaction {
         this.contractAddress = contractAddress;
     }
 
+    public void setContractAddress(String contractAddress) {
+        this.contractAddress = contractAddress;
+    }
+
     public String getContractAddress() {
         return contractAddress;
     }
@@ -63,12 +67,12 @@ public abstract class Contract extends ManagedTransaction {
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 
-    protected <T extends Type> Future<T> executeCallSingleValueReturnAsync(
+    protected <T extends Type> CompletableFuture<T> executeCallSingleValueReturnAsync(
             Function function) {
         return Async.run(() -> executeCallSingleValueReturn(function));
     }
 
-    protected Future<List<Type>> executeCallMultipleValueReturnAsync(
+    protected CompletableFuture<List<Type>> executeCallMultipleValueReturnAsync(
             Function function) {
         return Async.run(() -> executeCallMultipleValueReturn(function));
     }
@@ -84,11 +88,17 @@ public abstract class Contract extends ManagedTransaction {
         return executeCall(function);
     }
 
+    protected TransactionReceipt executeTransaction(Function function) throws InterruptedException,
+            ExecutionException, TransactionTimeoutException {
+        return executeTransaction(FunctionEncoder.encode(function), BigInteger.ZERO);
+    }
+
+
     /**
      * Given the duration required to execute a transaction, asyncronous execution is strongly
      * recommended via {@link Contract#executeTransactionAsync}.
      *
-     * @param function to transact with
+     * @param data to send in transaction
      * @return {@link Optional} containing our transaction receipt
      * @throws ExecutionException if the computation threw an
      * exception
@@ -97,17 +107,18 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     protected TransactionReceipt executeTransaction(
-            Function function) throws ExecutionException, InterruptedException,
-            TransactionTimeoutException {
-        BigInteger nonce = getNonce(credentials.getAddress());
-        String encodedFunction = FunctionEncoder.encode(function);
+            String data, BigInteger value)
+            throws ExecutionException, InterruptedException, TransactionTimeoutException {
 
-        RawTransaction rawTransaction = RawTransaction.createFunctionCallTransaction(
+        BigInteger nonce = getNonce(credentials.getAddress());
+
+        RawTransaction rawTransaction = RawTransaction.createTransaction(
                 nonce,
                 gasPrice,
                 gasLimit,
                 contractAddress,
-                encodedFunction);
+                value,
+                data);
 
         return signAndSend(rawTransaction);
     }
@@ -118,7 +129,7 @@ public abstract class Contract extends ManagedTransaction {
      * @param function to transact with
      * @return {@link Future} containing executing transaction
      */
-    protected Future<TransactionReceipt> executeTransactionAsync(Function function) {
+    protected CompletableFuture<TransactionReceipt> executeTransactionAsync(Function function) {
         return Async.run(() -> executeTransaction(function));
     }
 
@@ -150,45 +161,27 @@ public abstract class Contract extends ManagedTransaction {
         return new EventValues(indexedValues, nonIndexedValues);
     }
 
-    private static String create(
-            Web3j web3j, Credentials credentials,
-            BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger value)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
-
-        Contract contract = new Contract("", web3j, credentials, gasPrice, gasLimit) { };
-
-        BigInteger nonce = contract.getNonce(contract.credentials.getAddress());
-        RawTransaction rawTransaction = RawTransaction.createContractTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                value,
-                binary + encodedConstructor);
-
-        TransactionReceipt transactionReceipt = contract.signAndSend(rawTransaction);
-        Optional<String> contractAddress = transactionReceipt.getContractAddress();
-        if (contractAddress.isPresent()) {
-            return contractAddress.get();
-        } else {
-            throw new RuntimeException("Empty contract address returned");
-        }
-    }
-
     protected static <T extends Contract> T deploy(
             Class<T> type,
             Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
-        String contractAddress = create(web3j, credentials, gasPrice, gasLimit,
-                binary, encodedConstructor, value);
-
         Constructor<T> constructor = type.getDeclaredConstructor(
                 String.class, Web3j.class, Credentials.class, BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
-        return constructor.newInstance(contractAddress, web3j, credentials, gasPrice, gasLimit);
+        T contract = constructor.newInstance("", web3j, credentials, gasPrice, gasLimit);
+        TransactionReceipt transactionReceipt =
+                contract.executeTransaction(binary + encodedConstructor, value);
+
+        String contractAddress = transactionReceipt.getContractAddress();
+        if (contractAddress == null) {
+            throw new RuntimeException("Empty contract address returned");
+        }
+        contract.setContractAddress(contractAddress);
+
+        return contract;
     }
 
     protected static <T extends Contract> CompletableFuture<T> deployAsync(

@@ -79,7 +79,7 @@ To send asynchronous requests using a Future::
 To use an RxJava Observable::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3j.web3ClientVersion().observable().subscribe(x -> {
+   web3.web3ClientVersion().observable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });

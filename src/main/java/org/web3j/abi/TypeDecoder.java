@@ -39,7 +39,7 @@ class TypeDecoder {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
         } else if (Bool.class.isAssignableFrom(type)) {
-            return (T) decodeBool(input.substring(offset, offset + MAX_BYTE_LENGTH_FOR_HEX_STRING));
+            return (T) decodeBool(input, offset);
         } else if (Bytes.class.isAssignableFrom(type)) {
             return (T) decodeBytes(input, offset, (Class<Bytes>) type);
         } else if (DynamicBytes.class.isAssignableFrom(type)) {
@@ -125,7 +125,8 @@ class TypeDecoder {
         return decode(input, 0, Uint.class).getValue().intValue();
     }
 
-    static Bool decodeBool(String input) {
+    static Bool decodeBool(String rawInput, int offset) {
+        String input = rawInput.substring(offset, offset + MAX_BYTE_LENGTH_FOR_HEX_STRING);
         BigInteger numericValue = Numeric.toBigInt(input);
         boolean value = numericValue.equals(BigInteger.ONE);
         return new Bool(value);

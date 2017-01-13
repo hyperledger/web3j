@@ -17,11 +17,11 @@ public class TypeDecoderTest {
     @Test
     public void testBoolDecode() {
         assertThat(TypeDecoder.decodeBool(
-                "0000000000000000000000000000000000000000000000000000000000000000"),
+                "0000000000000000000000000000000000000000000000000000000000000000", 0),
                 is(new Bool(false)));
 
         assertThat(TypeDecoder.decodeBool(
-                "0000000000000000000000000000000000000000000000000000000000000001"),
+                "0000000000000000000000000000000000000000000000000000000000000001", 0),
                 is(new Bool(true)));
     }
 
