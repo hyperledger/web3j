@@ -26,6 +26,18 @@ public class TypeDecoderTest {
     }
 
     @Test
+    public void testBoolDecodeGivenOffset() {
+        // Decode second parameter as Bool
+        assertThat(TypeDecoder.decode(
+                "0000000000000000000000000000000000000000000000007fffffffffffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007fffffffffffffff", 64, Bool.class),
+                is(new Bool(false)));
+
+        assertThat(TypeDecoder.decode(
+                "0000000000000000000000000000000000000000000000007fffffffffffffff00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000007fffffffffffffff", 64, Bool.class),
+                is(new Bool(true)));
+    }
+
+    @Test
     public void testUintDecode() {
 
         assertThat(TypeDecoder.decodeNumeric(

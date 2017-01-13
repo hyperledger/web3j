@@ -39,7 +39,7 @@ class TypeDecoder {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
         } else if (Bool.class.isAssignableFrom(type)) {
-            return (T) decodeBool(input);
+            return (T) decodeBool(input.substring(offset, offset + MAX_BYTE_LENGTH_FOR_HEX_STRING));
         } else if (Bytes.class.isAssignableFrom(type)) {
             return (T) decodeBytes(input, offset, (Class<Bytes>) type);
         } else if (DynamicBytes.class.isAssignableFrom(type)) {
