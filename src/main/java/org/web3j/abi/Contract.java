@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
@@ -127,7 +125,7 @@ public abstract class Contract extends ManagedTransaction {
      * Execute the provided function as a transaction asynchronously.
      *
      * @param function to transact with
-     * @return {@link Future} containing executing transaction
+     * @return {@link CompletableFuture} containing executing transaction
      */
     protected CompletableFuture<TransactionReceipt> executeTransactionAsync(Function function) {
         return Async.run(() -> executeTransaction(function));
