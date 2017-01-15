@@ -3,8 +3,6 @@ package org.web3j.abi;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
 /**
  * <p>Type wrapper to get around limitations of Java's type erasure.<br>
  * This is so that we can pass around Typed {@link org.web3j.abi.datatypes.Array} types.</p>
@@ -49,8 +47,8 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type> impl
     public Class<T> getClassType() throws ClassNotFoundException {
         Type clsType = getType();
 
-        if (getType() instanceof ParameterizedTypeImpl) {
-            return (Class<T>) ((ParameterizedTypeImpl) clsType).getRawType();
+        if (getType() instanceof ParameterizedType) {
+            return (Class<T>) ((ParameterizedType) clsType).getRawType();
         } else {
             return (Class<T>) Class.forName(clsType.getTypeName());
         }
