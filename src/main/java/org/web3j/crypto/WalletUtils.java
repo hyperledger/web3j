@@ -73,20 +73,21 @@ public class WalletUtils {
         String osName = osName1.toLowerCase();
 
         if (osName.startsWith("mac")) {
-            return System.getProperty("user.home") + "/Library/Ethereum";
+            return String.format("%s%sLibrary%sEthereum", 
+            		System.getProperty("user.home"), File.separator, File.separator);
         } else if (osName.startsWith("win")) {
-            return System.getenv("APPDATA") + "/Ethereum";
+            return String.format("%s%sEthereum", System.getenv("APPDATA"), File.separator);
         } else {
-            return System.getProperty("user.home") + "/.ethereum";
+            return String.format("%s%s.ethereum", System.getProperty("user.home"), File.separator);
         }
     }
 
     public static String getTestnetKeyDirectory() {
-        return getDefaultKeyDirectory() + "/testnet/keystore";
+        return String.format("%s%stestnet%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
     }
 
     public static String getMainnetKeyDirectory() {
-        return getDefaultKeyDirectory() + "/keystore";
+        return String.format("%s%skeystore", getDefaultKeyDirectory(), File.separator);
     }
 
     public static boolean isValidPrivateKey(String privateKey) {
