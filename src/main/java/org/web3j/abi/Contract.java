@@ -99,6 +99,7 @@ public abstract class Contract extends ManagedTransaction {
      * recommended via {@link Contract#executeTransactionAsync}.
      *
      * @param data to send in transaction
+     * @param value in Wei to send in transaction
      * @return {@link Optional} containing our transaction receipt
      * @throws ExecutionException if the computation threw an
      * exception
