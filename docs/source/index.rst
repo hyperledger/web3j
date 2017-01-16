@@ -16,7 +16,7 @@ Features
 ========
 
 - Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
-  client API
+  client API over HTTP and IPC
 - Ethereum wallet support
 - Reactive-functional API for working with filters
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart

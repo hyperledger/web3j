@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.1.1</version>
+     <version>1.1.2</version>
    </dependency>
 
 Android:
@@ -33,7 +33,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.1.1')
+   compile ('org.web3j:core:1.1.2')
 
 Android:
 
@@ -94,6 +94,20 @@ To send synchronous requests::
 
    Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
    ...
+
+
+IPC
+---
+
+web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
+the same host as web3j. To connect simply use *IpcService* instead of *HttpService* when you
+create your service:
+
+.. code-block:: java
+
+   Web3j web3 = Web3j.build(new IpcService("/path/to/socketfile"));
+   ...
+
 
 
 Filters
