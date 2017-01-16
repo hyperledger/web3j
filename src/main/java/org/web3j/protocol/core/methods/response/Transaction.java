@@ -24,7 +24,7 @@ public class Transaction {
     private String raw;
     private String r;
     private String s;
-    private byte v;
+    private int v;  // see https://github.com/web3j/web3j/issues/44
 
     public Transaction() {
     }
@@ -32,7 +32,7 @@ public class Transaction {
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,
                        String gas, String gasPrice, String input, String creates,
-                       String publicKey, String raw, String r, String s, byte v) {
+                       String publicKey, String raw, String r, String s, int v) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -180,7 +180,7 @@ public class Transaction {
         this.s = s;
     }
 
-    public byte getV() {
+    public int getV() {
         return v;
     }
 
@@ -193,9 +193,9 @@ public class Transaction {
     // https://github.com/ethereum/go-ethereum/issues/3339
     public void setV(Object v) {
         if (v instanceof String) {
-            this.v = Numeric.toBigInt((String) v).byteValueExact();
+            this.v = Numeric.toBigInt((String) v).intValueExact();
         } else {
-            this.v = ((Integer) v).byteValue();
+            this.v = ((Integer) v);
         }
     }
 
