@@ -64,7 +64,7 @@ It has seven runtime dependencies:
 - `Bouncy Castle <https://www.bouncycastle.org/>`_ and
   `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
 - `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
-- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for *nix IPC
+- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
 
 Full project documentation is available at
 `Read the Docs <http://docs.web3j.io>`_.
