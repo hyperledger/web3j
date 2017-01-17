@@ -66,7 +66,7 @@ public class Scenario {
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
 
         // IPC Logging
-//        System.setProperty("org.apache.commons.logging.simplelog.log.org.web3j", "DEBUG");
+//        System.setProperty("org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
     }
 
     @Before

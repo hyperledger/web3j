@@ -32,6 +32,10 @@ the Ethereum network:
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
 
+The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
+overview of blockchain, Ethereum and web3j.
+
+
 Features
 --------
 
@@ -48,8 +52,10 @@ Features
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
+- Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
 
-It has six runtime dependencies:
+
+It has seven runtime dependencies:
 
 - `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
@@ -58,6 +64,7 @@ It has six runtime dependencies:
 - `Bouncy Castle <https://www.bouncycastle.org/>`_ and
   `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
 - `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
+- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for *nix IPC
 
 Full project documentation is available at
 `Read the Docs <http://docs.web3j.io>`_.
@@ -437,4 +444,10 @@ Thanks and credits
   `@ice09 <https://github.com/ice09>`_, `@adridadou <https://github.com/adridadou>`_,
   `@nickmelis <https://github.com/nickmelis>`_, `@basavk <https://github.com/basavk>`_,
   `@kabl <https://github.com/kabl>`_, `@MaxBinnewies <https://github.com/MaxBinnewies>`_,
-  `@vikulin <https://github.com/vikulin>`_
+  `@vikulin <https://github.com/vikulin>`_, `@sullis <https://github.com/sullis>`_,
+  `@vethan <https://github.com/vethan>`_, `@h2mch <https://github.com/h2mch>`_,
+  `@mtiutin <https://github.com/mtiutin>`_, `@fooock <https://github.com/fooock>`_,
+  `@ermyas <https://github.com/ermyas>`_, `@danieldietrich <https://github.com/danieldietrich>`_,
+  `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_,
+  `@ferOnti <https://github.com/ferOnti>`_, `@fraspadafora <https://github.com/fraspadafora>`_,
+  `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_

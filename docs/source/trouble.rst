@@ -38,8 +38,13 @@ being too low. Please refer to the section :ref:`nonce` for more information.
 I want to see details of the JSON-RPC requests and responses
 ------------------------------------------------------------
 
-Set the following system properties in your main class::
+Set the following system properties in your main class or project configuration::
 
+   // For HTTP connections
    System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
    System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
    System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+
+   // For IPC connections
+   System.setProperty("org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
+
