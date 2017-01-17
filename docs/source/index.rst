@@ -11,6 +11,9 @@ web3j is a lightweight, reactive, type safe Java and Android library for integra
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
 
+The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
+overview of blockchain, Ethereum and web3j.
+
 
 Features
 ========
