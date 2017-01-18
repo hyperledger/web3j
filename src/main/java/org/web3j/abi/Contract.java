@@ -123,6 +123,35 @@ public abstract class Contract extends ManagedTransaction {
 
         return signAndSend(rawTransaction);
     }
+    
+    /**
+     * Given the duration required to execute a transaction, asyncronous execution is strongly
+     * recommended via {@link Contract#executeTransactionAsync}.
+     * This executes the transaction and waits for the transaction to be processed by the node, but does not wait for the transaction receipt (i.e. the transaction getting mined) 
+     *
+     * @param function to transact with
+     * @return Transaction hash
+     * @throws ExecutionException if the computation threw an
+     * exception
+     * @throws InterruptedException if the current thread was interrupted
+     * while waiting
+     * @throws TransactionTimeoutException if the transaction was not processed while waiting
+     */
+    protected String executeTransactionWithoutWaiting(
+            Function function) throws ExecutionException, InterruptedException,
+            TransactionTimeoutException {
+        BigInteger nonce = getNonce(credentials.getAddress());
+        String encodedFunction = FunctionEncoder.encode(function);
+
+        RawTransaction rawTransaction = RawTransaction.createFunctionCallTransaction(
+                nonce,
+                GAS_PRICE,
+                GAS_LIMIT,
+                contractAddress,
+                encodedFunction);
+
+        return signAndSendWithoutReceipt(rawTransaction);
+    }
 
     /**
      * Execute the provided function as a transaction asynchronously.
