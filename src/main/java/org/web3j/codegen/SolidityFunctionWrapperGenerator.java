@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.*;
@@ -282,7 +282,8 @@ public class SolidityFunctionWrapperGenerator {
         return MethodSpec.methodBuilder("deploy")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(ParameterizedTypeName.get(
-                        ClassName.get(Future.class), TypeVariableName.get(className, Type.class)))
+                        ClassName.get(CompletableFuture.class), TypeVariableName.get(className, Type
+                        .class)))
                 .addParameter(Web3j.class, WEB3J)
                 .addParameter(Credentials.class, CREDENTIALS)
                 .addParameter(BigInteger.class, GAS_PRICE)
@@ -392,7 +393,7 @@ public class SolidityFunctionWrapperGenerator {
             throw new RuntimeException("Only transactional methods should have void return types");
         } else if (outputParameterTypes.size() == 1) {
             methodBuilder.returns(ParameterizedTypeName.get(
-                    ClassName.get(Future.class), outputParameterTypes.get(0)));
+                    ClassName.get(CompletableFuture.class), outputParameterTypes.get(0)));
 
             TypeName typeName = outputParameterTypes.get(0);
             methodBuilder.addStatement("$T function = " +
@@ -405,7 +406,7 @@ public class SolidityFunctionWrapperGenerator {
 
         } else {
             methodBuilder.returns(ParameterizedTypeName.get(
-                    ClassName.get(Future.class),
+                    ClassName.get(CompletableFuture.class),
                     ParameterizedTypeName.get(
                             ClassName.get(List.class), ClassName.get(Type.class))));
 
@@ -423,7 +424,8 @@ public class SolidityFunctionWrapperGenerator {
 
         String functionName = functionDefinition.getName();
 
-        methodBuilder.returns(ParameterizedTypeName.get(Future.class, TransactionReceipt.class));
+        methodBuilder.returns(ParameterizedTypeName.get(CompletableFuture.class, TransactionReceipt
+            .class));
 
         methodBuilder.addStatement("$T function = new $T($S, $T.<$T>asList($L), $T.<$T<?>>emptyList())",
                 Function.class, Function.class, functionName,

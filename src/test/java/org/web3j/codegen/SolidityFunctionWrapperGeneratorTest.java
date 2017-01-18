@@ -82,7 +82,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
         MethodSpec methodSpec = buildFunction(functionDefinition);
 
-        String expected = "public java.util.concurrent.Future<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(org.web3j.abi.datatypes.generated.Uint8 param) {\n" +
+        String expected = "public java.util.concurrent.CompletableFuture<org.web3j.protocol.core" +
+            ".methods.response.TransactionReceipt> functionName(org.web3j.abi.datatypes.generated.Uint8 param) {\n" +
                 "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(param), java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n" +
                 "  return executeTransactionAsync(function);\n" +
                 "}\n";
@@ -104,7 +105,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
         MethodSpec methodSpec = buildFunction(functionDefinition);
 
-        String expected = "public java.util.concurrent.Future<org.web3j.abi.datatypes.generated.Int8> functionName(org.web3j.abi.datatypes.generated.Uint8 param) {\n" +
+        String expected = "public java.util.concurrent.CompletableFuture<org.web3j.abi.datatypes.generated.Int8> functionName(org.web3j.abi.datatypes.generated.Uint8 param) {\n" +
                 "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n" +
                 "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(param), \n" +
                 "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n" +
@@ -145,7 +146,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
         MethodSpec methodSpec = buildFunction(functionDefinition);
 
-        String expected = "public java.util.concurrent.Future<java.util.List<org.web3j.abi.datatypes.Type>> functionName(org.web3j.abi.datatypes.generated.Uint8 param1, org.web3j.abi.datatypes.generated.Uint32 param2) {\n" +
+        String expected = "public java.util.concurrent.CompletableFuture<java.util.List<org.web3j.abi.datatypes.Type>> functionName(org.web3j.abi.datatypes.generated.Uint8 param1, org.web3j.abi.datatypes.generated.Uint32 param2) {\n" +
                 "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n" +
                 "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(param1, param2), \n" +
                 "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n" +
