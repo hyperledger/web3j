@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.*;
 
-import org.web3j.abi.Contract;
+import org.web3j.tx.Contract;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
