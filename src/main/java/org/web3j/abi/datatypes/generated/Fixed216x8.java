@@ -6,9 +6,11 @@ import org.web3j.abi.datatypes.Fixed;
 /**
  * <p>Auto generated code.<br>
  * <strong>Do not modifiy!</strong><br>
- * Please use Generator located in project X to update.</p>
+ * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Fixed216x8 extends Fixed {
+  public static final Fixed216x8 DEFAULT = new Fixed216x8(BigInteger.ZERO);
+
   public Fixed216x8(BigInteger value) {
     super(216, 8, value);
   }
