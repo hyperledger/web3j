@@ -8,6 +8,7 @@ import java.math.BigInteger;
 public class Int extends IntType {
 
     public static final String TYPE_NAME = "int";
+    public static final Int DEFAULT = new Int(BigInteger.ZERO);
 
     public Int(BigInteger value) {
         // "int" values should be declared as int256 in computing function selectors
