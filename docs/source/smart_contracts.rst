@@ -195,6 +195,47 @@ smart contract, simply pass in it's address::
            "0x...", web3j, credentials, GAS_PRICE, GAS_LIMIT);
 
 
+.. _transaction-managers:
+
+Transaction Managers
+--------------------
+
+web3j provides a
+`TransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/TransactionManager.java>`_
+abstraction to control the manner you connect to Ethereum clients with. The default mechanism uses
+ web3j's
+`RawTransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/RawTransactionManager.java>`_
+which works with Ethereum wallet files to sign transactions offline before submitting them to the
+network. However, you may wish to modify the transaction manager, which you can pass to the smart
+contract deployment and creation methods instead of a credentials object, i.e.::
+
+   YourSmartContract contract = YourSmartContract.deploy(
+           <web3j>, <transactionManager>, GAS_PRICE, GAS_LIMIT,
+           <initialValue>,
+           <param1>, ..., <paramN>);
+
+In addition to the RawTransactionManager, web3j provides a
+`ClientTransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/ClientTransactionManager.java>`_
+which passes the responsibility of signing your transaction on to the Ethereum client you are
+connecting to.
+
+
+Specifying the Chain Id on Transactions (EIP-155)
+-------------------------------------------------
+
+The RawTransactionManager takes an optional *chainId* parameter to specify the chain id to be used
+on transactions as per
+`EIP-155 <https://github.com/ethereum/EIPs/issues/155>`_. This prevents transactions from one chain
+being re-broadcast onto another chain, such as from Morden to Mainnet::
+
+   TransactionManager transactionManager = new RawTransactionManager(
+           web3j, credentials, ChainId.MAIN_NET);
+
+In order to avoid having to change config or code to specify which chain you are working with,
+web3j's default behaviour is to not specify chain ids on transactions to simplify working with the
+library. However, the recommendation of the Ethereum community is to use them.
+
+
 .. _invoking-transactions:
 
 Invoking transactions and events

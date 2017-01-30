@@ -48,3 +48,8 @@ Set the following system properties in your main class or project configuration:
    // For IPC connections
    System.setProperty("org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
 
+
+I want to obtain some Ether on Testnet, but don't want to have to mine it myself
+--------------------------------------------------------------------------------
+
+Head to the `Ethereum Ropsten Faucet <http://faucet.ropsten.be:3001/>`_ to request one free Ether.

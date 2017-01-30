@@ -182,12 +182,17 @@ IPC
 ---
 
 web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
-the same host as web3j. To connect simply use *IpcService* instead of *HttpService* when you
-create your service:
+the same host as web3j. To connect simply use the relevent *IpcService* implemntation instead of
+*HttpService* when you create your service:
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new IpcService("/path/to/socketfile"));
+   // OS X/Linux/Unix:
+   Web3j web3 = Web3j.build(new UnixIpcService("/path/to/socketfile"));
+   ...
+
+   // Windows
+   Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
 
 
@@ -389,12 +394,6 @@ You can run the integration test class
 to verify clients.
 
 
-Coming soon
------------
-
-- WebSocket interface support
-
-
 Related projects
 ----------------
 
@@ -453,4 +452,5 @@ Thanks and credits
   `@ermyas <https://github.com/ermyas>`_, `@danieldietrich <https://github.com/danieldietrich>`_,
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_,
   `@ferOnti <https://github.com/ferOnti>`_, `@fraspadafora <https://github.com/fraspadafora>`_,
-  `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_
+  `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_,
+  `@thedoctor <https://github.com/thedoctor>`_

@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.Future;
-import org.web3j.tx.Contract;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -20,10 +19,12 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Contract;
+import org.web3j.tx.TransactionManager;
 
 /**
  * <p>Auto generated code.<br>
- * <strong>Do not modifiy!</strong><br>
+ * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.</p>
  */
 public final class HumanStandardToken extends Contract {
@@ -31,6 +32,10 @@ public final class HumanStandardToken extends Contract {
 
     private HumanStandardToken(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    }
+
+    private HumanStandardToken(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
     public Future<Utf8String> name() {
@@ -107,6 +112,11 @@ public final class HumanStandardToken extends Contract {
         return deployAsync(HumanStandardToken.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor, initialValue);
     }
 
+    public static Future<HumanStandardToken> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue, Uint256 _initialAmount, Utf8String _tokenName, Uint8 _decimalUnits, Utf8String _tokenSymbol) {
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(_initialAmount, _tokenName, _decimalUnits, _tokenSymbol));
+        return deployAsync(HumanStandardToken.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor, initialValue);
+    }
+
     public EventValues processTransferEvent(TransactionReceipt transactionReceipt) {
         Event event = new Event("Transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
@@ -123,5 +133,9 @@ public final class HumanStandardToken extends Contract {
 
     public static HumanStandardToken load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         return new HumanStandardToken(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    }
+
+    public static HumanStandardToken load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new HumanStandardToken(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 }

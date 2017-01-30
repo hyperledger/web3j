@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.Future;
-import org.web3j.tx.Contract;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
@@ -15,10 +14,12 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Contract;
+import org.web3j.tx.TransactionManager;
 
 /**
  * <p>Auto generated code.<br>
- * <strong>Do not modifiy!</strong><br>
+ * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.</p>
  */
 public final class Fibonacci extends Contract {
@@ -26,6 +27,10 @@ public final class Fibonacci extends Contract {
 
     private Fibonacci(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    }
+
+    private Fibonacci(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
     public Future<TransactionReceipt> fibonacciNotify(Uint256 number) {
@@ -51,7 +56,15 @@ public final class Fibonacci extends Contract {
         return deployAsync(Fibonacci.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialValue);
     }
 
+    public static Future<Fibonacci> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {
+        return deployAsync(Fibonacci.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialValue);
+    }
+
     public static Fibonacci load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         return new Fibonacci(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    }
+
+    public static Fibonacci load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new Fibonacci(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 }

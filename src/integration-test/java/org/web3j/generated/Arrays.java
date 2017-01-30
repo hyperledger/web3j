@@ -4,7 +4,6 @@ import java.lang.String;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.concurrent.Future;
-import org.web3j.tx.Contract;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Function;
@@ -14,10 +13,12 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Contract;
+import org.web3j.tx.TransactionManager;
 
 /**
  * <p>Auto generated code.<br>
- * <strong>Do not modifiy!</strong><br>
+ * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.</p>
  */
 public final class Arrays extends Contract {
@@ -25,6 +26,10 @@ public final class Arrays extends Contract {
 
     private Arrays(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    }
+
+    private Arrays(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
     public Future<TransactionReceipt> fixedReverse(StaticArray<Uint256> input) {
@@ -41,7 +46,15 @@ public final class Arrays extends Contract {
         return deployAsync(Arrays.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialValue);
     }
 
+    public static Future<Arrays> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {
+        return deployAsync(Arrays.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialValue);
+    }
+
     public static Arrays load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         return new Arrays(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    }
+
+    public static Arrays load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new Arrays(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 }

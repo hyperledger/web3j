@@ -14,25 +14,31 @@ import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Numeric;
 
 /**
- * TransactionManager implementation using Ethereum wallet file to create and sign transactions
+ * <p>TransactionManager implementation using Ethereum wallet file to create and sign transactions
  * locally.
+ *
+ * <p>This transaction manager provides support for specifying the chain id for transactions as per
+ * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>.
  */
 public class RawTransactionManager implements TransactionManager {
 
     private final Web3j web3j;
     private final Credentials credentials;
 
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, boolean queryGasPricePerTransaction) {
+    private final byte chainId;
+
+    public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
         this.web3j = web3j;
         this.credentials = credentials;
+
+        this.chainId = chainId;
     }
 
     public RawTransactionManager(Web3j web3j, Credentials credentials) {
-        this(web3j, credentials, false);
+        this(web3j, credentials, (byte) -1);
     }
 
-    private BigInteger getNonce(String address) throws InterruptedException, ExecutionException {
+    BigInteger getNonce(String address) throws InterruptedException, ExecutionException {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
@@ -61,10 +67,16 @@ public class RawTransactionManager implements TransactionManager {
     public EthSendTransaction signAndSend(RawTransaction rawTransaction)
             throws InterruptedException, ExecutionException, TransactionTimeoutException {
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        byte[] signedMessage;
+
+        if (chainId > 0) {
+            signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
+        } else {
+            signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        }
+
         String hexValue = Numeric.toHexString(signedMessage);
 
-        // This might be a good candidate for using functional composition with CompletableFutures
         return web3j.ethSendRawTransaction(hexValue)
                 .sendAsync().get();
     }
