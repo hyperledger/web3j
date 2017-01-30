@@ -3,7 +3,7 @@ package org.web3j.protocol.ipc;
 import java.io.IOException;
 
 /**
- * Simple IO facade for the &#42;nix & Windows IPC implementations.
+ * Simple IO facade for the &#42;nix and Windows IPC implementations.
  */
 public interface IOFacade {
     void write(String payload) throws IOException;
