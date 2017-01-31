@@ -16,14 +16,30 @@ import static org.junit.Assert.assertThat;
 public class WalletTest {
 
     @Test
-    public void testCreate() throws Exception {
-        WalletFile walletFile = Wallet.create(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR);
+    public void testCreateStandard() throws Exception {
+        testCreate(Wallet.createStandard(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR));
+    }
+
+    @Test
+    public void testCreateLight() throws Exception {
+        testCreate(Wallet.createLight(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR));
+    }
+
+    private void testCreate(WalletFile walletFile) throws Exception {
         assertThat(walletFile.getAddress(), is(SampleKeys.ADDRESS_NO_PREFIX));
     }
 
     @Test
-    public void testEncryptDecrypt() throws Exception {
-        WalletFile walletFile = Wallet.create(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR);
+    public void testEncryptDecryptStandard() throws Exception {
+        testEncryptDecrypt(Wallet.createStandard(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR));
+    }
+
+    @Test
+    public void testEncryptDecryptLight() throws Exception {
+        testEncryptDecrypt(Wallet.createLight(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR));
+    }
+
+    private void testEncryptDecrypt(WalletFile walletFile) throws Exception {
         assertThat(Wallet.decrypt(SampleKeys.PASSWORD, walletFile), equalTo(SampleKeys.KEY_PAIR));
     }
 

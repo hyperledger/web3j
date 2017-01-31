@@ -32,7 +32,6 @@ gradle-app.setting
 .idea
 *.iml
 geth.sh
-src/main/resources/
 
 # Sphinx generated docs
 docs/build

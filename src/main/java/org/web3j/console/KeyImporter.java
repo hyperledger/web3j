@@ -73,7 +73,7 @@ public class KeyImporter extends WalletManager {
 
         try {
             String walletFileName = WalletUtils.generateWalletFile(
-                    password, credentials.getEcKeyPair(), destination);
+                    password, credentials.getEcKeyPair(), destination, true);
             console.printf("Wallet file " + walletFileName +
                     " successfully created in: " + destinationDir + "\n");
         } catch (CipherException | IOException e) {

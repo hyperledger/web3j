@@ -39,16 +39,34 @@ public class WalletUtilsTest {
     }
 
     @Test
-    public void testGenerateNewWalletFile() throws Exception {
-        String fileName = WalletUtils.generateNewWalletFile(PASSWORD, tempDir);
+    public void testGenerateFullNewWalletFile() throws Exception {
+        String fileName = WalletUtils.generateFullNewWalletFile(PASSWORD, tempDir);
+        testGenerateNewWalletFile(fileName);
+    }
 
+    @Test
+    public void testGenerateLightNewWalletFile() throws Exception {
+        String fileName = WalletUtils.generateLightNewWalletFile(PASSWORD, tempDir);
+        testGenerateNewWalletFile(fileName);
+    }
+
+    private void testGenerateNewWalletFile(String fileName) throws Exception {
         WalletUtils.loadCredentials(PASSWORD, new File(tempDir, fileName));
     }
 
     @Test
-    public void testGenerateWalletFile() throws Exception {
-        String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir);
+    public void testGenerateFullWalletFile() throws Exception {
+        String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, true);
+        testGenerateWalletFile(fileName);
+    }
 
+    @Test
+    public void testGenerateLightWalletFile() throws Exception {
+        String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, false);
+        testGenerateWalletFile(fileName);
+    }
+
+    private void testGenerateWalletFile(String fileName) throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD, new File(tempDir, fileName));
 

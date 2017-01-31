@@ -37,6 +37,7 @@ import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Collection;
 import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
+import org.web3j.utils.Version;
 
 import static org.web3j.utils.Collection.tail;
 
@@ -57,7 +58,7 @@ public class SolidityFunctionWrapperGenerator {
     private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
             "<strong>Do not modify!</strong><br>\n" +
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
-            "} to update.</p>\n";
+            "} to update.\n";
 
     private static final String USAGE = "solidity generate " +
             "<input binary file>.bin <input abi file>.abi " +
@@ -208,11 +209,27 @@ public class SolidityFunctionWrapperGenerator {
     }
 
     private TypeSpec.Builder createClassBuilder(String className, String binary) {
+
+        String javadoc = CODEGEN_WARNING + getWeb3jVersion();
+
         return TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addJavadoc(CODEGEN_WARNING)
+                .addJavadoc(javadoc)
                 .superclass(Contract.class)
                 .addField(createBinaryDefinition(binary));
+    }
+
+    private static String getWeb3jVersion() {
+        String version;
+
+        try {
+            // This only works if run as part of the web3j command line tools which contains
+            // a version.properties file
+            version = Version.getVersion();
+        } catch (IOException|NullPointerException e) {
+            version = Version.DEFAULT;
+        }
+        return "\n<p>Generated with web3j version " + version + ".\n";
     }
 
     private FieldSpec createBinaryDefinition(String binary) {
