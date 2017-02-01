@@ -195,7 +195,8 @@ public class SolidityFunctionWrapperGenerator {
         classBuilder.addMethod(buildConstructor(
                 TransactionManager.class, TRANSACTION_MANAGER));
 
-        classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, functionDefinitions));
+        classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder,
+                functionDefinitions));
 
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
@@ -228,7 +229,7 @@ public class SolidityFunctionWrapperGenerator {
             // This only works if run as part of the web3j command line tools which contains
             // a version.properties file
             version = Version.getVersion();
-        } catch (IOException|NullPointerException e) {
+        } catch (IOException | NullPointerException e) {
             version = Version.DEFAULT;
         }
         return "\n<p>Generated with web3j version " + version + ".\n";
@@ -480,15 +481,21 @@ public class SolidityFunctionWrapperGenerator {
 
         methodBuilder.returns(ParameterizedTypeName.get(Future.class, TransactionReceipt.class));
 
-        methodBuilder.addStatement("$T function = new $T($S, $T.<$T>asList($L), $T.<$T<?>>emptyList())",
+        methodBuilder.addStatement("$T function = new $T($S, $T.<$T>asList($L), $T" +
+                        ".<$T<?>>emptyList())",
                 Function.class, Function.class, functionName,
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
         methodBuilder.addStatement("return executeTransactionAsync(function)");
     }
 
-    static TypeSpec buildEventResponseObject(String className, List<NamedTypeName> indexedParameters, List<NamedTypeName> nonIndexedParameters) {
-        TypeSpec.Builder builder = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+    static TypeSpec buildEventResponseObject(String className,
+                                             List<NamedTypeName> indexedParameters,
+                                             List<NamedTypeName> nonIndexedParameters) {
+
+        TypeSpec.Builder builder = TypeSpec.classBuilder(className)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+
         for (NamedTypeName namedType : indexedParameters) {
             builder.addField(namedType.getTypeName(), namedType.getName(), Modifier.PUBLIC);
         }
@@ -500,9 +507,15 @@ public class SolidityFunctionWrapperGenerator {
         return builder.build();
     }
 
-    static MethodSpec buildEventObservableFunction(String responseClassName, String functionName, List<NamedTypeName> indexedParameters, List<NamedTypeName> nonIndexedParameters) throws ClassNotFoundException {
+    static MethodSpec buildEventObservableFunction(String responseClassName,
+                                                   String functionName,
+                                                   List<NamedTypeName> indexedParameters,
+                                                   List<NamedTypeName> nonIndexedParameters)
+            throws ClassNotFoundException {
+
         String generatedFunctionName = functionName + "EventObservable";
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx.Observable.class), ClassName.get("", responseClassName));
+        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx
+                .Observable.class), ClassName.get("", responseClassName));
 
         MethodSpec.Builder observableMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName)
                 .addModifiers(Modifier.PUBLIC)
@@ -512,12 +525,15 @@ public class SolidityFunctionWrapperGenerator {
         buildVariableLengthEventConstructor(
                 observableMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
-        observableMethodBuilder.addStatement("$1T filter = new $1T($2T.EARLIEST,$2T.LATEST, getContractAddress())", EthFilter.class, DefaultBlockParameterName.class)
+        observableMethodBuilder.addStatement("$1T filter = new $1T($2T.EARLIEST,$2T.LATEST, " +
+                "getContractAddress())", EthFilter.class, DefaultBlockParameterName.class)
                 .addStatement("filter.addSingleTopic($T.encode(event))", EventEncoder.class)
                 .beginControlFlow("return web3j.ethLogObservable(filter).map(log ->")
-                .addStatement("$T eventValues = extractEventParameters(event, log)", EventValues.class)
+                .addStatement("$T eventValues = extractEventParameters(event, log)", EventValues
+                        .class)
                 .addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName))
-                .addCode(buildTypedResponse("typedResponse", indexedParameters, nonIndexedParameters))
+                .addCode(buildTypedResponse("typedResponse", indexedParameters,
+                        nonIndexedParameters))
                 .addStatement("return typedResponse")
                 .endControlFlow(")");
 
@@ -525,11 +541,16 @@ public class SolidityFunctionWrapperGenerator {
                 .build();
     }
 
-    static MethodSpec buildEventTransactionReceiptFunction(String responseClassName, String functionName, List<NamedTypeName> indexedParameters, List<NamedTypeName> nonIndexedParameters) throws ClassNotFoundException {
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(List.class), ClassName.get("", responseClassName));
+    static MethodSpec buildEventTransactionReceiptFunction(String responseClassName, String
+            functionName, List<NamedTypeName> indexedParameters, List<NamedTypeName>
+            nonIndexedParameters) throws ClassNotFoundException {
+        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get
+                (List.class), ClassName.get("", responseClassName));
 
-        String generatedFunctionName = "get" + Strings.capitaliseFirstLetter(functionName) + "EventFromTransactionReceipt";
-        MethodSpec.Builder transactionMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName)
+        String generatedFunctionName = "get" + Strings.capitaliseFirstLetter(functionName) +
+                "EventFromTransactionReceipt";
+        MethodSpec.Builder transactionMethodBuilder = MethodSpec.methodBuilder
+                (generatedFunctionName)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(TransactionReceipt.class, "transactionReceipt")
                 .returns(parameterizedTypeName);
@@ -537,9 +558,11 @@ public class SolidityFunctionWrapperGenerator {
         buildVariableLengthEventConstructor(
                 transactionMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
-        transactionMethodBuilder.beginControlFlow("return extractEventParameters(event, transactionReceipt).stream().map(eventValues ->")
+        transactionMethodBuilder.beginControlFlow("return extractEventParameters(event, " +
+                "transactionReceipt).stream().map(eventValues ->")
                 .addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName))
-                .addCode(buildTypedResponse("typedResponse", indexedParameters, nonIndexedParameters))
+                .addCode(buildTypedResponse("typedResponse", indexedParameters,
+                        nonIndexedParameters))
                 .addStatement("return typedResponse")
                 .endControlFlow(").collect($T.toList())", Collectors.class);
         return transactionMethodBuilder.build();
@@ -558,26 +581,41 @@ public class SolidityFunctionWrapperGenerator {
         for (AbiDefinition.NamedType namedType : inputs) {
 
             if (namedType.isIndexed()) {
-                indexedParameters.add(new NamedTypeName(namedType.getName(), buildTypeName(namedType.getType())));
+                indexedParameters.add(new NamedTypeName(namedType.getName(), buildTypeName
+                        (namedType.getType())));
             } else {
-                nonIndexedParameters.add(new NamedTypeName(namedType.getName(), buildTypeName(namedType.getType())));
+                nonIndexedParameters.add(new NamedTypeName(namedType.getName(), buildTypeName
+                        (namedType.getType())));
             }
         }
 
-        classBuilder.addType(buildEventResponseObject(responseClassName, indexedParameters, nonIndexedParameters));
+        classBuilder.addType(buildEventResponseObject(responseClassName, indexedParameters,
+                nonIndexedParameters));
 
-        classBuilder.addMethod(buildEventTransactionReceiptFunction(responseClassName, functionName, indexedParameters, nonIndexedParameters));
-        classBuilder.addMethod(buildEventObservableFunction(responseClassName, functionName, indexedParameters, nonIndexedParameters));
+        classBuilder.addMethod(buildEventTransactionReceiptFunction(responseClassName,
+                functionName, indexedParameters, nonIndexedParameters));
+        classBuilder.addMethod(buildEventObservableFunction(responseClassName, functionName,
+                indexedParameters, nonIndexedParameters));
     }
 
-    static CodeBlock buildTypedResponse(String objectName, List<NamedTypeName> indexedParameters, List<NamedTypeName> nonIndexedParameters) {
+    static CodeBlock buildTypedResponse(String objectName,
+                                        List<NamedTypeName> indexedParameters,
+                                        List<NamedTypeName> nonIndexedParameters) {
         CodeBlock.Builder builder = CodeBlock.builder();
         for (int i = 0; i < indexedParameters.size(); i++) {
-            builder.addStatement("$L.$L = ($T)eventValues.getIndexedValues().get($L)", objectName, indexedParameters.get(i).getName(), indexedParameters.get(i).getTypeName(), i);
+            builder.addStatement("$L.$L = ($T)eventValues.getIndexedValues().get($L)",
+                    objectName,
+                    indexedParameters.get(i).getName(),
+                    indexedParameters.get(i).getTypeName(),
+                    i);
         }
 
         for (int i = 0; i < nonIndexedParameters.size(); i++) {
-            builder.addStatement("$L.$L = ($T)eventValues.getNonIndexedValues().get($L)", objectName, nonIndexedParameters.get(i).getName(), nonIndexedParameters.get(i).getTypeName(), i);
+            builder.addStatement("$L.$L = ($T)eventValues.getNonIndexedValues().get($L)",
+                    objectName,
+                    nonIndexedParameters.get(i).getName(),
+                    nonIndexedParameters.get(i).getTypeName(),
+                    i);
         }
         return builder.build();
     }
@@ -631,12 +669,14 @@ public class SolidityFunctionWrapperGenerator {
                     }
                 });
 
-        methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T.<$T<?>>asList(" +
+        methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T" +
+                ".<$T<?>>asList(" +
                 asListParams + "))", objects.toArray());
     }
 
     private static void buildVariableLengthEventConstructor(
-            MethodSpec.Builder methodBuilder, String eventName, List<NamedTypeName> indexedParameterTypes,
+            MethodSpec.Builder methodBuilder, String eventName, List<NamedTypeName>
+            indexedParameterTypes,
             List<NamedTypeName> nonIndexedParameterTypes) throws ClassNotFoundException {
 
         List<Object> objects = new ArrayList<Object>();
