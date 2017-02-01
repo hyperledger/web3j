@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.*;
 
 import org.web3j.abi.EventEncoder;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.tx.Contract;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
@@ -40,6 +41,7 @@ import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
 import rx.*;
+import rx.functions.Func1;
 
 import static org.web3j.utils.Collection.tail;
 
@@ -525,17 +527,31 @@ public class SolidityFunctionWrapperGenerator {
         buildVariableLengthEventConstructor(
                 observableMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
+
+        TypeSpec converter = TypeSpec.anonymousClassBuilder("")
+                .addSuperinterface(ParameterizedTypeName.get(
+                        ClassName.get(Func1.class),
+                        ClassName.get(Log.class),
+                        ClassName.get("", responseClassName)))
+                .addMethod(MethodSpec.methodBuilder("call")
+                        .addAnnotation(Override.class)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(Log.class, "log")
+                        .returns(ClassName.get("", responseClassName))
+                        .addStatement("$T eventValues = extractEventParameters(event, log)",
+                                EventValues.class)
+                        .addStatement("$1T typedResponse = new $1T()",
+                                ClassName.get("", responseClassName))
+                        .addCode(buildTypedResponse("typedResponse", indexedParameters,
+                                nonIndexedParameters))
+                        .addStatement("return typedResponse")
+                        .build())
+                .build();
+
         observableMethodBuilder.addStatement("$1T filter = new $1T($2T.EARLIEST,$2T.LATEST, " +
                 "getContractAddress())", EthFilter.class, DefaultBlockParameterName.class)
                 .addStatement("filter.addSingleTopic($T.encode(event))", EventEncoder.class)
-                .beginControlFlow("return web3j.ethLogObservable(filter).map(log ->")
-                .addStatement("$T eventValues = extractEventParameters(event, log)", EventValues
-                        .class)
-                .addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName))
-                .addCode(buildTypedResponse("typedResponse", indexedParameters,
-                        nonIndexedParameters))
-                .addStatement("return typedResponse")
-                .endControlFlow(")");
+                .addStatement("return web3j.ethLogObservable(filter).map($L)", converter);
 
         return observableMethodBuilder
                 .build();
@@ -543,12 +559,13 @@ public class SolidityFunctionWrapperGenerator {
 
     static MethodSpec buildEventTransactionReceiptFunction(String responseClassName, String
             functionName, List<NamedTypeName> indexedParameters, List<NamedTypeName>
-            nonIndexedParameters) throws ClassNotFoundException {
+                                                                   nonIndexedParameters) throws
+            ClassNotFoundException {
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get
                 (List.class), ClassName.get("", responseClassName));
 
         String generatedFunctionName = "get" + Strings.capitaliseFirstLetter(functionName) +
-                "EventFromTransactionReceipt";
+                "Events";
         MethodSpec.Builder transactionMethodBuilder = MethodSpec.methodBuilder
                 (generatedFunctionName)
                 .addModifiers(Modifier.PUBLIC)
@@ -558,13 +575,21 @@ public class SolidityFunctionWrapperGenerator {
         buildVariableLengthEventConstructor(
                 transactionMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
-        transactionMethodBuilder.beginControlFlow("return extractEventParameters(event, " +
-                "transactionReceipt).stream().map(eventValues ->")
-                .addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName))
+        transactionMethodBuilder.addStatement("$T valueList = extractEventParameters(event," +
+                "transactionReceipt)", ParameterizedTypeName.get(List.class, EventValues.class))
+                .addStatement("$1T responses = new $1T(valueList.size())",
+                        ParameterizedTypeName.get(ClassName.get(ArrayList.class),
+                                ClassName.get("", responseClassName)))
+                .beginControlFlow("for($T eventValues : valueList)", EventValues.class)
+                .addStatement("$1T typedResponse = new $1T()",
+                        ClassName.get("", responseClassName))
                 .addCode(buildTypedResponse("typedResponse", indexedParameters,
                         nonIndexedParameters))
-                .addStatement("return typedResponse")
-                .endControlFlow(").collect($T.toList())", Collectors.class);
+                .addStatement("responses.add(typedResponse)")
+                .endControlFlow();
+
+
+        transactionMethodBuilder.addStatement("return responses");
         return transactionMethodBuilder.build();
     }
 
