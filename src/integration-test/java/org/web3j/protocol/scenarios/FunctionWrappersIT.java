@@ -44,11 +44,12 @@ public class FunctionWrappersIT extends Scenario {
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(
                 new Uint256(BigInteger.valueOf(15))).get();
 
-        EventValues result = fibonacci.processNotifyEvent(transactionReceipt);
+        Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
-        assertThat(result.getNonIndexedValues(),
-                equalTo(Arrays.asList(
-                        new Uint256(BigInteger.valueOf(15)),
-                        new Uint256(BigInteger.valueOf(610)))));
+        assertThat(result.input,
+                equalTo(new Uint256(BigInteger.valueOf(15))));
+
+        assertThat(result.result,
+                equalTo(new Uint256(BigInteger.valueOf(610))));
     }
 }
