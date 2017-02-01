@@ -69,7 +69,7 @@ public class ContractTest extends ManagedTransactionTester {
         TestContract deployedContract = TestContract.deployAsync(
                 TestContract.class, web3j, SampleKeys.CREDENTIALS,
                 ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
-                "0xcafed00d" , encodedConstructor, BigInteger.ZERO).get();
+                "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
         assertThat(deployedContract.getContractAddress(), is(ADDRESS));
     }
 
@@ -87,7 +87,7 @@ public class ContractTest extends ManagedTransactionTester {
             TestContract.deployAsync(
                     TestContract.class, web3j, SampleKeys.CREDENTIALS,
                     ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
-                    "0xcafed00d" , encodedConstructor, BigInteger.ZERO).get();
+                    "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
         } catch (InterruptedException e) {
             throw e;
         } catch (ExecutionException e) {
@@ -111,7 +111,7 @@ public class ContractTest extends ManagedTransactionTester {
     public void testCallMultipleValue() throws Exception {
         EthCall ethCall = new EthCall();
         ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000037" +
-                        "0000000000000000000000000000000000000000000000000000000000000007");
+                "0000000000000000000000000000000000000000000000000000000000000007");
         prepareCall(ethCall);
 
         assertThat(contract.callMultipleValue().get(),
@@ -136,7 +136,7 @@ public class ContractTest extends ManagedTransactionTester {
         prepareTransaction(transactionReceipt);
 
         assertThat(contract.performTransaction(
-                        new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).get(),
+                new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).get(),
                 is(transactionReceipt));
     }
 
@@ -151,7 +151,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         transactionReceipt.setLogs(Arrays.asList(log));
 
-        EventValues eventValues = contract.processEvent(transactionReceipt);
+        EventValues eventValues = contract.processEvent(transactionReceipt).get(0);
 
         assertThat(eventValues.getIndexedValues(),
                 equalTo(Collections.singletonList(
@@ -235,7 +235,8 @@ public class ContractTest extends ManagedTransactionTester {
         public Future<Utf8String> callSingleValue() {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
+                    Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
+                    }));
             return executeCallSingleValueReturnAsync(function);
         }
 
@@ -243,8 +244,10 @@ public class ContractTest extends ManagedTransactionTester {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(
-                            new TypeReference<Uint256>() {},
-                            new TypeReference<Uint256>() {}));
+                            new TypeReference<Uint256>() {
+                            },
+                            new TypeReference<Uint256>() {
+                            }));
             return executeCallMultipleValueReturnAsync(function);
         }
 
@@ -254,10 +257,12 @@ public class ContractTest extends ManagedTransactionTester {
             return executeTransactionAsync(function);
         }
 
-        public EventValues processEvent(TransactionReceipt transactionReceipt) {
+        public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {
             Event event = new Event("Event",
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+                    Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
+                    }),
+                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
+                    }));
             return extractEventParameters(event, transactionReceipt);
         }
     }

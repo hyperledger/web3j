@@ -1,10 +1,15 @@
 package org.web3j.generated;
 
+
+import java.lang.Override;
 import java.lang.String;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Future;
+import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
@@ -13,9 +18,14 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * <p>Auto generated code.<br>
@@ -33,23 +43,49 @@ public final class Fibonacci extends Contract {
         super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
+    public List<NotifyEventResponse> getNotifyEvents(TransactionReceipt transactionReceipt) {
+        Event event = new Event("Notify",
+                Arrays.<TypeReference<?>>asList(),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+        List<EventValues> valueList = extractEventParameters(event,transactionReceipt);
+        ArrayList<NotifyEventResponse> responses = new ArrayList<NotifyEventResponse>(valueList.size());
+        for(EventValues eventValues : valueList) {
+            NotifyEventResponse typedResponse = new NotifyEventResponse();
+            typedResponse.input = (Uint256)eventValues.getNonIndexedValues().get(0);
+            typedResponse.result = (Uint256)eventValues.getNonIndexedValues().get(1);
+            responses.add(typedResponse);
+        }
+        return responses;
+    }
+
+    public Observable<NotifyEventResponse> NotifyEventObservable() {
+        Event event = new Event("Notify",
+                Arrays.<TypeReference<?>>asList(),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+        EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,DefaultBlockParameterName.LATEST, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(event));
+        return web3j.ethLogObservable(filter).map(new Func1<Log, NotifyEventResponse>() {
+            @Override
+            public NotifyEventResponse call(Log log) {
+                EventValues eventValues = extractEventParameters(event, log);
+                NotifyEventResponse typedResponse = new NotifyEventResponse();
+                typedResponse.input = (Uint256)eventValues.getNonIndexedValues().get(0);
+                typedResponse.result = (Uint256)eventValues.getNonIndexedValues().get(1);
+                return typedResponse;
+            }
+        });
+    }
+
     public Future<TransactionReceipt> fibonacciNotify(Uint256 number) {
         Function function = new Function("fibonacciNotify", Arrays.<Type>asList(number), Collections.<TypeReference<?>>emptyList());
         return executeTransactionAsync(function);
     }
 
     public Future<Uint256> fibonacci(Uint256 number) {
-        Function function = new Function("fibonacci", 
-                Arrays.<Type>asList(number), 
+        Function function = new Function("fibonacci",
+                Arrays.<Type>asList(number),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeCallSingleValueReturnAsync(function);
-    }
-
-    public EventValues processNotifyEvent(TransactionReceipt transactionReceipt) {
-        Event event = new Event("Notify", 
-                Arrays.<TypeReference<?>>asList(),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
-        return extractEventParameters(event, transactionReceipt);
     }
 
     public static Future<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {
@@ -66,5 +102,11 @@ public final class Fibonacci extends Contract {
 
     public static Fibonacci load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         return new Fibonacci(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    }
+
+    public static class NotifyEventResponse {
+        public Uint256 input;
+
+        public Uint256 result;
     }
 }

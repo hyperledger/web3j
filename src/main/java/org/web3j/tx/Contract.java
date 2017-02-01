@@ -112,13 +112,13 @@ public abstract class Contract extends ManagedTransaction {
      * Given the duration required to execute a transaction, asyncronous execution is strongly
      * recommended via {@link Contract#executeTransactionAsync}.
      *
-     * @param data to send in transaction
+     * @param data  to send in transaction
      * @param value in Wei to send in transaction
      * @return {@link Optional} containing our transaction receipt
-     * @throws ExecutionException if the computation threw an
-     * exception
-     * @throws InterruptedException if the current thread was interrupted
-     * while waiting
+     * @throws ExecutionException          if the computation threw an
+     *                                     exception
+     * @throws InterruptedException        if the current thread was interrupted
+     *                                     while waiting
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     protected TransactionReceipt executeTransaction(
@@ -139,31 +139,40 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected EventValues extractEventParameters(
+            Event event, Log log) {
+
+        List<String> topics = log.getTopics();
+        String encodedEventSignature = EventEncoder.encode(event);
+        if (!topics.get(0).equals(encodedEventSignature)) {
+            return null;
+        }
+
+        List<Type> indexedValues = new ArrayList<>();
+        List<Type> nonIndexedValues = FunctionReturnDecoder.decode(
+                log.getData(), event.getNonIndexedParameters());
+
+        List<TypeReference<Type>> indexedParameters = event.getIndexedParameters();
+        for (int i = 0; i < indexedParameters.size(); i++) {
+            Type value = FunctionReturnDecoder.decodeIndexedValue(
+                    topics.get(i + 1), indexedParameters.get(i));
+            indexedValues.add(value);
+        }
+        return new EventValues(indexedValues, nonIndexedValues);
+    }
+
+    protected List<EventValues> extractEventParameters(
             Event event, TransactionReceipt transactionReceipt) {
 
         List<Log> logs = transactionReceipt.getLogs();
-
-        List<Type> indexedValues = new ArrayList<>();
-        List<Type> nonIndexedValues = new ArrayList<>();
-
-        for (Log log:logs) {
-            List<String> topics = log.getTopics();
-            String encodedEventSignature = EventEncoder.encode(event);
-            if (topics.get(0).equals(encodedEventSignature)) {
-
-                nonIndexedValues = FunctionReturnDecoder.decode(
-                        log.getData(), event.getNonIndexedParameters());
-
-                List<TypeReference<Type>> indexedParameters = event.getIndexedParameters();
-                for (int i = 0; i < indexedParameters.size(); i++) {
-                    Type value = FunctionReturnDecoder.decodeIndexedValue(
-                            topics.get(i+1), indexedParameters.get(i));
-                    indexedValues.add(value);
-                }
+        List<EventValues> values = new ArrayList<>();
+        for (Log log : logs) {
+            EventValues eventValues = extractEventParameters(event, log);
+            if (eventValues != null) {
+                values.add(eventValues);
             }
         }
 
-        return new EventValues(indexedValues, nonIndexedValues);
+        return values;
     }
 
     protected static <T extends Contract> T deploy(
