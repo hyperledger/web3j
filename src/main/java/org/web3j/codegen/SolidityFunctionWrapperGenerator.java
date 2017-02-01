@@ -10,14 +10,28 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 
-import org.web3j.abi.*;
+import org.web3j.tx.Contract;
+import org.web3j.abi.EventValues;
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.crypto.Credentials;
@@ -27,9 +41,11 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.utils.*;
+import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Collection;
+import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
+import org.web3j.utils.Version;
 import rx.*;
 
 import static org.web3j.utils.Collection.tail;
@@ -42,6 +58,7 @@ public class SolidityFunctionWrapperGenerator {
     private static final String BINARY = "BINARY";
     private static final String WEB3J = "web3j";
     private static final String CREDENTIALS = "credentials";
+    private static final String TRANSACTION_MANAGER = "transactionManager";
     private static final String INITIAL_VALUE = "initialValue";
     private static final String CONTRACT_ADDRESS = "contractAddress";
     private static final String GAS_PRICE = "gasPrice";
@@ -50,7 +67,7 @@ public class SolidityFunctionWrapperGenerator {
     private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
             "<strong>Do not modify!</strong><br>\n" +
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
-            "} to update.</p>\n";
+            "} to update.\n";
 
     private static final String USAGE = "solidity generate " +
             "<input binary file>.bin <input abi file>.abi " +
@@ -181,9 +198,14 @@ public class SolidityFunctionWrapperGenerator {
         String className = Strings.capitaliseFirstLetter(contractName);
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, binary);
-        classBuilder.addMethod(buildConstructor());
+        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildConstructor(
+                TransactionManager.class, TRANSACTION_MANAGER));
+
         classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, functionDefinitions));
-        classBuilder.addMethod(buildLoad(className));
+
+        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
 
         System.out.printf("Generating " + basePackageName + "." + className + " ... ");
         JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
@@ -196,11 +218,27 @@ public class SolidityFunctionWrapperGenerator {
     }
 
     private TypeSpec.Builder createClassBuilder(String className, String binary) {
+
+        String javadoc = CODEGEN_WARNING + getWeb3jVersion();
+
         return TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addJavadoc(CODEGEN_WARNING)
+                .addJavadoc(javadoc)
                 .superclass(Contract.class)
                 .addField(createBinaryDefinition(binary));
+    }
+
+    private static String getWeb3jVersion() {
+        String version;
+
+        try {
+            // This only works if run as part of the web3j command line tools which contains
+            // a version.properties file
+            version = Version.getVersion();
+        } catch (IOException|NullPointerException e) {
+            version = Version.DEFAULT;
+        }
+        return "\n<p>Generated with web3j version " + version + ".\n";
     }
 
     private FieldSpec createBinaryDefinition(String binary) {
@@ -227,87 +265,104 @@ public class SolidityFunctionWrapperGenerator {
 
             } else if (functionDefinition.getType().equals("constructor")) {
                 constructor = true;
-                methodSpecs.add(buildDeploy(className, functionDefinition));
+                methodSpecs.add(buildDeploy(
+                        className, functionDefinition, Credentials.class, CREDENTIALS));
+                methodSpecs.add(buildDeploy(
+                        className, functionDefinition, TransactionManager.class,
+                        TRANSACTION_MANAGER));
             }
         }
 
         // constructor will not be specified in ABI file if its empty
         if (!constructor) {
-            MethodSpec.Builder methodBuilder = getDeployMethodSpec(className);
-            methodSpecs.add(buildDeployAsyncNoParams(methodBuilder, className));
+            MethodSpec.Builder credentialsMethodBuilder =
+                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS);
+            methodSpecs.add(buildDeployAsyncNoParams(
+                    credentialsMethodBuilder, className, CREDENTIALS));
+
+            MethodSpec.Builder transactionManagerMethodBuilder =
+                    getDeployMethodSpec(className, TransactionManager.class, TRANSACTION_MANAGER);
+            methodSpecs.add(buildDeployAsyncNoParams(
+                    transactionManagerMethodBuilder, className, TRANSACTION_MANAGER));
         }
 
         return methodSpecs;
     }
 
-    private static MethodSpec buildConstructor() {
+    private static MethodSpec buildConstructor(Class authType, String authName) {
         return MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PRIVATE)
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(Credentials.class, CREDENTIALS)
+                .addParameter(authType, authName)
                 .addParameter(BigInteger.class, GAS_PRICE)
                 .addParameter(BigInteger.class, GAS_LIMIT)
                 .addStatement("super($N, $N, $N, $N, $N)",
-                        CONTRACT_ADDRESS, WEB3J, CREDENTIALS, GAS_PRICE, GAS_LIMIT)
+                        CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
                 .build();
     }
 
     private static MethodSpec buildDeploy(
-            String className, AbiDefinition functionDefinition) {
+            String className, AbiDefinition functionDefinition,
+            Class authType, String authName) {
 
-        MethodSpec.Builder methodBuilder = getDeployMethodSpec(className);
+        MethodSpec.Builder methodBuilder = getDeployMethodSpec(className, authType, authName);
         String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
 
         if (!inputParams.isEmpty()) {
-            return buildDeployAsyncWithParams(methodBuilder, className, inputParams);
+            return buildDeployAsyncWithParams(methodBuilder, className, inputParams, authName);
         } else {
-            return buildDeployAsyncNoParams(methodBuilder, className);
+            return buildDeployAsyncNoParams(methodBuilder, className, authName);
         }
     }
 
     private static MethodSpec buildDeployAsyncWithParams(
-            MethodSpec.Builder methodBuilder, String className, String inputParams) {
+            MethodSpec.Builder methodBuilder, String className, String inputParams,
+            String authName) {
+
         methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor(" +
                         "$T.<$T>asList($L)" +
                         ")",
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         methodBuilder.addStatement(
                 "return deployAsync($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
-                className, WEB3J, CREDENTIALS, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+                className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
         return methodBuilder.build();
     }
 
     private static MethodSpec buildDeployAsyncNoParams(
-            MethodSpec.Builder methodBuilder, String className) {
+            MethodSpec.Builder methodBuilder, String className,
+            String authName) {
         methodBuilder.addStatement("return deployAsync($L.class, $L, $L, $L, $L, $L, \"\", $L)",
-                className, WEB3J, CREDENTIALS, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+                className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
         return methodBuilder.build();
     }
 
-    private static MethodSpec.Builder getDeployMethodSpec(String className) {
+    private static MethodSpec.Builder getDeployMethodSpec(
+            String className, Class authType, String authName) {
         return MethodSpec.methodBuilder("deploy")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(ParameterizedTypeName.get(
                         ClassName.get(Future.class), TypeVariableName.get(className, Type.class)))
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(Credentials.class, CREDENTIALS)
+                .addParameter(authType, authName)
                 .addParameter(BigInteger.class, GAS_PRICE)
                 .addParameter(BigInteger.class, GAS_LIMIT)
                 .addParameter(BigInteger.class, INITIAL_VALUE);
     }
 
-    private static MethodSpec buildLoad(String className) {
+    private static MethodSpec buildLoad(
+            String className, Class authType, String authName) {
         return MethodSpec.methodBuilder("load")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeVariableName.get(className, Type.class))
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(Credentials.class, CREDENTIALS)
+                .addParameter(authType, authName)
                 .addParameter(BigInteger.class, GAS_PRICE)
                 .addParameter(BigInteger.class, GAS_LIMIT)
-                .addStatement("return new $L($L, $L, $L, $L, $L)",
-                        className, CONTRACT_ADDRESS, WEB3J, CREDENTIALS, GAS_PRICE, GAS_LIMIT)
+                .addStatement("return new $L($L, $L, $L, $L, $L)", className,
+                        CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
                 .build();
     }
 

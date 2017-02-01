@@ -6,9 +6,11 @@ import org.web3j.abi.datatypes.Fixed;
 /**
  * <p>Auto generated code.<br>
  * <strong>Do not modifiy!</strong><br>
- * Please use Generator located in project X to update.</p>
+ * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Fixed40x48 extends Fixed {
+  public static final Fixed40x48 DEFAULT = new Fixed40x48(BigInteger.ZERO);
+
   public Fixed40x48(BigInteger value) {
     super(40, 48, value);
   }

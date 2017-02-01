@@ -23,18 +23,39 @@ import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
  */
 public class WalletUtils {
 
-    public static String generateNewWalletFile(String password, File destinationDirectory)
+    public static String generateFullNewWalletFile(String password, File destinationDirectory)
+            throws NoSuchAlgorithmException, NoSuchProviderException,
+            InvalidAlgorithmParameterException, CipherException, IOException {
+
+        return generateNewWalletFile(password, destinationDirectory, true);
+    }
+
+    public static String generateLightNewWalletFile(String password, File destinationDirectory)
+            throws NoSuchAlgorithmException, NoSuchProviderException,
+            InvalidAlgorithmParameterException, CipherException, IOException {
+
+        return generateNewWalletFile(password, destinationDirectory, false);
+    }
+
+    public static String generateNewWalletFile(
+            String password, File destinationDirectory, boolean useFullScrypt)
             throws CipherException, IOException, InvalidAlgorithmParameterException,
             NoSuchAlgorithmException, NoSuchProviderException {
 
         ECKeyPair ecKeyPair = Keys.createEcKeyPair();
-        return generateWalletFile(password, ecKeyPair, destinationDirectory);
+        return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
     }
 
     public static String generateWalletFile(
-            String password, ECKeyPair ecKeyPair, File destinationDirectory)
+            String password, ECKeyPair ecKeyPair, File destinationDirectory, boolean useFullScrypt)
             throws CipherException, IOException {
-        WalletFile walletFile = Wallet.create(password, ecKeyPair);
+
+        WalletFile walletFile;
+        if (useFullScrypt) {
+            walletFile = Wallet.createStandard(password, ecKeyPair);
+        } else {
+            walletFile = Wallet.createLight(password, ecKeyPair);
+        }
 
         String fileName = getWalletFileName(walletFile);
         File destination = new File(destinationDirectory, fileName);

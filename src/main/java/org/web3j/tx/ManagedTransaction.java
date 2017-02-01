@@ -1,21 +1,19 @@
-package org.web3j.abi;
+package org.web3j.tx;
 
 import java.math.BigInteger;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.RawTransaction;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.EthGasPrice;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
-import org.web3j.utils.Numeric;
 
 
 /**
- * Generic transaction manager
+ * Generic transaction manager.
  */
 public abstract class ManagedTransaction {
 
@@ -26,21 +24,15 @@ public abstract class ManagedTransaction {
     private static final int ATTEMPTS = 40;
 
     protected Web3j web3j;
-    protected Credentials credentials;
 
-    protected BigInteger gasPrice;
-    protected BigInteger gasLimit;
+    private TransactionManager transactionManager;
 
     private int sleepDuration = SLEEP_DURATION;
     private int attempts = ATTEMPTS;
 
-    protected ManagedTransaction(Web3j web3j, Credentials credentials,
-                                 BigInteger gasPrice, BigInteger gasLimit) {
+    protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
         this.web3j = web3j;
-        this.credentials = credentials;
-
-        this.gasPrice = gasPrice;
-        this.gasLimit = gasLimit;
     }
 
     // In case anyone wishes to override the defaults
@@ -60,17 +52,19 @@ public abstract class ManagedTransaction {
         this.attempts = attempts;
     }
 
-    protected TransactionReceipt signAndSend(RawTransaction rawTransaction)
+    protected BigInteger getGasPrice() throws InterruptedException, ExecutionException {
+        EthGasPrice ethGasPrice = web3j.ethGasPrice().sendAsync().get();
+
+        return ethGasPrice.getGasPrice();
+    }
+
+    protected TransactionReceipt send(
+            String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit)
             throws InterruptedException, ExecutionException, TransactionTimeoutException {
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-        String hexValue = Numeric.toHexString(signedMessage);
-
-        // This might be a good candidate for using functional composition with CompletableFutures
-        EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
-                .sendAsync().get();
-
-        return processResponse(transactionResponse);
+        EthSendTransaction transaction = transactionManager.executeTransaction(
+                gasPrice, gasLimit, to, data, value);
+        return processResponse(transaction);
     }
 
     protected TransactionReceipt processResponse(EthSendTransaction transactionResponse)
@@ -83,19 +77,6 @@ public abstract class ManagedTransaction {
         String transactionHash = transactionResponse.getTransactionHash();
 
         return waitForTransactionReceipt(transactionHash);
-    }
-
-    protected BigInteger getNonce(String address) throws InterruptedException, ExecutionException {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                address, DefaultBlockParameterName.LATEST).sendAsync().get();
-
-        return ethGetTransactionCount.getTransactionCount();
-    }
-
-    protected BigInteger getGasPrice() throws InterruptedException, ExecutionException {
-        EthGasPrice ethGasPrice = web3j.ethGasPrice().sendAsync().get();
-
-        return ethGasPrice.getGasPrice();
     }
 
     private TransactionReceipt waitForTransactionReceipt(

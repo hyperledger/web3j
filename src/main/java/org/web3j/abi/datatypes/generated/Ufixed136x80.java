@@ -6,9 +6,11 @@ import org.web3j.abi.datatypes.Ufixed;
 /**
  * <p>Auto generated code.<br>
  * <strong>Do not modifiy!</strong><br>
- * Please use Generator located in project X to update.</p>
+ * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Ufixed136x80 extends Ufixed {
+  public static final Ufixed136x80 DEFAULT = new Ufixed136x80(BigInteger.ZERO);
+
   public Ufixed136x80(BigInteger value) {
     super(136, 80, value);
   }

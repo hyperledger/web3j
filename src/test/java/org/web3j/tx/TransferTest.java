@@ -1,8 +1,9 @@
-package org.web3j.abi;
+package org.web3j.tx;
 
 
 import java.math.BigDecimal;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import org.web3j.crypto.SampleKeys;
@@ -19,10 +20,17 @@ import static org.mockito.Mockito.when;
 
 public class TransferTest extends ManagedTransactionTester {
 
+    private TransactionReceipt transactionReceipt;
+
+    @Before
+    @Override
+    public void setUp() {
+        super.setUp();
+        transactionReceipt = prepareTransfer();
+    }
+
     @Test
     public void testSendFunds() throws Exception {
-        TransactionReceipt transactionReceipt = prepareTransfer();
-
         assertThat(Transfer.sendFunds(web3j, SampleKeys.CREDENTIALS, ADDRESS,
                 BigDecimal.TEN, Convert.Unit.ETHER),
                 is(transactionReceipt));
@@ -30,8 +38,6 @@ public class TransferTest extends ManagedTransactionTester {
 
     @Test
     public void testSendFundsAsync() throws  Exception {
-        TransactionReceipt transactionReceipt = prepareTransfer();
-
         assertThat(Transfer.sendFundsAsync(web3j, SampleKeys.CREDENTIALS, ADDRESS,
                 BigDecimal.TEN, Convert.Unit.ETHER).get(),
                 is(transactionReceipt));

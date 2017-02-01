@@ -32,9 +32,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * <pre>
  * {@code
  * // Only value of r that cost (as an int) could be exceeded for is 1
- * if (r == 1 && N > 65536)
+ * if (r == 1 && N_STANDARD > 65536)
  * {
- *     throw new IllegalArgumentException("Cost parameter N must be > 1 and < 65536.");
+ *     throw new IllegalArgumentException("Cost parameter N_STANDARD must be > 1 and < 65536.");
  * }
  * }
  * </pre>
@@ -43,8 +43,12 @@ public class Wallet {
 
     private static SecureRandom SECURE_RANDOM = new SecureRandom();
 
-    private static final int N = 1 << 18;
-    private static final int P = 1;
+    private static final int N_LIGHT = 1 << 12;
+    private static final int P_LIGHT = 6;
+
+    private static final int N_STANDARD = 1 << 18;
+    private static final int P_STANDARD = 1;
+
     private static final int R = 8;
     private static final int DKLEN = 32;
 
@@ -54,12 +58,13 @@ public class Wallet {
     static final String AES_128_CTR = "pbkdf2";
     static final String SCRYPT = "scrypt";
 
-    public static WalletFile create(String password, ECKeyPair ecKeyPair)
+    public static WalletFile create(String password, ECKeyPair ecKeyPair, int n, int p)
             throws CipherException {
 
         byte[] salt = generateRandomBytes(32);
 
-        byte[] derivedKey = generateDerivedScryptKey(password.getBytes(UTF_8), salt, N, R, P, DKLEN);
+        byte[] derivedKey = generateDerivedScryptKey(
+                password.getBytes(UTF_8), salt, n, R, p, DKLEN);
 
         byte[] encryptKey = Arrays.copyOfRange(derivedKey, 0, 16);
         byte[] iv = generateRandomBytes(16);
@@ -72,11 +77,22 @@ public class Wallet {
 
         byte[] mac = generateMac(derivedKey, cipherText);
 
-        return createWalletFile(ecKeyPair, cipherText, iv, salt, mac);
+        return createWalletFile(ecKeyPair, cipherText, iv, salt, mac, n, p);
+    }
+
+    public static WalletFile createStandard(String password, ECKeyPair ecKeyPair)
+            throws CipherException {
+        return create(password, ecKeyPair, N_STANDARD, P_STANDARD);
+    }
+
+    public static WalletFile createLight(String password, ECKeyPair ecKeyPair)
+            throws CipherException {
+        return create(password, ecKeyPair, N_LIGHT, P_LIGHT);
     }
 
     private static WalletFile createWalletFile(
-            ECKeyPair ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac) {
+            ECKeyPair ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
+            int n, int p) {
 
         WalletFile walletFile = new WalletFile();
         walletFile.setAddress(Keys.getAddress(ecKeyPair));
@@ -93,8 +109,8 @@ public class Wallet {
         crypto.setKdf(SCRYPT);
         WalletFile.ScryptKdfParams kdfParams = new WalletFile.ScryptKdfParams();
         kdfParams.setDklen(DKLEN);
-        kdfParams.setN(N);
-        kdfParams.setP(P);
+        kdfParams.setN(n);
+        kdfParams.setP(p);
         kdfParams.setR(R);
         kdfParams.setSalt(Numeric.toHexStringNoPrefix(salt));
         crypto.setKdfparams(kdfParams);

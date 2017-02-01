@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     repositories {
         mavenCentral()
@@ -26,7 +28,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '1.1.2'
+version '1.2.0'
 
 sourceCompatibility = 1.8
 
@@ -128,6 +130,29 @@ task sourcesJar(type: Jar) {
 task testJar(type: Jar) {
     classifier = 'tests'
     from sourceSets.test.output
+}
+
+task createProperties(dependsOn: processResources) << {
+    // if resources dir is empty we need to create this ourselves
+    new File("$buildDir/resources/main/").mkdirs()
+
+    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+        Properties p = new Properties()
+        p['version'] = project.version.toString()
+        p['timestamp'] = getTimestamp()
+        p.store w, null
+    }
+}
+
+def getTimestamp() {
+    Date today = new Date()
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(today)
+}
+
+classes {
+    dependsOn createProperties
 }
 
 publishing {

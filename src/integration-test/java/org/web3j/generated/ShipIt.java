@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Future;
-import org.web3j.abi.Contract;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
@@ -16,10 +15,12 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.tx.Contract;
+import org.web3j.tx.TransactionManager;
 
 /**
  * <p>Auto generated code.<br>
- * <strong>Do not modifiy!</strong><br>
+ * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.</p>
  */
 public final class ShipIt extends Contract {
@@ -29,8 +30,12 @@ public final class ShipIt extends Contract {
         super(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
+    private ShipIt(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    }
+
     public Future<List<Type>> shipments(Address param0) {
-        Function function = new Function("org.web3j.abi.datatypes.generated.Bytes32", 
+        Function function = new Function("shipments", 
                 Arrays.<Type>asList(param0), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint8>() {}, new TypeReference<Uint256>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Bytes32>() {}));
         return executeCallMultipleValueReturnAsync(function);
@@ -40,7 +45,15 @@ public final class ShipIt extends Contract {
         return deployAsync(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialValue);
     }
 
+    public static Future<ShipIt> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {
+        return deployAsync(ShipIt.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialValue);
+    }
+
     public static ShipIt load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         return new ShipIt(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    }
+
+    public static ShipIt load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new ShipIt(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 }

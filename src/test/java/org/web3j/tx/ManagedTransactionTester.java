@@ -1,4 +1,4 @@
-package org.web3j.abi;
+package org.web3j.tx;
 
 import org.junit.Before;
 

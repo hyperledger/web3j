@@ -66,6 +66,7 @@ Contents:
    management_apis.rst
    infura.rst
    trouble.rst
+   projects.rst
    development.rst
    links.rst
    credits.rst

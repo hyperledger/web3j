@@ -182,12 +182,17 @@ IPC
 ---
 
 web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
-the same host as web3j. To connect simply use *IpcService* instead of *HttpService* when you
-create your service:
+the same host as web3j. To connect simply use the relevent *IpcService* implemntation instead of
+*HttpService* when you create your service:
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new IpcService("/path/to/socketfile"));
+   // OS X/Linux/Unix:
+   Web3j web3 = Web3j.build(new UnixIpcService("/path/to/socketfile"));
+   ...
+
+   // Windows
+   Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
 
 
@@ -359,6 +364,7 @@ tools allow you to use some of the functionality of web3j from the command line:
 Please refer to the `documentation <http://docs.web3j.io/command_line.html>`_ for further
 information.
 
+
 Further details
 ---------------
 
@@ -377,13 +383,6 @@ In both the Java 8 and Andriod builds:
   `Response <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().
 
 
-Working with filters
---------------------
-
-See `EventFilterIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/EventFilterIT.java>`_
-for an example.
-
-
 Tested clients
 --------------
 
@@ -395,14 +394,6 @@ You can run the integration test class
 to verify clients.
 
 
-Coming soon
------------
-
-- External key store support
-- IPC interface support
-- WebSocket interface support
-
-
 Related projects
 ----------------
 
@@ -411,6 +402,17 @@ For a .NET implementation, check out `Nethereum <https://github.com/Nethereum/Ne
 For a pure Java implementation of the Ethereum client, check out
 `EthereumJ <https://github.com/ethereum/ethereumj>`_ and the work of
 `Ether.Camp <https://github.com/ether-camp/>`_.
+
+
+Projects using web3j
+--------------------
+
+- `Ether Wallet <https://play.google.com/store/apps/details?id=org.vikulin.etherwallet>`_ by
+  `@vikulin <https://github.com/vikulin>`_
+- `eth-contract-api <https://github.com/adridadou/eth-contract-api>`_ by
+  `@adridadou <https://github.com/adridadou>`_
+- `https://github.com/matthiaszimmermann/ethereum-paper-wallet`_ by
+  `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
 
 
 Build instructions
@@ -450,4 +452,5 @@ Thanks and credits
   `@ermyas <https://github.com/ermyas>`_, `@danieldietrich <https://github.com/danieldietrich>`_,
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_,
   `@ferOnti <https://github.com/ferOnti>`_, `@fraspadafora <https://github.com/fraspadafora>`_,
-  `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_
+  `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_,
+  `@thedoctor <https://github.com/thedoctor>`_
