@@ -52,7 +52,7 @@ public abstract class ManagedTransaction {
         this.attempts = attempts;
     }
 
-    protected BigInteger getGasPrice() throws InterruptedException, ExecutionException {
+    public BigInteger getGasPrice() throws InterruptedException, ExecutionException {
         EthGasPrice ethGasPrice = web3j.ethGasPrice().sendAsync().get();
 
         return ethGasPrice.getGasPrice();

@@ -5,10 +5,10 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import org.web3j.tx.Transfer;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import static junit.framework.TestCase.assertFalse;

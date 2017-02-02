@@ -1,12 +1,9 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.web3j.abi.EventValues;
-import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.generated.Fibonacci;
 import org.web3j.protocol.Web3j;

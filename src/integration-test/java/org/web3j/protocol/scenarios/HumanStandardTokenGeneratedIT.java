@@ -1,12 +1,9 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
 
 import org.junit.Test;
 
-import org.web3j.abi.EventValues;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -16,7 +13,9 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.web3j.generated.HumanStandardToken.*;
+import static org.web3j.generated.HumanStandardToken.ApprovalEventResponse;
+import static org.web3j.generated.HumanStandardToken.TransferEventResponse;
+import static org.web3j.generated.HumanStandardToken.deploy;
 
 /**
  * Generated HumanStandardToken integration test for all supported scenarios.
@@ -27,6 +26,9 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
     public void testContract() throws Exception {
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
         BigInteger bobQty = BigInteger.ZERO;
+
+        Address aliceAddress = new Address(ALICE.getAddress());
+        Address bobAddress = new Address(BOB.getAddress());
 
         HumanStandardToken contract = deploy(parity, ALICE,
                 GAS_PRICE, GAS_LIMIT,
@@ -54,15 +56,15 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         TransferEventResponse aliceTransferEventValues = contract.getTransferEvents(aliceTransferReceipt).get(0);
         assertThat(aliceTransferEventValues._from,
-                equalTo(ALICE.getAddress()));
+                equalTo(aliceAddress));
         assertThat(aliceTransferEventValues._to,
-                equalTo(BOB.getAddress()));
+                equalTo(bobAddress));
         assertThat(aliceTransferEventValues._value,
                 equalTo(new Uint256(transferQuantity)));
 
         // set an allowance
         assertThat(contract.allowance(
-                new Address(ALICE.getAddress()), new Address(BOB.getAddress())).get(),
+                aliceAddress, bobAddress).get(),
                 equalTo(new Uint256(BigInteger.ZERO)));
 
         transferQuantity = BigInteger.valueOf(50);
@@ -70,14 +72,14 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         ApprovalEventResponse approvalEventValues = contract.getApprovalEvents(approveReceipt).get(0);
         assertThat(approvalEventValues._owner,
-                equalTo(ALICE.getAddress()));
+                equalTo(aliceAddress));
         assertThat(approvalEventValues._spender,
-                equalTo(BOB.getAddress()));
+                equalTo(bobAddress));
         assertThat(approvalEventValues._value,
                 equalTo(new Uint256(transferQuantity)));
 
         assertThat(contract.allowance(
-                new Address(ALICE.getAddress()), new Address(BOB.getAddress())).get(),
+                aliceAddress, bobAddress).get(),
                 equalTo(new Uint256(transferQuantity)));
 
         // perform a transfer as Bob
@@ -88,23 +90,23 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                 contract.getContractAddress(), parity, BOB, GAS_PRICE, GAS_LIMIT);
 
         TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
-                new Address(ALICE.getAddress()),
-                new Address(BOB.getAddress()),
+                aliceAddress,
+                bobAddress,
                 new Uint256(transferQuantity)).get();
 
         aliceQty = aliceQty.subtract(transferQuantity);
         bobQty = bobQty.add(transferQuantity);
 
-        assertThat(contract.balanceOf(new Address(ALICE.getAddress())).get(),
+        assertThat(contract.balanceOf(aliceAddress).get(),
                 equalTo(new Uint256(aliceQty)));
-        assertThat(contract.balanceOf(new Address(BOB.getAddress())).get(),
+        assertThat(contract.balanceOf(bobAddress).get(),
                 equalTo(new Uint256(bobQty)));
 
         TransferEventResponse bobTransferEventValues = contract.getTransferEvents(bobTransferReceipt).get(0);
         assertThat(bobTransferEventValues._from,
-                equalTo(ALICE.getAddress()));
+                equalTo(aliceAddress));
         assertThat(bobTransferEventValues._to,
-                equalTo(BOB.getAddress()));
+                equalTo(bobAddress));
         assertThat(bobTransferEventValues._value,
                 equalTo(new Uint256(transferQuantity)));
     }

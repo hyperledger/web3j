@@ -10,7 +10,6 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Numeric;
 
 /**
@@ -23,7 +22,7 @@ import org.web3j.utils.Numeric;
 public class RawTransactionManager implements TransactionManager {
 
     private final Web3j web3j;
-    private final Credentials credentials;
+    final Credentials credentials;
 
     private final byte chainId;
 
@@ -38,9 +37,9 @@ public class RawTransactionManager implements TransactionManager {
         this(web3j, credentials, (byte) -1);
     }
 
-    BigInteger getNonce(String address) throws InterruptedException, ExecutionException {
+    BigInteger getNonce() throws ExecutionException, InterruptedException {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+                credentials.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return ethGetTransactionCount.getTransactionCount();
     }
@@ -48,10 +47,9 @@ public class RawTransactionManager implements TransactionManager {
     @Override
     public EthSendTransaction executeTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
-            throws ExecutionException, InterruptedException, TransactionTimeoutException {
+            String data, BigInteger value) throws ExecutionException, InterruptedException {
 
-        BigInteger nonce = getNonce(credentials.getAddress());
+        BigInteger nonce = getNonce();
 
         RawTransaction rawTransaction = RawTransaction.createTransaction(
                 nonce,
@@ -65,7 +63,7 @@ public class RawTransactionManager implements TransactionManager {
     }
 
     public EthSendTransaction signAndSend(RawTransaction rawTransaction)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
+            throws ExecutionException, InterruptedException {
 
         byte[] signedMessage;
 
@@ -77,7 +75,6 @@ public class RawTransactionManager implements TransactionManager {
 
         String hexValue = Numeric.toHexString(signedMessage);
 
-        return web3j.ethSendRawTransaction(hexValue)
-                .sendAsync().get();
+        return web3j.ethSendRawTransaction(hexValue).sendAsync().get();
     }
 }

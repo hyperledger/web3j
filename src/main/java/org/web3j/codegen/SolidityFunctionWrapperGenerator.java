@@ -1,32 +1,37 @@
 package org.web3j.codegen;
 
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVisitor;
-
 import java.io.File;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
+import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
+import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
-import org.web3j.protocol.core.methods.response.Log;
-import org.web3j.tx.Contract;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
@@ -34,14 +39,14 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Collection;
 import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
-import rx.*;
-import rx.functions.Func1;
 
 import static org.web3j.utils.Collection.tail;
 

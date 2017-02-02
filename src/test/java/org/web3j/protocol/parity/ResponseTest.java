@@ -1,16 +1,27 @@
 package org.web3j.protocol.parity;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.VoidResponse;
-import org.web3j.protocol.parity.methods.response.*;
+import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
+import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
+import org.web3j.protocol.parity.methods.response.PersonalListAccounts;
+import org.web3j.protocol.parity.methods.response.PersonalRejectRequest;
+import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
+import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
+import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Parity Protocol Response tests.

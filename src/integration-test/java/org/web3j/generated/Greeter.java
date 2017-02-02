@@ -1,10 +1,10 @@
 package org.web3j.generated;
 
-import java.lang.String;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.Future;
+
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;

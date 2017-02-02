@@ -3,7 +3,15 @@ package org.web3j.abi;
 
 import org.junit.Test;
 
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Fixed;
+import org.web3j.abi.datatypes.Int;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Int64;
 import org.web3j.abi.datatypes.generated.Uint64;
 

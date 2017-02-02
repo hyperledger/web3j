@@ -6,9 +6,12 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.web3j.protocol.core.methods.request.*;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.request.ShhFilter;
+import org.web3j.protocol.core.methods.request.ShhPost;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 

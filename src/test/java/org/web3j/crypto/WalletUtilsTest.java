@@ -1,6 +1,16 @@
 package org.web3j.crypto;
 
 
+import java.io.File;
+import java.nio.file.Files;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import org.web3j.utils.Numeric;
+
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -10,15 +20,6 @@ import static org.web3j.crypto.SampleKeys.KEY_PAIR;
 import static org.web3j.crypto.SampleKeys.PASSWORD;
 import static org.web3j.crypto.WalletUtils.isValidAddress;
 import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
-
-import java.io.File;
-import java.nio.file.Files;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.web3j.utils.Numeric;
 
 
 public class WalletUtilsTest {

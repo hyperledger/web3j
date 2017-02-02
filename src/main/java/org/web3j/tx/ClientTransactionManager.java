@@ -7,12 +7,11 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
-import org.web3j.tx.TransactionManager;
 
 /**
- * <p>TransactionManager implementation for using an Ethereum node to transact.</p>
+ * <p>TransactionManager implementation for using an Ethereum node to transact.
  *
- * <p><b>Note</b>: accounts must be unlocked on the node for transactions to be successful.</p>
+ * <p><b>Note</b>: accounts must be unlocked on the node for transactions to be successful.
  */
 public class ClientTransactionManager implements TransactionManager {
 

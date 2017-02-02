@@ -9,7 +9,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.protocol.ObjectMapperFactory;

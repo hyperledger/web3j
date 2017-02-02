@@ -1,15 +1,15 @@
 package org.web3j.codegen;
 
-
-import javax.lang.model.element.Modifier;
-import javax.tools.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -29,7 +29,11 @@ import org.web3j.utils.Strings;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.*;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.buildEventFunctions;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.buildFunction;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.buildTypeName;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.createValidParamName;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
 
 
 public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {

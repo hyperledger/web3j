@@ -1,6 +1,6 @@
 package org.web3j.protocol.ipc;
 
-import java.io.*;
+import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

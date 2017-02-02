@@ -1,15 +1,18 @@
 package org.web3j.utils;
 
 
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Test;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.utils.Collection.*;
 import static org.web3j.utils.Collection.EMPTY_STRING_ARRAY;
+import static org.web3j.utils.Collection.Function;
+import static org.web3j.utils.Collection.create;
+import static org.web3j.utils.Collection.join;
+import static org.web3j.utils.Collection.tail;
 
 public class CollectionTest {
 

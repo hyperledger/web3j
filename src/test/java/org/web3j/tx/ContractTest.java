@@ -14,7 +14,11 @@ import org.junit.Test;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
@@ -23,7 +27,11 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
 
@@ -244,10 +252,8 @@ public class ContractTest extends ManagedTransactionTester {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(
-                            new TypeReference<Uint256>() {
-                            },
-                            new TypeReference<Uint256>() {
-                            }));
+                            new TypeReference<Uint256>() { },
+                            new TypeReference<Uint256>() { }));
             return executeCallMultipleValueReturnAsync(function);
         }
 
@@ -259,10 +265,8 @@ public class ContractTest extends ManagedTransactionTester {
 
         public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {
             Event event = new Event("Event",
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
-                    }),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
-                    }));
+                    Arrays.<TypeReference<?>>asList(new TypeReference<Address>() { }),
+                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() { }));
             return extractEventParameters(event, transactionReceipt);
         }
     }

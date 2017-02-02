@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.web3j.tx.Transfer;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
@@ -14,6 +13,7 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.infura.InfuraHttpService;
+import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
 import static org.web3j.utils.Console.exitError;

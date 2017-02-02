@@ -15,8 +15,8 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.utils.Numeric;
 import org.web3j.protocol.core.Response;
+import org.web3j.utils.Numeric;
 
 /**
  * Block object returned by:

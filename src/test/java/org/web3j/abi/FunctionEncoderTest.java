@@ -7,7 +7,12 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes10;
 import org.web3j.abi.datatypes.generated.Uint32;
 

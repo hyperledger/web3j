@@ -1,9 +1,9 @@
 package org.web3j.abi.datatypes;
 
+import java.math.BigInteger;
+
 import org.web3j.crypto.Keys;
 import org.web3j.utils.Numeric;
-
-import java.math.BigInteger;
 
 /**
  * Address type, which is equivalent to uint160.

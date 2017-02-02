@@ -3,7 +3,18 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Array;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.BytesType;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.NumericType;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;

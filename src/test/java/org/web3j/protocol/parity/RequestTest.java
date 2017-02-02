@@ -8,8 +8,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import org.web3j.crypto.WalletFile;
-import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.RequestTester;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 
 
