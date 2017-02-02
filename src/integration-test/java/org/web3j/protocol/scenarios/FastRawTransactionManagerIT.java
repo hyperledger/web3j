@@ -19,7 +19,7 @@ import static junit.framework.TestCase.assertTrue;
 
 public class FastRawTransactionManagerIT extends Scenario {
 
-    private static final int COUNT = 1;  // don't set too high if using a real Ethereum network
+    private static final int COUNT = 5;  // don't set too high if using a real Ethereum network
 
     @Test
     public void testTransaction() throws Exception {
