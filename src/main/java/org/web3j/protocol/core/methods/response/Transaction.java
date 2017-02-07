@@ -64,6 +64,10 @@ public class Transaction {
         return Numeric.decodeQuantity(nonce);
     }
 
+    public String getNonceRaw() {
+        return nonce;
+    }
+
     public void setNonce(String nonce) {
         this.nonce = nonce;
     }
@@ -80,12 +84,20 @@ public class Transaction {
         return Numeric.decodeQuantity(blockNumber);
     }
 
+    public String getBlockNumberRaw() {
+        return blockNumber;
+    }
+
     public void setBlockNumber(String blockNumber) {
         this.blockNumber = blockNumber;
     }
 
     public BigInteger getTransactionIndex() {
         return Numeric.decodeQuantity(transactionIndex);
+    }
+
+    public String getTransactionIndexRaw() {
+        return transactionIndex;
     }
 
     public void setTransactionIndex(String transactionIndex) {
@@ -112,6 +124,10 @@ public class Transaction {
         return Numeric.decodeQuantity(value);
     }
 
+    public String getValueRaw() {
+        return value;
+    }
+
     public void setValue(String value) {
         this.value = value;
     }
@@ -120,12 +136,20 @@ public class Transaction {
         return Numeric.decodeQuantity(gasPrice);
     }
 
+    public String getGasPriceRaw() {
+        return gasPrice;
+    }
+
     public void setGasPrice(String gasPrice) {
         this.gasPrice = gasPrice;
     }
 
     public BigInteger getGas() {
         return Numeric.decodeQuantity(gas);
+    }
+
+    public String getGasRaw() {
+        return gas;
     }
 
     public void setGas(String gas) {
@@ -201,55 +225,85 @@ public class Transaction {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Transaction)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Transaction)) {
+            return false;
+        }
 
         Transaction that = (Transaction) o;
 
-        if (v != that.v) return false;
-        if (hash != null ? !hash.equals(that.hash) : that.hash != null) return false;
-        if (nonce != null ? !nonce.equals(that.nonce) : that.nonce != null) return false;
-        if (blockHash != null ? !blockHash.equals(that.blockHash) : that.blockHash != null)
+        if (getV() != that.getV()) {
             return false;
-        if (blockNumber != null ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null)
+        }
+        if (getHash() != null ? !getHash().equals(that.getHash()) : that.getHash() != null) {
             return false;
-        if (transactionIndex != null ? !transactionIndex.equals(that.transactionIndex) : that.transactionIndex != null)
+        }
+        if (getNonceRaw() != null ? !getNonceRaw().equals(that.getNonceRaw()) : that.getNonceRaw() != null) {
             return false;
-        if (from != null ? !from.equals(that.from) : that.from != null) return false;
-        if (to != null ? !to.equals(that.to) : that.to != null) return false;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-        if (gasPrice != null ? !gasPrice.equals(that.gasPrice) : that.gasPrice != null)
+        }
+        if (getBlockHash() != null ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
             return false;
-        if (gas != null ? !gas.equals(that.gas) : that.gas != null) return false;
-        if (input != null ? !input.equals(that.input) : that.input != null) return false;
-        if (creates != null ? !creates.equals(that.creates) : that.creates != null) return false;
-        if (publicKey != null ? !publicKey.equals(that.publicKey) : that.publicKey != null)
+        }
+        if (getBlockNumberRaw() != null ? !getBlockNumberRaw().equals(that.getBlockNumberRaw()) : that.getBlockNumberRaw()!= null) {
             return false;
-        if (raw != null ? !raw.equals(that.raw) : that.raw != null) return false;
-        if (r != null ? !r.equals(that.r) : that.r != null) return false;
-        return s != null ? s.equals(that.s) : that.s == null;
-
+        }
+        if (getTransactionIndexRaw() != null ? !getTransactionIndexRaw().equals(that.getTransactionIndexRaw()) : that.getTransactionIndexRaw() != null) {
+            return false;
+        }
+        if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
+            return false;
+        }
+        if (getTo() != null ? !getTo().equals(that.getTo()) : that.getTo() != null) {
+            return false;
+        }
+        if (getValueRaw() != null ? !getValueRaw().equals(that.getValueRaw()) : that.getValueRaw()!= null) {
+            return false;
+        }
+        if (getGasPriceRaw() != null ? !getGasPriceRaw().equals(that.getGasPriceRaw()) : that.getGasPriceRaw() != null) {
+            return false;
+        }
+        if (getGasRaw() != null ? !getGasRaw().equals(that.getGasRaw()) : that.getGasRaw() != null) {
+            return false;
+        }
+        if (getInput() != null ? !getInput().equals(that.getInput()) : that.getInput() != null) {
+            return false;
+        }
+        if (getCreates() != null ? !getCreates().equals(that.getCreates()) : that.getCreates() != null) {
+            return false;
+        }
+        if (getPublicKey() != null ? !getPublicKey().equals(that.getPublicKey()) : that.getPublicKey() != null) {
+            return false;
+        }
+        if (getRaw() != null ? !getRaw().equals(that.getRaw()) : that.getRaw() != null) {
+            return false;
+        }
+        if (getR() != null ? !getR().equals(that.getR()) : that.getR() != null) {
+            return false;
+        }
+        return getS() != null ? getS().equals(that.getS()) : that.getS() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = hash != null ? hash.hashCode() : 0;
-        result = 31 * result + (nonce != null ? nonce.hashCode() : 0);
-        result = 31 * result + (blockHash != null ? blockHash.hashCode() : 0);
-        result = 31 * result + (blockNumber != null ? blockNumber.hashCode() : 0);
-        result = 31 * result + (transactionIndex != null ? transactionIndex.hashCode() : 0);
-        result = 31 * result + (from != null ? from.hashCode() : 0);
-        result = 31 * result + (to != null ? to.hashCode() : 0);
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        result = 31 * result + (gasPrice != null ? gasPrice.hashCode() : 0);
-        result = 31 * result + (gas != null ? gas.hashCode() : 0);
-        result = 31 * result + (input != null ? input.hashCode() : 0);
-        result = 31 * result + (creates != null ? creates.hashCode() : 0);
-        result = 31 * result + (publicKey != null ? publicKey.hashCode() : 0);
-        result = 31 * result + (raw != null ? raw.hashCode() : 0);
-        result = 31 * result + (r != null ? r.hashCode() : 0);
-        result = 31 * result + (s != null ? s.hashCode() : 0);
-        result = 31 * result + (int) v;
+        int result = getHash() != null ? getHash().hashCode() : 0;
+        result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
+        result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
+        result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
+        result = 31 * result + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
+        result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
+        result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
+        result = 31 * result + (getValueRaw() != null ? getValueRaw().hashCode() : 0);
+        result = 31 * result + (getGasPriceRaw() != null ? getGasPriceRaw().hashCode() : 0);
+        result = 31 * result + (getGasRaw() != null ? getGasRaw().hashCode() : 0);
+        result = 31 * result + (getInput() != null ? getInput().hashCode() : 0);
+        result = 31 * result + (getCreates() != null ? getCreates().hashCode() : 0);
+        result = 31 * result + (getPublicKey() != null ? getPublicKey().hashCode() : 0);
+        result = 31 * result + (getRaw() != null ? getRaw().hashCode() : 0);
+        result = 31 * result + (getR() != null ? getR().hashCode() : 0);
+        result = 31 * result + (getS() != null ? getS().hashCode() : 0);
+        result = 31 * result + getV();
         return result;
     }
 }

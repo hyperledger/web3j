@@ -385,11 +385,15 @@ public class CoreIT {
 
     @Test
     public void testEthCompileSolidity() throws Exception {
-        String sourceCode = "contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }";
+        String sourceCode = "pragma solidity ^0.4.0;" +
+                "\ncontract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }" +
+                "\ncontract test2 { function multiply2(uint a) returns(uint d) {   return a * 7;   } }";
         EthCompileSolidity ethCompileSolidity = web3j.ethCompileSolidity(sourceCode)
                 .send();
         assertNotNull(ethCompileSolidity.getCompiledSolidity());
-        assertThat(ethCompileSolidity.getCompiledSolidity().getTest().getInfo().getSource(), is(sourceCode));
+        assertThat(
+                ethCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
+                is(sourceCode));
     }
 
     @Ignore  // The method eth_compileSerpent does not exist/is not available

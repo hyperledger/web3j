@@ -78,6 +78,10 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return Numeric.decodeQuantity(expiry);
         }
 
+        public String getExpiryRaw() {
+            return expiry;
+        }
+
         public void setExpiry(String expiry) {
             this.expiry = expiry;
         }
@@ -86,12 +90,20 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return Numeric.decodeQuantity(ttl);
         }
 
+        public String getTtlRaw() {
+            return ttl;
+        }
+
         public void setTtl(String ttl) {
             this.ttl = ttl;
         }
 
         public BigInteger getSent() {
             return Numeric.decodeQuantity(sent);
+        }
+
+        public String getSentRaw() {
+            return sent;
         }
 
         public void setSent(String sent) {
@@ -118,41 +130,63 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return Numeric.decodeQuantity(workProved);
         }
 
+        public String getWorkProvedRaw() {
+            return workProved;
+        }
+
         public void setWorkProved(String workProved) {
             this.workProved = workProved;
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof SshMessage)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof SshMessage)) {
+                return false;
+            }
 
             SshMessage that = (SshMessage) o;
 
-            if (hash != null ? !hash.equals(that.hash) : that.hash != null) return false;
-            if (from != null ? !from.equals(that.from) : that.from != null) return false;
-            if (to != null ? !to.equals(that.to) : that.to != null) return false;
-            if (expiry != null ? !expiry.equals(that.expiry) : that.expiry != null) return false;
-            if (ttl != null ? !ttl.equals(that.ttl) : that.ttl != null) return false;
-            if (sent != null ? !sent.equals(that.sent) : that.sent != null) return false;
-            if (topics != null ? !topics.equals(that.topics) : that.topics != null) return false;
-            if (payload != null ? !payload.equals(that.payload) : that.payload != null)
+            if (getHash() != null ? !getHash().equals(that.getHash()) : that.getHash() != null) {
                 return false;
-            return workProved != null ? workProved.equals(that.workProved) : that.workProved == null;
-
+            }
+            if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
+                return false;
+            }
+            if (getTo() != null ? !getTo().equals(that.getTo()) : that.getTo() != null) {
+                return false;
+            }
+            if (getExpiryRaw() != null ? !getExpiryRaw().equals(that.getExpiryRaw()) : that.getExpiryRaw() != null) {
+                return false;
+            }
+            if (getTtlRaw() != null ? !getTtlRaw().equals(that.getTtlRaw()) : that.getTtlRaw() != null) {
+                return false;
+            }
+            if (getSentRaw() != null ? !getSentRaw().equals(that.getSentRaw()) : that.getSentRaw() != null) {
+                return false;
+            }
+            if (getTopics() != null ? !getTopics().equals(that.getTopics()) : that.getTopics() != null) {
+                return false;
+            }
+            if (getPayload() != null ? !getPayload().equals(that.getPayload()) : that.getPayload() != null) {
+                return false;
+            }
+            return getWorkProvedRaw() != null ? getWorkProvedRaw().equals(that.getWorkProvedRaw()) : that.getWorkProvedRaw() == null;
         }
 
         @Override
         public int hashCode() {
-            int result = hash != null ? hash.hashCode() : 0;
-            result = 31 * result + (from != null ? from.hashCode() : 0);
-            result = 31 * result + (to != null ? to.hashCode() : 0);
-            result = 31 * result + (expiry != null ? expiry.hashCode() : 0);
-            result = 31 * result + (ttl != null ? ttl.hashCode() : 0);
-            result = 31 * result + (sent != null ? sent.hashCode() : 0);
-            result = 31 * result + (topics != null ? topics.hashCode() : 0);
-            result = 31 * result + (payload != null ? payload.hashCode() : 0);
-            result = 31 * result + (workProved != null ? workProved.hashCode() : 0);
+            int result = getHash() != null ? getHash().hashCode() : 0;
+            result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
+            result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
+            result = 31 * result + (getExpiryRaw() != null ? getExpiryRaw().hashCode() : 0);
+            result = 31 * result + (getTtlRaw() != null ? getTtlRaw().hashCode() : 0);
+            result = 31 * result + (getSentRaw() != null ? getSentRaw().hashCode() : 0);
+            result = 31 * result + (getTopics() != null ? getTopics().hashCode() : 0);
+            result = 31 * result + (getPayload() != null ? getPayload().hashCode() : 0);
+            result = 31 * result + (getWorkProvedRaw() != null ? getWorkProvedRaw().hashCode() : 0);
             return result;
         }
     }

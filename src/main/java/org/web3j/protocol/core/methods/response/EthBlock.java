@@ -108,6 +108,10 @@ public class EthBlock extends Response<EthBlock.Block> {
             return Numeric.decodeQuantity(number);
         }
 
+        public String getNumberRaw() {
+            return number;
+        }
+
         public void setNumber(String number) {
             this.number = number;
         }
@@ -128,7 +132,11 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.parentHash = parentHash;
         }
 
-        public String getNonce() {
+        public BigInteger getNonce() {
+            return Numeric.decodeQuantity(nonce);
+        }
+
+        public String getNonceRaw() {
             return nonce;
         }
 
@@ -204,12 +212,20 @@ public class EthBlock extends Response<EthBlock.Block> {
             return Numeric.decodeQuantity(difficulty);
         }
 
+        public String getDifficultyRaw() {
+            return difficulty;
+        }
+
         public void setDifficulty(String difficulty) {
             this.difficulty = difficulty;
         }
 
         public BigInteger getTotalDifficulty() {
             return Numeric.decodeQuantity(totalDifficulty);
+        }
+
+        public String getTotalDifficultyRaw() {
+            return totalDifficulty;
         }
 
         public void setTotalDifficulty(String totalDifficulty) {
@@ -228,12 +244,20 @@ public class EthBlock extends Response<EthBlock.Block> {
             return Numeric.decodeQuantity(size);
         }
 
+        public String getSizeRaw() {
+            return size;
+        }
+
         public void setSize(String size) {
             this.size = size;
         }
 
         public BigInteger getGasLimit() {
             return Numeric.decodeQuantity(gasLimit);
+        }
+
+        public String getGasLimitRaw() {
+            return gasLimit;
         }
 
         public void setGasLimit(String gasLimit) {
@@ -244,12 +268,20 @@ public class EthBlock extends Response<EthBlock.Block> {
             return Numeric.decodeQuantity(gasUsed);
         }
 
+        public String getGasUsedRaw() {
+            return gasUsed;
+        }
+
         public void setGasUsed(String gasUsed) {
             this.gasUsed = gasUsed;
         }
 
         public BigInteger getTimestamp() {
             return Numeric.decodeQuantity(timestamp);
+        }
+
+        public String getTimestampRaw() {
+            return timestamp;
         }
 
         public void setTimestamp(String timestamp) {
@@ -283,75 +315,105 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Block)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Block)) {
+                return false;
+            }
 
-            Block that = (Block) o;
+            Block block = (Block) o;
 
-            if (number != null ? !number.equals(that.number) : that.number != null) return false;
-            if (hash != null ? !hash.equals(that.hash) : that.hash != null) return false;
-            if (parentHash != null ? !parentHash.equals(that.parentHash) : that.parentHash != null)
+            if (getNumberRaw() != null ? !getNumberRaw().equals(block.getNumberRaw()) : block.getNumberRaw() != null) {
                 return false;
-            if (nonce != null ? !nonce.equals(that.nonce) : that.nonce != null) return false;
-            if (sha3Uncles != null ? !sha3Uncles.equals(that.sha3Uncles) : that.sha3Uncles != null)
+            }
+            if (getHash() != null ? !getHash().equals(block.getHash()) : block.getHash() != null) {
                 return false;
-            if (logsBloom != null ? !logsBloom.equals(that.logsBloom) : that.logsBloom != null)
+            }
+            if (getParentHash() != null ? !getParentHash().equals(block.getParentHash()) : block.getParentHash() != null) {
                 return false;
-            if (transactionsRoot != null ? !transactionsRoot.equals(that.transactionsRoot) : that.transactionsRoot != null)
+            }
+            if (getNonceRaw() != null ? !getNonceRaw().equals(block.getNonceRaw()) : block.getNonceRaw() != null) {
                 return false;
-            if (stateRoot != null ? !stateRoot.equals(that.stateRoot) : that.stateRoot != null)
+            }
+            if (getSha3Uncles() != null ? !getSha3Uncles().equals(block.getSha3Uncles()) : block.getSha3Uncles() != null) {
                 return false;
-            if (receiptsRoot != null ? !receiptsRoot.equals(that.receiptsRoot) : that.receiptsRoot != null)
+            }
+            if (getLogsBloom() != null ? !getLogsBloom().equals(block.getLogsBloom()) : block.getLogsBloom() != null) {
                 return false;
-            if (author != null ? !author.equals(that.author) : that.author != null) return false;
-            if (miner != null ? !miner.equals(that.miner) : that.miner != null) return false;
-            if (mixHash != null ? !mixHash.equals(that.mixHash) : that.mixHash != null)
+            }
+            if (getTransactionsRoot() != null ? !getTransactionsRoot().equals(block.getTransactionsRoot()) : block.getTransactionsRoot() != null) {
                 return false;
-            if (difficulty != null ? !difficulty.equals(that.difficulty) : that.difficulty != null)
+            }
+            if (getStateRoot() != null ? !getStateRoot().equals(block.getStateRoot()) : block.getStateRoot() != null) {
                 return false;
-            if (totalDifficulty != null ? !totalDifficulty.equals(that.totalDifficulty) : that.totalDifficulty != null)
+            }
+            if (getReceiptsRoot() != null ? !getReceiptsRoot().equals(block.getReceiptsRoot()) : block.getReceiptsRoot() != null) {
                 return false;
-            if (extraData != null ? !extraData.equals(that.extraData) : that.extraData != null)
+            }
+            if (getAuthor() != null ? !getAuthor().equals(block.getAuthor()) : block.getAuthor() != null) {
                 return false;
-            if (size != null ? !size.equals(that.size) : that.size != null) return false;
-            if (gasLimit != null ? !gasLimit.equals(that.gasLimit) : that.gasLimit != null)
+            }
+            if (getMiner() != null ? !getMiner().equals(block.getMiner()) : block.getMiner() != null) {
                 return false;
-            if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null)
+            }
+            if (getMixHash() != null ? !getMixHash().equals(block.getMixHash()) : block.getMixHash() != null) {
                 return false;
-            if (timestamp != null ? !timestamp.equals(that.timestamp) : that.timestamp != null)
+            }
+            if (getDifficultyRaw() != null ? !getDifficultyRaw().equals(block.getDifficultyRaw()) : block.getDifficultyRaw() != null) {
                 return false;
-            if (transactions != null ? !transactions.equals(that.transactions) : that.transactions != null)
+            }
+            if (getTotalDifficultyRaw() != null ? !getTotalDifficultyRaw().equals(block.getTotalDifficultyRaw()) : block.getTotalDifficultyRaw() != null) {
                 return false;
-            if (uncles != null ? !uncles.equals(that.uncles) : that.uncles != null)
+            }
+            if (getExtraData() != null ? !getExtraData().equals(block.getExtraData()) : block.getExtraData() != null) {
                 return false;
-            return sealFields != null ? sealFields.equals(that.sealFields) : that.sealFields == null;
-
+            }
+            if (getSizeRaw() != null ? !getSizeRaw().equals(block.getSizeRaw()) : block.getSizeRaw() != null) {
+                return false;
+            }
+            if (getGasLimitRaw() != null ? !getGasLimitRaw().equals(block.getGasLimitRaw()) : block.getGasLimitRaw() != null) {
+                return false;
+            }
+            if (getGasUsedRaw() != null ? !getGasUsedRaw().equals(block.getGasUsedRaw()) : block.getGasUsedRaw() != null) {
+                return false;
+            }
+            if (getTimestampRaw() != null ? !getTimestampRaw().equals(block.getTimestampRaw()) : block.getTimestampRaw() != null) {
+                return false;
+            }
+            if (getTransactions() != null ? !getTransactions().equals(block.getTransactions()) : block.getTransactions() != null) {
+                return false;
+            }
+            if (getUncles() != null ? !getUncles().equals(block.getUncles()) : block.getUncles() != null) {
+                return false;
+            }
+            return getSealFields() != null ? getSealFields().equals(block.getSealFields()) : block.getSealFields() == null;
         }
 
         @Override
         public int hashCode() {
-            int result = number != null ? number.hashCode() : 0;
-            result = 31 * result + (hash != null ? hash.hashCode() : 0);
-            result = 31 * result + (parentHash != null ? parentHash.hashCode() : 0);
-            result = 31 * result + (nonce != null ? nonce.hashCode() : 0);
-            result = 31 * result + (sha3Uncles != null ? sha3Uncles.hashCode() : 0);
-            result = 31 * result + (logsBloom != null ? logsBloom.hashCode() : 0);
-            result = 31 * result + (transactionsRoot != null ? transactionsRoot.hashCode() : 0);
-            result = 31 * result + (stateRoot != null ? stateRoot.hashCode() : 0);
-            result = 31 * result + (receiptsRoot != null ? receiptsRoot.hashCode() : 0);
-            result = 31 * result + (author != null ? author.hashCode() : 0);
-            result = 31 * result + (miner != null ? miner.hashCode() : 0);
-            result = 31 * result + (mixHash != null ? mixHash.hashCode() : 0);
-            result = 31 * result + (difficulty != null ? difficulty.hashCode() : 0);
-            result = 31 * result + (totalDifficulty != null ? totalDifficulty.hashCode() : 0);
-            result = 31 * result + (extraData != null ? extraData.hashCode() : 0);
-            result = 31 * result + (size != null ? size.hashCode() : 0);
-            result = 31 * result + (gasLimit != null ? gasLimit.hashCode() : 0);
-            result = 31 * result + (gasUsed != null ? gasUsed.hashCode() : 0);
-            result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
-            result = 31 * result + (transactions != null ? transactions.hashCode() : 0);
-            result = 31 * result + (uncles != null ? uncles.hashCode() : 0);
-            result = 31 * result + (sealFields != null ? sealFields.hashCode() : 0);
+            int result = getNumberRaw() != null ? getNumberRaw().hashCode() : 0;
+            result = 31 * result + (getHash() != null ? getHash().hashCode() : 0);
+            result = 31 * result + (getParentHash() != null ? getParentHash().hashCode() : 0);
+            result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
+            result = 31 * result + (getSha3Uncles() != null ? getSha3Uncles().hashCode() : 0);
+            result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
+            result = 31 * result + (getTransactionsRoot() != null ? getTransactionsRoot().hashCode() : 0);
+            result = 31 * result + (getStateRoot() != null ? getStateRoot().hashCode() : 0);
+            result = 31 * result + (getReceiptsRoot() != null ? getReceiptsRoot().hashCode() : 0);
+            result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
+            result = 31 * result + (getMiner() != null ? getMiner().hashCode() : 0);
+            result = 31 * result + (getMixHash() != null ? getMixHash().hashCode() : 0);
+            result = 31 * result + (getDifficultyRaw() != null ? getDifficultyRaw().hashCode() : 0);
+            result = 31 * result + (getTotalDifficultyRaw() != null ? getTotalDifficultyRaw().hashCode() : 0);
+            result = 31 * result + (getExtraData() != null ? getExtraData().hashCode() : 0);
+            result = 31 * result + (getSizeRaw() != null ? getSizeRaw().hashCode() : 0);
+            result = 31 * result + (getGasLimitRaw() != null ? getGasLimitRaw().hashCode() : 0);
+            result = 31 * result + (getGasUsedRaw() != null ? getGasUsedRaw().hashCode() : 0);
+            result = 31 * result + (getTimestampRaw() != null ? getTimestampRaw().hashCode() : 0);
+            result = 31 * result + (getTransactions() != null ? getTransactions().hashCode() : 0);
+            result = 31 * result + (getUncles() != null ? getUncles().hashCode() : 0);
+            result = 31 * result + (getSealFields() != null ? getSealFields().hashCode() : 0);
             return result;
         }
     }

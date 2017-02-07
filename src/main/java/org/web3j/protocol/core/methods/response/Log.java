@@ -54,12 +54,20 @@ public class Log {
         return convert(logIndex);
     }
 
+    public String getLogIndexRaw() {
+        return logIndex;
+    }
+
     public void setLogIndex(String logIndex) {
         this.logIndex = logIndex;
     }
 
     public BigInteger getTransactionIndex() {
         return convert(transactionIndex);
+    }
+
+    public String getTransactionIndexRaw() {
+        return transactionIndex;
     }
 
     public void setTransactionIndex(String transactionIndex) {
@@ -84,6 +92,10 @@ public class Log {
 
     public BigInteger getBlockNumber() {
         return convert(blockNumber);
+    }
+
+    public String getBlockNumberRaw() {
+        return blockNumber;
     }
 
     public void setBlockNumber(String blockNumber) {
@@ -132,40 +144,57 @@ public class Log {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Log)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Log)) {
+            return false;
+        }
 
         Log log = (Log) o;
 
-        if (removed != log.removed) return false;
-        if (logIndex != null ? !logIndex.equals(log.logIndex) : log.logIndex != null) return false;
-        if (transactionIndex != null ? !transactionIndex.equals(log.transactionIndex) : log.transactionIndex != null)
+        if (isRemoved() != log.isRemoved()) {
             return false;
-        if (transactionHash != null ? !transactionHash.equals(log.transactionHash) : log.transactionHash != null)
+        }
+        if (getLogIndexRaw() != null ? !getLogIndexRaw().equals(log.getLogIndexRaw()) : log.getLogIndexRaw() != null) {
             return false;
-        if (blockHash != null ? !blockHash.equals(log.blockHash) : log.blockHash != null)
+        }
+        if (getTransactionIndexRaw() != null ? !getTransactionIndexRaw().equals(log.getTransactionIndexRaw()) : log.getTransactionIndexRaw() != null) {
             return false;
-        if (blockNumber != null ? !blockNumber.equals(log.blockNumber) : log.blockNumber != null)
+        }
+        if (getTransactionHash() != null ? !getTransactionHash().equals(log.getTransactionHash()) : log.getTransactionHash() != null) {
             return false;
-        if (address != null ? !address.equals(log.address) : log.address != null) return false;
-        if (data != null ? !data.equals(log.data) : log.data != null) return false;
-        if (type != null ? !type.equals(log.type) : log.type != null) return false;
-        return topics != null ? topics.equals(log.topics) : log.topics == null;
-
+        }
+        if (getBlockHash() != null ? !getBlockHash().equals(log.getBlockHash()) : log.getBlockHash() != null) {
+            return false;
+        }
+        if (getBlockNumberRaw() != null ? !getBlockNumberRaw().equals(log.getBlockNumberRaw()) : log.getBlockNumberRaw() != null) {
+            return false;
+        }
+        if (getAddress() != null ? !getAddress().equals(log.getAddress()) : log.getAddress() != null) {
+            return false;
+        }
+        if (getData() != null ? !getData().equals(log.getData()) : log.getData() != null) {
+            return false;
+        }
+        if (getType() != null ? !getType().equals(log.getType()) : log.getType() != null) {
+            return false;
+        }
+        return getTopics() != null ? getTopics().equals(log.getTopics()) : log.getTopics() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (removed ? 1 : 0);
-        result = 31 * result + (logIndex != null ? logIndex.hashCode() : 0);
-        result = 31 * result + (transactionIndex != null ? transactionIndex.hashCode() : 0);
-        result = 31 * result + (transactionHash != null ? transactionHash.hashCode() : 0);
-        result = 31 * result + (blockHash != null ? blockHash.hashCode() : 0);
-        result = 31 * result + (blockNumber != null ? blockNumber.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (data != null ? data.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (topics != null ? topics.hashCode() : 0);
+        int result = (isRemoved() ? 1 : 0);
+        result = 31 * result + (getLogIndexRaw() != null ? getLogIndexRaw().hashCode() : 0);
+        result = 31 * result + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
+        result = 31 * result + (getTransactionHash() != null ? getTransactionHash().hashCode() : 0);
+        result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
+        result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + (getData() != null ? getData().hashCode() : 0);
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + (getTopics() != null ? getTopics().hashCode() : 0);
         return result;
     }
 }
