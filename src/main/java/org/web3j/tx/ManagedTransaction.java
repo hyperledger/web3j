@@ -81,9 +81,11 @@ public abstract class ManagedTransaction {
         }
 
         String transactionHash = transactionResponse.getTransactionHash();
+        //if attempts is zero, means the transaction will not wait for a receipt,
         if (attempts > 0) {
             return waitForTransactionReceipt(transactionHash);
         } else {
+            //but returns an incomplete receipt with only the transactionHash in it
             TransactionReceipt transactionReceipt = new TransactionReceipt();
             transactionReceipt.setTransactionHash(transactionHash);
             return transactionReceipt;
