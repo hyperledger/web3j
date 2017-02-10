@@ -206,7 +206,9 @@ abstraction to control the manner you connect to Ethereum clients with. The defa
 web3j's
 `RawTransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/RawTransactionManager.java>`_
 which works with Ethereum wallet files to sign transactions offline before submitting them to the
-network. However, you may wish to modify the transaction manager, which you can pass to the smart
+network.
+
+However, you may wish to modify the transaction manager, which you can pass to the smart
 contract deployment and creation methods instead of a credentials object, i.e.::
 
    YourSmartContract contract = YourSmartContract.deploy(
