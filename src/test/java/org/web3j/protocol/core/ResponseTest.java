@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -201,8 +202,7 @@ public class ResponseTest extends ResponseTester {
 
         EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
 
-        assertThat(ethSyncing.getResult(),
-                CoreMatchers.<EthSyncing.Result>equalTo(new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
+        assertThat(ethSyncing.getResult(), CoreMatchers.<EthSyncing.Result>equalTo(new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
     }
 
     @Test
@@ -555,8 +555,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     @Test
@@ -666,8 +665,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     // Remove once Geth & Parity return the same v value in transactions
@@ -778,8 +776,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     @Test
@@ -993,29 +990,27 @@ public class ResponseTest extends ResponseTester {
                         "}"
         );
 
-        EthCompileSolidity.CompiledSolidity compiledSolidity =
-                new EthCompileSolidity.CompiledSolidity(
-                        new EthCompileSolidity.Code(
-                            "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
-                            new EthCompileSolidity.SolidityInfo(
-                                    "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n\t\treturn a * 7;\n\t}\n}\n",
-                                    "Solidity",
-                                    "0",
-                                    "0.8.2",
-                                    "--bin --abi --userdoc --devdoc --add-std --optimize -o /var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
-                                    Arrays.asList(new AbiDefinition(
-                                            false,
-                                            Arrays.asList(new AbiDefinition.NamedType("a", "uint256")),
-                                            "multiply",
-                                            Arrays.asList(new AbiDefinition.NamedType("d", "uint256")),
-                                            "function",
-                                            false
-                                    )),
-                                    new EthCompileSolidity.Documentation(),
-                                    new EthCompileSolidity.Documentation()
-                            )
-                        )
-                );
+        Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<>(1);
+        compiledSolidity.put("test", new EthCompileSolidity.Code(
+                "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
+                new EthCompileSolidity.SolidityInfo(
+                        "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n\t\treturn a * 7;\n\t}\n}\n",
+                        "Solidity",
+                        "0",
+                        "0.8.2",
+                        "--bin --abi --userdoc --devdoc --add-std --optimize -o /var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
+                        Arrays.asList(new AbiDefinition(
+                                false,
+                                Arrays.asList(new AbiDefinition.NamedType("a", "uint256")),
+                                "multiply",
+                                Arrays.asList(new AbiDefinition.NamedType("d", "uint256")),
+                                "function",
+                                false
+                        )),
+                        new EthCompileSolidity.Documentation(),
+                        new EthCompileSolidity.Documentation()
+                )
+        ));
 
         EthCompileSolidity ethCompileSolidity = deserialiseResponse(EthCompileSolidity.class);
         assertThat(ethCompileSolidity.getCompiledSolidity(), equalTo(compiledSolidity));

@@ -114,8 +114,8 @@ public class EqualsVerifierResponseTest {
     }
 
     @Test
-    public void testCompiledSolidity() {
-        EqualsVerifier.forClass(EthCompileSolidity.CompiledSolidity.class)
+    public void testCompiledSolidityCode() {
+        EqualsVerifier.forClass(EthCompileSolidity.Code.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -124,6 +124,14 @@ public class EqualsVerifierResponseTest {
     @Test
     public void testDocumentation() {
         EqualsVerifier.forClass(EthCompileSolidity.Documentation.class)
+                .suppress(Warning.NONFINAL_FIELDS)
+                .suppress(Warning.STRICT_INHERITANCE)
+                .verify();
+    }
+
+    @Test
+    public void testError() {
+        EqualsVerifier.forClass(Response.Error.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();

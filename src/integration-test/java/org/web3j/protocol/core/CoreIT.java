@@ -270,7 +270,7 @@ public class CoreIT {
                 .send();
 
         EthBlock.Block block = ethBlock.getBlock();
-        assertNotNull(block);
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 is(config.validBlockTransactionCount().intValue()));
@@ -282,7 +282,7 @@ public class CoreIT {
                 .send();
 
         EthBlock.Block block = ethBlock.getBlock();
-        assertNotNull(block);
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 equalTo(config.validBlockTransactionCount().intValue()));
@@ -294,7 +294,7 @@ public class CoreIT {
                 DefaultBlockParameterNumber.valueOf(config.validBlock()), false).send();
 
         EthBlock.Block block = ethBlock.getBlock();
-        assertNotNull(block);
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 equalTo(config.validBlockTransactionCount().intValue()));
@@ -306,7 +306,7 @@ public class CoreIT {
                 DefaultBlockParameterNumber.valueOf(config.validBlock()), true).send();
 
         EthBlock.Block block = ethBlock.getBlock();
-        assertNotNull(block);
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 equalTo(config.validBlockTransactionCount().intValue()));
@@ -316,8 +316,8 @@ public class CoreIT {
     public void testEthGetTransactionByHash() throws Exception {
         EthTransaction ethTransaction = web3j.ethGetTransactionByHash(
                 config.validTransactionHash()).send();
-        Transaction transaction = ethTransaction.getTransaction();
-        assertNotNull(transaction);
+        assertTrue(ethTransaction.getTransaction().isPresent());
+        Transaction transaction = ethTransaction.getTransaction().get();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
     }
 
@@ -327,8 +327,8 @@ public class CoreIT {
 
         EthTransaction ethTransaction = web3j.ethGetTransactionByBlockHashAndIndex(
                 config.validBlockHash(), index).send();
-        Transaction transaction = ethTransaction.getTransaction();
-        assertNotNull(transaction);
+        assertTrue(ethTransaction.getTransaction().isPresent());
+        Transaction transaction = ethTransaction.getTransaction().get();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
         assertThat(transaction.getTransactionIndex(), equalTo(index));
     }
@@ -386,11 +386,15 @@ public class CoreIT {
 
     @Test
     public void testEthCompileSolidity() throws Exception {
-        String sourceCode = "contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }";
+        String sourceCode = "pragma solidity ^0.4.0;" +
+                "\ncontract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }" +
+                "\ncontract test2 { function multiply2(uint a) returns(uint d) {   return a * 7;   } }";
         EthCompileSolidity ethCompileSolidity = web3j.ethCompileSolidity(sourceCode)
                 .send();
         assertNotNull(ethCompileSolidity.getCompiledSolidity());
-        assertThat(ethCompileSolidity.getCompiledSolidity().getTest().getInfo().getSource(), is(sourceCode));
+        assertThat(
+                ethCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
+                is(sourceCode));
     }
 
     @Ignore  // The method eth_compileSerpent does not exist/is not available

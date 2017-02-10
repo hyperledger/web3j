@@ -79,28 +79,41 @@ public class AbiDefinition {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AbiDefinition)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AbiDefinition)) {
+            return false;
+        }
 
         AbiDefinition that = (AbiDefinition) o;
 
-        if (constant != that.constant) return false;
-        if (payable != that.payable) return false;
-        if (inputs != null ? !inputs.equals(that.inputs) : that.inputs != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (outputs != null ? !outputs.equals(that.outputs) : that.outputs != null) return false;
-        return type != null ? type.equals(that.type) : that.type == null;
-
+        if (isConstant() != that.isConstant()) {
+            return false;
+        }
+        if (isPayable() != that.isPayable()) {
+            return false;
+        }
+        if (getInputs() != null ? !getInputs().equals(that.getInputs()) : that.getInputs() != null) {
+            return false;
+        }
+        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+            return false;
+        }
+        if (getOutputs() != null ? !getOutputs().equals(that.getOutputs()) : that.getOutputs() != null) {
+            return false;
+        }
+        return getType() != null ? getType().equals(that.getType()) : that.getType() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (constant ? 1 : 0);
-        result = 31 * result + (inputs != null ? inputs.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (outputs != null ? outputs.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (payable ? 1 : 0);
+        int result = (isConstant() ? 1 : 0);
+        result = 31 * result + (getInputs() != null ? getInputs().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getOutputs() != null ? getOutputs().hashCode() : 0);
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + (isPayable() ? 1 : 0);
         return result;
     }
 
@@ -143,22 +156,29 @@ public class AbiDefinition {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof NamedType)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof NamedType)) {
+                return false;
+            }
 
             NamedType namedType = (NamedType) o;
 
-            if (indexed != namedType.indexed) return false;
-            if (name != null ? !name.equals(namedType.name) : namedType.name != null) return false;
-            return type != null ? type.equals(namedType.type) : namedType.type == null;
-
+            if (isIndexed() != namedType.isIndexed()) {
+                return false;
+            }
+            if (getName() != null ? !getName().equals(namedType.getName()) : namedType.getName() != null) {
+                return false;
+            }
+            return getType() != null ? getType().equals(namedType.getType()) : namedType.getType() == null;
         }
 
         @Override
         public int hashCode() {
-            int result = name != null ? name.hashCode() : 0;
-            result = 31 * result + (type != null ? type.hashCode() : 0);
-            result = 31 * result + (indexed ? 1 : 0);
+            int result = getName() != null ? getName().hashCode() : 0;
+            result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+            result = 31 * result + (isIndexed() ? 1 : 0);
             return result;
         }
     }

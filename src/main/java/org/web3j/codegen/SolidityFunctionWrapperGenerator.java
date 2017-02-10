@@ -604,7 +604,7 @@ public class SolidityFunctionWrapperGenerator {
             AbiDefinition functionDefinition,
             TypeSpec.Builder classBuilder) throws ClassNotFoundException {
 
-        String functionName = functionDefinition.getName();
+        String functionName = Strings.lowercaseFirstLetter(functionDefinition.getName());
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 

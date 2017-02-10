@@ -9,44 +9,10 @@ import org.web3j.protocol.core.Response;
 /**
  * eth_compileSolidity
  */
-public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSolidity> {
+public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.Code>> {
 
-    public CompiledSolidity getCompiledSolidity() {
+    public Map<String, EthCompileSolidity.Code> getCompiledSolidity() {
         return getResult();
-    }
-
-    public static class CompiledSolidity {
-        private Code test;
-
-        public CompiledSolidity() { }
-
-        public CompiledSolidity(Code test) {
-            this.test = test;
-        }
-
-        public Code getTest() {
-            return test;
-        }
-
-        public void setTest(Code test) {
-            this.test = test;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof CompiledSolidity)) return false;
-
-            CompiledSolidity that = (CompiledSolidity) o;
-
-            return test != null ? test.equals(that.test) : that.test == null;
-
-        }
-
-        @Override
-        public int hashCode() {
-            return test != null ? test.hashCode() : 0;
-        }
     }
 
     public static class Code {
@@ -79,20 +45,25 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Code)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Code)) {
+                return false;
+            }
 
-            Code that = (Code) o;
+            Code code1 = (Code) o;
 
-            if (code != null ? !code.equals(that.code) : that.code != null) return false;
-            return info != null ? info.equals(that.info) : that.info == null;
-
+            if (getCode() != null ? !getCode().equals(code1.getCode()) : code1.getCode() != null) {
+                return false;
+            }
+            return getInfo() != null ? getInfo().equals(code1.getInfo()) : code1.getInfo() == null;
         }
 
         @Override
         public int hashCode() {
-            int result = code != null ? code.hashCode() : 0;
-            result = 31 * result + (info != null ? info.hashCode() : 0);
+            int result = getCode() != null ? getCode().hashCode() : 0;
+            result = 31 * result + (getInfo() != null ? getInfo().hashCode() : 0);
             return result;
         }
     }
@@ -190,43 +161,52 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof SolidityInfo)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof SolidityInfo)) {
+                return false;
+            }
 
             SolidityInfo that = (SolidityInfo) o;
 
-            if (source != null ? !source.equals(that.source) : that.source != null) return false;
-            if (language != null ? !language.equals(that.language) : that.language != null)
+            if (getSource() != null ? !getSource().equals(that.getSource()) : that.getSource() != null) {
                 return false;
-            if (languageVersion != null ? !languageVersion.equals(that.languageVersion) : that.languageVersion != null)
+            }
+            if (getLanguage() != null ? !getLanguage().equals(that.getLanguage()) : that.getLanguage() != null) {
                 return false;
-            if (compilerVersion != null ? !compilerVersion.equals(that.compilerVersion) : that.compilerVersion != null)
+            }
+            if (getLanguageVersion() != null ? !getLanguageVersion().equals(that.getLanguageVersion()) : that.getLanguageVersion() != null) {
                 return false;
-            if (compilerOptions != null ? !compilerOptions.equals(that.compilerOptions) : that.compilerOptions != null)
+            }
+            if (getCompilerVersion() != null ? !getCompilerVersion().equals(that.getCompilerVersion()) : that.getCompilerVersion() != null) {
                 return false;
-            if (abiDefinition != null ? !abiDefinition.equals(that.abiDefinition) : that.abiDefinition != null)
+            }
+            if (getCompilerOptions() != null ? !getCompilerOptions().equals(that.getCompilerOptions()) : that.getCompilerOptions() != null) {
                 return false;
-            if (userDoc != null ? !userDoc.equals(that.userDoc) : that.userDoc != null)
+            }
+            if (getAbiDefinition() != null ? !getAbiDefinition().equals(that.getAbiDefinition()) : that.getAbiDefinition() != null) {
                 return false;
-            return developerDoc != null ? developerDoc.equals(that.developerDoc) : that.developerDoc == null;
-
+            }
+            if (getUserDoc() != null ? !getUserDoc().equals(that.getUserDoc()) : that.getUserDoc() != null) {
+                return false;
+            }
+            return getDeveloperDoc() != null ? getDeveloperDoc().equals(that.getDeveloperDoc()) : that.getDeveloperDoc() == null;
         }
 
         @Override
         public int hashCode() {
-            int result = source != null ? source.hashCode() : 0;
-            result = 31 * result + (language != null ? language.hashCode() : 0);
-            result = 31 * result + (languageVersion != null ? languageVersion.hashCode() : 0);
-            result = 31 * result + (compilerVersion != null ? compilerVersion.hashCode() : 0);
-            result = 31 * result + (compilerOptions != null ? compilerOptions.hashCode() : 0);
-            result = 31 * result + (abiDefinition != null ? abiDefinition.hashCode() : 0);
-            result = 31 * result + (userDoc != null ? userDoc.hashCode() : 0);
-            result = 31 * result + (developerDoc != null ? developerDoc.hashCode() : 0);
+            int result = getSource() != null ? getSource().hashCode() : 0;
+            result = 31 * result + (getLanguage() != null ? getLanguage().hashCode() : 0);
+            result = 31 * result + (getLanguageVersion() != null ? getLanguageVersion().hashCode() : 0);
+            result = 31 * result + (getCompilerVersion() != null ? getCompilerVersion().hashCode() : 0);
+            result = 31 * result + (getCompilerOptions() != null ? getCompilerOptions().hashCode() : 0);
+            result = 31 * result + (getAbiDefinition() != null ? getAbiDefinition().hashCode() : 0);
+            result = 31 * result + (getUserDoc() != null ? getUserDoc().hashCode() : 0);
+            result = 31 * result + (getDeveloperDoc() != null ? getDeveloperDoc().hashCode() : 0);
             return result;
         }
     }
-
-
 
     public static class Documentation {
         // No documentation available
@@ -247,18 +227,21 @@ public class EthCompileSolidity extends Response<EthCompileSolidity.CompiledSoli
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Documentation)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Documentation)) {
+                return false;
+            }
 
             Documentation that = (Documentation) o;
 
-            return methods != null ? methods.equals(that.methods) : that.methods == null;
-
+            return getMethods() != null ? getMethods().equals(that.getMethods()) : that.getMethods() == null;
         }
 
         @Override
         public int hashCode() {
-            return methods != null ? methods.hashCode() : 0;
+            return getMethods() != null ? getMethods().hashCode() : 0;
         }
     }
 }
