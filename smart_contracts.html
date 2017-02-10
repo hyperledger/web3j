@@ -196,12 +196,12 @@ smart contract, simply pass in it&#8217;s address:</p>
 <span id="id2"></span><h2>Transaction Managers<a class="headerlink" href="#transaction-managers" title="Permalink to this headline">¶</a></h2>
 <p>web3j provides a
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/TransactionManager.java">TransactionManager</a>
-abstraction to control the manner you connect to Ethereum clients with. The default mechanism uses</p>
-<blockquote>
-<div>web3j&#8217;s</div></blockquote>
-<p><a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/RawTransactionManager.java">RawTransactionManager</a>
+abstraction to control the manner you connect to Ethereum clients with. The default mechanism uses
+web3j&#8217;s
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/RawTransactionManager.java">RawTransactionManager</a>
 which works with Ethereum wallet files to sign transactions offline before submitting them to the
-network. However, you may wish to modify the transaction manager, which you can pass to the smart
+network.</p>
+<p>However, you may wish to modify the transaction manager, which you can pass to the smart
 contract deployment and creation methods instead of a credentials object, i.e.:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
         <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">transactionManager</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">,</span>
