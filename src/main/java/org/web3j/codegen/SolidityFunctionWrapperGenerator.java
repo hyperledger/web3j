@@ -750,7 +750,7 @@ public class SolidityFunctionWrapperGenerator {
                     }
                 });
 
-        methodBuilder.addStatement("$T event = new $T($S, \n" +
+        methodBuilder.addStatement("final $T event = new $T($S, \n" +
                 "$T.<$T<?>>asList(" + indexedAsListParams + "),\n" +
                 "$T.<$T<?>>asList(" + nonIndexedAsListParams + "))", objects.toArray());
     }

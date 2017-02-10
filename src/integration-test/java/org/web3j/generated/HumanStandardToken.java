@@ -50,7 +50,7 @@ public final class HumanStandardToken extends Contract {
     }
 
     public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
-        Event event = new Event("transfer", 
+        final Event event = new Event("transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         List<EventValues> valueList = extractEventParameters(event,transactionReceipt);
@@ -66,7 +66,7 @@ public final class HumanStandardToken extends Contract {
     }
 
     public Observable<TransferEventResponse> transferEventObservable() {
-        Event event = new Event("transfer", 
+        final Event event = new Event("transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,DefaultBlockParameterName.LATEST, getContractAddress());
@@ -85,7 +85,7 @@ public final class HumanStandardToken extends Contract {
     }
 
     public List<ApprovalEventResponse> getApprovalEvents(TransactionReceipt transactionReceipt) {
-        Event event = new Event("approval", 
+        final Event event = new Event("approval", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         List<EventValues> valueList = extractEventParameters(event,transactionReceipt);
@@ -101,7 +101,7 @@ public final class HumanStandardToken extends Contract {
     }
 
     public Observable<ApprovalEventResponse> approvalEventObservable() {
-        Event event = new Event("approval", 
+        final Event event = new Event("approval", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,DefaultBlockParameterName.LATEST, getContractAddress());
