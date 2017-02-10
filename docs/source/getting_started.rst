@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.1.0</version>
+     <version>1.1.2</version>
    </dependency>
 
 Android:
@@ -33,7 +33,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.1.0')
+   compile ('org.web3j:core:1.1.2')
 
 Android:
 
@@ -79,7 +79,7 @@ To send asynchronous requests using a Future::
 To use an RxJava Observable::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3j.web3ClientVersion().observable().subscribe(x -> {
+   web3.web3ClientVersion().observable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -93,6 +93,24 @@ To send synchronous requests::
 **Note:** for Android use:
 
    Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
+   ...
+
+
+IPC
+---
+
+web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
+the same host as web3j. To connect simply use the relevent *IpcService* implemntation instead of
+*HttpService* when you create your service:
+
+.. code-block:: java
+
+   // OS X/Linux/Unix:
+   Web3j web3 = Web3j.build(new UnixIpcService("/path/to/socketfile"));
+   ...
+
+   // Windows
+   Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
 
 

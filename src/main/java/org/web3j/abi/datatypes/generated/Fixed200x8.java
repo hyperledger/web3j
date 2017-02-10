@@ -1,6 +1,7 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.math.BigInteger;
+
 import org.web3j.abi.datatypes.Fixed;
 
 /**
@@ -9,6 +10,8 @@ import org.web3j.abi.datatypes.Fixed;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Fixed200x8 extends Fixed {
+  public static final Fixed200x8 DEFAULT = new Fixed200x8(BigInteger.ZERO);
+
   public Fixed200x8(BigInteger value) {
     super(200, 8, value);
   }

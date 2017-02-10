@@ -1,12 +1,18 @@
 package org.web3j.abi;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Fixed;
+import org.web3j.abi.datatypes.Int;
+import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 
 /**
  * Utility functions.
@@ -19,8 +25,8 @@ public class Utils {
             java.lang.reflect.Type reflectedType = typeReference.getType();
 
             Class<?> type;
-            if (reflectedType instanceof ParameterizedTypeImpl) {
-                type = ((ParameterizedTypeImpl) reflectedType).getRawType();
+            if (reflectedType instanceof ParameterizedType) {
+                type = (Class<?>) ((ParameterizedType) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
             } else {
                 type = Class.forName(((Class) reflectedType).getName());
@@ -74,7 +80,7 @@ public class Utils {
 
         java.lang.reflect.Type type = typeReference.getType();
         java.lang.reflect.Type[] typeArguments =
-                ((ParameterizedTypeImpl) type).getActualTypeArguments();
+                ((ParameterizedType) type).getActualTypeArguments();
 
         String parameterizedTypeName = ((Class) typeArguments[0]).getName();
         return (Class<T>) Class.forName(parameterizedTypeName);

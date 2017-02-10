@@ -8,6 +8,7 @@ Links and Useful Resources
   `GitHub <https://github.com/ethereum/yellowpaper>`_ repository
 - `Homestead <https://ethereum-homestead.readthedocs.org/en/latest/>`_ docs
 - `Solidity <http://solidity.readthedocs.io/en/develop/>`_ docs
+- `Layout of variables in storage <http://solidity.readthedocs.io/en/latest/miscellaneous.html#layout-of-state-variables-in-storage>`_
 - `Ethereum tests <https://github.com/ethereum/tests>`_ contains lots of common tests for clients
 - `Etherscan <https://etherscan.io>`_ is very useful for exploring blocks and transactions, it also
   has a `testnet site <https://testnet.etherscan.io>`_

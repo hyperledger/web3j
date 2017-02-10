@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     repositories {
         mavenCentral()
@@ -27,7 +29,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '1.1.0'
+version '1.2.0'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -64,7 +66,7 @@ ext {
 
 repositories {
     mavenCentral()
-    jcenter()
+    jcenter()  // Shadow resides on JCenter
 }
 
 // See https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
@@ -92,7 +94,8 @@ dependencies {
             'com.madgag.spongycastle:prov:1.54.0.0',
             'com.lambdaworks:scrypt:1.4.0',
             'com.squareup:javapoet:1.7.0',
-            'io.reactivex:rxjava:1.2.4'
+            'io.reactivex:rxjava:1.2.4',
+            'com.github.jnr:jnr-unixsocket:0.15'
     testCompile 'junit:junit:4.11',
             'org.mockito:mockito-core:1.10.19',
             'nl.jqno.equalsverifier:equalsverifier:2.1.7'
@@ -127,6 +130,34 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+task testJar(type: Jar) {
+    classifier = 'tests'
+    from sourceSets.test.output
+}
+
+task createProperties(dependsOn: processResources) << {
+    // if resources dir is empty we need to create this ourselves
+    new File("$buildDir/resources/main/").mkdirs()
+
+    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+        Properties p = new Properties()
+        p['version'] = project.version.toString()
+        p['timestamp'] = getTimestamp()
+        p.store w, null
+    }
+}
+
+def getTimestamp() {
+    Date today = new Date()
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(today)
+}
+
+classes {
+    dependsOn createProperties
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -134,6 +165,10 @@ publishing {
 
             artifact sourcesJar {
                 classifier 'sources'
+            }
+
+            artifact testJar {
+                classifier 'tests'
             }
         }
     }
@@ -159,7 +194,7 @@ bintray {
 
 
 artifacts {
-    archives sourcesJar, javadocJar
+    archives sourcesJar, javadocJar, testJar
 }
 
 signing {

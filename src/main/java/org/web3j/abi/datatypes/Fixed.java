@@ -8,6 +8,7 @@ import java.math.BigInteger;
 public class Fixed extends FixedPointType {
 
     public static final String TYPE_NAME = "fixed";
+    public static final Fixed DEFAULT = new Fixed(BigInteger.ZERO);
 
     protected Fixed(int mBitSize, int nBitSize, BigInteger value) {
         super(TYPE_NAME , mBitSize, nBitSize, value);

@@ -18,4 +18,8 @@ public class Files {
         fileInputStream.close();
         return bytes;
     }
+
+    public static String readString(File file) throws IOException {
+        return new String(readBytes(file));
+    }
 }

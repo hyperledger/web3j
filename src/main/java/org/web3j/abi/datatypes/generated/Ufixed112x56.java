@@ -1,6 +1,7 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.math.BigInteger;
+
 import org.web3j.abi.datatypes.Ufixed;
 
 /**
@@ -9,6 +10,8 @@ import org.web3j.abi.datatypes.Ufixed;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Ufixed112x56 extends Ufixed {
+  public static final Ufixed112x56 DEFAULT = new Ufixed112x56(BigInteger.ZERO);
+
   public Ufixed112x56(BigInteger value) {
     super(112, 56, value);
   }

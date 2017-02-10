@@ -10,6 +10,10 @@ import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.request.*;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.request.ShhFilter;
+import org.web3j.protocol.core.methods.request.ShhPost;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 
@@ -367,6 +371,15 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getLogs\",\"params\":[{\"topics\":[\"0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b\"]}],\"id\":1}");
+    }
+
+    @Test
+    public void testEthGetLogsWithNumericBlockRange() throws Exception {
+        web3j.ethGetLogs(new EthFilter(DefaultBlockParameterNumber.valueOf(Numeric.toBigInt
+            ("0xe8")), DefaultBlockParameterName.valueOf("latest"), "")).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getLogs\",\"params\":[{\"topics\":[]," +
+            "\"fromBlock\":\"0xe8\",\"toBlock\":\"latest\",\"address\":[\"\"]}],\"id\":1}");
     }
 
     @Test

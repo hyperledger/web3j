@@ -5,9 +5,8 @@ import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.web3j.abi.Transfer;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.Keys;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -15,8 +14,8 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.infura.InfuraHttpService;
+import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
-import org.web3j.utils.Numeric;
 
 import static org.web3j.utils.Console.exitError;
 
@@ -40,7 +39,7 @@ public class WalletSendFunds extends WalletManager {
         Credentials credentials = getCredentials(walletFile);
         console.printf("Wallet for address " + credentials.getAddress() + " loaded\n");
 
-        if (!isValidAddress(destinationAddress)) {
+        if (!WalletUtils.isValidAddress(destinationAddress)) {
             exitError("Invalid destination address specified");
         }
 
@@ -163,10 +162,5 @@ public class WalletSendFunds extends WalletManager {
             exitError("Problem encountered verifying client: " + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");
-    }
-
-    private static boolean isValidAddress(String address) {
-        String addressNoPrefix = Numeric.cleanHexPrefix(address);
-        return addressNoPrefix.length() == Keys.ADDRESS_LENGTH_IN_HEX;
     }
 }

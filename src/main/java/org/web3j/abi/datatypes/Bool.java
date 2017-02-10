@@ -6,6 +6,7 @@ package org.web3j.abi.datatypes;
 public class Bool implements Type<Boolean> {
 
     public static final String TYPE_NAME = "bool";
+    public static final Bool DEFAULT = new Bool(false);
 
     private boolean value;
 

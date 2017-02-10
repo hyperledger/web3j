@@ -6,6 +6,7 @@ package org.web3j.abi.datatypes;
 public class Utf8String implements Type<String> {
 
     public static final String TYPE_NAME = "string";
+    public static final Utf8String DEFAULT = new Utf8String("");
 
     private String value;
 

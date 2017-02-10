@@ -27,7 +27,7 @@ public class Collection {
     public static <T> String join(List<T> list, String separator, Function<T, String> function) {
         String result = "";
         for (int i = 0; i < list.size(); i++) {
-            result += function.apply(list.get(i));
+            result += function.apply(list.get(i)).trim();
             if (i + 1 < list.size()) {
                 result += separator;
             }
@@ -38,7 +38,7 @@ public class Collection {
     public static String join(List<String> list, String separator) {
         String result = "";
         for (int i = 0; i < list.size(); i++) {
-            result += list.get(i);
+            result += list.get(i).trim();
             if (i + 1 < list.size()) {
                 result += separator;
             }

@@ -1,22 +1,28 @@
-package org.web3j.abi;
+package org.web3j.tx;
 
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.web3j.abi.EventEncoder;
+import org.web3j.abi.EventValues;
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
 
@@ -30,11 +36,25 @@ public abstract class Contract extends ManagedTransaction {
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
 
     private String contractAddress;
+    private final BigInteger gasPrice;
+    private final BigInteger gasLimit;
+
+    protected Contract(String contractAddress, Web3j web3j, TransactionManager transactionManager,
+                       BigInteger gasPrice, BigInteger gasLimit) {
+        super(web3j, transactionManager);
+
+        this.contractAddress = contractAddress;
+        this.gasPrice = gasPrice;
+        this.gasLimit = gasLimit;
+    }
 
     protected Contract(String contractAddress, Web3j web3j, Credentials credentials,
                        BigInteger gasPrice, BigInteger gasLimit) {
-        super(web3j, credentials, gasPrice, gasLimit);
+        this(contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+                gasPrice, gasLimit);
+    }
 
+    public void setContractAddress(String contractAddress) {
         this.contractAddress = contractAddress;
     }
 
@@ -93,32 +113,30 @@ public abstract class Contract extends ManagedTransaction {
         return executeCall(function);
     }
 
+    protected TransactionReceipt executeTransaction(Function function) throws InterruptedException,
+            ExecutionException, TransactionTimeoutException {
+        return executeTransaction(FunctionEncoder.encode(function), BigInteger.ZERO);
+    }
+
+
     /**
      * Given the duration required to execute a transaction, asyncronous execution is strongly
      * recommended via {@link Contract#executeTransactionAsync}.
      *
-     * @param function to transact with
-     * @return the transaction receipt
-     * @throws ExecutionException if the computation threw an
-     * exception
-     * @throws InterruptedException if the current thread was interrupted
-     * while waiting
+     * @param data  to send in transaction
+     * @param value in Wei to send in transaction
+     * @return transaction receipt
+     * @throws ExecutionException          if the computation threw an
+     *                                     exception
+     * @throws InterruptedException        if the current thread was interrupted
+     *                                     while waiting
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     protected TransactionReceipt executeTransaction(
-            Function function) throws ExecutionException, InterruptedException,
-            TransactionTimeoutException {
-        BigInteger nonce = getNonce(credentials.getAddress());
-        String encodedFunction = FunctionEncoder.encode(function);
+            String data, BigInteger value)
+            throws ExecutionException, InterruptedException, TransactionTimeoutException {
 
-        RawTransaction rawTransaction = RawTransaction.createFunctionCallTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                contractAddress,
-                encodedFunction);
-
-        return signAndSend(rawTransaction);
+        return send(contractAddress, data, value, gasPrice, gasLimit);
     }
 
     /**
@@ -137,56 +155,40 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected EventValues extractEventParameters(
-            Event event, TransactionReceipt transactionReceipt) {
+            Event event, Log log) {
 
-        List<Log> logs = transactionReceipt.getLogs();
-
-        List<Type> indexedValues = new ArrayList<Type>();
-        List<Type> nonIndexedValues = new ArrayList<Type>();
-
-        for (Log log:logs) {
-            List<String> topics = log.getTopics();
-            String encodedEventSignature = EventEncoder.encode(event);
-            if (topics.get(0).equals(encodedEventSignature)) {
-
-                nonIndexedValues = FunctionReturnDecoder.decode(
-                        log.getData(), event.getNonIndexedParameters());
-
-                List<TypeReference<Type>> indexedParameters = event.getIndexedParameters();
-                for (int i = 0; i < indexedParameters.size(); i++) {
-                    Type value = FunctionReturnDecoder.decodeIndexedValue(
-                            topics.get(i+1), indexedParameters.get(i));
-                    indexedValues.add(value);
-                }
-            }
+        List<String> topics = log.getTopics();
+        String encodedEventSignature = EventEncoder.encode(event);
+        if (!topics.get(0).equals(encodedEventSignature)) {
+            return null;
         }
 
+        List<Type> indexedValues = new ArrayList<>();
+        List<Type> nonIndexedValues = FunctionReturnDecoder.decode(
+                log.getData(), event.getNonIndexedParameters());
+
+        List<TypeReference<Type>> indexedParameters = event.getIndexedParameters();
+        for (int i = 0; i < indexedParameters.size(); i++) {
+            Type value = FunctionReturnDecoder.decodeIndexedValue(
+                    topics.get(i + 1), indexedParameters.get(i));
+            indexedValues.add(value);
+        }
         return new EventValues(indexedValues, nonIndexedValues);
     }
 
-    private static String create(
-            Web3j web3j, Credentials credentials,
-            BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger value)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
+    protected List<EventValues> extractEventParameters(
+            Event event, TransactionReceipt transactionReceipt) {
 
-        Contract contract = new Contract("", web3j, credentials, gasPrice, gasLimit) { };
-
-        BigInteger nonce = contract.getNonce(contract.credentials.getAddress());
-        RawTransaction rawTransaction = RawTransaction.createContractTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                value,
-                binary + encodedConstructor);
-
-        TransactionReceipt transactionReceipt = contract.signAndSend(rawTransaction);
-        String contractAddress = transactionReceipt.getContractAddress();
-
-        if (contractAddress == null) {
-            throw new IllegalArgumentException("Contract address cannot be null");
+        List<Log> logs = transactionReceipt.getLogs();
+        List<EventValues> values = new ArrayList<>();
+        for (Log log : logs) {
+            EventValues eventValues = extractEventParameters(event, log);
+            if (eventValues != null) {
+                values.add(eventValues);
+            }
         }
-        return contractAddress;
+
+        return values;
     }
 
     protected static <T extends Contract> T deploy(
@@ -195,14 +197,46 @@ public abstract class Contract extends ManagedTransaction {
             BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
-        String contractAddress = create(web3j, credentials, gasPrice, gasLimit,
-                binary, encodedConstructor, value);
-
         Constructor<T> constructor = type.getDeclaredConstructor(
-                String.class, Web3j.class, Credentials.class, BigInteger.class, BigInteger.class);
+                String.class, Web3j.class, Credentials.class,
+                BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
-        return constructor.newInstance(contractAddress, web3j, credentials, gasPrice, gasLimit);
+        T contract = constructor.newInstance("", web3j, credentials, gasPrice, gasLimit);
+        TransactionReceipt transactionReceipt =
+                contract.executeTransaction(binary + encodedConstructor, value);
+
+        String contractAddress = transactionReceipt.getContractAddress();
+        if (contractAddress == null) {
+            throw new RuntimeException("Empty contract address returned");
+        }
+        contract.setContractAddress(contractAddress);
+
+        return contract;
+    }
+
+    protected static <T extends Contract> T deploy(
+            Class<T> type,
+            Web3j web3j, TransactionManager transactionManager,
+            BigInteger gasPrice, BigInteger gasLimit,
+            String binary, String encodedConstructor, BigInteger value) throws Exception {
+
+        Constructor<T> constructor = type.getDeclaredConstructor(
+                String.class, Web3j.class, TransactionManager.class,
+                BigInteger.class, BigInteger.class);
+        constructor.setAccessible(true);
+
+        T contract = constructor.newInstance("", web3j, transactionManager, gasPrice, gasLimit);
+        TransactionReceipt transactionReceipt =
+                contract.executeTransaction(binary + encodedConstructor, value);
+
+        String contractAddress = transactionReceipt.getContractAddress();
+        if (contractAddress == null) {
+            throw new RuntimeException("Empty contract address returned");
+        }
+        contract.setContractAddress(contractAddress);
+
+        return contract;
     }
 
     protected static <T extends Contract> Future<T> deployAsync(
@@ -217,5 +251,20 @@ public abstract class Contract extends ManagedTransaction {
                         binary, encodedConstructor, value);
             }
         });
+    }
+
+    protected static <T extends Contract> Future<T> deployAsync(
+            final Class<T> type, final Web3j web3j, final TransactionManager transactionManager,
+            final BigInteger gasPrice, final BigInteger gasLimit,
+            final String binary, final String encodedConstructor, final BigInteger value) {
+
+        return Async.run(
+                new Callable<T>() {
+                    @Override
+                    public T call() throws Exception {
+                        return deploy(type, web3j, transactionManager, gasPrice, gasLimit,
+                                binary, encodedConstructor, value);
+                    }
+                });
     }
 }

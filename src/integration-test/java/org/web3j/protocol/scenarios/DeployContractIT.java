@@ -9,7 +9,6 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -17,9 +16,9 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Integration test demonstrating the full contract deployment workflow.
@@ -43,6 +42,7 @@ public class DeployContractIT extends Scenario {
                 transactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
         String contractAddress = transactionReceipt.getContractAddress();
+
         assertNotNull(contractAddress);
 
         Function function = createFibonacciFunction();
@@ -53,7 +53,7 @@ public class DeployContractIT extends Scenario {
         List<Type> uint = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
         assertThat(uint.size(), is(1));
-        assertThat((BigInteger) uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
+        assertThat(uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
     }
 
     private String sendTransaction() throws Exception {

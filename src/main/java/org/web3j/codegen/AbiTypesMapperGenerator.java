@@ -4,9 +4,23 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.WildcardTypeName;
 
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Fixed;
+import org.web3j.abi.datatypes.Int;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 
 /**
  * Generator class for creating all the different numeric type variants.

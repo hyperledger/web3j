@@ -11,12 +11,15 @@ web3j is a lightweight, reactive, type safe Java and Android library for integra
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
 
+The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
+overview of blockchain, Ethereum and web3j.
+
 
 Features
 ========
 
 - Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
-  client API
+  client API over HTTP and IPC
 - Ethereum wallet support
 - Reactive-functional API for working with filters
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
@@ -28,12 +31,13 @@ Features
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
+- Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
 
 
 Dependencies
 ============
 
-It has six runtime dependencies:
+It has seven runtime dependencies:
 
 - `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
@@ -42,6 +46,7 @@ It has six runtime dependencies:
 - `Bouncy Castle <https://www.bouncycastle.org/>`_ and
   `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
 - `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
+- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
 
 
 Contents:
@@ -61,6 +66,7 @@ Contents:
    management_apis.rst
    infura.rst
    trouble.rst
+   projects.rst
    development.rst
    links.rst
    credits.rst

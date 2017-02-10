@@ -9,8 +9,10 @@ import org.web3j.utils.Numeric;
  * Address type, which is equivalent to uint160.
  */
 public class Address extends Uint {
+
     public static final String TYPE_NAME = "address";
     public static final int LENGTH = 160;
+    public static final Address DEFAULT = new Address(BigInteger.ZERO);
 
     public Address(BigInteger value) {
         super(TYPE_NAME, LENGTH, value);

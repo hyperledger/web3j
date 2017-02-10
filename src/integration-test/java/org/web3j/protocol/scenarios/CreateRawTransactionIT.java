@@ -4,9 +4,9 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -15,7 +15,7 @@ import org.web3j.utils.Numeric;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Create, sign and send a raw transaction.

@@ -5,8 +5,24 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import org.web3j.abi.datatypes.*;
-import org.web3j.abi.datatypes.generated.*;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Fixed;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Bytes1;
+import org.web3j.abi.datatypes.generated.Bytes4;
+import org.web3j.abi.datatypes.generated.Bytes6;
+import org.web3j.abi.datatypes.generated.Fixed24x40;
+import org.web3j.abi.datatypes.generated.Int256;
+import org.web3j.abi.datatypes.generated.Int64;
+import org.web3j.abi.datatypes.generated.Ufixed24x40;
+import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint64;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -17,11 +33,23 @@ public class TypeDecoderTest {
     @Test
     public void testBoolDecode() {
         assertThat(TypeDecoder.decodeBool(
-                "0000000000000000000000000000000000000000000000000000000000000000"),
+                "0000000000000000000000000000000000000000000000000000000000000000", 0),
                 is(new Bool(false)));
 
         assertThat(TypeDecoder.decodeBool(
-                "0000000000000000000000000000000000000000000000000000000000000001"),
+                "0000000000000000000000000000000000000000000000000000000000000001", 0),
+                is(new Bool(true)));
+    }
+
+    @Test
+    public void testBoolDecodeGivenOffset() {
+        // Decode second parameter as Bool
+        assertThat(TypeDecoder.decode(
+                "0000000000000000000000000000000000000000000000007fffffffffffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007fffffffffffffff", 64, Bool.class),
+                is(new Bool(false)));
+
+        assertThat(TypeDecoder.decode(
+                "0000000000000000000000000000000000000000000000007fffffffffffffff00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000007fffffffffffffff", 64, Bool.class),
                 is(new Bool(true)));
     }
 

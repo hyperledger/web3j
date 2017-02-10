@@ -1,16 +1,11 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.web3j.abi.EventValues;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.generated.Fibonacci;
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
@@ -48,11 +43,12 @@ public class FunctionWrappersIT extends Scenario {
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(
                 new Uint256(BigInteger.valueOf(15))).get();
 
-        EventValues result = fibonacci.processNotifyEvent(transactionReceipt);
+        Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
-        assertThat(result.getNonIndexedValues(),
-                equalTo(Arrays.<Type>asList(
-                        new Uint256(BigInteger.valueOf(15)),
-                        new Uint256(BigInteger.valueOf(610)))));
+        assertThat(result.input,
+                equalTo(new Uint256(BigInteger.valueOf(15))));
+
+        assertThat(result.result,
+                equalTo(new Uint256(BigInteger.valueOf(610))));
     }
 }

@@ -19,8 +19,7 @@ import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicHeader;
 
-import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.ObjectMapperFactory;
+import org.web3j.protocol.Service;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.utils.Async;
@@ -28,13 +27,11 @@ import org.web3j.utils.Async;
 /**
  * HTTP implementation of our services API.
  */
-public class HttpService implements Web3jService {
+public class HttpService extends Service {
 
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
     private CloseableHttpClient httpClient;
-
-    private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
     private final String url;
 

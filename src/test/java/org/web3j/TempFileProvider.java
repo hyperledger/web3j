@@ -1,5 +1,4 @@
-package org.web3j.codegen;
-
+package org.web3j;
 
 import java.io.File;
 
@@ -8,9 +7,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-public abstract class GeneratorBase {
+/**
+ * Base class for tests wishing to use temporary file locations.
+ */
+public class TempFileProvider {
     private File tempDir;
-    String tempDirPath;
+    protected String tempDirPath;
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -18,7 +20,7 @@ public abstract class GeneratorBase {
     @Before
     public void setUp() throws Exception {
         tempDir = folder.newFolder(
-                SolidityFunctionWrapperGeneratorTest.class.getSimpleName());
+                TempFileProvider.class.getSimpleName());
         tempDirPath = tempDir.getPath();
     }
 

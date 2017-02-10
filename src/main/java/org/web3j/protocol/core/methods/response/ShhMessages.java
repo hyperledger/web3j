@@ -3,8 +3,8 @@ package org.web3j.protocol.core.methods.response;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.web3j.utils.Numeric;
 import org.web3j.protocol.core.Response;
+import org.web3j.utils.Numeric;
 
 /**
  * Whisper messages returned by:
