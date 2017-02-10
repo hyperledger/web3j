@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>web3j &mdash; web3j 0.5.0 documentation</title>
+    <title>web3j &mdash; web3j 2.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.5.0',
+        VERSION:     '2.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 0.5.0 documentation" href="#" />
+    <link rel="top" title="web3j 2.0.0 documentation" href="#" />
     <link rel="next" title="Getting Started" href="getting_started.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -127,6 +127,8 @@ serialisation/deserialisation</li>
 <li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#eip-20-ethereum-token-standard-smart-contract">EIP-20 Ethereum token standard smart contract</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#solidity-smart-contract-wrappers">Solidity smart contract wrappers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#construction-and-deployment">Construction and deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#transaction-managers">Transaction Managers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#specifying-the-chain-id-on-transactions-eip-155">Specifying the Chain Id on Transactions (EIP-155)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#invoking-transactions-and-events">Invoking transactions and events</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#calling-constant-methods">Calling constant methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smart_contracts.html#examples">Examples</a></li>
@@ -156,8 +158,10 @@ serialisation/deserialisation</li>
 <li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="trouble.html#i-m-submitting-a-transaction-but-it-s-not-being-mined">I&#8217;m submitting a transaction, but it&#8217;s not being mined</a></li>
 <li class="toctree-l2"><a class="reference internal" href="trouble.html#i-want-to-see-details-of-the-json-rpc-requests-and-responses">I want to see details of the JSON-RPC requests and responses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trouble.html#i-want-to-obtain-some-ether-on-testnet-but-don-t-want-to-have-to-mine-it-myself">I want to obtain some Ether on Testnet, but don&#8217;t want to have to mine it myself</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Projects using web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="development.html#building-web3j">Building web3j</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#generating-documentation">Generating documentation</a></li>
@@ -234,6 +238,7 @@ serialisation/deserialisation</li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Projects using web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Links and Useful Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Thanks and Credits</a></li>
@@ -265,7 +270,7 @@ serialisation/deserialisation</li>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016, Conor Svensson.
+      &copy;2016-2017, Conor Svensson.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
