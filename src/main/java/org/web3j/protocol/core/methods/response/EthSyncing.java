@@ -123,7 +123,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         @Override
         public int hashCode() {
             int result = getStartingBlock() != null ? getStartingBlock().hashCode() : 0;
-            result = 31 * result + Boolean.hashCode(isSyncing());
+            result = 31 * result + (isSyncing() ? 1231 : 1237);
             result = 31 * result + (getCurrentBlock() != null ? getCurrentBlock().hashCode() : 0);
             result = 31 * result + (getHighestBlock() != null ? getHighestBlock().hashCode() : 0);
             result = 31 * result + (knownStates != null ? knownStates.hashCode() : 0);
