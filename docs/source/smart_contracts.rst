@@ -203,7 +203,7 @@ Transaction Managers
 web3j provides a
 `TransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/TransactionManager.java>`_
 abstraction to control the manner you connect to Ethereum clients with. The default mechanism uses
- web3j's
+web3j's
 `RawTransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/RawTransactionManager.java>`_
 which works with Ethereum wallet files to sign transactions offline before submitting them to the
 network. However, you may wish to modify the transaction manager, which you can pass to the smart
