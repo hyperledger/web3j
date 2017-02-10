@@ -76,7 +76,9 @@ public class KeyImporter extends WalletManager {
                     password, credentials.getEcKeyPair(), destination, true);
             console.printf("Wallet file " + walletFileName +
                     " successfully created in: " + destinationDir + "\n");
-        } catch (CipherException | IOException e) {
+        } catch (CipherException e) {
+            exitError(e);
+        } catch (IOException e) {
             exitError(e);
         }
     }

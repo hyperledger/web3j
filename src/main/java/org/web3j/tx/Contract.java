@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -163,7 +162,7 @@ public abstract class Contract extends ManagedTransaction {
             return null;
         }
 
-        List<Type> indexedValues = new ArrayList<>();
+        List<Type> indexedValues = new ArrayList<Type>();
         List<Type> nonIndexedValues = FunctionReturnDecoder.decode(
                 log.getData(), event.getNonIndexedParameters());
 
@@ -180,7 +179,7 @@ public abstract class Contract extends ManagedTransaction {
             Event event, TransactionReceipt transactionReceipt) {
 
         List<Log> logs = transactionReceipt.getLogs();
-        List<EventValues> values = new ArrayList<>();
+        List<EventValues> values = new ArrayList<EventValues>();
         for (Log log : logs) {
             EventValues eventValues = extractEventParameters(event, log);
             if (eventValues != null) {

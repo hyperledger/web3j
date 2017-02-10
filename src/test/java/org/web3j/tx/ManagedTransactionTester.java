@@ -1,5 +1,7 @@
 package org.web3j.tx;
 
+import java.util.concurrent.Callable;
+
 import org.junit.Before;
 
 import org.web3j.crypto.SampleKeys;
@@ -35,33 +37,48 @@ public abstract class ManagedTransactionTester {
     }
 
     void prepareNonceRequest() {
-        EthGetTransactionCount ethGetTransactionCount = new EthGetTransactionCount();
+        final EthGetTransactionCount ethGetTransactionCount = new EthGetTransactionCount();
         ethGetTransactionCount.setResult("0x1");
 
         Request transactionCountRequest = mock(Request.class);
         when(transactionCountRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionCount));
+                .thenReturn(Async.run(new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        return ethGetTransactionCount;
+                    }
+                }));
         when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.LATEST))
                 .thenReturn(transactionCountRequest);
     }
 
     void prepareTransactionRequest() {
-        EthSendTransaction ethSendTransaction = new EthSendTransaction();
+        final EthSendTransaction ethSendTransaction = new EthSendTransaction();
         ethSendTransaction.setResult(TRANSACTION_HASH);
 
         Request rawTransactionRequest = mock(Request.class);
-        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
+        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return ethSendTransaction;
+            }
+        }));
         when(web3j.ethSendRawTransaction(any(String.class)))
                 .thenReturn(rawTransactionRequest);
     }
 
     void prepareTransactionReceipt(TransactionReceipt transactionReceipt) {
-        EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
+        final EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
         ethGetTransactionReceipt.setResult(transactionReceipt);
 
         Request getTransactionReceiptRequest = mock(Request.class);
         when(getTransactionReceiptRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionReceipt));
+                .thenReturn(Async.run(new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        return ethGetTransactionReceipt;
+                    }
+                }));
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn(getTransactionReceiptRequest);
     }

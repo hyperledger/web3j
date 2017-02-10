@@ -5,9 +5,12 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +21,7 @@ import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
@@ -123,14 +127,19 @@ public class ContractTest extends ManagedTransactionTester {
         prepareCall(ethCall);
 
         assertThat(contract.callMultipleValue().get(),
-                equalTo(Arrays.asList(
+                equalTo(Arrays.<Type>asList(
                         new Uint256(BigInteger.valueOf(55)),
                         new Uint256(BigInteger.valueOf(7)))));
     }
 
-    private void prepareCall(EthCall ethCall) {
+    private void prepareCall(final EthCall ethCall) {
         Request request = mock(Request.class);
-        when(request.sendAsync()).thenReturn(Async.run(() -> ethCall));
+        when(request.sendAsync()).thenReturn(Async.run(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return ethCall;
+            }
+        }));
 
         when(web3j.ethCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST)))
                 .thenReturn(request);
@@ -162,10 +171,10 @@ public class ContractTest extends ManagedTransactionTester {
         EventValues eventValues = contract.processEvent(transactionReceipt).get(0);
 
         assertThat(eventValues.getIndexedValues(),
-                equalTo(Collections.singletonList(
+                equalTo(Collections.<Type>singletonList(
                         new Address("0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a"))));
         assertThat(eventValues.getNonIndexedValues(),
-                equalTo(Collections.singletonList(new Uint256(BigInteger.ONE))));
+                equalTo(Collections.<Type>singletonList(new Uint256(BigInteger.ONE))));
     }
 
     @Test(expected = TransactionTimeoutException.class)
@@ -182,11 +191,16 @@ public class ContractTest extends ManagedTransactionTester {
     public void testInvalidTransactionResponse() throws Throwable {
         prepareNonceRequest();
 
-        EthSendTransaction ethSendTransaction = new EthSendTransaction();
+        final EthSendTransaction ethSendTransaction = new EthSendTransaction();
         ethSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
 
         Request rawTransactionRequest = mock(Request.class);
-        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
+        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return ethSendTransaction;
+            }
+        }));
         when(web3j.ethSendRawTransaction(any(String.class)))
                 .thenReturn(rawTransactionRequest);
 
@@ -199,12 +213,17 @@ public class ContractTest extends ManagedTransactionTester {
         prepareNonceRequest();
         prepareTransactionRequest();
 
-        EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
+        final EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
         ethGetTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
 
         Request getTransactionReceiptRequest = mock(Request.class);
         when(getTransactionReceiptRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionReceipt));
+                .thenReturn(Async.run(new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        return ethGetTransactionReceipt;
+                    }
+                }));
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn(getTransactionReceiptRequest);
 

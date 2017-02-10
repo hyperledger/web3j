@@ -236,7 +236,9 @@ public class SolidityFunctionWrapperGenerator {
             // This only works if run as part of the web3j command line tools which contains
             // a version.properties file
             version = Version.getVersion();
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException e) {
+            version = Version.DEFAULT;
+        } catch (NullPointerException e) {
             version = Version.DEFAULT;
         }
         return "\n<p>Generated with web3j version " + version + ".\n";
@@ -606,8 +608,8 @@ public class SolidityFunctionWrapperGenerator {
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 
-        List<NamedTypeName> indexedParameters = new ArrayList<>();
-        List<NamedTypeName> nonIndexedParameters = new ArrayList<>();
+        List<NamedTypeName> indexedParameters = new ArrayList<NamedTypeName>();
+        List<NamedTypeName> nonIndexedParameters = new ArrayList<NamedTypeName>();
         for (AbiDefinition.NamedType namedType : inputs) {
 
             if (namedType.isIndexed()) {

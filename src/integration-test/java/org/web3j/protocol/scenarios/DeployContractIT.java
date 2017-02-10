@@ -3,6 +3,7 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
 import org.web3j.abi.FunctionEncoder;
@@ -53,7 +54,7 @@ public class DeployContractIT extends Scenario {
         List<Type> uint = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
         assertThat(uint.size(), is(1));
-        assertThat(uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
+        assertThat(uint.get(0).getValue(), IsEqual.<Object>equalTo(BigInteger.valueOf(13)));
     }
 
     private String sendTransaction() throws Exception {

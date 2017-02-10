@@ -91,7 +91,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 Arrays.asList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
-                Collections.emptyList(),
+                Collections.<AbiDefinition.NamedType>emptyList(),
                 "type",
                 false);
 
@@ -144,7 +144,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 Arrays.asList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
-                Collections.emptyList(),
+                Collections.<AbiDefinition.NamedType>emptyList(),
                 "type",
                 false);
 
@@ -196,7 +196,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 false,
                 Arrays.asList(fromAddress, toAddress, value),
                 "transfer",
-                new ArrayList<>(),
+                new ArrayList<AbiDefinition.NamedType>(),
                 "event",
                 false);
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
@@ -207,7 +207,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         String expected = "class testClass {\n" +
                 "  public java.util.List<TransferEventResponse> getTransferEvents(org.web3j" +
                 ".protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n" +
-                "    org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event" +
+                "    final org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event" +
                 "(\"transfer\", \n" +
                 "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j" +
                 ".abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi" +
@@ -232,7 +232,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 "  }\n" +
                 "\n" +
                 "  public rx.Observable<TransferEventResponse> transferEventObservable() {\n" +
-                "    org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event" +
+                "    final org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event" +
                 "(\"transfer\", \n" +
                 "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j" +
                 ".abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi" +

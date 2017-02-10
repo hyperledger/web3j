@@ -24,7 +24,8 @@ public class FastRawTransactionManagerIT extends Scenario {
     @Test
     public void testTransaction() throws Exception {
 
-        List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
+        List<Future<TransactionReceipt>> transactionReceipts =
+                new LinkedList<Future<TransactionReceipt>>();
 
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(
                 parity, ALICE);

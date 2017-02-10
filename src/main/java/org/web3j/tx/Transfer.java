@@ -88,9 +88,14 @@ public class Transfer extends ManagedTransaction {
     }
 
     public Future<TransactionReceipt> sendFundsAsync(
-            String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
-            BigInteger gasLimit) {
-        return Async.run(() -> send(toAddress, value, unit, gasPrice, gasLimit));
+            final String toAddress, final BigDecimal value, final Convert.Unit unit,
+            final BigInteger gasPrice, final BigInteger gasLimit) {
+        return Async.run(new Callable<TransactionReceipt>() {
+            @Override
+            public TransactionReceipt call() throws Exception {
+                return Transfer.this.send(toAddress, value, unit, gasPrice, gasLimit);
+            }
+        });
     }
 
     public static TransactionReceipt sendFunds(

@@ -43,6 +43,7 @@ import org.web3j.protocol.core.methods.response.EthHashrate;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthMining;
 import org.web3j.protocol.core.methods.response.EthProtocolVersion;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
 import org.web3j.protocol.core.methods.response.EthSubmitWork;

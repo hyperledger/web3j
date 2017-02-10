@@ -44,25 +44,45 @@ public class CollectionTest {
                 new FakeSpec("a"),
                 new FakeSpec("b"),
                 new FakeSpec("c"));
-        assertThat(join(specs1, ",", FakeSpec::getName), is("a,b,c"));
+        assertThat(join(specs1, ",", new Function<FakeSpec, String>() {
+            @Override
+            public String apply(FakeSpec fakeSpec) {
+                return fakeSpec.getName();
+            }
+        }), is("a,b,c"));
 
         final List<FakeSpec> specs2 = Arrays.asList(
                 new FakeSpec("a"),
                 new FakeSpec("b"),
                 new FakeSpec("c"));
-        assertThat(join(specs2, ", ", FakeSpec::getName), is("a, b, c"));
+        assertThat(join(specs2, ", ", new Function<FakeSpec, String>() {
+            @Override
+            public String apply(FakeSpec fakeSpec) {
+                return fakeSpec.getName();
+            }
+        }), is("a, b, c"));
 
         final List<FakeSpec> specs3 = Arrays.asList(
                 new FakeSpec(" a"),
                 new FakeSpec("b  "),
                 new FakeSpec(" c "));
-        assertThat(join(specs3, ",", FakeSpec::getName), is("a,b,c"));
+        assertThat(join(specs3, ",", new Function<FakeSpec, String>() {
+            @Override
+            public String apply(FakeSpec fakeSpec) {
+                return fakeSpec.getName();
+            }
+        }), is("a,b,c"));
 
         final List<FakeSpec> specs4 = Arrays.asList(
                 new FakeSpec(" a"),
                 new FakeSpec("b  "),
                 new FakeSpec(" c "));
-        assertThat(join(specs4, ", ", FakeSpec::getName), is("a, b, c"));
+        assertThat(join(specs4, ", ", new Function<FakeSpec, String>() {
+            @Override
+            public String apply(FakeSpec fakeSpec) {
+                return fakeSpec.getName();
+            }
+        }), is("a, b, c"));
     }
 
 

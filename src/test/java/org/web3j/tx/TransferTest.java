@@ -2,6 +2,7 @@ package org.web3j.tx;
 
 
 import java.math.BigDecimal;
+import java.util.concurrent.Callable;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,11 +55,16 @@ public class TransferTest extends ManagedTransactionTester {
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
         prepareTransaction(transactionReceipt);
 
-        EthGasPrice ethGasPrice = new EthGasPrice();
+        final EthGasPrice ethGasPrice = new EthGasPrice();
         ethGasPrice.setResult("0x1");
 
         Request gasPriceRequest = mock(Request.class);
-        when(gasPriceRequest.sendAsync()).thenReturn(Async.run(() -> ethGasPrice));
+        when(gasPriceRequest.sendAsync()).thenReturn(Async.run(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                return ethGasPrice;
+            }
+        }));
         when(web3j.ethGasPrice()).thenReturn(gasPriceRequest);
 
         return transactionReceipt;
