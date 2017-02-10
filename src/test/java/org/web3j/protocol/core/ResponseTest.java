@@ -70,6 +70,7 @@ import org.web3j.protocol.core.methods.response.Web3Sha3;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -555,8 +556,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     @Test
@@ -666,8 +666,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     // Remove once Geth & Parity return the same v value in transactions
@@ -778,8 +777,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     @Test
@@ -791,7 +789,7 @@ public class ResponseTest extends ResponseTester {
         );
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        assertThat(ethBlock.getBlock(), is(Optional.empty()));
+        assertNull(ethBlock.getBlock());
     }
 
     @Test

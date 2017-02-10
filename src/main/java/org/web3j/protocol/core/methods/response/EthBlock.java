@@ -42,8 +42,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         super.setResult(result);
     }
 
-    public Optional<Block> getBlock() {
-        return Optional.ofNullable(getResult());
+    public Block getBlock() {
+        return getResult();
     }
 
     public static class Block {

@@ -65,7 +65,7 @@ public class JsonRpc2_0Rx {
 
     public Observable<Transaction>  transactionObservable(long pollingInterval) {
         return blockObservable(true, pollingInterval)
-                .flatMapIterable(ethBlock -> (List) ethBlock.getBlock().get().getTransactions());
+                .flatMapIterable(ethBlock -> (List) ethBlock.getBlock().getTransactions());
     }
 
     public Observable<Transaction> pendingTransactionObservable(long pollingInterval) {
