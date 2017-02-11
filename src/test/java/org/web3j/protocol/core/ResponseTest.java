@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -990,7 +991,7 @@ public class ResponseTest extends ResponseTester {
                         "}"
         );
 
-        Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<>(1);
+        Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<String, EthCompileSolidity.Code>(1);
         compiledSolidity.put("test", new EthCompileSolidity.Code(
                 "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
                 new EthCompileSolidity.SolidityInfo(
