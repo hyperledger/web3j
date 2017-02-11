@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>1.1.0</version>
+     <version>2.0.0</version>
    </dependency>
 
 Gradle
@@ -39,7 +39,7 @@ Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:1.1.0')
+   compile ('org.web3j:core-android:2.0.0')
 
 
 Start a client
@@ -112,6 +112,8 @@ the same host as web3j. To connect simply use the relevent *IpcService* implemnt
    // Windows
    Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
+
+**Note:** IPC is not currently available on web3j-android.
 
 
 Filters
