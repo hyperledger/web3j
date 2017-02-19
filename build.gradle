@@ -184,7 +184,7 @@ bintray {
         licenses = ['Apache-2.0']
         issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
         vcsUrl = 'https://github.com/web3j/web3j.git'
-        websiteUrl = 'http://web3j.org'
+        websiteUrl = 'https://web3j.io'
         publicDownloadNumbers = true
     }
 }
@@ -215,7 +215,7 @@ uploadArchives {
                 name 'web3j'
                 packaging 'jar'
                 description 'web3j is a lightweight Java library for integration with Ethereum clients'
-                url 'http://web3j.org'
+                url 'https://web3j.io'
 
                 scm {
                     connection 'scm:git:https://github.com/web3j/web3j.git'
