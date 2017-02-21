@@ -28,7 +28,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 group 'org.web3j'
-version '2.0.0'
+version '2.0.1'
 
 sourceCompatibility = 1.8
 
