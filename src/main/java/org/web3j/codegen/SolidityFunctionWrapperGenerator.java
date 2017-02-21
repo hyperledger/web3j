@@ -520,7 +520,8 @@ public class SolidityFunctionWrapperGenerator {
                                                    List<NamedTypeName> nonIndexedParameters)
             throws ClassNotFoundException {
 
-        String generatedFunctionName = functionName + "EventObservable";
+        String generatedFunctionName =
+                Strings.lowercaseFirstLetter(functionName) + "EventObservable";
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx
                 .Observable.class), ClassName.get("", responseClassName));
 
@@ -602,7 +603,7 @@ public class SolidityFunctionWrapperGenerator {
             AbiDefinition functionDefinition,
             TypeSpec.Builder classBuilder) throws ClassNotFoundException {
 
-        String functionName = Strings.lowercaseFirstLetter(functionDefinition.getName());
+        String functionName = functionDefinition.getName();
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 
