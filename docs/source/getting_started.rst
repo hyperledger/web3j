@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>2.0.1</version>
+     <version>2.0.2</version>
    </dependency>
 
 Android:
@@ -33,7 +33,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:2.0.1')
+   compile ('org.web3j:core:2.0.2')
 
 Android:
 
@@ -50,7 +50,7 @@ Start up an Ethereum client if you don't already have one running, such as
 
 .. code-block:: bash
 
-   $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
+   $ geth --fast --cache=512 --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
 Or `Parity <https://github.com/ethcore/parity>`_:
 
