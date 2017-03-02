@@ -1,10 +1,10 @@
 package org.web3j.generated;
 
+import java.lang.String;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Future;
-
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
@@ -21,7 +21,9 @@ import org.web3j.tx.TransactionManager;
 /**
  * <p>Auto generated code.<br>
  * <strong>Do not modify!</strong><br>
- * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.</p>
+ * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.
+ *
+ * <p>Generated with web3j version 2.0.0.
  */
 public final class ShipIt extends Contract {
     private static final String BINARY = "606060405261015c806100126000396000f3606060405260e060020a6000350463d51cd4ac811461001e575b610002565b3461000257600060208190526004803582526040909120805460018201546002830154600384015494840154600585015460078601546100869773ffffffffffffffffffffffffffffffffffffffff96871697969095169593949360ff909316926006019088565b6040805173ffffffffffffffffffffffffffffffffffffffff808b16825289166020820152908101879052606081018690526080810185905260a0810184905260e0810182905261010060c082018181528454600260018216158402600019019091160491830182905290610120830190859080156101465780601f1061011b57610100808354040283529160200191610146565b820191906000526020600020905b81548152906001019060200180831161012957829003601f168201915b5050995050505050505050505060405180910390f3";

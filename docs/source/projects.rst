@@ -5,5 +5,5 @@ Projects using web3j
   `@vikulin <https://github.com/vikulin>`_
 - `eth-contract-api <https://github.com/adridadou/eth-contract-api>`_ by
   `@adridadou <https://github.com/adridadou>`_
-- `https://github.com/matthiaszimmermann/ethereum-paper-wallet`_ by
+- `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_

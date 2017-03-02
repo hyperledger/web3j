@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Strings.capitaliseFirstLetter;
 import static org.web3j.utils.Strings.join;
+import static org.web3j.utils.Strings.lowercaseFirstLetter;
 import static org.web3j.utils.Strings.repeat;
 import static org.web3j.utils.Strings.toCsv;
 import static org.web3j.utils.Strings.zeros;
@@ -35,6 +36,15 @@ public class StringsTest {
         assertThat(capitaliseFirstLetter("aa"), is("Aa"));
         assertThat(capitaliseFirstLetter("A"), is("A"));
         assertThat(capitaliseFirstLetter("Ab"), is("Ab"));
+    }
+
+    @Test
+    public void testLowercaseFirstLetter() {
+        assertThat(lowercaseFirstLetter(""), is(""));
+        assertThat(lowercaseFirstLetter("A"), is("a"));
+        assertThat(lowercaseFirstLetter("AA"), is("aA"));
+        assertThat(lowercaseFirstLetter("a"), is("a"));
+        assertThat(lowercaseFirstLetter("aB"), is("aB"));
     }
 
     @Test

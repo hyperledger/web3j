@@ -85,7 +85,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.1.2</version>
+     <version>2.0.2</version>
    </dependency>
 
 Android:
@@ -95,7 +95,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>1.1.0</version>
+     <version>2.0.0</version>
    </dependency>
 
 Gradle
@@ -105,13 +105,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.1.2')
+   compile ('org.web3j:core:2.0.2')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:1.1.0')
+   compile ('org.web3j:core-android:2.0.0')
 
 
 Start a client
@@ -195,6 +195,7 @@ the same host as web3j. To connect simply use the relevent *IpcService* implemnt
    Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
 
+**Note:** IPC is not currently available on web3j-android.
 
 
 Filters
@@ -411,7 +412,7 @@ Projects using web3j
   `@vikulin <https://github.com/vikulin>`_
 - `eth-contract-api <https://github.com/adridadou/eth-contract-api>`_ by
   `@adridadou <https://github.com/adridadou>`_
-- `https://github.com/matthiaszimmermann/ethereum-paper-wallet`_ by
+- `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
 
 
@@ -453,4 +454,5 @@ Thanks and credits
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_,
   `@ferOnti <https://github.com/ferOnti>`_, `@fraspadafora <https://github.com/fraspadafora>`_,
   `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_,
-  `@thedoctor <https://github.com/thedoctor>`_
+  `@thedoctor <https://github.com/thedoctor>`_, `@tramonex-nate <https://github.com/tramonex-nate>`_,
+  `@ferOnti <https://github.com/ferOnti>`_

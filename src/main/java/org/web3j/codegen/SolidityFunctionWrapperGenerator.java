@@ -520,7 +520,8 @@ public class SolidityFunctionWrapperGenerator {
                                                    List<NamedTypeName> nonIndexedParameters)
             throws ClassNotFoundException {
 
-        String generatedFunctionName = functionName + "EventObservable";
+        String generatedFunctionName =
+                Strings.lowercaseFirstLetter(functionName) + "EventObservable";
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx
                 .Observable.class), ClassName.get("", responseClassName));
 
@@ -748,7 +749,7 @@ public class SolidityFunctionWrapperGenerator {
                     }
                 });
 
-        methodBuilder.addStatement("$T event = new $T($S, \n" +
+        methodBuilder.addStatement("final $T event = new $T($S, \n" +
                 "$T.<$T<?>>asList(" + indexedAsListParams + "),\n" +
                 "$T.<$T<?>>asList(" + nonIndexedAsListParams + "))", objects.toArray());
     }

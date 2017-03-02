@@ -17,4 +17,5 @@ Thanks and Credits
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_,
   `@ferOnti <https://github.com/ferOnti>`_, `@fraspadafora <https://github.com/fraspadafora>`_,
   `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_,
-  `@thedoctor <https://github.com/thedoctor>`_,
+  `@thedoctor <https://github.com/thedoctor>`_, `@tramonex-nate <https://github.com/tramonex-nate>`_,
+  `@ferOnti <https://github.com/ferOnti>`_

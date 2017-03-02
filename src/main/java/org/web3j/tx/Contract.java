@@ -211,7 +211,8 @@ public abstract class Contract extends ManagedTransaction {
                 BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
-        T contract = constructor.newInstance("", web3j, transactionManager, gasPrice, gasLimit);
+        // we want to use null here to ensure that "to" parameter on message is not populated
+        T contract = constructor.newInstance(null, web3j, transactionManager, gasPrice, gasLimit);
         TransactionReceipt transactionReceipt =
                 contract.executeTransaction(binary + encodedConstructor, value);
 

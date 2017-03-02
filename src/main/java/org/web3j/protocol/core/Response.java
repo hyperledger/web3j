@@ -88,20 +88,29 @@ public class Response<T> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Error)) {
+                return false;
+            }
 
             Error error = (Error) o;
 
-            if (code != error.code) return false;
-            return message != null ? message.equals(error.message) : error.message == null;
-
+            if (getCode() != error.getCode()) {
+                return false;
+            }
+            if (getMessage() != null ? !getMessage().equals(error.getMessage()) : error.getMessage() != null) {
+                return false;
+            }
+            return getData() != null ? getData().equals(error.getData()) : error.getData() == null;
         }
 
         @Override
         public int hashCode() {
-            int result = code;
-            result = 31 * result + (message != null ? message.hashCode() : 0);
+            int result = getCode();
+            result = 31 * result + (getMessage() != null ? getMessage().hashCode() : 0);
+            result = 31 * result + (getData() != null ? getData().hashCode() : 0);
             return result;
         }
     }
