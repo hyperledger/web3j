@@ -263,9 +263,3 @@ task release {
 
     tasks.findByName('bintrayUpload').mustRunAfter 'build'
 }
-
-install {
-    repositories.mavenInstaller {
-        pom.packaging = 'jar'
-    }
-}
