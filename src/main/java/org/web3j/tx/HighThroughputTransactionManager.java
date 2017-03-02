@@ -1,18 +1,14 @@
 package org.web3j.tx;
 
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.RawTransaction;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import rx.Subscription;
-
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.RawTransaction;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 /**
  * High Throughput transaction manager.
@@ -33,13 +29,11 @@ public class HighThroughputTransactionManager extends RawTransactionManager {
 	// ---> block number ---> txindex ---> TransactionReceipt
 	private HashMap<BigInteger, HashMap<Long, TransactionReceipt>> transactions;
 
-	public static HighThroughputTransactionManager getInstance(Web3j web3j, Credentials credentials)
-	{
+	public static HighThroughputTransactionManager getInstance(Web3j web3j, Credentials credentials) {
 		return getInstance(web3j, credentials, (byte) -1);
 	}
 
-	public static HighThroughputTransactionManager getInstance(Web3j web3j, Credentials credentials, byte chainId)
-	{
+	public static HighThroughputTransactionManager getInstance(Web3j web3j, Credentials credentials, byte chainId) {
 		//local variable for the entry in the map
 		HashMap<String, HighThroughputTransactionManager> entryWeb3j = null;
 
@@ -84,8 +78,7 @@ public class HighThroughputTransactionManager extends RawTransactionManager {
 	}
 
 	@Override
-	synchronized BigInteger getNonce() throws InterruptedException, ExecutionException
-	{
+	synchronized BigInteger getNonce() throws InterruptedException, ExecutionException {
 		if (nonce.signum() == -1) {
 			nonce = super.getNonce();
 		} else {
