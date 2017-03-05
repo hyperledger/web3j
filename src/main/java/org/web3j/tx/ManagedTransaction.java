@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -52,6 +53,11 @@ public abstract class ManagedTransaction {
         this.attempts = attempts;
     }
 
+    public TransactionManager getTransactionManager()
+    {
+        return transactionManager;
+    }
+
     public BigInteger getGasPrice() throws InterruptedException, ExecutionException {
         EthGasPrice ethGasPrice = web3j.ethGasPrice().sendAsync().get();
 
@@ -75,8 +81,15 @@ public abstract class ManagedTransaction {
         }
 
         String transactionHash = transactionResponse.getTransactionHash();
-
-        return waitForTransactionReceipt(transactionHash);
+        //if attempts is zero, means the transaction will not wait for a receipt,
+        if (attempts > 0) {
+            return waitForTransactionReceipt(transactionHash);
+        } else {
+            //but returns an incomplete receipt with only the transactionHash in it
+            TransactionReceipt transactionReceipt = new TransactionReceipt();
+            transactionReceipt.setTransactionHash(transactionHash);
+            return transactionReceipt;
+        }
     }
 
     private TransactionReceipt waitForTransactionReceipt(
