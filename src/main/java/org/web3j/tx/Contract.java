@@ -38,7 +38,7 @@ public abstract class Contract extends ManagedTransaction {
     private String contractAddress;
     private final BigInteger gasPrice;
     private final BigInteger gasLimit;
-    private Optional<TransactionReceipt> transactionReceipt;
+    private TransactionReceipt transactionReceipt;
 
     protected Contract(String contractAddress, Web3j web3j, TransactionManager transactionManager,
                        BigInteger gasPrice, BigInteger gasLimit) {
@@ -64,7 +64,7 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     public void setTransactionReceipt(TransactionReceipt transactionReceipt) {
-        this.transactionReceipt = Optional.of(transactionReceipt);
+        this.transactionReceipt = transactionReceipt;
     }
 
     /**
@@ -75,7 +75,7 @@ public abstract class Contract extends ManagedTransaction {
      * @return the TransactionReceipt generated at contract deployment
      */
     public Optional<TransactionReceipt> getTransactionReceipt() {
-        return transactionReceipt;
+        return Optional.ofNullable(transactionReceipt);
     }
 
     /**
