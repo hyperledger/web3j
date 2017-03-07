@@ -45,7 +45,7 @@ public final class Fibonacci extends Contract {
     }
 
     public List<NotifyEventResponse> getNotifyEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("notify", 
+        final Event event = new Event("Notify", 
                 Arrays.<TypeReference<?>>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
         List<EventValues> valueList = extractEventParameters(event,transactionReceipt);
@@ -60,7 +60,7 @@ public final class Fibonacci extends Contract {
     }
 
     public Observable<NotifyEventResponse> notifyEventObservable() {
-        final Event event = new Event("notify", 
+        final Event event = new Event("Notify", 
                 Arrays.<TypeReference<?>>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
         EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,DefaultBlockParameterName.LATEST, getContractAddress());

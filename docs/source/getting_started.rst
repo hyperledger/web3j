@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>2.0.0</version>
+     <version>2.0.2</version>
    </dependency>
 
 Android:
@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>1.1.0</version>
+     <version>2.0.0</version>
    </dependency>
 
 Gradle
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:2.0.0')
+   compile ('org.web3j:core:2.0.2')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:1.1.0')
+   compile ('org.web3j:core-android:2.0.0')
 
 
 Start a client
@@ -50,7 +50,7 @@ Start up an Ethereum client if you don't already have one running, such as
 
 .. code-block:: bash
 
-   $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
+   $ geth --fast --cache=512 --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
 Or `Parity <https://github.com/ethcore/parity>`_:
 
@@ -112,6 +112,8 @@ the same host as web3j. To connect simply use the relevent *IpcService* implemnt
    // Windows
    Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
+
+**Note:** IPC is not currently available on web3j-android.
 
 
 Filters

@@ -195,7 +195,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
                 Arrays.asList(fromAddress, toAddress, value),
-                "transfer",
+                "Transfer",
                 new ArrayList<AbiDefinition.NamedType>(),
                 "event",
                 false);
@@ -208,7 +208,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 "  public java.util.List<TransferEventResponse> getTransferEvents(org.web3j" +
                 ".protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n" +
                 "    final org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event" +
-                "(\"transfer\", \n" +
+                "(\"Transfer\", \n" +
                 "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j" +
                 ".abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi" +
                 ".TypeReference<org.web3j.abi.datatypes.Address>() {}),\n" +
@@ -233,7 +233,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 "\n" +
                 "  public rx.Observable<TransferEventResponse> transferEventObservable() {\n" +
                 "    final org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event" +
-                "(\"transfer\", \n" +
+                "(\"Transfer\", \n" +
                 "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j" +
                 ".abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi" +
                 ".TypeReference<org.web3j.abi.datatypes.Address>() {}),\n" +
