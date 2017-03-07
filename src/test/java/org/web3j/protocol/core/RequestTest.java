@@ -226,6 +226,14 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthEstimateGasContractCreation() throws Exception {
+        web3j.ethEstimateGas(
+                Transaction.createContractTransaction("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", BigInteger.ONE, BigInteger.TEN, "")).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_estimateGas\",\"params\":[{\"from\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"gasPrice\":\"0xa\",\"data\":\"0x\",\"nonce\":\"0x1\"}],\"id\":1}");
+    }
+
+    @Test
     public void testEthGetBlockByHash() throws Exception {
         web3j.ethGetBlockByHash(
                 "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331", true).send();

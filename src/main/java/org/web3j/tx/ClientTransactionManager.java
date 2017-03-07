@@ -13,19 +13,27 @@ import org.web3j.protocol.exceptions.TransactionTimeoutException;
  *
  * <p><b>Note</b>: accounts must be unlocked on the node for transactions to be successful.
  */
-public class ClientTransactionManager implements TransactionManager {
+public class ClientTransactionManager extends TransactionManager {
 
     private final Web3j web3j;
     private final String fromAddress;
 
     public ClientTransactionManager(
             Web3j web3j, String fromAddress) {
+        super(web3j);
+        this.web3j = web3j;
+        this.fromAddress = fromAddress;
+    }
+
+    public ClientTransactionManager(
+            Web3j web3j, String fromAddress, int attempts, int sleepDuration) {
+        super(web3j, attempts, sleepDuration);
         this.web3j = web3j;
         this.fromAddress = fromAddress;
     }
 
     @Override
-    public EthSendTransaction executeTransaction(
+    public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
             throws ExecutionException, InterruptedException, TransactionTimeoutException {
@@ -35,5 +43,10 @@ public class ClientTransactionManager implements TransactionManager {
 
         return web3j.ethSendTransaction(transaction)
                 .sendAsync().get();
+    }
+
+    @Override
+    public String getFromAddress() {
+        return fromAddress;
     }
 }

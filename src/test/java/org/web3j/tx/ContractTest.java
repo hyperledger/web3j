@@ -41,7 +41,9 @@ import org.web3j.utils.Async;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -67,6 +69,11 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
+    public void testGetContractTransactionReceipt() {
+        assertFalse(contract.getTransactionReceipt().isPresent());
+    }
+
+    @Test
     public void testDeploy() throws Exception {
 
         TransactionReceipt transactionReceipt = new TransactionReceipt();
@@ -83,6 +90,8 @@ public class ContractTest extends ManagedTransactionTester {
                 ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                 "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
         assertThat(deployedContract.getContractAddress(), is(ADDRESS));
+        assertTrue(deployedContract.getTransactionReceipt().isPresent());
+        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
     }
 
     @Test(expected = RuntimeException.class)
@@ -181,8 +190,12 @@ public class ContractTest extends ManagedTransactionTester {
     public void testTimeout() throws Throwable {
         prepareTransaction(null);
 
-        contract.setAttempts(1);
-        contract.setSleepDuration(1);
+        TransactionManager transactionManager = new RawTransactionManager(
+                web3j, SampleKeys.CREDENTIALS, 1, 1);
+
+        contract = new TestContract(
+                ADDRESS, web3j, transactionManager,
+                Contract.GAS_PRICE, Contract.GAS_LIMIT);
 
         testErrorScenario();
     }
@@ -230,18 +243,6 @@ public class ContractTest extends ManagedTransactionTester {
         testErrorScenario();
     }
 
-    @Test
-    public void testGetSleepDuration() {
-        contract.setSleepDuration(1);
-        assertThat(contract.getSleepDuration(), is(1));
-    }
-
-    @Test
-    public void testGetAttempts() {
-        contract.setAttempts(1);
-        assertThat(contract.getAttempts(), is(1));
-    }
-
     void testErrorScenario() throws Throwable {
         try {
             contract.performTransaction(
@@ -254,9 +255,16 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     private static class TestContract extends Contract {
-        public TestContract(String contractAddress, Web3j web3j, Credentials credentials,
-                            BigInteger gasPrice, BigInteger gasLimit) {
+        public TestContract(
+                String contractAddress, Web3j web3j, Credentials credentials,
+                BigInteger gasPrice, BigInteger gasLimit) {
             super(contractAddress, web3j, credentials, gasPrice, gasLimit);
+        }
+
+        public TestContract(
+                String contractAddress, Web3j web3j, TransactionManager transactionManager,
+                BigInteger gasPrice, BigInteger gasLimit) {
+            super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
         }
 
         public Future<Utf8String> callSingleValue() {
