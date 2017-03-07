@@ -73,8 +73,8 @@ public abstract class Contract extends ManagedTransaction {
      *
      * @return the TransactionReceipt generated at contract deployment
      */
-    public Optional<TransactionReceipt> getTransactionReceipt() {
-        return Optional.ofNullable(transactionReceipt);
+    public TransactionReceipt getTransactionReceipt() {
+        return transactionReceipt;
     }
 
     /**

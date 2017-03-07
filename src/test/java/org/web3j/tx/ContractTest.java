@@ -42,6 +42,8 @@ import org.web3j.utils.Async;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -70,7 +72,7 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testGetContractTransactionReceipt() {
-        assertFalse(contract.getTransactionReceipt().isPresent());
+        assertNull(contract.getTransactionReceipt());
     }
 
     @Test
@@ -90,8 +92,8 @@ public class ContractTest extends ManagedTransactionTester {
                 ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                 "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
         assertThat(deployedContract.getContractAddress(), is(ADDRESS));
-        assertTrue(deployedContract.getTransactionReceipt().isPresent());
-        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
+        assertNotNull(deployedContract.getTransactionReceipt());
+        assertThat(deployedContract.getTransactionReceipt(), equalTo(transactionReceipt));
     }
 
     @Test(expected = RuntimeException.class)
