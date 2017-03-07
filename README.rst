@@ -95,7 +95,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>2.0.0</version>
+     <version>2.1.0</version>
    </dependency>
 
 Gradle
@@ -111,7 +111,7 @@ Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:2.0.0')
+   compile ('org.web3j:core-android:2.1.0')
 
 
 Start a client
