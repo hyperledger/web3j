@@ -57,8 +57,8 @@ public class FastRawTransactionManagerIT extends Scenario {
             transactionReceipts.add(transactionReceiptFuture);
         }
 
-        for (int i = 0; i < transfer.getAttempts() && !transactionReceipts.isEmpty(); i++) {
-            Thread.sleep(transfer.getSleepDuration());
+        for (int i = 0; i < 30 && !transactionReceipts.isEmpty(); i++) {
+            Thread.sleep(15000);
 
             for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator(); iterator.hasNext(); ) {
                 Future<TransactionReceipt> transactionReceiptFuture = iterator.next();

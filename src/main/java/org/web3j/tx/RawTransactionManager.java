@@ -19,7 +19,7 @@ import org.web3j.utils.Numeric;
  * <p>This transaction manager provides support for specifying the chain id for transactions as per
  * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>.
  */
-public class RawTransactionManager implements TransactionManager {
+public class RawTransactionManager extends TransactionManager {
 
     private final Web3j web3j;
     final Credentials credentials;
@@ -27,6 +27,16 @@ public class RawTransactionManager implements TransactionManager {
     private final byte chainId;
 
     public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
+        super(web3j);
+        this.web3j = web3j;
+        this.credentials = credentials;
+
+        this.chainId = chainId;
+    }
+
+    public RawTransactionManager(
+            Web3j web3j, Credentials credentials, byte chainId, int attempts, int sleepDuration) {
+        super(web3j, attempts, sleepDuration);
         this.web3j = web3j;
         this.credentials = credentials;
 
@@ -34,7 +44,12 @@ public class RawTransactionManager implements TransactionManager {
     }
 
     public RawTransactionManager(Web3j web3j, Credentials credentials) {
-        this(web3j, credentials, (byte) -1);
+        this(web3j, credentials, ChainId.NONE);
+    }
+
+    public RawTransactionManager(
+            Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
+        this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
     BigInteger getNonce() throws ExecutionException, InterruptedException {
@@ -45,7 +60,7 @@ public class RawTransactionManager implements TransactionManager {
     }
 
     @Override
-    public EthSendTransaction executeTransaction(
+    public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value) throws ExecutionException, InterruptedException {
 
@@ -67,7 +82,7 @@ public class RawTransactionManager implements TransactionManager {
 
         byte[] signedMessage;
 
-        if (chainId > 0) {
+        if (chainId > ChainId.NONE) {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
@@ -76,5 +91,10 @@ public class RawTransactionManager implements TransactionManager {
         String hexValue = Numeric.toHexString(signedMessage);
 
         return web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+    }
+
+    @Override
+    public String getFromAddress() {
+        return credentials.getAddress();
     }
 }

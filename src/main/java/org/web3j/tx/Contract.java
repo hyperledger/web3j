@@ -38,6 +38,7 @@ public abstract class Contract extends ManagedTransaction {
     private String contractAddress;
     private final BigInteger gasPrice;
     private final BigInteger gasLimit;
+    private Optional<TransactionReceipt> transactionReceipt;
 
     protected Contract(String contractAddress, Web3j web3j, TransactionManager transactionManager,
                        BigInteger gasPrice, BigInteger gasLimit) {
@@ -60,6 +61,21 @@ public abstract class Contract extends ManagedTransaction {
 
     public String getContractAddress() {
         return contractAddress;
+    }
+
+    public void setTransactionReceipt(TransactionReceipt transactionReceipt) {
+        this.transactionReceipt = Optional.of(transactionReceipt);
+    }
+
+    /**
+     * If this Contract instance was created at deployment, the TransactionReceipt associated
+     * with the initial creation will be provided, e.g. via a <em>deploy</em> method. This will not persist
+     * for Contracts instances constructed via a <em>load</em> method.
+     *
+     * @return the TransactionReceipt generated at contract deployment
+     */
+    public Optional<TransactionReceipt> getTransactionReceipt() {
+        return transactionReceipt;
     }
 
     /**
@@ -187,17 +203,10 @@ public abstract class Contract extends ManagedTransaction {
                 BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
-        T contract = constructor.newInstance("", web3j, credentials, gasPrice, gasLimit);
-        TransactionReceipt transactionReceipt =
-                contract.executeTransaction(binary + encodedConstructor, value);
+        // we want to use null here to ensure that "to" parameter on message is not populated
+        T contract = constructor.newInstance(null, web3j, credentials, gasPrice, gasLimit);
 
-        String contractAddress = transactionReceipt.getContractAddress();
-        if (contractAddress == null) {
-            throw new RuntimeException("Empty contract address returned");
-        }
-        contract.setContractAddress(contractAddress);
-
-        return contract;
+        return create(contract, binary, encodedConstructor, value);
     }
 
     protected static <T extends Contract> T deploy(
@@ -213,6 +222,13 @@ public abstract class Contract extends ManagedTransaction {
 
         // we want to use null here to ensure that "to" parameter on message is not populated
         T contract = constructor.newInstance(null, web3j, transactionManager, gasPrice, gasLimit);
+
+        return create(contract, binary, encodedConstructor, value);
+    }
+
+    private static <T extends Contract> T create(
+            T contract, String binary, String encodedConstructor, BigInteger value)
+            throws InterruptedException, ExecutionException, TransactionTimeoutException {
         TransactionReceipt transactionReceipt =
                 contract.executeTransaction(binary + encodedConstructor, value);
 
@@ -221,6 +237,7 @@ public abstract class Contract extends ManagedTransaction {
             throw new RuntimeException("Empty contract address returned");
         }
         contract.setContractAddress(contractAddress);
+        contract.setTransactionReceipt(transactionReceipt);
 
         return contract;
     }
