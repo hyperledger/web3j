@@ -45,13 +45,12 @@ public abstract class TransactionManager {
         return processResponse(ethSendTransaction);
     }
 
-    abstract EthSendTransaction sendTransaction(
+    public abstract EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
             throws ExecutionException, InterruptedException, TransactionTimeoutException;
 
-
-    abstract String getFromAddress();
+    public abstract String getFromAddress();
 
     private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
             throws InterruptedException, ExecutionException, TransactionTimeoutException {
