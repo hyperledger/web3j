@@ -264,7 +264,7 @@ public class Sign {
         }
     }
 
-    static class SignatureData {
+    public static class SignatureData {
         private final byte v;
         private final byte[] r;
         private final byte[] s;
