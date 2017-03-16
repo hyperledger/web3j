@@ -52,11 +52,25 @@ public class TypeEncoderTest {
                 16));
         assertThat(TypeEncoder.encodeNumeric(maxValue),
                 is("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+
+        Uint largeValue = new Uint(
+                new BigInteger("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+                16));
+        assertThat(TypeEncoder.encodeNumeric(largeValue),
+                is("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testInvalidUintEncode() {
         new Uint64(BigInteger.valueOf(-1));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testTooLargeUintEncode() {
+        // 1 more than "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        new Uint(new BigInteger("10000000000000000000000000000000000000000000000000000000000000000",
+                16));
+
     }
 
     @Test
