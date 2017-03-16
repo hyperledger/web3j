@@ -52,6 +52,12 @@ public class TypeEncoderTest {
                 16));
         assertThat(TypeEncoder.encodeNumeric(maxValue),
                 is("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+
+        Uint largeValue = new Uint(
+                new BigInteger("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+                16));
+        assertThat(TypeEncoder.encodeNumeric(largeValue),
+                is("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
