@@ -65,6 +65,14 @@ public class TypeEncoderTest {
         new Uint64(BigInteger.valueOf(-1));
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testTooLargeUintEncode() {
+        // 1 more than "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        new Uint(new BigInteger("10000000000000000000000000000000000000000000000000000000000000000",
+                16));
+
+    }
+
     @Test
     public void testIntEncode() {
         Int zero = new Int64(BigInteger.ZERO);

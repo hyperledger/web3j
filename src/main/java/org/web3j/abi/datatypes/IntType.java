@@ -27,6 +27,6 @@ public abstract class IntType extends NumericType {
     }
 
     private static boolean isValidBitCount(int bitSize, BigInteger value) {
-        return value.bitCount() <= bitSize;
+        return value.bitLength() <= bitSize;
     }
 }
