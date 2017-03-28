@@ -21,6 +21,6 @@ public class ConsoleDevice implements IODevice {
 
     @Override
     public char[] readPassword(String fmt, Object... args) {
-        return console.readPassword();
+        return console.readPassword(fmt, args);
     }
 }
