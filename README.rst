@@ -46,7 +46,7 @@ Features
   contracts from native Java code
 - Reactive-functional API for working with filters
 - Support for Parity's
-  `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
+  `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
@@ -124,7 +124,7 @@ Start up an Ethereum client if you don't already have one running, such as
 
    $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
-Or `Parity <https://github.com/ethcore/parity>`_:
+Or `Parity <https://github.com/paritytech/parity>`_:
 
 .. code-block:: bash
 
