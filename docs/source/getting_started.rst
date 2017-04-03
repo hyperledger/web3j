@@ -52,7 +52,7 @@ Start up an Ethereum client if you don't already have one running, such as
 
    $ geth --fast --cache=512 --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
-Or `Parity <https://github.com/ethcore/parity>`_:
+Or `Parity <https://github.com/paritytech/parity>`_:
 
 .. code-block:: bash
 

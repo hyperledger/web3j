@@ -58,7 +58,7 @@ Geth
   https://github.com/ethereum/go-ethereum/wiki/Mining
 
 Parity
-  https://github.com/ethcore/parity/wiki/Mining
+  https://github.com/paritytech/parity/wiki/Mining
 
 Once you have mined some Ether, you can start transacting with the blockchain.
 
@@ -127,7 +127,7 @@ via:
   a good run down of the different mechanisms Geth supports such as importing private key files,
   and creating a new account via it's console
 - Alternatively you can use a JSON-RPC admin command for your client, such as personal_newAccount
-  for `Parity <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module#personal_newaccount>`_
+  for `Parity <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module#personal_newaccount>`_
   or `Geth <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_newaccount>`_
 
 With your wallet file created, you can unlock your account via web3j by first of all creating an
