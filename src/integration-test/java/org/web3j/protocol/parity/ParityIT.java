@@ -28,7 +28,7 @@ public class ParityIT {
 
     @Before
     public void setUp() {
-        this.httpService = new HttpService("http://localhost:8080");
+        this.httpService = new HttpService();
         this.parity = Parity.build(httpService);
     }
 
