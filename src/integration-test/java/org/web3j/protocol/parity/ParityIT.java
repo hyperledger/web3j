@@ -17,7 +17,6 @@ public class ParityIT {
 
     private static String PASSWORD = "1n5ecur3P@55w0rd";
     private Parity parity;
-    private HttpService httpService;
 
 
     public ParityIT() {
@@ -28,8 +27,7 @@ public class ParityIT {
 
     @Before
     public void setUp() {
-        this.httpService = new HttpService();
-        this.parity = Parity.build(httpService);
+        this.parity = Parity.build(new HttpService());
     }
 
     @Test
