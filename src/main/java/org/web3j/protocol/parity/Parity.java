@@ -1,21 +1,15 @@
 package org.web3j.protocol.parity;
 
-import java.math.BigInteger;
-import java.util.Map;
-
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.VoidResponse;
-import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
-import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
-import org.web3j.protocol.parity.methods.response.PersonalListAccounts;
-import org.web3j.protocol.parity.methods.response.PersonalRejectRequest;
-import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
-import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
-import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.parity.methods.response.*;
+
+import java.math.BigInteger;
+import java.util.Map;
 
 /**
  * JSON-RPC Request object building factory for Parity.
@@ -26,6 +20,10 @@ public interface Parity extends Web3j {
     }
 
     Request<?, PersonalSignerEnabled> personalSignerEnabled();
+
+    Request<?, PersonalSign> personalSign(String HexMessage,String accountId,String password);
+
+    Request<?, PersonalEcRecover> personalEcRecover(String hexMessage,String signedMessage);
 
     Request<?, PersonalListAccounts> personalListAccounts();
 

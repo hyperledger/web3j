@@ -1,12 +1,5 @@
 package org.web3j.protocol.parity;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
@@ -14,13 +7,10 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.VoidResponse;
-import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
-import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
-import org.web3j.protocol.parity.methods.response.PersonalListAccounts;
-import org.web3j.protocol.parity.methods.response.PersonalRejectRequest;
-import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
-import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
-import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.parity.methods.response.*;
+
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * JSON-RPC 2.0 factory implementation for Parity.
@@ -39,6 +29,26 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
                 ID,
                 web3jService,
                 PersonalSignerEnabled.class);
+    }
+
+    @Override
+    public Request<?, PersonalSign> personalSign(String message, String accountId, String password) {
+        return new Request<>(
+                "personal_sign",
+                Arrays.asList(message,accountId,password),
+                ID,
+                web3jService,
+                PersonalSign.class);
+    }
+
+    @Override
+    public Request<?, PersonalEcRecover> personalEcRecover(String hexMessage, String signedMessage) {
+        return new Request<>(
+                "personal_ecRecover",
+                Arrays.asList(hexMessage,signedMessage),
+                ID,
+                web3jService,
+                PersonalEcRecover.class);
     }
 
     @Override
