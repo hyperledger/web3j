@@ -7,10 +7,22 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.VoidResponse;
-import org.web3j.protocol.parity.methods.response.*;
+import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
+import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
+import org.web3j.protocol.parity.methods.response.PersonalEcRecover;
+import org.web3j.protocol.parity.methods.response.PersonalListAccounts;
+import org.web3j.protocol.parity.methods.response.PersonalRejectRequest;
+import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
+import org.web3j.protocol.parity.methods.response.PersonalSign;
+import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
+import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * JSON-RPC 2.0 factory implementation for Parity.
