@@ -1,16 +1,15 @@
 package org.web3j.protocol.parity;
 
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Test;
-
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
+
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RequestTest extends RequestTester {
@@ -27,6 +26,20 @@ public class RequestTest extends RequestTester {
         web3j.personalSignerEnabled().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_signerEnabled\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testPersonalSign() throws Exception {
+        web3j.personalSign("0xdeadbeef","0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54","123").send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_sign\",\"params\":[\"0xdeadbeef\",\"0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54\",\"123\"],\"id\":1}");
+    }
+
+    @Test
+    public void testPersonalEcRecover() throws Exception {
+        web3j.personalEcRecover("0xdeadbeef","0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c").send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_ecRecover\",\"params\":[\"0xdeadbeef\",\"0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c\"],\"id\":1}");
     }
 
     @Test
