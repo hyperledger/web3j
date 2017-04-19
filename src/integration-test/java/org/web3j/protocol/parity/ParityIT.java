@@ -59,7 +59,8 @@ public class ParityIT {
         PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
 
-        PersonalSign personalSign = parity.personalSign("0xdeadbeaf",personalListAccounts.getAccountIds().get(0),"123").send();
+        PersonalSign personalSign = parity.personalSign("0xdeadbeaf",
+                personalListAccounts.getAccountIds().get(0), "123").send();
         // address : 0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54
         assertNotNull(personalSign.getSignedMessage());
         // result : 0x80ab45a65bd5acce92eac60b52235a34eee647c8dbef8e62108be90a4ac9a22222f87dd8934fc71545cf2ea1b71d8b62146e6d741ac6ee12fd1d1d740adca9021b
@@ -67,8 +68,10 @@ public class ParityIT {
 
     @Test
     public void testPersonalEcRecover() throws Exception {
-        PersonalEcRecover personalEcRecover = parity.personalEcRecover("0xdeadbeaf","0x80ab45a65bd5acce92eac60b52235a34eee647c8dbef8e62108be90a4ac9a22222f87dd8934fc71545cf2ea1b71d8b62146e6d741ac6ee12fd1d1d740adca9021b").send();
-        assertEquals("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54",personalEcRecover.getRecoverAccountId());
+        PersonalEcRecover personalEcRecover = parity.personalEcRecover("0xdeadbeaf",
+                "0x80ab45a65bd5acce92eac60b52235a34eee647c8dbef8e62108be90a4ac9a22222f87dd8934fc71545cf2ea1b71d8b62146e6d741ac6ee12fd1d1d740adca9021b").send();
+        assertEquals("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54",
+                personalEcRecover.getRecoverAccountId());
     }
 
 
