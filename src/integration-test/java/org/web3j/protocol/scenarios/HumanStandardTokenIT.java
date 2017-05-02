@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 
@@ -12,7 +11,12 @@ import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
@@ -28,8 +32,8 @@ import org.web3j.utils.Numeric;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Integration test demonstrating integration with
@@ -134,10 +138,10 @@ public class HumanStandardTokenIT extends Scenario {
         assertFalse("Contract execution ran out of gas",
                 createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        Optional<String> contractAddressOptional = createTransactionReceipt.getContractAddress();
+        String contractAddress = createTransactionReceipt.getContractAddress();
 
-        assertTrue(contractAddressOptional.isPresent());
-        return contractAddressOptional.get();
+        assertNotNull(contractAddress);
+        return contractAddress;
     }
 
     private String sendCreateContractTransaction(
@@ -271,7 +275,7 @@ public class HumanStandardTokenIT extends Scenario {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        RawTransaction rawTransaction = RawTransaction.createFunctionCallTransaction(
+        RawTransaction rawTransaction = RawTransaction.createTransaction(
                 nonce,
                 GAS_PRICE,
                 GAS_LIMIT,

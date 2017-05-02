@@ -4,6 +4,9 @@ package org.web3j.protocol.core;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import rx.Observable;
 
 import org.web3j.protocol.Web3jService;
 
@@ -72,4 +75,17 @@ public class Request<S, T extends Response> {
         return  web3jService.sendAsync(this, responseType);
     }
 
+    public Observable<T> observable() {
+        return Observable.create(
+                subscriber -> {
+                    try {
+                        subscriber.onNext(sendAsync().get());
+                    } catch (InterruptedException e) {
+                        subscriber.onError(e);
+                    } catch (ExecutionException e) {
+                        subscriber.onError(e);
+                    }
+                }
+        );
+    }
 }

@@ -2,6 +2,7 @@ package org.web3j.console;
 
 import org.web3j.codegen.SolidityFunctionWrapperGenerator;
 import org.web3j.utils.Console;
+import org.web3j.utils.Version;
 
 import static org.web3j.utils.Collection.tail;
 
@@ -10,7 +11,7 @@ import static org.web3j.utils.Collection.tail;
  */
 public class Runner {
 
-    private static String USAGE = "Usage: web3j wallet|solidity ...";
+    private static String USAGE = "Usage: web3j version|wallet|solidity ...";
 
     private static String LOGO = "\n" + // generated at http://patorjk.com/software/taag
             "              _      _____ _     _        \n" +
@@ -35,11 +36,12 @@ public class Runner {
                 case "solidity":
                     SolidityFunctionWrapperGenerator.run(tail(args));
                     break;
+                case "version":
+                    Console.exitSuccess("Version: " + Version.getVersion() + "\n" +
+                            "Build timestamp: " + Version.getTimestamp());
                 default:
                     Console.exitError(USAGE);
             }
         }
     }
-
-
 }

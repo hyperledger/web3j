@@ -3,6 +3,7 @@ package org.web3j.utils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.web3j.crypto.Keys;
@@ -44,14 +45,23 @@ public class NumericTest {
                 equalTo(new BigInteger("204516877000845695339750056077105398031")));
     }
 
+    @Test
+    public void testQuantityDecodeLeadingZero() {
+        assertThat(Numeric.decodeQuantity("0x0400"), equalTo(BigInteger.valueOf(1024L)));
+        assertThat(Numeric.decodeQuantity("0x001"), equalTo(BigInteger.valueOf(1L)));
+    }
+
+    // If TestRpc resolves the following issue, we can reinstate this code
+    // https://github.com/ethereumjs/testrpc/issues/220
+    @Ignore
     @Test(expected = MessageDecodingException.class)
-    public void testQuantityDecodeMissingPrefix() {
-        Numeric.decodeQuantity("ff");
+    public void testQuantityDecodeLeadingZeroException() {
+        Numeric.decodeQuantity("0x0400");
     }
 
     @Test(expected = MessageDecodingException.class)
-    public void testQuantityDecodeLeadingZero() {
-        Numeric.decodeQuantity("0x0400");
+    public void testQuantityDecodeMissingPrefix() {
+        Numeric.decodeQuantity("ff");
     }
 
     @Test(expected = MessageDecodingException.class)

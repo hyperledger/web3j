@@ -2,10 +2,13 @@ package org.web3j.codegen;
 
 import org.junit.Test;
 
+import org.web3j.TempFileProvider;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class AbiTypesGeneratorTest {
+
+public class AbiTypesGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGetPackageName() {
@@ -18,7 +21,7 @@ public class AbiTypesGeneratorTest {
     }
 
     @Test
-    public void testGeneration() {
-        System.out.println(System.getProperty("user.dir"));
+    public void testGeneration() throws Exception {
+        AbiTypesGenerator.main(new String[] { tempDirPath });
     }
 }

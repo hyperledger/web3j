@@ -15,8 +15,19 @@ import org.web3j.utils.Console;
  */
 public class WalletCreator extends WalletManager {
 
+    public WalletCreator() {
+    }
+
+    public WalletCreator(IODevice console) {
+        super(console);
+    }
+
     public static void main(String[] args) {
         new WalletCreator().run();
+    }
+
+    static void main(IODevice console) {
+        new WalletCreator(console).run();
     }
 
     private void run() {
@@ -25,7 +36,7 @@ public class WalletCreator extends WalletManager {
         File destination = createDir(destinationDir);
 
         try {
-            String walletFileName = WalletUtils.generateNewWalletFile(password, destination);
+            String walletFileName = WalletUtils.generateFullNewWalletFile(password, destination);
             console.printf("Wallet file " + walletFileName +
                     " successfully created in: " + destinationDir + "\n");
         } catch (CipherException|IOException|InvalidAlgorithmParameterException|

@@ -6,9 +6,12 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.web3j.protocol.core.methods.request.*;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.request.ShhFilter;
+import org.web3j.protocol.core.methods.request.ShhPost;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 
@@ -221,6 +224,14 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthEstimateGasContractCreation() throws Exception {
+        web3j.ethEstimateGas(
+                Transaction.createContractTransaction("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", BigInteger.ONE, BigInteger.TEN, "")).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_estimateGas\",\"params\":[{\"from\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"gasPrice\":\"0xa\",\"data\":\"0x\",\"nonce\":\"0x1\"}],\"id\":1}");
+    }
+
+    @Test
     public void testEthGetBlockByHash() throws Exception {
         web3j.ethGetBlockByHash(
                 "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331", true).send();
@@ -366,6 +377,15 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getLogs\",\"params\":[{\"topics\":[\"0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b\"]}],\"id\":1}");
+    }
+
+    @Test
+    public void testEthGetLogsWithNumericBlockRange() throws Exception {
+        web3j.ethGetLogs(new EthFilter(DefaultBlockParameter.valueOf(Numeric.toBigInt
+            ("0xe8")), DefaultBlockParameter.valueOf("latest"), "")).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getLogs\",\"params\":[{\"topics\":[]," +
+            "\"fromBlock\":\"0xe8\",\"toBlock\":\"latest\",\"address\":[\"\"]}],\"id\":1}");
     }
 
     @Test

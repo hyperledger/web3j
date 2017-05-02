@@ -3,7 +3,6 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 
@@ -19,6 +18,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -48,10 +48,9 @@ public class GreeterContractIT extends Scenario {
         assertFalse("Contract execution ran out of gas",
                 createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        Optional<String> contractAddressOptional = createTransactionReceipt.getContractAddress();
+        String contractAddress = createTransactionReceipt.getContractAddress();
 
-        assertTrue(contractAddressOptional.isPresent());
-        String contractAddress = contractAddressOptional.get();
+        assertNotNull(contractAddress);
 
         // call our getter
         Function getFunction = createGreetFunction();

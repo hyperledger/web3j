@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.9</version>
+     <version>2.1.0</version>
    </dependency>
 
 Android:
@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>1.0.9</version>
+     <version>2.1.0</version>
    </dependency>
 
 Gradle
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.9')
+   compile ('org.web3j:core:2.1.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:1.0.9')
+   compile ('org.web3j:core-android:2.1.0')
 
 
 Start a client
@@ -50,9 +50,9 @@ Start up an Ethereum client if you don't already have one running, such as
 
 .. code-block:: bash
 
-   $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
+   $ geth --fast --cache=512 --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
-Or `Parity <https://github.com/ethcore/parity>`_:
+Or `Parity <https://github.com/paritytech/parity>`_:
 
 .. code-block:: bash
 
@@ -76,6 +76,13 @@ To send asynchronous requests using a Future::
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
+To use an RxJava Observable::
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   web3.web3ClientVersion().observable().subscribe(x -> {
+       String clientVersion = x.getWeb3ClientVersion();
+       ...
+   });
 
 To send synchronous requests::
 
@@ -85,10 +92,71 @@ To send synchronous requests::
 
 **Note:** for Android use:
 
-.. code-block:: java
-
    Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
    ...
+
+
+IPC
+---
+
+web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
+the same host as web3j. To connect simply use the relevent *IpcService* implemntation instead of
+*HttpService* when you create your service:
+
+.. code-block:: java
+
+   // OS X/Linux/Unix:
+   Web3j web3 = Web3j.build(new UnixIpcService("/path/to/socketfile"));
+   ...
+
+   // Windows
+   Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
+   ...
+
+**Note:** IPC is not currently available on web3j-android.
+
+
+Filters
+-------
+
+web3j functional-reactive nature makes it really simple to setup observers that notify subscribers
+of events taking place on the blockchain.
+
+To receive all new blocks as they are added to the blockchain::
+
+   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+       ...
+   });
+
+To receive all new transactions as they are added to the blockchain::
+
+   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+       ...
+   });
+
+To receive all pending transactions as they are submitted to the network (i.e. before they have
+been grouped into a block together)::
+
+   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+       ...
+   });
+
+Topic filters are also supported::
+
+   EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
+           DefaultBlockParameterName.LATEST, <contract-address>)
+                .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
+   web3j.ethLogObservable(filter).subscribe(log -> {
+       ...
+   });
+
+Subscriptions should always be cancelled when no longer required::
+
+   subscription.unsubscribe();
+
+**Note:** filters are not supported on Infura.
+
+For further information refer to :doc:`filters`.
 
 
 Transactions

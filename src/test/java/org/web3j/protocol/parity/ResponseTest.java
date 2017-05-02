@@ -1,15 +1,28 @@
 package org.web3j.protocol.parity;
 
-import java.util.*;
-
 import org.junit.Test;
-
 import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.parity.methods.response.*;
+import org.web3j.protocol.core.methods.response.VoidResponse;
+import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
+import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
+import org.web3j.protocol.parity.methods.response.PersonalEcRecover;
+import org.web3j.protocol.parity.methods.response.PersonalListAccounts;
+import org.web3j.protocol.parity.methods.response.PersonalRejectRequest;
+import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
+import org.web3j.protocol.parity.methods.response.PersonalSign;
+import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
+import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Parity Protocol Response tests.
@@ -27,6 +40,32 @@ public class ResponseTest extends ResponseTester {
         PersonalSignerEnabled personalSignerEnabled = deserialiseResponse(
                 PersonalSignerEnabled.class);
         assertTrue(personalSignerEnabled.isSignerEnabled());
+    }
+
+    @Test
+    public void testPersonalSign() {
+        buildResponse("{\n" +
+                "    \"jsonrpc\": \"2.0\",\n" +
+                "    \"id\": 1,\n" +
+                "    \"result\": \"0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c\"\n" +
+                "}");
+
+        PersonalSign personalSign = deserialiseResponse(
+                PersonalSign.class);
+        assertThat(personalSign.getSignedMessage(),is("0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c"));
+    }
+
+    @Test
+    public void testPersonalEcRecover() {
+        buildResponse("{\n" +
+                "    \"jsonrpc\": \"2.0\",\n" +
+                "    \"id\": 1,\n" +
+                "    \"result\": \"0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54\"\n" +
+                "}");
+
+        PersonalEcRecover personalEcRecover = deserialiseResponse(
+                PersonalEcRecover.class);
+        assertThat(personalEcRecover.getRecoverAccountId(),is("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
     }
 
     @Test

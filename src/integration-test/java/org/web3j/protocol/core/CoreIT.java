@@ -7,12 +7,47 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.web3j.protocol.core.methods.request.EthFilter;
-import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
+import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthCoinbase;
+import org.web3j.protocol.core.methods.response.EthCompileLLL;
+import org.web3j.protocol.core.methods.response.EthCompileSerpent;
+import org.web3j.protocol.core.methods.response.EthCompileSolidity;
+import org.web3j.protocol.core.methods.response.EthEstimateGas;
+import org.web3j.protocol.core.methods.response.EthFilter;
+import org.web3j.protocol.core.methods.response.EthGasPrice;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
+import org.web3j.protocol.core.methods.response.EthGetCode;
+import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetStorageAt;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
+import org.web3j.protocol.core.methods.response.EthHashrate;
+import org.web3j.protocol.core.methods.response.EthLog;
+import org.web3j.protocol.core.methods.response.EthMining;
+import org.web3j.protocol.core.methods.response.EthProtocolVersion;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthSyncing;
+import org.web3j.protocol.core.methods.response.EthTransaction;
+import org.web3j.protocol.core.methods.response.EthUninstallFilter;
+import org.web3j.protocol.core.methods.response.NetListening;
+import org.web3j.protocol.core.methods.response.NetPeerCount;
+import org.web3j.protocol.core.methods.response.NetVersion;
+import org.web3j.protocol.core.methods.response.ShhNewGroup;
+import org.web3j.protocol.core.methods.response.ShhNewIdentity;
+import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.Transaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.http.HttpService;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -31,9 +66,13 @@ public class CoreIT {
     private IntegrationTestConfig config = new TestnetConfig();
 
     public CoreIT() {
+        // HTTP Logging
         System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+
+        // IPC Logging
+//        System.setProperty("org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
     }
 
     @Before
@@ -229,8 +268,8 @@ public class CoreIT {
         EthBlock ethBlock = web3j.ethGetBlockByHash(config.validBlockHash(), false)
                 .send();
 
-        assertTrue(ethBlock.getBlock().isPresent());
-        EthBlock.Block block = ethBlock.getBlock().get();
+        EthBlock.Block block = ethBlock.getBlock();
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 is(config.validBlockTransactionCount().intValue()));
@@ -241,8 +280,8 @@ public class CoreIT {
         EthBlock ethBlock = web3j.ethGetBlockByHash(config.validBlockHash(), true)
                 .send();
 
-        assertTrue(ethBlock.getBlock().isPresent());
-        EthBlock.Block block = ethBlock.getBlock().get();
+        EthBlock.Block block = ethBlock.getBlock();
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 equalTo(config.validBlockTransactionCount().intValue()));
@@ -253,8 +292,8 @@ public class CoreIT {
         EthBlock ethBlock = web3j.ethGetBlockByNumber(
                 DefaultBlockParameter.valueOf(config.validBlock()), false).send();
 
-        assertTrue(ethBlock.getBlock().isPresent());
-        EthBlock.Block block = ethBlock.getBlock().get();
+        EthBlock.Block block = ethBlock.getBlock();
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 equalTo(config.validBlockTransactionCount().intValue()));
@@ -265,8 +304,8 @@ public class CoreIT {
         EthBlock ethBlock = web3j.ethGetBlockByNumber(
                 DefaultBlockParameter.valueOf(config.validBlock()), true).send();
 
-        assertTrue(ethBlock.getBlock().isPresent());
-        EthBlock.Block block = ethBlock.getBlock().get();
+        EthBlock.Block block = ethBlock.getBlock();
+        assertNotNull(ethBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
         assertThat(block.getTransactions().size(),
                 equalTo(config.validBlockTransactionCount().intValue()));
@@ -319,7 +358,7 @@ public class CoreIT {
     public void testEthGetUncleByBlockHashAndIndex() throws Exception {
         EthBlock ethBlock = web3j.ethGetUncleByBlockHashAndIndex(
                 config.validUncleBlockHash(), BigInteger.ZERO).send();
-        assertTrue(ethBlock.getBlock().isPresent());
+        assertNotNull(ethBlock.getBlock());
     }
 
     @Test
@@ -327,7 +366,7 @@ public class CoreIT {
         EthBlock ethBlock = web3j.ethGetUncleByBlockNumberAndIndex(
                 DefaultBlockParameter.valueOf(config.validUncleBlock()), BigInteger.ZERO)
                 .send();
-        assertTrue(ethBlock.getBlock().isPresent());
+        assertNotNull(ethBlock.getBlock());
     }
 
     @Test
@@ -346,11 +385,15 @@ public class CoreIT {
 
     @Test
     public void testEthCompileSolidity() throws Exception {
-        String sourceCode = "contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }";
+        String sourceCode = "pragma solidity ^0.4.0;" +
+                "\ncontract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }" +
+                "\ncontract test2 { function multiply2(uint a) returns(uint d) {   return a * 7;   } }";
         EthCompileSolidity ethCompileSolidity = web3j.ethCompileSolidity(sourceCode)
                 .send();
         assertNotNull(ethCompileSolidity.getCompiledSolidity());
-        assertThat(ethCompileSolidity.getCompiledSolidity().getTest().getInfo().getSource(), is(sourceCode));
+        assertThat(
+                ethCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
+                is(sourceCode));
     }
 
     @Ignore  // The method eth_compileSerpent does not exist/is not available
@@ -363,7 +406,8 @@ public class CoreIT {
 
     @Test
     public void testFiltersByFilterId() throws Exception {
-        EthFilter ethFilter = new EthFilter(
+        org.web3j.protocol.core.methods.request.EthFilter ethFilter =
+                new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST,
                 config.validContractAddress());
@@ -372,7 +416,7 @@ public class CoreIT {
         ethFilter.addSingleTopic(eventSignature);
 
         // eth_newFilter
-        EthNewFilter ethNewFilter = web3j.ethNewFilter(ethFilter).send();
+        EthFilter ethNewFilter = web3j.ethNewFilter(ethFilter).send();
         BigInteger filterId = ethNewFilter.getFilterId();
 
         // eth_getFilterLogs
@@ -391,20 +435,20 @@ public class CoreIT {
 
     @Test
     public void testEthNewBlockFilter() throws Exception {
-        EthNewBlockFilter ethNewBlockFilter = web3j.ethNewBlockFilter().send();
+        EthFilter ethNewBlockFilter = web3j.ethNewBlockFilter().send();
         assertNotNull(ethNewBlockFilter.getFilterId());
     }
 
     @Test
     public void testEthNewPendingTransactionFilter() throws Exception {
-        EthNewPendingTransactionFilter ethNewPendingTransactionFilter =
+        EthFilter ethNewPendingTransactionFilter =
                 web3j.ethNewPendingTransactionFilter().send();
         assertNotNull(ethNewPendingTransactionFilter.getFilterId());
     }
 
     @Test
     public void testEthGetLogs() throws Exception {
-        EthFilter ethFilter = new EthFilter(
+        org.web3j.protocol.core.methods.request.EthFilter ethFilter = new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST,
                 config.validContractAddress()
@@ -425,7 +469,7 @@ public class CoreIT {
 
     @Test
     public void testEthSubmitWork() throws Exception {
-    
+
     }
 
     @Test

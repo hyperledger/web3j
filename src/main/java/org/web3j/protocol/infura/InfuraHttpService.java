@@ -1,12 +1,15 @@
 package org.web3j.protocol.infura;
 
-import javax.net.ssl.*;
 import java.io.File;
 import java.io.IOException;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Optional;
+import javax.net.ssl.SSLContext;
 
 import org.apache.http.Header;
 import org.apache.http.impl.client.CloseableHttpClient;

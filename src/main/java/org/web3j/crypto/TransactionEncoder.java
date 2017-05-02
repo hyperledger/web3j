@@ -24,8 +24,32 @@ public class TransactionEncoder {
         return encode(rawTransaction, signatureData);
     }
 
+    public static byte[] signMessage(
+            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+        byte[] encodedTransaction = encode(rawTransaction, chainId);
+        Sign.SignatureData signatureData = Sign.signMessage(
+                encodedTransaction, credentials.getEcKeyPair());
+
+        Sign.SignatureData eip155SignatureData = createEip155SignatureData(signatureData, chainId);
+        return encode(rawTransaction, eip155SignatureData);
+    }
+
+    public static Sign.SignatureData createEip155SignatureData(
+            Sign.SignatureData signatureData, byte chainId) {
+        byte v = (byte) (signatureData.getV() + (chainId << 1) + 8);
+
+        return new Sign.SignatureData(
+                v, signatureData.getR(), signatureData.getS());
+    }
+
     public static byte[] encode(RawTransaction rawTransaction) {
         return encode(rawTransaction, null);
+    }
+
+    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+        Sign.SignatureData signatureData = new Sign.SignatureData(
+                chainId, new byte[] {}, new byte[] {});
+        return encode(rawTransaction, signatureData);
     }
 
     private static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
@@ -44,7 +68,7 @@ public class TransactionEncoder {
 
         // an empty to address (contract creation) should not be encoded as a numeric 0 value
         String to = rawTransaction.getTo();
-        if (to.length() > 0) {
+        if (to != null && to.length() > 0) {
             result.add(RlpString.create(Numeric.toBigInt(to)));
         } else {
             result.add(RlpString.create(""));

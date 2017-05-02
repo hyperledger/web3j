@@ -8,6 +8,7 @@ import java.math.BigInteger;
 public class Ufixed extends FixedPointType {
 
     public static final String TYPE_NAME = "ufixed";
+    public static final Ufixed DEFAULT = new Ufixed(BigInteger.ZERO);
 
     protected Ufixed(int mBitSize, int nBitSize, BigInteger value) {
         super(TYPE_NAME, mBitSize, nBitSize, value);

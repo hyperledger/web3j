@@ -1,15 +1,29 @@
 package org.web3j.abi;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Fixed;
+import org.web3j.abi.datatypes.FixedPointType;
+import org.web3j.abi.datatypes.Int;
+import org.web3j.abi.datatypes.IntType;
+import org.web3j.abi.datatypes.NumericType;
+import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.utils.Numeric;
 
 /**
@@ -39,9 +53,9 @@ class TypeDecoder {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
         } else if (Bool.class.isAssignableFrom(type)) {
-            return (T) decodeBool(input);
+            return (T) decodeBool(input, offset);
         } else if (Bytes.class.isAssignableFrom(type)) {
-            return (T) decodeBytes(input, (Class<Bytes>) type);
+            return (T) decodeBytes(input, offset, (Class<Bytes>) type);
         } else if (DynamicBytes.class.isAssignableFrom(type)) {
             return (T) decodeDynamicBytes(input, offset);
         } else if (Utf8String.class.isAssignableFrom(type)) {
@@ -125,20 +139,25 @@ class TypeDecoder {
         return decode(input, 0, Uint.class).getValue().intValue();
     }
 
-    static Bool decodeBool(String input) {
+    static Bool decodeBool(String rawInput, int offset) {
+        String input = rawInput.substring(offset, offset + MAX_BYTE_LENGTH_FOR_HEX_STRING);
         BigInteger numericValue = Numeric.toBigInt(input);
         boolean value = numericValue.equals(BigInteger.ONE);
         return new Bool(value);
     }
 
     static <T extends Bytes> T decodeBytes(String input, Class<T> type) {
+    	return decodeBytes(input, 0, type);
+    }
+    
+    static <T extends Bytes> T decodeBytes(String input, int offset, Class<T> type) {
         try {
             String simpleName = type.getSimpleName();
             String[] splitName = simpleName.split(Bytes.class.getSimpleName());
             int length = Integer.parseInt(splitName[1]);
             int hexStringLength = length << 1;
 
-            byte[] bytes = Numeric.hexStringToByteArray(input.substring(0, hexStringLength));
+            byte[] bytes = Numeric.hexStringToByteArray(input.substring(offset, offset+hexStringLength));
             return type.getConstructor(byte[].class).newInstance(bytes);
         } catch (NoSuchMethodException | SecurityException |
                 InstantiationException | IllegalAccessException |

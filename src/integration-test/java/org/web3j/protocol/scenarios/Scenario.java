@@ -30,8 +30,9 @@ import static junit.framework.TestCase.fail;
  */
 public class Scenario {
 
-    static final BigInteger GAS_PRICE = BigInteger.valueOf(50_000_000_000L);
-    static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_000_000);
+    // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
+    static final BigInteger GAS_PRICE = BigInteger.valueOf(20_000_000_000L);
+    static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
 
     // testnet
     private static final String WALLET_PASSWORD = "";
@@ -59,9 +60,13 @@ public class Scenario {
     Parity parity;
 
     public Scenario() {
+        // HTTP Logging
         System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+
+        // IPC Logging
+//        System.setProperty("org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
     }
 
     @Before

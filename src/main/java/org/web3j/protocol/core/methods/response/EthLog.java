@@ -82,13 +82,16 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Hash)) {
+                return false;
+            }
 
-            Hash that = (Hash) o;
+            Hash hash = (Hash) o;
 
-            return value != null ? value.equals(that.value) : that.value == null;
-
+            return value != null ? value.equals(hash.value) : hash.value == null;
         }
 
         @Override

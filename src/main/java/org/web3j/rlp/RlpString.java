@@ -3,6 +3,8 @@ package org.web3j.rlp;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import org.web3j.utils.Bytes;
+
 /**
  * RLP string type.
  */
@@ -20,7 +22,7 @@ public class RlpString implements RlpType {
     }
 
     public static RlpString create(byte[] value) {
-        return new RlpString(value);
+        return new RlpString(Bytes.trimLeadingZeroes(value));
     }
 
     public static RlpString create(byte value) {

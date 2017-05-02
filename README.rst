@@ -24,7 +24,7 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
-web3j is a lightweight, type safe Java and Android library for integrating with clients (nodes) on
+web3j is a lightweight, reactive, type safe Java and Android library for integrating with clients (nodes) on
 the Ethereum network:
 
 .. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j_network.png
@@ -32,30 +32,39 @@ the Ethereum network:
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
 
+The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
+overview of blockchain, Ethereum and web3j.
+
+
 Features
 --------
 
 - Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
-  client API
+  client API over HTTP and IPC
 - Ethereum wallet support
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
+- Reactive-functional API for working with filters
 - Support for Parity's
-  `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
+  `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
+- Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
 
-It only has five runtime dependencies:
 
+It has seven runtime dependencies:
+
+- `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
 - `Bouncy Castle <https://www.bouncycastle.org/>`_ and
   `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
 - `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
+- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
 
 Full project documentation is available at
 `Read the Docs <http://docs.web3j.io>`_.
@@ -76,7 +85,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>1.0.9</version>
+     <version>2.1.0</version>
    </dependency>
 
 Android:
@@ -86,7 +95,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>1.0.9</version>
+     <version>2.1.0</version>
    </dependency>
 
 Gradle
@@ -96,13 +105,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:1.0.9')
+   compile ('org.web3j:core:2.1.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:1.0.9')
+   compile ('org.web3j:core-android:2.1.0')
 
 
 Start a client
@@ -115,7 +124,7 @@ Start up an Ethereum client if you don't already have one running, such as
 
    $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
-Or `Parity <https://github.com/ethcore/parity>`_:
+Or `Parity <https://github.com/paritytech/parity>`_:
 
 .. code-block:: bash
 
@@ -143,6 +152,15 @@ To send asynchronous requests using a Future:
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
+To use an RxJava Observable:
+
+.. code-block:: java
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   web3.web3ClientVersion().observable().subscribe(x -> {
+       String clientVersion = x.getWeb3ClientVersion();
+       ...
+   });
 
 To send synchronous requests:
 
@@ -158,6 +176,80 @@ To send synchronous requests:
 
    Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
    ...
+
+
+IPC
+---
+
+web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
+the same host as web3j. To connect simply use the relevent *IpcService* implemntation instead of
+*HttpService* when you create your service:
+
+.. code-block:: java
+
+   // OS X/Linux/Unix:
+   Web3j web3 = Web3j.build(new UnixIpcService("/path/to/socketfile"));
+   ...
+
+   // Windows
+   Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
+   ...
+
+**Note:** IPC is not currently available on web3j-android.
+
+
+Filters
+-------
+
+web3j functional-reactive nature makes it really simple to setup observers that notify subscribers
+of events taking place on the blockchain.
+
+To receive all new blocks as they are added to the blockchain:
+
+.. code-block:: java
+
+   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+       ...
+   });
+
+To receive all new transactions as they are added to the blockchain:
+
+.. code-block:: java
+
+   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+       ...
+   });
+
+To receive all pending transactions as they are submitted to the network (i.e. before they have
+been grouped into a block together):
+
+.. code-block:: java
+
+   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+       ...
+   });
+
+Topic filters are also supported:
+
+.. code-block:: java
+
+   EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
+           DefaultBlockParameterName.LATEST, <contract-address>)
+                .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
+   web3j.ethLogObservable(filter).subscribe(log -> {
+       ...
+   });
+
+Subscriptions should always be cancelled when no longer required:
+
+.. code-block:: java
+
+   subscription.unsubscribe();
+
+**Note:** filters are not supported on Infura.
+
+For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_.
+
 
 Transactions
 ------------
@@ -273,6 +365,7 @@ tools allow you to use some of the functionality of web3j from the command line:
 Please refer to the `documentation <http://docs.web3j.io/command_line.html>`_ for further
 information.
 
+
 Further details
 ---------------
 
@@ -291,13 +384,6 @@ In both the Java 8 and Andriod builds:
   `Response <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().
 
 
-Working with filters
---------------------
-
-See `EventFilterIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/EventFilterIT.java>`_
-for an example.
-
-
 Tested clients
 --------------
 
@@ -309,22 +395,25 @@ You can run the integration test class
 to verify clients.
 
 
-Coming soon
------------
-
-- External key store support
-- IPC interface support
-- WebSocket interface support
-
-
 Related projects
 ----------------
 
 For a .NET implementation, check out `Nethereum <https://github.com/Nethereum/Nethereum>`_.
- 
+
 For a pure Java implementation of the Ethereum client, check out
 `EthereumJ <https://github.com/ethereum/ethereumj>`_ and the work of
 `Ether.Camp <https://github.com/ether-camp/>`_.
+
+
+Projects using web3j
+--------------------
+
+- `Ether Wallet <https://play.google.com/store/apps/details?id=org.vikulin.etherwallet>`_ by
+  `@vikulin <https://github.com/vikulin>`_
+- `eth-contract-api <https://github.com/adridadou/eth-contract-api>`_ by
+  `@adridadou <https://github.com/adridadou>`_
+- `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
+  `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
 
 
 Build instructions
@@ -357,4 +446,13 @@ Thanks and credits
 - And of course the users of the library, who've provided valuable input & feedback -
   `@ice09 <https://github.com/ice09>`_, `@adridadou <https://github.com/adridadou>`_,
   `@nickmelis <https://github.com/nickmelis>`_, `@basavk <https://github.com/basavk>`_,
-  `@kabl <https://github.com/kabl>`_, `@MaxBinnewies <https://github.com/MaxBinnewies>`_
+  `@kabl <https://github.com/kabl>`_, `@MaxBinnewies <https://github.com/MaxBinnewies>`_,
+  `@vikulin <https://github.com/vikulin>`_, `@sullis <https://github.com/sullis>`_,
+  `@vethan <https://github.com/vethan>`_, `@h2mch <https://github.com/h2mch>`_,
+  `@mtiutin <https://github.com/mtiutin>`_, `@fooock <https://github.com/fooock>`_,
+  `@ermyas <https://github.com/ermyas>`_, `@danieldietrich <https://github.com/danieldietrich>`_,
+  `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_,
+  `@ferOnti <https://github.com/ferOnti>`_, `@fraspadafora <https://github.com/fraspadafora>`_,
+  `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_,
+  `@thedoctor <https://github.com/thedoctor>`_, `@tramonex-nate <https://github.com/tramonex-nate>`_,
+  `@ferOnti <https://github.com/ferOnti>`_

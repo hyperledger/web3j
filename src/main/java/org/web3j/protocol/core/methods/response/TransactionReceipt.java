@@ -2,7 +2,6 @@ package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
 import org.web3j.utils.Numeric;
 
@@ -56,6 +55,10 @@ public class TransactionReceipt {
         return Numeric.decodeQuantity(transactionIndex);
     }
 
+    public String getTransactionIndexRaw() {
+        return transactionIndex;
+    }
+
     public void setTransactionIndex(String transactionIndex) {
         this.transactionIndex = transactionIndex;
     }
@@ -72,12 +75,20 @@ public class TransactionReceipt {
         return Numeric.decodeQuantity(blockNumber);
     }
 
+    public String getBlockNumberRaw() {
+        return blockNumber;
+    }
+
     public void setBlockNumber(String blockNumber) {
         this.blockNumber = blockNumber;
     }
 
     public BigInteger getCumulativeGasUsed() {
         return Numeric.decodeQuantity(cumulativeGasUsed);
+    }
+
+    public String getCumulativeGasUsedRaw() {
+        return cumulativeGasUsed;
     }
 
     public void setCumulativeGasUsed(String cumulativeGasUsed) {
@@ -88,12 +99,16 @@ public class TransactionReceipt {
         return Numeric.decodeQuantity(gasUsed);
     }
 
+    public String getGasUsedRaw() {
+        return gasUsed;
+    }
+
     public void setGasUsed(String gasUsed) {
         this.gasUsed = gasUsed;
     }
 
-    public Optional<String> getContractAddress() {
-        return Optional.ofNullable(contractAddress);
+    public String getContractAddress() {
+        return contractAddress;
     }
 
     public void setContractAddress(String contractAddress) {
@@ -142,45 +157,65 @@ public class TransactionReceipt {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TransactionReceipt)) {
+            return false;
+        }
 
         TransactionReceipt that = (TransactionReceipt) o;
 
-        if (transactionHash != null ? !transactionHash.equals(that.transactionHash) : that.transactionHash != null)
+        if (getTransactionHash() != null ? !getTransactionHash().equals(that.getTransactionHash()) : that.getTransactionHash() != null) {
             return false;
-        if (transactionIndex != null ? !transactionIndex.equals(that.transactionIndex) : that.transactionIndex != null)
+        }
+        if (transactionIndex != null ? !transactionIndex.equals(that.transactionIndex) : that.transactionIndex != null) {
             return false;
-        if (blockHash != null ? !blockHash.equals(that.blockHash) : that.blockHash != null)
+        }
+        if (getBlockHash() != null ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
             return false;
-        if (blockNumber != null ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null)
+        }
+        if (blockNumber != null ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
             return false;
-        if (cumulativeGasUsed != null ? !cumulativeGasUsed.equals(that.cumulativeGasUsed) : that.cumulativeGasUsed != null)
+        }
+        if (cumulativeGasUsed != null ? !cumulativeGasUsed.equals(that.cumulativeGasUsed) : that.cumulativeGasUsed != null) {
             return false;
-        if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null) return false;
-        if (contractAddress != null ? !contractAddress.equals(that.contractAddress) : that.contractAddress != null)
+        }
+        if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null) {
             return false;
-        if (root != null ? !root.equals(that.root) : that.root != null) return false;
-        if (from != null ? !from.equals(that.from) : that.from != null) return false;
-        if (to != null ? !to.equals(that.to) : that.to != null) return false;
-        if (logs != null ? !logs.equals(that.logs) : that.logs != null) return false;
-        return logsBloom != null ? logsBloom.equals(that.logsBloom) : that.logsBloom == null;
+        }
+        if (getContractAddress() != null ? !getContractAddress().equals(that.getContractAddress()) : that.getContractAddress() != null) {
+            return false;
+        }
+        if (getRoot() != null ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
+            return false;
+        }
+        if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
+            return false;
+        }
+        if (getTo() != null ? !getTo().equals(that.getTo()) : that.getTo() != null) {
+            return false;
+        }
+        if (getLogs() != null ? !getLogs().equals(that.getLogs()) : that.getLogs() != null) {
+            return false;
+        }
+        return getLogsBloom() != null ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = transactionHash != null ? transactionHash.hashCode() : 0;
+        int result = getTransactionHash() != null ? getTransactionHash().hashCode() : 0;
         result = 31 * result + (transactionIndex != null ? transactionIndex.hashCode() : 0);
-        result = 31 * result + (blockHash != null ? blockHash.hashCode() : 0);
+        result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
         result = 31 * result + (blockNumber != null ? blockNumber.hashCode() : 0);
         result = 31 * result + (cumulativeGasUsed != null ? cumulativeGasUsed.hashCode() : 0);
         result = 31 * result + (gasUsed != null ? gasUsed.hashCode() : 0);
-        result = 31 * result + (contractAddress != null ? contractAddress.hashCode() : 0);
-        result = 31 * result + (root != null ? root.hashCode() : 0);
-        result = 31 * result + (from != null ? from.hashCode() : 0);
-        result = 31 * result + (to != null ? to.hashCode() : 0);
-        result = 31 * result + (logs != null ? logs.hashCode() : 0);
-        result = 31 * result + (logsBloom != null ? logsBloom.hashCode() : 0);
+        result = 31 * result + (getContractAddress() != null ? getContractAddress().hashCode() : 0);
+        result = 31 * result + (getRoot() != null ? getRoot().hashCode() : 0);
+        result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
+        result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
+        result = 31 * result + (getLogs() != null ? getLogs().hashCode() : 0);
+        result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
         return result;
     }
 }

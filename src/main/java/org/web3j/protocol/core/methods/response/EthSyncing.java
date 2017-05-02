@@ -93,28 +93,39 @@ public class EthSyncing extends Response<EthSyncing.Result> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Syncing)) {
+                return false;
+            }
 
             Syncing syncing = (Syncing) o;
 
-            if (startingBlock != null ? !startingBlock.equals(syncing.startingBlock) : syncing.startingBlock != null)
+            if (isSyncing() != syncing.isSyncing()) {
                 return false;
-            if (currentBlock != null ? !currentBlock.equals(syncing.currentBlock) : syncing.currentBlock != null)
+            }
+            if (getStartingBlock() != null ? !getStartingBlock().equals(syncing.getStartingBlock()) : syncing.getStartingBlock() != null) {
                 return false;
-            if (highestBlock != null ? !highestBlock.equals(syncing.highestBlock) : syncing.highestBlock != null)
+            }
+            if (getCurrentBlock() != null ? !getCurrentBlock().equals(syncing.getCurrentBlock()) : syncing.getCurrentBlock() != null) {
                 return false;
-            if (knownStates != null ? !knownStates.equals(syncing.knownStates) : syncing.knownStates != null)
+            }
+            if (getHighestBlock() != null ? !getHighestBlock().equals(syncing.getHighestBlock()) : syncing.getHighestBlock() != null) {
                 return false;
+            }
+            if (knownStates != null ? !knownStates.equals(syncing.knownStates) : syncing.knownStates != null) {
+                return false;
+            }
             return pulledStates != null ? pulledStates.equals(syncing.pulledStates) : syncing.pulledStates == null;
-
         }
 
         @Override
         public int hashCode() {
-            int result = startingBlock != null ? startingBlock.hashCode() : 0;
-            result = 31 * result + (currentBlock != null ? currentBlock.hashCode() : 0);
-            result = 31 * result + (highestBlock != null ? highestBlock.hashCode() : 0);
+            int result = getStartingBlock() != null ? getStartingBlock().hashCode() : 0;
+            result = 31 * result + Boolean.hashCode(isSyncing());
+            result = 31 * result + (getCurrentBlock() != null ? getCurrentBlock().hashCode() : 0);
+            result = 31 * result + (getHighestBlock() != null ? getHighestBlock().hashCode() : 0);
             result = 31 * result + (knownStates != null ? knownStates.hashCode() : 0);
             result = 31 * result + (pulledStates != null ? pulledStates.hashCode() : 0);
             return result;

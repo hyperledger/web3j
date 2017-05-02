@@ -32,6 +32,14 @@ public class Strings {
         }
     }
 
+    public static String lowercaseFirstLetter(String string) {
+        if (string == null || string.length() == 0) {
+            return string;
+        } else {
+            return string.substring(0, 1).toLowerCase() + string.substring(1);
+        }
+    }
+
     public static String zeros(int n) {
         return repeat('0', n);
     }

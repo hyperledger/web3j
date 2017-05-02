@@ -1,4 +1,4 @@
-package org.web3j.abi;
+package org.web3j.tx;
 
 
 import java.math.BigDecimal;
@@ -9,8 +9,7 @@ import java.util.concurrent.Future;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.request.RawTransaction;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
 import org.web3j.utils.Convert;
@@ -25,13 +24,8 @@ public class Transfer extends ManagedTransaction {
     // This is the cost to send Ether between parties
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(21000);
 
-    private Transfer(Web3j web3j, Credentials credentials,
-                     BigInteger gasPrice, BigInteger gasLimit) {
-        super(web3j, credentials, gasPrice, gasLimit);
-    }
-
-    private Transfer(Web3j web3j, Credentials credentials) {
-        this(web3j, credentials, GAS_PRICE, GAS_LIMIT);
+    public Transfer(Web3j web3j, TransactionManager transactionManager) {
+        super(web3j, transactionManager);
     }
 
     /**
@@ -49,30 +43,27 @@ public class Transfer extends ManagedTransaction {
      * while waiting
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
-    private TransactionReceipt send(
-            String toAddress, BigDecimal value, Convert.Unit unit)
+    private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit)
             throws ExecutionException, InterruptedException,
             TransactionTimeoutException {
 
-        BigDecimal weiValue = Convert.toWei(value, unit);
+        BigInteger gasPrice = getGasPrice();
+        return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
+    }
 
+    private TransactionReceipt send(
+            String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
+            BigInteger gasLimit) throws ExecutionException, InterruptedException,
+            TransactionTimeoutException {
+
+        BigDecimal weiValue = Convert.toWei(value, unit);
         if (!Numeric.isIntegerValue(weiValue)) {
             throw new UnsupportedOperationException(
                     "Non decimal Wei value provided: " + value + " " + unit.toString() +
                             " = " + weiValue + " Wei");
         }
 
-        BigInteger nonce = getNonce(credentials.getAddress());
-        BigInteger gasPrice = getGasPrice();
-
-        RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                toAddress,
-                weiValue.toBigIntegerExact());
-
-        return signAndSend(rawTransaction);
+        return send(toAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
     }
 
     /**
@@ -90,20 +81,20 @@ public class Transfer extends ManagedTransaction {
         return Async.run(() -> send(toAddress, value, unit));
     }
 
+    public Future<TransactionReceipt> sendFundsAsync(
+            String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
+            BigInteger gasLimit) {
+        return Async.run(() -> send(toAddress, value, unit, gasPrice, gasLimit));
+    }
+
     public static TransactionReceipt sendFunds(
             Web3j web3j, Credentials credentials,
             String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
             ExecutionException, TransactionTimeoutException {
 
-        return new Transfer(web3j, credentials).send(toAddress, value, unit);
-    }
+        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
 
-    public static TransactionReceipt sendFunds(
-            Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit,
-            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
-            ExecutionException, TransactionTimeoutException {
-
-        return new Transfer(web3j, credentials, gasPrice, gasLimit).send(toAddress, value, unit);
+        return new Transfer(web3j, transactionManager).send(toAddress, value, unit);
     }
 
     public static Future<TransactionReceipt> sendFundsAsync(
@@ -111,15 +102,9 @@ public class Transfer extends ManagedTransaction {
             String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
             ExecutionException, TransactionTimeoutException {
 
-        return new Transfer(web3j, credentials).sendFundsAsync(toAddress, value, unit);
-    }
+        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
 
-    public static Future<TransactionReceipt> sendFundsAsync(
-            Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit,
-            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
-            ExecutionException, TransactionTimeoutException {
-
-        return new Transfer(web3j, credentials, gasPrice, gasLimit)
+        return new Transfer(web3j, transactionManager)
                 .sendFundsAsync(toAddress, value, unit);
     }
 }

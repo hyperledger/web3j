@@ -4,16 +4,73 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.DbGetHex;
+import org.web3j.protocol.core.methods.response.DbGetString;
+import org.web3j.protocol.core.methods.response.DbPutHex;
+import org.web3j.protocol.core.methods.response.DbPutString;
+import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
+import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthCompileLLL;
+import org.web3j.protocol.core.methods.response.EthCompileSerpent;
+import org.web3j.protocol.core.methods.response.EthCompileSolidity;
+import org.web3j.protocol.core.methods.response.EthEstimateGas;
+import org.web3j.protocol.core.methods.response.EthFilter;
+import org.web3j.protocol.core.methods.response.EthGasPrice;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
+import org.web3j.protocol.core.methods.response.EthGetCode;
+import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetStorageAt;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
+import org.web3j.protocol.core.methods.response.EthGetWork;
+import org.web3j.protocol.core.methods.response.EthHashrate;
+import org.web3j.protocol.core.methods.response.EthLog;
+import org.web3j.protocol.core.methods.response.EthMining;
+import org.web3j.protocol.core.methods.response.EthProtocolVersion;
+import org.web3j.protocol.core.methods.response.EthSendRawTransaction;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthSign;
+import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
+import org.web3j.protocol.core.methods.response.EthSubmitWork;
+import org.web3j.protocol.core.methods.response.EthSyncing;
+import org.web3j.protocol.core.methods.response.EthTransaction;
+import org.web3j.protocol.core.methods.response.EthUninstallFilter;
+import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.NetListening;
+import org.web3j.protocol.core.methods.response.NetPeerCount;
+import org.web3j.protocol.core.methods.response.NetVersion;
+import org.web3j.protocol.core.methods.response.ShhAddToGroup;
+import org.web3j.protocol.core.methods.response.ShhHasIdentity;
+import org.web3j.protocol.core.methods.response.ShhMessages;
+import org.web3j.protocol.core.methods.response.ShhNewFilter;
+import org.web3j.protocol.core.methods.response.ShhNewGroup;
+import org.web3j.protocol.core.methods.response.ShhNewIdentity;
+import org.web3j.protocol.core.methods.response.ShhPost;
+import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
+import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.Transaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.core.methods.response.Web3Sha3;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -499,8 +556,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     @Test
@@ -610,8 +666,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     // Remove once Geth & Parity return the same v value in transactions
@@ -658,7 +713,7 @@ public class ResponseTest extends ResponseTester {
                         "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n" +
                         "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n" +
                         "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n" +
-                        "        \"v\":\"0x0\"\n" +
+                        "        \"v\":\"0x9d\"\n" +
                         "    }], \n" +
                         "    \"uncles\": [\n" +
                         "       \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n" +
@@ -710,7 +765,7 @@ public class ResponseTest extends ResponseTester {
                                 "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                                 "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                                 "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                (byte) 0
+                                0x9d
                         )
                 ),
                 Arrays.asList(
@@ -722,8 +777,7 @@ public class ResponseTest extends ResponseTester {
                         "0x39a3eb432fbef1fc"
                 )
         );
-        assertThat(ethBlock.getBlock().get(),
-                equalTo(block));
+        assertThat(ethBlock.getBlock(), equalTo(block));
     }
 
     @Test
@@ -735,7 +789,7 @@ public class ResponseTest extends ResponseTester {
         );
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        assertThat(ethBlock.getBlock(), is(Optional.empty()));
+        assertNull(ethBlock.getBlock());
     }
 
     @Test
@@ -937,29 +991,27 @@ public class ResponseTest extends ResponseTester {
                         "}"
         );
 
-        EthCompileSolidity.CompiledSolidity compiledSolidity =
-                new EthCompileSolidity.CompiledSolidity(
-                        new EthCompileSolidity.Code(
-                            "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
-                            new EthCompileSolidity.SolidityInfo(
-                                    "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n\t\treturn a * 7;\n\t}\n}\n",
-                                    "Solidity",
-                                    "0",
-                                    "0.8.2",
-                                    "--bin --abi --userdoc --devdoc --add-std --optimize -o /var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
-                                    Arrays.asList(new AbiDefinition(
-                                            false,
-                                            Arrays.asList(new AbiDefinition.NamedType("a", "uint256")),
-                                            "multiply",
-                                            Arrays.asList(new AbiDefinition.NamedType("d", "uint256")),
-                                            "function",
-                                            false
-                                    )),
-                                    new EthCompileSolidity.Documentation(),
-                                    new EthCompileSolidity.Documentation()
-                            )
-                        )
-                );
+        Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<>(1);
+        compiledSolidity.put("test", new EthCompileSolidity.Code(
+                "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
+                new EthCompileSolidity.SolidityInfo(
+                        "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n\t\treturn a * 7;\n\t}\n}\n",
+                        "Solidity",
+                        "0",
+                        "0.8.2",
+                        "--bin --abi --userdoc --devdoc --add-std --optimize -o /var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
+                        Arrays.asList(new AbiDefinition(
+                                false,
+                                Arrays.asList(new AbiDefinition.NamedType("a", "uint256")),
+                                "multiply",
+                                Arrays.asList(new AbiDefinition.NamedType("d", "uint256")),
+                                "function",
+                                false
+                        )),
+                        new EthCompileSolidity.Documentation(),
+                        new EthCompileSolidity.Documentation()
+                )
+        ));
 
         EthCompileSolidity ethCompileSolidity = deserialiseResponse(EthCompileSolidity.class);
         assertThat(ethCompileSolidity.getCompiledSolidity(), equalTo(compiledSolidity));
@@ -994,7 +1046,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEthNewFilter() {
+    public void testEthFilter() {
         buildResponse(
                 "{\n" +
                         "  \"id\":1,\n" +
@@ -1003,37 +1055,8 @@ public class ResponseTest extends ResponseTester {
                         "}"
         );
 
-        EthNewFilter ethNewFilter = deserialiseResponse(EthNewFilter.class);
-        assertThat(ethNewFilter.getFilterId(), is(BigInteger.valueOf(1)));
-    }
-
-    @Test
-    public void testEthNewBlockFilter() {
-        buildResponse(
-                "{\n" +
-                        "  \"id\":1,\n" +
-                        "  \"jsonrpc\": \"2.0\",\n" +
-                        "  \"result\": \"0x1\"\n" +
-                        "}"
-        );
-
-        EthNewBlockFilter ethNewBlockFilter = deserialiseResponse(EthNewBlockFilter.class);
-        assertThat(ethNewBlockFilter.getFilterId(), is(BigInteger.valueOf(1)));
-    }
-
-    @Test
-    public void testEthNewPendingTransactionFilter() {
-        buildResponse(
-                "{\n" +
-                        "  \"id\":1,\n" +
-                        "  \"jsonrpc\": \"2.0\",\n" +
-                        "  \"result\": \"0x1\"\n" +
-                        "}"
-        );
-
-        EthNewPendingTransactionFilter ethNewPendingTransactionFilter =
-                deserialiseResponse(EthNewPendingTransactionFilter.class);
-        assertThat(ethNewPendingTransactionFilter.getFilterId(), is(BigInteger.valueOf(1)));
+        EthFilter ethFilter = deserialiseResponse(EthFilter.class);
+        assertThat(ethFilter.getFilterId(), is(BigInteger.valueOf(1)));
     }
 
     @Test

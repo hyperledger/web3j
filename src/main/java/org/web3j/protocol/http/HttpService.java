@@ -4,9 +4,7 @@ package org.web3j.protocol.http;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -17,22 +15,18 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 
-import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.ObjectMapperFactory;
+import org.web3j.protocol.Service;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
-import org.web3j.utils.Async;
 
 /**
  * HTTP implementation of our services API.
  */
-public class HttpService implements Web3jService {
+public class HttpService extends Service {
 
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
     private CloseableHttpClient httpClient;
-
-    private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
     private final String url;
 
@@ -81,7 +75,7 @@ public class HttpService implements Web3jService {
 
     protected void addHeaders(List<Header> headers) { }
 
-    public <T> ResponseHandler<T> getResponseHandler(Class<T> type) {
+    public <T extends Response> ResponseHandler<T> getResponseHandler(Class<T> type) {
         return response -> {
             int status = response.getStatusLine().getStatusCode();
             if (status >= 200 && status < 300) {
@@ -96,11 +90,5 @@ public class HttpService implements Web3jService {
                 throw new ClientProtocolException("Unexpected response status: " + status);
             }
         };
-    }
-
-    @Override
-    public <T extends Response> CompletableFuture<T> sendAsync(
-            Request jsonRpc20Request, Class<T> responseType) {
-        return Async.run(() -> send(jsonRpc20Request, responseType));
     }
 }

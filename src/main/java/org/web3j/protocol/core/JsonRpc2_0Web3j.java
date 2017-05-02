@@ -4,13 +4,67 @@ package org.web3j.protocol.core;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
 
-import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.methods.request.*;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.request.ShhPost;
-import org.web3j.protocol.core.methods.response.*;
+import rx.Observable;
+
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.methods.request.ShhFilter;
+import org.web3j.protocol.core.methods.request.ShhPost;
+import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.DbGetHex;
+import org.web3j.protocol.core.methods.response.DbGetString;
+import org.web3j.protocol.core.methods.response.DbPutHex;
+import org.web3j.protocol.core.methods.response.DbPutString;
+import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
+import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthCoinbase;
+import org.web3j.protocol.core.methods.response.EthCompileLLL;
+import org.web3j.protocol.core.methods.response.EthCompileSerpent;
+import org.web3j.protocol.core.methods.response.EthCompileSolidity;
+import org.web3j.protocol.core.methods.response.EthEstimateGas;
+import org.web3j.protocol.core.methods.response.EthFilter;
+import org.web3j.protocol.core.methods.response.EthGasPrice;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
+import org.web3j.protocol.core.methods.response.EthGetCode;
+import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetStorageAt;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
+import org.web3j.protocol.core.methods.response.EthGetWork;
+import org.web3j.protocol.core.methods.response.EthHashrate;
+import org.web3j.protocol.core.methods.response.EthLog;
+import org.web3j.protocol.core.methods.response.EthMining;
+import org.web3j.protocol.core.methods.response.EthProtocolVersion;
+import org.web3j.protocol.core.methods.response.EthSign;
+import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
+import org.web3j.protocol.core.methods.response.EthSubmitWork;
+import org.web3j.protocol.core.methods.response.EthSyncing;
+import org.web3j.protocol.core.methods.response.EthTransaction;
+import org.web3j.protocol.core.methods.response.EthUninstallFilter;
+import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.NetListening;
+import org.web3j.protocol.core.methods.response.NetPeerCount;
+import org.web3j.protocol.core.methods.response.NetVersion;
+import org.web3j.protocol.core.methods.response.ShhAddToGroup;
+import org.web3j.protocol.core.methods.response.ShhHasIdentity;
+import org.web3j.protocol.core.methods.response.ShhMessages;
+import org.web3j.protocol.core.methods.response.ShhNewFilter;
+import org.web3j.protocol.core.methods.response.ShhNewGroup;
+import org.web3j.protocol.core.methods.response.ShhNewIdentity;
+import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
+import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.rx.JsonRpc2_0Rx;
+import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
 /**
@@ -19,11 +73,21 @@ import org.web3j.utils.Numeric;
 public class JsonRpc2_0Web3j implements Web3j {
 
     protected static final long ID = 1;
-    
-    protected Web3jService web3jService;
+    static final int BLOCK_TIME = 15 * 1000;
+
+    protected final Web3jService web3jService;
+    private final JsonRpc2_0Rx web3jRx;
+    private final long blockTime;
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
+        this(web3jService, BLOCK_TIME, Async.defaultExecutorService());
+    }
+
+    public JsonRpc2_0Web3j(
+            Web3jService web3jService, long pollingInterval, ExecutorService executorService) {
         this.web3jService = web3jService;
+        this.web3jRx = new JsonRpc2_0Rx(this, executorService);
+        this.blockTime = pollingInterval;
     }
 
     @Override
@@ -281,7 +345,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
             Transaction transaction, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<Object, EthCall>(
                 "eth_call",
                 Arrays.asList(transaction, defaultBlockParameter),
                 ID,
@@ -439,33 +503,34 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthNewFilter> ethNewFilter(EthFilter ethFilter) {
+    public Request<?, EthFilter> ethNewFilter(
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<>(
                 "eth_newFilter",
                 Arrays.asList(ethFilter),
                 ID,
                 web3jService,
-                EthNewFilter.class);
+                EthFilter.class);
     }
 
     @Override
-    public Request<?, EthNewBlockFilter> ethNewBlockFilter() {
+    public Request<?, EthFilter> ethNewBlockFilter() {
         return new Request<>(
                 "eth_newBlockFilter",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                EthNewBlockFilter.class);
+                EthFilter.class);
     }
 
     @Override
-    public Request<?, EthNewPendingTransactionFilter> ethNewPendingTransactionFilter() {
+    public Request<?, EthFilter> ethNewPendingTransactionFilter() {
         return new Request<>(
                 "eth_newPendingTransactionFilter",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                EthNewPendingTransactionFilter.class);
+                EthFilter.class);
     }
 
     @Override
@@ -499,7 +564,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthLog> ethGetLogs(EthFilter ethFilter) {
+    public Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),
@@ -677,5 +742,38 @@ public class JsonRpc2_0Web3j implements Web3j {
                 ID,
                 web3jService,
                 ShhMessages.class);
+    }
+
+    @Override
+    public Observable<String> ethBlockHashObservable() {
+        return web3jRx.ethBlockHashObservable(blockTime);
+    }
+
+    @Override
+    public Observable<String> ethPendingTransactionHashObservable() {
+        return web3jRx.ethPendingTransactionHashObservable(blockTime);
+    }
+
+    @Override
+    public Observable<Log> ethLogObservable(
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+        return web3jRx.ethLogObservable(ethFilter, blockTime);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+            transactionObservable() {
+        return web3jRx.transactionObservable(blockTime);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+            pendingTransactionObservable() {
+        return web3jRx.pendingTransactionObservable(blockTime);
+    }
+
+    @Override
+    public Observable<EthBlock> blockObservable(boolean fullTransactionObjects) {
+        return web3jRx.blockObservable(fullTransactionObjects, blockTime);
     }
 }

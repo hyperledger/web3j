@@ -1,11 +1,11 @@
 Management APIs
 ===============
 
-In addition to implementing the standard `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_ API, Ethereum clients, such as `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`__ and `Parity <https://github.com/ethcore/parity>`__ provide additional management via JSON-RPC.
+In addition to implementing the standard `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_ API, Ethereum clients, such as `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`__ and `Parity <https://github.com/paritytech/parity>`__ provide additional management via JSON-RPC.
 
 One of the key common pieces of functionality that they provide is the ability to create & unlock Ethereum accounts for transacting on the network. In Geth and Parity, this is implemented in their Personal modules, details of which are available below:
 
-- `Parity <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__
+- `Parity <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__
 - `Geth <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__
 
 Support for the personal modules is available in web3j. Both clients have further admin commands available, they will be incorporated into web3j over time if there is sufficient demand.

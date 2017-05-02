@@ -13,9 +13,15 @@ These tools provide:
 
 The command line tools can be obtained as a zipfile/tarball from the
 `releases <https://github.com/web3j/web3j/releases/latest>`_ page of the project repository, under
-the **Downloads** section.
+the **Downloads** section, or for OS X users via
+`Homebrew <https://github.com/web3j/homebrew-web3j>`_.
 
-To run, simply extract the zipfile and run the binary:
+.. code-block:: bash
+
+   brew tap web3j/web3j
+   brew install web3j
+
+To run via the zipfile, simply extract the zipfile and run the binary:
 
 .. code-block:: bash
 
