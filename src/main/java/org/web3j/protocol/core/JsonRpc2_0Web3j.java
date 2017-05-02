@@ -334,6 +334,9 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(
             String signedTransactionData) {
+        if (!signedTransactionData.startsWith("0x")) {
+            signedTransactionData = "0x" + signedTransactionData;
+        }
         return new Request<>(
                 "eth_sendRawTransaction",
                 Arrays.asList(signedTransactionData),
@@ -762,13 +765,13 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            transactionObservable() {
+    transactionObservable() {
         return web3jRx.transactionObservable(blockTime);
     }
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            pendingTransactionObservable() {
+    pendingTransactionObservable() {
         return web3jRx.pendingTransactionObservable(blockTime);
     }
 
