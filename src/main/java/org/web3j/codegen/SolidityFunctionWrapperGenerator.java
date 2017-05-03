@@ -59,7 +59,7 @@ public class SolidityFunctionWrapperGenerator {
     private static final String WEB3J = "web3j";
     private static final String CREDENTIALS = "credentials";
     private static final String TRANSACTION_MANAGER = "transactionManager";
-    private static final String INITIAL_VALUE = "initialValue";
+    private static final String INITIAL_VALUE = "initialEtherValue";
     private static final String CONTRACT_ADDRESS = "contractAddress";
     private static final String GAS_PRICE = "gasPrice";
     private static final String GAS_LIMIT = "gasLimit";
@@ -651,7 +651,9 @@ public class SolidityFunctionWrapperGenerator {
         return builder.build();
     }
 
-    static TypeName buildTypeName(String type) {
+    static TypeName buildTypeName(String typeDeclaration) {
+        String type = trimStorageDeclaration(typeDeclaration);
+
         if (type.endsWith("]")) {
             String[] splitType = type.split("\\[");
             Class<?> baseType = AbiTypes.getType(splitType[0]);
@@ -667,6 +669,14 @@ public class SolidityFunctionWrapperGenerator {
         } else {
             Class<?> cls = AbiTypes.getType(type);
             return ClassName.get(cls);
+        }
+    }
+
+    private static String trimStorageDeclaration(String type) {
+        if (type.endsWith(" storage") || type.endsWith(" memory")) {
+            return type.split(" ")[0];
+        } else {
+            return type;
         }
     }
 

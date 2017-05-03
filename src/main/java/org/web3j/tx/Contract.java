@@ -245,18 +245,18 @@ public abstract class Contract extends ManagedTransaction {
     protected static <T extends Contract> CompletableFuture<T> deployAsync(
             Class<T> type, Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger value) {
+            String binary, String encodedConstructor, BigInteger initialEtherValue) {
 
         return Async.run(() -> deploy(type, web3j, credentials, gasPrice, gasLimit,
-                binary, encodedConstructor, value));
+                binary, encodedConstructor, initialEtherValue));
     }
 
     protected static <T extends Contract> CompletableFuture<T> deployAsync(
             Class<T> type, Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger value) {
+            String binary, String encodedConstructor, BigInteger initialEtherValue) {
 
         return Async.run(() -> deploy(type, web3j, transactionManager, gasPrice, gasLimit,
-                binary, encodedConstructor, value));
+                binary, encodedConstructor, initialEtherValue));
     }
 }
