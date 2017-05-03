@@ -94,6 +94,43 @@ being too low. Please refer to the section <a class="reference internal" href="t
 <h2>I want to obtain some Ether on Testnet, but don&#8217;t want to have to mine it myself<a class="headerlink" href="#i-want-to-obtain-some-ether-on-testnet-but-don-t-want-to-have-to-mine-it-myself" title="Permalink to this headline">¶</a></h2>
 <p>Head to the <a class="reference external" href="http://faucet.ropsten.be:3001/">Ethereum Ropsten Faucet</a> to request one free Ether.</p>
 </div>
+<div class="section" id="how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction">
+<h2>How do I obtain the return value from a smart contract method invoked by a transaction?<a class="headerlink" href="#how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction" title="Permalink to this headline">¶</a></h2>
+<p>You can&#8217;t. It is not possible to return values from methods on smart contracts that are called as
+part of a transaction. If you wish to read a value during a transaction, you must use
+<a class="reference external" href="http://solidity.readthedocs.io/en/develop/contracts.html#events">Events</a>. To query values
+from smart contracts you must use a call, which is separate to a transaction. These methods should
+be marked as
+<a class="reference external" href="http://solidity.readthedocs.io/en/develop/contracts.html?highlight=constant#constant-functions">constant</a>
+functions. <a class="reference internal" href="smart_contracts.html#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a> created by web3j handle these differences for you.</p>
+<p>The following StackExchange
+<a class="reference external" href="http://ethereum.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call">post</a>
+is useful for background.</p>
+</div>
+<div class="section" id="is-it-possible-to-send-arbitrary-text-with-transactions">
+<h2>Is it possible to send arbitrary text with transactions?<a class="headerlink" href="#is-it-possible-to-send-arbitrary-text-with-transactions" title="Permalink to this headline">¶</a></h2>
+<p>Yes it is. Text should be ASCII encoded and provided as a hexadecimal String in the data field
+of the transaction. This is demonstrated below:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>RawTransaction.createTransaction(</dt>
+<dd>&lt;nonce&gt;, GAS_PRICE, GAS_LIMIT, &#8220;0x&lt;address&gt;&#8221;, &lt;amount&gt;, &#8220;0x&lt;hex encoded text&gt;&#8221;);</dd>
+</dl>
+<p>byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+String hexValue = Numeric.toHexString(signedMessage);</p>
+<dl class="docutils">
+<dt>EthSendTransaction ethSendTransaction =</dt>
+<dd>parity.ethSendRawTransaction(hexValue).sendAsync().get();</dd>
+</dl>
+<p>String transactionHash = ethSendTransaction.getTransactionHash();
+...</p>
+</div></blockquote>
+<p><em>Note</em>: Please ensure you increase the gas limit on the transaction to allow for the storage of
+text.</p>
+<p>The following StackExchange
+<a class="reference external" href="http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address">post</a>
+is useful for background.</p>
+</div>
 </div>
 
 
@@ -164,6 +201,8 @@ being too low. Please refer to the section <a class="reference internal" href="t
 <li class="toctree-l2"><a class="reference internal" href="#i-m-submitting-a-transaction-but-it-s-not-being-mined">I&#8217;m submitting a transaction, but it&#8217;s not being mined</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-want-to-see-details-of-the-json-rpc-requests-and-responses">I want to see details of the JSON-RPC requests and responses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-want-to-obtain-some-ether-on-testnet-but-don-t-want-to-have-to-mine-it-myself">I want to obtain some Ether on Testnet, but don&#8217;t want to have to mine it myself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction">How do I obtain the return value from a smart contract method invoked by a transaction?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#is-it-possible-to-send-arbitrary-text-with-transactions">Is it possible to send arbitrary text with transactions?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="projects.html">Projects using web3j</a></li>

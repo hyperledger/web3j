@@ -84,7 +84,7 @@
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>geth --fast --cache<span class="o">=</span>512 --rpcapi personal,db,eth,net,web3 --rpc --testnet
 </pre></div>
 </div>
-<p>Or <a class="reference external" href="https://github.com/ethcore/parity">Parity</a>:</p>
+<p>Or <a class="reference external" href="https://github.com/paritytech/parity">Parity</a>:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>parity --chain testnet
 </pre></div>
 </div>
@@ -202,7 +202,7 @@ client admin commands for sending transactions.</p>
 
 <span class="c1">// sign &amp; send our transaction</span>
 <span class="kt">byte</span><span class="o">[]</span> <span class="n">signedMessage</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="o">.</span><span class="na">signMessage</span><span class="o">(</span><span class="n">rawTransaction</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
-<span class="n">String</span> <span class="n">hexValue</span> <span class="o">=</span> <span class="n">Hex</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">signedMessage</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">hexValue</span> <span class="o">=</span> <span class="n">Numeric</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">signedMessage</span><span class="o">);</span>
 <span class="n">EthSendTransaction</span> <span class="n">ethSendTransaction</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">ethSendRawTransaction</span><span class="o">(</span><span class="n">hexValue</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
 <span class="c1">// ...</span>
 </pre></div>
