@@ -12,8 +12,8 @@ public class Observables {
     /**
      * Simple Observable implementation to emit a range of BigInteger values.
      *
-     * @param startValue
-     * @param endValue
+     * @param startValue first value to emit in range
+     * @param endValue final value to emit in range
      * @return Observable to omit this range of values
      */
     public static Observable<BigInteger> range(BigInteger startValue, BigInteger endValue) {
