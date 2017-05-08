@@ -1,5 +1,6 @@
 package org.web3j.protocol.core;
 
+import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +11,7 @@ import rx.Subscription;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.http.HttpService;
 
 import static junit.framework.TestCase.assertTrue;
@@ -19,7 +21,7 @@ import static junit.framework.TestCase.assertTrue;
  */
 public class ObservableIT {
 
-    private static final int EVENT_COUNT = 3;
+    private static final int EVENT_COUNT = 5;
 
     private Web3j web3j;
 
@@ -52,6 +54,20 @@ public class ObservableIT {
     @Test
     public void testLogObservable() throws Exception {
         run(web3j.ethLogObservable(new EthFilter()));
+    }
+
+    @Test
+    public void testReplayObservable() throws Exception {
+        run(web3j.replayBlocksObservable(BigInteger.ZERO, BigInteger.valueOf(EVENT_COUNT), true));
+    }
+
+    @Test
+    public void testCatchUpToLatestAndSubscribeToNewBlocksObservable() throws Exception {
+        EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
+                .send();
+        BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
+        run(web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
+                latestBlockNumber.subtract(BigInteger.ONE), false));
     }
 
     private <T> void run(Observable<T> observable) throws Exception {

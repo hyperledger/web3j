@@ -1,5 +1,6 @@
 package org.web3j.tx;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
@@ -36,13 +37,13 @@ public class ClientTransactionManager extends TransactionManager {
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
-            throws ExecutionException, InterruptedException, TransactionTimeoutException {
+            throws IOException {
 
         Transaction transaction = new Transaction(
                 fromAddress, null, gasPrice, gasLimit, to, value, data);
 
         return web3j.ethSendTransaction(transaction)
-                .sendAsync().get();
+                .send();
     }
 
     @Override

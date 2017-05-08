@@ -239,13 +239,14 @@ public class ContractTest extends ManagedTransactionTester {
         public TestContract(
                 String contractAddress, Web3j web3j, Credentials credentials,
                 BigInteger gasPrice, BigInteger gasLimit) {
-            super(contractAddress, web3j, credentials, gasPrice, gasLimit);
+            super("0x", contractAddress, web3j, credentials, gasPrice, gasLimit);
         }
 
         public TestContract(
-                String contractAddress, Web3j web3j, TransactionManager transactionManager,
+                String contractAddress,
+                Web3j web3j, TransactionManager transactionManager,
                 BigInteger gasPrice, BigInteger gasLimit) {
-            super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+            super("0x", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
         }
 
         public Future<Utf8String> callSingleValue() {

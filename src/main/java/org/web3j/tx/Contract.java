@@ -1,5 +1,6 @@
 package org.web3j.tx;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
@@ -35,23 +37,50 @@ public abstract class Contract extends ManagedTransaction {
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
 
+    private final String contractBinary;
     private String contractAddress;
     private final BigInteger gasPrice;
     private final BigInteger gasLimit;
     private TransactionReceipt transactionReceipt;
 
-    protected Contract(String contractAddress, Web3j web3j, TransactionManager transactionManager,
+    protected Contract(String contractBinary, String contractAddress,
+                       Web3j web3j, TransactionManager transactionManager,
                        BigInteger gasPrice, BigInteger gasLimit) {
         super(web3j, transactionManager);
 
+        this.contractBinary = contractBinary;
         this.contractAddress = contractAddress;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
     }
 
-    protected Contract(String contractAddress, Web3j web3j, Credentials credentials,
+    protected Contract(String contractBinary, String contractAddress,
+                       Web3j web3j, Credentials credentials,
                        BigInteger gasPrice, BigInteger gasLimit) {
-        this(contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+        this(contractBinary, contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+                gasPrice, gasLimit);
+    }
+
+    /**
+     * @deprecated in favour of
+     * {@link #Contract(String, String, Web3j, TransactionManager, BigInteger, BigInteger)}
+     */
+    @Deprecated
+    protected Contract(String contractAddress,
+                       Web3j web3j, TransactionManager transactionManager,
+                       BigInteger gasPrice, BigInteger gasLimit) {
+        this("", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    }
+
+    /**
+     * @deprecated in favour of
+     * {@link #Contract(String, String, Web3j, Credentials, BigInteger, BigInteger)}}
+     */
+    @Deprecated
+    protected Contract(String contractAddress,
+                       Web3j web3j, Credentials credentials,
+                       BigInteger gasPrice, BigInteger gasLimit) {
+        this("", contractAddress, web3j, new RawTransactionManager(web3j, credentials),
                 gasPrice, gasLimit);
     }
 
@@ -65,6 +94,21 @@ public abstract class Contract extends ManagedTransaction {
 
     public void setTransactionReceipt(TransactionReceipt transactionReceipt) {
         this.transactionReceipt = transactionReceipt;
+    }
+
+    public String getContractBinary() {
+        return contractBinary;
+    }
+
+    public boolean isValid() throws IOException {
+        if (contractAddress.equals("")) {
+            throw new UnsupportedOperationException(
+                    "Contract binary not present, you will need to regenerate your smart " +
+                            "contract wrapper with web3j v2.2.0+");
+        }
+
+        EthGetCode code = web3j.ethGetCode(contractAddress, DefaultBlockParameterName.LATEST).send();
+        return !code.hasError() && code.getCode().equals(contractBinary);
     }
 
     /**
@@ -120,7 +164,7 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected TransactionReceipt executeTransaction(Function function) throws InterruptedException,
-            ExecutionException, TransactionTimeoutException {
+            IOException, TransactionTimeoutException {
         return executeTransaction(FunctionEncoder.encode(function), BigInteger.ZERO);
     }
 
@@ -140,7 +184,7 @@ public abstract class Contract extends ManagedTransaction {
      */
     protected TransactionReceipt executeTransaction(
             String data, BigInteger value)
-            throws ExecutionException, InterruptedException, TransactionTimeoutException {
+            throws InterruptedException, IOException, TransactionTimeoutException {
 
         return send(contractAddress, data, value, gasPrice, gasLimit);
     }
@@ -199,7 +243,8 @@ public abstract class Contract extends ManagedTransaction {
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
         Constructor<T> constructor = type.getDeclaredConstructor(
-                String.class, Web3j.class, Credentials.class,
+                String.class,
+                Web3j.class, Credentials.class,
                 BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
@@ -216,7 +261,8 @@ public abstract class Contract extends ManagedTransaction {
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
         Constructor<T> constructor = type.getDeclaredConstructor(
-                String.class, Web3j.class, TransactionManager.class,
+                String.class,
+                Web3j.class, TransactionManager.class,
                 BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
@@ -228,7 +274,7 @@ public abstract class Contract extends ManagedTransaction {
 
     private static <T extends Contract> T create(
             T contract, String binary, String encodedConstructor, BigInteger value)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
+            throws InterruptedException, IOException, TransactionTimeoutException {
         TransactionReceipt transactionReceipt =
                 contract.executeTransaction(binary + encodedConstructor, value);
 

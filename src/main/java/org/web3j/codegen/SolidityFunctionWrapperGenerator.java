@@ -298,8 +298,8 @@ public class SolidityFunctionWrapperGenerator {
                 .addParameter(authType, authName)
                 .addParameter(BigInteger.class, GAS_PRICE)
                 .addParameter(BigInteger.class, GAS_LIMIT)
-                .addStatement("super($N, $N, $N, $N, $N)",
-                        CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
+                .addStatement("super($N, $N, $N, $N, $N, $N)",
+                        BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
                 .build();
     }
 

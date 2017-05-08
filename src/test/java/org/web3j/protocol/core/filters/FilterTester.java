@@ -67,12 +67,12 @@ public abstract class FilterTester {
 
         CountDownLatch completedLatch = new CountDownLatch(1);
 
-        when(web3jService.sendAsync(any(Request.class), eq(EthFilter.class)))
-                .thenReturn(future(ethFilter));
-        when(web3jService.sendAsync(any(Request.class), eq(EthLog.class)))
-                .thenReturn(future(ethLog));
-        when(web3jService.sendAsync(any(Request.class), eq(EthUninstallFilter.class)))
-                .thenReturn(future(ethUninstallFilter));
+        when(web3jService.send(any(Request.class), eq(EthFilter.class)))
+                .thenReturn(ethFilter);
+        when(web3jService.send(any(Request.class), eq(EthLog.class)))
+                .thenReturn(ethLog);
+        when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
+                .thenReturn(ethUninstallFilter);
 
         Subscription subscription = observable.subscribe(
                 result -> {
@@ -99,11 +99,5 @@ public abstract class FilterTester {
 
         return ethLog.getLogs().stream()
                 .map(t -> t.get()).collect(Collectors.toList());
-    }
-
-    private <T extends Response> CompletableFuture<T> future(T value) {
-        CompletableFuture<T> future = new CompletableFuture<>();
-        executorService.submit((Runnable) () -> future.complete(value));
-        return future;
     }
 }

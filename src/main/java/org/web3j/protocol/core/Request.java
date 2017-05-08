@@ -79,10 +79,9 @@ public class Request<S, T extends Response> {
         return Observable.create(
                 subscriber -> {
                     try {
-                        subscriber.onNext(sendAsync().get());
-                    } catch (InterruptedException e) {
-                        subscriber.onError(e);
-                    } catch (ExecutionException e) {
+                        subscriber.onNext(send());
+                        subscriber.onCompleted();
+                    } catch (IOException e) {
                         subscriber.onError(e);
                     }
                 }
