@@ -1,6 +1,7 @@
 package org.web3j.tx;
 
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.junit.Before;
@@ -10,7 +11,6 @@ import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.utils.Async;
 import org.web3j.utils.Convert;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -24,7 +24,7 @@ public class TransferTest extends ManagedTransactionTester {
 
     @Before
     @Override
-    public void setUp() {
+    public void setUp() throws Exception {
         super.setUp();
         transactionReceipt = prepareTransfer();
     }
@@ -49,7 +49,7 @@ public class TransferTest extends ManagedTransactionTester {
                 new BigDecimal(0.1), Convert.Unit.WEI);
     }
 
-    private TransactionReceipt prepareTransfer() {
+    private TransactionReceipt prepareTransfer() throws IOException {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
         prepareTransaction(transactionReceipt);
@@ -58,7 +58,7 @@ public class TransferTest extends ManagedTransactionTester {
         ethGasPrice.setResult("0x1");
 
         Request gasPriceRequest = mock(Request.class);
-        when(gasPriceRequest.sendAsync()).thenReturn(Async.run(() -> ethGasPrice));
+        when(gasPriceRequest.send()).thenReturn(ethGasPrice);
         when(web3j.ethGasPrice()).thenReturn(gasPriceRequest);
 
         return transactionReceipt;

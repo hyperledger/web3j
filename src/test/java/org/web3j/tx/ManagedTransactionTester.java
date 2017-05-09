@@ -1,5 +1,7 @@
 package org.web3j.tx;
 
+import java.io.IOException;
+
 import org.junit.Before;
 
 import org.web3j.crypto.SampleKeys;
@@ -24,44 +26,44 @@ public abstract class ManagedTransactionTester {
     protected Web3j web3j;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         web3j = mock(Web3j.class);
     }
 
-    void prepareTransaction(TransactionReceipt transactionReceipt) {
+    void prepareTransaction(TransactionReceipt transactionReceipt) throws IOException {
         prepareNonceRequest();
         prepareTransactionRequest();
         prepareTransactionReceipt(transactionReceipt);
     }
 
-    void prepareNonceRequest() {
+    void prepareNonceRequest() throws IOException {
         EthGetTransactionCount ethGetTransactionCount = new EthGetTransactionCount();
         ethGetTransactionCount.setResult("0x1");
 
         Request transactionCountRequest = mock(Request.class);
-        when(transactionCountRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionCount));
-        when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.LATEST))
+        when(transactionCountRequest.send())
+                .thenReturn(ethGetTransactionCount);
+        when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.PENDING))
                 .thenReturn(transactionCountRequest);
     }
 
-    void prepareTransactionRequest() {
+    void prepareTransactionRequest() throws IOException {
         EthSendTransaction ethSendTransaction = new EthSendTransaction();
         ethSendTransaction.setResult(TRANSACTION_HASH);
 
         Request rawTransactionRequest = mock(Request.class);
-        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
+        when(rawTransactionRequest.send()).thenReturn(ethSendTransaction);
         when(web3j.ethSendRawTransaction(any(String.class)))
                 .thenReturn(rawTransactionRequest);
     }
 
-    void prepareTransactionReceipt(TransactionReceipt transactionReceipt) {
+    void prepareTransactionReceipt(TransactionReceipt transactionReceipt) throws IOException {
         EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
         ethGetTransactionReceipt.setResult(transactionReceipt);
 
         Request getTransactionReceiptRequest = mock(Request.class);
-        when(getTransactionReceiptRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionReceipt));
+        when(getTransactionReceiptRequest.send())
+                .thenReturn(ethGetTransactionReceipt);
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn(getTransactionReceiptRequest);
     }

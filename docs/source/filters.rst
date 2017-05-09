@@ -63,6 +63,12 @@ for details of these refer to the
 interface.
 
 
+Replay filters
+--------------
+
+web3j also provides filters for replaying block and transaction histories.
+
+
 Topic filters and EVM events
 ----------------------------
 
