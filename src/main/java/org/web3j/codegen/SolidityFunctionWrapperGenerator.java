@@ -44,6 +44,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Collection;
+import org.web3j.utils.Console;
 import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
@@ -93,7 +94,7 @@ public class SolidityFunctionWrapperGenerator {
 
     public static void run(String[] args) throws Exception {
         if (args.length < 1 || !args[0].equals("generate")) {
-            exitError(USAGE);
+            Console.exitError(USAGE);
         } else {
             main(tail(args));
         }
@@ -102,7 +103,7 @@ public class SolidityFunctionWrapperGenerator {
     public static void main(String[] args) throws Exception {
 
         if (args.length != 6) {
-            exitError(USAGE);
+            Console.exitError(USAGE);
         }
 
         String binaryFileLocation = parsePositionalArg(args, 0);
@@ -114,7 +115,7 @@ public class SolidityFunctionWrapperGenerator {
                 || absFileLocation.equals("")
                 || destinationDirLocation.equals("")
                 || basePackageName.equals("")) {
-            exitError(USAGE);
+            Console.exitError(USAGE);
         }
 
         new SolidityFunctionWrapperGenerator(
@@ -148,16 +149,11 @@ public class SolidityFunctionWrapperGenerator {
         return "";
     }
 
-    private static void exitError(String message) {
-        System.err.println(message);
-        System.exit(1);
-    }
-
     private void generate() throws IOException, ClassNotFoundException {
 
         File binaryFile = new File(binaryFileLocation);
         if (!binaryFile.exists()) {
-            exitError("Invalid input binary file specified: " + binaryFileLocation);
+            Console.exitError("Invalid input binary file specified: " + binaryFileLocation);
         }
 
         byte[] bytes = Files.readBytes(new File(binaryFile.toURI()));
@@ -165,7 +161,7 @@ public class SolidityFunctionWrapperGenerator {
 
         File absFile = new File(absFileLocation);
         if (!absFile.exists() || !absFile.canRead()) {
-            exitError("Invalid input ABI file specified: " + absFileLocation);
+            Console.exitError("Invalid input ABI file specified: " + absFileLocation);
         }
         String fileName = absFile.getName();
         String contractName = getFileNameNoExtension(fileName);
@@ -173,7 +169,7 @@ public class SolidityFunctionWrapperGenerator {
         List<AbiDefinition> functionDefinitions = loadContractDefinition(absFile);
 
         if (functionDefinitions.isEmpty()) {
-            exitError("Unable to parse input ABI file");
+            Console.exitError("Unable to parse input ABI file");
         } else {
             generateSolidityWrappers(binary, contractName, functionDefinitions, basePackageName);
         }
