@@ -61,10 +61,6 @@ public abstract class Contract extends ManagedTransaction {
                 gasPrice, gasLimit);
     }
 
-    /**
-     * @deprecated in favour of
-     * {@link #Contract(String, String, Web3j, TransactionManager, BigInteger, BigInteger)}
-     */
     @Deprecated
     protected Contract(String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
@@ -72,10 +68,6 @@ public abstract class Contract extends ManagedTransaction {
         this("", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    /**
-     * @deprecated in favour of
-     * {@link #Contract(String, String, Web3j, Credentials, BigInteger, BigInteger)}}
-     */
     @Deprecated
     protected Contract(String contractAddress,
                        Web3j web3j, Credentials credentials,
@@ -176,10 +168,9 @@ public abstract class Contract extends ManagedTransaction {
      * @param data  to send in transaction
      * @param value in Wei to send in transaction
      * @return {@link Optional} containing our transaction receipt
-     * @throws ExecutionException          if the computation threw an
-     *                                     exception
      * @throws InterruptedException        if the current thread was interrupted
      *                                     while waiting
+     * @throws IOException                 if the call to the node fails
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     protected TransactionReceipt executeTransaction(

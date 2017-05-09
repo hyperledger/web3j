@@ -69,6 +69,8 @@ public interface Web3jRx {
      *
      * @param startBlockNumber block number to commence with
      * @param endBlockNumber block number to finish with
+     * @param fullTransactionObjects if true, provides transactions embedded in blocks, otherwise
+     *                               transaction hashes
      * @return Observable to emit these blocks
      */
     Observable<EthBlock> replayBlocksObservable(
@@ -121,7 +123,7 @@ public interface Web3jRx {
      * As per {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(BigInteger, boolean)},
      * except that all transactions contained within the blocks are emitted.
      *
-     * @param startBlockNumber
+     * @param startBlockNumber the block number we wish to request from
      * @return Observable to emit all requested transactions and future
      */
     Observable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(
