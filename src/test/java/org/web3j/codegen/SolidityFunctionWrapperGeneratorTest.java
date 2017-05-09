@@ -1,30 +1,18 @@
 package org.web3j.codegen;
 
+import org.junit.Test;
+import org.web3j.TempFileProvider;
+import org.web3j.utils.Strings;
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
-
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeSpec;
-import org.junit.Test;
-
-import org.web3j.TempFileProvider;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.abi.datatypes.generated.Uint64;
-import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.utils.Strings;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

@@ -62,10 +62,15 @@ public class SolidityFunctionWrapper {
     private static final String WEB3J = "web3j";
     private static final String CREDENTIALS = "credentials";
     private static final String TRANSACTION_MANAGER = "transactionManager";
-    private static final String INITIAL_VALUE = "initialValue";
+    private static final String INITIAL_VALUE = "initialEtherValue";
     private static final String CONTRACT_ADDRESS = "contractAddress";
     private static final String GAS_PRICE = "gasPrice";
     private static final String GAS_LIMIT = "gasLimit";
+
+    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
+            "<strong>Do not modify!</strong><br>\n" +
+            "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
+            "} to update.\n";
 
     public void generateJavaFiles(String contractName, String bin, String abi, String destinationDirLocation, String basePackageName) throws IOException, ClassNotFoundException {
         String className = Strings.capitaliseFirstLetter(contractName);
@@ -75,8 +80,11 @@ public class SolidityFunctionWrapper {
                 .initializer("$S", bin)
                 .build();
 
+        String javadoc = CODEGEN_WARNING + getWeb3jVersion();
+
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addJavadoc(javadoc)
                 .superclass(Contract.class)
                 .addField(fieldSpec);
 
@@ -96,6 +104,19 @@ public class SolidityFunctionWrapper {
                 .build();
 
         javaFile.writeTo(new File(destinationDirLocation));
+    }
+
+    private static String getWeb3jVersion() {
+        String version;
+
+        try {
+            // This only works if run as part of the web3j command line tools which contains
+            // a version.properties file
+            version = Version.getVersion();
+        } catch (IOException | NullPointerException e) {
+            version = Version.DEFAULT;
+        }
+        return "\n<p>Generated with web3j version " + version + ".\n";
     }
 
     private static List<MethodSpec> buildFunctionDefinitions(

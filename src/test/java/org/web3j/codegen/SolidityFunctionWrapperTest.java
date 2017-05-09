@@ -51,6 +51,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         assertThat(buildTypeName("uint256[]"),
                 is(ParameterizedTypeName.get(DynamicArray.class, Uint256.class)));
+
+        assertThat(buildTypeName("uint256[] storage"),
+                is(ParameterizedTypeName.get(DynamicArray.class, Uint256.class)));
+
+        assertThat(buildTypeName("uint256[] memory"),
+                is(ParameterizedTypeName.get(DynamicArray.class, Uint256.class)));
+
         assertThat(buildTypeName("uint256[10]"),
                 is(ParameterizedTypeName.get(StaticArray.class, Uint256.class)));
     }
