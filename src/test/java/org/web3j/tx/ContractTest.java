@@ -51,7 +51,7 @@ public class ContractTest extends ManagedTransactionTester {
     private TestContract contract;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         super.setUp();
 
         contract = new TestContract(
