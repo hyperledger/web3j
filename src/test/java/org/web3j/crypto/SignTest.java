@@ -43,4 +43,10 @@ public class SignTest {
         assertThat(Sign.publicKeyFromPrivate(SampleKeys.PRIVATE_KEY),
                 equalTo(SampleKeys.PUBLIC_KEY));
     }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvalidSignature() throws SignatureException {
+        Sign.signedMessageToKey(
+                TEST_MESSAGE, new Sign.SignatureData((byte) 27, new byte[]{1}, new byte[]{0}));
+    }
 }

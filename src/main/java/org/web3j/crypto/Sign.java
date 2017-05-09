@@ -19,6 +19,8 @@ import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
 
 import org.web3j.utils.Numeric;
 
+import static org.web3j.utils.Assertions.verifyPrecondition;
+
 /**
  * <p>Transaction signing logic.</p>
  *
@@ -151,12 +153,6 @@ public class Sign {
         return new BigInteger(1, Arrays.copyOfRange(qBytes, 1, qBytes.length));
     }
 
-    private static void verifyPrecondition(boolean assertionResult, String errorMessage) {
-        if (!assertionResult) {
-            throw new RuntimeException(errorMessage);
-        }
-    }
-
     /** Decompress a compressed public key (x co-ord and low-bit of y-coord). */
     private static ECPoint decompressKey(BigInteger xBN, boolean yBit) {
         X9IntegerConverter x9 = new X9IntegerConverter();
@@ -178,14 +174,21 @@ public class Sign {
      */
     public static BigInteger signedMessageToKey(
             byte[] message, SignatureData signatureData) throws SignatureException {
+
+        byte[] r = signatureData.getR();
+        byte[] s = signatureData.getS();
+        verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
+        verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
+
         int header = signatureData.getV() & 0xFF;
         // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
         //                  0x1D = second key with even y, 0x1E = second key with odd y
         if (header < 27 || header > 34)
             throw new SignatureException("Header byte out of range: " + header);
-        BigInteger r = new BigInteger(1, signatureData.getR());
-        BigInteger s = new BigInteger(1, signatureData.getS());
-        ECDSASignature sig = new ECDSASignature(r, s);
+
+        ECDSASignature sig = new ECDSASignature(
+                new BigInteger(1, signatureData.getR()),
+                new BigInteger(1, signatureData.getS()));
 
         byte[] messageHash = Hash.sha3(message);
         int recId = header - 27;
