@@ -1,6 +1,7 @@
 package org.web3j.tx;
 
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class Transfer extends ManagedTransaction {
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit)
-            throws ExecutionException, InterruptedException,
+            throws IOException, InterruptedException,
             TransactionTimeoutException {
 
         BigInteger gasPrice = getGasPrice();
@@ -53,7 +54,7 @@ public class Transfer extends ManagedTransaction {
 
     private TransactionReceipt send(
             String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
-            BigInteger gasLimit) throws ExecutionException, InterruptedException,
+            BigInteger gasLimit) throws IOException, InterruptedException,
             TransactionTimeoutException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
@@ -90,7 +91,7 @@ public class Transfer extends ManagedTransaction {
     public static TransactionReceipt sendFunds(
             Web3j web3j, Credentials credentials,
             String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
-            ExecutionException, TransactionTimeoutException {
+            IOException, TransactionTimeoutException {
 
         TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
 

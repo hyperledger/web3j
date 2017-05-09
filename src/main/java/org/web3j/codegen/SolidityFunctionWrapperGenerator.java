@@ -152,7 +152,6 @@ public class SolidityFunctionWrapperGenerator {
         String fileName = absFile.getName();
         String contractName = getFileNameNoExtension(fileName);
         bytes = Files.readBytes(new File(absFile.toURI()));
-        ;
         String abi = new String(bytes);
 
         List<AbiDefinition> functionDefinitions = loadContractDefinition(absFile);

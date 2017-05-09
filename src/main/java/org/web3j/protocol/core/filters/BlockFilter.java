@@ -1,5 +1,6 @@
 package org.web3j.protocol.core.filters;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -17,8 +18,8 @@ public class BlockFilter extends Filter<String> {
     }
 
     @Override
-    EthFilter sendRequest() throws ExecutionException, InterruptedException {
-        return web3j.ethNewBlockFilter().sendAsync().get();
+    EthFilter sendRequest() throws IOException {
+        return web3j.ethNewBlockFilter().send();
     }
 
     @Override

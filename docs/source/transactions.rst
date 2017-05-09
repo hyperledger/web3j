@@ -247,7 +247,7 @@ create your transaction object::
 The transaction can then be signed and encoded::
 
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <credentials>);
-   String hexValue = Hex.toHexString(signedMessage);
+   String hexValue = Numeric.toHexString(signedMessage);
 
 Where the credentials are those loaded as per :ref:`wallet-files`.
 

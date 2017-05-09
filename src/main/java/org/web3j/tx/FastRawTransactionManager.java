@@ -1,5 +1,6 @@
 package org.web3j.tx;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
@@ -23,7 +24,7 @@ public class FastRawTransactionManager extends RawTransactionManager {
     }
 
     @Override
-    synchronized BigInteger getNonce() throws InterruptedException, ExecutionException {
+    synchronized BigInteger getNonce() throws IOException {
         if (nonce.signum() == -1) {
             nonce = super.getNonce();
         } else {
@@ -36,7 +37,7 @@ public class FastRawTransactionManager extends RawTransactionManager {
         return nonce;
     }
 
-    public synchronized void resetNonce() throws InterruptedException, ExecutionException {
+    public synchronized void resetNonce() throws IOException {
         nonce = super.getNonce();
     }
 

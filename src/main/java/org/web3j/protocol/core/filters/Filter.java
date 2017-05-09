@@ -1,5 +1,6 @@
 package org.web3j.protocol.core.filters;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -37,7 +38,7 @@ public abstract class Filter<T> {
             filterId = ethFilter.getFilterId();
 
             while (!canceled) {
-                EthLog ethLog = web3j.ethGetFilterChanges(filterId).sendAsync().get();
+                EthLog ethLog = web3j.ethGetFilterChanges(filterId).send();
                 if (ethLog.hasError()) {
                     throwException(ethFilter.getError());
                 }
@@ -46,12 +47,12 @@ public abstract class Filter<T> {
 
                 Thread.sleep(blockTime);
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | IOException e) {
             throwException(e);
         }
     }
 
-    abstract EthFilter sendRequest() throws ExecutionException, InterruptedException;
+    abstract EthFilter sendRequest() throws IOException;
 
     abstract void process(List<EthLog.LogResult> logResults);
 
@@ -60,8 +61,8 @@ public abstract class Filter<T> {
 
         EthUninstallFilter ethUninstallFilter = null;
         try {
-            ethUninstallFilter = web3j.ethUninstallFilter(filterId).sendAsync().get();
-        } catch (InterruptedException | ExecutionException e) {
+            ethUninstallFilter = web3j.ethUninstallFilter(filterId).send();
+        } catch (IOException e) {
             throwException(e);
         }
 

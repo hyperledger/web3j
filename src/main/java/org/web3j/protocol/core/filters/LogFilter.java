@@ -1,5 +1,6 @@
 package org.web3j.protocol.core.filters;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -23,8 +24,8 @@ public class LogFilter extends Filter<Log> {
     }
 
     @Override
-    EthFilter sendRequest() throws ExecutionException, InterruptedException {
-        return web3j.ethNewFilter(ethFilter).sendAsync().get();
+    EthFilter sendRequest() throws IOException {
+        return web3j.ethNewFilter(ethFilter).send();
     }
 
     @Override
