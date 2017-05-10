@@ -168,8 +168,8 @@ public class SolidityFunctionWrapper {
                 .addParameter(authType, authName)
                 .addParameter(BigInteger.class, GAS_PRICE)
                 .addParameter(BigInteger.class, GAS_LIMIT)
-                .addStatement("super($N, $N, $N, $N, $N)",
-                        CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
+                .addStatement("super($N, $N, $N, $N, $N, $N)",
+                        BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
                 .build();
     }
 
@@ -521,7 +521,9 @@ public class SolidityFunctionWrapper {
         return builder.build();
     }
 
-    static TypeName buildTypeName(String type) {
+    static TypeName buildTypeName(String typeDeclaration) {
+        String type = trimStorageDeclaration(typeDeclaration);
+
         if (type.endsWith("]")) {
             String[] splitType = type.split("\\[");
             Class<?> baseType = AbiTypes.getType(splitType[0]);
@@ -537,6 +539,14 @@ public class SolidityFunctionWrapper {
         } else {
             Class<?> cls = AbiTypes.getType(type);
             return ClassName.get(cls);
+        }
+    }
+
+    private static String trimStorageDeclaration(String type) {
+        if (type.endsWith(" storage") || type.endsWith(" memory")) {
+            return type.split(" ")[0];
+        } else {
+            return type;
         }
     }
 
