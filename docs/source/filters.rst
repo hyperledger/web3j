@@ -66,7 +66,53 @@ interface.
 Replay filters
 --------------
 
-web3j also provides filters for replaying block and transaction histories.
+web3j also provides filters for replaying block and transaction history.
+
+To replay a range of blocks from the blockchain::
+
+   Subscription subscription = web3j.replayBlocksObservable(
+           <startBlockNumber>, <endBlockNumber>, <fullTxObjects>)
+           .subscribe(block -> {
+               ...
+   });
+
+To replay the individual transactions contained within a range of blocks::
+
+   Subscription subscription = web3j.replayTransactionsObservable(
+           <startBlockNumber>, <endBlockNumber>)
+           .subscribe(tx -> {
+               ...
+   });
+
+You can also get web3j to replay all blocks up to the most current, and provide notification
+(via the submitted Observable) once you've caught up::
+
+   Subscription subscription = web3j.catchUpToLatestBlockObservable(
+           <startBlockNumber>, <fullTxObjects>, <onCompleteObservable>)
+           .subscribe(block -> {
+               ...
+   });
+
+Or, if you'd rather replay all blocks to the most current, then be notified of new subsequent
+blocks being created::
+
+   Subscription subscription = web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
+           <startBlockNumber>, <fullTxObjects>)
+           .subscribe(block -> {
+               ...
+   });
+
+As above, but with transactions contained within blocks::
+
+   Subscription subscription = web3j.catchUpToLatestAndSubscribeToNewTransactionsObservable(
+           <startBlockNumber>)
+           .subscribe(tx -> {
+               ...
+   });
+
+All of the above filters are exported via the
+`Web3jRx <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+interface.
 
 
 Topic filters and EVM events

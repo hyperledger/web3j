@@ -229,6 +229,18 @@ been grouped into a block together):
        ...
    });
 
+Or, if you'd rather replay all blocks to the most current, and be notified of new subsequent
+blocks being created::
+
+   Subscription subscription = catchUpToLatestAndSubscribeToNewBlocksObservable(
+           <startBlockNumber>, <fullTxObjects>)
+           .subscribe(block -> {
+               ...
+   });
+
+There are a number of other transaction and block replay Observables described in the
+`docs <http://docs.web3j.io/filters.html>`_.
+
 Topic filters are also supported:
 
 .. code-block:: java
@@ -248,7 +260,9 @@ Subscriptions should always be cancelled when no longer required:
 
 **Note:** filters are not supported on Infura.
 
-For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_.
+For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_ and the
+`Web3jRx <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+interface.
 
 
 Transactions
