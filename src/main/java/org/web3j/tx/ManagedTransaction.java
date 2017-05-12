@@ -23,7 +23,7 @@ public abstract class ManagedTransaction {
 
     protected Web3j web3j;
 
-    private TransactionManager transactionManager;
+    protected TransactionManager transactionManager;
 
     protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
         this.transactionManager = transactionManager;

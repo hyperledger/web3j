@@ -76,9 +76,9 @@ public class Transaction {
         return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data);
     }
 
-    public static Transaction createEthCallTransaction(String to, String data) {
+    public static Transaction createEthCallTransaction(String from, String to, String data) {
 
-        return new Transaction(null, null, null, null, to, null, data);
+        return new Transaction(from, null, null, null, to, null, data);
     }
 
     public String getFrom() {

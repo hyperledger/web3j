@@ -162,11 +162,13 @@ public class RequestTest extends RequestTester {
     public void testPersonalConfirmRequest() throws Exception {
         web3j.personalConfirmRequest(
                 "0x1",
-                Transaction.createEthCallTransaction("0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc", "0x0"),
+                Transaction.createEthCallTransaction(
+                        "0xa010fbad79f5e602699fff2bb4919fbd87abc8cc",
+                        "0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc", "0x0"),
                 "password"
         ).send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_confirmRequest\",\"params\":[\"0x1\",{\"to\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_confirmRequest\",\"params\":[\"0x1\",{\"from\":\"0xa010fbad79f5e602699fff2bb4919fbd87abc8cc\",\"to\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
     }
 
     @Test
