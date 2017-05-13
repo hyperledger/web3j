@@ -5,10 +5,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -41,12 +40,13 @@ public abstract class FilterTester {
     Web3j web3j;
 
     final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-    final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    final ScheduledExecutorService scheduledExecutorService =
+            Executors.newSingleThreadScheduledExecutor();
 
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService, 1000, executorService);
+        web3j = Web3j.build(web3jService, 1000, scheduledExecutorService);
     }
 
     <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {

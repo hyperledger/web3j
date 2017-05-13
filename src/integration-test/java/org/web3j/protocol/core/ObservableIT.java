@@ -21,7 +21,7 @@ import static junit.framework.TestCase.assertTrue;
  */
 public class ObservableIT {
 
-    private static final int EVENT_COUNT = 5;
+    private static final int EVENT_COUNT = 3;
 
     private Web3j web3j;
 

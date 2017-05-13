@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +46,7 @@ public class JsonRpc2_0RxTest {
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService);
+        web3j = Web3j.build(web3jService, 1000, Executors.newSingleThreadScheduledExecutor());
     }
 
     @Test
@@ -136,7 +137,7 @@ public class JsonRpc2_0RxTest {
                 throwable -> fail(throwable.getMessage()),
                 () -> completedLatch.countDown());
 
-        transactionLatch.await(5, TimeUnit.SECONDS);
+        transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(expected));
 
         subscription.unsubscribe();

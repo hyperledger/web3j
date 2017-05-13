@@ -3,7 +3,9 @@ package org.web3j.protocol.core.filters;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.Response;
@@ -21,14 +23,15 @@ public abstract class Filter<T> {
     final Callback<T> callback;
 
     private volatile BigInteger filterId;
-    private volatile boolean canceled = false;
+
+    private ScheduledFuture<?> schedule;
 
     public Filter(Web3j web3j, Callback<T> callback) {
         this.web3j = web3j;
         this.callback = callback;
     }
 
-    public void run(long blockTime) {
+    public void run(ScheduledExecutorService scheduledExecutorService, long blockTime) {
         try {
             EthFilter ethFilter = sendRequest();
             if (ethFilter.hasError()) {
@@ -37,17 +40,22 @@ public abstract class Filter<T> {
 
             filterId = ethFilter.getFilterId();
 
-            while (!canceled) {
-                EthLog ethLog = web3j.ethGetFilterChanges(filterId).send();
+            schedule = scheduledExecutorService.scheduleAtFixedRate(() -> {
+                EthLog ethLog = null;
+                try {
+                    ethLog = web3j.ethGetFilterChanges(filterId).send();
+                } catch (IOException e) {
+                    throwException(e);
+                }
                 if (ethLog.hasError()) {
                     throwException(ethFilter.getError());
                 }
 
                 process(ethLog.getLogs());
+            }, 0, blockTime, TimeUnit.MILLISECONDS);
 
-                Thread.sleep(blockTime);
-            }
-        } catch (InterruptedException | IOException e) {
+
+        } catch (IOException e) {
             throwException(e);
         }
     }
@@ -57,7 +65,7 @@ public abstract class Filter<T> {
     abstract void process(List<EthLog.LogResult> logResults);
 
     public void cancel() {
-        canceled = true;
+        schedule.cancel(false);
 
         EthUninstallFilter ethUninstallFilter = null;
         try {

@@ -3,8 +3,8 @@ package org.web3j.utils;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Async task facilitation.
@@ -29,7 +29,7 @@ public class Async {
         return Runtime.getRuntime().availableProcessors();
     }
 
-    public static ExecutorService defaultExecutorService() {
-        return Executors.newFixedThreadPool(getCpuCount());
+    public static ScheduledExecutorService defaultExecutorService() {
+        return Executors.newScheduledThreadPool(getCpuCount());
     }
 }

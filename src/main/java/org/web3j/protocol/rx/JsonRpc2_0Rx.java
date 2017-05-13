@@ -3,7 +3,7 @@ package org.web3j.protocol.rx;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 import rx.Observable;
@@ -27,17 +27,17 @@ import org.web3j.utils.Observables;
 public class JsonRpc2_0Rx {
 
     private final Web3j web3j;
-    private final ExecutorService executorService;
+    private final ScheduledExecutorService scheduledExecutorService;
 
-    public JsonRpc2_0Rx(Web3j web3j, ExecutorService executorService) {
+    public JsonRpc2_0Rx(Web3j web3j, ScheduledExecutorService scheduledExecutorService) {
         this.web3j = web3j;
-        this.executorService = executorService;
+        this.scheduledExecutorService = scheduledExecutorService;
     }
 
     public Observable<String> ethBlockHashObservable(long pollingInterval) {
         return Observable.create(subscriber -> {
             BlockFilter blockFilter = new BlockFilter(
-                    web3j, value -> subscriber.onNext(value));
+                    web3j, subscriber::onNext);
             run(blockFilter, subscriber, pollingInterval);
         });
     }
@@ -45,7 +45,7 @@ public class JsonRpc2_0Rx {
     public Observable<String> ethPendingTransactionHashObservable(long pollingInterval) {
         return Observable.create(subscriber -> {
             PendingTransactionFilter pendingTransactionFilter = new PendingTransactionFilter(
-                    web3j, value -> subscriber.onNext(value));
+                    web3j, subscriber::onNext);
 
             run(pendingTransactionFilter, subscriber, pollingInterval);
         });
@@ -65,7 +65,7 @@ public class JsonRpc2_0Rx {
             org.web3j.protocol.core.filters.Filter<T> filter, Subscriber<? super T> subscriber,
             long pollingInterval) {
 
-        executorService.submit(() -> filter.run(pollingInterval));
+        filter.run(scheduledExecutorService, pollingInterval);
         subscriber.add(Subscriptions.create(filter::cancel));
     }
 

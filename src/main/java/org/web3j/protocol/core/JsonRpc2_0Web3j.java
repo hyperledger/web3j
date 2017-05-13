@@ -4,7 +4,7 @@ package org.web3j.protocol.core;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import rx.Observable;
 
@@ -84,9 +84,10 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     public JsonRpc2_0Web3j(
-            Web3jService web3jService, long pollingInterval, ExecutorService executorService) {
+            Web3jService web3jService, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
         this.web3jService = web3jService;
-        this.web3jRx = new JsonRpc2_0Rx(this, executorService);
+        this.web3jRx = new JsonRpc2_0Rx(this, scheduledExecutorService);
         this.blockTime = pollingInterval;
     }
 
