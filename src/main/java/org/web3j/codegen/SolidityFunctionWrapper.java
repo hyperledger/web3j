@@ -72,7 +72,9 @@ public class SolidityFunctionWrapper {
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
             "} to update.\n";
 
-    public void generateJavaFiles(String contractName, String bin, String abi, String destinationDirLocation, String basePackageName) throws IOException, ClassNotFoundException {
+    public void generateJavaFiles(String contractName, String bin, String abi,
+                                  String destinationDirLocation, String basePackageName)
+            throws IOException, ClassNotFoundException {
         String className = Strings.capitaliseFirstLetter(contractName);
 
         FieldSpec fieldSpec = FieldSpec.builder(String.class, "BINARY")
