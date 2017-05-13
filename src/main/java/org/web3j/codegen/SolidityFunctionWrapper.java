@@ -73,30 +73,13 @@ public class SolidityFunctionWrapper {
             throws IOException, ClassNotFoundException {
         String className = Strings.capitaliseFirstLetter(contractName);
 
-        FieldSpec fieldSpec = FieldSpec.builder(String.class, "BINARY")
-                .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
-                .initializer("$S", bin)
-                .build();
+        TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
-        String javadoc = CODEGEN_WARNING + getWeb3jVersion();
-
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addJavadoc(javadoc)
-                .superclass(Contract.class)
-                .addField(fieldSpec);
-
-
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-        AbiDefinition[] abiDefinition = objectMapper.readValue(abi, AbiDefinition[].class);
-        List<AbiDefinition> functionDefinitions = Arrays.asList(abiDefinition);
-
-
-        classBuilder.addMethod(SolidityFunctionWrapper.buildConstructor(Credentials.class, "credentials"));
-        classBuilder.addMethod(SolidityFunctionWrapper.buildConstructor(TransactionManager.class, "transactionManager"));
-        classBuilder.addMethods(SolidityFunctionWrapper.buildFunctionDefinitions(className, classBuilder, functionDefinitions));
-        classBuilder.addMethod(SolidityFunctionWrapper.buildLoad(className, Credentials.class, "credentials"));
-        classBuilder.addMethod(SolidityFunctionWrapper.buildLoad(className, TransactionManager.class, "transactionManager"));
+        classBuilder.addMethod(buildConstructor(Credentials.class, "credentials"));
+        classBuilder.addMethod(buildConstructor(TransactionManager.class, "transactionManager"));
+        classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, loadContractDefinition(abi)));
+        classBuilder.addMethod(buildLoad(className, Credentials.class, "credentials"));
+        classBuilder.addMethod(buildLoad(className, TransactionManager.class, "transactionManager"));
 
         JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
                 .build();
@@ -104,7 +87,18 @@ public class SolidityFunctionWrapper {
         javaFile.writeTo(new File(destinationDirLocation));
     }
 
-    private static String getWeb3jVersion() {
+    private TypeSpec.Builder createClassBuilder(String className, String binary) {
+
+        String javadoc = CODEGEN_WARNING + getWeb3jVersion();
+
+        return TypeSpec.classBuilder(className)
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addJavadoc(javadoc)
+                .superclass(Contract.class)
+                .addField(createBinaryDefinition(binary));
+    }
+
+    private String getWeb3jVersion() {
         String version;
 
         try {
@@ -115,6 +109,13 @@ public class SolidityFunctionWrapper {
             version = Version.DEFAULT;
         }
         return "\n<p>Generated with web3j version " + version + ".\n";
+    }
+
+    private FieldSpec createBinaryDefinition(String binary) {
+        return FieldSpec.builder(String.class, BINARY)
+                .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
+                .initializer("$S", binary)
+                .build();
     }
 
     private static List<MethodSpec> buildFunctionDefinitions(
@@ -244,16 +245,11 @@ public class SolidityFunctionWrapper {
         return Collection.join(
                 inputParameterTypes,
                 ", ",
-                new Collection.Function<ParameterSpec, String>() {
-                    @Override
-                    public String apply(ParameterSpec parameterSpec) {
-                        return parameterSpec.name;
-                    }
-                });
+                parameterSpec -> parameterSpec.name);
     }
 
     static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes) {
-        List<ParameterSpec> result = new ArrayList<ParameterSpec>(namedTypes.size());
+        List<ParameterSpec> result = new ArrayList<>(namedTypes.size());
         for (int i = 0; i < namedTypes.size(); i++) {
             AbiDefinition.NamedType namedType = namedTypes.get(i);
 
@@ -552,7 +548,7 @@ public class SolidityFunctionWrapper {
             MethodSpec.Builder methodBuilder, String functionName, String inputParameters,
             List<TypeName> outputParameterTypes) throws ClassNotFoundException {
 
-        List<Object> objects = new ArrayList<Object>();
+        List<Object> objects = new ArrayList<>();
         objects.add(Function.class);
         objects.add(Function.class);
         objects.add(functionName);
@@ -571,12 +567,7 @@ public class SolidityFunctionWrapper {
         String asListParams = Collection.join(
                 outputParameterTypes,
                 ", ",
-                new Collection.Function<TypeName, String>() {
-                    @Override
-                    public String apply(TypeName typeName) {
-                        return "new $T<$T>() {}";
-                    }
-                });
+                typeName -> "new $T<$T>() {}");
 
         methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T" +
                 ".<$T<?>>asList(" +
@@ -588,7 +579,7 @@ public class SolidityFunctionWrapper {
             indexedParameterTypes,
             List<NamedTypeName> nonIndexedParameterTypes) throws ClassNotFoundException {
 
-        List<Object> objects = new ArrayList<Object>();
+        List<Object> objects = new ArrayList<>();
         objects.add(Event.class);
         objects.add(Event.class);
         objects.add(eventName);
@@ -610,26 +601,22 @@ public class SolidityFunctionWrapper {
         String indexedAsListParams = Collection.join(
                 indexedParameterTypes,
                 ", ",
-                new Collection.Function<NamedTypeName, String>() {
-                    @Override
-                    public String apply(NamedTypeName typeName) {
-                        return "new $T<$T>() {}";
-                    }
-                });
+                typeName -> "new $T<$T>() {}");
 
         String nonIndexedAsListParams = Collection.join(
                 nonIndexedParameterTypes,
                 ", ",
-                new Collection.Function<NamedTypeName, String>() {
-                    @Override
-                    public String apply(NamedTypeName typeName) {
-                        return "new $T<$T>() {}";
-                    }
-                });
+                typeName -> "new $T<$T>() {}");
 
         methodBuilder.addStatement("final $T event = new $T($S, \n" +
                 "$T.<$T<?>>asList(" + indexedAsListParams + "),\n" +
                 "$T.<$T<?>>asList(" + nonIndexedAsListParams + "))", objects.toArray());
+    }
+
+    private List<AbiDefinition> loadContractDefinition(String abi) throws IOException {
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+        AbiDefinition[] abiDefinition = objectMapper.readValue(abi, AbiDefinition[].class);
+        return Arrays.asList(abiDefinition);
     }
 
     private static class NamedTypeName {
