@@ -33,8 +33,6 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Collection;
-import org.web3j.utils.Console;
-import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
 
@@ -50,8 +48,6 @@ import java.util.concurrent.Future;
 import javax.lang.model.element.Modifier;
 
 import rx.functions.Func1;
-
-import static org.web3j.utils.Collection.tail;
 
 /**
  * Generate Java Classes based on generated Solidity BIN and ABI.
