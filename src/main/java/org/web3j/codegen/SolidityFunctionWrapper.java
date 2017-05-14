@@ -76,7 +76,7 @@ public class SolidityFunctionWrapper {
         TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
-        classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER);
+        classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER));
         classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, loadContractDefinition(abi)));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
