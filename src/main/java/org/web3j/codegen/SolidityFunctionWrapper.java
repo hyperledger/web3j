@@ -68,18 +68,18 @@ public class SolidityFunctionWrapper {
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
             "} to update.\n";
 
-    public void generateJavaFiles(String contractName, String bin, String abi,
-                                  String destinationDirLocation, String basePackageName)
+    public void generateJavaFiles(
+            String contractName, String bin, String abi, String destinationDirLocation, String basePackageName)
             throws IOException, ClassNotFoundException {
         String className = Strings.capitaliseFirstLetter(contractName);
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
-        classBuilder.addMethod(buildConstructor(Credentials.class, "credentials"));
-        classBuilder.addMethod(buildConstructor(TransactionManager.class, "transactionManager"));
+        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER);
         classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, loadContractDefinition(abi)));
-        classBuilder.addMethod(buildLoad(className, Credentials.class, "credentials"));
-        classBuilder.addMethod(buildLoad(className, TransactionManager.class, "transactionManager"));
+        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
 
         JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
                 .build();

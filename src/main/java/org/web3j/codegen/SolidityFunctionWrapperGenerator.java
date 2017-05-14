@@ -126,8 +126,8 @@ public class SolidityFunctionWrapperGenerator {
 
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            new SolidityFunctionWrapper().generateJavaFiles(contractName, binary, abi,
-                    destinationDirLocation.toString(), basePackageName);
+            new SolidityFunctionWrapper().generateJavaFiles(
+                    contractName, binary, abi, destinationDirLocation.toString(), basePackageName);
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }
     }
