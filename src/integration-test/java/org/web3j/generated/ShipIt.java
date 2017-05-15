@@ -1,6 +1,5 @@
 package org.web3j.generated;
 
-import java.lang.String;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
@@ -23,17 +22,17 @@ import org.web3j.tx.TransactionManager;
  * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.
  *
- * <p>Generated with web3j version 2.0.1.
+ * <p>Generated with web3j version 2.2.0.
  */
 public final class ShipIt extends Contract {
     private static final String BINARY = "6060604052341561000c57fe5b5b6101968061001c6000396000f300606060405263ffffffff60e060020a600035041663d51cd4ac8114610021575bfe5b341561002957fe5b61003d600160a060020a0360043516610118565b60408051600160a060020a03808b16825289166020820152908101879052606081018690526080810185600081111561007257fe5b60ff168152602081018590526060810183905260808282038101604083019081528554600260001960018316156101000201909116049183018290529160a00190859080156101025780601f106100d757610100808354040283529160200191610102565b820191906000526020600020905b8154815290600101906020018083116100e557829003601f168201915b5050995050505050505050505060405180910390f35b60006020819052908152604090208054600182015460028301546003840154600485015460058601546007870154600160a060020a039687169796909516959394929360ff90921692909160060190885600a165627a7a723058201e285ed5a311302c7e3870a6bebc9464c5677d294265aeb7d1aa6b37b9c5a7dc0029";
 
     private ShipIt(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(contractAddress, web3j, credentials, gasPrice, gasLimit);
+        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     private ShipIt(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        super(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+        super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
     public Future<List<Type>> shipments(Address param0) {
@@ -43,12 +42,12 @@ public final class ShipIt extends Contract {
         return executeCallMultipleValueReturnAsync(function);
     }
 
-    public static Future<ShipIt> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {
-        return deployAsync(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialValue);
+    public static Future<ShipIt> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue) {
+        return deployAsync(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialEtherValue);
     }
 
-    public static Future<ShipIt> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {
-        return deployAsync(ShipIt.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialValue);
+    public static Future<ShipIt> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue) {
+        return deployAsync(ShipIt.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialEtherValue);
     }
 
     public static ShipIt load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

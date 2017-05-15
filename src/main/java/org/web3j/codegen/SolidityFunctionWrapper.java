@@ -25,7 +25,7 @@ import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.Log;
@@ -50,7 +50,7 @@ import javax.lang.model.element.Modifier;
 import rx.functions.Func1;
 
 /**
- * Generate Java Classes based on generated Solidity BIN and ABI.
+ * Generate Java Classes based on generated Solidity bin and abi files.
  */
 public class SolidityFunctionWrapper {
 
@@ -62,6 +62,8 @@ public class SolidityFunctionWrapper {
     private static final String CONTRACT_ADDRESS = "contractAddress";
     private static final String GAS_PRICE = "gasPrice";
     private static final String GAS_LIMIT = "gasLimit";
+    private static final String START_BLOCK = "startBlock";
+    private static final String END_BLOCK = "endBlock";
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
             "<strong>Do not modify!</strong><br>\n" +
@@ -82,6 +84,8 @@ public class SolidityFunctionWrapper {
         classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
 
         JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
+                .indent("    ")
+                .skipJavaLangImports(true)
                 .build();
 
         javaFile.writeTo(new File(destinationDirLocation));
@@ -391,12 +395,12 @@ public class SolidityFunctionWrapper {
 
         MethodSpec.Builder observableMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName)
                 .addModifiers(Modifier.PUBLIC)
+                .addParameter(DefaultBlockParameter.class, START_BLOCK)
+                .addParameter(DefaultBlockParameter.class, END_BLOCK)
                 .returns(parameterizedTypeName);
-
 
         buildVariableLengthEventConstructor(
                 observableMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
-
 
         TypeSpec converter = TypeSpec.anonymousClassBuilder("")
                 .addSuperinterface(ParameterizedTypeName.get(
@@ -418,8 +422,8 @@ public class SolidityFunctionWrapper {
                         .build())
                 .build();
 
-        observableMethodBuilder.addStatement("$1T filter = new $1T($2T.EARLIEST,$2T.LATEST, " +
-                "getContractAddress())", EthFilter.class, DefaultBlockParameterName.class)
+        observableMethodBuilder.addStatement("$1T filter = new $1T($2L, $3L, " +
+                "getContractAddress())", EthFilter.class, START_BLOCK, END_BLOCK)
                 .addStatement("filter.addSingleTopic($T.encode(event))", EventEncoder.class)
                 .addStatement("return web3j.ethLogObservable(filter).map($L)", converter);
 
@@ -498,7 +502,7 @@ public class SolidityFunctionWrapper {
                                         List<NamedTypeName> nonIndexedParameters) {
         CodeBlock.Builder builder = CodeBlock.builder();
         for (int i = 0; i < indexedParameters.size(); i++) {
-            builder.addStatement("$L.$L = ($T)eventValues.getIndexedValues().get($L)",
+            builder.addStatement("$L.$L = ($T) eventValues.getIndexedValues().get($L)",
                     objectName,
                     indexedParameters.get(i).getName(),
                     indexedParameters.get(i).getTypeName(),
@@ -506,7 +510,7 @@ public class SolidityFunctionWrapper {
         }
 
         for (int i = 0; i < nonIndexedParameters.size(); i++) {
-            builder.addStatement("$L.$L = ($T)eventValues.getNonIndexedValues().get($L)",
+            builder.addStatement("$L.$L = ($T) eventValues.getNonIndexedValues().get($L)",
                     objectName,
                     nonIndexedParameters.get(i).getName(),
                     nonIndexedParameters.get(i).getTypeName(),

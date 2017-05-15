@@ -174,6 +174,7 @@ public class AbiTypesGenerator {
 
     private void write(String packageName, TypeSpec typeSpec, Path destination) throws IOException {
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
+                .indent("    ")
                 .skipJavaLangImports(true)
                 .build();
 
