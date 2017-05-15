@@ -1,7 +1,6 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.math.BigInteger;
-
 import org.web3j.abi.datatypes.Fixed;
 
 /**
@@ -10,13 +9,13 @@ import org.web3j.abi.datatypes.Fixed;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Fixed24x40 extends Fixed {
-  public static final Fixed24x40 DEFAULT = new Fixed24x40(BigInteger.ZERO);
+    public static final Fixed24x40 DEFAULT = new Fixed24x40(BigInteger.ZERO);
 
-  public Fixed24x40(BigInteger value) {
-    super(24, 40, value);
-  }
+    public Fixed24x40(BigInteger value) {
+        super(24, 40, value);
+    }
 
-  public Fixed24x40(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
-    super(24, 40, m, n);
-  }
+    public Fixed24x40(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+        super(24, 40, m, n);
+    }
 }

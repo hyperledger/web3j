@@ -1,7 +1,6 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.math.BigInteger;
-
 import org.web3j.abi.datatypes.Int;
 
 /**
@@ -10,9 +9,13 @@ import org.web3j.abi.datatypes.Int;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Int224 extends Int {
-  public static final Int224 DEFAULT = new Int224(BigInteger.ZERO);
+    public static final Int224 DEFAULT = new Int224(BigInteger.ZERO);
 
-  public Int224(BigInteger value) {
-    super(224, value);
-  }
+    public Int224(BigInteger value) {
+        super(224, value);
+    }
+
+    public Int224(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }

@@ -17,6 +17,10 @@ public class DefaultBlockParameterNumber implements DefaultBlockParameter {
         this.blockNumber = blockNumber;
     }
 
+    public DefaultBlockParameterNumber(long blockNumber) {
+        this(BigInteger.valueOf(blockNumber));
+    }
+
     @Override
     @JsonValue
     public String getValue() {

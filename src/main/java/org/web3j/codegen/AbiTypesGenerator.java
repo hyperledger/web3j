@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.ClassName;
@@ -63,6 +64,12 @@ public class AbiTypesGenerator {
                     .addStatement("super($L, $N)", bitSize, "value")
                     .build();
 
+            MethodSpec overideConstructorSpec = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(long.class, "value")
+                    .addStatement("this(BigInteger.valueOf(value))")
+                    .build();
+
             FieldSpec defaultFieldSpec = FieldSpec
                     .builder(className, DEFAULT, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                     .initializer("new $T(BigInteger.ZERO)", className)
@@ -73,14 +80,10 @@ public class AbiTypesGenerator {
                     .superclass(superclass)
                     .addModifiers(Modifier.PUBLIC)
                     .addField(defaultFieldSpec)
-                    .addMethod(constructorSpec)
+                    .addMethods(Arrays.asList(constructorSpec, overideConstructorSpec))
                     .build();
 
-            JavaFile javaFile = JavaFile.builder(packageName, intType)
-                    .skipJavaLangImports(true)
-                    .build();
-
-            javaFile.writeTo(path);
+            write(packageName, intType, path);
         }
     }
 

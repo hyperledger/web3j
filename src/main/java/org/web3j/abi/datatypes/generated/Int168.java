@@ -1,7 +1,6 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.math.BigInteger;
-
 import org.web3j.abi.datatypes.Int;
 
 /**
@@ -10,9 +9,13 @@ import org.web3j.abi.datatypes.Int;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Int168 extends Int {
-  public static final Int168 DEFAULT = new Int168(BigInteger.ZERO);
+    public static final Int168 DEFAULT = new Int168(BigInteger.ZERO);
 
-  public Int168(BigInteger value) {
-    super(168, value);
-  }
+    public Int168(BigInteger value) {
+        super(168, value);
+    }
+
+    public Int168(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }
