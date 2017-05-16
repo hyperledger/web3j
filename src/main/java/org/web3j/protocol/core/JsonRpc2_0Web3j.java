@@ -780,37 +780,50 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<EthBlock> replayBlocksObservable(
-            BigInteger startBlockNumber, BigInteger endBlockNumber, boolean fullTransactionObjects) {
-        return web3jRx.replayBlocksObservable(startBlockNumber, endBlockNumber, fullTransactionObjects);
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects) {
+        return web3jRx.replayBlocksObservable(startBlock, endBlock, fullTransactionObjects);
     }
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
             replayTransactionsObservable(
-            BigInteger startBlockNumber, BigInteger endBlockNumber) {
-        return web3jRx.replayTransactionsObservable(startBlockNumber, endBlockNumber);
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        return web3jRx.replayTransactionsObservable(startBlock, endBlock);
     }
 
     @Override
     public Observable<EthBlock> catchUpToLatestBlockObservable(
-            BigInteger startBlockNumber, boolean fullTransactionObjects,
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             Observable<EthBlock> onCompleteObservable) {
         return web3jRx.catchUpToLatestBlockObservable(
-                startBlockNumber, fullTransactionObjects, onCompleteObservable);
+                startBlock, fullTransactionObjects, onCompleteObservable);
+    }
+
+    @Override
+    public Observable<EthBlock> catchUpToLatestBlockObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
+        return web3jRx.catchUpToLatestBlockObservable(startBlock, fullTransactionObjects);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+    catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
+        return web3jRx.catchUpToLatestTransactionObservable(startBlock);
     }
 
     @Override
     public Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
-            BigInteger startBlockNumber, boolean fullTransactionObjects) {
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
         return web3jRx.catchUpToLatestAndSubscribeToNewBlocksObservable(
-                startBlockNumber, fullTransactionObjects, blockTime);
+                startBlock, fullTransactionObjects, blockTime);
     }
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
             catchUpToLatestAndSubscribeToNewTransactionsObservable(
-            BigInteger startBlockNumber) {
+            DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(
-                startBlockNumber, blockTime);
+                startBlock, blockTime);
     }
 }

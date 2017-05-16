@@ -19,6 +19,7 @@ import rx.Subscription;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthFilter;
@@ -61,7 +62,9 @@ public class JsonRpc2_0RxTest {
         }
 
         Observable<EthBlock> observable = web3j.replayBlocksObservable(
-                BigInteger.ZERO, BigInteger.valueOf(2), false);
+                new DefaultBlockParameterNumber(BigInteger.ZERO),
+                new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
+                false);
 
         CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
         CountDownLatch completedLatch = new CountDownLatch(1);
@@ -123,7 +126,8 @@ public class JsonRpc2_0RxTest {
                 .thenReturn(ethUninstallFilter);
 
         Observable<EthBlock> observable = web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
-                BigInteger.ZERO, false);
+                new DefaultBlockParameterNumber(BigInteger.ZERO),
+                false);
 
         CountDownLatch transactionLatch = new CountDownLatch(expected.size());
         CountDownLatch completedLatch = new CountDownLatch(1);

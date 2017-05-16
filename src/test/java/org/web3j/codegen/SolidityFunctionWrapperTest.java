@@ -193,10 +193,10 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j" +
                 ".abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}));\n" +
                 "    java.util.List<org.web3j.abi.EventValues> valueList = extractEventParameters" +
-                "(event,transactionReceipt);\n" +
+                "(event, transactionReceipt);\n" +
                 "    java.util.ArrayList<TransferEventResponse> responses = new java.util" +
                 ".ArrayList<TransferEventResponse>(valueList.size());\n" +
-                "    for(org.web3j.abi.EventValues eventValues : valueList) {\n" +
+                "    for (org.web3j.abi.EventValues eventValues : valueList) {\n" +
                 "      TransferEventResponse typedResponse = new TransferEventResponse();\n" +
                 "      typedResponse.from = (org.web3j.abi.datatypes.Address) eventValues" +
                 ".getIndexedValues().get(0);\n" +

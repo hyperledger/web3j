@@ -16,7 +16,7 @@ import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 
 /**
- * <p>Auto generated code.<br>
+ * Auto generated code.<br>
  * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.
  *
@@ -45,14 +45,14 @@ public final class Greeter extends Contract {
         return executeCallSingleValueReturnAsync(function);
     }
 
-    public static Future<Greeter> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue, Utf8String _greeting) {
+    public static Future<Greeter> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, Utf8String _greeting) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(_greeting));
-        return deployAsync(Greeter.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor, initialEtherValue);
+        return deployAsync(Greeter.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
     }
 
-    public static Future<Greeter> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue, Utf8String _greeting) {
+    public static Future<Greeter> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, Utf8String _greeting) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(_greeting));
-        return deployAsync(Greeter.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor, initialEtherValue);
+        return deployAsync(Greeter.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
     }
 
     public static Greeter load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

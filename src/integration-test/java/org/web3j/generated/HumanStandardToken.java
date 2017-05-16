@@ -30,7 +30,7 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * <p>Auto generated code.<br>
+ * Auto generated code.<br>
  * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.
  *
@@ -51,9 +51,9 @@ public final class HumanStandardToken extends Contract {
         final Event event = new Event("Transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        List<EventValues> valueList = extractEventParameters(event,transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
-        for(EventValues eventValues : valueList) {
+        for (EventValues eventValues : valueList) {
             TransferEventResponse typedResponse = new TransferEventResponse();
             typedResponse._from = (Address) eventValues.getIndexedValues().get(0);
             typedResponse._to = (Address) eventValues.getIndexedValues().get(1);
@@ -86,9 +86,9 @@ public final class HumanStandardToken extends Contract {
         final Event event = new Event("Approval", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        List<EventValues> valueList = extractEventParameters(event,transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ApprovalEventResponse> responses = new ArrayList<ApprovalEventResponse>(valueList.size());
-        for(EventValues eventValues : valueList) {
+        for (EventValues eventValues : valueList) {
             ApprovalEventResponse typedResponse = new ApprovalEventResponse();
             typedResponse._owner = (Address) eventValues.getIndexedValues().get(0);
             typedResponse._spender = (Address) eventValues.getIndexedValues().get(1);
@@ -186,14 +186,14 @@ public final class HumanStandardToken extends Contract {
         return executeCallSingleValueReturnAsync(function);
     }
 
-    public static Future<HumanStandardToken> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue, Uint256 _initialAmount, Utf8String _tokenName, Uint8 _decimalUnits, Utf8String _tokenSymbol) {
+    public static Future<HumanStandardToken> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, Uint256 _initialAmount, Utf8String _tokenName, Uint8 _decimalUnits, Utf8String _tokenSymbol) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(_initialAmount, _tokenName, _decimalUnits, _tokenSymbol));
-        return deployAsync(HumanStandardToken.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor, initialEtherValue);
+        return deployAsync(HumanStandardToken.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
     }
 
-    public static Future<HumanStandardToken> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue, Uint256 _initialAmount, Utf8String _tokenName, Uint8 _decimalUnits, Utf8String _tokenSymbol) {
+    public static Future<HumanStandardToken> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, Uint256 _initialAmount, Utf8String _tokenName, Uint8 _decimalUnits, Utf8String _tokenSymbol) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(_initialAmount, _tokenName, _decimalUnits, _tokenSymbol));
-        return deployAsync(HumanStandardToken.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor, initialEtherValue);
+        return deployAsync(HumanStandardToken.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
     }
 
     public static HumanStandardToken load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

@@ -26,4 +26,8 @@ public class DefaultBlockParameterNumber implements DefaultBlockParameter {
     public String getValue() {
         return Numeric.encodeQuantity(blockNumber);
     }
+
+    public BigInteger getBlockNumber() {
+        return blockNumber;
+    }
 }

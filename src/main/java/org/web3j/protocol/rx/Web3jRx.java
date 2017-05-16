@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import rx.Observable;
 
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Log;
@@ -67,25 +68,26 @@ public interface Web3jRx {
      * Create an Observable that emits all blocks from the blockchain contained within the
      * requested range.
      *
-     * @param startBlockNumber block number to commence with
-     * @param endBlockNumber block number to finish with
+     * @param startBlock block number to commence with
+     * @param endBlock block number to finish with
      * @param fullTransactionObjects if true, provides transactions embedded in blocks, otherwise
      *                               transaction hashes
      * @return Observable to emit these blocks
      */
     Observable<EthBlock> replayBlocksObservable(
-            BigInteger startBlockNumber, BigInteger endBlockNumber, boolean fullTransactionObjects);
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects);
 
     /**
      * Create an Observable that emits all transactions from the blockchain contained within the
      * requested range.
      *
-     * @param startBlockNumber block number to commence with
-     * @param endBlockNumber block number to finish with
+     * @param startBlock block number to commence with
+     * @param endBlock block number to finish with
      * @return Observable to emit these transactions in the order they appear in the blocks
      */
     Observable<Transaction> replayTransactionsObservable(
-            BigInteger startBlockNumber, BigInteger endBlockNumber);
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
 
     /**
      * Create an Observable that emits all transactions from the blockchain starting with a
@@ -93,9 +95,9 @@ public interface Web3jRx {
      * Observable is invoked.
      *
      * <p>To automatically subscribe to new blocks, use
-     * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(BigInteger, boolean)}.
+     * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(DefaultBlockParameter, boolean)}.
      *
-     * @param startBlockNumber the block number we wish to request from
+     * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided in
      *                               the {@link EthBlock} responses
      * @param onCompleteObservable a subsequent Observable that we wish to run once we are caught
@@ -103,29 +105,52 @@ public interface Web3jRx {
      * @return Observable to emit all requested blocks
      */
     Observable<EthBlock> catchUpToLatestBlockObservable(
-            BigInteger startBlockNumber, boolean fullTransactionObjects,
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             Observable<EthBlock> onCompleteObservable);
+
+    /**
+     * Creates an Observable that emits all blocks from the requested block number to the most
+     * current. Once it has emitted the most current block, onComplete is called.
+     *
+     * @param startBlock the block number we wish to request from
+     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided in
+     *                               the {@link EthBlock} responses
+     * @return Observable to emit all requested blocks
+     */
+    Observable<EthBlock> catchUpToLatestBlockObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects);
+
+    /**
+     * Creates an Observable that emits all transactions from the requested block number to the most
+     * current. Once it has emitted the most current block's transactions, onComplete is called.
+     *
+     * @param startBlock the block number we wish to request from
+     * @return Observable to emit all requested transactions
+     */
+    Observable<Transaction> catchUpToLatestTransactionObservable(
+            DefaultBlockParameter startBlock);
 
     /**
      * Creates an Observable that emits all blocks from the requested block number to the most
      * current. Once it has emitted the most current block, it starts emitting new blocks as they
      * are created.
      *
-     * @param startBlockNumber the block number we wish to request from
+     * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided in
      *                               the {@link EthBlock} responses
      * @return Observable to emit all requested blocks and future
      */
     Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
-            BigInteger startBlockNumber, boolean fullTransactionObjects);
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects);
 
     /**
-     * As per {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(BigInteger, boolean)},
+     * As per
+     * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(DefaultBlockParameter, boolean)},
      * except that all transactions contained within the blocks are emitted.
      *
-     * @param startBlockNumber the block number we wish to request from
+     * @param startBlock the block number we wish to request from
      * @return Observable to emit all requested transactions and future
      */
     Observable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(
-            BigInteger startBlockNumber);
+            DefaultBlockParameter startBlock);
 }

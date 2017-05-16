@@ -7,10 +7,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 import rx.Observable;
+import rx.Scheduler;
 import rx.Subscriber;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.filters.BlockFilter;
@@ -28,10 +31,12 @@ public class JsonRpc2_0Rx {
 
     private final Web3j web3j;
     private final ScheduledExecutorService scheduledExecutorService;
+    private final Scheduler scheduler;
 
     public JsonRpc2_0Rx(Web3j web3j, ScheduledExecutorService scheduledExecutorService) {
         this.web3j = web3j;
         this.scheduledExecutorService = scheduledExecutorService;
+        this.scheduler = Schedulers.from(scheduledExecutorService);
     }
 
     public Observable<String> ethBlockHashObservable(long pollingInterval) {
@@ -89,8 +94,26 @@ public class JsonRpc2_0Rx {
     }
 
     public Observable<EthBlock> replayBlocksObservable(
-            BigInteger startBlockNumber, BigInteger endBlockNumber,
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects) {
+        // We use a scheduler to ensure this Observable runs asynchronously for users to be
+        // consistent with the other Observables
+        return replayBlocksObservableSync(startBlock, endBlock, fullTransactionObjects)
+                .subscribeOn(scheduler);
+    }
+
+    private Observable<EthBlock> replayBlocksObservableSync(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects) {
+
+        BigInteger startBlockNumber = null;
+        BigInteger endBlockNumber = null;
+        try {
+            startBlockNumber = getBlockNumber(startBlock);
+            endBlockNumber = getBlockNumber(endBlock);
+        } catch (IOException e) {
+            Observable.error(e);
+        }
 
         return Observables.range(startBlockNumber, endBlockNumber)
                 .flatMap(i -> web3j.ethGetBlockByNumber(
@@ -98,17 +121,29 @@ public class JsonRpc2_0Rx {
     }
 
     public Observable<Transaction> replayTransactionsObservable(
-            BigInteger startBlockNumber, BigInteger endBlockNumber) {
-        return replayBlocksObservable(startBlockNumber, endBlockNumber, true)
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        return replayBlocksObservable(startBlock, endBlock, true)
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
     public Observable<EthBlock> catchUpToLatestBlockObservable(
-        BigInteger startBlockNumber, boolean fullTransactionObjects,
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects,
+            Observable<EthBlock> onCompleteObservable) {
+        // We use a scheduler to ensure this Observable runs asynchronously for users to be
+        // consistent with the other Observables
+        return catchUpToLatestBlockObservableSync(
+                startBlock, fullTransactionObjects, onCompleteObservable)
+                .subscribeOn(scheduler);
+    }
+
+    private Observable<EthBlock> catchUpToLatestBlockObservableSync(
+        DefaultBlockParameter startBlock, boolean fullTransactionObjects,
         Observable<EthBlock> onCompleteObservable) {
 
+        BigInteger startBlockNumber;
         BigInteger latestBlockNumber;
         try {
+            startBlockNumber = getBlockNumber(startBlock);
             latestBlockNumber = getLatestBlockNumber();
         } catch (IOException e) {
             return Observable.error(e);
@@ -118,36 +153,62 @@ public class JsonRpc2_0Rx {
             return onCompleteObservable;
         } else {
             return Observable.concat(
-                    replayBlocksObservable(
-                            startBlockNumber, latestBlockNumber,
+                    replayBlocksObservableSync(
+                            new DefaultBlockParameterNumber(startBlockNumber),
+                            new DefaultBlockParameterNumber(latestBlockNumber),
                             fullTransactionObjects),
-                    Observable.defer(() -> catchUpToLatestBlockObservable(
-                            latestBlockNumber.add(BigInteger.ONE), fullTransactionObjects,
+                    Observable.defer(() -> catchUpToLatestBlockObservableSync(
+                            new DefaultBlockParameterNumber(latestBlockNumber.add(BigInteger.ONE)),
+                            fullTransactionObjects,
                             onCompleteObservable)));
         }
     }
 
-    public Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
-            BigInteger startBlockNumber, boolean fullTransactionObjects, long pollingInterval) {
+    public Observable<EthBlock> catchUpToLatestBlockObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
         return catchUpToLatestBlockObservable(
-                startBlockNumber, fullTransactionObjects,
+                startBlock, fullTransactionObjects, Observable.empty());
+    }
+
+    public Observable<Transaction> catchUpToLatestTransactionObservable(
+            DefaultBlockParameter startBlock) {
+        return catchUpToLatestBlockObservable(
+                startBlock, true, Observable.empty())
+                .flatMapIterable(JsonRpc2_0Rx::toTransactions);
+    }
+
+    public Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects, long pollingInterval) {
+        return catchUpToLatestBlockObservable(
+                startBlock, fullTransactionObjects,
                 blockObservable(fullTransactionObjects, pollingInterval));
     }
 
     public Observable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(
-            BigInteger startBlockNumber, long pollingInterval) {
+            DefaultBlockParameter startBlock, long pollingInterval) {
         return catchUpToLatestAndSubscribeToNewBlocksObservable(
-                startBlockNumber, true, pollingInterval)
+                startBlock, true, pollingInterval)
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
     private BigInteger getLatestBlockNumber() throws IOException {
-        EthBlock latestEthBlock = web3j.ethGetBlockByNumber(
-                DefaultBlockParameterName.LATEST, false).send();
-        return latestEthBlock.getBlock().getNumber();
+        return getBlockNumber(DefaultBlockParameterName.LATEST);
+    }
+
+    private BigInteger getBlockNumber(
+            DefaultBlockParameter defaultBlockParameter) throws IOException {
+        if (defaultBlockParameter instanceof DefaultBlockParameterNumber) {
+            return ((DefaultBlockParameterNumber) defaultBlockParameter).getBlockNumber();
+        } else {
+            EthBlock latestEthBlock = web3j.ethGetBlockByNumber(
+                    defaultBlockParameter, false).send();
+            return latestEthBlock.getBlock().getNumber();
+        }
     }
 
     private static List<Transaction> toTransactions(EthBlock ethBlock) {
+        // If you ever see an exception thrown here, it's probably due to an incomplete chain in
+        // Geth/Parity. You should resync to solve.
         return ethBlock.getBlock().getTransactions().stream()
                 .map(transactionResult -> (Transaction) transactionResult.get())
                 .collect(Collectors.toList());

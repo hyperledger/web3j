@@ -167,7 +167,7 @@ public abstract class Contract extends ManagedTransaction {
      * recommended via {@link Contract#executeTransactionAsync}.
      *
      * @param data  to send in transaction
-     * @param value in Wei to send in transaction
+     * @param weiValue in Wei to send in transaction
      * @return {@link Optional} containing our transaction receipt
      * @throws InterruptedException        if the current thread was interrupted
      *                                     while waiting
@@ -175,10 +175,10 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     protected TransactionReceipt executeTransaction(
-            String data, BigInteger value)
+            String data, BigInteger weiValue)
             throws InterruptedException, IOException, TransactionTimeoutException {
 
-        return send(contractAddress, data, value, gasPrice, gasLimit);
+        return send(contractAddress, data, weiValue, gasPrice, gasLimit);
     }
 
     /**
@@ -283,18 +283,18 @@ public abstract class Contract extends ManagedTransaction {
     protected static <T extends Contract> CompletableFuture<T> deployAsync(
             Class<T> type, Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger initialEtherValue) {
+            String binary, String encodedConstructor, BigInteger initialWeiValue) {
 
         return Async.run(() -> deploy(type, web3j, credentials, gasPrice, gasLimit,
-                binary, encodedConstructor, initialEtherValue));
+                binary, encodedConstructor, initialWeiValue));
     }
 
     protected static <T extends Contract> CompletableFuture<T> deployAsync(
             Class<T> type, Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger initialEtherValue) {
+            String binary, String encodedConstructor, BigInteger initialWeiValue) {
 
         return Async.run(() -> deploy(type, web3j, transactionManager, gasPrice, gasLimit,
-                binary, encodedConstructor, initialEtherValue));
+                binary, encodedConstructor, initialWeiValue));
     }
 }

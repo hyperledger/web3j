@@ -58,14 +58,14 @@ public class SolidityFunctionWrapper {
     private static final String WEB3J = "web3j";
     private static final String CREDENTIALS = "credentials";
     private static final String TRANSACTION_MANAGER = "transactionManager";
-    private static final String INITIAL_VALUE = "initialEtherValue";
+    private static final String INITIAL_VALUE = "initialWeiValue";
     private static final String CONTRACT_ADDRESS = "contractAddress";
     private static final String GAS_PRICE = "gasPrice";
     private static final String GAS_LIMIT = "gasLimit";
     private static final String START_BLOCK = "startBlock";
     private static final String END_BLOCK = "endBlock";
 
-    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
+    private static final String CODEGEN_WARNING = "Auto generated code.<br>\n" +
             "<strong>Do not modify!</strong><br>\n" +
             "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
             "} to update.\n";
@@ -449,12 +449,12 @@ public class SolidityFunctionWrapper {
         buildVariableLengthEventConstructor(
                 transactionMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
-        transactionMethodBuilder.addStatement("$T valueList = extractEventParameters(event," +
+        transactionMethodBuilder.addStatement("$T valueList = extractEventParameters(event, " +
                 "transactionReceipt)", ParameterizedTypeName.get(List.class, EventValues.class))
                 .addStatement("$1T responses = new $1T(valueList.size())",
                         ParameterizedTypeName.get(ClassName.get(ArrayList.class),
                                 ClassName.get("", responseClassName)))
-                .beginControlFlow("for($T eventValues : valueList)", EventValues.class)
+                .beginControlFlow("for ($T eventValues : valueList)", EventValues.class)
                 .addStatement("$1T typedResponse = new $1T()",
                         ClassName.get("", responseClassName))
                 .addCode(buildTypedResponse("typedResponse", indexedParameters,

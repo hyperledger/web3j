@@ -18,7 +18,7 @@ import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 
 /**
- * <p>Auto generated code.<br>
+ * Auto generated code.<br>
  * <strong>Do not modify!</strong><br>
  * Please use {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.
  *
@@ -42,12 +42,12 @@ public final class ShipIt extends Contract {
         return executeCallMultipleValueReturnAsync(function);
     }
 
-    public static Future<ShipIt> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue) {
-        return deployAsync(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialEtherValue);
+    public static Future<ShipIt> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) {
+        return deployAsync(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialWeiValue);
     }
 
-    public static Future<ShipIt> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue) {
-        return deployAsync(ShipIt.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialEtherValue);
+    public static Future<ShipIt> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) {
+        return deployAsync(ShipIt.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialWeiValue);
     }
 
     public static ShipIt load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

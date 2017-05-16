@@ -58,7 +58,9 @@ public class ObservableIT {
 
     @Test
     public void testReplayObservable() throws Exception {
-        run(web3j.replayBlocksObservable(BigInteger.ZERO, BigInteger.valueOf(EVENT_COUNT), true));
+        run(web3j.replayBlocksObservable(
+                new DefaultBlockParameterNumber(0),
+                new DefaultBlockParameterNumber(EVENT_COUNT), true));
     }
 
     @Test
@@ -67,7 +69,8 @@ public class ObservableIT {
                 .send();
         BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
         run(web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
-                latestBlockNumber.subtract(BigInteger.ONE), false));
+                new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
+                false));
     }
 
     private <T> void run(Observable<T> observable) throws Exception {

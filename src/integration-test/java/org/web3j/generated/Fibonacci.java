@@ -87,12 +87,12 @@ public final class Fibonacci extends Contract {
         return executeCallSingleValueReturnAsync(function);
     }
 
-    public static Future<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue) {
-        return deployAsync(Fibonacci.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialEtherValue);
+    public static Future<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) {
+        return deployAsync(Fibonacci.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialWeiValue);
     }
 
-    public static Future<Fibonacci> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialEtherValue) {
-        return deployAsync(Fibonacci.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialEtherValue);
+    public static Future<Fibonacci> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) {
+        return deployAsync(Fibonacci.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialWeiValue);
     }
 
     public static Fibonacci load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
