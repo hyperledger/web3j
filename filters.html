@@ -100,6 +100,55 @@ for details of these refer to the
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java">Web3jRx</a>
 interface.</p>
 </div>
+<div class="section" id="replay-filters">
+<h2>Replay filters<a class="headerlink" href="#replay-filters" title="Permalink to this headline">¶</a></h2>
+<p>web3j also provides filters for replaying block and transaction history.</p>
+<p>To replay a range of blocks from the blockchain:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">replayBlocksObservable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">endBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">fullTxObjects</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>To replay the individual transactions contained within a range of blocks:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">replayTransactionsObservable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">endBlockNumber</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>You can also get web3j to replay all blocks up to the most current, and provide notification
+(via the submitted Observable) once you&#8217;ve caught up:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">catchUpToLatestBlockObservable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">fullTxObjects</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">onCompleteObservable</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>Or, if you&#8217;d rather replay all blocks to the most current, then be notified of new subsequent
+blocks being created:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">catchUpToLatestAndSubscribeToNewBlocksObservable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">fullTxObjects</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>As above, but with transactions contained within blocks:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">catchUpToLatestAndSubscribeToNewTransactionsObservable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>All of the above filters are exported via the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java">Web3jRx</a>
+interface.</p>
+</div>
 <div class="section" id="topic-filters-and-evm-events">
 <h2>Topic filters and EVM events<a class="headerlink" href="#topic-filters-and-evm-events" title="Permalink to this headline">¶</a></h2>
 <p>Topic filters capture details of Ethereum Virtual Machine (EVM) events taking place in the network.
@@ -222,6 +271,7 @@ for further examples.</p>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Filters and Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#block-and-transaction-filters">Block and transaction filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#replay-filters">Replay filters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#topic-filters-and-evm-events">Topic filters and EVM events</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#a-note-on-functional-composition">A note on functional composition</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#further-examples">Further examples</a></li>
