@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Smart Contracts &mdash; web3j 2.1.0 documentation</title>
+    <title>Smart Contracts &mdash; web3j 2.2.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2.1.0',
+        VERSION:     '2.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 2.1.0 documentation" href="index.html" />
+    <link rel="top" title="web3j 2.2.1 documentation" href="index.html" />
     <link rel="next" title="Filters and Events" href="filters.html" />
     <link rel="prev" title="Transactions" href="transactions.html" />
    
@@ -169,6 +169,7 @@ files.</p>
 <li><a class="reference internal" href="#construction-and-deployment"><span>Construction and deployment</span></a></li>
 <li><a class="reference internal" href="#invoking-transactions"><span>Invoking transactions and events</span></a></li>
 <li><a class="reference internal" href="#constant-methods"><span>Calling constant methods</span></a></li>
+<li><a class="reference internal" href="#contract-validity"><span>Examples</span></a></li>
 </ul>
 <p>Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.</p>
@@ -187,10 +188,20 @@ supplied credentials, and constructor parameter values.</p>
 <p>It returns a new smart contract wrapper instance which contains the underlying address of the
 smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
 smart contract, simply pass in it&#8217;s address:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="k">new</span> <span class="n">YourSmartContract</span><span class="o">(</span>
-        <span class="s">&quot;0x...&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
+        <span class="s">&quot;0x&lt;address&gt;&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
 </pre></div>
 </div>
+<p>Using this method, you may want to ascertain that the contract address that you have loaded is the
+smart contract that you expect. For this you can use the isValid smart contract method, which will
+only return true if the deployed bytecode at the contract address matches the bytecode in the
+smart contract wrapper.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>contract.isValid();  // returns false if the contract bytecode does not match what&#8217;s deployed</dt>
+<dd>// at the provided addres</dd>
+</dl>
+</div></blockquote>
 </div>
 <div class="section" id="transaction-managers">
 <span id="id2"></span><h2>Transaction Managers<a class="headerlink" href="#transaction-managers" title="Permalink to this headline">¶</a></h2>
@@ -255,6 +266,13 @@ object.:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">EventValues</span> <span class="n">eventValues</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">processSomeEvent</span><span class="o">(</span><span class="n">transactionReceipt</span><span class="o">);</span>
 </pre></div>
 </div>
+<p>Alternatively you can use an Observable filter instead which will listen for events associated with
+the smart contract:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">contract</span><span class="o">.</span><span class="na">someEventObservable</span><span class="o">(</span><span class="n">startBlock</span><span class="o">,</span> <span class="n">endBlock</span><span class="o">).</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">event</span> <span class="o">-&gt;</span> <span class="o">...);</span>
+</pre></div>
+</div>
+<p>For more information on working with Observable filters, refer to <a class="reference internal" href="filters.html"><em>Filters and Events</em></a>.</p>
 <p><strong>Remember</strong> that for any indexed array, bytes and string Solidity parameter
 types, a Keccak-256 hash of their values will be returned, see the
 <a class="reference external" href="http://solidity.readthedocs.io/en/latest/contracts.html#events">documentation</a>
@@ -270,7 +288,7 @@ contract they were generated from, the only addition is that the call is wrapped
 </div>
 </div>
 <div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<span id="contract-validity"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <p>Please refer to <a class="reference internal" href="#eip"><span>EIP-20 Ethereum token standard smart contract</span></a>.</p>
 </div>
 </div>
