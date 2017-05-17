@@ -1,6 +1,7 @@
 package org.web3j.tx;
 
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,12 +29,14 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
+import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,6 +50,8 @@ import static org.mockito.Mockito.when;
 
 
 public class ContractTest extends ManagedTransactionTester {
+
+    private static final String TEST_CONTRACT_BINARY = "12345";
 
     private TestContract contract;
 
@@ -71,23 +76,43 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testDeploy() throws Exception {
+        TransactionReceipt transactionReceipt = createTransactionReceipt();
+        Contract deployedContract = deployContract(transactionReceipt);
 
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setContractAddress(ADDRESS);
-
-        prepareTransaction(transactionReceipt);
-
-        String encodedConstructor = FunctionEncoder.encodeConstructor(
-                Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
-
-        TestContract deployedContract = TestContract.deployAsync(
-                TestContract.class, web3j, SampleKeys.CREDENTIALS,
-                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
-                "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
         assertThat(deployedContract.getContractAddress(), is(ADDRESS));
         assertTrue(deployedContract.getTransactionReceipt().isPresent());
         assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
+    }
+
+    private TransactionReceipt createTransactionReceipt() {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setContractAddress(ADDRESS);
+        return transactionReceipt;
+    }
+
+    @Test
+    public void testIsValid() throws Exception {
+        prepareEthGetCode(TEST_CONTRACT_BINARY);
+
+        Contract contract = deployContract(createTransactionReceipt());
+        assertTrue(contract.isValid());
+    }
+
+    @Test
+    public void testIsValidDifferentCode() throws Exception {
+        prepareEthGetCode(TEST_CONTRACT_BINARY + "0");
+
+        Contract contract = deployContract(createTransactionReceipt());
+        assertFalse(contract.isValid());
+    }
+
+    @Test
+    public void testIsValidEmptyCode() throws Exception {
+        prepareEthGetCode("");
+
+        Contract contract = deployContract(createTransactionReceipt());
+        assertFalse(contract.isValid());
     }
 
     @Test(expected = RuntimeException.class)
@@ -235,18 +260,43 @@ public class ContractTest extends ManagedTransactionTester {
         }
     }
 
+    private Contract deployContract(TransactionReceipt transactionReceipt)
+            throws ExecutionException, InterruptedException, IOException {
+
+        prepareTransaction(transactionReceipt);
+
+        String encodedConstructor = FunctionEncoder.encodeConstructor(
+                Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
+
+        return TestContract.deployAsync(
+                TestContract.class, web3j, SampleKeys.CREDENTIALS,
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
+                "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
+    }
+
+    private void prepareEthGetCode(String binary) throws IOException {
+        EthGetCode ethGetCode = new EthGetCode();
+        ethGetCode.setResult(Numeric.prependHexPrefix(binary));
+
+        Request ethGetCodeRequest = mock(Request.class);
+        when(ethGetCodeRequest.send())
+                .thenReturn(ethGetCode);
+        when(web3j.ethGetCode(ADDRESS, DefaultBlockParameterName.LATEST))
+                .thenReturn(ethGetCodeRequest);
+    }
+
     private static class TestContract extends Contract {
         public TestContract(
                 String contractAddress, Web3j web3j, Credentials credentials,
                 BigInteger gasPrice, BigInteger gasLimit) {
-            super("0x", contractAddress, web3j, credentials, gasPrice, gasLimit);
+            super(TEST_CONTRACT_BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
         }
 
         public TestContract(
                 String contractAddress,
                 Web3j web3j, TransactionManager transactionManager,
                 BigInteger gasPrice, BigInteger gasLimit) {
-            super("0x", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
         }
 
         public Future<Utf8String> callSingleValue() {

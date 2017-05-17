@@ -27,6 +27,7 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
+import org.web3j.utils.Numeric;
 
 
 /**
@@ -92,6 +93,18 @@ public abstract class Contract extends ManagedTransaction {
         return contractBinary;
     }
 
+    /**
+     * Check that the contract deployed at the address associated with this smart contract wrapper
+     * is in fact the contract you believe it is.
+     *
+     * <p>This method uses the
+     * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getcode">eth_getCode</a> method
+     * to get the contract byte code and validates it against the byte code stored in this smart
+     * contract wrapper.
+     *
+     * @return true if the contract is valid
+     * @throws IOException
+     */
     public boolean isValid() throws IOException {
         if (contractAddress.equals("")) {
             throw new UnsupportedOperationException(
@@ -99,8 +112,17 @@ public abstract class Contract extends ManagedTransaction {
                             "contract wrapper with web3j v2.2.0+");
         }
 
-        EthGetCode code = web3j.ethGetCode(contractAddress, DefaultBlockParameterName.LATEST).send();
-        return !code.hasError() && code.getCode().equals(contractBinary);
+        EthGetCode ethGetCode = web3j
+                .ethGetCode(contractAddress, DefaultBlockParameterName.LATEST)
+                .send();
+        if (ethGetCode.hasError()) {
+            return false;
+        }
+
+        String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
+        // There may be multiple contracts in the Solidity bytecode, hence we only check for a
+        // match with a subset
+        return !code.isEmpty() && contractBinary.contains(code);
     }
 
     /**

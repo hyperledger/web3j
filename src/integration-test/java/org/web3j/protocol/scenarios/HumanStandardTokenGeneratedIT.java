@@ -11,6 +11,7 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.web3j.generated.HumanStandardToken.ApprovalEventResponse;
@@ -35,6 +36,8 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                 BigInteger.ZERO,
                 new Uint256(aliceQty), new Utf8String("web3j tokens"),
                 new Uint8(BigInteger.TEN), new Utf8String("w3j$")).get();
+
+        assertTrue(contract.isValid());
 
         assertThat(contract.totalSupply().get(), equalTo(new Uint256(aliceQty)));
 
