@@ -1,22 +1,10 @@
 package org.web3j.codegen;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.Test;
-
 import org.web3j.TempFileProvider;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
@@ -25,6 +13,17 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.utils.Strings;
+
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -297,6 +296,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     public void testShipIt() throws Exception {
         testCodeGeneration("shipit", "ShipIt");
     }
+    @Test
+    public void testUGCToken() throws Exception {
+        ugcContractGeneretor("DAS", "DAS");
+    }
 
     private void testCodeGeneration(String contractName, String inputFileName) throws Exception {
         SolidityFunctionWrapperGenerator.main(Arrays.asList(
@@ -308,6 +311,16 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
         verifyGeneratedCode(tempDirPath + "/org/web3j/unittests/" +
                 Strings.capitaliseFirstLetter(inputFileName) + ".java");
+    }
+
+    private void ugcContractGeneretor(String contractName, String inputFileName) throws Exception {
+        SolidityFunctionWrapperGenerator.main(Arrays.asList(
+                "/Users/fanjl/ugcoin/output/DAS.bin",
+                "/Users/fanjl/ugcoin/output/DAS.abi",
+                "-p", "com.ugc.gameserver.domain.contract",
+                "-o", "/Users/fanjl/IdeaProjects/ugc-game-server/src/main/java"
+        ).toArray(new String[0])); // https://shipilev.net/blog/2016/arrays-wisdom-ancients/
+
     }
 
     private void verifyGeneratedCode(String sourceFile) throws IOException {
