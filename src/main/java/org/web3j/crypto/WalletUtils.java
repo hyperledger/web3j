@@ -93,8 +93,9 @@ public class WalletUtils {
         String osName = osName1.toLowerCase();
 
         if (osName.startsWith("mac")) {
-            return String.format("%s%sLibrary%sEthereum", 
-            		System.getProperty("user.home"), File.separator, File.separator);
+            return String.format(
+                    "%s%sLibrary%sEthereum", System.getProperty("user.home"), File.separator,
+                    File.separator);
         } else if (osName.startsWith("win")) {
             return String.format("%s%sEthereum", System.getenv("APPDATA"), File.separator);
         } else {
@@ -103,7 +104,8 @@ public class WalletUtils {
     }
 
     public static String getTestnetKeyDirectory() {
-        return String.format("%s%stestnet%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
+        return String.format(
+                "%s%stestnet%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
     }
 
     public static String getMainnetKeyDirectory() {

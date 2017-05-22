@@ -26,13 +26,16 @@ public class Utf8String implements Type<String> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Utf8String that = (Utf8String) o;
 
         return value != null ? value.equals(that.value) : that.value == null;
-
     }
 
     @Override

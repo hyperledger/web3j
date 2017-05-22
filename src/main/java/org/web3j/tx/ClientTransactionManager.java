@@ -10,7 +10,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 
 /**
- * <p>TransactionManager implementation for using an Ethereum node to transact.
+ * TransactionManager implementation for using an Ethereum node to transact.
  *
  * <p><b>Note</b>: accounts must be unlocked on the node for transactions to be successful.
  */

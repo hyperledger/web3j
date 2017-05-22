@@ -1,5 +1,8 @@
 package org.web3j.protocol.parity;
 
+import java.math.BigInteger;
+import java.util.Map;
+
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
@@ -16,9 +19,6 @@ import org.web3j.protocol.parity.methods.response.PersonalSign;
 import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
 import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
 
-import java.math.BigInteger;
-import java.util.Map;
-
 /**
  * JSON-RPC Request object building factory for Parity.
  */
@@ -29,7 +29,7 @@ public interface Parity extends Web3j {
 
     Request<?, PersonalSignerEnabled> personalSignerEnabled();
 
-    Request<?, PersonalSign> personalSign(String HexMessage, String accountId, String password);
+    Request<?, PersonalSign> personalSign(String hexMessage, String accountId, String password);
 
     Request<?, PersonalEcRecover> personalEcRecover(String hexMessage, String signedMessage);
 
@@ -39,14 +39,16 @@ public interface Parity extends Web3j {
 
     Request<?, NewAccountIdentifier> personalNewAccountFromPhrase(String phrase, String password);
 
-    Request<?, NewAccountIdentifier> personalNewAccountFromWallet(WalletFile walletFile, String password);
+    Request<?, NewAccountIdentifier> personalNewAccountFromWallet(
+            WalletFile walletFile, String password);
 
     Request<?, PersonalUnlockAccount> personalUnlockAccount(
             String accountId, String password, BigInteger duration);
 
     Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password);
 
-    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> personalSignAndSendTransaction(
+    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
+            personalSignAndSendTransaction(
             Transaction transaction, String password);
 
     Request<?, VoidResponse> personalSetAccountName(

@@ -60,7 +60,8 @@ public class FastRawTransactionManagerIT extends Scenario {
         for (int i = 0; i < 30 && !transactionReceipts.isEmpty(); i++) {
             Thread.sleep(15000);
 
-            for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator(); iterator.hasNext(); ) {
+            for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator();
+                    iterator.hasNext(); ) {
                 Future<TransactionReceipt> transactionReceiptFuture = iterator.next();
 
                 if (transactionReceiptFuture.isDone()) {

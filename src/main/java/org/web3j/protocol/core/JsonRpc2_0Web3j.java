@@ -1,6 +1,5 @@
 package org.web3j.protocol.core;
 
-
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -322,7 +321,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(
+    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
+            ethSendTransaction(
             Transaction transaction) {
         return new Request<>(
                 "eth_sendTransaction",
@@ -333,7 +333,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(
+    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
+            ethSendRawTransaction(
             String signedTransactionData) {
         return new Request<>(
                 "eth_sendRawTransaction",
@@ -565,7 +566,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+    public Request<?, EthLog> ethGetLogs(
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),
@@ -585,7 +587,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthSubmitWork> ethSubmitWork(String nonce, String headerPowHash, String mixDigest) {
+    public Request<?, EthSubmitWork> ethSubmitWork(
+            String nonce, String headerPowHash, String mixDigest) {
         return new Request<>(
                 "eth_submitWork",
                 Arrays.asList(nonce, headerPowHash, mixDigest),
@@ -808,7 +811,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-    catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
+            catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestTransactionObservable(startBlock);
     }
 

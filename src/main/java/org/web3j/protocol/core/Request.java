@@ -1,6 +1,5 @@
 package org.web3j.protocol.core;
 
-
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -9,7 +8,6 @@ import java.util.concurrent.ExecutionException;
 import rx.Observable;
 
 import org.web3j.protocol.Web3jService;
-
 
 public class Request<S, T extends Response> {
     private String jsonrpc = "2.0";

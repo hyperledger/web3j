@@ -3,7 +3,7 @@ package org.web3j.protocol.core.methods.response;
 import org.web3j.protocol.core.Response;
 
 /**
- * eth_submitHashrate
+ * eth_submitHashrate.
  */
 public class EthSubmitHashrate extends Response<Boolean> {
 

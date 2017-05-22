@@ -6,7 +6,7 @@ import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
 
 /**
- * eth_hashrate
+ * eth_hashrate.
  */
 public class EthHashrate extends Response<String> {
     public BigInteger getHashrate() {

@@ -67,12 +67,15 @@ public class CoreIT {
 
     public CoreIT() {
         // HTTP Logging
-        System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty(
+                "org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+        System.setProperty(
+                "org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
 
         // IPC Logging
-//        System.setProperty("org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
+        // System.setProperty(
+        //      "org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
     }
 
     @Before
@@ -230,7 +233,7 @@ public class CoreIT {
     @Ignore  // TODO: Once account unlock functionality is available
     @Test
     public void testEthSign() throws Exception {
-//        EthSign ethSign = web3j.ethSign();
+        // EthSign ethSign = web3j.ethSign();
     }
 
     @Ignore  // TODO: Once account unlock functionality is available
@@ -385,9 +388,11 @@ public class CoreIT {
 
     @Test
     public void testEthCompileSolidity() throws Exception {
-        String sourceCode = "pragma solidity ^0.4.0;" +
-                "\ncontract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }" +
-                "\ncontract test2 { function multiply2(uint a) returns(uint d) {   return a * 7;   } }";
+        String sourceCode = "pragma solidity ^0.4.0;"
+                + "\ncontract test { function multiply(uint a) returns(uint d) {"
+                + "   return a * 7;   } }"
+                + "\ncontract test2 { function multiply2(uint a) returns(uint d) {"
+                + "   return a * 7;   } }";
         EthCompileSolidity ethCompileSolidity = web3j.ethCompileSolidity(sourceCode)
                 .send();
         assertNotNull(ethCompileSolidity.getCompiledSolidity());
@@ -448,7 +453,8 @@ public class CoreIT {
 
     @Test
     public void testEthGetLogs() throws Exception {
-        org.web3j.protocol.core.methods.request.EthFilter ethFilter = new org.web3j.protocol.core.methods.request.EthFilter(
+        org.web3j.protocol.core.methods.request.EthFilter ethFilter =
+                new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST,
                 config.validContractAddress()
@@ -461,11 +467,11 @@ public class CoreIT {
         assertFalse(logs.isEmpty());
     }
 
-//    @Test
-//    public void testEthGetWork() throws Exception {
-//        EthGetWork ethGetWork = requestFactory.ethGetWork();
-//        assertNotNull(ethGetWork.getResult());
-//    }
+    // @Test
+    // public void testEthGetWork() throws Exception {
+    //     EthGetWork ethGetWork = requestFactory.ethGetWork();
+    //     assertNotNull(ethGetWork.getResult());
+    // }
 
     @Test
     public void testEthSubmitWork() throws Exception {

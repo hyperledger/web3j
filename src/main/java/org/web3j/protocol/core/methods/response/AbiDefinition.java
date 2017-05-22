@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * AbiDefinition wrapper
+ * AbiDefinition wrapper.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AbiDefinition {
@@ -94,16 +94,20 @@ public class AbiDefinition {
         if (isPayable() != that.isPayable()) {
             return false;
         }
-        if (getInputs() != null ? !getInputs().equals(that.getInputs()) : that.getInputs() != null) {
+        if (getInputs() != null
+                ? !getInputs().equals(that.getInputs()) : that.getInputs() != null) {
             return false;
         }
-        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+        if (getName() != null
+                ? !getName().equals(that.getName()) : that.getName() != null) {
             return false;
         }
-        if (getOutputs() != null ? !getOutputs().equals(that.getOutputs()) : that.getOutputs() != null) {
+        if (getOutputs() != null
+                ? !getOutputs().equals(that.getOutputs()) : that.getOutputs() != null) {
             return false;
         }
-        return getType() != null ? getType().equals(that.getType()) : that.getType() == null;
+        return getType() != null
+                ? getType().equals(that.getType()) : that.getType() == null;
     }
 
     @Override
@@ -168,10 +172,12 @@ public class AbiDefinition {
             if (isIndexed() != namedType.isIndexed()) {
                 return false;
             }
-            if (getName() != null ? !getName().equals(namedType.getName()) : namedType.getName() != null) {
+            if (getName() != null
+                    ? !getName().equals(namedType.getName()) : namedType.getName() != null) {
                 return false;
             }
-            return getType() != null ? getType().equals(namedType.getType()) : namedType.getType() == null;
+            return getType() != null
+                    ? getType().equals(namedType.getType()) : namedType.getType() == null;
         }
 
         @Override

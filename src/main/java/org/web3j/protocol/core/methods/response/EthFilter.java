@@ -6,7 +6,7 @@ import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
 
 /**
- * eth_newFilter
+ * eth_newFilter.
  */
 public class EthFilter extends Response<String> {
     public BigInteger getFilterId() {

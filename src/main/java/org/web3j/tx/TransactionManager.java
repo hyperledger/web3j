@@ -42,7 +42,8 @@ public abstract class TransactionManager {
             String data, BigInteger value)
             throws InterruptedException, IOException, TransactionTimeoutException {
 
-        EthSendTransaction ethSendTransaction = sendTransaction(gasPrice, gasLimit, to, data, value);
+        EthSendTransaction ethSendTransaction = sendTransaction(
+                gasPrice, gasLimit, to, data, value);
         return processResponse(ethSendTransaction);
     }
 
@@ -56,8 +57,8 @@ public abstract class TransactionManager {
     private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
             throws InterruptedException, IOException, TransactionTimeoutException {
         if (transactionResponse.hasError()) {
-            throw new RuntimeException("Error processing transaction request: " +
-                    transactionResponse.getError().getMessage());
+            throw new RuntimeException("Error processing transaction request: "
+                    + transactionResponse.getError().getMessage());
         }
 
         String transactionHash = transactionResponse.getTransactionHash();
@@ -87,9 +88,9 @@ public abstract class TransactionManager {
             }
         }
 
-        throw new TransactionTimeoutException("Transaction receipt was not generated after " +
-                ((sleepDuration * attempts) / 1000 +
-                        " seconds for transaction: " + transactionHash));
+        throw new TransactionTimeoutException("Transaction receipt was not generated after "
+                + ((sleepDuration * attempts) / 1000
+                + " seconds for transaction: " + transactionHash));
     }
 
     private Optional<TransactionReceipt> sendTransactionReceiptRequest(
@@ -97,8 +98,8 @@ public abstract class TransactionManager {
         EthGetTransactionReceipt transactionReceipt =
                 web3j.ethGetTransactionReceipt(transactionHash).send();
         if (transactionReceipt.hasError()) {
-            throw new RuntimeException("Error processing request: " +
-                    transactionReceipt.getError().getMessage());
+            throw new RuntimeException("Error processing request: "
+                    + transactionReceipt.getError().getMessage());
         }
 
         return transactionReceipt.getTransactionReceipt();

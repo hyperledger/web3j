@@ -1,16 +1,16 @@
 package org.web3j.codegen;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.web3j.utils.Collection.tail;
 import static org.web3j.utils.Console.exitError;
@@ -20,10 +20,10 @@ import static org.web3j.utils.Console.exitError;
  */
 public class SolidityFunctionWrapperGenerator {
 
-    private static final String USAGE = "solidity generate " +
-            "<input binary file>.bin <input abi file>.abi " +
-            "[-p|--package <base package name>] " +
-            "-o|--output <destination base directory>";
+    private static final String USAGE = "solidity generate "
+            + "<input binary file>.bin <input abi file>.abi "
+            + "[-p|--package <base package name>] "
+            + "-o|--output <destination base directory>";
 
     private String binaryFileLocation;
     private String absFileLocation;

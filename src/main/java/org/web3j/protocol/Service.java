@@ -9,9 +9,9 @@ import org.web3j.protocol.core.Response;
 import org.web3j.utils.Async;
 
 /**
- * Base service implementation
+ * Base service implementation.
  */
-public abstract class Service implements Web3jService{
+public abstract class Service implements Web3jService {
 
     protected final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 

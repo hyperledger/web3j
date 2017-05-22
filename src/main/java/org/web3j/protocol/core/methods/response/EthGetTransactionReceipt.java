@@ -13,7 +13,7 @@ import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 
 /**
- * eth_getTransactionReceipt
+ * eth_getTransactionReceipt.
  */
 public class EthGetTransactionReceipt extends Response<TransactionReceipt> {
 

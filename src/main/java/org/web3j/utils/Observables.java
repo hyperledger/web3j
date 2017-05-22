@@ -26,9 +26,9 @@ public class Observables {
 
         return Observable.create(subscriber -> {
             for (BigInteger i = startValue;
-                 i.compareTo(endValue) < 1 &&
-                         !subscriber.isUnsubscribed();
-                 i = i.add(BigInteger.ONE)) {
+                    i.compareTo(endValue) < 1
+                            && !subscriber.isUnsubscribed();
+                    i = i.add(BigInteger.ONE)) {
                 subscriber.onNext(i);
             }
 

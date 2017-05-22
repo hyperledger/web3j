@@ -14,7 +14,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.utils.Numeric;
 
 /**
- * <p>TransactionManager implementation using Ethereum wallet file to create and sign transactions
+ * TransactionManager implementation using Ethereum wallet file to create and sign transactions
  * locally.
  *
  * <p>This transaction manager provides support for specifying the chain id for transactions as per

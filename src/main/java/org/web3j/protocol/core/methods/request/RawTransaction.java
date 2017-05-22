@@ -5,9 +5,9 @@ import java.math.BigInteger;
 import org.web3j.utils.Numeric;
 
 /**
- * <p>Transaction class used for signing transactions locally.<br>
+ * Transaction class used for signing transactions locally.<br>
  * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">
- * yellow paper</a>.</p>
+ * yellow paper</a>.
  */
 public class RawTransaction {
 

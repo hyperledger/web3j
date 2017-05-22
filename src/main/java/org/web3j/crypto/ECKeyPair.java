@@ -56,15 +56,22 @@ public class ECKeyPair {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ECKeyPair ecKeyPair = (ECKeyPair) o;
 
-        if (privateKey != null ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null)
+        if (privateKey != null
+                ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null) {
             return false;
-        return publicKey != null ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
+        }
 
+        return publicKey != null
+                ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
     }
 
     @Override

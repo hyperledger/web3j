@@ -51,9 +51,11 @@ public class Sign {
                 break;
             }
         }
-        if (recId == -1)
+        if (recId == -1) {
             throw new RuntimeException(
                     "Could not construct a recoverable key. This should never happen.");
+        }
+
         int headerByte = recId + 27;
 
         // 1 header + 32 bytes for R + 32 bytes for S
@@ -124,8 +126,9 @@ public class Sign {
         ECPoint R = decompressKey(x, (recId & 1) == 1);
         //   1.4. If nR != point at infinity, then do another iteration of Step 1 (callers
         //        responsibility).
-        if (!R.multiply(n).isInfinity())
+        if (!R.multiply(n).isInfinity()) {
             return null;
+        }
         //   1.5. Compute e from M using Steps 2 and 3 of ECDSA signature verification.
         BigInteger e = new BigInteger(1, message);
         //   1.6. For k from 1 to 2 do the following.   (loop is outside this function via
@@ -183,8 +186,9 @@ public class Sign {
         int header = signatureData.getV() & 0xFF;
         // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
         //                  0x1D = second key with even y, 0x1E = second key with odd y
-        if (header < 27 || header > 34)
+        if (header < 27 || header > 34) {
             throw new SignatureException("Header byte out of range: " + header);
+        }
 
         ECDSASignature sig = new ECDSASignature(
                 new BigInteger(1, signatureData.getR()),
@@ -193,8 +197,9 @@ public class Sign {
         byte[] messageHash = Hash.sha3(message);
         int recId = header - 27;
         BigInteger key = recoverFromSignature(recId, sig, messageHash);
-        if (key == null)
+        if (key == null) {
             throw new SignatureException("Could not recover public key from signature");
+        }
         return key;
     }
 
@@ -292,15 +297,22 @@ public class Sign {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             SignatureData that = (SignatureData) o;
 
-            if (v != that.v) return false;
-            if (!Arrays.equals(r, that.r)) return false;
+            if (v != that.v) {
+                return false;
+            }
+            if (!Arrays.equals(r, that.r)) {
+                return false;
+            }
             return Arrays.equals(s, that.s);
-
         }
 
         @Override

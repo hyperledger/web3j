@@ -27,12 +27,18 @@ public class BytesType implements Type<byte[]> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         BytesType bytesType = (BytesType) o;
 
-        if (!Arrays.equals(value, bytesType.value)) return false;
+        if (!Arrays.equals(value, bytesType.value)) {
+            return false;
+        }
         return type.equals(bytesType.type);
 
     }

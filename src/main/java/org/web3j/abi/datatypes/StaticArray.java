@@ -1,6 +1,5 @@
 package org.web3j.abi.datatypes;
 
-
 import java.util.List;
 
 /**

@@ -30,7 +30,8 @@ public class SendEtherIT extends Scenario {
         Transaction transaction = Transaction.createEtherTransaction(
                 ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
 
-        EthSendTransaction ethSendTransaction = parity.ethSendTransaction(transaction).sendAsync().get();
+        EthSendTransaction ethSendTransaction =
+                parity.ethSendTransaction(transaction).sendAsync().get();
 
         String transactionHash = ethSendTransaction.getTransactionHash();
 

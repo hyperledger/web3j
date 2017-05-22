@@ -5,7 +5,7 @@ import java.util.List;
 import org.web3j.protocol.core.Response;
 
 /**
- * eth_getWork
+ * eth_getWork.
  */
 public class EthGetWork extends Response<List<String>> {
 

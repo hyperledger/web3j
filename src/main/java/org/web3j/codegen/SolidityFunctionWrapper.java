@@ -1,5 +1,16 @@
 package org.web3j.codegen;
 
+import java.io.File;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Future;
+
+import javax.lang.model.element.Modifier;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
@@ -11,6 +22,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
@@ -36,19 +48,6 @@ import org.web3j.utils.Collection;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Future;
-
-import javax.lang.model.element.Modifier;
-
-import rx.functions.Func1;
-
 /**
  * Generate Java Classes based on generated Solidity bin and abi files.
  */
@@ -65,13 +64,15 @@ public class SolidityFunctionWrapper {
     private static final String START_BLOCK = "startBlock";
     private static final String END_BLOCK = "endBlock";
 
-    private static final String CODEGEN_WARNING = "Auto generated code.<br>\n" +
-            "<strong>Do not modify!</strong><br>\n" +
-            "Please use {@link " + SolidityFunctionWrapperGenerator.class.getName() +
-            "} to update.\n";
+    private static final String CODEGEN_WARNING = "Auto generated code.<br>\n"
+            + "<strong>Do not modify!</strong><br>\n"
+            + "Please use the "
+            + "<a href=\"https://docs.web3j.io/command_line.html\">web3j command line tools</a>, "
+            + "or {@link " + SolidityFunctionWrapperGenerator.class.getName() + "} to update.\n";
 
     public void generateJavaFiles(
-            String contractName, String bin, String abi, String destinationDirLocation, String basePackageName)
+            String contractName, String bin, String abi, String destinationDirLocation,
+            String basePackageName)
             throws IOException, ClassNotFoundException {
         String className = Strings.capitaliseFirstLetter(contractName);
 
@@ -79,7 +80,8 @@ public class SolidityFunctionWrapper {
 
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER));
-        classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, loadContractDefinition(abi)));
+        classBuilder.addMethods(
+                buildFunctionDefinitions(className, classBuilder, loadContractDefinition(abi)));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
 
@@ -194,9 +196,9 @@ public class SolidityFunctionWrapper {
             MethodSpec.Builder methodBuilder, String className, String inputParams,
             String authName) {
 
-        methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor(" +
-                        "$T.<$T>asList($L)" +
-                        ")",
+        methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor("
+                        + "$T.<$T>asList($L)"
+                        + ")",
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         methodBuilder.addStatement(
                 "return deployAsync($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
@@ -267,10 +269,10 @@ public class SolidityFunctionWrapper {
 
     /**
      * Public Solidity arrays and maps require an unnamed input parameter - multiple if they
-     * require a struct type
+     * require a struct type.
      *
-     * @param name
-     * @param idx
+     * @param name parameter name
+     * @param idx parameter index
      * @return non-empty parameter name
      */
     static String createValidParamName(String name, int idx) {
@@ -326,8 +328,9 @@ public class SolidityFunctionWrapper {
                     ClassName.get(Future.class), outputParameterTypes.get(0)));
 
             TypeName typeName = outputParameterTypes.get(0);
-            methodBuilder.addStatement("$T function = " +
-                            "new $T($S, \n$T.<$T>asList($L), \n$T.<$T<?>>asList(new $T<$T>() {}))",
+            methodBuilder.addStatement("$T function = "
+                            + "new $T($S, \n$T.<$T>asList($L), "
+                            + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
                     Function.class, Function.class, functionName,
                     Arrays.class, Type.class, inputParams,
                     Arrays.class, TypeReference.class,
@@ -356,8 +359,8 @@ public class SolidityFunctionWrapper {
 
         methodBuilder.returns(ParameterizedTypeName.get(Future.class, TransactionReceipt.class));
 
-        methodBuilder.addStatement("$T function = new $T($S, $T.<$T>asList($L), $T" +
-                        ".<$T<?>>emptyList())",
+        methodBuilder.addStatement("$T function = new $T($S, $T.<$T>asList($L), $T"
+                        + ".<$T<?>>emptyList())",
                 Function.class, Function.class, functionName,
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
@@ -422,8 +425,8 @@ public class SolidityFunctionWrapper {
                         .build())
                 .build();
 
-        observableMethodBuilder.addStatement("$1T filter = new $1T($2L, $3L, " +
-                "getContractAddress())", EthFilter.class, START_BLOCK, END_BLOCK)
+        observableMethodBuilder.addStatement("$1T filter = new $1T($2L, $3L, "
+                + "getContractAddress())", EthFilter.class, START_BLOCK, END_BLOCK)
                 .addStatement("filter.addSingleTopic($T.encode(event))", EventEncoder.class)
                 .addStatement("return web3j.ethLogObservable(filter).map($L)", converter);
 
@@ -435,13 +438,14 @@ public class SolidityFunctionWrapper {
             functionName, List<NamedTypeName> indexedParameters, List<NamedTypeName>
                                                                    nonIndexedParameters) throws
             ClassNotFoundException {
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get
-                (List.class), ClassName.get("", responseClassName));
 
-        String generatedFunctionName = "get" + Strings.capitaliseFirstLetter(functionName) +
-                "Events";
-        MethodSpec.Builder transactionMethodBuilder = MethodSpec.methodBuilder
-                (generatedFunctionName)
+        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                ClassName.get(List.class), ClassName.get("", responseClassName));
+
+        String generatedFunctionName = "get" + Strings.capitaliseFirstLetter(functionName)
+                + "Events";
+        MethodSpec.Builder transactionMethodBuilder = MethodSpec
+                .methodBuilder(generatedFunctionName)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(TransactionReceipt.class, "transactionReceipt")
                 .returns(parameterizedTypeName);
@@ -449,8 +453,8 @@ public class SolidityFunctionWrapper {
         buildVariableLengthEventConstructor(
                 transactionMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
-        transactionMethodBuilder.addStatement("$T valueList = extractEventParameters(event, " +
-                "transactionReceipt)", ParameterizedTypeName.get(List.class, EventValues.class))
+        transactionMethodBuilder.addStatement("$T valueList = extractEventParameters(event, "
+                + "transactionReceipt)", ParameterizedTypeName.get(List.class, EventValues.class))
                 .addStatement("$1T responses = new $1T(valueList.size())",
                         ParameterizedTypeName.get(ClassName.get(ArrayList.class),
                                 ClassName.get("", responseClassName)))
@@ -480,11 +484,11 @@ public class SolidityFunctionWrapper {
         for (AbiDefinition.NamedType namedType : inputs) {
 
             if (namedType.isIndexed()) {
-                indexedParameters.add(new NamedTypeName(namedType.getName(), buildTypeName
-                        (namedType.getType())));
+                indexedParameters.add(
+                        new NamedTypeName(namedType.getName(), buildTypeName(namedType.getType())));
             } else {
-                nonIndexedParameters.add(new NamedTypeName(namedType.getName(), buildTypeName
-                        (namedType.getType())));
+                nonIndexedParameters.add(
+                        new NamedTypeName(namedType.getName(), buildTypeName(namedType.getType())));
             }
         }
 
@@ -573,9 +577,9 @@ public class SolidityFunctionWrapper {
                 ", ",
                 typeName -> "new $T<$T>() {}");
 
-        methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T" +
-                ".<$T<?>>asList(" +
-                asListParams + "))", objects.toArray());
+        methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T"
+                + ".<$T<?>>asList("
+                + asListParams + "))", objects.toArray());
     }
 
     private static void buildVariableLengthEventConstructor(
@@ -612,9 +616,9 @@ public class SolidityFunctionWrapper {
                 ", ",
                 typeName -> "new $T<$T>() {}");
 
-        methodBuilder.addStatement("final $T event = new $T($S, \n" +
-                "$T.<$T<?>>asList(" + indexedAsListParams + "),\n" +
-                "$T.<$T<?>>asList(" + nonIndexedAsListParams + "))", objects.toArray());
+        methodBuilder.addStatement("final $T event = new $T($S, \n"
+                + "$T.<$T<?>>asList(" + indexedAsListParams + "),\n"
+                + "$T.<$T<?>>asList(" + nonIndexedAsListParams + "))", objects.toArray());
     }
 
     private List<AbiDefinition> loadContractDefinition(String abi) throws IOException {

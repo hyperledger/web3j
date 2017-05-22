@@ -47,7 +47,6 @@ public class HumanStandardTokenIT extends Scenario {
 
         // deploy contract
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
-        BigInteger bobQty = BigInteger.ZERO;
 
         String contractAddress = createContract(ALICE, aliceQty);
 
@@ -62,6 +61,8 @@ public class HumanStandardTokenIT extends Scenario {
                 ALICE, BOB.getAddress(), contractAddress, transferQuantity);
 
         aliceQty = aliceQty.subtract(transferQuantity);
+
+        BigInteger bobQty = BigInteger.ZERO;
         bobQty = bobQty.add(transferQuantity);
 
         confirmBalance(
@@ -173,7 +174,9 @@ public class HumanStandardTokenIT extends Scenario {
     }
 
     private void sendTransferTokensTransaction(
-            Credentials credentials, String to, String contractAddress, BigInteger qty) throws Exception {
+            Credentials credentials, String to, String contractAddress, BigInteger qty)
+            throws Exception {
+
         Function function = transfer(to, qty);
         String functionHash = execute(credentials, function, contractAddress);
 

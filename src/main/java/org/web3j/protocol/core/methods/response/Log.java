@@ -156,22 +156,31 @@ public class Log {
         if (isRemoved() != log.isRemoved()) {
             return false;
         }
-        if (getLogIndexRaw() != null ? !getLogIndexRaw().equals(log.getLogIndexRaw()) : log.getLogIndexRaw() != null) {
+        if (getLogIndexRaw() != null
+                ? !getLogIndexRaw().equals(log.getLogIndexRaw()) : log.getLogIndexRaw() != null) {
             return false;
         }
-        if (getTransactionIndexRaw() != null ? !getTransactionIndexRaw().equals(log.getTransactionIndexRaw()) : log.getTransactionIndexRaw() != null) {
+        if (getTransactionIndexRaw() != null
+                ? !getTransactionIndexRaw().equals(log.getTransactionIndexRaw())
+                : log.getTransactionIndexRaw() != null) {
             return false;
         }
-        if (getTransactionHash() != null ? !getTransactionHash().equals(log.getTransactionHash()) : log.getTransactionHash() != null) {
+        if (getTransactionHash() != null
+                ? !getTransactionHash().equals(log.getTransactionHash())
+                : log.getTransactionHash() != null) {
             return false;
         }
-        if (getBlockHash() != null ? !getBlockHash().equals(log.getBlockHash()) : log.getBlockHash() != null) {
+        if (getBlockHash() != null
+                ? !getBlockHash().equals(log.getBlockHash()) : log.getBlockHash() != null) {
             return false;
         }
-        if (getBlockNumberRaw() != null ? !getBlockNumberRaw().equals(log.getBlockNumberRaw()) : log.getBlockNumberRaw() != null) {
+        if (getBlockNumberRaw() != null
+                ? !getBlockNumberRaw().equals(log.getBlockNumberRaw())
+                : log.getBlockNumberRaw() != null) {
             return false;
         }
-        if (getAddress() != null ? !getAddress().equals(log.getAddress()) : log.getAddress() != null) {
+        if (getAddress() != null
+                ? !getAddress().equals(log.getAddress()) : log.getAddress() != null) {
             return false;
         }
         if (getData() != null ? !getData().equals(log.getData()) : log.getData() != null) {
@@ -187,7 +196,8 @@ public class Log {
     public int hashCode() {
         int result = (isRemoved() ? 1 : 0);
         result = 31 * result + (getLogIndexRaw() != null ? getLogIndexRaw().hashCode() : 0);
-        result = 31 * result + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
+        result = 31 * result
+                + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
         result = 31 * result + (getTransactionHash() != null ? getTransactionHash().hashCode() : 0);
         result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
         result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);

@@ -11,7 +11,7 @@ public class Hash {
     private Hash() { }
 
     /**
-     * Keccak-256 hash function
+     * Keccak-256 hash function.
      *
      * @param hexInput hex encoded input data with optional 0x prefix
      * @return hash value as hex encoded string
@@ -23,7 +23,7 @@ public class Hash {
     }
 
     /**
-     * Keccak-256 hash function
+     * Keccak-256 hash function.
      *
      * @param input binary encoded input data
      * @param offset of start of data

@@ -103,13 +103,13 @@ public abstract class Contract extends ManagedTransaction {
      * contract wrapper.
      *
      * @return true if the contract is valid
-     * @throws IOException
+     * @throws IOException if unable to connect to web3j node
      */
     public boolean isValid() throws IOException {
         if (contractAddress.equals("")) {
             throw new UnsupportedOperationException(
-                    "Contract binary not present, you will need to regenerate your smart " +
-                            "contract wrapper with web3j v2.2.0+");
+                    "Contract binary not present, you will need to regenerate your smart "
+                            + "contract wrapper with web3j v2.2.0+");
         }
 
         EthGetCode ethGetCode = web3j
@@ -127,8 +127,8 @@ public abstract class Contract extends ManagedTransaction {
 
     /**
      * If this Contract instance was created at deployment, the TransactionReceipt associated
-     * with the initial creation will be provided, e.g. via a <em>deploy</em> method. This will not persist
-     * for Contracts instances constructed via a <em>load</em> method.
+     * with the initial creation will be provided, e.g. via a <em>deploy</em> method. This will
+     * not persist for Contracts instances constructed via a <em>load</em> method.
      *
      * @return the TransactionReceipt generated at contract deployment
      */
@@ -141,8 +141,8 @@ public abstract class Contract extends ManagedTransaction {
      *
      * @param function to call
      * @return {@link List} of values returned by function call
-     * @throws InterruptedException
-     * @throws ExecutionException
+     * @throws InterruptedException if async call is interrupted
+     * @throws ExecutionException if async call throws an exception
      */
     private List<Type> executeCall(
             Function function) throws InterruptedException, ExecutionException {

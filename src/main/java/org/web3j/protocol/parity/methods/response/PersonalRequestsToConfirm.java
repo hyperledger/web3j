@@ -16,9 +16,10 @@ import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
 
 /**
- * personal_requestsToConfirm
+ * personal_requestsToConfirm.
  */
-public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToConfirm.RequestsToConfirm>> {
+public class PersonalRequestsToConfirm extends
+        Response<List<PersonalRequestsToConfirm.RequestsToConfirm>> {
 
     public List<RequestsToConfirm> getRequestsToConfirm() {
         return getResult();
@@ -56,14 +57,19 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof RequestsToConfirm)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof RequestsToConfirm)) {
+                return false;
+            }
 
             RequestsToConfirm that = (RequestsToConfirm) o;
 
-            if (id != null ? !id.equals(that.id) : that.id != null) return false;
+            if (id != null ? !id.equals(that.id) : that.id != null) {
+                return false;
+            }
             return payload != null ? payload.equals(that.payload) : that.payload == null;
-
         }
 
         @Override
@@ -95,8 +101,12 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof SignPayload)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof SignPayload)) {
+                return false;
+            }
 
             SignPayload signPayload = (SignPayload) o;
 
@@ -139,15 +149,19 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof SignRequest)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof SignRequest)) {
+                return false;
+            }
 
             SignRequest that = (SignRequest) o;
 
-            if (address != null ? !address.equals(that.address) : that.address != null)
+            if (address != null ? !address.equals(that.address) : that.address != null) {
                 return false;
+            }
             return hash != null ? hash.equals(that.hash) : that.hash == null;
-
         }
 
         @Override
@@ -177,12 +191,17 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof TransactionPayload)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof TransactionPayload)) {
+                return false;
+            }
 
             TransactionPayload that = (TransactionPayload) o;
 
-            return transaction != null ? transaction.equals(that.transaction) : that.transaction == null;
+            return transaction != null
+                    ? transaction.equals(that.transaction) : that.transaction == null;
         }
 
         @Override
@@ -251,20 +270,34 @@ public class PersonalRequestsToConfirm extends Response<List<PersonalRequestsToC
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof TransactionRequestType)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof TransactionRequestType)) {
+                return false;
+            }
 
             TransactionRequestType that = (TransactionRequestType) o;
 
-            if (from != null ? !from.equals(that.from) : that.from != null) return false;
-            if (to != null ? !to.equals(that.to) : that.to != null) return false;
-            if (gas != null ? !gas.equals(that.gas) : that.gas != null) return false;
-            if (gasPrice != null ? !gasPrice.equals(that.gasPrice) : that.gasPrice != null)
+            if (from != null ? !from.equals(that.from) : that.from != null) {
                 return false;
-            if (value != null ? !value.equals(that.value) : that.value != null) return false;
-            if (data != null ? !data.equals(that.data) : that.data != null) return false;
+            }
+            if (to != null ? !to.equals(that.to) : that.to != null) {
+                return false;
+            }
+            if (gas != null ? !gas.equals(that.gas) : that.gas != null) {
+                return false;
+            }
+            if (gasPrice != null ? !gasPrice.equals(that.gasPrice) : that.gasPrice != null) {
+                return false;
+            }
+            if (value != null ? !value.equals(that.value) : that.value != null) {
+                return false;
+            }
+            if (data != null ? !data.equals(that.data) : that.data != null) {
+                return false;
+            }
             return nonce != null ? nonce.equals(that.nonce) : that.nonce == null;
-
         }
 
         @Override

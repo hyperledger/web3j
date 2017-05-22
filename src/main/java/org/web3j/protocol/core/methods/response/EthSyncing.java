@@ -1,6 +1,5 @@
 package org.web3j.protocol.core.methods.response;
 
-
 import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,9 +14,9 @@ import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 
 /**
- * eth_syncing
- * <p>
- * Returns an object with data about the sync status or false.
+ * eth_syncing.
+ *
+ * <p>Returns an object with data about the sync status or false.
  */
 public class EthSyncing extends Response<EthSyncing.Result> {
 
@@ -59,7 +58,9 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         public Syncing() {
         }
 
-        public Syncing(String startingBlock, String currentBlock, String highestBlock, String knownStates, String pulledStates) {
+        public Syncing(
+                String startingBlock, String currentBlock, String highestBlock, String knownStates,
+                String pulledStates) {
             this.startingBlock = startingBlock;
             this.currentBlock = currentBlock;
             this.highestBlock = highestBlock;
@@ -105,19 +106,29 @@ public class EthSyncing extends Response<EthSyncing.Result> {
             if (isSyncing() != syncing.isSyncing()) {
                 return false;
             }
-            if (getStartingBlock() != null ? !getStartingBlock().equals(syncing.getStartingBlock()) : syncing.getStartingBlock() != null) {
+            if (getStartingBlock() != null
+                    ? !getStartingBlock().equals(syncing.getStartingBlock())
+                    : syncing.getStartingBlock() != null) {
                 return false;
             }
-            if (getCurrentBlock() != null ? !getCurrentBlock().equals(syncing.getCurrentBlock()) : syncing.getCurrentBlock() != null) {
+            if (getCurrentBlock() != null
+                    ? !getCurrentBlock().equals(syncing.getCurrentBlock())
+                    : syncing.getCurrentBlock() != null) {
                 return false;
             }
-            if (getHighestBlock() != null ? !getHighestBlock().equals(syncing.getHighestBlock()) : syncing.getHighestBlock() != null) {
+            if (getHighestBlock() != null
+                    ? !getHighestBlock().equals(syncing.getHighestBlock())
+                    : syncing.getHighestBlock() != null) {
                 return false;
             }
-            if (knownStates != null ? !knownStates.equals(syncing.knownStates) : syncing.knownStates != null) {
+            if (knownStates != null
+                    ? !knownStates.equals(syncing.knownStates)
+                    : syncing.knownStates != null) {
                 return false;
             }
-            return pulledStates != null ? pulledStates.equals(syncing.pulledStates) : syncing.pulledStates == null;
+            return pulledStates != null
+                    ? pulledStates.equals(syncing.pulledStates)
+                    : syncing.pulledStates == null;
         }
 
         @Override
@@ -137,7 +148,8 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
-        public Result deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+        public Result deserialize(
+                JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException {
             Result result;
             if (jsonParser.getCurrentToken() == JsonToken.VALUE_FALSE) {

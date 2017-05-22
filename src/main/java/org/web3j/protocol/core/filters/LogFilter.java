@@ -10,7 +10,7 @@ import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.Log;
 
 /**
- * Log filter handler
+ * Log filter handler.
  */
 public class LogFilter extends Filter<Log> {
 

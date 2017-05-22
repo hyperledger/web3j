@@ -136,9 +136,15 @@ public class JsonRpc2_0Rx {
                 .subscribeOn(scheduler);
     }
 
+    public Observable<EthBlock> catchUpToLatestBlockObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
+        return catchUpToLatestBlockObservable(
+                startBlock, fullTransactionObjects, Observable.empty());
+    }
+
     private Observable<EthBlock> catchUpToLatestBlockObservableSync(
-        DefaultBlockParameter startBlock, boolean fullTransactionObjects,
-        Observable<EthBlock> onCompleteObservable) {
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects,
+            Observable<EthBlock> onCompleteObservable) {
 
         BigInteger startBlockNumber;
         BigInteger latestBlockNumber;
@@ -164,12 +170,6 @@ public class JsonRpc2_0Rx {
         }
     }
 
-    public Observable<EthBlock> catchUpToLatestBlockObservable(
-            DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
-        return catchUpToLatestBlockObservable(
-                startBlock, fullTransactionObjects, Observable.empty());
-    }
-
     public Observable<Transaction> catchUpToLatestTransactionObservable(
             DefaultBlockParameter startBlock) {
         return catchUpToLatestBlockObservable(
@@ -178,7 +178,9 @@ public class JsonRpc2_0Rx {
     }
 
     public Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
-            DefaultBlockParameter startBlock, boolean fullTransactionObjects, long pollingInterval) {
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects,
+            long pollingInterval) {
+
         return catchUpToLatestBlockObservable(
                 startBlock, fullTransactionObjects,
                 blockObservable(fullTransactionObjects, pollingInterval));

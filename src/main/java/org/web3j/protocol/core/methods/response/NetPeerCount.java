@@ -6,7 +6,7 @@ import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
 
 /**
- * net_peerCount
+ * net_peerCount.
  */
 public class NetPeerCount extends Response<String> {
 

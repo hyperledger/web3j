@@ -30,7 +30,8 @@ public class SignTransactionIT extends Scenario {
         byte[] encoded = TransactionEncoder.encode(rawTransaction);
         byte[] hashed = Hash.sha3(encoded);
 
-        EthSign ethSign = parity.ethSign(ALICE.getAddress(), Numeric.toHexString(hashed)).sendAsync().get();
+        EthSign ethSign = parity.ethSign(ALICE.getAddress(), Numeric.toHexString(hashed))
+                .sendAsync().get();
 
         String signature = ethSign.getSignature();
         assertNotNull(signature);

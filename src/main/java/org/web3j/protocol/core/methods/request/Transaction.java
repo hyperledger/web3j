@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.web3j.utils.Numeric;
 
 /**
- * Transaction request object used by:
+ * Transaction request object used the below methods.
  * <ol>
  *     <li>eth_call</li>
  *     <li>eth_sendTransaction</li>

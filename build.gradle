@@ -26,6 +26,7 @@ apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
+apply plugin: 'checkstyle'
 
 group 'org.web3j'
 version '2.2.1'

@@ -208,9 +208,9 @@ public class Transaction {
         return v;
     }
 
-//    public void setV(byte v) {
-//        this.v = v;
-//    }
+    // public void setV(byte v) {
+    //     this.v = v;
+    // }
 
     // Workaround until Geth & Parity return consistent values. At present
     // Parity returns a byte value, Geth returns a hex-encoded string
@@ -240,16 +240,22 @@ public class Transaction {
         if (getHash() != null ? !getHash().equals(that.getHash()) : that.getHash() != null) {
             return false;
         }
-        if (getNonceRaw() != null ? !getNonceRaw().equals(that.getNonceRaw()) : that.getNonceRaw() != null) {
+        if (getNonceRaw() != null
+                ? !getNonceRaw().equals(that.getNonceRaw()) : that.getNonceRaw() != null) {
             return false;
         }
-        if (getBlockHash() != null ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
+        if (getBlockHash() != null
+                ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
             return false;
         }
-        if (getBlockNumberRaw() != null ? !getBlockNumberRaw().equals(that.getBlockNumberRaw()) : that.getBlockNumberRaw()!= null) {
+        if (getBlockNumberRaw() != null
+                ? !getBlockNumberRaw().equals(that.getBlockNumberRaw())
+                : that.getBlockNumberRaw() != null) {
             return false;
         }
-        if (getTransactionIndexRaw() != null ? !getTransactionIndexRaw().equals(that.getTransactionIndexRaw()) : that.getTransactionIndexRaw() != null) {
+        if (getTransactionIndexRaw() != null
+                ? !getTransactionIndexRaw().equals(that.getTransactionIndexRaw())
+                : that.getTransactionIndexRaw() != null) {
             return false;
         }
         if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
@@ -258,22 +264,27 @@ public class Transaction {
         if (getTo() != null ? !getTo().equals(that.getTo()) : that.getTo() != null) {
             return false;
         }
-        if (getValueRaw() != null ? !getValueRaw().equals(that.getValueRaw()) : that.getValueRaw()!= null) {
+        if (getValueRaw() != null
+                ? !getValueRaw().equals(that.getValueRaw()) : that.getValueRaw() != null) {
             return false;
         }
-        if (getGasPriceRaw() != null ? !getGasPriceRaw().equals(that.getGasPriceRaw()) : that.getGasPriceRaw() != null) {
+        if (getGasPriceRaw() != null
+                ? !getGasPriceRaw().equals(that.getGasPriceRaw()) : that.getGasPriceRaw() != null) {
             return false;
         }
-        if (getGasRaw() != null ? !getGasRaw().equals(that.getGasRaw()) : that.getGasRaw() != null) {
+        if (getGasRaw() != null
+                ? !getGasRaw().equals(that.getGasRaw()) : that.getGasRaw() != null) {
             return false;
         }
         if (getInput() != null ? !getInput().equals(that.getInput()) : that.getInput() != null) {
             return false;
         }
-        if (getCreates() != null ? !getCreates().equals(that.getCreates()) : that.getCreates() != null) {
+        if (getCreates() != null
+                ? !getCreates().equals(that.getCreates()) : that.getCreates() != null) {
             return false;
         }
-        if (getPublicKey() != null ? !getPublicKey().equals(that.getPublicKey()) : that.getPublicKey() != null) {
+        if (getPublicKey() != null
+                ? !getPublicKey().equals(that.getPublicKey()) : that.getPublicKey() != null) {
             return false;
         }
         if (getRaw() != null ? !getRaw().equals(that.getRaw()) : that.getRaw() != null) {
@@ -291,7 +302,8 @@ public class Transaction {
         result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
         result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
         result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
-        result = 31 * result + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
+        result = 31 * result
+                + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
         result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getValueRaw() != null ? getValueRaw().hashCode() : 0);

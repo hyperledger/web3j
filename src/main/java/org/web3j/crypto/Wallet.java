@@ -164,9 +164,9 @@ public class Wallet {
             SecretKeySpec secretKeySpec = new SecretKeySpec(encryptKey, "AES");
             cipher.init(mode, secretKeySpec, ivParameterSpec);
             return cipher.doFinal(text);
-        } catch (NoSuchPaddingException|NoSuchAlgorithmException|
-                InvalidAlgorithmParameterException|InvalidKeyException|
-                BadPaddingException|IllegalBlockSizeException e) {
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException
+                | InvalidAlgorithmParameterException | InvalidKeyException
+                | BadPaddingException | IllegalBlockSizeException e) {
             throw new CipherException("Error performing cipher operation", e);
         }
     }

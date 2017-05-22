@@ -25,9 +25,9 @@ import org.web3j.abi.datatypes.Uint;
  */
 public class AbiTypesGenerator {
 
-    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
-            "<strong>Do not modifiy!</strong><br>\n" +
-            "Please use {@link " + AbiTypesGenerator.class.getName() + "} to update.</p>\n";
+    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n"
+            + "<strong>Do not modifiy!</strong><br>\n"
+            + "Please use {@link " + AbiTypesGenerator.class.getName() + "} to update.</p>\n";
 
     private static final String DEFAULT = "DEFAULT";
 
@@ -171,7 +171,7 @@ public class AbiTypesGenerator {
                     .addMethod(constructorSpec)
                     .build();
 
-           write(packageName, bytesType, path);
+            write(packageName, bytesType, path);
         }
     }
 

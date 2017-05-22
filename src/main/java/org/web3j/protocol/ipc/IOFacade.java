@@ -7,5 +7,6 @@ import java.io.IOException;
  */
 public interface IOFacade {
     void write(String payload) throws IOException;
+
     String read() throws IOException;
 }
