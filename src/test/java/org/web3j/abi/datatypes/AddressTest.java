@@ -1,6 +1,5 @@
 package org.web3j.abi.datatypes;
 
-
 import org.junit.Test;
 
 import org.web3j.crypto.SampleKeys;

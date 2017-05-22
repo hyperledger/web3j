@@ -1,6 +1,5 @@
 package org.web3j.protocol.core;
 
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;

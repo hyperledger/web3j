@@ -1,6 +1,5 @@
 package org.web3j.crypto;
 
-
 import java.math.BigInteger;
 import java.security.SignatureException;
 

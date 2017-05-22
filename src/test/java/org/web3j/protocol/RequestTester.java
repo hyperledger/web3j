@@ -1,6 +1,5 @@
 package org.web3j.protocol;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +18,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-
 public abstract class RequestTester {
 
     private CloseableHttpClient closeableHttpClient;
@@ -36,7 +34,8 @@ public abstract class RequestTester {
 
     protected void verifyResult(String expected) throws Exception {
         ArgumentCaptor<HttpPost> httpPostArgumentCaptor = ArgumentCaptor.forClass(HttpPost.class);
-        verify(closeableHttpClient).execute(httpPostArgumentCaptor.capture(), any(ResponseHandler.class));
+        verify(closeableHttpClient).execute(
+                httpPostArgumentCaptor.capture(), any(ResponseHandler.class));
 
         String result = readResult(httpPostArgumentCaptor.getValue().getEntity().getContent());
         assertThat(result, is(expected));

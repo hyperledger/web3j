@@ -1,6 +1,5 @@
 package org.web3j.protocol.infura;
 
-
 import org.apache.http.message.BasicHeader;
 import org.junit.Test;
 

@@ -1,6 +1,5 @@
 package org.web3j.protocol.core.filters;
 
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -51,11 +50,11 @@ public abstract class FilterTester {
 
     <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {
         EthFilter ethFilter = objectMapper.readValue(
-                "{\n" +
-                        "  \"id\":1,\n" +
-                        "  \"jsonrpc\": \"2.0\",\n" +
-                        "  \"result\": \"0x1\"\n" +
-                        "}", EthFilter.class);
+                "{\n"
+                        + "  \"id\":1,\n"
+                        + "  \"jsonrpc\": \"2.0\",\n"
+                        + "  \"result\": \"0x1\"\n"
+                        + "}", EthFilter.class);
 
         EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);

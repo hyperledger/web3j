@@ -1,9 +1,5 @@
 package org.web3j.codegen;
 
-import org.junit.Test;
-import org.web3j.TempFileProvider;
-import org.web3j.utils.Strings;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -13,6 +9,11 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+
+import org.junit.Test;
+
+import org.web3j.TempFileProvider;
+import org.web3j.utils.Strings;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -78,8 +79,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 "-o", tempDirPath
         ).toArray(new String[0])); // https://shipilev.net/blog/2016/arrays-wisdom-ancients/
 
-        verifyGeneratedCode(tempDirPath + "/org/web3j/unittests/" +
-                Strings.capitaliseFirstLetter(inputFileName) + ".java");
+        verifyGeneratedCode(tempDirPath + "/org/web3j/unittests/"
+                + Strings.capitaliseFirstLetter(inputFileName) + ".java");
     }
 
     private void verifyGeneratedCode(String sourceFile) throws IOException {

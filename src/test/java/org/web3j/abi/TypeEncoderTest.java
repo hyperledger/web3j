@@ -147,58 +147,59 @@ public class TypeEncoderTest {
     public void testDynamicBytes() {
         DynamicBytes dynamicBytes = new DynamicBytes(new byte[] { 0, 1, 2, 3, 4, 5 });
         assertThat(TypeEncoder.encodeDynamicBytes(dynamicBytes),
-                is("0000000000000000000000000000000000000000000000000000000000000006" +
-                        "0001020304050000000000000000000000000000000000000000000000000000"));
+                is("0000000000000000000000000000000000000000000000000000000000000006"
+                        + "0001020304050000000000000000000000000000000000000000000000000000"));
 
         DynamicBytes empty = new DynamicBytes(new byte[] { 0 });
         assertThat(TypeEncoder.encodeDynamicBytes(empty),
-                is("0000000000000000000000000000000000000000000000000000000000000001" +
-                        "0000000000000000000000000000000000000000000000000000000000000000"));
+                is("0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000000"));
 
         DynamicBytes dave = new DynamicBytes("dave".getBytes());
         assertThat(TypeEncoder.encodeDynamicBytes(dave),
-                is("0000000000000000000000000000000000000000000000000000000000000004" +
-                        "6461766500000000000000000000000000000000000000000000000000000000"));
+                is("0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6461766500000000000000000000000000000000000000000000000000000000"));
 
         DynamicBytes loremIpsum = new DynamicBytes(
-                ("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
-                        "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim " +
-                        "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex " +
-                        "ea commodo consequat. Duis aute irure dolor in reprehenderit in " +
-                        "voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur " +
-                        "sint occaecat cupidatat non proident, sunt in culpa qui officia " +
-                        "deserunt mollit anim id est laborum.").getBytes());
+                ("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod "
+                        + "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+                        + "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+                        + "ea commodo consequat. Duis aute irure dolor in reprehenderit in "
+                        + "voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
+                        + "sint occaecat cupidatat non proident, sunt in culpa qui officia "
+                        + "deserunt mollit anim id est laborum.").getBytes());
         assertThat(TypeEncoder.encodeDynamicBytes(loremIpsum),
-                is("00000000000000000000000000000000000000000000000000000000000001bd" +
-                        "4c6f72656d20697073756d20646f6c6f722073697420616d65742c20636f6e73" +
-                        "656374657475722061646970697363696e6720656c69742c2073656420646f20" +
-                        "656975736d6f642074656d706f7220696e6369646964756e74207574206c6162" +
-                        "6f726520657420646f6c6f7265206d61676e6120616c697175612e2055742065" +
-                        "6e696d206164206d696e696d2076656e69616d2c2071756973206e6f73747275" +
-                        "6420657865726369746174696f6e20756c6c616d636f206c61626f726973206e" +
-                        "69736920757420616c697175697020657820656120636f6d6d6f646f20636f6e" +
-                        "7365717561742e2044756973206175746520697275726520646f6c6f7220696e" +
-                        "20726570726568656e646572697420696e20766f6c7570746174652076656c69" +
-                        "7420657373652063696c6c756d20646f6c6f726520657520667567696174206e" +
-                        "756c6c612070617269617475722e204578636570746575722073696e74206f63" +
-                        "63616563617420637570696461746174206e6f6e2070726f6964656e742c2073" +
-                        "756e7420696e2063756c706120717569206f666669636961206465736572756e" +
-                        "74206d6f6c6c697420616e696d20696420657374206c61626f72756d2e000000"));
+                is("00000000000000000000000000000000000000000000000000000000000001bd"
+                        + "4c6f72656d20697073756d20646f6c6f722073697420616d65742c20636f6e73"
+                        + "656374657475722061646970697363696e6720656c69742c2073656420646f20"
+                        + "656975736d6f642074656d706f7220696e6369646964756e74207574206c6162"
+                        + "6f726520657420646f6c6f7265206d61676e6120616c697175612e2055742065"
+                        + "6e696d206164206d696e696d2076656e69616d2c2071756973206e6f73747275"
+                        + "6420657865726369746174696f6e20756c6c616d636f206c61626f726973206e"
+                        + "69736920757420616c697175697020657820656120636f6d6d6f646f20636f6e"
+                        + "7365717561742e2044756973206175746520697275726520646f6c6f7220696e"
+                        + "20726570726568656e646572697420696e20766f6c7570746174652076656c69"
+                        + "7420657373652063696c6c756d20646f6c6f726520657520667567696174206e"
+                        + "756c6c612070617269617475722e204578636570746575722073696e74206f63"
+                        + "63616563617420637570696461746174206e6f6e2070726f6964656e742c2073"
+                        + "756e7420696e2063756c706120717569206f666669636961206465736572756e"
+                        + "74206d6f6c6c697420616e696d20696420657374206c61626f72756d2e000000"));
     }
 
     @Test
     public void testAddress() {
         Address address = new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338");
         assertThat(address.getTypeAsString(), is("address"));
-        assertThat(TypeEncoder.encodeNumeric(address), is("000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"));
+        assertThat(TypeEncoder.encodeNumeric(address),
+                is("000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"));
     }
 
     @Test
     public void testUtf8String() {
         Utf8String string = new Utf8String("Hello, world!");
         assertThat(TypeEncoder.encodeString(string),
-                is("000000000000000000000000000000000000000000000000000000000000000d" +
-                        "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"));
+                is("000000000000000000000000000000000000000000000000000000000000000d"
+                        + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"));
     }
 
     @Test
@@ -209,8 +210,8 @@ public class TypeEncoderTest {
         );
 
         assertThat(TypeEncoder.encodeArrayValues(array),
-                is("0000000000000000000000000000000220000000000000000000000000000000" +
-                        "0000000000000000000000000000000880000000000000000000000000000000"));
+                is("0000000000000000000000000000000220000000000000000000000000000000"
+                        + "0000000000000000000000000000000880000000000000000000000000000000"));
     }
 
     @Test
@@ -223,10 +224,10 @@ public class TypeEncoderTest {
 
         assertThat(
                 TypeEncoder.encodeDynamicArray(array),
-                is("0000000000000000000000000000000000000000000000000000000000000003" +
-                        "0000000000000000000000000000000000000000000000000000000000000001" +
-                        "0000000000000000000000000000000000000000000000000000000000000002" +
-                        "0000000000000000000000000000000000000000000000000000000000000003"
+                is("0000000000000000000000000000000000000000000000000000000000000003"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000003"
                 ));
     }
 

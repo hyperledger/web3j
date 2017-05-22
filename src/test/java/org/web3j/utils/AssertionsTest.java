@@ -1,6 +1,5 @@
 package org.web3j.utils;
 
-
 import org.junit.Test;
 
 import static org.web3j.utils.Assertions.verifyPrecondition;

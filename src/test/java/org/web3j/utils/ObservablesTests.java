@@ -1,6 +1,5 @@
 package org.web3j.utils;
 
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;

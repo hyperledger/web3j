@@ -225,7 +225,11 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
         <module name="CommentsIndentation"/>
+        <!-- Required for SuppressionCommentFilter, see
+        http://checkstyle.sourceforge.net/config_filters.html#SuppressionCommentFilter -->
+        <module name="FileContentsHolder"/>
     </module>
+    <module name="SuppressionCommentFilter"/>
 
     <module name="SuppressionFilter">
         <property name="file" value="config/checkstyle/suppressions.xml"/>

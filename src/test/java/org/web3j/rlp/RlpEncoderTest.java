@@ -1,6 +1,5 @@
 package org.web3j.rlp;
 
-
 import java.math.BigInteger;
 
 import org.junit.Test;
@@ -13,7 +12,7 @@ public class RlpEncoderTest {
     /**
      * Examples taken from https://github.com/ethereum/wiki/wiki/RLP#examples.
      *
-     * For further examples see https://github.com/ethereum/tests/tree/develop/RLPTests.
+     * <p>For further examples see https://github.com/ethereum/tests/tree/develop/RLPTests.
      */
     @Test
     public void testEncode() {
@@ -21,7 +20,9 @@ public class RlpEncoderTest {
                 is(new byte[]{ (byte) 0x83, 'd', 'o', 'g' }));
 
         assertThat(RlpEncoder.encode(new RlpList(RlpString.create("cat"), RlpString.create("dog"))),
-                is(new byte[]{ (byte) 0xc8, (byte) 0x83, 'c', 'a', 't', (byte) 0x83, 'd', 'o', 'g'}));
+                is(new byte[]{
+                        (byte) 0xc8, (byte) 0x83, 'c', 'a', 't', (byte) 0x83, 'd', 'o', 'g'
+                }));
 
         assertThat(RlpEncoder.encode(RlpString.create("")),
                 is(new byte[]{ (byte) 0x80 }));

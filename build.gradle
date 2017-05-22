@@ -156,6 +156,10 @@ classes {
     dependsOn createProperties
 }
 
+checkstyle {
+    toolVersion = "7.7"
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {

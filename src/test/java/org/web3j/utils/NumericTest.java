@@ -20,7 +20,7 @@ import static org.web3j.utils.Numeric.asByte;
 
 public class NumericTest {
 
-    private final byte[] HEX_RANGE_ARRAY = new byte[] {
+    private static final byte[] HEX_RANGE_ARRAY = new byte[] {
             asByte(0x0, 0x1),
             asByte(0x2, 0x3),
             asByte(0x4, 0x5),
@@ -31,7 +31,7 @@ public class NumericTest {
             asByte(0xe, 0xf)
     };
 
-    private String HEX_RANGE_STRING = "0x0123456789abcdef";
+    private static final String HEX_RANGE_STRING = "0x0123456789abcdef";
 
 
     @Test

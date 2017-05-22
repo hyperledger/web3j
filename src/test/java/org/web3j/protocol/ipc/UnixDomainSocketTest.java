@@ -16,8 +16,8 @@ import static org.mockito.Mockito.verify;
 public class UnixDomainSocketTest {
 
     private static final String RESPONSE =
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " +
-                    "incididunt ut labore et dolore magna aliqua\n";
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
+                    + "incididunt ut labore et dolore magna aliqua\n";
 
     private PrintWriter writer;
     private InputStreamReader reader;
@@ -54,8 +54,7 @@ public class UnixDomainSocketTest {
             ((CharBuffer) args[0]).append(RESPONSE.substring(0, bufferSize));
             return RESPONSE.length();
         })
-                .doAnswer(
-                invocation -> {
+                .doAnswer(invocation -> {
                     Object[] args = invocation.getArguments();
                     ((CharBuffer) args[0]).append(
                             RESPONSE.substring(bufferSize, bufferSize * 2));

@@ -1,6 +1,5 @@
 package org.web3j.tx;
 
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -47,7 +46,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 
 public class ContractTest extends ManagedTransactionTester {
 
@@ -142,8 +140,8 @@ public class ContractTest extends ManagedTransactionTester {
         // Example taken from FunctionReturnDecoderTest
 
         EthCall ethCall = new EthCall();
-        ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000020" +
-                "0000000000000000000000000000000000000000000000000000000000000000");
+        ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000020"
+                + "0000000000000000000000000000000000000000000000000000000000000000");
         prepareCall(ethCall);
 
         assertThat(contract.callSingleValue().get(), equalTo(new Utf8String("")));
@@ -152,8 +150,8 @@ public class ContractTest extends ManagedTransactionTester {
     @Test
     public void testCallMultipleValue() throws Exception {
         EthCall ethCall = new EthCall();
-        ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000037" +
-                "0000000000000000000000000000000000000000000000000000000000000007");
+        ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000037"
+                + "0000000000000000000000000000000000000000000000000000000000000007");
         prepareCall(ethCall);
 
         assertThat(contract.callMultipleValue().get(),
@@ -187,9 +185,12 @@ public class ContractTest extends ManagedTransactionTester {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         Log log = new Log();
         log.setTopics(Arrays.asList(
-                "0xfceb437c298f40d64702ac26411b2316e79f3c28ffa60edfc891ad4fc8ab82ca",  // encoded function
-                "0000000000000000000000003d6cb163f7c72d20b0fcd6baae5889329d138a4a")); // indexed value
-        log.setData("0000000000000000000000000000000000000000000000000000000000000001");  // non-indexed value
+                // encoded function
+                "0xfceb437c298f40d64702ac26411b2316e79f3c28ffa60edfc891ad4fc8ab82ca",
+                // indexed value
+                "0000000000000000000000003d6cb163f7c72d20b0fcd6baae5889329d138a4a"));
+        // non-indexed value
+        log.setData("0000000000000000000000000000000000000000000000000000000000000001");
 
         transactionReceipt.setLogs(Arrays.asList(log));
 
@@ -296,7 +297,8 @@ public class ContractTest extends ManagedTransactionTester {
                 String contractAddress,
                 Web3j web3j, TransactionManager transactionManager,
                 BigInteger gasPrice, BigInteger gasLimit) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasPrice,
+                    gasLimit);
         }
 
         public Future<Utf8String> callSingleValue() {
@@ -307,7 +309,8 @@ public class ContractTest extends ManagedTransactionTester {
             return executeCallSingleValueReturnAsync(function);
         }
 
-        public Future<List<Type>> callMultipleValue() throws ExecutionException, InterruptedException {
+        public Future<List<Type>> callMultipleValue()
+                throws ExecutionException, InterruptedException {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(
@@ -316,9 +319,11 @@ public class ContractTest extends ManagedTransactionTester {
             return executeCallMultipleValueReturnAsync(function);
         }
 
-        public Future<TransactionReceipt> performTransaction(Address address, Uint256 amount) {
+        public Future<TransactionReceipt> performTransaction(
+                Address address, Uint256 amount) {
             Function function = new Function("approve",
-                    Arrays.<Type>asList(address, amount), Collections.<TypeReference<?>>emptyList());
+                    Arrays.<Type>asList(address, amount),
+                    Collections.<TypeReference<?>>emptyList());
             return executeTransactionAsync(function);
         }
 

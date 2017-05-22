@@ -1,6 +1,5 @@
 package org.web3j.protocol.rx;
 
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,13 +107,16 @@ public class JsonRpc2_0RxTest {
         }
 
         EthFilter ethFilter = objectMapper.readValue(
-                "{\n" +
-                        "  \"id\":1,\n" +
-                        "  \"jsonrpc\": \"2.0\",\n" +
-                        "  \"result\": \"0x1\"\n" +
-                        "}", EthFilter.class);
+                "{\n"
+                        + "  \"id\":1,\n"
+                        + "  \"jsonrpc\": \"2.0\",\n"
+                        + "  \"result\": \"0x1\"\n"
+                        + "}", EthFilter.class);
         EthLog ethLog = objectMapper.readValue(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":[\"0x31c2342b1e0b8ffda1507fbffddf213c4b3c1e819ff6a84b943faabb0ebf2403\"]}", EthLog.class);
+                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":["
+                        + "\"0x31c2342b1e0b8ffda1507fbffddf213c4b3c1e819ff6a84b943faabb0ebf2403\""
+                        + "]}",
+                EthLog.class);
         EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 

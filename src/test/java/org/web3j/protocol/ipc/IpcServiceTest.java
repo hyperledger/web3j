@@ -26,7 +26,8 @@ public class IpcServiceTest {
     @Test
     public void testSend() throws IOException {
         when(ioFacade.read()).thenReturn(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"Geth/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n");
+                "{\"jsonrpc\":\"2.0\",\"id\":1,"
+                        + "\"result\":\"Geth/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n");
 
         ipcService.send(new Request(), Web3ClientVersion.class);
 

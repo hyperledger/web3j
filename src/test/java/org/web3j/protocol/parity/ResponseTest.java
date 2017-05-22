@@ -1,6 +1,13 @@
 package org.web3j.protocol.parity;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Test;
+
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.VoidResponse;
 import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
@@ -12,12 +19,6 @@ import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
 import org.web3j.protocol.parity.methods.response.PersonalSign;
 import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
 import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,11 +32,11 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalSignerEnabled() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\": 1,\n" +
-                "    \"result\": true\n" +
-                "}");
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 1,\n"
+                + "    \"result\": true\n"
+                + "}");
 
         PersonalSignerEnabled personalSignerEnabled = deserialiseResponse(
                 PersonalSignerEnabled.class);
@@ -44,40 +45,44 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalSign() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\": 1,\n" +
-                "    \"result\": \"0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c\"\n" +
-                "}");
+        //CHECKSTYLE:OFF
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 1,\n"
+                + "    \"result\": \"0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c\"\n"
+                + "}");
+        //CHECKSTYLE:ON
 
-        PersonalSign personalSign = deserialiseResponse(
-                PersonalSign.class);
+        PersonalSign personalSign = deserialiseResponse(PersonalSign.class);
+        //CHECKSTYLE:OFF
         assertThat(personalSign.getSignedMessage(),is("0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c"));
+        //CHECKSTYLE:ON
     }
 
     @Test
     public void testPersonalEcRecover() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\": 1,\n" +
-                "    \"result\": \"0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54\"\n" +
-                "}");
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 1,\n"
+                + "    \"result\": \"0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54\"\n"
+                + "}");
 
         PersonalEcRecover personalEcRecover = deserialiseResponse(
                 PersonalEcRecover.class);
-        assertThat(personalEcRecover.getRecoverAccountId(),is("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
+        assertThat(personalEcRecover.getRecoverAccountId(),
+                is("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
     }
 
     @Test
     public void testPersonalListAccounts() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\": 83,\n" +
-                "    \"result\": [\n" +
-                "        \"0x7bf87721a96849d168de02fd6ea5986a3a147383\",\n" +
-                "        \"0xca807a90fd64deed760fb98bf0869b475c469348\"\n" +
-                "    ]\n" +
-                "}\n");
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 83,\n"
+                + "    \"result\": [\n"
+                + "        \"0x7bf87721a96849d168de02fd6ea5986a3a147383\",\n"
+                + "        \"0xca807a90fd64deed760fb98bf0869b475c469348\"\n"
+                + "    ]\n"
+                + "}\n");
 
         PersonalListAccounts personalListAccounts = deserialiseResponse(PersonalListAccounts.class);
         assertThat(personalListAccounts.getAccountIds(),
@@ -89,11 +94,11 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testNewAccountIdentifier() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\": 22,\n" +
-                "    \"result\": \"0x8f0227d45853a50eefd48dd4fec25d5b3fd2295e\"\n" +
-                "}");
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 22,\n"
+                + "    \"result\": \"0x8f0227d45853a50eefd48dd4fec25d5b3fd2295e\"\n"
+                + "}");
 
         NewAccountIdentifier newAccountIdentifier = deserialiseResponse(NewAccountIdentifier.class);
         assertThat(newAccountIdentifier.getAccountId(),
@@ -102,23 +107,24 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalUnlockAccount() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\":\"2.0\",\n" +
-                "    \"id\":22,\n" +
-                "    \"result\":true\n" +
-                "}");
+        buildResponse("{\n"
+                + "    \"jsonrpc\":\"2.0\",\n"
+                + "    \"id\":22,\n"
+                + "    \"result\":true\n"
+                + "}");
 
-        PersonalUnlockAccount personalUnlockAccount = deserialiseResponse(PersonalUnlockAccount.class);
+        PersonalUnlockAccount personalUnlockAccount =
+                deserialiseResponse(PersonalUnlockAccount.class);
         assertTrue(personalUnlockAccount.accountUnlocked());
     }
 
     @Test
     public void testVoidResponse() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\":22,\n" +
-                "    \"result\":null\n" +
-                "}");
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\":22,\n"
+                + "    \"result\":null\n"
+                + "}");
 
         VoidResponse voidResponse = deserialiseResponse(VoidResponse.class);
         assertTrue(voidResponse.isValid());
@@ -126,17 +132,17 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalAccountsInfo() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\":22,\n" +
-                "    \"result\":{\n" +
-                "        \"0xfc390d8a8ddb591b010fda52f4db4945742c3809\":{\n" +
-                "            \"name\":\"Savings\",\n" +
-                "            \"uuid\":\"7fee0393-7571-2b4f-8672-862fea01a4a0\",\n" +
-                "            \"meta\":{}\n" +
-                "        }\n" +
-                "    }\n" +
-                "}");
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\":22,\n"
+                + "    \"result\":{\n"
+                + "        \"0xfc390d8a8ddb591b010fda52f4db4945742c3809\":{\n"
+                + "            \"name\":\"Savings\",\n"
+                + "            \"uuid\":\"7fee0393-7571-2b4f-8672-862fea01a4a0\",\n"
+                + "            \"meta\":{}\n"
+                + "        }\n"
+                + "    }\n"
+                + "}");
 
         Map<String, PersonalAccountsInfo.AccountsInfo> accountsInfoMap = new HashMap<>(1);
         accountsInfoMap.put("0xfc390d8a8ddb591b010fda52f4db4945742c3809",
@@ -152,11 +158,12 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalRequestsToConfirm() {
-        buildResponse("{\"jsonrpc\":\"2.0\",\"result\":[" +
-        "{\"id\":\"0x1\",\"payload\":{\"transaction\":{\"data\":\"0x\",\"from\":\"0x0000000000000000000000000000000000000001\",\"gas\":\"0x989680\",\"gasPrice\":\"0x2710\",\"nonce\":null,\"to\":\"0xd46e8dd67c5d32be8058bb8eb970870f07244567\",\"value\":\"0x1\"}}}," +
-        "{\"id\":\"0x2\",\"payload\":{\"sign\":{\"address\":\"0x0000000000000000000000000000000000000001\",\"hash\":\"0x0000000000000000000000000000000000000000000000000000000000000005\"}}}" +
-        "],\"id\":1}"
-        );
+        //CHECKSTYLE:OFF
+        buildResponse("{\"jsonrpc\":\"2.0\",\"result\":["
+                        + "{\"id\":\"0x1\",\"payload\":{\"transaction\":{\"data\":\"0x\",\"from\":\"0x0000000000000000000000000000000000000001\",\"gas\":\"0x989680\",\"gasPrice\":\"0x2710\",\"nonce\":null,\"to\":\"0xd46e8dd67c5d32be8058bb8eb970870f07244567\",\"value\":\"0x1\"}}},"
+                        + "{\"id\":\"0x2\",\"payload\":{\"sign\":{\"address\":\"0x0000000000000000000000000000000000000001\",\"hash\":\"0x0000000000000000000000000000000000000000000000000000000000000005\"}}}"
+                        + "],\"id\":1}");
+        //CHECKSTYLE:ON
 
         List<PersonalRequestsToConfirm.RequestsToConfirm> requestsToConfirm =
                 Arrays.asList(
@@ -179,7 +186,8 @@ public class ResponseTest extends ResponseTester {
                                 new PersonalRequestsToConfirm.SignPayload(
                                         new PersonalRequestsToConfirm.SignRequest(
                                                 "0x0000000000000000000000000000000000000001",
-                                                "0x0000000000000000000000000000000000000000000000000000000000000005"
+                                                "0x0000000000000000000000000000000000000000"
+                                                        + "000000000000000000000005"
                                         )
                                 )
                         )
@@ -192,11 +200,11 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalRejectRequest() {
-        buildResponse("{\n" +
-                "    \"jsonrpc\": \"2.0\",\n" +
-                "    \"id\":22,\n" +
-                "    \"result\":true\n" +
-                "}");
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\":22,\n"
+                + "    \"result\":true\n"
+                + "}");
 
         PersonalRejectRequest personalRejectRequest =
                 deserialiseResponse(PersonalRejectRequest.class);

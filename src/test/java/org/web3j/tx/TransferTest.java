@@ -1,6 +1,5 @@
 package org.web3j.tx;
 
-
 import java.io.IOException;
 import java.math.BigDecimal;
 

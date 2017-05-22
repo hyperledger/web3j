@@ -1,6 +1,5 @@
 package org.web3j.utils;
 
-
 import java.io.IOException;
 
 import org.junit.Test;

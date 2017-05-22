@@ -1,6 +1,5 @@
 package org.web3j.crypto;
 
-
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,8 +69,10 @@ public class WalletTest {
 
     // Test vectors taken from https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
     private static final String PASSWORD = "testpassword";
-    private static final String SECRET = "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d";
+    private static final String SECRET =
+            "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d";
 
+    //CHECKSTYLE:OFF
     private static final String AES_128_CTR = "{\n" +
             "    \"crypto\" : {\n" +
             "        \"cipher\" : \"aes-128-ctr\",\n" +
@@ -112,4 +113,5 @@ public class WalletTest {
             "    \"id\" : \"3198bc9c-6672-5ab3-d995-4942343ae5b6\",\n" +
             "    \"version\" : 3\n" +
             "}";
+    //CHECKSTYLE:ON
 }
