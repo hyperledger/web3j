@@ -316,8 +316,8 @@ public class CoreIT {
     public void testEthGetTransactionByHash() throws Exception {
         EthTransaction ethTransaction = web3j.ethGetTransactionByHash(
                 config.validTransactionHash()).send();
-        assertTrue(ethTransaction.getTransaction().isPresent());
-        Transaction transaction = ethTransaction.getTransaction().get();
+        assertNotNull(ethTransaction.getTransaction());
+        Transaction transaction = ethTransaction.getTransaction();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
     }
 
@@ -327,8 +327,8 @@ public class CoreIT {
 
         EthTransaction ethTransaction = web3j.ethGetTransactionByBlockHashAndIndex(
                 config.validBlockHash(), index).send();
-        assertTrue(ethTransaction.getTransaction().isPresent());
-        Transaction transaction = ethTransaction.getTransaction().get();
+        assertNotNull(ethTransaction.getTransaction());
+        Transaction transaction = ethTransaction.getTransaction();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
         assertThat(transaction.getTransactionIndex(), equalTo(index));
     }
