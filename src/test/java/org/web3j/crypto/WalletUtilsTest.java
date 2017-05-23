@@ -1,6 +1,5 @@
 package org.web3j.crypto;
 
-
 import java.io.File;
 import java.nio.file.Files;
 
@@ -20,7 +19,6 @@ import static org.web3j.crypto.SampleKeys.KEY_PAIR;
 import static org.web3j.crypto.SampleKeys.PASSWORD;
 import static org.web3j.crypto.WalletUtils.isValidAddress;
 import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
-
 
 public class WalletUtilsTest {
 
@@ -79,9 +77,10 @@ public class WalletUtilsTest {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
                 new File(WalletUtilsTest.class.getResource(
-                		"/keyfiles/" +
-                        "UTC--2016-11-03T05-55-06." +
-                        "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile()));
+                        "/keyfiles/"
+                                + "UTC--2016-11-03T05-55-06."
+                                + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")
+                        .getFile()));
 
         assertThat(credentials, equalTo(CREDENTIALS));
     }
@@ -91,9 +90,9 @@ public class WalletUtilsTest {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
                 WalletUtilsTest.class.getResource(
-                		"/keyfiles/" +
-                        "UTC--2016-11-03T05-55-06." +
-                        "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
+                        "/keyfiles/"
+                        + "UTC--2016-11-03T05-55-06."
+                        + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
 
         assertThat(credentials, equalTo(CREDENTIALS));
     }
@@ -104,9 +103,9 @@ public class WalletUtilsTest {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
                 new File(WalletUtilsTest.class.getResource(
-                		"/keyfiles/" +
-                        "UTC--2016-11-03T07-47-45." +
-                        "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818").getFile()));
+                        "/keyfiles/"
+                        + "UTC--2016-11-03T07-47-45."
+                        + "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818").getFile()));
 
         assertThat(credentials, equalTo(
                 Credentials.create(
@@ -116,19 +115,19 @@ public class WalletUtilsTest {
     @Test
     public void testGetDefaultKeyDirectory() {
         assertTrue(WalletUtils.getDefaultKeyDirectory("Mac OS X")
-        		.endsWith(String.format("%sLibrary%sEthereum", File.separator, File.separator)));
+                .endsWith(String.format("%sLibrary%sEthereum", File.separator, File.separator)));
         assertTrue(WalletUtils.getDefaultKeyDirectory("Windows")
-        		.endsWith(String.format("%sEthereum", File.separator)));
+                .endsWith(String.format("%sEthereum", File.separator)));
         assertTrue(WalletUtils.getDefaultKeyDirectory("Linux")
-        		.endsWith(String.format("%s.ethereum", File.separator)));
+                .endsWith(String.format("%s.ethereum", File.separator)));
     }
 
     @Test
     public void testGetTestnetKeyDirectory() {
         assertTrue(WalletUtils.getMainnetKeyDirectory()
-        		.endsWith(String.format("%skeystore", File.separator)));
+                .endsWith(String.format("%skeystore", File.separator)));
         assertTrue(WalletUtils.getTestnetKeyDirectory()
-        		.endsWith(String.format("%stestnet%skeystore", File.separator, File.separator)));
+                .endsWith(String.format("%stestnet%skeystore", File.separator, File.separator)));
     }
 
     private static File createTempDir() throws Exception {

@@ -1,6 +1,5 @@
 package org.web3j.crypto;
 
-
 import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -113,15 +112,15 @@ public class WalletFile {
         }
 
         @JsonTypeInfo(
-                use=JsonTypeInfo.Id.NAME,
-                include=JsonTypeInfo.As.EXTERNAL_PROPERTY,
-                property="kdf")
+                use = JsonTypeInfo.Id.NAME,
+                include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
+                property = "kdf")
         @JsonSubTypes({
                 @JsonSubTypes.Type(value = Aes128CtrKdfParams.class, name = Wallet.AES_128_CTR),
                 @JsonSubTypes.Type(value = ScryptKdfParams.class, name = Wallet.SCRYPT)
         })
         // To support my Ether Wallet keys uncomment this annotation & comment out the above
-//        @JsonDeserialize(using = KdfParamsDeserialiser.class)
+        //  @JsonDeserialize(using = KdfParamsDeserialiser.class)
         // Also add the following to the ObjectMapperFactory
         // objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
         public void setKdfparams(KdfParams kdfparams) {
@@ -154,6 +153,7 @@ public class WalletFile {
 
     interface KdfParams {
         int getDklen();
+
         String getSalt();
     }
 

@@ -9,9 +9,13 @@ import org.web3j.abi.datatypes.Int;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Int24 extends Int {
-  public static final Int24 DEFAULT = new Int24(BigInteger.ZERO);
+    public static final Int24 DEFAULT = new Int24(BigInteger.ZERO);
 
-  public Int24(BigInteger value) {
-    super(24, value);
-  }
+    public Int24(BigInteger value) {
+        super(24, value);
+    }
+
+    public Int24(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }

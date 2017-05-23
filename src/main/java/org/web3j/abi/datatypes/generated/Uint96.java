@@ -9,9 +9,13 @@ import org.web3j.abi.datatypes.Uint;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Uint96 extends Uint {
-  public static final Uint96 DEFAULT = new Uint96(BigInteger.ZERO);
+    public static final Uint96 DEFAULT = new Uint96(BigInteger.ZERO);
 
-  public Uint96(BigInteger value) {
-    super(96, value);
-  }
+    public Uint96(BigInteger value) {
+        super(96, value);
+    }
+
+    public Uint96(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }

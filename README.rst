@@ -46,7 +46,7 @@ Features
   contracts from native Java code
 - Reactive-functional API for working with filters
 - Support for Parity's
-  `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
+  `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
@@ -85,7 +85,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>2.1.0</version>
+     <version>2.2.1</version>
    </dependency>
 
 Android:
@@ -95,7 +95,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core-android</artifactId>
-     <version>2.0.0</version>
+     <version>2.1.0</version>
    </dependency>
 
 Gradle
@@ -105,13 +105,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:2.1.0')
+   compile ('org.web3j:core:2.2.1')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:2.0.0')
+   compile ('org.web3j:core-android:2.1.0')
 
 
 Start a client
@@ -124,7 +124,7 @@ Start up an Ethereum client if you don't already have one running, such as
 
    $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
-Or `Parity <https://github.com/ethcore/parity>`_:
+Or `Parity <https://github.com/paritytech/parity>`_:
 
 .. code-block:: bash
 
@@ -229,6 +229,18 @@ been grouped into a block together):
        ...
    });
 
+Or, if you'd rather replay all blocks to the most current, and be notified of new subsequent
+blocks being created::
+
+   Subscription subscription = catchUpToLatestAndSubscribeToNewBlocksObservable(
+           <startBlockNumber>, <fullTxObjects>)
+           .subscribe(block -> {
+               ...
+   });
+
+There are a number of other transaction and block replay Observables described in the
+`docs <http://docs.web3j.io/filters.html>`_.
+
 Topic filters are also supported:
 
 .. code-block:: java
@@ -248,7 +260,9 @@ Subscriptions should always be cancelled when no longer required:
 
 **Note:** filters are not supported on Infura.
 
-For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_.
+For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_ and the
+`Web3jRx <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+interface.
 
 
 Transactions

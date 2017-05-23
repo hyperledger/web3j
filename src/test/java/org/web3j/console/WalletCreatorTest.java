@@ -1,6 +1,5 @@
 package org.web3j.console;
 
-
 import org.junit.Test;
 
 import static org.mockito.Matchers.contains;

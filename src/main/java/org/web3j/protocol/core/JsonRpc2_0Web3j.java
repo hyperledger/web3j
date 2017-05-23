@@ -1,10 +1,9 @@
 package org.web3j.protocol.core;
 
-
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import rx.Observable;
 
@@ -85,9 +84,10 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     public JsonRpc2_0Web3j(
-            Web3jService web3jService, long pollingInterval, ExecutorService executorService) {
+            Web3jService web3jService, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
         this.web3jService = web3jService;
-        this.web3jRx = new JsonRpc2_0Rx(this, executorService);
+        this.web3jRx = new JsonRpc2_0Rx(this, scheduledExecutorService);
         this.blockTime = pollingInterval;
     }
 
@@ -322,7 +322,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(
+    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
+            ethSendTransaction(
             Transaction transaction) {
         return new Request<Transaction, EthSendTransaction>(
                 "eth_sendTransaction",
@@ -333,7 +334,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(
+    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
+            ethSendRawTransaction(
             String signedTransactionData) {
         return new Request<String, EthSendTransaction>(
                 "eth_sendRawTransaction",
@@ -565,7 +567,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthLog> ethGetLogs(org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+    public Request<?, EthLog> ethGetLogs(
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return new Request<org.web3j.protocol.core.methods.request.EthFilter, EthLog>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),
@@ -585,7 +588,8 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, EthSubmitWork> ethSubmitWork(String nonce, String headerPowHash, String mixDigest) {
+    public Request<?, EthSubmitWork> ethSubmitWork(
+            String nonce, String headerPowHash, String mixDigest) {
         return new Request<String, EthSubmitWork>(
                 "eth_submitWork",
                 Arrays.asList(nonce, headerPowHash, mixDigest),
@@ -776,5 +780,54 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Observable<EthBlock> blockObservable(boolean fullTransactionObjects) {
         return web3jRx.blockObservable(fullTransactionObjects, blockTime);
+    }
+
+    @Override
+    public Observable<EthBlock> replayBlocksObservable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects) {
+        return web3jRx.replayBlocksObservable(startBlock, endBlock, fullTransactionObjects);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+            replayTransactionsObservable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        return web3jRx.replayTransactionsObservable(startBlock, endBlock);
+    }
+
+    @Override
+    public Observable<EthBlock> catchUpToLatestBlockObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects,
+            Observable<EthBlock> onCompleteObservable) {
+        return web3jRx.catchUpToLatestBlockObservable(
+                startBlock, fullTransactionObjects, onCompleteObservable);
+    }
+
+    @Override
+    public Observable<EthBlock> catchUpToLatestBlockObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
+        return web3jRx.catchUpToLatestBlockObservable(startBlock, fullTransactionObjects);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+            catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
+        return web3jRx.catchUpToLatestTransactionObservable(startBlock);
+    }
+
+    @Override
+    public Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
+            DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
+        return web3jRx.catchUpToLatestAndSubscribeToNewBlocksObservable(
+                startBlock, fullTransactionObjects, blockTime);
+    }
+
+    @Override
+    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+            catchUpToLatestAndSubscribeToNewTransactionsObservable(
+            DefaultBlockParameter startBlock) {
+        return web3jRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(
+                startBlock, blockTime);
     }
 }

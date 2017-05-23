@@ -1,5 +1,6 @@
 package org.web3j.tx;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
@@ -13,7 +14,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.utils.Numeric;
 
 /**
- * <p>TransactionManager implementation using Ethereum wallet file to create and sign transactions
+ * TransactionManager implementation using Ethereum wallet file to create and sign transactions
  * locally.
  *
  * <p>This transaction manager provides support for specifying the chain id for transactions as per
@@ -52,9 +53,9 @@ public class RawTransactionManager extends TransactionManager {
         this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
-    BigInteger getNonce() throws ExecutionException, InterruptedException {
+    BigInteger getNonce() throws IOException {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                credentials.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
+                credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
 
         return ethGetTransactionCount.getTransactionCount();
     }
@@ -62,7 +63,7 @@ public class RawTransactionManager extends TransactionManager {
     @Override
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value) throws ExecutionException, InterruptedException {
+            String data, BigInteger value) throws IOException {
 
         BigInteger nonce = getNonce();
 
@@ -78,7 +79,7 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public EthSendTransaction signAndSend(RawTransaction rawTransaction)
-            throws ExecutionException, InterruptedException {
+            throws IOException {
 
         byte[] signedMessage;
 
@@ -90,7 +91,7 @@ public class RawTransactionManager extends TransactionManager {
 
         String hexValue = Numeric.toHexString(signedMessage);
 
-        return web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+        return web3j.ethSendRawTransaction(hexValue).send();
     }
 
     @Override

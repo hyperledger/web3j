@@ -19,6 +19,8 @@ import org.spongycastle.math.ec.custom.sec.SecP256K1Curve;
 
 import org.web3j.utils.Numeric;
 
+import static org.web3j.utils.Assertions.verifyPrecondition;
+
 /**
  * <p>Transaction signing logic.</p>
  *
@@ -49,9 +51,11 @@ public class Sign {
                 break;
             }
         }
-        if (recId == -1)
+        if (recId == -1) {
             throw new RuntimeException(
                     "Could not construct a recoverable key. This should never happen.");
+        }
+
         int headerByte = recId + 27;
 
         // 1 header + 32 bytes for R + 32 bytes for S
@@ -122,8 +126,9 @@ public class Sign {
         ECPoint R = decompressKey(x, (recId & 1) == 1);
         //   1.4. If nR != point at infinity, then do another iteration of Step 1 (callers
         //        responsibility).
-        if (!R.multiply(n).isInfinity())
+        if (!R.multiply(n).isInfinity()) {
             return null;
+        }
         //   1.5. Compute e from M using Steps 2 and 3 of ECDSA signature verification.
         BigInteger e = new BigInteger(1, message);
         //   1.6. For k from 1 to 2 do the following.   (loop is outside this function via
@@ -151,12 +156,6 @@ public class Sign {
         return new BigInteger(1, Arrays.copyOfRange(qBytes, 1, qBytes.length));
     }
 
-    private static void verifyPrecondition(boolean assertionResult, String errorMessage) {
-        if (!assertionResult) {
-            throw new RuntimeException(errorMessage);
-        }
-    }
-
     /** Decompress a compressed public key (x co-ord and low-bit of y-coord). */
     private static ECPoint decompressKey(BigInteger xBN, boolean yBit) {
         X9IntegerConverter x9 = new X9IntegerConverter();
@@ -178,20 +177,29 @@ public class Sign {
      */
     public static BigInteger signedMessageToKey(
             byte[] message, SignatureData signatureData) throws SignatureException {
+
+        byte[] r = signatureData.getR();
+        byte[] s = signatureData.getS();
+        verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
+        verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
+
         int header = signatureData.getV() & 0xFF;
         // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
         //                  0x1D = second key with even y, 0x1E = second key with odd y
-        if (header < 27 || header > 34)
+        if (header < 27 || header > 34) {
             throw new SignatureException("Header byte out of range: " + header);
-        BigInteger r = new BigInteger(1, signatureData.getR());
-        BigInteger s = new BigInteger(1, signatureData.getS());
-        ECDSASignature sig = new ECDSASignature(r, s);
+        }
+
+        ECDSASignature sig = new ECDSASignature(
+                new BigInteger(1, signatureData.getR()),
+                new BigInteger(1, signatureData.getS()));
 
         byte[] messageHash = Hash.sha3(message);
         int recId = header - 27;
         BigInteger key = recoverFromSignature(recId, sig, messageHash);
-        if (key == null)
+        if (key == null) {
             throw new SignatureException("Could not recover public key from signature");
+        }
         return key;
     }
 
@@ -264,7 +272,7 @@ public class Sign {
         }
     }
 
-    static class SignatureData {
+    public static class SignatureData {
         private final byte v;
         private final byte[] r;
         private final byte[] s;
@@ -289,15 +297,22 @@ public class Sign {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             SignatureData that = (SignatureData) o;
 
-            if (v != that.v) return false;
-            if (!Arrays.equals(r, that.r)) return false;
+            if (v != that.v) {
+                return false;
+            }
+            if (!Arrays.equals(r, that.r)) {
+                return false;
+            }
             return Arrays.equals(s, that.s);
-
         }
 
         @Override

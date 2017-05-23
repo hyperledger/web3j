@@ -1,5 +1,7 @@
 package org.web3j.tx;
 
+import java.io.IOException;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
@@ -38,24 +40,25 @@ public abstract class TransactionManager {
     TransactionReceipt executeTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
-            throws ExecutionException, InterruptedException, TransactionTimeoutException {
+            throws InterruptedException, IOException, TransactionTimeoutException {
 
-        EthSendTransaction ethSendTransaction = sendTransaction(gasPrice, gasLimit, to, data, value);
+        EthSendTransaction ethSendTransaction = sendTransaction(
+                gasPrice, gasLimit, to, data, value);
         return processResponse(ethSendTransaction);
     }
 
     public abstract EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
-            throws ExecutionException, InterruptedException, TransactionTimeoutException;
+            throws IOException;
 
     public abstract String getFromAddress();
 
-    protected TransactionReceipt processResponse(EthSendTransaction transactionResponse)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
+    private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
+            throws InterruptedException, IOException, TransactionTimeoutException {
         if (transactionResponse.hasError()) {
-            throw new RuntimeException("Error processing transaction request: " +
-                    transactionResponse.getError().getMessage());
+            throw new RuntimeException("Error processing transaction request: "
+                    + transactionResponse.getError().getMessage());
         }
 
         String transactionHash = transactionResponse.getTransactionHash();
@@ -64,15 +67,15 @@ public abstract class TransactionManager {
     }
 
     private TransactionReceipt waitForTransactionReceipt(
-            String transactionHash) throws InterruptedException, ExecutionException,
-            TransactionTimeoutException {
+            String transactionHash)
+            throws InterruptedException, IOException, TransactionTimeoutException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
     private TransactionReceipt getTransactionReceipt(
             String transactionHash, int sleepDuration, int attempts)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
+            throws IOException, InterruptedException, TransactionTimeoutException {
 
         TransactionReceipt receiptOptional =
                 sendTransactionReceiptRequest(transactionHash);
@@ -85,18 +88,18 @@ public abstract class TransactionManager {
             }
         }
 
-        throw new TransactionTimeoutException("Transaction receipt was not generated after " +
-                ((sleepDuration * attempts) / 1000 +
-                        " seconds for transaction: " + transactionHash));
+        throw new TransactionTimeoutException("Transaction receipt was not generated after "
+                + ((sleepDuration * attempts) / 1000
+                + " seconds for transaction: " + transactionHash));
     }
 
     private TransactionReceipt sendTransactionReceiptRequest(
-            String transactionHash) throws InterruptedException, ExecutionException {
+            String transactionHash) throws IOException {
         EthGetTransactionReceipt transactionReceipt =
-                web3j.ethGetTransactionReceipt(transactionHash).sendAsync().get();
+                web3j.ethGetTransactionReceipt(transactionHash).send();
         if (transactionReceipt.hasError()) {
-            throw new RuntimeException("Error processing request: " +
-                    transactionReceipt.getError().getMessage());
+            throw new RuntimeException("Error processing request: "
+                    + transactionReceipt.getError().getMessage());
         }
 
         return transactionReceipt.getTransactionReceipt();

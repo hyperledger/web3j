@@ -1,6 +1,7 @@
 package org.web3j.protocol;
 
 import java.math.BigInteger;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.protocol.core.Ethereum;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;

@@ -1,6 +1,5 @@
 package org.web3j.utils;
 
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class CollectionTest {
     @Test
     public void testTail() {
         assertThat(tail(EMPTY_STRING_ARRAY), is(EMPTY_STRING_ARRAY));
-        assertThat(tail(create("a", "b", "c" )), is(create("b", "c")));
+        assertThat(tail(create("a", "b", "c")), is(create("b", "c")));
         assertThat(tail(create("a")), is(EMPTY_STRING_ARRAY));
     }
 
@@ -87,7 +86,7 @@ public class CollectionTest {
 
 
     /**
-     * Fake object to test {@link Collection#join(List, String, Function)}
+     * Fake object to test {@link Collection#join(List, String, Function)}.
      */
     private final class FakeSpec {
         private final String name;

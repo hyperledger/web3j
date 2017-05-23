@@ -15,23 +15,23 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.web3j.utils.Numeric.b;
+import static org.web3j.utils.Numeric.asByte;
 
 
 public class NumericTest {
 
-    private final byte[] HEX_RANGE_ARRAY = new byte[] {
-            b(0x0, 0x1),
-            b(0x2, 0x3),
-            b(0x4, 0x5),
-            b(0x6, 0x7),
-            b(0x8, 0x9),
-            b(0xa, 0xb),
-            b(0xc, 0xd),
-            b(0xe, 0xf)
+    private static final byte[] HEX_RANGE_ARRAY = new byte[] {
+            asByte(0x0, 0x1),
+            asByte(0x2, 0x3),
+            asByte(0x4, 0x5),
+            asByte(0x6, 0x7),
+            asByte(0x8, 0x9),
+            asByte(0xa, 0xb),
+            asByte(0xc, 0xd),
+            asByte(0xe, 0xf)
     };
 
-    private String HEX_RANGE_STRING = "0x0123456789abcdef";
+    private static final String HEX_RANGE_STRING = "0x0123456789abcdef";
 
 
     @Test

@@ -3,7 +3,7 @@ package org.web3j.protocol.parity.methods.response;
 import org.web3j.protocol.core.Response;
 
 /**
- * Account id object returned by:
+ * Account id object returned by below methods.
  * <ul>
  * <li>personal_newAccount</li>
  * <li>personal_newAccountFromPhrase</li>

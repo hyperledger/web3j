@@ -9,9 +9,13 @@ import org.web3j.abi.datatypes.Uint;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Uint32 extends Uint {
-  public static final Uint32 DEFAULT = new Uint32(BigInteger.ZERO);
+    public static final Uint32 DEFAULT = new Uint32(BigInteger.ZERO);
 
-  public Uint32(BigInteger value) {
-    super(32, value);
-  }
+    public Uint32(BigInteger value) {
+        super(32, value);
+    }
+
+    public Uint32(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }

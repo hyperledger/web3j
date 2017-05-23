@@ -1,9 +1,10 @@
 package org.web3j.codegen;
 
-import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Arrays;
+import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -23,9 +24,9 @@ import org.web3j.abi.datatypes.Uint;
  */
 public class AbiTypesGenerator {
 
-    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n" +
-            "<strong>Do not modifiy!</strong><br>\n" +
-            "Please use {@link " + AbiTypesGenerator.class.getName() + "} to update.</p>\n";
+    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n"
+            + "<strong>Do not modifiy!</strong><br>\n"
+            + "Please use {@link " + AbiTypesGenerator.class.getName() + "} to update.</p>\n";
 
     private static final String DEFAULT = "DEFAULT";
 
@@ -62,6 +63,12 @@ public class AbiTypesGenerator {
                     .addStatement("super($L, $N)", bitSize, "value")
                     .build();
 
+            MethodSpec overideConstructorSpec = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(long.class, "value")
+                    .addStatement("this(BigInteger.valueOf(value))")
+                    .build();
+
             FieldSpec defaultFieldSpec = FieldSpec
                     .builder(className, DEFAULT, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                     .initializer("new $T(BigInteger.ZERO)", className)
@@ -72,14 +79,10 @@ public class AbiTypesGenerator {
                     .superclass(superclass)
                     .addModifiers(Modifier.PUBLIC)
                     .addField(defaultFieldSpec)
-                    .addMethod(constructorSpec)
+                    .addMethods(Arrays.asList(constructorSpec, overideConstructorSpec))
                     .build();
 
-            JavaFile javaFile = JavaFile.builder(packageName, intType)
-                    .skipJavaLangImports(true)
-                    .build();
-
-            javaFile.writeTo(path);
+            write(packageName, intType, path);
         }
     }
 
@@ -167,12 +170,13 @@ public class AbiTypesGenerator {
                     .addMethod(constructorSpec)
                     .build();
 
-           write(packageName, bytesType, path);
+            write(packageName, bytesType, path);
         }
     }
 
     private void write(String packageName, TypeSpec typeSpec, File destination) throws IOException {
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
+                .indent("    ")
                 .skipJavaLangImports(true)
                 .build();
 

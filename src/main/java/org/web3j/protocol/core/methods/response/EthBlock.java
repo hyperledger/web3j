@@ -323,70 +323,105 @@ public class EthBlock extends Response<EthBlock.Block> {
 
             Block block = (Block) o;
 
-            if (getNumberRaw() != null ? !getNumberRaw().equals(block.getNumberRaw()) : block.getNumberRaw() != null) {
+            if (getNumberRaw() != null
+                    ? !getNumberRaw().equals(block.getNumberRaw()) : block.getNumberRaw() != null) {
                 return false;
             }
             if (getHash() != null ? !getHash().equals(block.getHash()) : block.getHash() != null) {
                 return false;
             }
-            if (getParentHash() != null ? !getParentHash().equals(block.getParentHash()) : block.getParentHash() != null) {
+            if (getParentHash() != null
+                    ? !getParentHash().equals(block.getParentHash())
+                    : block.getParentHash() != null) {
                 return false;
             }
-            if (getNonceRaw() != null ? !getNonceRaw().equals(block.getNonceRaw()) : block.getNonceRaw() != null) {
+            if (getNonceRaw() != null
+                    ? !getNonceRaw().equals(block.getNonceRaw()) : block.getNonceRaw() != null) {
                 return false;
             }
-            if (getSha3Uncles() != null ? !getSha3Uncles().equals(block.getSha3Uncles()) : block.getSha3Uncles() != null) {
+            if (getSha3Uncles() != null
+                    ? !getSha3Uncles().equals(block.getSha3Uncles())
+                    : block.getSha3Uncles() != null) {
                 return false;
             }
-            if (getLogsBloom() != null ? !getLogsBloom().equals(block.getLogsBloom()) : block.getLogsBloom() != null) {
+            if (getLogsBloom() != null
+                    ? !getLogsBloom().equals(block.getLogsBloom())
+                    : block.getLogsBloom() != null) {
                 return false;
             }
-            if (getTransactionsRoot() != null ? !getTransactionsRoot().equals(block.getTransactionsRoot()) : block.getTransactionsRoot() != null) {
+            if (getTransactionsRoot() != null
+                    ? !getTransactionsRoot().equals(block.getTransactionsRoot())
+                    : block.getTransactionsRoot() != null) {
                 return false;
             }
-            if (getStateRoot() != null ? !getStateRoot().equals(block.getStateRoot()) : block.getStateRoot() != null) {
+            if (getStateRoot() != null
+                    ? !getStateRoot().equals(block.getStateRoot())
+                    : block.getStateRoot() != null) {
                 return false;
             }
-            if (getReceiptsRoot() != null ? !getReceiptsRoot().equals(block.getReceiptsRoot()) : block.getReceiptsRoot() != null) {
+            if (getReceiptsRoot() != null
+                    ? !getReceiptsRoot().equals(block.getReceiptsRoot())
+                    : block.getReceiptsRoot() != null) {
                 return false;
             }
-            if (getAuthor() != null ? !getAuthor().equals(block.getAuthor()) : block.getAuthor() != null) {
+            if (getAuthor() != null
+                    ? !getAuthor().equals(block.getAuthor()) : block.getAuthor() != null) {
                 return false;
             }
-            if (getMiner() != null ? !getMiner().equals(block.getMiner()) : block.getMiner() != null) {
+            if (getMiner() != null
+                    ? !getMiner().equals(block.getMiner()) : block.getMiner() != null) {
                 return false;
             }
-            if (getMixHash() != null ? !getMixHash().equals(block.getMixHash()) : block.getMixHash() != null) {
+            if (getMixHash() != null
+                    ? !getMixHash().equals(block.getMixHash()) : block.getMixHash() != null) {
                 return false;
             }
-            if (getDifficultyRaw() != null ? !getDifficultyRaw().equals(block.getDifficultyRaw()) : block.getDifficultyRaw() != null) {
+            if (getDifficultyRaw() != null
+                    ? !getDifficultyRaw().equals(block.getDifficultyRaw())
+                    : block.getDifficultyRaw() != null) {
                 return false;
             }
-            if (getTotalDifficultyRaw() != null ? !getTotalDifficultyRaw().equals(block.getTotalDifficultyRaw()) : block.getTotalDifficultyRaw() != null) {
+            if (getTotalDifficultyRaw() != null
+                    ? !getTotalDifficultyRaw().equals(block.getTotalDifficultyRaw())
+                    : block.getTotalDifficultyRaw() != null) {
                 return false;
             }
-            if (getExtraData() != null ? !getExtraData().equals(block.getExtraData()) : block.getExtraData() != null) {
+            if (getExtraData() != null
+                    ? !getExtraData().equals(block.getExtraData())
+                    : block.getExtraData() != null) {
                 return false;
             }
-            if (getSizeRaw() != null ? !getSizeRaw().equals(block.getSizeRaw()) : block.getSizeRaw() != null) {
+            if (getSizeRaw() != null
+                    ? !getSizeRaw().equals(block.getSizeRaw())
+                    : block.getSizeRaw() != null) {
                 return false;
             }
-            if (getGasLimitRaw() != null ? !getGasLimitRaw().equals(block.getGasLimitRaw()) : block.getGasLimitRaw() != null) {
+            if (getGasLimitRaw() != null
+                    ? !getGasLimitRaw().equals(block.getGasLimitRaw())
+                    : block.getGasLimitRaw() != null) {
                 return false;
             }
-            if (getGasUsedRaw() != null ? !getGasUsedRaw().equals(block.getGasUsedRaw()) : block.getGasUsedRaw() != null) {
+            if (getGasUsedRaw() != null
+                    ? !getGasUsedRaw().equals(block.getGasUsedRaw())
+                    : block.getGasUsedRaw() != null) {
                 return false;
             }
-            if (getTimestampRaw() != null ? !getTimestampRaw().equals(block.getTimestampRaw()) : block.getTimestampRaw() != null) {
+            if (getTimestampRaw() != null
+                    ? !getTimestampRaw().equals(block.getTimestampRaw())
+                    : block.getTimestampRaw() != null) {
                 return false;
             }
-            if (getTransactions() != null ? !getTransactions().equals(block.getTransactions()) : block.getTransactions() != null) {
+            if (getTransactions() != null
+                    ? !getTransactions().equals(block.getTransactions())
+                    : block.getTransactions() != null) {
                 return false;
             }
-            if (getUncles() != null ? !getUncles().equals(block.getUncles()) : block.getUncles() != null) {
+            if (getUncles() != null
+                    ? !getUncles().equals(block.getUncles()) : block.getUncles() != null) {
                 return false;
             }
-            return getSealFields() != null ? getSealFields().equals(block.getSealFields()) : block.getSealFields() == null;
+            return getSealFields() != null
+                    ? getSealFields().equals(block.getSealFields()) : block.getSealFields() == null;
         }
 
         @Override
@@ -397,14 +432,16 @@ public class EthBlock extends Response<EthBlock.Block> {
             result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
             result = 31 * result + (getSha3Uncles() != null ? getSha3Uncles().hashCode() : 0);
             result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
-            result = 31 * result + (getTransactionsRoot() != null ? getTransactionsRoot().hashCode() : 0);
+            result = 31 * result
+                    + (getTransactionsRoot() != null ? getTransactionsRoot().hashCode() : 0);
             result = 31 * result + (getStateRoot() != null ? getStateRoot().hashCode() : 0);
             result = 31 * result + (getReceiptsRoot() != null ? getReceiptsRoot().hashCode() : 0);
             result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
             result = 31 * result + (getMiner() != null ? getMiner().hashCode() : 0);
             result = 31 * result + (getMixHash() != null ? getMixHash().hashCode() : 0);
             result = 31 * result + (getDifficultyRaw() != null ? getDifficultyRaw().hashCode() : 0);
-            result = 31 * result + (getTotalDifficultyRaw() != null ? getTotalDifficultyRaw().hashCode() : 0);
+            result = 31 * result
+                    + (getTotalDifficultyRaw() != null ? getTotalDifficultyRaw().hashCode() : 0);
             result = 31 * result + (getExtraData() != null ? getExtraData().hashCode() : 0);
             result = 31 * result + (getSizeRaw() != null ? getSizeRaw().hashCode() : 0);
             result = 31 * result + (getGasLimitRaw() != null ? getGasLimitRaw().hashCode() : 0);
@@ -442,13 +479,16 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof TransactionHash)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof TransactionHash)) {
+                return false;
+            }
 
             TransactionHash that = (TransactionHash) o;
 
             return value != null ? value.equals(that.value) : that.value == null;
-
         }
 
         @Override
@@ -457,7 +497,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
     }
 
-    public static class TransactionObject extends Transaction implements TransactionResult<Transaction> {
+    public static class TransactionObject extends Transaction
+            implements TransactionResult<Transaction> {
         public TransactionObject() {
         }
 
@@ -475,7 +516,8 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
     }
 
-    public static class ResultTransactionDeserialiser extends JsonDeserializer<List<TransactionResult>> {
+    public static class ResultTransactionDeserialiser
+            extends JsonDeserializer<List<TransactionResult>> {
 
         private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 

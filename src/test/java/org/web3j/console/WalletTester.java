@@ -1,6 +1,5 @@
 package org.web3j.console;
 
-
 import org.junit.Before;
 
 import org.web3j.TempFileProvider;

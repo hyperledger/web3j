@@ -1,5 +1,6 @@
 package org.web3j.tx;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
@@ -9,7 +10,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 
 /**
- * <p>TransactionManager implementation for using an Ethereum node to transact.
+ * TransactionManager implementation for using an Ethereum node to transact.
  *
  * <p><b>Note</b>: accounts must be unlocked on the node for transactions to be successful.
  */
@@ -36,13 +37,13 @@ public class ClientTransactionManager extends TransactionManager {
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
-            throws ExecutionException, InterruptedException, TransactionTimeoutException {
+            throws IOException {
 
         Transaction transaction = new Transaction(
                 fromAddress, null, gasPrice, gasLimit, to, value, data);
 
         return web3j.ethSendTransaction(transaction)
-                .sendAsync().get();
+                .send();
     }
 
     @Override

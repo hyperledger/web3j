@@ -54,7 +54,8 @@ public abstract class ResponseTester {
         T response = null;
         try {
             response = web3jService.getResponseHandler(type).handleResponse(httpResponse);
-            when(closeableHttpClient.execute(isA(HttpPost.class), isA(ResponseHandler.class))).thenReturn(response);
+            when(closeableHttpClient.execute(isA(HttpPost.class), isA(ResponseHandler.class)))
+                    .thenReturn(response);
         } catch (IOException e) {
             fail(e.getMessage());
         }

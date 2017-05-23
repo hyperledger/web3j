@@ -1,6 +1,5 @@
 package org.web3j.protocol.core;
 
-
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -10,7 +9,6 @@ import rx.Observable;
 import rx.Subscriber;
 
 import org.web3j.protocol.Web3jService;
-
 
 public class Request<S, T extends Response> {
     private String jsonrpc = "2.0";
@@ -82,10 +80,9 @@ public class Request<S, T extends Response> {
                     @Override
                     public void call(final Subscriber<? super T> subscriber) {
                         try {
-                            subscriber.onNext(Request.this.sendAsync().get());
-                        } catch (InterruptedException e) {
-                            subscriber.onError(e);
-                        } catch (ExecutionException e) {
+                            subscriber.onNext(send());
+                            subscriber.onCompleted();
+                        } catch (IOException e) {
                             subscriber.onError(e);
                         }
                     }

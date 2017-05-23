@@ -22,11 +22,12 @@ public abstract class Filter<T extends Filter> {
 
     public T addSingleTopic(String topic) {
         topics.add(new SingleTopic<String>(topic));
+        topics.add(new SingleTopic(topic));
         return getThis();
     }
 
     public T addNullTopic() {
-        topics.add(new SingleTopic<Object>());
+        topics.add(new SingleTopic());
         return getThis();
     }
 
@@ -47,7 +48,8 @@ public abstract class Filter<T extends Filter> {
         T getValue();
     }
 
-    public static class SingleTopic<String> implements FilterTopic {
+    public static class SingleTopic implements FilterTopic<String> {
+
         private String topic;
 
         public SingleTopic() {
@@ -64,14 +66,14 @@ public abstract class Filter<T extends Filter> {
         }
     }
 
-    public static class ListTopic implements FilterTopic<List<SingleTopic<String>>> {
-        private List<SingleTopic<String>> topics;
+    public static class ListTopic implements FilterTopic<List<SingleTopic>> {
+        private List<SingleTopic> topics;
 
         public ListTopic(String... optionalTopics) {
-            topics = new ArrayList<SingleTopic<String>>();
+            topics = new ArrayList<SingleTopic>();
             for (String topic : optionalTopics) {
                 if (topic != null) {
-                    topics.add(new SingleTopic<String>(topic));
+                    topics.add(new SingleTopic(topic));
                 } else {
                     topics.add(new SingleTopic());
                 }
@@ -79,7 +81,7 @@ public abstract class Filter<T extends Filter> {
         }
 
         @Override
-        public List<SingleTopic<String>> getValue() {
+        public List<SingleTopic> getValue() {
             return topics;
         }
     }

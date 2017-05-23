@@ -68,15 +68,16 @@ class TypeDecoder {
         }
     }
 
-    public static <T extends Array> T decode(String input, int offset, TypeReference<T> typeReference) {
+    public static <T extends Array> T decode(
+            String input, int offset, TypeReference<T> typeReference) {
         Class cls = ((ParameterizedType) typeReference.getType()).getRawType().getClass();
         if (StaticArray.class.isAssignableFrom(cls)) {
             return decodeStaticArray(input, offset, typeReference, 1);
         } else if (DynamicArray.class.isAssignableFrom(cls)) {
             return decodeDynamicArray(input, offset, typeReference);
         } else {
-            throw new UnsupportedOperationException("Unsupported TypeReference: " +
-                    cls.getName() + ", only Array types can be passed as TypeReferences");
+            throw new UnsupportedOperationException("Unsupported TypeReference: "
+                    + cls.getName() + ", only Array types can be passed as TypeReferences");
         }
     }
 
@@ -133,7 +134,8 @@ class TypeDecoder {
                 return Integer.parseInt(splitName[1]);
             }
         } else if (FixedPointType.class.isAssignableFrom(type)) {
-            String regex = "(" + Ufixed.class.getSimpleName() + "|" + Fixed.class.getSimpleName() + ")";
+            String regex = "(" + Ufixed.class.getSimpleName() + "|"
+                    + Fixed.class.getSimpleName() + ")";
             String[] splitName = type.getSimpleName().split(regex);
             if (splitName.length == 2) {
                 String[] bitsCounts = splitName[1].split("x");
@@ -158,7 +160,7 @@ class TypeDecoder {
     }
 
     static <T extends Bytes> T decodeBytes(String input, Class<T> type) {
-    	return decodeBytes(input, 0, type);
+        return decodeBytes(input, 0, type);
     }
     
     static <T extends Bytes> T decodeBytes(String input, int offset, Class<T> type) {
@@ -168,7 +170,8 @@ class TypeDecoder {
             int length = Integer.parseInt(splitName[1]);
             int hexStringLength = length << 1;
 
-            byte[] bytes = Numeric.hexStringToByteArray(input.substring(offset, offset+hexStringLength));
+            byte[] bytes = Numeric.hexStringToByteArray(
+                    input.substring(offset, offset + hexStringLength));
             return type.getConstructor(byte[].class).newInstance(bytes);
         } catch (NoSuchMethodException e) {
             return throwUnsupportedOperation(e, type);
@@ -237,14 +240,14 @@ class TypeDecoder {
             Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
             if (Array.class.isAssignableFrom(cls)) {
                 throw new UnsupportedOperationException(
-                        "Arrays of arrays are not currently supported for external functions, " +
-                                "see http://solidity.readthedocs.io/en/develop/types.html#members");
+                        "Arrays of arrays are not currently supported for external functions, see"
+                                + "http://solidity.readthedocs.io/en/develop/types.html#members");
             } else {
                 List<T> elements = new ArrayList<T>(length);
 
                 for (int i = 0, currOffset = offset;
-                     i < length;
-                     i++, currOffset += getSingleElementLength(input, currOffset, cls)
+                        i < length;
+                        i++, currOffset += getSingleElementLength(input, currOffset, cls)
                              * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
                     T value = decode(input, currOffset, cls);
                     elements.add(value);

@@ -17,13 +17,17 @@ public class DefaultBlockParameterNumber implements DefaultBlockParameter {
         this.blockNumber = blockNumber;
     }
 
+    public DefaultBlockParameterNumber(long blockNumber) {
+        this(BigInteger.valueOf(blockNumber));
+    }
+
     @Override
     @JsonValue
     public String getValue() {
         return Numeric.encodeQuantity(blockNumber);
     }
 
-    static DefaultBlockParameter valueOf(BigInteger blockNumber) {
-        return new DefaultBlockParameterNumber(blockNumber);
+    public BigInteger getBlockNumber() {
+        return blockNumber;
     }
 }

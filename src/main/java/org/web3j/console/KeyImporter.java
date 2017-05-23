@@ -60,8 +60,8 @@ public class KeyImporter extends WalletManager {
 
     private void createWalletFile(String privateKey) {
         if (!WalletUtils.isValidPrivateKey(privateKey)) {
-            exitError("Invalid private key specified, must be " +
-                    PRIVATE_KEY_LENGTH_IN_HEX
+            exitError("Invalid private key specified, must be "
+                    + PRIVATE_KEY_LENGTH_IN_HEX
                     + " digit hex value");
         }
 
@@ -74,8 +74,8 @@ public class KeyImporter extends WalletManager {
         try {
             String walletFileName = WalletUtils.generateWalletFile(
                     password, credentials.getEcKeyPair(), destination, true);
-            console.printf("Wallet file " + walletFileName +
-                    " successfully created in: " + destinationDir + "\n");
+            console.printf("Wallet file " + walletFileName
+                    + " successfully created in: " + destinationDir + "\n");
         } catch (CipherException e) {
             exitError(e);
         } catch (IOException e) {

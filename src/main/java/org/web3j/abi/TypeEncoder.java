@@ -31,9 +31,9 @@ public class TypeEncoder {
     private TypeEncoder() { }
 
     static boolean isDynamic(Type parameter) {
-        return parameter instanceof DynamicBytes ||
-                parameter instanceof Utf8String ||
-                parameter instanceof DynamicArray;
+        return parameter instanceof DynamicBytes
+                || parameter instanceof Utf8String
+                || parameter instanceof DynamicArray;
     }
 
     static String encode(Type parameter) {
@@ -85,9 +85,10 @@ public class TypeEncoder {
     private static byte[] toByteArray(NumericType numericType) {
         BigInteger value = numericType.getValue();
         if (numericType instanceof Ufixed || numericType instanceof Uint) {
-            if (value.bitCount() == MAX_BIT_LENGTH) {
-                // As BigInteger is signed, if we have a 256 bit value, the resultant byte array will
-                // contain a sign byte in it's MSB, which we should ignore for this unsigned integer type.
+            if (value.bitLength() == MAX_BIT_LENGTH) {
+                // As BigInteger is signed, if we have a 256 bit value, the resultant byte array
+                // will contain a sign byte in it's MSB, which we should ignore for this unsigned
+                // integer type.
                 byte[] byteArray = new byte[MAX_BYTE_LENGTH];
                 System.arraycopy(value.toByteArray(), 1, byteArray, 0, MAX_BYTE_LENGTH);
                 return byteArray;

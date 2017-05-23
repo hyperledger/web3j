@@ -3,7 +3,7 @@ package org.web3j.crypto;
 import org.web3j.utils.Numeric;
 
 /**
- * Credentials wrapper
+ * Credentials wrapper.
  */
 public class Credentials {
 
@@ -38,15 +38,20 @@ public class Credentials {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Credentials that = (Credentials) o;
 
-        if (ecKeyPair != null ? !ecKeyPair.equals(that.ecKeyPair) : that.ecKeyPair != null)
+        if (ecKeyPair != null ? !ecKeyPair.equals(that.ecKeyPair) : that.ecKeyPair != null) {
             return false;
-        return address != null ? address.equals(that.address) : that.address == null;
+        }
 
+        return address != null ? address.equals(that.address) : that.address == null;
     }
 
     @Override

@@ -167,6 +167,7 @@ The smart contract wrappers support all common operations for working with smart
 - :ref:`construction-and-deployment`
 - :ref:`invoking-transactions`
 - :ref:`constant-methods`
+- :ref:`contract-validity`
 
 Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.
@@ -191,8 +192,16 @@ It returns a new smart contract wrapper instance which contains the underlying a
 smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
 smart contract, simply pass in it's address::
 
-   YourSmartContract contract = new YourSmartContract(
-           "0x...", web3j, credentials, GAS_PRICE, GAS_LIMIT);
+   YourSmartContract contract = YourSmartContract.load(
+           "0x<address>", web3j, credentials, GAS_PRICE, GAS_LIMIT);
+
+Using this method, you may want to ascertain that the contract address that you have loaded is the
+smart contract that you expect. For this you can use the isValid smart contract method, which will
+only return true if the deployed bytecode at the contract address matches the bytecode in the
+smart contract wrapper.
+
+   contract.isValid();  // returns false if the contract bytecode does not match what's deployed
+                        // at the provided addres
 
 
 .. _transaction-managers:
@@ -269,6 +278,14 @@ object.::
 
    EventValues eventValues = contract.processSomeEvent(transactionReceipt);
 
+Alternatively you can use an Observable filter instead which will listen for events associated with
+the smart contract::
+
+   contract.someEventObservable(startBlock, endBlock).
+           .subscribe(event -> ...);
+
+For more information on working with Observable filters, refer to :doc:`filters`.
+
 **Remember** that for any indexed array, bytes and string Solidity parameter
 types, a Keccak-256 hash of their values will be returned, see the
 `documentation <http://solidity.readthedocs.io/en/latest/contracts.html#events>`_
@@ -285,6 +302,11 @@ the smart contract. These methods are available with the same method signature a
 contract they were generated from, the only addition is that the call is wrapped in a Future.::
 
    Type result = contract.someMethod(new Type(...), ...).get();
+
+
+
+.. _contract-validity:
+
 
 
 Examples

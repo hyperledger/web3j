@@ -25,7 +25,7 @@ Features
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
 - Support for Parity's
-  `Personal <https://github.com/ethcore/parity/wiki/JSONRPC-personal-module>`__, and Geth's
+  `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios

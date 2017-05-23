@@ -22,7 +22,7 @@ public class Ufixed extends FixedPointType {
         this(convert(m, n));
     }
 
-     protected Ufixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+    protected Ufixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
         this(convert(mBitSize, nBitSize, m, n));
     }
 

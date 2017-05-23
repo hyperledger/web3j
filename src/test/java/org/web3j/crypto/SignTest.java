@@ -1,6 +1,5 @@
 package org.web3j.crypto;
 
-
 import java.math.BigInteger;
 import java.security.SignatureException;
 
@@ -42,5 +41,11 @@ public class SignTest {
     public void testPublicKeyFromPrivateKey() {
         assertThat(Sign.publicKeyFromPrivate(SampleKeys.PRIVATE_KEY),
                 equalTo(SampleKeys.PUBLIC_KEY));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvalidSignature() throws SignatureException {
+        Sign.signedMessageToKey(
+                TEST_MESSAGE, new Sign.SignatureData((byte) 27, new byte[]{1}, new byte[]{0}));
     }
 }

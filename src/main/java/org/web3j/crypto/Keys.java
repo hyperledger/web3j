@@ -38,8 +38,9 @@ public class Keys {
     /**
      * Create a keypair using SECP-256k1 curve.
      *
-     * Private keypairs are encoded using PKCS8
-     * Private keys are encoded using X.509
+     * <p>Private keypairs are encoded using PKCS8
+     *
+     * <p>Private keys are encoded using X.509
      */
     static KeyPair createSecp256k1KeyPair() throws NoSuchProviderException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException {
@@ -70,8 +71,8 @@ public class Keys {
 
         if (publicKeyNoPrefix.length() < PUBLIC_KEY_LENGTH_IN_HEX) {
             publicKeyNoPrefix = Strings.zeros(
-                    PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length()) +
-                    publicKeyNoPrefix;
+                    PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length())
+                    + publicKeyNoPrefix;
         }
         String hash = Hash.sha3(publicKeyNoPrefix);
         return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX);  // right most 160 bits

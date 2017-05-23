@@ -1,6 +1,5 @@
 package org.web3j.protocol.infura;
 
-
 import cz.msebera.android.httpclient.message.BasicHeader;
 import org.junit.Test;
 

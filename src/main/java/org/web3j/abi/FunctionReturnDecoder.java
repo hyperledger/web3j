@@ -47,8 +47,8 @@ public class FunctionReturnDecoder {
      * encoded, unlike non-indexed parameters which are encoded as per ABI-encoded function
      * parameters and return values.</p>
      *
-     * <p>If any of the following types are indexed, the Keccak-256 hashes of the values are returned
-     * instead. These are returned as a bytes32 value.</p>
+     * <p>If any of the following types are indexed, the Keccak-256 hashes of the values are
+     * returned instead. These are returned as a bytes32 value.</p>
      *
      * <ul>
      *     <li>Arrays</li>
@@ -72,9 +72,9 @@ public class FunctionReturnDecoder {
         try {
             Class<T> type = typeReference.getClassType();
 
-            if (Array.class.isAssignableFrom(type) ||
-                    BytesType.class.isAssignableFrom(type) ||
-                    Utf8String.class.isAssignableFrom(type)) {
+            if (Array.class.isAssignableFrom(type)
+                    || BytesType.class.isAssignableFrom(type)
+                    || Utf8String.class.isAssignableFrom(type)) {
                 return TypeDecoder.decodeBytes(input, Bytes32.class);
             } else {
                 return TypeDecoder.decode(input, type);

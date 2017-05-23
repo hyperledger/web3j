@@ -73,7 +73,8 @@ public class CreateRawTransactionIT extends Scenario {
                 nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
     }
 
-    private static RawTransaction createSmartContractTransaction(BigInteger nonce) throws Exception {
+    private static RawTransaction createSmartContractTransaction(BigInteger nonce)
+            throws Exception {
         return RawTransaction.createContractTransaction(
                 nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
     }

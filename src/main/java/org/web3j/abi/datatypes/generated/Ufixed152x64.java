@@ -9,13 +9,13 @@ import org.web3j.abi.datatypes.Ufixed;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Ufixed152x64 extends Ufixed {
-  public static final Ufixed152x64 DEFAULT = new Ufixed152x64(BigInteger.ZERO);
+    public static final Ufixed152x64 DEFAULT = new Ufixed152x64(BigInteger.ZERO);
 
-  public Ufixed152x64(BigInteger value) {
-    super(152, 64, value);
-  }
+    public Ufixed152x64(BigInteger value) {
+        super(152, 64, value);
+    }
 
-  public Ufixed152x64(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
-    super(152, 64, m, n);
-  }
+    public Ufixed152x64(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+        super(152, 64, m, n);
+    }
 }

@@ -1,6 +1,5 @@
 package org.web3j.console;
 
-
 import org.junit.Test;
 
 import static org.mockito.Matchers.contains;
@@ -22,8 +21,9 @@ public class WalletUpdaterTest extends WalletTester {
         when(console.readLine(startsWith("Would you like to delete")))
                 .thenReturn("N");
 
-        WalletUpdater.main(console, KeyImporterTest.class.getResource("/keyfiles/" +
-                "UTC--2016-11-03T05-55-06.340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
+        WalletUpdater.main(console, KeyImporterTest.class.getResource("/keyfiles/"
+                + "UTC--2016-11-03T05-55-06.340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")
+                .getFile());
 
         verify(console).printf(contains("successfully created in"));
     }

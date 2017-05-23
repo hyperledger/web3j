@@ -1,5 +1,6 @@
 package org.web3j.protocol.core;
 
+import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -13,6 +14,7 @@ import rx.functions.Action1;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.http.HttpService;
 
 import static junit.framework.TestCase.assertTrue;
@@ -27,9 +29,11 @@ public class ObservableIT {
     private Web3j web3j;
 
     public ObservableIT() {
-        System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty(
+                "org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+        System.setProperty(
+                "org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
     }
 
     @Before
@@ -55,6 +59,23 @@ public class ObservableIT {
     @Test
     public void testLogObservable() throws Exception {
         run(web3j.ethLogObservable(new EthFilter()));
+    }
+
+    @Test
+    public void testReplayObservable() throws Exception {
+        run(web3j.replayBlocksObservable(
+                new DefaultBlockParameterNumber(0),
+                new DefaultBlockParameterNumber(EVENT_COUNT), true));
+    }
+
+    @Test
+    public void testCatchUpToLatestAndSubscribeToNewBlocksObservable() throws Exception {
+        EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
+                .send();
+        BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
+        run(web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
+                new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
+                false));
     }
 
     private <T> void run(Observable<T> observable) throws Exception {

@@ -68,7 +68,7 @@ public class InfuraHttpService extends HttpService {
      * Create an {@link InfuraHttpService} instance with a local keystore that implicitly trusts
      * the provided endpoint.
      *
-     * This is achieved by creating a local temporary keystore file which we add the certificate
+     * <p>This is achieved by creating a local temporary keystore file which we add the certificate
      * of the endpoint to upon application startup.
      *
      * @param url we wish to connect to

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.web3j.protocol.core.Response;
 
 /**
- * personal_accountsInfo
+ * personal_accountsInfo.
  */
 public class PersonalAccountsInfo extends Response<Map<String, PersonalAccountsInfo.AccountsInfo>> {
 
@@ -54,15 +54,22 @@ public class PersonalAccountsInfo extends Response<Map<String, PersonalAccountsI
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof AccountsInfo)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof AccountsInfo)) {
+                return false;
+            }
 
             AccountsInfo that = (AccountsInfo) o;
 
-            if (name != null ? !name.equals(that.name) : that.name != null) return false;
-            if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
+            if (name != null ? !name.equals(that.name) : that.name != null) {
+                return false;
+            }
+            if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) {
+                return false;
+            }
             return meta != null ? meta.equals(that.meta) : that.meta == null;
-
         }
 
         @Override

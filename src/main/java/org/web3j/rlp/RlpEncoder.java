@@ -22,12 +22,10 @@ public class RlpEncoder {
         }
     }
 
-    static byte[] encodeString(RlpString value) {
-        return encode(value.getBytes(), STRING_OFFSET);
-    }
-
     private static byte[] encode(byte[] bytesValue, int offset) {
-        if (bytesValue.length == 1 && bytesValue[0] >= (byte) 0x00 && bytesValue[0] <= (byte) 0x7f) {
+        if (bytesValue.length == 1
+                && bytesValue[0] >= (byte) 0x00
+                && bytesValue[0] <= (byte) 0x7f) {
             return bytesValue;
         } else if (bytesValue.length < 55) {
             byte[] result = new byte[bytesValue.length + 1];
@@ -38,12 +36,16 @@ public class RlpEncoder {
             byte[] encodedStringLength = toMinimalByteArray(bytesValue.length);
             byte[] result = new byte[bytesValue.length + encodedStringLength.length + 1];
 
-            result[0] = (byte) ( (offset + 0x37) + encodedStringLength.length);
+            result[0] = (byte) ((offset + 0x37) + encodedStringLength.length);
             System.arraycopy(encodedStringLength, 0, result, 1, encodedStringLength.length);
             System.arraycopy(
                     bytesValue, 0, result, encodedStringLength.length + 1, bytesValue.length);
             return result;
         }
+    }
+
+    static byte[] encodeString(RlpString value) {
+        return encode(value.getBytes(), STRING_OFFSET);
     }
 
     private static byte[] toMinimalByteArray(int value) {

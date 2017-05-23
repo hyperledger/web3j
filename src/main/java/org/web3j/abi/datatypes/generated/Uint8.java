@@ -9,9 +9,13 @@ import org.web3j.abi.datatypes.Uint;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Uint8 extends Uint {
-  public static final Uint8 DEFAULT = new Uint8(BigInteger.ZERO);
+    public static final Uint8 DEFAULT = new Uint8(BigInteger.ZERO);
 
-  public Uint8(BigInteger value) {
-    super(8, value);
-  }
+    public Uint8(BigInteger value) {
+        super(8, value);
+    }
+
+    public Uint8(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }

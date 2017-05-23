@@ -166,28 +166,40 @@ public class TransactionReceipt {
 
         TransactionReceipt that = (TransactionReceipt) o;
 
-        if (getTransactionHash() != null ? !getTransactionHash().equals(that.getTransactionHash()) : that.getTransactionHash() != null) {
+        if (getTransactionHash() != null
+                ? !getTransactionHash().equals(that.getTransactionHash())
+                : that.getTransactionHash() != null) {
             return false;
         }
-        if (transactionIndex != null ? !transactionIndex.equals(that.transactionIndex) : that.transactionIndex != null) {
+        if (transactionIndex != null
+                ? !transactionIndex.equals(that.transactionIndex)
+                : that.transactionIndex != null) {
             return false;
         }
-        if (getBlockHash() != null ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
+        if (getBlockHash() != null
+                ? !getBlockHash().equals(that.getBlockHash())
+                : that.getBlockHash() != null) {
             return false;
         }
-        if (blockNumber != null ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
+        if (blockNumber != null
+                ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
             return false;
         }
-        if (cumulativeGasUsed != null ? !cumulativeGasUsed.equals(that.cumulativeGasUsed) : that.cumulativeGasUsed != null) {
+        if (cumulativeGasUsed != null
+                ? !cumulativeGasUsed.equals(that.cumulativeGasUsed)
+                : that.cumulativeGasUsed != null) {
             return false;
         }
         if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null) {
             return false;
         }
-        if (getContractAddress() != null ? !getContractAddress().equals(that.getContractAddress()) : that.getContractAddress() != null) {
+        if (getContractAddress() != null
+                ? !getContractAddress().equals(that.getContractAddress())
+                : that.getContractAddress() != null) {
             return false;
         }
-        if (getRoot() != null ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
+        if (getRoot() != null
+                ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
             return false;
         }
         if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
@@ -199,7 +211,8 @@ public class TransactionReceipt {
         if (getLogs() != null ? !getLogs().equals(that.getLogs()) : that.getLogs() != null) {
             return false;
         }
-        return getLogsBloom() != null ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
+        return getLogsBloom() != null
+                ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
     }
 
     @Override

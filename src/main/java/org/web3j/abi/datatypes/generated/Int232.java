@@ -9,9 +9,13 @@ import org.web3j.abi.datatypes.Int;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Int232 extends Int {
-  public static final Int232 DEFAULT = new Int232(BigInteger.ZERO);
+    public static final Int232 DEFAULT = new Int232(BigInteger.ZERO);
 
-  public Int232(BigInteger value) {
-    super(232, value);
-  }
+    public Int232(BigInteger value) {
+        super(232, value);
+    }
+
+    public Int232(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }

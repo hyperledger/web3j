@@ -1,5 +1,6 @@
 package org.web3j.tx;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
+import org.web3j.utils.Numeric;
 
 
 /**
@@ -34,23 +37,42 @@ public abstract class Contract extends ManagedTransaction {
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
 
+    private final String contractBinary;
     private String contractAddress;
     private final BigInteger gasPrice;
     private final BigInteger gasLimit;
     private TransactionReceipt transactionReceipt;
 
-    protected Contract(String contractAddress, Web3j web3j, TransactionManager transactionManager,
+    protected Contract(String contractBinary, String contractAddress,
+                       Web3j web3j, TransactionManager transactionManager,
                        BigInteger gasPrice, BigInteger gasLimit) {
         super(web3j, transactionManager);
 
+        this.contractBinary = contractBinary;
         this.contractAddress = contractAddress;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
     }
 
-    protected Contract(String contractAddress, Web3j web3j, Credentials credentials,
+    protected Contract(String contractBinary, String contractAddress,
+                       Web3j web3j, Credentials credentials,
                        BigInteger gasPrice, BigInteger gasLimit) {
-        this(contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+        this(contractBinary, contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+                gasPrice, gasLimit);
+    }
+
+    @Deprecated
+    protected Contract(String contractAddress,
+                       Web3j web3j, TransactionManager transactionManager,
+                       BigInteger gasPrice, BigInteger gasLimit) {
+        this("", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    }
+
+    @Deprecated
+    protected Contract(String contractAddress,
+                       Web3j web3j, Credentials credentials,
+                       BigInteger gasPrice, BigInteger gasLimit) {
+        this("", contractAddress, web3j, new RawTransactionManager(web3j, credentials),
                 gasPrice, gasLimit);
     }
 
@@ -66,10 +88,46 @@ public abstract class Contract extends ManagedTransaction {
         this.transactionReceipt = transactionReceipt;
     }
 
+    public String getContractBinary() {
+        return contractBinary;
+    }
+
+    /**
+     * Check that the contract deployed at the address associated with this smart contract wrapper
+     * is in fact the contract you believe it is.
+     *
+     * <p>This method uses the
+     * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getcode">eth_getCode</a> method
+     * to get the contract byte code and validates it against the byte code stored in this smart
+     * contract wrapper.
+     *
+     * @return true if the contract is valid
+     * @throws IOException if unable to connect to web3j node
+     */
+    public boolean isValid() throws IOException {
+        if (contractAddress.equals("")) {
+            throw new UnsupportedOperationException(
+                    "Contract binary not present, you will need to regenerate your smart "
+                            + "contract wrapper with web3j v2.2.0+");
+        }
+
+        EthGetCode ethGetCode = web3j
+                .ethGetCode(contractAddress, DefaultBlockParameterName.LATEST)
+                .send();
+        if (ethGetCode.hasError()) {
+            return false;
+        }
+
+        String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
+        // There may be multiple contracts in the Solidity bytecode, hence we only check for a
+        // match with a subset
+        return !code.isEmpty() && contractBinary.contains(code);
+    }
+
     /**
      * If this Contract instance was created at deployment, the TransactionReceipt associated
-     * with the initial creation will be provided, e.g. via a <em>deploy</em> method. This will not persist
-     * for Contracts instances constructed via a <em>load</em> method.
+     * with the initial creation will be provided, e.g. via a <em>deploy</em> method. This will
+     * not persist for Contracts instances constructed via a <em>load</em> method.
      *
      * @return the TransactionReceipt generated at contract deployment
      */
@@ -82,14 +140,15 @@ public abstract class Contract extends ManagedTransaction {
      *
      * @param function to call
      * @return {@link List} of values returned by function call
-     * @throws InterruptedException
-     * @throws ExecutionException
+     * @throws InterruptedException if async call is interrupted
+     * @throws ExecutionException if async call throws an exception
      */
     private List<Type> executeCall(
             Function function) throws InterruptedException, ExecutionException {
         String encodedFunction = FunctionEncoder.encode(function);
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
-                Transaction.createEthCallTransaction(contractAddress, encodedFunction),
+                Transaction.createEthCallTransaction(
+                        transactionManager.getFromAddress(), contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();
 
@@ -129,7 +188,7 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected TransactionReceipt executeTransaction(Function function) throws InterruptedException,
-            ExecutionException, TransactionTimeoutException {
+            IOException, TransactionTimeoutException {
         return executeTransaction(FunctionEncoder.encode(function), BigInteger.ZERO);
     }
 
@@ -139,19 +198,18 @@ public abstract class Contract extends ManagedTransaction {
      * recommended via {@link Contract#executeTransactionAsync}.
      *
      * @param data  to send in transaction
-     * @param value in Wei to send in transaction
+     * @param weiValue in Wei to send in transaction
      * @return transaction receipt
-     * @throws ExecutionException          if the computation threw an
-     *                                     exception
      * @throws InterruptedException        if the current thread was interrupted
      *                                     while waiting
+     * @throws IOException                 if the call to the node fails
      * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     protected TransactionReceipt executeTransaction(
-            String data, BigInteger value)
-            throws ExecutionException, InterruptedException, TransactionTimeoutException {
+            String data, BigInteger weiValue)
+            throws InterruptedException, IOException, TransactionTimeoutException {
 
-        return send(contractAddress, data, value, gasPrice, gasLimit);
+        return send(contractAddress, data, weiValue, gasPrice, gasLimit);
     }
 
     /**
@@ -213,7 +271,8 @@ public abstract class Contract extends ManagedTransaction {
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
         Constructor<T> constructor = type.getDeclaredConstructor(
-                String.class, Web3j.class, Credentials.class,
+                String.class,
+                Web3j.class, Credentials.class,
                 BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
@@ -230,7 +289,8 @@ public abstract class Contract extends ManagedTransaction {
             String binary, String encodedConstructor, BigInteger value) throws Exception {
 
         Constructor<T> constructor = type.getDeclaredConstructor(
-                String.class, Web3j.class, TransactionManager.class,
+                String.class,
+                Web3j.class, TransactionManager.class,
                 BigInteger.class, BigInteger.class);
         constructor.setAccessible(true);
 
@@ -242,7 +302,7 @@ public abstract class Contract extends ManagedTransaction {
 
     private static <T extends Contract> T create(
             T contract, String binary, String encodedConstructor, BigInteger value)
-            throws InterruptedException, ExecutionException, TransactionTimeoutException {
+            throws InterruptedException, IOException, TransactionTimeoutException {
         TransactionReceipt transactionReceipt =
                 contract.executeTransaction(binary + encodedConstructor, value);
 
@@ -259,13 +319,14 @@ public abstract class Contract extends ManagedTransaction {
     protected static <T extends Contract> Future<T> deployAsync(
             final Class<T> type, final Web3j web3j, final Credentials credentials,
             final BigInteger gasPrice, final BigInteger gasLimit,
-            final String binary, final String encodedConstructor, final BigInteger value) {
+            final String binary, final String encodedConstructor,
+            final BigInteger initialWeiValue) {
 
         return Async.run(new Callable<T>() {
             @Override
             public T call() throws Exception {
                 return deploy(type, web3j, credentials, gasPrice, gasLimit,
-                        binary, encodedConstructor, value);
+                        binary, encodedConstructor, initialWeiValue);
             }
         });
     }
@@ -273,7 +334,8 @@ public abstract class Contract extends ManagedTransaction {
     protected static <T extends Contract> Future<T> deployAsync(
             final Class<T> type, final Web3j web3j, final TransactionManager transactionManager,
             final BigInteger gasPrice, final BigInteger gasLimit,
-            final String binary, final String encodedConstructor, final BigInteger value) {
+            final String binary, final String encodedConstructor,
+            final BigInteger initialWeiValue) {
 
         return Async.run(
                 new Callable<T>() {

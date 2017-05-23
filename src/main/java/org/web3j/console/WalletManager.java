@@ -22,8 +22,8 @@ abstract class WalletManager {
         console = new ConsoleDevice();
 
         if (console == null) {
-            Console.exitError("Unable to access console - please ensure you are running " +
-                    "from the command line");
+            Console.exitError("Unable to access console - please ensure you are running "
+                    + "from the command line");
         }
     }
 
@@ -63,8 +63,8 @@ abstract class WalletManager {
         if (!destination.exists()) {
             console.printf("Creating directory: " + destinationDir + " ...");
             if (!destination.mkdirs()) {
-                Console.exitError("Unable to create destination directory [" +
-                        destinationDir + "], exiting...");
+                Console.exitError("Unable to create destination directory ["
+                        + destinationDir + "], exiting...");
             } else {
                 console.printf("complete\n");
             }

@@ -3,7 +3,7 @@ package org.web3j.protocol.core.methods.response;
 import org.web3j.protocol.core.Response;
 
 /**
- * shh_version
+ * shh_version.
  */
 public class ShhVersion extends Response<String> {
 

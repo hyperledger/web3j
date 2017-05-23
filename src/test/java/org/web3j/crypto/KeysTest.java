@@ -1,6 +1,5 @@
 package org.web3j.crypto;
 
-
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -57,8 +56,8 @@ public class KeysTest {
     @Test
     public void testGetAddressZeroPaddedAddress() {
         String publicKey =
-                "0xa1b31be4d58a7ddd24b135db0da56a90fb5382077ae26b250e1dc9cd6232ce22" +
-                        "70f4c995428bc76aa78e522316e95d7834d725efc9ca754d043233af6ca90113";
+                "0xa1b31be4d58a7ddd24b135db0da56a90fb5382077ae26b250e1dc9cd6232ce22"
+                        + "70f4c995428bc76aa78e522316e95d7834d725efc9ca754d043233af6ca90113";
         assertThat(Keys.getAddress(publicKey),
                 is("01c52b08330e05d731e38c856c1043288f7d9744"));
     }
@@ -85,8 +84,8 @@ public class KeysTest {
         String expected = Numeric.toHexStringNoPrefix(address);
 
         String value = "1234";
-        assertThat(Keys.getAddress("0x" +
-                        Strings.zeros(Keys.PUBLIC_KEY_LENGTH_IN_HEX - value.length()) + value),
+        assertThat(Keys.getAddress("0x"
+                        + Strings.zeros(Keys.PUBLIC_KEY_LENGTH_IN_HEX - value.length()) + value),
                 equalTo(expected));
     }
 

@@ -9,9 +9,13 @@ import org.web3j.abi.datatypes.Int;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Int136 extends Int {
-  public static final Int136 DEFAULT = new Int136(BigInteger.ZERO);
+    public static final Int136 DEFAULT = new Int136(BigInteger.ZERO);
 
-  public Int136(BigInteger value) {
-    super(136, value);
-  }
+    public Int136(BigInteger value) {
+        super(136, value);
+    }
+
+    public Int136(long value) {
+        this(BigInteger.valueOf(value));
+    }
 }

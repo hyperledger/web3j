@@ -1,15 +1,12 @@
 package org.web3j.protocol.core.filters;
 
-
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -45,21 +42,22 @@ public abstract class FilterTester {
     Web3j web3j;
 
     final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-    final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    final ScheduledExecutorService scheduledExecutorService =
+            Executors.newSingleThreadScheduledExecutor();
 
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3jFactory.build(web3jService, 1000, executorService);
+        web3j = Web3jFactory.build(web3jService, 1000, scheduledExecutorService);
     }
 
     <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {
         EthFilter ethFilter = objectMapper.readValue(
-                "{\n" +
-                        "  \"id\":1,\n" +
-                        "  \"jsonrpc\": \"2.0\",\n" +
-                        "  \"result\": \"0x1\"\n" +
-                        "}", EthFilter.class);
+                "{\n"
+                        + "  \"id\":1,\n"
+                        + "  \"jsonrpc\": \"2.0\",\n"
+                        + "  \"result\": \"0x1\"\n"
+                        + "}", EthFilter.class);
 
         EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
@@ -71,12 +69,12 @@ public abstract class FilterTester {
 
         final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        when(web3jService.sendAsync(any(Request.class), eq(EthFilter.class)))
-                .thenReturn(future(ethFilter));
-        when(web3jService.sendAsync(any(Request.class), eq(EthLog.class)))
-                .thenReturn(future(ethLog));
-        when(web3jService.sendAsync(any(Request.class), eq(EthUninstallFilter.class)))
-                .thenReturn(future(ethUninstallFilter));
+        when(web3jService.send(any(Request.class), eq(EthFilter.class)))
+                .thenReturn(ethFilter);
+        when(web3jService.send(any(Request.class), eq(EthLog.class)))
+                .thenReturn(ethLog);
+        when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
+                .thenReturn(ethUninstallFilter);
 
         Subscription subscription = observable.subscribe(
                 new Action1<T>() {
@@ -119,14 +117,5 @@ public abstract class FilterTester {
             expected.add(logResult.get());
         }
         return expected;
-    }
-
-    private <T extends Response> Future<T> future(final T value) {
-        return executorService.submit(new Callable<T>() {
-            @Override
-            public T call() {
-                return value;
-            }
-        });
     }
 }

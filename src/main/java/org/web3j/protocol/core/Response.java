@@ -100,7 +100,8 @@ public class Response<T> {
             if (getCode() != error.getCode()) {
                 return false;
             }
-            if (getMessage() != null ? !getMessage().equals(error.getMessage()) : error.getMessage() != null) {
+            if (getMessage() != null
+                    ? !getMessage().equals(error.getMessage()) : error.getMessage() != null) {
                 return false;
             }
             return getData() != null ? getData().equals(error.getData()) : error.getData() == null;

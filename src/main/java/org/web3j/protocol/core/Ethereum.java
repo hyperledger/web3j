@@ -82,32 +82,43 @@ public interface Ethereum {
 
     Request<?, EthBlockNumber> ethBlockNumber();
 
-    Request<?, EthGetBalance> ethGetBalance(String address, DefaultBlockParameter defaultBlockParameter);
+    Request<?, EthGetBalance> ethGetBalance(
+            String address, DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, EthGetStorageAt> ethGetStorageAt(String address, BigInteger position,
-                                                DefaultBlockParameter defaultBlockParameter);
+    Request<?, EthGetStorageAt> ethGetStorageAt(
+            String address, BigInteger position,
+            DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, EthGetTransactionCount> ethGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter);
+    Request<?, EthGetTransactionCount> ethGetTransactionCount(
+            String address, DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, EthGetBlockTransactionCountByHash> ethGetBlockTransactionCountByHash(String blockHash);
+    Request<?, EthGetBlockTransactionCountByHash> ethGetBlockTransactionCountByHash(
+            String blockHash);
 
-    Request<?, EthGetBlockTransactionCountByNumber> ethGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter);
+    Request<?, EthGetBlockTransactionCountByNumber> ethGetBlockTransactionCountByNumber(
+            DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthGetUncleCountByBlockHash> ethGetUncleCountByBlockHash(String blockHash);
 
-    Request<?, EthGetUncleCountByBlockNumber> ethGetUncleCountByBlockNumber(DefaultBlockParameter defaultBlockParameter);
+    Request<?, EthGetUncleCountByBlockNumber> ethGetUncleCountByBlockNumber(
+            DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthGetCode> ethGetCode(String address, DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthSign> ethSign(String address, String sha3HashOfDataToSign);
 
-    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(org.web3j.protocol.core.methods.request.Transaction transaction);
+    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendTransaction(
+            org.web3j.protocol.core.methods.request.Transaction transaction);
 
-    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(String signedTransactionData);
+    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> ethSendRawTransaction(
+            String signedTransactionData);
 
-    Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(org.web3j.protocol.core.methods.request.Transaction transaction, DefaultBlockParameter defaultBlockParameter);
+    Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
+            org.web3j.protocol.core.methods.request.Transaction transaction,
+            DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, EthEstimateGas> ethEstimateGas(org.web3j.protocol.core.methods.request.Transaction transaction);
+    Request<?, EthEstimateGas> ethEstimateGas(
+            org.web3j.protocol.core.methods.request.Transaction transaction);
 
     Request<?, EthBlock> ethGetBlockByHash(String blockHash, boolean returnFullTransactionObjects);
 
@@ -125,7 +136,8 @@ public interface Ethereum {
 
     Request<?, EthGetTransactionReceipt> ethGetTransactionReceipt(String transactionHash);
 
-    Request<?, EthBlock> ethGetUncleByBlockHashAndIndex(String blockHash, BigInteger transactionIndex);
+    Request<?, EthBlock> ethGetUncleByBlockHashAndIndex(
+            String blockHash, BigInteger transactionIndex);
 
     Request<?, EthBlock> ethGetUncleByBlockNumberAndIndex(
             DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex);
@@ -166,7 +178,8 @@ public interface Ethereum {
 
     Request<?, DbGetHex> dbGetHex(String databaseName, String keyName);
 
-    Request<?, org.web3j.protocol.core.methods.response.ShhPost> shhPost(org.web3j.protocol.core.methods.request.ShhPost shhPost);
+    Request<?, org.web3j.protocol.core.methods.response.ShhPost> shhPost(
+            org.web3j.protocol.core.methods.request.ShhPost shhPost);
 
     Request<?, ShhVersion> shhVersion();
 

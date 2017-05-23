@@ -1,13 +1,11 @@
 package org.web3j.protocol.parity;
 
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
 import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
 import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
-
 
 public class EqualsVerifierParityResponseTest {
 

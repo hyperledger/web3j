@@ -9,13 +9,13 @@ import org.web3j.abi.datatypes.Fixed;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Fixed120x136 extends Fixed {
-  public static final Fixed120x136 DEFAULT = new Fixed120x136(BigInteger.ZERO);
+    public static final Fixed120x136 DEFAULT = new Fixed120x136(BigInteger.ZERO);
 
-  public Fixed120x136(BigInteger value) {
-    super(120, 136, value);
-  }
+    public Fixed120x136(BigInteger value) {
+        super(120, 136, value);
+    }
 
-  public Fixed120x136(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
-    super(120, 136, m, n);
-  }
+    public Fixed120x136(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+        super(120, 136, m, n);
+    }
 }

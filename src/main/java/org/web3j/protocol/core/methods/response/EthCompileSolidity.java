@@ -7,7 +7,7 @@ import java.util.Map;
 import org.web3j.protocol.core.Response;
 
 /**
- * eth_compileSolidity
+ * eth_compileSolidity.
  */
 public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.Code>> {
 
@@ -170,37 +170,53 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
 
             SolidityInfo that = (SolidityInfo) o;
 
-            if (getSource() != null ? !getSource().equals(that.getSource()) : that.getSource() != null) {
+            if (getSource() != null
+                    ? !getSource().equals(that.getSource()) : that.getSource() != null) {
                 return false;
             }
-            if (getLanguage() != null ? !getLanguage().equals(that.getLanguage()) : that.getLanguage() != null) {
+            if (getLanguage() != null
+                    ? !getLanguage().equals(that.getLanguage()) : that.getLanguage() != null) {
                 return false;
             }
-            if (getLanguageVersion() != null ? !getLanguageVersion().equals(that.getLanguageVersion()) : that.getLanguageVersion() != null) {
+            if (getLanguageVersion() != null
+                    ? !getLanguageVersion().equals(that.getLanguageVersion())
+                    : that.getLanguageVersion() != null) {
                 return false;
             }
-            if (getCompilerVersion() != null ? !getCompilerVersion().equals(that.getCompilerVersion()) : that.getCompilerVersion() != null) {
+            if (getCompilerVersion() != null
+                    ? !getCompilerVersion().equals(that.getCompilerVersion())
+                    : that.getCompilerVersion() != null) {
                 return false;
             }
-            if (getCompilerOptions() != null ? !getCompilerOptions().equals(that.getCompilerOptions()) : that.getCompilerOptions() != null) {
+            if (getCompilerOptions() != null
+                    ? !getCompilerOptions().equals(that.getCompilerOptions())
+                    : that.getCompilerOptions() != null) {
                 return false;
             }
-            if (getAbiDefinition() != null ? !getAbiDefinition().equals(that.getAbiDefinition()) : that.getAbiDefinition() != null) {
+            if (getAbiDefinition() != null
+                    ? !getAbiDefinition().equals(that.getAbiDefinition())
+                    : that.getAbiDefinition() != null) {
                 return false;
             }
-            if (getUserDoc() != null ? !getUserDoc().equals(that.getUserDoc()) : that.getUserDoc() != null) {
+            if (getUserDoc() != null
+                    ? !getUserDoc().equals(that.getUserDoc()) : that.getUserDoc() != null) {
                 return false;
             }
-            return getDeveloperDoc() != null ? getDeveloperDoc().equals(that.getDeveloperDoc()) : that.getDeveloperDoc() == null;
+            return getDeveloperDoc() != null
+                    ? getDeveloperDoc().equals(that.getDeveloperDoc())
+                    : that.getDeveloperDoc() == null;
         }
 
         @Override
         public int hashCode() {
             int result = getSource() != null ? getSource().hashCode() : 0;
             result = 31 * result + (getLanguage() != null ? getLanguage().hashCode() : 0);
-            result = 31 * result + (getLanguageVersion() != null ? getLanguageVersion().hashCode() : 0);
-            result = 31 * result + (getCompilerVersion() != null ? getCompilerVersion().hashCode() : 0);
-            result = 31 * result + (getCompilerOptions() != null ? getCompilerOptions().hashCode() : 0);
+            result = 31 * result
+                    + (getLanguageVersion() != null ? getLanguageVersion().hashCode() : 0);
+            result = 31 * result
+                    + (getCompilerVersion() != null ? getCompilerVersion().hashCode() : 0);
+            result = 31 * result
+                    + (getCompilerOptions() != null ? getCompilerOptions().hashCode() : 0);
             result = 31 * result + (getAbiDefinition() != null ? getAbiDefinition().hashCode() : 0);
             result = 31 * result + (getUserDoc() != null ? getUserDoc().hashCode() : 0);
             result = 31 * result + (getDeveloperDoc() != null ? getDeveloperDoc().hashCode() : 0);
@@ -236,7 +252,8 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
 
             Documentation that = (Documentation) o;
 
-            return getMethods() != null ? getMethods().equals(that.getMethods()) : that.getMethods() == null;
+            return getMethods() != null
+                    ? getMethods().equals(that.getMethods()) : that.getMethods() == null;
         }
 
         @Override

@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
 public class EventFilterIT extends Scenario {
 
     // Deployed Fibonacci contract instance in testnet
-    private final String CONTRACT_ADDRESS = "0x3c05b2564139fb55820b18b72e94b2178eaace7d";
+    private static final String CONTRACT_ADDRESS = "0x3c05b2564139fb55820b18b72e94b2178eaace7d";
 
     @Test
     public void testEventFilter() throws Exception {
@@ -87,9 +87,10 @@ public class EventFilterIT extends Scenario {
 
     private BigInteger estimateGas(String encodedFunction) throws Exception {
         EthEstimateGas ethEstimateGas = parity.ethEstimateGas(
-                Transaction.createEthCallTransaction(null, encodedFunction))
+                Transaction.createEthCallTransaction(ALICE.getAddress(), null, encodedFunction))
                 .sendAsync().get();
-        // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388 - see eth.getBlock("latest")
+        // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388
+        // see eth.getBlock("latest")
         return ethEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
     }
 

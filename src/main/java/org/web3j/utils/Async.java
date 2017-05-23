@@ -11,10 +11,10 @@ import java.util.concurrent.Future;
  */
 public class Async {
 
-    private static ExecutorService executorService;
+    private static ScheduledExecutorService executorService;
 
     static {
-        executorService = Executors.newFixedThreadPool(getCpuCount());
+        executorService = defaultExecutorService();
     }
 
     public static <T> Future<T> run(Callable<T> callable) {
@@ -25,7 +25,7 @@ public class Async {
         return Runtime.getRuntime().availableProcessors();
     }
 
-    public static ExecutorService defaultExecutorService() {
-        return executorService;
+    public static ScheduledExecutorService defaultExecutorService() {
+        return Executors.newScheduledThreadPool(getCpuCount());
     }
 }

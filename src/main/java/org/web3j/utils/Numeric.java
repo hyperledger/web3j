@@ -53,9 +53,9 @@ public final class Numeric {
 
         // If TestRpc resolves the following issue, we can reinstate this code
         // https://github.com/ethereumjs/testrpc/issues/220
-//        if (value.length() > 3 && value.charAt(2) == '0') {
-//            return false;
-//        }
+        // if (value.length() > 3 && value.charAt(2) == '0') {
+        //    return false;
+        // }
 
         return true;
     }
@@ -101,6 +101,10 @@ public final class Numeric {
         return value.toString(16);
     }
 
+    public static String toHexStringNoPrefix(byte[] input) {
+        return toHexString(input, 0, input.length, false);
+    }
+
     public static String toHexStringWithPrefixZeroPadded(BigInteger value, int size) {
         return toHexStringZeroPadded(value, size, true);
     }
@@ -141,7 +145,7 @@ public final class Numeric {
             bytesLength = bytes.length - 1;
             srcOffset = 1;
         } else {
-             bytesLength = bytes.length;
+            bytesLength = bytes.length;
             srcOffset = 0;
         }
 
@@ -176,7 +180,7 @@ public final class Numeric {
 
         for (int i = startIdx; i < len; i += 2) {
             data[(i + 1) / 2] = (byte) ((Character.digit(cleanInput.charAt(i), 16) << 4)
-                    + Character.digit(cleanInput.charAt(i+1), 16));
+                    + Character.digit(cleanInput.charAt(i + 1), 16));
         }
         return data;
     }
@@ -193,21 +197,17 @@ public final class Numeric {
         return stringBuilder.toString();
     }
 
-    public static String toHexStringNoPrefix(byte[] input) {
-        return toHexString(input, 0, input.length, false);
-    }
-
     public static String toHexString(byte[] input) {
         return toHexString(input, 0, input.length, true);
     }
 
-    public static byte b(int m, int n) {
-        return (byte) ( (m << 4) | n);
+    public static byte asByte(int m, int n) {
+        return (byte) ((m << 4) | n);
     }
 
     public static boolean isIntegerValue(BigDecimal value) {
-        return value.signum() == 0 ||
-                value.scale() <= 0 ||
-                value.stripTrailingZeros().scale() <= 0;
+        return value.signum() == 0
+                || value.scale() <= 0
+                || value.stripTrailingZeros().scale() <= 0;
     }
 }

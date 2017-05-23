@@ -53,3 +53,44 @@ I want to obtain some Ether on Testnet, but don't want to have to mine it myself
 --------------------------------------------------------------------------------
 
 Head to the `Ethereum Ropsten Faucet <http://faucet.ropsten.be:3001/>`_ to request one free Ether.
+
+
+How do I obtain the return value from a smart contract method invoked by a transaction?
+---------------------------------------------------------------------------------------
+
+You can't. It is not possible to return values from methods on smart contracts that are called as
+part of a transaction. If you wish to read a value during a transaction, you must use
+`Events <http://solidity.readthedocs.io/en/develop/contracts.html#events>`_. To query values
+from smart contracts you must use a call, which is separate to a transaction. These methods should
+be marked as
+`constant <http://solidity.readthedocs.io/en/develop/contracts.html?highlight=constant#constant-functions>`_
+functions. :ref:`smart-contract-wrappers` created by web3j handle these differences for you.
+
+The following StackExchange
+`post <http://ethereum.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call>`_
+is useful for background.
+
+
+Is it possible to send arbitrary text with transactions?
+--------------------------------------------------------
+
+Yes it is. Text should be ASCII encoded and provided as a hexadecimal String in the data field
+of the transaction. This is demonstrated below:
+
+   RawTransaction.createTransaction(
+           <nonce>, GAS_PRICE, GAS_LIMIT, "0x<address>", <amount>, "0x<hex encoded text>");
+
+   byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+   String hexValue = Numeric.toHexString(signedMessage);
+
+   EthSendTransaction ethSendTransaction =
+           parity.ethSendRawTransaction(hexValue).sendAsync().get();
+   String transactionHash = ethSendTransaction.getTransactionHash();
+   ...
+
+*Note*: Please ensure you increase the gas limit on the transaction to allow for the storage of
+text.
+
+The following StackExchange
+`post <http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address>`_
+is useful for background.

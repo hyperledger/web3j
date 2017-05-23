@@ -8,9 +8,9 @@ import org.web3j.abi.datatypes.Bytes;
  * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Bytes6 extends Bytes {
-  public static final Bytes6 DEFAULT = new Bytes6(new byte[6]);
+    public static final Bytes6 DEFAULT = new Bytes6(new byte[6]);
 
-  public Bytes6(byte[] value) {
-    super(6, value);
-  }
+    public Bytes6(byte[] value) {
+        super(6, value);
+    }
 }
