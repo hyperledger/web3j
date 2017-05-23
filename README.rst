@@ -230,8 +230,9 @@ been grouped into a block together):
    });
 
 Or, if you'd rather replay all blocks to the most current, and be notified of new subsequent
-blocks being created::
+blocks being created:
 
+.. code-block:: java
    Subscription subscription = catchUpToLatestAndSubscribeToNewBlocksObservable(
            <startBlockNumber>, <fullTxObjects>)
            .subscribe(block -> {
@@ -271,14 +272,18 @@ Transactions
 web3j provides support for both working with Ethereum wallet files (recommended) and Ethereum
 client admin commands for sending transactions.
 
-To send Ether to another party using your Ethereum wallet file::
+To send Ether to another party using your Ethereum wallet file:
 
+.. code-block:: java
+		
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
            web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER);
 
-Or if you wish to create your own custom transaction::
+Or if you wish to create your own custom transaction:
+
+.. code-block:: java
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
@@ -302,8 +307,10 @@ Although it's far simpler using web3j's
 `Java smart contract wrappers`_.
 
 Using an Ethereum client's admin commands (make sure you have your wallet in the client's
-keystore)::
+keystore):
 
+.. code-block:: java
+  		
    Parity parity = Parity.build(new HttpService());  // defaults to http://localhost:8545/
    PersonalUnlockAccount personalUnlockAccount = parity.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
@@ -336,7 +343,9 @@ Or in code:
    org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 
-Now you can create and deploy your smart contract::
+Now you can create and deploy your smart contract:
+
+.. code-block:: java
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
@@ -347,18 +356,24 @@ Now you can create and deploy your smart contract::
            <initialEtherValue>,
            <param1>, ..., <paramN>).get();  // constructor params
 
-Or use an existing::
+Or use an existing:
+
+.. code-block:: java
 
    YourSmartContract contract = YourSmartContract.load(
            "0x<address>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
 
-To Transact with a smart contract::
+To Transact with a smart contract:
+
+.. code-block:: java
 
    TransactionReceipt transactionReceipt = contract.someMethod(
                 new Type(...),
                 ...).get();
 
-To call a smart contract::
+To call a smart contract:
+
+.. code-block:: java
 
    Type result = contract.someMethod(new Type(...), ...).get();
 
