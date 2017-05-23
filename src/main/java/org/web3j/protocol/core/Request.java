@@ -3,7 +3,6 @@ package org.web3j.protocol.core;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
 import rx.Subscriber;

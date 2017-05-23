@@ -21,7 +21,6 @@ public abstract class Filter<T extends Filter> {
     }
 
     public T addSingleTopic(String topic) {
-        topics.add(new SingleTopic<String>(topic));
         topics.add(new SingleTopic(topic));
         return getThis();
     }

@@ -27,7 +27,7 @@ apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
-apply plugin: 'checkstyle'
+//apply plugin: 'checkstyle'  // Recent checkstyle vesions are not JDK 1.6+ compatible
 
 group 'org.web3j'
 version '2.2.1'
@@ -158,9 +158,9 @@ classes {
     dependsOn createProperties
 }
 
-checkstyle {
-    toolVersion = "7.7"
-}
+//checkstyle {
+//    toolVersion = "7.7"
+//}
 
 publishing {
     publications {

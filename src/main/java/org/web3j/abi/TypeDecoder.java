@@ -1,8 +1,8 @@
 package org.web3j.abi;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +85,8 @@ class TypeDecoder {
         return decode(input, 0, type);
     }
 
-    static <T extends NumericType> T decodeNumeric(String input, Class<T> type) throws UnsupportedOperationException {
+    static <T extends NumericType> T decodeNumeric(String input, Class<T> type)
+            throws UnsupportedOperationException {
         try {
             byte[] inputByteArray = Numeric.hexStringToByteArray(input);
             int typeLengthAsBytes = getTypeLengthInBytes(type);
@@ -117,7 +118,8 @@ class TypeDecoder {
         }
     }
 
-    private static <T> T throwUnsupportedOperation(Exception e, Class<T> type) throws UnsupportedOperationException {
+    private static <T> T throwUnsupportedOperation(Exception e, Class<T> type)
+            throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 "Unable to create instance of " + type.getName(), e);
     }
@@ -263,7 +265,8 @@ class TypeDecoder {
                     }
                 } else {
                     if (elements.isEmpty()) {
-                        throw new UnsupportedOperationException("Zero length fixed array is invalid type");
+                        throw new UnsupportedOperationException(
+                                "Zero length fixed array is invalid type");
                     } else {
                         return (T) new StaticArray<T>(elements);
                     }

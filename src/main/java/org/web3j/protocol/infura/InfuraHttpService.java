@@ -1,6 +1,5 @@
 package org.web3j.protocol.infura;
 
-import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -9,6 +8,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.List;
+
+import javax.net.ssl.SSLContext;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;

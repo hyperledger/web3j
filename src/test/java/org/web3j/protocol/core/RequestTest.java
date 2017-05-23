@@ -181,7 +181,8 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEthGetUncleCountByBlockNumber() throws Exception {
-        web3j.ethGetUncleCountByBlockNumber(DefaultBlockParameterNumber.valueOf(Numeric.toBigInt("0xe8"))).send();
+        web3j.ethGetUncleCountByBlockNumber(
+                DefaultBlockParameterNumber.valueOf(Numeric.toBigInt("0xe8"))).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getUncleCountByBlockNumber\","
                 + "\"params\":[\"0xe8\"],\"id\":1}");
@@ -319,7 +320,8 @@ public class RequestTest extends RequestTester {
     @Test
     public void testEthGetTransactionByBlockNumberAndIndex() throws Exception {
         web3j.ethGetTransactionByBlockNumberAndIndex(
-                DefaultBlockParameterNumber.valueOf(Numeric.toBigInt("0x29c")), BigInteger.ZERO).send();
+                DefaultBlockParameterNumber.valueOf(Numeric.toBigInt("0x29c")),
+                BigInteger.ZERO).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionByBlockNumberAndIndex\","
                 + "\"params\":[\"0x29c\",\"0x0\"],\"id\":1}");
@@ -350,7 +352,8 @@ public class RequestTest extends RequestTester {
     @Test
     public void testEthGetUncleByBlockNumberAndIndex() throws Exception {
         web3j.ethGetUncleByBlockNumberAndIndex(
-                DefaultBlockParameterNumber.valueOf(Numeric.toBigInt("0x29c")), BigInteger.ZERO).send();
+                DefaultBlockParameterNumber.valueOf(Numeric.toBigInt("0x29c")),
+                BigInteger.ZERO).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getUncleByBlockNumberAndIndex\","
                 + "\"params\":[\"0x29c\",\"0x0\"],\"id\":1}");

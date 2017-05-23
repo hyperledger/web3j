@@ -46,7 +46,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     @Override
     public Request<?, PersonalSign> personalSign(
             String message, String accountId, String password) {
-        return new Request<>(
+        return new Request<String, PersonalSign>(
                 "personal_sign",
                 Arrays.asList(message,accountId,password),
                 ID,
@@ -57,7 +57,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     @Override
     public Request<?, PersonalEcRecover> personalEcRecover(
             String hexMessage, String signedMessage) {
-        return new Request<>(
+        return new Request<String, PersonalEcRecover>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage,signedMessage),
                 ID,

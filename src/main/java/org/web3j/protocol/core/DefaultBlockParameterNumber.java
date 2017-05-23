@@ -30,4 +30,8 @@ public class DefaultBlockParameterNumber implements DefaultBlockParameter {
     public BigInteger getBlockNumber() {
         return blockNumber;
     }
+
+    static DefaultBlockParameter valueOf(BigInteger blockNumber) {
+        return new DefaultBlockParameterNumber(blockNumber);
+    }
 }

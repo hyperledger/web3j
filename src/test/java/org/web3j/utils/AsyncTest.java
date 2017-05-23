@@ -1,6 +1,5 @@
 package org.web3j.utils;
 
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 

@@ -111,7 +111,9 @@ public class SolidityFunctionWrapper {
             // This only works if run as part of the web3j command line tools which contains
             // a version.properties file
             version = Version.getVersion();
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException e) {
+            version = Version.DEFAULT;
+        } catch (NullPointerException e) {
             version = Version.DEFAULT;
         }
         return "\n<p>Generated with web3j version " + version + ".\n";
@@ -129,7 +131,7 @@ public class SolidityFunctionWrapper {
             TypeSpec.Builder classBuilder,
             List<AbiDefinition> functionDefinitions) throws ClassNotFoundException {
 
-        List<MethodSpec> methodSpecs = new ArrayList<>();
+        List<MethodSpec> methodSpecs = new ArrayList<MethodSpec>();
         boolean constructor = false;
 
         for (AbiDefinition functionDefinition : functionDefinitions) {
@@ -251,11 +253,16 @@ public class SolidityFunctionWrapper {
         return Collection.join(
                 inputParameterTypes,
                 ", ",
-                parameterSpec -> parameterSpec.name);
+                new Collection.Function<ParameterSpec, String>() {
+                    @Override
+                    public String apply(ParameterSpec parameterSpec) {
+                        return parameterSpec.name;
+                    }
+                });
     }
 
     static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes) {
-        List<ParameterSpec> result = new ArrayList<>(namedTypes.size());
+        List<ParameterSpec> result = new ArrayList<ParameterSpec>(namedTypes.size());
         for (int i = 0; i < namedTypes.size(); i++) {
             AbiDefinition.NamedType namedType = namedTypes.get(i);
 
@@ -284,7 +291,7 @@ public class SolidityFunctionWrapper {
     }
 
     static List<TypeName> buildTypeNames(List<AbiDefinition.NamedType> namedTypes) {
-        List<TypeName> result = new ArrayList<>(namedTypes.size());
+        List<TypeName> result = new ArrayList<TypeName>(namedTypes.size());
         for (AbiDefinition.NamedType namedType : namedTypes) {
             result.add(buildTypeName(namedType.getType()));
         }
@@ -479,8 +486,8 @@ public class SolidityFunctionWrapper {
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 
-        List<NamedTypeName> indexedParameters = new ArrayList<>();
-        List<NamedTypeName> nonIndexedParameters = new ArrayList<>();
+        List<NamedTypeName> indexedParameters = new ArrayList<NamedTypeName>();
+        List<NamedTypeName> nonIndexedParameters = new ArrayList<NamedTypeName>();
         for (AbiDefinition.NamedType namedType : inputs) {
 
             if (namedType.isIndexed()) {
@@ -556,7 +563,7 @@ public class SolidityFunctionWrapper {
             MethodSpec.Builder methodBuilder, String functionName, String inputParameters,
             List<TypeName> outputParameterTypes) throws ClassNotFoundException {
 
-        List<Object> objects = new ArrayList<>();
+        List<Object> objects = new ArrayList<Object>();
         objects.add(Function.class);
         objects.add(Function.class);
         objects.add(functionName);
@@ -575,7 +582,12 @@ public class SolidityFunctionWrapper {
         String asListParams = Collection.join(
                 outputParameterTypes,
                 ", ",
-                typeName -> "new $T<$T>() {}");
+                new Collection.Function<TypeName, String>() {
+                    @Override
+                    public String apply(TypeName typeName) {
+                        return "new $T<$T>() {}";
+                    }
+                });
 
         methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T"
                 + ".<$T<?>>asList("
@@ -587,7 +599,7 @@ public class SolidityFunctionWrapper {
             indexedParameterTypes,
             List<NamedTypeName> nonIndexedParameterTypes) throws ClassNotFoundException {
 
-        List<Object> objects = new ArrayList<>();
+        List<Object> objects = new ArrayList<Object>();
         objects.add(Event.class);
         objects.add(Event.class);
         objects.add(eventName);
@@ -609,12 +621,22 @@ public class SolidityFunctionWrapper {
         String indexedAsListParams = Collection.join(
                 indexedParameterTypes,
                 ", ",
-                typeName -> "new $T<$T>() {}");
+                new Collection.Function<NamedTypeName, String>() {
+                    @Override
+                    public String apply(NamedTypeName typeName) {
+                        return "new $T<$T>() {}";
+                    }
+                });
 
         String nonIndexedAsListParams = Collection.join(
                 nonIndexedParameterTypes,
                 ", ",
-                typeName -> "new $T<$T>() {}");
+                new Collection.Function<NamedTypeName, String>() {
+                    @Override
+                    public String apply(NamedTypeName typeName) {
+                        return "new $T<$T>() {}";
+                    }
+                });
 
         methodBuilder.addStatement("final $T event = new $T($S, \n"
                 + "$T.<$T<?>>asList(" + indexedAsListParams + "),\n"

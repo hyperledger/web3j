@@ -82,7 +82,7 @@ public class HttpService extends Service {
     public <T extends Response> ResponseHandler<T> getResponseHandler(final Class<T> type) {
         return new ResponseHandler<T>() {
             @Override
-            public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+            public T handleResponse(HttpResponse response) throws IOException {
                 int status = response.getStatusLine().getStatusCode();
                 if (status >= 200 && status < 300) {
                     HttpEntity entity = response.getEntity();

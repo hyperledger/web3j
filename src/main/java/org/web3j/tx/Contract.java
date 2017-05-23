@@ -342,7 +342,7 @@ public abstract class Contract extends ManagedTransaction {
                     @Override
                     public T call() throws Exception {
                         return deploy(type, web3j, transactionManager, gasPrice, gasLimit,
-                                binary, encodedConstructor, value);
+                                binary, encodedConstructor, initialWeiValue);
                     }
                 });
     }

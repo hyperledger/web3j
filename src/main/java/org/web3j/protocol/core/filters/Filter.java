@@ -33,25 +33,28 @@ public abstract class Filter<T> {
 
     public void run(ScheduledExecutorService scheduledExecutorService, long blockTime) {
         try {
-            EthFilter ethFilter = sendRequest();
+            final EthFilter ethFilter = sendRequest();
             if (ethFilter.hasError()) {
                 throwException(ethFilter.getError());
             }
 
             filterId = ethFilter.getFilterId();
 
-            schedule = scheduledExecutorService.scheduleAtFixedRate(() -> {
-                EthLog ethLog = null;
-                try {
-                    ethLog = web3j.ethGetFilterChanges(filterId).send();
-                } catch (IOException e) {
-                    throwException(e);
-                }
-                if (ethLog.hasError()) {
-                    throwException(ethFilter.getError());
-                }
+            schedule = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    EthLog ethLog = null;
+                    try {
+                        ethLog = web3j.ethGetFilterChanges(filterId).send();
+                    } catch (IOException e) {
+                        Filter.this.throwException(e);
+                    }
+                    if (ethLog.hasError()) {
+                        Filter.this.throwException(ethFilter.getError());
+                    }
 
-                process(ethLog.getLogs());
+                    Filter.this.process(ethLog.getLogs());
+                }
             }, 0, blockTime, TimeUnit.MILLISECONDS);
 
 

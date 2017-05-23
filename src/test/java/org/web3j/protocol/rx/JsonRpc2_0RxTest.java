@@ -14,9 +14,12 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.Request;
@@ -46,7 +49,8 @@ public class JsonRpc2_0RxTest {
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService, 1000, Executors.newSingleThreadScheduledExecutor());
+        web3j = Web3jFactory.build(
+                web3jService, 1000, Executors.newSingleThreadScheduledExecutor());
     }
 
     @Test
@@ -65,17 +69,30 @@ public class JsonRpc2_0RxTest {
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false);
 
-        CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<EthBlock> results = new ArrayList<>(ethBlocks.size());
+        final List<EthBlock> results = new ArrayList<EthBlock>(ethBlocks.size());
         Subscription subscription = observable.subscribe(
-                result -> {
-                    results.add(result);
-                    transactionLatch.countDown();
+                new Action1<EthBlock>() {
+                    @Override
+                    public void call(EthBlock result) {
+                        results.add(result);
+                        transactionLatch.countDown();
+                    }
                 },
-                throwable -> fail(throwable.getMessage()),
-                () -> completedLatch.countDown());
+                new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        fail(throwable.getMessage());
+                    }
+                },
+                new Action0() {
+                    @Override
+                    public void call() {
+                        completedLatch.countDown();
+                    }
+                });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(ethBlocks));
@@ -131,17 +148,30 @@ public class JsonRpc2_0RxTest {
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 false);
 
-        CountDownLatch transactionLatch = new CountDownLatch(expected.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<EthBlock> results = new ArrayList<>(expected.size());
+        final List<EthBlock> results = new ArrayList<EthBlock>(expected.size());
         Subscription subscription = observable.subscribe(
-                result -> {
-                    results.add(result);
-                    transactionLatch.countDown();
+                new Action1<EthBlock>() {
+                    @Override
+                    public void call(EthBlock result) {
+                        results.add(result);
+                        transactionLatch.countDown();
+                    }
                 },
-                throwable -> fail(throwable.getMessage()),
-                () -> completedLatch.countDown());
+                new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        fail(throwable.getMessage());
+                    }
+                },
+                new Action0() {
+                    @Override
+                    public void call() {
+                        completedLatch.countDown();
+                    }
+                });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(expected));

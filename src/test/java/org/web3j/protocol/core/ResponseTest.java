@@ -208,7 +208,8 @@ public class ResponseTest extends ResponseTester {
         EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
 
         assertThat(ethSyncing.getResult(),
-                CoreMatchers.<EthSyncing.Result>equalTo(new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
+                CoreMatchers.<EthSyncing.Result>equalTo(
+                        new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
     }
 
     @Test
@@ -1149,7 +1150,7 @@ public class ResponseTest extends ResponseTester {
         );
         //CHECKSTYLE:ON
 
-        List<Log> logs = Collections.<EthLog.LogResult>singletonList(
+        List<EthLog.LogResult> logs = Collections.<EthLog.LogResult>singletonList(
                 new EthLog.LogObject(
                         false,
                         "0x1",

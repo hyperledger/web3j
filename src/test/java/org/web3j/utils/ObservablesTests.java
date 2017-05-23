@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -24,23 +26,36 @@ public class ObservablesTests {
         Observable<BigInteger> observable = Observables.range(
                 BigInteger.ZERO, BigInteger.valueOf(count - 1));
 
-        CountDownLatch transactionLatch = new CountDownLatch(count);
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(count);
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<BigInteger> expected = new ArrayList<>(count);
+        List<BigInteger> expected = new ArrayList<BigInteger>(count);
         for (int i = 0; i < count; i++) {
             expected.add(BigInteger.valueOf(i));
         }
 
-        List<BigInteger> results = new ArrayList<>(count);
+        final List<BigInteger> results = new ArrayList<BigInteger>(count);
 
         Subscription subscription = observable.subscribe(
-                result -> {
-                    results.add(result);
-                    transactionLatch.countDown();
+                new Action1<BigInteger>() {
+                    @Override
+                    public void call(BigInteger result) {
+                        results.add(result);
+                        transactionLatch.countDown();
+                    }
                 },
-                throwable -> fail(throwable.getMessage()),
-                () -> completedLatch.countDown());
+                new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        fail(throwable.getMessage());
+                    }
+                },
+                new Action0() {
+                    @Override
+                    public void call() {
+                        completedLatch.countDown();
+                    }
+                });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(expected));

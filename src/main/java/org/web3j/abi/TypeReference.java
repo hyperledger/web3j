@@ -57,7 +57,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
     public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
             final Class<T> cls) {
-        return new TypeReference<T>(){
+        return new TypeReference<T>() {
             @Override
             public Type getType() {
                 return cls;

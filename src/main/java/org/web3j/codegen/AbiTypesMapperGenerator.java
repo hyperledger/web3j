@@ -1,8 +1,9 @@
 package org.web3j.codegen;
 
-import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
+
+import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
