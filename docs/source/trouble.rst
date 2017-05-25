@@ -75,7 +75,7 @@ Is it possible to send arbitrary text with transactions?
 --------------------------------------------------------
 
 Yes it is. Text should be ASCII encoded and provided as a hexadecimal String in the data field
-of the transaction. This is demonstrated below:
+of the transaction. This is demonstrated below::
 
    RawTransaction.createTransaction(
            <nonce>, GAS_PRICE, GAS_LIMIT, "0x<address>", <amount>, "0x<hex encoded text>");
