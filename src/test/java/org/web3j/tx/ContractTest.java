@@ -40,6 +40,7 @@ import org.web3j.utils.Numeric;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -148,6 +149,17 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
+    public void testCallSingleValueEmpty() throws Exception {
+        // Example taken from FunctionReturnDecoderTest
+
+        EthCall ethCall = new EthCall();
+        ethCall.setResult("0x");
+        prepareCall(ethCall);
+
+        assertNull(contract.callSingleValue().get());
+    }
+
+    @Test
     public void testCallMultipleValue() throws Exception {
         EthCall ethCall = new EthCall();
         ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000037"
@@ -158,6 +170,16 @@ public class ContractTest extends ManagedTransactionTester {
                 equalTo(Arrays.asList(
                         new Uint256(BigInteger.valueOf(55)),
                         new Uint256(BigInteger.valueOf(7)))));
+    }
+
+    @Test
+    public void testCallMultipleValueEmpty() throws Exception {
+        EthCall ethCall = new EthCall();
+        ethCall.setResult("0x");
+        prepareCall(ethCall);
+
+        assertThat(contract.callMultipleValue().get(),
+                equalTo(Collections.emptyList()));
     }
 
     private void prepareCall(EthCall ethCall) {

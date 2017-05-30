@@ -170,7 +170,11 @@ public abstract class Contract extends ManagedTransaction {
     protected <T extends Type> T executeCallSingleValueReturn(
             Function function) throws InterruptedException, ExecutionException {
         List<Type> values = executeCall(function);
-        return (T) values.get(0);
+        if (!values.isEmpty()) {
+            return (T) values.get(0);
+        } else {
+            return null;
+        }
     }
 
     protected List<Type> executeCallMultipleValueReturn(
