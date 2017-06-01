@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.web3j.protocol.core.methods.response.AdminPeers;
+import org.web3j.protocol.core.methods.response.EthTxpoolStatus;
 import rx.Observable;
 
 import org.web3j.protocol.Web3j;
@@ -131,13 +133,33 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
+    public Request<?, AdminPeers>adminPeers() {
+        return new Request<>(
+            "admin_peers",
+            Collections.<String>emptyList(),
+            ID,
+            web3jService,
+            AdminPeers.class);
+    }
+
+    @Override
+    public Request<?, EthTxpoolStatus>txpoolStatus() {
+        return new Request<>(
+            "txpool_status",
+            Collections.<String>emptyList(),
+            ID,
+            web3jService,
+            EthTxpoolStatus.class);
+    }
+
+    @Override
     public Request<?, NetPeerCount> netPeerCount() {
         return new Request<>(
-                "net_peerCount",
-                Collections.<String>emptyList(),
-                ID,
-                web3jService,
-                NetPeerCount.class);
+            "net_peerCount",
+            Collections.<String>emptyList(),
+            ID,
+            web3jService,
+            NetPeerCount.class);
     }
 
     @Override
