@@ -15,6 +15,7 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Bytes16;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Hash;
@@ -179,6 +180,28 @@ public class FunctionReturnDecoderTest {
                 hash,
                 new TypeReference<Utf8String>() {}),
                 equalTo(new Bytes32(Numeric.hexStringToByteArray(hash))));
+    }
+
+    @Test
+    public void testDecodeIndexedBytes32Value() {
+        String rawInput = "0x1234567890123456789012345678901234567890123456789012345678901234";
+        byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput);
+
+        assertThat(FunctionReturnDecoder.decodeIndexedValue(
+                rawInput,
+                new TypeReference<Bytes32>(){}),
+                equalTo(new Bytes32(rawInputBytes)));
+    }
+
+    @Test
+    public void testDecodeIndexedBytes16Value() {
+        String rawInput = "0x1234567890123456789012345678901200000000000000000000000000000000";
+        byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput.substring(0, 34));
+
+        assertThat(FunctionReturnDecoder.decodeIndexedValue(
+                rawInput,
+                new TypeReference<Bytes16>(){}),
+                equalTo(new Bytes16(rawInputBytes)));
     }
 
     @Test

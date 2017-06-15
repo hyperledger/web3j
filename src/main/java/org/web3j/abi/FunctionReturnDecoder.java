@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.web3j.abi.datatypes.Array;
+import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -72,7 +73,9 @@ public class FunctionReturnDecoder {
         try {
             Class<T> type = typeReference.getClassType();
 
-            if (Array.class.isAssignableFrom(type)
+            if (Bytes.class.isAssignableFrom(type)) {
+                return TypeDecoder.decodeBytes(input, (Class<Bytes>) Class.forName(type.getName()));
+            } else if (Array.class.isAssignableFrom(type)
                     || BytesType.class.isAssignableFrom(type)
                     || Utf8String.class.isAssignableFrom(type)) {
                 return TypeDecoder.decodeBytes(input, Bytes32.class);
