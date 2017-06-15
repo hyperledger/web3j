@@ -187,6 +187,10 @@ public abstract class Contract extends ManagedTransaction {
         return executeTransaction(FunctionEncoder.encode(function), BigInteger.ZERO);
     }
 
+    protected TransactionReceipt executeTransaction(Function function, BigInteger weiValue)
+            throws InterruptedException, IOException, TransactionTimeoutException {
+        return executeTransaction(FunctionEncoder.encode(function), weiValue);
+    }
 
     /**
      * Given the duration required to execute a transaction, asyncronous execution is strongly
