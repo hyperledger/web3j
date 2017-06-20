@@ -1,7 +1,5 @@
 package org.web3j.codegen;
 
-
-
 import org.junit.Test;
 import org.web3j.TempFileProvider;
 import org.web3j.utils.Strings;
@@ -82,7 +80,6 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         verifyGeneratedCode(tempDirPath + "/org/web3j/unittests/"
                 + Strings.capitaliseFirstLetter(inputFileName) + ".java");
     }
-
 
     private void verifyGeneratedCode(String sourceFile) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
