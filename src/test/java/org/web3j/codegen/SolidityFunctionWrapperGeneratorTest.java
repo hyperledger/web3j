@@ -1,19 +1,17 @@
 package org.web3j.codegen;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
+import org.junit.Test;
+import org.web3j.TempFileProvider;
+import org.web3j.utils.Strings;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
-
-import org.junit.Test;
-
-import org.web3j.TempFileProvider;
-import org.web3j.utils.Strings;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
