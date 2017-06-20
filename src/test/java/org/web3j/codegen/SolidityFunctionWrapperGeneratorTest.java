@@ -81,6 +81,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 + Strings.capitaliseFirstLetter(inputFileName) + ".java");
     }
 
+
     private void verifyGeneratedCode(String sourceFile) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
