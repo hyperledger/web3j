@@ -1,16 +1,7 @@
 package org.web3j.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -33,9 +24,18 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionOutOfGasException;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -119,6 +119,28 @@ public class ContractTest extends ManagedTransactionTester {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
 
+        prepareTransaction(transactionReceipt);
+
+        String encodedConstructor = FunctionEncoder.encodeConstructor(
+                Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
+
+        try {
+            TestContract.deployAsync(
+                    TestContract.class, web3j, SampleKeys.CREDENTIALS,
+                    ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
+                    "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
+        } catch (InterruptedException e) {
+            throw e;
+        } catch (ExecutionException e) {
+            throw e.getCause();
+        }
+    }
+
+    @Test(expected = TransactionOutOfGasException.class)
+    public void testDeployContractRunsOutOfGas() throws Throwable {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setGasUsed(Numeric.toHexStringWithPrefix(Contract.GAS_LIMIT));
         prepareTransaction(transactionReceipt);
 
         String encodedConstructor = FunctionEncoder.encodeConstructor(
