@@ -134,7 +134,8 @@ public class SolidityFunctionWrapper {
 
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
-                methodSpecs.add(buildFunction(functionDefinition));
+                methodSpecs.addAll(buildFunction(functionDefinition));
+
 
             } else if (functionDefinition.getType().equals("event")) {
                 buildEventFunctions(functionDefinition, classBuilder);
@@ -291,8 +292,10 @@ public class SolidityFunctionWrapper {
         return result;
     }
 
-    static MethodSpec buildFunction(
+    static List<MethodSpec> buildFunction(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
+        List<MethodSpec> overloadedMethods = new ArrayList<>();
+
         String functionName = functionDefinition.getName();
 
         MethodSpec.Builder methodBuilder =
@@ -306,11 +309,26 @@ public class SolidityFunctionWrapper {
             buildConstantFunction(
                     functionDefinition, methodBuilder, outputParameterTypes, inputParams);
         } else {
-            buildTransactionFunction(
-                    functionDefinition, methodBuilder, inputParams);
-        }
+            MethodSpec.Builder methodBuilderWithVal =
+                    MethodSpec.methodBuilder(functionName)
+                            .addModifiers(Modifier.PUBLIC);
 
-        return methodBuilder.build();
+            String inputParamsWithVal = addParameters(methodBuilderWithVal, functionDefinition
+                    .getInputs());
+            methodBuilderWithVal.addParameter(ParameterSpec.builder(
+                    ClassName.get("java.math",
+                    "BigInteger"),
+                    "weiValue").build());
+
+            buildTransactionFunction(
+                    functionDefinition, methodBuilderWithVal,inputParamsWithVal, true);
+            buildTransactionFunction(
+                    functionDefinition, methodBuilder, inputParams, false);
+
+            overloadedMethods.add(methodBuilderWithVal.build());
+        }
+        overloadedMethods.add(methodBuilder.build());
+        return overloadedMethods;
     }
 
     private static void buildConstantFunction(
@@ -353,7 +371,8 @@ public class SolidityFunctionWrapper {
     private static void buildTransactionFunction(
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
-            String inputParams) throws ClassNotFoundException {
+            String inputParams,
+            boolean valuePresent) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
 
@@ -364,7 +383,11 @@ public class SolidityFunctionWrapper {
                 Function.class, Function.class, functionName,
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
-        methodBuilder.addStatement("return executeTransactionAsync(function)");
+        if (valuePresent) {
+            methodBuilder.addStatement("return executeTransactionAsync(function, weiValue)");
+        } else {
+            methodBuilder.addStatement("return executeTransactionAsync(function)");
+        }
     }
 
     static TypeSpec buildEventResponseObject(String className,
