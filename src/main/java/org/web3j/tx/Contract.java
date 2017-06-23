@@ -182,11 +182,6 @@ public abstract class Contract extends ManagedTransaction {
         return executeCall(function);
     }
 
-    protected TransactionReceipt executeTransaction(Function function) throws InterruptedException,
-            IOException, TransactionTimeoutException {
-        return executeTransaction(FunctionEncoder.encode(function), BigInteger.ZERO);
-    }
-
     protected TransactionReceipt executeTransaction(Function function, BigInteger weiValue)
             throws InterruptedException, IOException, TransactionTimeoutException {
         return executeTransaction(FunctionEncoder.encode(function), weiValue);
@@ -218,7 +213,19 @@ public abstract class Contract extends ManagedTransaction {
      * @return {@link Future} containing executing transaction
      */
     protected CompletableFuture<TransactionReceipt> executeTransactionAsync(Function function) {
-        return Async.run(() -> executeTransaction(function));
+        return Async.run(() -> executeTransaction(function, BigInteger.ZERO));
+    }
+
+    /**
+     * Execute the provided function as a transaction asynchronously.
+     *
+     * @param function to transact with
+     * @param weiValue to send in transaction to send to smart contract
+     * @return {@link Future} containing executing transaction
+     */
+    protected CompletableFuture<TransactionReceipt> executeTransactionAsync(Function function,
+                                                                            BigInteger weiValue) {
+        return Async.run(() -> executeTransaction(function,weiValue));
     }
 
     protected EventValues extractEventParameters(
