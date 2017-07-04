@@ -70,6 +70,24 @@ Full project documentation is available at
 `Read the Docs <http://docs.web3j.io>`_.
 
 
+Donate
+------
+
+web3j is an open source project, developed voluntarily. You can help support its development by
+donating to the following addresses:
+
++=========+============================================+
+| Ether   | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
+| Bitcoin | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
++---------+--------------------------------------------+
+
+
+Commercial support and training
+-------------------------------
+
+Commercial support and training is available from `blk.io <https://blk.io>`.
+
+
 Getting started
 ---------------
 
