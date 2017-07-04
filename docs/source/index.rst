@@ -52,19 +52,18 @@ It has seven runtime dependencies:
 Donate
 ======
 
-web3j is an open source project, developed voluntarily. You can help support its development by
-donating to the following addresses:
+You can help fund the development of web3j by donating to the following wallet addresses:
 
-+=========+============================================+
-| Ether   | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
-| Bitcoin | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
-+---------+--------------------------------------------+
++----------+--------------------------------------------+
+| Ethereum | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
+| Bitcoin  | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
++----------+--------------------------------------------+
 
 
 Commercial support and training
 ===============================
 
-Commercial support and training is available from `blk.io <https://blk.io>`.
+Commercial support and training is available from `blk.io <https://blk.io>`_.
 
 
 
