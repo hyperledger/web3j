@@ -56,6 +56,7 @@ You can help fund the development of web3j by donating to the following wallet a
 
 +----------+--------------------------------------------+
 | Ethereum | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
++----------+--------------------------------------------+
 | Bitcoin  | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
 +----------+--------------------------------------------+
 
