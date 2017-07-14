@@ -1,11 +1,13 @@
 package org.web3j.protocol.core;
 
 import org.junit.Test;
+
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+
 import static org.junit.Assert.assertThat;
 
 /**
