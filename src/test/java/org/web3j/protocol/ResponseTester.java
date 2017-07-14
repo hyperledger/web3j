@@ -39,7 +39,7 @@ public abstract class ResponseTester {
     @Before
     public void setUp() {
         closeableHttpClient = mock(CloseableHttpClient.class);
-        web3jService = new HttpService("", closeableHttpClient);
+        configureWeb3Service(false);
 
         httpResponse = mock(CloseableHttpResponse.class);
         entity = mock(HttpEntity.class);
@@ -68,6 +68,10 @@ public abstract class ResponseTester {
         } catch (IOException e) {
             fail(e.getMessage());
         }
+    }
+
+    protected void configureWeb3Service(boolean includeRawResponses) {
+        web3jService = new HttpService("", closeableHttpClient, includeRawResponses);
     }
 
     private InputStream buildInputStream(String input) {

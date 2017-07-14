@@ -18,9 +18,13 @@ public class IpcService extends Service {
 
     private final IOFacade ioFacade;
 
-    public IpcService(IOFacade ioFacade) {
-        super();
+    public IpcService(IOFacade ioFacade, boolean includeRawResponses) {
+        super(includeRawResponses);
         this.ioFacade = ioFacade;
+    }
+
+    public IpcService(IOFacade ioFacade) {
+        this(ioFacade, false);
     }
 
     @Override

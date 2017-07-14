@@ -13,7 +13,11 @@ import org.web3j.utils.Async;
  */
 public abstract class Service implements Web3jService {
 
-    protected final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+    protected final ObjectMapper objectMapper;
+
+    public Service(boolean includeRawResponses) {
+        objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
+    }
 
     @Override
     public <T extends Response> CompletableFuture<T> sendAsync(

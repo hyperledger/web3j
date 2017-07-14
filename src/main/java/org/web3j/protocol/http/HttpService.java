@@ -29,9 +29,14 @@ public class HttpService extends Service {
 
     private final String url;
 
-    public HttpService(String url, CloseableHttpClient httpClient) {
+    public HttpService(String url, CloseableHttpClient httpClient, boolean includeRawResponses) {
+        super(includeRawResponses);
         this.url = url;
         this.httpClient = httpClient;
+    }
+
+    public HttpService(String url, CloseableHttpClient httpClient) {
+        this(url, httpClient, false);
     }
 
     public HttpService(String url) {
