@@ -17,7 +17,7 @@ public class Hash {
      * @return hash value as hex encoded string
      */
     public static String sha3(String hexInput) {
-        byte[] bytes = Numeric.hexStringToByteArray(hexInput);
+        byte[] bytes = Numeric.cleanHexPrefix(hexInput).getBytes();
         byte[] result = sha3(bytes);
         return Numeric.toHexString(result);
     }
