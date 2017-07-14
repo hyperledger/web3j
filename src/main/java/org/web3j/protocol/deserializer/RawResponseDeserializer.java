@@ -17,12 +17,12 @@ import org.web3j.protocol.core.Response;
 /**
  * A jackson deserializer that sets the rawResponse variable of Response objects.
  */
-public class ResponseRawMessageDeserializer
+public class RawResponseDeserializer
         extends StdDeserializer<Response> implements ResolvableDeserializer {
 
     private final JsonDeserializer<?> defaultDeserializer;
 
-    public ResponseRawMessageDeserializer(JsonDeserializer<?> defaultDeserializer) {
+    public RawResponseDeserializer(JsonDeserializer<?> defaultDeserializer) {
         super(Response.class);
         this.defaultDeserializer = defaultDeserializer;
     }

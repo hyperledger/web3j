@@ -54,8 +54,8 @@ public class Response<T> {
         return rawResponse;
     }
 
-    public void setRawResponse(String rawMessage) {
-        this.rawResponse = rawMessage;
+    public void setRawResponse(String rawResponse) {
+        this.rawResponse = rawResponse;
     }
 
     public static class Error {

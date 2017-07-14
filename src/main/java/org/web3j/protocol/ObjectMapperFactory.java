@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import org.web3j.protocol.core.Response;
-import org.web3j.protocol.deserializer.ResponseRawMessageDeserializer;
+import org.web3j.protocol.deserializer.RawResponseDeserializer;
 
 /**
  * Factory for managing our ObjectMapper instances.
@@ -50,7 +50,7 @@ public class ObjectMapperFactory {
                                                               BeanDescription beanDesc,
                                                               JsonDeserializer<?> deserializer) {
                     if (Response.class.isAssignableFrom(beanDesc.getBeanClass())) {
-                        return new ResponseRawMessageDeserializer(deserializer);
+                        return new RawResponseDeserializer(deserializer);
                     }
 
                     return deserializer;
