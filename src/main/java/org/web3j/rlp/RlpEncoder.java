@@ -24,6 +24,7 @@ public class RlpEncoder {
 
     private static byte[] encode(byte[] bytesValue, int offset) {
         if (bytesValue.length == 1
+                && offset == STRING_OFFSET
                 && bytesValue[0] >= (byte) 0x00
                 && bytesValue[0] <= (byte) 0x7f) {
             return bytesValue;

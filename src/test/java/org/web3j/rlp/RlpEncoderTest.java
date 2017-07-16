@@ -71,5 +71,14 @@ public class RlpEncoderTest {
         // https://github.com/paritytech/parity/blob/master/util/rlp/tests/tests.rs#L239
         assertThat(RlpEncoder.encode(RlpString.create(new byte[] { 0 })),
                 is(new byte[]{ (byte) 0x00 }));
+
+        assertThat(RlpEncoder.encode(
+                new RlpList(
+                        RlpString.create("zw"),
+                        new RlpList(RlpString.create(4)),
+                        RlpString.create(1))),
+                is(new byte[]{
+                        (byte) 0xc6, (byte) 0x82, (byte) 0x7a, (byte) 0x77, (byte) 0xc1,
+                        (byte) 0x04, (byte) 0x01}));
     }
 }

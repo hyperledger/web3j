@@ -43,6 +43,10 @@ public class RlpString implements RlpType {
         }
     }
 
+    public static RlpString create(long value) {
+        return create(BigInteger.valueOf(value));
+    }
+
     public static RlpString create(String value) {
         return new RlpString(value.getBytes());
     }
