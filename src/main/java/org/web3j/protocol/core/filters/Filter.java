@@ -39,6 +39,8 @@ public abstract class Filter<T> {
             }
 
             filterId = ethFilter.getFilterId();
+            EthLog ethLogInit = web3j.ethGetFilterLogs(filterId).send();
+            process(ethLogInit.getLogs());
 
             schedule = scheduledExecutorService.scheduleAtFixedRate(() -> {
                 EthLog ethLog = null;
