@@ -9,6 +9,7 @@ public class Response<T> {
     private String jsonrpc;
     private T result;
     private Error error;
+    private String rawResponse;
 
     public Response() {
     }
@@ -47,6 +48,14 @@ public class Response<T> {
 
     public boolean hasError() {
         return error != null;
+    }
+
+    public String getRawResponse() {
+        return rawResponse;
+    }
+
+    public void setRawResponse(String rawResponse) {
+        this.rawResponse = rawResponse;
     }
 
     public static class Error {

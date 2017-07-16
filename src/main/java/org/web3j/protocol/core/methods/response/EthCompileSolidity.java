@@ -22,6 +22,10 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
         public Code() {
         }
 
+        public Code(String code) {
+            this.code = code;
+        }
+
         public Code(String code, SolidityInfo info) {
             this.code = code;
             this.info = info;
