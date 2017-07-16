@@ -32,7 +32,7 @@ import org.web3j.utils.Numeric;
  * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  * </p>
  */
-class TypeDecoder {
+public class TypeDecoder {
 
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
