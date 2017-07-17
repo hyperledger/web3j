@@ -22,7 +22,7 @@ public class RlpString implements RlpType {
     }
 
     public static RlpString create(byte[] value) {
-        return new RlpString(Bytes.trimLeadingZeroes(value));
+        return new RlpString(value);
     }
 
     public static RlpString create(byte value) {

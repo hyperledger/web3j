@@ -69,7 +69,9 @@ public class TransactionEncoder {
         // an empty to address (contract creation) should not be encoded as a numeric 0 value
         String to = rawTransaction.getTo();
         if (to != null && to.length() > 0) {
-            result.add(RlpString.create(Numeric.toBigInt(to)));
+            // addresses that start with zeros should be encoded with the zeros included, not
+            // as numeric values
+            result.add(RlpString.create(Numeric.hexStringToByteArray(to)));
         } else {
             result.add(RlpString.create(""));
         }
