@@ -294,6 +294,7 @@ public class SolidityFunctionWrapper {
 
     static List<MethodSpec> buildFunction(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
+
         List<MethodSpec> overloadedMethods = new ArrayList<>();
 
         String functionName = functionDefinition.getName();
@@ -305,13 +306,13 @@ public class SolidityFunctionWrapper {
         String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
 
         List<TypeName> outputParameterTypes = buildTypeNames(functionDefinition.getOutputs());
+
         if (functionDefinition.isConstant()) {
             buildConstantFunction(
                     functionDefinition, methodBuilder, outputParameterTypes, inputParams);
-        } else {
-            buildTransactionFunction(
-                    functionDefinition, methodBuilder, inputParams);
 
+            overloadedMethods.add(methodBuilder.build());
+        } else {
             if (functionDefinition.isPayable()) {
                 MethodSpec.Builder methodBuilderWithVal =
                         MethodSpec.methodBuilder(functionName)
@@ -324,14 +325,18 @@ public class SolidityFunctionWrapper {
                         "BigInteger"),
                         "weiValue").build());
 
-                buildValuedFunction(
+                buildValuedTransactionFunction(
                         functionDefinition, methodBuilderWithVal,inputParamsWithVal);
 
                 overloadedMethods.add(methodBuilderWithVal.build());
+            } else {
+                buildTransactionFunction(
+                        functionDefinition, methodBuilder, inputParams);
+
+                overloadedMethods.add(methodBuilder.build());
             }
         }
 
-        overloadedMethods.add(methodBuilder.build());
         return overloadedMethods;
     }
 
@@ -390,7 +395,7 @@ public class SolidityFunctionWrapper {
         methodBuilder.addStatement("return executeTransactionAsync(function)");
     }
 
-    private static void buildValuedFunction(
+    private static void buildValuedTransactionFunction(
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             String inputParams) throws ClassNotFoundException {

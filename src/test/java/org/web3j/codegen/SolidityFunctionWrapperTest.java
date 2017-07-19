@@ -103,8 +103,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         List<MethodSpec> methodSpec = buildFunction(functionDefinition);
 
-        String[] expected = {
-                "public java.util.concurrent.Future<org.web3j.protocol.core.methods"
+        String expected = "public java.util.concurrent.Future<org.web3j.protocol.core.methods"
                 + ".response.TransactionReceipt> functionName(org.web3j.abi.datatypes.generated"
                 + ".Uint8 param, java.math.BigInteger weiValue) {\n"
                 + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes"
@@ -112,19 +111,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 + ".Type>asList(param), java.util.Collections.<org.web3j.abi"
                 + ".TypeReference<?>>emptyList());\n"
                 + "  return executeTransactionAsync(function, weiValue);\n"
-                + "}\n",
-                "public java.util.concurrent.Future<org.web3j.protocol.core.methods"
-                + ".response.TransactionReceipt> functionName(org.web3j.abi.datatypes.generated"
-                + ".Uint8 param) {\n"
-                + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes"
-                + ".Function(\"functionName\", java.util.Arrays.<org.web3j.abi.datatypes"
-                + ".Type>asList(param), java.util.Collections.<org.web3j.abi"
-                + ".TypeReference<?>>emptyList());\n"
-                + "  return executeTransactionAsync(function);\n"
-                + "}\n"};
+                + "}\n";
 
-        assertThat(methodSpec.get(0).toString(), is(expected[0]));
-        assertThat(methodSpec.get(1).toString(), is(expected[1]));
+        assertThat(methodSpec.get(0).toString(), is(expected));
     }
 
     @Test
