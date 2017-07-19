@@ -217,6 +217,18 @@ public abstract class Contract extends ManagedTransaction {
         return Async.run(() -> executeTransaction(function));
     }
 
+    /**
+     * Execute the provided payable function as a transaction asynchronously.
+     *
+     * @param function to transact with
+     * @param weiValue in Wei to send in transaction
+     * @return {@link Future} containing executing transaction
+     */
+    protected CompletableFuture<TransactionReceipt> executeTransactionAsync(
+            Function function, BigInteger weiValue) {
+        return Async.run(() -> executeTransaction(FunctionEncoder.encode(function), weiValue));
+    }
+
     protected EventValues extractEventParameters(
             Event event, Log log) {
 
