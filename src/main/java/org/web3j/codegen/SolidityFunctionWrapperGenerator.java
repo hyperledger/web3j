@@ -22,7 +22,7 @@ public class SolidityFunctionWrapperGenerator {
 
     private static final String USAGE = "solidity generate "
             + "<input binary file>.bin <input abi file>.abi "
-            + "[-p|--package <base package name>] "
+            + "-p|--package <base package name> "
             + "-o|--output <destination base directory>";
 
     private String binaryFileLocation;
