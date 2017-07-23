@@ -1,53 +1,72 @@
 package org.web3j.protocol;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okio.Buffer;
 import org.junit.Before;
-import org.mockito.ArgumentCaptor;
 
 import org.web3j.protocol.http.HttpService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertNotNull;
 
 public abstract class RequestTester {
 
-    private CloseableHttpClient closeableHttpClient;
+    private OkHttpClient httpClient;
     private HttpService httpService;
+
+    private RequestInterceptor requestInterceptor;
 
     @Before
     public void setUp() {
-        closeableHttpClient = mock(CloseableHttpClient.class);
-        httpService = new HttpService("", closeableHttpClient);
+        requestInterceptor = new RequestInterceptor();
+        httpClient = new OkHttpClient.Builder()
+                .addInterceptor(requestInterceptor)
+                .build();
+        httpService = new HttpService(httpClient);
         initWeb3Client(httpService);
     }
 
     protected abstract void initWeb3Client(HttpService httpService);
 
     protected void verifyResult(String expected) throws Exception {
-        ArgumentCaptor<HttpPost> httpPostArgumentCaptor = ArgumentCaptor.forClass(HttpPost.class);
-        verify(closeableHttpClient).execute(
-                httpPostArgumentCaptor.capture(), any(ResponseHandler.class));
+        RequestBody requestBody = requestInterceptor.getRequestBody();
+        assertNotNull(requestBody);
+        assertThat(requestBody.contentType(), is(HttpService.JSON_MEDIA_TYPE));
 
-        String result = readResult(httpPostArgumentCaptor.getValue().getEntity().getContent());
-        assertThat(result, is(expected));
+        Buffer buffer = new Buffer();
+        requestBody.writeTo(buffer);
+        assertThat(buffer.readUtf8(), is(expected));
     }
 
-    private static String readResult(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = inputStream.read(buffer)) != -1) {
-            result.write(buffer, 0, length);
+    private class RequestInterceptor implements Interceptor {
+
+        private RequestBody requestBody;
+
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
+
+            Request request = chain.request();
+            this.requestBody = request.body();
+
+            okhttp3.Response response = new okhttp3.Response.Builder()
+                    .request(chain.request())
+                    .protocol(Protocol.HTTP_2)
+                    .code(200)
+                    .message("")
+                    .build();
+
+            return response;
         }
-        return result.toString("UTF-8");
+
+        public RequestBody getRequestBody() {
+            return requestBody;
+        }
     }
 }

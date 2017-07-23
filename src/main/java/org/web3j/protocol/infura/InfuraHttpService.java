@@ -1,21 +1,7 @@
 package org.web3j.protocol.infura;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.List;
-import java.util.Optional;
-import javax.net.ssl.SSLContext;
-
-import org.apache.http.Header;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.ssl.SSLContexts;
+import java.util.Collections;
+import java.util.Map;
 
 import org.web3j.protocol.http.HttpService;
 
@@ -29,12 +15,11 @@ public class InfuraHttpService extends HttpService {
 
     private static final char[] TEMP_KEY_STORE_PASSWORD = "web3j runtime cert store".toCharArray();
 
-    private final Optional<Header> clientVersionHeader;
+    private final Map<String, String> clientVersionHeader;
 
     public InfuraHttpService(String url, String clientVersion, boolean required) {
         super(url);
-        setHttpClient(createTrustTlsHttpClient(url));
-        clientVersionHeader = buildHeader(clientVersion, required);
+        clientVersionHeader = buildClientVersionHeader(clientVersion, required);
     }
 
     public InfuraHttpService(String url, String clientVersion) {
@@ -46,63 +31,20 @@ public class InfuraHttpService extends HttpService {
     }
 
     @Override
-    protected void addHeaders(List<Header> headers) {
-        if (clientVersionHeader.isPresent()) {
-            headers.add(clientVersionHeader.get());
-        }
+    protected void addHeaders(Map<String, String> headers) {
+        headers.putAll(clientVersionHeader);
     }
 
-    static Optional<Header> buildHeader(String clientVersion, boolean required) {
+    static Map<String, String> buildClientVersionHeader(String clientVersion, boolean required) {
         if (clientVersion == null || clientVersion.equals("")) {
-            return Optional.empty();
+            return Collections.emptyMap();
         }
 
         if (required) {
-            return Optional.of(new BasicHeader(INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion));
+            return Collections.singletonMap(INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion);
         } else {
-            return Optional.of(new BasicHeader(
-                    INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion + "; required=false"));
+            return Collections.singletonMap(
+                    INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion + "; required=false");
         }
-    }
-
-    /**
-     * Create an {@link InfuraHttpService} instance with a local keystore that implicitly trusts
-     * the provided endpoint.
-     *
-     * <p>This is achieved by creating a local temporary keystore file which we add the certificate
-     * of the endpoint to upon application startup.
-     *
-     * @param url we wish to connect to
-     * @return the file containing the keystore
-     * @throws UnrecoverableKeyException if keystore file cannot be loaded
-     * @throws NoSuchAlgorithmException if keystore file cannot be loaded
-     * @throws KeyStoreException if keystore file cannot be loaded
-     * @throws KeyManagementException if keystore file cannot be loaded
-     */
-    private static CloseableHttpClient createTrustTlsHttpClient(String url) {
-
-        File keyFile = CertificateManager.buildKeyStore(url, TEMP_KEY_STORE_PASSWORD);
-
-        SSLContext sslContext;
-        try {
-            sslContext = SSLContexts.custom()
-                    .loadTrustMaterial(keyFile, TEMP_KEY_STORE_PASSWORD)
-                    .build();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (KeyManagementException e) {
-            throw new RuntimeException(e);
-        } catch (KeyStoreException e) {
-            throw new RuntimeException(e);
-        } catch (CertificateException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return HttpClients.custom()
-                .setConnectionManagerShared(true)
-                .setSSLContext(sslContext)
-                .build();
     }
 }

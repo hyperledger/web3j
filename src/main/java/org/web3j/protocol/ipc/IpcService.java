@@ -2,8 +2,8 @@ package org.web3j.protocol.ipc;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.web3j.protocol.Service;
 import org.web3j.protocol.core.Request;
@@ -14,7 +14,7 @@ import org.web3j.protocol.core.Response;
  */
 public class IpcService extends Service {
 
-    private static final Log log = LogFactory.getLog(IpcService.class);
+    private static final Logger log = LoggerFactory.getLogger(IpcService.class);
 
     private final IOFacade ioFacade;
 

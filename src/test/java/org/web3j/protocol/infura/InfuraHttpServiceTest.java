@@ -1,28 +1,30 @@
 package org.web3j.protocol.infura;
 
-import org.apache.http.message.BasicHeader;
+import java.util.Collections;
+
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.web3j.protocol.infura.InfuraHttpService.buildHeader;
+import static org.junit.Assert.assertTrue;
+import static org.web3j.protocol.infura.InfuraHttpService.buildClientVersionHeader;
 
 public class InfuraHttpServiceTest {
 
     @Test
     public void testBuildHeader() {
-        assertFalse(buildHeader("", false).isPresent());
-        assertFalse(buildHeader(null, false).isPresent());
+        assertTrue(buildClientVersionHeader("", false).isEmpty());
+        assertTrue(buildClientVersionHeader(null, false).isEmpty());
 
-        assertThat(buildHeader("geth 1.4.19", true).get().toString(),
-                is(new BasicHeader(
+        assertThat(buildClientVersionHeader("geth 1.4.19", true),
+                equalTo(Collections.singletonMap(
                         "Infura-Ethereum-Preferred-Client",
-                        "geth 1.4.19").toString()));
+                        "geth 1.4.19")));
 
-        assertThat(buildHeader("geth 1.4.19", false).get().toString(),
-                is(new BasicHeader(
+        assertThat(buildClientVersionHeader("geth 1.4.19", false),
+                is(Collections.singletonMap(
                         "Infura-Ethereum-Preferred-Client",
-                        "geth 1.4.19; required=false").toString()));
+                        "geth 1.4.19; required=false")));
     }
 }
