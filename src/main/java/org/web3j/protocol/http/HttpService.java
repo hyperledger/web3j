@@ -65,10 +65,6 @@ public class HttpService extends Service {
         this(DEFAULT_URL);
     }
 
-    protected void setHttpClient(OkHttpClient httpClient) {
-        this.httpClient = httpClient;
-    }
-
     private static OkHttpClient createOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         configureLogging(builder);
@@ -77,7 +73,17 @@ public class HttpService extends Service {
 
     private static void configureLogging(OkHttpClient.Builder builder) {
         if (log.isDebugEnabled()) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            HttpLoggingInterceptor logging =
+                    new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                        @Override
+                        public void log(String message) {
+                            if (log.isTraceEnabled()) {
+                                log.trace(message);
+                            } else {
+                                log.debug(message);
+                            }
+                        }
+                    });
             if (log.isTraceEnabled()) {
                 logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             } else {

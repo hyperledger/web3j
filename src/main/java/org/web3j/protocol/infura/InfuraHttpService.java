@@ -13,8 +13,6 @@ public class InfuraHttpService extends HttpService {
     private static final String INFURA_ETHEREUM_PREFERRED_CLIENT =
             "Infura-Ethereum-Preferred-Client";
 
-    private static final char[] TEMP_KEY_STORE_PASSWORD = "web3j runtime cert store".toCharArray();
-
     private final Map<String, String> clientVersionHeader;
 
     public InfuraHttpService(String url, String clientVersion, boolean required) {
