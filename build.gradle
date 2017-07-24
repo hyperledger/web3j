@@ -98,7 +98,9 @@ dependencies {
             'io.reactivex:rxjava:1.2.4'
     testCompile 'junit:junit:4.11',
             'org.mockito:mockito-core:1.10.19',
-            'nl.jqno.equalsverifier:equalsverifier:2.1.7'
+            'nl.jqno.equalsverifier:equalsverifier:2.1.7',
+            'ch.qos.logback:logback-core:1.2.3',
+            'ch.qos.logback:logback-classic:1.2.3'
 }
 
 
