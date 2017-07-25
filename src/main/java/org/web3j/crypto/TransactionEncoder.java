@@ -8,6 +8,7 @@ import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
+import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 
 /**
@@ -84,8 +85,8 @@ public class TransactionEncoder {
 
         if (signatureData != null) {
             result.add(RlpString.create(signatureData.getV()));
-            result.add(RlpString.create(signatureData.getR()));
-            result.add(RlpString.create(signatureData.getS()));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }
 
         return result;
