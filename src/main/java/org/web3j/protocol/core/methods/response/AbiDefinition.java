@@ -26,7 +26,7 @@ public class AbiDefinition {
         this.name = name;
         this.outputs = outputs;
         this.type = type;
-        this.payable = false;
+        this.payable = payable;
     }
 
     public boolean isConstant() {
