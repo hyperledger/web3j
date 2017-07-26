@@ -38,7 +38,7 @@ public class Account {
 
     private static Boolean validateChecksumAddress(String address) {
         String formattedAddress = address.replace("0x", "").toLowerCase();
-        String hash = Numeric.toHexString(Hash.sha3(formattedAddress.getBytes()));
+        String hash = Numeric.toHexStringNoPrefix(Hash.sha3(formattedAddress.getBytes()));
         for (int i = 0; i < 40; i++) {
             if (Character.isLetter(address.charAt(i))) {
                 // each uppercase letter should correlate with a first bit of 1 in the hash
