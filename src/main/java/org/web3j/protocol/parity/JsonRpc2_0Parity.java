@@ -9,15 +9,16 @@ import java.util.Map;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.admin.JsonRpc2_0Personal;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.VoidResponse;
 import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
-import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
+import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
 import org.web3j.protocol.parity.methods.response.PersonalEcRecover;
-import org.web3j.protocol.parity.methods.response.PersonalListAccounts;
+import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.parity.methods.response.PersonalRejectRequest;
 import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
 import org.web3j.protocol.parity.methods.response.PersonalSign;
@@ -27,13 +28,15 @@ import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
 /**
  * JSON-RPC 2.0 factory implementation for Parity.
  */
-public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
+public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
 
     public JsonRpc2_0Parity(Web3jService web3jService) {
         super(web3jService);
     }
 
-    @Override
+    
+    
+    /*@Override
     public Request<?, PersonalSignerEnabled> personalSignerEnabled() {
         return new Request<>(
                 "personal_signerEnabled",
@@ -63,27 +66,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
                 ID,
                 web3jService,
                 PersonalEcRecover.class);
-    }
-
-    @Override
-    public Request<?, PersonalListAccounts> personalListAccounts() {
-        return new Request<>(
-                "personal_listAccounts",
-                Collections.<String>emptyList(),
-                ID,
-                web3jService,
-                PersonalListAccounts.class);
-    }
-
-    @Override
-    public Request<?, NewAccountIdentifier> personalNewAccount(String password) {
-        return new Request<>(
-                "personal_newAccount",
-                Arrays.asList(password),
-                ID,
-                web3jService,
-                NewAccountIdentifier.class);
-    }
+    }    
 
     @Override
     public Request<?, NewAccountIdentifier> personalNewAccountFromPhrase(
@@ -173,13 +156,13 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     }
 
     @Override
-    public Request<?, PersonalAccountsInfo> personalAccountsInfo() {
+    public Request<?, ParityAllAccountsInfo> personalAccountsInfo() {
         return new Request<>(
                 "personal_accountsInfo",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                PersonalAccountsInfo.class);
+                ParityAllAccountsInfo.class);
     }
 
     @Override
@@ -211,5 +194,5 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
                 ID,
                 web3jService,
                 PersonalRejectRequest.class);
-    }
+    }*/
 }
