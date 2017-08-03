@@ -1,27 +1,31 @@
 package org.web3j.protocol.parity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.web3j.crypto.WalletFile;
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.admin.methods.response.BooleanResponse;
+import org.web3j.protocol.admin.Personal;
+import org.web3j.protocol.parity.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
+import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
-import org.web3j.protocol.parity.methods.response.ParityDeriveAddr;
+import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
 import org.web3j.protocol.parity.methods.response.ParityExportAccount;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
+import org.web3j.protocol.parity.methods.response.SignerRejectRequest;
+import org.web3j.protocol.parity.methods.response.SignerRequestsToConfirm;
 
 /**
  * JSON-RPC Request object building factory for Parity.
  */
-public interface Parity extends Web3j {
+public interface Parity extends Personal {
     static Parity build(Web3jService web3jService) {
         return new JsonRpc2_0Parity(web3jService);
     }
@@ -30,9 +34,9 @@ public interface Parity extends Web3j {
     
     Request<?, BooleanResponse> parityChangePassword(String accountId, String oldPass, String newPass);
     
-    Request<?, ParityDeriveAddr> parityDeriveAddrHash(String accountId, String password, Map<String,String> hashType, boolean toSave);
+    Request<?, ParityDeriveAddress> parityDeriveAddressHash(String accountId, String password, Map<String, Object> hashType, boolean toSave);
     
-    Request<?, ParityDeriveAddr> parityDeriveAddrIndex(String accountId, String password, Map<String, String> indexType, boolean toSave);
+    Request<?, ParityDeriveAddress> parityDeriveAddressIndex(String accountId, String password, List<Map<String, Object>> indexType, boolean toSave);
     
     Request<?, ParityExportAccount> parityExportAccount(String accountId, String password);
     
@@ -74,35 +78,12 @@ public interface Parity extends Web3j {
     
     Request<?, BooleanResponse> parityTestPassword(String accountId, String password);
     
-    Request<?, EthSendTransaction> personalSendTransaction(Transaction transaction, String password);
+    Request<?, PersonalSign> paritySignMessage(String accountId, String password, String hexMessage);    
 
+    Request<?, SignerRequestsToConfirm> signerRequestsToConfirm();
 
-    /*Request<?, PersonalSignerEnabled> personalSignerEnabled();
-
-    Request<?, PersonalSign> personalSign(String hexMessage, String accountId, String password);
-
-    Request<?, PersonalEcRecover> personalEcRecover(String hexMessage, String signedMessage);
-
-    Request<?, NewAccountIdentifier> personalNewAccountFromPhrase(String phrase, String password);
-
-    Request<?, NewAccountIdentifier> personalNewAccountFromWallet(
-            WalletFile walletFile, String password);
-
-    Request<?, PersonalUnlockAccount> personalUnlockAccount(
-            String accountId, String password, BigInteger duration);
-
-    Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password);
-
-   
-    Request<?, VoidResponse> personalSetAccountName(
-            String accountId, String newAccountName);
-
-    Request<?, VoidResponse> personalSetAccountMeta(String accountId, Map<String, Object> metadata);
-
-    Request<?, PersonalRequestsToConfirm> personalRequestsToConfirm();
-
-    Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction> personalConfirmRequest(
+    Request<?, EthSendTransaction> signerConfirmRequest(
             String requestId, Transaction transaction, String password);
 
-    Request<?, PersonalRejectRequest> personalRejectRequest(String requestId);*/
+    Request<?, SignerRejectRequest> signerRejectRequest(String requestId);
 }

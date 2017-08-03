@@ -5,7 +5,7 @@ import java.util.Map;
 import org.web3j.protocol.core.Response;
 
 /**
- * personal_accountsInfo.
+ * parity_allAccountsInfo.
  */
 public class ParityAllAccountsInfo extends Response<Map<String, ParityAllAccountsInfo.AccountsInfo>> {
 
@@ -22,7 +22,7 @@ public class ParityAllAccountsInfo extends Response<Map<String, ParityAllAccount
         public AccountsInfo() {
         }
 
-        public AccountsInfo(String name, String uuid, Map<String, Object> meta) {
+        public AccountsInfo(Map<String, Object> meta, String name, String uuid) {
             this.name = name;
             this.uuid = uuid;
             this.meta = meta;

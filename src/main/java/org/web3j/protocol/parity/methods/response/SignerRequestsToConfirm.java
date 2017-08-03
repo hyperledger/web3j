@@ -16,10 +16,10 @@ import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
 
 /**
- * personal_requestsToConfirm.
+ * signer_requestsToConfirm.
  */
-public class PersonalRequestsToConfirm extends
-        Response<List<PersonalRequestsToConfirm.RequestsToConfirm>> {
+public class SignerRequestsToConfirm extends
+        Response<List<SignerRequestsToConfirm.RequestsToConfirm>> {
 
     public List<RequestsToConfirm> getRequestsToConfirm() {
         return getResult();

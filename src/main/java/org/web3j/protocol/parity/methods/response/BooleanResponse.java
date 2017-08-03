@@ -3,10 +3,10 @@ package org.web3j.protocol.parity.methods.response;
 import org.web3j.protocol.core.Response;
 
 /**
- * personal_signerEnabled.
+ * personal_unlockAccount.
  */
-public class PersonalSignerEnabled extends Response<Boolean> {
-    public boolean isSignerEnabled() {
+public class BooleanResponse extends Response<Boolean>{
+    public boolean success(){
         return getResult();
     }
 }

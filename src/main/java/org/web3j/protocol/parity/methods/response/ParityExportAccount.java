@@ -4,8 +4,7 @@ import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.core.Response;
 
 /**
- *
- * @author ivaylo
+ * parity_ExportAccount.
  */
 public class ParityExportAccount extends Response<WalletFile>{
     public WalletFile getWallet(){

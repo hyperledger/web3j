@@ -3,11 +3,10 @@ package org.web3j.protocol.parity.methods.response;
 import org.web3j.protocol.core.Response;
 
 /**
- *
- * @author ivaylo
+ * signer_rejectRequest.
  */
-public class ParityDeriveAddr extends Response<String>{
-    public String getAddress(){
+public class SignerRejectRequest extends Response<Boolean> {
+    public boolean isRejected() {
         return getResult();
     }
 }
