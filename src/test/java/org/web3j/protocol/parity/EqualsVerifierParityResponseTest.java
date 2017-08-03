@@ -4,14 +4,14 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
-import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
-import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
+import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
+import org.web3j.protocol.parity.methods.response.SignerRequestsToConfirm;
 
 public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testTransactionRequestType() {
-        EqualsVerifier.forClass(PersonalRequestsToConfirm.TransactionRequestType.class)
+        EqualsVerifier.forClass(SignerRequestsToConfirm.TransactionRequestType.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -19,7 +19,7 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testAccountsInfo() {
-        EqualsVerifier.forClass(PersonalAccountsInfo.AccountsInfo.class)
+        EqualsVerifier.forClass(ParityAllAccountsInfo.AccountsInfo.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -27,7 +27,7 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testSignRequest() {
-        EqualsVerifier.forClass(PersonalRequestsToConfirm.SignRequest.class)
+        EqualsVerifier.forClass(SignerRequestsToConfirm.SignRequest.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -35,7 +35,7 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testRequestsToConfirm() {
-        EqualsVerifier.forClass(PersonalRequestsToConfirm.RequestsToConfirm.class)
+        EqualsVerifier.forClass(SignerRequestsToConfirm.RequestsToConfirm.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -43,7 +43,7 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testTransactionPayload() {
-        EqualsVerifier.forClass(PersonalRequestsToConfirm.TransactionPayload.class)
+        EqualsVerifier.forClass(SignerRequestsToConfirm.TransactionPayload.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -51,7 +51,7 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testSignPayload() {
-        EqualsVerifier.forClass(PersonalRequestsToConfirm.SignPayload.class)
+        EqualsVerifier.forClass(SignerRequestsToConfirm.SignPayload.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();

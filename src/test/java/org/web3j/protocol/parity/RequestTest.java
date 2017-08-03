@@ -1,7 +1,9 @@
 package org.web3j.protocol.parity;
 
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -19,59 +21,140 @@ public class RequestTest extends RequestTester {
     protected void initWeb3Client(HttpService httpService) {
         web3j = Parity.build(httpService);
     }
-
+    
     @Test
-    public void testPersonalSignerEnabled() throws Exception {
-        web3j.personalSignerEnabled().send();
+    public void testParityAllAccountsInfo() throws Exception {
+        web3j.parityAllAccountsInfo().send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_signerEnabled\","
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_allAccountsInfo\","
                 + "\"params\":[],\"id\":1}");
     }
-
+    
     @Test
-    public void testPersonalSign() throws Exception {
-        web3j.personalSign("0xdeadbeef","0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54","123").send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_sign\","
-                + "\"params\":[\"0xdeadbeef\",\"0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54\","
-                + "\"123\"],\"id\":1}");
+    public void testParityChangePassword() throws Exception{
+        web3j.parityChangePassword("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", "bazqux5").send();
+        
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_changePassword\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\",\"bazqux5\"],\"id\":1}");
     }
-
+    
     @Test
-    public void testPersonalEcRecover() throws Exception {
-        //CHECKSTYLE:OFF
-        web3j.personalEcRecover("0xdeadbeef","0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c").send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_ecRecover\",\"params\":[\"0xdeadbeef\",\"0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c\"],\"id\":1}");
-        //CHECKSTYLE:ON
+    public void testParityDeriveAddressHash() throws Exception{
+        Map<String, Object> hashType = new LinkedHashMap<>(2);
+        hashType.put("hash","0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43");
+        hashType.put("type","hard");                
+        
+        web3j.parityDeriveAddressHash("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", hashType, false).send();
+        
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_deriveAddressHash\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\","
+                + "{\"hash\":\"0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43\",\"type\":\"hard\"},false],\"id\":1}");
     }
-
+    
     @Test
-    public void testPersonalListAccounts() throws Exception {
-        web3j.personalListAccounts().send();
+    public void testParityDeriveAddressIndex() throws Exception{
+        Map<String, Object> firstIndex = new LinkedHashMap<>(2);
+        firstIndex.put("index",1);
+        firstIndex.put("type","hard");                
+        Map<String, Object> secondIndex = new LinkedHashMap<>(2);
+        secondIndex.put("index",2);
+        secondIndex.put("type","soft");                
+        List<Map<String, Object>> indexType = new ArrayList<>();
+        indexType.add(firstIndex);
+        indexType.add(secondIndex);
+        
+        web3j.parityDeriveAddressIndex("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", indexType, false).send();
+        
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_deriveAddressIndex\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\","
+                + "[{\"index\":1,\"type\":\"hard\"},{\"index\":2,\"type\":\"soft\"}],false],\"id\":1}");
+    }
+    
+    @Test
+    public void testParityExportAccount() throws Exception{
+        web3j.parityExportAccount("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2").send();
+        
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_exportAccount\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],\"id\":1}");
+    }
+    
+    @Test
+    public void testParityGetDappAddresses() throws Exception{
+        web3j.parityGetDappAddresses("web").send();
+        
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getDappAddresses\","
+                + "\"params\":[\"web\"],\"id\":1}");
+    }
+    
+    @Test
+    public void testParityGetDefaultDappAddress() throws Exception{
+        web3j.parityGetDappDefaultAddress("web").send();
+        
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getDappDefaultAddress\","
+                + "\"params\":[\"web\"],\"id\":1}");
+    }
+    
+    public void testParityGetNewDappsAddresses() throws Exception {
+        web3j.parityAllAccountsInfo().send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_listAccounts\","
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getNewDappsAddresses\","
                 + "\"params\":[],\"id\":1}");
     }
+    
+    public void testParityGetNewDappsDefaultAddress() throws Exception {
+        web3j.parityGetNewDappsDefaultAddress().send();
 
-    @Test
-    public void testPersonalNewAccount() throws Exception {
-        web3j.personalNewAccount("password").send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_newAccount\","
-                + "\"params\":[\"password\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getNewDappsDefaultAddress\","
+                + "\"params\":[],\"id\":1}");
     }
+    
+    public void testParityImportGethAccounts() throws Exception {
+        ArrayList<String> gethAccounts = new ArrayList<>();
+        gethAccounts.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
+        web3j.parityImportGethAccounts(gethAccounts).send();
 
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_importGethAccounts\","
+                + "\"params\":[[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]],\"id\":1}");
+    }
+    
+    public void testParityKillAccount() throws Exception {
+        web3j.parityKillAccount("0x407d73d8a49eeb85d32cf465507dd71d507100c1","hunter2").send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_killAccount\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],\"id\":1}");
+    }
+    
+    public void testParityListGethAccounts() throws Exception {
+        web3j.parityListGethAccounts().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listGethAccounts\","
+                + "\"params\":[],\"id\":1}");
+    }
+    
+    public void testParityListRecentDapps() throws Exception {
+        web3j.parityListRecentDapps().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listRecentDapps\","
+                + "\"params\":[],\"id\":1}");
+    }
+    
     @Test
-    public void testPersonalNewAccountFromPhrase() throws Exception {
-        web3j.personalNewAccountFromPhrase("phrase", "password").send();
+    public void testParityNewAccountFromPhrase() throws Exception {
+        web3j.parityNewAccountFromPhrase("phrase", "password").send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_newAccountFromPhrase\","
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromPhrase\","
                 + "\"params\":[\"phrase\",\"password\"],\"id\":1}");
     }
-
     @Test
-    public void testPersonalNewAccountFromWallet() throws Exception {
+    public void testParityNewAccountFromSecret() throws Exception {
+        web3j.parityNewAccountFromSecret("0x1db2c0cf57505d0f4a3d589414f0a0025ca97421d2cd596a9486bc7e2cd2bf8b", "password").send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromSecret\","
+                + "\"params\":[\"0x1db2c0cf57505d0f4a3d589414f0a0025ca97421d2cd596a9486bc7e2cd2bf8b\",\"password\"],\"id\":1}");
+    }
+    
+    @Test
+    public void testParityNewAccountFromWallet() throws Exception {
         WalletFile walletFile = new WalletFile();
         walletFile.setAddress("0x...");
 
@@ -98,92 +181,115 @@ public class RequestTest extends RequestTester {
         walletFile.setId("cab06c9e-79a9-48ea-afc7-d3bdb3a59526");
         walletFile.setVersion(1);
 
-        web3j.personalNewAccountFromWallet(walletFile, "password").send();
+        web3j.parityNewAccountFromWallet(walletFile, "password").send();
 
         //CHECKSTYLE:OFF
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_newAccountFromWallet\",\"params\":[{\"address\":\"0x...\",\"id\":\"cab06c9e-79a9-48ea-afc7-d3bdb3a59526\",\"version\":1,\"crypto\":{\"cipher\":\"CIPHER\",\"ciphertext\":\"CIPHERTEXT\",\"cipherparams\":{\"iv\":\"IV\"},\"kdf\":\"KDF\",\"kdfparams\":{\"dklen\":32,\"n\":1,\"p\":10,\"r\":100,\"salt\":\"SALT\"},\"mac\":\"MAC\"}},\"password\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromWallet\",\"params\":[{\"address\":\"0x...\",\"id\":\"cab06c9e-79a9-48ea-afc7-d3bdb3a59526\",\"version\":1,\"crypto\":{\"cipher\":\"CIPHER\",\"ciphertext\":\"CIPHERTEXT\",\"cipherparams\":{\"iv\":\"IV\"},\"kdf\":\"KDF\",\"kdfparams\":{\"dklen\":32,\"n\":1,\"p\":10,\"r\":100,\"salt\":\"SALT\"},\"mac\":\"MAC\"}},\"password\"],\"id\":1}");
         //CHECKSTYLE:ON
     }
+    
+    public void testParityRemoveAddress() throws Exception {
+        web3j.parityRemoveAddress("0x407d73d8a49eeb85d32cf465507dd71d507100c1").send();
 
-    @Test
-    public void testPersonalUnlockAccount() throws Exception {
-        web3j.personalUnlockAccount(
-                "0xfc390d8a8ddb591b010fda52f4db4945742c3809", "hunter2", BigInteger.ONE).send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_unlockAccount\","
-                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"hunter2\",1],"
-                + "\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_removeAddress\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],\"id\":1}");
     }
-
+    
     @Test
-    public void testPersonalUnlockAccountNoDuration() throws Exception {
-        web3j.personalUnlockAccount("0xfc390d8a8ddb591b010fda52f4db4945742c3809", "hunter2").send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_unlockAccount\","
-                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"hunter2\",null],"
-                + "\"id\":1}");
-    }
-
-    @Test
-    public void testPersonalSignAndSendTransaction() throws Exception {
-        web3j.personalSignAndSendTransaction(
-                new Transaction(
-                        "FROM",
-                        BigInteger.ONE,
-                        BigInteger.TEN,
-                        BigInteger.ONE,
-                        "TO",
-                        BigInteger.ZERO,
-                        "DATA"
-                ),
-                "password"
-        ).send();
-
-        //CHECKSTYLE:OFF
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_signAndSendTransaction\",\"params\":[{\"from\":\"FROM\",\"to\":\"TO\",\"gas\":\"0x1\",\"gasPrice\":\"0xa\",\"value\":\"0x0\",\"data\":\"0xDATA\",\"nonce\":\"0x1\"},\"password\"],\"id\":1}");
-        //CHECKSTYLE:ON
-    }
-
-    @Test
-    public void testPersonalSetAccountName() throws Exception {
-        web3j.personalSetAccountName("0xfc390d8a8ddb591b010fda52f4db4945742c3809", "Savings")
-                .send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_setAccountName\","
-                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"Savings\"],"
-                + "\"id\":1}");
-    }
-
-    @Test
-    public void testPersonalSetAccountMeta() throws Exception {
+    public void testParitySetAccountMeta() throws Exception {
         Map<String, Object> meta = new HashMap<>(1);
         meta.put("foo", "bar");
-        web3j.personalSetAccountMeta("0xfc390d8a8ddb591b010fda52f4db4945742c3809", meta).send();
+        web3j.paritySetAccountMeta("0xfc390d8a8ddb591b010fda52f4db4945742c3809", meta).send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_setAccountMeta\","
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setAccountMeta\","
                 + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",{\"foo\":\"bar\"}],"
                 + "\"id\":1}");
     }
-
+    
     @Test
-    public void testPersonalAccountsInfo() throws Exception {
-        web3j.personalAccountsInfo().send();
+    public void testParitySetAccountName() throws Exception {
+        web3j.paritySetAccountName("0xfc390d8a8ddb591b010fda52f4db4945742c3809", "Savings")
+                .send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_accountsInfo\","
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setAccountName\","
+                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"Savings\"],"
+                + "\"id\":1}");
+    }
+    
+    @Test
+    public void testParitySetDappAddresses() throws Exception {
+        ArrayList<String> dAppAddresses = new ArrayList<>();
+        dAppAddresses.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
+        web3j.paritySetDappAddresses("web", dAppAddresses)
+                .send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setDappAddresses\","
+                + "\"params\":[\"web\",[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]],"
+                + "\"id\":1}");
+    }
+    
+    @Test
+    public void testParitySetDappDefaultAddress() throws Exception {
+        web3j.paritySetDappDefaultAddress("web", "0x407d73d8a49eeb85d32cf465507dd71d507100c1")
+                .send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setDappDefaultAddress\","
+                + "\"params\":[\"web\",\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],"
+                + "\"id\":1}");
+    }
+    
+    @Test
+    public void testParitySetNewDappsAddresses() throws Exception {
+        ArrayList<String> dAppAddresses = new ArrayList<>();
+        dAppAddresses.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
+        web3j.paritySetNewDappsAddresses(dAppAddresses)
+                .send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setNewDappsAddresses\","
+                + "\"params\":[[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]],"
+                + "\"id\":1}");
+    }
+    
+    @Test
+    public void testParitySetNewDappsDefaultAddress() throws Exception {
+        web3j.paritySetNewDappsDefaultAddress("0x407d73d8a49eeb85d32cf465507dd71d507100c1")
+                .send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setNewDappsDefaultAddress\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],"
+                + "\"id\":1}");
+    }
+    
+    @Test
+    public void testParityTestPassword() throws Exception {
+        web3j.parityTestPassword("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2")
+                .send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_testPassword\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],"
+                + "\"id\":1}");
+    }
+    
+    @Test
+    public void testParitySignMessage() throws Exception {
+        web3j.paritySignMessage("0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e","password1","0xbc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a").send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_signMessage\","
+                + "\"params\":[\"0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e\",\"password1\","
+                + "\"0xbc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a\"],\"id\":1}");
+    }  
+    
+    @Test
+    public void testSignerRequestsToConfirm() throws Exception {
+        web3j.signerRequestsToConfirm().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"signer_requestsToConfirm\","
                 + "\"params\":[],\"id\":1}");
     }
 
     @Test
-    public void testPersonalRequestsToConfirm() throws Exception {
-        web3j.personalRequestsToConfirm().send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_requestsToConfirm\","
-                + "\"params\":[],\"id\":1}");
-    }
-
-    @Test
-    public void testPersonalConfirmRequest() throws Exception {
-        web3j.personalConfirmRequest(
+    public void testSignerConfirmRequest() throws Exception {
+        web3j.signerConfirmRequest(
                 "0x1",
                 Transaction.createEthCallTransaction(
                         "0xa010fbad79f5e602699fff2bb4919fbd87abc8cc",
@@ -192,15 +298,15 @@ public class RequestTest extends RequestTester {
         ).send();
 
         //CHECKSTYLE:OFF
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_confirmRequest\",\"params\":[\"0x1\",{\"from\":\"0xa010fbad79f5e602699fff2bb4919fbd87abc8cc\",\"to\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"signer_confirmRequest\",\"params\":[\"0x1\",{\"from\":\"0xa010fbad79f5e602699fff2bb4919fbd87abc8cc\",\"to\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
         //CHECKSTYLE:ON
-    }
+    }       
 
     @Test
-    public void testPersonalRejectRequest() throws Exception {
-        web3j.personalRejectRequest("0x1").send();
+    public void testSignerRejectRequest() throws Exception {
+        web3j.signerRejectRequest("0x1").send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_rejectRequest\","
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"signer_rejectRequest\","
                 + "\"params\":[\"0x1\"],\"id\":1}");
-    }
+    } 
 }
