@@ -15,6 +15,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import org.web3j.crypto.Wallet;
 import org.web3j.crypto.WalletFile;
+import org.web3j.protocol.core.methods.response.VoidResponse;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
 import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
@@ -100,7 +101,7 @@ public class ResponseTest extends ResponseTester {
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1"));
     }   
     
-    /*@Test
+    @Test
     public void testParityExportAccount() {
         buildResponse("{\n"
                 + "    \"jsonrpc\": \"2.0\",\n"
@@ -157,7 +158,7 @@ public class ResponseTest extends ResponseTester {
         ParityExportAccount parityExportAccount = deserialiseResponse(
                 ParityExportAccount.class);
         assertThat(parityExportAccount.getWallet(), equalTo(walletFile));
-    }  */
+    }
     
     @Test
     public void testParityListRecentDapps() {
@@ -228,19 +229,6 @@ public class ResponseTest extends ResponseTester {
         assertThat(signerRequestsToConfirm.getRequestsToConfirm(),equalTo(requestsToConfirm));
     }
 
-    /*@Test
-    public void testPersonalSignerEnabled() {
-        buildResponse("{\n"
-                + "    \"jsonrpc\": \"2.0\",\n"
-                + "    \"id\": 1,\n"
-                + "    \"result\": true\n"
-                + "}");
-
-        PersonalSignerEnabled personalSignerEnabled = deserialiseResponse(
-                PersonalSignerEnabled.class);
-        assertTrue(personalSignerEnabled.isSignerEnabled());
-    }
-
     @Test
     public void testVoidResponse() {
         buildResponse("{\n"
@@ -252,32 +240,4 @@ public class ResponseTest extends ResponseTester {
         VoidResponse voidResponse = deserialiseResponse(VoidResponse.class);
         assertTrue(voidResponse.isValid());
     }
-
-    @Test
-    public void testPersonalAccountsInfo() {
-        buildResponse("{\n"
-                + "    \"jsonrpc\": \"2.0\",\n"
-                + "    \"id\":22,\n"
-                + "    \"result\":{\n"
-                + "        \"0xfc390d8a8ddb591b010fda52f4db4945742c3809\":{\n"
-                + "            \"name\":\"Savings\",\n"
-                + "            \"uuid\":\"7fee0393-7571-2b4f-8672-862fea01a4a0\",\n"
-                + "            \"meta\":{}\n"
-                + "        }\n"
-                + "    }\n"
-                + "}");
-
-        Map<String, ParityAllAccountsInfo.AccountsInfo> accountsInfoMap = new HashMap<>(1);
-        accountsInfoMap.put("0xfc390d8a8ddb591b010fda52f4db4945742c3809",
-                new ParityAllAccountsInfo.AccountsInfo(
-                        "Savings",
-                        "7fee0393-7571-2b4f-8672-862fea01a4a0",
-                        Collections.<String, Object>emptyMap()
-                ));
-
-        ParityAllAccountsInfo personalAccountsInfo = deserialiseResponse(ParityAllAccountsInfo.class);
-        assertThat(personalAccountsInfo.getAccountsInfo(), equalTo(accountsInfoMap));
-    }
-    
-    */
 }
