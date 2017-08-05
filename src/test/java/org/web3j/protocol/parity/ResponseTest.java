@@ -5,16 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.Test;
 
-import org.web3j.protocol.ResponseTester;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import org.web3j.crypto.Wallet;
 import org.web3j.crypto.WalletFile;
+import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.VoidResponse;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
@@ -25,6 +20,10 @@ import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
 import org.web3j.protocol.parity.methods.response.SignerRejectRequest;
 import org.web3j.protocol.parity.methods.response.SignerRequestsToConfirm;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Parity Protocol Response tests.
@@ -103,6 +102,7 @@ public class ResponseTest extends ResponseTester {
     
     @Test
     public void testParityExportAccount() {
+        //CHECKSTYLE:OFF
         buildResponse("{\n"
                 + "    \"jsonrpc\": \"2.0\",\n"
                 + "    \"id\": 1,\n"
@@ -129,13 +129,16 @@ public class ResponseTest extends ResponseTester {
                 + "    \"version\": 3\n"
                 + "    }\n"
                 + "}");
+        //CHECKSTYLE:ON
         
         WalletFile walletFile = new WalletFile();
         walletFile.setAddress("0042e5d2a662eeaca8a7e828c174f98f35d8925b");
 
         WalletFile.Crypto crypto = new WalletFile.Crypto();
-        crypto.setCipher("aes-128-ctr");        
-        crypto.setCiphertext("df27e3db64aa18d984b6439443f73660643c2d119a6f0fa2fa9a6456fc802d75");        
+        crypto.setCipher("aes-128-ctr");  
+        //CHECKSTYLE:OFF
+        crypto.setCiphertext("df27e3db64aa18d984b6439443f73660643c2d119a6f0fa2fa9a6456fc802d75");  
+        //CHECKSTYLE:ON
         walletFile.setCrypto(crypto);
 
         WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();

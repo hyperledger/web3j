@@ -7,7 +7,8 @@ import org.web3j.protocol.core.Response;
 /**
  * parity_allAccountsInfo.
  */
-public class ParityAllAccountsInfo extends Response<Map<String, ParityAllAccountsInfo.AccountsInfo>> {
+public class ParityAllAccountsInfo extends 
+        Response<Map<String, ParityAllAccountsInfo.AccountsInfo>> {
 
     // we need to use a map type as a string value is returned with the account information
     public Map<String, ParityAllAccountsInfo.AccountsInfo> getAccountsInfo() {

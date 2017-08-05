@@ -1,10 +1,11 @@
 package org.web3j.protocol.geth;
 
 import org.junit.Test;
+
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.http.HttpService;
 
-public class RequestTest extends RequestTester{
+public class RequestTest extends RequestTester {
     private Geth web3j;
 
     @Override
@@ -14,12 +15,14 @@ public class RequestTest extends RequestTester{
     
     @Test
     public void testPersonalImportRawKey() throws Exception {
+        //CHECKSTYLE:OFF
         String rawKey = "a08165236279178312660610114131826512483935470542850824183737259708197206310322";
         String password = "hunter2";
         web3j.personalImportRawKey(rawKey,password).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_importRawKey\","
                 + "\"params\":[\"a08165236279178312660610114131826512483935470542850824183737259708197206310322\",\"hunter2\"],\"id\":1}");
+        //CHECKSTYLE:ON
     }
     
     @Test
@@ -33,11 +36,12 @@ public class RequestTest extends RequestTester{
     
     @Test
     public void testPersonalSign() throws Exception {
-        
+        //CHECKSTYLE:OFF
         web3j.personalSign("0xdeadbeaf", "0x9b2055d370f73ec7d8a03e965129118dc8f5bf83", "hunter2").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_sign\","
                 + "\"params\":[\"0xdeadbeaf\",\"0x9b2055d370f73ec7d8a03e965129118dc8f5bf83\",\"hunter2\"],\"id\":1}");
+        //CHECKSTYLE:ON
     }
     
     @Test

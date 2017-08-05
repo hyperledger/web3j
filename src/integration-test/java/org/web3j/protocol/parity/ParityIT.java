@@ -3,11 +3,11 @@ package org.web3j.protocol.parity;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.http.HttpService;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

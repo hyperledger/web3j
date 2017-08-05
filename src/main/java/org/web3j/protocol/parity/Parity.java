@@ -7,17 +7,17 @@ import java.util.Map;
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.Personal;
-import org.web3j.protocol.parity.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.parity.methods.response.BooleanResponse;
+import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
+import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
 import org.web3j.protocol.parity.methods.response.ParityExportAccount;
-import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
-import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
 import org.web3j.protocol.parity.methods.response.SignerRejectRequest;
 import org.web3j.protocol.parity.methods.response.SignerRequestsToConfirm;
@@ -32,11 +32,14 @@ public interface Parity extends Personal {
     
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
     
-    Request<?, BooleanResponse> parityChangePassword(String accountId, String oldPass, String newPass);
+    Request<?, BooleanResponse> parityChangePassword(
+            String accountId, String oldPass, String newPass);
     
-    Request<?, ParityDeriveAddress> parityDeriveAddressHash(String accountId, String password, Map<String, Object> hashType, boolean toSave);
+    Request<?, ParityDeriveAddress> parityDeriveAddressHash(
+            String accountId, String password, Map<String, Object> hashType, boolean toSave);
     
-    Request<?, ParityDeriveAddress> parityDeriveAddressIndex(String accountId, String password, List<Map<String, Object>> indexType, boolean toSave);
+    Request<?, ParityDeriveAddress> parityDeriveAddressIndex(
+            String accountId, String password, List<Map<String, Object>> indexType, boolean toSave);
     
     Request<?, ParityExportAccount> parityExportAccount(String accountId, String password);
     
@@ -60,15 +63,18 @@ public interface Parity extends Personal {
     
     Request<?, NewAccountIdentifier> parityNewAccountFromSecret(String secret, String password);
     
-    Request<?, NewAccountIdentifier> parityNewAccountFromWallet(WalletFile walletFile, String password);
+    Request<?, NewAccountIdentifier> parityNewAccountFromWallet(
+            WalletFile walletFile, String password);
     
     Request<?, BooleanResponse> parityRemoveAddress(String accountId);
     
-    Request<?, BooleanResponse> paritySetAccountMeta(String accountId, Map<String, Object> metadata);
+    Request<?, BooleanResponse> paritySetAccountMeta(
+            String accountId, Map<String, Object> metadata);
     
     Request<?, BooleanResponse> paritySetAccountName(String accountId, String newAccountName);
     
-    Request<?, BooleanResponse> paritySetDappAddresses(String dAppId, ArrayList<String> availableAccountIds);
+    Request<?, BooleanResponse> paritySetDappAddresses(
+            String dAppId, ArrayList<String> availableAccountIds);
     
     Request<?, BooleanResponse> paritySetDappDefaultAddress(String dAppId, String defaultAddress);
     
@@ -78,7 +84,8 @@ public interface Parity extends Personal {
     
     Request<?, BooleanResponse> parityTestPassword(String accountId, String password);
     
-    Request<?, PersonalSign> paritySignMessage(String accountId, String password, String hexMessage);    
+    Request<?, PersonalSign> paritySignMessage(
+            String accountId, String password, String hexMessage);    
 
     Request<?, SignerRequestsToConfirm> signerRequestsToConfirm();
 

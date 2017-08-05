@@ -1,11 +1,11 @@
 package org.web3j.protocol.admin;
 
 import java.math.BigInteger;
+
 import org.junit.Test;
 
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.geth.Geth;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.Parity;
 

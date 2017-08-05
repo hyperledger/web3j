@@ -7,8 +7,8 @@ import org.web3j.protocol.core.Response;
 /**
  * parity_ListRecentDapps.
  */
-public class ParityListRecentDapps extends Response<ArrayList<String>>{
-    public ArrayList<String> getDappsIds(){
+public class ParityListRecentDapps extends Response<ArrayList<String>> {
+    public ArrayList<String> getDappsIds() {
         return getResult();
     }
 }

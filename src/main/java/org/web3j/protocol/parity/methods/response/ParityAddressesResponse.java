@@ -10,8 +10,8 @@ import org.web3j.protocol.core.Response;
  * parity_importGethAccounts
  * parity_listGethAccounts.
  */
-public class ParityAddressesResponse extends Response<ArrayList<String>>{
-    public ArrayList<String> getAddresses(){
+public class ParityAddressesResponse extends Response<ArrayList<String>> {
+    public ArrayList<String> getAddresses() {
         return getResult();
     }
 }

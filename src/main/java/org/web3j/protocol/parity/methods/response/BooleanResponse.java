@@ -14,8 +14,8 @@ import org.web3j.protocol.core.Response;
  * parity_setNewDappsDefaultAddress
  * parity_signMessage.
  */
-public class BooleanResponse extends Response<Boolean>{
-    public boolean success(){
+public class BooleanResponse extends Response<Boolean> {
+    public boolean success() {
         return getResult();
     }
 }

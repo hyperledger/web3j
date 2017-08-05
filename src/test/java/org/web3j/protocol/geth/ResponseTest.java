@@ -1,17 +1,15 @@
 package org.web3j.protocol.geth;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import org.junit.Test;
+
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.geth.methods.response.PersonalEcRecover;
 import org.web3j.protocol.geth.methods.response.PersonalImportRawKey;
 
-/**
- *
- * @author ivaylo
- */
-public class ResponseTest extends ResponseTester{
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalEcRecover() {

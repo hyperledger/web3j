@@ -6,8 +6,8 @@ import org.web3j.protocol.core.Response;
 /**
  * parity_ExportAccount.
  */
-public class ParityExportAccount extends Response<WalletFile>{
-    public WalletFile getWallet(){
+public class ParityExportAccount extends Response<WalletFile> {
+    public WalletFile getWallet() {
         return getResult();
     }
 }
