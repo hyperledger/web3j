@@ -8,7 +8,8 @@ import java.util.List;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
-import org.web3j.protocol.admin.methods.response.BooleanResponse;
+import org.web3j.protocol.parity.methods.response.BooleanResponse;
+import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -44,7 +45,7 @@ public class JsonRpc2_0Personal extends JsonRpc2_0Web3j implements Personal {
     }   
 
     @Override
-    public Request<?, BooleanResponse> personalUnlockAccount(String accountId, String password,
+    public Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password,
             BigInteger duration) {
         List<Object> attributes = new ArrayList<>(3);
         attributes.add(accountId);
@@ -52,11 +53,25 @@ public class JsonRpc2_0Personal extends JsonRpc2_0Web3j implements Personal {
         attributes.add(duration.longValue());
         
         return new Request<>(
-                "personal_unlockedAccount",
+                "personal_unlockAccount",
                 attributes,
                 ID,
                 web3jService,
-                BooleanResponse.class);
+                PersonalUnlockAccount.class);
+    }
+    
+    @Override
+    public Request<?, PersonalUnlockAccount> personalUnlockAccount(String accountId, String password) {
+        List<Object> attributes = new ArrayList<>(3);
+        attributes.add(accountId);
+        attributes.add(password);
+        attributes.add(null);
+        return new Request<>(
+                "personal_unlockAccount",
+                attributes,
+                ID,
+                web3jService,
+                PersonalUnlockAccount.class);
     }
     
     @Override

@@ -5,8 +5,8 @@ import org.web3j.protocol.core.Response;
 /**
  * personal_unlockAccount.
  */
-public class BooleanResponse extends Response<Boolean>{
-    public boolean success(){
+public class PersonalUnlockAccount extends Response<Boolean>{
+    public Boolean accountUnlocked() {
         return getResult();
     }
 }
