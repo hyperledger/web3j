@@ -51,7 +51,15 @@ public class JsonRpc2_0Personal extends JsonRpc2_0Web3j implements Personal {
         List<Object> attributes = new ArrayList<>(3);
         attributes.add(accountId);
         attributes.add(password);
-        attributes.add(duration.longValue());
+        
+        if (duration != null) {
+            // Parity has a bug where it won't support a duration
+            // See https://github.com/ethcore/parity/issues/1215
+            attributes.add(duration.longValue());
+        } else {
+            // we still need to include the null value, otherwise Parity rejects request
+            attributes.add(null);
+        }
         
         return new Request<>(
                 "personal_unlockAccount",
@@ -64,16 +72,8 @@ public class JsonRpc2_0Personal extends JsonRpc2_0Web3j implements Personal {
     @Override
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(
             String accountId, String password) {
-        List<Object> attributes = new ArrayList<>(3);
-        attributes.add(accountId);
-        attributes.add(password);
-        attributes.add(null);
-        return new Request<>(
-                "personal_unlockAccount",
-                attributes,
-                ID,
-                web3jService,
-                PersonalUnlockAccount.class);
+        
+        return personalUnlockAccount(accountId, password, null);
     }
     
     @Override
