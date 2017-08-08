@@ -12,6 +12,7 @@ import org.web3j.protocol.admin.JsonRpc2_0Personal;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.parity.methods.request.Derivation;
 import org.web3j.protocol.parity.methods.response.BooleanResponse;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
@@ -52,7 +53,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
 
     @Override
     public Request<?, ParityDeriveAddress> parityDeriveAddressHash(
-            String accountId, String password, Map<String, Object> hashType, boolean toSave) {
+            String accountId, String password, Derivation hashType, boolean toSave) {
         return new Request<>(
                 "parity_deriveAddressHash",
                 Arrays.asList(accountId, password, hashType, toSave),
@@ -64,10 +65,10 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
     @Override
     public Request<?, ParityDeriveAddress> parityDeriveAddressIndex(
             String accountId, String password,
-            List<Map<String, Object>> indexType, boolean toSave) {
+            List<Derivation> indicesType, boolean toSave) {
         return new Request<>(
                 "parity_deriveAddressIndex",
-                Arrays.asList(accountId, password, indexType, toSave),
+                Arrays.asList(accountId, password, indicesType, toSave),
                 ID,
                 web3jService,
                 ParityDeriveAddress.class);

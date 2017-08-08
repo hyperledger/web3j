@@ -1,5 +1,6 @@
 package org.web3j.protocol.parity;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.protocol.parity.methods.request.Derivation;
 
 public class RequestTest extends RequestTester {
 
@@ -40,10 +42,9 @@ public class RequestTest extends RequestTester {
     }
     
     @Test
-    public void testParityDeriveAddressHash() throws Exception {
-        Map<String, Object> hashType = new LinkedHashMap<>(2);
-        hashType.put("hash","0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43");
-        hashType.put("type","hard");                
+    public void testParityDeriveAddressHash() throws Exception { 
+        Derivation hashType = Derivation.createDerivationHash(
+                "0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43", "hard");
         
         web3j.parityDeriveAddressHash("0x407d73d8a49eeb85d32cf465507dd71d507100c1", 
                 "hunter2", hashType, false).send();
@@ -56,16 +57,10 @@ public class RequestTest extends RequestTester {
     }
     
     @Test
-    public void testParityDeriveAddressIndex() throws Exception {
-        Map<String, Object> firstIndex = new LinkedHashMap<>(2);
-        firstIndex.put("index",1);
-        firstIndex.put("type","hard");                
-        Map<String, Object> secondIndex = new LinkedHashMap<>(2);
-        secondIndex.put("index",2);
-        secondIndex.put("type","soft");                
-        List<Map<String, Object>> indexType = new ArrayList<>();
-        indexType.add(firstIndex);
-        indexType.add(secondIndex);
+    public void testParityDeriveAddressIndex() throws Exception {               
+        List<Derivation> indexType = new ArrayList<>();
+        indexType.add(Derivation.createDerivationIndex(1, "hard"));
+        indexType.add(Derivation.createDerivationIndex(2, "soft"));
         
         //CHECKSTYLE:OFF
         web3j.parityDeriveAddressIndex("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", indexType, false).send();

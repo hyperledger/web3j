@@ -10,6 +10,7 @@ import org.web3j.protocol.admin.Personal;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.parity.methods.request.Derivation;
 import org.web3j.protocol.parity.methods.response.BooleanResponse;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
@@ -32,10 +33,10 @@ public interface Parity extends Personal {
             String accountId, String oldPassword, String newPassword);
     
     Request<?, ParityDeriveAddress> parityDeriveAddressHash(
-            String accountId, String password, Map<String, Object> hashType, boolean toSave);
+            String accountId, String password, Derivation hashType, boolean toSave);
     
     Request<?, ParityDeriveAddress> parityDeriveAddressIndex(
-            String accountId, String password, List<Map<String, Object>> indexType, boolean toSave);
+            String accountId, String password, List<Derivation> indicesType, boolean toSave);
     
     Request<?, ParityExportAccount> parityExportAccount(String accountId, String password);
     
