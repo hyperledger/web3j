@@ -64,41 +64,42 @@ public class WalletFile {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.address);
-        hash = 37 * hash + Objects.hashCode(this.crypto);
-        hash = 37 * hash + Objects.hashCode(this.id);
-        hash = 37 * hash + this.version;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (!(o instanceof WalletFile)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        
+        WalletFile that = (WalletFile) o;
+        
+        if (getAddress() != null 
+                ? !getAddress().equals(that.getAddress())
+                : that.getAddress() != null) {
             return false;
         }
-        final WalletFile other = (WalletFile) obj;
-        if (this.version != other.version) {
+        if (getCrypto() != null 
+                ? !getCrypto().equals(that.getCrypto())
+                : that.getCrypto() != null) {
+            return false;
+        } 
+        if (getId() != null 
+                ? !getId().equals(that.getId())
+                : that.getId() != null) {
             return false;
         }
-        if (!Objects.equals(this.address, other.address)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.crypto, other.crypto)) {
-            return false;
-        }
-        return true;
-    }   
+        return version == that.version;
+    } 
+
+    @Override
+    public int hashCode() {
+        int result = getAddress() != null ? getAddress().hashCode() : 0;
+        result = 31 * result + (getCrypto() != null ? getCrypto().hashCode() : 0);
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + version;
+        return result;
+    }  
 
     public static class Crypto {
         private String cipher;
@@ -174,49 +175,55 @@ public class WalletFile {
         }
 
         @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 17 * hash + Objects.hashCode(this.cipher);
-            hash = 17 * hash + Objects.hashCode(this.ciphertext);
-            hash = 17 * hash + Objects.hashCode(this.cipherparams);
-            hash = 17 * hash + Objects.hashCode(this.kdf);
-            hash = 17 * hash + Objects.hashCode(this.kdfparams);
-            hash = 17 * hash + Objects.hashCode(this.mac);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
+        public boolean equals(Object o) {
+            if (this == o) {
                 return true;
             }
-            if (obj == null) {
+            if (!(o instanceof Crypto)) {
                 return false;
             }
-            if (getClass() != obj.getClass()) {
+            
+            Crypto that = (Crypto) o;
+            
+            if (getCipher() != null
+                    ? !getCipher().equals(that.getCipher())
+                    : that.getCipher() != null) {
                 return false;
             }
-            final Crypto other = (Crypto) obj;
-            if (!Objects.equals(this.cipher, other.cipher)) {
+            if (getCiphertext() != null
+                    ? !getCiphertext().equals(that.getCiphertext())
+                    : that.getCiphertext() != null) {
                 return false;
             }
-            if (!Objects.equals(this.ciphertext, other.ciphertext)) {
+            if (getCipherparams() != null
+                    ? !getCipherparams().equals(that.getCipherparams())
+                    : that.getCipherparams() != null) {
                 return false;
             }
-            if (!Objects.equals(this.kdf, other.kdf)) {
+            if (getKdf() != null
+                    ? !getKdf().equals(that.getKdf())
+                    : that.getKdf() != null) {
                 return false;
             }
-            if (!Objects.equals(this.mac, other.mac)) {
+            if (getKdfparams() != null
+                    ? !getKdfparams().equals(that.getKdfparams())
+                    : that.getKdfparams() != null) {
                 return false;
             }
-            if (!Objects.equals(this.cipherparams, other.cipherparams)) {
-                return false;
-            }
-            if (!Objects.equals(this.kdfparams, other.kdfparams)) {
-                return false;
-            }
-            return true;
-        }       
+            return getMac() != null
+                    ? getMac().equals(that.getMac()) : that.getMac() == null;
+        }  
+
+        @Override
+        public int hashCode() {
+            int result = getCipher() != null ? getCipher().hashCode() : 0;
+            result = 31 * result + (getCiphertext() != null ? getCiphertext().hashCode() : 0);
+            result = 31 * result + (getCipherparams() != null ? getCipherparams().hashCode() : 0);
+            result = 31 * result + (getKdf() != null ? getKdf().hashCode() : 0);
+            result = 31 * result + (getKdfparams() != null ? getKdfparams().hashCode() : 0);
+            result = 31 * result + (getMac() != null ? getMac().hashCode() : 0);
+            return result;
+        }
         
     }
 
@@ -235,29 +242,25 @@ public class WalletFile {
         }
 
         @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 89 * hash + Objects.hashCode(this.iv);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
+        public boolean equals(Object o) {
+            if (this == o) {
                 return true;
             }
-            if (obj == null) {
+            if (!(o instanceof CipherParams)) {
                 return false;
             }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final CipherParams other = (CipherParams) obj;
-            if (!Objects.equals(this.iv, other.iv)) {
-                return false;
-            }
-            return true;
-        }        
+            
+            CipherParams that = (CipherParams) o;
+            
+            return getIv() != null
+                    ? getIv().equals(that.getIv()) : that.getIv() == null;
+        }  
+
+        @Override
+        public int hashCode() {
+            int result = getIv() != null ? getIv().hashCode() : 0;
+            return result;
+        }      
         
     }
 
@@ -309,40 +312,38 @@ public class WalletFile {
         }
 
         @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 53 * hash + this.dklen;
-            hash = 53 * hash + this.c;
-            hash = 53 * hash + Objects.hashCode(this.prf);
-            hash = 53 * hash + Objects.hashCode(this.salt);
-            return hash;
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Aes128CtrKdfParams)) {
+                return false;
+            }
+            
+            Aes128CtrKdfParams that = (Aes128CtrKdfParams) o;
+            
+            if (dklen != that.dklen) {
+                return false;
+            }
+            if (c != that.c) {
+                return false;
+            }
+            if (getPrf() != null
+                    ? !getPrf().equals(that.getPrf())
+                    : that.getPrf() != null) {
+                return false;
+            }
+            return getSalt() != null
+                ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final Aes128CtrKdfParams other = (Aes128CtrKdfParams) obj;
-            if (this.dklen != other.dklen) {
-                return false;
-            }
-            if (this.c != other.c) {
-                return false;
-            }
-            if (!Objects.equals(this.prf, other.prf)) {
-                return false;
-            }
-            if (!Objects.equals(this.salt, other.salt)) {
-                return false;
-            }
-            return true;
+        public int hashCode() {
+            int result = dklen;
+            result = 31 * result + c;
+            result = 31 * result + (getPrf() != null ? getPrf().hashCode() : 0);
+            result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
+            return result;
         }        
     }
 
@@ -397,45 +398,41 @@ public class WalletFile {
         }
 
         @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 97 * hash + this.dklen;
-            hash = 97 * hash + this.n;
-            hash = 97 * hash + this.p;
-            hash = 97 * hash + this.r;
-            hash = 97 * hash + Objects.hashCode(this.salt);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
+        public boolean equals(Object o) {
+            if (this == o) {
                 return true;
             }
-            if (obj == null) {
+            if (!(o instanceof ScryptKdfParams)) {
                 return false;
             }
-            if (getClass() != obj.getClass()) {
+            
+            ScryptKdfParams that = (ScryptKdfParams) o;
+            
+            if (dklen != that.dklen) {
                 return false;
             }
-            final ScryptKdfParams other = (ScryptKdfParams) obj;
-            if (this.dklen != other.dklen) {
+            if (n != that.n) {
                 return false;
             }
-            if (this.n != other.n) {
+            if (p != that.p) {
                 return false;
             }
-            if (this.p != other.p) {
+            if (r != that.r) {
                 return false;
             }
-            if (this.r != other.r) {
-                return false;
-            }
-            if (!Objects.equals(this.salt, other.salt)) {
-                return false;
-            }
-            return true;
-        }       
+            return getSalt() != null
+                ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
+        }  
+
+        @Override
+        public int hashCode() {
+            int result = dklen;
+            result = 31 * result + n;
+            result = 31 * result + p;
+            result = 31 * result + r;
+            result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
+            return result;
+        }     
     }
 
     // If we need to work with MyEtherWallet we'll need to use this deserializer, see the
