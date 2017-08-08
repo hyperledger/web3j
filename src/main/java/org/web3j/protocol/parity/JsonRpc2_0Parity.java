@@ -41,10 +41,10 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
 
     @Override
     public Request<?, BooleanResponse> parityChangePassword(
-            String accountId, String oldPass, String newPass) {
+            String accountId, String oldPassword, String newPassword) {
         return new Request<>(
                 "parity_changePassword",
-                Arrays.asList(accountId, oldPass, newPass),
+                Arrays.asList(accountId, oldPassword, newPassword),
                 ID,
                 web3jService,
                 BooleanResponse.class);
@@ -221,10 +221,10 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
 
     @Override
     public Request<?, BooleanResponse> paritySetAccountName(
-            String accountId, String newAccountName) {
+            String address, String name) {
         return new Request<>(
                 "parity_setAccountName",
-                Arrays.asList(accountId, newAccountName),
+                Arrays.asList(address, name),
                 ID,
                 web3jService,
                 BooleanResponse.class);

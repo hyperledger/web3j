@@ -29,7 +29,7 @@ public interface Parity extends Personal {
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
     
     Request<?, BooleanResponse> parityChangePassword(
-            String accountId, String oldPass, String newPass);
+            String accountId, String oldPassword, String newPassword);
     
     Request<?, ParityDeriveAddress> parityDeriveAddressHash(
             String accountId, String password, Map<String, Object> hashType, boolean toSave);
@@ -67,7 +67,7 @@ public interface Parity extends Personal {
     Request<?, BooleanResponse> paritySetAccountMeta(
             String accountId, Map<String, Object> metadata);
     
-    Request<?, BooleanResponse> paritySetAccountName(String accountId, String newAccountName);
+    Request<?, BooleanResponse> paritySetAccountName(String address, String name);
     
     Request<?, BooleanResponse> paritySetDappAddresses(
             String dAppId, ArrayList<String> availableAccountIds);
