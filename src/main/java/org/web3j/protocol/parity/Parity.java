@@ -10,8 +10,6 @@ import org.web3j.protocol.admin.Personal;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.parity.methods.response.BooleanResponse;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
@@ -19,8 +17,6 @@ import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
 import org.web3j.protocol.parity.methods.response.ParityExportAccount;
 import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
-import org.web3j.protocol.parity.methods.response.SignerRejectRequest;
-import org.web3j.protocol.parity.methods.response.SignerRequestsToConfirm;
 
 /**
  * JSON-RPC Request object building factory for Parity.
@@ -86,11 +82,4 @@ public interface Parity extends Personal {
     
     Request<?, PersonalSign> paritySignMessage(
             String accountId, String password, String hexMessage);    
-
-    Request<?, SignerRequestsToConfirm> signerRequestsToConfirm();
-
-    Request<?, EthSendTransaction> signerConfirmRequest(
-            String requestId, Transaction transaction, String password);
-
-    Request<?, SignerRejectRequest> signerRejectRequest(String requestId);
 }

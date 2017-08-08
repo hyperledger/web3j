@@ -12,8 +12,6 @@ import org.web3j.protocol.admin.JsonRpc2_0Personal;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.parity.methods.response.BooleanResponse;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
@@ -21,8 +19,6 @@ import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
 import org.web3j.protocol.parity.methods.response.ParityExportAccount;
 import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
-import org.web3j.protocol.parity.methods.response.SignerRejectRequest;
-import org.web3j.protocol.parity.methods.response.SignerRequestsToConfirm;
 
 /**
  * JSON-RPC 2.0 factory implementation for Parity.
@@ -296,36 +292,5 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
                 ID,
                 web3jService,
                 PersonalSign.class);
-    }
-
-    @Override
-    public Request<?, SignerRequestsToConfirm> signerRequestsToConfirm() {
-        return new Request<>(
-                "signer_requestsToConfirm",
-                Collections.<String>emptyList(),
-                ID,
-                web3jService,
-                SignerRequestsToConfirm.class);
-    }
-
-    @Override
-    public Request<?, EthSendTransaction> signerConfirmRequest(
-            String requestId, Transaction transaction, String password) {
-        return new Request<>(
-                "signer_confirmRequest",
-                Arrays.asList(requestId, transaction, password),
-                ID,
-                web3jService,
-                EthSendTransaction.class);
-    }
-
-    @Override
-    public Request<?, SignerRejectRequest> signerRejectRequest(String requestId) {
-        return new Request<>(
-                "signer_rejectRequest",
-                Arrays.asList(requestId),
-                ID,
-                web3jService,
-                SignerRejectRequest.class);
     }
 }

@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.RequestTester;
-import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 
 public class RequestTest extends RequestTester {
@@ -293,36 +292,5 @@ public class RequestTest extends RequestTester {
                 + "\"params\":[\"0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e\",\"password1\","
                 + "\"0xbc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a\"],\"id\":1}");
         //CHECKSTYLE:ON
-    }  
-    
-    @Test
-    public void testSignerRequestsToConfirm() throws Exception {
-        web3j.signerRequestsToConfirm().send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"signer_requestsToConfirm\","
-                + "\"params\":[],\"id\":1}");
     }
-
-    @Test
-    public void testSignerConfirmRequest() throws Exception {
-        web3j.signerConfirmRequest(
-                "0x1",
-                Transaction.createEthCallTransaction(
-                        "0xa010fbad79f5e602699fff2bb4919fbd87abc8cc",
-                        "0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc", "0x0"),
-                "password"
-        ).send();
-
-        //CHECKSTYLE:OFF
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"signer_confirmRequest\",\"params\":[\"0x1\",{\"from\":\"0xa010fbad79f5e602699fff2bb4919fbd87abc8cc\",\"to\":\"0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc\",\"data\":\"0x0\"},\"password\"],\"id\":1}");
-        //CHECKSTYLE:ON
-    }       
-
-    @Test
-    public void testSignerRejectRequest() throws Exception {
-        web3j.signerRejectRequest("0x1").send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"signer_rejectRequest\","
-                + "\"params\":[\"0x1\"],\"id\":1}");
-    } 
 }

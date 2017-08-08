@@ -3,7 +3,6 @@ package org.web3j.protocol.parity;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -17,8 +16,6 @@ import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
 import org.web3j.protocol.parity.methods.response.ParityExportAccount;
 import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
-import org.web3j.protocol.parity.methods.response.SignerRejectRequest;
-import org.web3j.protocol.parity.methods.response.SignerRequestsToConfirm;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -177,60 +174,6 @@ public class ResponseTest extends ResponseTester {
                         "web"
                 )));
     } 
-    
-    @Test
-    public void testSignerRejectRequest() {
-        buildResponse("{\n"
-                + "    \"jsonrpc\": \"2.0\",\n"
-                + "    \"id\":22,\n"
-                + "    \"result\":true\n"
-                + "}");
-
-        SignerRejectRequest signerRejectRequest =
-                deserialiseResponse(SignerRejectRequest.class);
-        assertTrue(signerRejectRequest.isRejected());
-    }
-    
-    @Test
-    public void testPersonalRequestsToConfirm() {
-        //CHECKSTYLE:OFF
-        buildResponse("{\"jsonrpc\":\"2.0\",\"result\":["
-                        + "{\"id\":\"0x1\",\"payload\":{\"transaction\":{\"data\":\"0x\",\"from\":\"0x0000000000000000000000000000000000000001\",\"gas\":\"0x989680\",\"gasPrice\":\"0x2710\",\"nonce\":null,\"to\":\"0xd46e8dd67c5d32be8058bb8eb970870f07244567\",\"value\":\"0x1\"}}},"
-                        + "{\"id\":\"0x2\",\"payload\":{\"sign\":{\"address\":\"0x0000000000000000000000000000000000000001\",\"hash\":\"0x0000000000000000000000000000000000000000000000000000000000000005\"}}}"
-                        + "],\"id\":1}");
-        //CHECKSTYLE:ON
-
-        List<SignerRequestsToConfirm.RequestsToConfirm> requestsToConfirm =
-                Arrays.asList(new SignerRequestsToConfirm.RequestsToConfirm(
-                                "0x1",
-                                new SignerRequestsToConfirm.TransactionPayload(
-                                        new SignerRequestsToConfirm.TransactionRequestType(
-                                                "0x0000000000000000000000000000000000000001",
-                                                "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
-                                                "0x989680",
-                                                "0x2710",
-                                                "0x1",
-                                                "0x",
-                                                null
-                                        )
-                                )
-                            ),
-                        new SignerRequestsToConfirm.RequestsToConfirm(
-                                "0x2",
-                                new SignerRequestsToConfirm.SignPayload(
-                                        new SignerRequestsToConfirm.SignRequest(
-                                                "0x0000000000000000000000000000000000000001",
-                                                "0x0000000000000000000000000000000000000000"
-                                                        + "000000000000000000000005"
-                                        )
-                                )
-                        )
-                );
-
-        SignerRequestsToConfirm signerRequestsToConfirm =
-                deserialiseResponse(SignerRequestsToConfirm.class);
-        assertThat(signerRequestsToConfirm.getRequestsToConfirm(),equalTo(requestsToConfirm));
-    }
 
     @Test
     public void testVoidResponse() {
