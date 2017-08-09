@@ -1,4 +1,4 @@
-package org.web3j.protocol.parity.methods.response;
+package org.web3j.protocol.admin.methods.response;
 
 import java.util.List;
 

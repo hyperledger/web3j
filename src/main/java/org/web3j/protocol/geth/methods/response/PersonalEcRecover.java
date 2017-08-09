@@ -1,4 +1,4 @@
-package org.web3j.protocol.parity.methods.response;
+package org.web3j.protocol.geth.methods.response;
 
 import org.web3j.protocol.core.Response;
 
