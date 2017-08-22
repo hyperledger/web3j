@@ -65,18 +65,7 @@ public class CoreIT {
 
     private IntegrationTestConfig config = new TestnetConfig();
 
-    public CoreIT() {
-        // HTTP Logging
-        System.setProperty(
-                "org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-        System.setProperty(
-                "org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
-
-        // IPC Logging
-        // System.setProperty(
-        //      "org.apache.commons.logging.simplelog.log.org.web3j.protocol.ipc", "DEBUG");
-    }
+    public CoreIT() { }
 
     @Before
     public void setUp() {

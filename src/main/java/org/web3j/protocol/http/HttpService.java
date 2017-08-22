@@ -1,54 +1,82 @@
 package org.web3j.protocol.http;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.web3j.protocol.Service;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
+import org.web3j.protocol.exceptions.ClientConnectionException;
 
 /**
  * HTTP implementation of our services API.
  */
 public class HttpService extends Service {
 
+    public static final MediaType JSON_MEDIA_TYPE
+            = MediaType.parse("application/json; charset=utf-8");
+
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
-    private CloseableHttpClient httpClient;
+    private static final Logger log = LoggerFactory.getLogger(HttpService.class);
+
+    private OkHttpClient httpClient;
 
     private final String url;
 
-    public HttpService(String url, CloseableHttpClient httpClient, boolean includeRawResponses) {
+    private final boolean includeRawResponse;
+
+    public HttpService(String url, OkHttpClient httpClient, boolean includeRawResponses) {
         super(includeRawResponses);
         this.url = url;
         this.httpClient = httpClient;
+        this.includeRawResponse = includeRawResponses;
     }
 
-    public HttpService(String url, CloseableHttpClient httpClient) {
+    public HttpService(OkHttpClient httpClient, boolean includeRawResponses) {
+        this(DEFAULT_URL, httpClient, includeRawResponses);
+    }
+
+    private HttpService(String url, OkHttpClient httpClient) {
         this(url, httpClient, false);
     }
 
     public HttpService(String url) {
-        this(url, HttpClients.custom().setConnectionManagerShared(true).build());
+        this(url, createOkHttpClient());
+    }
+
+    public HttpService(OkHttpClient httpClient) {
+        this(DEFAULT_URL, httpClient);
     }
 
     public HttpService() {
         this(DEFAULT_URL);
     }
 
-    protected void setHttpClient(CloseableHttpClient httpClient) {
-        this.httpClient = httpClient;
+    private static OkHttpClient createOkHttpClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        configureLogging(builder);
+        return builder.build();
+    }
+
+    private static void configureLogging(OkHttpClient.Builder builder) {
+        if (log.isDebugEnabled()) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(log::debug);
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(logging);
+        }
     }
 
     @Override
@@ -57,42 +85,52 @@ public class HttpService extends Service {
 
         byte[] payload = objectMapper.writeValueAsBytes(request);
 
-        HttpPost httpPost = new HttpPost(this.url);
-        httpPost.setEntity(new ByteArrayEntity(payload));
-        Header[] headers = buildHeaders();
-        httpPost.setHeaders(headers);
+        RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, payload);
+        Headers headers = buildHeaders();
 
-        ResponseHandler<T> responseHandler = getResponseHandler(responseType);
+        okhttp3.Request httpRequest = new okhttp3.Request.Builder()
+                .url(url)
+                .headers(headers)
+                .post(requestBody)
+                .build();
+
+        okhttp3.Response response = httpClient.newCall(httpRequest).execute();
         try {
-            return httpClient.execute(httpPost, responseHandler);
-        } finally {
-            httpClient.close();
-        }
-    }
-
-    private Header[] buildHeaders() {
-        List<Header> headers = new ArrayList<>();
-        headers.add(new BasicHeader("Content-Type", "application/json; charset=UTF-8"));
-        addHeaders(headers);
-        return headers.toArray(new Header[0]);
-    }
-
-    protected void addHeaders(List<Header> headers) { }
-
-    public <T extends Response> ResponseHandler<T> getResponseHandler(Class<T> type) {
-        return response -> {
-            int status = response.getStatusLine().getStatusCode();
-            if (status >= 200 && status < 300) {
-                HttpEntity entity = response.getEntity();
-
-                if (entity != null) {
-                    return objectMapper.readValue(response.getEntity().getContent(), type);
+            if (response.isSuccessful()) {
+                ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    InputStream inputStream = buildInputStream(responseBody.byteStream());
+                    return objectMapper.readValue(inputStream, responseType);
                 } else {
                     return null;
                 }
             } else {
-                throw new ClientProtocolException("Unexpected response status: " + status);
+                throw new ClientConnectionException(
+                        "Invalid response received: " + response.body());
             }
-        };
+        } finally {
+            if (response.body() != null) {
+                response.close();
+            }
+        }
     }
+
+    private InputStream buildInputStream(InputStream inputStream) throws IOException {
+        if (includeRawResponse) {
+            BufferedInputStream bufferedinputStream =
+                    new BufferedInputStream(inputStream);
+            bufferedinputStream.mark(inputStream.available());
+            return bufferedinputStream;
+        } else {
+            return inputStream;
+        }
+    }
+
+    private Headers buildHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        addHeaders(headers);
+        return Headers.of(headers);
+    }
+
+    protected void addHeaders(Map<String, String> headers) { }
 }

@@ -1,80 +1,80 @@
 package org.web3j.protocol;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.HttpVersion;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicStatusLine;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.ResponseBody;
 import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.http.HttpService;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.web3j.protocol.http.HttpService.JSON_MEDIA_TYPE;
 
 /**
  * Protocol Response tests.
  */
-@RunWith(MockitoJUnitRunner.class)
 public abstract class ResponseTester {
 
     private HttpService web3jService;
-
-    private CloseableHttpClient closeableHttpClient;
-    private CloseableHttpResponse httpResponse;
-    private HttpEntity entity;
+    private OkHttpClient okHttpClient;
+    private ResponseInterceptor responseInterceptor;
 
     @Before
     public void setUp() {
-        closeableHttpClient = mock(CloseableHttpClient.class);
+        responseInterceptor = new ResponseInterceptor();
+        okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(responseInterceptor)
+                .build();
         configureWeb3Service(false);
+    }
 
-        httpResponse = mock(CloseableHttpResponse.class);
-        entity = mock(HttpEntity.class);
+    protected void buildResponse(String data) {
+        responseInterceptor.setJsonResponse(data);
+    }
 
-        when(httpResponse.getStatusLine()).thenReturn(
-                new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "Test")
-        );
-        when(httpResponse.getEntity()).thenReturn(entity);
+    protected void configureWeb3Service(boolean includeRawResponses) {
+        web3jService = new HttpService(okHttpClient, includeRawResponses);
     }
 
     protected <T extends Response> T deserialiseResponse(Class<T> type) {
         T response = null;
         try {
-            response = web3jService.getResponseHandler(type).handleResponse(httpResponse);
-            when(closeableHttpClient.execute(isA(HttpPost.class), isA(ResponseHandler.class)))
-                    .thenReturn(response);
+            response = web3jService.send(new Request(), type);
         } catch (IOException e) {
             fail(e.getMessage());
         }
         return response;
     }
 
-    protected void buildResponse(String data) {
-        try {
-            when(entity.getContent()).thenReturn(buildInputStream(data));
-        } catch (IOException e) {
-            fail(e.getMessage());
+    private class ResponseInterceptor implements Interceptor {
+
+        private String jsonResponse;
+
+        public void setJsonResponse(String jsonResponse) {
+            this.jsonResponse = jsonResponse;
         }
-    }
 
-    protected void configureWeb3Service(boolean includeRawResponses) {
-        web3jService = new HttpService("", closeableHttpClient, includeRawResponses);
-    }
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
 
-    private InputStream buildInputStream(String input) {
-        return new ByteArrayInputStream(input.getBytes());
+            if (jsonResponse == null) {
+                throw new UnsupportedOperationException("Response has not been configured");
+            }
+
+            okhttp3.Response response = new okhttp3.Response.Builder()
+                    .body(ResponseBody.create(JSON_MEDIA_TYPE, jsonResponse))
+                    .request(chain.request())
+                    .protocol(Protocol.HTTP_2)
+                    .code(200)
+                    .message("")
+                    .build();
+
+            return response;
+        }
     }
 }
