@@ -13,7 +13,7 @@ import org.web3j.protocol.Web3j;
  */
 public class FastRawTransactionManager extends RawTransactionManager {
 
-    private BigInteger nonce = BigInteger.valueOf(-1);
+    private volatile BigInteger nonce = BigInteger.valueOf(-1);
 
     public FastRawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
         super(web3j, credentials, chainId);

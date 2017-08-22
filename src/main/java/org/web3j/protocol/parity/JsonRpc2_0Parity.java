@@ -1,6 +1,5 @@
 package org.web3j.protocol.parity;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,87 +8,169 @@ import java.util.Map;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
+import org.web3j.protocol.admin.JsonRpc2_0Personal;
+import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
+import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.VoidResponse;
-import org.web3j.protocol.parity.methods.response.NewAccountIdentifier;
-import org.web3j.protocol.parity.methods.response.PersonalAccountsInfo;
-import org.web3j.protocol.parity.methods.response.PersonalEcRecover;
-import org.web3j.protocol.parity.methods.response.PersonalListAccounts;
-import org.web3j.protocol.parity.methods.response.PersonalRejectRequest;
-import org.web3j.protocol.parity.methods.response.PersonalRequestsToConfirm;
-import org.web3j.protocol.parity.methods.response.PersonalSign;
-import org.web3j.protocol.parity.methods.response.PersonalSignerEnabled;
-import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.parity.methods.request.Derivation;
+import org.web3j.protocol.parity.methods.response.BooleanResponse;
+import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
+import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
+import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
+import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
+import org.web3j.protocol.parity.methods.response.ParityExportAccount;
+import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
 
 /**
  * JSON-RPC 2.0 factory implementation for Parity.
  */
-public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
+public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
 
     public JsonRpc2_0Parity(Web3jService web3jService) {
         super(web3jService);
     }
-
+    
     @Override
-    public Request<?, PersonalSignerEnabled> personalSignerEnabled() {
+    public Request<?, ParityAllAccountsInfo> parityAllAccountsInfo() {
         return new Request<>(
-                "personal_signerEnabled",
+                "parity_allAccountsInfo",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                PersonalSignerEnabled.class);
+                ParityAllAccountsInfo.class);
     }
 
     @Override
-    public Request<?, PersonalSign> personalSign(
-            String message, String accountId, String password) {
+    public Request<?, BooleanResponse> parityChangePassword(
+            String accountId, String oldPassword, String newPassword) {
         return new Request<>(
-                "personal_sign",
-                Arrays.asList(message,accountId,password),
+                "parity_changePassword",
+                Arrays.asList(accountId, oldPassword, newPassword),
                 ID,
                 web3jService,
-                PersonalSign.class);
+                BooleanResponse.class);
     }
 
     @Override
-    public Request<?, PersonalEcRecover> personalEcRecover(
-            String hexMessage, String signedMessage) {
+    public Request<?, ParityDeriveAddress> parityDeriveAddressHash(
+            String accountId, String password, Derivation hashType, boolean toSave) {
         return new Request<>(
-                "personal_ecRecover",
-                Arrays.asList(hexMessage,signedMessage),
+                "parity_deriveAddressHash",
+                Arrays.asList(accountId, password, hashType, toSave),
                 ID,
                 web3jService,
-                PersonalEcRecover.class);
+                ParityDeriveAddress.class);
     }
 
     @Override
-    public Request<?, PersonalListAccounts> personalListAccounts() {
+    public Request<?, ParityDeriveAddress> parityDeriveAddressIndex(
+            String accountId, String password,
+            List<Derivation> indicesType, boolean toSave) {
         return new Request<>(
-                "personal_listAccounts",
+                "parity_deriveAddressIndex",
+                Arrays.asList(accountId, password, indicesType, toSave),
+                ID,
+                web3jService,
+                ParityDeriveAddress.class);
+    }
+
+    @Override
+    public Request<?, ParityExportAccount> parityExportAccount(
+            String accountId, String password) {
+        return new Request<>(
+                "parity_exportAccount",
+                Arrays.asList(accountId, password),
+                ID,
+                web3jService,
+                ParityExportAccount.class);
+    }
+
+    @Override
+    public Request<?, ParityAddressesResponse> parityGetDappAddresses(String dAppId) {
+        return new Request<>(
+                "parity_getDappAddresses",
+                Arrays.asList(dAppId),
+                ID,
+                web3jService,
+                ParityAddressesResponse.class);
+    }
+
+    @Override
+    public Request<?, ParityDefaultAddressResponse> parityGetDappDefaultAddress(String dAppId) {
+        return new Request<>(
+                "parity_getDappDefaultAddress",
+                Arrays.asList(dAppId),
+                ID,
+                web3jService,
+                ParityDefaultAddressResponse.class);
+    }
+
+    @Override
+    public Request<?, ParityAddressesResponse> parityGetNewDappsAddresses() {
+        return new Request<>(
+                "parity_getNewDappsAddresses",
                 Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                PersonalListAccounts.class);
+                ParityAddressesResponse.class);
     }
 
     @Override
-    public Request<?, NewAccountIdentifier> personalNewAccount(String password) {
+    public Request<?, ParityDefaultAddressResponse> parityGetNewDappsDefaultAddress() {
         return new Request<>(
-                "personal_newAccount",
-                Arrays.asList(password),
+                "parity_getNewDappsDefaultAddress",
+                Collections.<String>emptyList(),
                 ID,
                 web3jService,
-                NewAccountIdentifier.class);
+                ParityDefaultAddressResponse.class);
     }
 
     @Override
-    public Request<?, NewAccountIdentifier> personalNewAccountFromPhrase(
+    public Request<?, ParityAddressesResponse> parityImportGethAccounts(
+            ArrayList<String> gethAddresses) {
+        return new Request<>(
+                "parity_importGethAccounts",
+                gethAddresses,
+                ID,
+                web3jService,
+                ParityAddressesResponse.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> parityKillAccount(String accountId, String password) {
+        return new Request<>(
+                "parity_killAccount",
+                Arrays.asList(accountId, password),
+                ID,
+                web3jService,
+                BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, ParityAddressesResponse> parityListGethAccounts() {
+        return new Request<>(
+                "parity_listGethAccounts",
+                Collections.<String>emptyList(),
+                ID,
+                web3jService,
+                ParityAddressesResponse.class);
+    }
+
+    @Override
+    public Request<?, ParityListRecentDapps> parityListRecentDapps() {
+        return new Request<>(
+                "parity_listRecentDapps",
+                Collections.<String>emptyList(),
+                ID,
+                web3jService,
+                ParityListRecentDapps.class);
+    }
+
+    @Override
+    public Request<?, NewAccountIdentifier> parityNewAccountFromPhrase(
             String phrase, String password) {
         return new Request<>(
-                "personal_newAccountFromPhrase",
+                "parity_newAccountFromPhrase",
                 Arrays.asList(phrase, password),
                 ID,
                 web3jService,
@@ -97,10 +178,21 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     }
 
     @Override
-    public Request<?, NewAccountIdentifier> personalNewAccountFromWallet(
+    public Request<?, NewAccountIdentifier> parityNewAccountFromSecret(
+            String secret, String password) {
+        return new Request<>(
+                "parity_newAccountFromSecret",
+                Arrays.asList(secret, password),
+                ID,
+                web3jService,
+                NewAccountIdentifier.class);
+    }
+
+    @Override
+    public Request<?, NewAccountIdentifier> parityNewAccountFromWallet(
             WalletFile walletFile, String password) {
         return new Request<>(
-                "personal_newAccountFromWallet",
+                "parity_newAccountFromWallet",
                 Arrays.asList(walletFile, password),
                 ID,
                 web3jService,
@@ -108,108 +200,98 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Web3j implements Parity {
     }
 
     @Override
-    public Request<?, PersonalUnlockAccount> personalUnlockAccount(
-            String accountId, String password, BigInteger duration) {
-        List<Object> attributes = new ArrayList<>(3);
-        attributes.add(accountId);
-        attributes.add(password);
-
-        if (duration != null) {
-            // Parity has a bug where it won't support a duration
-            // See https://github.com/ethcore/parity/issues/1215
-            attributes.add(duration.longValue());
-        } else {
-            // we still need to include the null value, otherwise Parity rejects request
-            attributes.add(null);
-        }
-
+    public Request<?, BooleanResponse> parityRemoveAddress(String accountId) {
         return new Request<>(
-                "personal_unlockAccount",
-                attributes,
+                "parity_RemoveAddress",
+                Arrays.asList(accountId),
                 ID,
                 web3jService,
-                PersonalUnlockAccount.class);
+                BooleanResponse.class);
     }
 
     @Override
-    public Request<?, PersonalUnlockAccount> personalUnlockAccount(
-            String accountId, String password) {
-
-        return personalUnlockAccount(accountId, password, null);
-    }
-
-    @Override
-    public Request<?, EthSendTransaction> personalSignAndSendTransaction(
-            Transaction transaction, String password) {
-        return new Request<>(
-                "personal_signAndSendTransaction",
-                Arrays.asList(transaction, password),
-                ID,
-                web3jService,
-                EthSendTransaction.class);
-    }
-
-    @Override
-    public Request<?, VoidResponse> personalSetAccountName(
-            String accountId, String newAccountName) {
-
-        return new Request<>(
-                "personal_setAccountName",
-                Arrays.asList(accountId, newAccountName),
-                ID,
-                web3jService,
-                VoidResponse.class);
-    }
-
-    @Override
-    public Request<?, VoidResponse> personalSetAccountMeta(
+    public Request<?, BooleanResponse> paritySetAccountMeta(
             String accountId, Map<String, Object> metadata) {
         return new Request<>(
-                "personal_setAccountMeta",
+                "parity_setAccountMeta",
                 Arrays.asList(accountId, metadata),
                 ID,
                 web3jService,
-                VoidResponse.class);
+                BooleanResponse.class);
     }
 
     @Override
-    public Request<?, PersonalAccountsInfo> personalAccountsInfo() {
+    public Request<?, BooleanResponse> paritySetAccountName(
+            String address, String name) {
         return new Request<>(
-                "personal_accountsInfo",
-                Collections.<String>emptyList(),
+                "parity_setAccountName",
+                Arrays.asList(address, name),
                 ID,
                 web3jService,
-                PersonalAccountsInfo.class);
+                BooleanResponse.class);
     }
 
     @Override
-    public Request<?, PersonalRequestsToConfirm> personalRequestsToConfirm() {
+    public Request<?, BooleanResponse> paritySetDappAddresses(
+            String dAppId, ArrayList<String> availableAccountIds) {
         return new Request<>(
-                "personal_requestsToConfirm",
-                Collections.<String>emptyList(),
+                "parity_setDappAddresses",
+                Arrays.asList(dAppId, availableAccountIds),
                 ID,
                 web3jService,
-                PersonalRequestsToConfirm.class);
+                BooleanResponse.class);
     }
 
     @Override
-    public Request<?, EthSendTransaction> personalConfirmRequest(
-            String requestId, Transaction transaction, String password) {
+    public Request<?, BooleanResponse> paritySetDappDefaultAddress(
+            String dAppId, String defaultAddress) {
         return new Request<>(
-                "personal_confirmRequest",
-                Arrays.asList(requestId, transaction, password),
+                "parity_setDappDefaultAddress",
+                Arrays.asList(dAppId, defaultAddress),
                 ID,
                 web3jService,
-                EthSendTransaction.class);
+                BooleanResponse.class);
     }
 
     @Override
-    public Request<?, PersonalRejectRequest> personalRejectRequest(String requestId) {
+    public Request<?, BooleanResponse> paritySetNewDappsAddresses(
+            ArrayList<String> availableAccountIds) {
         return new Request<>(
-                "personal_rejectRequest",
-                Arrays.asList(requestId),
+                "parity_setNewDappsAddresses",
+                Arrays.asList(availableAccountIds),
                 ID,
                 web3jService,
-                PersonalRejectRequest.class);
+                BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> paritySetNewDappsDefaultAddress(String defaultAddress) {
+        return new Request<>(
+                "parity_setNewDappsDefaultAddress",
+                Arrays.asList(defaultAddress),
+                ID,
+                web3jService,
+                BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> parityTestPassword(String accountId, String password) {
+        return new Request<>(
+                "parity_testPassword",
+                Arrays.asList(accountId, password),
+                ID,
+                web3jService,
+                BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, PersonalSign> paritySignMessage(
+            String accountId, String password, String hexMessage) {
+        return new Request<>(
+                "parity_signMessage",
+                Arrays.asList(accountId,password,hexMessage),
+                ID,
+                web3jService,
+                PersonalSign.class);
     }
 }

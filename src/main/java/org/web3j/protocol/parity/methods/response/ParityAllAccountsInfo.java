@@ -5,12 +5,13 @@ import java.util.Map;
 import org.web3j.protocol.core.Response;
 
 /**
- * personal_accountsInfo.
+ * parity_allAccountsInfo.
  */
-public class PersonalAccountsInfo extends Response<Map<String, PersonalAccountsInfo.AccountsInfo>> {
+public class ParityAllAccountsInfo extends 
+        Response<Map<String, ParityAllAccountsInfo.AccountsInfo>> {
 
     // we need to use a map type as a string value is returned with the account information
-    public Map<String, PersonalAccountsInfo.AccountsInfo> getAccountsInfo() {
+    public Map<String, ParityAllAccountsInfo.AccountsInfo> getAccountsInfo() {
         return getResult();
     }
 
@@ -22,7 +23,7 @@ public class PersonalAccountsInfo extends Response<Map<String, PersonalAccountsI
         public AccountsInfo() {
         }
 
-        public AccountsInfo(String name, String uuid, Map<String, Object> meta) {
+        public AccountsInfo(Map<String, Object> meta, String name, String uuid) {
             this.name = name;
             this.uuid = uuid;
             this.meta = meta;

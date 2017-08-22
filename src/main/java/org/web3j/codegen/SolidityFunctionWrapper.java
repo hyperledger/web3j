@@ -63,6 +63,7 @@ public class SolidityFunctionWrapper {
     private static final String GAS_LIMIT = "gasLimit";
     private static final String START_BLOCK = "startBlock";
     private static final String END_BLOCK = "endBlock";
+    private static final String WEI_VALUE = "weiValue";
 
     private static final String CODEGEN_WARNING = "Auto generated code.<br>\n"
             + "<strong>Do not modify!</strong><br>\n"
@@ -355,6 +356,10 @@ public class SolidityFunctionWrapper {
             MethodSpec.Builder methodBuilder,
             String inputParams) throws ClassNotFoundException {
 
+        if (functionDefinition.isPayable()) {
+            methodBuilder.addParameter(BigInteger.class, WEI_VALUE);
+        }
+
         String functionName = functionDefinition.getName();
 
         methodBuilder.returns(ParameterizedTypeName.get(Future.class, TransactionReceipt.class));
@@ -364,7 +369,11 @@ public class SolidityFunctionWrapper {
                 Function.class, Function.class, functionName,
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
-        methodBuilder.addStatement("return executeTransactionAsync(function)");
+        if (functionDefinition.isPayable()) {
+            methodBuilder.addStatement("return executeTransactionAsync(function, $N)", WEI_VALUE);
+        } else {
+            methodBuilder.addStatement("return executeTransactionAsync(function)");
+        }
     }
 
     static TypeSpec buildEventResponseObject(String className,
