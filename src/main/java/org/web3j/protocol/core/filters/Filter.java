@@ -8,6 +8,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
@@ -39,7 +40,7 @@ public abstract class Filter<T> {
             }
 
             filterId = ethFilter.getFilterId();
-            EthLog ethLogInit = web3j.ethGetFilterLogs(filterId).send();
+            EthLog ethLogInit = this.createFilterRequest(this.filterId).send();
             process(ethLogInit.getLogs());
 
             schedule = scheduledExecutorService.scheduleAtFixedRate(() -> {
@@ -84,6 +85,8 @@ public abstract class Filter<T> {
             throwException(ethUninstallFilter.getError());
         }
     }
+
+    protected abstract Request<?, EthLog> createFilterRequest(BigInteger filterId);
 
     void throwException(Response.Error error) {
         throw new FilterException("Invalid request: " + error.getMessage());

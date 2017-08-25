@@ -1,10 +1,12 @@
 package org.web3j.protocol.core.filters;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 
@@ -33,6 +35,11 @@ public class BlockFilter extends Filter<String> {
                         "Unexpected result type: " + logResult.get() + ", required Hash");
             }
         }
+    }
+
+    @Override
+    protected Request<?, EthLog> createFilterRequest(BigInteger filterId) {
+        return this.web3j.ethGetFilterChanges(filterId);
     }
 }
 
