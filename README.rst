@@ -58,7 +58,7 @@ Features
 It has seven runtime dependencies:
 
 - `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
-- `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
+- `OkHttp <http://square.github.io/okhttp/>`_
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
 - `Bouncy Castle <https://www.bouncycastle.org/>`_ and
