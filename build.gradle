@@ -89,7 +89,6 @@ configurations {
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5',
             'com.github.jnr:jnr-unixsocket:0.15',
-            'com.lambdaworks:scrypt:1.4.0',
             'com.squareup:javapoet:1.7.0',
             'com.squareup.okhttp3:okhttp:3.8.1',
             'com.squareup.okhttp3:logging-interceptor:3.8.1',
