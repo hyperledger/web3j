@@ -39,8 +39,8 @@ public class PendingTransactionFilter extends Filter<String> {
     }
 
     /**
-     * Since the pending transaction filter does not support historic filters, the filterId is ignored
-     * and an empty optional is returned
+     * Since the pending transaction filter does not support historic filters,
+     * the filterId is ignored and an empty optional is returned
      * @param filterId
      * Id of the filter for which the historic log should be retrieved
      * @return
