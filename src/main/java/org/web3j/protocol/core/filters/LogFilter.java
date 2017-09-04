@@ -3,6 +3,7 @@ package org.web3j.protocol.core.filters;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
@@ -26,7 +27,6 @@ public class LogFilter extends Filter<Log> {
     }
 
 
-
     @Override
     EthFilter sendRequest() throws IOException {
         return web3j.ethNewFilter(ethFilter).send();
@@ -46,7 +46,7 @@ public class LogFilter extends Filter<Log> {
     }
 
     @Override
-    protected Request<?, EthLog> createFilterRequest(BigInteger filterId) {
-        return this.web3j.ethGetFilterLogs(filterId);
+    protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
+        return Optional.empty();
     }
 }
