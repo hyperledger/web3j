@@ -15,9 +15,9 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.lambdaworks.crypto.SCrypt;
 import org.spongycastle.crypto.digests.SHA256Digest;
 import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.spongycastle.crypto.generators.SCrypt;
 import org.spongycastle.crypto.params.KeyParameter;
 
 import org.web3j.utils.Numeric;
@@ -131,11 +131,7 @@ public class Wallet {
 
     private static byte[] generateDerivedScryptKey(
             byte[] password, byte[] salt, int n, int r, int p, int dkLen) throws CipherException {
-        try {
-            return SCrypt.scrypt(password, salt, n, r, p, dkLen);
-        } catch (GeneralSecurityException e) {
-            throw new CipherException(e);
-        }
+            return SCrypt.generate(password, salt, n, r, p, dkLen);
     }
 
     private static byte[] generateAes128CtrDerivedKey(
