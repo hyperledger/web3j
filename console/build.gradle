@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':core')
+//    testCompile project(path: ':core', configuration: 'testOutput')
+    testCompile project(path: ':core', configuration: 'archives')
+}

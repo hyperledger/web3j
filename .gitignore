@@ -15,6 +15,7 @@ hs_err_pid*
 ### Gradle template
 .gradle
 /build
+
 gradle.properties
 
 # Ignore Gradle GUI config

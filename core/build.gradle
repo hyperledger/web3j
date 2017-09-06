@@ -1,0 +1,34 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+//task testJar (type: Jar) {
+//    from sourceSets.test.output
+//    classifier = 'test'
+//}
+//
+//configurations {
+//    testOutput
+//}
+//
+//artifacts {
+//    testOutput testJar
+//}
+
+dependencies {
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "com.lambdaworks:scrypt:$scryptVersion",
+            "com.squareup:javapoet:$javapoetVersion",
+            "com.squareup.okhttp3:okhttp:$okhttpVersion",
+            "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
+            "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion",
+            "io.reactivex:rxjava:$rxjavaVersion"
+    testCompile "junit:junit:$junitVersion",
+            "org.mockito:mockito-core:$mockitoVersion",
+            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
+            "ch.qos.logback:logback-core:$logbackVersion",
+            "ch.qos.logback:logback-classic:$logbackVersion"
+}
