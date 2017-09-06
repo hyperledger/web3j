@@ -1,6 +1,7 @@
 package org.web3j.protocol.core.filters;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
@@ -41,11 +42,6 @@ public abstract class Filter<T> {
             }
 
             filterId = ethFilter.getFilterId();
-<<<<<<< HEAD
-            EthLog ethLogInit = web3j.ethGetFilterLogs(filterId).send();
-            process(ethLogInit.getLogs());
-=======
->>>>>>> b89a6dc... Modified pull request #154 according to feedback;
 
             scheduledExecutorService.submit(this::getInitialFilterLogs);
 
@@ -61,15 +57,15 @@ public abstract class Filter<T> {
     private void getInitialFilterLogs() {
         try {
             Optional<Request<?, EthLog>> maybeRequest = this.getFilterLogs(this.filterId);
-            EthLog ethLog = null;
-            if(maybeRequest.isPresent()) {
+            EthLog ethLog;
+            if (maybeRequest.isPresent()) {
                 ethLog = maybeRequest.get().send();
             } else {
                 ethLog = new EthLog();
                 ethLog.setResult(Collections.emptyList());
             }
             process(ethLog.getLogs());
-        } catch(IOException e) {
+        } catch (IOException e) {
             throwException(e);
         }
     }
@@ -110,19 +106,16 @@ public abstract class Filter<T> {
         }
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Retrieves historic filters for the filter with the given id.
-     * Getting historic logs is not supported by all filters. If not the method should return an empty EthLog object
-     * @param filterId
-     * Id of the filter for which the historic log should be retrieved
-     * @return
-     * Historic logs, or an empty optional if the filter cannot retrieve historic logs
+     * Getting historic logs is not supported by all filters. If not the method should return an
+     * empty EthLog object
+     *
+     * @param filterId Id of the filter for which the historic log should be retrieved
+     * @return Historic logs, or an empty optional if the filter cannot retrieve historic logs
      */
     protected abstract Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId);
 
->>>>>>> b89a6dc... Modified pull request #154 according to feedback;
     void throwException(Response.Error error) {
         throw new FilterException("Invalid request: " + error.getMessage());
     }

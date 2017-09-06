@@ -1,11 +1,12 @@
 package org.web3j.protocol.core.filters;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 
@@ -35,21 +36,16 @@ public class BlockFilter extends Filter<String> {
             }
         }
     }
-<<<<<<< HEAD
-=======
 
     /**
      * Since the block filter does not support historic filters, the filterId is ignored
      * and an empty optional is returned
-     * @param filterId
-     * Id of the filter for which the historic log should be retrieved
-     * @return
-     * Optional.empty()
+     * @param filterId Id of the filter for which the historic log should be retrieved
+     * @return Optional.empty()
      */
     @Override
     protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
         return Optional.empty();
     }
->>>>>>> b89a6dc... Modified pull request #154 according to feedback;
 }
 
