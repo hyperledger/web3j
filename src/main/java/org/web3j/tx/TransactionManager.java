@@ -3,13 +3,17 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
+
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionOutOfGasException;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
+
+
+
 
 /**
  * Transaction manager abstraction for executing transactions with Ethereum client via
@@ -100,6 +104,12 @@ public abstract class TransactionManager {
         if (transactionReceipt.hasError()) {
             throw new RuntimeException("Error processing request: "
                     + transactionReceipt.getError().getMessage());
+        } else if (transactionReceipt.getTransactionReceipt().isPresent()) {
+            TransactionReceipt receipt = transactionReceipt.getTransactionReceipt().get();
+            if (receipt.getGasUsed().compareTo(Contract.GAS_LIMIT) == 0) {
+                throw new TransactionOutOfGasException("Transaction run out of gas : gas used "
+                        + Contract.GAS_LIMIT);
+            }
         }
 
         return transactionReceipt.getTransactionReceipt();

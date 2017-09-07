@@ -33,6 +33,7 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionOutOfGasException;
 import org.web3j.protocol.exceptions.TransactionTimeoutException;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
@@ -119,6 +120,28 @@ public class ContractTest extends ManagedTransactionTester {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
 
+        prepareTransaction(transactionReceipt);
+
+        String encodedConstructor = FunctionEncoder.encodeConstructor(
+                Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
+
+        try {
+            TestContract.deployAsync(
+                    TestContract.class, web3j, SampleKeys.CREDENTIALS,
+                    ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
+                    "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
+        } catch (InterruptedException e) {
+            throw e;
+        } catch (ExecutionException e) {
+            throw e.getCause();
+        }
+    }
+
+    @Test(expected = TransactionOutOfGasException.class)
+    public void testDeployContractRunsOutOfGas() throws Throwable {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setGasUsed(Numeric.toHexStringWithPrefix(Contract.GAS_LIMIT));
         prepareTransaction(transactionReceipt);
 
         String encodedConstructor = FunctionEncoder.encodeConstructor(
