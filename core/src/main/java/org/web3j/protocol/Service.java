@@ -28,7 +28,11 @@ public abstract class Service implements Web3jService {
             Request request, Class<T> responseType) throws IOException {
         String payload = objectMapper.writeValueAsString(request);
         try (InputStream result = performIO(payload)) {
-            return objectMapper.readValue(result, responseType);
+            if (result != null) {
+                return objectMapper.readValue(result, responseType);
+            } else {
+                return null;
+            }
         }
     }
 

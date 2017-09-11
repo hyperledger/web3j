@@ -2,6 +2,7 @@ import java.text.SimpleDateFormat
 
 dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.lambdaworks:scrypt:$scryptVersion",
             "com.squareup:javapoet:$javapoetVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
@@ -11,7 +12,7 @@ dependencies {
             "io.reactivex:rxjava:$rxjavaVersion"
     testCompile "junit:junit:$junitVersion",
             "org.mockito:mockito-core:$mockitoVersion",
-            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
+            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
             "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion"
 }
