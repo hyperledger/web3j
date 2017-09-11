@@ -1,6 +1,0 @@
-
-dependencies {
-    compile project(":core"),
-            "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
-            "org.slf4j:slf4j-api:$slf4jVersion"
-}
