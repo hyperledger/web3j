@@ -86,6 +86,11 @@ allprojects {
         archives sourcesJar, javadocJar, testJar
     }
 
+    ext {
+        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
+        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
+    }
+
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -197,11 +202,6 @@ subprojects {
 // dependencies for this root project that creates the web3j zip
 dependencies {
     compile project(':console')
-}
-
-ext {
-    ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
-    ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
 }
 
 repositories {
