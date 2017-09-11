@@ -1,13 +1,13 @@
 package org.web3j.protocol.ipc;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.web3j.protocol.Service;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.Response;
 
 /**
  * Ipc service implementation.
@@ -28,15 +28,15 @@ public class IpcService extends Service {
     }
 
     @Override
-    public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
-        String payload = objectMapper.writeValueAsString(request);
-
+    protected InputStream performIO(String payload) throws IOException {
         ioFacade.write(payload);
         log.debug(">> " + payload);
 
         String result = ioFacade.read();
         log.debug("<< " + result);
 
-        return objectMapper.readValue(result, responseType);
+        // It's not ideal converting back into an inputStream, but we want
+        // to be consistent with the HTTPService API.
+        return new ByteArrayInputStream(result.getBytes());
     }
 }

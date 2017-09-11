@@ -12,6 +12,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Buffer;
+import okio.BufferedSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,8 +59,16 @@ public class HttpService extends Service {
         this(url, createOkHttpClient());
     }
 
+    public HttpService(String url, boolean includeRawResponse) {
+        this(url, createOkHttpClient(), includeRawResponse);
+    }
+
     public HttpService(OkHttpClient httpClient) {
         this(DEFAULT_URL, httpClient);
+    }
+
+    public  HttpService(boolean includeRawResponse) {
+        this(DEFAULT_URL, includeRawResponse);
     }
 
     public HttpService() {
@@ -80,12 +90,9 @@ public class HttpService extends Service {
     }
 
     @Override
-    public <T extends Response> T send(
-            Request request, Class<T> responseType) throws IOException {
+    protected InputStream performIO(String request) throws IOException {
 
-        byte[] payload = objectMapper.writeValueAsBytes(request);
-
-        RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, payload);
+        RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, request);
         Headers headers = buildHeaders();
 
         okhttp3.Request httpRequest = new okhttp3.Request.Builder()
@@ -95,32 +102,43 @@ public class HttpService extends Service {
                 .build();
 
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
-        try {
-            if (response.isSuccessful()) {
-                ResponseBody responseBody = response.body();
-                if (responseBody != null) {
-                    InputStream inputStream = buildInputStream(responseBody.byteStream());
-                    return objectMapper.readValue(inputStream, responseType);
-                } else {
-                    return null;
-                }
+        if (response.isSuccessful()) {
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                return buildInputStream(responseBody);
             } else {
-                throw new ClientConnectionException(
-                        "Invalid response received: " + response.body());
+                return null;
             }
-        } finally {
-            if (response.body() != null) {
-                response.close();
-            }
+        } else {
+            throw new ClientConnectionException(
+                    "Invalid response received: " + response.body());
         }
     }
 
-    private InputStream buildInputStream(InputStream inputStream) throws IOException {
+    private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
+        InputStream inputStream = responseBody.byteStream();
+
         if (includeRawResponse) {
+            // we have to buffer the entire input payload, so that after processing
+            // it can be re-read and used to populate the rawResponse field.
+
+            BufferedSource source = responseBody.source();
+            source.request(Long.MAX_VALUE); // Buffer the entire body
+            Buffer buffer = source.buffer();
+
+            long size = buffer.size();
+            if (size > Integer.MAX_VALUE) {
+                throw new UnsupportedOperationException(
+                        "Non-integer input buffer size specified: " + size);
+            }
+
+            int bufferSize = (int) size;
             BufferedInputStream bufferedinputStream =
-                    new BufferedInputStream(inputStream);
+                    new BufferedInputStream(inputStream, bufferSize);
+
             bufferedinputStream.mark(inputStream.available());
             return bufferedinputStream;
+
         } else {
             return inputStream;
         }

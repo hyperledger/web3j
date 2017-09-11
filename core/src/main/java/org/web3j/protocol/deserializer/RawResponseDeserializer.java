@@ -43,7 +43,7 @@ public class RawResponseDeserializer
     }
 
     private String getRawResponse(JsonParser jp) throws IOException {
-        final InputStream inputSource = (InputStream)jp.getInputSource();
+        final InputStream inputSource = (InputStream) jp.getInputSource();
 
         if (inputSource == null) {
             return "";

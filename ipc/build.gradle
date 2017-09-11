@@ -1,8 +1,3 @@
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compile project(":core"),

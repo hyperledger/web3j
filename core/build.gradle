@@ -1,21 +1,4 @@
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-}
-
-//task testJar (type: Jar) {
-//    from sourceSets.test.output
-//    classifier = 'test'
-//}
-//
-//configurations {
-//    testOutput
-//}
-//
-//artifacts {
-//    testOutput testJar
-//}
+import java.text.SimpleDateFormat
 
 dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
@@ -28,7 +11,30 @@ dependencies {
             "io.reactivex:rxjava:$rxjavaVersion"
     testCompile "junit:junit:$junitVersion",
             "org.mockito:mockito-core:$mockitoVersion",
-            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
+            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
             "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion"
+}
+
+task createProperties(dependsOn: processResources) << {
+    // if resources dir is empty we need to create this ourselves
+    new File("$buildDir/resources/main/").mkdirs()
+
+    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+        Properties p = new Properties()
+        p['version'] = project.version.toString()
+        p['timestamp'] = getTimestamp()
+        p.store w, null
+    }
+}
+
+def getTimestamp() {
+    Date today = new Date()
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(today)
+}
+
+classes {
+    dependsOn createProperties
 }

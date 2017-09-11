@@ -1,5 +1,7 @@
 package org.web3j.protocol;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +19,17 @@ public abstract class Service implements Web3jService {
 
     public Service(boolean includeRawResponses) {
         objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
+    }
+
+    protected abstract InputStream performIO(String payload) throws IOException;
+
+    @Override
+    public <T extends Response> T send(
+            Request request, Class<T> responseType) throws IOException {
+        String payload = objectMapper.writeValueAsString(request);
+        try (InputStream result = performIO(payload)) {
+            return objectMapper.readValue(result, responseType);
+        }
     }
 
     @Override
