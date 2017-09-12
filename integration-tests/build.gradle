@@ -1,0 +1,7 @@
+
+dependencies {
+    compile project(':core')
+}
+
+// we don't want integration tests to run by default
+test.enabled = false
