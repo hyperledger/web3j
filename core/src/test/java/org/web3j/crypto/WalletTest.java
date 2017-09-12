@@ -67,29 +67,28 @@ public class WalletTest {
         return objectMapper.readValue(source, WalletFile.class);
     }
 
-    // Test vectors taken from https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
-    private static final String PASSWORD = "testpassword";
+    private static final String PASSWORD = "Insecure Pa55w0rd";
     private static final String SECRET =
-            "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d";
+            "a392604efc2fad9c0b3da43b5f698a2e3f270f170d859912be0d54742275c5f6";
 
     //CHECKSTYLE:OFF
     private static final String AES_128_CTR = "{\n" +
             "    \"crypto\" : {\n" +
             "        \"cipher\" : \"aes-128-ctr\",\n" +
             "        \"cipherparams\" : {\n" +
-            "            \"iv\" : \"6087dab2f9fdbbfaddc31a909735c1e6\"\n" +
+            "            \"iv\" : \"02ebc768684e5576900376114625ee6f\"\n" +
             "        },\n" +
-            "        \"ciphertext\" : \"5318b4d5bcd28de64ee5559e671353e16f075ecae9f99c7a79a38af5f869aa46\",\n" +
+            "        \"ciphertext\" : \"7ad5c9dd2c95f34a92ebb86740b92103a5d1cc4c2eabf3b9a59e1f83f3181216\",\n" +
             "        \"kdf\" : \"pbkdf2\",\n" +
             "        \"kdfparams\" : {\n" +
             "            \"c\" : 262144,\n" +
             "            \"dklen\" : 32,\n" +
             "            \"prf\" : \"hmac-sha256\",\n" +
-            "            \"salt\" : \"ae3cd4e7013836a3df6bd7241b12db061dbe2c6785853cce422d148a624ce0bd\"\n" +
+            "            \"salt\" : \"0e4cf3893b25bb81efaae565728b5b7cde6a84e224cbf9aed3d69a31c981b702\"\n" +
             "        },\n" +
-            "        \"mac\" : \"517ead924a9d0dc3124507e3393d175ce3ff7c1e96529c6c555ce9e51205e9b2\"\n" +
+            "        \"mac\" : \"2b29e4641ec17f4dc8b86fc8592090b50109b372529c30b001d4d96249edaf62\"\n" +
             "    },\n" +
-            "    \"id\" : \"3198bc9c-6672-5ab3-d995-4942343ae5b6\",\n" +
+            "    \"id\" : \"af0451b4-6020-4ef0-91ec-794a5a965b01\",\n" +
             "    \"version\" : 3\n" +
             "}";
 
@@ -97,20 +96,20 @@ public class WalletTest {
             "    \"crypto\" : {\n" +
             "        \"cipher\" : \"aes-128-ctr\",\n" +
             "        \"cipherparams\" : {\n" +
-            "            \"iv\" : \"83dbcc02d8ccb40e466191a123791e0e\"\n" +
+            "            \"iv\" : \"3021e1ef4774dfc5b08307f3a4c8df00\"\n" +
             "        },\n" +
-            "        \"ciphertext\" : \"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\n" +
+            "        \"ciphertext\" : \"4dd29ba18478b98cf07a8a44167acdf7e04de59777c4b9c139e3d3fa5cb0b931\",\n" +
             "        \"kdf\" : \"scrypt\",\n" +
             "        \"kdfparams\" : {\n" +
             "            \"dklen\" : 32,\n" +
             "            \"n\" : 262144,\n" +
-            "            \"r\" : 1,\n" +
-            "            \"p\" : 8,\n" +
-            "            \"salt\" : \"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"\n" +
+            "            \"r\" : 8,\n" +
+            "            \"p\" : 1,\n" +
+            "            \"salt\" : \"4f9f68c71989eb3887cd947c80b9555fce528f210199d35c35279beb8c2da5ca\"\n" +
             "        },\n" +
-            "        \"mac\" : \"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\"\n" +
+            "        \"mac\" : \"7e8f2192767af9be18e7a373c1986d9190fcaa43ad689bbb01a62dbde159338d\"\n" +
             "    },\n" +
-            "    \"id\" : \"3198bc9c-6672-5ab3-d995-4942343ae5b6\",\n" +
+            "    \"id\" : \"7654525c-17e0-4df5-94b5-c7fde752c9d2\",\n" +
             "    \"version\" : 3\n" +
             "}";
     //CHECKSTYLE:ON

@@ -145,7 +145,7 @@ public class JsonRpc2_0RxTest {
                 throwable -> fail(throwable.getMessage()),
                 () -> completedLatch.countDown());
 
-        transactionLatch.await(1, TimeUnit.SECONDS);
+        transactionLatch.await(1250, TimeUnit.MILLISECONDS);
         assertThat(results, equalTo(expected));
 
         subscription.unsubscribe();
