@@ -6,7 +6,6 @@ buildscript {
     ext.jnr_unixsocketVersion = '0.15'
     ext.okhttpVersion = '3.8.1'
     ext.rxjavaVersion = '1.2.4'
-    ext.scryptVersion = '1.4.0'
     ext.slf4jVersion = '1.7.25'
 
     // test dependencies
@@ -30,12 +29,12 @@ plugins {
 }
 
 apply plugin: 'java'
-apply plugin: 'jacoco'
 apply plugin: 'signing'
 apply plugin: 'idea'
 // should only be applied to the root project, see
 // https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
 apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'jacoco'
 
 allprojects {
 
@@ -43,9 +42,10 @@ allprojects {
     targetCompatibility = 1.8
 
     group 'org.web3j'
-    version '3.0.0-test'
+    version '3.0.0'
 
     apply plugin: 'java'
+    apply plugin: 'jacoco'
     apply plugin: 'checkstyle'
 
     repositories {
@@ -68,13 +68,10 @@ allprojects {
         reports {
             xml.enabled true
         }
+    }
 
-        afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it,
-                        exclude: ['org/web3j/abi/datatypes/generated/**'])
-            })
-        }
+    tasks.withType(Test) {
+        reports.html.destination = file("${reporting.baseDir}/${name}")
     }
 
     checkstyle {
@@ -212,8 +209,33 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
     }
 }
 
-tasks.withType(Test) {
-    reports.html.destination = file("${reporting.baseDir}/${name}")
+
+task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories =  files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
+    reports {
+        xml.enabled = true
+    }
+
+    onlyIf = {
+        true
+    }
+
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ['org/web3j/abi/datatypes/generated/**'])
+        })
+    }
 }
 
 signing {

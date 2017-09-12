@@ -3,7 +3,6 @@ import java.text.SimpleDateFormat
 dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
-            "com.lambdaworks:scrypt:$scryptVersion",
             "com.squareup:javapoet:$javapoetVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",

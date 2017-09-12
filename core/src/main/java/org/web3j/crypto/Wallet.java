@@ -1,6 +1,5 @@
 package org.web3j.crypto;
 
-import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -30,9 +29,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * <a href="https://github.com/ethereum/go-ethereum/blob/master/accounts/key_store_passphrase.go">
  * Go Ethereum client implementation</a>.</p>
  *
- * <p><strong>Note:</strong> we don't use the Bouncy Castle Scrypt implementation
- * {@link org.bouncycastle.crypto.generators.SCrypt}, as the following parameter assertion results
- * in failure of the Ethereum reference
+ * <p><strong>Note:</strong> the Bouncy Castle Scrypt implementation
+ * {@link org.bouncycastle.crypto.generators.SCrypt}, fails to comply with the following
+ * Ethereum reference
  * <a href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#scrypt">
  * Scrypt test vector</a>:</p>
  *
