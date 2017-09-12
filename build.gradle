@@ -33,9 +33,9 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'signing'
 apply plugin: 'idea'
+// should only be applied to the root project, see
+// https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
 apply plugin: 'io.codearte.nexus-staging'
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'application'
 
 allprojects {
 
@@ -48,13 +48,6 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'checkstyle'
 
-    // Required for Maven Nexus repository
-    apply plugin: 'maven'
-
-    // Required for JFrog Artifactory repository
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
-
     repositories {
         mavenCentral()
     }
@@ -66,6 +59,46 @@ allprojects {
     compileTestJava {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
+
+    jacoco {
+        toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                        exclude: ['org/web3j/abi/datatypes/generated/**'])
+            })
+        }
+    }
+
+    checkstyle {
+        toolVersion = "7.7"
+        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    dependencies {
+        testCompile "junit:junit:$junitVersion",
+                    "org.mockito:mockito-core:$mockitoVersion"
+    }
+}
+
+configure(subprojects.findAll {it.name != 'integration-tests'}) {
+    // Required for Maven Nexus repository
+    apply plugin: 'maven'
+
+    // Required for JFrog Artifactory repository
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
 
     task javadocJar(type: Jar) {
         classifier = 'javadoc'
@@ -105,28 +138,6 @@ allprojects {
                 }
             }
         }
-    }
-
-    jacoco {
-        toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
-    }
-
-    jacocoTestReport {
-        reports {
-            xml.enabled true
-        }
-
-        afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it,
-                        exclude: ['org/web3j/abi/datatypes/generated/**'])
-            })
-        }
-    }
-
-    checkstyle {
-        toolVersion = "7.7"
-        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
     }
 
     uploadArchives {
@@ -188,27 +199,18 @@ allprojects {
             publicDownloadNumbers = true
         }
     }
-}
 
-subprojects {
-    apply plugin: 'java'
+    task release {
+        dependsOn 'clean'
+        dependsOn 'build'
+        dependsOn 'uploadArchives'
+        dependsOn 'bintrayUpload'
 
-    dependencies {
-        testCompile "junit:junit:$junitVersion",
-                    "org.mockito:mockito-core:$mockitoVersion"
+        tasks.findByName('build').mustRunAfter 'clean'
+        tasks.findByName('uploadArchives').mustRunAfter 'build'
+        tasks.findByName('bintrayUpload').mustRunAfter 'build'
     }
 }
-
-// dependencies for this root project that creates the web3j zip
-dependencies {
-    compile project(':console')
-}
-
-repositories {
-    mavenCentral()
-    jcenter()  // Shadow resides on JCenter
-}
-
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
@@ -217,24 +219,4 @@ tasks.withType(Test) {
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
     sign configurations.archives
-}
-
-// Build command line library release with target distShadowZip
-mainClassName = 'org.web3j.console.Runner'
-applicationName = 'web3j'
-
-
-task release {
-    dependsOn 'clean'
-    dependsOn 'build'
-//    dependsOn 'uploadArchives'
-//    dependsOn 'closeAndPromoteRepository'
-    dependsOn 'bintrayUpload'
-
-    tasks.findByName('build').mustRunAfter 'clean'
-
-//    tasks.findByName('uploadArchives').mustRunAfter 'build'
-//    tasks.findByName('closeAndPromoteRepository').mustRunAfter 'uploadArchives'
-
-    tasks.findByName('bintrayUpload').mustRunAfter 'build'
 }
