@@ -61,7 +61,8 @@ It has seven runtime dependencies:
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_ and
+- `Bouncy Castle <https://www.bouncycastle.org/>`_
+  (`Spongy Castle for Android <https://rtyley.github.io/spongycastle/>`_) and
   `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
 - `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
 - `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
