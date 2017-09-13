@@ -3,7 +3,6 @@ package org.web3j.crypto;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.UUID;
 import javax.crypto.BadPaddingException;
@@ -21,6 +20,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.web3j.utils.Numeric;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.web3j.crypto.SecureRandomUtils.secureRandom;
 
 /**
  * <p>Ethereum wallet file management. For reference, refer to
@@ -46,8 +46,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * </pre>
  */
 public class Wallet {
-
-    private static SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private static final int N_LIGHT = 1 << 12;
     private static final int P_LIGHT = 6;
@@ -239,7 +237,7 @@ public class Wallet {
 
     static byte[] generateRandomBytes(int size) {
         byte[] bytes = new byte[size];
-        SECURE_RANDOM.nextBytes(bytes);
+        secureRandom().nextBytes(bytes);
         return bytes;
     }
 }

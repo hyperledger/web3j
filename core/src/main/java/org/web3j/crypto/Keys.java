@@ -6,7 +6,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Arrays;
@@ -15,6 +14,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
+
+import static org.web3j.crypto.SecureRandomUtils.secureRandom;
 
 
 /**
@@ -47,7 +48,7 @@ public class Keys {
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
-        keyPairGenerator.initialize(ecGenParameterSpec, new SecureRandom());
+        keyPairGenerator.initialize(ecGenParameterSpec, secureRandom());
         return keyPairGenerator.generateKeyPair();
     }
 
