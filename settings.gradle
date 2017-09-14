@@ -1,2 +1,5 @@
-rootProject.name = 'core'
+rootProject.name = 'base'
+include 'core'
+include 'console'
+include 'integration-tests'
 
