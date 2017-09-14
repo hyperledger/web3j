@@ -1,6 +1,5 @@
 package org.web3j.codegen;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
@@ -50,7 +48,7 @@ import org.web3j.utils.Version;
 /**
  * Generate Java Classes based on generated Solidity bin and abi files.
  */
-public class SolidityFunctionWrapper {
+public class SolidityFunctionWrapper extends Generator {
 
     private static final String BINARY = "BINARY";
     private static final String WEB3J = "web3j";
@@ -64,14 +62,14 @@ public class SolidityFunctionWrapper {
     private static final String END_BLOCK = "endBlock";
     private static final String WEI_VALUE = "weiValue";
 
-    private static final String CODEGEN_WARNING = "Auto generated code.<br>\n"
-            + "<strong>Do not modify!</strong><br>\n"
-            + "Please use the "
+    private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
+            + "<p><strong>Do not modify!</strong>\n"
+            + "<p>Please use the "
             + "<a href=\"https://docs.web3j.io/command_line.html\">web3j command line tools</a>, "
             + "or {@link " + SolidityFunctionWrapperGenerator.class.getName() + "} to update.\n";
 
     public void generateJavaFiles(
-            String contractName, String bin, String abi, String destinationDirLocation,
+            String contractName, String bin, String abi, String destinationDir,
             String basePackageName)
             throws IOException, ClassNotFoundException {
         String className = Strings.capitaliseFirstLetter(contractName);
@@ -85,12 +83,7 @@ public class SolidityFunctionWrapper {
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
 
-        JavaFile javaFile = JavaFile.builder(basePackageName, classBuilder.build())
-                .indent("    ")
-                .skipJavaLangImports(true)
-                .build();
-
-        javaFile.writeTo(new File(destinationDirLocation));
+        write(basePackageName, classBuilder.build(), destinationDir);
     }
 
     private TypeSpec.Builder createClassBuilder(String className, String binary) {

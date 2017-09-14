@@ -23,11 +23,9 @@ import org.web3j.abi.datatypes.Uint;
 /**
  * Generator class for creating all the different numeric type variants.
  */
-public class AbiTypesGenerator {
+public class AbiTypesGenerator extends Generator {
 
-    private static final String CODEGEN_WARNING = "<p>Auto generated code.<br>\n"
-            + "<strong>Do not modifiy!</strong><br>\n"
-            + "Please use {@link " + AbiTypesGenerator.class.getName() + "} to update.</p>\n";
+    private static final String CODEGEN_WARNING = buildWarning(AbiTypesGenerator.class);
 
     private static final String DEFAULT = "DEFAULT";
 
@@ -41,17 +39,15 @@ public class AbiTypesGenerator {
     }
 
     private void generate(String destinationDir) throws IOException {
-        Path path = Paths.get(destinationDir);
-
-        generateIntTypes(Int.class, path);
-        generateIntTypes(Uint.class, path);
-        generateFixedTypes(Fixed.class, path);
-        generateFixedTypes(Ufixed.class, path);
-        generateBytesTypes(Bytes.class, path);
+        generateIntTypes(Int.class, destinationDir);
+        generateIntTypes(Uint.class, destinationDir);
+        generateFixedTypes(Fixed.class, destinationDir);
+        generateFixedTypes(Ufixed.class, destinationDir);
+        generateBytesTypes(Bytes.class, destinationDir);
     }
 
     private <T extends Type> void generateIntTypes(
-            Class<T> superclass, Path path) throws IOException {
+            Class<T> superclass, String path) throws IOException {
         String packageName = createPackageName(superclass);
         ClassName className;
 
@@ -88,7 +84,7 @@ public class AbiTypesGenerator {
     }
 
     private <T extends Type> void generateFixedTypes(
-            Class<T> superclass, Path path) throws IOException {
+            Class<T> superclass, String path) throws IOException {
         String packageName = createPackageName(superclass);
         ClassName className;
 
@@ -143,7 +139,7 @@ public class AbiTypesGenerator {
     }
 
     private <T extends Type> void generateBytesTypes(
-            Class<T> superclass, Path path) throws IOException {
+            Class<T> superclass, String path) throws IOException {
         String packageName = createPackageName(superclass);
         ClassName className;
 
@@ -173,15 +169,6 @@ public class AbiTypesGenerator {
 
             write(packageName, bytesType, path);
         }
-    }
-
-    private void write(String packageName, TypeSpec typeSpec, Path destination) throws IOException {
-        JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
-                .indent("    ")
-                .skipJavaLangImports(true)
-                .build();
-
-        javaFile.writeTo(destination);
     }
 
     static String createPackageName(Class<?> cls) {
