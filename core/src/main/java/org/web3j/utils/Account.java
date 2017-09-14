@@ -1,8 +1,7 @@
 package org.web3j.utils;
 
-import org.web3j.crypto.Hash;
-
 import java.util.regex.Pattern;
+import org.web3j.crypto.Hash;
 
 /**
  * Account utility functions.
