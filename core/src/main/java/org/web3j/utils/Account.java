@@ -1,6 +1,7 @@
 package org.web3j.utils;
 
 import java.util.regex.Pattern;
+
 import org.web3j.crypto.Hash;
 
 /**
