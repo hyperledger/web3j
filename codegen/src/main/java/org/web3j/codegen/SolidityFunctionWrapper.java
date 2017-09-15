@@ -65,8 +65,10 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
             + "<p><strong>Do not modify!</strong>\n"
             + "<p>Please use the "
-            + "<a href=\"https://docs.web3j.io/command_line.html\">web3j command line tools</a>, "
-            + "or {@link " + SolidityFunctionWrapperGenerator.class.getName() + "} to update.\n";
+            + "<a href=\"https://docs.web3j.io/command_line.html\">web3j command line tools</a>,\n"
+            + "or the " + SolidityFunctionWrapperGenerator.class.getName() + " in the \n"
+            + "<a href=\"https://github.com/web3j/web3j/tree/master/codegen\">"
+            + "codegen module</a> to update.\n";
 
     public void generateJavaFiles(
             String contractName, String bin, String abi, String destinationDir,

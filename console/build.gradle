@@ -2,7 +2,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
 dependencies {
-    compile project(':core')
+    compile project(':codegen')
     testCompile project(path: ':core', configuration: 'archives')
 }
 

@@ -3,7 +3,6 @@ package org.web3j.codegen;
 import org.junit.Test;
 
 import org.web3j.TempFileProvider;
-import org.web3j.codegen.AbiTypesGenerator;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

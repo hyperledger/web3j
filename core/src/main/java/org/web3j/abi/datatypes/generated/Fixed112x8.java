@@ -1,13 +1,13 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.math.BigInteger;
-
 import org.web3j.abi.datatypes.Fixed;
 
 /**
- * <p>Auto generated code.<br>
- * <strong>Do not modifiy!</strong><br>
- * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
+ * Auto generated code.
+ * <p><strong>Do not modifiy!</strong>
+ * <p>Please use org.web3j.codegen.AbiTypesGenerator in the 
+ * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class Fixed112x8 extends Fixed {
     public static final Fixed112x8 DEFAULT = new Fixed112x8(BigInteger.ZERO);

@@ -2,14 +2,11 @@ package org.web3j.codegen;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
@@ -34,7 +31,7 @@ public class AbiTypesGenerator extends Generator {
         if (args.length == 1) {
             abiTypesGenerator.generate(args[0]);
         } else {
-            abiTypesGenerator.generate(System.getProperty("user.dir") + "/src/main/java/");
+            abiTypesGenerator.generate(System.getProperty("user.dir") + "/core/src/main/java/");
         }
     }
 

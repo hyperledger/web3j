@@ -1,12 +1,12 @@
 package org.web3j.utils.tuples.generated;
 
-import org.web3j.codegen.TupleGenerator;
 import org.web3j.utils.tuples.Tuple;
 
 /**
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
- * <p>Please use {@link TupleGenerator} to update.
+ * <p>Please use org.web3j.codegen.TupleGenerator in the 
+ * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public final class Tuple3<T1, T2, T3> implements Tuple {
     private static final int SIZE = 3;

@@ -32,7 +32,8 @@ public class AbiTypesMapperGenerator extends Generator {
         if (args.length == 1) {
             abiTypesMapperGenerator.generate(args[0]);
         } else {
-            abiTypesMapperGenerator.generate(System.getProperty("user.dir") + "/src/main/java/");
+            abiTypesMapperGenerator.generate(
+                    System.getProperty("user.dir") + "/core/src/main/java/");
         }
     }
 
