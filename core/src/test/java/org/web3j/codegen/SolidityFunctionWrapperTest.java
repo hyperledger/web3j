@@ -74,14 +74,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         MethodSpec methodSpec = buildFunction(functionDefinition);
 
-        String expected = "public java.util.concurrent.Future<org.web3j.protocol.core.methods"
+        String expected =
+                "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods"
                 + ".response.TransactionReceipt> functionName(org.web3j.abi.datatypes.generated"
                 + ".Uint8 param) {\n"
                 + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes"
                 + ".Function(\"functionName\", java.util.Arrays.<org.web3j.abi.datatypes"
                 + ".Type>asList(param), java.util.Collections.<org.web3j.abi"
                 + ".TypeReference<?>>emptyList());\n"
-                + "  return executeTransactionAsync(function);\n"
+                + "  return executeRemoteCallTransaction(function);\n"
                 + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
@@ -100,14 +101,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         MethodSpec methodSpec = buildFunction(functionDefinition);
 
-        String expected = "public java.util.concurrent.Future<org.web3j.protocol.core.methods"
+        String expected =
+                "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods"
                 + ".response.TransactionReceipt> functionName(org.web3j.abi.datatypes.generated"
                 + ".Uint8 param, java.math.BigInteger weiValue) {\n"
                 + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes"
                 + ".Function(\"functionName\", java.util.Arrays.<org.web3j.abi.datatypes"
                 + ".Type>asList(param), java.util.Collections.<org.web3j.abi"
                 + ".TypeReference<?>>emptyList());\n"
-                + "  return executeTransactionAsync(function, weiValue);\n"
+                + "  return executeRemoteCallTransaction(function, weiValue);\n"
                 + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
@@ -127,14 +129,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         MethodSpec methodSpec = buildFunction(functionDefinition);
 
-        String expected = "public java.util.concurrent.Future<org.web3j.abi.datatypes.generated"
+        String expected =
+                "public org.web3j.protocol.core.RemoteCall<org.web3j.abi.datatypes.generated"
                 + ".Int8> functionName(org.web3j.abi.datatypes.generated.Uint8 param) {\n"
                 + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes"
                 + ".Function(\"functionName\", \n"
                 + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(param), \n"
                 + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi"
                 + ".TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n"
-                + "  return executeCallSingleValueReturnAsync(function);\n"
+                + "  return executeRemoteCallSingleValueReturn(function);\n"
                 + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
@@ -171,7 +174,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         MethodSpec methodSpec = buildFunction(functionDefinition);
 
-        String expected = "public java.util.concurrent.Future<java.util.List<org.web3j.abi"
+        String expected = "public org.web3j.protocol.core.RemoteCall<java.util.List<org.web3j.abi"
                 + ".datatypes.Type>> functionName(org.web3j.abi.datatypes.generated.Uint8 param1, "
                 + "org.web3j.abi.datatypes.generated.Uint32 param2) {\n"
                 + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes"
@@ -180,7 +183,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi"
                 + ".TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi"
                 + ".TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n"
-                + "  return executeCallMultipleValueReturnAsync(function);\n"
+                + "  return executeRemoteCallMultipleValueReturn(function);\n"
                 + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));

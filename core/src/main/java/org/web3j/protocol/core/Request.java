@@ -73,15 +73,6 @@ public class Request<S, T extends Response> {
     }
 
     public Observable<T> observable() {
-        return Observable.create(
-                subscriber -> {
-                    try {
-                        subscriber.onNext(send());
-                        subscriber.onCompleted();
-                    } catch (IOException e) {
-                        subscriber.onError(e);
-                    }
-                }
-        );
+        return new RemoteCall<>(this::send).observable();
     }
 }

@@ -1,11 +1,16 @@
 package org.web3j.utils.tuples.generated;
 
+import org.web3j.codegen.TupleGenerator;
+import org.web3j.utils.tuples.Tuple;
+
 /**
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
- * <p>Please use {@link org.web3j.codegen.TuplesGenerator} to update.
+ * <p>Please use {@link TupleGenerator} to update.
  */
-public final class Tuple1<T1> {
+public final class Tuple1<T1> implements Tuple {
+    private static final int SIZE = 1;
+
     private final T1 value1;
 
     public Tuple1(T1 value1) {
@@ -14,6 +19,11 @@ public final class Tuple1<T1> {
 
     public T1 getValue1() {
         return value1;
+    }
+
+    @Override
+    public int getSize() {
+        return SIZE;
     }
 
     @Override

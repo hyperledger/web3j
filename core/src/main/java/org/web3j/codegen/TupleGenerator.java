@@ -5,30 +5,33 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.lang.model.element.Modifier;
 
+import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 
 import org.web3j.utils.Strings;
+import org.web3j.utils.tuples.Tuple;
 
 /**
  * A class for generating arbitrary sized tuples.
  */
-public class TuplesGenerator extends Generator {
+public class TupleGenerator extends Generator {
 
     static final int LIMIT = 20;
     static final String PACKAGE_NAME = "org.web3j.utils.tuples.generated";
     static final String CLASS_NAME = "Tuple";
 
+    private static final String SIZE = "SIZE";
     private static final String RESULT = "result";
     private static final String VALUE = "value";
 
     public static void main(String[] args) throws IOException {
-        TuplesGenerator tuplesGenerator = new TuplesGenerator();
+        TupleGenerator tupleGenerator = new TupleGenerator();
         if (args.length == 1) {
-            tuplesGenerator.generate(args[0]);
+            tupleGenerator.generate(args[0]);
         } else {
-            tuplesGenerator.generate(System.getProperty("user.dir") + "/core/src/main/java/");
+            tupleGenerator.generate(System.getProperty("user.dir") + "/core/src/main/java/");
         }
     }
 
@@ -42,7 +45,12 @@ public class TuplesGenerator extends Generator {
 
     private TypeSpec createTuple(int size) {
         String className = CLASS_NAME + size;
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className);
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className)
+                .addSuperinterface(Tuple.class)
+                .addField(FieldSpec.builder(int.class, SIZE)
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("$L", size)
+                        .build());
 
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
@@ -69,18 +77,30 @@ public class TuplesGenerator extends Generator {
         }
 
         MethodSpec constructorSpec = constructorBuilder.build();
+        MethodSpec sizeSpec = generateSizeSpec();
         MethodSpec equalsSpec = generateEqualsSpec(className, size);
         MethodSpec hashCodeSpec = generateHashCodeSpec(size);
         MethodSpec toStringSpec = generateToStringSpec(size);
 
         return typeSpecBuilder
-                .addJavadoc(buildWarning(TuplesGenerator.class))
+                .addJavadoc(buildWarning(TupleGenerator.class))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addMethod(constructorSpec)
                 .addMethods(methodSpecs)
+                .addMethod(sizeSpec)
                 .addMethod(equalsSpec)
                 .addMethod(hashCodeSpec)
                 .addMethod(toStringSpec)
+                .build();
+    }
+
+    private MethodSpec generateSizeSpec() {
+        return MethodSpec.methodBuilder(
+                "getSize")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .returns(int.class)
+                .addStatement("return $L", SIZE)
                 .build();
     }
 

@@ -17,8 +17,8 @@ public class SimpleStorageContractIT extends Scenario {
     public void testSimpleStorageContract() throws Exception {
         Uint256 value = new Uint256(1000L);
         SimpleStorage simpleStorage = SimpleStorage.deploy(
-                parity, ALICE, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO).get();
-        assertNotNull(simpleStorage.set(value).get());
-        assertThat(simpleStorage.get().get(), is(value));
+                parity, ALICE, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO).send();
+        assertNotNull(simpleStorage.set(value).send());
+        assertThat(simpleStorage.get().send(), is(value));
     }
 }

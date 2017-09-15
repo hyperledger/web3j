@@ -9,7 +9,7 @@ shipit/ShipIt
 simplestorage/SimpleStorage
 "
 
-for target in $targets; do
+for target in ${targets}; do
     dirName=$(dirname $target)
     fileName=$(basename $target)
 

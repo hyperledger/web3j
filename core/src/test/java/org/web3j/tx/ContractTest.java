@@ -24,6 +24,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -125,10 +126,10 @@ public class ContractTest extends ManagedTransactionTester {
                 Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
 
         try {
-            TestContract.deployAsync(
+            TestContract.deployRemoteCall(
                     TestContract.class, web3j, SampleKeys.CREDENTIALS,
                     ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
-                    "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
+                    "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
         } catch (InterruptedException e) {
             throw e;
         } catch (ExecutionException e) {
@@ -145,7 +146,7 @@ public class ContractTest extends ManagedTransactionTester {
                 + "0000000000000000000000000000000000000000000000000000000000000000");
         prepareCall(ethCall);
 
-        assertThat(contract.callSingleValue().get(), equalTo(new Utf8String("")));
+        assertThat(contract.callSingleValue().send(), equalTo(new Utf8String("")));
     }
 
     @Test
@@ -156,7 +157,7 @@ public class ContractTest extends ManagedTransactionTester {
         ethCall.setResult("0x");
         prepareCall(ethCall);
 
-        assertNull(contract.callSingleValue().get());
+        assertNull(contract.callSingleValue().send());
     }
 
     @Test
@@ -166,7 +167,7 @@ public class ContractTest extends ManagedTransactionTester {
                 + "0000000000000000000000000000000000000000000000000000000000000007");
         prepareCall(ethCall);
 
-        assertThat(contract.callMultipleValue().get(),
+        assertThat(contract.callMultipleValue().send(),
                 equalTo(Arrays.asList(
                         new Uint256(BigInteger.valueOf(55)),
                         new Uint256(BigInteger.valueOf(7)))));
@@ -178,13 +179,13 @@ public class ContractTest extends ManagedTransactionTester {
         ethCall.setResult("0x");
         prepareCall(ethCall);
 
-        assertThat(contract.callMultipleValue().get(),
+        assertThat(contract.callMultipleValue().send(),
                 equalTo(Collections.emptyList()));
     }
 
-    private void prepareCall(EthCall ethCall) {
+    private void prepareCall(EthCall ethCall) throws IOException {
         Request request = mock(Request.class);
-        when(request.sendAsync()).thenReturn(Async.run(() -> ethCall));
+        when(request.send()).thenReturn(ethCall);
 
         when(web3j.ethCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST)))
                 .thenReturn(request);
@@ -198,7 +199,7 @@ public class ContractTest extends ManagedTransactionTester {
         prepareTransaction(transactionReceipt);
 
         assertThat(contract.performTransaction(
-                new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).get(),
+                new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send(),
                 is(transactionReceipt));
     }
 
@@ -275,7 +276,7 @@ public class ContractTest extends ManagedTransactionTester {
     void testErrorScenario() throws Throwable {
         try {
             contract.performTransaction(
-                    new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).get();
+                    new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send();
         } catch (InterruptedException e) {
             throw e;
         } catch (ExecutionException e) {
@@ -284,17 +285,17 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     private Contract deployContract(TransactionReceipt transactionReceipt)
-            throws ExecutionException, InterruptedException, IOException {
+            throws Exception {
 
         prepareTransaction(transactionReceipt);
 
         String encodedConstructor = FunctionEncoder.encodeConstructor(
                 Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
 
-        return TestContract.deployAsync(
+        return TestContract.deployRemoteCall(
                 TestContract.class, web3j, SampleKeys.CREDENTIALS,
                 ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
-                "0xcafed00d", encodedConstructor, BigInteger.ZERO).get();
+                "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
     }
 
     private void prepareEthGetCode(String binary) throws IOException {
@@ -323,30 +324,30 @@ public class ContractTest extends ManagedTransactionTester {
                     gasLimit);
         }
 
-        public Future<Utf8String> callSingleValue() {
+        public RemoteCall<Utf8String> callSingleValue() {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                     }));
-            return executeCallSingleValueReturnAsync(function);
+            return executeRemoteCallSingleValueReturn(function);
         }
 
-        public Future<List<Type>> callMultipleValue()
+        public RemoteCall<List<Type>> callMultipleValue()
                 throws ExecutionException, InterruptedException {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(
                             new TypeReference<Uint256>() { },
                             new TypeReference<Uint256>() { }));
-            return executeCallMultipleValueReturnAsync(function);
+            return executeRemoteCallMultipleValueReturn(function);
         }
 
-        public Future<TransactionReceipt> performTransaction(
+        public RemoteCall<TransactionReceipt> performTransaction(
                 Address address, Uint256 amount) {
             Function function = new Function("approve",
                     Arrays.<Type>asList(address, amount),
                     Collections.<TypeReference<?>>emptyList());
-            return executeTransactionAsync(function);
+            return executeRemoteCallTransaction(function);
         }
 
         public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {

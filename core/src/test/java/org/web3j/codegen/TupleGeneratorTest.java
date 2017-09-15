@@ -16,17 +16,17 @@ import org.junit.Test;
 import org.web3j.TempFileProvider;
 
 import static org.junit.Assert.assertTrue;
-import static org.web3j.codegen.TuplesGenerator.CLASS_NAME;
-import static org.web3j.codegen.TuplesGenerator.LIMIT;
+import static org.web3j.codegen.TupleGenerator.CLASS_NAME;
+import static org.web3j.codegen.TupleGenerator.LIMIT;
 
-public class TuplesGeneratorTest extends TempFileProvider {
+public class TupleGeneratorTest extends TempFileProvider {
 
     @Test
     public void testTuplesGeneration() throws IOException {
-        TuplesGenerator.main(new String[] { tempDirPath });
+        TupleGenerator.main(new String[] { tempDirPath });
 
         String baseDir = tempDirPath + File.separatorChar
-                + TuplesGenerator.PACKAGE_NAME.replace('.', File.separatorChar);
+                + TupleGenerator.PACKAGE_NAME.replace('.', File.separatorChar);
 
         String fileNameBase = baseDir + File.separator + CLASS_NAME;
         List<String> fileNames = new ArrayList<>(LIMIT);
