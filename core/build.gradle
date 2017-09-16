@@ -9,9 +9,7 @@ dependencies {
             "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion",
             "org.slf4j:slf4j-api:$slf4jVersion",
             "io.reactivex:rxjava:$rxjavaVersion"
-    testCompile "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
-            "ch.qos.logback:logback-core:$logbackVersion",
-            "ch.qos.logback:logback-classic:$logbackVersion"
+    testCompile "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
 }
 
 task createProperties(dependsOn: processResources) << {
