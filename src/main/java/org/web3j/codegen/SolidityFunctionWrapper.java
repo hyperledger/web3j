@@ -527,20 +527,29 @@ public class SolidityFunctionWrapper {
         String type = trimStorageDeclaration(typeDeclaration);
 
         if (type.endsWith("]")) {
-            String[] splitType = type.split("\\[");
+            String[] splitType = type.split("[\\[\\]]");
             Class<?> baseType = AbiTypes.getType(splitType[0]);
 
             TypeName typeName;
-            if (splitType[1].length() == 1) {
+            if (splitType.length == 1) {
                 typeName = ParameterizedTypeName.get(DynamicArray.class, baseType);
             } else {
-                // Unfortunately we can't encode it's length as a type
-                typeName = ParameterizedTypeName.get(StaticArray.class, baseType);
+                Class<?> rawType = getStaticArrayTypeReferenceClass(splitType);
+                typeName = ParameterizedTypeName.get(rawType, baseType);
             }
             return typeName;
         } else {
             Class<?> cls = AbiTypes.getType(type);
             return ClassName.get(cls);
+        }
+    }
+
+    private static Class<?> getStaticArrayTypeReferenceClass(String[] splitType) {
+        try {
+            return Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + splitType[1]);
+        } catch (ClassNotFoundException e) {
+            // Unfortunately we can't encode it's length as a type if it's > 32.
+            return StaticArray.class;
         }
     }
 

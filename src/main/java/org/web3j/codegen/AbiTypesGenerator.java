@@ -5,17 +5,22 @@ import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import javax.lang.model.element.Modifier;
 
+import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.Fixed;
 import org.web3j.abi.datatypes.Int;
+import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
@@ -48,6 +53,7 @@ public class AbiTypesGenerator {
         generateFixedTypes(Fixed.class, path);
         generateFixedTypes(Ufixed.class, path);
         generateBytesTypes(Bytes.class, path);
+        generateStaticArrayTypes(StaticArray.class, path);
     }
 
     private <T extends Type> void generateIntTypes(
@@ -116,14 +122,14 @@ public class AbiTypesGenerator {
                         .build();
 
                 className = ClassName.get(packageName,
-                                          superclass.getSimpleName() + mBitSize + "x" + nBitSize);
+                        superclass.getSimpleName() + mBitSize + "x" + nBitSize);
 
                 FieldSpec defaultFieldSpec = FieldSpec
                         .builder(className,
-                                 DEFAULT,
-                                 Modifier.PUBLIC,
-                                 Modifier.STATIC,
-                                 Modifier.FINAL)
+                                DEFAULT,
+                                Modifier.PUBLIC,
+                                Modifier.STATIC,
+                                Modifier.FINAL)
                         .initializer("new $T(BigInteger.ZERO)", className)
                         .build();
 
@@ -169,6 +175,45 @@ public class AbiTypesGenerator {
                     .addModifiers(Modifier.PUBLIC)
                     .addField(defaultFieldSpec)
                     .addMethod(constructorSpec)
+                    .build();
+
+            write(packageName, bytesType, path);
+        }
+    }
+
+    private <T extends Type> void generateStaticArrayTypes(
+            Class<T> superclass, Path path) throws IOException {
+        String packageName = createPackageName(superclass);
+        ClassName className;
+
+        for (int byteSize = 1; byteSize <= 32; byteSize++) {
+
+            TypeVariableName typeVariableName = TypeVariableName.get("T").withBounds(Type.class);
+
+            MethodSpec constructorSpec = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(ParameterizedTypeName.get(ClassName.get(List.class),
+                            typeVariableName), "values")
+                    .addStatement("super($N)", "values")
+                    .build();
+
+            MethodSpec arrayOverloadConstructorSpec = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(ArrayTypeName.of(typeVariableName), "values")
+                    .varargs()
+                    .addStatement("super($N)", "values")
+                    .build();
+
+            className = ClassName.get(packageName, superclass.getSimpleName() + byteSize);
+
+            TypeSpec bytesType = TypeSpec
+                    .classBuilder(className.simpleName())
+                    .addTypeVariable(typeVariableName)
+                    .addJavadoc(CODEGEN_WARNING)
+                    .superclass(ParameterizedTypeName.get(ClassName.get(superclass),
+                            typeVariableName))
+                    .addModifiers(Modifier.PUBLIC)
+                    .addMethods(Arrays.asList(constructorSpec, arrayOverloadConstructorSpec))
                     .build();
 
             write(packageName, bytesType, path);
