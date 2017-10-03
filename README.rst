@@ -61,13 +61,32 @@ It has seven runtime dependencies:
 - `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_ and
+- `Bouncy Castle <https://www.bouncycastle.org/>`_
+  (`Spongy Castle for Android <https://rtyley.github.io/spongycastle/>`_) and
   `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
 - `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
 - `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
 
 Full project documentation is available at
 `Read the Docs <http://docs.web3j.io>`_.
+
+
+Donate
+------
+
+You can help fund the development of web3j by donating to the following wallet addresses:
+
++----------+--------------------------------------------+
+| Ethereum | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
++----------+--------------------------------------------+
+| Bitcoin  | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
++----------+--------------------------------------------+
+
+
+Commercial support and training
+-------------------------------
+
+Commercial support and training is available from `blk.io <https://blk.io>`_.
 
 
 Getting started
@@ -85,7 +104,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>2.2.2</version>
+     <version>2.3.1</version>
    </dependency>
 
 Android:
@@ -105,7 +124,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:2.2.2')
+   compile ('org.web3j:core:2.3.1')
 
 Android:
 

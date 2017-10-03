@@ -1,0 +1,4 @@
+
+dependencies {
+    compile project(':core'), "com.squareup:javapoet:$javapoetVersion"
+}

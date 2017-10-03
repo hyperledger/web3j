@@ -1,0 +1,9 @@
+
+dependencies {
+    compile project(':core')
+    testCompile "ch.qos.logback:logback-core:$logbackVersion",
+            "ch.qos.logback:logback-classic:$logbackVersion"
+}
+
+// we don't want integration tests to run by default
+test.enabled = false

@@ -1,0 +1,36 @@
+import java.text.SimpleDateFormat
+
+dependencies {
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
+            "com.squareup:javapoet:$javapoetVersion",
+            "com.squareup.okhttp3:okhttp:$okhttpVersion",
+            "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
+            "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion",
+            "io.reactivex:rxjava:$rxjavaVersion"
+    testCompile "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
+}
+
+task createProperties(dependsOn: processResources) << {
+    // if resources dir is empty we need to create this ourselves
+    new File("$buildDir/resources/main/").mkdirs()
+
+    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+        Properties p = new Properties()
+        p['version'] = project.version.toString()
+        p['timestamp'] = getTimestamp()
+        p.store w, null
+    }
+}
+
+def getTimestamp() {
+    Date today = new Date()
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(today)
+}
+
+classes {
+    dependsOn createProperties
+}

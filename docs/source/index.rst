@@ -49,6 +49,25 @@ It has seven runtime dependencies:
 - `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
 
 
+Donate
+======
+
+You can help fund the development of web3j by donating to the following wallet addresses:
+
++----------+--------------------------------------------+
+| Ethereum | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
++----------+--------------------------------------------+
+| Bitcoin  | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
++----------+--------------------------------------------+
+
+
+Commercial support and training
+===============================
+
+Commercial support and training is available from `blk.io <https://blk.io>`_.
+
+
+
 Contents:
 =========
 

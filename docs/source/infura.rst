@@ -13,8 +13,8 @@ relevant Ethereum network:
 Main Ethereum Network:
   https://mainnet.infura.io/your-token
 
-Test Ethereum Network (Morden):
-  https://morden.infura.io/your-token
+Test Ethereum Network (Ropsten):
+  https://ropsten.infura.io/your-token
 
 If you need some Ether on testnet to get started, please post a message with your wallet address
 to the `web3j Gitter channel <https://gitter.im/web3j/web3j>`_ and I'll send you some.

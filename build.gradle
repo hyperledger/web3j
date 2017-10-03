@@ -1,9 +1,23 @@
-import java.text.SimpleDateFormat
 
 buildscript {
+    ext.bouncycastleVersion = '1.54'
+    ext.jacksonVersion = '2.8.5'
+    ext.javapoetVersion = '1.7.0'
+    ext.jnr_unixsocketVersion = '0.15'
+    ext.okhttpVersion = '3.8.1'
+    ext.rxjavaVersion = '1.2.4'
+    ext.slf4jVersion = '1.7.25'
+
+    // test dependencies
+    ext.equalsverifierVersion = '2.1.7'
+    ext.junitVersion = '4.11'
+    ext.logbackVersion = '1.2.3'
+    ext.mockitoVersion = '1.10.19'
+
     repositories {
         mavenCentral()
     }
+
     dependencies {
         classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
@@ -15,256 +29,219 @@ plugins {
 }
 
 apply plugin: 'java'
-// Required for JFrog Artifactory repository
-apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
-
-// Required for Maven Nexus repository
-apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'idea'
+// should only be applied to the root project, see
+// https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
 apply plugin: 'io.codearte.nexus-staging'
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'application'
-apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
 
-group 'org.web3j'
-version '2.2.2'
+allprojects {
 
-sourceCompatibility = 1.8
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-// We don't want any compiler warnings
-compileJava {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    group 'org.web3j'
+    version '3.0.0-alpha1'
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'checkstyle'
+
+    repositories {
+        mavenCentral()
+    }
+
+    // We don't want any compiler warnings
+    compileJava {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+    compileTestJava {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
+    jacoco {
+        toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+    }
+
+    tasks.withType(Test) {
+        reports.html.destination = file("${reporting.baseDir}/${name}")
+    }
+
+    checkstyle {
+        toolVersion = "7.7"
+        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+    }
 }
-compileTestJava {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+
+subprojects {
+    apply plugin: 'java'
+
+    dependencies {
+        testCompile "junit:junit:$junitVersion",
+                    "org.mockito:mockito-core:$mockitoVersion"
+    }
 }
 
-jacoco {
-    toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
+configure(subprojects.findAll {it.name != 'integration-tests'}) {
+    // Required for Maven Nexus repository
+    apply plugin: 'maven'
+
+    // Required for JFrog Artifactory repository
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task testJar(type: Jar) {
+        classifier = 'tests'
+        from sourceSets.test.output
+    }
+
+    artifacts {
+        archives sourcesJar, javadocJar, testJar
+    }
+
+    ext {
+        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
+        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifact sourcesJar {
+                    classifier 'sources'
+                }
+
+                artifact testJar {
+                    classifier 'tests'
+                }
+            }
+        }
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                    authentication(
+                            userName: ossrhUsername,
+                            password: ossrhPassword
+                    )
+                }
+
+                pom.project {
+                    name 'web3j'
+                    packaging 'jar'
+                    description 'web3j is a lightweight Java library for integration with Ethereum clients'
+                    url 'https://web3j.io'
+
+                    scm {
+                        connection 'scm:git:https://github.com/web3j/web3j.git'
+                        url 'https://github.com/web3j/web3j.git'
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'conor10'
+                            name 'Conor Svensson'
+                            email 'conor10@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    bintray {
+        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+        publications = ['mavenJava']
+        publish = true
+        pkg {
+            repo = 'maven'
+            name = 'org.web3j'
+            desc = 'web3j is a lightweight Java library for integration with Ethereum clients'
+            userOrg = 'web3j'
+            licenses = ['Apache-2.0']
+            issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
+            vcsUrl = 'https://github.com/web3j/web3j.git'
+            websiteUrl = 'https://web3j.io'
+            publicDownloadNumbers = true
+        }
+    }
+
+    task release {
+        dependsOn 'clean'
+        dependsOn 'build'
+        dependsOn 'uploadArchives'
+        dependsOn 'bintrayUpload'
+
+        tasks.findByName('build').mustRunAfter 'clean'
+        tasks.findByName('uploadArchives').mustRunAfter 'build'
+        tasks.findByName('bintrayUpload').mustRunAfter 'build'
+    }
 }
 
-jacocoTestReport {
+
+task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories =  files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
     reports {
-        xml.enabled true
+        xml.enabled = true
+    }
+
+    onlyIf = {
+        true
+    }
+
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
     }
 
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it,
-                    exclude: ['org/web3j/abi/datatypes/generated/**'])
+                    exclude: [
+                            'org/web3j/abi/datatypes/generated/**',
+                            'org/web3j/utils/tuples/generated/**'
+                    ])
         })
     }
-}
-
-ext {
-    ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
-    ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
-}
-
-repositories {
-    mavenCentral()
-    jcenter()  // Shadow resides on JCenter
-}
-
-// See https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/
-// exclude with: gradle clean build -x integrationTest
-sourceSets {
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/java')
-        }
-        resources.srcDir file('src/integration-test/resources')
-    }
-}
-
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-}
-
-dependencies {
-    compile 'org.apache.httpcomponents:httpclient:4.5.2',
-            'com.fasterxml.jackson.core:jackson-databind:2.8.5',
-            'org.bouncycastle:bcprov-jdk15on:1.54',
-            'com.lambdaworks:scrypt:1.4.0',
-            'com.squareup:javapoet:1.7.0',
-            'io.reactivex:rxjava:1.2.4',
-            'com.github.jnr:jnr-unixsocket:0.15'
-    testCompile 'junit:junit:4.11',
-            'org.mockito:mockito-core:1.10.19',
-            'nl.jqno.equalsverifier:equalsverifier:2.1.7'
-}
-
-
-task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }  // always run integration tests regardless of if up to date
-
-    // view status of integration tests
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
-check.dependsOn integrationTest
-integrationTest.mustRunAfter test
-
-tasks.withType(Test) {
-    reports.html.destination = file("${reporting.baseDir}/${name}")
-}
-
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task testJar(type: Jar) {
-    classifier = 'tests'
-    from sourceSets.test.output
-}
-
-task createProperties(dependsOn: processResources) << {
-    // if resources dir is empty we need to create this ourselves
-    new File("$buildDir/resources/main/").mkdirs()
-
-    new File("$buildDir/resources/main/version.properties").withWriter { w ->
-        Properties p = new Properties()
-        p['version'] = project.version.toString()
-        p['timestamp'] = getTimestamp()
-        p.store w, null
-    }
-}
-
-def getTimestamp() {
-    Date today = new Date()
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z")
-    df.setTimeZone(TimeZone.getTimeZone("UTC"))
-    return df.format(today)
-}
-
-classes {
-    dependsOn createProperties
-}
-
-checkstyle {
-    toolVersion = "7.7"
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-
-            artifact sourcesJar {
-                classifier 'sources'
-            }
-
-            artifact testJar {
-                classifier 'tests'
-            }
-        }
-    }
-}
-
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    publications = ['mavenJava']
-    publish = true
-    pkg {
-        repo = 'maven'
-        name = 'org.web3j'
-        desc = 'web3j is a lightweight Java library for integration with Ethereum clients'
-        userOrg = 'web3j'
-        licenses = ['Apache-2.0']
-        issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
-        vcsUrl = 'https://github.com/web3j/web3j.git'
-        websiteUrl = 'https://web3j.io'
-        publicDownloadNumbers = true
-    }
-}
-
-
-artifacts {
-    archives sourcesJar, javadocJar, testJar
 }
 
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
     sign configurations.archives
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(
-                        userName: ossrhUsername,
-                        password: ossrhPassword
-                )
-            }
-
-            pom.project {
-                name 'web3j'
-                packaging 'jar'
-                description 'web3j is a lightweight Java library for integration with Ethereum clients'
-                url 'https://web3j.io'
-
-                scm {
-                    connection 'scm:git:https://github.com/web3j/web3j.git'
-                    url 'https://github.com/web3j/web3j.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'conor10'
-                        name 'Conor Svensson'
-                        email 'conor10@gmail.com'
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Build command line library release with target distShadowZip
-mainClassName = 'org.web3j.console.Runner'
-applicationName = 'web3j'
-
-
-task release {
-    // remove once integration tests are running as part of the build
-    check.dependsOn.remove(integrationTest)
-
-    dependsOn 'clean'
-    dependsOn 'build'
-    dependsOn 'uploadArchives'
-    dependsOn 'closeAndPromoteRepository'
-    dependsOn 'bintrayUpload'
-
-    tasks.findByName('build').mustRunAfter 'clean'
-
-    tasks.findByName('uploadArchives').mustRunAfter 'build'
-    tasks.findByName('closeAndPromoteRepository').mustRunAfter 'uploadArchives'
-
-    tasks.findByName('bintrayUpload').mustRunAfter 'build'
 }

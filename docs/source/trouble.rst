@@ -94,3 +94,21 @@ text.
 The following StackExchange
 `post <http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address>`_
 is useful for background.
+
+
+Do you have a project donation address?
+---------------------------------------
+
+Absolutely, you can contribute Bitcoin or Ether to help fund the development of web3j.
+
++----------+--------------------------------------------+
+| Ethereum | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
++----------+--------------------------------------------+
+| Bitcoin  | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
++----------+--------------------------------------------+
+
+
+Where can I get commercial support for web3j?
+---------------------------------------------
+
+Commercial support and training is available from `blk.io <https://blk.io>`_.

@@ -1,2 +1,6 @@
-rootProject.name = 'core'
+rootProject.name = 'base'
+include 'codegen'
+include 'core'
+include 'console'
+include 'integration-tests'
 
