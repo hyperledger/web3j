@@ -87,6 +87,43 @@ public class JsonRpc2_0RxTest {
     }
 
     @Test
+    public void testReplayBlocksDescendingObservable() throws Exception {
+
+        List<EthBlock> ethBlocks = Arrays.asList(createBlock(2), createBlock(1), createBlock(0));
+
+        OngoingStubbing<EthBlock> stubbing =
+                when(web3jService.send(any(Request.class), eq(EthBlock.class)));
+        for (EthBlock ethBlock : ethBlocks) {
+            stubbing = stubbing.thenReturn(ethBlock);
+        }
+
+        Observable<EthBlock> observable = web3j.replayBlocksObservable(
+                new DefaultBlockParameterNumber(BigInteger.ZERO),
+                new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
+                false, false);
+
+        CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
+        CountDownLatch completedLatch = new CountDownLatch(1);
+
+        List<EthBlock> results = new ArrayList<>(ethBlocks.size());
+        Subscription subscription = observable.subscribe(
+                result -> {
+                    results.add(result);
+                    transactionLatch.countDown();
+                },
+                throwable -> fail(throwable.getMessage()),
+                () -> completedLatch.countDown());
+
+        transactionLatch.await(1, TimeUnit.SECONDS);
+        assertThat(results, equalTo(ethBlocks));
+
+        subscription.unsubscribe();
+
+        completedLatch.await(1, TimeUnit.SECONDS);
+        assertTrue(subscription.isUnsubscribed());
+    }
+
+    @Test
     public void testCatchUpToLatestAndSubscribeToNewBlockObservable() throws Exception {
         List<EthBlock> expected = Arrays.asList(
                 createBlock(0), createBlock(1), createBlock(2),

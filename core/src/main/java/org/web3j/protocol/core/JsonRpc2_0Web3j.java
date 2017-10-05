@@ -789,6 +789,14 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
+    public Observable<EthBlock> replayBlocksObservable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects, boolean ascending) {
+        return web3jRx.replayBlocksObservable(startBlock, endBlock,
+                fullTransactionObjects, ascending);
+    }
+
+    @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
             replayTransactionsObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
