@@ -96,15 +96,27 @@ public class JsonRpc2_0Rx {
     public Observable<EthBlock> replayBlocksObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects) {
+        return replayBlocksObservable(startBlock, endBlock, fullTransactionObjects, true);
+    }
+
+    public Observable<EthBlock> replayBlocksObservable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects, boolean ascending) {
         // We use a scheduler to ensure this Observable runs asynchronously for users to be
         // consistent with the other Observables
-        return replayBlocksObservableSync(startBlock, endBlock, fullTransactionObjects)
+        return replayBlocksObservableSync(startBlock, endBlock, fullTransactionObjects, ascending)
                 .subscribeOn(scheduler);
     }
 
     private Observable<EthBlock> replayBlocksObservableSync(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects) {
+        return replayBlocksObservableSync(startBlock, endBlock, fullTransactionObjects, true);
+    }
+
+    private Observable<EthBlock> replayBlocksObservableSync(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects, boolean ascending) {
 
         BigInteger startBlockNumber = null;
         BigInteger endBlockNumber = null;
@@ -115,9 +127,17 @@ public class JsonRpc2_0Rx {
             Observable.error(e);
         }
 
-        return Observables.range(startBlockNumber, endBlockNumber)
-                .flatMap(i -> web3j.ethGetBlockByNumber(
-                        new DefaultBlockParameterNumber(i), fullTransactionObjects).observable());
+        if (ascending) {
+            return Observables.range(startBlockNumber, endBlockNumber)
+                    .flatMap(i -> web3j.ethGetBlockByNumber(
+                            new DefaultBlockParameterNumber(i),
+                            fullTransactionObjects).observable());
+        } else {
+            return Observables.range(startBlockNumber, endBlockNumber, false)
+                    .flatMap(i -> web3j.ethGetBlockByNumber(
+                            new DefaultBlockParameterNumber(i),
+                            fullTransactionObjects).observable());
+        }
     }
 
     public Observable<Transaction> replayTransactionsObservable(
