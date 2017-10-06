@@ -96,6 +96,33 @@ The following StackExchange
 is useful for background.
 
 
+I've generated my smart contract wrapper, but the binary for the smart contract is empty?
+-----------------------------------------------------------------------------------------
+
+If you have defined an interface in Solidity, but one of your method implementations doesn't
+match the original interface definitions, the produced binary will be blank.
+
+In the following example:
+
+   contract Web3jToken is ERC20Basic, Ownable {
+       ...
+       function transfer(address _from, address _to, uint256 _value) onlyOwner returns (bool) {
+       ...
+   }
+
+We forgot to define the *from* parameter in one of the inherited contracts.
+
+   contract ERC20Basic {
+       ...
+       function transfer(address to, uint256 value) returns (bool);
+       ...
+   }
+
+The Solidity compiler will not complain about this, however, the produced binary file for the
+Web3jToken will be blank.
+
+
+
 Do you have a project donation address?
 ---------------------------------------
 

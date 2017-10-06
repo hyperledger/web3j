@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.protocol.exceptions.TransactionException;
 
 
 /**
@@ -34,7 +34,7 @@ public abstract class ManagedTransaction {
 
     protected TransactionReceipt send(
             String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit)
-            throws InterruptedException, IOException, TransactionTimeoutException {
+            throws IOException, TransactionException {
 
         return transactionManager.executeTransaction(
                 gasPrice, gasLimit, to, data, value);

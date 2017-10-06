@@ -1,5 +1,7 @@
 package org.web3j.abi;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +95,29 @@ public class Utils {
         result.addAll(input.stream()
                 .map(typeReference -> (TypeReference<Type>) typeReference)
                 .collect(Collectors.toList()));
+        return result;
+    }
+
+    public static <T, R extends Type<T>> List<R> typeMap(List<T> input, Class<R> destType)
+            throws TypeMappingException {
+
+        List<R> result = new ArrayList<R>(input.size());
+
+        if (!input.isEmpty()) {
+            try {
+                Constructor<R> constructor = destType.getDeclaredConstructor(
+                        input.get(0).getClass());
+                for (T value : input) {
+                    result.add(constructor.newInstance(value));
+                }
+            } catch (NoSuchMethodException
+                    | IllegalAccessException
+                    | InvocationTargetException
+                    | InstantiationException e) {
+                throw new TypeMappingException(e);
+            }
+        }
+
         return result;
     }
 }

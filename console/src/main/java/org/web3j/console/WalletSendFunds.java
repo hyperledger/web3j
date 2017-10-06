@@ -1,6 +1,7 @@
 package org.web3j.console;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -10,7 +11,7 @@ import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.infura.InfuraHttpService;
 import org.web3j.tx.Transfer;
@@ -107,8 +108,9 @@ public class WalletSendFunds extends WalletManager {
 
         console.printf("Commencing transfer (this may take a few minutes) ");
         try {
-            Future<TransactionReceipt> future = Transfer.sendFundsAsync(
-                    web3j, credentials, destinationAddress, amountInWei, Convert.Unit.WEI);
+            Future<TransactionReceipt> future = Transfer.sendFunds(
+                    web3j, credentials, destinationAddress, amountInWei, Convert.Unit.WEI)
+                    .sendAsync();
 
             while (!future.isDone()) {
                 console.printf(".");
@@ -116,7 +118,7 @@ public class WalletSendFunds extends WalletManager {
             }
             console.printf("$%n%n");
             return future.get();
-        } catch (InterruptedException | ExecutionException | TransactionTimeoutException e) {
+        } catch (InterruptedException | ExecutionException | TransactionException | IOException e) {
             exitError("Problem encountered transferring funds: \n" + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");

@@ -6,13 +6,13 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
@@ -24,7 +24,7 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Numeric;
 
 
@@ -139,8 +139,6 @@ public abstract class Contract extends ManagedTransaction {
      *
      * @param function to call
      * @return {@link List} of values returned by function call
-     * @throws InterruptedException if async call is interrupted
-     * @throws ExecutionException if async call throws an exception
      */
     private List<Type> executeCall(
             Function function) throws IOException {
@@ -155,7 +153,7 @@ public abstract class Contract extends ManagedTransaction {
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 
-    private <T extends Type> T executeCallSingleValueReturn(
+    protected <T extends Type> T executeCallSingleValueReturn(
             Function function) throws IOException {
         List<Type> values = executeCall(function);
         if (!values.isEmpty()) {
@@ -165,20 +163,33 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
-    private List<Type> executeCallMultipleValueReturn(
+    protected <T extends Type, R> R executeCallSingleValueReturn(
+            Function function, Class<R> returnType) throws IOException {
+        T result = executeCallSingleValueReturn(function);
+        Object value = result.getValue();
+        if (returnType.isAssignableFrom(value.getClass())) {
+            return (R) value;
+        } else if (result.getClass().equals(Address.class) && returnType.equals(String.class)) {
+            return (R) result.toString();  // cast isn't necessary
+        } else {
+            return null;
+        }
+    }
+
+    protected List<Type> executeCallMultipleValueReturn(
             Function function) throws IOException {
         return executeCall(function);
     }
 
-    private TransactionReceipt executeTransaction(
-            Function function) throws InterruptedException,
-            IOException, TransactionTimeoutException {
+    protected TransactionReceipt executeTransaction(
+            Function function)
+            throws IOException, TransactionException {
         return executeTransaction(function, BigInteger.ZERO);
     }
 
     private TransactionReceipt executeTransaction(
-            Function function, BigInteger weiValue) throws InterruptedException,
-            IOException, TransactionTimeoutException {
+            Function function, BigInteger weiValue)
+            throws IOException, TransactionException {
         return executeTransaction(FunctionEncoder.encode(function), weiValue);
     }
 
@@ -188,20 +199,23 @@ public abstract class Contract extends ManagedTransaction {
      * @param data  to send in transaction
      * @param weiValue in Wei to send in transaction
      * @return {@link Optional} containing our transaction receipt
-     * @throws InterruptedException        if the current thread was interrupted
-     *                                     while waiting
      * @throws IOException                 if the call to the node fails
-     * @throws TransactionTimeoutException if the transaction was not mined while waiting
+     * @throws TransactionException if the transaction was not mined while waiting
      */
     TransactionReceipt executeTransaction(
             String data, BigInteger weiValue)
-            throws InterruptedException, IOException, TransactionTimeoutException {
+            throws TransactionException, IOException {
 
         return send(contractAddress, data, weiValue, gasPrice, gasLimit);
     }
 
     protected <T extends Type> RemoteCall<T> executeRemoteCallSingleValueReturn(Function function) {
         return new RemoteCall<>(() -> executeCallSingleValueReturn(function));
+    }
+
+    protected <T> RemoteCall<T> executeRemoteCallSingleValueReturn(
+            Function function, Class<T> returnType) {
+        return new RemoteCall<>(() -> executeCallSingleValueReturn(function, returnType));
     }
 
     protected RemoteCall<List<Type>> executeRemoteCallMultipleValueReturn(Function function) {
@@ -219,7 +233,7 @@ public abstract class Contract extends ManagedTransaction {
 
     private static <T extends Contract> T create(
             T contract, String binary, String encodedConstructor, BigInteger value)
-            throws InterruptedException, IOException, TransactionTimeoutException {
+            throws IOException, TransactionException {
         TransactionReceipt transactionReceipt =
                 contract.executeTransaction(binary + encodedConstructor, value);
 
@@ -233,40 +247,50 @@ public abstract class Contract extends ManagedTransaction {
         return contract;
     }
 
-    private static <T extends Contract> T deploy(
+    protected static <T extends Contract> T deploy(
             Class<T> type,
             Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger value) throws Exception {
+            String binary, String encodedConstructor, BigInteger value) throws
+            IOException, TransactionException {
 
-        Constructor<T> constructor = type.getDeclaredConstructor(
-                String.class,
-                Web3j.class, Credentials.class,
-                BigInteger.class, BigInteger.class);
-        constructor.setAccessible(true);
+        try {
+            Constructor<T> constructor = type.getDeclaredConstructor(
+                    String.class,
+                    Web3j.class, Credentials.class,
+                    BigInteger.class, BigInteger.class);
+            constructor.setAccessible(true);
 
-        // we want to use null here to ensure that "to" parameter on message is not populated
-        T contract = constructor.newInstance(null, web3j, credentials, gasPrice, gasLimit);
+            // we want to use null here to ensure that "to" parameter on message is not populated
+            T contract = constructor.newInstance(null, web3j, credentials, gasPrice, gasLimit);
 
-        return create(contract, binary, encodedConstructor, value);
+            return create(contract, binary, encodedConstructor, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static <T extends Contract> T deploy(
+    protected static <T extends Contract> T deploy(
             Class<T> type,
             Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger value) throws Exception {
+            String binary, String encodedConstructor, BigInteger value)
+            throws IOException, TransactionException {
 
-        Constructor<T> constructor = type.getDeclaredConstructor(
-                String.class,
-                Web3j.class, TransactionManager.class,
-                BigInteger.class, BigInteger.class);
-        constructor.setAccessible(true);
+        try {
+            Constructor<T> constructor = type.getDeclaredConstructor(
+                    String.class,
+                    Web3j.class, TransactionManager.class,
+                    BigInteger.class, BigInteger.class);
+            constructor.setAccessible(true);
 
-        // we want to use null here to ensure that "to" parameter on message is not populated
-        T contract = constructor.newInstance(null, web3j, transactionManager, gasPrice, gasLimit);
-
-        return create(contract, binary, encodedConstructor, value);
+            // we want to use null here to ensure that "to" parameter on message is not populated
+            T contract = constructor.newInstance(
+                    null, web3j, transactionManager, gasPrice, gasLimit);
+            return create(contract, binary, encodedConstructor, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected static <T extends Contract> RemoteCall<T> deployRemoteCall(

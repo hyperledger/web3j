@@ -25,21 +25,27 @@ public class SolidityFunctionWrapperGenerator {
             + "-p|--package <base package name> "
             + "-o|--output <destination base directory>";
 
+    static final String JAVA_TYPES_ARG = "--javaTypes";
+    static final String SOLIDITY_TYPES_ARG = "--solidityTypes";
+
     private String binaryFileLocation;
     private String absFileLocation;
     private File destinationDirLocation;
     private String basePackageName;
+    private boolean useJavaNativeTypes;
 
     private SolidityFunctionWrapperGenerator(
             String binaryFileLocation,
             String absFileLocation,
             String destinationDirLocation,
-            String basePackageName) {
+            String basePackageName,
+            boolean useJavaNativeTypes) {
 
         this.binaryFileLocation = binaryFileLocation;
         this.absFileLocation = absFileLocation;
         this.destinationDirLocation = new File(destinationDirLocation);
         this.basePackageName = basePackageName;
+        this.useJavaNativeTypes = useJavaNativeTypes;
     }
 
     public static void run(String[] args) throws Exception {
@@ -52,14 +58,32 @@ public class SolidityFunctionWrapperGenerator {
 
     public static void main(String[] args) throws Exception {
 
-        if (args.length != 6) {
+        String[] fullArgs;
+        if (args.length == 6) {
+            fullArgs = new String[args.length + 1];
+            fullArgs[0] = JAVA_TYPES_ARG;
+            System.arraycopy(args, 0, fullArgs, 1, args.length);
+        } else {
+            fullArgs = args;
+        }
+
+        if (fullArgs.length != 7) {
             exitError(USAGE);
         }
 
-        String binaryFileLocation = parsePositionalArg(args, 0);
-        String absFileLocation = parsePositionalArg(args, 1);
-        String destinationDirLocation = parseParameterArgument(args, "-o", "--outputDir");
-        String basePackageName = parseParameterArgument(args, "-p", "--package");
+        boolean useJavaNativeTypes = true;
+        if (fullArgs[0].equals(SOLIDITY_TYPES_ARG)) {
+            useJavaNativeTypes = false;
+        } else if (fullArgs[0].equals(JAVA_TYPES_ARG)) {
+            useJavaNativeTypes = true;
+        } else {
+            exitError(USAGE);
+        }
+
+        String binaryFileLocation = parsePositionalArg(fullArgs, 1);
+        String absFileLocation = parsePositionalArg(fullArgs, 2);
+        String destinationDirLocation = parseParameterArgument(fullArgs, "-o", "--outputDir");
+        String basePackageName = parseParameterArgument(fullArgs, "-p", "--package");
 
         if (binaryFileLocation.equals("")
                 || absFileLocation.equals("")
@@ -72,7 +96,8 @@ public class SolidityFunctionWrapperGenerator {
                 binaryFileLocation,
                 absFileLocation,
                 destinationDirLocation,
-                basePackageName)
+                basePackageName,
+                useJavaNativeTypes)
                 .generate();
     }
 
@@ -123,10 +148,9 @@ public class SolidityFunctionWrapperGenerator {
         if (functionDefinitions.isEmpty()) {
             exitError("Unable to parse input ABI file");
         } else {
-
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            new SolidityFunctionWrapper().generateJavaFiles(
+            new SolidityFunctionWrapper(useJavaNativeTypes).generateJavaFiles(
                     contractName, binary, abi, destinationDirLocation.toString(), basePackageName);
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }

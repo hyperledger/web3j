@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,7 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -226,7 +225,7 @@ public class ContractTest extends ManagedTransactionTester {
                 equalTo(Collections.singletonList(new Uint256(BigInteger.ONE))));
     }
 
-    @Test(expected = TransactionTimeoutException.class)
+    @Test(expected = TransactionException.class)
     public void testTimeout() throws Throwable {
         prepareTransaction(null);
 

@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.web3j.utils.Collection;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Collection.EMPTY_STRING_ARRAY;
@@ -65,7 +63,6 @@ public class CollectionTest {
                 new FakeSpec(" c "));
         assertThat(join(specs4, ", ", FakeSpec::getName), is("a, b, c"));
     }
-
 
     /**
      * Fake object to test {@link Collection#join(List, String, Function)}.

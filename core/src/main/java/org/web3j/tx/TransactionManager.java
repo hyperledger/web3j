@@ -8,7 +8,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.protocol.exceptions.TransactionException;
 
 /**
  * Transaction manager abstraction for executing transactions with Ethereum client via
@@ -39,7 +39,7 @@ public abstract class TransactionManager {
     TransactionReceipt executeTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
-            throws InterruptedException, IOException, TransactionTimeoutException {
+            throws IOException, TransactionException {
 
         EthSendTransaction ethSendTransaction = sendTransaction(
                 gasPrice, gasLimit, to, data, value);
@@ -54,7 +54,7 @@ public abstract class TransactionManager {
     public abstract String getFromAddress();
 
     private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
-            throws InterruptedException, IOException, TransactionTimeoutException {
+            throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
             throw new RuntimeException("Error processing transaction request: "
                     + transactionResponse.getError().getMessage());
@@ -65,39 +65,43 @@ public abstract class TransactionManager {
         return waitForTransactionReceipt(transactionHash);
     }
 
-    private TransactionReceipt waitForTransactionReceipt(
+    TransactionReceipt waitForTransactionReceipt(
             String transactionHash)
-            throws InterruptedException, IOException, TransactionTimeoutException {
+            throws IOException, TransactionException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
     private TransactionReceipt getTransactionReceipt(
             String transactionHash, int sleepDuration, int attempts)
-            throws IOException, InterruptedException, TransactionTimeoutException {
+            throws IOException, TransactionException {
 
         Optional<TransactionReceipt> receiptOptional =
                 sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
-                Thread.sleep(sleepDuration);
+                try {
+                    Thread.sleep(sleepDuration);
+                } catch (InterruptedException e) {
+                    throw new TransactionException(e);
+                }
                 receiptOptional = sendTransactionReceiptRequest(transactionHash);
             } else {
                 return receiptOptional.get();
             }
         }
 
-        throw new TransactionTimeoutException("Transaction receipt was not generated after "
+        throw new TransactionException("Transaction receipt was not generated after "
                 + ((sleepDuration * attempts) / 1000
                 + " seconds for transaction: " + transactionHash));
     }
 
     private Optional<TransactionReceipt> sendTransactionReceiptRequest(
-            String transactionHash) throws IOException {
+            String transactionHash) throws IOException, TransactionException {
         EthGetTransactionReceipt transactionReceipt =
                 web3j.ethGetTransactionReceipt(transactionHash).send();
         if (transactionReceipt.hasError()) {
-            throw new RuntimeException("Error processing request: "
+            throw new TransactionException("Error processing request: "
                     + transactionReceipt.getError().getMessage());
         }
 
