@@ -14,6 +14,7 @@ import org.web3j.TempFileProvider;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.StaticArray10;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
@@ -58,6 +59,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 is(ParameterizedTypeName.get(DynamicArray.class, Uint256.class)));
 
         assertThat(buildTypeName("uint256[10]"),
+                is(ParameterizedTypeName.get(StaticArray10.class, Uint256.class)));
+
+        assertThat(buildTypeName("uint256[33]"),
                 is(ParameterizedTypeName.get(StaticArray.class, Uint256.class)));
     }
 
