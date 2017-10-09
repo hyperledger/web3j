@@ -26,7 +26,7 @@ public class Observables {
                                                boolean ascending) {
         if (startValue.compareTo(BigInteger.ZERO) == -1) {
             throw new IllegalArgumentException("Negative start index cannot be used");
-        } else if (startValue.compareTo(endValue) > -1) {
+        } else if (startValue.compareTo(endValue) > 0) {
             throw new IllegalArgumentException(
                     "Negative start index cannot be greater then end index");
         }
