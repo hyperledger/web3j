@@ -66,7 +66,8 @@ public class SendEtherIT extends Scenario {
     @Test
     public void testTransfer() throws Exception {
         TransactionReceipt transactionReceipt = Transfer.sendFunds(
-                parity, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER);
+                parity, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER)
+                .send();
         assertFalse(transactionReceipt.getBlockHash().isEmpty());
     }
 }

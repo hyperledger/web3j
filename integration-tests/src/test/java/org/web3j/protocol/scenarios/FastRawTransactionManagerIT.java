@@ -51,9 +51,9 @@ public class FastRawTransactionManagerIT extends Scenario {
 
         for (int i = 0; i < COUNT; i++) {
 
-            Future<TransactionReceipt> transactionReceiptFuture = transfer.sendFundsAsync(
+            Future<TransactionReceipt> transactionReceiptFuture = transfer.sendFunds(
                     BOB.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.ETHER,
-                    gasPrice, Transfer.GAS_LIMIT);
+                    gasPrice, Transfer.GAS_LIMIT).sendAsync();
             transactionReceipts.add(transactionReceiptFuture);
         }
 

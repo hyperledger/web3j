@@ -24,6 +24,7 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.utils.Numeric;
 
 /**
@@ -52,6 +53,8 @@ public class TypeDecoder {
     static <T extends Type> T decode(String input, int offset, Class<T> type) {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
+        } else if (Address.class.isAssignableFrom(type)) {
+            return (T) decodeAddress(input.substring(offset));
         } else if (Bool.class.isAssignableFrom(type)) {
             return (T) decodeBool(input, offset);
         } else if (Bytes.class.isAssignableFrom(type)) {
@@ -84,6 +87,10 @@ public class TypeDecoder {
 
     static <T extends Type> T decode(String input, Class<T> type) {
         return decode(input, 0, type);
+    }
+
+    static Address decodeAddress(String input) {
+        return new Address(decodeNumeric(input, Uint160.class));
     }
 
     static <T extends NumericType> T decodeNumeric(String input, Class<T> type) {
@@ -130,8 +137,6 @@ public class TypeDecoder {
                 String[] bitsCounts = splitName[1].split("x");
                 return Integer.parseInt(bitsCounts[0]) + Integer.parseInt(bitsCounts[1]);
             }
-        } else if (Address.class.isAssignableFrom(type)) {
-            return Address.LENGTH;
         }
         return Type.MAX_BIT_LENGTH;
     }

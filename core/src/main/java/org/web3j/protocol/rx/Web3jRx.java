@@ -77,6 +77,22 @@ public interface Web3jRx {
             boolean fullTransactionObjects);
 
     /**
+     * Create an Observable that emits all blocks from the blockchain contained within the
+     * requested range.
+     *
+     * @param startBlock block number to commence with
+     * @param endBlock block number to finish with
+     * @param fullTransactionObjects if true, provides transactions embedded in blocks, otherwise
+     *                               transaction hashes
+     * @param ascending if true, emits blocks in ascending order between range, otherwise
+     *                  in descending order
+     * @return Observable to emit these blocks
+     */
+    Observable<EthBlock> replayBlocksObservable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
+            boolean fullTransactionObjects, boolean ascending);
+
+    /**
      * Create an Observable that emits all transactions from the blockchain contained within the
      * requested range.
      *

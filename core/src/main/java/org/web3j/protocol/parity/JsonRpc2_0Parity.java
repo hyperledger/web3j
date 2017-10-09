@@ -1,25 +1,34 @@
 package org.web3j.protocol.parity;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.JsonRpc2_0Personal;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.parity.methods.request.Derivation;
+import org.web3j.protocol.parity.methods.request.TraceFilter;
 import org.web3j.protocol.parity.methods.response.BooleanResponse;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
 import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
 import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
 import org.web3j.protocol.parity.methods.response.ParityExportAccount;
+import org.web3j.protocol.parity.methods.response.ParityFullTraceResponse;
 import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
+import org.web3j.protocol.parity.methods.response.ParityTraceGet;
+import org.web3j.protocol.parity.methods.response.ParityTracesResponse;
+import org.web3j.utils.Numeric;
 
 /**
  * JSON-RPC 2.0 factory implementation for Parity.
@@ -293,5 +302,83 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Personal implements Parity {
                 ID,
                 web3jService,
                 PersonalSign.class);
+    }
+    
+    // TRACE API
+    
+    @Override
+    public Request<?, ParityFullTraceResponse> traceCall(
+            Transaction transaction, List<String> traces, DefaultBlockParameter blockParameter) {
+        return new Request<>(
+            "trace_call",
+            Arrays.asList(transaction, traces, blockParameter),
+            ID,
+            web3jService,
+            ParityFullTraceResponse.class);
+    }
+    
+    @Override
+    public Request<?, ParityFullTraceResponse> traceRawTransaction(
+            String data, List<String> traceTypes) {
+        return new Request<>(
+            "trace_rawTransaction",
+            Arrays.asList(data, traceTypes),
+            ID,
+            web3jService,
+            ParityFullTraceResponse.class);
+    }
+    
+    @Override
+    public Request<?, ParityFullTraceResponse> traceReplayTransaction(
+            String hash, List<String> traceTypes) {
+        return new Request<>(
+            "trace_replayTransaction",
+            Arrays.asList(hash, traceTypes),
+            ID,
+            web3jService,
+            ParityFullTraceResponse.class);
+    }
+    
+    @Override
+    public Request<?, ParityTracesResponse> traceBlock(DefaultBlockParameter blockParameter) {
+        return new Request<>(
+            "trace_block",
+            Arrays.asList(blockParameter),
+            ID,
+            web3jService,
+            ParityTracesResponse.class);
+    }
+    
+    @Override
+    public Request<?, ParityTracesResponse> traceFilter(TraceFilter traceFilter) {
+        return new Request<>(
+            "trace_filter",
+            Arrays.asList(traceFilter),
+            ID,
+            web3jService,
+            ParityTracesResponse.class);
+    }
+    
+    @Override
+    public Request<?, ParityTraceGet> traceGet(String hash, List<BigInteger> indices) {
+        List<String> encodedIndices = indices.stream()
+                .map(Numeric::encodeQuantity)
+                .collect(Collectors.toList());
+        return new Request<>(
+            "trace_get",
+            Arrays.asList(hash, encodedIndices),
+            ID,
+            web3jService,
+            ParityTraceGet.class);
+    }
+
+    @Override
+    public Request<?, ParityTracesResponse> traceTransaction(String hash) {
+        return new Request<>(
+            "trace_transaction",
+            Arrays.asList(hash),
+            ID,
+            web3jService,
+            ParityTracesResponse.class);
     }
 }

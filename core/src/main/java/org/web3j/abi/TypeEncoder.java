@@ -3,6 +3,7 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
@@ -39,6 +40,8 @@ public class TypeEncoder {
     public static String encode(Type parameter) {
         if (parameter instanceof NumericType) {
             return encodeNumeric(((NumericType) parameter));
+        } else if (parameter instanceof Address) {
+            return encodeAddress((Address) parameter);
         } else if (parameter instanceof Bool) {
             return encodeBool((Bool) parameter);
         } else if (parameter instanceof Bytes) {
@@ -55,6 +58,10 @@ public class TypeEncoder {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
         }
+    }
+
+    static String encodeAddress(Address address) {
+        return encodeNumeric(address.toUint160());
     }
 
     static String encodeNumeric(NumericType numericType) {

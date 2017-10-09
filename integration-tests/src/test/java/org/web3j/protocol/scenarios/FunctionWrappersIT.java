@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Test Fibonacci contract generated wrappers.
  *
- * <p>Generated via running {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} with params:
+ * <p>Generated via running org.web3j.codegen.SolidityFunctionWrapperGenerator with params:
  * <em>project-home</em>/src/test/resources/solidity/fibonacci.abi -o
  * <em>project-home</em>/src/integration-test/java -p org.web3j.generated
  */
@@ -28,8 +28,8 @@ public class FunctionWrappersIT extends Scenario {
                 "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()),
                 ALICE, GAS_PRICE, GAS_LIMIT);
 
-        Uint256 result = fibonacci.fibonacci(new Uint256(BigInteger.valueOf(10))).send();
-        assertThat(result.getValue(), equalTo(BigInteger.valueOf(55)));
+        BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10));
+        assertThat(result, equalTo(BigInteger.valueOf(55)));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class FunctionWrappersIT extends Scenario {
                 ALICE, GAS_PRICE, GAS_LIMIT);
 
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(
-                new Uint256(BigInteger.valueOf(15))).send();
+                BigInteger.valueOf(15));
 
         Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 

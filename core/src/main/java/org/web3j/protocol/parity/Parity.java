@@ -22,7 +22,7 @@ import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
 /**
  * JSON-RPC Request object building factory for Parity.
  */
-public interface Parity extends Personal {
+public interface Parity extends Personal, Trace {
     static Parity build(Web3jService web3jService) {
         return new JsonRpc2_0Parity(web3jService);
     }
@@ -82,5 +82,5 @@ public interface Parity extends Personal {
     Request<?, BooleanResponse> parityTestPassword(String accountId, String password);
     
     Request<?, PersonalSign> paritySignMessage(
-            String accountId, String password, String hexMessage);    
+            String accountId, String password, String hexMessage);
 }

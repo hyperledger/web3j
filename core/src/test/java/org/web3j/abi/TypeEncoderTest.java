@@ -191,7 +191,7 @@ public class TypeEncoderTest {
     public void testAddress() {
         Address address = new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338");
         assertThat(address.getTypeAsString(), is("address"));
-        assertThat(TypeEncoder.encodeNumeric(address),
+        assertThat(TypeEncoder.encodeAddress(address),
                 is("000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"));
     }
 
