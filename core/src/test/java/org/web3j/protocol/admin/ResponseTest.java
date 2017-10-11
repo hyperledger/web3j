@@ -5,11 +5,11 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
+import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
-import org.web3j.protocol.parity.methods.response.BooleanResponse;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Parity/Geth Shared Protocol Response tests.
  */
-public class ResponseTest extends ResponseTester {    
+public class ResponseTest extends ResponseTester {
 
     @Test
     public void testBooleanResponse() {

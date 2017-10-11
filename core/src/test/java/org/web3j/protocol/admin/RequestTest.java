@@ -7,15 +7,14 @@ import org.junit.Test;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.parity.Parity;
 
 public class RequestTest extends RequestTester {
     
-    private Parity web3j;
+    private Admin web3j;
 
     @Override
     protected void initWeb3Client(HttpService httpService) {
-        web3j = Parity.build(httpService);
+        web3j = Admin.build(httpService);
     }
     
     @Test
@@ -72,5 +71,4 @@ public class RequestTest extends RequestTester {
                 + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"hunter2\",null],"
                 + "\"id\":1}");
     }
-    
 }

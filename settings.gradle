@@ -3,4 +3,7 @@ include 'codegen'
 include 'core'
 include 'console'
 include 'integration-tests'
+include 'infura'
+include 'parity'
+include 'geth'
 

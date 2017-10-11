@@ -1,6 +1,6 @@
 
 dependencies {
-    compile project(':core')
+    compile project(':core'), project(':parity')
     testCompile "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion"
 }

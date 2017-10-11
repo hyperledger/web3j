@@ -36,7 +36,6 @@ public class Scenario {
 
     // testnet
     private static final String WALLET_PASSWORD = "";
-
     /*
     If you want to use regular Ethereum wallet addresses, provide a WALLET address variable
     "0x..." // 20 bytes (40 hex characters) & replace instances of ALICE.getAddress() with this
