@@ -12,10 +12,10 @@ import org.web3j.abi.datatypes.Type;
  */
 public class StaticArray23<T extends Type> extends StaticArray<T> {
     public StaticArray23(List<T> values) {
-        super(values);
+        super(23, values);
     }
 
     public StaticArray23(T... values) {
-        super(values);
+        super(23, values);
     }
 }

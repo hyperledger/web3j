@@ -179,7 +179,7 @@ public class AbiTypesGenerator extends Generator {
         String packageName = createPackageName(superclass);
         ClassName className;
 
-        for (int byteSize = 1; byteSize <= 32; byteSize++) {
+        for (int length = 1; length <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY; length++) {
 
             TypeVariableName typeVariableName = TypeVariableName.get("T").withBounds(Type.class);
 
@@ -187,17 +187,17 @@ public class AbiTypesGenerator extends Generator {
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(ParameterizedTypeName.get(ClassName.get(List.class),
                             typeVariableName), "values")
-                    .addStatement("super($N)", "values")
+                    .addStatement("super($L, $N)", length, "values")
                     .build();
 
             MethodSpec arrayOverloadConstructorSpec = MethodSpec.constructorBuilder()
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(ArrayTypeName.of(typeVariableName), "values")
                     .varargs()
-                    .addStatement("super($N)", "values")
+                    .addStatement("super($L, $N)", length, "values")
                     .build();
 
-            className = ClassName.get(packageName, superclass.getSimpleName() + byteSize);
+            className = ClassName.get(packageName, superclass.getSimpleName() + length);
 
             TypeSpec bytesType = TypeSpec
                     .classBuilder(className.simpleName())
