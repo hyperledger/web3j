@@ -156,7 +156,7 @@ public class TypeDecoder {
     static <T extends Bytes> T decodeBytes(String input, Class<T> type) {
         return decodeBytes(input, 0, type);
     }
-    
+
     static <T extends Bytes> T decodeBytes(String input, int offset, Class<T> type) {
         try {
             String simpleName = type.getSimpleName();
@@ -206,11 +206,22 @@ public class TypeDecoder {
             if (elements.isEmpty()) {
                 throw new UnsupportedOperationException("Zero length fixed array is invalid type");
             } else {
-                return (T) new StaticArray<>(elements);
+                return instantiateStaticArray(typeReference, elements);
             }
         };
 
         return decodeArrayElements(input, offset, typeReference, length, function);
+    }
+
+    private static <T extends Type> T instantiateStaticArray(
+            TypeReference<T> typeReference, List<T> elements) {
+        try {
+            Class<List> listClass = List.class;
+            return typeReference.getClassType().getConstructor(listClass).newInstance(elements);
+        } catch (ReflectiveOperationException e) {
+            //noinspection unchecked
+            return (T) new StaticArray<>(elements);
+        }
     }
 
     @SuppressWarnings("unchecked")

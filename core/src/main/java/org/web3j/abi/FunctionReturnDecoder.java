@@ -103,8 +103,14 @@ public class FunctionReturnDecoder {
                     result = TypeDecoder.decodeDynamicArray(
                             input, hexStringDataOffset, typeReference);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
-                } else if (StaticArray.class.isAssignableFrom(type)) {
+                } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
                     int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
+                    result = TypeDecoder.decodeStaticArray(
+                            input, hexStringDataOffset, typeReference, length);
+                    offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                } else if (StaticArray.class.isAssignableFrom(type)) {
+                    int length = Integer.parseInt(type.getSimpleName()
+                            .substring(StaticArray.class.getSimpleName().length()));
                     result = TypeDecoder.decodeStaticArray(
                             input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;

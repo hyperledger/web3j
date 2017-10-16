@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class Array<T extends Type> implements Type<List<T>> {
 
     private String type;
-    private List<T> value;
+    protected final List<T> value;
 
     Array(String type, T... values) {
         if (!valid(values, type)) {
