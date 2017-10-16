@@ -6,4 +6,5 @@ include 'integration-tests'
 include 'infura'
 include 'parity'
 include 'geth'
+include 'rlp'
 

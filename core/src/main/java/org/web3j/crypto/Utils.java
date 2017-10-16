@@ -1,11 +1,14 @@
-package org.web3j.rlp;
+package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.web3j.crypto.Hash;
+import org.web3j.rlp.RlpEncoder;
+import org.web3j.rlp.RlpList;
+import org.web3j.rlp.RlpString;
+import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
 /**

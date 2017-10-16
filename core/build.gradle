@@ -1,7 +1,8 @@
 import java.text.SimpleDateFormat
 
 dependencies {
-    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+    compile project(':rlp'),
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup:javapoet:$javapoetVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
