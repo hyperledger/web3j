@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;

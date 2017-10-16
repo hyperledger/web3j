@@ -5,8 +5,8 @@ import java.math.BigInteger;
 import org.junit.Test;
 
 import org.web3j.crypto.Hash;
+import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
-import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;

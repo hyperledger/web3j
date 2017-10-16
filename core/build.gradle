@@ -2,12 +2,12 @@ import java.text.SimpleDateFormat
 
 dependencies {
     compile project(':rlp'),
+            project(':abi'),
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup:javapoet:$javapoetVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
-            "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion",
             "org.slf4j:slf4j-api:$slf4jVersion",
             "io.reactivex:rxjava:$rxjavaVersion"
     testCompile "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
