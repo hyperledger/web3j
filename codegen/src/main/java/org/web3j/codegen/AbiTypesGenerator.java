@@ -38,8 +38,12 @@ public class AbiTypesGenerator extends Generator {
     private void generate(String destinationDir) throws IOException {
         generateIntTypes(Int.class, destinationDir);
         generateIntTypes(Uint.class, destinationDir);
-        generateFixedTypes(Fixed.class, destinationDir);
-        generateFixedTypes(Ufixed.class, destinationDir);
+
+        // TODO: Enable once Solidity supports fixed types - see
+        // https://github.com/ethereum/solidity/issues/409
+        // generateFixedTypes(Fixed.class, destinationDir);
+        // generateFixedTypes(Ufixed.class, destinationDir);
+
         generateBytesTypes(Bytes.class, destinationDir);
     }
 

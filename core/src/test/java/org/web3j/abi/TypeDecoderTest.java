@@ -13,15 +13,12 @@ import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Fixed;
 import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes1;
 import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.abi.datatypes.generated.Bytes6;
-import org.web3j.abi.datatypes.generated.Fixed24x40;
 import org.web3j.abi.datatypes.generated.Int256;
 import org.web3j.abi.datatypes.generated.Int64;
-import org.web3j.abi.datatypes.generated.Ufixed24x40;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 
@@ -116,6 +113,10 @@ public class TypeDecoderTest {
                 is(new Int256(BigInteger.valueOf(-1))));
     }
 
+    /*
+    TODO: Enable once Solidity supports fixed types - see
+    https://github.com/ethereum/solidity/issues/409
+
     @Test
     public void testUfixedDecode() {
         assertThat(TypeDecoder.decodeNumeric(
@@ -160,6 +161,7 @@ public class TypeDecoderTest {
                 Fixed.class),
                 is(new Fixed(BigInteger.valueOf(-1))));
     }
+    */
 
     @Test
     public void testStaticBytes() {

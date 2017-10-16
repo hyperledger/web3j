@@ -4,13 +4,11 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import org.web3j.abi.TypeEncoder;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.Fixed;
 import org.web3j.abi.datatypes.Int;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Ufixed;
@@ -19,9 +17,7 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes1;
 import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.abi.datatypes.generated.Bytes6;
-import org.web3j.abi.datatypes.generated.Fixed24x40;
 import org.web3j.abi.datatypes.generated.Int64;
-import org.web3j.abi.datatypes.generated.Ufixed24x40;
 import org.web3j.abi.datatypes.generated.Uint64;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -93,6 +89,10 @@ public class TypeEncoderTest {
                 is("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
     }
 
+    /*
+    TODO: Enable once Solidity supports fixed types - see
+    https://github.com/ethereum/solidity/issues/409
+
     @Test
     public void testUfixedEncode() {
         Ufixed zero = new Ufixed24x40(BigInteger.ZERO);
@@ -128,6 +128,7 @@ public class TypeEncoderTest {
         assertThat(TypeEncoder.encodeNumeric(minusOne),
                 is("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
     }
+    */
 
     @Test
     public void testStaticBytes() {
