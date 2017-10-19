@@ -441,7 +441,7 @@ public class SolidityFunctionWrapper extends Generator {
 
             ParameterizedTypeName tupleType = ParameterizedTypeName.get(
                     ClassName.get(
-                            "org.web3j.utils.tuples.generated",
+                            "org.web3j.tuples.generated",
                             "Tuple" + returnTypes.size()),
                     returnTypes.toArray(
                             new TypeName[returnTypes.size()]));

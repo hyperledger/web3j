@@ -1,6 +1,6 @@
-package org.web3j.utils.tuples.generated;
+package org.web3j.tuples.generated;
 
-import org.web3j.utils.tuples.Tuple;
+import org.web3j.tuples.Tuple;
 
 /**
  * Auto generated code.

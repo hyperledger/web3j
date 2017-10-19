@@ -1,6 +1,6 @@
-package org.web3j.utils.tuples.generated;
+package org.web3j.tuples.generated;
 
-import org.web3j.utils.tuples.Tuple;
+import org.web3j.tuples.Tuple;
 
 /**
  * Auto generated code.
@@ -8,8 +8,8 @@ import org.web3j.utils.tuples.Tuple;
  * <p>Please use org.web3j.codegen.TupleGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
-public final class Tuple11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> implements Tuple {
-    private static final int SIZE = 11;
+public final class Tuple9<T1, T2, T3, T4, T5, T6, T7, T8, T9> implements Tuple {
+    private static final int SIZE = 9;
 
     private final T1 value1;
 
@@ -29,11 +29,7 @@ public final class Tuple11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> impleme
 
     private final T9 value9;
 
-    private final T10 value10;
-
-    private final T11 value11;
-
-    public Tuple11(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9, T10 value10, T11 value11) {
+    public Tuple9(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -43,8 +39,6 @@ public final class Tuple11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> impleme
         this.value7 = value7;
         this.value8 = value8;
         this.value9 = value9;
-        this.value10 = value10;
-        this.value11 = value11;
     }
 
     public T1 getValue1() {
@@ -83,14 +77,6 @@ public final class Tuple11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> impleme
         return value9;
     }
 
-    public T10 getValue10() {
-        return value10;
-    }
-
-    public T11 getValue11() {
-        return value11;
-    }
-
     @Override
     public int getSize() {
         return SIZE;
@@ -104,38 +90,32 @@ public final class Tuple11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> impleme
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple11 = (Tuple11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
-        if (value1 != null ? !value1.equals(tuple11.value1) : tuple11.value1 != null) {
+        Tuple9<?, ?, ?, ?, ?, ?, ?, ?, ?> tuple9 = (Tuple9<?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
+        if (value1 != null ? !value1.equals(tuple9.value1) : tuple9.value1 != null) {
             return false;
         }
-        if (value2 != null ? !value2.equals(tuple11.value2) : tuple11.value2 != null) {
+        if (value2 != null ? !value2.equals(tuple9.value2) : tuple9.value2 != null) {
             return false;
         }
-        if (value3 != null ? !value3.equals(tuple11.value3) : tuple11.value3 != null) {
+        if (value3 != null ? !value3.equals(tuple9.value3) : tuple9.value3 != null) {
             return false;
         }
-        if (value4 != null ? !value4.equals(tuple11.value4) : tuple11.value4 != null) {
+        if (value4 != null ? !value4.equals(tuple9.value4) : tuple9.value4 != null) {
             return false;
         }
-        if (value5 != null ? !value5.equals(tuple11.value5) : tuple11.value5 != null) {
+        if (value5 != null ? !value5.equals(tuple9.value5) : tuple9.value5 != null) {
             return false;
         }
-        if (value6 != null ? !value6.equals(tuple11.value6) : tuple11.value6 != null) {
+        if (value6 != null ? !value6.equals(tuple9.value6) : tuple9.value6 != null) {
             return false;
         }
-        if (value7 != null ? !value7.equals(tuple11.value7) : tuple11.value7 != null) {
+        if (value7 != null ? !value7.equals(tuple9.value7) : tuple9.value7 != null) {
             return false;
         }
-        if (value8 != null ? !value8.equals(tuple11.value8) : tuple11.value8 != null) {
+        if (value8 != null ? !value8.equals(tuple9.value8) : tuple9.value8 != null) {
             return false;
         }
-        if (value9 != null ? !value9.equals(tuple11.value9) : tuple11.value9 != null) {
-            return false;
-        }
-        if (value10 != null ? !value10.equals(tuple11.value10) : tuple11.value10 != null) {
-            return false;
-        }
-        return value11 != null ? value11.equals(tuple11.value11) : tuple11.value11 == null;
+        return value9 != null ? value9.equals(tuple9.value9) : tuple9.value9 == null;
     }
 
     @Override
@@ -149,14 +129,12 @@ public final class Tuple11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> impleme
         result = 31 * result + (value7 != null ? value7.hashCode() : 0);
         result = 31 * result + (value8 != null ? value8.hashCode() : 0);
         result = 31 * result + (value9 != null ? value9.hashCode() : 0);
-        result = 31 * result + (value10 != null ? value10.hashCode() : 0);
-        result = 31 * result + (value11 != null ? value11.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Tuple11{" +
+        return "Tuple9{" +
                 "value1=" + value1 +
                 ", value2=" + value2 +
                 ", value3=" + value3 +
@@ -166,8 +144,6 @@ public final class Tuple11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> impleme
                 ", value7=" + value7 +
                 ", value8=" + value8 +
                 ", value9=" + value9 +
-                ", value10=" + value10 +
-                ", value11=" + value11 +
                 "}";
     }
 }

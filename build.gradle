@@ -11,6 +11,7 @@ buildscript {
     // test dependencies
     ext.equalsverifierVersion = '2.1.7'
     ext.junitVersion = '4.11'
+    ext.junitBenchmarkVersion = '0.7.2'
     ext.logbackVersion = '1.2.3'
     ext.mockitoVersion = '1.10.19'
 
@@ -35,6 +36,8 @@ apply plugin: 'idea'
 // https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'jacoco'
+
+description 'web3j base project'
 
 allprojects {
 

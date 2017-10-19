@@ -1,6 +1,6 @@
-package org.web3j.utils.tuples.generated;
+package org.web3j.tuples.generated;
 
-import org.web3j.utils.tuples.Tuple;
+import org.web3j.tuples.Tuple;
 
 /**
  * Auto generated code.
@@ -8,17 +8,24 @@ import org.web3j.utils.tuples.Tuple;
  * <p>Please use org.web3j.codegen.TupleGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
-public final class Tuple1<T1> implements Tuple {
-    private static final int SIZE = 1;
+public final class Tuple2<T1, T2> implements Tuple {
+    private static final int SIZE = 2;
 
     private final T1 value1;
 
-    public Tuple1(T1 value1) {
+    private final T2 value2;
+
+    public Tuple2(T1 value1, T2 value2) {
         this.value1 = value1;
+        this.value2 = value2;
     }
 
     public T1 getValue1() {
         return value1;
+    }
+
+    public T2 getValue2() {
+        return value2;
     }
 
     @Override
@@ -34,20 +41,25 @@ public final class Tuple1<T1> implements Tuple {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple1<?> tuple1 = (Tuple1<?>) o;
-        return value1 != null ? value1.equals(tuple1.value1) : tuple1.value1 == null;
+        Tuple2<?, ?> tuple2 = (Tuple2<?, ?>) o;
+        if (value1 != null ? !value1.equals(tuple2.value1) : tuple2.value1 != null) {
+            return false;
+        }
+        return value2 != null ? value2.equals(tuple2.value2) : tuple2.value2 == null;
     }
 
     @Override
     public int hashCode() {
         int result = value1.hashCode();
+        result = 31 * result + (value2 != null ? value2.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Tuple1{" +
+        return "Tuple2{" +
                 "value1=" + value1 +
+                ", value2=" + value2 +
                 "}";
     }
 }

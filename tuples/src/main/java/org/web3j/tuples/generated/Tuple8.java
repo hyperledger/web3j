@@ -1,6 +1,6 @@
-package org.web3j.utils.tuples.generated;
+package org.web3j.tuples.generated;
 
-import org.web3j.utils.tuples.Tuple;
+import org.web3j.tuples.Tuple;
 
 /**
  * Auto generated code.
@@ -8,8 +8,8 @@ import org.web3j.utils.tuples.Tuple;
  * <p>Please use org.web3j.codegen.TupleGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
-public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements Tuple {
-    private static final int SIZE = 10;
+public final class Tuple8<T1, T2, T3, T4, T5, T6, T7, T8> implements Tuple {
+    private static final int SIZE = 8;
 
     private final T1 value1;
 
@@ -27,11 +27,7 @@ public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements T
 
     private final T8 value8;
 
-    private final T9 value9;
-
-    private final T10 value10;
-
-    public Tuple10(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9, T10 value10) {
+    public Tuple8(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -40,8 +36,6 @@ public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements T
         this.value6 = value6;
         this.value7 = value7;
         this.value8 = value8;
-        this.value9 = value9;
-        this.value10 = value10;
     }
 
     public T1 getValue1() {
@@ -76,14 +70,6 @@ public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements T
         return value8;
     }
 
-    public T9 getValue9() {
-        return value9;
-    }
-
-    public T10 getValue10() {
-        return value10;
-    }
-
     @Override
     public int getSize() {
         return SIZE;
@@ -97,35 +83,29 @@ public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements T
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple10 = (Tuple10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
-        if (value1 != null ? !value1.equals(tuple10.value1) : tuple10.value1 != null) {
+        Tuple8<?, ?, ?, ?, ?, ?, ?, ?> tuple8 = (Tuple8<?, ?, ?, ?, ?, ?, ?, ?>) o;
+        if (value1 != null ? !value1.equals(tuple8.value1) : tuple8.value1 != null) {
             return false;
         }
-        if (value2 != null ? !value2.equals(tuple10.value2) : tuple10.value2 != null) {
+        if (value2 != null ? !value2.equals(tuple8.value2) : tuple8.value2 != null) {
             return false;
         }
-        if (value3 != null ? !value3.equals(tuple10.value3) : tuple10.value3 != null) {
+        if (value3 != null ? !value3.equals(tuple8.value3) : tuple8.value3 != null) {
             return false;
         }
-        if (value4 != null ? !value4.equals(tuple10.value4) : tuple10.value4 != null) {
+        if (value4 != null ? !value4.equals(tuple8.value4) : tuple8.value4 != null) {
             return false;
         }
-        if (value5 != null ? !value5.equals(tuple10.value5) : tuple10.value5 != null) {
+        if (value5 != null ? !value5.equals(tuple8.value5) : tuple8.value5 != null) {
             return false;
         }
-        if (value6 != null ? !value6.equals(tuple10.value6) : tuple10.value6 != null) {
+        if (value6 != null ? !value6.equals(tuple8.value6) : tuple8.value6 != null) {
             return false;
         }
-        if (value7 != null ? !value7.equals(tuple10.value7) : tuple10.value7 != null) {
+        if (value7 != null ? !value7.equals(tuple8.value7) : tuple8.value7 != null) {
             return false;
         }
-        if (value8 != null ? !value8.equals(tuple10.value8) : tuple10.value8 != null) {
-            return false;
-        }
-        if (value9 != null ? !value9.equals(tuple10.value9) : tuple10.value9 != null) {
-            return false;
-        }
-        return value10 != null ? value10.equals(tuple10.value10) : tuple10.value10 == null;
+        return value8 != null ? value8.equals(tuple8.value8) : tuple8.value8 == null;
     }
 
     @Override
@@ -138,14 +118,12 @@ public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements T
         result = 31 * result + (value6 != null ? value6.hashCode() : 0);
         result = 31 * result + (value7 != null ? value7.hashCode() : 0);
         result = 31 * result + (value8 != null ? value8.hashCode() : 0);
-        result = 31 * result + (value9 != null ? value9.hashCode() : 0);
-        result = 31 * result + (value10 != null ? value10.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Tuple10{" +
+        return "Tuple8{" +
                 "value1=" + value1 +
                 ", value2=" + value2 +
                 ", value3=" + value3 +
@@ -154,8 +132,6 @@ public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements T
                 ", value6=" + value6 +
                 ", value7=" + value7 +
                 ", value8=" + value8 +
-                ", value9=" + value9 +
-                ", value10=" + value10 +
                 "}";
     }
 }

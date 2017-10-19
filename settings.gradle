@@ -10,3 +10,5 @@ include 'integration-tests'
 include 'parity'
 include 'rlp'
 include 'utils'
+include 'tuples'
+

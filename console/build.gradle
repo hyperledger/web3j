@@ -1,6 +1,8 @@
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
+description 'web3j command line tools'
+
 dependencies {
     compile project(':codegen'), project(':infura')
     testCompile project(path: ':core', configuration: 'archives')

@@ -1,6 +1,6 @@
-package org.web3j.utils.tuples.generated;
+package org.web3j.tuples.generated;
 
-import org.web3j.utils.tuples.Tuple;
+import org.web3j.tuples.Tuple;
 
 /**
  * Auto generated code.
@@ -8,8 +8,8 @@ import org.web3j.utils.tuples.Tuple;
  * <p>Please use org.web3j.codegen.TupleGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
-public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> implements Tuple {
-    private static final int SIZE = 14;
+public final class Tuple15<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> implements Tuple {
+    private static final int SIZE = 15;
 
     private final T1 value1;
 
@@ -39,7 +39,9 @@ public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
 
     private final T14 value14;
 
-    public Tuple14(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9, T10 value10, T11 value11, T12 value12, T13 value13, T14 value14) {
+    private final T15 value15;
+
+    public Tuple15(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9, T10 value10, T11 value11, T12 value12, T13 value13, T14 value14, T15 value15) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -54,6 +56,7 @@ public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         this.value12 = value12;
         this.value13 = value13;
         this.value14 = value14;
+        this.value15 = value15;
     }
 
     public T1 getValue1() {
@@ -112,6 +115,10 @@ public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         return value14;
     }
 
+    public T15 getValue15() {
+        return value15;
+    }
+
     @Override
     public int getSize() {
         return SIZE;
@@ -125,47 +132,50 @@ public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple14 = (Tuple14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
-        if (value1 != null ? !value1.equals(tuple14.value1) : tuple14.value1 != null) {
+        Tuple15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple15 = (Tuple15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
+        if (value1 != null ? !value1.equals(tuple15.value1) : tuple15.value1 != null) {
             return false;
         }
-        if (value2 != null ? !value2.equals(tuple14.value2) : tuple14.value2 != null) {
+        if (value2 != null ? !value2.equals(tuple15.value2) : tuple15.value2 != null) {
             return false;
         }
-        if (value3 != null ? !value3.equals(tuple14.value3) : tuple14.value3 != null) {
+        if (value3 != null ? !value3.equals(tuple15.value3) : tuple15.value3 != null) {
             return false;
         }
-        if (value4 != null ? !value4.equals(tuple14.value4) : tuple14.value4 != null) {
+        if (value4 != null ? !value4.equals(tuple15.value4) : tuple15.value4 != null) {
             return false;
         }
-        if (value5 != null ? !value5.equals(tuple14.value5) : tuple14.value5 != null) {
+        if (value5 != null ? !value5.equals(tuple15.value5) : tuple15.value5 != null) {
             return false;
         }
-        if (value6 != null ? !value6.equals(tuple14.value6) : tuple14.value6 != null) {
+        if (value6 != null ? !value6.equals(tuple15.value6) : tuple15.value6 != null) {
             return false;
         }
-        if (value7 != null ? !value7.equals(tuple14.value7) : tuple14.value7 != null) {
+        if (value7 != null ? !value7.equals(tuple15.value7) : tuple15.value7 != null) {
             return false;
         }
-        if (value8 != null ? !value8.equals(tuple14.value8) : tuple14.value8 != null) {
+        if (value8 != null ? !value8.equals(tuple15.value8) : tuple15.value8 != null) {
             return false;
         }
-        if (value9 != null ? !value9.equals(tuple14.value9) : tuple14.value9 != null) {
+        if (value9 != null ? !value9.equals(tuple15.value9) : tuple15.value9 != null) {
             return false;
         }
-        if (value10 != null ? !value10.equals(tuple14.value10) : tuple14.value10 != null) {
+        if (value10 != null ? !value10.equals(tuple15.value10) : tuple15.value10 != null) {
             return false;
         }
-        if (value11 != null ? !value11.equals(tuple14.value11) : tuple14.value11 != null) {
+        if (value11 != null ? !value11.equals(tuple15.value11) : tuple15.value11 != null) {
             return false;
         }
-        if (value12 != null ? !value12.equals(tuple14.value12) : tuple14.value12 != null) {
+        if (value12 != null ? !value12.equals(tuple15.value12) : tuple15.value12 != null) {
             return false;
         }
-        if (value13 != null ? !value13.equals(tuple14.value13) : tuple14.value13 != null) {
+        if (value13 != null ? !value13.equals(tuple15.value13) : tuple15.value13 != null) {
             return false;
         }
-        return value14 != null ? value14.equals(tuple14.value14) : tuple14.value14 == null;
+        if (value14 != null ? !value14.equals(tuple15.value14) : tuple15.value14 != null) {
+            return false;
+        }
+        return value15 != null ? value15.equals(tuple15.value15) : tuple15.value15 == null;
     }
 
     @Override
@@ -184,12 +194,13 @@ public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         result = 31 * result + (value12 != null ? value12.hashCode() : 0);
         result = 31 * result + (value13 != null ? value13.hashCode() : 0);
         result = 31 * result + (value14 != null ? value14.hashCode() : 0);
+        result = 31 * result + (value15 != null ? value15.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Tuple14{" +
+        return "Tuple15{" +
                 "value1=" + value1 +
                 ", value2=" + value2 +
                 ", value3=" + value3 +
@@ -204,6 +215,7 @@ public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
                 ", value12=" + value12 +
                 ", value13=" + value13 +
                 ", value14=" + value14 +
+                ", value15=" + value15 +
                 "}";
     }
 }

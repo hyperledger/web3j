@@ -10,8 +10,8 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 
+import org.web3j.tuples.Tuple;
 import org.web3j.utils.Strings;
-import org.web3j.utils.tuples.Tuple;
 
 /**
  * A class for generating arbitrary sized tuples.
@@ -19,7 +19,7 @@ import org.web3j.utils.tuples.Tuple;
 public class TupleGenerator extends Generator {
 
     static final int LIMIT = 20;
-    static final String PACKAGE_NAME = "org.web3j.utils.tuples.generated";
+    static final String PACKAGE_NAME = "org.web3j.tuples.generated";
     static final String CLASS_NAME = "Tuple";
 
     private static final String SIZE = "SIZE";
@@ -31,7 +31,7 @@ public class TupleGenerator extends Generator {
         if (args.length == 1) {
             tupleGenerator.generate(args[0]);
         } else {
-            tupleGenerator.generate(System.getProperty("user.dir") + "/core/src/main/java/");
+            tupleGenerator.generate(System.getProperty("user.dir") + "/tuples/src/main/java/");
         }
     }
 

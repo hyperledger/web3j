@@ -1,6 +1,6 @@
-package org.web3j.utils.tuples.generated;
+package org.web3j.tuples.generated;
 
-import org.web3j.utils.tuples.Tuple;
+import org.web3j.tuples.Tuple;
 
 /**
  * Auto generated code.
@@ -8,8 +8,8 @@ import org.web3j.utils.tuples.Tuple;
  * <p>Please use org.web3j.codegen.TupleGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
-public final class Tuple19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> implements Tuple {
-    private static final int SIZE = 19;
+public final class Tuple14<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> implements Tuple {
+    private static final int SIZE = 14;
 
     private final T1 value1;
 
@@ -39,17 +39,7 @@ public final class Tuple19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
 
     private final T14 value14;
 
-    private final T15 value15;
-
-    private final T16 value16;
-
-    private final T17 value17;
-
-    private final T18 value18;
-
-    private final T19 value19;
-
-    public Tuple19(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9, T10 value10, T11 value11, T12 value12, T13 value13, T14 value14, T15 value15, T16 value16, T17 value17, T18 value18, T19 value19) {
+    public Tuple14(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9, T10 value10, T11 value11, T12 value12, T13 value13, T14 value14) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -64,11 +54,6 @@ public final class Tuple19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         this.value12 = value12;
         this.value13 = value13;
         this.value14 = value14;
-        this.value15 = value15;
-        this.value16 = value16;
-        this.value17 = value17;
-        this.value18 = value18;
-        this.value19 = value19;
     }
 
     public T1 getValue1() {
@@ -127,26 +112,6 @@ public final class Tuple19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         return value14;
     }
 
-    public T15 getValue15() {
-        return value15;
-    }
-
-    public T16 getValue16() {
-        return value16;
-    }
-
-    public T17 getValue17() {
-        return value17;
-    }
-
-    public T18 getValue18() {
-        return value18;
-    }
-
-    public T19 getValue19() {
-        return value19;
-    }
-
     @Override
     public int getSize() {
         return SIZE;
@@ -160,62 +125,47 @@ public final class Tuple19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple19<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple19 = (Tuple19<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
-        if (value1 != null ? !value1.equals(tuple19.value1) : tuple19.value1 != null) {
+        Tuple14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple14 = (Tuple14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
+        if (value1 != null ? !value1.equals(tuple14.value1) : tuple14.value1 != null) {
             return false;
         }
-        if (value2 != null ? !value2.equals(tuple19.value2) : tuple19.value2 != null) {
+        if (value2 != null ? !value2.equals(tuple14.value2) : tuple14.value2 != null) {
             return false;
         }
-        if (value3 != null ? !value3.equals(tuple19.value3) : tuple19.value3 != null) {
+        if (value3 != null ? !value3.equals(tuple14.value3) : tuple14.value3 != null) {
             return false;
         }
-        if (value4 != null ? !value4.equals(tuple19.value4) : tuple19.value4 != null) {
+        if (value4 != null ? !value4.equals(tuple14.value4) : tuple14.value4 != null) {
             return false;
         }
-        if (value5 != null ? !value5.equals(tuple19.value5) : tuple19.value5 != null) {
+        if (value5 != null ? !value5.equals(tuple14.value5) : tuple14.value5 != null) {
             return false;
         }
-        if (value6 != null ? !value6.equals(tuple19.value6) : tuple19.value6 != null) {
+        if (value6 != null ? !value6.equals(tuple14.value6) : tuple14.value6 != null) {
             return false;
         }
-        if (value7 != null ? !value7.equals(tuple19.value7) : tuple19.value7 != null) {
+        if (value7 != null ? !value7.equals(tuple14.value7) : tuple14.value7 != null) {
             return false;
         }
-        if (value8 != null ? !value8.equals(tuple19.value8) : tuple19.value8 != null) {
+        if (value8 != null ? !value8.equals(tuple14.value8) : tuple14.value8 != null) {
             return false;
         }
-        if (value9 != null ? !value9.equals(tuple19.value9) : tuple19.value9 != null) {
+        if (value9 != null ? !value9.equals(tuple14.value9) : tuple14.value9 != null) {
             return false;
         }
-        if (value10 != null ? !value10.equals(tuple19.value10) : tuple19.value10 != null) {
+        if (value10 != null ? !value10.equals(tuple14.value10) : tuple14.value10 != null) {
             return false;
         }
-        if (value11 != null ? !value11.equals(tuple19.value11) : tuple19.value11 != null) {
+        if (value11 != null ? !value11.equals(tuple14.value11) : tuple14.value11 != null) {
             return false;
         }
-        if (value12 != null ? !value12.equals(tuple19.value12) : tuple19.value12 != null) {
+        if (value12 != null ? !value12.equals(tuple14.value12) : tuple14.value12 != null) {
             return false;
         }
-        if (value13 != null ? !value13.equals(tuple19.value13) : tuple19.value13 != null) {
+        if (value13 != null ? !value13.equals(tuple14.value13) : tuple14.value13 != null) {
             return false;
         }
-        if (value14 != null ? !value14.equals(tuple19.value14) : tuple19.value14 != null) {
-            return false;
-        }
-        if (value15 != null ? !value15.equals(tuple19.value15) : tuple19.value15 != null) {
-            return false;
-        }
-        if (value16 != null ? !value16.equals(tuple19.value16) : tuple19.value16 != null) {
-            return false;
-        }
-        if (value17 != null ? !value17.equals(tuple19.value17) : tuple19.value17 != null) {
-            return false;
-        }
-        if (value18 != null ? !value18.equals(tuple19.value18) : tuple19.value18 != null) {
-            return false;
-        }
-        return value19 != null ? value19.equals(tuple19.value19) : tuple19.value19 == null;
+        return value14 != null ? value14.equals(tuple14.value14) : tuple14.value14 == null;
     }
 
     @Override
@@ -234,17 +184,12 @@ public final class Tuple19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
         result = 31 * result + (value12 != null ? value12.hashCode() : 0);
         result = 31 * result + (value13 != null ? value13.hashCode() : 0);
         result = 31 * result + (value14 != null ? value14.hashCode() : 0);
-        result = 31 * result + (value15 != null ? value15.hashCode() : 0);
-        result = 31 * result + (value16 != null ? value16.hashCode() : 0);
-        result = 31 * result + (value17 != null ? value17.hashCode() : 0);
-        result = 31 * result + (value18 != null ? value18.hashCode() : 0);
-        result = 31 * result + (value19 != null ? value19.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Tuple19{" +
+        return "Tuple14{" +
                 "value1=" + value1 +
                 ", value2=" + value2 +
                 ", value3=" + value3 +
@@ -259,11 +204,6 @@ public final class Tuple19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
                 ", value12=" + value12 +
                 ", value13=" + value13 +
                 ", value14=" + value14 +
-                ", value15=" + value15 +
-                ", value16=" + value16 +
-                ", value17=" + value17 +
-                ", value18=" + value18 +
-                ", value19=" + value19 +
                 "}";
     }
 }

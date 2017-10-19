@@ -5,6 +5,9 @@ import java.math.BigInteger;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.tx.response.Callback;
+import org.web3j.tx.response.QueuingTransactionReceiptProcessor;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 
 /**
  * Simple RawTransactionManager derivative that manages nonces to facilitate multiple transactions
@@ -22,9 +25,22 @@ public class FastRawTransactionManager extends RawTransactionManager {
         super(web3j, credentials);
     }
 
+    public FastRawTransactionManager(
+            Web3j web3j, Credentials credentials,
+            TransactionReceiptProcessor transactionReceiptProcessor) {
+        super(web3j, credentials, ChainId.NONE, transactionReceiptProcessor);
+    }
+
+    public FastRawTransactionManager(
+            Web3j web3j, Credentials credentials, byte chainId,
+            TransactionReceiptProcessor transactionReceiptProcessor) {
+        super(web3j, credentials, chainId, transactionReceiptProcessor);
+    }
+
     @Override
     synchronized BigInteger getNonce() throws IOException {
         if (nonce.signum() == -1) {
+            // obtain lock
             nonce = super.getNonce();
         } else {
             nonce = nonce.add(BigInteger.ONE);

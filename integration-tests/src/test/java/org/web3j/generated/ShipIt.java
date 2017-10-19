@@ -15,9 +15,9 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tuples.generated.Tuple8;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
-import org.web3j.utils.tuples.generated.Tuple8;
 
 /**
  * <p>Auto generated code.

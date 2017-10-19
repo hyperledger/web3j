@@ -1,8 +1,11 @@
 import java.text.SimpleDateFormat
 
+description 'Core web3j components'
+
 dependencies {
     compile project(':rlp'),
             project(':abi'),
+            project(':tuples'),
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup:javapoet:$javapoetVersion",

@@ -1,4 +1,4 @@
-package org.web3j.utils.tuples;
+package org.web3j.tuples;
 
 /**
  * Empty Tuple type.
