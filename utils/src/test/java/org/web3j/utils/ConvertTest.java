@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
-import org.web3j.utils.Convert;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 

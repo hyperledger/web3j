@@ -73,6 +73,15 @@ public class HashTest {
     }
 
     @Test
+    public void testSha3String() {
+        assertThat(Hash.sha3String(""),
+                is("0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
+
+        assertThat(Hash.sha3String("EVWithdraw(address,uint256,bytes32)"),
+                is("0x953d0c27f84a9649b0e121099ffa9aeb7ed83e65eaed41d3627f895790c72d41"));
+    }
+
+    @Test
     public void testByte() {
         assertThat(asByte(0x0, 0x0), is((byte) 0x0));
         assertThat(asByte(0x1, 0x0), is((byte) 0x10));

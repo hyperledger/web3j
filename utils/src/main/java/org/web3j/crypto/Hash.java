@@ -1,5 +1,7 @@
 package org.web3j.crypto;
 
+import java.nio.charset.StandardCharsets;
+
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 
 import org.web3j.utils.Numeric;
@@ -36,7 +38,23 @@ public class Hash {
         return kecc.digest();
     }
 
+    /**
+     * Keccak-256 hash function.
+     *
+     * @param input binary encoded input data
+     * @return hash value
+     */
     public static byte[] sha3(byte[] input) {
         return sha3(input, 0, input.length);
+    }
+
+    /**
+     * Keccak-256 hash function that operates on a UTF-8 encoded String.
+     *
+     * @param utf8String UTF-8 encoded string
+     * @return hash value as hex encoded string
+     */
+    public static String sha3String(String utf8String) {
+        return Numeric.toHexString(sha3(utf8String.getBytes(StandardCharsets.UTF_8)));
     }
 }
