@@ -155,7 +155,7 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
                 pom.project {
                     name 'web3j'
                     packaging 'jar'
-                    description 'web3j is a lightweight Java library for integration with Ethereum clients'
+                    description project.description
                     url 'https://web3j.io'
 
                     scm {
@@ -190,7 +190,7 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         pkg {
             repo = 'maven'
             name = 'org.web3j'
-            desc = 'web3j is a lightweight Java library for integration with Ethereum clients'
+            desc = project.description
             userOrg = 'web3j'
             licenses = ['Apache-2.0']
             issueTrackerUrl = 'https://github.com/web3j/web3j/issues'

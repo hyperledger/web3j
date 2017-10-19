@@ -21,6 +21,7 @@ import static org.web3j.utils.Console.exitError;
 public class SolidityFunctionWrapperGenerator {
 
     private static final String USAGE = "solidity generate "
+            + "[--javaTypes|--solidityTypes] "
             + "<input binary file>.bin <input abi file>.abi "
             + "-p|--package <base package name> "
             + "-o|--output <destination base directory>";

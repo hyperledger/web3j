@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 
-description 'Core web3j library'
+description 'web3j is a lightweight Java library for integration with Ethereum clients'
 
 dependencies {
     compile project(':rlp'),
