@@ -1,19 +1,18 @@
 import java.text.SimpleDateFormat
 
-description 'Core web3j components'
+description 'Core web3j library'
 
 dependencies {
     compile project(':rlp'),
             project(':abi'),
             project(':tuples'),
-            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            project(':crypto'),
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
-            "com.squareup:javapoet:$javapoetVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
-            "org.slf4j:slf4j-api:$slf4jVersion",
             "io.reactivex:rxjava:$rxjavaVersion"
-    testCompile "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
+    testCompile project(path: ':crypto', configuration: 'archives'),
+            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
 }
 
 task createProperties(dependsOn: processResources) << {

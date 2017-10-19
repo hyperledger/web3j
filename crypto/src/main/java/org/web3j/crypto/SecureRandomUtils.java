@@ -16,10 +16,10 @@ final class SecureRandomUtils {
         if (isAndroidRuntime()) {
             new LinuxSecureRandom();
         }
-        SECURE_RANDOM = new java.security.SecureRandom();
+        SECURE_RANDOM = new SecureRandom();
     }
 
-    static java.security.SecureRandom secureRandom() {
+    static SecureRandom secureRandom() {
         return SECURE_RANDOM;
     }
 

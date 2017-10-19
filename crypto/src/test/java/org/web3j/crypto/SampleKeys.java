@@ -2,8 +2,6 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.ECKeyPair;
 import org.web3j.utils.Numeric;
 
 /**

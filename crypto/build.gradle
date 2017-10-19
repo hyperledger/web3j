@@ -1,0 +1,9 @@
+
+description 'web3j Ethereum crypto library'
+
+dependencies {
+    compile project(':rlp'),
+            project(':utils'),
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion"
+}

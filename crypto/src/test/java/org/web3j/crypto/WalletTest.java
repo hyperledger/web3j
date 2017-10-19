@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
-import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.core.Is.is;
@@ -63,7 +62,7 @@ public class WalletTest {
     }
 
     private WalletFile load(String source) throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(source, WalletFile.class);
     }
 

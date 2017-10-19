@@ -9,9 +9,10 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
@@ -21,6 +22,13 @@ import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
  * Utility functions for working with Wallet files.
  */
 public class WalletUtils {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
 
     public static String generateFullNewWalletFile(String password, File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
@@ -59,7 +67,6 @@ public class WalletUtils {
         String fileName = getWalletFileName(walletFile);
         File destination = new File(destinationDirectory, fileName);
 
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         objectMapper.writeValue(destination, walletFile);
 
         return fileName;
@@ -72,7 +79,6 @@ public class WalletUtils {
 
     public static Credentials loadCredentials(String password, File source)
             throws IOException, CipherException {
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         WalletFile walletFile = objectMapper.readValue(source, WalletFile.class);
         return Credentials.create(Wallet.decrypt(password, walletFile));
     }

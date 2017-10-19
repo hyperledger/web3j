@@ -11,4 +11,5 @@ include 'parity'
 include 'rlp'
 include 'utils'
 include 'tuples'
+include 'crypto'
 

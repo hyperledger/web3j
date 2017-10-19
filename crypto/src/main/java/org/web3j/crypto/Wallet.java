@@ -30,7 +30,7 @@ import static org.web3j.crypto.SecureRandomUtils.secureRandom;
  * Go Ethereum client implementation</a>.</p>
  *
  * <p><strong>Note:</strong> the Bouncy Castle Scrypt implementation
- * {@link org.bouncycastle.crypto.generators.SCrypt}, fails to comply with the following
+ * {@link SCrypt}, fails to comply with the following
  * Ethereum reference
  * <a href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#scrypt">
  * Scrypt test vector</a>:</p>
