@@ -1,0 +1,14 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'application'
+
+description 'web3j command line tools'
+
+dependencies {
+    compile project(':codegen'), project(':infura')
+    testCompile project(path: ':crypto', configuration: 'archives'),
+            project(path: ':core', configuration: 'archives')
+}
+
+// Build command line library release with target distShadowZip
+mainClassName = 'org.web3j.console.Runner'
+applicationName = 'web3j'

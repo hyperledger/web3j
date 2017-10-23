@@ -75,7 +75,7 @@ Is it possible to send arbitrary text with transactions?
 --------------------------------------------------------
 
 Yes it is. Text should be ASCII encoded and provided as a hexadecimal String in the data field
-of the transaction. This is demonstrated below:
+of the transaction. This is demonstrated below::
 
    RawTransaction.createTransaction(
            <nonce>, GAS_PRICE, GAS_LIMIT, "0x<address>", <amount>, "0x<hex encoded text>");
@@ -94,3 +94,48 @@ text.
 The following StackExchange
 `post <http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address>`_
 is useful for background.
+
+
+I've generated my smart contract wrapper, but the binary for the smart contract is empty?
+-----------------------------------------------------------------------------------------
+
+If you have defined an interface in Solidity, but one of your method implementations doesn't
+match the original interface definitions, the produced binary will be blank.
+
+In the following example:
+
+   contract Web3jToken is ERC20Basic, Ownable {
+       ...
+       function transfer(address _from, address _to, uint256 _value) onlyOwner returns (bool) {
+       ...
+   }
+
+We forgot to define the *from* parameter in one of the inherited contracts.
+
+   contract ERC20Basic {
+       ...
+       function transfer(address to, uint256 value) returns (bool);
+       ...
+   }
+
+The Solidity compiler will not complain about this, however, the produced binary file for the
+Web3jToken will be blank.
+
+
+
+Do you have a project donation address?
+---------------------------------------
+
+Absolutely, you can contribute Bitcoin or Ether to help fund the development of web3j.
+
++----------+--------------------------------------------+
+| Ethereum | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
++----------+--------------------------------------------+
+| Bitcoin  | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
++----------+--------------------------------------------+
+
+
+Where can I get commercial support for web3j?
+---------------------------------------------
+
+Commercial support and training is available from `blk.io <https://blk.io>`_.
