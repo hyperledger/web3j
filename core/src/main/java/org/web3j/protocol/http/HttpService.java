@@ -83,7 +83,13 @@ public class HttpService extends Service {
 
     private static void configureLogging(OkHttpClient.Builder builder) {
         if (log.isDebugEnabled()) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(log::debug);
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
+                    new HttpLoggingInterceptor.Logger() {
+                        @Override
+                        public void log(String msg) {
+                            log.debug(msg);
+                        }
+            });
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(logging);
         }
@@ -145,7 +151,7 @@ public class HttpService extends Service {
     }
 
     private Headers buildHeaders() {
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<String, String>();
         addHeaders(headers);
         return Headers.of(headers);
     }

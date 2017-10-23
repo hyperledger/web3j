@@ -39,13 +39,14 @@ public class FastRawTransactionManagerIT extends Scenario {
     @Test
     public void testTransactionPolling() throws Exception {
 
-        List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
+        List<Future<TransactionReceipt>> transactionReceipts =
+                new LinkedList<Future<TransactionReceipt>>();
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                parity, ALICE,
+                web3j, ALICE,
                 new PollingTransactionReceiptProcessor(
-                        parity, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
+                        web3j, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
 
-        Transfer transfer = new Transfer(parity, transactionManager);
+        Transfer transfer = new Transfer(web3j, transactionManager);
         BigInteger gasPrice = transfer.getGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
@@ -78,13 +79,13 @@ public class FastRawTransactionManagerIT extends Scenario {
     @Test
     public void testTransactionQueuing() throws Exception {
 
-        Map<String, Object> pendingTransactions = new ConcurrentHashMap<>();
-        ConcurrentLinkedQueue<TransactionReceipt> transactionReceipts =
-                new ConcurrentLinkedQueue<>();
+        Map<String, Object> pendingTransactions = new ConcurrentHashMap<String, Object>();
+        final ConcurrentLinkedQueue<TransactionReceipt> transactionReceipts =
+                new ConcurrentLinkedQueue<TransactionReceipt>();
 
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                parity, ALICE,
-                new QueuingTransactionReceiptProcessor(parity, new Callback() {
+                web3j, ALICE,
+                new QueuingTransactionReceiptProcessor(web3j, new Callback() {
                     @Override
                     public void accept(TransactionReceipt transactionReceipt) {
                         transactionReceipts.add(transactionReceipt);
@@ -96,7 +97,7 @@ public class FastRawTransactionManagerIT extends Scenario {
                     }
                 }, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH, POLLING_FREQUENCY));
 
-        Transfer transfer = new Transfer(parity, transactionManager);
+        Transfer transfer = new Transfer(web3j, transactionManager);
 
         BigInteger gasPrice = transfer.getGasPrice();
 

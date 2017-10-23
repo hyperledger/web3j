@@ -14,7 +14,6 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -86,7 +85,7 @@ public class EventFilterIT extends Scenario {
     }
 
     private BigInteger estimateGas(String encodedFunction) throws Exception {
-        EthEstimateGas ethEstimateGas = parity.ethEstimateGas(
+        EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(
                 Transaction.createEthCallTransaction(ALICE.getAddress(), null, encodedFunction))
                 .sendAsync().get();
         // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388
@@ -103,7 +102,7 @@ public class EventFilterIT extends Scenario {
                 encodedFunction);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
-                parity.ethSendTransaction(transaction).sendAsync().get();
+                web3j.ethSendTransaction(transaction).sendAsync().get();
 
         assertFalse(transactionResponse.hasError());
 
@@ -120,7 +119,7 @@ public class EventFilterIT extends Scenario {
 
         ethFilter.addSingleTopic(encodedEventSignature);
 
-        EthLog ethLog = parity.ethGetLogs(ethFilter).send();
+        EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
         return ethLog.getLogs();
     }
 }

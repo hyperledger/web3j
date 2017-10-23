@@ -2,6 +2,7 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
+import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -46,9 +47,9 @@ public class FunctionWrappersIT extends Scenario {
         Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
         assertThat(result.input,
-                equalTo(new Uint256(BigInteger.valueOf(15))));
+                IsEqual.<BigInteger>equalTo(BigInteger.valueOf(15)));
 
         assertThat(result.result,
-                equalTo(new Uint256(BigInteger.valueOf(610))));
+                IsEqual.<BigInteger>equalTo(BigInteger.valueOf(610)));
     }
 }

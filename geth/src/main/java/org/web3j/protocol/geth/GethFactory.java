@@ -1,13 +1,13 @@
-package org.web3j.protocol.parity;
+package org.web3j.protocol.geth;
 
 import org.web3j.protocol.Web3jService;
 
 /**
- * web3j Parity client factory.
+ * web3j Geth client factory.
  */
-public class ParityFactory {
+public class GethFactory {
 
-    public static Parity build(Web3jService web3jService) {
-        return new JsonRpc2_0Parity(web3jService);
+    public static Geth build(Web3jService web3jService) {
+        return new JsonRpc2_0Geth(web3jService);
     }
 }

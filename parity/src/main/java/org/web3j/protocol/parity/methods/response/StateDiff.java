@@ -1,7 +1,7 @@
 package org.web3j.protocol.parity.methods.response;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -231,12 +231,12 @@ public class StateDiff {
         return storage;
     }
 
-    public void setStorage(Map<String, JsonNode> storage) {
-        this.storage = storage.entrySet().stream()
-            .collect(Collectors.toMap(
-                Map.Entry::getKey,
-                entry -> deserializeState(entry.getValue()))
-            );
+    public void setStorage(Map<String, JsonNode> nodeStorage) {
+        this.storage = new HashMap<String, State>();
+
+        for (Map.Entry<String, JsonNode> entry : nodeStorage.entrySet()) {
+            this.storage.put(entry.getKey(), deserializeState(entry.getValue()));
+        }
     }
 
     @Override

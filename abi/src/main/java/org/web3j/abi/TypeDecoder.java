@@ -225,15 +225,7 @@ public class TypeDecoder {
     static <T extends Type> T decodeStaticArray(
             String input, int offset, TypeReference<T> typeReference, int length) {
 
-        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
-            if (elements.isEmpty()) {
-                throw new UnsupportedOperationException("Zero length fixed array is invalid type");
-            } else {
-                return instantiateStaticArray(typeReference, elements);
-            }
-        };
-
-        return decodeArrayElements(input, offset, typeReference, length, function);
+        return decodeArrayElements(input, offset, typeReference, length, false);
     }
 
     private static <T extends Type> T instantiateStaticArray(
@@ -241,10 +233,22 @@ public class TypeDecoder {
         try {
             Class<List> listClass = List.class;
             return typeReference.getClassType().getConstructor(listClass).newInstance(elements);
-        } catch (ReflectiveOperationException e) {
+        } catch (ClassNotFoundException e) {
             //noinspection unchecked
-            return (T) new StaticArray<>(elements);
+            return instantiateStaticArray(elements);
+        } catch (IllegalAccessException e) {
+            return instantiateStaticArray(elements);
+        } catch (InstantiationException e) {
+            return instantiateStaticArray(elements);
+        } catch (NoSuchMethodException e) {
+            return instantiateStaticArray(elements);
+        } catch (InvocationTargetException e) {
+            return instantiateStaticArray(elements);
         }
+    }
+
+    private static <T extends Type> T instantiateStaticArray(List<T> elements) {
+        return (T) new StaticArray<T>(elements);
     }
 
     @SuppressWarnings("unchecked")
@@ -291,7 +295,7 @@ public class TypeDecoder {
                         throw new UnsupportedOperationException(
                                 "Zero length fixed array is invalid type");
                     } else {
-                        return (T) new StaticArray<T>(elements);
+                        return instantiateStaticArray(typeReference, elements);
                     }
                 }
             }

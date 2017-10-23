@@ -16,7 +16,6 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -69,7 +68,7 @@ public class DeployContractIT extends Scenario {
                 getFibonacciSolidityBinary());
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = parity.ethSendTransaction(transaction)
+                transactionResponse = web3j.ethSendTransaction(transaction)
                 .sendAsync().get();
 
         return transactionResponse.getTransactionHash();
@@ -80,7 +79,7 @@ public class DeployContractIT extends Scenario {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response = parity.ethCall(
+        org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
                 Transaction.createEthCallTransaction(
                         ALICE.getAddress(), contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)

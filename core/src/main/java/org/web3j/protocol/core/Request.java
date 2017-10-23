@@ -2,6 +2,7 @@ package org.web3j.protocol.core;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 import rx.Observable;
@@ -74,19 +75,11 @@ public class Request<S, T extends Response> {
     }
 
     public Observable<T> observable() {
-        return Observable.create(
-                new Observable.OnSubscribe<T>() {
-                    @Override
-                    public void call(final Subscriber<? super T> subscriber) {
-                        try {
-                            subscriber.onNext(send());
-                            subscriber.onCompleted();
-                        } catch (IOException e) {
-                            subscriber.onError(e);
-                        }
-                    }
-                }
-        );
-        return new RemoteCall<>(this::send).observable();
+        return new RemoteCall<T>(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return Request.this.send();
+            }
+        }).observable();
     }
 }

@@ -66,7 +66,8 @@ public class ResponseTest extends ResponseTester {
                 + "    }\n"
                 + "}");
         
-        Map<String, ParityAllAccountsInfo.AccountsInfo> accountsInfoMap = new HashMap<>(1);
+        Map<String, ParityAllAccountsInfo.AccountsInfo> accountsInfoMap =
+                new HashMap<String, ParityAllAccountsInfo.AccountsInfo>(1);
         accountsInfoMap.put("0x00a289b43e1e4825dbedf2a78ba60a640634dc40",
                 new ParityAllAccountsInfo.AccountsInfo(
                         Collections.<String, Object>emptyMap(),
@@ -259,25 +260,26 @@ public class ResponseTest extends ResponseTester {
         ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
         assertNotNull(response);
 
-        Map<String, StateDiff> stateDiffMap = new LinkedHashMap<>();
+        Map<String, StateDiff> stateDiffMap = new LinkedHashMap<String, StateDiff>();
         stateDiffMap.put("0x00a0a24b9f0e5ec7aa4c7389b8302fd0123194de", new StateDiff(
                 new StateDiff.ChangedState("0x2067ee238a4648bed5797", "0x2067ee23f5d09db3d0397"),
                 new StateDiff.UnchangedState(),
                 new StateDiff.UnchangedState(),
-                new HashMap<>()
+                new HashMap<String, StateDiff.State>()
         ));
         stateDiffMap.put("0x14772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a", new StateDiff(
                 new StateDiff.ChangedState("0xf85a746b58c1fee", "0xf7eeea1663c73ee"),
                 new StateDiff.UnchangedState(),
                 new StateDiff.ChangedState("0x15", "0x16"),
-                new HashMap<>()
+                new HashMap<String, StateDiff.State>()
         ));
         //CHECKSTYLE:OFF
         stateDiffMap.put("0x1a4298d0edc00618310e4c26f6479e5cccdfeaf8", new StateDiff(
                 new StateDiff.AddedState("0x0"),
                 new StateDiff.AddedState("0x6060604052361561004a576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806341c0e1b51461004e578063b46300ec14610063575b5b5b005b341561005957600080fd5b61006161006d565b005b61006b6100ff565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156100fc576000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b5b565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc3073ffffffffffffffffffffffffffffffffffffffff16319081150290604051600060405180830381858888f19350505050151561017757600080fd5b5b5600a165627a7a72305820a6f301a38f55ea4c326a17bb26afad4aad7ed9dd49e1954d2b8995595e0ffceb0029"),
                 new StateDiff.AddedState("0x1"),
-                new HashMap<>(Collections.singletonMap(
+                new HashMap<String, StateDiff.State>(
+                        Collections.singletonMap(
                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                         new StateDiff.AddedState("0x00000000000000000000000014772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a"))
                 )
@@ -377,7 +379,7 @@ public class ResponseTest extends ResponseTester {
                 null
         ));
         trace1.setSubtraces(BigInteger.ZERO);
-        trace1.setTraceAddress(Collections.emptyList());
+        trace1.setTraceAddress(Collections.<BigInteger>emptyList());
         trace1.setTransactionHash("0x3d30d01a470dc4ae92e87f4c0068d640f880ce27e8b863780cbcb748f1654939");
         trace1.setTransactionPosition(BigInteger.ONE);
         trace1.setType("create");
@@ -393,7 +395,7 @@ public class ResponseTest extends ResponseTester {
         trace2.setAction(action2);
         trace2.setError("Bad instruction");
         trace2.setSubtraces(BigInteger.ONE);
-        trace2.setTraceAddress(Collections.emptyList());
+        trace2.setTraceAddress(Collections.<BigInteger>emptyList());
         trace2.setType("call");
 
         org.web3j.protocol.parity.methods.response.Trace trace3 = new org.web3j.protocol.parity.methods.response.Trace();
@@ -411,7 +413,7 @@ public class ResponseTest extends ResponseTester {
         trace3.setType("suicide");
         //CHECKSTYLE:ON
 
-        List<org.web3j.protocol.parity.methods.response.Trace> traces = new ArrayList<>();
+        List<org.web3j.protocol.parity.methods.response.Trace> traces = new ArrayList<Trace>();
         traces.add(trace1);
         traces.add(trace2);
         traces.add(trace3);
@@ -492,7 +494,7 @@ public class ResponseTest extends ResponseTester {
                 BigInteger.valueOf(20000),
                 new VMTrace.VMOperation.Ex(
                         null,
-                        Collections.emptyList(),
+                        Collections.<String>emptyList(),
                         new VMTrace.VMOperation.Ex.Store(
                                 "0x0",
                                 "0x14772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a"),

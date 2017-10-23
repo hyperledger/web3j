@@ -9,9 +9,7 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
-import org.web3j.utils.Collection;
 import org.web3j.utils.Numeric;
-import org.web3j.utils.Strings;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.

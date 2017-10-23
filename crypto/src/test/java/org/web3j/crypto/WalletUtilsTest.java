@@ -1,12 +1,13 @@
 package org.web3j.crypto;
 
 import java.io.File;
-import java.nio.file.Files;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import org.web3j.utils.Numeric;
 
@@ -23,10 +24,16 @@ import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
 public class WalletUtilsTest {
 
     private File tempDir;
+    protected String tempDirPath;
+
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
     @Before
     public void setUp() throws Exception {
-        tempDir = createTempDir();
+        tempDir = folder.newFolder(
+                WalletUtilsTest.class.getSimpleName() + "-testkeys");
+        tempDirPath = tempDir.getPath();
     }
 
     @After
@@ -128,11 +135,6 @@ public class WalletUtilsTest {
                 .endsWith(String.format("%skeystore", File.separator)));
         assertTrue(WalletUtils.getTestnetKeyDirectory()
                 .endsWith(String.format("%stestnet%skeystore", File.separator, File.separator)));
-    }
-
-    private static File createTempDir() throws Exception {
-        return Files.createTempDirectory(
-                WalletUtilsTest.class.getSimpleName() + "-testkeys").toFile();
     }
 
     @Test

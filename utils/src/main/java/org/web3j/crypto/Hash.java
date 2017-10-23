@@ -1,5 +1,7 @@
 package org.web3j.crypto;
 
+import java.nio.charset.Charset;
+
 import org.spongycastle.jcajce.provider.digest.Keccak;
 
 import org.web3j.utils.Numeric;
@@ -53,6 +55,6 @@ public class Hash {
      * @return hash value as hex encoded string
      */
     public static String sha3String(String utf8String) {
-        return Numeric.toHexString(sha3(utf8String.getBytes(StandardCharsets.UTF_8)));
+        return Numeric.toHexString(sha3(utf8String.getBytes(Charset.forName("UTF-8"))));
     }
 }

@@ -78,7 +78,7 @@ public class GreeterContractIT extends Scenario {
                 getGreeterSolidityBinary() + encodedConstructor);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = parity.ethSendTransaction(transaction)
+                transactionResponse = web3j.ethSendTransaction(transaction)
                 .sendAsync().get();
 
         return transactionResponse.getTransactionHash();
@@ -89,7 +89,7 @@ public class GreeterContractIT extends Scenario {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response = parity.ethCall(
+        org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
                 Transaction.createEthCallTransaction(
                         ALICE.getAddress(), contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)

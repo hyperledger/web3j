@@ -65,14 +65,19 @@ public class Transfer extends ManagedTransaction {
     }
 
     public static RemoteCall<TransactionReceipt> sendFunds(
-            Web3j web3j, Credentials credentials,
-            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
+            final Web3j web3j, final Credentials credentials,
+            final String toAddress, final BigDecimal value, final Convert.Unit unit)
+            throws InterruptedException,
             IOException, TransactionException {
 
-        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        final TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
 
-        return new RemoteCall<>(() ->
-                new Transfer(web3j, transactionManager).send(toAddress, value, unit));
+        return new RemoteCall<TransactionReceipt>(new Callable<TransactionReceipt>() {
+            @Override
+            public TransactionReceipt call() throws Exception {
+                return new Transfer(web3j, transactionManager).send(toAddress, value, unit);
+            }
+        });
     }
 
     /**
@@ -86,13 +91,23 @@ public class Transfer extends ManagedTransaction {
      * @return {@link RemoteCall} containing executing transaction
      */
     public RemoteCall<TransactionReceipt> sendFunds(
-            String toAddress, BigDecimal value, Convert.Unit unit) {
-        return new RemoteCall<>(() -> send(toAddress, value, unit));
+            final String toAddress, final BigDecimal value, final Convert.Unit unit) {
+        return new RemoteCall<TransactionReceipt>(new Callable<TransactionReceipt>() {
+            @Override
+            public TransactionReceipt call() throws Exception {
+                return Transfer.this.send(toAddress, value, unit);
+            }
+        });
     }
 
     public RemoteCall<TransactionReceipt> sendFunds(
-            String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
-            BigInteger gasLimit) {
-        return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, gasLimit));
+            final String toAddress, final BigDecimal value, final Convert.Unit unit,
+            final BigInteger gasPrice, final BigInteger gasLimit) {
+        return new RemoteCall<TransactionReceipt>(new Callable<TransactionReceipt>() {
+            @Override
+            public TransactionReceipt call() throws Exception {
+                return Transfer.this.send(toAddress, value, unit, gasPrice, gasLimit);
+            }
+        });
     }
 }

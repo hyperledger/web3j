@@ -1,7 +1,5 @@
 package org.web3j.abi.datatypes;
 
-import java.util.stream.IntStream;
-
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.generated.StaticArray3;
@@ -15,14 +13,14 @@ public class StaticArrayTest {
 
     @Test
     public void canBeInstantiatedWithLessThan32Elements() {
-        final StaticArray<Uint> array = new StaticArray<>(arrayOfUints(32));
+        final StaticArray<Uint> array = new StaticArray<Uint>(arrayOfUints(32));
 
         assertThat(array.getValue().size(), equalTo(32));
     }
 
     @Test
     public void canBeInstantiatedWithSizeMatchingType() {
-        final StaticArray<Uint> array = new StaticArray3<>(arrayOfUints(3));
+        final StaticArray<Uint> array = new StaticArray3<Uint>(arrayOfUints(3));
 
         assertThat(array.getValue().size(), equalTo(3));
     }
@@ -30,7 +28,7 @@ public class StaticArrayTest {
     @Test
     public void throwsIfSizeDoesntMatchType() {
         try {
-            new StaticArray3<>(arrayOfUints(4));
+            new StaticArray3<Uint>(arrayOfUints(4));
             fail();
         } catch (UnsupportedOperationException e) {
             assertThat(e.getMessage(), equalTo(
@@ -41,7 +39,7 @@ public class StaticArrayTest {
     @Test
     public void throwsIfSizeIsAboveMaxOf32() {
         try {
-            new StaticArray<>(arrayOfUints(33));
+            new StaticArray<Uint>(arrayOfUints(33));
             fail();
         } catch (UnsupportedOperationException e) {
             assertThat(e.getMessage(), equalTo(
@@ -50,6 +48,10 @@ public class StaticArrayTest {
     }
 
     private Uint[] arrayOfUints(int length) {
-        return IntStream.rangeClosed(1, length).mapToObj(Uint8::new).toArray(Uint[]::new);
+        Uint[] uints = new Uint[length];
+        for (int i = 0; i < length; i++) {
+            uints[i] = new Uint8(i + 1);
+        }
+        return uints;
     }
 }

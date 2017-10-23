@@ -25,7 +25,7 @@ public class RequestTest extends RequestTester {
 
     @Override
     protected void initWeb3Client(HttpService httpService) {
-        web3j = Parity.build(httpService);
+        web3j = ParityFactory.build(httpService);
     }
     
     @Test
@@ -63,7 +63,7 @@ public class RequestTest extends RequestTester {
     
     @Test
     public void testParityDeriveAddressIndex() throws Exception {               
-        List<Derivation> indexType = new ArrayList<>();
+        List<Derivation> indexType = new ArrayList<Derivation>();
         indexType.add(Derivation.createDerivationIndex(1, "hard"));
         indexType.add(Derivation.createDerivationIndex(2, "soft"));
         
@@ -117,7 +117,7 @@ public class RequestTest extends RequestTester {
     }
     
     public void testParityImportGethAccounts() throws Exception {
-        ArrayList<String> gethAccounts = new ArrayList<>();
+        ArrayList<String> gethAccounts = new ArrayList<String>();
         gethAccounts.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
         web3j.parityImportGethAccounts(gethAccounts).send();
 
@@ -210,7 +210,7 @@ public class RequestTest extends RequestTester {
     
     @Test
     public void testParitySetAccountMeta() throws Exception {
-        Map<String, Object> meta = new HashMap<>(1);
+        Map<String, Object> meta = new HashMap<String, Object>(1);
         meta.put("foo", "bar");
         web3j.paritySetAccountMeta("0xfc390d8a8ddb591b010fda52f4db4945742c3809", meta).send();
 
@@ -231,7 +231,7 @@ public class RequestTest extends RequestTester {
     
     @Test
     public void testParitySetDappAddresses() throws Exception {
-        ArrayList<String> dAppAddresses = new ArrayList<>();
+        ArrayList<String> dAppAddresses = new ArrayList<String>();
         dAppAddresses.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
         web3j.paritySetDappAddresses("web", dAppAddresses)
                 .send();
@@ -253,7 +253,7 @@ public class RequestTest extends RequestTester {
     
     @Test
     public void testParitySetNewDappsAddresses() throws Exception {
-        ArrayList<String> dAppAddresses = new ArrayList<>();
+        ArrayList<String> dAppAddresses = new ArrayList<String>();
         dAppAddresses.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
         web3j.paritySetNewDappsAddresses(dAppAddresses)
                 .send();

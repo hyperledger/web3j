@@ -3,13 +3,15 @@ package org.web3j.utils;
 import java.math.BigInteger;
 
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Observable utility functions.
  */
 public class Observables {
 
-    public static Observable<BigInteger> range(BigInteger startValue, BigInteger endValue) {
+    public static Observable<BigInteger> range(
+            final BigInteger startValue, final BigInteger endValue) {
         return range(startValue, endValue, true);
     }
 
@@ -21,9 +23,8 @@ public class Observables {
      * @param ascending direction to iterate through range
      * @return Observable to emit this range of values
      */
-    public static Observable<BigInteger> range(BigInteger startValue,
-                                               BigInteger endValue,
-                                               boolean ascending) {
+    public static Observable<BigInteger> range(
+            final BigInteger startValue, final BigInteger endValue, final boolean ascending) {
         if (startValue.compareTo(BigInteger.ZERO) == -1) {
             throw new IllegalArgumentException("Negative start index cannot be used");
         } else if (startValue.compareTo(endValue) > 0) {
@@ -32,29 +33,35 @@ public class Observables {
         }
 
         if (ascending) {
-            return Observable.create(subscriber -> {
-                for (BigInteger i = startValue;
+            return Observable.create(new Observable.OnSubscribe<BigInteger>() {
+                @Override
+                public void call(Subscriber<? super BigInteger> subscriber) {
+                    for (BigInteger i = startValue;
                         i.compareTo(endValue) < 1
-                             && !subscriber.isUnsubscribed();
+                                 && !subscriber.isUnsubscribed();
                         i = i.add(BigInteger.ONE)) {
-                    subscriber.onNext(i);
-                }
+                        subscriber.onNext(i);
+                    }
 
-                if (!subscriber.isUnsubscribed()) {
-                    subscriber.onCompleted();
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onCompleted();
+                    }
                 }
             });
         } else {
-            return Observable.create(subscriber -> {
-                for (BigInteger i = endValue;
+            return Observable.create(new Observable.OnSubscribe<BigInteger>() {
+                @Override
+                public void call(Subscriber<? super BigInteger> subscriber) {
+                    for (BigInteger i = endValue;
                         i.compareTo(startValue) > -1
-                             && !subscriber.isUnsubscribed();
+                                 && !subscriber.isUnsubscribed();
                         i = i.subtract(BigInteger.ONE)) {
-                    subscriber.onNext(i);
-                }
+                        subscriber.onNext(i);
+                    }
 
-                if (!subscriber.isUnsubscribed()) {
-                    subscriber.onCompleted();
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onCompleted();
+                    }
                 }
             });
         }

@@ -25,7 +25,7 @@ public class Utils {
      * @return the generated smart contract address
      */
     public static byte[] generateContractAddress(byte[] address, BigInteger nonce) {
-        List<RlpType> values = new ArrayList<>();
+        List<RlpType> values = new ArrayList<RlpType>();
 
         values.add(RlpString.create(address));
         values.add(RlpString.create(nonce));

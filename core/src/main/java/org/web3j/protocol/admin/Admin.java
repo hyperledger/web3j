@@ -15,11 +15,6 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
  * JSON-RPC Request object building factory for common Parity and Geth. 
  */
 public interface Admin extends Web3j {
-
-    static Admin build(Web3jService web3jService) {
-        return new JsonRpc2_0Admin(web3jService);
-    }
-    
     public Request<?, PersonalListAccounts> personalListAccounts();
     
     public Request<?, NewAccountIdentifier> personalNewAccount(String password);

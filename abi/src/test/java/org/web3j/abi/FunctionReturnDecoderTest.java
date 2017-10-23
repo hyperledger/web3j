@@ -198,7 +198,7 @@ public class FunctionReturnDecoderTest {
         assertThat(FunctionReturnDecoder.decodeIndexedValue(
                 rawInput,
                 new TypeReference<Bytes32>(){}),
-                equalTo(new Bytes32(rawInputBytes)));
+                IsEqual.<Type>equalTo(new Bytes32(rawInputBytes)));
     }
 
     @Test
@@ -209,7 +209,7 @@ public class FunctionReturnDecoderTest {
         assertThat(FunctionReturnDecoder.decodeIndexedValue(
                 rawInput,
                 new TypeReference<Bytes16>(){}),
-                equalTo(new Bytes16(rawInputBytes)));
+                IsEqual.<Type>equalTo(new Bytes16(rawInputBytes)));
     }
 
     @Test

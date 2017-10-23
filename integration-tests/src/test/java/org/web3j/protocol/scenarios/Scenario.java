@@ -14,15 +14,14 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Credentials;
+import org.web3j.protocol.admin.Admin;
+import org.web3j.protocol.admin.AdminFactory;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.parity.Parity;
-import org.web3j.protocol.parity.ParityFactory;
-import org.web3j.protocol.parity.methods.response.PersonalUnlockAccount;
 import org.web3j.utils.Files;
 
 import static junit.framework.TestCase.fail;
@@ -58,18 +57,18 @@ public class Scenario {
     private static final int SLEEP_DURATION = 15000;
     private static final int ATTEMPTS = 40;
 
-    Parity parity;
+    Admin web3j;
 
     public Scenario() { }
 
     @Before
     public void setUp() {
-        this.parity = ParityFactory.build(new HttpService());
+        this.web3j = AdminFactory.build(new HttpService());
     }
 
     boolean unlockAccount() throws Exception {
         PersonalUnlockAccount personalUnlockAccount =
-                parity.personalUnlockAccount(
+                web3j.personalUnlockAccount(
                         ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
                         .sendAsync().get();
         return personalUnlockAccount.accountUnlocked();
@@ -108,13 +107,13 @@ public class Scenario {
     private TransactionReceipt sendTransactionReceiptRequest(
             String transactionHash) throws Exception {
         EthGetTransactionReceipt transactionReceipt =
-                parity.ethGetTransactionReceipt(transactionHash).sendAsync().get();
+                web3j.ethGetTransactionReceipt(transactionHash).sendAsync().get();
 
         return transactionReceipt.getTransactionReceipt();
     }
 
     BigInteger getNonce(String address) throws Exception {
-        EthGetTransactionCount ethGetTransactionCount = parity.ethGetTransactionCount(
+        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return ethGetTransactionCount.getTransactionCount();

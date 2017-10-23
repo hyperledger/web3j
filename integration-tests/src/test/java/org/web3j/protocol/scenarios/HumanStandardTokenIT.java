@@ -168,7 +168,7 @@ public class HumanStandardTokenIT extends Scenario {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        EthSendTransaction transactionResponse = parity.ethSendRawTransaction(hexValue)
+        EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
                 .sendAsync().get();
 
         return transactionResponse.getTransactionHash();
@@ -289,7 +289,7 @@ public class HumanStandardTokenIT extends Scenario {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        EthSendTransaction transactionResponse = parity.ethSendRawTransaction(hexValue)
+        EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
                 .sendAsync().get();
 
         return transactionResponse.getTransactionHash();
@@ -299,7 +299,7 @@ public class HumanStandardTokenIT extends Scenario {
             Function function, String contractAddress) throws Exception {
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response = parity.ethCall(
+        org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
                 Transaction.createEthCallTransaction(
                         ALICE.getAddress(), contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)

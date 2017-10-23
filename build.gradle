@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.bouncycastleVersion = '1.54'
+    ext.spongycastleVersion = '1.54.0.0'
     ext.jacksonVersion = '2.8.5'
     ext.javapoetVersion = '1.7.0'
     ext.jnr_unixsocketVersion = '0.15'
@@ -41,15 +41,16 @@ description 'web3j base project'
 
 allprojects {
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 
     group 'org.web3j'
     version '3.0.0-alpha2'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'checkstyle'
+    // Recent Checkstyle versions are not Java 1.6 compatible
+    // apply plugin: 'checkstyle'
 
     repositories {
         mavenCentral()
@@ -77,10 +78,10 @@ allprojects {
         reports.html.destination = file("${reporting.baseDir}/${name}")
     }
 
-    checkstyle {
-        toolVersion = "7.7"
-        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
-    }
+//    checkstyle {
+//        toolVersion = "7.7"
+//        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+//    }
 }
 
 subprojects {

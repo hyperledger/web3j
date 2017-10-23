@@ -43,22 +43,21 @@ public abstract class Filter<T> {
 
             filterId = ethFilter.getFilterId();
 
-            schedule = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            scheduledExecutorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    EthLog ethLog = null;
-                    try {
-                        ethLog = web3j.ethGetFilterChanges(filterId).send();
-                    } catch (IOException e) {
-                        Filter.this.throwException(e);
-                    }
-                    if (ethLog.hasError()) {
-                        Filter.this.throwException(ethFilter.getError());
-                    }
-
-                    Filter.this.process(ethLog.getLogs());
+                    Filter.this.getInitialFilterLogs();
                 }
-            }, 0, blockTime, TimeUnit.MILLISECONDS);
+            });
+
+            schedule = scheduledExecutorService.scheduleAtFixedRate(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Filter.this.pollFilter(ethFilter);
+                        }
+                    },
+                    0, blockTime, TimeUnit.MILLISECONDS);
 
         } catch (IOException e) {
             throwException(e);
@@ -67,13 +66,13 @@ public abstract class Filter<T> {
 
     private void getInitialFilterLogs() {
         try {
-            Optional<Request<?, EthLog>> maybeRequest = this.getFilterLogs(this.filterId);
+            Request<?, EthLog> request = this.getFilterLogs(this.filterId);
             EthLog ethLog = null;
-            if (maybeRequest.isPresent()) {
-                ethLog = maybeRequest.get().send();
+            if (request != null) {
+                ethLog = request.send();
             } else {
                 ethLog = new EthLog();
-                ethLog.setResult(Collections.emptyList());
+                ethLog.setResult(Collections.<EthLog.LogResult>emptyList());
             }
             process(ethLog.getLogs());
         } catch (IOException e) {
@@ -125,7 +124,7 @@ public abstract class Filter<T> {
      * @param filterId Id of the filter for which the historic log should be retrieved
      * @return Historic logs, or an empty optional if the filter cannot retrieve historic logs
      */
-    protected abstract Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId);
+    protected abstract Request<?, EthLog> getFilterLogs(BigInteger filterId);
 
     void throwException(Response.Error error) {
         throw new FilterException("Invalid request: " + error.getMessage());

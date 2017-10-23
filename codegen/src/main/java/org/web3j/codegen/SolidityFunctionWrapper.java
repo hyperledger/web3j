@@ -256,7 +256,8 @@ public class SolidityFunctionWrapper extends Generator {
 
         List<ParameterSpec> inputParameterTypes = buildParameterTypes(namedTypes);
 
-        List<ParameterSpec> nativeInputParameterTypes = new ArrayList<>(inputParameterTypes.size());
+        List<ParameterSpec> nativeInputParameterTypes =
+                new ArrayList<ParameterSpec>(inputParameterTypes.size());
         for (ParameterSpec parameterSpec:inputParameterTypes) {
             TypeName typeName = getWrapperType(parameterSpec.type);
             nativeInputParameterTypes.add(
@@ -270,12 +271,23 @@ public class SolidityFunctionWrapper extends Generator {
                     inputParameterTypes,
                     ", \n",
                     // this results in fully qualified names being generated
-                    parameterSpec -> createMappedParameterTypes(parameterSpec));
+                    new Collection.Function<ParameterSpec, String>() {
+                        @Override
+                        public String apply(ParameterSpec parameterSpec) {
+                            return SolidityFunctionWrapper.this.createMappedParameterTypes(
+                                    parameterSpec);
+                        }
+                    });
         } else {
             return Collection.join(
                     inputParameterTypes,
                     ", ",
-                    parameterSpec -> parameterSpec.name);
+                    new Collection.Function<ParameterSpec, String>() {
+                        @Override
+                        public String apply(ParameterSpec parameterSpec) {
+                            return parameterSpec.name;
+                        }
+                    });
         }
     }
 
@@ -336,7 +348,7 @@ public class SolidityFunctionWrapper extends Generator {
 
     static TypeName getNativeType(ParameterizedTypeName parameterizedTypeName) {
         List<TypeName> typeNames = parameterizedTypeName.typeArguments;
-        List<TypeName> nativeTypeNames = new ArrayList<>(typeNames.size());
+        List<TypeName> nativeTypeNames = new ArrayList<TypeName>(typeNames.size());
         for (TypeName enclosedTypeName : typeNames) {
             nativeTypeNames.add(getNativeType(enclosedTypeName));
         }
@@ -694,7 +706,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private List<TypeName> buildReturnTypes(List<TypeName> outputParameterTypes) {
-        List<TypeName> result = new ArrayList<>(outputParameterTypes.size());
+        List<TypeName> result = new ArrayList<TypeName>(outputParameterTypes.size());
         for (TypeName typeName : outputParameterTypes) {
             result.add(getWrapperType(typeName));
         }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.Bool;
@@ -63,6 +64,6 @@ public class UtilsTest {
     @Test
     public void testTypeMapEmpty() {
         assertThat(typeMap(new ArrayList<BigInteger>(), Uint256.class),
-                equalTo(new ArrayList<Uint256>()));
+                CoreMatchers.<List<Uint256>>equalTo(new ArrayList<Uint256>()));
     }
 }

@@ -55,7 +55,7 @@ public class TupleGenerator extends Generator {
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
 
-        List<MethodSpec> methodSpecs = new ArrayList<>(size);
+        List<MethodSpec> methodSpecs = new ArrayList<MethodSpec>(size);
 
         for (int i = 1; i <= size; i++) {
             String value = VALUE + i;

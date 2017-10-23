@@ -119,11 +119,13 @@ public class WalletSendFunds extends WalletManager {
             }
             console.printf("$%n%n");
             return future.get();
-        } catch (InterruptedException e) {
-            return errorTransferringFunds(e);
         } catch (ExecutionException e) {
             return errorTransferringFunds(e);
-        } catch (TransactionTimeoutException e) {
+        } catch (InterruptedException e) {
+            return errorTransferringFunds(e);
+        } catch (IOException e) {
+            return errorTransferringFunds(e);
+        } catch (TransactionException e) {
             return errorTransferringFunds(e);
         }
     }

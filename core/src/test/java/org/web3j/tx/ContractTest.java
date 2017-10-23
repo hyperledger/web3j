@@ -184,7 +184,7 @@ public class ContractTest extends ManagedTransactionTester {
         prepareCall(ethCall);
 
         assertThat(contract.callMultipleValue().send(),
-                equalTo(Collections.emptyList()));
+                CoreMatchers.equalTo(Collections.<Type>emptyList()));
     }
 
     private void prepareCall(EthCall ethCall) throws IOException {

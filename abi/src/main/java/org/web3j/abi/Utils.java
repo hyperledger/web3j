@@ -111,10 +111,13 @@ public class Utils {
                 for (T value : input) {
                     result.add(constructor.newInstance(value));
                 }
-            } catch (NoSuchMethodException
-                    | IllegalAccessException
-                    | InvocationTargetException
-                    | InstantiationException e) {
+            } catch (NoSuchMethodException e) {
+                throw new TypeMappingException(e);
+            } catch (IllegalAccessException e) {
+                throw new TypeMappingException(e);
+            } catch (InvocationTargetException e) {
+                throw new TypeMappingException(e);
+            } catch (InstantiationException e) {
                 throw new TypeMappingException(e);
             }
         }

@@ -119,17 +119,30 @@ public class JsonRpc2_0RxTest {
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false, false);
 
-        CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<EthBlock> results = new ArrayList<>(ethBlocks.size());
+        final List<EthBlock> results = new ArrayList<EthBlock>(ethBlocks.size());
         Subscription subscription = observable.subscribe(
-                result -> {
-                    results.add(result);
-                    transactionLatch.countDown();
+                new Action1<EthBlock>() {
+                    @Override
+                    public void call(EthBlock result) {
+                        results.add(result);
+                        transactionLatch.countDown();
+                    }
                 },
-                throwable -> fail(throwable.getMessage()),
-                () -> completedLatch.countDown());
+                new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        fail(throwable.getMessage());
+                    }
+                },
+                new Action0() {
+                    @Override
+                    public void call() {
+                        completedLatch.countDown();
+                    }
+                });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(ethBlocks));

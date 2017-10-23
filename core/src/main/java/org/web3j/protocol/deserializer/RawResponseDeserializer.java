@@ -2,7 +2,6 @@ package org.web3j.protocol.deserializer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -55,6 +54,6 @@ public class RawResponseDeserializer
     }
 
     private String streamToString(InputStream input) throws IOException {
-        return new Scanner(input, StandardCharsets.UTF_8.name()).useDelimiter("\\Z").next();
+        return new Scanner(input, "UTF-8").useDelimiter("\\Z").next();
     }
 }

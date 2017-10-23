@@ -23,7 +23,7 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     @Override
     public Request<?, PersonalImportRawKey> personalImportRawKey(
             String keydata, String password) {
-        return new Request<>(
+        return new Request<String, PersonalImportRawKey>(
                 "personal_importRawKey",
                 Arrays.asList(keydata, password),
                 JsonRpc2_0Web3j.ID,
@@ -33,7 +33,7 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Request<?, BooleanResponse> personalLockAccount(String accountId) {
-        return new Request<>(
+        return new Request<String, BooleanResponse>(
                 "personal_lockAccount",
                 Arrays.asList(accountId),
                 JsonRpc2_0Web3j.ID,
@@ -44,7 +44,7 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     @Override
     public Request<?, PersonalSign> personalSign(
             String message, String accountId, String password) {
-        return new Request<>(
+        return new Request<String, PersonalSign>(
                 "personal_sign",
                 Arrays.asList(message,accountId,password),
                 JsonRpc2_0Web3j.ID,
@@ -55,7 +55,7 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     @Override
     public Request<?, PersonalEcRecover> personalEcRecover(
             String hexMessage, String signedMessage) {
-        return new Request<>(
+        return new Request<String, PersonalEcRecover>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage,signedMessage),
                 JsonRpc2_0Web3j.ID,

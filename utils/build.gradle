@@ -2,5 +2,5 @@
 description 'Minimal set of web3j utility classes'
 
 dependencies {
-    compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    compile "com.madgag.spongycastle:prov:$spongycastleVersion"
 }
