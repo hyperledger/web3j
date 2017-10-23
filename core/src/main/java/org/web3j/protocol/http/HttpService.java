@@ -39,6 +39,8 @@ public class HttpService extends Service {
     private final String url;
 
     private final boolean includeRawResponse;
+    
+    private HashMap<String, String> headersMap = new HashMap<>();
 
     public HttpService(String url, OkHttpClient httpClient, boolean includeRawResponses) {
         super(includeRawResponses);
@@ -145,10 +147,14 @@ public class HttpService extends Service {
     }
 
     private Headers buildHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        addHeaders(headers);
-        return Headers.of(headers);
+        return Headers.of(headersMap);
     }
-
-    protected void addHeaders(Map<String, String> headers) { }
+    
+    public void addHeader(String key, String value) {
+        headersMap.put(key, value);
+    }
+    
+    public void addHeaders(Map<String, String> headers) {
+        headersMap.putAll(headers);
+    }
 }
