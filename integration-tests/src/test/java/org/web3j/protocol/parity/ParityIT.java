@@ -21,15 +21,6 @@ public class ParityIT {
     private static String PASSWORD = "1n5ecur3P@55w0rd";
     private Parity parity;
 
-
-    public ParityIT() {
-        System.setProperty(
-                "org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-        System.setProperty(
-                "org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
-    }
-
     @Before
     public void setUp() {
         this.parity = Parity.build(new HttpService());
