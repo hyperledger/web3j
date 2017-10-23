@@ -9,7 +9,8 @@ import rx.Observable;
  */
 public class Observables {
 
-    public static Observable<BigInteger> range(BigInteger startValue, BigInteger endValue) {
+    public static Observable<BigInteger> range(
+            final BigInteger startValue, final BigInteger endValue) {
         return range(startValue, endValue, true);
     }
 
@@ -21,9 +22,8 @@ public class Observables {
      * @param ascending direction to iterate through range
      * @return Observable to emit this range of values
      */
-    public static Observable<BigInteger> range(BigInteger startValue,
-                                               BigInteger endValue,
-                                               boolean ascending) {
+    public static Observable<BigInteger> range(
+            final BigInteger startValue, final BigInteger endValue, final boolean ascending) {
         if (startValue.compareTo(BigInteger.ZERO) == -1) {
             throw new IllegalArgumentException("Negative start index cannot be used");
         } else if (startValue.compareTo(endValue) > 0) {

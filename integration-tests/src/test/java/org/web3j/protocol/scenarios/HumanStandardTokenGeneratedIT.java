@@ -25,7 +25,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         final String aliceAddress = ALICE.getAddress();
         final String bobAddress = BOB.getAddress();
 
-        HumanStandardToken contract = deploy(parity, ALICE,
+        HumanStandardToken contract = deploy(web3j, ALICE,
                 GAS_PRICE, GAS_LIMIT,
                 BigInteger.ZERO,
                 aliceQty, "web3j tokens",
@@ -92,7 +92,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         // Bob requires his own contract instance
         HumanStandardToken bobsContract = HumanStandardToken.load(
-                contract.getContractAddress(), parity, BOB, GAS_PRICE, GAS_LIMIT);
+                contract.getContractAddress(), web3j, BOB, GAS_PRICE, GAS_LIMIT);
 
         TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
                 aliceAddress,
@@ -120,7 +120,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
     @Test
     public void transferTokens() throws Exception {
         HumanStandardToken contract = HumanStandardToken.load(
-                "0x04886d741D9C20e594d1343F8f6eD4eFE01F18C0", parity, ALICE, GAS_PRICE, GAS_LIMIT);
+                "0x04886d741D9C20e594d1343F8f6eD4eFE01F18C0", web3j, ALICE, GAS_PRICE, GAS_LIMIT);
 
         contract.transfer(BOB.getAddress(), BigInteger.valueOf(1000));
     }

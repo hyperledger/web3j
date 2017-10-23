@@ -46,6 +46,6 @@ public class LogFilter extends Filter<Log> {
 
     @Override
     protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
-        return Optional.empty();
+        return Optional.of(web3j.ethGetFilterLogs(filterId));
     }
 }

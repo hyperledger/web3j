@@ -31,7 +31,7 @@ public class SendEtherIT extends Scenario {
                 ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
 
         EthSendTransaction ethSendTransaction =
-                parity.ethSendTransaction(transaction).sendAsync().get();
+                web3j.ethSendTransaction(transaction).sendAsync().get();
 
         String transactionHash = ethSendTransaction.getTransactionHash();
 
@@ -66,7 +66,7 @@ public class SendEtherIT extends Scenario {
     @Test
     public void testTransfer() throws Exception {
         TransactionReceipt transactionReceipt = Transfer.sendFunds(
-                parity, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER)
+                web3j, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER)
                 .send();
         assertFalse(transactionReceipt.getBlockHash().isEmpty());
     }
