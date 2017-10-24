@@ -15,7 +15,7 @@ public class ECDSASignature {
     }
 
     /**
-     * Returns true if the S component is "low", that means it is below
+     * @return true if the S component is "low", that means it is below
      * {@link Sign#HALF_CURVE_ORDER}. See
      * <a href="https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures">
      * BIP62</a>.
@@ -31,7 +31,10 @@ public class ECDSASignature {
      * ability to modify the bits of a Bitcoin transaction after it's been signed, as that
      * violates various assumed invariants. Thus in future only one of those forms will be
      * considered legal and the other will be banned.
+     *
+     * @return the signature in a canonicalised form.
      */
+
     public ECDSASignature toCanonicalised() {
         if (!isCanonical()) {
             // The order of the curve is the number of valid points that exist on that curve.
