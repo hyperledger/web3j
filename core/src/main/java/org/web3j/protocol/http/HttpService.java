@@ -40,7 +40,7 @@ public class HttpService extends Service {
 
     private final boolean includeRawResponse;
 
-    private HashMap<String, String> headers = new HashMap<>();
+    private HashMap<String, String> headers = new HashMap<String, String>();
 
     public HttpService(String url, OkHttpClient httpClient, boolean includeRawResponses) {
         super(includeRawResponses);

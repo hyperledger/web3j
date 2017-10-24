@@ -21,7 +21,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
     @Test
     public void testContract() throws Exception {
-        BigInteger aliceQty = BigInteger.valueOf(1_000_000);
+        BigInteger aliceQty = BigInteger.valueOf(1000000);
         final String aliceAddress = ALICE.getAddress();
         final String bobAddress = BOB.getAddress();
 
