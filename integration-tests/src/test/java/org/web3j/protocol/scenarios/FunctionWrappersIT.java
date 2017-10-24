@@ -30,7 +30,7 @@ public class FunctionWrappersIT extends Scenario {
                 Web3jFactory.build(new HttpService()),
                 ALICE, GAS_PRICE, GAS_LIMIT);
 
-        BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10));
+        BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).send();
         assertThat(result, equalTo(BigInteger.valueOf(55)));
     }
 
@@ -42,7 +42,7 @@ public class FunctionWrappersIT extends Scenario {
                 ALICE, GAS_PRICE, GAS_LIMIT);
 
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(
-                BigInteger.valueOf(15));
+                BigInteger.valueOf(15)).send();
 
         Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
