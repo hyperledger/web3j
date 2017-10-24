@@ -6,9 +6,9 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+import org.web3j.codegen.Console;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.WalletUtils;
-import org.web3j.utils.Console;
 
 /**
  * Simple class for creating a wallet file.

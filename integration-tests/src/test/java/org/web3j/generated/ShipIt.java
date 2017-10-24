@@ -1,9 +1,9 @@
 package org.web3j.generated;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
@@ -14,7 +14,7 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.tuples.generated.Tuple8;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
@@ -39,28 +39,34 @@ public final class ShipIt extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]> shipments(String param0) throws IOException {
+    public RemoteCall<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>> shipments(String param0) {
         Function function = new Function("shipments", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(param0)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint8>() {}, new TypeReference<Uint256>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Bytes32>() {}));
-        List<Type> results = executeCallMultipleValueReturn(function);
-        return new Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>(
-                (String) results.get(0).getValue(), 
-                (String) results.get(1).getValue(), 
-                (BigInteger) results.get(2).getValue(), 
-                (BigInteger) results.get(3).getValue(), 
-                (BigInteger) results.get(4).getValue(), 
-                (BigInteger) results.get(5).getValue(), 
-                (String) results.get(6).getValue(), 
-                (byte[]) results.get(7).getValue());
+        return new RemoteCall<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>>(new Callable<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>>() {
+            @Override
+            public Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]> call() throws Exception {
+                List<Type> results = executeCallMultipleValueReturn(function);
+                        ;
+                return new Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>(
+                        (String) results.get(0).getValue(), 
+                        (String) results.get(1).getValue(), 
+                        (BigInteger) results.get(2).getValue(), 
+                        (BigInteger) results.get(3).getValue(), 
+                        (BigInteger) results.get(4).getValue(), 
+                        (BigInteger) results.get(5).getValue(), 
+                        (String) results.get(6).getValue(), 
+                        (byte[]) results.get(7).getValue());
+            }
+        });
     }
 
-    public static ShipIt deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) throws IOException, TransactionException {
-        return deploy(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialWeiValue);
+    public static RemoteCall<ShipIt> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return deployRemoteCall(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
     }
 
-    public static ShipIt deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) throws IOException, TransactionException {
-        return deploy(ShipIt.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialWeiValue);
+    public static RemoteCall<ShipIt> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return deployRemoteCall(ShipIt.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "");
     }
 
     public static ShipIt load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

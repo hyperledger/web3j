@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,11 +39,11 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Collection;
@@ -157,14 +158,15 @@ public class SolidityFunctionWrapper extends Generator {
         // constructor will not be specified in ABI file if its empty
         if (!constructor) {
             MethodSpec.Builder credentialsMethodBuilder =
-                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS);
+                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS, false);
             methodSpecs.add(buildDeployNoParams(
-                    credentialsMethodBuilder, className, CREDENTIALS));
+                    credentialsMethodBuilder, className, CREDENTIALS, false));
 
             MethodSpec.Builder transactionManagerMethodBuilder =
-                    getDeployMethodSpec(className, TransactionManager.class, TRANSACTION_MANAGER);
+                    getDeployMethodSpec(
+                            className, TransactionManager.class, TRANSACTION_MANAGER, false);
             methodSpecs.add(buildDeployNoParams(
-                    transactionManagerMethodBuilder, className, TRANSACTION_MANAGER));
+                    transactionManagerMethodBuilder, className, TRANSACTION_MANAGER, false));
         }
 
         return methodSpecs;
@@ -187,51 +189,72 @@ public class SolidityFunctionWrapper extends Generator {
             String className, AbiDefinition functionDefinition,
             Class authType, String authName) {
 
-        MethodSpec.Builder methodBuilder = getDeployMethodSpec(className, authType, authName);
+        boolean isPayable = functionDefinition.isPayable();
+
+        MethodSpec.Builder methodBuilder = getDeployMethodSpec(
+                className, authType, authName, isPayable);
         String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
 
         if (!inputParams.isEmpty()) {
-            return buildDeployWithParams(methodBuilder, className, inputParams, authName);
+            return buildDeployWithParams(
+                    methodBuilder, className, inputParams, authName, isPayable);
         } else {
-            return buildDeployNoParams(methodBuilder, className, authName);
+            return buildDeployNoParams(methodBuilder, className, authName, isPayable);
         }
     }
 
     private static MethodSpec buildDeployWithParams(
             MethodSpec.Builder methodBuilder, String className, String inputParams,
-            String authName) {
+            String authName, boolean isPayable) {
 
         methodBuilder.addStatement("$T encodedConstructor = $T.encodeConstructor("
                         + "$T.<$T>asList($L)"
                         + ")",
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
-        methodBuilder.addStatement(
-                "return deploy($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
-                className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+        if (isPayable) {
+            methodBuilder.addStatement(
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+        } else {
+            methodBuilder.addStatement(
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor)",
+                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY);
+        }
+
         return methodBuilder.build();
     }
 
     private static MethodSpec buildDeployNoParams(
             MethodSpec.Builder methodBuilder, String className,
-            String authName) {
-        methodBuilder.addStatement(
-                "return deploy($L.class, $L, $L, $L, $L, $L, \"\", $L)",
-                className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+            String authName, boolean isPayable) {
+        if (isPayable) {
+            methodBuilder.addStatement(
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\", $L)",
+                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+        } else {
+            methodBuilder.addStatement(
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\")",
+                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY);
+        }
+
         return methodBuilder.build();
     }
 
     private static MethodSpec.Builder getDeployMethodSpec(
-            String className, Class authType, String authName) {
-        return MethodSpec.methodBuilder("deploy")
+            String className, Class authType, String authName, boolean isPayable) {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("deploy")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(TypeVariableName.get(className, Type.class))
-                .addException(IOException.class)
-                .addException(TransactionException.class)
+                .returns(
+                        buildRemoteCall(TypeVariableName.get(className, Type.class)))
                 .addParameter(Web3j.class, WEB3J)
                 .addParameter(authType, authName)
                 .addParameter(BigInteger.class, GAS_PRICE)
-                .addParameter(BigInteger.class, GAS_LIMIT)
-                .addParameter(BigInteger.class, INITIAL_VALUE);
+                .addParameter(BigInteger.class, GAS_LIMIT);
+        if (isPayable) {
+            return builder.addParameter(BigInteger.class, INITIAL_VALUE);
+        } else {
+            return builder;
+        }
     }
 
     private static MethodSpec buildLoad(
@@ -416,7 +439,7 @@ public class SolidityFunctionWrapper extends Generator {
 
             TypeName typeName = outputParameterTypes.get(0);
             TypeName nativeTypeName = getWrapperType(typeName);
-            methodBuilder.returns(nativeTypeName);
+            methodBuilder.returns(buildRemoteCall(nativeTypeName));
 
             methodBuilder.addStatement("$T function = "
                             + "new $T($S, \n$T.<$T>asList($L), "
@@ -428,33 +451,33 @@ public class SolidityFunctionWrapper extends Generator {
 
             if (useNativeJavaTypes) {
                 methodBuilder.addStatement(
-                        "return executeCallSingleValueReturn(function, $T.class)",
+                        "return executeRemoteCallSingleValueReturn(function, $T.class)",
                         nativeTypeName);
             } else {
-                methodBuilder.addStatement("return executeCallSingleValueReturn(function)");
+                methodBuilder.addStatement("return executeRemoteCallSingleValueReturn(function)");
             }
-
-            methodBuilder.addException(IOException.class);
-
         } else {
             List<TypeName> returnTypes = buildReturnTypes(outputParameterTypes);
 
-            ParameterizedTypeName tupleType = ParameterizedTypeName.get(
+            ParameterizedTypeName parameterizedTupleType = ParameterizedTypeName.get(
                     ClassName.get(
                             "org.web3j.tuples.generated",
                             "Tuple" + returnTypes.size()),
                     returnTypes.toArray(
                             new TypeName[returnTypes.size()]));
 
-            methodBuilder
-                    .addException(IOException.class)
-                    .returns(tupleType);
+            methodBuilder.returns(buildRemoteCall(parameterizedTupleType));
 
             buildVariableLengthReturnFunctionConstructor(
                     methodBuilder, functionName, inputParams, outputParameterTypes);
 
-            buildTupleResultContainer(methodBuilder, tupleType);
+            buildTupleResultContainer(methodBuilder, parameterizedTupleType);
         }
+    }
+
+    private static ParameterizedTypeName buildRemoteCall(TypeName typeName) {
+        return ParameterizedTypeName.get(
+                ClassName.get(RemoteCall.class), typeName);
     }
 
     private static void buildTransactionFunction(
@@ -468,9 +491,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         String functionName = functionDefinition.getName();
 
-        methodBuilder.returns(TransactionReceipt.class)
-                .addException(IOException.class)
-                .addException(TransactionException.class);
+        methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
 
         methodBuilder.addStatement("$T function = new $T(\n$S, \n$T.<$T>asList($L), \n$T"
                         + ".<$T<?>>emptyList())",
@@ -479,9 +500,9 @@ public class SolidityFunctionWrapper extends Generator {
                 TypeReference.class);
         if (functionDefinition.isPayable()) {
             methodBuilder.addStatement(
-                    "return executeTransaction(function, $N)", WEI_VALUE);
+                    "return executeRemoteCallTransaction(function, $N)", WEI_VALUE);
         } else {
-            methodBuilder.addStatement("return executeTransaction(function)");
+            methodBuilder.addStatement("return executeRemoteCallTransaction(function)");
         }
     }
 
@@ -733,14 +754,13 @@ public class SolidityFunctionWrapper extends Generator {
             MethodSpec.Builder methodBuilder, ParameterizedTypeName tupleType)
             throws ClassNotFoundException {
 
-        methodBuilder.addStatement(
-                "$T<$T> results = executeCallMultipleValueReturn(function)",
-                List.class, Type.class);
-
         List<TypeName> typeArguments = tupleType.typeArguments;
 
         CodeBlock.Builder tupleConstructor = CodeBlock.builder();
-        tupleConstructor.add("return new $T(", tupleType)
+        tupleConstructor.addStatement(
+                        "$T results = executeCallMultipleValueReturn(function);",
+                        ParameterizedTypeName.get(List.class, Type.class))
+                .add("return new $T(", tupleType)
                 .add("$>$>");
 
         String resultString = "\n($T) results.get($L)";
@@ -757,7 +777,20 @@ public class SolidityFunctionWrapper extends Generator {
                 .add(resultString + ");\n", typeArguments.get(size - 1), size - 1);
         tupleConstructor.add("$<$<");
 
-        methodBuilder.addCode(tupleConstructor.build());
+        TypeSpec callableType = TypeSpec.anonymousClassBuilder("")
+                .addSuperinterface(ParameterizedTypeName.get(
+                        ClassName.get(Callable.class), tupleType))
+                .addMethod(MethodSpec.methodBuilder("call")
+                        .addAnnotation(Override.class)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addException(Exception.class)
+                        .returns(tupleType)
+                        .addCode(tupleConstructor.build())
+                        .build())
+                .build();
+
+        methodBuilder.addStatement(
+                "return new $T(\n$L)", buildRemoteCall(tupleType), callableType);
     }
 
     private static void buildVariableLengthEventConstructor(

@@ -20,6 +20,7 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -119,108 +120,108 @@ public final class HumanStandardToken extends Contract {
         });
     }
 
-    public String name() throws IOException {
+    public RemoteCall<String> name() {
         Function function = new Function("name", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        return executeCallSingleValueReturn(function, String.class);
+        return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public TransactionReceipt approve(String _spender, BigInteger _value) throws IOException, TransactionException {
+    public RemoteCall<TransactionReceipt> approve(String _spender, BigInteger _value) {
         Function function = new Function(
                 "approve", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_spender), 
                 new org.web3j.abi.datatypes.generated.Uint256(_value)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeTransaction(function);
+        return executeRemoteCallTransaction(function);
     }
 
-    public BigInteger totalSupply() throws IOException {
+    public RemoteCall<BigInteger> totalSupply() {
         Function function = new Function("totalSupply", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeCallSingleValueReturn(function, BigInteger.class);
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public TransactionReceipt transferFrom(String _from, String _to, BigInteger _value) throws IOException, TransactionException {
+    public RemoteCall<TransactionReceipt> transferFrom(String _from, String _to, BigInteger _value) {
         Function function = new Function(
                 "transferFrom", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_from), 
                 new org.web3j.abi.datatypes.Address(_to), 
                 new org.web3j.abi.datatypes.generated.Uint256(_value)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeTransaction(function);
+        return executeRemoteCallTransaction(function);
     }
 
-    public BigInteger decimals() throws IOException {
+    public RemoteCall<BigInteger> decimals() {
         Function function = new Function("decimals", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint8>() {}));
-        return executeCallSingleValueReturn(function, BigInteger.class);
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public String version() throws IOException {
+    public RemoteCall<String> version() {
         Function function = new Function("version", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        return executeCallSingleValueReturn(function, String.class);
+        return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public BigInteger balanceOf(String _owner) throws IOException {
+    public RemoteCall<BigInteger> balanceOf(String _owner) {
         Function function = new Function("balanceOf", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_owner)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeCallSingleValueReturn(function, BigInteger.class);
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public String symbol() throws IOException {
+    public RemoteCall<String> symbol() {
         Function function = new Function("symbol", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        return executeCallSingleValueReturn(function, String.class);
+        return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public TransactionReceipt transfer(String _to, BigInteger _value) throws IOException, TransactionException {
+    public RemoteCall<TransactionReceipt> transfer(String _to, BigInteger _value) {
         Function function = new Function(
                 "transfer", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_to), 
                 new org.web3j.abi.datatypes.generated.Uint256(_value)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeTransaction(function);
+        return executeRemoteCallTransaction(function);
     }
 
-    public TransactionReceipt approveAndCall(String _spender, BigInteger _value, byte[] _extraData) throws IOException, TransactionException {
+    public RemoteCall<TransactionReceipt> approveAndCall(String _spender, BigInteger _value, byte[] _extraData) {
         Function function = new Function(
                 "approveAndCall", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_spender), 
                 new org.web3j.abi.datatypes.generated.Uint256(_value), 
                 new org.web3j.abi.datatypes.DynamicBytes(_extraData)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeTransaction(function);
+        return executeRemoteCallTransaction(function);
     }
 
-    public BigInteger allowance(String _owner, String _spender) throws IOException {
+    public RemoteCall<BigInteger> allowance(String _owner, String _spender) {
         Function function = new Function("allowance", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_owner), 
                 new org.web3j.abi.datatypes.Address(_spender)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeCallSingleValueReturn(function, BigInteger.class);
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public static HumanStandardToken deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) throws IOException, TransactionException {
+    public static RemoteCall<HumanStandardToken> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) throws IOException, TransactionException {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_initialAmount), 
                 new org.web3j.abi.datatypes.Utf8String(_tokenName), 
                 new org.web3j.abi.datatypes.generated.Uint8(_decimalUnits), 
                 new org.web3j.abi.datatypes.Utf8String(_tokenSymbol)));
-        return deploy(HumanStandardToken.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
+        return deployRemoteCall(HumanStandardToken.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
-    public static HumanStandardToken deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) throws IOException, TransactionException {
+    public static RemoteCall<HumanStandardToken> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) throws IOException, TransactionException {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_initialAmount), 
                 new org.web3j.abi.datatypes.Utf8String(_tokenName), 
                 new org.web3j.abi.datatypes.generated.Uint8(_decimalUnits), 
                 new org.web3j.abi.datatypes.Utf8String(_tokenSymbol)));
-        return deploy(HumanStandardToken.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
+        return deployRemoteCall(HumanStandardToken.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
     public static HumanStandardToken load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

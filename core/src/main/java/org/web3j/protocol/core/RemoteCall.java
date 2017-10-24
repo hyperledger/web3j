@@ -1,7 +1,7 @@
 package org.web3j.protocol.core;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 import rx.Observable;
 
@@ -31,11 +31,11 @@ public class RemoteCall<T> {
     }
 
     /**
-     * We return a future here to provide Android backwards compatibility for generated code.
+     * Perform request asynchronously with a future.
      *
      * @return a future containing our function
      */
-    public Future<T> sendAsync() {
+    public CompletableFuture<T> sendAsync() {
         return Async.run(this::send);
     }
 

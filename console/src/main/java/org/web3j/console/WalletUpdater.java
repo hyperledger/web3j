@@ -7,7 +7,7 @@ import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 
-import static org.web3j.utils.Console.exitError;
+import static org.web3j.codegen.Console.exitError;
 
 /**
  * Simple class for creating a wallet file.

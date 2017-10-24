@@ -1,7 +1,7 @@
 package org.web3j.console;
 
+import org.web3j.codegen.Console;
 import org.web3j.codegen.SolidityFunctionWrapperGenerator;
-import org.web3j.utils.Console;
 import org.web3j.utils.Version;
 
 import static org.web3j.utils.Collection.tail;
