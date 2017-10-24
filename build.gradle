@@ -30,7 +30,6 @@ plugins {
 }
 
 apply plugin: 'java'
-apply plugin: 'signing'
 apply plugin: 'idea'
 // should only be applied to the root project, see
 // https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
@@ -95,6 +94,7 @@ subprojects {
 configure(subprojects.findAll {it.name != 'integration-tests'}) {
     // Required for Maven Nexus repository
     apply plugin: 'maven'
+    apply plugin: 'signing'
 
     // Required for JFrog Artifactory repository
     apply plugin: 'maven-publish'
@@ -182,6 +182,11 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         }
     }
 
+    signing {
+        required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
+        sign configurations.archives
+    }
+
     bintray {
         user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
         key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
@@ -242,9 +247,4 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
                     ])
         })
     }
-}
-
-signing {
-    required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
-    sign configurations.archives
 }
