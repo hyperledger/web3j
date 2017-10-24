@@ -23,7 +23,7 @@ for target in ${targets}; do
         build/${fileName}.bin \
         build/${fileName}.abi \
         -p org.web3j.generated \
-        -o ../../../../../../integration-tests/java/ > /dev/null
+        -o ../../../../../../integration-tests/src/test/java/ > /dev/null
     echo "Complete"
 
     cd -

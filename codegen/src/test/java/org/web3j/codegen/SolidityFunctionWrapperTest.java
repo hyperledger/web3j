@@ -211,7 +211,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         //CHECKSTYLE:OFF
         String expected = "public org.web3j.protocol.core.RemoteCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
-                + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n"
+                + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n"
                 + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param1), \n"
                 + "      new org.web3j.abi.datatypes.generated.Uint32(param2)), \n"
                 + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n"

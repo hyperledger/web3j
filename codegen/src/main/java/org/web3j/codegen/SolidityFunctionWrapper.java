@@ -764,7 +764,7 @@ public class SolidityFunctionWrapper extends Generator {
                     }
                 });
 
-        methodBuilder.addStatement("$T function = new $T($S, \n$T.<$T>asList($L), \n$T"
+        methodBuilder.addStatement("final $T function = new $T($S, \n$T.<$T>asList($L), \n$T"
                 + ".<$T<?>>asList("
                 + asListParams + "))", objects.toArray());
     }
