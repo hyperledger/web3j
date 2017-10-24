@@ -45,3 +45,6 @@ docs/build
 
 /bin/
 /target/
+
+# Android Studio settings
+/local.properties
