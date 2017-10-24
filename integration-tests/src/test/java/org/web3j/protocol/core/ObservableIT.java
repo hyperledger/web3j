@@ -24,17 +24,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class ObservableIT {
 
-    private static final int EVENT_COUNT = 3;
+    private static final int EVENT_COUNT = 5;
+    private static final int TIMEOUT_MINUTES = 5;
 
     private Web3j web3j;
-
-    public ObservableIT() {
-        System.setProperty(
-                "org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-        System.setProperty(
-                "org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
-    }
 
     @Before
     public void setUp() {
@@ -103,7 +96,7 @@ public class ObservableIT {
                 }
         );
 
-        countDownLatch.await(5, TimeUnit.MINUTES);
+        countDownLatch.await(TIMEOUT_MINUTES, TimeUnit.MINUTES);
         subscription.unsubscribe();
         completedLatch.await(1, TimeUnit.SECONDS);
         assertTrue(subscription.isUnsubscribed());

@@ -1,4 +1,4 @@
-package org.web3j.utils;
+package org.web3j.codegen;
 
 /**
  * Command line utility classes.

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Future;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.TypeReference;
@@ -16,6 +15,7 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -25,14 +25,16 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * Auto generated code.<br>
- * <strong>Do not modify!</strong><br>
- * Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>, or {@link org.web3j.codegen.SolidityFunctionWrapperGenerator} to update.
+ * <p>Auto generated code.
+ * <p><strong>Do not modify!</strong>
+ * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 2.3.0.
+ * <p>Generated with web3j version 3.0.0-alpha3.
  */
 public final class Fibonacci extends Contract {
-    private static final String BINARY = "6060604052341561000c57fe5b5b6101278061001c6000396000f300606060405263ffffffff60e060020a6000350416633c7fdc708114602a57806361047ff414604c575bfe5b3415603157fe5b603a600435606e565b60408051918252519081900360200190f35b3415605357fe5b603a60043560bb565b60408051918252519081900360200190f35b600060778260bb565b604080518481526020810183905281519293507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed929081900390910190a15b919050565b600081151560ca5750600060b6565b816001141560d95750600160b6565b60e36002830360bb565b60ed6001840360bb565b01905060b6565b5b5b9190505600a165627a7a72305820ab11641de769d11f19354d7b1109fd73cd4e799ccf7eeb83192400c110e3dc950029";
+    private static final String BINARY = "6060604052341561000f57600080fd5b6101408061001e6000396000f300606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633c7fdc70811461004757806361047ff41461006f57600080fd5b341561005257600080fd5b61005d600435610085565b60405190815260200160405180910390f35b341561007a57600080fd5b61005d6004356100d1565b6000610090826100d1565b90507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed828260405191825260208201526040908101905180910390a1919050565b60008115156100e25750600061010f565b81600114156100f35750600161010f565b6100ff600283036100d1565b61010b600184036100d1565b0190505b9190505600a165627a7a72305820e29e6f9256736dbb0e785aef85807aaa0d64be7212498e8ced7848bed1a3daa10029";
 
     private Fibonacci(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
@@ -50,8 +52,8 @@ public final class Fibonacci extends Contract {
         ArrayList<NotifyEventResponse> responses = new ArrayList<NotifyEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NotifyEventResponse typedResponse = new NotifyEventResponse();
-            typedResponse.input = (Uint256) eventValues.getNonIndexedValues().get(0);
-            typedResponse.result = (Uint256) eventValues.getNonIndexedValues().get(1);
+            typedResponse.input = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.result = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
             responses.add(typedResponse);
         }
         return responses;
@@ -68,31 +70,34 @@ public final class Fibonacci extends Contract {
             public NotifyEventResponse call(Log log) {
                 EventValues eventValues = extractEventParameters(event, log);
                 NotifyEventResponse typedResponse = new NotifyEventResponse();
-                typedResponse.input = (Uint256) eventValues.getNonIndexedValues().get(0);
-                typedResponse.result = (Uint256) eventValues.getNonIndexedValues().get(1);
+                typedResponse.input = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+                typedResponse.result = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
                 return typedResponse;
             }
         });
     }
 
-    public Future<TransactionReceipt> fibonacciNotify(Uint256 number) {
-        Function function = new Function("fibonacciNotify", Arrays.<Type>asList(number), Collections.<TypeReference<?>>emptyList());
-        return executeTransactionAsync(function);
+    public RemoteCall<TransactionReceipt> fibonacciNotify(BigInteger number) {
+        Function function = new Function(
+                "fibonacciNotify", 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(number)), 
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
     }
 
-    public Future<Uint256> fibonacci(Uint256 number) {
+    public RemoteCall<BigInteger> fibonacci(BigInteger number) {
         Function function = new Function("fibonacci", 
-                Arrays.<Type>asList(number), 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(number)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeCallSingleValueReturnAsync(function);
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public static Future<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) {
-        return deployAsync(Fibonacci.class, web3j, credentials, gasPrice, gasLimit, BINARY, "", initialWeiValue);
+    public static RemoteCall<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return deployRemoteCall(Fibonacci.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
     }
 
-    public static Future<Fibonacci> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue) {
-        return deployAsync(Fibonacci.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "", initialWeiValue);
+    public static RemoteCall<Fibonacci> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return deployRemoteCall(Fibonacci.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, "");
     }
 
     public static Fibonacci load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
@@ -104,8 +109,8 @@ public final class Fibonacci extends Contract {
     }
 
     public static class NotifyEventResponse {
-        public Uint256 input;
+        public BigInteger input;
 
-        public Uint256 result;
+        public BigInteger result;
     }
 }

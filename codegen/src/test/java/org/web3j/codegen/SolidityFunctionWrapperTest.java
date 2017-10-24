@@ -112,12 +112,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         //CHECKSTYLE:OFF
         String expected =
-                "public org.web3j.protocol.core.methods.response.TransactionReceipt functionName(java.math.BigInteger param) throws java.io.IOException, org.web3j.protocol.exceptions.TransactionException {\n"
+                "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param) {\n"
                         + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      \"functionName\", \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
-                        + "  return executeTransaction(function);\n"
+                        + "  return executeRemoteCallTransaction(function);\n"
                         + "}\n";
         //CHECKSTYLE:ON
 
@@ -139,12 +139,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         //CHECKSTYLE:OFF
         String expected =
-                "public org.web3j.protocol.core.methods.response.TransactionReceipt functionName(java.math.BigInteger param, java.math.BigInteger weiValue) throws java.io.IOException, org.web3j.protocol.exceptions.TransactionException {\n"
+                "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param, java.math.BigInteger weiValue) {\n"
                         + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      \"functionName\", \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
-                        + "  return executeTransaction(function, weiValue);\n"
+                        + "  return executeRemoteCallTransaction(function, weiValue);\n"
                         + "}\n";
         //CHECKSTYLE:ON
 
@@ -167,11 +167,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         //CHECKSTYLE:OFF
         String expected =
-                "public java.math.BigInteger functionName(java.math.BigInteger param) throws java.io.IOException {\n"
+                "public org.web3j.protocol.core.RemoteCall<java.math.BigInteger> functionName(java.math.BigInteger param) {\n"
                         + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n"
-                        + "  return executeCallSingleValueReturn(function, java.math.BigInteger.class);\n"
+                        + "  return executeRemoteCallSingleValueReturn(function, java.math.BigInteger.class);\n"
                         + "}\n";
         //CHECKSTYLE:ON
 
@@ -210,15 +210,21 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         //CHECKSTYLE:OFF
-        String expected = "public org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger> functionName(java.math.BigInteger param1, java.math.BigInteger param2) throws java.io.IOException {\n"
+        String expected = "public org.web3j.protocol.core.RemoteCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
                 + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n"
                 + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param1), \n"
                 + "      new org.web3j.abi.datatypes.generated.Uint32(param2)), \n"
                 + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n"
-                + "  java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);\n"
-                + "  return new org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>(\n"
-                + "      (java.math.BigInteger) results.get(0).getValue(), \n"
-                + "      (java.math.BigInteger) results.get(1).getValue());\n"
+                + "  return new org.web3j.protocol.core.RemoteCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>(\n"
+                + "      new java.util.concurrent.Callable<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>() {\n"
+                + "        @java.lang.Override\n"
+                + "        public org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger> call() throws java.lang.Exception {\n"
+                + "          java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);;\n"
+                + "          return new org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>(\n"
+                + "              (java.math.BigInteger) results.get(0).getValue(), \n"
+                + "              (java.math.BigInteger) results.get(1).getValue());\n"
+                + "        }\n"
+                + "      });\n"
                 + "}\n";
         //CHECKSTYLE:ON
 

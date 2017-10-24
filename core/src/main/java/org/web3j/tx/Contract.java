@@ -6,8 +6,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
@@ -27,7 +25,6 @@ import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
 
@@ -212,21 +209,6 @@ public abstract class Contract extends ManagedTransaction {
         return send(contractAddress, data, weiValue, gasPrice, gasLimit);
     }
 
-    /**
-     * Execute the provided function as a transaction asynchronously.
-     *
-     * @param function to transact with
-     * @return {@link Future} containing executing transaction
-     */
-    protected Future<TransactionReceipt> executeTransactionAsync(final Function function) {
-        return Async.run(new Callable<TransactionReceipt>() {
-            @Override
-            public TransactionReceipt call() throws Exception {
-                return executeTransaction(function);
-            }
-        });
-    }
-
     protected <T extends Type> RemoteCall<T> executeRemoteCallSingleValueReturn(
             final Function function) {
         return new RemoteCall<T>(new Callable<T>() {
@@ -353,6 +335,16 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit,
+            String binary, String encodedConstructor) {
+        return deployRemoteCall(
+                type, web3j, credentials, gasPrice, gasLimit,
+                binary, encodedConstructor, BigInteger.ZERO);
+    }
+
+    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
             final Class<T> type,
             final Web3j web3j, final TransactionManager transactionManager,
             final BigInteger gasPrice, final BigInteger gasLimit,
@@ -365,6 +357,16 @@ public abstract class Contract extends ManagedTransaction {
                         encodedConstructor, value);
             }
         });
+    }
+
+    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j, TransactionManager transactionManager,
+            BigInteger gasPrice, BigInteger gasLimit,
+            String binary, String encodedConstructor) {
+        return deployRemoteCall(
+                type, web3j, transactionManager, gasPrice, gasLimit, binary,
+                encodedConstructor, BigInteger.ZERO);
     }
 
     protected EventValues extractEventParameters(

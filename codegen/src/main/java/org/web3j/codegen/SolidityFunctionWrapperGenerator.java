@@ -12,8 +12,8 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
 
+import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
-import static org.web3j.utils.Console.exitError;
 
 /**
  * Java wrapper source code generator for Solidity ABI format.

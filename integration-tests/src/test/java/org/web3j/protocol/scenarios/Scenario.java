@@ -31,12 +31,12 @@ import static junit.framework.TestCase.fail;
  */
 public class Scenario {
 
-    // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
-    static final BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+    static final BigInteger GAS_PRICE = BigInteger.valueOf(22000000000L);
     static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
 
     // testnet
     private static final String WALLET_PASSWORD = "";
+
     /*
     If you want to use regular Ethereum wallet addresses, provide a WALLET address variable
     "0x..." // 20 bytes (40 hex characters) & replace instances of ALICE.getAddress() with this

@@ -32,7 +32,7 @@ public class RemoteCall<T> {
     }
 
     /**
-     * We return a future here to provide Android backwards compatibility for generated code.
+     * Perform request asynchronously with a future.
      *
      * @return a future containing our function
      */

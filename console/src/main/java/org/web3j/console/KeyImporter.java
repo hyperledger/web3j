@@ -8,8 +8,8 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.utils.Files;
 
+import static org.web3j.codegen.Console.exitError;
 import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
-import static org.web3j.utils.Console.exitError;
 
 /**
  * Create Ethereum wallet file from a provided private key.

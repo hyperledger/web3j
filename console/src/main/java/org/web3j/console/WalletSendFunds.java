@@ -18,7 +18,7 @@ import org.web3j.protocol.infura.InfuraHttpService;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
-import static org.web3j.utils.Console.exitError;
+import static org.web3j.codegen.Console.exitError;
 
 /**
  * Simple class for creating a wallet file.
