@@ -1,6 +1,5 @@
 package org.web3j.generated;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,8 +10,8 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 
@@ -23,10 +22,10 @@ import org.web3j.tx.TransactionManager;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version none.
+ * <p>Generated with web3j version 3.0.0-alpha4.
  */
 public final class Greeter extends Contract {
-    private static final String BINARY = "6060604052341561000c57fe5b6040516102f03803806102f0833981016040528051015b5b60008054600160a060020a03191633600160a060020a03161790555b805161005390600190602084019061005b565b505b506100fb565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061009c57805160ff19168380011785556100c9565b828001600101855582156100c9579182015b828111156100c95782518255916020019190600101906100ae565b5b506100d69291506100da565b5090565b6100f891905b808211156100d657600081556001016100e0565b5090565b90565b6101e68061010a6000396000f300606060405263ffffffff60e060020a60003504166341c0e1b5811461002c578063cfae32171461003e575bfe5b341561003457fe5b61003c6100ce565b005b341561004657fe5b61004e610110565b604080516020808252835181830152835191928392908301918501908083838215610094575b80518252602083111561009457601f199092019160209182019101610074565b505050905090810190601f1680156100c05780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6000543373ffffffffffffffffffffffffffffffffffffffff9081169116141561010d5760005473ffffffffffffffffffffffffffffffffffffffff16ff5b5b565b6101186101a8565b60018054604080516020600284861615610100026000190190941693909304601f8101849004840282018401909252818152929183018282801561019d5780601f106101725761010080835404028352916020019161019d565b820191906000526020600020905b81548152906001019060200180831161018057829003601f168201915b505050505090505b90565b604080516020810190915260008152905600a165627a7a72305820141d86fec5655546a8ea51f05c2df449092e6e94a88e09d4214fdf5836d7b56e0029";
+    private static final String BINARY = "6060604052341561000f57600080fd5b6040516103173803806103178339810160405280805160008054600160a060020a03191633600160a060020a03161790559190910190506001818051610059929160200190610060565b50506100fb565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106100a157805160ff19168380011785556100ce565b828001600101855582156100ce579182015b828111156100ce5782518255916020019190600101906100b3565b506100da9291506100de565b5090565b6100f891905b808211156100da57600081556001016100e4565b90565b61020d8061010a6000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b58114610047578063cfae32171461005c57600080fd5b341561005257600080fd5b61005a6100e6565b005b341561006757600080fd5b61006f610127565b60405160208082528190810183818151815260200191508051906020019080838360005b838110156100ab578082015183820152602001610093565b50505050905090810190601f1680156100d85780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6000543373ffffffffffffffffffffffffffffffffffffffff908116911614156101255760005473ffffffffffffffffffffffffffffffffffffffff16ff5b565b61012f6101cf565b60018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156101c55780601f1061019a576101008083540402835291602001916101c5565b820191906000526020600020905b8154815290600101906020018083116101a857829003601f168201915b5050505050905090565b602060405190810160405260008152905600a165627a7a72305820aa08e4bb9248935fa72006b4a31d561f0246e87657677aea82c22108f4af7cb70029";
 
     private Greeter(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
@@ -36,29 +35,29 @@ public final class Greeter extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public TransactionReceipt kill() throws IOException, TransactionException {
+    public RemoteCall<TransactionReceipt> kill() {
         Function function = new Function(
                 "kill", 
                 Arrays.<Type>asList(), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeTransaction(function);
+        return executeRemoteCallTransaction(function);
     }
 
-    public String greet() throws IOException {
+    public RemoteCall<String> greet() {
         Function function = new Function("greet", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        return executeCallSingleValueReturn(function, String.class);
+        return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public static Greeter deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, String _greeting) throws IOException, TransactionException {
+    public static RemoteCall<Greeter> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String _greeting) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(_greeting)));
-        return deploy(Greeter.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
+        return deployRemoteCall(Greeter.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
-    public static Greeter deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialWeiValue, String _greeting) throws IOException, TransactionException {
+    public static RemoteCall<Greeter> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, String _greeting) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(_greeting)));
-        return deploy(Greeter.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor, initialWeiValue);
+        return deployRemoteCall(Greeter.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
     public static Greeter load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
