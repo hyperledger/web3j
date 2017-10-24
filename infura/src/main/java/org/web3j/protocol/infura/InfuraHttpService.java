@@ -18,6 +18,7 @@ public class InfuraHttpService extends HttpService {
     public InfuraHttpService(String url, String clientVersion, boolean required) {
         super(url);
         clientVersionHeader = buildClientVersionHeader(clientVersion, required);
+        addHeaders(clientVersionHeader);
     }
 
     public InfuraHttpService(String url, String clientVersion) {
@@ -26,11 +27,6 @@ public class InfuraHttpService extends HttpService {
 
     public InfuraHttpService(String url) {
         this(url, "", false);
-    }
-
-    @Override
-    protected void addHeaders(Map<String, String> headers) {
-        headers.putAll(clientVersionHeader);
     }
 
     static Map<String, String> buildClientVersionHeader(String clientVersion, boolean required) {
