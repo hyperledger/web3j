@@ -12,9 +12,9 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
 /**
- * RLP utility methods.
+ * Smart Contract utility methods.
  */
-public class Utils {
+public class ContractUtils {
 
     /**
      *  Generate a smart contract address. This enables you to identify what address a

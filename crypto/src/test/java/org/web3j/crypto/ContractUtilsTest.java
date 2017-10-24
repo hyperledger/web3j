@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.crypto.Utils.generateContractAddress;
+import static org.web3j.crypto.ContractUtils.generateContractAddress;
 
-public class UtilsTest {
+public class ContractUtilsTest {
 
     @Test
     public void testCreateContractAddress() {
