@@ -20,7 +20,7 @@ if there are any updates to your filters due to the synchronous nature of HTTP a
 Additionally the block and transaction filters only provide the transaction or block hash, so a
 further request is required to obtain the actual transaction or block referred to by the hash.
 
-web3j's managed `Filter <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/filters/Filter.java>`_
+web3j's managed `Filter <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/filters/Filter.java>`_
 implementation address these issues, so you have a fully asynchronous event based API for working
 with filters. It uses `RxJava <https://github.com/ReactiveX/RxJava>`_'s
 `Observables <http://reactivex.io/documentation/observable.html>`_ which provides a consistent API
@@ -59,7 +59,7 @@ Subscriptions should always be cancelled when no longer required via *unsubscrib
 
 Other callbacks are also provided which provide simply the block or transaction hashes,
 for details of these refer to the
-`Web3jRx <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+`Web3jRx <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
 interface.
 
 
@@ -111,7 +111,7 @@ As above, but with transactions contained within blocks::
    });
 
 All of the above filters are exported via the
-`Web3jRx <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+`Web3jRx <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
 interface.
 
 
@@ -126,7 +126,7 @@ The `Solidity documentation <http://solidity.readthedocs.io/en/develop/contracts
 provides a good overview of EVM events.
 
 You use the
-`EthFilter <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/EthFilter.java>`_
+`EthFilter <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/methods/request/EthFilter.java>`_
 type to specify the topics that you wish to apply to the filter. This can include the address of
 the smart contract you wish to apply the filter to. You can also provide specific topics to filter
 on. Where the individual topics represent indexed parameters on the smart contract::
@@ -158,7 +158,7 @@ In addition to *send()* and *sendAsync*, all JSON-RPC method implementations in 
 very straight forwards to compose JSON-RPC calls together into new functions.
 
 For instance, the
-`blockObservable <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/JsonRpc2_0Rx.java>`_ is
+`blockObservable <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/JsonRpc2_0Rx.java>`_ is
 itself composed of a number of separate JSON-RPC calls::
 
    public Observable<EthBlock> blockObservable(
@@ -177,8 +177,8 @@ Further examples
 ----------------
 
 Please refer to the integration test
-`ObservableIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/core/ObservableIT.java>`_
+`ObservableIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/ObservableIT.java>`_
 for further examples.
 
 For a demonstration of using the manual filter API, you can take a look at the test
-`EventFilterIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/EventFilterIT.java>`_..
+`EventFilterIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/EventFilterIT.java>`_..

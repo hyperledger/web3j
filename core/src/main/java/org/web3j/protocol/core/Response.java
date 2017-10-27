@@ -2,7 +2,11 @@ package org.web3j.protocol.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
+/**
+ * Our common JSON-RPC response type.
+ *
+ * @param <T> the object type contained within the response
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<T> {
     private long id;

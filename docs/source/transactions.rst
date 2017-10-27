@@ -28,9 +28,9 @@ Obtaining Ether
 To obtain Ether you have two options:
 
 #. Mine it yourself
-#. Buy Ether from another party
+#. Obtain Ether from another party
 
-Mining it yourself in a private environment, or the public tet environment (testnet) is very
+Mining it yourself in a private environment, or the public test environment (testnet) is very
 straight forwards. However, in the main live environment (mainnet) it requires significant
 dedicated GPU time which is not likely to be feasible unless you already have a gaming PC with
 multiple dedicated GPUs. If you wish to use a private environment, there is some guidance on the
@@ -41,9 +41,34 @@ exchanges, you will need to research the best location for this yourself. The
 `Homestead documentation <https://ethereum-homestead.readthedocs.io/en/latest/ether.html#list-of-centralised-exchange-marketplaces>`__
 contains a number of exchanges which is a good place to start.
 
-Alternatively, if you need some Ether on testnet to get started, please post a message with your
-wallet address to the `web3j Gitter channel <https://gitter.im/web3j/web3j>`_ and I'll send you
-some.
+
+.. _ethereum-testnets:
+
+Ethereum testnets
+-----------------
+
+There are a number of dedicated test networks in Ethereum, which are supported by various clients.
+
+- Rinkeby (Geth only)
+- Kovan (Parity only)
+- Ropsten (Geth and Parity)
+
+For development, its recommended you use the Rinkeby or Kovan test networks. This is because they
+use a Proof of Authority (PoA) consensus mechanism, ensuring transactions and blocks are created in
+a consistent and timely manner. The Ropsten testnet, although closest to the Mainnet as it uses
+Proof of Work (PoW) consensus, has been subject to attacks in the past and tends to be more
+problematic for developers.
+
+You can request Ether for the Rinkeby testnet via the Rinkeby Crypto Faucet, available at
+https://www.rinkeby.io/.
+
+Details of how to request Ether for the Kovan testnet are available
+`here <https://github.com/kovan-testnet/faucet>`_.
+
+If you need some Ether on the Ropsten testnet to get started, please post a message with your
+wallet address to the `web3j Gitter channel <https://gitter.im/web3j/web3j>`_ and you will be
+sent some.
+
 
 
 Mining on testnet/private blockchains
@@ -61,6 +86,9 @@ Parity
   https://github.com/paritytech/parity/wiki/Mining
 
 Once you have mined some Ether, you can start transacting with the blockchain.
+
+However, as mentioned :ref:`above <ethereum-testnets>` it's simpler to use the Kovan or Rinkeby
+test networks.
 
 
 .. _gas:
@@ -82,15 +110,17 @@ are used to dictate how much Ether you wish to spend in order for a tranaction t
 
 *Gas price*
 
-  This is the amount you are prepared in Ether per unit of gas. It defaults to a price of 9000 Wei
-  (9 x 10\ :sup:`-15` Ether).
+  This is the amount you are prepared in Ether per unit of gas. web3j uses a default price
+  of 22,000,000,000 Wei
+  (22 x 10\ :sup:`-8` Ether). This is defined in
+  `ManagedTransaction <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ManagedTransaction.java>`_.
 
 
 *Gas limit*
 
   This is the total amount of gas you are happy to spend on the transaction execution. There is an
   upper limit of how large a single transaction can be in an Ethereum block which restricts this
-  value typically to less then 1,500,000. The current gas limit is visible at https://ethstats.net/.
+  value typically to less then 6,700,000. The current gas limit is visible at https://ethstats.net/.
 
 
 These parameters taken together dictate the maximum amount of Ether you are willing to spend on
@@ -126,37 +156,37 @@ via:
 - The `Geth Wiki <https://github.com/ethereum/go-ethereum/wiki/Managing-your-accounts>`_ contains
   a good run down of the different mechanisms Geth supports such as importing private key files,
   and creating a new account via it's console
-- Alternatively you can use a JSON-RPC admin command for your client, such as personal_newAccount
+- Alternatively you can use a JSON-RPC admin command for your client, such as *personal_newAccount*
   for `Parity <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module#personal_newaccount>`_
   or `Geth <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_newaccount>`_
 
 With your wallet file created, you can unlock your account via web3j by first of all creating an
 instance of web3j that supports Parity/Geth admin commands::
 
-   Parity parity = Parity.build(new HttpService());
+   Admin web3j = Admin.build(new HttpService());
 
 Then you can unlock the account, and providing this was successful, send a transaction::
 
-   PersonalUnlockAccount personalUnlockAccount = parity.personalUnlockAccount("0x000...", "a password").sendAsync().get();
+   PersonalUnlockAccount personalUnlockAccount = web3j.personalUnlockAccount("0x000...", "a password").send();
    if (personalUnlockAccount.accountUnlocked()) {
        // send a transaction
    }
 
 
 Transactions for sending in this manner should be created via
-`EthSendTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/EthSendTransaction.java>`_,
-with the `Transaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_ type::
+`EthSendTransaction <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/methods/response/EthSendTransaction.java>`_,
+with the `Transaction <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_ type::
 
   Transaction transaction = Transaction.createContractTransaction(
                 <from address>,
                 <nonce>,
-                BigInteger.valueOf(<gas price>),
+                BigInteger.valueOf(<gas price>),  // we use default gas limit
                 "0x...<smart contract code to execute>"
         );
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
                 transactionResponse = parity.ethSendTransaction(ethSendTransaction)
-                .sendAsync().get();
+                .send();
 
         String transactionHash = transactionResponse.getTransactionHash();
 
@@ -165,9 +195,9 @@ with the `Transaction <https://github.com/web3j/web3j/blob/master/src/main/java/
 Where the *<nonce>* value is obtained as per :ref:`below <nonce>`.
 
 Please refer to the integration test
-`DeployContractIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_
+`DeployContractIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_
 and its superclass
-`Scenario <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/Scenario.java>`_
+`Scenario <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/Scenario.java>`_
 for further details of this transaction workflow.
 
 Further details of working with the different admin commands supported by web3j are available in
@@ -186,6 +216,10 @@ Offline transaction signing allows you to sign a transaction using your Ethereum
 within web3j, allowing you to have complete control over your private credentials. A transaction
 created offline can then be sent to any Ethereum client on the network, which will propagate the
 transaction out to other nodes, provided it is a valid transaction.
+
+You can also perform out of process transaction signing if required. This can be achieved by
+overriding the *sign* method in
+`ECKeyPair <https://github.com/web3j/web3j/blob/master/crypto/src/main/java/org/web3j/crypto/ECKeyPair.java#L41>`_.
 
 
 .. _wallet-files:
@@ -222,7 +256,7 @@ Signing transactions
 --------------------
 
 Transactions to be used in an offline signing capacity, should use the
-`RawTransaction <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_
+`RawTransaction <https://github.com/web3j/web3j/blob/master/crypto/src/main/java/org/web3j/crypto/RawTransaction.java>`_
 type for this purpose. The RawTransaction is similar to the previously mentioned Transaction type,
 however it does not require a *from* address, as this can be inferred from the signature.
 
@@ -259,7 +293,7 @@ The transaction is then sent using `eth_sendRawTransaction <https://github.com/e
 
 
 Please refer to the integration test
-`CreateRawTransactionIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/scenarios/CreateRawTransactionIT.java>`_
+`CreateRawTransactionIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/CreateRawTransactionIT.java>`_
 for a full example of creating and sending a raw transaction.
 
 
@@ -332,6 +366,15 @@ object:
    // send...
 
 
+Recommended approach for working with smart contracts
+-----------------------------------------------------
+
+When working with smart contract wrappers as outlined below, you will have to perform all of
+the conversions from Solidity to native Java types manually. It is far more effective to use
+web3j's :ref:`smart-contract-wrappers` which take care of all code generation and this conversion
+for you.
+
+
 .. _creation-of-smart-contract:
 
 Creation of a smart contract
@@ -357,9 +400,15 @@ To deploy a new smart contract, the following attributes will need to be provide
    // send...
 
    // get contract address
-   EthGetTransactionReceipt.TransactionReceipt transactionReceipt = sendTransactionReceiptRequest(transactionHash);
+   EthGetTransactionReceipt transactionReceipt =
+                web3j.ethGetTransactionReceipt(transactionHash).send();
 
-   Optional<String> contractAddressOptional = transactionReceipt.getContractAddress();
+   if (transactionReceipt.getTransactionReceipt.isPresent()) {
+       String contractAddress = transactionReceipt.get().getContractAddress();
+   } else {
+       // try again
+   }
+
 
 If the smart contract contains a constructor, the associated constructor field values must be
 encoded and appended to the *compiled smart contract code*::
@@ -379,6 +428,7 @@ encoded and appended to the *compiled smart contract code*::
    // send...
 
 
+
 .. _transacting-with-contract:
 
 Transacting with a smart contract
@@ -396,8 +446,8 @@ To transact with an existing smart contract, the following attributes will need 
   the encoded function selector and parameter arguments
 
 web3j takes care of the function encoding for you, further details are available in the
-`Ethereum Contract ABI <https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#function-selector-and-argument-encoding>`_
-section of the Ethereum Wiki.
+`Ethereum Contract ABI <https://solidity.readthedocs.io/en/develop/abi-spec.html#function-selector>`_
+section of the Solidity docs.
 
 ::
 

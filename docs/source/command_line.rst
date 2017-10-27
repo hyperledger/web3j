@@ -26,11 +26,11 @@ To run via the zipfile, simply extract the zipfile and run the binary:
 .. code-block:: bash
 
    $ unzip web3j-<version>.zip
-      creating: web3j-1.0.2/lib/
-     inflating: web3j-1.0.2/lib/core-1.0.2-all.jar
-      creating: web3j-1.0.2/bin/
-     inflating: web3j-1.0.2/bin/web3j
-     inflating: web3j-1.0.2/bin/web3j.bat
+      creating: web3j-3.0.0/lib/
+     inflating: web3j-3.0.0/lib/core-1.0.2-all.jar
+      creating: web3j-3.0.0/bin/
+     inflating: web3j-3.0.0/bin/web3j
+     inflating: web3j-3.0.0/bin/web3j.bat
    $ ./web3j-<version>/bin/web3j
 
                  _      _____ _     _
@@ -42,7 +42,7 @@ To run via the zipfile, simply extract the zipfile and run the binary:
                             _/ |
                            |__/
 
-   Usage: web3j wallet|solidity ...
+   Usage: web3j version|wallet|solidity ...
 
 
 Wallet tools

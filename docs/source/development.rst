@@ -4,20 +4,21 @@ Developer Guide
 Building web3j
 --------------
 
-web3j includes integration tests for running against a live Ethereum client. If you do not have a client running, you can exclude their execution as per the below instructions.
+web3j includes integration tests for running against a live Ethereum client. If you do not have a
+client running, you can exclude their execution as per the below instructions.
 
-To run a full build including integration tests:
+To run a full build (excluding integration tests):
 
 .. code-block:: bash
 
    $ ./gradlew check
 
 
-To run excluding integration tests:
+To run the integration tests:
 
 .. code-block:: bash
 
-   $ ./gradlew -x integrationTest check
+   $ ./gradlew  -Pintegration-tests=true :integration-tests:test
 
 
 Generating documentation
