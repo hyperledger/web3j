@@ -80,14 +80,18 @@ public class Request<S, T extends Response> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Request<?, ?> request = (Request<?, ?>) o;
-        return Objects.equals(jsonrpc, request.jsonrpc) &&
-                Objects.equals(method, request.method) &&
-                Objects.equals(params, request.params) &&
-                Objects.equals(web3jService, request.web3jService) &&
-                Objects.equals(responseType, request.responseType);
+        return Objects.equals(jsonrpc, request.jsonrpc)
+                && Objects.equals(method, request.method)
+                && Objects.equals(params, request.params)
+                && Objects.equals(web3jService, request.web3jService)
+                && Objects.equals(responseType, request.responseType);
     }
 
     @Override
