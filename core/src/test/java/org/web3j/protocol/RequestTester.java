@@ -1,19 +1,16 @@
 package org.web3j.protocol;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.*;
 import okio.Buffer;
 import org.junit.Before;
-
 import org.web3j.protocol.http.HttpService;
+
+import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public abstract class RequestTester {
@@ -23,6 +20,8 @@ public abstract class RequestTester {
 
     private RequestInterceptor requestInterceptor;
 
+    private ObjectMapper objectMapper;
+
     @Before
     public void setUp() {
         requestInterceptor = new RequestInterceptor();
@@ -31,6 +30,7 @@ public abstract class RequestTester {
                 .build();
         httpService = new HttpService(httpClient);
         initWeb3Client(httpService);
+        objectMapper = new ObjectMapper();
     }
 
     protected abstract void initWeb3Client(HttpService httpService);
@@ -42,7 +42,10 @@ public abstract class RequestTester {
 
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
-        assertThat(buffer.readUtf8(), is(expected));
+        org.web3j.protocol.core.Request actualRequest = objectMapper.readValue(buffer.readUtf8(), org.web3j.protocol.core.Request.class);
+        org.web3j.protocol.core.Request expectedRequest = objectMapper.readValue(expected, org.web3j.protocol.core.Request.class);
+        assertEquals(actualRequest, expectedRequest);
+        assertNotNull(actualRequest.getId());
     }
 
     private class RequestInterceptor implements Interceptor {

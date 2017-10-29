@@ -2,6 +2,8 @@ package org.web3j.protocol.core;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import rx.Observable;
@@ -12,7 +14,7 @@ public class Request<S, T extends Response> {
     private String jsonrpc = "2.0";
     private String method;
     private List<S> params;
-    private long id;
+    private UUID id;
 
     private Web3jService web3jService;
 
@@ -23,11 +25,11 @@ public class Request<S, T extends Response> {
     public Request() {
     }
 
-    public Request(String method, List<S> params, long id,
+    public Request(String method, List<S> params,
                    Web3jService web3jService, Class<T> type) {
         this.method = method;
         this.params = params;
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.web3jService = web3jService;
         this.responseType = type;
     }
@@ -56,11 +58,11 @@ public class Request<S, T extends Response> {
         this.params = params;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -74,5 +76,22 @@ public class Request<S, T extends Response> {
 
     public Observable<T> observable() {
         return new RemoteCall<>(this::send).observable();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Request<?, ?> request = (Request<?, ?>) o;
+        return Objects.equals(jsonrpc, request.jsonrpc) &&
+                Objects.equals(method, request.method) &&
+                Objects.equals(params, request.params) &&
+                Objects.equals(web3jService, request.web3jService) &&
+                Objects.equals(responseType, request.responseType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(jsonrpc, method, params, web3jService, responseType);
     }
 }

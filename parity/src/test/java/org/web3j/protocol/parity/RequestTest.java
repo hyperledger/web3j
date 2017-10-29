@@ -33,7 +33,7 @@ public class RequestTest extends RequestTester {
         web3j.parityAllAccountsInfo().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_allAccountsInfo\","
-                + "\"params\":[],\"id\":1}");
+                + "\"params\":[]}");
     }
     
     @Test
@@ -42,7 +42,7 @@ public class RequestTest extends RequestTester {
         web3j.parityChangePassword("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", "bazqux5").send();
         
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_changePassword\","
-                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\",\"bazqux5\"],\"id\":1}");
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\",\"bazqux5\"]}");
         //CHECKSTYLE:ON
     }
     
@@ -57,7 +57,7 @@ public class RequestTest extends RequestTester {
         //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_deriveAddressHash\","
                 + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\","
-                + "{\"hash\":\"0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43\",\"type\":\"hard\"},false],\"id\":1}");
+                + "{\"hash\":\"0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43\",\"type\":\"hard\"},false]}");
         //CHECKSTYLE:ON
     }
     
@@ -72,7 +72,7 @@ public class RequestTest extends RequestTester {
         
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_deriveAddressIndex\","
                 + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\","
-                + "[{\"index\":1,\"type\":\"hard\"},{\"index\":2,\"type\":\"soft\"}],false],\"id\":1}");
+                + "[{\"index\":1,\"type\":\"hard\"},{\"index\":2,\"type\":\"soft\"}],false]}");
         //CHECKSTYLE:ON
     }
     
@@ -82,7 +82,7 @@ public class RequestTest extends RequestTester {
         
         //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_exportAccount\","
-                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],\"id\":1}");
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"]}");
         //CHECKSTYLE:ON
     }
     
@@ -91,7 +91,7 @@ public class RequestTest extends RequestTester {
         web3j.parityGetDappAddresses("web").send();
         
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getDappAddresses\","
-                + "\"params\":[\"web\"],\"id\":1}");
+                + "\"params\":[\"web\"]}");
     }
     
     @Test
@@ -99,21 +99,21 @@ public class RequestTest extends RequestTester {
         web3j.parityGetDappDefaultAddress("web").send();
         
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getDappDefaultAddress\","
-                + "\"params\":[\"web\"],\"id\":1}");
+                + "\"params\":[\"web\"]}");
     }
     
     public void testParityGetNewDappsAddresses() throws Exception {
         web3j.parityAllAccountsInfo().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getNewDappsAddresses\","
-                + "\"params\":[],\"id\":1}");
+                + "\"params\":[]}");
     }
     
     public void testParityGetNewDappsDefaultAddress() throws Exception {
         web3j.parityGetNewDappsDefaultAddress().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_getNewDappsDefaultAddress\","
-                + "\"params\":[],\"id\":1}");
+                + "\"params\":[]}");
     }
     
     public void testParityImportGethAccounts() throws Exception {
@@ -122,7 +122,7 @@ public class RequestTest extends RequestTester {
         web3j.parityImportGethAccounts(gethAccounts).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_importGethAccounts\","
-                + "\"params\":[[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]],\"id\":1}");
+                + "\"params\":[[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]]}");
     }
     
     public void testParityKillAccount() throws Exception {
@@ -130,7 +130,7 @@ public class RequestTest extends RequestTester {
         
         //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_killAccount\","
-                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],\"id\":1}");
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"]}");
         //CHECKSTYLE:ON
     }
     
@@ -138,14 +138,14 @@ public class RequestTest extends RequestTester {
         web3j.parityListGethAccounts().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listGethAccounts\","
-                + "\"params\":[],\"id\":1}");
+                + "\"params\":[]}");
     }
     
     public void testParityListRecentDapps() throws Exception {
         web3j.parityListRecentDapps().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listRecentDapps\","
-                + "\"params\":[],\"id\":1}");
+                + "\"params\":[]}");
     }
     
     @Test
@@ -153,7 +153,7 @@ public class RequestTest extends RequestTester {
         web3j.parityNewAccountFromPhrase("phrase", "password").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromPhrase\","
-                + "\"params\":[\"phrase\",\"password\"],\"id\":1}");
+                + "\"params\":[\"phrase\",\"password\"]}");
     }
     
     @Test
@@ -162,7 +162,7 @@ public class RequestTest extends RequestTester {
         web3j.parityNewAccountFromSecret("0x1db2c0cf57505d0f4a3d589414f0a0025ca97421d2cd596a9486bc7e2cd2bf8b", "password").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromSecret\","
-                + "\"params\":[\"0x1db2c0cf57505d0f4a3d589414f0a0025ca97421d2cd596a9486bc7e2cd2bf8b\",\"password\"],\"id\":1}");
+                + "\"params\":[\"0x1db2c0cf57505d0f4a3d589414f0a0025ca97421d2cd596a9486bc7e2cd2bf8b\",\"password\"]}");
         //CHECKSTYLE:ON
     }
     
@@ -197,7 +197,7 @@ public class RequestTest extends RequestTester {
         web3j.parityNewAccountFromWallet(walletFile, "password").send();
 
         //CHECKSTYLE:OFF
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromWallet\",\"params\":[{\"address\":\"0x...\",\"id\":\"cab06c9e-79a9-48ea-afc7-d3bdb3a59526\",\"version\":1,\"crypto\":{\"cipher\":\"CIPHER\",\"ciphertext\":\"CIPHERTEXT\",\"cipherparams\":{\"iv\":\"IV\"},\"kdf\":\"KDF\",\"kdfparams\":{\"dklen\":32,\"n\":1,\"p\":10,\"r\":100,\"salt\":\"SALT\"},\"mac\":\"MAC\"}},\"password\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromWallet\",\"params\":[{\"address\":\"0x...\",\"id\":\"cab06c9e-79a9-48ea-afc7-d3bdb3a59526\",\"version\":1,\"crypto\":{\"cipher\":\"CIPHER\",\"ciphertext\":\"CIPHERTEXT\",\"cipherparams\":{\"iv\":\"IV\"},\"kdf\":\"KDF\",\"kdfparams\":{\"dklen\":32,\"n\":1,\"p\":10,\"r\":100,\"salt\":\"SALT\"},\"mac\":\"MAC\"}},\"password\"]}");
         //CHECKSTYLE:ON
     }
     
@@ -205,7 +205,7 @@ public class RequestTest extends RequestTester {
         web3j.parityRemoveAddress("0x407d73d8a49eeb85d32cf465507dd71d507100c1").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_removeAddress\","
-                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],\"id\":1}");
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]}");
     }
     
     @Test
@@ -215,8 +215,7 @@ public class RequestTest extends RequestTester {
         web3j.paritySetAccountMeta("0xfc390d8a8ddb591b010fda52f4db4945742c3809", meta).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setAccountMeta\","
-                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",{\"foo\":\"bar\"}],"
-                + "\"id\":1}");
+                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",{\"foo\":\"bar\"}]}");
     }
     
     @Test
@@ -225,8 +224,7 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setAccountName\","
-                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"Savings\"],"
-                + "\"id\":1}");
+                + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"Savings\"]}");
     }
     
     @Test
@@ -237,8 +235,7 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setDappAddresses\","
-                + "\"params\":[\"web\",[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]],"
-                + "\"id\":1}");
+                + "\"params\":[\"web\",[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]]}");
     }
     
     @Test
@@ -247,8 +244,7 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setDappDefaultAddress\","
-                + "\"params\":[\"web\",\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],"
-                + "\"id\":1}");
+                + "\"params\":[\"web\",\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]}");
     }
     
     @Test
@@ -259,8 +255,7 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setNewDappsAddresses\","
-                + "\"params\":[[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]],"
-                + "\"id\":1}");
+                + "\"params\":[[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]]}");
     }
     
     @Test
@@ -269,8 +264,7 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_setNewDappsDefaultAddress\","
-                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],"
-                + "\"id\":1}");
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]}");
     }
     
     @Test
@@ -279,8 +273,7 @@ public class RequestTest extends RequestTester {
                 .send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_testPassword\","
-                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],"
-                + "\"id\":1}");
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"]}");
     }
     
     @Test
@@ -290,7 +283,7 @@ public class RequestTest extends RequestTester {
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_signMessage\","
                 + "\"params\":[\"0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e\",\"password1\","
-                + "\"0xbc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a\"],\"id\":1}");
+                + "\"0xbc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a\"]}");
         //CHECKSTYLE:ON
     }
     
@@ -323,8 +316,7 @@ public class RequestTest extends RequestTester {
                 + "\"data\":\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\","
                 + "\"nonce\":\"0x1\"},"
                 + "[\"trace\",\"vmTrace\",\"stateDiff\"],"
-                + "\"latest\"],"
-                + "\"id\":1}");
+                + "\"latest\"]}");
         //CHECKSTYLE:ON
     }
     
@@ -340,8 +332,7 @@ public class RequestTest extends RequestTester {
                 + "\"params\":["
                 + "\"0xf869808504e3b292008305499d94781ab1a38837e351bfe1e318c6587766848abffa8084b46300ec26a0b1ffd8f843e08a9dbf0a42b3c7"
                 + "dd5288a48885cd6e3bcdb2609e943d0b0053d4a07bfdb3c12a7cec896bfc2cfc7c346a2cb411e1aca62ad085e8d7abbb6532e128\","
-                + "[\"trace\",\"vmTrace\",\"stateDiff\"]],"
-                + "\"id\":1}");
+                + "[\"trace\",\"vmTrace\",\"stateDiff\"]]}");
         //CHECKSTYLE:ON
     }
 
@@ -355,8 +346,7 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"trace_replayTransaction\","
                 + "\"params\":["
                 + "\"0x090a4bbdeb57f15fe252cccc924255855eda45a2d8f65b12ec81f03e2cc33249\","
-                + "[\"trace\",\"vmTrace\",\"stateDiff\"]],"
-                + "\"id\":1}");
+                + "[\"trace\",\"vmTrace\",\"stateDiff\"]]}");
     }
 
     @Test
@@ -364,8 +354,7 @@ public class RequestTest extends RequestTester {
         web3j.traceBlock(DefaultBlockParameterName.LATEST).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"trace_block\","
-                + "\"params\":[\"latest\"],"
-                + "\"id\":1}");
+                + "\"params\":[\"latest\"]}");
     }
 
     @Test
@@ -380,8 +369,7 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"trace_filter\","
                 + "\"params\":[{\"fromBlock\":\"earliest\",\"toBlock\":\"latest\","
                 + "\"fromAddress\":[\"0xa9bebd4853ce06c3dc1b711bbafa1514ed5b5130\"],"
-                + "\"toAddress\":[\"0xB4d9b203d8D16f41916a62DEab83389cF2b7eeCb\"]}],"
-                + "\"id\":1}");
+                + "\"toAddress\":[\"0xB4d9b203d8D16f41916a62DEab83389cF2b7eeCb\"]}]}");
     }
 
     @Test
@@ -394,7 +382,6 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"trace_get\","
                 + "\"params\":["
                 + "\"0x090a4bbdeb57f15fe252cccc924255855eda45a2d8f65b12ec81f03e2cc33249\","
-                + "[\"0x2\",\"0x0\",\"0x0\"]],"
-                + "\"id\":1}");
+                + "[\"0x2\",\"0x0\",\"0x0\"]]}");
     }
 }
