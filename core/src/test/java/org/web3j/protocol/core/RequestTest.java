@@ -127,7 +127,8 @@ public class RequestTest extends RequestTester {
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\","
-                        + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"latest\"]}");
+                        + "\"params\":["
+                        + "\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"latest\"]}");
     }
 
     @Test
@@ -136,7 +137,8 @@ public class RequestTest extends RequestTester {
                 DefaultBlockParameterName.LATEST).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getStorageAt\","
-                + "\"params\":[\"0x295a70b2de5e3953354a6a8344e616ed314d7251\",\"0x0\",\"latest\"]}");
+                + "\"params\":["
+                + "\"0x295a70b2de5e3953354a6a8344e616ed314d7251\",\"0x0\",\"latest\"]}");
     }
 
     @Test
@@ -338,7 +340,8 @@ public class RequestTest extends RequestTester {
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getUncleByBlockHashAndIndex\","
                 + "\"params\":["
-                + "\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\"0x0\"]}");
+                + "\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\","
+                + "\"0x0\"]}");
     }
 
     @Test

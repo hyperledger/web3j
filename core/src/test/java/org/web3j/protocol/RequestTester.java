@@ -1,16 +1,20 @@
 package org.web3j.protocol;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import okio.Buffer;
 import org.junit.Before;
-import org.web3j.protocol.http.HttpService;
 
-import java.io.IOException;
+import org.web3j.protocol.http.HttpService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public abstract class RequestTester {
@@ -42,9 +46,11 @@ public abstract class RequestTester {
 
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
-        org.web3j.protocol.core.Request actualRequest = objectMapper.readValue(buffer.readUtf8(), org.web3j.protocol.core.Request.class);
-        org.web3j.protocol.core.Request expectedRequest = objectMapper.readValue(expected, org.web3j.protocol.core.Request.class);
-        assertEquals(actualRequest, expectedRequest);
+        org.web3j.protocol.core.Request actualRequest =
+                objectMapper.readValue(buffer.readUtf8(), org.web3j.protocol.core.Request.class);
+        org.web3j.protocol.core.Request expectedRequest =
+                objectMapper.readValue(expected, org.web3j.protocol.core.Request.class);
+        assertThat(actualRequest, is(expectedRequest));
         assertNotNull(actualRequest.getId());
     }
 
