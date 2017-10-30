@@ -81,9 +81,9 @@ Contents:
    modules.rst
    transactions.rst
    smart_contracts.rst
-   filters.rst
-   rlp.rst
    abi.rst
+   rlp.rst
+   filters.rst
    command_line.rst
    management_apis.rst
    infura.rst

@@ -125,7 +125,7 @@ Working with smart contracts with Java smart contract wrappers
 --------------------------------------------------------------
 
 web3j can auto-generate smart contract wrapper code to deploy and interact with smart contracts
-without leaving Java.
+without leaving the JVM.
 
 To generate the wrapper code, compile your smart contract:
 
@@ -147,7 +147,7 @@ Now you can create and deploy your smart contract::
    YourSmartContract contract = YourSmartContract.deploy(
            <web3j>, <credentials>,
            GAS_PRICE, GAS_LIMIT,
-           <param1>, ..., <paramN>).get();  // constructor params
+           <param1>, ..., <paramN>).send();  // constructor params
 
 Or use an existing contract::
 
@@ -256,8 +256,8 @@ Or if you wish to create your own custom transaction::
    EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
    // ...
 
-Although it's far simpler using web3j's
-:ref:`smart contract wrappers <smart-contract-wrappers-summary>`.
+Although it's far simpler using web3j's `Transfer <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java>`_
+for transacting with Ether.
 
 Using an Ethereum client's admin commands (make sure you have your wallet in the client's
 keystore)::
@@ -273,6 +273,21 @@ If you want to make use of Parity's
 `Trace <https://github.com/paritytech/parity/wiki/JSONRPC-trace-module>`_, or Geth's
 `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs,
 you can use the *org.web3j:parity* and *org.web3j:geth* modules respectively.
+
+
+Command line tools
+------------------
+
+A web3j fat jar is distributed with each release providing command line tools. The command line
+tools allow you to use some of the functionality of web3j from the command line:
+
+- Wallet creation
+- Wallet password management
+- Transfer of funds from one wallet to another
+- Generate Solidity smart contract function wrappers
+
+Please refer to the :doc:`documentation <command_line>` for further
+information.
 
 
 Further details
@@ -291,8 +306,14 @@ In the Java 8 build:
   `Async.run() <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/utils/Async.java>`_ and its associated
   `test <https://github.com/web3j/web3j/blob/master/core/src/test/java/org/web3j/utils/AsyncTest.java>`_ for details.
 
-In both the Java 8 and Andriod builds:
+In both the Java 8 and Android builds:
 
 - Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
   For simple results, you can obtain the quantity as a String via
   `Response <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().
+- It's also possible to include the raw JSON payload in responses via the *includeRawResponse*
+  parameter, present in the
+  `HttpService <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/http/HttpService.java>`_
+  and
+  `IpcService <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/ipc/IpcService.java>`_
+  classes.

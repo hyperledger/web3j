@@ -264,7 +264,7 @@ In order to create and sign a raw transaction, the sequence of events is as foll
 
 #. Identify the next available :ref:`nonce <nonce>` for the sender account
 #. Create the RawTransaction object
-#. Encode the RawTransaction object
+#. Encode the RawTransaction object using :doc:`rlp` encoding
 #. Sign the RawTransaction object
 #. Send the RawTransaction object to a node for processing
 
@@ -365,6 +365,16 @@ object:
                 <nonce>, <gas price>, <gas limit>, <toAddress>, value);
    // send...
 
+However, it is recommended that you use the
+`Transfer class <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java>`_
+for sending Ether, which takes care of the nonce management and polling for a
+response for you::
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
+   TransactionReceipt transactionReceipt = Transfer.sendFunds(
+           web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
+
 
 Recommended approach for working with smart contracts
 -----------------------------------------------------
@@ -440,14 +450,14 @@ To transact with an existing smart contract, the following attributes will need 
   the smart contract address
 
 *value*
-  the amount of Ether you wish to deposit in the smart contract (assumes zero if not provided)
+  the amount of Ether you wish to deposit in the smart contract (if the smart contract accepts
+  ether)
 
 *data*
   the encoded function selector and parameter arguments
 
-web3j takes care of the function encoding for you, further details are available in the
-`Ethereum Contract ABI <https://solidity.readthedocs.io/en/develop/abi-spec.html#function-selector>`_
-section of the Solidity docs.
+web3j takes care of the function encoding for you, for further details on the implementation refer
+to the :doc:`abi` section.
 
 ::
 

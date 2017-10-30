@@ -12,7 +12,7 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
 /**
- * Smart Contract utility methods.
+ * Smart Contract utility functions.
  */
 public class ContractUtils {
 

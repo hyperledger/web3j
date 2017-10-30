@@ -60,7 +60,7 @@ with smart contracts from web3j.
   request.
 
 *--abi*
-  Outputs a Solidity application binary interface (ABI) file which details all of the publicly
+  Outputs a Solidity :doc:`abi` (ABI) file which details all of the publicly
   accessible contract methods and their associated parameters. These details along with the
   contract address are crucial for interacting with smart contracts. The ABI file is also used for
   the generation of :ref:`smart-contract-wrappers`.
@@ -166,6 +166,8 @@ You can also generate the wrappers by calling then Java class directly:
    org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Where the *bin* and *abi* are obtained as per :ref:`compiling-Solidity`.
+
+The native Java to Solidity type conversions used are detailed in the :doc:`abi` section.
 
 The smart contract wrappers support all common operations for working with smart contracts:
 
