@@ -108,18 +108,6 @@ public class JsonRpc2_0Rx {
                 filter.cancel();
             }
         }));
-        scheduledExecutorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                filter.run(scheduledExecutorService, pollingInterval);
-            }
-        });
-        subscriber.add(Subscriptions.create(new Action0() {
-            @Override
-            public void call() {
-                filter.cancel();
-            }
-        }));
     }
 
     public Observable<Transaction>  transactionObservable(final long pollingInterval) {
