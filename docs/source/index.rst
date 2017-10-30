@@ -3,8 +3,8 @@
 web3j
 =====
 
-web3j is a lightweight, reactive, type safe Java and Android library for integrating with clients
-(nodes) on the Ethereum network:
+web3j is a highly modular, reactive, type safe Java and Android library for working with
+Smart Contracts and integrating with clients (nodes) on the Ethereum network:
 
 .. image:: /images/web3j_network.png
 
@@ -21,9 +21,9 @@ Features
 - Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
   client API over HTTP and IPC
 - Ethereum wallet support
-- Reactive-functional API for working with filters
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
+- Reactive-functional API for working with filters
 - Support for Parity's
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
@@ -37,16 +37,18 @@ Features
 Dependencies
 ============
 
-It has seven runtime dependencies:
+It has five runtime dependencies:
 
 - `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
-- `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
+- `OKHttp <https://hc.apache.org/httpcomponents-client-ga/index.html>`_ for HTTP connections
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_ and
-  `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
-- `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
-- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
+- `Bouncy Castle <https://www.bouncycastle.org/>`_ for crypto
+- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC (not available on
+  Android)
+
+It also uses `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract
+wrappers
 
 
 Donate
@@ -76,11 +78,12 @@ Contents:
 
    introduction.rst
    getting_started.rst
+   modules.rst
    transactions.rst
    smart_contracts.rst
-   filters.rst
-   rlp.rst
    abi.rst
+   rlp.rst
+   filters.rst
    command_line.rst
    management_apis.rst
    infura.rst

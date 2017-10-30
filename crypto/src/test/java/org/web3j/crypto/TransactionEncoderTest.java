@@ -75,13 +75,13 @@ public class TransactionEncoderTest {
                 BigInteger.valueOf(Long.MAX_VALUE));
     }
 
-    private static RawTransaction createContractTransaction() {
+    static RawTransaction createContractTransaction() {
         return RawTransaction.createContractTransaction(
                 BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, BigInteger.valueOf(Long.MAX_VALUE),
                 "01234566789");
     }
 
-    public static RawTransaction createEip155RawTransaction() {
+    private static RawTransaction createEip155RawTransaction() {
         return RawTransaction.createEtherTransaction(
                 BigInteger.valueOf(9), BigInteger.valueOf(20000000000L),
                 BigInteger.valueOf(21000), "0x3535353535353535353535353535353535353535",
