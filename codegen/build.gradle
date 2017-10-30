@@ -3,5 +3,7 @@ description 'web3j project code generators'
 
 dependencies {
     compile project(':core'),
-            "com.squareup:javapoet:$javapoetVersion"
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "com.squareup:javapoet:$javapoetVersion",
+            "io.reactivex:rxjava:$rxjavaVersion"
 }

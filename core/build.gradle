@@ -7,10 +7,12 @@ dependencies {
             project(':abi'),
             project(':tuples'),
             project(':crypto'),
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
-            "io.reactivex:rxjava:$rxjavaVersion"
+            "io.reactivex:rxjava:$rxjavaVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion"
     testCompile project(path: ':crypto', configuration: 'archives'),
             "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
 }
