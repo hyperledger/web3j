@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developer Guide &mdash; web3j 2.3.1 documentation</title>
+    <title>Developer Guide &mdash; web3j 3.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2.3.1',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 2.3.1 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.0.0 documentation" href="index.html" />
     <link rel="next" title="Links and Useful Resources" href="links.html" />
     <link rel="prev" title="Projects using web3j" href="projects.html" />
    
@@ -48,13 +48,14 @@
 <h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="building-web3j">
 <h2>Building web3j<a class="headerlink" href="#building-web3j" title="Permalink to this headline">¶</a></h2>
-<p>web3j includes integration tests for running against a live Ethereum client. If you do not have a client running, you can exclude their execution as per the below instructions.</p>
-<p>To run a full build including integration tests:</p>
+<p>web3j includes integration tests for running against a live Ethereum client. If you do not have a
+client running, you can exclude their execution as per the below instructions.</p>
+<p>To run a full build (excluding integration tests):</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./gradlew check
 </pre></div>
 </div>
-<p>To run excluding integration tests:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./gradlew -x integrationTest check
+<p>To run the integration tests:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./gradlew  -Pintegration-tests<span class="o">=</span><span class="nb">true</span> :integration-tests:test
 </pre></div>
 </div>
 </div>
@@ -133,8 +134,11 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi.html">Application Binary Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rlp.html">Recursive Length Prefix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filters.html">Filters and Events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; web3j 3.0.0 documentation</title>
+    <title>Recursive Length Prefix &mdash; web3j 3.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,11 +25,13 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="web3j 3.0.0 documentation" href="index.html" />
+    <link rel="next" title="Filters and Events" href="filters.html" />
+    <link rel="prev" title="Application Binary Interface" href="abi.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
-    <link rel="canonical" href="https://web3j.readthedocs.io/genindex.html"/>
+    <link rel="canonical" href="https://web3j.readthedocs.io/rlp.html"/>
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -43,11 +44,40 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="recursive-length-prefix">
+<h1>Recursive Length Prefix<a class="headerlink" href="#recursive-length-prefix" title="Permalink to this headline">¶</a></h1>
+<p>The Recursive Length Prefix (RLP) encoding scheme is a space efficient object serialization scheme
+used in Ethereum.</p>
+<p>The specification itself is defined in the <a class="reference external" href="http://gavwood.com/paper.pdf">Yellow Paper</a>,
+and the following page on the <a class="reference external" href="https://github.com/ethereum/wiki/wiki/RLP">Ethereum Wiki</a>.</p>
+<div class="section" id="rlp-types">
+<h2>RLP Types<a class="headerlink" href="#rlp-types" title="Permalink to this headline">¶</a></h2>
+<p>The RLP encoder defined two supported types:</p>
+<ul class="simple">
+<li>string</li>
+<li>list</li>
+</ul>
+<p>The list type can be nested an arbitrary number of times allowing complex data structures to be
+encoded.</p>
+<p>The <a class="reference external" href="https://github.com/web3j/web3j/tree/master/rlp">RLP module</a> in web3j provides RLP encoding
+capabilities, with the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/rlp/src/test/java/org/web3j/rlp/RlpEncoderTest.java">RlpEncoderTest</a>
+demonstrating encoding of a number of different values.</p>
+</div>
+<div class="section" id="transaction-encoding">
+<h2>Transaction encoding<a class="headerlink" href="#transaction-encoding" title="Permalink to this headline">¶</a></h2>
+<p>Within web3j, RLP encoding is used to encode Ethereum transaction objects into a byte array which
+is signed before submission to the network. The transaction types and signing logic are located
+within the Crypto module, with the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/crypto/src/test/java/org/web3j/crypto/TransactionEncoderTest.java">TransactionEncoderTest</a>
+providing examples of transaction signing and encoding.</p>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>This is a very lightweight module, with no other dependencies. The hope is that other
+projects wishing to work with Ethereum&#8217;s RLP encoding on the JVM or Android  will choose to make
+use of this module rather then write their own implementations.</p>
+</div>
 </div>
 
 
@@ -106,13 +136,18 @@
 </a>
 </p>
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi.html">Application Binary Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rlp.html">Recursive Length Prefix</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Recursive Length Prefix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rlp-types">RLP Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transaction-encoding">Transaction encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="filters.html">Filters and Events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
@@ -128,6 +163,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="abi.html" title="previous chapter">Application Binary Interface</a></li>
+      <li>Next: <a href="filters.html" title="next chapter">Filters and Events</a></li>
   </ul></li>
 </ul>
 </div>
@@ -155,6 +192,9 @@
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
+      |
+      <a href="_sources/rlp.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     

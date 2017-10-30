@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using Infura with web3j &mdash; web3j 2.3.1 documentation</title>
+    <title>Using Infura with web3j &mdash; web3j 3.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2.3.1',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 2.3.1 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.0.0 documentation" href="index.html" />
     <link rel="next" title="Troubleshooting" href="trouble.html" />
     <link rel="prev" title="Management APIs" href="management_apis.html" />
    
@@ -48,65 +48,42 @@
 <h1>Using Infura with web3j<a class="headerlink" href="#using-infura-with-web3j" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="signing-up">
 <h2>Signing up<a class="headerlink" href="#signing-up" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://infura.io/">Infura</a> service by <a class="reference external" href="https://consensys.net/">Consensys</a>, provides
+<p>The <a class="reference external" href="https://infura.io/">Infura</a> service by <a class="reference external" href="https://consensys.net/">ConsenSys</a>, provides
 Ethereum clients running in the cloud, so you don&#8217;t have to run one yourself to work with Ethereum.</p>
 <p>When you sign up to the service you are provided with a token you can use to connect to the
 relevant Ethereum network:</p>
 <dl class="docutils">
 <dt>Main Ethereum Network:</dt>
-<dd><a class="reference external" href="https://mainnet.infura.io/your-token">https://mainnet.infura.io/your-token</a></dd>
+<dd><a class="reference external" href="https://mainnet.infura.io">https://mainnet.infura.io</a>/&lt;your-token&gt;</dd>
+<dt>Test Ethereum Network (Rinkeby):</dt>
+<dd><a class="reference external" href="https://rinkeby.infura.io">https://rinkeby.infura.io</a>/&lt;your-token&gt;</dd>
+<dt>Test Ethereum Network (Kovan):</dt>
+<dd><a class="reference external" href="https://rinkeby.infura.io">https://rinkeby.infura.io</a>/&lt;your-token&gt;</dd>
 <dt>Test Ethereum Network (Ropsten):</dt>
-<dd><a class="reference external" href="https://ropsten.infura.io/your-token">https://ropsten.infura.io/your-token</a></dd>
+<dd><a class="reference external" href="https://ropsten.infura.io">https://ropsten.infura.io</a>/&lt;your-token&gt;</dd>
 </dl>
-<p>If you need some Ether on testnet to get started, please post a message with your wallet address
-to the <a class="reference external" href="https://gitter.im/web3j/web3j">web3j Gitter channel</a> and I&#8217;ll send you some.</p>
+<p>For obtaining ether to use in these networks, you can refer to <a class="reference internal" href="transactions.html#ethereum-testnets"><span>Ethereum testnets</span></a></p>
 </div>
 <div class="section" id="infurahttpclient">
 <h2>InfuraHttpClient<a class="headerlink" href="#infurahttpclient" title="Permalink to this headline">¶</a></h2>
-<p>web3j comes with an Infura HTTP client
-(<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/infura/InfuraHttpService.java">InfuraHttpService</a>)
-so you don&#8217;t need to concern yourself with installing an HTTP certificate into your JVM. Upon
-startup web3j will connect to the Infura endpoint you have specified and downloads the Infura
-node TLS certificate to a temporary local key store which exists for the duration of your
-application runtime:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">InfuraHttpService</span><span class="o">(</span><span class="s">&quot;https://morden.infura.io/your-token&quot;</span><span class="o">));</span>
-</pre></div>
-</div>
-<p>Alternatively, if you&#8217;d rather install the key permanently in your JVM keystore, see
-<a class="reference internal" href="#certificate-installation"><span>below</span></a>.</p>
-</div>
-<div class="section" id="certificate-installation">
-<span id="id1"></span><h2>Certificate installation<a class="headerlink" href="#certificate-installation" title="Permalink to this headline">¶</a></h2>
-<p>As the Infura nodes are accessed over TLS, you will need to install the relevant certificates into
-your Java Virtual Machine&#8217;s keystore.</p>
-<p>You can obtain the certificate using the <a class="reference external" href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
-web browser:</p>
-<img alt="_images/infura_cert.png" src="_images/infura_cert.png" />
-<p>Alternatively, you can use SSL (this will only download the first certificate in the chain, which
-should be adequate).</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>openssl s_client -connect morden.infura.io:443 -showcerts &lt;/dev/null 2&gt;/dev/null<span class="p">|</span>openssl x509 -outform PEM &gt; infura-morden.pem
-</pre></div>
-</div>
-<p>Once you have downloaded it, then install it into your keystore (for Windows/Linux hosts the paths
-will differ slightly):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ $JAVA_HOME</span>/Contents/Home/jre/bin/keytool -import -noprompt -trustcacerts -alias morden.infura.io -file  ~/Downloads/morden.infura.io -keystore <span class="nv">$JAVA_HOME</span>/Contents/Home/jre/lib/security/cacerts -storepass changeit
-</pre></div>
-</div>
-</div>
-<div class="section" id="connecting">
-<h2>Connecting<a class="headerlink" href="#connecting" title="Permalink to this headline">¶</a></h2>
-<p>You can now use Infura to work with the Ethereum blockchain.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">(</span><span class="s">&quot;https://morden.infura.io/your-token&quot;</span><span class="o">));</span>
-<span class="n">Web3ClientVersion</span> <span class="n">web3ClientVersion</span> <span class="o">=</span> <span class="n">web3</span><span class="o">.</span><span class="na">web3ClientVersion</span><span class="o">().</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+<p>The web3j infura module provides an Infura HTTP client
+(<a class="reference external" href="https://github.com/web3j/web3j/blob/master/infura/src/main/java/org/web3j/protocol/infura/InfuraHttpService.java">InfuraHttpService</a>)
+which provides support for the Infura specific <em>Infura-Ethereum-Preferred-Client</em> header. This
+allows you to specify whether you want a Geth or Parity client to respond to your request. You
+can create the client just like the regular HTTPClient:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">(</span><span class="s">&quot;https://rinkeby.infura.io/&lt;your-token&gt;&quot;</span><span class="o">));</span>
+<span class="n">Web3ClientVersion</span> <span class="n">web3ClientVersion</span> <span class="o">=</span> <span class="n">web3</span><span class="o">.</span><span class="na">web3ClientVersion</span><span class="o">().</span><span class="na">send</span><span class="o">();</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">web3ClientVersion</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">());</span>
 </pre></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre>Parity//v1.3.5-beta/x86_64-linux-gnu/rustc1.12.0
+<div class="highlight-bash"><div class="highlight"><pre>Geth/v1.7.2-stable-1db4ecdc/darwin-amd64/go1.9.1
 </pre></div>
 </div>
 <p>If you want to test a number of the JSON-RPC calls against Infura, update the integration test
-<a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/core/CoreIT.java">CoreIT</a>
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/CoreIT.java">CoreIT</a>
 with your Infura URL &amp; run it.</p>
+<p>For further information, refer to the
+<a class="reference external" href="https://github.com/INFURA/infura/blob/master/docs/source/index.html.md#choosing-a-client-to-handle-your-request">Infura docs</a>.</p>
 </div>
 <div class="section" id="transactions">
 <h2>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h2>
@@ -175,16 +152,17 @@ are required to unlock accounts via the Personal Geth/Parity admin commands.</p>
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="smart_contracts.html">Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi.html">Application Binary Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rlp.html">Recursive Length Prefix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filters.html">Filters and Events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Using Infura with web3j</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#signing-up">Signing up</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#infurahttpclient">InfuraHttpClient</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#certificate-installation">Certificate installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting">Connecting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transactions">Transactions</a></li>
 </ul>
 </li>
