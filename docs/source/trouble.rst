@@ -70,7 +70,7 @@ be marked as
 functions. :ref:`smart-contract-wrappers` created by web3j handle these differences for you.
 
 The following StackExchange
-`post <http://ethereum.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call>`_
+`post <http://ethereum.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call>`__
 is useful for background.
 
 
@@ -95,7 +95,7 @@ of the transaction. This is demonstrated below::
 text.
 
 The following StackExchange
-`post <http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address>`_
+`post <http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address>`__
 is useful for background.
 
 

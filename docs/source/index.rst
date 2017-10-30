@@ -76,7 +76,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   introduction.rst
    getting_started.rst
    modules.rst
    transactions.rst

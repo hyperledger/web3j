@@ -12,13 +12,14 @@ Developers have the choice of three languages for writing smart contracts:
 LISP Like Language (LLL)
   A low level language, Serpent provides a superset of LLL. There's not a great deal of information
   for working with LLL, the following blog `/var/log/syrinx <http://blog.syrinx.net/>`_ and
-  associated `GitHub <https://github.com/zigguratt/lll-resurrected>`_ is a good place to start.
+  associated `lll-resurrected GitHub <https://github.com/zigguratt/lll-resurrected>`_ repository
+  is a good place to start.
 
 
 In order to deploy a smart contract onto the Ethereum blockchain, it must first be compiled into
 a bytecode format, then it can be sent as part of a transaction. web3j can do all of this for you
- with its :ref:`smart-contract-wrappers`. To understand what is happening behind the scenes, you
- can refer to the details in :ref:`creation-of-smart-contract`.
+with its :ref:`smart-contract-wrappers`. To understand what is happening behind the scenes, you
+can refer to the details in :ref:`creation-of-smart-contract`.
 
 Given that Solidity is the language of choice for writing smart contracts, it is the language
 supported by web3j, and is used for all subsequent examples.
@@ -207,7 +208,11 @@ smart contract, simply pass in it's address::
    YourSmartContract contract = YourSmartContract.load(
            "0x<address>", web3j, credentials, GAS_PRICE, GAS_LIMIT);
 
+
 .. _contract-validity:
+
+Contract validity
+-----------------
 
 Using this method, you may want to ascertain that the contract address that you have loaded is the
 smart contract that you expect. For this you can use the *isValid* smart contract method, which will
