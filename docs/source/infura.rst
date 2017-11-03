@@ -17,7 +17,7 @@ Test Ethereum Network (Rinkeby):
   https://rinkeby.infura.io/<your-token>
 
 Test Ethereum Network (Kovan):
-  https://rinkeby.infura.io/<your-token>
+  https://kovan.infura.io/<your-token>
 
 Test Ethereum Network (Ropsten):
   https://ropsten.infura.io/<your-token>
