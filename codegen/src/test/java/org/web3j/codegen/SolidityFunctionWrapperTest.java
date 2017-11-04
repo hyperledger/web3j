@@ -84,7 +84,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(getNativeType(TypeName.get(Int256.class)),
                 equalTo(TypeName.get(BigInteger.class)));
         assertThat(getNativeType(TypeName.get(Bool.class)),
-                equalTo(TypeName.get(boolean.class)));
+                equalTo(TypeName.get(Boolean.class)));
         assertThat(getNativeType(TypeName.get(Bytes32.class)),
                 equalTo(TypeName.get(byte[].class)));
         assertThat(getNativeType(TypeName.get(DynamicBytes.class)),

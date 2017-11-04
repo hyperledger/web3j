@@ -347,7 +347,7 @@ public class SolidityFunctionWrapper extends Generator {
         } else if (simpleName.equals(DynamicBytes.class.getSimpleName())) {
             return TypeName.get(byte[].class);
         } else if (simpleName.equals(Bool.class.getSimpleName())) {
-            return TypeName.get(boolean.class);
+            return TypeName.get(Boolean.class);  // boolean cannot be a parameterized type
         } else {
             throw new UnsupportedOperationException(
                     "Unsupported type: " + typeName
