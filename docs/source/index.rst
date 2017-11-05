@@ -88,6 +88,7 @@ Contents:
    infura.rst
    trouble.rst
    projects.rst
+   companies.rst
    development.rst
    links.rst
    credits.rst

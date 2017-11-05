@@ -484,9 +484,11 @@ Please submit a pull request if you wish to include your project on the list:
 Companies using web3j
 ---------------------
 
-Please submit a pull request if you wish to include your project on the list:
+Please submit a pull request if you wish to include your company on the list:
 
+- `Amberdata <https://www.amberdata.io/>`_
 - `blk.io <https://blk.io>`_
+- `Othera <http://www.othera.io/>`_
 
 
 Build instructions
