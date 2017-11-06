@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Management APIs &mdash; web3j 3.0.2 documentation</title>
+    <title>Companies using web3j &mdash; web3j 3.0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,13 +25,13 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="web3j 3.0.2 documentation" href="index.html" />
-    <link rel="next" title="Using Infura with web3j" href="infura.html" />
-    <link rel="prev" title="Command Line Tools" href="command_line.html" />
+    <link rel="next" title="Developer Guide" href="development.html" />
+    <link rel="prev" title="Projects using web3j" href="projects.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
-    <link rel="canonical" href="https://web3j.readthedocs.io/management_apis.html"/>
+    <link rel="canonical" href="https://web3j.readthedocs.io/companies.html"/>
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -44,39 +44,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="management-apis">
-<h1>Management APIs<a class="headerlink" href="#management-apis" title="Permalink to this headline">¶</a></h1>
-<p>In addition to implementing the standard
-<a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC">JSON-RPC</a> API, Ethereum clients, such as
-<a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/geth">Geth</a> and
-<a class="reference external" href="https://github.com/paritytech/parity">Parity</a> provide additional management via JSON-RPC.</p>
-<p>One of the key common pieces of functionality that they provide is the ability to create and
-unlock Ethereum accounts for transacting on the network. In Geth and Parity, this is implemented
-in their Personal modules, details of which are available below:</p>
+  <div class="section" id="companies-using-web3j">
+<h1>Companies using web3j<a class="headerlink" href="#companies-using-web3j" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/paritytech/parity/wiki/JSONRPC-personal-module">Parity</a></li>
-<li><a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal">Geth</a></li>
+<li><a class="reference external" href="https://www.amberdata.io/">Amberdata</a></li>
+<li><a class="reference external" href="https://blk.io">blk.io</a></li>
+<li><a class="reference external" href="http://www.othera.io/">Othera</a></li>
 </ul>
-<p>Support for the personal modules is available in web3j. Those methods that are common to both Geth
-and Parity reside in the <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/admin/Admin.java">Admin</a> module of web3j.</p>
-<p>You can initialise a new web3j connector that supports this module using the factory method:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Admin</span> <span class="n">web3j</span> <span class="o">=</span> <span class="n">Admin</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
-<span class="n">PersonalUnlockAccount</span> <span class="n">personalUnlockAccount</span> <span class="o">=</span> <span class="n">admin</span><span class="o">.</span><span class="na">personalUnlockAccount</span><span class="o">(</span><span class="s">&quot;0x000...&quot;</span><span class="o">,</span> <span class="s">&quot;a password&quot;</span><span class="o">).</span><span class="na">send</span><span class="o">();</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">personalUnlockAccount</span><span class="o">.</span><span class="na">accountUnlocked</span><span class="o">())</span> <span class="o">{</span>
-    <span class="c1">// send a transaction</span>
-<span class="o">}</span>
-</pre></div>
-</div>
-<p>For Geth specific methods, you can use the
-<a class="reference external" href="https://github.com/web3j/web3j/blob/master/geth/src/main/java/org/web3j/protocol/geth/Geth.java">Geth</a>
-connector, and for Parity you can use the associated
-<a class="reference external" href="https://github.com/web3j/web3j/blob/master/parity/src/main/java/org/web3j/protocol/parity/Parity.java">Parity</a>
-connector. The <em>Parity</em> connector also provides support for Parity&#8217;s
-<a class="reference external" href="https://github.com/paritytech/parity/wiki/JSONRPC-trace-module">Trace</a> module. These connectors
-are available in the web3j <em>geth</em> and <em>parity</em> modules respectively.</p>
-<p>You can refer to the integration test
-<a class="reference external" href="https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/parity/ParityIT.java">ParityIT</a>
-for further examples of working with these APIs.</p>
 </div>
 
 
@@ -144,11 +118,11 @@ for further examples of working with these APIs.</p>
 <li class="toctree-l1"><a class="reference internal" href="rlp.html">Recursive Length Prefix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filters.html">Filters and Events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Management APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projects.html">Projects using web3j</a></li>
-<li class="toctree-l1"><a class="reference internal" href="companies.html">Companies using web3j</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Companies using web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Links and Useful Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Thanks and Credits</a></li>
@@ -158,8 +132,8 @@ for further examples of working with these APIs.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="command_line.html" title="previous chapter">Command Line Tools</a></li>
-      <li>Next: <a href="infura.html" title="next chapter">Using Infura with web3j</a></li>
+      <li>Previous: <a href="projects.html" title="previous chapter">Projects using web3j</a></li>
+      <li>Next: <a href="development.html" title="next chapter">Developer Guide</a></li>
   </ul></li>
 </ul>
 </div>
@@ -188,7 +162,7 @@ for further examples of working with these APIs.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/management_apis.txt"
+      <a href="_sources/companies.txt"
           rel="nofollow">Page source</a>
     </div>
 
