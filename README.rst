@@ -105,7 +105,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.0.1</version>
+     <version>3.0.2</version>
    </dependency>
 
 Android:
@@ -125,7 +125,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.0.1')
+   compile ('org.web3j:core:3.0.2')
 
 Android:
 
@@ -488,7 +488,7 @@ Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
 - `blk.io <https://blk.io>`_
-- `Othera <http://www.othera.io/>`_
+- `Othera <https://www.othera.com.au/>`_
 
 
 Build instructions
