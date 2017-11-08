@@ -22,6 +22,6 @@ public class ContractsTest {
 
     @Test(expected = EnsResolutionException.class)
     public void testResolveRegistryContractInvalid() {
-        resolveRegistryContract("foo");
+        resolveRegistryContract(ChainId.NONE + "");
     }
 }
