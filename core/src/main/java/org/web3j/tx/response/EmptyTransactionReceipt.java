@@ -123,6 +123,16 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
+    public String getStatus() {
+        throw unsupportedOperation();
+    }
+
+    @Override
+    public void setStatus(String status) {
+        throw unsupportedOperation();
+    }
+
+    @Override
     public String getFrom() {
         throw unsupportedOperation();
     }

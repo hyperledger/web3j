@@ -893,7 +893,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testeEthGetTransactionReceipt() {
+    public void testeEthGetTransactionReceiptBeforeByzantium() {
         //CHECKSTYLE:OFF
         buildResponse(
                 "{\n"
@@ -937,6 +937,82 @@ public class ResponseTest extends ResponseTester {
                         "0x4dc",
                         "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
                         "9307ba10e41ecf3d40507fc908655fe72fc129d46f6d99baf7605d0e29184911",
+                        null,
+                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                        "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                        Arrays.asList(
+                                new Log(
+                                        false,
+                                        "0x1",
+                                        "0x0",
+                                        "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf",
+                                        "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                                        "0x1b4",
+                                        "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                                        "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                        "mined",
+                                        Arrays.asList(
+                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
+                                        )
+                                )
+                        ),
+                        "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+
+                );
+        //CHECKSTYLE:ON
+
+        EthGetTransactionReceipt ethGetTransactionReceipt = deserialiseResponse(
+                EthGetTransactionReceipt.class);
+        assertThat(ethGetTransactionReceipt.getTransactionReceipt().get(),
+                equalTo(transactionReceipt));
+    }
+
+    @Test
+    public void testeEthGetTransactionReceiptAfterByzantium() {
+        //CHECKSTYLE:OFF
+        buildResponse(
+                "{\n"
+                        + "    \"id\":1,\n"
+                        + "    \"jsonrpc\":\"2.0\",\n"
+                        + "    \"result\": {\n"
+                        + "        \"transactionHash\": \"0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238\",\n"
+                        + "        \"transactionIndex\":  \"0x1\",\n"
+                        + "        \"blockHash\": \"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n"
+                        + "        \"blockNumber\": \"0xb\",\n"
+                        + "        \"cumulativeGasUsed\": \"0x33bc\",\n"
+                        + "        \"gasUsed\": \"0x4dc\",\n"
+                        + "        \"contractAddress\": \"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\n"
+                        + "        \"status\": \"0x1\",\n"
+                        + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"logs\": [{\n"
+                        + "            \"removed\": false,\n"
+                        + "            \"logIndex\": \"0x1\",\n"
+                        + "            \"transactionIndex\": \"0x0\",\n"
+                        + "            \"transactionHash\": \"0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf\",\n"
+                        + "            \"blockHash\": \"0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n"
+                        + "            \"blockNumber\":\"0x1b4\",\n"
+                        + "            \"address\": \"0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n"
+                        + "            \"data\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\n"
+                        + "            \"type\":\"mined\",\n"
+                        + "            \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]"
+                        + "        }],\n"
+                        + "        \"logsBloom\":\"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"\n"
+                        + "  }\n"
+                        + "}"
+        );
+
+        TransactionReceipt transactionReceipt =
+                new TransactionReceipt(
+                        "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238",
+                        "0x1",
+                        "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+                        "0xb",
+                        "0x33bc",
+                        "0x4dc",
+                        "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+                        null,
+                        "0x1",
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
                         "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
                         Arrays.asList(
