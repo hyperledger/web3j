@@ -326,6 +326,14 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
+    private TypeName getEventWrapperType(TypeName typeName) {
+        if (useNativeJavaTypes) {
+            return getEventNativeType(typeName);
+        } else {
+            return typeName;
+        }
+    }
+
     static TypeName getNativeType(TypeName typeName) {
 
         if (typeName instanceof ParameterizedTypeName) {
@@ -364,6 +372,19 @@ public class SolidityFunctionWrapper extends Generator {
         return ParameterizedTypeName.get(
                 ClassName.get(List.class),
                 nativeTypeNames.toArray(new TypeName[nativeTypeNames.size()]));
+    }
+
+    static TypeName getEventNativeType(TypeName typeName) {
+        if (typeName instanceof ParameterizedTypeName) {
+            return TypeName.get(byte[].class);
+        }
+
+        String simpleName = ((ClassName) typeName).simpleName();
+        if (simpleName.equals(Utf8String.class.getSimpleName())) {
+            return TypeName.get(byte[].class);
+        } else {
+            return getNativeType(typeName);
+        }
     }
 
     static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes) {
@@ -514,12 +535,12 @@ public class SolidityFunctionWrapper extends Generator {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
         for (NamedTypeName namedType : indexedParameters) {
-            TypeName typeName = getWrapperType(namedType.typeName);
+            TypeName typeName = getEventWrapperType(namedType.typeName);
             builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
         }
 
         for (NamedTypeName namedType : nonIndexedParameters) {
-            TypeName typeName = getWrapperType(namedType.typeName);
+            TypeName typeName = getEventWrapperType(namedType.typeName);
             builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
         }
 
@@ -659,7 +680,7 @@ public class SolidityFunctionWrapper extends Generator {
                     "$L.$L = ($T) eventValues.getIndexedValues().get($L)" + nativeConversion,
                     objectName,
                     indexedParameters.get(i).getName(),
-                    getWrapperType(indexedParameters.get(i).getTypeName()),
+                    getEventWrapperType(indexedParameters.get(i).getTypeName()),
                     i);
         }
 
@@ -668,7 +689,7 @@ public class SolidityFunctionWrapper extends Generator {
                     "$L.$L = ($T) eventValues.getNonIndexedValues().get($L)" + nativeConversion,
                     objectName,
                     nonIndexedParameters.get(i).getName(),
-                    getWrapperType(nonIndexedParameters.get(i).getTypeName()),
+                    getEventWrapperType(nonIndexedParameters.get(i).getTypeName()),
                     i);
         }
         return builder.build();

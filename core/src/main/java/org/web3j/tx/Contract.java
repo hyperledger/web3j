@@ -17,6 +17,7 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
+import org.web3j.ens.ContractResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
@@ -25,6 +26,7 @@ import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.utils.Numeric;
 
 
@@ -46,6 +48,9 @@ public abstract class Contract extends ManagedTransaction {
                        Web3j web3j, TransactionManager transactionManager,
                        BigInteger gasPrice, BigInteger gasLimit) {
         super(web3j, transactionManager);
+
+        ContractResolver contractResolver = new ContractResolver(web3j);
+        this.contractAddress = contractResolver.resolve(contractAddress);
 
         this.contractBinary = contractBinary;
         this.contractAddress = contractAddress;
@@ -166,13 +171,19 @@ public abstract class Contract extends ManagedTransaction {
     protected <T extends Type, R> R executeCallSingleValueReturn(
             Function function, Class<R> returnType) throws IOException {
         T result = executeCallSingleValueReturn(function);
+        if (result == null) {
+            throw new ContractCallException("Empty value (0x) returned from contract");
+        }
+
         Object value = result.getValue();
         if (returnType.isAssignableFrom(value.getClass())) {
             return (R) value;
         } else if (result.getClass().equals(Address.class) && returnType.equals(String.class)) {
             return (R) result.toString();  // cast isn't necessary
         } else {
-            return null;
+            throw new ContractCallException(
+                    "Unable to convert response: " + value
+                            + " to expected type: " + returnType.getSimpleName());
         }
     }
 
