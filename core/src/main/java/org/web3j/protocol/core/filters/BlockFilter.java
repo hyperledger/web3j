@@ -39,7 +39,7 @@ public class BlockFilter extends Filter<String> {
 
     /**
      * Since the block filter does not support historic filters, the filterId is ignored
-     * and an empty optional is returned
+     * and an empty optional is returned.
      * @param filterId
      * Id of the filter for which the historic log should be retrieved
      * @return

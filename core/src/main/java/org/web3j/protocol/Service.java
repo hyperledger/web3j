@@ -27,6 +27,7 @@ public abstract class Service implements Web3jService {
     public <T extends Response> T send(
             Request request, Class<T> responseType) throws IOException {
         String payload = objectMapper.writeValueAsString(request);
+
         try (InputStream result = performIO(payload)) {
             if (result != null) {
                 return objectMapper.readValue(result, responseType);

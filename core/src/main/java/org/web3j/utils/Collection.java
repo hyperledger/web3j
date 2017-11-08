@@ -7,7 +7,10 @@ import java.util.List;
  * Utility functions for working with Collections.
  */
 public class Collection {
+
     static String[] EMPTY_STRING_ARRAY = { };
+
+    private Collection() { }
 
     public static String[] tail(String[] args) {
         if (args.length == 0) {
