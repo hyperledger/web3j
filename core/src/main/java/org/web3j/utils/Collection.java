@@ -17,6 +17,7 @@ public class Collection {
         }
     }
 
+    @SafeVarargs
     public static <T> T[] create(T... args) {
         return args;
     }

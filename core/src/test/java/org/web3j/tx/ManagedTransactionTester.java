@@ -35,35 +35,38 @@ public abstract class ManagedTransactionTester {
         prepareTransactionReceipt(transactionReceipt);
     }
 
+    @SuppressWarnings("unchecked")
     void prepareNonceRequest() throws IOException {
         EthGetTransactionCount ethGetTransactionCount = new EthGetTransactionCount();
         ethGetTransactionCount.setResult("0x1");
 
-        Request transactionCountRequest = mock(Request.class);
+        Request<?, EthGetTransactionCount> transactionCountRequest = mock(Request.class);
         when(transactionCountRequest.send())
                 .thenReturn(ethGetTransactionCount);
         when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.PENDING))
-                .thenReturn(transactionCountRequest);
+                .thenReturn((Request) transactionCountRequest);
     }
 
+    @SuppressWarnings("unchecked")
     void prepareTransactionRequest() throws IOException {
         EthSendTransaction ethSendTransaction = new EthSendTransaction();
         ethSendTransaction.setResult(TRANSACTION_HASH);
 
-        Request rawTransactionRequest = mock(Request.class);
+        Request<?, EthSendTransaction> rawTransactionRequest = mock(Request.class);
         when(rawTransactionRequest.send()).thenReturn(ethSendTransaction);
         when(web3j.ethSendRawTransaction(any(String.class)))
-                .thenReturn(rawTransactionRequest);
+                .thenReturn((Request) rawTransactionRequest);
     }
 
+    @SuppressWarnings("unchecked")
     void prepareTransactionReceipt(TransactionReceipt transactionReceipt) throws IOException {
         EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
         ethGetTransactionReceipt.setResult(transactionReceipt);
 
-        Request getTransactionReceiptRequest = mock(Request.class);
+        Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
         when(getTransactionReceiptRequest.send())
                 .thenReturn(ethGetTransactionReceipt);
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
-                .thenReturn(getTransactionReceiptRequest);
+                .thenReturn((Request) getTransactionReceiptRequest);
     }
 }

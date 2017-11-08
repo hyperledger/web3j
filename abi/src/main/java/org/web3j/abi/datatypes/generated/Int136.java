@@ -1,7 +1,6 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.math.BigInteger;
-
 import org.web3j.abi.datatypes.Int;
 
 /**

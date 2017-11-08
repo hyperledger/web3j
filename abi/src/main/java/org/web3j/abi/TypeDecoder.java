@@ -213,6 +213,7 @@ public class TypeDecoder {
         return decodeArrayElements(input, offset, typeReference, length, function);
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Type> T instantiateStaticArray(
             TypeReference<T> typeReference, List<T> elements) {
         try {
