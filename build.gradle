@@ -244,7 +244,8 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
             fileTree(dir: it,
                     exclude: [
                             'org/web3j/abi/datatypes/generated/**',
-                            'org/web3j/tuples/generated/**'
+                            'org/web3j/tuples/generated/**',
+                            'org/web3j/ens/contracts/generated/**'
                     ])
         })
     }
