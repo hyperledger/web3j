@@ -81,7 +81,7 @@ public class Scenario {
                 getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
 
         if (transactionReceipt == null) {
-            fail("Transaction reciept not generated after " + ATTEMPTS + " attempts");
+            fail("Transaction receipt not generated after " + ATTEMPTS + " attempts");
         }
 
         return transactionReceipt;

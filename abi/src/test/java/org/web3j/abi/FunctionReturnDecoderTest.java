@@ -120,9 +120,8 @@ public class FunctionReturnDecoderTest {
     }
 
 
-
-
     @Test
+    @SuppressWarnings("unchecked")
     public void testDecodeStaticArrayValue() {
         List<TypeReference<Type>> outputParameters = new ArrayList<TypeReference<Type>>(1);
         outputParameters.add((TypeReference)
@@ -140,8 +139,6 @@ public class FunctionReturnDecoderTest {
                 new StaticArray<Uint256>(
                         new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE)),
                 new Uint256(BigInteger.TEN));
-
-
         assertThat(decoded, is(expected));
     }
 

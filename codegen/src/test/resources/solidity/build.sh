@@ -14,7 +14,7 @@ for target in ${targets}; do
     fileName=$(basename $target)
 
     cd $dirName
-    echo "Compiling Solidity files"
+    echo "Compiling Solidity files in ${dirName}:"
     solc --bin --abi --optimize --overwrite ${fileName}.sol -o build/
     echo "Complete"
 

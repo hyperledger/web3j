@@ -360,7 +360,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     
     @Override
     public Request<?, ParityTraceGet> traceGet(String hash, List<BigInteger> indices) {
-
         List<String> encodedIndices = new ArrayList<String>(indices.size());
         for (BigInteger index : indices) {
             encodedIndices.add(Numeric.encodeQuantity(index));

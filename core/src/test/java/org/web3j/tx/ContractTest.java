@@ -187,12 +187,13 @@ public class ContractTest extends ManagedTransactionTester {
                 CoreMatchers.equalTo(Collections.<Type>emptyList()));
     }
 
+    @SuppressWarnings("unchecked")
     private void prepareCall(EthCall ethCall) throws IOException {
-        Request request = mock(Request.class);
+        Request<?, EthCall> request = mock(Request.class);
         when(request.send()).thenReturn(ethCall);
 
         when(web3j.ethCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST)))
-                .thenReturn(request);
+                .thenReturn((Request) request);
     }
 
     @Test
@@ -245,27 +246,29 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test(expected = RuntimeException.class)
+    @SuppressWarnings("unchecked")
     public void testInvalidTransactionResponse() throws Throwable {
         prepareNonceRequest();
 
         final EthSendTransaction ethSendTransaction = new EthSendTransaction();
         ethSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
 
-        Request rawTransactionRequest = mock(Request.class);
-        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(new Callable<Object>() {
+        Request<?, EthSendTransaction> rawTransactionRequest = mock(Request.class);
+        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(new Callable<EthSendTransaction>() {
             @Override
-            public Object call() throws Exception {
+            public EthSendTransaction call() throws Exception {
                 return ethSendTransaction;
             }
         }));
         when(web3j.ethSendRawTransaction(any(String.class)))
-                .thenReturn(rawTransactionRequest);
+                .thenReturn((Request) rawTransactionRequest);
 
         testErrorScenario();
     }
 
 
     @Test(expected = RuntimeException.class)
+    @SuppressWarnings("unchecked")
     public void testInvalidTransactionReceipt() throws Throwable {
         prepareNonceRequest();
         prepareTransactionRequest();
@@ -273,16 +276,16 @@ public class ContractTest extends ManagedTransactionTester {
         final EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
         ethGetTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
 
-        Request getTransactionReceiptRequest = mock(Request.class);
+        Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
         when(getTransactionReceiptRequest.sendAsync())
-                .thenReturn(Async.run(new Callable<Object>() {
+                .thenReturn(Async.run(new Callable<EthGetTransactionReceipt>() {
                     @Override
-                    public Object call() throws Exception {
+                    public EthGetTransactionReceipt call() throws Exception {
                         return ethGetTransactionReceipt;
                     }
                 }));
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
-                .thenReturn(getTransactionReceiptRequest);
+                .thenReturn((Request) getTransactionReceiptRequest);
 
         testErrorScenario();
     }
@@ -312,15 +315,16 @@ public class ContractTest extends ManagedTransactionTester {
                 "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
     }
 
+    @SuppressWarnings("unchecked")
     private void prepareEthGetCode(String binary) throws IOException {
         EthGetCode ethGetCode = new EthGetCode();
         ethGetCode.setResult(Numeric.prependHexPrefix(binary));
 
-        Request ethGetCodeRequest = mock(Request.class);
+        Request<?, EthGetCode> ethGetCodeRequest = mock(Request.class);
         when(ethGetCodeRequest.send())
                 .thenReturn(ethGetCode);
         when(web3j.ethGetCode(ADDRESS, DefaultBlockParameterName.LATEST))
-                .thenReturn(ethGetCodeRequest);
+                .thenReturn((Request) ethGetCodeRequest);
     }
 
     private static class TestContract extends Contract {

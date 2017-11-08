@@ -247,6 +247,7 @@ public class TypeDecoder {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Type> T instantiateStaticArray(List<T> elements) {
         return (T) new StaticArray<T>(elements);
     }
@@ -261,6 +262,7 @@ public class TypeDecoder {
         return decodeArrayElements(input, valueOffset, typeReference, length, true);
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Type> T decodeArrayElements(
             String input, int offset, TypeReference<T> typeReference, int length,
             boolean isDynamic) {

@@ -44,7 +44,7 @@ public class EthFilter extends Filter<EthFilter> {
     }
 
     @Override
-    Filter getThis() {
+    EthFilter getThis() {
         return this;
     }
 }

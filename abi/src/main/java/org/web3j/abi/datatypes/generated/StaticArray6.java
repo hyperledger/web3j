@@ -1,7 +1,6 @@
 package org.web3j.abi.datatypes.generated;
 
 import java.util.List;
-
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 
@@ -16,6 +15,7 @@ public class StaticArray6<T extends Type> extends StaticArray<T> {
         super(6, values);
     }
 
+    @SafeVarargs
     public StaticArray6(T... values) {
         super(6, values);
     }

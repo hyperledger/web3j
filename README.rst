@@ -24,8 +24,8 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
-web3j is a lightweight, reactive, type safe Java and Android library for integrating with clients (nodes) on
-the Ethereum network:
+web3j is a lightweight, highly modular, reactive, type safe Java and Android library for working with
+Smart Contracts and integrating with clients (nodes) on the Ethereum network:
 
 .. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j_network.png
 
@@ -68,7 +68,7 @@ It has seven runtime dependencies:
 - `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
 
 Full project documentation is available at
-`Read the Docs <http://docs.web3j.io>`_.
+`docs.web3j.io <http://docs.web3j.io>`_.
 
 
 Donate
@@ -149,21 +149,32 @@ Or `Parity <https://github.com/paritytech/parity>`_:
 
    $ parity --chain testnet
 
-
 Or use `Infura <https://infura.io/>`_, which provides **free clients** running in the cloud:
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new InfuraHttpService("https://morden.infura.io/your-token"));
+   Web3j web3 = Web3j.build(new InfuraHttpService("https://ropsten.infura.io/your-token"));
 
 For further information refer to
 `Using Infura with web3j <https://web3j.github.io/web3j/infura.html>`_
+
+Instructions on obtaining Ether to transact on the network can be found in the
+`testnet section of the docs <http://docs.web3j.io/transactions.html#ethereum-testnets>`_.
 
 
 Start sending requests
 ----------------------
 
-To send asynchronous requests using a Future:
+To send synchronous requests:
+
+.. code-block:: java
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
+   String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+
+
+To send asynchronous requests using a CompletableFuture (Future on Android):
 
 .. code-block:: java
 
@@ -181,14 +192,6 @@ To use an RxJava Observable:
        ...
    });
 
-To send synchronous requests:
-
-.. code-block:: java
-
-   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
-   String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-
 **Note:** for Android use:
 
 .. code-block:: java
@@ -201,7 +204,7 @@ IPC
 ---
 
 web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
-the same host as web3j. To connect simply use the relevent *IpcService* implemntation instead of
+the same host as web3j. To connect simply use the relevant *IpcService* implementation instead of
 *HttpService* when you create your service:
 
 .. code-block:: java
@@ -215,6 +218,68 @@ the same host as web3j. To connect simply use the relevent *IpcService* implemnt
    ...
 
 **Note:** IPC is not currently available on web3j-android.
+
+
+Working with smart contracts with Java smart contract wrappers
+--------------------------------------------------------------
+
+web3j can auto-generate smart contract wrapper code to deploy and interact with smart contracts
+without leaving the JVM.
+
+To generate the wrapper code, compile your smart contract:
+
+.. code-block:: bash
+
+   $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
+
+Then generate the wrapper code using web3j's `Command line tools`_:
+
+.. code-block:: bash
+
+   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+
+Or in code:
+
+.. code-block:: bash
+
+   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+
+
+Now you can create and deploy your smart contract:
+
+.. code-block:: java
+
+   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
+   Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
+
+   YourSmartContract contract = YourSmartContract.deploy(
+           <web3j>, <credentials>,
+           GAS_PRICE, GAS_LIMIT,
+           <initialEtherValue>,
+           <param1>, ..., <paramN>).get();  // constructor params
+
+Or use an existing contract:
+
+.. code-block:: java
+
+   YourSmartContract contract = YourSmartContract.load(
+           "0x<address>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
+
+To transact with a smart contract:
+
+.. code-block:: java
+
+   TransactionReceipt transactionReceipt = contract.someMethod(
+                new Type(...),
+                ...).get();
+
+To call a smart contract:
+
+.. code-block:: java
+
+   Type result = contract.someMethod(new Type(...), ...).get();
+
+For more information refer to `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
 
 
 Filters
@@ -281,7 +346,7 @@ Subscriptions should always be cancelled when no longer required:
 **Note:** filters are not supported on Infura.
 
 For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_ and the
-`Web3jRx <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+`Web3jRx <https://github.com/web3j/web3j/blob/master/src/core/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
 interface.
 
 
@@ -322,8 +387,8 @@ Or if you wish to create your own custom transaction:
    EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
    // ...
 
-Although it's far simpler using web3j's
-`Java smart contract wrappers`_.
+Although it's far simpler using web3j's `Transfer <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java>`_
+for transacting with Ether.
 
 Using an Ethereum client's admin commands (make sure you have your wallet in the client's
 keystore):
@@ -336,67 +401,6 @@ keystore):
        // send a transaction, or use parity.personalSignAndSendTransaction() to do it all in one
    }
 
-
-Java smart contract wrappers
-----------------------------
-
-web3j can auto-generate smart contract wrapper code to deploy and interact with smart contracts
-without leaving Java.
-
-To generate the wrapper code, compile your smart contract:
-
-.. code-block:: bash
-
-   $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
-
-Then generate the wrapper code using web3j's `Command line tools`_:
-
-.. code-block:: bash
-
-   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
-
-Or in code:
-
-.. code-block:: bash
-
-   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
-
-
-Now you can create and deploy your smart contract:
-
-.. code-block:: java
-
-   Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
-
-   YourSmartContract contract = YourSmartContract.deploy(
-           <web3j>, <credentials>,
-           GAS_PRICE, GAS_LIMIT,
-           <initialEtherValue>,
-           <param1>, ..., <paramN>).get();  // constructor params
-
-Or use an existing:
-
-.. code-block:: java
-
-   YourSmartContract contract = YourSmartContract.load(
-           "0x<address>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
-
-To Transact with a smart contract:
-
-.. code-block:: java
-
-   TransactionReceipt transactionReceipt = contract.someMethod(
-                new Type(...),
-                ...).get();
-
-To call a smart contract:
-
-.. code-block:: java
-
-   Type result = contract.someMethod(new Type(...), ...).get();
-
-For more information refer to the `documentation <http://docs.web3j.io/>`_.
 
 
 Command line tools
@@ -422,10 +426,10 @@ In the Java 8 build:
 - web3j provides type safe access to all responses. Optional or null responses
   are wrapped in Java 8's
   `Optional <https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html>`_ type.
-- Async requests are handled using Java 8's
+- Asynchronous requests are wrapped in a Java 8
   `CompletableFutures <https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>`_.
 
-In both the Java 8 and Andriod builds:
+In both the Java 8 and Android builds:
 
 - Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
   For simple results, you can obtain the quantity as a String via
@@ -439,7 +443,7 @@ Tested clients
 - Parity
 
 You can run the integration test class
-`CoreIT <https://github.com/web3j/web3j/blob/master/src/integration-test/java/org/web3j/protocol/core/CoreIT.java>`_
+`CoreIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/CoreIT.java>`_
 to verify clients.
 
 
@@ -456,6 +460,9 @@ For a pure Java implementation of the Ethereum client, check out
 Projects using web3j
 --------------------
 
+Please submit a pull request if you wish to include your project on the list:
+
+- `ERC-20 RESTful Service <https://github.com/blk-io/erc20-rest-service>`_
 - `Ether Wallet <https://play.google.com/store/apps/details?id=org.vikulin.etherwallet>`_ by
   `@vikulin <https://github.com/vikulin>`_
 - `eth-contract-api <https://github.com/adridadou/eth-contract-api>`_ by
@@ -464,24 +471,34 @@ Projects using web3j
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
 
 
+Companies using web3j
+---------------------
+
+Please submit a pull request if you wish to include your company on the list:
+
+- `Amberdata <https://www.amberdata.io/>`_
+- `blk.io <https://blk.io>`_
+- `Othera <https://www.othera.com.au/>`_
+
+
 Build instructions
 ------------------
 
 web3j includes integration tests for running against a live Ethereum client. If you do not have a
 client running, you can exclude their execution as per the below instructions.
 
-To run a full build including integration tests:
+To run a full build (excluding integration tests):
 
 .. code-block:: bash
 
    $ ./gradlew check
 
 
-To run excluding integration tests:
+To run the integration tests:
 
 .. code-block:: bash
 
-   $ ./gradlew -x integrationTest check
+   $ ./gradlew  -Pintegration-tests=true :integration-tests:test
 
 Thanks and credits
 ------------------

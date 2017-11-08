@@ -66,6 +66,7 @@ public class FunctionReturnDecoder {
      * @param <T> type of TypeReference
      * @return the decode value
      */
+    @SuppressWarnings("unchecked")
     public static <T extends Type> Type decodeIndexedValue(
             String rawInput, TypeReference<T> typeReference) {
         String input = Numeric.cleanHexPrefix(rawInput);
@@ -94,6 +95,7 @@ public class FunctionReturnDecoder {
         int offset = 0;
         for (TypeReference<?> typeReference:outputParameters) {
             try {
+                @SuppressWarnings("unchecked")
                 Class<Type> type = (Class<Type>) typeReference.getClassType();
 
                 int hexStringDataOffset = getDataOffset(input, offset, type);

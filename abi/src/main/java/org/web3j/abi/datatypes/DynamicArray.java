@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class DynamicArray<T extends Type> extends Array<T> {
 
+    @SafeVarargs
     public DynamicArray(T... values) {
         super(values[0].getTypeAsString() + "[]", values);
     }

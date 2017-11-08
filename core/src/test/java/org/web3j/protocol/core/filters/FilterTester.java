@@ -105,14 +105,15 @@ public abstract class FilterTester {
         assertTrue(subscription.isUnsubscribed());
     }
 
-    List createExpected(EthLog ethLog) {
+    @SuppressWarnings("unchecked")
+    <T> List<T> createExpected(EthLog ethLog) {
         List<EthLog.LogResult> logResults = ethLog.getLogs();
         if (logResults.isEmpty()) {
             fail("Results cannot be empty");
         }
 
-        List expected = new ArrayList();
-        for (EthLog.LogResult logResult : ethLog.getLogs()) {
+        List<T> expected = new ArrayList<T>();
+        for (EthLog.LogResult<T> logResult : ethLog.getLogs()) {
             expected.add(logResult.get());
         }
         return expected;
