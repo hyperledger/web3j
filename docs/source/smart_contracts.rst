@@ -160,7 +160,7 @@ In versions prior to 3.x of web3j, the generated smart contract wrappers used na
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
 using the *--solidityTypes* command line argument.
 
-You can also generate the wrappers by calling then Java class directly:
+You can also generate the wrappers by calling the Java class directly:
 
 .. code-block:: bash
 
@@ -180,6 +180,19 @@ The smart contract wrappers support all common operations for working with smart
 Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.
 
+web3j also supports the generation of Java smart contract function wrappers directly from `Truffle <http://truffleframework.com/>`_ via the :doc:`command_line` utility.
+
+.. code-block:: bash
+
+   $ web3j truffle generate [--javaTypes|--solidityTypes] /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+
+And this also can be invoked by calling the Java class:
+
+.. code-block:: bash
+
+   org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+
+A wrapper generated this way ia "enhanced" to expose the per-network deployed address of the contract.  These addresses are from the truffle deployment at the time the wrapper is generared.
 
 .. _construction-and-deployment:
 

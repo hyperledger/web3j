@@ -258,6 +258,9 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             return getAddress(Long.toString(network.id));
         }
 
+        /*
+         * c.f., org.web3j.tx.ChainId
+         */
         enum Network {
             olympic(0), mainnet(1), morden(2), ropsten(3), rinkeby(4), kovan(42);
 
