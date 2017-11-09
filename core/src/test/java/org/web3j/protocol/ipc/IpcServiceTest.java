@@ -31,6 +31,6 @@ public class IpcServiceTest {
 
         ipcService.send(new Request(), Web3ClientVersion.class);
 
-        verify(ioFacade).write("{\"jsonrpc\":\"2.0\",\"method\":null,\"params\":null,\"id\":0}");
+        verify(ioFacade).write("{\"jsonrpc\":\"2.0\",\"method\":null,\"params\":null,\"id\":null}");
     }
 }

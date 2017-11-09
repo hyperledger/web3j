@@ -26,7 +26,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_importRawKey",
                 Arrays.asList(keydata, password),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 PersonalImportRawKey.class);
     }
@@ -36,7 +35,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_lockAccount",
                 Arrays.asList(accountId),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -47,7 +45,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_sign",
                 Arrays.asList(message,accountId,password),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 PersonalSign.class);
     }
@@ -58,7 +55,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage,signedMessage),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 PersonalEcRecover.class);
     } 
