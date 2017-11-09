@@ -6,8 +6,11 @@ import java.util.Collections;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.web3j.utils.Strings.capitaliseFirstLetter;
+import static org.web3j.utils.Strings.isEmpty;
 import static org.web3j.utils.Strings.join;
 import static org.web3j.utils.Strings.lowercaseFirstLetter;
 import static org.web3j.utils.Strings.repeat;
@@ -19,7 +22,7 @@ public class StringsTest {
 
     @Test
     public void testToCsv() {
-        assertThat(toCsv(Collections.<String>emptyList()), is(""));
+        assertThat(toCsv(Collections.emptyList()), is(""));
         assertThat(toCsv(Collections.singletonList("a")), is("a"));
         assertThat(toCsv(Arrays.asList("a", "b", "c")), is("a, b, c"));
     }
@@ -58,4 +61,13 @@ public class StringsTest {
         assertThat(zeros(0), is(""));
         assertThat(zeros(3), is("000"));
     }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void testEmptyString() {
+        assertTrue(isEmpty(null));
+        assertTrue(isEmpty(""));
+        assertFalse(isEmpty("hello world"));
+    }
+    
 }

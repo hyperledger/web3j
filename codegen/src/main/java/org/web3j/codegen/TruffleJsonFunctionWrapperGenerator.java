@@ -130,8 +130,8 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             }
             new SolidityFunctionWrapper(useJavaNativeTypes)
                     .generateJavaFiles(contractName,
-                            c.bytecode,
-                            c.abi,
+                            c.getBytecode(),
+                            c.getAbi(),
                             destinationDirLocation.toString(),
                             basePackageName,
                             addresses);
@@ -226,72 +226,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             this.schemaVersion = schemaVersion;
             this.updatedAt = updatedAt;
         }
-
-        public Contract withContractName(String contractName) {
-            this.contractName = contractName;
-            return this;
-        }
-
-        public Contract withAbi(List<AbiDefinition> abi) {
-            this.abi = abi;
-            return this;
-        }
-
-        public Contract withBytecode(String bytecode) {
-            this.bytecode = bytecode;
-            return this;
-        }
-
-        public Contract withDeployedBytecode(String deployedBytecode) {
-            this.deployedBytecode = deployedBytecode;
-            return this;
-        }
-
-        public Contract withSourceMap(String sourceMap) {
-            this.sourceMap = sourceMap;
-            return this;
-        }
-
-        public Contract withDeployedSourceMap(String deployedSourceMap) {
-            this.deployedSourceMap = deployedSourceMap;
-            return this;
-        }
-
-        public Contract withSource(String source) {
-            this.source = source;
-            return this;
-        }
-
-        public Contract withSourcePath(String sourcePath) {
-            this.sourcePath = sourcePath;
-            return this;
-        }
-
-        public Contract withAst(JsonNode ast) {
-            this.ast = ast;
-            return this;
-        }
-
-        public Contract withCompiler(Compiler compiler) {
-            this.compiler = compiler;
-            return this;
-        }
-
-        public Contract withNetworks(Map<String, NetworkInfo> networks) {
-            this.networks = networks;
-            return this;
-        }
-
-        public Contract withSchemaVersion(String schemaVersion) {
-            this.schemaVersion = schemaVersion;
-            return this;
-        }
-
-        public Contract withUpdatedAt(Date updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
+        
         public String getContractName() {
             return contractName;
         }
@@ -303,47 +238,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public String getBytecode() {
             return bytecode;
         }
-
-        public String getDeployedBytecode() {
-            return deployedBytecode;
-        }
-
-        public String getSourceMap() {
-            return sourceMap;
-        }
-
-        public String getDeployedSourceMap() {
-            return deployedSourceMap;
-        }
-
-        public String getSource() {
-            return source;
-        }
-
-        public String getSourcePath() {
-            return sourcePath;
-        }
-
-        public JsonNode getAst() {
-            return ast;
-        }
-
-        public Compiler getCompiler() {
-            return compiler;
-        }
-
-        public Map<String, NetworkInfo> getNetworks() {
-            return networks;
-        }
-
-        public String getSchemaVersion() {
-            return schemaVersion;
-        }
-
-        public Date getUpdatedAt() {
-            return updatedAt;
-        }
-
+        
         public NetworkInfo getNetwork(String networkId) {
             return networks.get(networkId);
         }
@@ -404,16 +299,6 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             this.version = version;
         }
 
-        public Compiler withName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Compiler withVersion(String version) {
-            this.version = version;
-            return this;
-        }
-
         @JsonAnyGetter
         public Map<String, JsonNode> getAdditionalProperties() {
             return this.additionalProperties;
@@ -462,12 +347,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             this.links = links;
             this.address = address;
         }
-
-        public NetworkInfo withAddress(String address) {
-            this.address = address;
-            return this;
-        }
-
+        
         public String getAddress() {
             return address;
         }
