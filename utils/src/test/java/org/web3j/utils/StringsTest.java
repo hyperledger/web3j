@@ -11,7 +11,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.web3j.utils.Strings.capitaliseFirstLetter;
 import static org.web3j.utils.Strings.isEmpty;
-import static org.web3j.utils.Strings.join;
 import static org.web3j.utils.Strings.lowercaseFirstLetter;
 import static org.web3j.utils.Strings.repeat;
 import static org.web3j.utils.Strings.toCsv;
@@ -26,12 +25,7 @@ public class StringsTest {
         assertThat(toCsv(Collections.singletonList("a")), is("a"));
         assertThat(toCsv(Arrays.asList("a", "b", "c")), is("a, b, c"));
     }
-
-    @Test
-    public void testJoin() {
-        assertThat(join(Arrays.asList("a", "b"), "|"), is("a|b"));
-    }
-
+    
     @Test
     public void testCapitaliseFirstLetter() {
         assertThat(capitaliseFirstLetter(""), is(""));

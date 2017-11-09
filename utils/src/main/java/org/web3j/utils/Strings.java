@@ -10,18 +10,7 @@ public class Strings {
     private Strings() {}
 
     public static String toCsv(List<String> src) {
-        return join(src, ", ");
-    }
-
-    public static String join(List<String> src, String delimiter) {
-        String result = "";
-        for (int i = 0; i < src.size(); i++) {
-            result += src.get(i);
-            if (i + 1 < src.size()) {
-                result += delimiter;
-            }
-        }
-        return result;
+        return src == null ? null : String.join(", ", src.toArray(new String[0]));
     }
 
     public static String capitaliseFirstLetter(String string) {
