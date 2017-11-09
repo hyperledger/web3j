@@ -21,7 +21,7 @@ public class StringsTest {
 
     @Test
     public void testToCsv() {
-        assertThat(toCsv(Collections.emptyList()), is(""));
+        assertThat(toCsv(Collections.<String>emptyList()), is(""));
         assertThat(toCsv(Collections.singletonList("a")), is("a"));
         assertThat(toCsv(Arrays.asList("a", "b", "c")), is("a, b, c"));
     }
