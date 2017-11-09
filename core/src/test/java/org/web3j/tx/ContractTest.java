@@ -260,6 +260,8 @@ public class ContractTest extends ManagedTransactionTester {
         assertNull(contract.getDeployedAddress("1"));
         contract.setDeployedAddress("1", "0x000000000000add0e00000000000");
         assertNotNull(contract.getDeployedAddress("1"));
+        contract.setDeployedAddress("2", "0x000000000000add0e00000000000");
+        assertNotNull(contract.getDeployedAddress("2"));
     }
 
     @Test(expected = RuntimeException.class)
