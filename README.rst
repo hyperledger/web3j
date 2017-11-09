@@ -488,7 +488,8 @@ Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
 - `blk.io <https://blk.io>`_
-- `Othera <https://www.othera.com.au/>`_
+- `ConsenSys <https://consensys.net/>`_
+- `Othera <https://www.othera.io/>`_
 
 
 Build instructions
