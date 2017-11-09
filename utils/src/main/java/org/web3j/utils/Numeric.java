@@ -19,12 +19,18 @@ public final class Numeric {
     private Numeric() {
     }
 
-    public static String encodeQuantity(BigInteger value) {
+    public static String encodeQuantity(BigInteger value, boolean startingZero) {
         if (value.signum() != -1) {
-            return HEX_PREFIX + value.toString(16);
+            String hexValue = value.toString(16);
+            if (hexValue.length() == 1 && startingZero) hexValue = "0" + hexValue;
+            return HEX_PREFIX + hexValue;
         } else {
             throw new MessageEncodingException("Negative values are not supported");
         }
+    }
+
+    public static String encodeQuantity(BigInteger value) {
+        return encodeQuantity(value, false);
     }
 
     public static BigInteger decodeQuantity(String value) {

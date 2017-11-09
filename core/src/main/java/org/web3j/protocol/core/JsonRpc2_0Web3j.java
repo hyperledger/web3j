@@ -539,7 +539,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthUninstallFilter> ethUninstallFilter(BigInteger filterId) {
         return new Request<>(
                 "eth_uninstallFilter",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId, true)),
                 ID,
                 web3jService,
                 EthUninstallFilter.class);
@@ -549,7 +549,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetFilterChanges(BigInteger filterId) {
         return new Request<>(
                 "eth_getFilterChanges",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId, true)),
                 ID,
                 web3jService,
                 EthLog.class);
@@ -559,7 +559,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetFilterLogs(BigInteger filterId) {
         return new Request<>(
                 "eth_getFilterLogs",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId, true)),
                 ID,
                 web3jService,
                 EthLog.class);
@@ -722,7 +722,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhUninstallFilter> shhUninstallFilter(BigInteger filterId) {
         return new Request<>(
                 "shh_uninstallFilter",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId, true)),
                 ID,
                 web3jService,
                 ShhUninstallFilter.class);
@@ -732,7 +732,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId) {
         return new Request<>(
                 "shh_getFilterChanges",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId, true)),
                 ID,
                 web3jService,
                 ShhMessages.class);
@@ -742,7 +742,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhMessages> shhGetMessages(BigInteger filterId) {
         return new Request<>(
                 "shh_getMessages",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.encodeQuantity(filterId, true)),
                 ID,
                 web3jService,
                 ShhMessages.class);
