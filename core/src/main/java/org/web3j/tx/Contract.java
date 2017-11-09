@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.web3j.abi.EventEncoder;
@@ -41,6 +43,7 @@ public abstract class Contract extends ManagedTransaction {
     private final BigInteger gasPrice;
     private final BigInteger gasLimit;
     private TransactionReceipt transactionReceipt;
+    private Map<String, String> deployedAddresses;
 
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
@@ -369,4 +372,31 @@ public abstract class Contract extends ManagedTransaction {
 
         return values;
     }
+
+    /**
+     * Subclasses should implement this method to return pre-existing addresses for deployed
+     * contracts.
+     *
+     * @param networkId the network id, for example "1" for the main-net, "3" for ropsten, etc.
+     * @return the deployed address of the contract, if known, and null otherwise.
+     */
+    protected String getStaticDeployedAddress(String networkId) {
+        return null;
+    }
+
+    public final void setDeployedAddress(String networkId, String address) {
+        if (deployedAddresses == null) {
+            deployedAddresses = new HashMap<>();
+        }
+        deployedAddresses.put(networkId, address);
+    }
+
+    public final String getDeployedAddress(String networkId) {
+        String addr = null;
+        if (deployedAddresses != null) {
+            addr = deployedAddresses.get(networkId);
+        }
+        return addr == null ? getStaticDeployedAddress(networkId) : addr;
+    }
+
 }

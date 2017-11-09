@@ -5,7 +5,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import javax.lang.model.element.Modifier;
 
@@ -81,9 +83,20 @@ public class SolidityFunctionWrapper extends Generator {
         this.useNativeJavaTypes = useNativeJavaTypes;
     }
 
+    @SuppressWarnings("unchecked")
     public void generateJavaFiles(
             String contractName, String bin, String abi, String destinationDir,
             String basePackageName)
+            throws IOException, ClassNotFoundException {
+        generateJavaFiles(contractName, bin,
+                loadContractDefinition(abi),
+                destinationDir, basePackageName,
+                null);
+    }
+
+    void generateJavaFiles(
+            String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
+            String basePackageName, Map<String, String> addresses)
             throws IOException, ClassNotFoundException {
         String className = Strings.capitaliseFirstLetter(contractName);
 
@@ -92,12 +105,50 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER));
         classBuilder.addMethods(
-                buildFunctionDefinitions(className, classBuilder, loadContractDefinition(abi)));
+                buildFunctionDefinitions(className, classBuilder, abi));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
 
+        addAddressesSupport(classBuilder, addresses);
+
         write(basePackageName, classBuilder.build(), destinationDir);
     }
+
+    private void addAddressesSupport(TypeSpec.Builder classBuilder, Map<String, String> addresses) {
+        if (addresses != null) {
+
+            ClassName stringType = ClassName.get(String.class);
+            ClassName mapType = ClassName.get(HashMap.class);
+            TypeName mapStringString = ParameterizedTypeName.get(mapType, stringType, stringType);
+            FieldSpec addressesStaticField = FieldSpec
+                    .builder(mapStringString, "_addresses",
+                            Modifier.PROTECTED, Modifier.STATIC, Modifier.FINAL)
+                    .build();
+            classBuilder.addField(addressesStaticField);
+
+            final CodeBlock.Builder staticInit = CodeBlock.builder();
+            staticInit.addStatement("_addresses = new HashMap<>()");
+            addresses.forEach((k, v) ->
+                    staticInit.addStatement(String.format("_addresses.put(\"%1s\", \"%2s\")", k, v))
+            );
+            classBuilder.addStaticBlock(staticInit.build());
+
+            // See org.web3j.tx.Contract#getStaticDeployedAddress(String)
+            MethodSpec getAddress = MethodSpec
+                    .methodBuilder("getStaticDeployedAddress")
+                    .addModifiers(Modifier.PROTECTED)
+                    .returns(stringType)
+                    .addParameter(stringType, "networkId")
+                    .addCode(CodeBlock
+                    .builder()
+                    .addStatement("return _addresses.get(networkId)")
+                    .build())
+                    .build();
+            classBuilder.addMethod(getAddress);
+
+        }
+    }
+
 
     private TypeSpec.Builder createClassBuilder(String className, String binary) {
 
