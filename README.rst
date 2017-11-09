@@ -125,7 +125,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.0.1')
+   compile ('org.web3j:core:3.0.2')
 
 Android:
 
