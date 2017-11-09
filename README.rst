@@ -104,7 +104,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>2.3.1</version>
+     <version>3.0.2</version>
    </dependency>
 
 Android:
@@ -113,8 +113,8 @@ Android:
 
    <dependency>
      <groupId>org.web3j</groupId>
-     <artifactId>core-android</artifactId>
-     <version>2.2.1</version>
+     <artifactId>core</artifactId>
+     <version>3.0.1-android</version>
    </dependency>
 
 Gradle
@@ -124,13 +124,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:2.3.1')
+   compile ('org.web3j:core:3.0.2')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core-android:2.2.1')
+   compile ('org.web3j:core:3.0.1-android')
 
 
 Start a client
