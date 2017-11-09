@@ -139,10 +139,11 @@ public class SolidityFunctionWrapper extends Generator {
                     .addModifiers(Modifier.PROTECTED)
                     .returns(stringType)
                     .addParameter(stringType, "networkId")
-                    .addCode(CodeBlock
-                    .builder()
-                    .addStatement("return _addresses.get(networkId)")
-                    .build())
+                    .addCode(
+                            CodeBlock
+                                    .builder()
+                                    .addStatement("return _addresses.get(networkId)")
+                                    .build())
                     .build();
             classBuilder.addMethod(getAddress);
 
