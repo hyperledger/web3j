@@ -12,6 +12,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
     private String type;
     protected final List<T> value;
 
+    @SafeVarargs
     Array(String type, T... values) {
         if (!valid(values, type)) {
             throw new UnsupportedOperationException(

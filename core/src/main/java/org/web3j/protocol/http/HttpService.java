@@ -39,7 +39,7 @@ public class HttpService extends Service {
     private final String url;
 
     private final boolean includeRawResponse;
-    
+
     private HashMap<String, String> headers = new HashMap<>();
 
     public HttpService(String url, OkHttpClient httpClient, boolean includeRawResponses) {
@@ -149,15 +149,15 @@ public class HttpService extends Service {
     private Headers buildHeaders() {
         return Headers.of(headers);
     }
-    
+
     public void addHeader(String key, String value) {
         headers.put(key, value);
     }
-    
+
     public void addHeaders(Map<String, String> headersToAdd) {
         headers.putAll(headersToAdd);
     }
-    
+
     public HashMap<String, String> getHeaders() {
         return headers;
     }
