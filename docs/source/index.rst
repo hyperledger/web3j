@@ -23,8 +23,8 @@ Features
 - Ethereum wallet support
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
-  - from solc output; or
-  - from Truffle `.json` contract files.
+    - from solc output; or
+    - from Truffle `.json` contract files.
 - Reactive-functional API for working with filters
 - Support for Parity's
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
