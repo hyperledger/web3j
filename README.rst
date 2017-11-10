@@ -265,7 +265,7 @@ Then generate the wrapper code using web3j's `Command line tools`_:
 
 .. code-block:: bash
 
-   $ cd /path/to/your/webj/java/project
+   $ cd /path/to/your/web3j/java/project
    $ web3j truffle generate /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
 
 Whether using `Truffle` or `solc` directly, either way you get a ready-to-use Java wrapper for your contract.
