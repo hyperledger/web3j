@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.ens.EnsResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
@@ -39,7 +40,8 @@ public class WalletSendFunds extends WalletManager {
         Credentials credentials = getCredentials(walletFile);
         console.printf("Wallet for address " + credentials.getAddress() + " loaded\n");
 
-        if (!WalletUtils.isValidAddress(destinationAddress)) {
+        if (!WalletUtils.isValidAddress(destinationAddress)
+                && !EnsResolver.isValidEnsName(destinationAddress)) {
             exitError("Invalid destination address specified");
         }
 

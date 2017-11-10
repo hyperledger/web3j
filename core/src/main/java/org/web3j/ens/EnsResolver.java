@@ -16,7 +16,7 @@ import org.web3j.utils.Numeric;
 /**
  * Resolution logic for contract addresses.
  */
-public class ContractResolver {
+public class EnsResolver {
 
     static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
 
@@ -24,13 +24,13 @@ public class ContractResolver {
     private final TransactionManager transactionManager;
     private final long syncThreshold;
 
-    public ContractResolver(Web3j web3j, long syncThreshold) {
+    public EnsResolver(Web3j web3j, long syncThreshold) {
         this.web3j = web3j;
         transactionManager = new ClientTransactionManager(web3j, null);  // don't use empty string
         this.syncThreshold = syncThreshold;
     }
 
-    public ContractResolver(Web3j web3j) {
+    public EnsResolver(Web3j web3j) {
         this(web3j, DEFAULT_SYNC_THRESHOLD);
     }
 
@@ -89,7 +89,7 @@ public class ContractResolver {
     }
 
     public static boolean isValidEnsName(String input) {
-        return input != null
+        return input != null  // will be set to null on new Contract creation
                 && (input.contains(".") || !WalletUtils.isValidAddress(input));
     }
 }

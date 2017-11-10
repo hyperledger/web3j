@@ -24,20 +24,20 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.web3j.ens.ContractResolver.DEFAULT_SYNC_THRESHOLD;
-import static org.web3j.ens.ContractResolver.isValidEnsName;
+import static org.web3j.ens.EnsResolver.DEFAULT_SYNC_THRESHOLD;
+import static org.web3j.ens.EnsResolver.isValidEnsName;
 
-public class ContractResolverTest {
+public class EnsResolverTest {
 
     private Web3j web3j;
     private Web3jService web3jService;
-    private ContractResolver contractResolver;
+    private EnsResolver ensResolver;
 
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
         web3j = Web3j.build(web3jService);
-        contractResolver = new ContractResolver(web3j);
+        ensResolver = new EnsResolver(web3j);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class ContractResolverTest {
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(contractAddressResponse);
 
-        assertThat(contractResolver.lookupAddress("web3j.eth"),
+        assertThat(ensResolver.lookupAddress("web3j.eth"),
                 is("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
     }
 
@@ -71,7 +71,7 @@ public class ContractResolverTest {
     public void testIsSyncedSyncing() throws Exception {
         configureSyncing(true);
 
-        assertFalse(contractResolver.isSynced());
+        assertFalse(ensResolver.isSynced());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ContractResolverTest {
         configureSyncing(false);
         configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
 
-        assertTrue(contractResolver.isSynced());
+        assertTrue(ensResolver.isSynced());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ContractResolverTest {
         configureSyncing(false);
         configureLatestBlock((System.currentTimeMillis() / 1000) - DEFAULT_SYNC_THRESHOLD);
 
-        assertFalse(contractResolver.isSynced());
+        assertFalse(ensResolver.isSynced());
     }
 
     private void configureSyncing(boolean isSynced) throws IOException {

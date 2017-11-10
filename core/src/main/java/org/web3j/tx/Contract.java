@@ -17,7 +17,6 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
-import org.web3j.ens.ContractResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
@@ -49,11 +48,9 @@ public abstract class Contract extends ManagedTransaction {
                        BigInteger gasPrice, BigInteger gasLimit) {
         super(web3j, transactionManager);
 
-        ContractResolver contractResolver = new ContractResolver(web3j);
-        this.contractAddress = contractResolver.resolve(contractAddress);
+        this.contractAddress = ensResolver.resolve(contractAddress);
 
         this.contractBinary = contractBinary;
-        this.contractAddress = contractAddress;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
     }

@@ -3,6 +3,7 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigInteger;
 
+import org.web3j.ens.EnsResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -20,9 +21,12 @@ public abstract class ManagedTransaction {
 
     protected TransactionManager transactionManager;
 
+    protected EnsResolver ensResolver;
+
     protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
         this.web3j = web3j;
+        this.ensResolver = new EnsResolver(web3j);
     }
 
     public BigInteger getGasPrice() throws IOException {
