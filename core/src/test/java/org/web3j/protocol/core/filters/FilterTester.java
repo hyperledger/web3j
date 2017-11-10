@@ -58,6 +58,7 @@ public abstract class FilterTester {
         EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 
+        @SuppressWarnings("unchecked")
         List<T> expected = createExpected(ethLog);
         Set<T> results = Collections.synchronizedSet(new HashSet<T>());
 

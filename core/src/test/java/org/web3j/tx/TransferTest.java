@@ -48,6 +48,7 @@ public class TransferTest extends ManagedTransactionTester {
                 new BigDecimal(0.1), Convert.Unit.WEI).send();
     }
 
+    @SuppressWarnings("unchecked")
     private TransactionReceipt prepareTransfer() throws IOException {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
@@ -56,9 +57,9 @@ public class TransferTest extends ManagedTransactionTester {
         EthGasPrice ethGasPrice = new EthGasPrice();
         ethGasPrice.setResult("0x1");
 
-        Request gasPriceRequest = mock(Request.class);
+        Request<?, EthGasPrice> gasPriceRequest = mock(Request.class);
         when(gasPriceRequest.send()).thenReturn(ethGasPrice);
-        when(web3j.ethGasPrice()).thenReturn(gasPriceRequest);
+        when(web3j.ethGasPrice()).thenReturn((Request) gasPriceRequest);
 
         return transactionReceipt;
     }

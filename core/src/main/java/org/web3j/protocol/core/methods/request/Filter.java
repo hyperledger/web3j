@@ -40,7 +40,7 @@ public abstract class Filter<T extends Filter> {
         return topics;
     }
 
-    abstract <T extends Filter> T getThis();
+    abstract T getThis();
 
     public interface FilterTopic<T> {
         @JsonValue

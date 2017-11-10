@@ -158,6 +158,7 @@ public abstract class Contract extends ManagedTransaction {
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends Type> T executeCallSingleValueReturn(
             Function function) throws IOException {
         List<Type> values = executeCall(function);
@@ -168,6 +169,7 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends Type, R> R executeCallSingleValueReturn(
             Function function, Class<R> returnType) throws IOException {
         T result = executeCallSingleValueReturn(function);

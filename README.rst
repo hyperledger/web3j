@@ -24,7 +24,7 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
-web3j is a highly modular, reactive, type safe Java and Android library for working with
+web3j is a lightweight, highly modular, reactive, type safe Java and Android library for working with
 Smart Contracts and integrating with clients (nodes) on the Ethereum network:
 
 .. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j_network.png
@@ -142,7 +142,7 @@ Start up an Ethereum client if you don't already have one running, such as
 
 .. code-block:: bash
 
-   $ geth --rpcapi personal,db,eth,net,web3 --rpc --rinkeby
+   $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
 Or `Parity <https://github.com/paritytech/parity>`_:
 
@@ -272,7 +272,7 @@ To call a smart contract:
 
    Type result = contract.someMethod(<param1>, ...).send();
 
-For more information refer `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
+For more information refer to `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
 
 
 Filters
@@ -453,7 +453,7 @@ Tested clients
 - Parity
 
 You can run the integration test class
-`CoreIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/main/test/java/org/web3j/protocol/core/CoreIT.java>`_
+`CoreIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/CoreIT.java>`_
 to verify clients.
 
 
