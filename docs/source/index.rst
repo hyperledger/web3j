@@ -26,6 +26,7 @@ Features
     - from solc output; or
     - from Truffle `.json` contract files.
 - Reactive-functional API for working with filters
+- `Ethereum Name Service (ENS) <https://ens.domains/>`_ support
 - Support for Parity's
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
@@ -45,7 +46,8 @@ It has five runtime dependencies:
 - `OKHttp <https://hc.apache.org/httpcomponents-client-ga/index.html>`_ for HTTP connections
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_ for crypto
+- `Bouncy Castle <https://www.bouncycastle.org/>`_
+  (`Spongy Castle <https://rtyley.github.io/spongycastle/>`_ on Android) for crypto
 - `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC (not available on
   Android)
 

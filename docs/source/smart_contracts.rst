@@ -219,7 +219,7 @@ smart contract. If you wish to construct an instance of a smart contract wrapper
 smart contract, simply pass in it's address::
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>", web3j, credentials, GAS_PRICE, GAS_LIMIT);
+           "0x<address>|<ensName>", web3j, credentials, GAS_PRICE, GAS_LIMIT);
 
 
 .. _contract-validity:

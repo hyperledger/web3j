@@ -115,6 +115,8 @@ All of the above filters are exported via the
 interface.
 
 
+.. _filters-and-events:
+
 Topic filters and EVM events
 ----------------------------
 
@@ -122,7 +124,7 @@ Topic filters capture details of Ethereum Virtual Machine (EVM) events taking pl
 These events are created by smart contracts and stored in the transaction log associated with a
 smart contract.
 
-The `Solidity documentation <http://solidity.readthedocs.io/en/develop/contracts.html?highlight=event#events>`_
+The `Solidity documentation <http://solidity.readthedocs.io/en/develop/contracts.html#events>`_
 provides a good overview of EVM events.
 
 You use the

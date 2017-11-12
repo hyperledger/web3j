@@ -22,7 +22,7 @@ public class EnsResolver {
 
     private final Web3j web3j;
     private final TransactionManager transactionManager;
-    private final long syncThreshold;
+    private long syncThreshold;  // non-final in case this value needs to be tweaked
 
     public EnsResolver(Web3j web3j, long syncThreshold) {
         this.web3j = web3j;
@@ -32,6 +32,14 @@ public class EnsResolver {
 
     public EnsResolver(Web3j web3j) {
         this(web3j, DEFAULT_SYNC_THRESHOLD);
+    }
+
+    public void setSyncThreshold(long syncThreshold) {
+        this.syncThreshold = syncThreshold;
+    }
+
+    public long getSyncThreshold() {
+        return syncThreshold;
     }
 
     public String resolve(String contractId) {

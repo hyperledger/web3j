@@ -29,6 +29,32 @@ public abstract class ManagedTransaction {
         this.ensResolver = new EnsResolver(web3j);
     }
 
+    /**
+     * This should only be used in case you need to get the {@link EnsResolver#syncThreshold}
+     * parameter, which dictates the threshold in milliseconds since the last processed block
+     * timestamp should be to considered in sync the blockchain.
+     *
+     * <p>It is currently experimental and only used in ENS name resolution, but will probably
+     * be made available for read calls in the future.
+     *
+     * @return sync threshold value in milliseconds
+     */
+    public long getSyncThreshold() {
+        return ensResolver.getSyncThreshold();
+    }
+
+    /**
+     * This should only be used in case you need to modify the {@link EnsResolver#syncThreshold}
+     * parameter, which dictates the threshold in milliseconds since the last processed block
+     * timestamp should be to considered in sync the blockchain.
+     *
+     * <p>It is currently experimental and only used in ENS name resolution, but will probably
+     * be made available for read calls in the future.
+     */
+    public void setSyncThreshold(long syncThreshold) {
+        ensResolver.setSyncThreshold(syncThreshold);
+    }
+
     public BigInteger getGasPrice() throws IOException {
         EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
 

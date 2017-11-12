@@ -87,7 +87,7 @@ of the transaction. This is demonstrated below::
    String hexValue = Numeric.toHexString(signedMessage);
 
    EthSendTransaction ethSendTransaction =
-           parity.ethSendRawTransaction(hexValue).send().get();
+           web3j.ethSendRawTransaction(hexValue).send();
    String transactionHash = ethSendTransaction.getTransactionHash();
    ...
 
