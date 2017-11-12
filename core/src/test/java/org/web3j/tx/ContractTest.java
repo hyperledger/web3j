@@ -37,6 +37,7 @@ import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
@@ -256,6 +257,14 @@ public class ContractTest extends ManagedTransactionTester {
         testErrorScenario();
     }
 
+    @Test
+    public void testSetGetAddresses() throws Exception {
+        assertNull(contract.getDeployedAddress("1"));
+        contract.setDeployedAddress("1", "0x000000000000add0e00000000000");
+        assertNotNull(contract.getDeployedAddress("1"));
+        contract.setDeployedAddress("2", "0x000000000000add0e00000000000");
+        assertNotNull(contract.getDeployedAddress("2"));
+    }
 
     @Test(expected = RuntimeException.class)
     @SuppressWarnings("unchecked")

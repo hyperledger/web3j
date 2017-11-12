@@ -44,6 +44,8 @@ Features
 - Ethereum wallet support
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
+    - from solc output; or
+    - from Truffle `.json` contract files.
 - Reactive-functional API for working with filters
 - Support for Parity's
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
@@ -251,7 +253,24 @@ Now you can create and deploy your smart contract:
            GAS_PRICE, GAS_LIMIT,
            <param1>, ..., <paramN>).send();  // constructor params
 
-Or use an existing contract:
+Alternatively, if you use `Truffle <http://truffleframework.com/>`_, you can make use of its `.json` output files:
+
+.. code-block:: bash
+
+   # Inside your Truffle project
+   $ truffle compile
+   $ truffle deploy
+
+Then generate the wrapper code using web3j's `Command line tools`_:
+
+.. code-block:: bash
+
+   $ cd /path/to/your/web3j/java/project
+   $ web3j truffle generate /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+
+Whether using `Truffle` or `solc` directly, either way you get a ready-to-use Java wrapper for your contract.
+
+So, to use an existing contract:
 
 .. code-block:: java
 
