@@ -55,17 +55,18 @@ Features
 - Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
 
 
-It has seven runtime dependencies:
+It has five runtime dependencies:
 
 - `RxJava <https://github.com/ReactiveX/RxJava>`_ for its reactive-functional API
-- `Apache HTTP Client <https://hc.apache.org/httpcomponents-client-ga/index.html>`_
+- `OKHttp <https://hc.apache.org/httpcomponents-client-ga/index.html>`_ for HTTP connections
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_
-  (`Spongy Castle for Android <https://rtyley.github.io/spongycastle/>`_) and
-  `Java Scrypt <https://github.com/wg/scrypt>`_ for crypto
-- `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract wrappers
-- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC
+- `Bouncy Castle <https://www.bouncycastle.org/>`_ for crypto
+- `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC (not available on
+  Android)
+
+It also uses `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract
+wrappers
 
 Full project documentation is available at
 `docs.web3j.io <http://docs.web3j.io>`_.
@@ -363,7 +364,7 @@ To send Ether to another party using your Ethereum wallet file:
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
-           web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER);
+           web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
 
 Or if you wish to create your own custom transaction:
 
@@ -384,7 +385,7 @@ Or if you wish to create your own custom transaction:
    // sign & send our transaction
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
    String hexValue = Hex.toHexString(signedMessage);
-   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
    // ...
 
 Although it's far simpler using web3j's `Transfer <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java>`_
@@ -395,10 +396,10 @@ keystore):
 
 .. code-block:: java
   		
-   Parity parity = Parity.build(new HttpService());  // defaults to http://localhost:8545/
-   PersonalUnlockAccount personalUnlockAccount = parity.personalUnlockAccount("0x000...", "a password").sendAsync().get();
+   Admin web3j = Admin.build(new HttpService());  // defaults to http://localhost:8545/
+   PersonalUnlockAccount personalUnlockAccount = web3j.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
-       // send a transaction, or use parity.personalSignAndSendTransaction() to do it all in one
+       // send a transaction
    }
 
 
@@ -428,12 +429,24 @@ In the Java 8 build:
   `Optional <https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html>`_ type.
 - Asynchronous requests are wrapped in a Java 8
   `CompletableFutures <https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>`_.
+  web3j provides a wrapper around all async requests to ensure that any exceptions during
+  execution will be captured rather then silently discarded. This is due to the lack of support
+  in *CompletableFutures* for checked exceptions, which are often rethrown as unchecked exception
+  causing problems with detection. See the
+  `Async.run() <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/utils/Async.java>`_ and its associated
+  `test <https://github.com/web3j/web3j/blob/master/core/src/test/java/org/web3j/utils/AsyncTest.java>`_ for details.
 
 In both the Java 8 and Android builds:
 
 - Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
   For simple results, you can obtain the quantity as a String via
   `Response <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().
+- It's also possible to include the raw JSON payload in responses via the *includeRawResponse*
+  parameter, present in the
+  `HttpService <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/http/HttpService.java>`_
+  and
+  `IpcService <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/ipc/IpcService.java>`_
+  classes.
 
 
 Tested clients
@@ -453,8 +466,8 @@ Related projects
 For a .NET implementation, check out `Nethereum <https://github.com/Nethereum/Nethereum>`_.
 
 For a pure Java implementation of the Ethereum client, check out
-`EthereumJ <https://github.com/ethereum/ethereumj>`_ and the work of
-`Ether.Camp <https://github.com/ether-camp/>`_.
+`EthereumJ <https://github.com/ethereum/ethereumj>`_ and
+`Ethereum Harmony <https://github.com/ether-camp/ethereum-harmony>`_.
 
 
 Projects using web3j
@@ -508,16 +521,4 @@ Thanks and credits
 - `Finhaus <http://finhaus.com.au/>`_ guys for putting me onto Nethereum
 - `bitcoinj <https://bitcoinj.github.io/>`_ for the reference Elliptic Curve crypto implementation
 - Everyone involved in the Ethererum project and its surrounding ecosystem
-- And of course the users of the library, who've provided valuable input & feedback -
-  `@ice09 <https://github.com/ice09>`_, `@adridadou <https://github.com/adridadou>`_,
-  `@nickmelis <https://github.com/nickmelis>`_, `@basavk <https://github.com/basavk>`_,
-  `@kabl <https://github.com/kabl>`_, `@MaxBinnewies <https://github.com/MaxBinnewies>`_,
-  `@vikulin <https://github.com/vikulin>`_, `@sullis <https://github.com/sullis>`_,
-  `@vethan <https://github.com/vethan>`_, `@h2mch <https://github.com/h2mch>`_,
-  `@mtiutin <https://github.com/mtiutin>`_, `@fooock <https://github.com/fooock>`_,
-  `@ermyas <https://github.com/ermyas>`_, `@danieldietrich <https://github.com/danieldietrich>`_,
-  `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_,
-  `@ferOnti <https://github.com/ferOnti>`_, `@fraspadafora <https://github.com/fraspadafora>`_,
-  `@bigstar119 <https://github.com/bigstar119>`_, `@gagarin55 <https://github.com/gagarin55>`_,
-  `@thedoctor <https://github.com/thedoctor>`_, `@tramonex-nate <https://github.com/tramonex-nate>`_,
-  `@ferOnti <https://github.com/ferOnti>`_
+- And of course the users of the library, who've provided valuable input & feedback

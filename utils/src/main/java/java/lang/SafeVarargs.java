@@ -84,7 +84,14 @@ import java.lang.annotation.*;
  *
  * @since 1.7
  */
+
+// The annotation SafeVarargs does not exist in Java 1.6, but it is being used
+// in the auto-generated type classes (the Android branch is still on Java 1.6).
+// Rather than having two different ways of generating these classes, the class
+// SafeVarargs was copied from the Java source code (>= 1.7), and the retention
+// changed from RUNTIME to CLASS, so it is not causing any problems at runtime.
+
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 @Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
 public @interface SafeVarargs {}
