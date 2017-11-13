@@ -47,6 +47,7 @@ Features
     - from solc output; or
     - from Truffle `.json` contract files.
 - Reactive-functional API for working with filters
+- `Ethereum Name Service (ENS) <https://ens.domains/>`_ support
 - Support for Parity's
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
@@ -63,12 +64,13 @@ It has five runtime dependencies:
 - `OKHttp <https://hc.apache.org/httpcomponents-client-ga/index.html>`_ for HTTP connections
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_ for crypto
+- `Bouncy Castle <https://www.bouncycastle.org/>`_
+  (`Spongy Castle <https://rtyley.github.io/spongycastle/>`_ on Android) for crypto
 - `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC (not available on
   Android)
 
 It also uses `JavaPoet <https://github.com/square/javapoet>`_ for generating smart contract
-wrappers
+wrappers.
 
 Full project documentation is available at
 `docs.web3j.io <http://docs.web3j.io>`_.
@@ -107,7 +109,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.0.2</version>
+     <version>3.1.0</version>
    </dependency>
 
 Android:
@@ -127,7 +129,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.0.2')
+   compile ('org.web3j:core:3.1.0')
 
 Android:
 
@@ -275,7 +277,7 @@ So, to use an existing contract:
 .. code-block:: java
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
+           "0x<address>|<ensName>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
 
 To transact with a smart contract:
 
@@ -375,7 +377,9 @@ To send Ether to another party using your Ethereum wallet file:
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
-           web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
+           web3, credentials, "0x<address>|<ensName>",
+           BigDecimal.valueOf(1.0), Convert.Unit.ETHER)
+           .send();
 
 Or if you wish to create your own custom transaction:
 
