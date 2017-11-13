@@ -81,6 +81,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   quickstart.rst
    getting_started.rst
    modules.rst
    transactions.rst
@@ -91,6 +92,7 @@ Contents:
    command_line.rst
    management_apis.rst
    infura.rst
+   ens.rst
    trouble.rst
    projects.rst
    companies.rst

@@ -1,6 +1,12 @@
 Troubleshooting
 ===============
 
+Do you have a sample web3j project
+----------------------------------
+
+Yes, refer to the web3j sample project outlined in the :doc:`quickstart`.
+
+
 I'm submitting a transaction, but it's not being mined
 ------------------------------------------------------
 After creating and sending a transaction, you receive a transaction hash, however calling
@@ -70,7 +76,7 @@ be marked as
 functions. :ref:`smart-contract-wrappers` created by web3j handle these differences for you.
 
 The following StackExchange
-`post <http://ethereum.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call>`_
+`post <http://ethereum.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call>`__
 is useful for background.
 
 
@@ -95,7 +101,7 @@ of the transaction. This is demonstrated below::
 text.
 
 The following StackExchange
-`post <http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address>`_
+`post <http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address>`__
 is useful for background.
 
 
@@ -124,6 +130,14 @@ We forgot to define the *from* parameter in one of the inherited contracts::
 The Solidity compiler will not complain about this, however, the produced binary file for the
 Web3jToken will be blank.
 
+
+My ENS lookups are failing
+--------------------------
+
+Are you sure that you are connecting to the correct network to perform the lookup?
+
+If web3j is telling you that the node is not in sync, you may need to change the *syncThreshold*
+in the :ref:`ENS resolver <ens-implementation>`.
 
 
 Do you have a project donation address?
