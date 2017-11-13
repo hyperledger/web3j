@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -32,6 +33,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
 import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
+import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
 import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
 
 
@@ -84,17 +86,42 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 equalTo(TypeName.get(BigInteger.class)));
         assertThat(getNativeType(TypeName.get(Int256.class)),
                 equalTo(TypeName.get(BigInteger.class)));
+        assertThat(getNativeType(TypeName.get(Utf8String.class)),
+                equalTo(TypeName.get(String.class)));
         assertThat(getNativeType(TypeName.get(Bool.class)),
-                equalTo(TypeName.get(boolean.class)));
+                equalTo(TypeName.get(Boolean.class)));
         assertThat(getNativeType(TypeName.get(Bytes32.class)),
                 equalTo(TypeName.get(byte[].class)));
         assertThat(getNativeType(TypeName.get(DynamicBytes.class)),
                 equalTo(TypeName.get(byte[].class)));
     }
 
+    @Test
+    public void testGetNativeTypeParameterized() {
+        assertThat(getNativeType(
+                ParameterizedTypeName.get(
+                        ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
+                equalTo(ParameterizedTypeName.get(
+                        ClassName.get(List.class), TypeName.get(String.class))));
+    }
+
     @Test(expected = UnsupportedOperationException.class)
     public void testGetNativeTypeInvalid() {
         getNativeType(TypeName.get(BigInteger.class));
+    }
+
+    @Test
+    public void testGetEventNativeType() {
+        assertThat(getEventNativeType(TypeName.get(Utf8String.class)),
+                equalTo(TypeName.get(byte[].class)));
+    }
+
+    @Test
+    public void testGetEventNativeTypeParameterized() {
+        assertThat(getEventNativeType(
+                ParameterizedTypeName.get(
+                        ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
+                equalTo(TypeName.get(byte[].class)));
     }
 
     @Test

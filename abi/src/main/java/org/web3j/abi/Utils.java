@@ -77,6 +77,7 @@ public class Utils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     static <T extends Type> Class<T> getParameterizedTypeFromArray(
             TypeReference typeReference) throws ClassNotFoundException {
 

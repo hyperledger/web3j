@@ -15,8 +15,11 @@ public class TransactionReceipt {
     private String blockNumber;
     private String cumulativeGasUsed;
     private String gasUsed;
-    private String contractAddress;  // this is present in the spec
+    private String contractAddress;
     private String root;
+    // status is only present on Byzantium transactions onwards
+    // see EIP 658 https://github.com/ethereum/EIPs/pull/658
+    private String status;
     private String from;
     private String to;
     private List<Log> logs;
@@ -27,8 +30,8 @@ public class TransactionReceipt {
 
     public TransactionReceipt(String transactionHash, String transactionIndex,
                               String blockHash, String blockNumber, String cumulativeGasUsed,
-                              String gasUsed, String contractAddress, String root, String from,
-                              String to, List<Log> logs, String logsBloom) {
+                              String gasUsed, String contractAddress, String root, String status,
+                              String from, String to, List<Log> logs, String logsBloom) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -37,6 +40,7 @@ public class TransactionReceipt {
         this.gasUsed = gasUsed;
         this.contractAddress = contractAddress;
         this.root = root;
+        this.status = status;
         this.from = from;
         this.to = to;
         this.logs = logs;
@@ -123,6 +127,14 @@ public class TransactionReceipt {
         this.root = root;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getFrom() {
         return from;
     }
@@ -202,6 +214,10 @@ public class TransactionReceipt {
                 ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
             return false;
         }
+        if (getStatus() != null
+                ? !getStatus().equals(that.getStatus()) : that.getStatus() != null) {
+            return false;
+        }
         if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
             return false;
         }
@@ -225,6 +241,7 @@ public class TransactionReceipt {
         result = 31 * result + (gasUsed != null ? gasUsed.hashCode() : 0);
         result = 31 * result + (getContractAddress() != null ? getContractAddress().hashCode() : 0);
         result = 31 * result + (getRoot() != null ? getRoot().hashCode() : 0);
+        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
         result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getLogs() != null ? getLogs().hashCode() : 0);

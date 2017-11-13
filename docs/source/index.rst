@@ -76,7 +76,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   introduction.rst
    getting_started.rst
    modules.rst
    transactions.rst
@@ -89,6 +88,7 @@ Contents:
    infura.rst
    trouble.rst
    projects.rst
+   companies.rst
    development.rst
    links.rst
    credits.rst

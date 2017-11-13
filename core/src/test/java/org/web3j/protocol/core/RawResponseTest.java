@@ -1,7 +1,5 @@
 package org.web3j.protocol.core;
 
-import java.nio.charset.Charset;
-
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
