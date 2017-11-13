@@ -22,7 +22,10 @@ Features
   client API over HTTP and IPC
 - Ethereum wallet support
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
-  contracts from native Java code (Solidity and Truffle definition formats supported)
+  contracts from native Java code
+  (`Solidity <http://solidity.readthedocs.io/en/latest/using-the-compiler.html#using-the-commandline-compiler>`_
+  and
+  `Truffle <https://github.com/trufflesuite/truffle-contract-schema>`_ definition formats supported)
 - Reactive-functional API for working with filters
 - `Ethereum Name Service (ENS) <https://ens.domains/>`_ support
 - Support for Parity's

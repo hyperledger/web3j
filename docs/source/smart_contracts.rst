@@ -180,7 +180,10 @@ The smart contract wrappers support all common operations for working with smart
 Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.
 
-web3j also supports the generation of Java smart contract function wrappers directly from `Truffle <http://truffleframework.com/>`_ via the :doc:`command_line` utility.
+web3j also supports the generation of Java smart contract function wrappers directly from
+`Truffle's <http://truffleframework.com/>`_
+`Contract Schema <https://github.com/trufflesuite/truffle-contract-schema>`_
+via the :doc:`command_line` utility.
 
 .. code-block:: bash
 
