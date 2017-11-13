@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.tx.ChainId;
 import org.web3j.utils.Strings;
 
 import static org.web3j.codegen.Console.exitError;
@@ -196,15 +197,9 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
                 pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "GMT")
         public Date updatedAt;
 
-        /**
-         * No args constructor for use in serialization.
-         */
         public Contract() {
         }
 
-        /**
-         * Default constructor.
-         */
         public Contract(String contractName, List<AbiDefinition> abi, String bytecode,
                 String deployedBytecode,
                 String sourceMap, String deployedSourceMap, String source, String sourcePath,
@@ -260,9 +255,16 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
 
         /*
          * c.f., org.web3j.tx.ChainId
+         *
+         * This should be updated with https://github.com/web3j/web3j/issues/234
          */
         enum Network {
-            olympic(0), mainnet(1), morden(2), ropsten(3), rinkeby(4), kovan(42);
+            olympic(0),
+            mainnet(ChainId.MAINNET),
+            morden(ChainId.EXPANSE_MAINNET),
+            ropsten(ChainId.ROPSTEN),
+            rinkeby(ChainId.RINKEBY),
+            kovan(ChainId.KOVAN);
 
             public final long id;
 
@@ -287,15 +289,9 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         @JsonIgnore
         private Map<String, JsonNode> additionalProperties = new HashMap<String, JsonNode>();
 
-        /**
-         * No args constructor for use in serialization.
-         */
         public Compiler() {
         }
 
-        /**
-         * Default constructor.
-         */
         public Compiler(String name, String version) {
             super();
             this.name = name;
@@ -316,7 +312,6 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             this.additionalProperties.put(name, value);
             return this;
         }
-
     }
 
 
@@ -337,9 +332,6 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         @JsonProperty("address")
         public String address;
 
-        /**
-         * No args constructor for use in serialization.
-         */
         public NetworkInfo() {
         }
 

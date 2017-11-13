@@ -207,12 +207,10 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
 
     task release {
         //TODO run clean & closeAndPromoteRepository once
-//        dependsOn 'clean'
         dependsOn 'build'
         dependsOn 'uploadArchives'
         dependsOn 'bintrayUpload'
 
-//        tasks.findByName('build').mustRunAfter 'clean'
         tasks.findByName('uploadArchives').mustRunAfter 'build'
         tasks.findByName('bintrayUpload').mustRunAfter 'build'
     }

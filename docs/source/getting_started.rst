@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.0.2</version>
+     <version>3.1.0</version>
    </dependency>
 
 Android:
@@ -33,7 +33,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.0.2')
+   compile ('org.web3j:core:3.1.0')
 
 Android:
 
@@ -152,7 +152,7 @@ Now you can create and deploy your smart contract::
 Or use an existing contract::
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
+           "0x<address>|<ensName>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
 
 To transact with a smart contract::
 
@@ -234,7 +234,9 @@ To send Ether to another party using your Ethereum wallet file::
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
-           web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
+           web3, credentials, "0x<address>|<ensName>",
+           BigDecimal.valueOf(1.0), Convert.Unit.ETHER)
+           .send();
 
 Or if you wish to create your own custom transaction::
 

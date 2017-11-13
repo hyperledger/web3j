@@ -3,16 +3,13 @@ import java.text.SimpleDateFormat
 description 'web3j is a lightweight Java library for integration with Ethereum clients'
 
 dependencies {
-    compile project(':rlp'),
-            project(':abi'),
-            project(':tuples'),
+    compile project(':abi'),
             project(':crypto'),
-            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            project(':tuples'),
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
-            "io.reactivex:rxjava:$rxjavaVersion",
-            "org.slf4j:slf4j-api:$slf4jVersion"
+            "io.reactivex:rxjava:$rxjavaVersion"
     testCompile project(path: ':crypto', configuration: 'archives'),
             "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
 }

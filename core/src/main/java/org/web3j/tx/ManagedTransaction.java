@@ -50,6 +50,8 @@ public abstract class ManagedTransaction {
      *
      * <p>It is currently experimental and only used in ENS name resolution, but will probably
      * be made available for read calls in the future.
+     *
+     * @param syncThreshold the sync threshold in milliseconds
      */
     public void setSyncThreshold(long syncThreshold) {
         ensResolver.setSyncThreshold(syncThreshold);
