@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Transactions &mdash; web3j 3.0.2 documentation</title>
+    <title>Transactions &mdash; web3j 3.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.2',
+        VERSION:     '3.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.0.2 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.1.0 documentation" href="index.html" />
     <link rel="next" title="Smart Contracts" href="smart_contracts.html" />
     <link rel="prev" title="Modules" href="modules.html" />
    
@@ -341,7 +341,8 @@ response for you:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span><span class="s">&quot;password&quot;</span><span class="o">,</span> <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
 <span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">Transfer</span><span class="o">.</span><span class="na">sendFunds</span><span class="o">(</span>
-        <span class="n">web3</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="s">&quot;0x...&quot;</span><span class="o">,</span> <span class="n">BigDecimal</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mf">1.0</span><span class="o">),</span> <span class="n">Convert</span><span class="o">.</span><span class="na">Unit</span><span class="o">.</span><span class="na">ETHER</span><span class="o">).</span><span class="na">send</span><span class="o">();</span>
+        <span class="n">web3</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span>
+        <span class="n">BigDecimal</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mf">1.0</span><span class="o">),</span> <span class="n">Convert</span><span class="o">.</span><span class="na">Unit</span><span class="o">.</span><span class="na">ETHER</span><span class="o">).</span><span class="na">send</span><span class="o">();</span>
 </pre></div>
 </div>
 </div>

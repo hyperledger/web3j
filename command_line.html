@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Command Line Tools &mdash; web3j 3.0.2 documentation</title>
+    <title>Command Line Tools &mdash; web3j 3.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.2',
+        VERSION:     '3.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.0.2 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.1.0 documentation" href="index.html" />
     <link rel="next" title="Management APIs" href="management_apis.html" />
     <link rel="prev" title="Filters and Events" href="filters.html" />
    
@@ -95,13 +95,13 @@ Usage: web3j version|wallet|solidity ...
 </pre></div>
 </div>
 <p>To send Ether to another address:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j wallet send &lt;walletfile&gt; &lt;destination-address&gt;
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j wallet send &lt;walletfile&gt; 0x&lt;address&gt;<span class="p">|</span>&lt;ensName&gt;
 </pre></div>
 </div>
 <p>When sending Ether to another address you will be asked a series of questions before the
 transaction takes place. See the below for a full example</p>
 <p>The following example demonstrates using web3j to send Ether to another wallet.</p>
-<div class="highlight-bash"><div class="highlight"><pre>$ ./web3j-&lt;version&gt;/bin/web3j wallet send &lt;walletfile&gt; &lt;destination-address&gt;
+<div class="highlight-bash"><div class="highlight"><pre>$ ./web3j-&lt;version&gt;/bin/web3j wallet send &lt;walletfile&gt; 0x&lt;address&gt;|&lt;ensName&gt;
 
               _      _____ _     _
              | |    |____ (_)   (_)

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Smart Contracts &mdash; web3j 3.0.2 documentation</title>
+    <title>Smart Contracts &mdash; web3j 3.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.2',
+        VERSION:     '3.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.0.2 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.1.0 documentation" href="index.html" />
     <link rel="next" title="Application Binary Interface" href="abi.html" />
     <link rel="prev" title="Transactions" href="transactions.html" />
    
@@ -165,7 +165,7 @@ files.</p>
 <p>In versions prior to 3.x of web3j, the generated smart contract wrappers used native Solidity
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
 using the <em>&#8211;solidityTypes</em> command line argument.</p>
-<p>You can also generate the wrappers by calling then Java class directly:</p>
+<p>You can also generate the wrappers by calling the Java class directly:</p>
 <div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
@@ -180,6 +180,18 @@ using the <em>&#8211;solidityTypes</em> command line argument.</p>
 </ul>
 <p>Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.</p>
+<p>web3j also supports the generation of Java smart contract function wrappers directly from
+<a class="reference external" href="http://truffleframework.com/">Truffle&#8217;s</a>
+<a class="reference external" href="https://github.com/trufflesuite/truffle-contract-schema">Contract Schema</a>
+via the <a class="reference internal" href="command_line.html"><em>Command Line Tools</em></a> utility.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j truffle generate <span class="o">[</span>--javaTypes<span class="p">|</span>--solidityTypes<span class="o">]</span> /path/to/&lt;truffle-smart-contract-output&gt;.json -o /path/to/src/main/java -p com.your.organisation.name
+</pre></div>
+</div>
+<p>And this also can be invoked by calling the Java class:</p>
+<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/&lt;truffle-smart-contract-output&gt;.json -o /path/to/src/main/java -p com.your.organisation.name
+</pre></div>
+</div>
+<p>A wrapper generated this way ia &#8220;enhanced&#8221; to expose the per-network deployed address of the contract.  These addresses are from the truffle deployment at the time the wrapper is generared.</p>
 </div>
 <div class="section" id="construction-and-deployment">
 <span id="id1"></span><h2>Construction and deployment<a class="headerlink" href="#construction-and-deployment" title="Permalink to this headline">¶</a></h2>
@@ -200,7 +212,7 @@ modifier to be present in the contract.</p>
 smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
 smart contract, simply pass in it&#8217;s address:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
-        <span class="s">&quot;0x&lt;address&gt;&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
+        <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
 </pre></div>
 </div>
 </div>

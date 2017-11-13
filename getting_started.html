@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; web3j 3.0.2 documentation</title>
+    <title>Getting Started &mdash; web3j 3.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.0.2',
+        VERSION:     '3.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.0.2 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.1.0 documentation" href="index.html" />
     <link rel="next" title="Modules" href="modules.html" />
     <link rel="prev" title="web3j" href="index.html" />
    
@@ -53,7 +53,7 @@
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>3.0.2<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -69,7 +69,7 @@
 <div class="section" id="gradle">
 <h2>Gradle<a class="headerlink" href="#gradle" title="Permalink to this headline">¶</a></h2>
 <p>Java 8:</p>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.0.2&#39;</span><span class="o">)</span>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.1.0&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Android:</p>
@@ -164,7 +164,7 @@ without leaving the JVM.</p>
 </div>
 <p>Or use an existing contract:</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
-        <span class="s">&quot;0x&lt;address&gt;&quot;</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
+        <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>To transact with a smart contract:</p>
@@ -238,7 +238,9 @@ client admin commands for sending transactions.</p>
 <div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span><span class="s">&quot;password&quot;</span><span class="o">,</span> <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
 <span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">Transfer</span><span class="o">.</span><span class="na">sendFunds</span><span class="o">(</span>
-        <span class="n">web3</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="s">&quot;0x...&quot;</span><span class="o">,</span> <span class="n">BigDecimal</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mf">1.0</span><span class="o">),</span> <span class="n">Convert</span><span class="o">.</span><span class="na">Unit</span><span class="o">.</span><span class="na">ETHER</span><span class="o">).</span><span class="na">send</span><span class="o">();</span>
+        <span class="n">web3</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span>
+        <span class="n">BigDecimal</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mf">1.0</span><span class="o">),</span> <span class="n">Convert</span><span class="o">.</span><span class="na">Unit</span><span class="o">.</span><span class="na">ETHER</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">send</span><span class="o">();</span>
 </pre></div>
 </div>
 <p>Or if you wish to create your own custom transaction:</p>
