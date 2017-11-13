@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Projects using web3j &mdash; web3j 3.1.0 documentation</title>
+    <title>Ethereum Name Service &mdash; web3j 3.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,13 +25,13 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="web3j 3.1.0 documentation" href="index.html" />
-    <link rel="next" title="Companies using web3j" href="companies.html" />
-    <link rel="prev" title="Troubleshooting" href="trouble.html" />
+    <link rel="next" title="Troubleshooting" href="trouble.html" />
+    <link rel="prev" title="Using Infura with web3j" href="infura.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
-    <link rel="canonical" href="https://web3j.readthedocs.io/projects.html"/>
+    <link rel="canonical" href="https://web3j.readthedocs.io/ens.html"/>
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -44,16 +44,67 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="projects-using-web3j">
-<h1>Projects using web3j<a class="headerlink" href="#projects-using-web3j" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference external" href="https://play.google.com/store/apps/details?id=org.vikulin.etherwallet">Ether Wallet</a> by
-<a class="reference external" href="https://github.com/vikulin">&#64;vikulin</a></li>
-<li><a class="reference external" href="https://github.com/adridadou/eth-contract-api">eth-contract-api</a> by
-<a class="reference external" href="https://github.com/adridadou">&#64;adridadou</a></li>
-<li><a class="reference external" href="https://github.com/matthiaszimmermann/ethereum-paper-wallet">Ethereum Paper Wallet</a> by
-<a class="reference external" href="https://github.com/matthiaszimmermann">&#64;matthiaszimmermann</a></li>
+  <div class="section" id="ethereum-name-service">
+<h1>Ethereum Name Service<a class="headerlink" href="#ethereum-name-service" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://ens.domains">Ethereum Name Service (ENS)</a> provides a human readable names to
+identify addresses on the Ethereum network. It is similar to the internet&#8217;s domain name service
+(DNS) which provides human-readable domain names which are mapped to IP addresses.</p>
+<p>In the case of ENS, the addresses are either wallet or smart contract addresses.</p>
+<p>E.g. instead of using the wallet address <em>0x19e03255f667bdfd50a32722df860b1eeaf4d635</em>, you can
+use <em>web3j.eth</em>.</p>
+<div class="section" id="usage-in-web3j">
+<h2>Usage in web3j<a class="headerlink" href="#usage-in-web3j" title="Permalink to this headline">¶</a></h2>
+<p>You can use ENS names anywhere you wish to transact in web3j. In practice this means, in smart
+contract wrappers, when you load them, such as:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
+        <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>Also, when performing Ether transfers, such as using the command line tools:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j wallet send &lt;walletfile&gt; 0x&lt;address&gt;<span class="p">|</span>&lt;ensName&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="web3j-implementation">
+<span id="ens-implementation"></span><h2>web3j implementation<a class="headerlink" href="#web3j-implementation" title="Permalink to this headline">¶</a></h2>
+<p>Behind the scenes, whenever you using web3j&#8217;s transaction managers (which are derived from the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ManagedTransaction.java">ManagedTransaction</a>
+class), the <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/ens/EnsResolver.java">EnsResolver</a>
+is invoked to perform an ENS lookup if applicable.</p>
+<p>The resolution process is as follows:</p>
+<ul>
+<li><p class="first">Check to see if our Ethereum node is fully synced</p>
+</li>
+<li><p class="first">If not fail</p>
+</li>
+<li><dl class="first docutils">
+<dt>If it is synced, check the timestamp on the most recent block it has.</dt>
+<dd><ul class="first last simple">
+<li>If it&#8217;s more than 3 minutes old, fail.</li>
+<li>Otherwise perform the lookup</li>
 </ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>If you need to change the threshold parameter of what constitutes being synced to something other
+then 3 minutes, this can be done via the <em>setSyncThreshold</em> method in the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ManagedTransaction.java">ManagedTransaction</a>
+class.</p>
+</div>
+<div class="section" id="unicode-technical-standard-uts-46">
+<h2>Unicode Technical Standard (UTS) #46<a class="headerlink" href="#unicode-technical-standard-uts-46" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="unicode.org/reports/tr46/">UTS #46</a> is the standard used to sanitise input on domain names.
+The web3j ENS implementation peforms this santisation on all inputs before attempting resolution.
+For details of the implementation, refer to the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/ens/NameHash.java">NameHash</a> class.</p>
+</div>
+<div class="section" id="registering-domain-names">
+<h2>Registering domain names<a class="headerlink" href="#registering-domain-names" title="Permalink to this headline">¶</a></h2>
+<p>Currently, web3j only supports the resolution of ENS domains. It does not support the registration.
+For instructions on how to do this, refer to the ENS
+<a class="reference external" href="http://docs.ens.domains/en/latest/quickstart.html">quickstart</a>.</p>
+</div>
 </div>
 
 
@@ -124,9 +175,15 @@
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ens.html">Ethereum Name Service</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Ethereum Name Service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage-in-web3j">Usage in web3j</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web3j-implementation">web3j implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unicode-technical-standard-uts-46">Unicode Technical Standard (UTS) #46</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#registering-domain-names">Registering domain names</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Projects using web3j</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Projects using web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="companies.html">Companies using web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Links and Useful Resources</a></li>
@@ -137,8 +194,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="trouble.html" title="previous chapter">Troubleshooting</a></li>
-      <li>Next: <a href="companies.html" title="next chapter">Companies using web3j</a></li>
+      <li>Previous: <a href="infura.html" title="previous chapter">Using Infura with web3j</a></li>
+      <li>Next: <a href="trouble.html" title="next chapter">Troubleshooting</a></li>
   </ul></li>
 </ul>
 </div>
@@ -167,7 +224,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/projects.txt"
+      <a href="_sources/ens.txt"
           rel="nofollow">Page source</a>
     </div>
 

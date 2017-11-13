@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="web3j 3.1.0 documentation" href="index.html" />
     <link rel="next" title="Projects using web3j" href="projects.html" />
-    <link rel="prev" title="Using Infura with web3j" href="infura.html" />
+    <link rel="prev" title="Ethereum Name Service" href="ens.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -46,6 +46,10 @@
             
   <div class="section" id="troubleshooting">
 <h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="do-you-have-a-sample-web3j-project">
+<h2>Do you have a sample web3j project<a class="headerlink" href="#do-you-have-a-sample-web3j-project" title="Permalink to this headline">¶</a></h2>
+<p>Yes, refer to the web3j sample project outlined in the <a class="reference internal" href="quickstart.html"><em>Quickstart</em></a>.</p>
+</div>
 <div class="section" id="i-m-submitting-a-transaction-but-it-s-not-being-mined">
 <h2>I&#8217;m submitting a transaction, but it&#8217;s not being mined<a class="headerlink" href="#i-m-submitting-a-transaction-but-it-s-not-being-mined" title="Permalink to this headline">¶</a></h2>
 <p>After creating and sending a transaction, you receive a transaction hash, however calling
@@ -152,6 +156,12 @@ match the original interface definitions, the produced binary will be blank.</p>
 <p>The Solidity compiler will not complain about this, however, the produced binary file for the
 Web3jToken will be blank.</p>
 </div>
+<div class="section" id="my-ens-lookups-are-failing">
+<h2>My ENS lookups are failing<a class="headerlink" href="#my-ens-lookups-are-failing" title="Permalink to this headline">¶</a></h2>
+<p>Are you sure that you are connecting to the correct network to perform the lookup?</p>
+<p>If web3j is telling you that the node is not in sync, you may need to change the <em>syncThreshold</em>
+in the <a class="reference internal" href="ens.html#ens-implementation"><span>ENS resolver</span></a>.</p>
+</div>
 <div class="section" id="do-you-have-a-project-donation-address">
 <h2>Do you have a project donation address?<a class="headerlink" href="#do-you-have-a-project-donation-address" title="Permalink to this headline">¶</a></h2>
 <p>Absolutely, you can contribute Bitcoin or Ether to help fund the development of web3j.</p>
@@ -233,6 +243,7 @@ Web3jToken will be blank.</p>
 </p>
 <h3>Navigation</h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
@@ -243,13 +254,16 @@ Web3jToken will be blank.</p>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ens.html">Ethereum Name Service</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#do-you-have-a-sample-web3j-project">Do you have a sample web3j project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-m-submitting-a-transaction-but-it-s-not-being-mined">I&#8217;m submitting a transaction, but it&#8217;s not being mined</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-want-to-see-details-of-the-json-rpc-requests-and-responses">I want to see details of the JSON-RPC requests and responses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-want-to-obtain-some-ether-on-testnet-but-don-t-want-to-have-to-mine-it-myself">I want to obtain some Ether on Testnet, but don&#8217;t want to have to mine it myself</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction">How do I obtain the return value from a smart contract method invoked by a transaction?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#is-it-possible-to-send-arbitrary-text-with-transactions">Is it possible to send arbitrary text with transactions?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-ve-generated-my-smart-contract-wrapper-but-the-binary-for-the-smart-contract-is-empty">I&#8217;ve generated my smart contract wrapper, but the binary for the smart contract is empty?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#my-ens-lookups-are-failing">My ENS lookups are failing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#do-you-have-a-project-donation-address">Do you have a project donation address?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#where-can-i-get-commercial-support-for-web3j">Where can I get commercial support for web3j?</a></li>
 </ul>
@@ -265,7 +279,7 @@ Web3jToken will be blank.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="infura.html" title="previous chapter">Using Infura with web3j</a></li>
+      <li>Previous: <a href="ens.html" title="previous chapter">Ethereum Name Service</a></li>
       <li>Next: <a href="projects.html" title="next chapter">Projects using web3j</a></li>
   </ul></li>
 </ul>
