@@ -240,7 +240,7 @@ public class SolidityFunctionWrapper extends Generator {
 
     private static MethodSpec buildConstructor(Class authType, String authName) {
         return MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PROTECTED)
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
                 .addParameter(authType, authName)
