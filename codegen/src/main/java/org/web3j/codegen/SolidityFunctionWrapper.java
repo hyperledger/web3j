@@ -147,6 +147,20 @@ public class SolidityFunctionWrapper extends Generator {
                     .build();
             classBuilder.addMethod(getAddress);
 
+            MethodSpec getPreviousAddress = MethodSpec
+                    .methodBuilder("getPreviouslyDeployedAddress")
+                    .addModifiers(Modifier.PUBLIC)
+                    .addModifiers(Modifier.STATIC)
+                    .returns(stringType)
+                    .addParameter(stringType, "networkId")
+                    .addCode(
+                            CodeBlock
+                                    .builder()
+                                    .addStatement("return _addresses.get(networkId)")
+                                    .build())
+                    .build();
+            classBuilder.addMethod(getPreviousAddress);
+            
         }
     }
 
