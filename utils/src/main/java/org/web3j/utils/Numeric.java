@@ -90,7 +90,11 @@ public final class Numeric {
 
     public static BigInteger toBigInt(String hexValue) {
         String cleanValue = cleanHexPrefix(hexValue);
-        return new BigInteger(cleanValue, 16);
+        return toBigIntNoPrefix(cleanValue);
+    }
+
+    public static BigInteger toBigIntNoPrefix(String hexValue) {
+        return new BigInteger(hexValue, 16);
     }
 
     public static String toHexStringWithPrefix(BigInteger value) {

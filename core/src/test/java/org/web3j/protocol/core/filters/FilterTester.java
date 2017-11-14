@@ -50,6 +50,7 @@ public abstract class FilterTester {
         web3j = Web3jFactory.build(web3jService, 1000, scheduledExecutorService);
     }
 
+    @SuppressWarnings("unchecked")
     <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {
         EthFilter ethFilter = objectMapper.readValue(
                 "{\n"
@@ -105,6 +106,7 @@ public abstract class FilterTester {
         assertTrue(subscription.isUnsubscribed());
     }
 
+    @SuppressWarnings("unchecked")
     List createExpected(EthLog ethLog) {
         List<EthLog.LogResult> logResults = ethLog.getLogs();
         if (logResults.isEmpty()) {

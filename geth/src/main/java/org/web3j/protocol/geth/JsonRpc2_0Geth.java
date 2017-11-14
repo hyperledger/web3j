@@ -6,7 +6,6 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.JsonRpc2_0Admin;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.geth.response.PersonalEcRecover;
 import org.web3j.protocol.geth.response.PersonalImportRawKey;
@@ -26,7 +25,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<String, PersonalImportRawKey>(
                 "personal_importRawKey",
                 Arrays.asList(keydata, password),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 PersonalImportRawKey.class);
     }
@@ -36,7 +34,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<String, BooleanResponse>(
                 "personal_lockAccount",
                 Arrays.asList(accountId),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -47,7 +44,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<String, PersonalSign>(
                 "personal_sign",
                 Arrays.asList(message,accountId,password),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 PersonalSign.class);
     }
@@ -58,7 +54,6 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<String, PersonalEcRecover>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage,signedMessage),
-                JsonRpc2_0Web3j.ID,
                 web3jService,
                 PersonalEcRecover.class);
     } 

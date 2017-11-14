@@ -37,6 +37,7 @@ public class TypeEncoder {
                 || parameter instanceof DynamicArray;
     }
 
+    @SuppressWarnings("unchecked")
     public static String encode(Type parameter) {
         if (parameter instanceof NumericType) {
             return encodeNumeric(((NumericType) parameter));

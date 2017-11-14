@@ -2,6 +2,7 @@ package org.web3j.console;
 
 import org.web3j.codegen.Console;
 import org.web3j.codegen.SolidityFunctionWrapperGenerator;
+import org.web3j.codegen.TruffleJsonFunctionWrapperGenerator;
 import org.web3j.utils.Version;
 
 import static org.web3j.utils.Collection.tail;
@@ -34,6 +35,8 @@ public class Runner {
                 WalletRunner.run(tail(args));
             } else if (arg.equals("solidity")) {
                 SolidityFunctionWrapperGenerator.run(tail(args));
+            } else if (arg.equals("truffle")) {
+                TruffleJsonFunctionWrapperGenerator.run(tail(args));
             } else if (arg.equals("version")) {
                 Console.exitSuccess("Version: " + Version.getVersion() + "\n"
                         + "Build timestamp: " + Version.getTimestamp());

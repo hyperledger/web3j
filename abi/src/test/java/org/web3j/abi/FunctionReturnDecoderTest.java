@@ -123,6 +123,7 @@ public class FunctionReturnDecoderTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testDecodeStaticArrayValue() {
         List<TypeReference<Type>> outputParameters = new ArrayList<TypeReference<Type>>(1);
         outputParameters.add((TypeReference)

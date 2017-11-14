@@ -119,8 +119,15 @@ public class WalletUtils {
         return cleanPrivateKey.length() == PRIVATE_KEY_LENGTH_IN_HEX;
     }
 
-    public static boolean isValidAddress(String address) {
-        String addressNoPrefix = Numeric.cleanHexPrefix(address);
-        return addressNoPrefix.length() == ADDRESS_LENGTH_IN_HEX;
+    public static boolean isValidAddress(String input) {
+        String cleanInput = Numeric.cleanHexPrefix(input);
+
+        try {
+            Numeric.toBigIntNoPrefix(cleanInput);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
     }
 }

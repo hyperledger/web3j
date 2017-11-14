@@ -23,7 +23,11 @@ Features
 - Ethereum wallet support
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
+  (`Solidity <http://solidity.readthedocs.io/en/latest/using-the-compiler.html#using-the-commandline-compiler>`_
+  and
+  `Truffle <https://github.com/trufflesuite/truffle-contract-schema>`_ definition formats supported)
 - Reactive-functional API for working with filters
+- `Ethereum Name Service (ENS) <https://ens.domains/>`_ support
 - Support for Parity's
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
@@ -43,7 +47,8 @@ It has five runtime dependencies:
 - `OKHttp <https://hc.apache.org/httpcomponents-client-ga/index.html>`_ for HTTP connections
 - `Jackson Core <https://github.com/FasterXML/jackson-core>`_ for fast JSON
   serialisation/deserialisation
-- `Bouncy Castle <https://www.bouncycastle.org/>`_ for crypto
+- `Bouncy Castle <https://www.bouncycastle.org/>`_
+  (`Spongy Castle <https://rtyley.github.io/spongycastle/>`_ on Android) for crypto
 - `Jnr-unixsocket <https://github.com/jnr/jnr-unixsocket>`_ for \*nix IPC (not available on
   Android)
 
@@ -76,7 +81,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   introduction.rst
+   quickstart.rst
    getting_started.rst
    modules.rst
    transactions.rst
@@ -87,8 +92,10 @@ Contents:
    command_line.rst
    management_apis.rst
    infura.rst
+   ens.rst
    trouble.rst
    projects.rst
+   companies.rst
    development.rst
    links.rst
    credits.rst

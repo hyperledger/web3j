@@ -42,7 +42,11 @@ public abstract class RequestTester {
 
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
-        assertThat(buffer.readUtf8(), is(expected));
+        assertThat(replaceRequestId(buffer.readUtf8()), is(replaceRequestId(expected)));
+    }
+
+    private String replaceRequestId(String json) {
+        return json.replaceAll("\"id\":\\d*}$", "\"id\":<generatedValue>}");
     }
 
     private class RequestInterceptor implements Interceptor {

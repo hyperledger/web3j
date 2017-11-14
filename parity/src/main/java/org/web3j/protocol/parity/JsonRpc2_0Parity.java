@@ -43,7 +43,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityAllAccountsInfo>(
                 "parity_allAccountsInfo",
                 Collections.<String>emptyList(),
-                ID,
                 web3jService,
                 ParityAllAccountsInfo.class);
     }
@@ -54,7 +53,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, BooleanResponse>(
                 "parity_changePassword",
                 Arrays.asList(accountId, oldPassword, newPassword),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -65,7 +63,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, ParityDeriveAddress>(
                 "parity_deriveAddressHash",
                 Arrays.asList(accountId, password, hashType, toSave),
-                ID,
                 web3jService,
                 ParityDeriveAddress.class);
     }
@@ -77,7 +74,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, ParityDeriveAddress>(
                 "parity_deriveAddressIndex",
                 Arrays.asList(accountId, password, indicesType, toSave),
-                ID,
                 web3jService,
                 ParityDeriveAddress.class);
     }
@@ -88,7 +84,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityExportAccount>(
                 "parity_exportAccount",
                 Arrays.asList(accountId, password),
-                ID,
                 web3jService,
                 ParityExportAccount.class);
     }
@@ -98,7 +93,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityAddressesResponse>(
                 "parity_getDappAddresses",
                 Arrays.asList(dAppId),
-                ID,
                 web3jService,
                 ParityAddressesResponse.class);
     }
@@ -108,7 +102,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityDefaultAddressResponse>(
                 "parity_getDappDefaultAddress",
                 Arrays.asList(dAppId),
-                ID,
                 web3jService,
                 ParityDefaultAddressResponse.class);
     }
@@ -118,7 +111,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityAddressesResponse>(
                 "parity_getNewDappsAddresses",
                 Collections.<String>emptyList(),
-                ID,
                 web3jService,
                 ParityAddressesResponse.class);
     }
@@ -128,7 +120,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityDefaultAddressResponse>(
                 "parity_getNewDappsDefaultAddress",
                 Collections.<String>emptyList(),
-                ID,
                 web3jService,
                 ParityDefaultAddressResponse.class);
     }
@@ -139,7 +130,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityAddressesResponse>(
                 "parity_importGethAccounts",
                 gethAddresses,
-                ID,
                 web3jService,
                 ParityAddressesResponse.class);
     }
@@ -149,7 +139,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, BooleanResponse>(
                 "parity_killAccount",
                 Arrays.asList(accountId, password),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -159,7 +148,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityAddressesResponse>(
                 "parity_listGethAccounts",
                 Collections.<String>emptyList(),
-                ID,
                 web3jService,
                 ParityAddressesResponse.class);
     }
@@ -169,7 +157,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityListRecentDapps>(
                 "parity_listRecentDapps",
                 Collections.<String>emptyList(),
-                ID,
                 web3jService,
                 ParityListRecentDapps.class);
     }
@@ -180,7 +167,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, NewAccountIdentifier>(
                 "parity_newAccountFromPhrase",
                 Arrays.asList(phrase, password),
-                ID,
                 web3jService,
                 NewAccountIdentifier.class);
     }
@@ -191,7 +177,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, NewAccountIdentifier>(
                 "parity_newAccountFromSecret",
                 Arrays.asList(secret, password),
-                ID,
                 web3jService,
                 NewAccountIdentifier.class);
     }
@@ -202,7 +187,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, NewAccountIdentifier>(
                 "parity_newAccountFromWallet",
                 Arrays.asList(walletFile, password),
-                ID,
                 web3jService,
                 NewAccountIdentifier.class);
     }
@@ -212,7 +196,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, BooleanResponse>(
                 "parity_RemoveAddress",
                 Arrays.asList(accountId),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -223,7 +206,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, BooleanResponse>(
                 "parity_setAccountMeta",
                 Arrays.asList(accountId, metadata),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -234,7 +216,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, BooleanResponse>(
                 "parity_setAccountName",
                 Arrays.asList(address, name),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -245,7 +226,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<java.io.Serializable, BooleanResponse>(
                 "parity_setDappAddresses",
                 Arrays.asList(dAppId, availableAccountIds),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -256,7 +236,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, BooleanResponse>(
                 "parity_setDappDefaultAddress",
                 Arrays.asList(dAppId, defaultAddress),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -267,7 +246,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<ArrayList<String>, BooleanResponse>(
                 "parity_setNewDappsAddresses",
                 Arrays.asList(availableAccountIds),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -277,7 +255,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, BooleanResponse>(
                 "parity_setNewDappsDefaultAddress",
                 Arrays.asList(defaultAddress),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -287,7 +264,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, BooleanResponse>(
                 "parity_testPassword",
                 Arrays.asList(accountId, password),
-                ID,
                 web3jService,
                 BooleanResponse.class);
     }
@@ -298,7 +274,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, PersonalSign>(
                 "parity_signMessage",
                 Arrays.asList(accountId,password,hexMessage),
-                ID,
                 web3jService,
                 PersonalSign.class);
     }
@@ -311,7 +286,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, ParityFullTraceResponse>(
             "trace_call",
             Arrays.asList(transaction, traces, blockParameter),
-            ID,
             web3jService,
             ParityFullTraceResponse.class);
     }
@@ -322,7 +296,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, ParityFullTraceResponse>(
             "trace_rawTransaction",
             Arrays.asList(data, traceTypes),
-            ID,
             web3jService,
             ParityFullTraceResponse.class);
     }
@@ -333,7 +306,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, ParityFullTraceResponse>(
             "trace_replayTransaction",
             Arrays.asList(hash, traceTypes),
-            ID,
             web3jService,
             ParityFullTraceResponse.class);
     }
@@ -343,7 +315,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<DefaultBlockParameter, ParityTracesResponse>(
             "trace_block",
             Arrays.asList(blockParameter),
-            ID,
             web3jService,
             ParityTracesResponse.class);
     }
@@ -353,7 +324,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<TraceFilter, ParityTracesResponse>(
             "trace_filter",
             Arrays.asList(traceFilter),
-            ID,
             web3jService,
             ParityTracesResponse.class);
     }
@@ -368,7 +338,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<Object, ParityTraceGet>(
             "trace_get",
             Arrays.asList(hash, encodedIndices),
-            ID,
             web3jService,
             ParityTraceGet.class);
     }
@@ -378,7 +347,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
         return new Request<String, ParityTracesResponse>(
             "trace_transaction",
             Arrays.asList(hash),
-            ID,
             web3jService,
             ParityTracesResponse.class);
     }

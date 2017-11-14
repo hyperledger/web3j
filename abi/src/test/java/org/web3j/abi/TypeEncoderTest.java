@@ -235,6 +235,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testEmptyArray() {
+        @SuppressWarnings("unchecked")
         DynamicArray<Uint> array = DynamicArray.empty("uint");
         assertThat(
                 TypeEncoder.encodeDynamicArray(array),

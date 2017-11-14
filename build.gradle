@@ -207,12 +207,11 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
     }
 
     task release {
-        dependsOn 'clean'
+        //TODO run clean & closeAndPromoteRepository once
         dependsOn 'build'
         dependsOn 'uploadArchives'
         dependsOn 'bintrayUpload'
 
-        tasks.findByName('build').mustRunAfter 'clean'
         tasks.findByName('uploadArchives').mustRunAfter 'build'
         tasks.findByName('bintrayUpload').mustRunAfter 'build'
     }
@@ -244,7 +243,8 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
             fileTree(dir: it,
                     exclude: [
                             'org/web3j/abi/datatypes/generated/**',
-                            'org/web3j/tuples/generated/**'
+                            'org/web3j/tuples/generated/**',
+                            'org/web3j/ens/contracts/generated/**'
                     ])
         })
     }
