@@ -170,7 +170,7 @@ public class SolidityFunctionWrapper extends Generator {
         String javadoc = CODEGEN_WARNING + getWeb3jVersion();
 
         return TypeSpec.classBuilder(className)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addModifiers(Modifier.PUBLIC) 
                 .addJavadoc(javadoc)
                 .superclass(Contract.class)
                 .addField(createBinaryDefinition(binary));
