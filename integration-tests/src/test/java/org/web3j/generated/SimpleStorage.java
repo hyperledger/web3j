@@ -21,7 +21,7 @@ import org.web3j.tx.TransactionManager;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.0.0-alpha4.
+ * <p>Generated with web3j version 3.0.0.
  */
 public final class SimpleStorage extends Contract {
     private static final String BINARY = "6060604052341561000f57600080fd5b600560005560b3806100226000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166360fe47b1811460455780636d4ce63c14605a57600080fd5b3415604f57600080fd5b6058600435607c565b005b3415606457600080fd5b606a6081565b60405190815260200160405180910390f35b600055565b600054905600a165627a7a723058200a0eade034c6c9ce9aed1a5bde0152ebdc61c84d6f93ee9227353c8446ed73f00029";

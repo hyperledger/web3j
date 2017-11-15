@@ -15,11 +15,13 @@ public class StaticArray<T extends Type> extends Array<T> {
 
     private Integer expectedSize;
 
+    @SafeVarargs
     public StaticArray(T... values) {
         super(values[0].getTypeAsString() + "[" + values.length + "]", values);
         isValid();
     }
 
+    @SafeVarargs
     public StaticArray(int expectedSize, T... values) {
         super(values[0].getTypeAsString() + "[" + values.length + "]", values);
         this.expectedSize = expectedSize;

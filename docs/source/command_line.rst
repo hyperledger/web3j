@@ -64,7 +64,7 @@ To send Ether to another address:
 
 .. code-block:: bash
 
-   $ web3j wallet send <walletfile> <destination-address>
+   $ web3j wallet send <walletfile> 0x<address>|<ensName>
 
 When sending Ether to another address you will be asked a series of questions before the
 transaction takes place. See the below for a full example
@@ -73,7 +73,7 @@ The following example demonstrates using web3j to send Ether to another wallet.
 
 .. code-block:: bash
 
-   $ ./web3j-<version>/bin/web3j wallet send <walletfile> <destination-address>
+   $ ./web3j-<version>/bin/web3j wallet send <walletfile> 0x<address>|<ensName>
 
                  _      _____ _     _
                 | |    |____ (_)   (_)

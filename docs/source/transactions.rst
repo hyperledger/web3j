@@ -373,7 +373,8 @@ response for you::
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
-           web3, credentials, "0x...", BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
+           web3, credentials, "0x<address>|<ensName>",
+           BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
 
 
 Recommended approach for working with smart contracts

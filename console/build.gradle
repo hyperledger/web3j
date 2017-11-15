@@ -6,6 +6,7 @@ description 'web3j command line tools'
 dependencies {
     compile project(':codegen'),
             project(':infura')
+    runtime "org.slf4j:slf4j-nop:$slf4jVersion"  // prevent logging of the library to the console
     testCompile project(path: ':crypto', configuration: 'archives'),
             project(path: ':core', configuration: 'archives')
 }

@@ -12,13 +12,14 @@ Developers have the choice of three languages for writing smart contracts:
 LISP Like Language (LLL)
   A low level language, Serpent provides a superset of LLL. There's not a great deal of information
   for working with LLL, the following blog `/var/log/syrinx <http://blog.syrinx.net/>`_ and
-  associated `GitHub <https://github.com/zigguratt/lll-resurrected>`_ is a good place to start.
+  associated `lll-resurrected GitHub <https://github.com/zigguratt/lll-resurrected>`_ repository
+  is a good place to start.
 
 
 In order to deploy a smart contract onto the Ethereum blockchain, it must first be compiled into
 a bytecode format, then it can be sent as part of a transaction. web3j can do all of this for you
- with its :ref:`smart-contract-wrappers`. To understand what is happening behind the scenes, you
- can refer to the details in :ref:`creation-of-smart-contract`.
+with its :ref:`smart-contract-wrappers`. To understand what is happening behind the scenes, you
+can refer to the details in :ref:`creation-of-smart-contract`.
 
 Given that Solidity is the language of choice for writing smart contracts, it is the language
 supported by web3j, and is used for all subsequent examples.
@@ -159,7 +160,7 @@ In versions prior to 3.x of web3j, the generated smart contract wrappers used na
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
 using the *--solidityTypes* command line argument.
 
-You can also generate the wrappers by calling then Java class directly:
+You can also generate the wrappers by calling the Java class directly:
 
 .. code-block:: bash
 
@@ -179,6 +180,22 @@ The smart contract wrappers support all common operations for working with smart
 Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.
 
+web3j also supports the generation of Java smart contract function wrappers directly from
+`Truffle's <http://truffleframework.com/>`_
+`Contract Schema <https://github.com/trufflesuite/truffle-contract-schema>`_
+via the :doc:`command_line` utility.
+
+.. code-block:: bash
+
+   $ web3j truffle generate [--javaTypes|--solidityTypes] /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+
+And this also can be invoked by calling the Java class:
+
+.. code-block:: bash
+
+   org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+
+A wrapper generated this way ia "enhanced" to expose the per-network deployed address of the contract.  These addresses are from the truffle deployment at the time the wrapper is generared.
 
 .. _construction-and-deployment:
 
@@ -205,9 +222,13 @@ smart contract. If you wish to construct an instance of a smart contract wrapper
 smart contract, simply pass in it's address::
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>", web3j, credentials, GAS_PRICE, GAS_LIMIT);
+           "0x<address>|<ensName>", web3j, credentials, GAS_PRICE, GAS_LIMIT);
+
 
 .. _contract-validity:
+
+Contract validity
+-----------------
 
 Using this method, you may want to ascertain that the contract address that you have loaded is the
 smart contract that you expect. For this you can use the *isValid* smart contract method, which will

@@ -36,7 +36,7 @@ public class AbiTypesGenerator extends Generator {
         if (args.length == 1) {
             abiTypesGenerator.generate(args[0]);
         } else {
-            abiTypesGenerator.generate(System.getProperty("user.dir") + "/core/src/main/java/");
+            abiTypesGenerator.generate(System.getProperty("user.dir") + "/abi/src/main/java/");
         }
     }
 
@@ -195,6 +195,7 @@ public class AbiTypesGenerator extends Generator {
                     .build();
 
             MethodSpec arrayOverloadConstructorSpec = MethodSpec.constructorBuilder()
+                    .addAnnotation(SafeVarargs.class)
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(ArrayTypeName.of(typeVariableName), "values")
                     .varargs()

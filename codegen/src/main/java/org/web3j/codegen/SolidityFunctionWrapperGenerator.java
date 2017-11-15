@@ -18,7 +18,7 @@ import static org.web3j.utils.Collection.tail;
 /**
  * Java wrapper source code generator for Solidity ABI format.
  */
-public class SolidityFunctionWrapperGenerator {
+public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
     private static final String USAGE = "solidity generate "
             + "[--javaTypes|--solidityTypes] "
@@ -26,14 +26,8 @@ public class SolidityFunctionWrapperGenerator {
             + "-p|--package <base package name> "
             + "-o|--output <destination base directory>";
 
-    static final String JAVA_TYPES_ARG = "--javaTypes";
-    static final String SOLIDITY_TYPES_ARG = "--solidityTypes";
-
-    private String binaryFileLocation;
-    private String absFileLocation;
-    private File destinationDirLocation;
-    private String basePackageName;
-    private boolean useJavaNativeTypes;
+    private final String binaryFileLocation;
+    private final String absFileLocation;
 
     private SolidityFunctionWrapperGenerator(
             String binaryFileLocation,
@@ -42,11 +36,9 @@ public class SolidityFunctionWrapperGenerator {
             String basePackageName,
             boolean useJavaNativeTypes) {
 
+        super(destinationDirLocation, basePackageName, useJavaNativeTypes);
         this.binaryFileLocation = binaryFileLocation;
         this.absFileLocation = absFileLocation;
-        this.destinationDirLocation = new File(destinationDirLocation);
-        this.basePackageName = basePackageName;
-        this.useJavaNativeTypes = useJavaNativeTypes;
     }
 
     public static void run(String[] args) throws Exception {
@@ -72,14 +64,7 @@ public class SolidityFunctionWrapperGenerator {
             exitError(USAGE);
         }
 
-        boolean useJavaNativeTypes = true;
-        if (fullArgs[0].equals(SOLIDITY_TYPES_ARG)) {
-            useJavaNativeTypes = false;
-        } else if (fullArgs[0].equals(JAVA_TYPES_ARG)) {
-            useJavaNativeTypes = true;
-        } else {
-            exitError(USAGE);
-        }
+        boolean useJavaNativeTypes = useJavaNativeTypes(fullArgs[0], USAGE);
 
         String binaryFileLocation = parsePositionalArg(fullArgs, 1);
         String absFileLocation = parsePositionalArg(fullArgs, 2);
@@ -102,27 +87,11 @@ public class SolidityFunctionWrapperGenerator {
                 .generate();
     }
 
-    private static String parsePositionalArg(String[] args, int idx) {
-        if (args != null && args.length > idx) {
-            return args[idx];
-        } else {
-            return "";
-        }
-    }
-
-    private static String parseParameterArgument(String[] args, String... parameters) {
-        for (String parameter : parameters) {
-            for (int i = 0; i < args.length; i++) {
-                if (args[i].equals(parameter)
-                        && i + 1 < args.length) {
-                    String parameterValue = args[i + 1];
-                    if (!parameterValue.startsWith("-")) {
-                        return parameterValue;
-                    }
-                }
-            }
-        }
-        return "";
+    static List<AbiDefinition> loadContractDefinition(File absFile)
+            throws IOException {
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+        AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
+        return Arrays.asList(abiDefinition);
     }
 
     private void generate() throws IOException, ClassNotFoundException {
@@ -157,15 +126,5 @@ public class SolidityFunctionWrapperGenerator {
         }
     }
 
-    private static List<AbiDefinition> loadContractDefinition(File absFile)
-            throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-        AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
-        return Arrays.asList(abiDefinition);
-    }
 
-    static String getFileNameNoExtension(String fileName) {
-        String[] splitName = fileName.split("\\.(?=[^.]*$)");
-        return splitName[0];
-    }
 }

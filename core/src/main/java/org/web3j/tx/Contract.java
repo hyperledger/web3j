@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.Map;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
@@ -25,6 +27,7 @@ import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.utils.Numeric;
 
 
@@ -41,14 +44,16 @@ public abstract class Contract extends ManagedTransaction {
     private final BigInteger gasPrice;
     private final BigInteger gasLimit;
     private TransactionReceipt transactionReceipt;
+    private Map<String, String> deployedAddresses;
 
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
                        BigInteger gasPrice, BigInteger gasLimit) {
         super(web3j, transactionManager);
 
+        this.contractAddress = ensResolver.resolve(contractAddress);
+
         this.contractBinary = contractBinary;
-        this.contractAddress = contractAddress;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
     }
@@ -153,6 +158,7 @@ public abstract class Contract extends ManagedTransaction {
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends Type> T executeCallSingleValueReturn(
             Function function) throws IOException {
         List<Type> values = executeCall(function);
@@ -163,16 +169,23 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends Type, R> R executeCallSingleValueReturn(
             Function function, Class<R> returnType) throws IOException {
         T result = executeCallSingleValueReturn(function);
+        if (result == null) {
+            throw new ContractCallException("Empty value (0x) returned from contract");
+        }
+
         Object value = result.getValue();
         if (returnType.isAssignableFrom(value.getClass())) {
             return (R) value;
         } else if (result.getClass().equals(Address.class) && returnType.equals(String.class)) {
             return (R) result.toString();  // cast isn't necessary
         } else {
-            return null;
+            throw new ContractCallException(
+                    "Unable to convert response: " + value
+                            + " to expected type: " + returnType.getSimpleName());
         }
     }
 
@@ -405,4 +418,31 @@ public abstract class Contract extends ManagedTransaction {
 
         return values;
     }
+
+    /**
+     * Subclasses should implement this method to return pre-existing addresses for deployed
+     * contracts.
+     *
+     * @param networkId the network id, for example "1" for the main-net, "3" for ropsten, etc.
+     * @return the deployed address of the contract, if known, and null otherwise.
+     */
+    protected String getStaticDeployedAddress(String networkId) {
+        return null;
+    }
+
+    public final void setDeployedAddress(String networkId, String address) {
+        if (deployedAddresses == null) {
+            deployedAddresses = new HashMap<>();
+        }
+        deployedAddresses.put(networkId, address);
+    }
+
+    public final String getDeployedAddress(String networkId) {
+        String addr = null;
+        if (deployedAddresses != null) {
+            addr = deployedAddresses.get(networkId);
+        }
+        return addr == null ? getStaticDeployedAddress(networkId) : addr;
+    }
+
 }
