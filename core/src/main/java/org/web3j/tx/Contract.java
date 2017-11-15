@@ -347,7 +347,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, BigInteger.ZERO);
     }
 
-    protected EventValues extractEventParameters(
+    public static EventValues staticExtractEventParameters(
             Event event, Log log) {
 
         List<String> topics = log.getTopics();
@@ -367,6 +367,10 @@ public abstract class Contract extends ManagedTransaction {
             indexedValues.add(value);
         }
         return new EventValues(indexedValues, nonIndexedValues);
+    }
+
+    protected EventValues extractEventParameters(Event event, Log log) {
+        return staticExtractEventParameters(event, log);
     }
 
     protected List<EventValues> extractEventParameters(
