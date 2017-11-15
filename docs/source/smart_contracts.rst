@@ -195,7 +195,8 @@ And this also can be invoked by calling the Java class:
 
    org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
 
-A wrapper generated this way ia "enhanced" to expose the per-network deployed address of the contract.  These addresses are from the truffle deployment at the time the wrapper is generared.
+A wrapper generated this way ia "enhanced" to expose the per-network deployed address of the
+contract.  These addresses are from the truffle deployment at the time the wrapper is generared.
 
 .. _construction-and-deployment:
 

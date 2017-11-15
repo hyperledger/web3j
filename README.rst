@@ -527,6 +527,7 @@ Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
 - `blk.io <https://blk.io>`_
+- `comitFS <http://www.comitfs.com/>`_
 - `ConsenSys <https://consensys.net/>`_
 - `Othera <https://www.othera.io/>`_
 
