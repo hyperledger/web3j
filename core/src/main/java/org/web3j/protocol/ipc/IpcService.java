@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,12 +29,19 @@ public class IpcService extends Service {
         this(ioFacade, false);
     }
 
+    private ReentrantLock ioLock = new ReentrantLock();
+
     @Override
     protected InputStream performIO(String payload) throws IOException {
-        ioFacade.write(payload);
         log.debug(">> " + payload);
-
-        String result = ioFacade.read();
+        String result;
+        ioLock.lock();
+        try {
+            ioFacade.write(payload);
+            result = ioFacade.read();
+        } finally {
+            ioLock.unlock();
+        }
         log.debug("<< " + result);
 
         // It's not ideal converting back into an inputStream, but we want
