@@ -104,8 +104,10 @@ public class UnixDomainSocketTest {
 
         // two async requests may read parts interleavedly if not synchronized
         IpcService ipcService = new IpcService(unixDomainSocket);
-        CompletableFuture<Web3ClientVersion> ftr1 = ipcService.sendAsync(new Request(), Web3ClientVersion.class);
-        CompletableFuture<Web3ClientVersion> ftr2 = ipcService.sendAsync(new Request(), Web3ClientVersion.class);
+        CompletableFuture<Web3ClientVersion> ftr1 = ipcService.sendAsync(
+                new Request(), Web3ClientVersion.class);
+        CompletableFuture<Web3ClientVersion> ftr2 = ipcService.sendAsync(
+                new Request(), Web3ClientVersion.class);
         ftr1.get();
         ftr2.get();
     }
@@ -124,12 +126,13 @@ public class UnixDomainSocketTest {
         segments.add(response.substring(20));
         doAnswer(invocation -> {
             String segment = segments.poll();
-            if (segment == null)
+            if (segment == null) {
                 return 0;
-            Object[] args = invocation.getArguments();
-            ((CharBuffer) args[0]).append(segment);
-            System.out.println("" + Thread.currentThread() + ": read " + segment.length());
-            return segment.length();
+            } else {
+                Object[] args = invocation.getArguments();
+                ((CharBuffer) args[0]).append(segment);
+                return segment.length();
+            }
         }).when(reader).read(any(CharBuffer.class));
 
         IpcService ipcService = new IpcService(unixDomainSocket);
