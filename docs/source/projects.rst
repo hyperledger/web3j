@@ -7,3 +7,5 @@ Projects using web3j
   `@adridadou <https://github.com/adridadou>`_
 - `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
+- `web3j-scala <https://github.com/mslinn/web3j-scala>`_ by
+  `@mslinn <https://github.com/mslinn>`_
