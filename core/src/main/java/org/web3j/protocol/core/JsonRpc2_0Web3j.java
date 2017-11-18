@@ -19,7 +19,6 @@ import org.web3j.protocol.core.methods.response.DbPutString;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthCoinbase;
 import org.web3j.protocol.core.methods.response.EthCompileLLL;
 import org.web3j.protocol.core.methods.response.EthCompileSerpent;
@@ -71,14 +70,14 @@ import org.web3j.utils.Numeric;
  */
 public class JsonRpc2_0Web3j implements Web3j {
 
-    static final int BLOCK_TIME = 15 * 1000;
+    public static final int DEFAULT_BLOCK_TIME = 15 * 1000;
 
     protected final Web3jService web3jService;
     private final JsonRpc2_0Rx web3jRx;
     private final long blockTime;
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
-        this(web3jService, BLOCK_TIME, Async.defaultExecutorService());
+        this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
     }
 
     public JsonRpc2_0Web3j(

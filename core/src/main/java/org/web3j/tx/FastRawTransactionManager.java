@@ -38,7 +38,7 @@ public class FastRawTransactionManager extends RawTransactionManager {
     }
 
     @Override
-    synchronized BigInteger getNonce() throws IOException {
+    protected synchronized BigInteger getNonce() throws IOException {
         if (nonce.signum() == -1) {
             // obtain lock
             nonce = super.getNonce();

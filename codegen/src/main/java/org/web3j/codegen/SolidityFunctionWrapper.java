@@ -392,7 +392,7 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    private TypeName getEventWrapperType(TypeName typeName) {
+    private TypeName getIndexedEventWrapperType(TypeName typeName) {
         if (useNativeJavaTypes) {
             return getEventNativeType(typeName);
         } else {
@@ -601,12 +601,12 @@ public class SolidityFunctionWrapper extends Generator {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
         for (NamedTypeName namedType : indexedParameters) {
-            TypeName typeName = getEventWrapperType(namedType.typeName);
+            TypeName typeName = getIndexedEventWrapperType(namedType.typeName);
             builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
         }
 
         for (NamedTypeName namedType : nonIndexedParameters) {
-            TypeName typeName = getEventWrapperType(namedType.typeName);
+            TypeName typeName = getWrapperType(namedType.typeName);
             builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
         }
 
@@ -746,7 +746,7 @@ public class SolidityFunctionWrapper extends Generator {
                     "$L.$L = ($T) eventValues.getIndexedValues().get($L)" + nativeConversion,
                     objectName,
                     indexedParameters.get(i).getName(),
-                    getEventWrapperType(indexedParameters.get(i).getTypeName()),
+                    getIndexedEventWrapperType(indexedParameters.get(i).getTypeName()),
                     i);
         }
 
@@ -755,7 +755,7 @@ public class SolidityFunctionWrapper extends Generator {
                     "$L.$L = ($T) eventValues.getNonIndexedValues().get($L)" + nativeConversion,
                     objectName,
                     nonIndexedParameters.get(i).getName(),
-                    getEventWrapperType(nonIndexedParameters.get(i).getTypeName()),
+                    getWrapperType(nonIndexedParameters.get(i).getTypeName()),
                     i);
         }
         return builder.build();

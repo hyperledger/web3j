@@ -1,10 +1,14 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import rx.Subscription;
 
 import org.web3j.generated.HumanStandardToken;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -13,6 +17,7 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.generated.HumanStandardToken.ApprovalEventResponse;
 import static org.web3j.generated.HumanStandardToken.TransferEventResponse;
 import static org.web3j.generated.HumanStandardToken.deploy;
+import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 
 /**
  * Generated HumanStandardToken integration test for all supported scenarios.
@@ -36,6 +41,22 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         assertThat(contract.balanceOf(ALICE.getAddress()).send(),
                 equalTo(aliceQty));
+
+        // CHECKSTYLE:OFF
+        CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
+        Subscription transferEventSubscription = contract.transferEventObservable(
+                DefaultBlockParameterName.EARLIEST,
+                DefaultBlockParameterName.LATEST).subscribe(
+                        transferEventResponse -> transferEventCountDownLatch.countDown()
+        );
+
+        CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
+        Subscription approvalEventSubscription = contract.approvalEventObservable(
+                DefaultBlockParameterName.EARLIEST,
+                DefaultBlockParameterName.LATEST).subscribe(
+                transferEventResponse -> transferEventCountDownLatch.countDown()
+        );
+        // CHECKSTYLE:ON
 
         // transfer tokens
         BigInteger transferQuantity = BigInteger.valueOf(100_000);
@@ -114,5 +135,14 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                 equalTo(aliceQty));
         assertThat(contract.balanceOf(bobAddress).send(),
                 equalTo(bobQty));
+
+        transferEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);
+        approvalEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);
+
+        approvalEventSubscription.unsubscribe();
+        transferEventSubscription.unsubscribe();
+        Thread.sleep(1000);
+        assertTrue(approvalEventSubscription.isUnsubscribed());
+        assertTrue(transferEventSubscription.isUnsubscribed());
     }
 }

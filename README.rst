@@ -125,7 +125,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.1.0</version>
+     <version>3.1.1</version>
    </dependency>
 
 Android:
@@ -135,7 +135,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.0.1-android</version>
+     <version>3.1.1-android</version>
    </dependency>
 
 Gradle
@@ -145,13 +145,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.1.0')
+   compile ('org.web3j:core:3.1.1')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.0.1-android')
+   compile ('org.web3j:core:3.1.1-android')
 
 
 Start a client
@@ -527,7 +527,9 @@ Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
 - `blk.io <https://blk.io>`_
+- `comitFS <http://www.comitfs.com/>`_
 - `ConsenSys <https://consensys.net/>`_
+- `ING <https://www.ing.com>`_
 - `Othera <https://www.othera.io/>`_
 
 

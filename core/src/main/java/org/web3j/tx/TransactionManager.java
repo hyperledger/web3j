@@ -10,6 +10,8 @@ import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 
+import static org.web3j.protocol.core.JsonRpc2_0Web3j.DEFAULT_BLOCK_TIME;
+
 /**
  * Transaction manager abstraction for executing transactions with Ethereum client via
  * various mechanisms.
@@ -17,7 +19,7 @@ import org.web3j.tx.response.TransactionReceiptProcessor;
 public abstract class TransactionManager {
 
     public static final int DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH = 40;
-    public static final long DEFAULT_POLLING_FREQUENCY = 1000 * 15;
+    public static final long DEFAULT_POLLING_FREQUENCY = DEFAULT_BLOCK_TIME;
 
     private final TransactionReceiptProcessor transactionReceiptProcessor;
 
