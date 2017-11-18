@@ -19,10 +19,12 @@ package org.web3j.contracts.token;
 
 import java.math.BigInteger;
 import java.util.List;
+
+import rx.Observable;
+
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import rx.Observable;
 
 /**
  * The Ethereum ERC-20 token standard.
