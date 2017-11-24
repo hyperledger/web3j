@@ -15,11 +15,6 @@ public class ReadonlyTransactionManager extends TransactionManager {
         super(web3j, fromAddress);
     }
 
-    public ReadonlyTransactionManager(
-            Web3j web3j, int attempts, long sleepDuration, String fromAddress) {
-        super(web3j, attempts, sleepDuration, fromAddress);
-    }
-
     @Override
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
