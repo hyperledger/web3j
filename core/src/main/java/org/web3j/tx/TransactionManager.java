@@ -37,7 +37,7 @@ public abstract class TransactionManager {
                 web3j, sleepDuration, attempts);
     }
 
-    TransactionReceipt executeTransaction(
+    protected TransactionReceipt executeTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
             String data, BigInteger value)
             throws IOException, TransactionException {
