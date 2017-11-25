@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2017. DataVolo, Inc.  All Rights Reserved.
- *
- * Proprietary and confidential.
- *
- * Unauthorized copying or use of this file or any of its contents, via any medium is strictly
- * prohibited.
- *
- * Unauthorized use of the outputs of compiling or otherwise processing this file in a
- * programmable, repeatable way is strictly prohibited.
- *
- * Authorizations, when granted, must be via a valid software license agreement with DataVolo, Inc.
- *
- * For inquires please contact legal@datavolo.com
- *
- */
-
 package org.web3j.contracts.token;
 
 import java.math.BigInteger;
