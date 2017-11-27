@@ -118,7 +118,8 @@ public abstract class Filter<T> {
     protected abstract Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId);
 
     void throwException(Response.Error error) {
-        throw new FilterException("Invalid request: " + error.getMessage());
+        throw new FilterException("Invalid request: "
+                + (error == null ? "Unknown Error" : error.getMessage()));
     }
 
     void throwException(Throwable cause) {

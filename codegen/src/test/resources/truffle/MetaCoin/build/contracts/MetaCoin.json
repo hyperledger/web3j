@@ -1422,8 +1422,7 @@
       "events": {},
       "links": {
         "ConvertLib": "0xcfeb869f69431e42cdb54a4f4f105c19c080a601"
-      },
-      "address": "0x254dffcd3277c0b1660f6d42efbb754edababc2b"
+      }
     }
   },
   "schemaVersion": "1.0.1",

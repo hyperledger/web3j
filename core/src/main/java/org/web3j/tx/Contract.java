@@ -34,17 +34,18 @@ import org.web3j.utils.Numeric;
 /**
  * Solidity contract type abstraction for interacting with smart contracts via native Java types.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
 
-    private final String contractBinary;
-    private String contractAddress;
-    private final BigInteger gasPrice;
-    private final BigInteger gasLimit;
-    private TransactionReceipt transactionReceipt;
-    private Map<String, String> deployedAddresses;
+    protected final String contractBinary;
+    protected String contractAddress;
+    protected BigInteger gasPrice;
+    protected BigInteger gasLimit;
+    protected TransactionReceipt transactionReceipt;
+    protected Map<String, String> deployedAddresses;
 
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
@@ -346,7 +347,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, BigInteger.ZERO);
     }
 
-    protected EventValues extractEventParameters(
+    public static EventValues staticExtractEventParameters(
             Event event, Log log) {
 
         List<String> topics = log.getTopics();
@@ -366,6 +367,10 @@ public abstract class Contract extends ManagedTransaction {
             indexedValues.add(value);
         }
         return new EventValues(indexedValues, nonIndexedValues);
+    }
+
+    protected EventValues extractEventParameters(Event event, Log log) {
+        return staticExtractEventParameters(event, log);
     }
 
     protected List<EventValues> extractEventParameters(

@@ -147,6 +147,20 @@ public class SolidityFunctionWrapper extends Generator {
                     .build();
             classBuilder.addMethod(getAddress);
 
+            MethodSpec getPreviousAddress = MethodSpec
+                    .methodBuilder("getPreviouslyDeployedAddress")
+                    .addModifiers(Modifier.PUBLIC)
+                    .addModifiers(Modifier.STATIC)
+                    .returns(stringType)
+                    .addParameter(stringType, "networkId")
+                    .addCode(
+                            CodeBlock
+                                    .builder()
+                                    .addStatement("return _addresses.get(networkId)")
+                                    .build())
+                    .build();
+            classBuilder.addMethod(getPreviousAddress);
+            
         }
     }
 
@@ -156,7 +170,7 @@ public class SolidityFunctionWrapper extends Generator {
         String javadoc = CODEGEN_WARNING + getWeb3jVersion();
 
         return TypeSpec.classBuilder(className)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addModifiers(Modifier.PUBLIC) 
                 .addJavadoc(javadoc)
                 .superclass(Contract.class)
                 .addField(createBinaryDefinition(binary));
@@ -226,7 +240,7 @@ public class SolidityFunctionWrapper extends Generator {
 
     private static MethodSpec buildConstructor(Class authType, String authName) {
         return MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PROTECTED)
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
                 .addParameter(authType, authName)
