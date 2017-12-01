@@ -525,6 +525,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `blk.io <https://blk.io>`_
 - `comitFS <http://www.comitfs.com/>`_
 - `ConsenSys <https://consensys.net/>`_
+- `TrustWallet <http://trustwalletapp.com>`
 - `ING <https://www.ing.com>`_
 - `Othera <https://www.othera.io/>`_
 
