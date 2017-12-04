@@ -2,12 +2,16 @@ package org.web3j.codegen;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -38,7 +42,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
 
     private static final String USAGE = "truffle generate "
             + "[--javaTypes|--solidityTypes] "
-            + "<input truffle json file>.json "
+            + "[<input truffle json file>.json | <directory containing multiple truffle json files>]"
             + "-p|--package <base package name> "
             + "-o|--output <destination base directory>";
 
@@ -90,16 +94,36 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             exitError(USAGE);
         }
 
-        new TruffleJsonFunctionWrapperGenerator(
+        // Assumption taken that if it doesn't end with json then it must be a directory
+        if(jsonFileLocation.endsWith("json")){
+            new TruffleJsonFunctionWrapperGenerator(
                 jsonFileLocation,
                 destinationDirLocation,
                 basePackageName,
-                useJavaNativeTypes)
-                .generate();
+                useJavaNativeTypes
+            ).generate();
+        } else {
+            try(Stream<Path> paths = Files.walk(Paths.get(jsonFileLocation))) {
+                paths.filter(
+                    file -> file.endsWith("json")
+                ).forEach(path -> {
+                    try {
+                        new TruffleJsonFunctionWrapperGenerator(
+                            jsonFileLocation,
+                            destinationDirLocation,
+                            basePackageName,
+                            useJavaNativeTypes
+                        ).generate();
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                        exitError("Failed to generate file with exception:" + e.getMessage());
+                    }
+                });
+            }
+        }
     }
 
-    static Contract loadContractDefinition(File jsonFile)
-            throws IOException {
+    static Contract loadContractDefinition(File jsonFile) throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         return objectMapper.readValue(jsonFile, Contract.class);
     }
@@ -115,15 +139,15 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         String fileName = truffleJsonFile.getName();
         String contractName = getFileNameNoExtension(fileName);
 
-        Contract c = loadContractDefinition(truffleJsonFile);
-        if (c == null) {
+        Contract contract = loadContractDefinition(truffleJsonFile);
+        if (contract == null) {
             exitError("Unable to parse input json file");
         } else {
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
             Map<String, String> addresses;
-            if (c.networks != null && !c.networks.isEmpty()) {
-                addresses = c.networks.entrySet().stream()
+            if (contract.networks != null && !contract.networks.isEmpty()) {
+                addresses = contract.networks.entrySet().stream()
                         .filter(e -> (e.getValue() != null && e.getValue().getAddress() != null))
                         .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAddress()
                         ));
@@ -132,8 +156,8 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             }
             new SolidityFunctionWrapper(useJavaNativeTypes)
                     .generateJavaFiles(contractName,
-                            c.getBytecode(),
-                            c.getAbi(),
+                            contract.getBytecode(),
+                            contract.getAbi(),
                             destinationDirLocation.toString(),
                             basePackageName,
                             addresses);
@@ -222,7 +246,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             this.schemaVersion = schemaVersion;
             this.updatedAt = updatedAt;
         }
-        
+
         public String getContractName() {
             return contractName;
         }
@@ -234,7 +258,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public String getBytecode() {
             return bytecode;
         }
-        
+
         public NetworkInfo getNetwork(String networkId) {
             return networks == null ? null : networks.get(networkId);
         }
@@ -343,7 +367,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             this.links = links;
             this.address = address;
         }
-        
+
         public String getAddress() {
             return address;
         }
