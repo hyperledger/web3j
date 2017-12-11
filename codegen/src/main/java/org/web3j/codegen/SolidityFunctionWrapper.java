@@ -286,8 +286,8 @@ public class SolidityFunctionWrapper extends Generator {
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         if (isPayable) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)"
-                    ,
+                    "return deployRemoteCall(" +
+                            "$L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
                     className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
         } else {
             methodBuilder.addStatement(
