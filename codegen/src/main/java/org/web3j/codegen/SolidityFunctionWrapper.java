@@ -69,7 +69,8 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String END_BLOCK = "endBlock";
     private static final String WEI_VALUE = "weiValue";
 
-    public static final ClassName LOG = ClassName.get("org.web3j.protocol.core.methods.response", "Log");
+    public static final ClassName LOG = ClassName.get(
+            "org.web3j.protocol.core.methods.response", "Log");
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
             + "<p><strong>Do not modify!</strong>\n"
@@ -105,18 +106,21 @@ public class SolidityFunctionWrapper extends Generator {
         TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
-        classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER));
+        classBuilder.addMethod(buildConstructor(TransactionManager.class,
+                TRANSACTION_MANAGER));
         classBuilder.addMethods(
                 buildFunctionDefinitions(className, classBuilder, abi));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
-        classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
+        classBuilder.addMethod(buildLoad(className, TransactionManager.class,
+                TRANSACTION_MANAGER));
 
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
     }
 
-    private void addAddressesSupport(TypeSpec.Builder classBuilder, Map<String, String> addresses) {
+    private void addAddressesSupport(TypeSpec.Builder classBuilder,
+                                     Map<String, String> addresses) {
         if (addresses != null) {
 
             ClassName stringType = ClassName.get(String.class);
@@ -131,7 +135,8 @@ public class SolidityFunctionWrapper extends Generator {
             final CodeBlock.Builder staticInit = CodeBlock.builder();
             staticInit.addStatement("_addresses = new HashMap<>()");
             addresses.forEach((k, v) ->
-                    staticInit.addStatement(String.format("_addresses.put(\"%1s\", \"%2s\")", k, v))
+                    staticInit.addStatement(String.format("_addresses.put(\"%1s\", \"%2s\")",
+                            k, v))
             );
             classBuilder.addStaticBlock(staticInit.build());
 
@@ -281,7 +286,8 @@ public class SolidityFunctionWrapper extends Generator {
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         if (isPayable) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)"
+                    ,
                     className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
         } else {
             methodBuilder.addStatement(
@@ -345,8 +351,9 @@ public class SolidityFunctionWrapper extends Generator {
 
         List<ParameterSpec> inputParameterTypes = buildParameterTypes(namedTypes);
 
-        List<ParameterSpec> nativeInputParameterTypes = new ArrayList<>(inputParameterTypes.size());
-        for (ParameterSpec parameterSpec:inputParameterTypes) {
+        List<ParameterSpec> nativeInputParameterTypes =
+                new ArrayList<>(inputParameterTypes.size());
+        for (ParameterSpec parameterSpec : inputParameterTypes) {
             TypeName typeName = getWrapperType(parameterSpec.type);
             nativeInputParameterTypes.add(
                     ParameterSpec.builder(typeName, parameterSpec.name).build());
@@ -473,7 +480,7 @@ public class SolidityFunctionWrapper extends Generator {
      * require a struct type.
      *
      * @param name parameter name
-     * @param idx parameter index
+     * @param idx  parameter index
      * @return non-empty parameter name
      */
     static String createValidParamName(String name, int idx) {
@@ -595,20 +602,23 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    TypeSpec buildEventResponseObject(String className,
-                                      List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
-                                      List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters) {
+    TypeSpec buildEventResponseObject(
+            String className,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters) {
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
         builder.addField(LOG, "log", Modifier.PUBLIC);
-        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType : indexedParameters) {
+        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName
+                namedType : indexedParameters) {
             TypeName typeName = getIndexedEventWrapperType(namedType.typeName);
             builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
         }
 
-        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType : nonIndexedParameters) {
+        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName
+                namedType : nonIndexedParameters) {
             TypeName typeName = getWrapperType(namedType.typeName);
             builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
         }
@@ -616,10 +626,11 @@ public class SolidityFunctionWrapper extends Generator {
         return builder.build();
     }
 
-    MethodSpec buildEventObservableFunction(String responseClassName,
-                                            String functionName,
-                                            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
-                                            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters)
+    MethodSpec buildEventObservableFunction(
+            String responseClassName,
+            String functionName,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters)
             throws ClassNotFoundException {
 
         String generatedFunctionName =
@@ -627,11 +638,12 @@ public class SolidityFunctionWrapper extends Generator {
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx
                 .Observable.class), ClassName.get("", responseClassName));
 
-        MethodSpec.Builder observableMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(DefaultBlockParameter.class, START_BLOCK)
-                .addParameter(DefaultBlockParameter.class, END_BLOCK)
-                .returns(parameterizedTypeName);
+        MethodSpec.Builder observableMethodBuilder =
+                MethodSpec.methodBuilder(generatedFunctionName)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(DefaultBlockParameter.class, START_BLOCK)
+                        .addParameter(DefaultBlockParameter.class, END_BLOCK)
+                        .returns(parameterizedTypeName);
 
         buildVariableLengthEventConstructor(
                 observableMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
@@ -651,7 +663,7 @@ public class SolidityFunctionWrapper extends Generator {
                         .addStatement("$1T typedResponse = new $1T()",
                                 ClassName.get("", responseClassName))
                         .addCode(buildTypedResponse("typedResponse", indexedParameters,
-                                nonIndexedParameters,true))
+                                nonIndexedParameters, true))
                         .addStatement("return typedResponse")
                         .build())
                 .build();
@@ -665,9 +677,12 @@ public class SolidityFunctionWrapper extends Generator {
                 .build();
     }
 
-    MethodSpec buildEventTransactionReceiptFunction(String responseClassName, String
-            functionName, List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters, List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName>
-                                                            nonIndexedParameters) throws
+    MethodSpec buildEventTransactionReceiptFunction(
+            String responseClassName, String
+            functionName,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName>
+                    nonIndexedParameters) throws
             ClassNotFoundException {
 
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
@@ -693,7 +708,7 @@ public class SolidityFunctionWrapper extends Generator {
                 .addStatement("$1T typedResponse = new $1T()",
                         ClassName.get("", responseClassName))
                 .addCode(buildTypedResponse("typedResponse", indexedParameters,
-                        nonIndexedParameters,false))
+                        nonIndexedParameters, false))
                 .addStatement("responses.add(typedResponse)")
                 .endControlFlow();
 
@@ -710,16 +725,22 @@ public class SolidityFunctionWrapper extends Generator {
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 
-        List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters = new ArrayList<>();
-        List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters = new ArrayList<>();
+        List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName>
+                indexedParameters = new ArrayList<>();
+        List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName>
+                nonIndexedParameters = new ArrayList<>();
         for (AbiDefinition.NamedType namedType : inputs) {
 
             if (namedType.isIndexed()) {
                 indexedParameters.add(
-                        new org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName(namedType.getName(), buildTypeName(namedType.getType())));
+                        new org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName(
+                                namedType.getName(),
+                                buildTypeName(namedType.getType())));
             } else {
                 nonIndexedParameters.add(
-                        new org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName(namedType.getName(), buildTypeName(namedType.getType())));
+                        new org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName(
+                                namedType.getName(),
+                                buildTypeName(namedType.getType())));
             }
         }
 
@@ -732,10 +753,11 @@ public class SolidityFunctionWrapper extends Generator {
                 indexedParameters, nonIndexedParameters));
     }
 
-    CodeBlock buildTypedResponse(String objectName,
-                                 List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
-                                 List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters,
-                                 boolean observable) {
+    CodeBlock buildTypedResponse(
+            String objectName,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters,
+            boolean observable) {
         String nativeConversion;
 
         if (useNativeJavaTypes) {
@@ -748,7 +770,9 @@ public class SolidityFunctionWrapper extends Generator {
         if (observable) {
             builder.addStatement("$L.log = log", objectName);
         } else {
-            builder.addStatement("$L.log = transactionReceipt.getLogs().get(valueList.indexOf(eventValues))", objectName);
+            builder.addStatement(
+                    "$L.log = transactionReceipt.getLogs().get(valueList.indexOf(eventValues))",
+                    objectName);
         }
         for (int i = 0; i < indexedParameters.size(); i++) {
             builder.addStatement(
@@ -890,9 +914,11 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private static void buildVariableLengthEventConstructor(
-            MethodSpec.Builder methodBuilder, String eventName, List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName>
-            indexedParameterTypes,
-            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameterTypes) throws ClassNotFoundException {
+            MethodSpec.Builder methodBuilder, String eventName,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName>
+                    indexedParameterTypes,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameterTypes)
+            throws ClassNotFoundException {
 
         List<Object> objects = new ArrayList<>();
         objects.add(Event.class);
@@ -901,14 +927,16 @@ public class SolidityFunctionWrapper extends Generator {
 
         objects.add(Arrays.class);
         objects.add(TypeReference.class);
-        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName indexedParameterType : indexedParameterTypes) {
+        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName
+                indexedParameterType : indexedParameterTypes) {
             objects.add(TypeReference.class);
             objects.add(indexedParameterType.getTypeName());
         }
 
         objects.add(Arrays.class);
         objects.add(TypeReference.class);
-        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName indexedParameterType : nonIndexedParameterTypes) {
+        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName
+                indexedParameterType : nonIndexedParameterTypes) {
             objects.add(TypeReference.class);
             objects.add(indexedParameterType.getTypeName());
         }
