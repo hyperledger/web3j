@@ -75,13 +75,15 @@ public abstract class Filter<T> {
         EthLog ethLog = null;
         try {
             ethLog = web3j.ethGetFilterChanges(filterId).send();
+
+            if (ethLog.hasError()) {
+                throwException(ethFilter.getError());
+            }
+            process(ethLog.getLogs());
         } catch (IOException e) {
-            throwException(e);
+            System.out.println("LOG ME");
+            //throwException(e);
         }
-        if (ethLog.hasError()) {
-            throwException(ethFilter.getError());
-        }
-        process(ethLog.getLogs());
     }
 
     abstract EthFilter sendRequest() throws IOException;
