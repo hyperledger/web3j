@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Smart Contracts &mdash; web3j 3.1.1 documentation</title>
+    <title>Smart Contracts &mdash; web3j 3.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.1.1',
+        VERSION:     '3.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.1.1 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.2.0 documentation" href="index.html" />
     <link rel="next" title="Application Binary Interface" href="abi.html" />
     <link rel="prev" title="Transactions" href="transactions.html" />
    
@@ -248,6 +248,9 @@ contract deployment and creation methods instead of a credentials object, i.e.:<
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/ClientTransactionManager.java">ClientTransactionManager</a>
 which passes the responsibility of signing your transaction on to the Ethereum client you are
 connecting to.</p>
+<p>There is also a
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ReadonlyTransactionManager.java">ReadonlyTransactionManager</a>
+for when you only want to retrieve data from a smart contract, but not transact with it.</p>
 </div>
 <div class="section" id="specifying-the-chain-id-on-transactions-eip-155">
 <h2>Specifying the Chain Id on Transactions (EIP-155)<a class="headerlink" href="#specifying-the-chain-id-on-transactions-eip-155" title="Permalink to this headline">¶</a></h2>

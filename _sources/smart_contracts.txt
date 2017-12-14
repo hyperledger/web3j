@@ -265,6 +265,10 @@ In addition to the RawTransactionManager, web3j provides a
 which passes the responsibility of signing your transaction on to the Ethereum client you are
 connecting to.
 
+There is also a
+`ReadonlyTransactionManager <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ReadonlyTransactionManager.java>`_
+for when you only want to retrieve data from a smart contract, but not transact with it.
+
 
 Specifying the Chain Id on Transactions (EIP-155)
 -------------------------------------------------
