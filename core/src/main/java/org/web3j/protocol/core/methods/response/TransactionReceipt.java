@@ -24,6 +24,7 @@ public class TransactionReceipt {
     private String to;
     private List<Log> logs;
     private String logsBloom;
+    private String errorMessage;
 
     public TransactionReceipt() {
     }
@@ -31,7 +32,7 @@ public class TransactionReceipt {
     public TransactionReceipt(String transactionHash, String transactionIndex,
                               String blockHash, String blockNumber, String cumulativeGasUsed,
                               String gasUsed, String contractAddress, String root, String status,
-                              String from, String to, List<Log> logs, String logsBloom) {
+                              String from, String to, List<Log> logs, String logsBloom, String errorMessage) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -45,6 +46,7 @@ public class TransactionReceipt {
         this.to = to;
         this.logs = logs;
         this.logsBloom = logsBloom;
+        this.errorMessage = errorMessage;
     }
 
     public String getTransactionHash() {
@@ -165,6 +167,14 @@ public class TransactionReceipt {
 
     public void setLogsBloom(String logsBloom) {
         this.logsBloom = logsBloom;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage() {
+        return this.errorMessage;
     }
 
     @Override

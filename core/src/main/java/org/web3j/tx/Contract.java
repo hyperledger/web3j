@@ -22,7 +22,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.request.Call;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -52,8 +52,9 @@ public abstract class Contract extends ManagedTransaction {
                        BigInteger gasPrice, BigInteger gasLimit) {
         super(web3j, transactionManager);
 
-        this.contractAddress = ensResolver.resolve(contractAddress);
+        //this.contractAddress = ensResolver.resolve(contractAddress);
 
+        this.contractAddress = contractAddress;
         this.contractBinary = contractBinary;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
@@ -150,8 +151,7 @@ public abstract class Contract extends ManagedTransaction {
             Function function) throws IOException {
         String encodedFunction = FunctionEncoder.encode(function);
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
-                Transaction.createEthCallTransaction(
-                        transactionManager.getFromAddress(), contractAddress, encodedFunction),
+                new Call(transactionManager.getFromAddress(), contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .send();
 
@@ -276,6 +276,7 @@ public abstract class Contract extends ManagedTransaction {
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
+            // We don't need to modify this, because we must specify the CitaTransactionManager which used to send transaction
             T contract = constructor.newInstance(null, web3j, credentials, gasPrice, gasLimit);
 
             return create(contract, binary, encodedConstructor, value);
@@ -299,8 +300,9 @@ public abstract class Contract extends ManagedTransaction {
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
+            // Unfortunately, we need empty string(not null) that represent create contract
             T contract = constructor.newInstance(
-                    null, web3j, transactionManager, gasPrice, gasLimit);
+                    "", web3j, transactionManager, gasPrice, gasLimit);
             return create(contract, binary, encodedConstructor, value);
         } catch (Exception e) {
             throw new RuntimeException(e);

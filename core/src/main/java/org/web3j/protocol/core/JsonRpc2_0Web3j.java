@@ -12,6 +12,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.request.Call;
 import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
@@ -78,6 +79,10 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
         this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
+    }
+
+    public JsonRpc2_0Web3j(Web3jService web3jService, long pollingInterval) {
+        this(web3jService, pollingInterval, Async.defaultExecutorService());
     }
 
     public JsonRpc2_0Web3j(
@@ -199,7 +204,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthBlockNumber> ethBlockNumber() {
         return new Request<>(
-                "eth_blockNumber",
+                "cita_blockNumber",
                 Collections.<String>emptyList(),
                 web3jService,
                 EthBlockNumber.class);
@@ -312,7 +317,7 @@ public class JsonRpc2_0Web3j implements Web3j {
             ethSendRawTransaction(
             String signedTransactionData) {
         return new Request<>(
-                "eth_sendRawTransaction",
+                "cita_sendTransaction",
                 Arrays.asList(signedTransactionData),
                 web3jService,
                 org.web3j.protocol.core.methods.response.EthSendTransaction.class);
@@ -320,10 +325,10 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
-            Transaction transaction, DefaultBlockParameter defaultBlockParameter) {
+            Call call, DefaultBlockParameter defaultBlockParameter) {
         return new Request<>(
                 "eth_call",
-                Arrays.asList(transaction, defaultBlockParameter),
+                Arrays.asList(call, defaultBlockParameter),
                 web3jService,
                 org.web3j.protocol.core.methods.response.EthCall.class);
     }
@@ -341,7 +346,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthBlock> ethGetBlockByHash(
             String blockHash, boolean returnFullTransactionObjects) {
         return new Request<>(
-                "eth_getBlockByHash",
+                "cita_getBlockByHash",
                 Arrays.asList(
                         blockHash,
                         returnFullTransactionObjects),
@@ -354,7 +359,7 @@ public class JsonRpc2_0Web3j implements Web3j {
             DefaultBlockParameter defaultBlockParameter,
             boolean returnFullTransactionObjects) {
         return new Request<>(
-                "eth_getBlockByNumber",
+                "cita_getBlockByNumber",
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
                         returnFullTransactionObjects),
@@ -365,7 +370,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthTransaction> ethGetTransactionByHash(String transactionHash) {
         return new Request<>(
-                "eth_getTransactionByHash",
+                "cita_getTransactionByHash",
                 Arrays.asList(transactionHash),
                 web3jService,
                 EthTransaction.class);

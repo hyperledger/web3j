@@ -55,7 +55,7 @@ public class Sign {
                     "Could not construct a recoverable key. This should never happen.");
         }
 
-        int headerByte = recId + 27;
+        int headerByte = recId;
 
         // 1 header + 32 bytes for R + 32 bytes for S
         byte v = (byte) headerByte;
@@ -268,6 +268,14 @@ public class Sign {
             result = 31 * result + Arrays.hashCode(r);
             result = 31 * result + Arrays.hashCode(s);
             return result;
+        }
+
+        public byte[] get_signature() {
+            byte[] sig = new byte[65];
+            System.arraycopy(r, 0, sig, 0, 32);
+            System.arraycopy(s, 0, sig, 32, 32);
+            sig[64] = v;
+            return sig;
         }
     }
 }

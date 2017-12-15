@@ -6,7 +6,9 @@ dependencies {
     compile project(':abi'),
             project(':crypto'),
             project(':tuples'),
+            project(':protobuf'),
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
+            "org.abstractj.kalium:kalium:0.7.0",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
             "io.reactivex:rxjava:$rxjavaVersion"
@@ -14,7 +16,7 @@ dependencies {
             "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
 }
 
-task createProperties(dependsOn: processResources) << {
+task createProperties(dependsOn: processResources) doLast {
     // if resources dir is empty we need to create this ourselves
     new File("$buildDir/resources/main/").mkdirs()
 

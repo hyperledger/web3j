@@ -21,6 +21,10 @@ public interface Web3j extends Ethereum, Web3jRx {
         return new JsonRpc2_0Web3j(web3jService);
     }
 
+    static Web3j build(Web3jService web3jService, long pollingInterval) {
+        return new JsonRpc2_0Web3j(web3jService, pollingInterval);
+    }
+
     /**
      * Construct a new Web3j instance.
      *

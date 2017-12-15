@@ -67,7 +67,7 @@ public abstract class TransactionManager {
                     + transactionResponse.getError().getMessage());
         }
 
-        String transactionHash = transactionResponse.getTransactionHash();
+        String transactionHash = transactionResponse.getSendTransactionResult().getHash();
 
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
     }

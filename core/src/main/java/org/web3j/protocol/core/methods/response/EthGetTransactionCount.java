@@ -9,6 +9,10 @@ import org.web3j.utils.Numeric;
  * eth_getTransactionCount.
  */
 public class EthGetTransactionCount extends Response<String> {
+    public boolean isEmpty() {
+        return getResult() == null;
+    }
+
     public BigInteger getTransactionCount() {
         return Numeric.decodeQuantity(getResult());
     }

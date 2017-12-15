@@ -6,6 +6,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.web3j.utils.Numeric;
 
+import org.web3j.protobuf.Blockchain;
+
+import org.web3j.protobuf.ConvertStrByte;
+import org.web3j.protobuf.Blockchain.Crypto;
+
+import com.google.protobuf.*;
+
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.ECKeyPair;
+import org.web3j.crypto.Sign;
+
+import static org.abstractj.kalium.encoders.Encoder.HEX;
+import org.abstractj.kalium.keys.SigningKey;
+import org.abstractj.kalium.crypto.Hash;
+
 /**
  * Transaction request object used the below methods.
  * <ol>
@@ -16,104 +31,129 @@ import org.web3j.utils.Numeric;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
-    // default as per https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction
-    public static final BigInteger DEFAULT_GAS = BigInteger.valueOf(9000);
 
-    private String from;
     private String to;
-    private BigInteger gas;
-    private BigInteger gasPrice;
-    private BigInteger value;
-    private String data;
     private BigInteger nonce;  // nonce field is not present on eth_call/eth_estimateGas
+    private long quota;  // gas
+    private long valid_until_block;
+    private String data;
+    private final Hash hash = new Hash();
 
-    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-                       String to, BigInteger value, String data) {
-        this.from = from;
+    public Transaction(String to, BigInteger nonce, long quota, long valid_until_block, String data) {
         this.to = to;
-        this.gas = gasLimit;
-        this.gasPrice = gasPrice;
-        this.value = value;
+        this.nonce = nonce;
+        this.quota = quota;
+        this.valid_until_block = valid_until_block;
 
         if (data != null) {
             this.data = Numeric.prependHexPrefix(data);
         }
-
-        this.nonce = nonce;
     }
 
     public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-            BigInteger value, String init) {
+        BigInteger nonce, long quota, long valid_until_block, String init) {
 
-        return new Transaction(from, nonce, gasPrice, gasLimit, null, value, init);
-    }
-
-    public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, String init) {
-
-        return createContractTransaction(from, nonce, gasPrice, null, null, init);
-    }
-
-    public static Transaction createEtherTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value) {
-
-        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, null);
+        return new Transaction("", nonce, quota, valid_until_block, init);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value, String data) {
+        String to, BigInteger nonce, long quota, long valid_until_block, String data) {
 
-        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, data);
-    }
-
-    public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data) {
-
-        return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data);
-    }
-
-    public static Transaction createEthCallTransaction(String from, String to, String data) {
-
-        return new Transaction(from, null, null, null, to, null, data);
-    }
-
-    public String getFrom() {
-        return from;
+        return new Transaction(to, nonce, quota, valid_until_block, data);
     }
 
     public String getTo() {
         return to;
     }
 
-    public String getGas() {
-        return convert(gas);
+    public String getNonce() {
+        return convert(nonce);
     }
 
-    public String getGasPrice() {
-        return convert(gasPrice);
+    public long getQuota() {
+        return quota;
     }
 
-    public String getValue() {
-        return convert(value);
+    public long get_valid_until_block() {
+        return valid_until_block;
     }
 
     public String getData() {
         return data;
     }
 
-    public String getNonce() {
-        return convert(nonce);
-    }
-
     private static String convert(BigInteger value) {
         if (value != null) {
-            return Numeric.encodeQuantity(value);
+            return Numeric.cleanHexPrefix(Numeric.encodeQuantity(value));
         } else {
             return null;  // we don't want the field to be encoded if not present
         }
+    }
+
+    public String sign(String privateKey) {
+        return sign(privateKey, false);
+    }
+
+    public String sign(String privateKey, boolean isEd25519AndBlake2b) {
+        Blockchain.Transaction.Builder builder = Blockchain.Transaction.newBuilder();
+        byte[] strbyte = ConvertStrByte.hexStringToBytes(Numeric.cleanHexPrefix(getData()));
+        ByteString bdata = ByteString.copyFrom(strbyte);
+
+        builder.setData(bdata);
+        builder.setNonce(getNonce());
+        builder.setTo(getTo());
+        builder.setValidUntilBlock(get_valid_until_block());
+        builder.setQuota(getQuota());
+        Blockchain.Transaction tx = builder.build();
+
+        byte[] sig;
+        if (isEd25519AndBlake2b) {
+            byte[] message = hash.blake2(tx.toByteArray(), "CryptapeCryptape".getBytes(), null, null);
+            SigningKey key = new SigningKey(privateKey, HEX);
+            byte[] pk = key.getVerifyKey().toBytes();
+            byte[] signature = key.sign(message);
+            sig = new byte[signature.length + pk.length];
+            System.arraycopy(signature, 0, sig, 0, signature.length);  
+            System.arraycopy(pk, 0, sig, signature.length, pk.length);  
+        } else {
+            Credentials credentials = Credentials.create(privateKey);
+            ECKeyPair keyPair = credentials.getEcKeyPair();    
+            Sign.SignatureData signatureData = Sign.signMessage(tx.toByteArray(), keyPair);
+            sig = signatureData.get_signature();
+        }
+
+        Blockchain.UnverifiedTransaction.Builder builder1 = Blockchain.UnverifiedTransaction.newBuilder();
+        builder1.setTransaction(tx);
+        builder1.setSignature(ByteString.copyFrom(sig));
+        builder1.setCrypto(Crypto.SECP);
+        Blockchain.UnverifiedTransaction utx = builder1.build();
+
+        return ConvertStrByte.bytesToHexString(utx.toByteArray());
+    }
+
+    // just used to secp256k1
+    public String sign(Credentials credentials) {
+        Blockchain.Transaction.Builder builder = Blockchain.Transaction.newBuilder();
+        byte[] strbyte = ConvertStrByte.hexStringToBytes(Numeric.cleanHexPrefix(getData()));
+        ByteString bdata = ByteString.copyFrom(strbyte);
+
+        builder.setData(bdata);
+        builder.setNonce(getNonce());
+        builder.setTo(getTo());
+        builder.setValidUntilBlock(get_valid_until_block());
+        builder.setQuota(getQuota());
+        Blockchain.Transaction tx = builder.build();
+
+        ECKeyPair keyPair = credentials.getEcKeyPair();
+        Sign.SignatureData signatureData = Sign.signMessage(tx.toByteArray(), keyPair);
+        byte[] sig = signatureData.get_signature();
+
+        Blockchain.UnverifiedTransaction.Builder builder1 = Blockchain.UnverifiedTransaction.newBuilder();
+        builder1.setTransaction(tx);
+        builder1.setSignature(ByteString.copyFrom(sig));
+        builder1.setCrypto(Crypto.SECP);
+        Blockchain.UnverifiedTransaction utx = builder1.build();
+
+        return ConvertStrByte.bytesToHexString(utx.toByteArray());
     }
 }

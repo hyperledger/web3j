@@ -42,8 +42,9 @@ public class ClientTransactionManager extends TransactionManager {
             String data, BigInteger value)
             throws IOException {
 
+        // Note: useless for use, just for compile
         Transaction transaction = new Transaction(
-                getFromAddress(), null, gasPrice, gasLimit, to, value, data);
+                to, BigInteger.valueOf(1), 1000000, 99, data);
 
         return web3j.ethSendTransaction(transaction)
                 .send();

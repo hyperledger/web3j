@@ -25,6 +25,8 @@ public class Transaction {
     private String r;
     private String s;
     private int v;  // see https://github.com/web3j/web3j/issues/44
+    private String content;
+    private String index;
 
     public Transaction() {
     }
@@ -32,7 +34,8 @@ public class Transaction {
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,
                        String gas, String gasPrice, String input, String creates,
-                       String publicKey, String raw, String r, String s, int v) {
+                       String publicKey, String raw, String r, String s, int v,
+                       String content, String index) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -50,6 +53,8 @@ public class Transaction {
         this.r = r;
         this.s = s;
         this.v = v;
+        this.content = content;
+        this.index = index;
     }
 
     public String getHash() {
@@ -223,6 +228,18 @@ public class Transaction {
         }
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() { return content; }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
+
+    public String getIndex() { return index; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -293,6 +310,12 @@ public class Transaction {
         if (getR() != null ? !getR().equals(that.getR()) : that.getR() != null) {
             return false;
         }
+        if (getContent() != null ? !getContent().equals(that.getContent()) : that.getContent() != null) {
+            return false;
+        }
+        if (getIndex() != null ? !getIndex().equals(that.getIndex()) : that.getIndex() != null) {
+            return false;
+        }
         return getS() != null ? getS().equals(that.getS()) : that.getS() == null;
     }
 
@@ -315,6 +338,8 @@ public class Transaction {
         result = 31 * result + (getRaw() != null ? getRaw().hashCode() : 0);
         result = 31 * result + (getR() != null ? getR().hashCode() : 0);
         result = 31 * result + (getS() != null ? getS().hashCode() : 0);
+        result = 31 * result + (getContent() != null ? getContent().hashCode() : 0);
+        result = 31 * result + (getIndex() != null ? getIndex().hashCode() : 0);
         result = 31 * result + getV();
         return result;
     }

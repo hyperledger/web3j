@@ -114,7 +114,7 @@ public interface Ethereum {
             String signedTransactionData);
 
     Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
-            org.web3j.protocol.core.methods.request.Transaction transaction,
+            org.web3j.protocol.core.methods.request.Call transaction,
             DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthEstimateGas> ethEstimateGas(

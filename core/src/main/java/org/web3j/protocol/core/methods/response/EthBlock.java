@@ -45,126 +45,111 @@ public class EthBlock extends Response<EthBlock.Block> {
         return getResult();
     }
 
-    public static class Block {
+    public boolean isEmpty() {
+        return getResult() == null;
+    }
+
+
+    public static class Proof {
+        private String proposal;
+        private String height;
+        private String round;
+
+        public Proof(){
+        }
+
+        public Proof(String proposal, String height, String round){
+            this.proposal = proposal;
+            this.height = height;
+            this.round = round;
+        }
+
+        public String getProposal() {
+            return proposal;
+        }
+
+        public void setProposal(String proposal) {
+            this.proposal = proposal;
+        }
+
+        public String getHeight() {
+            return height;
+        }
+
+        public void setHeight(String height) {
+            this.height = height;
+        }
+
+        public String getRound() {
+            return round;
+        }
+
+        public void setRound(String round) {
+            this.round = round;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getProposal() != null ? getProposal().hashCode() : 0;
+            result = 31 * result + (getHeight() != null ? getHeight().hashCode() : 0);
+            result = 31 * result + (getRound() != null ? getRound().hashCode() : 0);
+            return result;
+        }
+    }
+
+
+    public static class Header{
+        private long timestamp;
+        private String prevHash;
         private String number;
-        private String hash;
-        private String parentHash;
-        private String nonce;
-        private String sha3Uncles;
-        private String logsBloom;
-        private String transactionsRoot;
         private String stateRoot;
-        private String receiptsRoot;  // geth has this wrong currently, see https://github.com/ethereum/go-ethereum/issues/3084
-        private String author;
-        private String miner;
-        private String mixHash;
-        private String difficulty;
-        private String totalDifficulty;
-        private String extraData;
-        private String size;
-        private String gasLimit;
+        private String transactionsRoot;
+        private String receiptsRoot;
         private String gasUsed;
-        private String timestamp;
-        private List<TransactionResult> transactions;
-        private List<String> uncles;
-        private List<String> sealFields;
+        private Proof proof;
 
-        public Block() {
+
+        public Header(){
         }
 
-        public Block(String number, String hash, String parentHash, String nonce,
-                     String sha3Uncles, String logsBloom, String transactionsRoot,
-                     String stateRoot, String receiptsRoot, String author, String miner, 
-                     String mixHash, String difficulty, String totalDifficulty, String extraData, 
-                     String size, String gasLimit, String gasUsed, String timestamp,
-                     List<TransactionResult> transactions, List<String> uncles,
-                     List<String> sealFields) {
-            this.number = number;
-            this.hash = hash;
-            this.parentHash = parentHash;
-            this.nonce = nonce;
-            this.sha3Uncles = sha3Uncles;
-            this.logsBloom = logsBloom;
-            this.transactionsRoot = transactionsRoot;
-            this.stateRoot = stateRoot;
-            this.receiptsRoot = receiptsRoot;
-            this.author = author;
-            this.miner = miner;
-            this.mixHash = mixHash;
-            this.difficulty = difficulty;
-            this.totalDifficulty = totalDifficulty;
-            this.extraData = extraData;
-            this.size = size;
-            this.gasLimit = gasLimit;
-            this.gasUsed = gasUsed;
+        public Header(long timestamp, String prevHash, String number, String stateRoot,
+                      String transactionsRoot, String receiptsRoot, String gasUsed, Proof proof){
             this.timestamp = timestamp;
-            this.transactions = transactions;
-            this.uncles = uncles;
-            this.sealFields = sealFields;
+            this.prevHash = prevHash;
+            this.number = number;
+            this.stateRoot = stateRoot;
+            this.transactionsRoot = transactionsRoot;
+            this.receiptsRoot = receiptsRoot;
+            this.gasUsed = gasUsed;
+            this.proof = proof;
         }
 
-        public BigInteger getNumber() {
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(long timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public String getPrevHash() {
+            return prevHash;
+        }
+
+        public void setPrevHash(String prevHash) {
+            this.prevHash = prevHash;
+        }
+
+        public BigInteger getNumberDec() {
             return Numeric.decodeQuantity(number);
         }
 
-        public String getNumberRaw() {
+        public String getNumber() {
             return number;
         }
 
         public void setNumber(String number) {
             this.number = number;
-        }
-
-        public String getHash() {
-            return hash;
-        }
-
-        public void setHash(String hash) {
-            this.hash = hash;
-        }
-
-        public String getParentHash() {
-            return parentHash;
-        }
-
-        public void setParentHash(String parentHash) {
-            this.parentHash = parentHash;
-        }
-
-        public BigInteger getNonce() {
-            return Numeric.decodeQuantity(nonce);
-        }
-
-        public String getNonceRaw() {
-            return nonce;
-        }
-
-        public void setNonce(String nonce) {
-            this.nonce = nonce;
-        }
-
-        public String getSha3Uncles() {
-            return sha3Uncles;
-        }
-
-        public void setSha3Uncles(String sha3Uncles) {
-            this.sha3Uncles = sha3Uncles;
-        }
-
-        public String getLogsBloom() {
-            return logsBloom;
-        }
-
-        public void setLogsBloom(String logsBloom) {
-            this.logsBloom = logsBloom;
-        }
-
-        public String getTransactionsRoot() {
-            return transactionsRoot;
-        }
-
-        public void setTransactionsRoot(String transactionsRoot) {
-            this.transactionsRoot = transactionsRoot;
         }
 
         public String getStateRoot() {
@@ -175,6 +160,14 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.stateRoot = stateRoot;
         }
 
+        public String getTransactionsRoot() {
+            return transactionsRoot;
+        }
+
+        public void setTransactionsRoot(String transactionsRoot) {
+            this.transactionsRoot = transactionsRoot;
+        }
+
         public String getReceiptsRoot() {
             return receiptsRoot;
         }
@@ -183,91 +176,11 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.receiptsRoot = receiptsRoot;
         }
 
-        public String getAuthor() {
-            return author;
-        }
-
-        public void setAuthor(String author) {
-            this.author = author;
-        }
-
-        public String getMiner() {
-            return miner;
-        }
-
-        public void setMiner(String miner) {
-            this.miner = miner;
-        }
-
-        public String getMixHash() {
-            return mixHash;
-        }
-
-        public void setMixHash(String mixHash) {
-            this.mixHash = mixHash;
-        }
-
-        public BigInteger getDifficulty() {
-            return Numeric.decodeQuantity(difficulty);
-        }
-
-        public String getDifficultyRaw() {
-            return difficulty;
-        }
-
-        public void setDifficulty(String difficulty) {
-            this.difficulty = difficulty;
-        }
-
-        public BigInteger getTotalDifficulty() {
-            return Numeric.decodeQuantity(totalDifficulty);
-        }
-
-        public String getTotalDifficultyRaw() {
-            return totalDifficulty;
-        }
-
-        public void setTotalDifficulty(String totalDifficulty) {
-            this.totalDifficulty = totalDifficulty;
-        }
-
-        public String getExtraData() {
-            return extraData;
-        }
-
-        public void setExtraData(String extraData) {
-            this.extraData = extraData;
-        }
-
-        public BigInteger getSize() {
-            return Numeric.decodeQuantity(size);
-        }
-
-        public String getSizeRaw() {
-            return size;
-        }
-
-        public void setSize(String size) {
-            this.size = size;
-        }
-
-        public BigInteger getGasLimit() {
-            return Numeric.decodeQuantity(gasLimit);
-        }
-
-        public String getGasLimitRaw() {
-            return gasLimit;
-        }
-
-        public void setGasLimit(String gasLimit) {
-            this.gasLimit = gasLimit;
-        }
-
-        public BigInteger getGasUsed() {
+        public BigInteger getGasUsedDec() {
             return Numeric.decodeQuantity(gasUsed);
         }
 
-        public String getGasUsedRaw() {
+        public String getGasUsed() {
             return gasUsed;
         }
 
@@ -275,181 +188,108 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.gasUsed = gasUsed;
         }
 
-        public BigInteger getTimestamp() {
-            return Numeric.decodeQuantity(timestamp);
+        public Proof getProof() {
+            return proof;
         }
 
-        public String getTimestampRaw() {
-            return timestamp;
+        public void setProof(Proof proof) {
+            this.proof = proof;
         }
 
-        public void setTimestamp(String timestamp) {
-            this.timestamp = timestamp;
+        @Override
+        public int hashCode() {
+            int result = 0;
+            result = 31 * result + (getPrevHash() != null ? getPrevHash().hashCode() : 0);
+            result = 31 * result + (getNumber() != null ? getNumber().hashCode() : 0);
+            result = 31 * result + (getStateRoot() != null ? getStateRoot().hashCode() : 0);
+            result = 31 * result + (getTransactionsRoot() != null ? getTransactionsRoot().hashCode() : 0);
+            result = 31 * result + (getReceiptsRoot() != null ? getReceiptsRoot().hashCode() : 0);
+            result = 31 * result + (getGasUsed() != null ? getGasUsed().hashCode() : 0);
+            result = 31 * result + (getProof() != null ? getProof().hashCode() : 0);
+            return result;
+        }
+    }
+
+    public static class Body {
+        private List<TransactionResult> transactions;
+
+        public Body() {
+        }
+
+        public Body(List<TransactionResult> transactions) {
+            this.transactions = transactions;
         }
 
         public List<TransactionResult> getTransactions() {
             return transactions;
         }
 
-        @JsonDeserialize(using = ResultTransactionDeserialiser.class)
+        @JsonDeserialize(using = EthBlock.ResultTransactionDeserialiser.class)
         public void setTransactions(List<TransactionResult> transactions) {
             this.transactions = transactions;
         }
 
-        public List<String> getUncles() {
-            return uncles;
-        }
-
-        public void setUncles(List<String> uncles) {
-            this.uncles = uncles;
-        }
-
-        public List<String> getSealFields() {
-            return sealFields;
-        }
-
-        public void setSealFields(List<String> sealFields) {
-            this.sealFields = sealFields;
-        }
-
         @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof Block)) {
-                return false;
-            }
+        public int hashCode() {
+            int result = getTransactions() != null ? getTransactions().hashCode() : 0;
+            return result;
+        }
+    }
 
-            Block block = (Block) o;
+    public static class Block {
+        private String version;
+        private String hash;
+        private Header header;
+        private Body body;
 
-            if (getNumberRaw() != null
-                    ? !getNumberRaw().equals(block.getNumberRaw()) : block.getNumberRaw() != null) {
-                return false;
-            }
-            if (getHash() != null ? !getHash().equals(block.getHash()) : block.getHash() != null) {
-                return false;
-            }
-            if (getParentHash() != null
-                    ? !getParentHash().equals(block.getParentHash())
-                    : block.getParentHash() != null) {
-                return false;
-            }
-            if (getNonceRaw() != null
-                    ? !getNonceRaw().equals(block.getNonceRaw()) : block.getNonceRaw() != null) {
-                return false;
-            }
-            if (getSha3Uncles() != null
-                    ? !getSha3Uncles().equals(block.getSha3Uncles())
-                    : block.getSha3Uncles() != null) {
-                return false;
-            }
-            if (getLogsBloom() != null
-                    ? !getLogsBloom().equals(block.getLogsBloom())
-                    : block.getLogsBloom() != null) {
-                return false;
-            }
-            if (getTransactionsRoot() != null
-                    ? !getTransactionsRoot().equals(block.getTransactionsRoot())
-                    : block.getTransactionsRoot() != null) {
-                return false;
-            }
-            if (getStateRoot() != null
-                    ? !getStateRoot().equals(block.getStateRoot())
-                    : block.getStateRoot() != null) {
-                return false;
-            }
-            if (getReceiptsRoot() != null
-                    ? !getReceiptsRoot().equals(block.getReceiptsRoot())
-                    : block.getReceiptsRoot() != null) {
-                return false;
-            }
-            if (getAuthor() != null
-                    ? !getAuthor().equals(block.getAuthor()) : block.getAuthor() != null) {
-                return false;
-            }
-            if (getMiner() != null
-                    ? !getMiner().equals(block.getMiner()) : block.getMiner() != null) {
-                return false;
-            }
-            if (getMixHash() != null
-                    ? !getMixHash().equals(block.getMixHash()) : block.getMixHash() != null) {
-                return false;
-            }
-            if (getDifficultyRaw() != null
-                    ? !getDifficultyRaw().equals(block.getDifficultyRaw())
-                    : block.getDifficultyRaw() != null) {
-                return false;
-            }
-            if (getTotalDifficultyRaw() != null
-                    ? !getTotalDifficultyRaw().equals(block.getTotalDifficultyRaw())
-                    : block.getTotalDifficultyRaw() != null) {
-                return false;
-            }
-            if (getExtraData() != null
-                    ? !getExtraData().equals(block.getExtraData())
-                    : block.getExtraData() != null) {
-                return false;
-            }
-            if (getSizeRaw() != null
-                    ? !getSizeRaw().equals(block.getSizeRaw())
-                    : block.getSizeRaw() != null) {
-                return false;
-            }
-            if (getGasLimitRaw() != null
-                    ? !getGasLimitRaw().equals(block.getGasLimitRaw())
-                    : block.getGasLimitRaw() != null) {
-                return false;
-            }
-            if (getGasUsedRaw() != null
-                    ? !getGasUsedRaw().equals(block.getGasUsedRaw())
-                    : block.getGasUsedRaw() != null) {
-                return false;
-            }
-            if (getTimestampRaw() != null
-                    ? !getTimestampRaw().equals(block.getTimestampRaw())
-                    : block.getTimestampRaw() != null) {
-                return false;
-            }
-            if (getTransactions() != null
-                    ? !getTransactions().equals(block.getTransactions())
-                    : block.getTransactions() != null) {
-                return false;
-            }
-            if (getUncles() != null
-                    ? !getUncles().equals(block.getUncles()) : block.getUncles() != null) {
-                return false;
-            }
-            return getSealFields() != null
-                    ? getSealFields().equals(block.getSealFields()) : block.getSealFields() == null;
+        public Block(){
+        }
+
+        public Block(String version, String hash, Header header, Body body){
+            this.version = version;
+            this.hash = hash;
+            this.header = header;
+            this.body = body;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public String getHash() {
+            return hash;
+        }
+
+        public void setHash(String hash) {
+            this.hash = hash;
+        }
+
+        public Header getHeader() {
+            return header;
+        }
+
+        public void setHeader(Header header) {
+            this.header = header;
+        }
+
+        public Body getBody() {
+            return body;
+        }
+
+        public void setBody(Body body) {
+            this.body = body;
         }
 
         @Override
         public int hashCode() {
-            int result = getNumberRaw() != null ? getNumberRaw().hashCode() : 0;
+            int result = getVersion() != null ? getVersion().hashCode() : 0;
             result = 31 * result + (getHash() != null ? getHash().hashCode() : 0);
-            result = 31 * result + (getParentHash() != null ? getParentHash().hashCode() : 0);
-            result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
-            result = 31 * result + (getSha3Uncles() != null ? getSha3Uncles().hashCode() : 0);
-            result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
-            result = 31 * result
-                    + (getTransactionsRoot() != null ? getTransactionsRoot().hashCode() : 0);
-            result = 31 * result + (getStateRoot() != null ? getStateRoot().hashCode() : 0);
-            result = 31 * result + (getReceiptsRoot() != null ? getReceiptsRoot().hashCode() : 0);
-            result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
-            result = 31 * result + (getMiner() != null ? getMiner().hashCode() : 0);
-            result = 31 * result + (getMixHash() != null ? getMixHash().hashCode() : 0);
-            result = 31 * result + (getDifficultyRaw() != null ? getDifficultyRaw().hashCode() : 0);
-            result = 31 * result
-                    + (getTotalDifficultyRaw() != null ? getTotalDifficultyRaw().hashCode() : 0);
-            result = 31 * result + (getExtraData() != null ? getExtraData().hashCode() : 0);
-            result = 31 * result + (getSizeRaw() != null ? getSizeRaw().hashCode() : 0);
-            result = 31 * result + (getGasLimitRaw() != null ? getGasLimitRaw().hashCode() : 0);
-            result = 31 * result + (getGasUsedRaw() != null ? getGasUsedRaw().hashCode() : 0);
-            result = 31 * result + (getTimestampRaw() != null ? getTimestampRaw().hashCode() : 0);
-            result = 31 * result + (getTransactions() != null ? getTransactions().hashCode() : 0);
-            result = 31 * result + (getUncles() != null ? getUncles().hashCode() : 0);
-            result = 31 * result + (getSealFields() != null ? getSealFields().hashCode() : 0);
+            result = 31 * result + (getHeader() != null ? getHeader().hashCode() : 0);
+            result = 31 * result + (getBody() != null ? getBody().hashCode() : 0);
             return result;
         }
     }
@@ -505,9 +345,10 @@ public class EthBlock extends Response<EthBlock.Block> {
         public TransactionObject(String hash, String nonce, String blockHash, String blockNumber,
                                  String transactionIndex, String from, String to, String value,
                                  String gasPrice, String gas, String input, String creates,
-                                 String publicKey, String raw, String r, String s, int v) {
+                                 String publicKey, String raw, String r, String s, int v,
+                                 String content, String index) {
             super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value,
-                    gasPrice, gas, input, creates, publicKey, raw, r, s, v);
+                    gasPrice, gas, input, creates, publicKey, raw, r, s, v, content, index);
         }
 
         @Override

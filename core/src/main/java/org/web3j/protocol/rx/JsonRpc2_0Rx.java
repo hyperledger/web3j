@@ -224,14 +224,14 @@ public class JsonRpc2_0Rx {
         } else {
             EthBlock latestEthBlock = web3j.ethGetBlockByNumber(
                     defaultBlockParameter, false).send();
-            return latestEthBlock.getBlock().getNumber();
+            return latestEthBlock.getBlock().getHeader().getNumberDec();
         }
     }
 
     private static List<Transaction> toTransactions(EthBlock ethBlock) {
         // If you ever see an exception thrown here, it's probably due to an incomplete chain in
         // Geth/Parity. You should resync to solve.
-        return ethBlock.getBlock().getTransactions().stream()
+        return ethBlock.getBlock().getBody().getTransactions().stream()
                 .map(transactionResult -> (Transaction) transactionResult.get())
                 .collect(Collectors.toList());
     }

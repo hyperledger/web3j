@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':core'),
+            project(':protobuf'),
+            'commons-cli:commons-cli:1.4'
+}
