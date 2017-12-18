@@ -514,6 +514,7 @@ Please submit a pull request if you wish to include your project on the list:
   `@adridadou <https://github.com/adridadou>`_
 - `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
+- `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
 
 
 Companies using web3j
