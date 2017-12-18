@@ -507,8 +507,6 @@ Projects using web3j
 
 Please submit a pull request if you wish to include your project on the list:
 
-- `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>` by
-  `Trust Wallet <http://trustwalletapp.com>`
 - `ERC-20 RESTful Service <https://github.com/blk-io/erc20-rest-service>`_
 - `Ether Wallet <https://play.google.com/store/apps/details?id=org.vikulin.etherwallet>`_ by
   `@vikulin <https://github.com/vikulin>`_
@@ -516,6 +514,7 @@ Please submit a pull request if you wish to include your project on the list:
   `@adridadou <https://github.com/adridadou>`_
 - `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
+- `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
 
 
 Companies using web3j
