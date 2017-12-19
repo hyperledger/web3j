@@ -113,7 +113,7 @@ public final class Numeric {
         return toHexStringZeroPadded(value, size, true);
     }
     
-    public static String toHexStringWithPrefixSave(BigInteger value) {
+    public static String toHexStringWithPrefixSafe(BigInteger value) {
         String result = toHexStringNoPrefix(value);
         if (result.length() < 2) {
             result = Strings.zeros(1) + result;

@@ -514,7 +514,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetFilterLogs(BigInteger filterId) {
         return new Request<>(
                 "eth_getFilterLogs",
-                Arrays.asList(Numeric.toHexStringWithPrefixSave(filterId)),
+                Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 EthLog.class);
     }
