@@ -112,6 +112,14 @@ public final class Numeric {
     public static String toHexStringWithPrefixZeroPadded(BigInteger value, int size) {
         return toHexStringZeroPadded(value, size, true);
     }
+    
+    public static String toHexStringWithPrefixSave(BigInteger value) {
+        String result = toHexStringNoPrefix(value);
+        if (result.length() < 2) {
+            result = Strings.zeros(1) + result;
+        }
+        return HEX_PREFIX + result;
+    }
 
     public static String toHexStringNoPrefixZeroPadded(BigInteger value, int size) {
         return toHexStringZeroPadded(value, size, false);
