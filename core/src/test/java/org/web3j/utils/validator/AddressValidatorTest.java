@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
+
 public class AddressValidatorTest {
 
     private static AddressValidator addressValidator;
@@ -32,6 +33,7 @@ public class AddressValidatorTest {
 
     @Test
     public void testValidAddress() {
-        Assert.assertTrue(addressValidator.isValid("0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420", null));
+        Assert.assertTrue(addressValidator
+                .isValid("0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420", null));
     }
 }
