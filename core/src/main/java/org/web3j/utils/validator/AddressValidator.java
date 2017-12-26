@@ -1,9 +1,9 @@
 package org.web3j.utils.validator;
 
-import org.web3j.crypto.WalletUtils;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import org.web3j.crypto.WalletUtils;
 
 /**
  * Validator class, have the logic to apply the validation.
