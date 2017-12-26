@@ -4,11 +4,7 @@
 web3j: Web3 Java Ethereum Ðapp API
 ==================================
 
-.. Will revert back to web3j badge (https://readthedocs.org/projects/web3j/badge/?version=latest),
-   when they finally fix their build server issues for the project, see
-   https://github.com/rtfd/readthedocs.org/issues/2476 for further information
-
-.. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
+.. image:: https://readthedocs.org/projects/web3j/badge/?version=latest
    :target: http://docs.web3j.io
    :alt: Documentation Status
 
@@ -125,7 +121,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.1.1</version>
+     <version>3.2.0</version>
    </dependency>
 
 Android:
@@ -145,7 +141,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.1.1')
+   compile ('org.web3j:core:3.2.0')
 
 Android:
 
@@ -435,7 +431,7 @@ keystore):
 
 If you want to make use of Parity's
 `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__ or
-`Trace https://github.com/paritytech/parity/wiki/JSONRPC-trace-module`_, or Geth's
+`Trace <https://github.com/paritytech/parity/wiki/JSONRPC-trace-module>`_, or Geth's
 `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs,
 you can use the *org.web3j:parity* and *org.web3j:geth* modules respectively.
 
@@ -518,6 +514,8 @@ Please submit a pull request if you wish to include your project on the list:
   `@adridadou <https://github.com/adridadou>`_
 - `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
+- `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
+- `Presto Ethereum <https://github.com/xiaoyao1991/presto-ethereum>`_
 
 
 Companies using web3j
@@ -531,6 +529,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `ConsenSys <https://consensys.net/>`_
 - `ING <https://www.ing.com>`_
 - `Othera <https://www.othera.io/>`_
+- `TrustWallet <http://trustwalletapp.com>`_
 
 
 Build instructions
