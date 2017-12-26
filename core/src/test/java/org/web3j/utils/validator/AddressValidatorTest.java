@@ -14,6 +14,30 @@ public class AddressValidatorTest {
     @Before
     public void setUp() {
         addressValidator = new AddressValidator();
+        Address address = new Address() {
+
+            @Override
+            public String message() {
+                return null;
+            }
+
+            @Override
+            public Class<?>[] groups() {
+                return new Class[0];
+            }
+
+            @Override
+            public Class[] payload() {
+                return new Class[0];
+            }
+
+            @Override
+            public Class<? extends Address> annotationType() {
+                return Address.class;
+            }
+        };
+        addressValidator.initialize(address);
+
     }
 
     @Test
@@ -36,4 +60,5 @@ public class AddressValidatorTest {
         Assert.assertTrue(addressValidator
                 .isValid("0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420", null));
     }
+
 }
