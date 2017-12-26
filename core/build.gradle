@@ -6,6 +6,7 @@ dependencies {
     compile project(':abi'),
             project(':crypto'),
             project(':tuples'),
+            "javax.validation:validation-api:$validationApiVersion",
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
