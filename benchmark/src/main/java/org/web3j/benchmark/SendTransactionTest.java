@@ -74,7 +74,7 @@ public class SendTransactionTest {
         } else {
             String hash = result.getSendTransactionResult().getHash();
             String status = result.getSendTransactionResult().getStatus();
-            if (status.equals("Ok")) {
+            if (status.equalsIgnoreCase("OK")) {
                 return true;
             } else {
                 System.out.println("tx " + hash + "failed, because of " + status);
