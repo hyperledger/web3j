@@ -96,6 +96,13 @@ public abstract class Contract extends ManagedTransaction {
     public String getContractBinary() {
         return contractBinary;
     }
+    
+    /**
+     * Allow gasPrice to be set.
+     */
+    public void setGasPrice(BigInteger newPrice) {
+        this.gasPrice = newPrice;
+    }
 
     /**
      * Check that the contract deployed at the address associated with this smart contract wrapper
