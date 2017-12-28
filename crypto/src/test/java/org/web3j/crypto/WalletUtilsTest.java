@@ -38,6 +38,11 @@ public class WalletUtilsTest {
     }
 
     @Test
+    public void testGeneratingBip39Wallets() throws Exception {
+        Bip39Wallet wallet = WalletUtils.generateBip39Wallet(PASSWORD, tempDir);
+    }
+
+    @Test
     public void testGenerateFullNewWalletFile() throws Exception {
         String fileName = WalletUtils.generateFullNewWalletFile(PASSWORD, tempDir);
         testGenerateNewWalletFile(fileName);

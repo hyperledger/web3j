@@ -2,9 +2,7 @@ package org.web3j.crypto;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
+import java.security.*;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +22,7 @@ import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 public class WalletUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     static {
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -70,6 +69,19 @@ public class WalletUtils {
         objectMapper.writeValue(destination, walletFile);
 
         return fileName;
+    }
+
+    public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory)
+            throws NoSuchAlgorithmException, CipherException, IOException {
+        byte[] initialEntropy = new byte[16];
+        secureRandom.nextBytes(initialEntropy);
+
+        String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
+        ECKeyPair privateKey = ECKeyPair.create(sha256(MnemonicUtils.generateSeed(mnemonic, "")));
+
+        String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
+
+        return new Bip39Wallet(walletFile, mnemonic);
     }
 
     public static Credentials loadCredentials(String password, String source)
@@ -133,5 +145,10 @@ public class WalletUtils {
         }
 
         return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
+    }
+
+    private static byte[] sha256(byte[] input) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        return digest.digest(input);
     }
 }
