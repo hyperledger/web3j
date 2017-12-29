@@ -1,8 +1,20 @@
 package org.web3j.crypto;
 
+/**
+ * Data class encapsulating a BIP-39 compatible Ethereum wallet.
+ *
+ * @author Ali Dehghani
+ */
 public class Bip39Wallet {
 
+    /**
+     * Path to wallet file.
+     */
     private final String filename;
+
+    /**
+     * Generated BIP-39 mnemonic for the wallet.
+     */
     private final String mnemonic;
 
     public Bip39Wallet(String filename, String mnemonic) {

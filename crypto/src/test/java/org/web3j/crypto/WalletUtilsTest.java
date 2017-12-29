@@ -2,6 +2,8 @@ package org.web3j.crypto;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,9 +13,7 @@ import org.junit.Test;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.web3j.crypto.SampleKeys.CREDENTIALS;
 import static org.web3j.crypto.SampleKeys.KEY_PAIR;
 import static org.web3j.crypto.SampleKeys.PASSWORD;
@@ -38,8 +38,12 @@ public class WalletUtilsTest {
     }
 
     @Test
-    public void testGeneratingBip39Wallets() throws Exception {
+    public void testGenerateBip39Wallets() throws Exception {
         Bip39Wallet wallet = WalletUtils.generateBip39Wallet(PASSWORD, tempDir);
+        byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
+        Credentials credentials = Credentials.create(ECKeyPair.create(sha256(seed)));
+
+        assertEquals(credentials, WalletUtils.loadBip39Credentials(PASSWORD, wallet.getMnemonic()));
     }
 
     @Test
@@ -158,5 +162,13 @@ public class WalletUtilsTest {
         assertFalse(isValidAddress(""));
         assertFalse(isValidAddress(SampleKeys.ADDRESS + 'a'));
         assertFalse(isValidAddress(SampleKeys.ADDRESS.substring(1)));
+    }
+
+    private byte[] sha256(byte[] input) {
+        try {
+            return MessageDigest.getInstance("SHA-256").digest(input);
+        } catch (NoSuchAlgorithmException e) {
+            return new byte[0];
+        }
     }
 }

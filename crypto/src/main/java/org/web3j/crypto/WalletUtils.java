@@ -71,13 +71,24 @@ public class WalletUtils {
         return fileName;
     }
 
+    /**
+     * Generates a BIP-39 compatible Ethereum wallet. The private key for the wallet can
+     * be calculated using following algorithm:
+     * <pre>
+     *     Key = SHA-256(BIP_39_SEED(mnemonic, password))
+     * </pre>
+     *
+     * @param password Will be used for both wallet encryption and passphrase for BIP-39 seed
+     * @param destinationDirectory The directory containing the wallet
+     * @return A BIP-39 compatible Ethereum wallet
+     */
     public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory)
             throws NoSuchAlgorithmException, CipherException, IOException {
         byte[] initialEntropy = new byte[16];
         secureRandom.nextBytes(initialEntropy);
 
         String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
-        ECKeyPair privateKey = ECKeyPair.create(sha256(MnemonicUtils.generateSeed(mnemonic, "")));
+        ECKeyPair privateKey = ECKeyPair.create(sha256(MnemonicUtils.generateSeed(mnemonic, password)));
 
         String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
 
@@ -93,6 +104,10 @@ public class WalletUtils {
             throws IOException, CipherException {
         WalletFile walletFile = objectMapper.readValue(source, WalletFile.class);
         return Credentials.create(Wallet.decrypt(password, walletFile));
+    }
+
+    public static Credentials loadBip39Credentials(String password, String mnemonic) throws NoSuchAlgorithmException {
+        return Credentials.create(ECKeyPair.create(sha256(MnemonicUtils.generateSeed(mnemonic, password))));
     }
 
     private static String getWalletFileName(WalletFile walletFile) {
