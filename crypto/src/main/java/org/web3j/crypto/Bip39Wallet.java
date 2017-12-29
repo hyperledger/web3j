@@ -32,9 +32,9 @@ public class Bip39Wallet {
 
     @Override
     public String toString() {
-        return "Bip39Wallet{" +
-                "filename='" + filename + '\'' +
-                ", mnemonic='" + mnemonic + '\'' +
-                '}';
+        return "Bip39Wallet{"
+                + "filename='" + filename + '\''
+                + ", mnemonic='" + mnemonic + '\''
+                + '}';
     }
 }

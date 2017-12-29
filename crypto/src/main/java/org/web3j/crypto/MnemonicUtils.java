@@ -1,9 +1,5 @@
 package org.web3j.crypto;
 
-import org.bouncycastle.crypto.digests.SHA512Digest;
-import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
-import org.bouncycastle.crypto.params.KeyParameter;
-
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,14 +9,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.bouncycastle.crypto.params.KeyParameter;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Provides utility methods to generate random mnemonics and also generate
  * seeds from mnemonics.
  *
- * @see <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">Mnemonic code for generating
- * deterministic keys</a>
+ * @see <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">Mnemonic code
+ * for generating deterministic keys</a>
  *
  * @author Ali Dehghani
  */
@@ -63,20 +63,24 @@ public class MnemonicUtils {
             mnemonicBuilder.append(WORD_LIST.get(index));
 
             boolean notLastIteration = i < iterations - 1;
-            if (notLastIteration) mnemonicBuilder.append(" ");
+            if (notLastIteration) {
+                mnemonicBuilder.append(" ");
+            }
         }
 
         return mnemonicBuilder.toString();
     }
 
     /**
-     * To create a binary seed from the mnemonic, we use the PBKDF2 function with a mnemonic sentence
-     * (in UTF-8 NFKD) used as the password and the string "mnemonic" + passphrase (again in UTF-8 NFKD)
-     * used as the salt. The iteration count is set to 2048 and HMAC-SHA512 is used as the pseudo-random
-     * function. The length of the derived key is 512 bits (= 64 bytes).
+     * To create a binary seed from the mnemonic, we use the PBKDF2 function with a
+     * mnemonic sentence (in UTF-8 NFKD) used as the password and the string "mnemonic"
+     * + passphrase (again in UTF-8 NFKD) used as the salt. The iteration count is set
+     * to 2048 and HMAC-SHA512 is used as the pseudo-random function. The length of the
+     * derived key is 512 bits (= 64 bytes).
      *
      * @param mnemonic The input mnemonic
-     * @param passphrase The passphrase which will be used as part of salt for PBKDF2 function
+     * @param passphrase The passphrase which will be used as part of salt for PBKDF2
+     *                   function
      * @return Byte array representation of the generated seed
      */
     public static byte[] generateSeed(String mnemonic, String passphrase) {
@@ -91,8 +95,9 @@ public class MnemonicUtils {
     }
 
     private static void validateMnemonic(String mnemonic) {
-        if (mnemonic == null || mnemonic.trim().isEmpty())
+        if (mnemonic == null || mnemonic.trim().isEmpty()) {
             throw new IllegalArgumentException("Mnemonic is required to generate a seed");
+        }
     }
 
     private static boolean[] nextElevenBits(boolean[] bits, int i) {
@@ -102,12 +107,15 @@ public class MnemonicUtils {
     }
 
     private static void validateInitialEntropy(byte[] initialEntropy) {
-        if (initialEntropy == null)
+        if (initialEntropy == null) {
             throw new IllegalArgumentException("Initial entropy is required");
+        }
 
         int ent = initialEntropy.length * 8;
-        if (ent < 128 || ent > 256 || ent % 32 != 0)
-            throw new IllegalArgumentException("The allowed size of ENT is 128-256 bits of multiples of 32");
+        if (ent < 128 || ent > 256 || ent % 32 != 0) {
+            throw new IllegalArgumentException("The allowed size of ENT is 128-256 bits of "
+                    + "multiples of 32");
+        }
     }
 
     private static boolean[] convertToBits(byte[] initialEntropy, byte checksum) {
@@ -138,7 +146,9 @@ public class MnemonicUtils {
         int value = 0;
         for (int i = 0; i < bits.length; i++) {
             boolean isSet = bits[i];
-            if (isSet) value += 1 << bits.length - i -1;
+            if (isSet)  {
+                value += 1 << bits.length - i - 1;
+            }
         }
 
         return value;
@@ -158,7 +168,8 @@ public class MnemonicUtils {
     }
 
     private static List<String> populateWordList() {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("en-mnemonic-word-list.txt");
+        URL url = Thread.currentThread().getContextClassLoader()
+                .getResource("en-mnemonic-word-list.txt");
         try {
             return Files.readAllLines(Paths.get(url.toURI()));
         } catch (Exception e) {

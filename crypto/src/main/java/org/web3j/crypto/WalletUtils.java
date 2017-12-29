@@ -2,7 +2,11 @@ package org.web3j.crypto;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -88,7 +92,8 @@ public class WalletUtils {
         secureRandom.nextBytes(initialEntropy);
 
         String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
-        ECKeyPair privateKey = ECKeyPair.create(sha256(MnemonicUtils.generateSeed(mnemonic, password)));
+        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
 
         String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
 
@@ -106,8 +111,10 @@ public class WalletUtils {
         return Credentials.create(Wallet.decrypt(password, walletFile));
     }
 
-    public static Credentials loadBip39Credentials(String password, String mnemonic) throws NoSuchAlgorithmException {
-        return Credentials.create(ECKeyPair.create(sha256(MnemonicUtils.generateSeed(mnemonic, password))));
+    public static Credentials loadBip39Credentials(String password, String mnemonic)
+            throws NoSuchAlgorithmException {
+        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        return Credentials.create(ECKeyPair.create(sha256(seed)));
     }
 
     private static String getWalletFileName(WalletFile walletFile) {
