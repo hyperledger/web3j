@@ -92,6 +92,6 @@ import java.lang.annotation.*;
 // changed from RUNTIME to CLASS, so it is not causing any problems at runtime.
 
 @Documented
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
 public @interface SafeVarargs {}
