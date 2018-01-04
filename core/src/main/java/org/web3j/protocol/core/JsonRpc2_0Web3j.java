@@ -370,7 +370,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthTransaction> ethGetTransactionByHash(String transactionHash) {
         return new Request<>(
-                "cita_getTransactionByHash",
+                "cita_getTransaction",
                 Arrays.asList(transactionHash),
                 web3jService,
                 EthTransaction.class);
