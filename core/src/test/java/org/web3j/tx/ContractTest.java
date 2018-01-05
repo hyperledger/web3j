@@ -40,6 +40,7 @@ import org.web3j.utils.Numeric;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -48,6 +49,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.web3j.tx.ManagedTransaction.GAS_PRICE;
 
 public class ContractTest extends ManagedTransactionTester {
 
@@ -61,7 +63,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                Contract.GAS_PRICE, Contract.GAS_LIMIT);
+                GAS_PRICE, Contract.GAS_LIMIT);
     }
 
     @Test
@@ -128,7 +130,7 @@ public class ContractTest extends ManagedTransactionTester {
         try {
             TestContract.deployRemoteCall(
                     TestContract.class, web3j, SampleKeys.CREDENTIALS,
-                    ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
+                    GAS_PRICE, Contract.GAS_LIMIT,
                     "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
         } catch (InterruptedException e) {
             throw e;
@@ -236,7 +238,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, transactionManager,
-                Contract.GAS_PRICE, Contract.GAS_LIMIT);
+                GAS_PRICE, Contract.GAS_LIMIT);
 
         testErrorScenario();
     }
@@ -264,6 +266,14 @@ public class ContractTest extends ManagedTransactionTester {
         assertNotNull(contract.getDeployedAddress("1"));
         contract.setDeployedAddress("2", "0x000000000000add0e00000000000");
         assertNotNull(contract.getDeployedAddress("2"));
+    }
+
+    @Test
+    public void testSetGetGasPrice() {
+        assertEquals(GAS_PRICE, contract.getGasPrice());
+        BigInteger newPrice = GAS_PRICE.multiply(BigInteger.valueOf(2));
+        contract.setGasPrice(newPrice);
+        assertEquals(newPrice, contract.getGasPrice());
     }
 
     @Test(expected = RuntimeException.class)
@@ -305,7 +315,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         return TestContract.deployRemoteCall(
                 TestContract.class, web3j, SampleKeys.CREDENTIALS,
-                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
+                GAS_PRICE, Contract.GAS_LIMIT,
                 "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
     }
 
