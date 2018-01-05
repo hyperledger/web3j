@@ -49,7 +49,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.web3j.tx.ManagedTransaction.GAS_PRICE;
 
 public class ContractTest extends ManagedTransactionTester {
 
@@ -63,7 +62,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                GAS_PRICE, Contract.GAS_LIMIT);
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
     }
 
     @Test
@@ -130,7 +129,7 @@ public class ContractTest extends ManagedTransactionTester {
         try {
             TestContract.deployRemoteCall(
                     TestContract.class, web3j, SampleKeys.CREDENTIALS,
-                    GAS_PRICE, Contract.GAS_LIMIT,
+                    ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                     "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
         } catch (InterruptedException e) {
             throw e;
@@ -238,7 +237,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, transactionManager,
-                GAS_PRICE, Contract.GAS_LIMIT);
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
 
         testErrorScenario();
     }
@@ -270,8 +269,8 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testSetGetGasPrice() {
-        assertEquals(GAS_PRICE, contract.getGasPrice());
-        BigInteger newPrice = GAS_PRICE.multiply(BigInteger.valueOf(2));
+        assertEquals(ManagedTransaction.GAS_PRICE, contract.getGasPrice());
+        BigInteger newPrice = ManagedTransaction.GAS_PRICE.multiply(BigInteger.valueOf(2));
         contract.setGasPrice(newPrice);
         assertEquals(newPrice, contract.getGasPrice());
     }
@@ -315,7 +314,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         return TestContract.deployRemoteCall(
                 TestContract.class, web3j, SampleKeys.CREDENTIALS,
-                GAS_PRICE, Contract.GAS_LIMIT,
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                 "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
     }
 
