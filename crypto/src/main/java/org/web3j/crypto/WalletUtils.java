@@ -3,7 +3,6 @@ package org.web3j.crypto;
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -17,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.utils.Numeric;
 
+import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
 import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 
@@ -26,7 +26,7 @@ import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 public class WalletUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final SecureRandom secureRandom = new SecureRandom();
+    private static final SecureRandom secureRandom = SecureRandomUtils.secureRandom();
 
     static {
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -87,7 +87,7 @@ public class WalletUtils {
      * @return A BIP-39 compatible Ethereum wallet
      */
     public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory)
-            throws NoSuchAlgorithmException, CipherException, IOException {
+            throws CipherException, IOException {
         byte[] initialEntropy = new byte[16];
         secureRandom.nextBytes(initialEntropy);
 
@@ -111,8 +111,7 @@ public class WalletUtils {
         return Credentials.create(Wallet.decrypt(password, walletFile));
     }
 
-    public static Credentials loadBip39Credentials(String password, String mnemonic)
-            throws NoSuchAlgorithmException {
+    public static Credentials loadBip39Credentials(String password, String mnemonic) {
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         return Credentials.create(ECKeyPair.create(sha256(seed)));
     }
@@ -167,10 +166,5 @@ public class WalletUtils {
         }
 
         return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
-    }
-
-    private static byte[] sha256(byte[] input) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        return digest.digest(input);
     }
 }

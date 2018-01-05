@@ -3,7 +3,6 @@ package org.web3j.crypto;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -79,8 +78,7 @@ public class MnemonicUtilsTest {
     }
 
     @Test
-    public void generateMnemonicShouldGenerateExpectedMnemonicWords()
-            throws NoSuchAlgorithmException {
+    public void generateMnemonicShouldGenerateExpectedMnemonicWords() {
         String actualMnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
 
         assertEquals(mnemonic, actualMnemonic);

@@ -3,8 +3,6 @@ package org.web3j.crypto;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +12,7 @@ import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.bouncycastle.crypto.params.KeyParameter;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.web3j.crypto.Hash.sha256;
 
 /**
  * Provides utility methods to generate random mnemonics and also generate
@@ -21,8 +20,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @see <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">Mnemonic code
  * for generating deterministic keys</a>
- *
- * @author Ali Dehghani
  */
 public class MnemonicUtils {
 
@@ -45,9 +42,8 @@ public class MnemonicUtils {
      * @param initialEntropy The initial entropy to generate mnemonic from
      * @return The generated mnemonic
      * @throws IllegalArgumentException If the given entropy is invalid
-     * @throws NoSuchAlgorithmException If we couldn't find a SHA-256 provider
      */
-    public static String generateMnemonic(byte[] initialEntropy) throws NoSuchAlgorithmException {
+    public static String generateMnemonic(byte[] initialEntropy) {
         validateInitialEntropy(initialEntropy);
 
         int ent = initialEntropy.length * 8;
@@ -78,7 +74,8 @@ public class MnemonicUtils {
      * to 2048 and HMAC-SHA512 is used as the pseudo-random function. The length of the
      * derived key is 512 bits (= 64 bytes).
      *
-     * @param mnemonic The input mnemonic
+     * @param mnemonic The input mnemonic which should be 128-160 bits in length containing
+     *                 only valid words
      * @param passphrase The passphrase which will be used as part of salt for PBKDF2
      *                   function
      * @return Byte array representation of the generated seed
@@ -154,17 +151,12 @@ public class MnemonicUtils {
         return value;
     }
 
-    private static byte calculateChecksum(byte[] initialEntropy) throws NoSuchAlgorithmException {
+    private static byte calculateChecksum(byte[] initialEntropy) {
         int ent = initialEntropy.length * 8;
         byte mask = (byte) (0xff << 8 - ent / 32);
         byte[] bytes = sha256(initialEntropy);
 
         return (byte) (bytes[0] & mask);
-    }
-
-    private static byte[] sha256(byte[] input) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        return digest.digest(input);
     }
 
     private static List<String> populateWordList() {
