@@ -7,3 +7,4 @@ Companies using web3j
 - `ConsenSys <https://consensys.net/>`_
 - `ING <https://www.ing.com>`_
 - `Othera <http://www.othera.io/>`_
+- `TrustWallet <http://trustwalletapp.com>`_
