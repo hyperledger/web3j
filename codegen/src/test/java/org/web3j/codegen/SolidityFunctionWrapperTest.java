@@ -204,6 +204,33 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(methodSpec.toString(), is(expected));
     }
 
+    @Test
+    public void testBuildFunctionConstantSingleValueRawListReturn() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                true,
+                Arrays.asList(
+                    new AbiDefinition.NamedType("param", "uint8")),
+                "functionName",
+                Arrays.asList(
+                        new AbiDefinition.NamedType("result", "address[]")),
+                "type",
+                false);
+
+        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        //CHECKSTYLE:OFF
+        String expected =
+                "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.math.BigInteger param) {\n"
+                        + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
+                        + "  return executeRemoteCallSingleValueReturn(function, java.util.List.class);\n"
+                        + "}\n";
+        //CHECKSTYLE:ON
+
+        assertThat(methodSpec.toString(), is(expected));
+    }
+
     @Test(expected = RuntimeException.class)
     public void testBuildFunctionConstantInvalid() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
