@@ -502,7 +502,7 @@ contract method's called, it simply returns the value from them::
 
    String encodedFunction = FunctionEncoder.encode(function)
    org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
-                Transaction.createEthCallTransaction(contractAddress, encodedFunction),
+                Transaction.createEthCallTransaction(<from>, contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();
 
