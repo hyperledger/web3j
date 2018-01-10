@@ -105,6 +105,13 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     /**
+     * Get the current {@code gasPrice} value this contract uses when executing transactions.
+     */
+    public BigInteger getGasPrice() {
+        return gasPrice;
+    }
+
+    /**
      * Check that the contract deployed at the address associated with this smart contract wrapper
      * is in fact the contract you believe it is.
      *
