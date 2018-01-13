@@ -36,18 +36,16 @@ public class Sign {
             CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
 
-    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair)
-    {
+    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
         return signMessage(message, keyPair, true);
     }
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean isHashed) {
         BigInteger publicKey = keyPair.getPublicKey();
         byte[] messageHash;
-        if(isHashed){
+        if (isHashed) {
             messageHash = Hash.sha3(message);
-        }
-        else {
+        } else {
             messageHash = message;
         }
 
