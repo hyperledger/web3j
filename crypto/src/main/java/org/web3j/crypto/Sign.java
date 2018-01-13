@@ -3,6 +3,7 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
@@ -35,10 +36,20 @@ public class Sign {
             CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
 
-    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
-        BigInteger publicKey = keyPair.getPublicKey();
+    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair)
+    {
+        return signMessage(message, keyPair, true);
+    }
 
-        byte[] messageHash = Hash.sha3(message);
+    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean isHashed) {
+        BigInteger publicKey = keyPair.getPublicKey();
+        byte[] messageHash;
+        if(isHashed){
+            messageHash = Hash.sha3(message);
+        }
+        else {
+            messageHash = message;
+        }
 
         ECDSASignature sig = keyPair.sign(messageHash);
         // Now we have to work backwards to figure out the recId needed to recover the signature.
