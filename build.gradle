@@ -21,7 +21,7 @@ buildscript {
 
     dependencies {
         classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
     }
 }
 
