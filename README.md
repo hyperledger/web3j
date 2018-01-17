@@ -1,4 +1,4 @@
-# web3j
+﻿# web3j
 
 ## 环境
 
@@ -140,3 +140,6 @@ YourSmartContract contract = YourSmartContract.deploy(
 ```
 目前发送交易CITA只支持eth_sendRawTransaction, 所以只能通过第二种方式来部署合约。
 
+### 开发流程
+
+在根目录下执行`gradle coreJar`，然后将core/build/libs/core-version.jar作为本地依赖。
