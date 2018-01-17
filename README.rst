@@ -516,7 +516,7 @@ Please submit a pull request if you wish to include your project on the list:
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
 - `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
 - `Presto Ethereum <https://github.com/xiaoyao1991/presto-ethereum>`_
-- [Kundera-Ethereum data importer and sync utility] (https://github.com/impetus-opensource/Kundera/tree/trunk/src/kundera-ethereum) by [@impetus-opensource] (https://github.com/impetus-opensource)
+- `Kundera-Ethereum data importer and sync utility <https://github.com/impetus-opensource/Kundera/tree/trunk/src/kundera-ethereum>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
 
 
 Companies using web3j
@@ -531,7 +531,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `ING <https://www.ing.com>`_
 - `Othera <https://www.othera.io/>`_
 - `TrustWallet <http://trustwalletapp.com>`_
-- [Impetus] (http://www.impetus.com/)
+- `Impetus <http://www.impetus.com/>`_
 
 
 Build instructions
