@@ -21,14 +21,14 @@ public class Log {
     private String blockNumber;
     private String address;
     private String data;
-    private String type;
+    private String transactionLogIndex;
     private List<String> topics;
 
     public Log() {
     }
 
     public Log(boolean removed, String logIndex, String transactionIndex, String transactionHash,
-               String blockHash, String blockNumber, String address, String data, String type,
+               String blockHash, String blockNumber, String address, String data, String transactionLogIndex,
                List<String> topics) {
         this.removed = removed;
         this.logIndex = logIndex;
@@ -38,7 +38,7 @@ public class Log {
         this.blockNumber = blockNumber;
         this.address = address;
         this.data = data;
-        this.type = type;
+        this.transactionLogIndex = transactionLogIndex;
         this.topics = topics;
     }
 
@@ -118,12 +118,12 @@ public class Log {
         this.data = data;
     }
 
-    public String getType() {
-        return type;
+    public String getTransactionLogIndex() {
+        return transactionLogIndex;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTransactionLogIndex(String transactionLogIndex) {
+        this.transactionLogIndex = transactionLogIndex;
     }
 
     public List<String> getTopics() {
@@ -186,7 +186,7 @@ public class Log {
         if (getData() != null ? !getData().equals(log.getData()) : log.getData() != null) {
             return false;
         }
-        if (getType() != null ? !getType().equals(log.getType()) : log.getType() != null) {
+        if (getTransactionLogIndex() != null ? !getTransactionLogIndex().equals(log.getTransactionLogIndex()) : log.getTransactionLogIndex() != null) {
             return false;
         }
         return getTopics() != null ? getTopics().equals(log.getTopics()) : log.getTopics() == null;
@@ -203,7 +203,7 @@ public class Log {
         result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
         result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
         result = 31 * result + (getData() != null ? getData().hashCode() : 0);
-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + (getTransactionLogIndex() != null ? getTransactionLogIndex().hashCode() : 0);
         result = 31 * result + (getTopics() != null ? getTopics().hashCode() : 0);
         return result;
     }

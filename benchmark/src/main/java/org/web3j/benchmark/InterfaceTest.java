@@ -3,21 +3,12 @@ package org.web3j.benchmark;
 import java.math.BigInteger;
 
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.http.HttpService;
 
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.core.methods.response.EthGetCode;
-import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.Call;
-import org.web3j.protocol.core.methods.response.NetPeerCount;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.EthTransaction;
 
 import java.util.Collections;
 import org.web3j.abi.TypeReference;
@@ -160,7 +151,7 @@ public class InterfaceTest {
 
 
     //5.  cita_sendTransaction
-    public Optional<String> testEthSendRawTransaction(String rawData ) throws Exception {
+    public Optional<String> testEthSendRawTransaction(String rawData) throws Exception {
         EthSendTransaction ethSendTx =  web3j.ethSendRawTransaction(rawData).send();
 
         if (ethSendTx.isEmpty()) {
