@@ -110,7 +110,7 @@ public abstract class Filter<T> {
             throwException(e);
         }
         if (ethLog.hasError()) {
-            throwException(ethFilter.getError());
+            throwException(ethLog.getError());
         } else {
             process(ethLog.getLogs());
         }
