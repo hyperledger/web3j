@@ -123,19 +123,17 @@ public abstract class Filter<T> {
     public void cancel() {
         schedule.cancel(false);
 
-        EthUninstallFilter ethUninstallFilter = null;
         try {
-            ethUninstallFilter = web3j.ethUninstallFilter(filterId).send();
+            EthUninstallFilter ethUninstallFilter = web3j.ethUninstallFilter(filterId).send();
+            if (ethUninstallFilter.hasError()) {
+                throwException(ethUninstallFilter.getError());
+            }
+
+            if (!ethUninstallFilter.isUninstalled()) {
+                throw new FilterException("Filter with id '" + filterId + "' failed to uninstall");
+            }
         } catch (IOException e) {
             throwException(e);
-        }
-
-        if (ethUninstallFilter.hasError()) {
-            throwException(ethUninstallFilter.getError());
-        }
-
-        if (!ethUninstallFilter.isUninstalled()) {
-            throwException(ethUninstallFilter.getError());
         }
     }
 
