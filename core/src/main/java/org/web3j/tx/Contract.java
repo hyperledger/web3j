@@ -98,7 +98,8 @@ public abstract class Contract extends ManagedTransaction {
     }
     
     /**
-     * Allow gasPrice to be set.
+     * Allow {@code gasPrice} to be set.
+     * @param newPrice gas price to use for subsequent transactions
      */
     public void setGasPrice(BigInteger newPrice) {
         this.gasPrice = newPrice;
@@ -106,6 +107,7 @@ public abstract class Contract extends ManagedTransaction {
 
     /**
      * Get the current {@code gasPrice} value this contract uses when executing transactions.
+     * @return the gas price set on this contract
      */
     public BigInteger getGasPrice() {
         return gasPrice;
