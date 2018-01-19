@@ -401,6 +401,17 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
+    private TypeName getWrapperRawType(TypeName typeName) {
+        if (useNativeJavaTypes) {
+            if (typeName instanceof ParameterizedTypeName) {
+                return ClassName.get(List.class);
+            }
+            return getNativeType(typeName);
+        } else {
+            return typeName;
+        }
+    }
+
     private TypeName getIndexedEventWrapperType(TypeName typeName) {
         if (useNativeJavaTypes) {
             return getEventNativeType(typeName);
@@ -534,8 +545,13 @@ public class SolidityFunctionWrapper extends Generator {
         } else if (outputParameterTypes.size() == 1) {
 
             TypeName typeName = outputParameterTypes.get(0);
-            TypeName nativeTypeName = getWrapperType(typeName);
-            methodBuilder.returns(buildRemoteCall(nativeTypeName));
+            TypeName nativeReturnTypeName;
+            if (useNativeJavaTypes) {
+                nativeReturnTypeName = getWrapperRawType(typeName);
+            } else {
+                nativeReturnTypeName = getWrapperType(typeName);
+            }
+            methodBuilder.returns(buildRemoteCall(nativeReturnTypeName));
 
             methodBuilder.addStatement("$T function = "
                             + "new $T($S, \n$T.<$T>asList($L), "
@@ -548,7 +564,7 @@ public class SolidityFunctionWrapper extends Generator {
             if (useNativeJavaTypes) {
                 methodBuilder.addStatement(
                         "return executeRemoteCallSingleValueReturn(function, $T.class)",
-                        nativeTypeName);
+                        nativeReturnTypeName);
             } else {
                 methodBuilder.addStatement("return executeRemoteCallSingleValueReturn(function)");
             }

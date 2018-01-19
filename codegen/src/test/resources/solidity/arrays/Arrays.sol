@@ -19,4 +19,8 @@ contract Arrays {
         }
         return result;
     }
+
+    function returnArray() constant returns (address[]) {
+        return new address[](0);
+    }
 }
