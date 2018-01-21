@@ -171,8 +171,22 @@ public class RlpDecoderTest {
                 + "F8DD8268609184E72A00064801BA0C52C114D4F5A3BA904A9B3036E5E118FE0DBB987"
                 + "FE3955DA20F2CD8F6C21AB9CA06BA4C2874299A55AD947DBC98A25EE895AABF6B625C"
                 + "26C435E84BFD70EDF2F69";
+
         byte[] payload = Numeric.hexStringToByteArray(data);
-        RlpDecoder.decode(payload);
+        rlpList = RlpDecoder.decode(payload);
+
+        assertThat(((RlpList) rlpList.getValues().get(0)).getValues().size(),
+                equalTo(2));
+
+        assertThat(((RlpList) rlpList.getValues().get(0)).getValues().get(0),
+                instanceOf(RlpString.class));
+
+        assertThat(((RlpList) rlpList.getValues().get(0)).getValues().get(1),
+                instanceOf(RlpList.class));
+
+        assertThat(((RlpList)
+                   ((RlpList) rlpList.getValues().get(0)).getValues().get(1)).getValues().size(),
+                equalTo(9));
 
     }
 }
