@@ -11,9 +11,11 @@ import org.junit.Test;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.SampleKeys.CREDENTIALS;
 import static org.web3j.crypto.SampleKeys.KEY_PAIR;
 import static org.web3j.crypto.SampleKeys.PASSWORD;
@@ -35,6 +37,15 @@ public class WalletUtilsTest {
             file.delete();
         }
         tempDir.delete();
+    }
+
+    @Test
+    public void testGenerateBip39Wallets() throws Exception {
+        Bip39Wallet wallet = WalletUtils.generateBip39Wallet(PASSWORD, tempDir);
+        byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
+        Credentials credentials = Credentials.create(ECKeyPair.create(sha256(seed)));
+
+        assertEquals(credentials, WalletUtils.loadBip39Credentials(PASSWORD, wallet.getMnemonic()));
     }
 
     @Test
