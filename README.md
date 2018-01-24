@@ -143,3 +143,7 @@ YourSmartContract contract = YourSmartContract.deploy(
 ### 开发流程
 
 在根目录下执行`gradle coreJar`，然后将core/build/libs/core-version.jar作为本地依赖。
+
+### 目前支持的接口
+
+[CITA-JsonRpc接口](http://cita.readthedocs.io/zh_CN/latest/rpc.html)
