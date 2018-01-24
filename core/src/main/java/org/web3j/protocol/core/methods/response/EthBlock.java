@@ -54,7 +54,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         private String logsBloom;
         private String transactionsRoot;
         private String stateRoot;
-        private String receiptsRoot;  // geth has this wrong currently, see https://github.com/ethereum/go-ethereum/issues/3084
+        private String receiptsRoot;
         private String author;
         private String miner;
         private String mixHash;
