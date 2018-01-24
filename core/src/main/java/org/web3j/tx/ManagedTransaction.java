@@ -70,4 +70,11 @@ public abstract class ManagedTransaction {
         return transactionManager.executeTransaction(
                 gasPrice, gasLimit, to, data, value);
     }
+
+    // adapt to cita
+    protected TransactionReceipt sendAdaptToCita(
+            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock)
+            throws IOException, TransactionException {
+        return transactionManager.executeTransaction(to, data, quota, nonce, validUntilBlock);
+    }
 }

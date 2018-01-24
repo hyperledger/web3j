@@ -15,8 +15,6 @@ public class CitaTransactionManager extends TransactionManager {
     private final Web3j web3j;
     final Credentials credentials;
 
-    private long currentHeight;
-
     public CitaTransactionManager(Web3j web3j, Credentials credentials) {
         super(web3j, credentials.getAddress());
         this.web3j = web3j;
@@ -42,14 +40,15 @@ public class CitaTransactionManager extends TransactionManager {
     public EthSendTransaction sendTransaction(
             BigInteger quota, BigInteger nonce, String to,
             String data, BigInteger value) throws IOException {
-
-        Transaction transaction = new Transaction(to, nonce, quota.longValue(), this.currentHeight + 80, data);
-
-        return web3j.ethSendRawTransaction(transaction.sign(credentials)).send();
+        return new EthSendTransaction();
     }
 
-    public void setCurrentHeight(long validUntilBlock) {
-        this.currentHeight = validUntilBlock;
+    // adapt to cita
+    @Override
+    public EthSendTransaction sendTransaction(
+            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock) throws IOException {
+        Transaction transaction = new Transaction(to, nonce, quota.longValue(), validUntilBlock.longValue(), data);
+        return web3j.ethSendRawTransaction(transaction.sign(credentials)).send();
     }
 
     @Override

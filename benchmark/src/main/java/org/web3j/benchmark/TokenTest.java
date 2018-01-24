@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 public class TokenTest {
     private final long initialSupply = 1000000;
+    private final BigInteger offset = BigInteger.valueOf(80);
     private final Random random = new Random(System.currentTimeMillis());
     private Map<Credentials, Long> accounts;
     private Credentials creator;
@@ -37,7 +38,11 @@ public class TokenTest {
     public void run() throws Exception {
         CitaTransactionManager creatorManager = transactionManagerOf(this.creator);
         System.out.println("Now, start token test");
-        CompletableFuture<Token> tokenFuture = Token.deploy(service, creatorManager, BigInteger.valueOf(1000000), nextNonce(), BigInteger.valueOf(initialSupply)).sendAsync();
+        BigInteger currentHeight = this.getCurrentHeight();
+        CompletableFuture<Token> tokenFuture = Token.deploy(service, creatorManager,
+                BigInteger.valueOf(1000000), nextNonce(),
+                currentHeight.add(this.offset), BigInteger.valueOf(initialSupply))
+                .sendAsync();
         tokenFuture.whenCompleteAsync((contract, exception) -> {
             if (exception != null) {
                 System.out.println("deploy contract failed because of " + exception);
@@ -72,6 +77,11 @@ public class TokenTest {
         }));
     }
 
+    private void printAccountsBalance() {
+        this.accounts.forEach((account, _balance) -> System.out.println("account: " +
+                account.getAddress() + " have " + balanceOf(account)));
+    }
+
     private void randomTransferToken() {
         ArrayList<Credentials> credentials = new ArrayList<>(this.accounts.keySet());
         int accountNum = credentials.size();
@@ -99,8 +109,9 @@ public class TokenTest {
 
             long transfer = ThreadLocalRandom.current().nextLong(0, balanceOfFrom - balanceOfTo);
             TransferEvent event = new TransferEvent(from, to, transfer);
-            CompletableFuture<TransactionReceipt> receiptFuture = event.execute(this.service);
             try {
+                printAccountsBalance();
+                CompletableFuture<TransactionReceipt> receiptFuture = event.execute(this.service);
                 TransactionReceipt receipt = receiptFuture.get(12, TimeUnit.SECONDS);
                 if (receipt.getErrorMessage() == null) {
                     System.out.println(event + " execute success");
@@ -108,7 +119,7 @@ public class TokenTest {
                 } else {
                     System.out.println(event + " execute failed, " + receipt.getErrorMessage());
                 }
-            } catch (InterruptedException|ExecutionException|TimeoutException e) {
+            } catch (InterruptedException|ExecutionException|TimeoutException|IOException e) {
                 System.out.println("Transaction " + event + ", get receipt failed, " + e);
                 waitToGetToken();
             }
@@ -162,8 +173,8 @@ public class TokenTest {
         this.accounts.forEach((account, balance) -> {
             if (account != credentials) {
                 TransferEvent event = new TransferEvent(account, credentials, balance);
-                CompletableFuture<TransactionReceipt> receiptFuture = event.execute(this.service);
                 try {
+                    CompletableFuture<TransactionReceipt> receiptFuture = event.execute(this.service);
                     TransactionReceipt receipt = receiptFuture.get(12, TimeUnit.SECONDS);
                     if (receipt.getErrorMessage() == null) {
                         System.out.println(event + " execute success");
@@ -171,7 +182,7 @@ public class TokenTest {
                     } else {
                         System.out.println(event + " execute failed, " + receipt.getErrorMessage());
                     }
-                } catch (InterruptedException|ExecutionException|TimeoutException e) {
+                } catch (InterruptedException|ExecutionException|TimeoutException|IOException e) {
                     System.out.println("get receipt failed, " + e);
                 }
             }
@@ -213,15 +224,7 @@ public class TokenTest {
     }
 
     private CitaTransactionManager transactionManagerOf(Credentials credentials) {
-        CitaTransactionManager manager = new CitaTransactionManager(service, credentials, 5, 3000);
-        try {
-            long currentHeight = this.service.ethBlockNumber().send().getBlockNumber().longValue();
-            manager.setCurrentHeight(currentHeight);
-        } catch (IOException e) {
-            System.out.println("get block number failed because of " + e);
-            System.exit(1);
-        }
-        return manager;
+        return new CitaTransactionManager(service, credentials, 5, 3000);
     }
 
     private Token tokenOf(Credentials credentials) {
@@ -229,8 +232,11 @@ public class TokenTest {
         return Token.load(this.token.getContractAddress(), this.service, manager, BigInteger.valueOf(100000), nextNonce());
     }
 
-    public BigInteger nextNonce() {
+    private BigInteger nextNonce() {
         return BigInteger.valueOf(Math.abs(this.random.nextLong()));
+    }
+    private BigInteger getCurrentHeight() throws IOException {
+        return this.service.ethBlockNumber().send().getBlockNumber();
     }
 
     private class TransferEvent {
@@ -244,9 +250,12 @@ public class TokenTest {
             this.tokens = tokens;
         }
 
-        CompletableFuture<TransactionReceipt> execute(Web3j service) {
+        CompletableFuture<TransactionReceipt> execute(Web3j service) throws IOException {
             Token token = TokenTest.this.tokenOf(this.from);
-            return token.transfer(this.to.getAddress(), BigInteger.valueOf(tokens)).sendAsync();
+            BigInteger currentHeigt = TokenTest.this.getCurrentHeight();
+            return token.transfer(this.to.getAddress(), BigInteger.valueOf(tokens),
+                    BigInteger.valueOf(100000), TokenTest.this.nextNonce(),
+                    currentHeigt.add(TokenTest.this.offset)).sendAsync();
         }
 
         @Override
