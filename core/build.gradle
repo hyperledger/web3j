@@ -14,7 +14,7 @@ dependencies {
             "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
 }
 
-task createProperties(dependsOn: processResources) << {
+task createProperties(dependsOn: processResources) doLast {
     // if resources dir is empty we need to create this ourselves
     new File("$buildDir/resources/main/").mkdirs()
 
