@@ -237,7 +237,7 @@ only return true if the deployed bytecode at the contract address matches the by
 smart contract wrapper.::
 
    contract.isValid();  // returns false if the contract bytecode does not match what's deployed
-                        // at the provided addres
+                        // at the provided address
 
 
 .. _transaction-managers:
