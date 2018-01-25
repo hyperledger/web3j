@@ -107,13 +107,13 @@ public class SolidityFunctionWrapper extends Generator {
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
-        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
-        classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER));
+        // classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
+        // classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER));
         classBuilder.addMethod(buildConstructorAdaptToCita(TransactionManager.class, TRANSACTION_MANAGER));
         classBuilder.addMethods(
                 buildFunctionDefinitions(className, classBuilder, abi));
-        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
-        classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
+        // classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
+        // classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
         classBuilder.addMethod(buildLoadAdaptToCita(className, TransactionManager.class, TRANSACTION_MANAGER));
 
         addAddressesSupport(classBuilder, addresses);
@@ -220,11 +220,11 @@ public class SolidityFunctionWrapper extends Generator {
 
             } else if (functionDefinition.getType().equals("constructor")) {
                 constructor = true;
-                methodSpecs.add(buildDeploy(
-                        className, functionDefinition, Credentials.class, CREDENTIALS));
-                methodSpecs.add(buildDeploy(
-                        className, functionDefinition, TransactionManager.class,
-                        TRANSACTION_MANAGER));
+                // methodSpecs.add(buildDeploy(
+                //         className, functionDefinition, Credentials.class, CREDENTIALS));
+                // methodSpecs.add(buildDeploy(
+                //         className, functionDefinition, TransactionManager.class,
+                //         TRANSACTION_MANAGER));
                 // adapt to cita
                 methodSpecs.add(buildDeployAdaptToCita(
                         className, functionDefinition, TransactionManager.class,
@@ -234,16 +234,16 @@ public class SolidityFunctionWrapper extends Generator {
 
         // constructor will not be specified in ABI file if its empty
         if (!constructor) {
-            MethodSpec.Builder credentialsMethodBuilder =
-                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS, false);
-            methodSpecs.add(buildDeployNoParams(
-                    credentialsMethodBuilder, className, CREDENTIALS, false));
+            // MethodSpec.Builder credentialsMethodBuilder =
+            //         getDeployMethodSpec(className, Credentials.class, CREDENTIALS, false);
+            // methodSpecs.add(buildDeployNoParams(
+            //         credentialsMethodBuilder, className, CREDENTIALS, false));
 
-            MethodSpec.Builder transactionManagerMethodBuilder =
-                    getDeployMethodSpec(
-                            className, TransactionManager.class, TRANSACTION_MANAGER, false);
-            methodSpecs.add(buildDeployNoParams(
-                    transactionManagerMethodBuilder, className, TRANSACTION_MANAGER, false));
+            // MethodSpec.Builder transactionManagerMethodBuilder =
+            //         getDeployMethodSpec(
+            //                 className, TransactionManager.class, TRANSACTION_MANAGER, false);
+            // methodSpecs.add(buildDeployNoParams(
+            //         transactionManagerMethodBuilder, className, TRANSACTION_MANAGER, false));
 
             MethodSpec.Builder txManagerMethodBuilderAdapter =
                     getDeployMethodSpec(className, TransactionManager.class, TRANSACTION_MANAGER);

@@ -77,7 +77,7 @@ public class SendTransactionDemo {
 
         // call contract function
         SendTransactionDemo.contractFunctionCall(contractAddress);
-        System.out.println("wait to call contract function");
+        System.out.println("Contract address: " + contractAddress + ", wait to call contract function");
         Thread.sleep(10000);
 
         String from = "0dbd369a741319fa5107733e2c9db9929093e3c7";

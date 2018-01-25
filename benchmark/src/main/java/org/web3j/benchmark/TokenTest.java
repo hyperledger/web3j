@@ -119,9 +119,11 @@ public class TokenTest {
                 } else {
                     System.out.println(event + " execute failed, " + receipt.getErrorMessage());
                 }
-            } catch (InterruptedException|ExecutionException|TimeoutException|IOException e) {
+            } catch (InterruptedException|ExecutionException|TimeoutException e) {
                 System.out.println("Transaction " + event + ", get receipt failed, " + e);
                 waitToGetToken();
+            } catch (IOException e) {
+                continue;
             }
 
             if (!isTokenConserve()) {
@@ -229,7 +231,7 @@ public class TokenTest {
 
     private Token tokenOf(Credentials credentials) {
         CitaTransactionManager manager = transactionManagerOf(credentials);
-        return Token.load(this.token.getContractAddress(), this.service, manager, BigInteger.valueOf(100000), nextNonce());
+        return Token.load(this.token.getContractAddress(), this.service, manager);
     }
 
     private BigInteger nextNonce() {
