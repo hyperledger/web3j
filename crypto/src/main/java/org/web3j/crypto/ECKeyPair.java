@@ -3,6 +3,8 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
@@ -39,13 +41,18 @@ public class ECKeyPair {
      * @return  An {@link ECDSASignature} of the hash
      */
     public ECDSASignature sign(byte[] transactionHash) {
+        return Async.sync(signAsync(transactionHash));
+    }
+
+    public CompletableFuture<ECDSASignature> signAsync(byte[] transactionHash) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
         ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(privateKey, Sign.CURVE);
         signer.init(true, privKey);
         BigInteger[] components = signer.generateSignature(transactionHash);
 
-        return new ECDSASignature(components[0], components[1]).toCanonicalised();
+        return CompletableFuture
+            .completedFuture(new ECDSASignature(components[0], components[1]).toCanonicalised());
     }
 
     public static ECKeyPair create(KeyPair keyPair) {

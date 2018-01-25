@@ -2,6 +2,7 @@ package org.web3j.crypto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
@@ -16,12 +17,15 @@ import org.web3j.utils.Numeric;
  */
 public class TransactionEncoder {
 
-    public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
+    public static CompletableFuture<byte[]> signMessageAsync(
+            RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
-        Sign.SignatureData signatureData = Sign.signMessage(
-                encodedTransaction, credentials.getEcKeyPair());
+        return Sign.signMessageAsync(encodedTransaction, credentials.getEcKeyPair())
+                     .thenApply(signatureData -> encode(rawTransaction, signatureData));
+    }
 
-        return encode(rawTransaction, signatureData);
+    public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
+        return Async.sync(signMessageAsync(rawTransaction, credentials));
     }
 
     public static byte[] signMessage(
