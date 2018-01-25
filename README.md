@@ -124,21 +124,11 @@ CITA只支持eth_sendRawTransaction，需要用户对交易签名：
 
 ### 使用web3j工具更方便地部署合约
 
-web3j提供了一个可以自动生成智能合约java代码的方式，利用该代码包既可以部署合约，也可以调用合约。具体可以参考 [web3j智能合约调用](https://docs.web3j.io/smart_contracts.html#smart-contract-wrappers), 需要下载[web3j-2.3.0](https://github.com/web3j/web3j/releases/tag/v2.3.0)版本。通过生成的java代码来部署合约有两种方式:
-第一种方式，通过Credentials来部署合约:
-```java
-YourSmartContract contract = YourSmartContract.deploy(
-        <web3j>, <credentials>, quota, nonce,
-        [<initialValue>,]
-        <param1>, ..., <paramN>).send();
+web3j提供了一个可以自动生成智能合约java代码的方式，利用该代码包既可以部署合约，也可以调用合约。为了适配CITA的交易执行，我们修改了代码生成工具。在web3j目录下运行`gradle shadowJar`命令，在`console/build/libs/`目录下会生成console-version-all.jar(当前为console-3.2.0-all.jar)，包含了代码生成工具。使用方式如下:
+```shell
+$ java -jar console-3.2.0-all.jar solidity generate [--javaTypes|--solidityTypes] /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 ```
-第二种方式，通过TransactionManager来部署合约:
-```java
-YourSmartContract contract = YourSmartContract.deploy(
-        <web3j>, <transactionManager>, quota, nonce,
-        <param1>, ..., <paramN>).send();
-```
-目前发送交易CITA只支持eth_sendRawTransaction, 所以只能通过第二种方式来部署合约。
+以[benchmark](https://github.com/cryptape/web3j/tree/master/benchmark/src/main/resources)目录下的Token.sol, Token.bin, Token.abi文件为例，通过代码生成工具，生成[Token.java](https://github.com/cryptape/web3j/blob/master/benchmark/src/main/java/org/web3j/benchmark/Token.java)文件。发送交易相关的接口如deploy和合约方法有额外的`quota`, `nonce`和`invalidUntilBlock`，这三个参数是发送交易必需的(如前所述)。`TransactionManager`必须使用[CitaTransactionManager](https://github.com/cryptape/web3j/blob/master/core/src/main/java/org/web3j/tx/CitaTransactionManager.java)。
 
 ### 开发流程
 
