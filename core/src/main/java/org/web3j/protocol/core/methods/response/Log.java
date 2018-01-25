@@ -207,4 +207,20 @@ public class Log {
         result = 31 * result + (getTopics() != null ? getTopics().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Log{" +
+                "removed=" + removed +
+                ", logIndex='" + logIndex + '\'' +
+                ", transactionIndex='" + transactionIndex + '\'' +
+                ", transactionHash='" + transactionHash + '\'' +
+                ", blockHash='" + blockHash + '\'' +
+                ", blockNumber='" + blockNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", data='" + data + '\'' +
+                ", type='" + type + '\'' +
+                ", topics=" + topics +
+                '}';
+    }
 }
