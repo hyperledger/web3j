@@ -218,7 +218,8 @@ public final class AbiTypes {
             case "bytes32":
                     return Bytes32.class;
             default:
-                    throw new UnsupportedOperationException("Unsupported type encountered");
+                    throw new UnsupportedOperationException("Unsupported type encountered: "
+                            + type);
         }
     }
 }
