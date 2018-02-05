@@ -3,6 +3,7 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
@@ -36,33 +37,46 @@ public class Sign {
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
+        return Sync.call(Sign::signMessageAsync, message, keyPair);
+    }
+
+    public static void signMessageAsync(
+            byte[] message, ECKeyPair keyPair, Consumer<SignatureData> complete,
+            Consumer<Throwable> error) {
+
         BigInteger publicKey = keyPair.getPublicKey();
 
         byte[] messageHash = Hash.sha3(message);
 
-        ECDSASignature sig = keyPair.sign(messageHash);
-        // Now we have to work backwards to figure out the recId needed to recover the signature.
-        int recId = -1;
-        for (int i = 0; i < 4; i++) {
-            BigInteger k = recoverFromSignature(i, sig, messageHash);
-            if (k != null && k.equals(publicKey)) {
-                recId = i;
-                break;
+        Consumer<ECDSASignature> inner = sig -> {
+            // Now we have to work backwards to figure out the recId needed to recover the
+            // signature.
+            int recId = -1;
+            for (int i = 0; i < 4; i++) {
+                BigInteger k = recoverFromSignature(i, sig, messageHash);
+                if (k != null && k.equals(publicKey)) {
+                    recId = i;
+                    break;
+                }
             }
-        }
-        if (recId == -1) {
-            throw new RuntimeException(
-                    "Could not construct a recoverable key. This should never happen.");
-        }
+            if (recId == -1) {
+                Throwable ex =  new RuntimeException(
+                        "Could not construct a recoverable key. This should never happen.");
+                error.accept(ex);
+                return;
+            }
 
-        int headerByte = recId + 27;
+            int headerByte = recId + 27;
 
-        // 1 header + 32 bytes for R + 32 bytes for S
-        byte v = (byte) headerByte;
-        byte[] r = Numeric.toBytesPadded(sig.r, 32);
-        byte[] s = Numeric.toBytesPadded(sig.s, 32);
+            // 1 header + 32 bytes for R + 32 bytes for S
+            byte v = (byte) headerByte;
+            byte[] r = Numeric.toBytesPadded(sig.r, 32);
+            byte[] s = Numeric.toBytesPadded(sig.s, 32);
 
-        return new SignatureData(v, r, s);
+            complete.accept(new SignatureData(v, r, s));
+        };
+
+        keyPair.signAsync(messageHash, inner, error);
     }
 
     /**
