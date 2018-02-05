@@ -529,6 +529,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `ConsenSys <https://consensys.net/>`_
 - `ING <https://www.ing.com>`_
 - `Othera <https://www.othera.io/>`_
+- `Pactum <https://pactum.io/>`_
 - `TrustWallet <http://trustwalletapp.com>`_
 
 
