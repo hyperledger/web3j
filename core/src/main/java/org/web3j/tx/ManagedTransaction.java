@@ -57,7 +57,20 @@ public abstract class ManagedTransaction {
         ensResolver.setSyncThreshold(syncThreshold);
     }
 
-    public BigInteger getGasPrice() throws IOException {
+    /**
+     * Return the current gas price from the ethereum node.
+     * <p>
+     *     Note: this method was previously called {@code getGasPrice} but was renamed to
+     *     distinguish it when a bean accessor method on {@link Contract} was added with that name.
+     *     If you have a Contract subclass that is calling this method (unlikely since those
+     *     classes are usually generated and until very recently those generated subclasses were
+     *     marked {@code final}), then you will need to change your code to call this method
+     *     instead, if you want the dynamic behavior.
+     * </p>
+     * @return the current gas price, determined dynamically at invocation
+     * @throws IOException if there's a problem communicating with the ethereum node
+     */
+    public BigInteger requestCurrentGasPrice() throws IOException {
         EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
 
         return ethGasPrice.getGasPrice();

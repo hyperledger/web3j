@@ -28,7 +28,7 @@ public class RawTransactionManager extends TransactionManager {
     private final byte chainId;
 
     public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
-        super(web3j);
+        super(web3j, credentials.getAddress());
 
         this.web3j = web3j;
         this.credentials = credentials;
@@ -39,7 +39,7 @@ public class RawTransactionManager extends TransactionManager {
     public RawTransactionManager(
             Web3j web3j, Credentials credentials, byte chainId,
             TransactionReceiptProcessor transactionReceiptProcessor) {
-        super(transactionReceiptProcessor);
+        super(transactionReceiptProcessor, credentials.getAddress());
 
         this.web3j = web3j;
         this.credentials = credentials;
@@ -49,7 +49,7 @@ public class RawTransactionManager extends TransactionManager {
 
     public RawTransactionManager(
             Web3j web3j, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
-        super(web3j, attempts, sleepDuration);
+        super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
         this.credentials = credentials;
@@ -66,7 +66,7 @@ public class RawTransactionManager extends TransactionManager {
         this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
-    BigInteger getNonce() throws IOException {
+    protected BigInteger getNonce() throws IOException {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                 credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
 
@@ -105,10 +105,5 @@ public class RawTransactionManager extends TransactionManager {
         String hexValue = Numeric.toHexString(signedMessage);
 
         return web3j.ethSendRawTransaction(hexValue).send();
-    }
-
-    @Override
-    public String getFromAddress() {
-        return credentials.getAddress();
     }
 }

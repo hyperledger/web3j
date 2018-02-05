@@ -40,6 +40,7 @@ import org.web3j.utils.Numeric;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -61,7 +62,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                Contract.GAS_PRICE, Contract.GAS_LIMIT);
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
     }
 
     @Test
@@ -236,7 +237,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, transactionManager,
-                Contract.GAS_PRICE, Contract.GAS_LIMIT);
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
 
         testErrorScenario();
     }
@@ -264,6 +265,14 @@ public class ContractTest extends ManagedTransactionTester {
         assertNotNull(contract.getDeployedAddress("1"));
         contract.setDeployedAddress("2", "0x000000000000add0e00000000000");
         assertNotNull(contract.getDeployedAddress("2"));
+    }
+
+    @Test
+    public void testSetGetGasPrice() {
+        assertEquals(ManagedTransaction.GAS_PRICE, contract.getGasPrice());
+        BigInteger newPrice = ManagedTransaction.GAS_PRICE.multiply(BigInteger.valueOf(2));
+        contract.setGasPrice(newPrice);
+        assertEquals(newPrice, contract.getGasPrice());
     }
 
     @Test(expected = RuntimeException.class)
