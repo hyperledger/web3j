@@ -2,6 +2,7 @@ package org.web3j.tx;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.concurrent.CompletableFuture;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -49,6 +50,13 @@ public class CitaTransactionManager extends TransactionManager {
             String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock) throws IOException {
         Transaction transaction = new Transaction(to, nonce, quota.longValue(), validUntilBlock.longValue(), data);
         return web3j.ethSendRawTransaction(transaction.sign(credentials)).send();
+    }
+
+    // adapt to cita
+    public CompletableFuture<EthSendTransaction> sendTransactionAsync(
+            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock) throws IOException {
+        Transaction transaction = new Transaction(to, nonce, quota.longValue(), validUntilBlock.longValue(), data);
+        return web3j.ethSendRawTransaction(transaction.sign(credentials)).sendAsync();
     }
 
     @Override
