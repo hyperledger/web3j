@@ -252,20 +252,20 @@ public class TransactionReceipt {
 
     @Override
     public String toString() {
-        return "TransactionReceipt{" +
-                "transactionHash='" + transactionHash + '\'' +
-                ", transactionIndex='" + transactionIndex + '\'' +
-                ", blockHash='" + blockHash + '\'' +
-                ", blockNumber='" + blockNumber + '\'' +
-                ", cumulativeGasUsed='" + cumulativeGasUsed + '\'' +
-                ", gasUsed='" + gasUsed + '\'' +
-                ", contractAddress='" + contractAddress + '\'' +
-                ", root='" + root + '\'' +
-                ", status='" + status + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", logs=" + logs +
-                ", logsBloom='" + logsBloom + '\'' +
-                '}';
+        return "TransactionReceipt{"
+                + "transactionHash='" + transactionHash + '\''
+                + ", transactionIndex='" + transactionIndex + '\''
+                + ", blockHash='" + blockHash + '\''
+                + ", blockNumber='" + blockNumber + '\''
+                + ", cumulativeGasUsed='" + cumulativeGasUsed + '\''
+                + ", gasUsed='" + gasUsed + '\''
+                + ", contractAddress='" + contractAddress + '\''
+                + ", root='" + root + '\''
+                + ", status='" + status + '\''
+                + ", from='" + from + '\''
+                + ", to='" + to + '\''
+                + ", logs=" + logs
+                + ", logsBloom='" + logsBloom + '\''
+                + '}';
     }
 }

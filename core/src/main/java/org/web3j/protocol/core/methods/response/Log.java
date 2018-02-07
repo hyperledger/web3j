@@ -210,17 +210,17 @@ public class Log {
 
     @Override
     public String toString() {
-        return "Log{" +
-                "removed=" + removed +
-                ", logIndex='" + logIndex + '\'' +
-                ", transactionIndex='" + transactionIndex + '\'' +
-                ", transactionHash='" + transactionHash + '\'' +
-                ", blockHash='" + blockHash + '\'' +
-                ", blockNumber='" + blockNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", data='" + data + '\'' +
-                ", type='" + type + '\'' +
-                ", topics=" + topics +
-                '}';
+        return "Log{"
+                + "removed=" + removed
+                + ", logIndex='" + logIndex + '\''
+                + ", transactionIndex='" + transactionIndex + '\''
+                + ", transactionHash='" + transactionHash + '\''
+                + ", blockHash='" + blockHash + '\''
+                + ", blockNumber='" + blockNumber + '\''
+                + ", address='" + address + '\''
+                + ", data='" + data + '\''
+                + ", type='" + type + '\''
+                + ", topics=" + topics
+                + '}';
     }
 }
