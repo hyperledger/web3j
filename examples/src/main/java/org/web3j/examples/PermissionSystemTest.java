@@ -92,6 +92,21 @@ public class PermissionSystemTest {
         }
 
         List<Bytes32> groups = permissionSystem.queryGroups(newUsers.get(0)).send();
-        System.out.println("group: " + Numeric.toHexString(groups.get(0).getValue()));
+        // remove prefix 0x
+        String hexStr = Numeric.toHexString(groups.get(0).getValue()).substring(2);
+        System.out.println("group: " + hexStringToAscii(hexStr));
+    }
+
+    public static String hexStringToAscii(String hexStr) {
+        assert(hexStr.length() % 2 == 0);
+        StringBuilder asciiStr = new StringBuilder();
+        for (int i = 0; i < hexStr.length(); i += 2) {
+            String str = hexStr.substring(i, i + 2);
+            if (str.equals("00")) {
+                break;
+            }
+            asciiStr.append((char)Integer.parseInt(str, 16));
+        }
+        return asciiStr.toString();
     }
 }
