@@ -44,7 +44,7 @@ public class EnsResolver {
     }
 
     /**
-     * Provides an access to a valid public resolver in order to access extra API methods like "text", "content" etc..
+     * Provides an access to a valid public resolver in order to access other API methods.
      * @param ensName our user input ENS name
      * @return PublicResolver
      */
