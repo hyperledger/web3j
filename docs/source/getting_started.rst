@@ -62,7 +62,7 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new InfuraHttpService("https://morden.infura.io/your-token"));
+   Web3j web3 = Web3j.build(new HttpService("https://morden.infura.io/your-token"));
 
 For further information refer to :doc:`infura`.
 
