@@ -298,7 +298,19 @@ To transact with a smart contract:
    TransactionReceipt transactionReceipt = contract.someMethod(
                 <param1>,
                 ...).send();
+                
+To transact with a smart contract:
 
+.. code-block:: java
+
+   EthBlock.Block b = web3j.ethGetBlockByNumber(
+        DefaultBlockParameter.valueOf(BigInteger.valueOf(1000)),true).send().getBlock();
+	b.getTransactions().forEach(transactionResult -> {
+    	Transaction transaction = (Transaction) transactionResult;
+    	System.out.println(transaction.getFrom());
+    	...
+	});                
+                
 To call a smart contract:
 
 .. code-block:: java
