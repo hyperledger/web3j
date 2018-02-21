@@ -1,5 +1,5 @@
 pragma solidity ^0.4.2;
-contract Shipit {
+contract ShipIt {
 
     enum Status{
         SHIPMENT_CREATED
