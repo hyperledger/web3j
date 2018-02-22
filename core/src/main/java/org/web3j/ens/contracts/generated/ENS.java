@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.web3j.protocol.core.methods.response.EventValuesWithLog;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -52,7 +53,7 @@ public final class ENS extends Contract {
         final Event event = new Event("NewOwner", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NewOwnerEventResponse> responses = new ArrayList<NewOwnerEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
@@ -87,7 +88,7 @@ public final class ENS extends Contract {
         final Event event = new Event("Transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             TransferEventResponse typedResponse = new TransferEventResponse();
@@ -120,7 +121,7 @@ public final class ENS extends Contract {
         final Event event = new Event("NewResolver", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NewResolverEventResponse> responses = new ArrayList<NewResolverEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NewResolverEventResponse typedResponse = new NewResolverEventResponse();
@@ -153,7 +154,7 @@ public final class ENS extends Contract {
         final Event event = new Event("NewTTL", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NewTTLEventResponse> responses = new ArrayList<NewTTLEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NewTTLEventResponse typedResponse = new NewTTLEventResponse();

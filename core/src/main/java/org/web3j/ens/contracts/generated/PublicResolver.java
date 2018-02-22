@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.web3j.protocol.core.methods.response.EventValuesWithLog;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -58,7 +59,7 @@ public final class PublicResolver extends Contract {
         final Event event = new Event("AddrChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<AddrChangedEventResponse> responses = new ArrayList<AddrChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
@@ -91,7 +92,7 @@ public final class PublicResolver extends Contract {
         final Event event = new Event("ContentChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ContentChangedEventResponse> responses = new ArrayList<ContentChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
@@ -124,7 +125,7 @@ public final class PublicResolver extends Contract {
         final Event event = new Event("NameChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NameChangedEventResponse> responses = new ArrayList<NameChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NameChangedEventResponse typedResponse = new NameChangedEventResponse();
@@ -157,7 +158,7 @@ public final class PublicResolver extends Contract {
         final Event event = new Event("ABIChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Uint256>() {}),
                 Arrays.<TypeReference<?>>asList());
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ABIChangedEventResponse> responses = new ArrayList<ABIChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
@@ -190,7 +191,7 @@ public final class PublicResolver extends Contract {
         final Event event = new Event("PubkeyChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<PubkeyChangedEventResponse> responses = new ArrayList<PubkeyChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
@@ -225,7 +226,7 @@ public final class PublicResolver extends Contract {
         final Event event = new Event("TextChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Utf8String>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TextChangedEventResponse> responses = new ArrayList<TextChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             TextChangedEventResponse typedResponse = new TextChangedEventResponse();

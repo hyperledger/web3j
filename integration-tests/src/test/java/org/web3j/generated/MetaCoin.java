@@ -19,6 +19,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.EventValuesWithLog;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
@@ -58,10 +59,11 @@ public final class MetaCoin extends Contract {
         final Event event = new Event("Transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
-        for (EventValues eventValues : valueList) {
+        for (EventValuesWithLog eventValues : valueList) {
             TransferEventResponse typedResponse = new TransferEventResponse();
+            typedResponse._log = eventValues.getLog();
             typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
             typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
             typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
@@ -81,6 +83,7 @@ public final class MetaCoin extends Contract {
             public TransferEventResponse call(Log log) {
                 EventValues eventValues = extractEventParameters(event, log);
                 TransferEventResponse typedResponse = new TransferEventResponse();
+                typedResponse._log = log;
                 typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
                 typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
@@ -133,6 +136,8 @@ public final class MetaCoin extends Contract {
     }
 
     public static class TransferEventResponse {
+        public Log _log;
+
         public String _from;
 
         public String _to;
