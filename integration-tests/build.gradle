@@ -1,6 +1,7 @@
 
 description 'web3j integration tests'
 
+
 dependencies {
     compile project(':core'),
             project(':parity')

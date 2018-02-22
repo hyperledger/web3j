@@ -17,6 +17,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.EventValuesWithLog;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
@@ -48,7 +49,7 @@ public class Fibonacci extends Contract {
         final Event event = new Event("Notify", 
                 Arrays.<TypeReference<?>>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NotifyEventResponse> responses = new ArrayList<NotifyEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NotifyEventResponse typedResponse = new NotifyEventResponse();

@@ -21,6 +21,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.EventValuesWithLog;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
@@ -52,7 +53,7 @@ public class HumanStandardToken extends Contract {
         final Event event = new Event("Transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             TransferEventResponse typedResponse = new TransferEventResponse();
@@ -89,7 +90,7 @@ public class HumanStandardToken extends Contract {
         final Event event = new Event("Approval", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValuesWithLog> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ApprovalEventResponse> responses = new ArrayList<ApprovalEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             ApprovalEventResponse typedResponse = new ApprovalEventResponse();

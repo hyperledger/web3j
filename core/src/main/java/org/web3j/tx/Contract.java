@@ -24,6 +24,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetCode;
+import org.web3j.protocol.core.methods.response.EventValuesWithLog;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
@@ -347,7 +348,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, BigInteger.ZERO);
     }
 
-    public static EventValues staticExtractEventParameters(
+    public static EventValuesWithLog staticExtractEventParameters(
             Event event, Log log) {
 
         List<String> topics = log.getTopics();
@@ -366,20 +367,20 @@ public abstract class Contract extends ManagedTransaction {
                     topics.get(i + 1), indexedParameters.get(i));
             indexedValues.add(value);
         }
-        return new EventValues(indexedValues, nonIndexedValues);
+        return new EventValuesWithLog(indexedValues, nonIndexedValues,log);
     }
 
-    protected EventValues extractEventParameters(Event event, Log log) {
+    protected EventValuesWithLog extractEventParameters(Event event, Log log) {
         return staticExtractEventParameters(event, log);
     }
 
-    protected List<EventValues> extractEventParameters(
+    protected List<EventValuesWithLog> extractEventParameters(
             Event event, TransactionReceipt transactionReceipt) {
 
         List<Log> logs = transactionReceipt.getLogs();
-        List<EventValues> values = new ArrayList<>();
+        List<EventValuesWithLog> values = new ArrayList<>();
         for (Log log : logs) {
-            EventValues eventValues = extractEventParameters(event, log);
+            EventValuesWithLog eventValues = extractEventParameters(event, log);
             if (eventValues != null) {
                 values.add(eventValues);
             }
