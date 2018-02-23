@@ -170,7 +170,7 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new InfuraHttpService("https://ropsten.infura.io/your-token"));
+   Web3j web3 = Web3j.build(new HttpService("https://ropsten.infura.io/your-token"));
 
 For further information refer to
 `Using Infura with web3j <https://web3j.github.io/web3j/infura.html>`_
