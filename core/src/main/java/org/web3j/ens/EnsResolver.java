@@ -19,6 +19,7 @@ import org.web3j.utils.Numeric;
 public class EnsResolver {
 
     static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
+    static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
 
     private final Web3j web3j;
     private final TransactionManager transactionManager;
@@ -42,24 +43,80 @@ public class EnsResolver {
         return syncThreshold;
     }
 
-    public String resolve(String contractId) {
-        if (isValidEnsName(contractId)) {
+    /**
+     * Provides an access to a valid public resolver in order to access other API methods.
+     * @param ensName our user input ENS name
+     * @return PublicResolver
+     */
+    public PublicResolver obtainPublicResolver(String ensName) {
+        if (isValidEnsName(ensName)) {
             try {
                 if (!isSynced()) {
                     throw new EnsResolutionException("Node is not currently synced");
                 } else {
-                    return lookupAddress(contractId);
+                    return lookupResolver(ensName);
                 }
             } catch (Exception e) {
                 throw new EnsResolutionException("Unable to determine sync status of node", e);
             }
 
         } else {
+            throw new EnsResolutionException("EnsName is invalid: " + ensName);
+        }
+    }
+
+    public String resolve(String contractId) {
+        if (isValidEnsName(contractId)) {
+            PublicResolver resolver = obtainPublicResolver(contractId);
+
+            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
+            String contractAddress = null;
+            try {
+                contractAddress = resolver.addr(nameHash).send();
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to execute Ethereum request", e);
+            }
+
+            if (!WalletUtils.isValidAddress(contractAddress)) {
+                throw new RuntimeException("Unable to resolve address for name: " + contractId);
+            } else {
+                return contractAddress;
+            }
+        } else {
             return contractId;
         }
     }
 
-    String lookupAddress(String ensName) throws Exception {
+    /**
+     * Reverse name resolution as documented in the
+     * <a href="https://docs.ens.domains/en/latest/userguide.html#reverse-name-resolution">specification</a>.
+     * @param address an ethereum address, example: "0x314159265dd8dbb310642f98f50c066173c1259b"
+     * @return a EnsName registered for provided address
+     */
+    public String reverseResolve(String address) {
+        if (WalletUtils.isValidAddress(address)) {
+            String reverseName = Numeric.cleanHexPrefix(address) + REVERSE_NAME_SUFFIX;
+            PublicResolver resolver = obtainPublicResolver(reverseName);
+
+            byte[] nameHash = NameHash.nameHashAsBytes(reverseName);
+            String name = null;
+            try {
+                name = resolver.name(nameHash).send();
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to execute Ethereum request", e);
+            }
+
+            if (!isValidEnsName(name)) {
+                throw new RuntimeException("Unable to resolve name for address: " + address);
+            } else {
+                return name;
+            }
+        } else {
+            throw new EnsResolutionException("Address is invalid: " + address);
+        }
+    }
+
+    PublicResolver lookupResolver(String ensName) throws Exception {
         NetVersion netVersion = web3j.netVersion().send();
         String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
@@ -67,20 +124,14 @@ public class EnsResolver {
                 registryContract, web3j, transactionManager,
                 ManagedTransaction.GAS_PRICE, org.web3j.tx.Contract.GAS_LIMIT);
 
-        byte[] nameHash = Numeric.hexStringToByteArray(NameHash.nameHash(ensName));
+        byte[] nameHash = NameHash.nameHashAsBytes(ensName);
 
         String resolverAddress = ensRegistry.resolver(nameHash).send();
         PublicResolver resolver = PublicResolver.load(
                 resolverAddress, web3j, transactionManager,
                 ManagedTransaction.GAS_PRICE, org.web3j.tx.Contract.GAS_LIMIT);
 
-        String contractAddress = resolver.addr(nameHash).send();
-
-        if (!WalletUtils.isValidAddress(contractAddress)) {
-            throw new RuntimeException("Unable to resolve address for name: " + ensName);
-        } else {
-            return contractAddress;
-        }
+        return resolver;
     }
 
     boolean isSynced() throws Exception {
