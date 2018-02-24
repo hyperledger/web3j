@@ -1,6 +1,8 @@
 package org.web3j.examples;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -60,10 +62,12 @@ public class PermissionSystemTest {
         CitaTransactionManager senderManager = new CitaTransactionManager(service, sender);
 
         // permission system contract already deployed when startup
+        String permissionManagementContractAddress = "0x00000000000000000000000000000000013241b2";
         String permissionSystemContractAddress = "0x00000000000000000000000000000000013241a5";
         String permissionManagerContractAddress = "0x00000000000000000000000000000000013241a4";
         PermissionSystem permissionSystem = PermissionSystem.load(permissionSystemContractAddress, service, adminManager);
         PermissionManager permissionManager = PermissionManager.load(permissionManagerContractAddress, service, senderManager);
+        PermissionManagement permissionManagement = PermissionManagement.load(permissionManagementContractAddress, service, senderManager);
 
         // set send transaction permission
         System.out.println("set send transaction permission");
@@ -95,6 +99,16 @@ public class PermissionSystemTest {
         // remove prefix 0x
         String hexStr = Numeric.toHexString(groups.get(0).getValue()).substring(2);
         System.out.println("group: " + hexStringToAscii(hexStr));
+
+        List<String> conts = new ArrayList<>();
+        List<byte[]> funcs = new ArrayList<>();
+        conts.add(Address.DEFAULT.toString());
+        funcs.add(Bytes4.DEFAULT.getValue());
+        TransactionReceipt tx3 = permissionManagement.newPermission(Bytes32.DEFAULT.getValue(), conts, funcs, quota, newNonce(), getValidUntilBlock()).send();
+        if (tx3.getErrorMessage() != null) {
+            System.out.println("call newPermission failed because of " + tx3.getErrorMessage());
+            System.exit(1);
+        }
     }
 
     public static String hexStringToAscii(String hexStr) {
