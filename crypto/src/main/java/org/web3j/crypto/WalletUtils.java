@@ -85,6 +85,8 @@ public class WalletUtils {
      * @param password Will be used for both wallet encryption and passphrase for BIP-39 seed
      * @param destinationDirectory The directory containing the wallet
      * @return A BIP-39 compatible Ethereum wallet
+     * @throws CipherException if the underlying cipher is not available
+     * @throws IOException if the destination cannot be written to
      */
     public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory)
             throws CipherException, IOException {
