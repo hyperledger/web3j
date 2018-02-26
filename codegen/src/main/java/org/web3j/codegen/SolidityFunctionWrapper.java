@@ -82,10 +82,8 @@ public class SolidityFunctionWrapper extends Generator {
             + "codegen module</a> to update.\n";
 
     private final boolean useNativeJavaTypes;
-    private boolean needsArrayConversion;
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
-        this.needsArrayConversion = false;
         this.useNativeJavaTypes = useNativeJavaTypes;
     }
 
@@ -117,10 +115,6 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addMethod(buildLoad(className, TransactionManager.class,
                 TRANSACTION_MANAGER));
         
-        if (needsArrayConversion) {
-            classBuilder.addMethod(buildListConverter());
-        }
-
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
@@ -353,27 +347,6 @@ public class SolidityFunctionWrapper extends Generator {
                 .build();
     }
     
-    private static MethodSpec buildListConverter() {
-        TypeVariableName newType = TypeVariableName.get("NewType");
-        TypeVariableName originalType = TypeVariableName.get("OriginalType", Type.class);
-        TypeName listNewType = ParameterizedTypeName.get(ClassName.get(List.class), newType);
-        TypeName listOriginalType = 
-                ParameterizedTypeName.get(ClassName.get(List.class), originalType);
-        
-        ClassName classCollectors = ClassName.get(Collectors.class);
-        
-        return MethodSpec.methodBuilder("convertToNative")
-                .addModifiers(Modifier.PROTECTED, Modifier.STATIC)
-                .addTypeVariable(originalType)
-                .addTypeVariable(newType)
-                .returns(listNewType)
-                .addParameter(listOriginalType, "arr")
-                .addStatement(
-                        "return ($T) arr.stream().map(v -> v.getValue()).collect($T.toList())",
-                        listNewType, classCollectors)
-                .build();
-    }
-
     String addParameters(
             MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes) {
 
@@ -601,7 +574,6 @@ public class SolidityFunctionWrapper extends Generator {
                             + "($T) executeCallSingleValueReturn(function, $T.class)",
                             listType, listType, nativeReturnTypeName);
                     callCode.addStatement("return convertToNative(result)");
-                    this.needsArrayConversion = true;
                     
                     TypeSpec callableType = TypeSpec.anonymousClassBuilder("")
                             .addSuperinterface(ParameterizedTypeName.get(
@@ -984,7 +956,6 @@ public class SolidityFunctionWrapper extends Generator {
                     convertTo = ParameterizedTypeName.get(classList, 
                             oldContainer.typeArguments.get(0));
                     resultString = resultStringNativeList;
-                    needsArrayConversion = true; //should add method convertToNative to the class
                 }
             }
             

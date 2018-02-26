@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -430,4 +431,13 @@ public abstract class Contract extends ManagedTransaction {
         return addr == null ? getStaticDeployedAddress(networkId) : addr;
     }
 
+    @SuppressWarnings("unchecked")
+    protected static <OriginalTypeT extends Type, NewTypeT> 
+            List<NewTypeT> convertToNative(List<OriginalTypeT> arr) {
+        List<NewTypeT> out = new ArrayList<NewTypeT>();
+        for (Iterator<OriginalTypeT> it = arr.iterator(); it.hasNext(); ) {
+            out.add((NewTypeT)it.next().getValue());
+        }
+        return out;
+    }
 }
