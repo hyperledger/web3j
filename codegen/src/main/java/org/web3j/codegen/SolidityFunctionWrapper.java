@@ -674,8 +674,8 @@ public class SolidityFunctionWrapper extends Generator {
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(Log.class, "log")
                         .returns(ClassName.get("", responseClassName))
-                        .addStatement("$T eventValues = extractEventParameters(event, log)",
-                                EventValues.class)
+                        .addStatement("$T eventValues = extractEventParametersWithLog(event, log)",
+                                Contract.EventValuesWithLog.class)
                         .addStatement("$1T typedResponse = new $1T()",
                                 ClassName.get("", responseClassName))
                         .addCode(buildTypedResponse("typedResponse", indexedParameters,
@@ -715,12 +715,14 @@ public class SolidityFunctionWrapper extends Generator {
         buildVariableLengthEventConstructor(
                 transactionMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
-        transactionMethodBuilder.addStatement("$T valueList = extractEventParameters(event, "
-                + "transactionReceipt)", ParameterizedTypeName.get(List.class, EventValues.class))
+        transactionMethodBuilder.addStatement("$T valueList = extractEventParametersWithLog(event, "
+                + "transactionReceipt)", ParameterizedTypeName.get(List.class,
+                        Contract.EventValuesWithLog.class))
                 .addStatement("$1T responses = new $1T(valueList.size())",
                         ParameterizedTypeName.get(ClassName.get(ArrayList.class),
                                 ClassName.get("", responseClassName)))
-                .beginControlFlow("for ($T eventValues : valueList)", EventValues.class)
+                .beginControlFlow("for ($T eventValues : valueList)",
+                        Contract.EventValuesWithLog.class)
                 .addStatement("$1T typedResponse = new $1T()",
                         ClassName.get("", responseClassName))
                 .addCode(buildTypedResponse("typedResponse", indexedParameters,
@@ -787,7 +789,7 @@ public class SolidityFunctionWrapper extends Generator {
             builder.addStatement("$L.log = log", objectName);
         } else {
             builder.addStatement(
-                    "$L.log = transactionReceipt.getLogs().get(valueList.indexOf(eventValues))",
+                    "$L.log = eventValues.getLog()",
                     objectName);
         }
         for (int i = 0; i < indexedParameters.size(); i++) {

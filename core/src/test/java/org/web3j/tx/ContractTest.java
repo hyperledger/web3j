@@ -6,10 +6,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.BiFunction;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -37,6 +39,8 @@ import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -181,7 +185,7 @@ public class ContractTest extends ManagedTransactionTester {
         prepareCall(ethCall);
 
         assertThat(contract.callMultipleValue().send(),
-                equalTo(Collections.emptyList()));
+                equalTo(emptyList()));
     }
 
     @SuppressWarnings("unchecked")
@@ -222,10 +226,10 @@ public class ContractTest extends ManagedTransactionTester {
         EventValues eventValues = contract.processEvent(transactionReceipt).get(0);
 
         assertThat(eventValues.getIndexedValues(),
-                equalTo(Collections.singletonList(
+                equalTo(singletonList(
                         new Address("0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a"))));
         assertThat(eventValues.getNonIndexedValues(),
-                equalTo(Collections.singletonList(new Uint256(BigInteger.ONE))));
+                equalTo(singletonList(new Uint256(BigInteger.ONE))));
     }
 
     @Test(expected = TransactionException.class)
@@ -291,6 +295,40 @@ public class ContractTest extends ManagedTransactionTester {
                 .thenReturn((Request) getTransactionReceiptRequest);
 
         testErrorScenario();
+    }
+
+    @Test
+    public void testExtractEventParametersWithLogGivenATransactionReceipt() {
+
+        final java.util.function.Function<String, Event> eventFactory = name ->
+                new Event(name, emptyList(), emptyList());
+
+        final BiFunction<Integer, Event, Log> logFactory = (logIndex, event) ->
+                new Log(false, "" + logIndex, "0", "0x0", "0x0", "0", "0x" + logIndex, "", "",
+                        singletonList(EventEncoder.encode(event)));
+
+        final Event testEvent1 = eventFactory.apply("TestEvent1");
+        final Event testEvent2 = eventFactory.apply("TestEvent2");
+
+        final List<Log> logs = Arrays.asList(
+                logFactory.apply(0, testEvent1),
+                logFactory.apply(1, testEvent2)
+        );
+
+        final TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setLogs(logs);
+
+        final List<Contract.EventValuesWithLog> eventValuesWithLogs1 =
+                contract.extractEventParametersWithLog(testEvent1, transactionReceipt);
+
+        assertEquals(eventValuesWithLogs1.size(), 1);
+        assertEquals(eventValuesWithLogs1.get(0).getLog(), logs.get(0));
+
+        final List<Contract.EventValuesWithLog> eventValuesWithLogs2 =
+                contract.extractEventParametersWithLog(testEvent2, transactionReceipt);
+
+        assertEquals(eventValuesWithLogs2.size(), 1);
+        assertEquals(eventValuesWithLogs2.get(0).getLog(), logs.get(1));
     }
 
     void testErrorScenario() throws Throwable {
