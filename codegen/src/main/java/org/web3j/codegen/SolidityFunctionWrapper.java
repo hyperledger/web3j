@@ -27,6 +27,7 @@ import com.squareup.javapoet.TypeVariableName;
 import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
+import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -547,7 +548,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     MethodSpec buildFunction(
-            AbiDefinition functionDefinition) throws ClassNotFoundException {
+            AbiDefinition functionDefinition) {
         String functionName = functionDefinition.getName();
 
         MethodSpec.Builder methodBuilder =
@@ -572,7 +573,7 @@ public class SolidityFunctionWrapper extends Generator {
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             List<TypeName> outputParameterTypes,
-            String inputParams) throws ClassNotFoundException {
+            String inputParams) {
 
         String functionName = functionDefinition.getName();
 
