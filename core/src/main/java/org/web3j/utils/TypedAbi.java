@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TypedABI {
+public class TypedAbi {
     public static class InvalidAbiType extends Exception {
         private String invalidTypeName;
 
@@ -71,7 +71,6 @@ public class TypedABI {
                         list.add(fromSingleJavaValue(arg));
                     }
                 } else {
-                    assert List.class.isAssignableFrom(value.getClass());
                     List<Object> args = (List<Object>)value;
                     for (Object arg: args) {
                         list.add(fromSingleJavaValue(arg));

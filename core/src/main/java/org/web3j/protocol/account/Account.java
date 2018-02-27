@@ -1,4 +1,4 @@
-package org.web3j.protocol.contract;
+package org.web3j.protocol.account;
 
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
@@ -13,7 +13,7 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.tx.CitaTransactionManager;
-import org.web3j.utils.TypedABI;
+import org.web3j.utils.TypedAbi;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
 
 public class Account {
     private CitaTransactionManager transactionManager;
@@ -34,64 +33,69 @@ public class Account {
         this.service = service;
     }
 
-    public EthSendTransaction deploy(File contractFile, BigInteger nonce, long quota)
+    public EthSendTransaction deploy(File contractFile, BigInteger nonce, BigInteger quota)
             throws IOException, InterruptedException, Contract.ContractCompileError {
         Contract contract = new Contract(contractFile);
         String contractBin = contract.getBin();
         return this.transactionManager.
-                sendTransaction("", contractBin, BigInteger.valueOf(quota), nonce, getValidUntilBlock());
+                sendTransaction("", contractBin, quota, nonce, getValidUntilBlock());
     }
 
-    public CompletableFuture<EthSendTransaction> deployAsync(File contractFile, BigInteger nonce, long quota)
+    public CompletableFuture<EthSendTransaction> deployAsync(File contractFile, BigInteger nonce, BigInteger quota)
             throws IOException, InterruptedException, Contract.ContractCompileError {
         Contract contract = new Contract(contractFile);
         String contractBin = contract.getBin();
         return this.transactionManager.
-                sendTransactionAsync("", contractBin, BigInteger.valueOf(quota), nonce, getValidUntilBlock());
+                sendTransactionAsync("", contractBin, quota, nonce, getValidUntilBlock());
     }
 
     // eth_call: nonce and quota is null
     // sendTransaction: nonce and quota is necessary
-    public Object callContract(String contractName, String funcName, BigInteger nonce, Long quota, Object... args)
+    public Object callContract(String contractName, String funcName, BigInteger nonce, BigInteger quota, Object... args)
             throws Exception {
         Contract contract = loadContract(contractName);
         String contractAddress = getContractAddress(contract);
         AbiDefinition functionAbi = contract.getFunctionAbi(funcName, args.length);
+        return callContract(contractAddress, functionAbi, funcName, nonce, quota, args);
+    }
+
+    public Object callContract(String contractAddress, AbiDefinition functionAbi, String funcName, BigInteger nonce, BigInteger quota, Object... args)
+            throws Exception {
         List<Type> params = new ArrayList<>();
         List<AbiDefinition.NamedType> inputs = functionAbi.getInputs();
-        assert args.length == inputs.size();
         for (int i = 0; i < inputs.size(); i++) {
             Object arg = args[i];
             String typeName = inputs.get(i).getType();
-            params.add(TypedABI.getType(typeName, arg));
+            params.add(TypedAbi.getType(typeName, arg));
         }
 
         Function func;
         if (functionAbi.isConstant()) {
             // eth_call
-            List<TypedABI.ArgRetType> retsType = new ArrayList<>();
-            List<TypeReference<? extends Type>> retsTypeRef = new ArrayList<>();
+            List<TypedAbi.ArgRetType> retsType = new ArrayList<>();
+            List<TypeReference<?>> retsTypeRef = new ArrayList<>();
             List<AbiDefinition.NamedType> outputs = functionAbi.getOutputs();
             for (AbiDefinition.NamedType namedType: outputs) {
-                retsTypeRef.add(TypeReference.create(TypedABI.getArgRetType(namedType.getType()).getType()));
+                TypedAbi.ArgRetType retType = TypedAbi.getArgRetType(namedType.getType());
+                retsType.add(retType);
+                retsTypeRef.add(TypeReference.create(retType.getType()));
             }
             func = new Function(funcName, params, retsTypeRef);
             return ethCall(contractAddress, func, retsType);
         } else {
             // send_transaction, no ret
             func = new Function(funcName, params, Collections.emptyList());
-            return sendTransaction(contractAddress, func, nonce, quota);
+            return sendTransaction(contractAddress, func, nonce, quota.longValue());
         }
     }
 
-    public Object ethCall(String contractAddress, Function func, List<TypedABI.ArgRetType> retsType)
+    public Object ethCall(String contractAddress, Function func, List<TypedAbi.ArgRetType> retsType)
             throws IOException {
         String data = FunctionEncoder.encode(func);
         EthCall call = this.service.ethCall(new Call(this.transactionManager.getFromAddress(),
                 contractAddress, data), DefaultBlockParameterName.LATEST).send();
         String value = call.getValue();
         List<Type> abiValues = FunctionReturnDecoder.decode(value, func.getOutputParameters());
-        assert retsType.size() == abiValues.size();
         if (retsType.size() == 1) {
             return retsType.get(0).abiToJava(abiValues.get(0));
         } else {
@@ -106,7 +110,7 @@ public class Account {
     public Object sendTransaction(String contractAddress, Function func, BigInteger nonce, long quota)
             throws IOException {
         String data = FunctionEncoder.encode(func);
-        return this.transactionManager.sendTransaction(BigInteger.valueOf(quota), nonce, contractAddress, data, getValidUntilBlock());
+        return this.transactionManager.sendTransaction(contractAddress, data, BigInteger.valueOf(quota), nonce, getValidUntilBlock());
     }
 
     private Contract loadContract(String contractName) throws IOException {

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-public class CallCMD {
+public class CallCmd {
     private static class StreamGobbler implements Runnable {
         private InputStream inputStream;
         private Consumer<String> consumer;
@@ -32,8 +32,8 @@ public class CallCMD {
 
     public static ExecutedResult callCmd(String cmd) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder();
-        pb.command(cmd);
-        pb.directory(new File("./"));
+        pb.directory(new File("/"));
+        pb.command(cmd.split("\\s+"));
         Process p = pb.start();
 
         final String[] result = {""};

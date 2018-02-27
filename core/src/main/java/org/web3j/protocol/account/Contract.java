@@ -1,10 +1,9 @@
-package org.web3j.protocol.contract;
+package org.web3j.protocol.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.web3j.abi.datatypes.Function;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.utils.CallCMD;
+import org.web3j.utils.CallCmd;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,10 +51,10 @@ public class Contract {
         }
         generateAbiAndBin(contractFile);
 
-        String abiPath = "/tmp/" + fileName + ".abi";
         String binPath = "/tmp/" + fileName + ".bin";
-        this.bin = new String(Files.readAllBytes(Paths.get(abiPath)));
-        this.abi = new String(Files.readAllBytes(Paths.get(binPath)));
+        String abiPath = "/tmp/" + fileName + ".abi";
+        this.bin = new String(Files.readAllBytes(Paths.get(binPath)));
+        this.abi = new String(Files.readAllBytes(Paths.get(abiPath)));
         this.typedABI = generateTypedABI();
     }
 
@@ -66,8 +65,8 @@ public class Contract {
 
     /// TODO: support windows OS
     private void generateAbiAndBin(File contractFile) throws IOException, InterruptedException, ContractCompileError {
-        String callSolcCmd = String.format("sh -c solc %s --abi --bin --optimize --overwrite -o /tmp/", contractFile.getAbsolutePath());
-        CallCMD.ExecutedResult result = CallCMD.callCmd(callSolcCmd);
+        String callSolcCmd = String.format("solc %s --abi --bin --optimize --overwrite -o /tmp/", contractFile.getAbsolutePath());
+        CallCmd.ExecutedResult result = CallCmd.callCmd(callSolcCmd);
         if (result.exitCode != 0) {
             throw new ContractCompileError(result.output);
         }
