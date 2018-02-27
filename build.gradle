@@ -131,6 +131,11 @@ project(':examples') {
         classpath = sourceSets.main.runtimeClasspath
         main = 'org.web3j.examples.SendTransactionDemo'
     }
+
+    task permissionTest(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.web3j.examples.PermissionSystemTest'
+    }
 }
 
 project(':core') {
