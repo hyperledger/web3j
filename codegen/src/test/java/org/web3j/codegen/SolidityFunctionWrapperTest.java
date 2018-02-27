@@ -221,11 +221,18 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.math.BigInteger param) {\n"
-                        + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n"
-                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
-                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
-                        + "  return executeRemoteCallSingleValueReturn(function, java.util.List.class);\n"
-                        + "}\n";
+                + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\"functionName\", \n"
+                + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
+                + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
+                + "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n"
+                + "      new java.util.concurrent.Callable<java.util.List>() {\n"
+                + "        @java.lang.Override\n"
+                + "        public java.util.List call() throws java.lang.Exception {\n"
+                + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
+                + "          return convertToNative(result);\n"
+                + "        }\n"
+                + "      });\n"
+                + "}\n";
         //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
@@ -272,7 +279,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 + "      new java.util.concurrent.Callable<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>() {\n"
                 + "        @java.lang.Override\n"
                 + "        public org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger> call() throws java.lang.Exception {\n"
-                + "          java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);;\n"
+                + "          java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);\n"
                 + "          return new org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>(\n"
                 + "              (java.math.BigInteger) results.get(0).getValue(), \n"
                 + "              (java.math.BigInteger) results.get(1).getValue());\n"

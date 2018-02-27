@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -463,4 +464,13 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    protected static <S extends Type, T> 
+            List<T> convertToNative(List<S> arr) {
+        List<T> out = new ArrayList<T>();
+        for (Iterator<S> it = arr.iterator(); it.hasNext(); ) {
+            out.add((T)it.next().getValue());
+        }
+        return out;
+    }
 }
