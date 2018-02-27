@@ -14,6 +14,10 @@ public class NameHash {
 
     private static final byte[] EMPTY = new byte[32];
 
+    public static byte[] nameHashAsBytes(String ensName) {
+        return Numeric.hexStringToByteArray(nameHash(ensName));
+    }
+
     public static String nameHash(String ensName) {
         String normalisedEnsName = normalise(ensName);
         return Numeric.toHexString(nameHash(normalisedEnsName.split("\\.")));

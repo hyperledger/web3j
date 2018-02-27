@@ -85,6 +85,32 @@ public class Keys {
         return Arrays.copyOfRange(hash, hash.length - 20, hash.length);  // right most 160 bits
     }
 
+    /**
+     * Checksum address encoding as per
+     * <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md">EIP-55</a>.
+     *
+     * @param address a valid hex encoded address
+     * @return hex encoded checksum address
+     */
+    public static String toChecksumAddress(String address) {
+        String lowercaseAddress = Numeric.cleanHexPrefix(address).toLowerCase();
+        String addressHash = Numeric.cleanHexPrefix(Hash.sha3String(lowercaseAddress));
+
+        StringBuilder result = new StringBuilder(lowercaseAddress.length() + 2);
+
+        result.append("0x");
+
+        for (int i = 0; i < lowercaseAddress.length(); i++) {
+            if (Integer.parseInt(String.valueOf(addressHash.charAt(i)), 16) >= 8) {
+                result.append(String.valueOf(lowercaseAddress.charAt(i)).toUpperCase());
+            } else {
+                result.append(lowercaseAddress.charAt(i));
+            }
+        }
+
+        return result.toString();
+    }
+
     public static byte[] serialize(ECKeyPair ecKeyPair) {
         byte[] privateKey = Numeric.toBytesPadded(ecKeyPair.getPrivateKey(), PRIVATE_KEY_SIZE);
         byte[] publicKey = Numeric.toBytesPadded(ecKeyPair.getPublicKey(), PUBLIC_KEY_SIZE);

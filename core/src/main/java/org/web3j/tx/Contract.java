@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
@@ -392,17 +394,23 @@ public abstract class Contract extends ManagedTransaction {
 
     protected List<EventValues> extractEventParameters(
             Event event, TransactionReceipt transactionReceipt) {
+        return transactionReceipt.getLogs().stream()
+                .map(log -> extractEventParameters(event, log))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 
-        List<Log> logs = transactionReceipt.getLogs();
-        List<EventValues> values = new ArrayList<>();
-        for (Log log : logs) {
-            EventValues eventValues = extractEventParameters(event, log);
-            if (eventValues != null) {
-                values.add(eventValues);
-            }
-        }
+    protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
+        final EventValues eventValues = staticExtractEventParameters(event, log);
+        return (eventValues == null) ? null : new EventValuesWithLog(eventValues, log);
+    }
 
-        return values;
+    protected List<EventValuesWithLog> extractEventParametersWithLog(
+            Event event, TransactionReceipt transactionReceipt) {
+        return transactionReceipt.getLogs().stream()
+                .map(log -> extractEventParametersWithLog(event, log))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -429,6 +437,31 @@ public abstract class Contract extends ManagedTransaction {
             addr = deployedAddresses.get(networkId);
         }
         return addr == null ? getStaticDeployedAddress(networkId) : addr;
+    }
+
+    /**
+     * Adds a log field to {@link EventValues}.
+     */
+    public static class EventValuesWithLog {
+        private final EventValues eventValues;
+        private final Log log;
+
+        private EventValuesWithLog(EventValues eventValues, Log log) {
+            this.eventValues = eventValues;
+            this.log = log;
+        }
+
+        public List<Type> getIndexedValues() {
+            return eventValues.getIndexedValues();
+        }
+
+        public List<Type> getNonIndexedValues() {
+            return eventValues.getNonIndexedValues();
+        }
+
+        public Log getLog() {
+            return log;
+        }
     }
 
     @SuppressWarnings("unchecked")

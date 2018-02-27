@@ -349,6 +349,19 @@ public class ResponseTest extends ResponseTester {
                 + "                \"transactionHash\": \"0xea6649db0f88d5400159853bf2c5b752ce724435dfb85b35f8725cf4cdc1ad6d\",\n"
                 + "                \"transactionPosition\": 2,\n"
                 + "                \"type\": \"suicide\"\n"
+                + "            }, {\n"
+                + "                \"action\": {\n"
+                + "                    \"author\": \"0xb8d2ac822f3d0445f5b83d32b0b176c2cb3d0e60\",\n"
+                + "                    \"value\": \"0x0\",\n"
+                + "                    \"rewardType\": \"reward\"\n"
+                + "                },\n"
+                + "                \"blockHash\": \"0x8d9aff92ab07598b65ca3457dc68ee66de48ea0e1d4b0a658b6e39977b2a8542\",\n"
+                + "                \"blockNumber\": 5676554,\n"
+                + "                \"subtraces\": 0,\n"
+                + "                \"traceAddress\": [\n"
+                + "                    0\n"
+                + "                ],\n"
+                + "                \"type\": \"reward\"\n"
                 + "            }\n"
                 + "        ]\n"
                 + "    },\n"
@@ -409,12 +422,25 @@ public class ResponseTest extends ResponseTester {
         trace3.setTransactionHash("0xea6649db0f88d5400159853bf2c5b752ce724435dfb85b35f8725cf4cdc1ad6d");
         trace3.setTransactionPosition(BigInteger.valueOf(2));
         trace3.setType("suicide");
+
+        org.web3j.protocol.parity.methods.response.Trace trace4 = new org.web3j.protocol.parity.methods.response.Trace();
+        Trace.RewardAction action4 = new Trace.RewardAction();
+        action4.setAuthor("0xb8d2ac822f3d0445f5b83d32b0b176c2cb3d0e60");
+        action4.setValue("0x0");
+        action4.setRewardType("reward");
+        trace4.setAction(action4);
+        trace4.setBlockHash("0x8d9aff92ab07598b65ca3457dc68ee66de48ea0e1d4b0a658b6e39977b2a8542");
+        trace4.setBlockNumber(BigInteger.valueOf(5676554));
+        trace4.setSubtraces(BigInteger.ZERO);
+        trace4.setTraceAddress(Collections.singletonList(BigInteger.ZERO));
+        trace4.setType("reward");
         //CHECKSTYLE:ON
 
         List<org.web3j.protocol.parity.methods.response.Trace> traces = new ArrayList<>();
         traces.add(trace1);
         traces.add(trace2);
         traces.add(trace3);
+        traces.add(trace4);
         FullTraceInfo info = new FullTraceInfo("0x", null, traces, null);
         assertThat(response.getFullTraceInfo(), equalTo(info));
     }

@@ -370,6 +370,91 @@ public class Trace {
         }
     }
 
+    @JsonDeserialize()
+    public static class RewardAction implements Action {
+
+        private String author;
+        private String value;
+        private String rewardType;
+
+        public RewardAction() {
+        }
+
+        public RewardAction(String author, String value, String rewardType) {
+            this.author = author;
+            this.value = value;
+            this.rewardType = rewardType;
+        }
+
+        public BigInteger getValue() {
+            return Numeric.decodeQuantity(value);
+        }
+
+        public String getValueRaw() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public String getRewardType() {
+            return rewardType;
+        }
+
+        public void setRewardType(String rewardType) {
+            this.rewardType = rewardType;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof RewardAction)) {
+                return false;
+            }
+
+            RewardAction that = (RewardAction) o;
+
+            if (getAuthor() != null ? !getAuthor().equals(that.getAuthor())
+                    : that.getAuthor() != null) {
+                return false;
+            }
+            if (getValueRaw() != null ? !getValueRaw().equals(that.getValueRaw())
+                    : that.getValueRaw() != null) {
+                return false;
+            }
+            return getRewardType() != null ? getRewardType().equals(that.getRewardType())
+                    : that.getRewardType() == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getAuthor() != null ? getAuthor().hashCode() : 0;
+            result = 31 * result + (getValueRaw() != null ? getValueRaw().hashCode() : 0);
+            result = 31 * result + (getRewardType() != null ? getRewardType().hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "RewardAction{"
+                    + "author='" + getAuthor() + '\''
+                    + ", value='" + getValueRaw() + '\''
+                    + ", rewardType='" + getRewardType() + '\''
+                    + '}';
+        }
+    }
+
     public static class Result {
 
         private String address;
@@ -675,6 +760,8 @@ public class Trace {
                 return objectMapper.convertValue(root, CreateAction.class);
             } else if (root.has("refundAddress")) {
                 return objectMapper.convertValue(root, SuicideAction.class);
+            } else if (root.has("rewardType")) {
+                return objectMapper.convertValue(root, RewardAction.class);
             }
 
             return null;
