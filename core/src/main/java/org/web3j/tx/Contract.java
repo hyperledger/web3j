@@ -432,11 +432,11 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     @SuppressWarnings("unchecked")
-    protected static <OriginalTypeT extends Type, NewTypeT> 
-            List<NewTypeT> convertToNative(List<OriginalTypeT> arr) {
-        List<NewTypeT> out = new ArrayList<NewTypeT>();
-        for (Iterator<OriginalTypeT> it = arr.iterator(); it.hasNext(); ) {
-            out.add((NewTypeT)it.next().getValue());
+    protected static <S extends Type, T> 
+            List<T> convertToNative(List<S> arr) {
+        List<T> out = new ArrayList<T>();
+        for (Iterator<S> it = arr.iterator(); it.hasNext(); ) {
+            out.add((T)it.next().getValue());
         }
         return out;
     }
