@@ -3,6 +3,8 @@ package org.web3j.protocol.account;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
@@ -78,8 +80,10 @@ public class Account {
             for (AbiDefinition.NamedType namedType: outputs) {
                 TypedAbi.ArgRetType retType = TypedAbi.getArgRetType(namedType.getType());
                 retsType.add(retType);
-                retsTypeRef.add(TypeReference.create(retType.getType()));
+                retsTypeRef.add(retType.getTypeReference());
             }
+            // retsTypeRef.remove(1);
+            // retsTypeRef.add(new TypeReference<DynamicArray<Address>>() {});
             func = new Function(funcName, params, retsTypeRef);
             return ethCall(contractAddress, func, retsType);
         } else {

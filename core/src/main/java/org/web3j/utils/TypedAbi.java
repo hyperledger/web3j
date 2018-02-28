@@ -1,10 +1,12 @@
 package org.web3j.utils;
 
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,14 +52,6 @@ public class TypedAbi {
                 staticArray = StaticArray.class;
             }
             return new ArgRetType(staticArray, baseType);
-        }
-
-        public Class<? extends Type> getType() {
-            if (this.rawType != null) {
-                return this.rawType;
-            } else {
-                return this.baseType;
-            }
         }
 
         public Type javaToAbi(Object value) throws Exception {
@@ -115,6 +109,32 @@ public class TypedAbi {
                 return result;
             } else {
                 return value.getValue();
+            }
+        }
+
+        // decode failed when pass DynamicArray.class or StaticArray.class because of type erasure
+        // we need to construct ParameterizedType manually
+        public TypeReference getTypeReference() {
+            if (this.rawType != null) {
+                ParameterizedType parameterizedType = new ParameterizedType() {
+                    @Override
+                    public java.lang.reflect.Type[] getActualTypeArguments() {
+                        return new java.lang.reflect.Type[]{ArgRetType.this.baseType};
+                    }
+
+                    @Override
+                    public java.lang.reflect.Type getRawType() {
+                        return ArgRetType.this.rawType;
+                    }
+
+                    @Override
+                    public java.lang.reflect.Type getOwnerType() {
+                        return null;
+                    }
+                };
+                return TypeReference.create(parameterizedType);
+            } else {
+                return TypeReference.create(this.baseType);
             }
         }
     }
