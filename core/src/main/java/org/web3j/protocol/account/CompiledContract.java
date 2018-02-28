@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-public class Contract {
+public class CompiledContract {
     public static class ContractCompileError extends Exception {
         private String errorMessage;
         public ContractCompileError(String error) {
@@ -44,7 +44,7 @@ public class Contract {
     private List<AbiDefinition> typedABI;
 
     /// NOTE: the file name must be same with contract name
-    public Contract(File contractFile) throws IOException, InterruptedException, ContractCompileError {
+    public CompiledContract(File contractFile) throws IOException, InterruptedException, ContractCompileError {
         String fileName = contractFile.getName();
         if (fileName.indexOf(".") > 0) {
             fileName = fileName.substring(0, fileName.indexOf("."));
@@ -58,7 +58,7 @@ public class Contract {
         this.typedABI = generateTypedABI();
     }
 
-    public Contract(String abi) throws IOException {
+    public CompiledContract(String abi) throws IOException {
         this.abi = abi;
         this.typedABI = generateTypedABI();
     }
@@ -96,11 +96,20 @@ public class Contract {
                         abiDefinition.getInputs().size() == numOfArgs)
                 .toArray();
 
-        AbiDefinition functionAbi;
         if (abiDefinitions.length == 0) {
             throw new ContractFuncNotFound(funcName, numOfArgs);
         } else {
             return (AbiDefinition)abiDefinitions[0];
         }
+    }
+
+    public AbiDefinition getEventAbi(String eventName) {
+        Object[] abiDefinitions = this.typedABI
+                .stream()
+                .filter(abiDefinition ->
+                        abiDefinition.getType().equals("event") &&
+                        abiDefinition.getName().equals(eventName))
+                .toArray();
+        return (AbiDefinition) abiDefinitions[0];
     }
 }

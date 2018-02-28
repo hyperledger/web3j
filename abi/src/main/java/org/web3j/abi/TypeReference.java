@@ -73,6 +73,15 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         };
     }
 
+    public static <T extends org.web3j.abi.datatypes.Type> StaticArrayTypeReference<T> create(int length, ParameterizedType type) {
+        return new StaticArrayTypeReference<T>(length) {
+            @Override
+            public Type getType() {
+                return type;
+            }
+        };
+    }
+
     public abstract static class StaticArrayTypeReference<T extends org.web3j.abi.datatypes.Type>
             extends TypeReference<T> {
 

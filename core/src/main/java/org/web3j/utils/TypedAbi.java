@@ -26,7 +26,7 @@ public class TypedAbi {
     }
 
     public static class ArgRetType {
-        // rawType is DynamicArray or StaticArray
+        // rawType is DynamicArray.class or StaticArrayX.class
         private Class<? extends Type> rawType;
         private Class<? extends Type> baseType;
 
@@ -65,7 +65,7 @@ public class TypedAbi {
                         list.add(fromSingleJavaValue(arg));
                     }
                 } else {
-                    List<Object> args = (List<Object>)value;
+                    List<Object> args = (List<Object>) value;
                     for (Object arg: args) {
                         list.add(fromSingleJavaValue(arg));
                     }
@@ -132,7 +132,14 @@ public class TypedAbi {
                         return null;
                     }
                 };
-                return TypeReference.create(parameterizedType);
+                if (StaticArray.class.isAssignableFrom(this.rawType)) {
+                    String typeName = this.rawType.getSimpleName();
+                    String baseTypeName = "StaticArray";
+                    String length = typeName.substring(baseTypeName.length());
+                    return TypeReference.create(Integer.parseInt(length), parameterizedType);
+                } else {
+                    return TypeReference.create(parameterizedType);
+                }
             } else {
                 return TypeReference.create(this.baseType);
             }
