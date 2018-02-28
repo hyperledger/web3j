@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
+#TODO: These paths should be moved back to targets before merge with master
+#arrays/Arrays
+#contracts/HumanStandardToken
+#fibonacci/Fibonacci
+#greeter/Greeter
+#shipit/ShipIt
+#simplestorage/SimpleStorage
+
 targets="
-arrays/Arrays
-contracts/HumanStandardToken
-fibonacci/Fibonacci
-greeter/Greeter
-shipit/ShipIt
-simplestorage/SimpleStorage
+complexstorage/ComplexStorage
 "
 
 for target in ${targets}; do
