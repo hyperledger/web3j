@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.UnorderedEvent;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
@@ -27,6 +28,25 @@ public class EventEncoder {
                 indexedParameters, nonIndexedParameters);
 
         return buildEventSignature(methodSignature);
+    }
+
+    public static String encode(UnorderedEvent event) {
+        List<TypeReference<Type>> parameters = event.getParameters();
+        String methodSignature = buildMethodSignature(event.getName(), parameters);
+        return buildEventSignature(methodSignature);
+    }
+
+    static <T extends Type> String buildMethodSignature(
+            String methodName, List<TypeReference<T>> parameters) {
+        StringBuilder result = new StringBuilder();
+        result.append(methodName);
+        result.append("(");
+        String params = parameters.stream()
+                .map(Utils::getTypeName)
+                .collect(Collectors.joining(","));
+        result.append(params);
+        result.append(")");
+        return result.toString();
     }
 
     static <T extends Type> String buildMethodSignature(

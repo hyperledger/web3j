@@ -1,9 +1,9 @@
 package org.web3j.protocol.account;
 
 import org.web3j.abi.*;
-import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.UnorderedEvent;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -36,6 +36,7 @@ public class Account {
         this.service = service;
     }
 
+    /// TODO: get contract address from receipt after deploy, then return contract name(ENS)
     public EthSendTransaction deploy(File contractFile, BigInteger nonce, BigInteger quota)
             throws IOException, InterruptedException, CompiledContract.ContractCompileError {
         CompiledContract contract = new CompiledContract(contractFile);
@@ -57,7 +58,7 @@ public class Account {
     public Object callContract(String contractName, String funcName, BigInteger nonce, BigInteger quota, Object... args)
             throws Exception {
         CompiledContract contract = loadContract(contractName);
-        String contractAddress = getContractAddress(contract);
+        String contractAddress = getContractAddress(contractName);
         AbiDefinition functionAbi = contract.getFunctionAbi(funcName, args.length);
         return callContract(contractAddress, functionAbi, nonce, quota, args);
     }
@@ -119,7 +120,7 @@ public class Account {
     public Observable<Object> eventObservable(String contractName, String eventName, DefaultBlockParameter start, DefaultBlockParameter end)
             throws Exception {
         CompiledContract contract = loadContract(contractName);
-        String contractAddress = getContractAddress(contract);
+        String contractAddress = getContractAddress(contractName);
         AbiDefinition eventAbi = contract.getEventAbi(eventName);
         return eventObservable(contractAddress, eventAbi, start, end);
     }
@@ -127,43 +128,47 @@ public class Account {
     public Observable<Object> eventObservable(String contractAddress, AbiDefinition eventAbi,
                                               DefaultBlockParameter start, DefaultBlockParameter end)
             throws Exception {
-        List<TypeReference<?>> indexedParameters = new ArrayList<>();
-        List<TypeReference<?>> nonindexedParameters = new ArrayList<>();
         List<TypedAbi.ArgRetType> results = new ArrayList<>();
         List<AbiDefinition.NamedType> namedTypes = eventAbi.getInputs();
+        UnorderedEvent event = new UnorderedEvent(eventAbi.getName());
         for (AbiDefinition.NamedType namedType: namedTypes) {
             TypedAbi.ArgRetType argRetType = TypedAbi.getArgRetType(namedType.getType());
             results.add(argRetType);
-            if (namedType.isIndexed()) {
-                indexedParameters.add(argRetType.getTypeReference());
-            } else {
-                nonindexedParameters.add(argRetType.getTypeReference());
-            }
+            event.add(namedType.isIndexed(), argRetType.getTypeReference());
         }
 
-        Event event = new Event(eventAbi.getName(), indexedParameters, nonindexedParameters);
         EthFilter filter = new EthFilter(start, end, contractAddress);
         /// FIXME: https://github.com/web3j/web3j/issues/209, patch to this after web3j fixed
         filter.addSingleTopic(EventEncoder.encode(event));
         return this.service.ethLogObservable(filter).map(log -> {
             EventValues eventValues = staticExtractEventParameters(event, log);
-            List<Object> values = new ArrayList<>();
             List<Type> indexedValues = eventValues.getIndexedValues();
+            List<Type> nonIndexedValues = eventValues.getNonIndexedValues();
             int indexedSize = indexedValues.size();
-            for (int i = 0; i < indexedSize; i++) {
-                values.add(results.get(i).abiToJava(indexedValues.get(i)));
+            int nonIndexedSize = nonIndexedValues.size();
+            int size = indexedSize + nonIndexedSize;
+            List<Object> values = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                values.add(null);
             }
 
-            List<Type> nonindexedValues = eventValues.getNonIndexedValues();
-            for (int i = 0; i < nonindexedValues.size(); i++) {
-                values.add(results.get(i + indexedSize).abiToJava(nonindexedValues.get(i)));
+            List<Integer> indexedSeq = event.getIndexedParametersSeq();
+            for (int i = 0; i < indexedSize; i++) {
+                int indexSeqNum = indexedSeq.get(i);
+                values.set(indexSeqNum, results.get(indexSeqNum).abiToJava(indexedValues.get(i)));
+            }
+
+            List<Integer> nonIndexedSeq = event.getNonIndexedParametersSeq();
+            for (int i = 0; i < nonIndexedSize; i++) {
+                int indexSeqNum = nonIndexedSeq.get(i);
+                values.set(indexSeqNum, results.get(indexSeqNum).abiToJava(nonIndexedValues.get(i)));
             }
             return values;
         });
     }
 
-    public static EventValues staticExtractEventParameters(
-            Event event, Log log) {
+    private static EventValues staticExtractEventParameters(
+            UnorderedEvent event, Log log) {
 
         List<String> topics = log.getTopics();
         String encodedEventSignature = EventEncoder.encode(event);
@@ -189,7 +194,8 @@ public class Account {
         return new CompiledContract("");
     }
 
-    private String getContractAddress(CompiledContract contract) {
+    /// TODO: get contract address from ENS
+    private String getContractAddress(String contractName) {
         return "";
     }
 
