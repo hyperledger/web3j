@@ -317,7 +317,7 @@ public class ContractTest extends ManagedTransactionTester {
                 Collections.<TypeReference<?>>emptyList());
 
         final Event testEvent2 = new Event(
-                "TestEvent1",
+                "TestEvent2",
                 Collections.<TypeReference<?>>emptyList(),
                 Collections.<TypeReference<?>>emptyList());
 
