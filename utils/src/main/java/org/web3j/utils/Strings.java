@@ -16,7 +16,7 @@ public class Strings {
     public static String join(List<String> src, String delimiter) {
         if (src != null) {
             StringBuilder builder = new StringBuilder();
-            if(!src.isEmpty()) {
+            if (!src.isEmpty()) {
                 builder.append(src.get(0));
             }
             for (int i = 1; i < src.size(); i++) {
