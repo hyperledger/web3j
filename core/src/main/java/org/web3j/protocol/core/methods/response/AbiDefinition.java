@@ -173,6 +173,12 @@ public class AbiDefinition {
             this.type = type;
         }
 
+        public NamedType(String name, String type, boolean indexed) {
+            this.name = name;
+            this.type = type;
+            this.indexed = indexed;
+        }
+
         public String getName() {
             return name;
         }

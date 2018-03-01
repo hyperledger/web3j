@@ -123,9 +123,10 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
             Map<String, String> addresses;
             if (c.networks != null && !c.networks.isEmpty()) {
-                addresses = c.networks.entrySet().stream().collect(Collectors.toMap(
-                        Map.Entry::getKey, e -> e.getValue().getAddress()
-                ));
+                addresses = c.networks.entrySet().stream()
+                        .filter(e -> (e.getValue() != null && e.getValue().getAddress() != null))
+                        .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAddress()
+                        ));
             } else {
                 addresses = Collections.EMPTY_MAP;
             }
@@ -235,7 +236,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         }
         
         public NetworkInfo getNetwork(String networkId) {
-            return networks.get(networkId);
+            return networks == null ? null : networks.get(networkId);
         }
 
         public String getAddress(String networkId) {

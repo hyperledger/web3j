@@ -217,7 +217,8 @@ public final class AbiTypes {
         } else if (type.equals("bytes32")) {
             return Bytes32.class;
         } else {
-            throw new UnsupportedOperationException("Unsupported type encountered");
+            throw new UnsupportedOperationException("Unsupported type encountered: "
+                    + type);
         }
     }
 }

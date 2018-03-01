@@ -6,14 +6,19 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.web3j.abi.TypeDecoder;
+import org.web3j.abi.TypeEncoder;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.NetVersion;
+import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.ChainId;
 import org.web3j.utils.Numeric;
 
@@ -42,7 +47,10 @@ public class EnsResolverTest {
     }
 
     @Test
-    public void testLookupAddress() throws Exception {
+    public void testResolve() throws Exception {
+        configureSyncing(false);
+        configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
+
         NetVersion netVersion = new NetVersion();
         netVersion.setResult(Byte.toString(ChainId.MAINNET));
 
@@ -64,8 +72,40 @@ public class EnsResolverTest {
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(contractAddressResponse);
 
-        assertThat(ensResolver.lookupAddress("web3j.eth"),
+        assertThat(ensResolver.resolve("web3j.eth"),
                 is("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
+    }
+
+    @Test
+    public void testReverseResolve() throws Exception {
+        configureSyncing(false);
+        configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
+
+        NetVersion netVersion = new NetVersion();
+        netVersion.setResult(Byte.toString(ChainId.MAINNET));
+
+        String resolverAddress =
+                "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
+        String contractName =
+                "0x0000000000000000000000000000000000000000000000000000000000000020"
+                + TypeEncoder.encode(new Utf8String("web3j.eth"));
+        System.err.println(contractName);
+
+        EthCall resolverAddressResponse = new EthCall();
+        resolverAddressResponse.setResult(resolverAddress);
+
+        EthCall contractNameResponse = new EthCall();
+        contractNameResponse.setResult(contractName);
+
+        when(web3jService.send(any(Request.class), eq(NetVersion.class)))
+                .thenReturn(netVersion);
+        when(web3jService.send(any(Request.class), eq(EthCall.class)))
+                .thenReturn(resolverAddressResponse);
+        when(web3jService.send(any(Request.class), eq(EthCall.class)))
+                .thenReturn(contractNameResponse);
+
+        assertThat(ensResolver.reverseResolve("0x19e03255f667bdfd50a32722df860b1eeaf4d635"),
+                is("web3j.eth"));
     }
 
     @Test
@@ -91,10 +131,10 @@ public class EnsResolverTest {
         assertFalse(ensResolver.isSynced());
     }
 
-    private void configureSyncing(boolean isSynced) throws IOException {
+    private void configureSyncing(boolean isSyncing) throws IOException {
         EthSyncing ethSyncing = new EthSyncing();
         EthSyncing.Result result = new EthSyncing.Result();
-        result.setSyncing(isSynced);
+        result.setSyncing(isSyncing);
         ethSyncing.setResult(result);
 
         when(web3jService.send(any(Request.class), eq(EthSyncing.class)))

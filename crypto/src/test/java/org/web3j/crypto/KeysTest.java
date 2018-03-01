@@ -90,6 +90,36 @@ public class KeysTest {
     }
 
     @Test
+    public void testToChecksumAddress() {
+        // Test cases as per https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md#test-cases
+
+        assertThat(Keys.toChecksumAddress("0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359"),
+                is("0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"));
+
+        // All uppercase
+        assertThat(Keys.toChecksumAddress("0x52908400098527886E0F7030069857D2E4169EE7"),
+                is("0x52908400098527886E0F7030069857D2E4169EE7"));
+        assertThat(Keys.toChecksumAddress("0x8617E340B3D01FA5F11F306F4090FD50E238070D"),
+                is("0x8617E340B3D01FA5F11F306F4090FD50E238070D"));
+
+        // All lowercase
+        assertThat(Keys.toChecksumAddress("0xde709f2102306220921060314715629080e2fb77"),
+                is("0xde709f2102306220921060314715629080e2fb77"));
+        assertThat(Keys.toChecksumAddress("0x27b1fdb04752bbc536007a920d24acb045561c26"),
+                is("0x27b1fdb04752bbc536007a920d24acb045561c26"));
+
+        // Normal
+        assertThat(Keys.toChecksumAddress("0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed"),
+                is("0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed"));
+        assertThat(Keys.toChecksumAddress("0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"),
+                is("0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"));
+        assertThat(Keys.toChecksumAddress("0xdbF03B407c01E7cD3CBea99509d93f8DDDC8C6FB"),
+                is("0xdbF03B407c01E7cD3CBea99509d93f8DDDC8C6FB"));
+        assertThat(Keys.toChecksumAddress("0xD1220A0cf47c7B9Be7A2E6BA89F429762e7b9aDb"),
+                is("0xD1220A0cf47c7B9Be7A2E6BA89F429762e7b9aDb"));
+    }
+
+    @Test
     public void testSerializeECKey() {
         assertThat(Keys.serialize(SampleKeys.KEY_PAIR), is(ENCODED));
     }
