@@ -56,7 +56,7 @@ public class RlpDecoder {
      * @return recursive RLP structure
      */
     public static RlpList decode(byte[] rlpEncoded) {
-        RlpList rlpList = new RlpList(new ArrayList<>());
+        RlpList rlpList = new RlpList(new ArrayList<RlpType>());
         traverse(rlpEncoded, 0, rlpEncoded.length, rlpList);
         return rlpList;
     }
@@ -130,7 +130,7 @@ public class RlpDecoder {
 
                     byte listLen = (byte) (prefix - OFFSET_SHORT_LIST);
 
-                    RlpList newLevelList = new RlpList(new ArrayList<>());
+                    RlpList newLevelList = new RlpList(new ArrayList<RlpType>());
                     traverse(data, startPos + 1, startPos + listLen + 1, newLevelList);
                     rlpList.getValues().add(newLevelList);
 
@@ -148,7 +148,7 @@ public class RlpDecoder {
                     byte lenOfListLen = (byte) (prefix - OFFSET_LONG_LIST);
                     int listLen = calcLength(lenOfListLen, data, startPos);
 
-                    RlpList newLevelList = new RlpList(new ArrayList<>());
+                    RlpList newLevelList = new RlpList(new ArrayList<RlpType>());
                     traverse(data, startPos + lenOfListLen + 1,
                             startPos + lenOfListLen + listLen + 1, newLevelList);
                     rlpList.getValues().add(newLevelList);
