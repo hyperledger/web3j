@@ -45,7 +45,7 @@ public class Transfer extends ManagedTransaction {
             throws IOException, InterruptedException,
             TransactionException {
 
-        BigInteger gasPrice = getGasPrice();
+        BigInteger gasPrice = requestCurrentGasPrice();
         return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
     }
 

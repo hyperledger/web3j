@@ -45,7 +45,7 @@ I want to see details of the JSON-RPC requests and responses
 ------------------------------------------------------------
 
 web3j uses the `SLF4J <https://www.slf4j.org/>`_ logging facade, which you can easily integrate
-with your preferred loggin framework. One lightweight approach is to use
+with your preferred logging framework. One lightweight approach is to use
 `LOGBack <https://logback.qos.ch/>`_, which is already configured in the integration-tests module.
 
 Include the LOGBack dependencies listed in

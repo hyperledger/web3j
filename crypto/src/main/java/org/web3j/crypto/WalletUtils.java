@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.utils.Numeric;
 
+import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
 import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 
@@ -23,6 +25,7 @@ import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 public class WalletUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final SecureRandom secureRandom = SecureRandomUtils.secureRandom();
 
     static {
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -71,6 +74,33 @@ public class WalletUtils {
         return fileName;
     }
 
+    /**
+     * Generates a BIP-39 compatible Ethereum wallet. The private key for the wallet can
+     * be calculated using following algorithm:
+     * <pre>
+     *     Key = SHA-256(BIP_39_SEED(mnemonic, password))
+     * </pre>
+     *
+     * @param password Will be used for both wallet encryption and passphrase for BIP-39 seed
+     * @param destinationDirectory The directory containing the wallet
+     * @return A BIP-39 compatible Ethereum wallet
+     * @throws CipherException if the underlying cipher is not available
+     * @throws IOException if the destination cannot be written to
+     */
+    public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory)
+            throws CipherException, IOException {
+        byte[] initialEntropy = new byte[16];
+        secureRandom.nextBytes(initialEntropy);
+
+        String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
+        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
+
+        String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
+
+        return new Bip39Wallet(walletFile, mnemonic);
+    }
+
     public static Credentials loadCredentials(String password, String source)
             throws IOException, CipherException {
         return loadCredentials(password, new File(source));
@@ -80,6 +110,11 @@ public class WalletUtils {
             throws IOException, CipherException {
         WalletFile walletFile = objectMapper.readValue(source, WalletFile.class);
         return Credentials.create(Wallet.decrypt(password, walletFile));
+    }
+
+    public static Credentials loadBip39Credentials(String password, String mnemonic) {
+        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        return Credentials.create(ECKeyPair.create(sha256(seed)));
     }
 
     private static String getWalletFileName(WalletFile walletFile) {

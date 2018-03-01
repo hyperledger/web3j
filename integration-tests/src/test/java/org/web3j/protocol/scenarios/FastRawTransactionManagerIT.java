@@ -47,7 +47,7 @@ public class FastRawTransactionManagerIT extends Scenario {
                         web3j, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
 
         Transfer transfer = new Transfer(web3j, transactionManager);
-        BigInteger gasPrice = transfer.getGasPrice();
+        BigInteger gasPrice = transfer.requestCurrentGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
 
@@ -99,7 +99,7 @@ public class FastRawTransactionManagerIT extends Scenario {
 
         Transfer transfer = new Transfer(web3j, transactionManager);
 
-        BigInteger gasPrice = transfer.getGasPrice();
+        BigInteger gasPrice = transfer.requestCurrentGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
             TransactionReceipt transactionReceipt = createTransaction(transfer, gasPrice).send();

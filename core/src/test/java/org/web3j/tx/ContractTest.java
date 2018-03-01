@@ -13,6 +13,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -40,6 +41,8 @@ import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
@@ -64,7 +67,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                Contract.GAS_PRICE, Contract.GAS_LIMIT);
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
     }
 
     @Test
@@ -239,7 +242,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, transactionManager,
-                Contract.GAS_PRICE, Contract.GAS_LIMIT);
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
 
         testErrorScenario();
     }
@@ -274,6 +277,14 @@ public class ContractTest extends ManagedTransactionTester {
         assertNotNull(contract.getDeployedAddress("2"));
     }
 
+    @Test
+    public void testSetGetGasPrice() {
+        assertThat(ManagedTransaction.GAS_PRICE, equalTo(contract.getGasPrice()));
+        BigInteger newPrice = ManagedTransaction.GAS_PRICE.multiply(BigInteger.valueOf(2));
+        contract.setGasPrice(newPrice);
+        assertThat(newPrice, equalTo(contract.getGasPrice()));
+    }
+
     @Test(expected = RuntimeException.class)
     @SuppressWarnings("unchecked")
     public void testInvalidTransactionReceipt() throws Throwable {
@@ -295,6 +306,38 @@ public class ContractTest extends ManagedTransactionTester {
                 .thenReturn((Request) getTransactionReceiptRequest);
 
         testErrorScenario();
+    }
+
+    @Test
+    public void testExtractEventParametersWithLogGivenATransactionReceipt() {
+
+        final java.util.function.Function<String, Event> eventFactory = name ->
+                new Event(name, emptyList(), emptyList());
+
+        final Event testEvent1 = eventFactory.apply("TestEvent1");
+        final Event testEvent2 = eventFactory.apply("TestEvent2");
+
+        final List<Log> logs = Arrays.asList(
+                new Log(false, "" + 0, "0", "0x0", "0x0", "0", "0x1", "", "",
+                        singletonList(EventEncoder.encode(testEvent1))),
+                new Log(false, "" + 0, "0", "0x0", "0x0", "0", "0x2", "", "",
+                        singletonList(EventEncoder.encode(testEvent2)))
+        );
+
+        final TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setLogs(logs);
+
+        final List<Contract.EventValuesWithLog> eventValuesWithLogs1 =
+                contract.extractEventParametersWithLog(testEvent1, transactionReceipt);
+
+        assertThat(eventValuesWithLogs1.size(), equalTo(1));
+        assertThat(eventValuesWithLogs1.get(0).getLog(), equalTo(logs.get(0)));
+
+        final List<Contract.EventValuesWithLog> eventValuesWithLogs2 =
+                contract.extractEventParametersWithLog(testEvent2, transactionReceipt);
+
+        assertThat(eventValuesWithLogs2.size(), equalTo(1));
+        assertThat(eventValuesWithLogs2.get(0).getLog(), equalTo(logs.get(1)));
     }
 
     void testErrorScenario() throws Throwable {

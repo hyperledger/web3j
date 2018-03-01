@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.1.0</version>
+     <version>3.2.0</version>
    </dependency>
 
 Android:
@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.0.1-android</version>
+     <version>3.1.1-android</version>
    </dependency>
 
 Gradle
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.1.0')
+   compile ('org.web3j:core:3.2.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.0.1-android')
+   compile ('org.web3j:core:3.1.1-android')
 
 
 Start a client
@@ -62,7 +62,7 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new InfuraHttpService("https://morden.infura.io/your-token"));
+   Web3j web3 = Web3j.build(new HttpService("https://morden.infura.io/your-token"));
 
 For further information refer to :doc:`infura`.
 

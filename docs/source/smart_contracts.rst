@@ -195,7 +195,8 @@ And this also can be invoked by calling the Java class:
 
    org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
 
-A wrapper generated this way ia "enhanced" to expose the per-network deployed address of the contract.  These addresses are from the truffle deployment at the time the wrapper is generared.
+A wrapper generated this way ia "enhanced" to expose the per-network deployed address of the
+contract.  These addresses are from the truffle deployment at the time the wrapper is generared.
 
 .. _construction-and-deployment:
 
@@ -236,7 +237,7 @@ only return true if the deployed bytecode at the contract address matches the by
 smart contract wrapper.::
 
    contract.isValid();  // returns false if the contract bytecode does not match what's deployed
-                        // at the provided addres
+                        // at the provided address
 
 
 .. _transaction-managers:
@@ -263,6 +264,10 @@ In addition to the RawTransactionManager, web3j provides a
 `ClientTransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/ClientTransactionManager.java>`_
 which passes the responsibility of signing your transaction on to the Ethereum client you are
 connecting to.
+
+There is also a
+`ReadonlyTransactionManager <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ReadonlyTransactionManager.java>`_
+for when you only want to retrieve data from a smart contract, but not transact with it.
 
 
 Specifying the Chain Id on Transactions (EIP-155)

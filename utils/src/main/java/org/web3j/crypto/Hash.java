@@ -1,6 +1,8 @@
 package org.web3j.crypto;
 
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.spongycastle.jcajce.provider.digest.Keccak;
 
@@ -56,5 +58,21 @@ public class Hash {
      */
     public static String sha3String(String utf8String) {
         return Numeric.toHexString(sha3(utf8String.getBytes(Charset.forName("UTF-8"))));
+    }
+
+    /**
+     * Generates SHA-256 digest for the given {@code input}.
+     *
+     * @param input The input to digest
+     * @return The hash value for the given input
+     * @throws RuntimeException If we couldn't find any SHA-256 provider
+     */
+    public static byte[] sha256(byte[] input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return digest.digest(input);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Couldn't find a SHA-256 provider", e);
+        }
     }
 }

@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.Map;
@@ -39,12 +40,12 @@ public abstract class Contract extends ManagedTransaction {
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
 
-    private final String contractBinary;
-    private String contractAddress;
-    private final BigInteger gasPrice;
-    private final BigInteger gasLimit;
-    private TransactionReceipt transactionReceipt;
-    private Map<String, String> deployedAddresses;
+    protected final String contractBinary;
+    protected String contractAddress;
+    protected BigInteger gasPrice;
+    protected BigInteger gasLimit;
+    protected TransactionReceipt transactionReceipt;
+    protected Map<String, String> deployedAddresses;
 
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
@@ -94,6 +95,22 @@ public abstract class Contract extends ManagedTransaction {
 
     public String getContractBinary() {
         return contractBinary;
+    }
+
+    /**
+     * Allow {@code gasPrice} to be set.
+     * @param newPrice gas price to use for subsequent transactions
+     */
+    public void setGasPrice(BigInteger newPrice) {
+        this.gasPrice = newPrice;
+    }
+
+    /**
+     * Get the current {@code gasPrice} value this contract uses when executing transactions.
+     * @return the gas price set on this contract
+     */
+    public BigInteger getGasPrice() {
+        return gasPrice;
     }
 
     /**
@@ -382,7 +399,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, BigInteger.ZERO);
     }
 
-    protected EventValues extractEventParameters(
+    public static EventValues staticExtractEventParameters(
             Event event, Log log) {
 
         List<String> topics = log.getTopics();
@@ -404,6 +421,10 @@ public abstract class Contract extends ManagedTransaction {
         return new EventValues(indexedValues, nonIndexedValues);
     }
 
+    protected EventValues extractEventParameters(Event event, Log log) {
+        return staticExtractEventParameters(event, log);
+    }
+
     protected List<EventValues> extractEventParameters(
             Event event, TransactionReceipt transactionReceipt) {
 
@@ -411,6 +432,26 @@ public abstract class Contract extends ManagedTransaction {
         List<EventValues> values = new ArrayList<EventValues>();
         for (Log log : logs) {
             EventValues eventValues = extractEventParameters(event, log);
+            if (eventValues != null) {
+                values.add(eventValues);
+            }
+        }
+
+        return values;
+    }
+
+    protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
+        final EventValues eventValues = staticExtractEventParameters(event, log);
+        return (eventValues == null) ? null : new EventValuesWithLog(eventValues, log);
+    }
+
+    protected List<EventValuesWithLog> extractEventParametersWithLog(
+            Event event, TransactionReceipt transactionReceipt) {
+
+        List<Log> logs = transactionReceipt.getLogs();
+        List<EventValuesWithLog> values = new ArrayList<EventValuesWithLog>();
+        for (Log log : logs) {
+            EventValuesWithLog eventValues = extractEventParametersWithLog(event, log);
             if (eventValues != null) {
                 values.add(eventValues);
             }
@@ -445,4 +486,38 @@ public abstract class Contract extends ManagedTransaction {
         return addr == null ? getStaticDeployedAddress(networkId) : addr;
     }
 
+    /**
+     * Adds a log field to {@link EventValues}.
+     */
+    public static class EventValuesWithLog {
+        private final EventValues eventValues;
+        private final Log log;
+
+        private EventValuesWithLog(EventValues eventValues, Log log) {
+            this.eventValues = eventValues;
+            this.log = log;
+        }
+
+        public List<Type> getIndexedValues() {
+            return eventValues.getIndexedValues();
+        }
+
+        public List<Type> getNonIndexedValues() {
+            return eventValues.getNonIndexedValues();
+        }
+
+        public Log getLog() {
+            return log;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected static <S extends Type, T>
+            List<T> convertToNative(List<S> arr) {
+        List<T> out = new ArrayList<T>();
+        for (Iterator<S> it = arr.iterator(); it.hasNext(); ) {
+            out.add((T)it.next().getValue());
+        }
+        return out;
+    }
 }

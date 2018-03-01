@@ -4,11 +4,7 @@
 web3j: Web3 Java Ethereum Ðapp API
 ==================================
 
-.. Will revert back to web3j badge (https://readthedocs.org/projects/web3j/badge/?version=latest),
-   when they finally fix their build server issues for the project, see
-   https://github.com/rtfd/readthedocs.org/issues/2476 for further information
-
-.. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
+.. image:: https://readthedocs.org/projects/web3j/badge/?version=latest
    :target: http://docs.web3j.io
    :alt: Documentation Status
 
@@ -125,7 +121,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.1.0</version>
+     <version>3.2.0</version>
    </dependency>
 
 Android:
@@ -135,7 +131,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.0.1-android</version>
+     <version>3.1.1-android</version>
    </dependency>
 
 Gradle
@@ -145,13 +141,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.1.0')
+   compile ('org.web3j:core:3.2.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.0.1-android')
+   compile ('org.web3j:core:3.1.1-android')
 
 
 Start a client
@@ -174,7 +170,7 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new InfuraHttpService("https://ropsten.infura.io/your-token"));
+   Web3j web3 = Web3j.build(new HttpService("https://ropsten.infura.io/your-token"));
 
 For further information refer to
 `Using Infura with web3j <https://web3j.github.io/web3j/infura.html>`_
@@ -435,7 +431,7 @@ keystore):
 
 If you want to make use of Parity's
 `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__ or
-`Trace https://github.com/paritytech/parity/wiki/JSONRPC-trace-module`_, or Geth's
+`Trace <https://github.com/paritytech/parity/wiki/JSONRPC-trace-module>`_, or Geth's
 `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs,
 you can use the *org.web3j:parity* and *org.web3j:geth* modules respectively.
 
@@ -518,6 +514,9 @@ Please submit a pull request if you wish to include your project on the list:
   `@adridadou <https://github.com/adridadou>`_
 - `Ethereum Paper Wallet <https://github.com/matthiaszimmermann/ethereum-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
+- `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
+- `Presto Ethereum <https://github.com/xiaoyao1991/presto-ethereum>`_
+- `Kundera-Ethereum data importer and sync utility <https://github.com/impetus-opensource/Kundera/tree/trunk/src/kundera-ethereum>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
 
 
 Companies using web3j
@@ -527,8 +526,13 @@ Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
 - `blk.io <https://blk.io>`_
+- `comitFS <http://www.comitfs.com/>`_
 - `ConsenSys <https://consensys.net/>`_
+- `ING <https://www.ing.com>`_
 - `Othera <https://www.othera.io/>`_
+- `Pactum <https://pactum.io/>`_
+- `TrustWallet <http://trustwalletapp.com>`_
+- `Impetus <http://www.impetus.com/>`_
 
 
 Build instructions

@@ -19,7 +19,6 @@ import org.web3j.protocol.core.methods.response.DbPutString;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthCoinbase;
 import org.web3j.protocol.core.methods.response.EthCompileLLL;
 import org.web3j.protocol.core.methods.response.EthCompileSerpent;
@@ -72,14 +71,14 @@ import org.web3j.utils.Numeric;
  */
 public class JsonRpc2_0Web3j implements Web3j {
 
-    static final int BLOCK_TIME = 15 * 1000;
+    public static final int DEFAULT_BLOCK_TIME = 15 * 1000;
 
     protected final Web3jService web3jService;
     private final JsonRpc2_0Rx web3jRx;
     private final long blockTime;
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
-        this(web3jService, BLOCK_TIME, Async.defaultExecutorService());
+        this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
     }
 
     public JsonRpc2_0Web3j(
@@ -498,7 +497,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthUninstallFilter> ethUninstallFilter(BigInteger filterId) {
         return new Request<String, EthUninstallFilter>(
                 "eth_uninstallFilter",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 EthUninstallFilter.class);
     }
@@ -507,7 +506,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetFilterChanges(BigInteger filterId) {
         return new Request<String, EthLog>(
                 "eth_getFilterChanges",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 EthLog.class);
     }
@@ -516,7 +515,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthLog> ethGetFilterLogs(BigInteger filterId) {
         return new Request<String, EthLog>(
                 "eth_getFilterLogs",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 EthLog.class);
     }
@@ -663,7 +662,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhUninstallFilter> shhUninstallFilter(BigInteger filterId) {
         return new Request<String, ShhUninstallFilter>(
                 "shh_uninstallFilter",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 ShhUninstallFilter.class);
     }
@@ -672,7 +671,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId) {
         return new Request<String, ShhMessages>(
                 "shh_getFilterChanges",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 ShhMessages.class);
     }
@@ -681,7 +680,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, ShhMessages> shhGetMessages(BigInteger filterId) {
         return new Request<String, ShhMessages>(
                 "shh_getMessages",
-                Arrays.asList(Numeric.encodeQuantity(filterId)),
+                Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 ShhMessages.class);
     }

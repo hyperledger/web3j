@@ -1,3 +1,4 @@
+
 package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
@@ -247,5 +248,24 @@ public class TransactionReceipt {
         result = 31 * result + (getLogs() != null ? getLogs().hashCode() : 0);
         result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionReceipt{"
+                + "transactionHash='" + transactionHash + '\''
+                + ", transactionIndex='" + transactionIndex + '\''
+                + ", blockHash='" + blockHash + '\''
+                + ", blockNumber='" + blockNumber + '\''
+                + ", cumulativeGasUsed='" + cumulativeGasUsed + '\''
+                + ", gasUsed='" + gasUsed + '\''
+                + ", contractAddress='" + contractAddress + '\''
+                + ", root='" + root + '\''
+                + ", status='" + status + '\''
+                + ", from='" + from + '\''
+                + ", to='" + to + '\''
+                + ", logs=" + logs
+                + ", logsBloom='" + logsBloom + '\''
+                + '}';
     }
 }
