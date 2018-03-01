@@ -9,4 +9,6 @@ public interface IOFacade {
     void write(String payload) throws IOException;
 
     String read() throws IOException;
+    
+    void close() throws IOException;
 }
