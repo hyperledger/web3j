@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import javax.lang.model.element.Modifier;
 
@@ -108,12 +110,13 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildConstructor(TransactionManager.class,
                 TRANSACTION_MANAGER));
-        classBuilder.addMethods(
-                buildFunctionDefinitions(className, classBuilder, abi));
+        List<MethodSpec> methodSpecs = buildFunctionDefinitions(className, classBuilder, abi);
+        classBuilder.addMethods(methodSpecs);
+        classBuilder.addFields(buildFuncNameConstants(methodSpecs));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class,
                 TRANSACTION_MANAGER));
-        
+
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
@@ -245,6 +248,23 @@ public class SolidityFunctionWrapper extends Generator {
         return methodSpecs;
     }
 
+    private Iterable<FieldSpec> buildFuncNameConstants(List<MethodSpec> methodSpecs) {
+        List<FieldSpec> fields = new ArrayList<>();
+        Set<String> fieldNames = new HashSet<>();
+        for (MethodSpec method : methodSpecs) {
+            if (!fieldNames.contains(method.name)) {
+                FieldSpec field = FieldSpec.builder(String.class,
+                        "FUNC_" + method.name.toUpperCase(),
+                        Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("$S", method.name)
+                        .build();
+                fields.add(field);
+                fieldNames.add(method.name);
+            }
+        }
+        return fields;
+    }
+
     private static MethodSpec buildConstructor(Class authType, String authName) {
         return MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PROTECTED)
@@ -345,7 +365,7 @@ public class SolidityFunctionWrapper extends Generator {
                         CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
                 .build();
     }
-    
+
     String addParameters(
             MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes) {
 
@@ -562,37 +582,9 @@ public class SolidityFunctionWrapper extends Generator {
                     TypeReference.class, typeName);
 
             if (useNativeJavaTypes) {
-                if (nativeReturnTypeName.equals(ClassName.get(List.class))) {
-                    // We return list. So all the list elements should 
-                    // also be converted to native types
-                    TypeName listType = ParameterizedTypeName.get(List.class, Type.class);
-                    
-                    CodeBlock.Builder callCode = CodeBlock.builder();
-                    callCode.addStatement(
-                            "$T result = "
-                            + "($T) executeCallSingleValueReturn(function, $T.class)",
-                            listType, listType, nativeReturnTypeName);
-                    callCode.addStatement("return convertToNative(result)");
-                    
-                    TypeSpec callableType = TypeSpec.anonymousClassBuilder("")
-                            .addSuperinterface(ParameterizedTypeName.get(
-                                    ClassName.get(Callable.class), nativeReturnTypeName))
-                            .addMethod(MethodSpec.methodBuilder("call")
-                                    .addAnnotation(Override.class)
-                                    .addModifiers(Modifier.PUBLIC)
-                                    .addException(Exception.class)
-                                    .returns(nativeReturnTypeName)
-                                    .addCode(callCode.build())
-                                    .build())
-                            .build();
-
-                    methodBuilder.addStatement("return new $T(\n$L)", 
-                            buildRemoteCall(nativeReturnTypeName), callableType);
-                } else {
-                    methodBuilder.addStatement(
-                            "return executeRemoteCallSingleValueReturn(function, $T.class)",
-                            nativeReturnTypeName);
-                }
+                methodBuilder.addStatement(
+                        "return executeRemoteCallSingleValueReturn(function, $T.class)",
+                        nativeReturnTypeName);
             } else {
                 methodBuilder.addStatement("return executeRemoteCallSingleValueReturn(function)");
             }
@@ -611,7 +603,7 @@ public class SolidityFunctionWrapper extends Generator {
             buildVariableLengthReturnFunctionConstructor(
                     methodBuilder, functionName, inputParams, outputParameterTypes);
 
-            buildTupleResultContainer(methodBuilder, parameterizedTupleType, outputParameterTypes);
+            buildTupleResultContainer(methodBuilder, parameterizedTupleType);
         }
     }
 
@@ -702,8 +694,8 @@ public class SolidityFunctionWrapper extends Generator {
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(Log.class, "log")
                         .returns(ClassName.get("", responseClassName))
-                        .addStatement("$T eventValues = extractEventParametersWithLog(event, log)",
-                                Contract.EventValuesWithLog.class)
+                        .addStatement("$T eventValues = extractEventParameters(event, log)",
+                                EventValues.class)
                         .addStatement("$1T typedResponse = new $1T()",
                                 ClassName.get("", responseClassName))
                         .addCode(buildTypedResponse("typedResponse", indexedParameters,
@@ -743,14 +735,12 @@ public class SolidityFunctionWrapper extends Generator {
         buildVariableLengthEventConstructor(
                 transactionMethodBuilder, functionName, indexedParameters, nonIndexedParameters);
 
-        transactionMethodBuilder.addStatement("$T valueList = extractEventParametersWithLog(event, "
-                + "transactionReceipt)", ParameterizedTypeName.get(List.class,
-                        Contract.EventValuesWithLog.class))
+        transactionMethodBuilder.addStatement("$T valueList = extractEventParameters(event, "
+                + "transactionReceipt)", ParameterizedTypeName.get(List.class, EventValues.class))
                 .addStatement("$1T responses = new $1T(valueList.size())",
                         ParameterizedTypeName.get(ClassName.get(ArrayList.class),
                                 ClassName.get("", responseClassName)))
-                .beginControlFlow("for ($T eventValues : valueList)",
-                        Contract.EventValuesWithLog.class)
+                .beginControlFlow("for ($T eventValues : valueList)", EventValues.class)
                 .addStatement("$1T typedResponse = new $1T()",
                         ClassName.get("", responseClassName))
                 .addCode(buildTypedResponse("typedResponse", indexedParameters,
@@ -817,7 +807,7 @@ public class SolidityFunctionWrapper extends Generator {
             builder.addStatement("$L.log = log", objectName);
         } else {
             builder.addStatement(
-                    "$L.log = eventValues.getLog()",
+                    "$L.log = transactionReceipt.getLogs().get(valueList.indexOf(eventValues))",
                     objectName);
         }
         for (int i = 0; i < indexedParameters.size(); i++) {
@@ -917,53 +907,30 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private void buildTupleResultContainer(
-            MethodSpec.Builder methodBuilder, ParameterizedTypeName tupleType, 
-            List<TypeName> outputParameterTypes)
+            MethodSpec.Builder methodBuilder, ParameterizedTypeName tupleType)
             throws ClassNotFoundException {
 
         List<TypeName> typeArguments = tupleType.typeArguments;
 
         CodeBlock.Builder tupleConstructor = CodeBlock.builder();
         tupleConstructor.addStatement(
-                "$T results = executeCallMultipleValueReturn(function)",
+                "$T results = executeCallMultipleValueReturn(function);",
                 ParameterizedTypeName.get(List.class, Type.class))
                 .add("return new $T(", tupleType)
                 .add("$>$>");
 
-        String resultStringSimple = "\n($T) results.get($L)";
+        String resultString = "\n($T) results.get($L)";
         if (useNativeJavaTypes) {
-            resultStringSimple += ".getValue()";
+            resultString += ".getValue()";
         }
-        
-        String resultStringNativeList = 
-                "\nconvertToNative(($T) results.get($L).getValue())";
 
         int size = typeArguments.size();
-        ClassName classList = ClassName.get(List.class);
-        
-        for (int i = 0; i < size; i++) {
-            TypeName param = outputParameterTypes.get(i);
-            TypeName convertTo = typeArguments.get(i);
-
-            String resultString = resultStringSimple;
-            
-            // If we use native java types we need to convert 
-            // elements of arrays to native java types too
-            if (useNativeJavaTypes && param instanceof ParameterizedTypeName) {
-                ParameterizedTypeName oldContainer = (ParameterizedTypeName)param;
-                ParameterizedTypeName newContainer = (ParameterizedTypeName)convertTo;
-                if (newContainer.rawType.compareTo(classList) == 0 
-                        && newContainer.typeArguments.size() == 1) {
-                    convertTo = ParameterizedTypeName.get(classList, 
-                            oldContainer.typeArguments.get(0));
-                    resultString = resultStringNativeList;
-                }
-            }
-            
+        for (int i = 0; i < size - 1; i++) {
             tupleConstructor
-                .add(resultString, convertTo, i);
-            tupleConstructor.add(i < size - 1 ? ", " : ");\n");
+                    .add(resultString + ", ", typeArguments.get(i), i);
         }
+        tupleConstructor
+                .add(resultString + ");\n", typeArguments.get(size - 1), size - 1);
         tupleConstructor.add("$<$<");
 
         TypeSpec callableType = TypeSpec.anonymousClassBuilder("")
