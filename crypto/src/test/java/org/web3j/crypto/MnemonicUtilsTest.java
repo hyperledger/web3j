@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import org.web3j.utils.Strings;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.Parameterized.Parameters;
@@ -41,12 +43,7 @@ public class MnemonicUtilsTest {
      */
     @Parameters
     public static Collection<Object[]> data() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(SAMPLE_FILE));
-        StringBuilder builder = new StringBuilder();
-        for(String line; (line = br.readLine()) != null; ) {
-            builder.append(line).append("\n");
-        }
-        String data = builder.toString();
+        String data = readAllLinesWithDeliminator(SAMPLE_FILE, "\n");
         String[] each = data.split("###");
 
         List<Object[]> parameters = new ArrayList<>();
@@ -55,6 +52,12 @@ public class MnemonicUtilsTest {
         }
 
         return parameters;
+    }
+
+    private static String readAllLinesWithDeliminator(String path, String delimiter)
+            throws
+            IOException {
+        return Strings.join(MnemonicUtils.readAllLines(path), delimiter);
     }
 
     /**
