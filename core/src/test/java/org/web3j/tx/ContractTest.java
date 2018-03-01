@@ -311,11 +311,15 @@ public class ContractTest extends ManagedTransactionTester {
     @Test
     public void testExtractEventParametersWithLogGivenATransactionReceipt() {
 
-        final java.util.function.Function<String, Event> eventFactory = name ->
-                new Event(name, emptyList(), emptyList());
+        final Event testEvent1 = new Event(
+                "TestEvent1",
+                Collections.<TypeReference<?>>emptyList(),
+                Collections.<TypeReference<?>>emptyList());
 
-        final Event testEvent1 = eventFactory.apply("TestEvent1");
-        final Event testEvent2 = eventFactory.apply("TestEvent2");
+        final Event testEvent2 = new Event(
+                "TestEvent1",
+                Collections.<TypeReference<?>>emptyList(),
+                Collections.<TypeReference<?>>emptyList());
 
         final List<Log> logs = Arrays.asList(
                 new Log(false, "" + 0, "0", "0x0", "0x0", "0", "0x1", "", "",

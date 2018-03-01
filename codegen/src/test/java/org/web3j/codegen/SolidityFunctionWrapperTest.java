@@ -12,6 +12,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import org.hamcrest.core.Is;
+import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
 import org.web3j.TempFileProvider;
@@ -101,7 +102,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(getNativeType(
                 ParameterizedTypeName.get(
                         ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
-                equalTo(ParameterizedTypeName.get(
+                IsEqual.<TypeName>equalTo(ParameterizedTypeName.get(
                         ClassName.get(List.class), TypeName.get(String.class))));
     }
 

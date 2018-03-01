@@ -3,7 +3,6 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.spongycastle.asn1.x9.X9ECParameters;
 import org.spongycastle.asn1.x9.X9IntegerConverter;

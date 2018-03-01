@@ -131,9 +131,11 @@ public class SolidityFunctionWrapper extends Generator {
 
             final CodeBlock.Builder staticInit = CodeBlock.builder();
             staticInit.addStatement("_addresses = new HashMap<>()");
-            addresses.forEach((k, v) ->
-                    staticInit.addStatement(String.format("_addresses.put(\"%1s\", \"%2s\")", k, v))
-            );
+
+            for (String key : addresses.keySet()) {
+                staticInit.addStatement(
+                        String.format("_addresses.put(\"%1s\", \"%2s\")", key, addresses.get(key)));
+            }
             classBuilder.addStaticBlock(staticInit.build());
 
             // See org.web3j.tx.Contract#getStaticDeployedAddress(String)

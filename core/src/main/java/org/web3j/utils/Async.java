@@ -15,7 +15,12 @@ public class Async {
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
     static {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(executor)));
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                shutdown(executor);
+            }
+        }));
     }
 
     public static <T> Future<T> run(Callable<T> callable) {
@@ -34,10 +39,15 @@ public class Async {
      * @return new ScheduledExecutorService
      */
     public static ScheduledExecutorService defaultExecutorService() {
-        ScheduledExecutorService scheduledExecutorService =
+        final ScheduledExecutorService scheduledExecutorService =
                 Executors.newScheduledThreadPool(getCpuCount());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(scheduledExecutorService)));
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                shutdown(scheduledExecutorService);
+            }
+        }));
 
         return scheduledExecutorService;
     }
