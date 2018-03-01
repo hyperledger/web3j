@@ -699,7 +699,7 @@ public class SolidityFunctionWrapper extends Generator {
                 .build();
 
         observableMethodBuilder
-                .addStatement("return web3j.ethLogObservable(filter).map($L)", converter);
+                .addStatement("return web3j.ethLogObservable(" + FILTER + ").map($L)", converter);
 
         return observableMethodBuilder
                 .build();
