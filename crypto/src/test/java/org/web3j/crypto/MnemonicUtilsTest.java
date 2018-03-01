@@ -1,12 +1,9 @@
 package org.web3j.crypto;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.spongycastle.util.encoders.Hex;
 import org.junit.Test;
@@ -44,7 +41,12 @@ public class MnemonicUtilsTest {
      */
     @Parameters
     public static Collection<Object[]> data() throws IOException {
-        String data = Files.lines(Paths.get(SAMPLE_FILE)).collect(Collectors.joining("\n"));
+        BufferedReader br = new BufferedReader(new FileReader(SAMPLE_FILE));
+        StringBuilder builder = new StringBuilder();
+        for(String line; (line = br.readLine()) != null; ) {
+            builder.append(line).append("\n");
+        }
+        String data = builder.toString();
         String[] each = data.split("###");
 
         List<Object[]> parameters = new ArrayList<>();

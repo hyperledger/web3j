@@ -4,14 +4,15 @@ import org.spongycastle.crypto.digests.SHA512Digest;
 import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.spongycastle.crypto.params.KeyParameter;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.web3j.crypto.Hash.sha256;
 
 /**
@@ -86,7 +87,7 @@ public class MnemonicUtils {
 
         String salt = String.format("mnemonic%s", passphrase);
         PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA512Digest());
-        gen.init(mnemonic.getBytes(UTF_8), salt.getBytes(UTF_8), SEED_ITERATIONS);
+        gen.init(mnemonic.getBytes(Charset.forName("UTF-8")), salt.getBytes(Charset.forName("UTF-8")), SEED_ITERATIONS);
 
         return ((KeyParameter) gen.generateDerivedParameters(SEED_KEY_SIZE)).getKey();
     }
@@ -163,7 +164,12 @@ public class MnemonicUtils {
         URL url = Thread.currentThread().getContextClassLoader()
                 .getResource("en-mnemonic-word-list.txt");
         try {
-            return Files.readAllLines(Paths.get(url.toURI()));
+            BufferedReader br = new BufferedReader(new FileReader(url.toURI().getSchemeSpecificPart()));
+            List<String> data = new ArrayList<String>();
+            for(String line; (line = br.readLine()) != null; ) {
+                data.add(line);
+            }
+            return data;
         } catch (Exception e) {
             return Collections.emptyList();
         }

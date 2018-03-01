@@ -32,13 +32,16 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
-        try (StandardJavaFileManager fileManager =
-                compiler.getStandardFileManager(diagnostics, null, null)) {
+        StandardJavaFileManager fileManager =
+                compiler.getStandardFileManager(diagnostics, null, null);
+        try {
             Iterable<? extends JavaFileObject> compilationUnits = fileManager
                     .getJavaFileObjectsFromStrings(Collections.singletonList(sourceFile));
             JavaCompiler.CompilationTask task = compiler.getTask(
                     null, fileManager, diagnostics, null, null, compilationUnits);
             assertTrue("Generated contract contains compile time error", task.call());
+        } finally {
+            fileManager.close();
         }
     }
 
