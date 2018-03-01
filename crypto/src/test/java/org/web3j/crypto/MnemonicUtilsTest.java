@@ -19,8 +19,6 @@ import static org.junit.runners.Parameterized.Parameters;
 
 /**
  * Unit tests for {@link MnemonicUtils} utility class.
- *
- * @author Ali Dehghani
  */
 @RunWith(Parameterized.class)
 public class MnemonicUtilsTest {
