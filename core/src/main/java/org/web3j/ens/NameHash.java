@@ -58,6 +58,9 @@ public class NameHash {
                     .toLowerCase();
         } catch (IllegalArgumentException e) {
             throw new EnsResolutionException("Invalid ENS name provided: " + ensName);
+        } catch (StringIndexOutOfBoundsException e) {
+            // http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8022758
+            throw new EnsResolutionException("Invalid ENS name provided: " + ensName);
         }
     }
 }

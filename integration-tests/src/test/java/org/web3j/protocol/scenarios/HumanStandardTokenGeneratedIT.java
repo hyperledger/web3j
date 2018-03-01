@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import rx.Subscription;
+import rx.functions.Action1;
 
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -43,18 +44,28 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                 equalTo(aliceQty));
 
         // CHECKSTYLE:OFF
-        CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
+        final CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
         Subscription transferEventSubscription = contract.transferEventObservable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
-                        transferEventResponse -> transferEventCountDownLatch.countDown()
+                new Action1<TransferEventResponse>() {
+                    @Override
+                    public void call(TransferEventResponse transferEventResponse) {
+                        transferEventCountDownLatch.countDown();
+                    }
+                }
         );
 
-        CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
+        final CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
         Subscription approvalEventSubscription = contract.approvalEventObservable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
-                transferEventResponse -> transferEventCountDownLatch.countDown()
+                new Action1<ApprovalEventResponse>() {
+                    @Override
+                    public void call(ApprovalEventResponse transferEventResponse) {
+                        transferEventCountDownLatch.countDown();
+                    }
+                }
         );
         // CHECKSTYLE:ON
 
