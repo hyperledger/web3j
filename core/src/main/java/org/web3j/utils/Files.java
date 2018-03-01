@@ -13,8 +13,11 @@ public class Files {
 
     public static byte[] readBytes(File file) throws IOException {
         byte[] bytes = new byte[(int) file.length()];
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+        FileInputStream fileInputStream = new FileInputStream(file);
+        try {
             fileInputStream.read(bytes);
+        } finally {
+            if (fileInputStream != null) fileInputStream.close();
         }
         return bytes;
     }
