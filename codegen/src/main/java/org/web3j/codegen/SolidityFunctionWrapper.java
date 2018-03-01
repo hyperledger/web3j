@@ -69,8 +69,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String END_BLOCK = "endBlock";
     private static final String WEI_VALUE = "weiValue";
 
-    public static final ClassName LOG = ClassName.get(
-            "org.web3j.protocol.core.methods.response", "Log");
+    private static final ClassName LOG = ClassName.get(Log.class);
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
             + "<p><strong>Do not modify!</strong>\n"
