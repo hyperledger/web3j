@@ -54,8 +54,8 @@ public class MnemonicUtilsTest {
         return parameters;
     }
 
-    private static String readAllLinesWithDeliminator
-            (String path, String delimiter) throws IOException {
+    private static String readAllLinesWithDeliminator(
+            String path, String delimiter) throws IOException {
         return Strings.join(MnemonicUtils.readAllLines(path), delimiter);
     }
 
