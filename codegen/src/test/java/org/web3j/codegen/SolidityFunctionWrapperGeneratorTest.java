@@ -50,7 +50,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
-    public void testContractsGeneration() throws Exception {
+    public void testHumanStandardTokenGeneration() throws Exception {
         testCodeGenerationJvmTypes("contracts", "HumanStandardToken");
         testCodeGenerationSolidityTypes("contracts", "HumanStandardToken");
     }
