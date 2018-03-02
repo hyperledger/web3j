@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; web3j 3.2.0 documentation</title>
+    <title>Getting Started &mdash; web3j 3.3.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.2.0',
+        VERSION:     '3.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.2.0 documentation" href="index.html" />
+    <link rel="top" title="web3j 3.3.1 documentation" href="index.html" />
     <link rel="next" title="Modules" href="modules.html" />
     <link rel="prev" title="Quickstart" href="quickstart.html" />
    
@@ -53,7 +53,7 @@
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>3.2.0<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>3.3.1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -61,7 +61,7 @@
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>3.1.1-android<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>3.3.1-android<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -69,11 +69,11 @@
 <div class="section" id="gradle">
 <h2>Gradle<a class="headerlink" href="#gradle" title="Permalink to this headline">¶</a></h2>
 <p>Java 8:</p>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.2.0&#39;</span><span class="o">)</span>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.3.1&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Android:</p>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.1.1-android&#39;</span><span class="o">)</span>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.3.1-android&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
@@ -89,7 +89,7 @@
 </pre></div>
 </div>
 <p>Or use <a class="reference external" href="https://infura.io/">Infura</a>, which provides <strong>free clients</strong> running in the cloud:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">InfuraHttpService</span><span class="o">(</span><span class="s">&quot;https://morden.infura.io/your-token&quot;</span><span class="o">));</span>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">(</span><span class="s">&quot;https://morden.infura.io/your-token&quot;</span><span class="o">));</span>
 </pre></div>
 </div>
 <p>For further information refer to <a class="reference internal" href="infura.html"><em>Using Infura with web3j</em></a>.</p>
