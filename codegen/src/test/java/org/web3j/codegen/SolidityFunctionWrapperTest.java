@@ -139,7 +139,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param) {\n"
-                        + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
@@ -151,7 +151,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     }
 
     @Test
-    public void testBuildPayabelFunctionTransaction() throws Exception {
+    public void testBuildPayableFunctionTransaction() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
                 Arrays.asList(
@@ -166,7 +166,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param, java.math.BigInteger weiValue) {\n"
-                        + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
@@ -194,7 +194,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.math.BigInteger> functionName(java.math.BigInteger param) {\n"
-                        + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n"
                         + "  return executeRemoteCallSingleValueReturn(function, java.math.BigInteger.class);\n"
@@ -221,12 +221,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.math.BigInteger param) {\n"
-                + "  org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                 + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                 + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
                 + "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n"
                 + "      new java.util.concurrent.Callable<java.util.List>() {\n"
                 + "        @java.lang.Override\n"
+                + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
                 + "        public java.util.List call() throws java.lang.Exception {\n"
                 + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
                 + "          return convertToNative(result);\n"

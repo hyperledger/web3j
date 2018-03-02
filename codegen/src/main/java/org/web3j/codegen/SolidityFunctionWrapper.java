@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
@@ -578,7 +579,7 @@ public class SolidityFunctionWrapper extends Generator {
             }
             methodBuilder.returns(buildRemoteCall(nativeReturnTypeName));
 
-            methodBuilder.addStatement("$T function = "
+            methodBuilder.addStatement("final $T function = "
                             + "new $T($N, \n$T.<$T>asList($L), "
                             + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
                     Function.class, Function.class, funcNameToConst(functionName),
@@ -604,6 +605,9 @@ public class SolidityFunctionWrapper extends Generator {
                                     ClassName.get(Callable.class), nativeReturnTypeName))
                             .addMethod(MethodSpec.methodBuilder("call")
                                     .addAnnotation(Override.class)
+                                    .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class)
+                                            .addMember("value", "$S", "unchecked")
+                                            .build())
                                     .addModifiers(Modifier.PUBLIC)
                                     .addException(Exception.class)
                                     .returns(nativeReturnTypeName)
@@ -658,7 +662,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
 
-        methodBuilder.addStatement("$T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
+        methodBuilder.addStatement("final $T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
                         + ".<$T<?>>emptyList())",
                 Function.class, Function.class, funcNameToConst(functionName),
                 Arrays.class, Type.class, inputParams, Collections.class,
