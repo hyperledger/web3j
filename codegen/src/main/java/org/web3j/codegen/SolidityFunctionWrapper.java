@@ -26,7 +26,6 @@ import com.squareup.javapoet.TypeVariableName;
 import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
-import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -70,6 +69,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String START_BLOCK = "startBlock";
     private static final String END_BLOCK = "endBlock";
     private static final String WEI_VALUE = "weiValue";
+    private static final String FUNC_NAME_PREFIX = "FUNC_";
 
     private static final ClassName LOG = ClassName.get(Log.class);
 
@@ -109,9 +109,9 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildConstructor(TransactionManager.class,
                 TRANSACTION_MANAGER));
-        List<MethodSpec> methodSpecs = buildFunctionDefinitions(className, classBuilder, abi);
-        classBuilder.addMethods(methodSpecs);
-        classBuilder.addFields(buildFuncNameConstants(methodSpecs));
+        classBuilder.addFields(buildFuncNameConstants(abi));
+        classBuilder.addMethods(
+                buildFunctionDefinitions(className, classBuilder, abi));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class,
                 TRANSACTION_MANAGER));
@@ -218,7 +218,7 @@ public class SolidityFunctionWrapper extends Generator {
                 methodSpecs.add(buildFunction(functionDefinition));
 
             } else if (functionDefinition.getType().equals("event")) {
-                buildEventFunctions(functionDefinition, classBuilder);
+                methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
 
             } else if (functionDefinition.getType().equals("constructor")) {
                 constructor = true;
@@ -247,20 +247,24 @@ public class SolidityFunctionWrapper extends Generator {
         return methodSpecs;
     }
 
-    private Iterable<FieldSpec> buildFuncNameConstants(List<MethodSpec> methodSpecs) {
+    private Iterable<FieldSpec> buildFuncNameConstants(List<AbiDefinition> functionDefinitions) {
         List<FieldSpec> fields = new ArrayList<>();
         Set<String> fieldNames = new HashSet<>();
         fieldNames.add(Contract.FUNC_DEPLOY);
 
-        for (MethodSpec method : methodSpecs) {
-            if (!fieldNames.contains(method.name)) {
-                FieldSpec field = FieldSpec.builder(String.class,
-                        "FUNC_" + method.name.toUpperCase(),
-                        Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                        .initializer("$S", method.name)
-                        .build();
-                fields.add(field);
-                fieldNames.add(method.name);
+        for (AbiDefinition functionDefinition : functionDefinitions) {
+            if (functionDefinition.getType().equals("function")) {
+                String funcName = functionDefinition.getName();
+
+                if (!fieldNames.contains(funcName)) {
+                    FieldSpec field = FieldSpec.builder(String.class,
+                            funcNameToConst(funcName),
+                            Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            .initializer("$S", funcName)
+                            .build();
+                    fields.add(field);
+                    fieldNames.add(funcName);
+                }
             }
         }
         return fields;
@@ -575,9 +579,9 @@ public class SolidityFunctionWrapper extends Generator {
             methodBuilder.returns(buildRemoteCall(nativeReturnTypeName));
 
             methodBuilder.addStatement("$T function = "
-                            + "new $T($S, \n$T.<$T>asList($L), "
+                            + "new $T($N, \n$T.<$T>asList($L), "
                             + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
-                    Function.class, Function.class, functionName,
+                    Function.class, Function.class, funcNameToConst(functionName),
                     Arrays.class, Type.class, inputParams,
                     Arrays.class, TypeReference.class,
                     TypeReference.class, typeName);
@@ -654,9 +658,9 @@ public class SolidityFunctionWrapper extends Generator {
 
         methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
 
-        methodBuilder.addStatement("$T function = new $T(\n$S, \n$T.<$T>asList($L), \n$T"
+        methodBuilder.addStatement("$T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
                         + ".<$T<?>>emptyList())",
-                Function.class, Function.class, functionName,
+                Function.class, Function.class, funcNameToConst(functionName),
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
         if (functionDefinition.isPayable()) {
@@ -784,9 +788,10 @@ public class SolidityFunctionWrapper extends Generator {
         return transactionMethodBuilder.build();
     }
 
-    void buildEventFunctions(
+    List<MethodSpec> buildEventFunctions(
             AbiDefinition functionDefinition,
             TypeSpec.Builder classBuilder) throws ClassNotFoundException {
+        List<MethodSpec> methods = new ArrayList<>();
 
         String functionName = functionDefinition.getName();
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
@@ -814,10 +819,11 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addType(buildEventResponseObject(responseClassName, indexedParameters,
                 nonIndexedParameters));
 
-        classBuilder.addMethod(buildEventTransactionReceiptFunction(responseClassName,
+        methods.add(buildEventTransactionReceiptFunction(responseClassName,
                 functionName, indexedParameters, nonIndexedParameters));
-        classBuilder.addMethod(buildEventObservableFunction(responseClassName, functionName,
+        methods.add(buildEventObservableFunction(responseClassName, functionName,
                 indexedParameters, nonIndexedParameters));
+        return methods;
     }
 
     CodeBlock buildTypedResponse(
@@ -914,7 +920,7 @@ public class SolidityFunctionWrapper extends Generator {
         List<Object> objects = new ArrayList<>();
         objects.add(Function.class);
         objects.add(Function.class);
-        objects.add(functionName);
+        objects.add(funcNameToConst(functionName));
 
         objects.add(Arrays.class);
         objects.add(Type.class);
@@ -932,7 +938,7 @@ public class SolidityFunctionWrapper extends Generator {
                 ", ",
                 typeName -> "new $T<$T>() {}");
 
-        methodBuilder.addStatement("final $T function = new $T($S, \n$T.<$T>asList($L), \n$T"
+        methodBuilder.addStatement("final $T function = new $T($N, \n$T.<$T>asList($L), \n$T"
                 + ".<$T<?>>asList("
                 + asListParams + "))", objects.toArray());
     }
@@ -1050,6 +1056,10 @@ public class SolidityFunctionWrapper extends Generator {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         AbiDefinition[] abiDefinition = objectMapper.readValue(abi, AbiDefinition[].class);
         return Arrays.asList(abiDefinition);
+    }
+
+    private static String funcNameToConst(String funcName) {
+        return FUNC_NAME_PREFIX + funcName.toUpperCase();
     }
 
     private static class NamedTypeName {
