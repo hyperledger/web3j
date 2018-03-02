@@ -312,7 +312,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 false);
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
-        builder.addMethods(solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
+        builder.addMethods(
+                solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
 
         //CHECKSTYLE:OFF
         String expected =
@@ -389,7 +390,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 true);
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
-        builder.addFields(solidityFunctionWrapper.buildFuncNameConstants(Collections.singletonList(functionDefinition)));
+        builder.addFields(solidityFunctionWrapper
+                .buildFuncNameConstants(Collections.singletonList(functionDefinition)));
 
 
         //CHECKSTYLE:OFF
