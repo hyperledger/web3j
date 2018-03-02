@@ -570,7 +570,7 @@ public class SolidityFunctionWrapper extends Generator {
             }
             methodBuilder.returns(buildRemoteCall(nativeReturnTypeName));
 
-            methodBuilder.addStatement("$T function = "
+            methodBuilder.addStatement("final $T function = "
                             + "new $T($S, \n$T.<$T>asList($L), "
                             + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
                     Function.class, Function.class, functionName,
@@ -650,7 +650,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
 
-        methodBuilder.addStatement("$T function = new $T(\n$S, \n$T.<$T>asList($L), \n$T"
+        methodBuilder.addStatement("final $T function = new $T(\n$S, \n$T.<$T>asList($L), \n$T"
                         + ".<$T<?>>emptyList())",
                 Function.class, Function.class, functionName,
                 Arrays.class, Type.class, inputParams, Collections.class,
