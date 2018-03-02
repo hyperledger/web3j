@@ -69,8 +69,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String END_BLOCK = "endBlock";
     private static final String WEI_VALUE = "weiValue";
 
-    public static final ClassName LOG = ClassName.get(
-            "org.web3j.protocol.core.methods.response", "Log");
+    private static final ClassName LOG = ClassName.get(Log.class);
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
             + "<p><strong>Do not modify!</strong>\n"
@@ -563,7 +562,7 @@ public class SolidityFunctionWrapper extends Generator {
             }
             methodBuilder.returns(buildRemoteCall(nativeReturnTypeName));
 
-            methodBuilder.addStatement("$T function = "
+            methodBuilder.addStatement("final $T function = "
                             + "new $T($S, \n$T.<$T>asList($L), "
                             + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
                     Function.class, Function.class, functionName,
@@ -643,7 +642,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
 
-        methodBuilder.addStatement("$T function = new $T(\n$S, \n$T.<$T>asList($L), \n$T"
+        methodBuilder.addStatement("final $T function = new $T(\n$S, \n$T.<$T>asList($L), \n$T"
                         + ".<$T<?>>emptyList())",
                 Function.class, Function.class, functionName,
                 Arrays.class, Type.class, inputParams, Collections.class,
