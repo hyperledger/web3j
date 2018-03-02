@@ -117,12 +117,12 @@ public class Account {
         return this.transactionManager.sendTransaction(contractAddress, data, BigInteger.valueOf(quota), nonce, getValidUntilBlock());
     }
 
-    public Observable<Object> eventObservable(String contractName, String eventName, DefaultBlockParameter start, DefaultBlockParameter end)
+    public Observable<Object> eventObservable(String contractName, String eventName)
             throws Exception {
         CompiledContract contract = loadContract(contractName);
         String contractAddress = getContractAddress(contractName);
         AbiDefinition eventAbi = contract.getEventAbi(eventName);
-        return eventObservable(contractAddress, eventAbi, start, end);
+        return eventObservable(contractAddress, eventAbi, DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST);
     }
 
     public Observable<Object> eventObservable(String contractAddress, AbiDefinition eventAbi,
