@@ -32,7 +32,7 @@ import rx.functions.Func1;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.3.0.
+ * <p>Generated with web3j version 3.3.1.
  */
 public class MetaCoin extends Contract {
     private static final String BINARY = "0x6060604052341561000f57600080fd5b6127106000803273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055506103c5806100636000396000f300606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680637bd703e81461005c57806390b98a11146100a9578063f8b2cb4f14610103575b600080fd5b341561006757600080fd5b610093600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610150565b6040518082815260200191505060405180910390f35b34156100b457600080fd5b6100e9600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919080359060200190919050506101f8565b604051808215151515815260200191505060405180910390f35b341561010e57600080fd5b61013a600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610351565b6040518082815260200191505060405180910390f35b600073__ConvertLib____________________________6396e4ee3d61017584610351565b60026000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018281526020019250505060206040518083038186803b15156101d657600080fd5b6102c65a03f415156101e757600080fd5b505050604051805190509050919050565b6000816000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020541015610249576000905061034b565b816000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550816000808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef846040518082815260200191505060405180910390a3600190505b92915050565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490509190505600a165627a7a72305820f791829bf0c920a6d43123cac9b9894757ddc838c17efbad6d56773d6e3dcf4c0029";
@@ -59,14 +59,14 @@ public class MetaCoin extends Contract {
     }
 
     public RemoteCall<Uint256> getBalanceInEth(Address addr) {
-        Function function = new Function(FUNC_GETBALANCEINETH,
+        final Function function = new Function(FUNC_GETBALANCEINETH,
                 Arrays.<Type>asList(addr),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function);
     }
 
     public RemoteCall<TransactionReceipt> sendCoin(Address receiver, Uint256 amount) {
-        Function function = new Function(
+        final Function function = new Function(
                 FUNC_SENDCOIN,
                 Arrays.<Type>asList(receiver, amount),
                 Collections.<TypeReference<?>>emptyList());
@@ -74,7 +74,7 @@ public class MetaCoin extends Contract {
     }
 
     public RemoteCall<Uint256> getBalance(Address addr) {
-        Function function = new Function(FUNC_GETBALANCE,
+        final Function function = new Function(FUNC_GETBALANCE,
                 Arrays.<Type>asList(addr),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function);

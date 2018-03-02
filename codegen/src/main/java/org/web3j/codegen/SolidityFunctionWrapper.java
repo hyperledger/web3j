@@ -248,7 +248,7 @@ public class SolidityFunctionWrapper extends Generator {
         return methodSpecs;
     }
 
-    private Iterable<FieldSpec> buildFuncNameConstants(List<AbiDefinition> functionDefinitions) {
+    Iterable<FieldSpec> buildFuncNameConstants(List<AbiDefinition> functionDefinitions) {
         List<FieldSpec> fields = new ArrayList<>();
         Set<String> fieldNames = new HashSet<>();
         fieldNames.add(Contract.FUNC_DEPLOY);

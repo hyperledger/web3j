@@ -377,4 +377,30 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(builder.build().toString(), is(expected));
     }
 
+    @Test
+    public void testBuildFuncNameConstants() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                false,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8")),
+                "functionName",
+                Collections.emptyList(),
+                "function",
+                true);
+        TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
+
+        builder.addFields(solidityFunctionWrapper.buildFuncNameConstants(Collections.singletonList(functionDefinition)));
+
+
+        //CHECKSTYLE:OFF
+        String expected =
+                "class testClass {\n" +
+                        "  public static final java.lang.String FUNC_FUNCTIONNAME = \"functionName\";\n" +
+                        "}\n";
+        //CHECKSTYLE:ON
+
+
+        assertThat(builder.build().toString(), is(expected));
+    }
+
 }
