@@ -151,7 +151,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     }
 
     @Test
-    public void testBuildPayabelFunctionTransaction() throws Exception {
+    public void testBuildPayableFunctionTransaction() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
                 Arrays.asList(
