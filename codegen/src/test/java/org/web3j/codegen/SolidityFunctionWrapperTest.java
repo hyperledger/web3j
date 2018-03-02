@@ -153,7 +153,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     }
 
     @Test
-    public void testBuildPayabelFunctionTransaction() throws Exception {
+    public void testBuildPayableFunctionTransaction() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
                 Arrays.<AbiDefinition.NamedType>asList(
@@ -229,6 +229,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 + "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n"
                 + "      new java.util.concurrent.Callable<java.util.List>() {\n"
                 + "        @java.lang.Override\n"
+                + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
                 + "        public java.util.List call() throws java.lang.Exception {\n"
                 + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
                 + "          return convertToNative(result);\n"
