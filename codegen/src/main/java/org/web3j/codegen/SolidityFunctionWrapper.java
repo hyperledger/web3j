@@ -12,6 +12,7 @@ import java.util.concurrent.Callable;
 import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
@@ -578,6 +579,9 @@ public class SolidityFunctionWrapper extends Generator {
                                     ClassName.get(Callable.class), nativeReturnTypeName))
                             .addMethod(MethodSpec.methodBuilder("call")
                                     .addAnnotation(Override.class)
+                                    .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class)
+                                            .addMember("value", "$S", "unchecked")
+                                            .build())
                                     .addModifiers(Modifier.PUBLIC)
                                     .addException(Exception.class)
                                     .returns(nativeReturnTypeName)
