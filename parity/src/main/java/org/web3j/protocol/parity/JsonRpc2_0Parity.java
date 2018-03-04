@@ -38,7 +38,16 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     public JsonRpc2_0Parity(Web3jService web3jService) {
         super(web3jService);
     }
-    
+
+    @Override
+    public Request<?, ParityAddressesResponse> parityListAccounts(BigInteger quantity) {
+        return new Request<>(
+                "parity_listAccounts",
+                Arrays.asList(quantity, null),
+                web3jService,
+                ParityAddressesResponse.class);
+    }
+
     @Override
     public Request<?, ParityAllAccountsInfo> parityAllAccountsInfo() {
         return new Request<>(

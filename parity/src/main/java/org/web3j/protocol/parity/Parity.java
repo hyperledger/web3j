@@ -1,5 +1,6 @@
 package org.web3j.protocol.parity;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,9 @@ public interface Parity extends Admin, Trace {
     static Parity build(Web3jService web3jService) {
         return new JsonRpc2_0Parity(web3jService);
     }
-    
+
+    Request<?, ParityAddressesResponse> parityListAccounts(BigInteger quantity);
+
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
     
     Request<?, BooleanResponse> parityChangePassword(

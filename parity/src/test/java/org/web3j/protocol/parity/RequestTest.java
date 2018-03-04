@@ -27,7 +27,16 @@ public class RequestTest extends RequestTester {
     protected void initWeb3Client(HttpService httpService) {
         web3j = Parity.build(httpService);
     }
-    
+
+    @Test
+    public void testParityListAccounts() throws Exception {
+        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        web3j.parityListAccounts(maxQuantityReturned).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
+                + "\"params\":[100,null],\"id\":1}");
+    }
+
     @Test
     public void testParityAllAccountsInfo() throws Exception {
         web3j.parityAllAccountsInfo().send();
