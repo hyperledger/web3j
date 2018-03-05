@@ -7,8 +7,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.commons.cli.*;
+
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.tx.Contract;
 import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
 
@@ -19,12 +22,44 @@ import static org.web3j.utils.Collection.tail;
  * Java wrapper source code generator for Solidity ABI format.
  */
 public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
+    static final String COMMAND_PREFIX = "solidity generate";
 
-    private static final String USAGE = "solidity generate "
-            + "[--javaTypes|--solidityTypes] "
-            + "<input binary file>.bin <input abi file>.abi "
-            + "-p|--package <base package name> "
-            + "-o|--output <destination base directory>";
+    static final Option OPTION_JAVA_TYPE = Option.builder("jt")
+            .longOpt("javaTypes")
+            .desc("use native java types")
+            .hasArg(false)
+            .required(false)
+            .build();
+    static final Option OPTION_SOLIDITY_TYPE = Option.builder("st")
+            .longOpt("solidityTypes")
+            .desc("use solidity types")
+            .hasArg(false)
+            .required(false)
+            .build();
+    static final Option OPTION_BIN_FILE = Option.builder("b")
+            .longOpt("binFile")
+            .desc("bin file with contract compiled code in order to generate deploy methods")
+            .hasArg(true)
+            .required(false)
+            .build();
+    static final Option OPTION_ABI_FILE = Option.builder("a")
+            .longOpt("abiFile")
+            .desc("abi file with contract definition")
+            .hasArg(true)
+            .required(true)
+            .build();
+    static final Option OPTION_OUTPUT = Option.builder("o")
+            .longOpt("output")
+            .desc("destination base directory")
+            .hasArg(true)
+            .required(true)
+            .build();
+    static final Option OPTION_PACKAGE = Option.builder("p")
+            .longOpt("package")
+            .desc("base package name")
+            .hasArg(true)
+            .required(true)
+            .build();
 
     private final String binaryFileLocation;
     private final String absFileLocation;
@@ -41,50 +76,51 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         this.absFileLocation = absFileLocation;
     }
 
+    public static Options buildCommandLineOptions() {
+        OptionGroup typeGroup = new OptionGroup();
+        typeGroup.setRequired(false);
+        typeGroup.addOption(OPTION_JAVA_TYPE);
+        typeGroup.addOption(OPTION_SOLIDITY_TYPE);
+
+        Options options = new Options();
+        options.addOptionGroup(typeGroup);
+        options.addOption(OPTION_BIN_FILE);
+        options.addOption(OPTION_ABI_FILE);
+        options.addOption(OPTION_OUTPUT);
+        options.addOption(OPTION_PACKAGE);
+
+        return options;
+    }
+
     public static void run(String[] args) throws Exception {
         if (args.length < 1 || !args[0].equals("generate")) {
-            exitError(USAGE);
+            exitErrorAndPrintHelp("error: \'generate\' is missing");
         } else {
             main(tail(args));
         }
     }
 
     public static void main(String[] args) throws Exception {
+        CommandLineParser parser = new DefaultParser();
+        try {
+            CommandLine line = parser.parse(buildCommandLineOptions(), args);
+            boolean useJavaNativeTypes = !line.hasOption(OPTION_SOLIDITY_TYPE.getOpt());
+            String binaryFileLocation = line.getOptionValue(OPTION_BIN_FILE.getOpt(),
+                    Contract.BIN_NOT_PROVIDED);
+            String absFileLocation = line.getOptionValue(OPTION_ABI_FILE.getOpt());
+            String destinationDirLocation = line.getOptionValue(OPTION_OUTPUT.getOpt());
+            String basePackageName = line.getOptionValue(OPTION_PACKAGE.getOpt());
 
-        String[] fullArgs;
-        if (args.length == 6) {
-            fullArgs = new String[args.length + 1];
-            fullArgs[0] = JAVA_TYPES_ARG;
-            System.arraycopy(args, 0, fullArgs, 1, args.length);
-        } else {
-            fullArgs = args;
+            new SolidityFunctionWrapperGenerator(
+                    binaryFileLocation,
+                    absFileLocation,
+                    destinationDirLocation,
+                    basePackageName,
+                    useJavaNativeTypes)
+                    .generate();
+        } catch (ParseException exp) {
+            exitErrorAndPrintHelp(exp.getMessage());
         }
-
-        if (fullArgs.length != 7) {
-            exitError(USAGE);
-        }
-
-        boolean useJavaNativeTypes = useJavaNativeTypes(fullArgs[0], USAGE);
-
-        String binaryFileLocation = parsePositionalArg(fullArgs, 1);
-        String absFileLocation = parsePositionalArg(fullArgs, 2);
-        String destinationDirLocation = parseParameterArgument(fullArgs, "-o", "--outputDir");
-        String basePackageName = parseParameterArgument(fullArgs, "-p", "--package");
-
-        if (binaryFileLocation.equals("")
-                || absFileLocation.equals("")
-                || destinationDirLocation.equals("")
-                || basePackageName.equals("")) {
-            exitError(USAGE);
-        }
-
-        new SolidityFunctionWrapperGenerator(
-                binaryFileLocation,
-                absFileLocation,
-                destinationDirLocation,
-                basePackageName,
-                useJavaNativeTypes)
-                .generate();
     }
 
     static List<AbiDefinition> loadContractDefinition(File absFile)
@@ -95,14 +131,13 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     }
 
     private void generate() throws IOException, ClassNotFoundException {
+        String binary = Contract.BIN_NOT_PROVIDED;
+        if (!binaryFileLocation.equals(Contract.BIN_NOT_PROVIDED)) {
+            File binaryFile = new File(binaryFileLocation);
 
-        File binaryFile = new File(binaryFileLocation);
-        if (!binaryFile.exists()) {
-            exitError("Invalid input binary file specified: " + binaryFileLocation);
+            byte[] bytes = Files.readBytes(new File(binaryFile.toURI()));
+            binary = new String(bytes);
         }
-
-        byte[] bytes = Files.readBytes(new File(binaryFile.toURI()));
-        String binary = new String(bytes);
 
         File absFile = new File(absFileLocation);
         if (!absFile.exists() || !absFile.canRead()) {
@@ -110,7 +145,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         }
         String fileName = absFile.getName();
         String contractName = getFileNameNoExtension(fileName);
-        bytes = Files.readBytes(new File(absFile.toURI()));
+        byte[] bytes = Files.readBytes(new File(absFile.toURI()));
         String abi = new String(bytes);
 
         List<AbiDefinition> functionDefinitions = loadContractDefinition(absFile);
@@ -126,5 +161,9 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         }
     }
 
-
+    private static void exitErrorAndPrintHelp(String message) {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp(COMMAND_PREFIX, buildCommandLineOptions());
+        exitError(message);
+    }
 }

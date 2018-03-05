@@ -43,6 +43,7 @@ public abstract class Contract extends ManagedTransaction {
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
 
+    public static final String BIN_NOT_PROVIDED = "Bin file was not provided";
     protected final String contractBinary;
     protected String contractAddress;
     protected BigInteger gasPrice;

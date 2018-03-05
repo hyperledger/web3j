@@ -3,7 +3,9 @@ package org.web3j.codegen;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -79,34 +81,48 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         testCodeGenerationSolidityTypes("shipit", "ShipIt");
     }
 
+    @Test
+    public void testContractsNoBin() throws Exception {
+        testCodeGeneration("contracts", "HumanStandardToken", JAVA_TYPES_ARG, false);
+        testCodeGeneration("contracts", "HumanStandardToken", SOLIDITY_TYPES_ARG, false);
+    }
+
     private void testCodeGenerationJvmTypes(
             String contractName, String inputFileName) throws Exception {
-
-        testCodeGeneration(
-                contractName, inputFileName, "org.web3j.unittests.java", JAVA_TYPES_ARG);
-
+        testCodeGeneration(contractName, inputFileName, JAVA_TYPES_ARG, true);
     }
 
     private void testCodeGenerationSolidityTypes(
             String contractName, String inputFileName) throws Exception {
-
-        testCodeGeneration(
-                contractName, inputFileName, "org.web3j.unittests.solidity", SOLIDITY_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, SOLIDITY_TYPES_ARG, true);
     }
 
     private void testCodeGeneration(
-            String contractName, String inputFileName, String packageName, String types)
+            String contractName, String inputFileName, String types, boolean useBin)
             throws Exception {
+        String packageName = null;
+        if (types.equals(JAVA_TYPES_ARG)) {
+            packageName = "org.web3j.unittests.java";
+        } else if (types.equals(SOLIDITY_TYPES_ARG)) {
+            packageName = "org.web3j.unittests.solidity";
+        }
 
-        SolidityFunctionWrapperGenerator.main(Arrays.asList(
-                types,
-                solidityBaseDir + File.separator + contractName + File.separator
-                        + "build" + File.separator + inputFileName + ".bin",
-                solidityBaseDir + File.separator + contractName + File.separator
-                        + "build" + File.separator + inputFileName + ".abi",
-                "-p", packageName,
-                "-o", tempDirPath
-        ).toArray(new String[0])); // https://shipilev.net/blog/2016/arrays-wisdom-ancients/
+        List<String> options = new ArrayList<>();
+        options.add(types);
+        if (useBin) {
+            options.add("-b");
+            options.add(solidityBaseDir + File.separator + contractName + File.separator
+                    + "build" + File.separator + inputFileName + ".bin");
+        }
+        options.add("-a");
+        options.add(solidityBaseDir + File.separator + contractName + File.separator
+                + "build" + File.separator + inputFileName + ".abi");
+        options.add("-p");
+        options.add(packageName);
+        options.add("-o");
+        options.add(tempDirPath);
+
+        SolidityFunctionWrapperGenerator.main(options.toArray(new String[options.size()]));
 
         verifyGeneratedCode(tempDirPath + File.separator
                 + packageName.replace('.', File.separatorChar) + File.separator

@@ -108,12 +108,14 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildConstructor(TransactionManager.class,
                 TRANSACTION_MANAGER));
-        classBuilder.addMethods(
-                buildFunctionDefinitions(className, classBuilder, abi));
+        classBuilder.addMethods(buildFunctionDefinitions(classBuilder, abi));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class,
                 TRANSACTION_MANAGER));
-        
+        if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
+            classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
+        }
+
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
@@ -204,13 +206,10 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private List<MethodSpec> buildFunctionDefinitions(
-            String className,
             TypeSpec.Builder classBuilder,
             List<AbiDefinition> functionDefinitions) throws ClassNotFoundException {
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
-        boolean constructor = false;
-
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
                 methodSpecs.add(buildFunction(functionDefinition));
@@ -218,7 +217,32 @@ public class SolidityFunctionWrapper extends Generator {
             } else if (functionDefinition.getType().equals("event")) {
                 buildEventFunctions(functionDefinition, classBuilder);
 
-            } else if (functionDefinition.getType().equals("constructor")) {
+            }
+        }
+
+        return methodSpecs;
+    }
+
+    private static MethodSpec buildConstructor(Class authType, String authName) {
+        return MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PROTECTED)
+                .addParameter(String.class, CONTRACT_ADDRESS)
+                .addParameter(Web3j.class, WEB3J)
+                .addParameter(authType, authName)
+                .addParameter(BigInteger.class, GAS_PRICE)
+                .addParameter(BigInteger.class, GAS_LIMIT)
+                .addStatement("super($N, $N, $N, $N, $N, $N)",
+                        BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
+                .build();
+    }
+
+    List<MethodSpec> buildDeployMethods(String className,
+                                        TypeSpec.Builder classBuilder,
+                                        List<AbiDefinition> functionDefinitions) {
+        boolean constructor = false;
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        for (AbiDefinition functionDefinition : functionDefinitions) {
+            if (functionDefinition.getType().equals("constructor")) {
                 constructor = true;
                 methodSpecs.add(buildDeploy(
                         className, functionDefinition, Credentials.class, CREDENTIALS));
@@ -241,21 +265,7 @@ public class SolidityFunctionWrapper extends Generator {
             methodSpecs.add(buildDeployNoParams(
                     transactionManagerMethodBuilder, className, TRANSACTION_MANAGER, false));
         }
-
         return methodSpecs;
-    }
-
-    private static MethodSpec buildConstructor(Class authType, String authName) {
-        return MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PROTECTED)
-                .addParameter(String.class, CONTRACT_ADDRESS)
-                .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName)
-                .addParameter(BigInteger.class, GAS_PRICE)
-                .addParameter(BigInteger.class, GAS_LIMIT)
-                .addStatement("super($N, $N, $N, $N, $N, $N)",
-                        BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
-                .build();
     }
 
     private MethodSpec buildDeploy(
