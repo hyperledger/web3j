@@ -103,7 +103,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     public static void main(String[] args) throws Exception {
         CommandLineParser parser = new DefaultParser();
         try {
-            CommandLine line = parser.parse(buildCommandLineOptions(), args);
+            CommandLine line = parser.parse(buildCommandLineOptions(), args, true);
             boolean useJavaNativeTypes = !line.hasOption(OPTION_SOLIDITY_TYPE.getOpt());
             String binaryFileLocation = line.getOptionValue(OPTION_BIN_FILE.getOpt(),
                     Contract.BIN_NOT_PROVIDED);
