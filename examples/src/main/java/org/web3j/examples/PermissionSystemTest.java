@@ -9,6 +9,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.CitaTransactionManager;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Strings;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -36,20 +37,6 @@ public class PermissionSystemTest {
 
     static BigInteger newNonce() {
         return BigInteger.valueOf(Math.abs(random.nextLong()));
-    }
-
-    private static byte[] asciiToHex(String asciiValue)
-    {
-        char[] chars = asciiValue.toCharArray();
-        StringBuffer hex = new StringBuffer();
-        for (int i = 0; i < chars.length; i++)
-        {
-            hex.append(Integer.toHexString((int) chars[i]));
-        }
-
-        String hexStr = hex.toString() + "".join("", Collections.nCopies(32 - (hex.length()/2), "00"));
-        System.out.println("hex str: " + hexStr);
-        return Numeric.hexStringToByteArray(hexStr);
     }
 
     public static void main(String[] args) throws Exception {
@@ -86,9 +73,9 @@ public class PermissionSystemTest {
         newUsers.add("0x1a702a25c6bca72b67987968f0bfb3a3213c5600");
         newUsers.add("0x1a702a25c6bca72b67987968f0bfb3a3213c5601");
         newUsers.add("0x1a702a25c6bca72b67987968f0bfb3a3213c5602");
-        TransactionReceipt tx2 = permissionSystem.newGroup(
-                asciiToHex("zz"), asciiToHex("test_group"), newUsers, true, BigInteger.valueOf(0),
-                asciiToHex(""), "This is a test group", quota, newNonce(), getValidUntilBlock()).send();
+        TransactionReceipt tx2 = permissionSystem.newGroup( Strings.asciiToHex("zz", 32),
+                Strings.asciiToHex("test_group", 32), newUsers, true, BigInteger.valueOf(0),
+                Strings.asciiToHex("", 32), "This is a test group", quota, newNonce(), getValidUntilBlock()).send();
 
         if (tx2.getErrorMessage() != null) {
             System.out.println("create new group failed because of " + tx2.getErrorMessage());
@@ -98,7 +85,7 @@ public class PermissionSystemTest {
         List<Bytes32> groups = permissionSystem.queryGroups(newUsers.get(0)).send();
         // remove prefix 0x
         String hexStr = Numeric.toHexString(groups.get(0).getValue()).substring(2);
-        System.out.println("group: " + hexStringToAscii(hexStr));
+        System.out.println("group: " + Strings.hexStringToAscii(hexStr));
 
         List<String> conts = new ArrayList<>();
         List<byte[]> funcs = new ArrayList<>();
@@ -109,18 +96,5 @@ public class PermissionSystemTest {
             System.out.println("call newPermission failed because of " + tx3.getErrorMessage());
             System.exit(1);
         }
-    }
-
-    public static String hexStringToAscii(String hexStr) {
-        assert(hexStr.length() % 2 == 0);
-        StringBuilder asciiStr = new StringBuilder();
-        for (int i = 0; i < hexStr.length(); i += 2) {
-            String str = hexStr.substring(i, i + 2);
-            if (str.equals("00")) {
-                break;
-            }
-            asciiStr.append((char)Integer.parseInt(str, 16));
-        }
-        return asciiStr.toString();
     }
 }

@@ -138,6 +138,14 @@ project(':examples') {
     }
 }
 
+project(':tests') {
+    task runTests(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.web3j.tests.PermissionSystemTest'
+        args = ['src/main/resources/config.json']
+    }
+}
+
 project(':core') {
     task coreJar(type: Jar) {
         exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'

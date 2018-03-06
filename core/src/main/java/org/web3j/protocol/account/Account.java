@@ -87,7 +87,7 @@ public class Account {
             func = new Function(functionAbi.getName(), params, retsTypeRef);
             return ethCall(contractAddress, func, retsType);
         } else {
-            // send_transaction, no ret
+            // send_transaction
             func = new Function(functionAbi.getName(), params, Collections.emptyList());
             return sendTransaction(contractAddress, func, nonce, quota.longValue());
         }

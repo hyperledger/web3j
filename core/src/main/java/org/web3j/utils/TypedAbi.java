@@ -70,7 +70,7 @@ public class TypedAbi {
                         list.add(fromSingleJavaValue(arg));
                     }
                 }
-                return (Type)arrayCtor.newInstance(list);
+                return (Type) arrayCtor.newInstance(list);
             } else {
                 return fromSingleJavaValue(value);
             }
@@ -98,13 +98,13 @@ public class TypedAbi {
             } else {
                 throw new InvalidAbiType(typeName);
             }
-            return (Type)ctor.newInstance(value);
+            return (Type) ctor.newInstance(value);
         }
 
         public Object abiToJava(Type value) {
             if (this.rawType != null) {
                 List<Object> result = new ArrayList();
-                List<Type> list = (List)value.getValue();
+                List<Type> list = (List) value.getValue();
                 list.forEach(type -> result.add(type.getValue()));
                 return result;
             } else {
