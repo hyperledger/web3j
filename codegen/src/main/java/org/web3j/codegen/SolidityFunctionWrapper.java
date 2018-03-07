@@ -385,7 +385,7 @@ public class SolidityFunctionWrapper extends Generator {
                     inputParameterTypes,
                     ", \n",
                     // this results in fully qualified names being generated
-                    parameterSpec -> createMappedParameterTypes(parameterSpec));
+                    this::createMappedParameterTypes);
         } else {
             return Collection.join(
                     inputParameterTypes,
@@ -530,7 +530,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     MethodSpec buildFunction(
-            AbiDefinition functionDefinition) {
+            AbiDefinition functionDefinition) throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
 
         MethodSpec.Builder methodBuilder =
@@ -555,7 +555,7 @@ public class SolidityFunctionWrapper extends Generator {
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             List<TypeName> outputParameterTypes,
-            String inputParams) {
+            String inputParams) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
 
