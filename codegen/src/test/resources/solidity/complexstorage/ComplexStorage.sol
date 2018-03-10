@@ -32,6 +32,9 @@ contract ComplexStorage {
     }
 
     function getFooBar() constant returns (Foo _foo, Bar _bar) {
+        Access(msg.sender, _foo, _bar);
         return (foo, bar);
     }
+
+    event Access(address indexed _address, Foo _foo, Bar _bar);
 }
