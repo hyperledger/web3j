@@ -405,10 +405,24 @@ public class SolidityFunctionWrapper extends Generator {
                 throw new UnsupportedOperationException(
                         "Only a single parameterized type is supported");
             } else {
+                String parameterSpecType = parameterSpec.type.toString();
                 TypeName typeName = typeNames.get(0);
-                return "new " + parameterSpec.type + "(\n"
+                String typeMapInput = typeName + ".class";
+                if (typeName instanceof ParameterizedTypeName) {
+                    List<TypeName> typeArguments = ((ParameterizedTypeName) typeName).typeArguments;
+                    if (typeArguments.size() != 1) {
+                        throw new UnsupportedOperationException(
+                                "Only a single parameterized type is supported");
+                    }
+                    TypeName innerTypeName = typeArguments.get(0);
+                    parameterSpecType = ((ParameterizedTypeName) parameterSpec.type)
+                            .rawType.toString();
+                    typeMapInput = ((ParameterizedTypeName) typeName).rawType + ".class, "
+                            + innerTypeName + ".class";
+                }
+                return "new " + parameterSpecType + "(\n"
                         + "        org.web3j.abi.Utils.typeMap("
-                        + parameterSpec.name + ", " + typeName + ".class)" + ")";
+                        + parameterSpec.name + ", " + typeMapInput + "))";
             }
         } else {
             return "new " + parameterSpec.type + "(" + parameterSpec.name + ")";
