@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +27,6 @@ import com.squareup.javapoet.TypeVariableName;
 import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
-import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -81,6 +82,8 @@ public class SolidityFunctionWrapper extends Generator {
             + "codegen module</a> to update.\n";
 
     private final boolean useNativeJavaTypes;
+    private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
+    private static final Pattern pattern = Pattern.compile(regex);
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
         this.useNativeJavaTypes = useNativeJavaTypes;
@@ -383,10 +386,24 @@ public class SolidityFunctionWrapper extends Generator {
                 throw new UnsupportedOperationException(
                         "Only a single parameterized type is supported");
             } else {
+                String parameterSpecType = parameterSpec.type.toString();
                 TypeName typeName = typeNames.get(0);
-                return "new " + parameterSpec.type + "(\n"
+                String typeMapInput = typeName + ".class";
+                if (typeName instanceof ParameterizedTypeName) {
+                    List<TypeName> typeArguments = ((ParameterizedTypeName) typeName).typeArguments;
+                    if (typeArguments.size() != 1) {
+                        throw new UnsupportedOperationException(
+                                "Only a single parameterized type is supported");
+                    }
+                    TypeName innerTypeName = typeArguments.get(0);
+                    parameterSpecType = ((ParameterizedTypeName) parameterSpec.type)
+                            .rawType.toString();
+                    typeMapInput = ((ParameterizedTypeName) typeName).rawType + ".class, "
+                            + innerTypeName + ".class";
+                }
+                return "new " + parameterSpecType + "(\n"
                         + "        org.web3j.abi.Utils.typeMap("
-                        + parameterSpec.name + ", " + typeName + ".class)" + ")";
+                        + parameterSpec.name + ", " + typeMapInput + "))";
             }
         } else {
             return "new " + parameterSpec.type + "(" + parameterSpec.name + ")";
@@ -845,18 +862,30 @@ public class SolidityFunctionWrapper extends Generator {
 
     static TypeName buildTypeName(String typeDeclaration) {
         String type = trimStorageDeclaration(typeDeclaration);
-
-        if (type.endsWith("]")) {
-            String[] splitType = type.split("[\\[\\]]");
-            Class<?> baseType = AbiTypes.getType(splitType[0]);
+        Matcher matcher = pattern.matcher(type);
+        if (matcher.find()) {
+            Class<?> baseType = AbiTypes.getType(matcher.group(1));
+            String firstArrayDimension = matcher.group(2);
+            String secondArrayDimension = matcher.group(3);
 
             TypeName typeName;
-            if (splitType.length == 1) {
+
+            if ("".equals(firstArrayDimension)) {
                 typeName = ParameterizedTypeName.get(DynamicArray.class, baseType);
             } else {
-                Class<?> rawType = getStaticArrayTypeReferenceClass(splitType);
+                Class<?> rawType = getStaticArrayTypeReferenceClass(firstArrayDimension);
                 typeName = ParameterizedTypeName.get(rawType, baseType);
             }
+
+            if (secondArrayDimension != null) {
+                if ("".equals(secondArrayDimension)) {
+                    return ParameterizedTypeName.get(ClassName.get(DynamicArray.class), typeName);
+                } else {
+                    Class<?> rawType = getStaticArrayTypeReferenceClass(secondArrayDimension);
+                    return ParameterizedTypeName.get(ClassName.get(rawType), typeName);
+                }
+            }
+
             return typeName;
         } else {
             Class<?> cls = AbiTypes.getType(type);
@@ -864,9 +893,9 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    private static Class<?> getStaticArrayTypeReferenceClass(String[] splitType) {
+    private static Class<?> getStaticArrayTypeReferenceClass(String type) {
         try {
-            return Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + splitType[1]);
+            return Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + type);
         } catch (ClassNotFoundException e) {
             // Unfortunately we can't encode it's length as a type if it's > 32.
             return StaticArray.class;
