@@ -27,7 +27,6 @@ import com.squareup.javapoet.TypeVariableName;
 import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
-import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
