@@ -138,7 +138,7 @@ public class SolidityFunctionWrapper extends Generator {
             classBuilder.addField(addressesStaticField);
 
             final CodeBlock.Builder staticInit = CodeBlock.builder();
-            staticInit.addStatement("_addresses = new HashMap<>()");
+            staticInit.addStatement("_addresses = new HashMap<String, String>()");
             addresses.forEach((k, v) ->
                     staticInit.addStatement(String.format("_addresses.put(\"%1s\", \"%2s\")",
                             k, v))
@@ -548,7 +548,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     MethodSpec buildFunction(
-            AbiDefinition functionDefinition) {
+            AbiDefinition functionDefinition) throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
 
         MethodSpec.Builder methodBuilder =
@@ -573,7 +573,7 @@ public class SolidityFunctionWrapper extends Generator {
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             List<TypeName> outputParameterTypes,
-            String inputParams) {
+            String inputParams) throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
 
