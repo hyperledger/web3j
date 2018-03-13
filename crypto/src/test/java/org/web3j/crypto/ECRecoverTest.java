@@ -10,6 +10,7 @@ import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ECRecoverTest {
 
@@ -23,23 +24,19 @@ public class ECRecoverTest {
         String address = "0x31b26e43651e9371c88af3d36c14cfd938baf4fd";
         String message = "v0G9u7huK4mJb2K1";
                 
-                
-        // Message
         String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
         byte[] msgHash = Hash.sha3((prefix + message).getBytes());
 
-
-        // Signature
-        byte[] array = Numeric.hexStringToByteArray(signature);
-        byte v = array[64];
+        byte[] signatureBytes = Numeric.hexStringToByteArray(signature);
+        byte v = signatureBytes[64];
         if (v < 27) { 
             v += 27; 
         }
            
         SignatureData sd = new SignatureData(
                 v, 
-                (byte[]) Arrays.copyOfRange(array, 0, 32), 
-                (byte[])  Arrays.copyOfRange(array, 32, 64));
+                (byte[]) Arrays.copyOfRange(signatureBytes, 0, 32), 
+                (byte[]) Arrays.copyOfRange(signatureBytes, 32, 64));
 
         String addressRecovered = null;
         boolean match = false;
@@ -47,7 +44,7 @@ public class ECRecoverTest {
         // Iterate for each possible key to recover
         for (int i = 0; i < 4; i++) {
             BigInteger publicKey = Sign.recoverFromSignature(
-                    (byte)i, 
+                    (byte) i, 
                     new ECDSASignature(new BigInteger(1, sd.getR()), new BigInteger(1, sd.getS())), 
                     msgHash);
                
@@ -62,6 +59,6 @@ public class ECRecoverTest {
         }
         
         assertThat(addressRecovered, is(address));
-        assertThat(match, is(true));
+        assertTrue(match);
     }
 }
