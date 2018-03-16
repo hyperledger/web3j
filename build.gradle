@@ -144,6 +144,11 @@ project(':tests') {
         main = 'org.web3j.tests.PermissionSystemTest'
         args = ['src/main/resources/config.json']
     }
+
+    task runToken(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.web3j.tests.TokenTest'
+    }
 }
 
 project(':core') {

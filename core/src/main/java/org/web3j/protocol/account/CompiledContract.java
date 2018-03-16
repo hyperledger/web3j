@@ -86,6 +86,10 @@ public class CompiledContract {
         return this.bin;
     }
 
+    public String getAbi() {
+        return this.abi;
+    }
+
     /// TODO: how to distinguish overload function which the num of args are same???
     public AbiDefinition getFunctionAbi(String funcName, int numOfArgs) throws ContractFuncNotFound {
         Object[] abiDefinitions =  this.typedABI

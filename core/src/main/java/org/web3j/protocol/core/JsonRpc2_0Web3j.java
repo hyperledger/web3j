@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.web3j.protocol.core.methods.response.*;
 import rx.Observable;
 
 import org.web3j.protocol.Web3j;
@@ -13,55 +14,6 @@ import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.request.Call;
-import org.web3j.protocol.core.methods.response.DbGetHex;
-import org.web3j.protocol.core.methods.response.DbGetString;
-import org.web3j.protocol.core.methods.response.DbPutHex;
-import org.web3j.protocol.core.methods.response.DbPutString;
-import org.web3j.protocol.core.methods.response.EthAccounts;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.EthCoinbase;
-import org.web3j.protocol.core.methods.response.EthCompileLLL;
-import org.web3j.protocol.core.methods.response.EthCompileSerpent;
-import org.web3j.protocol.core.methods.response.EthCompileSolidity;
-import org.web3j.protocol.core.methods.response.EthEstimateGas;
-import org.web3j.protocol.core.methods.response.EthFilter;
-import org.web3j.protocol.core.methods.response.EthGasPrice;
-import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
-import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
-import org.web3j.protocol.core.methods.response.EthGetCode;
-import org.web3j.protocol.core.methods.response.EthGetCompilers;
-import org.web3j.protocol.core.methods.response.EthGetStorageAt;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
-import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
-import org.web3j.protocol.core.methods.response.EthGetWork;
-import org.web3j.protocol.core.methods.response.EthHashrate;
-import org.web3j.protocol.core.methods.response.EthLog;
-import org.web3j.protocol.core.methods.response.EthMining;
-import org.web3j.protocol.core.methods.response.EthProtocolVersion;
-import org.web3j.protocol.core.methods.response.EthSign;
-import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
-import org.web3j.protocol.core.methods.response.EthSubmitWork;
-import org.web3j.protocol.core.methods.response.EthSyncing;
-import org.web3j.protocol.core.methods.response.EthTransaction;
-import org.web3j.protocol.core.methods.response.EthUninstallFilter;
-import org.web3j.protocol.core.methods.response.Log;
-import org.web3j.protocol.core.methods.response.NetListening;
-import org.web3j.protocol.core.methods.response.NetPeerCount;
-import org.web3j.protocol.core.methods.response.NetVersion;
-import org.web3j.protocol.core.methods.response.ShhAddToGroup;
-import org.web3j.protocol.core.methods.response.ShhHasIdentity;
-import org.web3j.protocol.core.methods.response.ShhMessages;
-import org.web3j.protocol.core.methods.response.ShhNewFilter;
-import org.web3j.protocol.core.methods.response.ShhNewGroup;
-import org.web3j.protocol.core.methods.response.ShhNewIdentity;
-import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
-import org.web3j.protocol.core.methods.response.ShhVersion;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
@@ -218,6 +170,16 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(address, defaultBlockParameter.getValue()),
                 web3jService,
                 EthGetBalance.class);
+    }
+
+    @Override
+    public Request<?, EthGetAbi> ethGetAbi(
+            String contractAddress, DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>(
+                "eth_getAbi",
+                Arrays.asList(contractAddress, defaultBlockParameter.getValue()),
+                web3jService,
+                EthGetAbi.class);
     }
 
     @Override

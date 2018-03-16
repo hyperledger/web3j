@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+/**
+ * TODO 由于系统合约文件有了较多更新，该测试用例无法继续使用，后续会更新
+ */
 public class PermissionSystemTest {
     private static Random random;
     private static BigInteger quota;

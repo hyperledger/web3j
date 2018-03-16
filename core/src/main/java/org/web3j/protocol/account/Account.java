@@ -8,12 +8,10 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Call;
 import org.web3j.protocol.core.methods.request.EthFilter;
-import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.tx.CitaTransactionManager;
 import org.web3j.utils.TypedAbi;
 import rx.Observable;
@@ -27,13 +25,19 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class Account {
+    private static final String ABI_ADDRESS = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     private CitaTransactionManager transactionManager;
     private Web3j service;
+    private String abi;
 
     public Account(String privateKey, Web3j service) {
         Credentials credentials = Credentials.create(privateKey);
         this.transactionManager = new CitaTransactionManager(service, credentials);
         this.service = service;
+    }
+
+    public CitaTransactionManager getTransactionManager() {
+        return transactionManager;
     }
 
     /// TODO: get contract address from receipt after deploy, then return contract name(ENS)
@@ -55,10 +59,12 @@ public class Account {
 
     // eth_call: nonce and quota is null
     // sendTransaction: nonce and quota is necessary
-    public Object callContract(String contractName, String funcName, BigInteger nonce, BigInteger quota, Object... args)
+    public Object callContract(String contractAddress, String funcName, BigInteger nonce, BigInteger quota, Object... args)
             throws Exception {
-        CompiledContract contract = loadContract(contractName);
-        String contractAddress = getContractAddress(contractName);
+        if (abi == null) {
+            abi = getAbi(contractAddress);
+        }
+        CompiledContract contract = new CompiledContract(abi);
         AbiDefinition functionAbi = contract.getFunctionAbi(funcName, args.length);
         return callContract(contractAddress, functionAbi, nonce, quota, args);
     }
@@ -115,6 +121,16 @@ public class Account {
             throws IOException {
         String data = FunctionEncoder.encode(func);
         return this.transactionManager.sendTransaction(contractAddress, data, BigInteger.valueOf(quota), nonce, getValidUntilBlock());
+    }
+
+    public Object uploadAbi(String contractAddress, String abi, BigInteger nonce, BigInteger quota) throws Exception {
+        String data = hex_remove_0x(contractAddress) + hex_remove_0x(bytesToHexStr(abi.getBytes()));
+        return this.transactionManager.sendTransaction(ABI_ADDRESS, data, quota, nonce, getValidUntilBlock());
+    }
+
+    public String getAbi(String contractAddress) throws IOException {
+        String abi = service.ethGetAbi(contractAddress, DefaultBlockParameter.valueOf("latest")).send().getAbi();
+        return new String(hexStrToBytes(hex_remove_0x(abi)));
     }
 
     public Observable<Object> eventObservable(String contractName, String eventName)
@@ -205,5 +221,33 @@ public class Account {
 
     private BigInteger getValidUntilBlock() throws IOException {
         return BigInteger.valueOf(blockHeight() + 80);
+    }
+
+    private String hex_remove_0x(String hex){
+        if (hex.contains("0x")) {
+            return hex.substring(2);
+        }
+        return hex;
+    }
+
+    private String bytesToHexStr(byte[] byteArr) {
+        if (null == byteArr || byteArr.length < 1) return "";
+        StringBuilder sb = new StringBuilder();
+        for (byte t : byteArr) {
+            if ((t & 0xF0) == 0) sb.append("0");
+            sb.append(Integer.toHexString(t & 0xFF));  //t & 0xFF 操作是为去除Integer高位多余的符号位（java数据是用补码表示）
+        }
+        return sb.toString();
+    }
+
+    private byte[] hexStrToBytes(String hexStr) {
+        if (null == hexStr || hexStr.length() < 1) return null;
+        int byteLen = hexStr.length() / 2;
+        byte[] result = new byte[byteLen];
+        char[] hexChar = hexStr.toCharArray();
+        for(int i=0 ;i<byteLen;i++){
+            result[i] = (byte)(Character.digit(hexChar[i*2],16)<<4 | Character.digit(hexChar[i*2+1],16));
+        }
+        return result;
     }
 }
