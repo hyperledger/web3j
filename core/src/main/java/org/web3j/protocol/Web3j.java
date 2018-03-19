@@ -36,4 +36,9 @@ public interface Web3j extends Ethereum, Web3jRx {
             ScheduledExecutorService scheduledExecutorService) {
         return new JsonRpc2_0Web3j(web3jService, pollingInterval, scheduledExecutorService);
     }
+
+    /**
+     * Shutdowns a Web3j instance and cleans up opened resources.
+     */
+    void shutdown();
 }
