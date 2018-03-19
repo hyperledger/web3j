@@ -131,6 +131,24 @@ project(':examples') {
         classpath = sourceSets.main.runtimeClasspath
         main = 'org.web3j.examples.SendTransactionDemo'
     }
+
+    task permissionTest(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.web3j.examples.PermissionSystemTest'
+    }
+}
+
+project(':tests') {
+    task runTests(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.web3j.tests.PermissionSystemTest'
+        args = ['src/main/resources/config.json']
+    }
+
+    task runToken(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.web3j.tests.TokenTest'
+    }
 }
 
 project(':core') {

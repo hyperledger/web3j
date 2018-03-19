@@ -1,0 +1,7 @@
+{
+  "roleManagerPath": "./src/main/resources/permission_management/RoleManagement.sol",
+  "roleManagerAddress": "0x00000000000000000000000000000000013241b4",
+  "senderPrivateKey": "866c936ff332228948bdefc15b1877c88e0effce703ee6de898cffcafe9bbe25",
+  "superAdminPrivateKey": "b7eb833f2ac19d3dabf4375146a7ce0e983b9997a02557be05f224e22797419e",
+  "superAdminAddress": "0x9dcd6b234e2772c5451fd4ccf7582f4283140697"
+}

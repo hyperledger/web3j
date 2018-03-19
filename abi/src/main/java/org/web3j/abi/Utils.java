@@ -63,7 +63,7 @@ public class Utils {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
                 String parameterizedTypeName = getSimpleTypeName(parameterizedType);
                 return parameterizedTypeName + "[]";
-            } else if (type.equals(StaticArray.class)) {
+            } else if (StaticArray.class.isAssignableFrom(type)) {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
                 String parameterizedTypeName = getSimpleTypeName(parameterizedType);
                 return parameterizedTypeName

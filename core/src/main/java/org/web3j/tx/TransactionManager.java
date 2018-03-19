@@ -61,7 +61,7 @@ public abstract class TransactionManager {
         return processResponse(ethSendTransaction);
     }
 
-    // adapt to cita
+    // adapt to cita, return empty EthSendTransaction default, only CitaTransactionManager will override this method
     public EthSendTransaction sendTransaction(
             String to, String data, BigInteger quota,
             BigInteger nonce, BigInteger validUntilBlock)
