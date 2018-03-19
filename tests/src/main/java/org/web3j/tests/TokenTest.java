@@ -106,10 +106,10 @@ public class TokenTest {
 
     public static void main(String[] args) throws Exception {
         // 本地编译solidity文件，然后部署合约以及调用合约方法
-//        deployContractAndCallMethodFromSolidity();
+        deployContractAndCallMethodFromSolidity();
 
         // 根据已经部署过的合约地址从链上获取abi，然后调用合约方法
-        callContractMethodFromRemoteAbi();
+//        callContractMethodFromRemoteAbi();
 
         System.exit(0);
     }
