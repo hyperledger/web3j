@@ -38,7 +38,7 @@ public interface Web3j extends Ethereum, Web3jRx {
     }
 
     /**
-     * Shutdowns a Web3j instance and cleans up opened resources.
+     * Shutdowns a Web3j instance and closes opened resources.
      */
     void shutdown();
 }
