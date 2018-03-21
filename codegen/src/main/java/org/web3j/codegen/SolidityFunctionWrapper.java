@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -209,11 +210,10 @@ public class SolidityFunctionWrapper extends Generator {
 
     private FieldSpec createEventDefinition(
             String name,
-            List<NamedTypeName> indexedParameters,
-            List<NamedTypeName> nonIndexedParameters) {
+            List<NamedTypeName> parameters) {
 
         CodeBlock initializer = buildVariableLengthEventInitializer(
-                name, indexedParameters, nonIndexedParameters);
+                name, parameters);
 
         return FieldSpec.builder(Event.class, buildEventDefinitionName(name))
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
@@ -827,26 +827,25 @@ public class SolidityFunctionWrapper extends Generator {
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 
+        List<NamedTypeName> parameters = new ArrayList<>();
         List<NamedTypeName> indexedParameters = new ArrayList<>();
         List<NamedTypeName> nonIndexedParameters = new ArrayList<>();
 
         for (AbiDefinition.NamedType namedType : inputs) {
-
+            NamedTypeName parameter = new NamedTypeName(
+                                namedType.getName(),
+                                buildTypeName(namedType.getType()),
+                                namedType.isIndexed()
+                    );
             if (namedType.isIndexed()) {
-                indexedParameters.add(
-                        new org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName(
-                                namedType.getName(),
-                                buildTypeName(namedType.getType())));
+                indexedParameters.add(parameter);
             } else {
-                nonIndexedParameters.add(
-                        new org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName(
-                                namedType.getName(),
-                                buildTypeName(namedType.getType())));
+                nonIndexedParameters.add(parameter);
             }
+            parameters.add(parameter);
         }
 
-        classBuilder.addField(createEventDefinition(functionName,
-                indexedParameters, nonIndexedParameters));
+        classBuilder.addField(createEventDefinition(functionName, parameters));
 
         classBuilder.addType(buildEventResponseObject(responseClassName, indexedParameters,
                 nonIndexedParameters));
@@ -1058,8 +1057,7 @@ public class SolidityFunctionWrapper extends Generator {
 
     private static CodeBlock buildVariableLengthEventInitializer(
             String eventName,
-            List<NamedTypeName> indexedParameterTypes,
-            List<NamedTypeName> nonIndexedParameterTypes) {
+            List<NamedTypeName> parameterTypes) {
 
         List<Object> objects = new ArrayList<>();
         objects.add(Event.class);
@@ -1067,32 +1065,24 @@ public class SolidityFunctionWrapper extends Generator {
 
         objects.add(Arrays.class);
         objects.add(TypeReference.class);
-        for (NamedTypeName indexedParameterType : indexedParameterTypes) {
+        for (NamedTypeName parameterType : parameterTypes) {
             objects.add(TypeReference.class);
-            objects.add(indexedParameterType.getTypeName());
+            objects.add(parameterType.getTypeName());
         }
 
-        objects.add(Arrays.class);
-        objects.add(TypeReference.class);
-        for (NamedTypeName indexedParameterType : nonIndexedParameterTypes) {
-            objects.add(TypeReference.class);
-            objects.add(indexedParameterType.getTypeName());
-        }
-
-        String indexedAsListParams = Collection.join(
-                indexedParameterTypes,
-                ", ",
-                typeName -> "new $T<$T>() {}");
-
-        String nonIndexedAsListParams = Collection.join(
-                nonIndexedParameterTypes,
-                ", ",
-                typeName -> "new $T<$T>() {}");
+        String asListParams = parameterTypes.stream()
+                .map(type -> {
+                    if (type.isIndexed()) {
+                        return "new $T<$T>(true) {}";
+                    } else {
+                        return "new $T<$T>() {}";
+                    }
+                })
+                .collect(Collectors.joining(", "));
 
         return CodeBlock.builder()
                 .addStatement("new $T($S, \n"
-                        + "$T.<$T<?>>asList(" + indexedAsListParams + "),\n"
-                        + "$T.<$T<?>>asList(" + nonIndexedAsListParams + "))", objects.toArray())
+                        + "$T.<$T<?>>asList(" + asListParams + "))", objects.toArray())
                 .build();
     }
 
@@ -1105,10 +1095,12 @@ public class SolidityFunctionWrapper extends Generator {
     private static class NamedTypeName {
         private final TypeName typeName;
         private final String name;
+        private final boolean indexed;
 
-        NamedTypeName(String name, TypeName typeName) {
+        NamedTypeName(String name, TypeName typeName, boolean indexed) {
             this.name = name;
             this.typeName = typeName;
+            this.indexed = indexed;
         }
 
         public String getName() {
@@ -1117,6 +1109,10 @@ public class SolidityFunctionWrapper extends Generator {
 
         public TypeName getTypeName() {
             return typeName;
+        }
+
+        public boolean isIndexed() {
+            return indexed;
         }
     }
 

@@ -301,7 +301,7 @@ public class ContractTest extends ManagedTransactionTester {
     public void testExtractEventParametersWithLogGivenATransactionReceipt() {
 
         final java.util.function.Function<String, Event> eventFactory = name ->
-                new Event(name, emptyList(), emptyList());
+                new Event(name, emptyList());
 
         final BiFunction<Integer, Event, Log> logFactory = (logIndex, event) ->
                 new Log(false, "" + logIndex, "0", "0x0", "0x0", "0", "0x" + logIndex, "", "",
@@ -411,8 +411,9 @@ public class ContractTest extends ManagedTransactionTester {
 
         public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {
             Event event = new Event("Event",
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Address>() { }),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() { }));
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<Address>(true) { },
+                            new TypeReference<Uint256>() { }));
             return extractEventParameters(event, transactionReceipt);
         }
     }
