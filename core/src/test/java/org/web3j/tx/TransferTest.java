@@ -52,6 +52,7 @@ public class TransferTest extends ManagedTransactionTester {
     private TransactionReceipt prepareTransfer() throws IOException {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setStatus("0x1");
         prepareTransaction(transactionReceipt);
 
         EthGasPrice ethGasPrice = new EthGasPrice();

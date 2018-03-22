@@ -42,6 +42,7 @@ public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
+    public static final String SUCCESSFUL_TRANSACTION_STATUS = "0x1";
 
     protected final String contractBinary;
     protected String contractAddress;
@@ -239,7 +240,18 @@ public abstract class Contract extends ManagedTransaction {
             String data, BigInteger weiValue)
             throws TransactionException, IOException {
 
-        return send(contractAddress, data, weiValue, gasPrice, gasLimit);
+        TransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
+
+        if (!SUCCESSFUL_TRANSACTION_STATUS.equals(receipt.getStatus())) {
+            throw new TransactionException(
+                    String.format(
+                            "Transaction has failed with status: %s. "
+                                    + "Gas used: %d. (not-enough gas?)",
+                            receipt.getStatus(),
+                            receipt.getGasUsed()));
+        }
+
+        return receipt;
     }
 
     protected <T extends Type> RemoteCall<T> executeRemoteCallSingleValueReturn(Function function) {
@@ -298,6 +310,8 @@ public abstract class Contract extends ManagedTransaction {
             T contract = constructor.newInstance(null, web3j, credentials, gasPrice, gasLimit);
 
             return create(contract, binary, encodedConstructor, value);
+        } catch (TransactionException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -321,6 +335,8 @@ public abstract class Contract extends ManagedTransaction {
             T contract = constructor.newInstance(
                     null, web3j, transactionManager, gasPrice, gasLimit);
             return create(contract, binary, encodedConstructor, value);
+        } catch (TransactionException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
