@@ -119,7 +119,6 @@ public class ResponseTest extends ResponseTester {
         assertThat(ethBlock.getError().getData(), equalTo("{\"foo\":\"bar\"}"));
     }
 
-
     @Test
     public void testWeb3ClientVersion() {
         buildResponse(
