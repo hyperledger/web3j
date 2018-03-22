@@ -40,15 +40,6 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityAddressesResponse> parityListAccounts(BigInteger quantity) {
-        return new Request<>(
-                "parity_listAccounts",
-                Arrays.asList(quantity, null),
-                web3jService,
-                ParityAddressesResponse.class);
-    }
-
-    @Override
     public Request<?, ParityAllAccountsInfo> parityAllAccountsInfo() {
         return new Request<>(
                 "parity_allAccountsInfo",
@@ -151,6 +142,16 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
                 Arrays.asList(accountId, password),
                 web3jService,
                 BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, ParityAddressesResponse> parityListAccounts(
+            BigInteger quantity, String accountId, DefaultBlockParameter blockParameter) {
+        return new Request<>(
+                "parity_listAccounts",
+                Arrays.asList(quantity, accountId, blockParameter),
+                web3jService,
+                ParityAddressesResponse.class);
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.parity.methods.request.Derivation;
 import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
@@ -27,8 +28,6 @@ public interface Parity extends Admin, Trace {
     static Parity build(Web3jService web3jService) {
         return new JsonRpc2_0Parity(web3jService);
     }
-
-    Request<?, ParityAddressesResponse> parityListAccounts(BigInteger quantity);
 
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
     
@@ -54,7 +53,10 @@ public interface Parity extends Admin, Trace {
     Request<?, ParityAddressesResponse> parityImportGethAccounts(ArrayList<String> gethAddresses);
     
     Request<?, BooleanResponse> parityKillAccount(String accountId, String password);
-    
+
+    Request<?, ParityAddressesResponse> parityListAccounts(
+            BigInteger quantity, String accountId, DefaultBlockParameter blockParameter);
+
     Request<?, ParityAddressesResponse> parityListGethAccounts();
     
     Request<?, ParityListRecentDapps> parityListRecentDapps();
