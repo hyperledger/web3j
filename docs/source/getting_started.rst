@@ -69,6 +69,12 @@ For further information refer to :doc:`infura`.
 Instructions on obtaining Ether to transact on the network can be found in the
 :ref:`testnet section of the docs <ethereum-testnets>`.
 
+When you no longer need a `Web3j` instance you need to call the `shutdown` method to close resources used by it.
+
+.. code-block:: java
+
+   web3.shutdown()
+
 
 Start sending requests
 ----------------------

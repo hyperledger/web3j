@@ -75,6 +75,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     protected final Web3jService web3jService;
     private final JsonRpc2_0Rx web3jRx;
     private final long blockTime;
+    private final ScheduledExecutorService scheduledExecutorService;
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
         this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
@@ -86,6 +87,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         this.web3jService = web3jService;
         this.web3jRx = new JsonRpc2_0Rx(this, scheduledExecutorService);
         this.blockTime = pollingInterval;
+        this.scheduledExecutorService = scheduledExecutorService;
     }
 
     @Override
@@ -772,5 +774,10 @@ public class JsonRpc2_0Web3j implements Web3j {
             DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(
                 startBlock, blockTime);
+    }
+
+    @Override
+    public void shutdown() {
+        scheduledExecutorService.shutdown();
     }
 }

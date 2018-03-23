@@ -67,7 +67,7 @@ public class HttpService extends Service {
         this(DEFAULT_URL, httpClient);
     }
 
-    public  HttpService(boolean includeRawResponse) {
+    public HttpService(boolean includeRawResponse) {
         this(DEFAULT_URL, includeRawResponse);
     }
 
