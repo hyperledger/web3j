@@ -189,8 +189,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         //CHECKSTYLE:OFF
         verify(generationReporter).report(
-                "Definition of the function functionName returns a value but is not defined as a constant function. " +
-                        "Please ensure it contains the constant modifier if you want to read the return value");
+                "Definition of the function functionName returns a value but is not defined as a view function. " +
+                        "Please ensure it contains the view modifier if you want to read the return value");
         //CHECKSTYLE:ON
     }
 
