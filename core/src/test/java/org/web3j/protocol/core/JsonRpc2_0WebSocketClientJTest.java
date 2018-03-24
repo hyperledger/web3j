@@ -10,7 +10,7 @@ import org.web3j.protocol.Web3jService;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class JsonRpc2_0Web3jTest {
+public class JsonRpc2_0WebSocketClientJTest {
 
     @Test
     public void testStopExecutorOnShutdown() {
