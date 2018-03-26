@@ -2,6 +2,7 @@ package org.web3j.protocol.websocket;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
@@ -9,25 +10,37 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.Subscription;
+
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.Response;
+import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.startsWith;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class WebSocketServiceTest {
@@ -45,6 +58,7 @@ public class WebSocketServiceTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+    private Request<Object, EthSubscribe> subscribeRequest;
 
     @Before
     public void before() throws InterruptedException {
@@ -98,7 +112,7 @@ public class WebSocketServiceTest {
     @Test
     public void testNoLongerWaitingForResponseAfterReply() throws Exception {
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onReply("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"geth-version\"}");
+        sendGethVersionReply();
 
         assertFalse(service.isWaitingForReply(1));
     }
@@ -130,7 +144,7 @@ public class WebSocketServiceTest {
     @Test
     public void testThrowExceptionIfIdIsMissing() throws Exception {
         thrown.expect(IOException.class);
-        thrown.expectMessage("'id' field is missing in the reply");
+        thrown.expectMessage("Unknown message type");
         service.sendAsync(request, Web3ClientVersion.class);
         service.onReply("{}");
     }
@@ -148,10 +162,25 @@ public class WebSocketServiceTest {
         CompletableFuture<Web3ClientVersion> reply = service.sendAsync(
                 request,
                 Web3ClientVersion.class);
-        service.onReply("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"geth-version\"}");
+        sendGethVersionReply();
 
         assertTrue(reply.isDone());
         assertEquals("geth-version", reply.get().getWeb3ClientVersion());
+    }
+
+    @Test
+    public void testReceiveError() throws Exception {
+        CompletableFuture<Web3ClientVersion> reply = service.sendAsync(
+                request,
+                Web3ClientVersion.class);
+        sendErrorReply();
+
+        assertTrue(reply.isDone());
+        Web3ClientVersion version = reply.get();
+        assertTrue(version.hasError());
+        assertEquals(
+                new Response.Error(-1, "Error message"),
+                version.getError());
     }
 
     @Test(expected = ExecutionException.class)
@@ -186,7 +215,7 @@ public class WebSocketServiceTest {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 requestSent.await();
-                service.onReply("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"geth-version\"}");
+                sendGethVersionReply();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -205,4 +234,178 @@ public class WebSocketServiceTest {
         verify(executorService).shutdown();
     }
 
+    @Test
+    public void testSendSubscriptionReply() throws Exception {
+        subscribeToEvents();
+
+        verifyStartedSubscriptionHadnshake();
+    }
+
+    @Test
+    public void testPropagateSubscriptionEvent() throws Exception {
+        CountDownLatch eventReceived = new CountDownLatch(1);
+        CountDownLatch completedCalled = new CountDownLatch(1);
+        AtomicReference<NewHeadsNotification> actualNotificationRef = new AtomicReference<>();
+
+        final Subscription subscription = subscribeToEvents()
+                .subscribe(new Subscriber<NewHeadsNotification>() {
+                    @Override
+                    public void onCompleted() {
+                        completedCalled.countDown();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(NewHeadsNotification newHeadsNotification) {
+                        actualNotificationRef.set(newHeadsNotification);
+                        eventReceived.countDown();
+                    }
+                });
+
+        sendSubscriptionConfirmation();
+        sendWebSocketEvent();
+
+        assertTrue(eventReceived.await(2, TimeUnit.SECONDS));
+        subscription.unsubscribe();
+
+        assertTrue(completedCalled.await(2, TimeUnit.SECONDS));
+        assertEquals(
+                "0xd9263f42a87",
+                actualNotificationRef.get().getParams().getResult().getDifficulty());
+    }
+
+    @Test
+    public void testSendUnsubscribeRequest() throws Exception {
+        Observable<NewHeadsNotification> obserable = subscribeToEvents();
+        sendSubscriptionConfirmation();
+        sendWebSocketEvent();
+
+        obserable.subscribe().unsubscribe();
+
+        verifyUnsubscribed();
+    }
+
+    @Test
+    public void testUnsubscribeIfReceivedUnexpectedSubscriptionId() throws Exception {
+        sendWebSocketEvent();
+
+        verifyUnsubscribed();
+    }
+
+    @Test
+    public void testDoSendUnsubscribeRequestIfUnsubscribedBeforeConfirmation() throws Exception {
+        Observable<NewHeadsNotification> obserable = subscribeToEvents();
+        obserable.subscribe().unsubscribe();
+
+        verifyStartedSubscriptionHadnshake();
+        verifyNoMoreInteractions(webSocketClient);
+    }
+
+    @Test
+    public void testStopWaitingForSubscriptionReplyAfterTimeout() throws Exception {
+        Observable<NewHeadsNotification> obserable = subscribeToEvents();
+        CountDownLatch errorReceived = new CountDownLatch(1);
+        AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
+
+        obserable.subscribe(new Observer<NewHeadsNotification>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                actualThrowable.set(e);
+                errorReceived.countDown();
+            }
+
+            @Override
+            public void onNext(NewHeadsNotification newHeadsNotification) {
+
+            }
+        });
+
+        Exception e = new IOException("timeout");
+        service.closeRequest(1, e);
+
+        assertTrue(errorReceived.await(2, TimeUnit.SECONDS));
+        assertEquals(
+                actualThrowable.get(),
+                e);
+    }
+
+    private Observable<NewHeadsNotification> subscribeToEvents() {
+        subscribeRequest = new Request<>(
+                "eth_subscribe",
+                Arrays.asList("newHeads", Collections.emptyMap()),
+                service,
+                EthSubscribe.class);
+        subscribeRequest.setId(1);
+
+        return service.subscribe(
+                subscribeRequest,
+                NewHeadsNotification.class
+        );
+    }
+
+    private void sendErrorReply() throws IOException {
+        service.onReply(
+                "{"
+                        + "  \"jsonrpc\":\"2.0\","
+                        + "  \"id\":1,"
+                        + "  \"error\":{"
+                        + "    \"code\":-1,"
+                        + "    \"message\":\"Error message\","
+                        + "    \"data\":null"
+                        + "  }"
+                        + "}");
+    }
+
+    private void sendGethVersionReply() throws IOException {
+        service.onReply(
+                "{"
+                        + "  \"jsonrpc\":\"2.0\","
+                        + "  \"id\":1,"
+                        + "  \"result\":\"geth-version\""
+                        + "}");
+    }
+
+    private void verifyStartedSubscriptionHadnshake() {
+        verify(webSocketClient).send(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
+                        + "\"params\":[\"newHeads\",{}],\"id\":1}");
+    }
+
+    private void verifyUnsubscribed() {
+        verify(webSocketClient).send(startsWith(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_unsubscribe\","
+                        + "\"params\":[\"0xcd0c3e8af590364c09d0fa6a1210faf5\"]"));
+    }
+
+    private void sendSubscriptionConfirmation() throws IOException {
+        service.onReply(
+                "{"
+                        + "\"jsonrpc\":\"2.0\","
+                        + "\"id\":1,"
+                        + "\"result\":\"0xcd0c3e8af590364c09d0fa6a1210faf5\""
+                        + "}");
+    }
+
+    private void sendWebSocketEvent() throws IOException {
+        service.onReply(
+                "{"
+                        + "  \"jsonrpc\":\"2.0\","
+                        + "  \"method\":\"eth_subscription\","
+                        + "  \"params\":{"
+                        + "    \"subscription\":\"0xcd0c3e8af590364c09d0fa6a1210faf5\","
+                        + "    \"result\":{"
+                        + "      \"difficulty\":\"0xd9263f42a87\","
+                        + "      \"uncles\":[]"
+                        + "    }"
+                        + "  }"
+                        + "}");
+    }
 }
