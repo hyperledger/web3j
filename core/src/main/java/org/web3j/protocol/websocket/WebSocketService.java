@@ -326,6 +326,7 @@ public class WebSocketService implements Web3jService {
         return true;
     }
 
+    @Override
     public void close() {
         webSocketClient.close();
         executor.shutdown();

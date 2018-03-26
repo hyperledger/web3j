@@ -1,5 +1,6 @@
 package org.web3j.protocol.core;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -779,5 +780,10 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public void shutdown() {
         scheduledExecutorService.shutdown();
+        try {
+            web3jService.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to close web3j service", e);
+        }
     }
 }

@@ -64,7 +64,7 @@ public class IpcService extends Service {
         return new ByteArrayInputStream(result.getBytes("UTF-8"));
     }
 
-    @Deprecated
+    @Override
     public void close() throws IOException {
         if (ioFacade != null) {
             ioFacade.close();

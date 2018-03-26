@@ -24,4 +24,6 @@ public interface Web3jService {
             Class<T> responseType);
 
     boolean supportsSubscription();
+
+    void close() throws IOException;
 }
