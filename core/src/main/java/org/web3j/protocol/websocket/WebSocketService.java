@@ -44,20 +44,15 @@ public class WebSocketService implements Web3jService {
     private final ObjectMapper objectMapper;
 
     private Map<Long, WebSocketRequest<?>> requestForId = new HashMap<>();
-    private Map<Long, WebSocketSubscription<?>> pendingSubscription = new HashMap<>();
     private Map<String, WebSocketSubscription<?>> subscriptionForId = new HashMap<>();
 
     public WebSocketService(String serverUrl, boolean includeRawResponses) {
-        this.webSocketClient = new WebSocketClient(parseURI(serverUrl), this);
-        this.executor = Executors.newScheduledThreadPool(1);
-        this.objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
+        this(new WebSocketClient(parseURI(serverUrl)), includeRawResponses);
     }
 
     public WebSocketService(WebSocketClient webSocketClient,
                      boolean includeRawResponses) {
-        this.webSocketClient = webSocketClient;
-        this.executor = Executors.newScheduledThreadPool(1);
-        this.objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
+        this(webSocketClient, Executors.newScheduledThreadPool(1), includeRawResponses);
     }
 
     WebSocketService(WebSocketClient webSocketClient,
@@ -74,6 +69,7 @@ public class WebSocketService implements Web3jService {
             if (!connected) {
                 throw new ConnectException("Failed to connect to WebSocket");
             }
+            webSocketClient.setListener(this::onMessage);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.warn("Interrupted while connecting via WebSocket protocol");
@@ -100,6 +96,7 @@ public class WebSocketService implements Web3jService {
     public <T extends Response> CompletableFuture<T> sendAsync(
             Request request,
             Class<T> responseType) {
+
         CompletableFuture<T> result = new CompletableFuture<>();
         long requestId = request.getId();
         requestForId.put(requestId, new WebSocketRequest<>(result, responseType));
@@ -116,10 +113,10 @@ public class WebSocketService implements Web3jService {
         String payload = objectMapper.writeValueAsString(request);
         log.debug("Sending request: {}", payload);
         webSocketClient.send(payload);
-        setTimeout(requestId);
+        setRequestTimeout(requestId);
     }
 
-    private void setTimeout(long requestId) {
+    private void setRequestTimeout(long requestId) {
         executor.schedule(
                 () -> closeRequest(
                     requestId,
@@ -135,13 +132,13 @@ public class WebSocketService implements Web3jService {
         result.completeExceptionally(e);
     }
 
-    void onReply(String replyStr) throws IOException {
-        JsonNode replyJson = parseToTree(replyStr);
+    void onMessage(String messageStr) throws IOException {
+        JsonNode replyJson = parseToTree(messageStr);
 
         if (isReply(replyJson)) {
-            processRequestReply(replyStr, replyJson);
+            processRequestReply(messageStr, replyJson);
         } else if (isSubscriptionEvent(replyJson)) {
-            processSubscriptionEvent(replyStr, replyJson);
+            processSubscriptionEvent(messageStr, replyJson);
         } else {
             throw new IOException("Unknown message type");
         }
@@ -153,19 +150,10 @@ public class WebSocketService implements Web3jService {
         try {
             Object reply = objectMapper.convertValue(replyJson, request.getResponseType());
 
-            if (reply instanceof EthSubscribe) {
-                subscribeForEvents(replyId, (EthSubscribe) reply);
-            }
-
             sendReplyToListener(request, reply);
         } catch (IllegalArgumentException e) {
             sendExceptionToListener(replyStr, request, e);
         }
-    }
-
-    private void subscribeForEvents(long replyId, EthSubscribe reply) {
-        WebSocketSubscription<?> subscription = pendingSubscription.remove(replyId);
-        subscriptionForId.put(reply.getSubscriptionId(), subscription);
     }
 
     private void sendReplyToListener(WebSocketRequest request, Object reply) {
@@ -190,10 +178,10 @@ public class WebSocketService implements Web3jService {
         String subscriptionId = extractSubscriptionId(replyJson);
         WebSocketSubscription subscription = subscriptionForId.get(subscriptionId);
 
-        if (subscription == null) {
-            unsubscribeFromEventsStream(subscriptionId);
-        } else {
+        if (subscription != null) {
             sendEventToSubscriber(replyJson, subscription);
+        } else {
+            log.warn("No subscriber for WebSocket event with subscription id {}", subscriptionId);
         }
     }
 
@@ -262,10 +250,7 @@ public class WebSocketService implements Web3jService {
             Class<T> responseType) {
         PublishSubject<T> subject = PublishSubject.create();
 
-        pendingSubscription.put(
-                request.getId(),
-                new WebSocketSubscription<>(subject, responseType));
-        sendSubscribeRequest(request, subject);
+        sendSubscribeRequest(request, subject, responseType);
 
         return subject
                 .doOnUnsubscribe(() -> closeSubscription(subject));
@@ -283,12 +268,15 @@ public class WebSocketService implements Web3jService {
 
     private <T extends Notification<?>> void sendSubscribeRequest(
             Request request,
-            PublishSubject<T> subject) {
+            PublishSubject<T> subject, Class<T> responseType) {
         sendAsync(request, EthSubscribe.class)
                 .thenAccept(ethSubscribe -> {
                     log.info(
                             "Subscribed to RPC events with id {}",
                             ethSubscribe.getSubscriptionId());
+                    subscriptionForId.put(
+                            ethSubscribe.getSubscriptionId(),
+                            new WebSocketSubscription<>(subject, responseType));
                 })
                 .exceptionally(throwable -> {
                     log.error(
@@ -339,7 +327,7 @@ public class WebSocketService implements Web3jService {
         executor.shutdown();
     }
 
-    // Method for unit-tests
+    // Method visible for unit-tests
     boolean isWaitingForReply(long requestId) {
         return requestForId.containsKey(requestId);
     }

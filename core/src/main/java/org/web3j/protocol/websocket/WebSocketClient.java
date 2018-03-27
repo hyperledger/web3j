@@ -10,11 +10,10 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketClient.class);
 
-    final WebSocketService service;
+    private WebSocketListener listener;
 
-    public WebSocketClient(URI serverUri, WebSocketService service) {
+    public WebSocketClient(URI serverUri) {
         super(serverUri);
-        this.service = service;
     }
 
     @Override
@@ -26,7 +25,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     public void onMessage(String s) {
         try {
             log.debug("Received message {} from server {}", s, uri);
-            service.onReply(s);
+            listener.onMessage(s);
             log.debug("Processed message {} from server {}", s, uri);
         } catch (Exception e) {
             log.error("Failed to process message '{}' from server {}", s, uri);
@@ -41,5 +40,9 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     @Override
     public void onError(Exception e) {
         log.error(String.format("WebSocket connection to {} failed with error", uri), e);
+    }
+
+    public void setListener(WebSocketListener listener) {
+        this.listener = listener;
     }
 }
