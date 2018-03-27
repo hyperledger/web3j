@@ -162,8 +162,10 @@ public class RequestTest extends RequestTester {
         web3j.parityListAccounts(maxQuantityReturned,
                 "0x407d73d8a49eeb85d32cf465507dd71d507100c1", blockParameter).send();
 
+        //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
                 + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"latest\"],\"id\":1}");
+        //CHECKSTYLE:ON
     }
 
     @Test
@@ -173,8 +175,10 @@ public class RequestTest extends RequestTester {
         web3j.parityListAccounts(maxQuantityReturned,
                 "0x407d73d8a49eeb85d32cf465507dd71d507100c1", blockParameter).send();
 
+        //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
                 + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"latest\"],\"id\":1}");
+        //CHECKSTYLE:ON
     }
 
     public void testParityListGethAccounts() throws Exception {
