@@ -505,7 +505,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         public TransactionObject(String hash, String nonce, String blockHash, String blockNumber,
                                  String transactionIndex, String from, String to, String value,
                                  String gasPrice, String gas, String input, String creates,
-                                 String publicKey, String raw, String r, String s, int v) {
+                                 String publicKey, String raw, String r, String s, long v) {
             super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value,
                     gasPrice, gas, input, creates, publicKey, raw, r, s, v);
         }

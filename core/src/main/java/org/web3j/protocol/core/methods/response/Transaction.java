@@ -24,7 +24,7 @@ public class Transaction {
     private String raw;
     private String r;
     private String s;
-    private int v;  // see https://github.com/web3j/web3j/issues/44
+    private long v;  // see https://github.com/web3j/web3j/issues/44
 
     public Transaction() {
     }
@@ -32,7 +32,7 @@ public class Transaction {
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,
                        String gas, String gasPrice, String input, String creates,
-                       String publicKey, String raw, String r, String s, int v) {
+                       String publicKey, String raw, String r, String s, long v) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -204,7 +204,7 @@ public class Transaction {
         this.s = s;
     }
 
-    public int getV() {
+    public long getV() {
         return v;
     }
 
@@ -217,9 +217,9 @@ public class Transaction {
     // https://github.com/ethereum/go-ethereum/issues/3339
     public void setV(Object v) {
         if (v instanceof String) {
-            this.v = Numeric.toBigInt((String) v).intValueExact();
+            this.v = Numeric.toBigInt((String) v).longValue();
         } else {
-            this.v = ((Integer) v);
+            this.v = ((Long) v);
         }
     }
 
@@ -315,7 +315,7 @@ public class Transaction {
         result = 31 * result + (getRaw() != null ? getRaw().hashCode() : 0);
         result = 31 * result + (getR() != null ? getR().hashCode() : 0);
         result = 31 * result + (getS() != null ? getS().hashCode() : 0);
-        result = 31 * result + getV();
+        result = 31 * result + BigInteger.valueOf(getV()).hashCode();
         return result;
     }
 }
