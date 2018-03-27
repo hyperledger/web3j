@@ -23,6 +23,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -49,6 +50,7 @@ public abstract class Contract extends ManagedTransaction {
     protected BigInteger gasLimit;
     protected TransactionReceipt transactionReceipt;
     protected Map<String, String> deployedAddresses;
+    protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
 
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
@@ -160,6 +162,16 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     /**
+     * Sets the default block parameter. This use useful if one wants to query
+     * historical state of a contract.
+     *
+     * @param defaultBlockParameter the default block parameter
+     */
+    public void setDefaultBlockParameter(DefaultBlockParameter defaultBlockParameter) {
+        this.defaultBlockParameter = defaultBlockParameter;
+    }
+    
+    /**
      * Execute constant function call - i.e. a call that does not change state of the contract
      *
      * @param function to call
@@ -171,7 +183,7 @@ public abstract class Contract extends ManagedTransaction {
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
                 Transaction.createEthCallTransaction(
                         transactionManager.getFromAddress(), contractAddress, encodedFunction),
-                DefaultBlockParameterName.LATEST)
+                defaultBlockParameter)
                 .send();
 
         String value = ethCall.getValue();
