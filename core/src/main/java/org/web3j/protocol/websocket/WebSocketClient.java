@@ -6,6 +6,10 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Web socket client implementation that connects to a specify URI. Allows to provide a listener
+ * that will be called when a new message is received by the client.
+ */
 public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketClient.class);
@@ -33,8 +37,9 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     }
 
     @Override
-    public void onClose(int i, String s, boolean b) {
-        log.info("Closed WebSocket connection to {}", uri);
+    public void onClose(int code, String reason, boolean remote) {
+        log.info("Closed WebSocket connection to {}, because of reason: '{}'."
+                + "Conection closed remotely: {}", uri, reason, remote);
     }
 
     @Override
@@ -42,6 +47,11 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
         log.error(String.format("WebSocket connection to {} failed with error", uri), e);
     }
 
+    /**
+     * Set a listener that will be called when a new message is received by the client.
+     *
+     * @param listener WebSocket listener
+     */
     public void setListener(WebSocketListener listener) {
         this.listener = listener;
     }

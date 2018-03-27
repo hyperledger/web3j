@@ -33,17 +33,34 @@ import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.core.methods.response.EthUnsubscribe;
 import org.web3j.protocol.websocket.events.Notification;
 
+/**
+ * Web socket service that allows to interact with JSON-RPC via WebSocket protocol.
+ *
+ * <p>Allows to interact with JSON-RPC either by sending individual requests or by
+ * subscribing to a stream of notifications. To subscribe to a notification it first
+ * sends a special JSON-RPC request that returns a unique subscription id. A subscription
+ * id is used to identify events for a single notifications stream.
+ *
+ * <p>To unsubscribe from a stream of notifications it should send another JSON-RPC
+ * request.
+ */
 public class WebSocketService implements Web3jService {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketService.class);
 
+    // Timeout for JSON-RPC requests
     static final long REQUEST_TIMEOUT = 60;
 
+    // WebSocket client
     private final WebSocketClient webSocketClient;
+    // Executor to schedule request timeouts
     private final ScheduledExecutorService executor;
+    // Object mapper to map incoming JSON objects
     private final ObjectMapper objectMapper;
 
+    // Map of a sent request id to objects necessary to process this id
     private Map<Long, WebSocketRequest<?>> requestForId = new HashMap<>();
+    // Map of a subscription id to objects necessary to process incoming events
     private Map<String, WebSocketSubscription<?>> subscriptionForId = new HashMap<>();
 
     public WebSocketService(String serverUrl, boolean includeRawResponses) {
