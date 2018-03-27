@@ -13,7 +13,7 @@ import org.web3j.protocol.geth.response.PersonalImportRawKey;
 /**
  * JSON-RPC 2.0 factory implementation for Geth.
  */
-class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
+public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     public JsonRpc2_0Geth(Web3jService web3jService) {
         super(web3jService);
