@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
 import rx.Observable;
@@ -64,7 +67,10 @@ import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
+import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
+import org.web3j.protocol.websocket.events.PendingTransactionNotification;
+import org.web3j.protocol.websocket.events.SyncingNotfication;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -694,10 +700,61 @@ public class JsonRpc2_0Web3j implements Web3j {
         return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",
-                        Arrays.asList("newHeads", Collections.emptyMap()),
+                        Collections.singletonList("newHeads"),
                         web3jService,
                         EthSubscribe.class),
                 NewHeadsNotification.class
+        );
+    }
+
+    @Override
+    public Observable<LogNotification> logsNotifications(
+            List<String> addresses, List<String> topics) {
+
+        Map<String, Object> params = createLogsParams(addresses, topics);
+
+        return web3jService.subscribe(
+                new Request<>(
+                        "eth_subscribe",
+                        Arrays.asList("logs", params),
+                        web3jService,
+                        EthSubscribe.class),
+                LogNotification.class
+        );
+    }
+
+    private Map<String, Object> createLogsParams(List<String> addresses, List<String> topics) {
+        Map<String, Object> params = new HashMap<>();
+        if (!addresses.isEmpty()) {
+            params.put("address", addresses);
+        }
+        if (!topics.isEmpty()) {
+            params.put("topics", topics);
+        }
+        return params;
+    }
+
+    @Override
+    public Observable<PendingTransactionNotification> newPendingTransactionsNotifications() {
+        return web3jService.subscribe(
+                new Request<>(
+                        "eth_subscribe",
+                        Arrays.asList("newPendingTransactions"),
+                        web3jService,
+                        EthSubscribe.class),
+                PendingTransactionNotification.class
+        );
+    }
+
+    @Override
+    public Observable<SyncingNotfication> syncingStatusNotifications() {
+        return web3jService.subscribe(
+                new Request<>(
+                        "eth_subscribe",
+                        Arrays.asList("syncing"),
+                        web3jService,
+                        EthSubscribe.class),
+                SyncingNotfication.class
         );
     }
 

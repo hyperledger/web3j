@@ -1,6 +1,6 @@
 package org.web3j.protocol.websocket.events;
 
-public class NewHeadsNotificationParam {
+public class NewHead {
     private String difficulty;
     private String extraData;
     private String gasLimit;

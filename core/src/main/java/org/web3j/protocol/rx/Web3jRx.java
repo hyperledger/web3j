@@ -1,5 +1,7 @@
 package org.web3j.protocol.rx;
 
+import java.util.List;
+
 import rx.Observable;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -7,7 +9,10 @@ import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.Transaction;
+import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
+import org.web3j.protocol.websocket.events.PendingTransactionNotification;
+import org.web3j.protocol.websocket.events.SyncingNotfication;
 
 /**
  * The Observables JSON-RPC client event API.
@@ -176,4 +181,30 @@ public interface Web3jRx {
      * @return Observable that emits a notification for every new header
      */
     Observable<NewHeadsNotification> newHeadsNotifications();
+
+    /**
+     * Creates an observable that emits notifications for logs included in new imported blocks.
+     *
+     * @param addresses only return logs from this list of address. Return logs from all addresses
+     *                  if the list is empty
+     * @param topics only return logs that match specified topics. Returns logs for all topics if
+     *               the list is empty
+     * @return Observable that emits logs included in new blocks
+     */
+    Observable<LogNotification> logsNotifications(List<String> addresses, List<String> topics);
+
+    /**
+     * Creates an observable that emits a notification when a new transaction is added
+     * to the pending state and is signed with a key that is available in the node.
+     *
+     * @return Observable that emits a notification when a new transaction is added
+     *         to the pending state
+     */
+    Observable<PendingTransactionNotification> newPendingTransactionsNotifications();
+
+    /**
+     * Creates an observable that emits a notification when a node starts or stops syncing.
+     * @return Observalbe that emits changes to syncing status
+     */
+    Observable<SyncingNotfication> syncingStatusNotifications();
 }
