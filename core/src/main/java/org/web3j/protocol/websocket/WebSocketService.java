@@ -53,6 +53,13 @@ public class WebSocketService implements Web3jService {
         this.objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
     }
 
+    public WebSocketService(WebSocketClient webSocketClient,
+                     boolean includeRawResponses) {
+        this.webSocketClient = webSocketClient;
+        this.executor = Executors.newScheduledThreadPool(1);
+        this.objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
+    }
+
     WebSocketService(WebSocketClient webSocketClient,
                      ScheduledExecutorService executor,
                      boolean includeRawResponses) {

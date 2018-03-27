@@ -45,6 +45,7 @@ import org.web3j.protocol.core.methods.response.EthProtocolVersion;
 import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
 import org.web3j.protocol.core.methods.response.EthSubmitWork;
+import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
@@ -63,6 +64,7 @@ import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
+import org.web3j.protocol.websocket.events.NewHeadsNotification;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -685,6 +687,18 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 ShhMessages.class);
+    }
+
+    @Override
+    public Observable<NewHeadsNotification> newHeadsNotifications() {
+        return web3jService.subscribe(
+                new Request<>(
+                        "eth_subscribe",
+                        Arrays.asList("newHeads", Collections.emptyMap()),
+                        web3jService,
+                        EthSubscribe.class),
+                NewHeadsNotification.class
+        );
     }
 
     @Override

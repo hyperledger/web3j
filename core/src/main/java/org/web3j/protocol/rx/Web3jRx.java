@@ -7,6 +7,7 @@ import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.Transaction;
+import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
 /**
  * The Observables JSON-RPC client event API.
@@ -167,4 +168,12 @@ public interface Web3jRx {
      */
     Observable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(
             DefaultBlockParameter startBlock);
+
+    /**
+     * Creates an observable that emits a notification when a new header is appended to a chain,
+     * including chain reorganizations.
+     *
+     * @return Observable that emits a notification for every new header
+     */
+    Observable<NewHeadsNotification> newHeadsNotifications();
 }
