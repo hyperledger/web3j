@@ -332,6 +332,45 @@ public class WebSocketServiceTest {
         assertEquals(e, actualThrowable.get());
     }
 
+    @Test
+    public void testIfCloseObserverIfSubscriptionRequestFailed() throws Exception {
+        CountDownLatch errorReceived = new CountDownLatch(1);
+        AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
+
+        runAsync(() -> {
+            subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    actualThrowable.set(e);
+                    errorReceived.countDown();
+                }
+
+                @Override
+                public void onNext(NewHeadsNotification newHeadsNotification) {
+
+                }
+            });
+        });
+
+        waitForRequestSent();
+        sendErrorReply();
+
+        assertTrue(errorReceived.await(2, TimeUnit.SECONDS));
+
+        Throwable throwable = actualThrowable.get();
+        assertEquals(
+                IOException.class,
+                throwable.getClass()
+        );
+        assertEquals(
+                "Subscription request failed with error: Error message",
+                throwable.getMessage());
+    }
+
     private void runAsync(Runnable runnable) {
         Executors.newSingleThreadExecutor().execute(runnable);
     }

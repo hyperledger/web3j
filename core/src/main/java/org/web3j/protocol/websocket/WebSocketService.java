@@ -58,7 +58,7 @@ public class WebSocketService implements Web3jService {
     // Object mapper to map incoming JSON objects
     private final ObjectMapper objectMapper;
 
-    // Map of a sent request id to objects necessary to process this id
+    // Map of a sent request id to objects necessary to process this request
     private Map<Long, WebSocketRequest<?>> requestForId = new ConcurrentHashMap<>();
     // Map of a subscription id to objects necessary to process incoming events
     private Map<String, WebSocketSubscription<?>> subscriptionForId = new ConcurrentHashMap<>();
@@ -304,12 +304,7 @@ public class WebSocketService implements Web3jService {
             BehaviorSubject<T> subject, Class<T> responseType) {
 
         try {
-            EthSubscribe ethSubscribe = send(request, EthSubscribe.class);
-            log.info("Subscribed to RPC events with id {}",
-                    ethSubscribe.getSubscriptionId());
-            subscriptionForId.put(
-                    ethSubscribe.getSubscriptionId(),
-                    new WebSocketSubscription<>(subject, responseType));
+            processSubscriptionResponse(request, subject, responseType);
         } catch (IOException e) {
             log.error("Failed to subscribe to RPC events with request id {}",
                     request.getId());
@@ -317,12 +312,43 @@ public class WebSocketService implements Web3jService {
         }
     }
 
+    private <T extends Notification<?>> void processSubscriptionResponse(
+            Request request, BehaviorSubject<T> subject, Class<T> responseType) throws IOException {
+        EthSubscribe subscriptionReply = send(request, EthSubscribe.class);
+        if (subscriptionReply.hasError()) {
+            reportSubscriptionError(subject, subscriptionReply);
+        } else {
+            establishSubscription(subject, responseType, subscriptionReply);
+        }
+    }
+
+    private <T extends Notification<?>> void establishSubscription(
+            BehaviorSubject<T> subject, Class<T> responseType, EthSubscribe subscriptionReply) {
+        log.info("Subscribed to RPC events with id {}",
+                subscriptionReply.getSubscriptionId());
+        subscriptionForId.put(
+                subscriptionReply.getSubscriptionId(),
+                new WebSocketSubscription<>(subject, responseType));
+    }
+
     private <T extends Notification<?>> String getSubscriptionId(BehaviorSubject<T> subject) {
         return subscriptionForId.entrySet().stream()
                 .filter(entry -> entry.getValue().getSubject() == subject)
-                .map(entry -> entry.getKey())
+                .map(Map.Entry::getKey)
                 .findFirst()
                 .orElse(null);
+    }
+
+    private <T extends Notification<?>> void reportSubscriptionError(
+            BehaviorSubject<T> subject, EthSubscribe subscriptionReply) {
+        Response.Error error = subscriptionReply.getError();
+        log.error("Subscription request returned error: {}", error.getMessage());
+        subject.onError(
+                new IOException(String.format(
+                        "Subscription request failed with error: %s",
+                        error.getMessage()
+                ))
+        );
     }
 
     private void unsubscribeFromEventsStream(String subscriptionId, String unsubscribeMethod) {
