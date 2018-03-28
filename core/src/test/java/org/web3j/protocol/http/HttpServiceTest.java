@@ -1,8 +1,14 @@
 package org.web3j.protocol.http;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.junit.Test;
+
+import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.EthSubscribe;
+import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
 import static org.junit.Assert.assertTrue;
 
@@ -34,6 +40,21 @@ public class HttpServiceTest {
         
         assertTrue(httpService.getHeaders().get(headerName1).equals(headerValue1));
         assertTrue(httpService.getHeaders().get(headerName2).equals(headerValue2));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void subscriptionNotSupported() {
+        Request<Object, EthSubscribe> subscribeRequest = new Request<>(
+                "eth_subscribe",
+                Arrays.asList("newHeads", Collections.emptyMap()),
+                httpService,
+                EthSubscribe.class);
+
+        httpService.subscribe(
+                subscribeRequest,
+                "eth_unsubscribe",
+                NewHeadsNotification.class
+        );
     }
     
 }
