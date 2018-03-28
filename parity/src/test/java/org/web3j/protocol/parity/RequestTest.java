@@ -137,7 +137,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testParityListAccountsNoAccountOffsetNoQuantity() throws Exception {
+    public void testParityListAccountsNoAccountOffsetNoBlockTag() throws Exception {
         BigInteger maxQuantityReturned = BigInteger.valueOf(100);
         web3j.parityListAccounts(maxQuantityReturned, null, null).send();
 
@@ -146,7 +146,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testParityListAccountsNoAccountOffsetWithQuantity() throws Exception {
+    public void testParityListAccountsNoAccountOffsetWithBlockTag() throws Exception {
         BigInteger maxQuantityReturned = BigInteger.valueOf(100);
         DefaultBlockParameter blockParameter = new DefaultBlockParameterNumber(BigInteger.ONE);
         web3j.parityListAccounts(maxQuantityReturned, null, blockParameter).send();
@@ -156,7 +156,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testParityListAccountsAccountOffsetWithQuantity() throws Exception {
+    public void testParityListAccountsWithAccountOffsetWithBlockTag() throws Exception {
         BigInteger maxQuantityReturned = BigInteger.valueOf(100);
         DefaultBlockParameter blockParameter = DefaultBlockParameterName.LATEST;
         web3j.parityListAccounts(maxQuantityReturned,
@@ -169,15 +169,14 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testParityListAccountsAccountOffsetNoQuantity() throws Exception {
+    public void testParityListAccountsWithAccountOffsetNoBlockTag() throws Exception {
         BigInteger maxQuantityReturned = BigInteger.valueOf(100);
-        DefaultBlockParameter blockParameter = DefaultBlockParameterName.LATEST;
         web3j.parityListAccounts(maxQuantityReturned,
-                "0x407d73d8a49eeb85d32cf465507dd71d507100c1", blockParameter).send();
+                "0x407d73d8a49eeb85d32cf465507dd71d507100c1", null).send();
 
         //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
-                + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"latest\"],\"id\":1}");
+                + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],\"id\":1}");
         //CHECKSTYLE:ON
     }
 
