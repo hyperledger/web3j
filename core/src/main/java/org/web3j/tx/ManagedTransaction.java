@@ -73,8 +73,8 @@ public abstract class ManagedTransaction {
 
     // adapt to cita
     protected TransactionReceipt sendAdaptToCita(
-            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock)
+            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version)
             throws IOException, TransactionException {
-        return transactionManager.executeTransaction(to, data, quota, nonce, validUntilBlock);
+        return transactionManager.executeTransaction(to, data, quota, nonce, validUntilBlock, version);
     }
 }

@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+enum ProofType {
+    AuthorityRound = 0;
+    Raft = 1;
+    Tendermint = 2;
+}
+
+message Proof {
+    bytes content = 1; 
+    ProofType type = 2;
+}
+
+message BlockHeader {
+    bytes prevhash = 1;
+    uint64 timestamp = 2;
+    uint64 height = 3;
+    bytes state_root = 4;
+    bytes transactions_root = 5;
+    bytes receipts_root = 6;
+    uint64 gas_used = 7;
+    uint64 gas_limit = 8;
+    Proof proof = 9;
+}
+
+message Status {
+    bytes hash = 1;
+    uint64 height = 2;
+}
+
+message AccountGasLimit {
+    uint64 common_gas_limit = 1;
+    map<string,uint64> specific_gas_limit = 2;
+}
+
+message RichStatus {
+    bytes hash = 1;
+    uint64 height = 2;
+    repeated bytes nodes = 3;
+}
+
+enum Crypto {
+    SECP = 0;
+    SM2 = 1; 
+}
+
+message Transaction {
+    string to = 1;
+    string nonce = 2;
+    uint64 quota = 3;
+    uint64 valid_until_block = 4;
+    bytes data = 5;
+    uint32 version = 6;
+}
+
+message UnverifiedTransaction {
+    Transaction transaction = 1;
+    bytes signature = 2;
+    Crypto crypto = 3;
+}
+
+message SignedTransaction {
+    UnverifiedTransaction transaction_with_sig = 1;
+    bytes tx_hash = 2;  // SignedTransaction hash
+    bytes signer = 3; //public key
+}
+
+// data precompile API
+
+message BlockBody {
+    repeated SignedTransaction transactions = 1;
+}
+
+message Block {
+    uint32 version = 1;
+    BlockHeader header = 2;
+    BlockBody body = 3;
+}
+
+message BlockWithProof {
+    Block blk = 1;
+    Proof proof = 2;
+}
+
+message BlockTxs {
+    uint64 height = 1;
+    BlockBody body = 3;
+}

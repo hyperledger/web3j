@@ -62,7 +62,7 @@ public class InterfaceTest {
         Random r = new Random(System.currentTimeMillis());
         long nonce = Math.abs(r.nextLong());
         System.out.println("nonce = " + nonce);
-        Transaction rtx = Transaction.createContractTransaction(BigInteger.valueOf(nonce), 1000000, validBlockNumber.longValue() + 88, code);
+        Transaction rtx = Transaction.createContractTransaction(BigInteger.valueOf(nonce), 1000000, validBlockNumber.longValue() + 88,0,  code);
         String privateKey = "352416e1c910e413768c51390dfd791b414212b7b4fe6b1a18f58007fa894214";
         String signedTx = rtx.sign(privateKey);
         String validTransactionHash = testEthSendRawTransaction(signedTx).get();

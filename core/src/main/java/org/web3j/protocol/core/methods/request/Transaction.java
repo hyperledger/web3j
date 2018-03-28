@@ -36,13 +36,15 @@ public class Transaction {
     private BigInteger nonce;  // nonce field is not present on eth_call/eth_estimateGas
     private long quota;  // gas
     private long valid_until_block;
+    private int version = 0;
     private String data;
     private final Hash hash = new Hash();
 
-    public Transaction(String to, BigInteger nonce, long quota, long valid_until_block, String data) {
+    public Transaction(String to, BigInteger nonce, long quota, long valid_until_block, int version, String data) {
         this.to = to;
         this.nonce = nonce;
         this.quota = quota;
+        this.version = version;
         this.valid_until_block = valid_until_block;
 
         if (data != null) {
@@ -51,15 +53,15 @@ public class Transaction {
     }
 
     public static Transaction createContractTransaction(
-        BigInteger nonce, long quota, long valid_until_block, String init) {
+        BigInteger nonce, long quota, long valid_until_block,int version, String init) {
 
-        return new Transaction("", nonce, quota, valid_until_block, init);
+        return new Transaction("", nonce, quota, valid_until_block, version, init);
     }
 
     public static Transaction createFunctionCallTransaction(
-        String to, BigInteger nonce, long quota, long valid_until_block, String data) {
+        String to, BigInteger nonce, long quota, long valid_until_block, int version, String data) {
 
-        return new Transaction(to, nonce, quota, valid_until_block, data);
+        return new Transaction(to, nonce, quota, valid_until_block, version, data);
     }
 
     public String getTo() {
@@ -76,6 +78,10 @@ public class Transaction {
 
     public long get_valid_until_block() {
         return valid_until_block;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public String getData() {
@@ -103,6 +109,7 @@ public class Transaction {
         builder.setNonce(getNonce());
         builder.setTo(getTo());
         builder.setValidUntilBlock(get_valid_until_block());
+        builder.setVersion(getVersion());
         builder.setQuota(getQuota());
         Blockchain.Transaction tx = builder.build();
 
@@ -142,6 +149,7 @@ public class Transaction {
         builder.setTo(getTo());
         builder.setValidUntilBlock(get_valid_until_block());
         builder.setQuota(getQuota());
+        builder.setVersion(getVersion());
         Blockchain.Transaction tx = builder.build();
 
         ECKeyPair keyPair = credentials.getEcKeyPair();

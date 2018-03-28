@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 public class TokenTest {
     private final long initialSupply = 1000000;
+    private final static int version = 0;
     private final BigInteger offset = BigInteger.valueOf(80);
     private final Random random = new Random(System.currentTimeMillis());
     private Map<Credentials, Long> accounts;
@@ -41,7 +42,7 @@ public class TokenTest {
         BigInteger currentHeight = this.getCurrentHeight();
         CompletableFuture<Token> tokenFuture = Token.deploy(service, creatorManager,
                 BigInteger.valueOf(1000000), nextNonce(),
-                currentHeight.add(this.offset), BigInteger.valueOf(initialSupply))
+                currentHeight.add(this.offset), BigInteger.valueOf(version), BigInteger.valueOf(initialSupply))
                 .sendAsync();
         tokenFuture.whenCompleteAsync((contract, exception) -> {
             if (exception != null) {
@@ -254,11 +255,12 @@ public class TokenTest {
 
         CompletableFuture<TransactionReceipt> execute(Web3j service) throws IOException {
             Token token = TokenTest.this.tokenOf(this.from);
-            BigInteger currentHeigt = TokenTest.this.getCurrentHeight();
+            BigInteger currentHeight = TokenTest.this.getCurrentHeight();
             return token.transfer(this.to.getAddress(), BigInteger.valueOf(tokens),
-                    BigInteger.valueOf(100000), TokenTest.this.nextNonce(),
-                    currentHeigt.add(TokenTest.this.offset)).sendAsync();
+                    BigInteger.valueOf(100000), TokenTest.this.nextNonce(),BigInteger.valueOf(0),
+                    currentHeight.add(TokenTest.this.offset) ).sendAsync();
         }
+
 
         @Override
         public String toString() {
