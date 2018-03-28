@@ -1,17 +1,17 @@
 package org.web3j.protocol.websocket;
 
-import rx.subjects.PublishSubject;
+import rx.subjects.BehaviorSubject;
 
 public class WebSocketSubscription<T> {
-    private PublishSubject<T> subject;
+    private BehaviorSubject<T> subject;
     private Class<T> responseType;
 
-    public WebSocketSubscription(PublishSubject<T> subject, Class<T> responseType) {
+    public WebSocketSubscription(BehaviorSubject<T> subject, Class<T> responseType) {
         this.subject = subject;
         this.responseType = responseType;
     }
 
-    public PublishSubject<T> getSubject() {
+    public BehaviorSubject<T> getSubject() {
         return subject;
     }
 
