@@ -274,7 +274,12 @@ public class WebSocketServiceTest {
             }
         });
 
+
         sendSubscriptionConfirmation();
+        // A subscriber can miss an event if it comes at the same time as
+        // a subscription confirmation. Waiting for a bit to ensure
+        // delivery
+        Thread.sleep(100);
         sendWebSocketEvent();
 
         assertTrue(completedCalled.await(6, TimeUnit.SECONDS));
