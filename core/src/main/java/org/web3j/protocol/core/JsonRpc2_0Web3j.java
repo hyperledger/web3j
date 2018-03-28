@@ -703,6 +703,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                         Collections.singletonList("newHeads"),
                         web3jService,
                         EthSubscribe.class),
+                "eth_unsubscribe",
                 NewHeadsNotification.class
         );
     }
@@ -719,6 +720,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                         Arrays.asList("logs", params),
                         web3jService,
                         EthSubscribe.class),
+                "eth_unsubscribe",
                 LogNotification.class
         );
     }
@@ -742,6 +744,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                         Arrays.asList("newPendingTransactions"),
                         web3jService,
                         EthSubscribe.class),
+                "eth_unsubscribe",
                 PendingTransactionNotification.class
         );
     }
@@ -754,6 +757,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                         Arrays.asList("syncing"),
                         web3jService,
                         EthSubscribe.class),
+                "eth_unsubscribe",
                 SyncingNotfication.class
         );
     }

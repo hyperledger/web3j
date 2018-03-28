@@ -46,17 +46,14 @@ public abstract class Service implements Web3jService {
         return Async.run(() -> send(jsonRpc20Request, responseType));
     }
 
-
+    @Override
     public <T extends Notification<?>> Observable<T> subscribe(
             Request request,
+            String unsubscribeMethod,
             Class<T> responseType) {
         throw new UnsupportedOperationException(
                 String.format(
                         "Service %s does not support subscriptions",
                         this.getClass().getSimpleName()));
-    }
-
-    public boolean supportsSubscription() {
-        return false;
     }
 }

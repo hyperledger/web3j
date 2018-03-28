@@ -264,22 +264,24 @@ public class WebSocketService implements Web3jService {
     @Override
     public <T extends Notification<?>> Observable<T> subscribe(
             Request request,
+            String unsubscribeMethod,
             Class<T> responseType) {
         PublishSubject<T> subject = PublishSubject.create();
 
         sendSubscribeRequest(request, subject, responseType);
 
         return subject
-                .doOnUnsubscribe(() -> closeSubscription(subject));
+                .doOnUnsubscribe(() -> closeSubscription(subject, unsubscribeMethod));
 
     }
 
-    private <T extends Notification<?>> void closeSubscription(PublishSubject<T> subject) {
+    private <T extends Notification<?>> void closeSubscription(
+            PublishSubject<T> subject, String unsubscribeMethod) {
         subject.onCompleted();
         String subscriptionId = getSubscriptionId(subject);
         subscriptionForId.remove(subscriptionId);
         if (subscriptionId != null) {
-            unsubscribeFromEventsStream(subscriptionId);
+            unsubscribeFromEventsStream(subscriptionId, unsubscribeMethod);
         }
     }
 
@@ -312,8 +314,8 @@ public class WebSocketService implements Web3jService {
                 .orElse(null);
     }
 
-    private void unsubscribeFromEventsStream(String subscriptionId) {
-        sendAsync(unsubscribeRequest(subscriptionId), EthUnsubscribe.class)
+    private void unsubscribeFromEventsStream(String subscriptionId, String unsubscribeMethod) {
+        sendAsync(unsubscribeRequest(subscriptionId, unsubscribeMethod), EthUnsubscribe.class)
                 .thenAccept(ethUnsubscribe -> {
                     log.debug(
                             "Successfully unsubscribed from subscription with id {}",
@@ -325,17 +327,13 @@ public class WebSocketService implements Web3jService {
                 });
     }
 
-    private Request<String, EthUnsubscribe> unsubscribeRequest(String subscriptionId) {
+    private Request<String, EthUnsubscribe> unsubscribeRequest(
+            String subscriptionId, String unsubscribeMethod) {
         return new Request<>(
-                        "eth_unsubscribe",
+                        unsubscribeMethod,
                         Arrays.asList(subscriptionId),
                         this,
                         EthUnsubscribe.class);
-    }
-
-    @Override
-    public boolean supportsSubscription() {
-        return true;
     }
 
     @Override

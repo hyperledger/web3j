@@ -341,6 +341,7 @@ public class WebSocketServiceTest {
 
         return service.subscribe(
                 subscribeRequest,
+                "eth_unsubscribe",
                 NewHeadsNotification.class
         );
     }
