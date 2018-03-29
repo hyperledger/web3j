@@ -130,7 +130,7 @@ public class WebSocketServiceTest {
         thrown.expect(IOException.class);
         thrown.expectMessage("Failed to parse incoming WebSocket message");
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onMessage("{");
+        service.onWebSocketMessage("{");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class WebSocketServiceTest {
         thrown.expect(IOException.class);
         thrown.expectMessage("'id' expected to be long, but it is: 'true'");
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onMessage("{\"id\":true}");
+        service.onWebSocketMessage("{\"id\":true}");
     }
 
     @Test
@@ -146,7 +146,7 @@ public class WebSocketServiceTest {
         thrown.expect(IOException.class);
         thrown.expectMessage("Unknown message type");
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onMessage("{}");
+        service.onWebSocketMessage("{}");
     }
 
     @Test
@@ -154,7 +154,8 @@ public class WebSocketServiceTest {
         thrown.expect(IOException.class);
         thrown.expectMessage("Received reply for unexpected request id: 12345");
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onMessage("{\"jsonrpc\":\"2.0\",\"id\":12345,\"result\":\"geth-version\"}");
+        service.onWebSocketMessage(
+                "{\"jsonrpc\":\"2.0\",\"id\":12345,\"result\":\"geth-version\"}");
     }
 
     @Test
@@ -396,7 +397,7 @@ public class WebSocketServiceTest {
     }
 
     private void sendErrorReply() throws IOException {
-        service.onMessage(
+        service.onWebSocketMessage(
                 "{"
                         + "  \"jsonrpc\":\"2.0\","
                         + "  \"id\":1,"
@@ -409,7 +410,7 @@ public class WebSocketServiceTest {
     }
 
     private void sendGethVersionReply() throws IOException {
-        service.onMessage(
+        service.onWebSocketMessage(
                 "{"
                         + "  \"jsonrpc\":\"2.0\","
                         + "  \"id\":1,"
@@ -432,7 +433,7 @@ public class WebSocketServiceTest {
     private void sendSubscriptionConfirmation() throws Exception {
         waitForRequestSent();
 
-        service.onMessage(
+        service.onWebSocketMessage(
                 "{"
                         + "\"jsonrpc\":\"2.0\","
                         + "\"id\":1,"
@@ -447,7 +448,7 @@ public class WebSocketServiceTest {
     }
 
     private void sendWebSocketEvent() throws IOException {
-        service.onMessage(
+        service.onWebSocketMessage(
                 "{"
                         + "  \"jsonrpc\":\"2.0\","
                         + "  \"method\":\"eth_subscription\","

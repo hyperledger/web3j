@@ -87,16 +87,40 @@ public class WebSocketService implements Web3jService {
      */
     public void connect() throws ConnectException {
         try {
-            boolean connected = webSocketClient.connectBlocking();
-            if (!connected) {
-                throw new ConnectException("Failed to connect to WebSocket");
-            }
-            webSocketClient.setListener(this::onMessage);
+            connectToWebSocket();
+            setWebSocketListener();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.warn("Interrupted while connecting via WebSocket protocol");
         }
     }
+
+    private void connectToWebSocket() throws InterruptedException, ConnectException {
+        boolean connected = webSocketClient.connectBlocking();
+        if (!connected) {
+            throw new ConnectException("Failed to connect to WebSocket");
+        }
+    }
+
+    private void setWebSocketListener() {
+        webSocketClient.setListener(new WebSocketListener() {
+            @Override
+            public void onMessage(String message) throws IOException {
+                onWebSocketMessage(message);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onClose() {
+                onWebSocketClose();
+            }
+        });
+    }
+
 
     @Override
     public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
@@ -154,7 +178,7 @@ public class WebSocketService implements Web3jService {
         result.completeExceptionally(e);
     }
 
-    void onMessage(String messageStr) throws IOException {
+    void onWebSocketMessage(String messageStr) throws IOException {
         JsonNode replyJson = parseToTree(messageStr);
 
         if (isReply(replyJson)) {
@@ -376,6 +400,9 @@ public class WebSocketService implements Web3jService {
     public void close() {
         webSocketClient.close();
         executor.shutdown();
+    }
+
+    void onWebSocketClose() {
     }
 
     // Method visible for unit-tests
