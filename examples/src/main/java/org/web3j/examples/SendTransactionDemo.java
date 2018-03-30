@@ -11,6 +11,8 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class SendTransactionDemo {
+    private final static int VERSION = 0;
+
     private static Web3j service;
     private static Random random;
 
@@ -33,7 +35,7 @@ public class SendTransactionDemo {
         long validUntilBlock = currentHeight + 80;
         BigInteger nonce = BigInteger.valueOf(Math.abs(random.nextLong()));
         long quota = 1000000;
-        Transaction tx = Transaction.createContractTransaction(nonce, quota, validUntilBlock, contractCode);
+        Transaction tx = Transaction.createContractTransaction(nonce, quota, validUntilBlock, VERSION, contractCode);
         String rawTx = tx.sign(privateKey);
 
         return service.ethSendRawTransaction(rawTx).send().getSendTransactionResult().getHash();
@@ -48,7 +50,7 @@ public class SendTransactionDemo {
         long validUntilBlock = currentHeight + 80;
         BigInteger nonce = BigInteger.valueOf(Math.abs(random.nextLong()));
         long quota = 1000000;
-        Transaction tx = Transaction.createFunctionCallTransaction(contractAddress, nonce, quota, validUntilBlock, functionCallData);
+        Transaction tx = Transaction.createFunctionCallTransaction(contractAddress, nonce, quota, validUntilBlock, VERSION, functionCallData);
         String rawTx = tx.sign(privateKey);
 
         return service.ethSendRawTransaction(rawTx).send().getSendTransactionResult().getHash();

@@ -35,7 +35,7 @@ import rx.functions.Func1;
  * <p>Generated with web3j version 3.2.0.
  */
 public class Token extends Contract {
-    private static final String BINARY = "6060604052341561000f57600080fd5b60405160208061020083398101604052808051600160a060020a03331660009081526020819052604090205550506101b48061004c6000396000f30060606040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166370a082318114610050578063a9059cbb14610081575b600080fd5b341561005b57600080fd5b61006f600160a060020a03600435166100a5565b60405190815260200160405180910390f35b341561008c57600080fd5b6100a3600160a060020a03600435166024356100b7565b005b60006020819052908152604090205481565b600160a060020a033316600090815260208190526040902054819010156100dd57600080fd5b600160a060020a038216600090815260208190526040902054818101101561010457600080fd5b600160a060020a03338181166000908152602081905260408082208054869003905592851681528290208054840190557fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef918490849051600160a060020a039384168152919092166020820152604080820192909252606001905180910390a150505600a165627a7a72305820ca1b64bd5fbfa2baede30b8fe2c9d5bf4014054f3a5c006aecf4a2eefed0a11a0029";
+    private static final String BINARY = "6060604052341561000f57600080fd5b60405160208061020083398101604052808051600160a060020a03331660009081526020819052604090205550506101b48061004c6000396000f30060606040526004361061004b5763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166370a082318114610050578063a9059cbb14610081575b600080fd5b341561005b57600080fd5b61006f600160a060020a03600435166100a5565b60405190815260200160405180910390f35b341561008c57600080fd5b6100a3600160a060020a03600435166024356100b7565b005b60006020819052908152604090205481565b600160a060020a033316600090815260208190526040902054819010156100dd57600080fd5b600160a060020a038216600090815260208190526040902054818101101561010457600080fd5b600160a060020a03338181166000908152602081905260408082208054869003905592851681528290208054840190557fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef918490849051600160a060020a039384168152919092166020820152604080820192909252606001905180910390a150505600a165627a7a723058206f14a74427ac06d07c1ffe987fb3c75095759dd0caf90c06679f040e8cceb8560029";
 
     protected Token(String contractAddress, Web3j web3j, TransactionManager transactionManager) {
         super(BINARY, contractAddress, web3j, transactionManager);
@@ -83,18 +83,18 @@ public class Token extends Contract {
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public RemoteCall<TransactionReceipt> transfer(String _to, BigInteger _value, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock) {
+    public RemoteCall<TransactionReceipt> transfer(String _to, BigInteger _value, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version) {
         Function function = new Function(
                 "transfer", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_to), 
                 new org.web3j.abi.datatypes.generated.Uint256(_value)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock);
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, version);
     }
 
-    public static RemoteCall<Token> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger initialSupply) {
+    public static RemoteCall<Token> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version, BigInteger initialSupply) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initialSupply)));
-        return deployRemoteCall(Token.class, web3j, transactionManager, quota, nonce, validUntilBlock, BINARY, encodedConstructor);
+        return deployRemoteCall(Token.class, web3j, transactionManager, quota, nonce, validUntilBlock, version, BINARY, encodedConstructor);
     }
 
     public static Token load(String contractAddress, Web3j web3j, TransactionManager transactionManager) {
