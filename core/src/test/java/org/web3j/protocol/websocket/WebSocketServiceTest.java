@@ -184,6 +184,18 @@ public class WebSocketServiceTest {
                 version.getError());
     }
 
+    @Test
+    public void testCloseRequestWhenConnectionIsClosed() throws Exception {
+        thrown.expect(ExecutionException.class);
+        CompletableFuture<Web3ClientVersion> reply = service.sendAsync(
+                request,
+                Web3ClientVersion.class);
+        service.onWebSocketClose();
+
+        assertTrue(reply.isDone());
+        reply.get();
+    }
+
     @Test(expected = ExecutionException.class)
     public void testCancelRequestAfterTimeout() throws Exception {
         when(executorService.schedule(
@@ -208,11 +220,13 @@ public class WebSocketServiceTest {
     public void testSyncRequest() throws Exception {
         CountDownLatch requestSent = new CountDownLatch(1);
 
+        // Wait for a request to be sent
         doAnswer(invocation -> {
             requestSent.countDown();
             return null;
         }).when(webSocketClient).send(anyString());
 
+        // Send reply asynchronously
         runAsync(() -> {
             try {
                 requestSent.await(2, TimeUnit.SECONDS);
@@ -277,10 +291,6 @@ public class WebSocketServiceTest {
 
 
         sendSubscriptionConfirmation();
-        // A subscriber can miss an event if it comes at the same time as
-        // a subscription confirmation. Waiting for a bit to ensure
-        // delivery
-        Thread.sleep(100);
         sendWebSocketEvent();
 
         assertTrue(completedCalled.await(6, TimeUnit.SECONDS));
@@ -311,24 +321,22 @@ public class WebSocketServiceTest {
         CountDownLatch errorReceived = new CountDownLatch(1);
         AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
 
-        runAsync(() -> {
-            subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
-                @Override
-                public void onCompleted() {
-                }
+        runAsync(() -> subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
+            @Override
+            public void onCompleted() {
+            }
 
-                @Override
-                public void onError(Throwable e) {
-                    actualThrowable.set(e);
-                    errorReceived.countDown();
-                }
+            @Override
+            public void onError(Throwable e) {
+                actualThrowable.set(e);
+                errorReceived.countDown();
+            }
 
-                @Override
-                public void onNext(NewHeadsNotification newHeadsNotification) {
+            @Override
+            public void onNext(NewHeadsNotification newHeadsNotification) {
 
-                }
-            });
-        });
+            }
+        }));
 
         waitForRequestSent();
         Exception e = new IOException("timeout");
@@ -339,28 +347,57 @@ public class WebSocketServiceTest {
     }
 
     @Test
+    public void testOnErrorCalledIfConnectionClosed() throws Exception {
+        CountDownLatch errorReceived = new CountDownLatch(1);
+        AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
+
+        runAsync(() -> subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                actualThrowable.set(e);
+                errorReceived.countDown();
+            }
+
+            @Override
+            public void onNext(NewHeadsNotification newHeadsNotification) {
+
+            }
+        }));
+
+        waitForRequestSent();
+        sendSubscriptionConfirmation();
+        service.onWebSocketClose();
+
+        assertTrue(errorReceived.await(2, TimeUnit.SECONDS));
+        assertEquals(IOException.class, actualThrowable.get().getClass());
+        assertEquals("Connection was closed", actualThrowable.get().getMessage());
+    }
+
+    @Test
     public void testIfCloseObserverIfSubscriptionRequestFailed() throws Exception {
         CountDownLatch errorReceived = new CountDownLatch(1);
         AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
 
-        runAsync(() -> {
-            subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
-                @Override
-                public void onCompleted() {
-                }
+        runAsync(() -> subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
+            @Override
+            public void onCompleted() {
+            }
 
-                @Override
-                public void onError(Throwable e) {
-                    actualThrowable.set(e);
-                    errorReceived.countDown();
-                }
+            @Override
+            public void onError(Throwable e) {
+                actualThrowable.set(e);
+                errorReceived.countDown();
+            }
 
-                @Override
-                public void onNext(NewHeadsNotification newHeadsNotification) {
+            @Override
+            public void onNext(NewHeadsNotification newHeadsNotification) {
 
-                }
-            });
-        });
+            }
+        }));
 
         waitForRequestSent();
         sendErrorReply();
