@@ -9,6 +9,7 @@ import rx.Observable;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -48,6 +49,7 @@ import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.core.methods.response.NetListening;
 import org.web3j.protocol.core.methods.response.NetPeerCount;
 import org.web3j.protocol.core.methods.response.NetVersion;
@@ -684,6 +686,24 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 ShhMessages.class);
+    }
+
+    @Override
+    public Request<?, MinerStartResponse> minerStart(int threadCount) {
+        return new Request<>(
+                "miner_start",
+                Arrays.asList(threadCount),
+                web3jService,
+                MinerStartResponse.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> minerStop() {
+        return new Request<>(
+                "miner_stop",
+                Collections.<String>emptyList(),
+                web3jService,
+                BooleanResponse.class);
     }
 
     @Override

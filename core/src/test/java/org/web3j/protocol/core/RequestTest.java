@@ -624,4 +624,20 @@ public class RequestTest extends RequestTester {
                 + "\"params\":[\"0x07\"],\"id\":1}");
     }
 
+    @Test
+    public void testMinerStart() throws Exception {
+        web3j.minerStart(4).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"miner_start\","
+                + "\"params\":[4],\"id\":1}");
+    }
+
+    @Test
+    public void testMinerStop() throws Exception {
+        web3j.minerStop().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"miner_stop\","
+                + "\"params\":[],\"id\":1}");
+    }
+
 }
