@@ -209,7 +209,10 @@ Construction and deployment of smart contracts happens with the *deploy* method:
            <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT,
            [<initialValue>,]
            <param1>, ..., <paramN>).send();
-
+   if (contract.isValid()) { 
+     throw new Exception("contract deploy failed. Hint: try increasing gas limit"); 
+   }
+ 
 This will create a new instance of the smart contract on the Ethereum blockchain using the
 supplied credentials, and constructor parameter values.
 
