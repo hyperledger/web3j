@@ -18,7 +18,7 @@ task createProperties(dependsOn: processResources) doLast {
     // if resources dir is empty we need to create this ourselves
     new File("$buildDir/resources/main/").mkdirs()
 
-    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+    new File("$buildDir/resources/main/web3j-version.properties").withWriter { w ->
         Properties p = new Properties()
         p['version'] = project.version.toString()
         p['timestamp'] = getTimestamp()
