@@ -24,6 +24,8 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
@@ -58,6 +60,8 @@ import org.web3j.utils.Version;
  * Generate Java Classes based on generated Solidity bin and abi files.
  */
 public class SolidityFunctionWrapper extends Generator {
+
+    private static final Logger log = LoggerFactory.getLogger(SolidityFunctionWrapper.class);
 
     private static final String BINARY = "BINARY";
     private static final String WEB3J = "web3j";
@@ -561,6 +565,12 @@ public class SolidityFunctionWrapper extends Generator {
             buildConstantFunction(
                     functionDefinition, methodBuilder, outputParameterTypes, inputParams);
         } else {
+            if (!outputParameterTypes.isEmpty()) {
+                log.warn(
+                        "function definition returns a value but is not defined as a constant"
+                        + " function. Please ensure it contains the constant modifier if you want"
+                        + " to read the return value");
+            }
             buildTransactionFunction(
                     functionDefinition, methodBuilder, inputParams);
         }
