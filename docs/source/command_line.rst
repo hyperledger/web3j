@@ -14,7 +14,8 @@ These tools provide:
 The command line tools can be obtained as a zipfile/tarball from the
 `releases <https://github.com/web3j/web3j/releases/latest>`_ page of the project repository, under
 the **Downloads** section, or for OS X users via
-`Homebrew <https://github.com/web3j/homebrew-web3j>`_.
+`Homebrew <https://github.com/web3j/homebrew-web3j>`_, or for Arch linux users via the
+`AUR <https://aur.archlinux.org/packages/web3j/>`_.
 
 .. code-block:: bash
 
