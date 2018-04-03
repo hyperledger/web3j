@@ -24,6 +24,8 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
@@ -73,6 +75,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String WEI_VALUE = "weiValue";
 
     private static final ClassName LOG = ClassName.get(Log.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SolidityFunctionWrapper.class);
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
             + "<p><strong>Do not modify!</strong>\n"
@@ -85,9 +88,15 @@ public class SolidityFunctionWrapper extends Generator {
     private final boolean useNativeJavaTypes;
     private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
     private static final Pattern pattern = Pattern.compile(regex);
+    private final GenerationReporter reporter;
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
+        this(useNativeJavaTypes, new LogGenerationReporter(LOGGER));
+    }
+
+    SolidityFunctionWrapper(boolean useNativeJavaTypes, GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
+        this.reporter = reporter;
     }
 
     @SuppressWarnings("unchecked")
@@ -659,10 +668,19 @@ public class SolidityFunctionWrapper extends Generator {
                 ClassName.get(RemoteCall.class), typeName);
     }
 
-    private static void buildTransactionFunction(
+    private void buildTransactionFunction(
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             String inputParams) throws ClassNotFoundException {
+
+        if (functionDefinition.hasOutputs()) {
+            //CHECKSTYLE:OFF
+            reporter.report(String.format(
+                    "Definition of the function %s returns a value but is not defined as a view function. "
+                            + "Please ensure it contains the view modifier if you want to read the return value",
+                    functionDefinition.getName()));
+            //CHECKSTYLE:ON
+        }
 
         if (functionDefinition.isPayable()) {
             methodBuilder.addParameter(BigInteger.class, WEI_VALUE);

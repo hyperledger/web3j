@@ -82,6 +82,10 @@ public class AbiDefinition {
         return outputs;
     }
 
+    public boolean hasOutputs() {
+        return !outputs.isEmpty();
+    }
+
     public void setOutputs(List<NamedType> outputs) {
         this.outputs = outputs;
     }

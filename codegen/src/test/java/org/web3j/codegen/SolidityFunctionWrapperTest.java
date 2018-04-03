@@ -32,6 +32,8 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
 import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
 import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
@@ -42,10 +44,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     private SolidityFunctionWrapper solidityFunctionWrapper;
 
+    private GenerationReporter generationReporter;
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        solidityFunctionWrapper = new SolidityFunctionWrapper(true);
+        generationReporter = mock(GenerationReporter.class);
+        solidityFunctionWrapper = new SolidityFunctionWrapper(true, generationReporter);
     }
 
     @Test
@@ -166,6 +171,27 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
+    }
+
+    @Test
+    public void testBuildingFunctionTransactionThatReturnsValueReportsWarning() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                false,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8")),
+                "functionName",
+                Arrays.asList(
+                        new AbiDefinition.NamedType("result", "uint8")),
+                "type",
+                false);
+
+        solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        //CHECKSTYLE:OFF
+        verify(generationReporter).report(
+                "Definition of the function functionName returns a value but is not defined as a view function. " +
+                        "Please ensure it contains the view modifier if you want to read the return value");
+        //CHECKSTYLE:ON
     }
 
     @Test
