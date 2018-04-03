@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.request.ShhPost;
@@ -623,21 +621,4 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"shh_getMessages\","
                 + "\"params\":[\"0x07\"],\"id\":1}");
     }
-
-    @Test
-    public void testMinerStart() throws Exception {
-        web3j.minerStart(4).send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"miner_start\","
-                + "\"params\":[4],\"id\":1}");
-    }
-
-    @Test
-    public void testMinerStop() throws Exception {
-        web3j.minerStop().send();
-
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"miner_stop\","
-                + "\"params\":[],\"id\":1}");
-    }
-
 }
