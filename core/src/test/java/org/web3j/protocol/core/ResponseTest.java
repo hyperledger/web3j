@@ -101,6 +101,25 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
+    public void testErrorResponseComplexData() {
+        buildResponse(
+                "{"
+                        + "  \"jsonrpc\":\"2.0\","
+                        + "  \"id\":1,"
+                        + "  \"error\":{"
+                        + "    \"code\":-32602,"
+                        + "    \"message\":\"Invalid address length, expected 40 got 64 bytes\","
+                        + "    \"data\":{\"foo\":\"bar\"}"
+                        + "  }"
+                        + "}"
+        );
+
+        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        assertTrue(ethBlock.hasError());
+        assertThat(ethBlock.getError().getData(), equalTo("{\"foo\":\"bar\"}"));
+    }
+
+    @Test
     public void testWeb3ClientVersion() {
         buildResponse(
                 "{\n"
