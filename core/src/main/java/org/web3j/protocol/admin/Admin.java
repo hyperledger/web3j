@@ -1,6 +1,7 @@
 package org.web3j.protocol.admin;
 
 import java.math.BigInteger;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
@@ -20,6 +21,12 @@ public interface Admin extends Web3j {
         return new JsonRpc2_0Admin(web3jService);
     }
     
+    static Admin build(
+            Web3jService web3jService, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        return new JsonRpc2_0Admin(web3jService, pollingInterval, scheduledExecutorService);
+    }
+
     public Request<?, PersonalListAccounts> personalListAccounts();
     
     public Request<?, NewAccountIdentifier> personalNewAccount(String password);
