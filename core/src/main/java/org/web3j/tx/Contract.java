@@ -355,7 +355,7 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
@@ -365,7 +365,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, value));
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
@@ -375,7 +375,7 @@ public abstract class Contract extends ManagedTransaction {
                 binary, encodedConstructor, BigInteger.ZERO);
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
@@ -385,7 +385,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, value));
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
