@@ -105,6 +105,16 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
+    public void testContractDeployWithNullStatusSucceeds() throws Exception {
+        TransactionReceipt transactionReceipt = createTransactionReceiptWithStatus(null);
+        Contract deployedContract = deployContract(transactionReceipt);
+
+        assertThat(deployedContract.getContractAddress(), is(ADDRESS));
+        assertTrue(deployedContract.getTransactionReceipt().isPresent());
+        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
+    }
+
+    @Test
     public void testIsValid() throws Exception {
         prepareEthGetCode(TEST_CONTRACT_BINARY);
 
@@ -368,18 +378,18 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     private TransactionReceipt createTransactionReceipt() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setContractAddress(ADDRESS);
-        transactionReceipt.setStatus("0x1");
-        return transactionReceipt;
+        return createTransactionReceiptWithStatus("0x1");
     }
 
     private TransactionReceipt createFailedTransactionReceipt() {
+        return createTransactionReceiptWithStatus("0x0");
+    }
+
+    private TransactionReceipt createTransactionReceiptWithStatus(String status) {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
         transactionReceipt.setContractAddress(ADDRESS);
-        transactionReceipt.setStatus("0x0");
+        transactionReceipt.setStatus(status);
         transactionReceipt.setGasUsed("0x1");
         return transactionReceipt;
     }
