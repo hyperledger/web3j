@@ -24,9 +24,9 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import io.reactivex.Flowable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rx.functions.Func1;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
@@ -736,8 +736,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         String generatedFunctionName =
                 Strings.lowercaseFirstLetter(functionName) + "EventObservable";
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx
-                .Observable.class), ClassName.get("", responseClassName));
+        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(Flowable.class), ClassName.get("", responseClassName));
 
         MethodSpec.Builder observableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)
@@ -747,7 +746,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         TypeSpec converter = TypeSpec.anonymousClassBuilder("")
                 .addSuperinterface(ParameterizedTypeName.get(
-                        ClassName.get(Func1.class),
+                        ClassName.get(java.util.function.Function.class),
                         ClassName.get(Log.class),
                         ClassName.get("", responseClassName)))
                 .addMethod(MethodSpec.methodBuilder("call")
@@ -779,8 +778,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         String generatedFunctionName =
                 Strings.lowercaseFirstLetter(functionName) + "EventObservable";
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx
-                .Observable.class), ClassName.get("", responseClassName));
+        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(Flowable.class), ClassName.get("", responseClassName));
 
         MethodSpec.Builder observableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)

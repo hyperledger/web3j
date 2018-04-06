@@ -9,11 +9,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
-import rx.Observable;
-import rx.Subscription;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -60,7 +60,7 @@ public class JsonRpc2_0RxTest {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Observable<EthBlock> observable = web3j.replayBlocksObservable(
+        Flowable<EthBlock> observable = web3j.replayBlocksObservable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false);
@@ -69,7 +69,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<EthBlock> results = new ArrayList<>(ethBlocks.size());
-        Subscription subscription = observable.subscribe(
+        Disposable subscription = observable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -80,10 +80,10 @@ public class JsonRpc2_0RxTest {
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(ethBlocks));
 
-        subscription.unsubscribe();
+        subscription.dispose();
 
         completedLatch.await(1, TimeUnit.SECONDS);
-        assertTrue(subscription.isUnsubscribed());
+        assertTrue(subscription.isDisposed());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class JsonRpc2_0RxTest {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Observable<EthBlock> observable = web3j.replayBlocksObservable(
+        Flowable<EthBlock> observable = web3j.replayBlocksObservable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false, false);
@@ -106,7 +106,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<EthBlock> results = new ArrayList<>(ethBlocks.size());
-        Subscription subscription = observable.subscribe(
+        Disposable subscription = observable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -117,10 +117,10 @@ public class JsonRpc2_0RxTest {
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(ethBlocks));
 
-        subscription.unsubscribe();
+        subscription.dispose();
 
         completedLatch.await(1, TimeUnit.SECONDS);
-        assertTrue(subscription.isUnsubscribed());
+        assertTrue(subscription.isDisposed());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class JsonRpc2_0RxTest {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Observable<EthBlock> observable = web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
+        Flowable<EthBlock> observable = web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 false);
 
@@ -174,7 +174,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<EthBlock> results = new ArrayList<>(expected.size());
-        Subscription subscription = observable.subscribe(
+        Disposable subscription = observable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -185,10 +185,10 @@ public class JsonRpc2_0RxTest {
         transactionLatch.await(1250, TimeUnit.MILLISECONDS);
         assertThat(results, equalTo(expected));
 
-        subscription.unsubscribe();
+        subscription.dispose();
 
         completedLatch.await(1, TimeUnit.SECONDS);
-        assertTrue(subscription.isUnsubscribed());
+        assertTrue(subscription.isDisposed());
     }
 
     private EthBlock createBlock(int number) {

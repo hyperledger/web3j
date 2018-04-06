@@ -5,7 +5,7 @@ buildscript {
     ext.javapoetVersion = '1.7.0'
     ext.jnr_unixsocketVersion = '0.15'
     ext.okhttpVersion = '3.8.1'
-    ext.rxjavaVersion = '1.2.4'
+    ext.rxjavaVersion = '2.1.10'
     ext.slf4jVersion = '1.7.25'
 
     // test dependencies

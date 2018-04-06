@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
@@ -22,8 +24,6 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
-import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * <p>Auto generated code.
@@ -71,22 +71,19 @@ public class MetaCoin extends Contract {
         return responses;
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
-            @Override
-            public TransferEventResponse call(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
-                TransferEventResponse typedResponse = new TransferEventResponse();
-                typedResponse.log = log;
-                typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
-                typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
+    public Flowable<TransferEventResponse> transferEventObservable(EthFilter filter) {
+        return web3j.ethLogObservable(filter).map(log -> {
+            EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
+            TransferEventResponse typedResponse = new TransferEventResponse();
+            typedResponse.log = log;
+            typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
+            typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
+            typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            return typedResponse;
         });
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
         return transferEventObservable(filter);

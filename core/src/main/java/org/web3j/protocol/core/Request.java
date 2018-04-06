@@ -1,13 +1,13 @@
 package org.web3j.protocol.core;
 
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import org.web3j.protocol.Web3jService;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
-
-import rx.Observable;
-
-import org.web3j.protocol.Web3jService;
 
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
@@ -75,7 +75,11 @@ public class Request<S, T extends Response> {
         return  web3jService.sendAsync(this, responseType);
     }
 
-    public Observable<T> observable() {
+    public Flowable<T> observable() {
         return new RemoteCall<>(this::send).observable();
+    }
+
+    public Single<T> single() {
+        return new RemoteCall<>(this::send).single();
     }
 }

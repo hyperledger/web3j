@@ -1,11 +1,11 @@
 package org.web3j.protocol.core;
 
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import org.web3j.utils.Async;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-
-import rx.Observable;
-
-import org.web3j.utils.Async;
 
 /**
  * A common type for wrapping remote requests.
@@ -44,16 +44,11 @@ public class RemoteCall<T> {
      *
      * @return an observable
      */
-    public Observable<T> observable() {
-        return Observable.create(
-                subscriber -> {
-                    try {
-                        subscriber.onNext(send());
-                        subscriber.onCompleted();
-                    } catch (Exception e) {
-                        subscriber.onError(e);
-                    }
-                }
-        );
+    public Flowable<T> observable() {
+        return single().toFlowable();
+    }
+
+    public Single<T> single() {
+        return Single.fromCallable(this::send);
     }
 }

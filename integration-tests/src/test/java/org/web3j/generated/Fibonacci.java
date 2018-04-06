@@ -1,10 +1,6 @@
 package org.web3j.generated;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
@@ -20,8 +16,12 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
-import rx.Observable;
-import rx.functions.Func1;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>Auto generated code.
@@ -61,21 +61,18 @@ public class Fibonacci extends Contract {
         return responses;
     }
 
-    public Observable<NotifyEventResponse> notifyEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, NotifyEventResponse>() {
-            @Override
-            public NotifyEventResponse call(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NOTIFY_EVENT, log);
-                NotifyEventResponse typedResponse = new NotifyEventResponse();
-                typedResponse.log = log;
-                typedResponse.input = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-                typedResponse.result = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
-                return typedResponse;
-            }
+    public Flowable<NotifyEventResponse> notifyEventObservable(EthFilter filter) {
+        return web3j.ethLogObservable(filter).map(log -> {
+            EventValuesWithLog eventValues = extractEventParametersWithLog(NOTIFY_EVENT, log);
+            NotifyEventResponse typedResponse = new NotifyEventResponse();
+            typedResponse.log = log;
+            typedResponse.input = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.result = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+            return typedResponse;
         });
     }
 
-    public Observable<NotifyEventResponse> notifyEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NotifyEventResponse> notifyEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NOTIFY_EVENT));
         return notifyEventObservable(filter);

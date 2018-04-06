@@ -3,8 +3,7 @@ package org.web3j.contracts.token;
 import java.math.BigInteger;
 import java.util.List;
 
-import rx.Observable;
-
+import io.reactivex.Flowable;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -30,7 +29,7 @@ public interface ERC20Interface<R, T> extends ERC20BasicInterface<T> {
 
     List<R> getApprovalEvents(TransactionReceipt transactionReceipt);
 
-    Observable<R> approvalEventObservable(DefaultBlockParameter startBlock,
-            DefaultBlockParameter endBlock);
+    Flowable<R> approvalEventObservable(DefaultBlockParameter startBlock,
+                                        DefaultBlockParameter endBlock);
 
 }
