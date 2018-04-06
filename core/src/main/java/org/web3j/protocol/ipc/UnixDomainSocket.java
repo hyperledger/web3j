@@ -56,17 +56,21 @@ public class UnixDomainSocket implements IOFacade {
         writer.flush();
     }
 
+    private String prefix = "";
+
     @Override
     public String read() throws IOException {
         CharBuffer response = CharBuffer.allocate(bufferSize);
-        String result = "";
+        String result = prefix;
 
-        do {
+        int length;
+        while ((length = result.indexOf('\n')) < 0) {
             response.clear();
             reader.read(response);
             result += new String(response.array(), response.arrayOffset(), response.position());
-        } while (response.position() == response.limit()
-                && response.get(response.limit() - 1) != '\n');
+        }
+        prefix = result.substring(length + 1);
+        result = result.substring(0, length + 1);
 
         return result;
     }
