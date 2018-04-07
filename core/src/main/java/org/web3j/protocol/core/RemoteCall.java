@@ -4,7 +4,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 import org.web3j.utils.Async;
 
@@ -46,10 +45,6 @@ public class RemoteCall<T> {
      * @return an observable
      */
     public Flowable<T> observable() {
-        return single().toFlowable();
-    }
-
-    public Single<T> single() {
-        return Single.fromCallable(this::send);
+        return Flowable.fromCallable(this::send);
     }
 }

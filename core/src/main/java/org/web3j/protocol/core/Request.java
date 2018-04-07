@@ -6,7 +6,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 import org.web3j.protocol.Web3jService;
 
@@ -79,9 +78,5 @@ public class Request<S, T extends Response> {
 
     public Flowable<T> observable() {
         return new RemoteCall<>(this::send).observable();
-    }
-
-    public Single<T> single() {
-        return new RemoteCall<>(this::send).single();
     }
 }
