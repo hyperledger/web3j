@@ -1,11 +1,12 @@
 package org.web3j.protocol.core;
 
-import io.reactivex.Flowable;
-import io.reactivex.Single;
-import org.web3j.utils.Async;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+
+import org.web3j.utils.Async;
 
 /**
  * A common type for wrapping remote requests.

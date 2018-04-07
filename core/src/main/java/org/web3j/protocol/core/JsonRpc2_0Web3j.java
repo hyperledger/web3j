@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
 
 import io.reactivex.Flowable;
+
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.methods.request.ShhFilter;

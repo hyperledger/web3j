@@ -736,7 +736,9 @@ public class SolidityFunctionWrapper extends Generator {
 
         String generatedFunctionName =
                 Strings.lowercaseFirstLetter(functionName) + "EventObservable";
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(Flowable.class), ClassName.get("", responseClassName));
+        ParameterizedTypeName parameterizedTypeName =
+                ParameterizedTypeName.get(ClassName.get(Flowable.class),
+                ClassName.get("", responseClassName));
 
         MethodSpec.Builder observableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)
@@ -778,7 +780,9 @@ public class SolidityFunctionWrapper extends Generator {
 
         String generatedFunctionName =
                 Strings.lowercaseFirstLetter(functionName) + "EventObservable";
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(Flowable.class), ClassName.get("", responseClassName));
+        ParameterizedTypeName parameterizedTypeName =
+                ParameterizedTypeName.get(ClassName.get(Flowable.class),
+                ClassName.get("", responseClassName));
 
         MethodSpec.Builder observableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)
