@@ -44,7 +44,7 @@ public abstract class Contract extends ManagedTransaction {
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
     // keep the string definition but store it as an int, perhaps pointless?
-    public static final int SUCCESSFUL_TRANSACTION_STATUS = Integer.parseInt("0x1", 16);
+    public static final int SUCCESSFUL_TRANSACTION_STATUS = Integer.decode("0x1");
 
     protected final String contractBinary;
     protected String contractAddress;
@@ -256,7 +256,7 @@ public abstract class Contract extends ManagedTransaction {
         TransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
 
         if (receipt.getStatus() != null
-                && SUCCESSFUL_TRANSACTION_STATUS != Integer.parseInt(receipt.getStatus(), 16)) {
+                && SUCCESSFUL_TRANSACTION_STATUS != Integer.decode(receipt.getStatus())) {
             throw new TransactionException(
                     String.format(
                             "Transaction has failed with status: %s. "
