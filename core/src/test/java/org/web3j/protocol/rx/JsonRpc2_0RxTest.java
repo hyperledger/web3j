@@ -319,7 +319,7 @@ public class JsonRpc2_0RxTest {
         return ethBlock;
     }
 
-    private EthBlock createBlockWithTransactions(int blockNumber, List<Transaction> transactions){
+    private EthBlock createBlockWithTransactions(int blockNumber, List<Transaction> transactions) {
         EthBlock ethBlock = new EthBlock();
         EthBlock.Block block = new EthBlock.Block();
         block.setNumber(Numeric.encodeQuantity(BigInteger.valueOf(blockNumber)));
@@ -334,7 +334,7 @@ public class JsonRpc2_0RxTest {
         return ethBlock;
     }
 
-    private Transaction createTransaction(String transactionHash){
+    private Transaction createTransaction(String transactionHash) {
         Transaction transaction = new Transaction();
         transaction.setHash(transactionHash);
         return transaction;
