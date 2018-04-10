@@ -23,4 +23,11 @@ public class SignedRawTransaction extends RawTransaction {
         BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
         return "0x" + Keys.getAddress(key);
     }
+
+    public void verify(String from) throws SignatureException {
+        String actualFrom = getFrom();
+        if (!actualFrom.equals(from)) {
+            throw new SignatureException("from mismatch");
+        }
+    }
 }

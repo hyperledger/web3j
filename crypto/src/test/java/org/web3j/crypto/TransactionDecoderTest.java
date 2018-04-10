@@ -64,5 +64,6 @@ public class TransactionDecoderTest {
         BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
         assertEquals(key, SampleKeys.PUBLIC_KEY);
         assertEquals(SampleKeys.ADDRESS, signedResult.getFrom());
+        signedResult.verify(SampleKeys.ADDRESS);
     }
 }
