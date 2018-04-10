@@ -1,6 +1,7 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.security.SignatureException;
 
 public class SignedRawTransaction extends RawTransaction {
 
@@ -15,5 +16,11 @@ public class SignedRawTransaction extends RawTransaction {
 
     public Sign.SignatureData getSignatureData() {
         return signatureData;
+    }
+
+    public String getFrom() throws SignatureException {
+        byte[] encodedTransaction = TransactionEncoder.encode(this);
+        BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
+        return "0x" + Keys.getAddress(key);
     }
 }
