@@ -17,10 +17,18 @@ public class TransactionDecoder {
         BigInteger gasPrice = ((RlpString) values.getValues().get(1)).asBigInteger();
         BigInteger gasLimit = ((RlpString) values.getValues().get(2)).asBigInteger();
         String to = ((RlpString) values.getValues().get(3)).asString();
-        BigInteger value = null;
-        String data = null;
-        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce,
+        BigInteger value = ((RlpString) values.getValues().get(4)).asBigInteger();
+        String data = ((RlpString) values.getValues().get(5)).asString();
+        if (values.getValues().size() > 6) {
+            byte v = ((RlpString) values.getValues().get(6)).getBytes()[0];
+            byte[] r = ((RlpString) values.getValues().get(7)).getBytes();
+            byte[] s = ((RlpString) values.getValues().get(8)).getBytes();
+            Sign.SignatureData signatureData = new Sign.SignatureData(v, r, s);
+            return new SignedRawTransaction(nonce, gasPrice, gasLimit,
+                to, value, data, signatureData);
+        } else {
+            return RawTransaction.createTransaction(nonce,
                 gasPrice, gasLimit, to, value, data);
-        return rawTransaction;
+        }
     }
 }
