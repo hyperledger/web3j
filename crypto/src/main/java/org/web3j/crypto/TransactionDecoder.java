@@ -17,10 +17,10 @@ public class TransactionDecoder {
         BigInteger gasPrice = ((RlpString) values.getValues().get(1)).asPositiveBigInteger();
         BigInteger gasLimit = ((RlpString) values.getValues().get(2)).asPositiveBigInteger();
         String to = ((RlpString) values.getValues().get(3)).asString();
-        BigInteger value = ((RlpString) values.getValues().get(4)).asPositiveBigInteger();
+        BigInteger value = ((RlpString) values.getValues().get(4)).asBigInteger();
         String data = ((RlpString) values.getValues().get(5)).asString();
         if (values.getValues().size() > 6) {
-            byte v = ((RlpString) values.getValues().get(6)).getBytes()[0];
+            byte[] v = ((RlpString) values.getValues().get(6)).getBytes();
             byte[] r = Numeric.toBytesPadded(
                 Numeric.toBigInt(((RlpString) values.getValues().get(7)).getBytes()), 32);
             byte[] s = Numeric.toBytesPadded(
@@ -33,5 +33,4 @@ public class TransactionDecoder {
                 gasPrice, gasLimit, to, value, data);
         }
     }
-    
 }
