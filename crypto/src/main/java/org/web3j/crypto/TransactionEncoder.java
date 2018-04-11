@@ -1,5 +1,6 @@
 package org.web3j.crypto;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,9 @@ import org.web3j.utils.Numeric;
  * <a href="http://gavwood.com/paper.pdf">yellow paper</a>.
  */
 public class TransactionEncoder {
+
+    private static final int CHAIN_ID_INC = 35;
+    private static final int LOWER_REAL_V = 27;
 
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
@@ -36,10 +40,13 @@ public class TransactionEncoder {
 
     public static Sign.SignatureData createEip155SignatureData(
             Sign.SignatureData signatureData, byte chainId) {
-        byte v = (byte) (signatureData.getV() + (chainId << 1) + 8);
+        BigInteger v = Numeric.toBigInt(signatureData.getV());
+        v = v.subtract(BigInteger.valueOf(LOWER_REAL_V));
+        v = v.add(BigInteger.valueOf(chainId * 2));
+        v = v.add(BigInteger.valueOf(CHAIN_ID_INC));
 
         return new Sign.SignatureData(
-                v, signatureData.getR(), signatureData.getS());
+                v.toByteArray(), signatureData.getR(), signatureData.getS());
     }
 
     public static byte[] encode(RawTransaction rawTransaction) {
@@ -48,7 +55,7 @@ public class TransactionEncoder {
 
     public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
         Sign.SignatureData signatureData = new Sign.SignatureData(
-                chainId, new byte[] {}, new byte[] {});
+                new byte[]{chainId}, new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
     }
 
