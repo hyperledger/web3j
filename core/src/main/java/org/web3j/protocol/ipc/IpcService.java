@@ -60,7 +60,8 @@ public class IpcService extends Service {
 
         // It's not ideal converting back into an inputStream, but we want
         // to be consistent with the HTTPService API.
-        return new ByteArrayInputStream(result.getBytes());
+        // UTF-8 (the default encoding for JSON) is explicitly used here.
+        return new ByteArrayInputStream(result.getBytes("UTF-8"));
     }
 
     @Deprecated
