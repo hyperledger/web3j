@@ -18,29 +18,55 @@ public class IpcService extends Service {
 
     private final IOFacade ioFacade;
 
+    @Deprecated
     public IpcService(IOFacade ioFacade, boolean includeRawResponses) {
         super(includeRawResponses);
         this.ioFacade = ioFacade;
     }
 
+    @Deprecated
     public IpcService(IOFacade ioFacade) {
         this(ioFacade, false);
     }
 
+    public IpcService(boolean includeRawResponses) {
+        this(null, includeRawResponses);
+    }
+
+    public IpcService() {
+        this(null, false);
+    }
+
+    protected IOFacade getIO() {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
     @Override
     protected InputStream performIO(String payload) throws IOException {
-        ioFacade.write(payload);
+        IOFacade io;
+        if (ioFacade != null) {
+            io = ioFacade;
+        } else {
+            io = getIO();
+        }
+        io.write(payload);
         log.debug(">> " + payload);
 
-        String result = ioFacade.read();
+        String result = io.read();
         log.debug("<< " + result);
+        if (io != ioFacade) {
+            io.close();
+        }
 
         // It's not ideal converting back into an inputStream, but we want
         // to be consistent with the HTTPService API.
         return new ByteArrayInputStream(result.getBytes());
     }
-    
+
+    @Deprecated
     public void close() throws IOException {
-        ioFacade.close();
+        if (ioFacade != null) {
+            ioFacade.close();
+        }
     }
 }
