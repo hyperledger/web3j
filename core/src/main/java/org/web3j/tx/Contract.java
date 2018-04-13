@@ -384,6 +384,16 @@ public abstract class Contract extends ManagedTransaction {
 
     protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
+            Web3j web3j, TransactionManager transactionManager,
+            BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version,
+            String binary) {
+        return new RemoteCall<>(() -> deploy(
+                type, web3j, transactionManager, quota, nonce, validUntilBlock, version, binary,
+                ""));
+    }
+
+    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
             Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value) {
