@@ -237,7 +237,7 @@ public class Account {
         StringBuilder sb = new StringBuilder();
         for (byte t : byteArr) {
             if ((t & 0xF0) == 0) sb.append("0");
-            sb.append(Integer.toHexString(t & 0xFF));  //t & 0xFF 操作是为去除Integer高位多余的符号位（java数据是用补码表示）
+            sb.append(Integer.toHexString(t & 0xFF));
         }
         return sb.toString();
     }
