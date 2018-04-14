@@ -1,15 +1,16 @@
 package org.web3j.crypto;
 
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.bouncycastle.crypto.params.KeyParameter;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.web3j.crypto.Hash.sha256;
@@ -25,7 +26,7 @@ public class MnemonicUtils {
 
     private static final int SEED_ITERATIONS = 2048;
     private static final int SEED_KEY_SIZE = 512;
-    private static final List<String> WORD_LIST = populateWordList();
+    private static List<String> WORD_LIST = null;
 
     /**
      * The mnemonic must encode entropy in a multiple of 32 bits. With more entropy security is
@@ -42,8 +43,12 @@ public class MnemonicUtils {
      * @param initialEntropy The initial entropy to generate mnemonic from
      * @return The generated mnemonic
      * @throws IllegalArgumentException If the given entropy is invalid
+     * @throws IllegalStateException If the word list has not been loaded
      */
     public static String generateMnemonic(byte[] initialEntropy) {
+        if (WORD_LIST == null) {
+            WORD_LIST = populateWordList();
+        }
         validateInitialEntropy(initialEntropy);
 
         int ent = initialEntropy.length * 8;
@@ -160,12 +165,21 @@ public class MnemonicUtils {
     }
 
     private static List<String> populateWordList() {
-        URL url = Thread.currentThread().getContextClassLoader()
-                .getResource("en-mnemonic-word-list.txt");
+        InputStream inputStream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("en-mnemonic-word-list.txt");
         try {
-            return Files.readAllLines(Paths.get(url.toURI()));
+            return readAllLines(inputStream);
         } catch (Exception e) {
-            return Collections.emptyList();
+            throw new IllegalStateException(e);
         }
+    }
+
+    private static List<String> readAllLines(InputStream inputStream) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        List<String> data = new ArrayList<>();
+        for (String line; (line = br.readLine()) != null; ) {
+            data.add(line);
+        }
+        return data;
     }
 }
