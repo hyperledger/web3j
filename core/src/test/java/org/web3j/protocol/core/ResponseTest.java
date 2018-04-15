@@ -900,6 +900,30 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
+    public void testEthTransactionChainId() {
+        Transaction transaction = new Transaction(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                (byte) 0x25
+        );
+        assertThat(transaction.getChainId(), equalTo(1));
+    }
+
+    @Test
     public void testEthTransactionNull() {
         buildResponse(
                 "{\n"
