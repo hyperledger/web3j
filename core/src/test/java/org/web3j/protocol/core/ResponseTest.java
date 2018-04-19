@@ -900,26 +900,9 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEthTransactionChainId() {
-        Transaction transaction = new Transaction(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                (byte) 0x25
-        );
+    public void testTransactionChainId() {
+        Transaction transaction = new Transaction();
+        transaction.setV(0x25);
         assertThat(transaction.getChainId(), equalTo(1));
     }
 
