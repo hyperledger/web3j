@@ -40,10 +40,10 @@ public class Sign {
         return signMessage(message, keyPair, true);
     }
 
-    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean isHashed) {
+    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean needToHash) {
         BigInteger publicKey = keyPair.getPublicKey();
         byte[] messageHash;
-        if (isHashed) {
+        if (needToHash) {
             messageHash = Hash.sha3(message);
         } else {
             messageHash = message;
