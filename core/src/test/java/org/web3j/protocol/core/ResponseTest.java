@@ -1063,58 +1063,15 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testTransactionReceiptIsStatusOK() {
-        TransactionReceipt transactionReceipt =
-                new TransactionReceipt(
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        "0x1",
-                        null,
-                        null,
-                        null,
-                        null
-                );
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setStatus("0x1");
         assertThat(transactionReceipt.isStatusOK(), equalTo(true));
 
-        TransactionReceipt transactionReceiptNoStatus =
-                new TransactionReceipt(
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                );
+        TransactionReceipt transactionReceiptNoStatus = new TransactionReceipt();
         assertThat(transactionReceiptNoStatus.isStatusOK(), equalTo(true));
 
-        TransactionReceipt transactionReceiptZeroStatus =
-                new TransactionReceipt(
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        "0x0",
-                        null,
-                        null,
-                        null,
-                        null
-                );
+        TransactionReceipt transactionReceiptZeroStatus = new TransactionReceipt();
+        transactionReceiptZeroStatus.setStatus("0x0");
         assertThat(transactionReceiptZeroStatus.isStatusOK(), equalTo(false));
     }
 
