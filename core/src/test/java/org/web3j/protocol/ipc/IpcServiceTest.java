@@ -20,7 +20,12 @@ public class IpcServiceTest {
     @Before
     public void setUp() {
         ioFacade = mock(IOFacade.class);
-        ipcService = new IpcService(ioFacade);
+        ipcService = new IpcService() {
+            @Override
+            protected IOFacade getIO() {
+                return ioFacade;
+            }
+        };
     }
 
     @Test
