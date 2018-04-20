@@ -8,6 +8,9 @@ import org.web3j.utils.Numeric;
  * Transaction object used by both {@link EthTransaction} and {@link EthBlock}.
  */
 public class Transaction {
+    private static final int CHAIN_ID_INC = 35;
+    private static final int LOWER_REAL_V = 27;
+
     private String hash;
     private String nonce;
     private String blockHash;
@@ -206,6 +209,14 @@ public class Transaction {
 
     public int getV() {
         return v;
+    }
+
+    public Integer getChainId() {
+        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
+            return null;
+        }
+        Integer chainId = (v - CHAIN_ID_INC) / 2;
+        return chainId;
     }
 
     // public void setV(byte v) {
