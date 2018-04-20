@@ -1062,6 +1062,20 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
+    public void testTransactionReceiptIsStatusOK() {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setStatus("0x1");
+        assertThat(transactionReceipt.isStatusOK(), equalTo(true));
+
+        TransactionReceipt transactionReceiptNoStatus = new TransactionReceipt();
+        assertThat(transactionReceiptNoStatus.isStatusOK(), equalTo(true));
+
+        TransactionReceipt transactionReceiptZeroStatus = new TransactionReceipt();
+        transactionReceiptZeroStatus.setStatus("0x0");
+        assertThat(transactionReceiptZeroStatus.isStatusOK(), equalTo(false));
+    }
+
+    @Test
     public void testEthGetCompilers() {
         buildResponse(
                 "{\n"
