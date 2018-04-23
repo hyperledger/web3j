@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import rx.Subscription;
 
-import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 

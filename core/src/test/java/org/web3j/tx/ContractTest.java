@@ -322,6 +322,8 @@ public class ContractTest extends ManagedTransactionTester {
     public void testStaticGasProvider() throws IOException, TransactionException {
         StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.TEN, BigInteger.ONE);
         TransactionManager txManager = mock(TransactionManager.class);
+        when(txManager.executeTransaction(any(), any(), any(), any(), any()))
+                .thenReturn(new TransactionReceipt());
 
         contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
 

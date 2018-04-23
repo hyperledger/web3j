@@ -4,8 +4,6 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import org.web3j.generated.SimpleStorage;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
