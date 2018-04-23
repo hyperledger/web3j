@@ -28,8 +28,8 @@ public class PendingTransactionFilter extends Filter<String> {
     void process(List<EthLog.LogResult> logResults) {
         for (EthLog.LogResult logResult : logResults) {
             if (logResult instanceof EthLog.Hash) {
-                String blockHash = ((EthLog.Hash) logResult).get();
-                callback.onEvent(blockHash);
+                String transactionHash = ((EthLog.Hash) logResult).get();
+                callback.onEvent(transactionHash);
             } else {
                 throw new FilterException(
                         "Unexpected result type: " + logResult.get() + ", required Hash");

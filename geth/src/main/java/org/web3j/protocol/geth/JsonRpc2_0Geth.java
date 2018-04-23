@@ -1,19 +1,21 @@
 package org.web3j.protocol.geth;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.JsonRpc2_0Admin;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.geth.response.PersonalEcRecover;
 import org.web3j.protocol.geth.response.PersonalImportRawKey;
 
 /**
  * JSON-RPC 2.0 factory implementation for Geth.
  */
-class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
+public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     public JsonRpc2_0Geth(Web3jService web3jService) {
         super(web3jService);
@@ -56,6 +58,24 @@ class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
                 Arrays.asList(hexMessage,signedMessage),
                 web3jService,
                 PersonalEcRecover.class);
-    } 
-    
+    }
+
+    @Override
+    public Request<?, MinerStartResponse> minerStart(int threadCount) {
+        return new Request<>(
+                "miner_start",
+                Arrays.asList(threadCount),
+                web3jService,
+                MinerStartResponse.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> minerStop() {
+        return new Request<>(
+                "miner_stop",
+                Collections.<String>emptyList(),
+                web3jService,
+                BooleanResponse.class);
+    }
+
 }

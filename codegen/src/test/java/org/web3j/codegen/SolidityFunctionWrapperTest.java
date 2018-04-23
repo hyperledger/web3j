@@ -23,6 +23,8 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.abi.datatypes.generated.Int256;
 import org.web3j.abi.datatypes.generated.StaticArray10;
+import org.web3j.abi.datatypes.generated.StaticArray2;
+import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
@@ -30,6 +32,8 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
 import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
 import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
@@ -40,10 +44,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     private SolidityFunctionWrapper solidityFunctionWrapper;
 
+    private GenerationReporter generationReporter;
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        solidityFunctionWrapper = new SolidityFunctionWrapper(true);
+        generationReporter = mock(GenerationReporter.class);
+        solidityFunctionWrapper = new SolidityFunctionWrapper(true, generationReporter);
     }
 
     @Test
@@ -75,6 +82,22 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         assertThat(buildTypeName("uint256[33]"),
                 is(ParameterizedTypeName.get(StaticArray.class, Uint256.class)));
+
+        assertThat(buildTypeName("uint256[10][3]"),
+                is(ParameterizedTypeName.get(ClassName.get(StaticArray3.class),
+                        ParameterizedTypeName.get(StaticArray10.class, Uint256.class))));
+
+        assertThat(buildTypeName("uint256[2][]"),
+                is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
+                        ParameterizedTypeName.get(StaticArray2.class, Uint256.class))));
+
+        assertThat(buildTypeName("uint256[33][]"),
+                is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
+                        ParameterizedTypeName.get(StaticArray.class, Uint256.class))));
+
+        assertThat(buildTypeName("uint256[][]"),
+                is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
+                        ParameterizedTypeName.get(DynamicArray.class, Uint256.class))));
     }
 
     @Test
@@ -148,6 +171,27 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
+    }
+
+    @Test
+    public void testBuildingFunctionTransactionThatReturnsValueReportsWarning() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                false,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8")),
+                "functionName",
+                Arrays.asList(
+                        new AbiDefinition.NamedType("result", "uint8")),
+                "type",
+                false);
+
+        solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        //CHECKSTYLE:OFF
+        verify(generationReporter).report(
+                "Definition of the function functionName returns a value but is not defined as a view function. " +
+                        "Please ensure it contains the view modifier if you want to read the return value");
+        //CHECKSTYLE:ON
     }
 
     @Test
@@ -318,11 +362,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "class testClass {\n"
+                        + "  public static final org.web3j.abi.datatypes.Event TRANSFER_EVENT = new org.web3j.abi.datatypes.Event(\"Transfer\", \n" +
+                        "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}),\n" +
+                        "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n  ;\n\n"
                         + "  public java.util.List<TransferEventResponse> getTransferEvents(org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n"
-                        + "    final org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event(\"Transfer\", \n"
-                        + "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}),\n"
-                        + "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n"
-                        + "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(event, transactionReceipt);\n"
+                        + "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);\n"
                         + "    java.util.ArrayList<TransferEventResponse> responses = new java.util.ArrayList<TransferEventResponse>(valueList.size());\n"
                         + "    for (org.web3j.tx.Contract.EventValuesWithLog eventValues : valueList) {\n"
                         + "      TransferEventResponse typedResponse = new TransferEventResponse();\n"
@@ -337,16 +381,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "    return responses;\n"
                         + "  }\n"
                         + "\n"
-                        + "  public rx.Observable<TransferEventResponse> transferEventObservable(org.web3j.protocol.core.DefaultBlockParameter startBlock, org.web3j.protocol.core.DefaultBlockParameter endBlock) {\n"
-                        + "    final org.web3j.abi.datatypes.Event event = new org.web3j.abi.datatypes.Event(\"Transfer\", \n"
-                        + "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}),\n"
-                        + "        java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n"
-                        + "    org.web3j.protocol.core.methods.request.EthFilter filter = new org.web3j.protocol.core.methods.request.EthFilter(startBlock, endBlock, getContractAddress());\n"
-                        + "    filter.addSingleTopic(org.web3j.abi.EventEncoder.encode(event));\n"
+                        + "  public rx.Observable<TransferEventResponse> transferEventObservable(org.web3j.protocol.core.methods.request.EthFilter filter) {\n"
                         + "    return web3j.ethLogObservable(filter).map(new rx.functions.Func1<org.web3j.protocol.core.methods.response.Log, TransferEventResponse>() {\n"
                         + "      @java.lang.Override\n"
                         + "      public TransferEventResponse call(org.web3j.protocol.core.methods.response.Log log) {\n"
-                        + "        org.web3j.tx.Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(event, log);\n"
+                        + "        org.web3j.tx.Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);\n"
                         + "        TransferEventResponse typedResponse = new TransferEventResponse();\n"
                         + "        typedResponse.log = log;\n"
                         + "        typedResponse.id = (byte[]) eventValues.getIndexedValues().get(0).getValue();\n"
@@ -357,6 +396,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "        return typedResponse;\n"
                         + "      }\n"
                         + "    });\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  public rx.Observable<TransferEventResponse> transferEventObservable(org.web3j.protocol.core.DefaultBlockParameter startBlock, org.web3j.protocol.core.DefaultBlockParameter endBlock) {\n"
+                        + "    org.web3j.protocol.core.methods.request.EthFilter filter = new org.web3j.protocol.core.methods.request.EthFilter(startBlock, endBlock, getContractAddress());\n"
+                        + "    filter.addSingleTopic(org.web3j.abi.EventEncoder.encode(TRANSFER_EVENT));\n"
+                        + "    return transferEventObservable(filter);\n"
                         + "  }\n"
                         + "\n"
                         + "  public static class TransferEventResponse {\n"

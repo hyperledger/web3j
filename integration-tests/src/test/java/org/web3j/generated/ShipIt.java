@@ -29,7 +29,7 @@ import org.web3j.tx.TransactionManager;
  * <p>Generated with web3j version 3.3.1.
  */
 public class ShipIt extends Contract {
-    private static final String BINARY = "6060604052341561000f57600080fd5b6101e48061001e6000396000f3006060604052600436106100405763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663d51cd4ac8114610045575b600080fd5b341561005057600080fd5b61007173ffffffffffffffffffffffffffffffffffffffff60043516610159565b60405173ffffffffffffffffffffffffffffffffffffffff808a168252881660208201526040810187905260608101869052608081018560008111156100b357fe5b60ff168152602081018590526060810183905260808282038101604083019081528554600260001960018316156101000201909116049183018290529160a00190859080156101435780601f1061011857610100808354040283529160200191610143565b820191906000526020600020905b81548152906001019060200180831161012657829003601f168201915b5050995050505050505050505060405180910390f35b6000602081905290815260409020805460018201546002830154600384015460048501546005860154600787015473ffffffffffffffffffffffffffffffffffffffff9687169796909516959394929360ff90921692909160060190885600a165627a7a72305820f4d4bf1c9ea57666a0a0e3a810321535fee9dd5f0809158d2f27a18e0a2df2560029";
+    private static final String BINARY = "6060604052341561000f57600080fd5b6101e48061001e6000396000f3006060604052600436106100405763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663d51cd4ac8114610045575b600080fd5b341561005057600080fd5b61007173ffffffffffffffffffffffffffffffffffffffff60043516610159565b60405173ffffffffffffffffffffffffffffffffffffffff808a168252881660208201526040810187905260608101869052608081018560008111156100b357fe5b60ff168152602081018590526060810183905260808282038101604083019081528554600260001960018316156101000201909116049183018290529160a00190859080156101435780601f1061011857610100808354040283529160200191610143565b820191906000526020600020905b81548152906001019060200180831161012657829003601f168201915b5050995050505050505050505060405180910390f35b6000602081905290815260409020805460018201546002830154600384015460048501546005860154600787015473ffffffffffffffffffffffffffffffffffffffff9687169796909516959394929360ff90921692909160060190885600a165627a7a723058200d498cd38cd8aaf532d9d54719f0f05c4865f5197a27c90e9dbdabb6f87524c60029";
 
     public static final String FUNC_SHIPMENTS = "shipments";
 
@@ -42,8 +42,8 @@ public class ShipIt extends Contract {
     }
 
     public RemoteCall<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>> shipments(String param0) {
-        final Function function = new Function(FUNC_SHIPMENTS,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(param0)),
+        final Function function = new Function(FUNC_SHIPMENTS, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(param0)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint8>() {}, new TypeReference<Uint256>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Bytes32>() {}));
         return new RemoteCall<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>>(
                 new Callable<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>>() {
@@ -51,13 +51,13 @@ public class ShipIt extends Contract {
                     public Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]> call() throws Exception {
                         List<Type> results = executeCallMultipleValueReturn(function);
                         return new Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>(
-                                (String) results.get(0).getValue(),
-                                (String) results.get(1).getValue(),
-                                (BigInteger) results.get(2).getValue(),
-                                (BigInteger) results.get(3).getValue(),
-                                (BigInteger) results.get(4).getValue(),
-                                (BigInteger) results.get(5).getValue(),
-                                (String) results.get(6).getValue(),
+                                (String) results.get(0).getValue(), 
+                                (String) results.get(1).getValue(), 
+                                (BigInteger) results.get(2).getValue(), 
+                                (BigInteger) results.get(3).getValue(), 
+                                (BigInteger) results.get(4).getValue(), 
+                                (BigInteger) results.get(5).getValue(), 
+                                (String) results.get(6).getValue(), 
                                 (byte[]) results.get(7).getValue());
                     }
                 });

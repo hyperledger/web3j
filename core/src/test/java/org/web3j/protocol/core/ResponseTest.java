@@ -101,6 +101,25 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
+    public void testErrorResponseComplexData() {
+        buildResponse(
+                "{"
+                        + "  \"jsonrpc\":\"2.0\","
+                        + "  \"id\":1,"
+                        + "  \"error\":{"
+                        + "    \"code\":-32602,"
+                        + "    \"message\":\"Invalid address length, expected 40 got 64 bytes\","
+                        + "    \"data\":{\"foo\":\"bar\"}"
+                        + "  }"
+                        + "}"
+        );
+
+        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        assertTrue(ethBlock.hasError());
+        assertThat(ethBlock.getError().getData(), equalTo("{\"foo\":\"bar\"}"));
+    }
+
+    @Test
     public void testWeb3ClientVersion() {
         buildResponse(
                 "{\n"
@@ -881,6 +900,13 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
+    public void testTransactionChainId() {
+        Transaction transaction = new Transaction();
+        transaction.setV(0x25);
+        assertThat(transaction.getChainId(), equalTo(1));
+    }
+
+    @Test
     public void testEthTransactionNull() {
         buildResponse(
                 "{\n"
@@ -1040,6 +1066,20 @@ public class ResponseTest extends ResponseTester {
                 EthGetTransactionReceipt.class);
         assertThat(ethGetTransactionReceipt.getTransactionReceipt().get(),
                 equalTo(transactionReceipt));
+    }
+
+    @Test
+    public void testTransactionReceiptIsStatusOK() {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setStatus("0x1");
+        assertThat(transactionReceipt.isStatusOK(), equalTo(true));
+
+        TransactionReceipt transactionReceiptNoStatus = new TransactionReceipt();
+        assertThat(transactionReceiptNoStatus.isStatusOK(), equalTo(true));
+
+        TransactionReceipt transactionReceiptZeroStatus = new TransactionReceipt();
+        transactionReceiptZeroStatus.setStatus("0x0");
+        assertThat(transactionReceiptZeroStatus.isStatusOK(), equalTo(false));
     }
 
     @Test

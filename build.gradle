@@ -62,6 +62,10 @@ allprojects {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 
+    javadoc {
+        options.encoding = 'UTF-8'
+    }
+
     jacoco {
         toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
     }

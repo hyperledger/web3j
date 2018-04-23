@@ -9,7 +9,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import org.junit.rules.ExpectedException;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
@@ -64,6 +67,9 @@ public class ContractTest extends ManagedTransactionTester {
 
     private TestContract contract;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -93,11 +99,23 @@ public class ContractTest extends ManagedTransactionTester {
         assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
     }
 
-    private TransactionReceipt createTransactionReceipt() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setContractAddress(ADDRESS);
-        return transactionReceipt;
+    @Test
+    public void testContractDeployFails() throws Exception {
+        thrown.expect(TransactionException.class);
+        thrown.expectMessage(
+                "Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+        TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
+        deployContract(transactionReceipt);
+    }
+
+    @Test
+    public void testContractDeployWithNullStatusSucceeds() throws Exception {
+        TransactionReceipt transactionReceipt = createTransactionReceiptWithStatus(null);
+        Contract deployedContract = deployContract(transactionReceipt);
+
+        assertThat(deployedContract.getContractAddress(), is(ADDRESS));
+        assertTrue(deployedContract.getTransactionReceipt().isPresent());
+        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
     }
 
     @Test
@@ -205,12 +223,29 @@ public class ContractTest extends ManagedTransactionTester {
     public void testTransaction() throws Exception {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setStatus("0x1");
 
         prepareTransaction(transactionReceipt);
 
         assertThat(contract.performTransaction(
                 new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send(),
                 is(transactionReceipt));
+    }
+
+    @Test
+    public void testTransactionFailed() throws Exception {
+        thrown.expect(TransactionException.class);
+        thrown.expectMessage(
+                "Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setStatus("0x0");
+        transactionReceipt.setGasUsed("0x1");
+
+        prepareTransaction(transactionReceipt);
+        contract.performTransaction(
+                new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send();
     }
 
     @Test
@@ -359,6 +394,23 @@ public class ContractTest extends ManagedTransactionTester {
         } catch (ExecutionException e) {
             throw e.getCause();
         }
+    }
+
+    private TransactionReceipt createTransactionReceipt() {
+        return createTransactionReceiptWithStatus("0x1");
+    }
+
+    private TransactionReceipt createFailedTransactionReceipt() {
+        return createTransactionReceiptWithStatus("0x0");
+    }
+
+    private TransactionReceipt createTransactionReceiptWithStatus(String status) {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setContractAddress(ADDRESS);
+        transactionReceipt.setStatus(status);
+        transactionReceipt.setGasUsed("0x1");
+        return transactionReceipt;
     }
 
     private Contract deployContract(TransactionReceipt transactionReceipt)

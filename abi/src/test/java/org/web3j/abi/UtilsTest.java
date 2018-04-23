@@ -17,6 +17,7 @@ import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Int64;
+import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 
@@ -58,6 +59,19 @@ public class UtilsTest {
                         new Uint256(BigInteger.ZERO),
                         new Uint256(BigInteger.ONE),
                         new Uint256(BigInteger.TEN))));
+    }
+
+    @Test
+    public void testTypeMapNested() {
+        List<BigInteger> innerList1 = Arrays.asList(BigInteger.valueOf(1), BigInteger.valueOf(2));
+        List<BigInteger> innerList2 = Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(4));
+        final List<List<BigInteger>> input = Arrays.asList(innerList1, innerList2);
+
+        StaticArray2<Uint256> staticArray1 = new StaticArray2<>(new Uint256(1), new Uint256(2));
+        StaticArray2<Uint256> staticArray2 = new StaticArray2<>(new Uint256(3), new Uint256(4));
+        List<StaticArray2<Uint256>> expectedList = Arrays.asList(staticArray1, staticArray2);
+        assertThat(typeMap(input, StaticArray2.class, Uint256.class),
+                equalTo(expectedList));
     }
 
     @Test

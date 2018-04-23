@@ -23,6 +23,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -56,6 +57,7 @@ public abstract class Contract extends ManagedTransaction {
     protected ContractGasProvider gasProvider;
     protected TransactionReceipt transactionReceipt;
     protected Map<String, String> deployedAddresses;
+    protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
 
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
@@ -118,7 +120,7 @@ public abstract class Contract extends ManagedTransaction {
     public void setGasProvider(ContractGasProvider gasProvider) {
         this.gasProvider = gasProvider;
     }
-    
+
     /**
      * Allow {@code gasPrice} to be set.
      * @param newPrice gas price to use for subsequent transactions
@@ -181,6 +183,16 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     /**
+     * Sets the default block parameter. This use useful if one wants to query
+     * historical state of a contract.
+     *
+     * @param defaultBlockParameter the default block parameter
+     */
+    public void setDefaultBlockParameter(DefaultBlockParameter defaultBlockParameter) {
+        this.defaultBlockParameter = defaultBlockParameter;
+    }
+
+    /**
      * Execute constant function call - i.e. a call that does not change state of the contract
      *
      * @param function to call
@@ -192,7 +204,7 @@ public abstract class Contract extends ManagedTransaction {
         org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
                 Transaction.createEthCallTransaction(
                         transactionManager.getFromAddress(), contractAddress, encodedFunction),
-                DefaultBlockParameterName.LATEST)
+                defaultBlockParameter)
                 .send();
 
         String value = ethCall.getValue();
@@ -260,9 +272,20 @@ public abstract class Contract extends ManagedTransaction {
             String data, BigInteger weiValue, String funcName)
             throws TransactionException, IOException {
 
-        return send(contractAddress, data, weiValue,
+        TransactionReceipt receipt = send(contractAddress, data, weiValue,
                 gasProvider.getGasPrice(funcName),
                 gasProvider.getGasLimit(funcName));
+
+        if (!receipt.isStatusOK()) {
+            throw new TransactionException(
+                    String.format(
+                            "Transaction has failed with status: %s. "
+                                    + "Gas used: %d. (not-enough gas?)",
+                            receipt.getStatus(),
+                            receipt.getGasUsed()));
+        }
+
+        return receipt;
     }
 
     protected <T extends Type> RemoteCall<T> executeRemoteCallSingleValueReturn(Function function) {
@@ -321,6 +344,8 @@ public abstract class Contract extends ManagedTransaction {
             T contract = constructor.newInstance(null, web3j, credentials, gasPrice, gasLimit);
 
             return create(contract, binary, encodedConstructor, value);
+        } catch (TransactionException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -344,12 +369,14 @@ public abstract class Contract extends ManagedTransaction {
             T contract = constructor.newInstance(
                     null, web3j, transactionManager, gasPrice, gasLimit);
             return create(contract, binary, encodedConstructor, value);
+        } catch (TransactionException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
@@ -359,7 +386,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, value));
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, Credentials credentials,
             BigInteger gasPrice, BigInteger gasLimit,
@@ -369,7 +396,7 @@ public abstract class Contract extends ManagedTransaction {
                 binary, encodedConstructor, BigInteger.ZERO);
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
@@ -379,7 +406,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor, value));
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
