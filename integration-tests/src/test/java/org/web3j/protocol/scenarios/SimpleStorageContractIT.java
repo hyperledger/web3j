@@ -3,6 +3,7 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 
 import org.junit.Test;
+
 import org.web3j.generated.SimpleStorage;
 
 import static org.hamcrest.CoreMatchers.is;

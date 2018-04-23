@@ -5,9 +5,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
-import org.web3j.generated.HumanStandardToken;
 import rx.Subscription;
 
+import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
@@ -47,7 +47,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         Subscription transferEventSubscription = contract.transferEventObservable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
-                        transferEventResponse -> transferEventCountDownLatch.countDown()
+                transferEventResponse -> transferEventCountDownLatch.countDown()
         );
 
         CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
