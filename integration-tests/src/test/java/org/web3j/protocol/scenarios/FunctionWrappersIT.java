@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.generated.Fibonacci;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
