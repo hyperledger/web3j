@@ -5,6 +5,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.web3j.generated.HumanStandardToken;
 import rx.Subscription;
 
 import org.web3j.protocol.core.DefaultBlockParameterName;
