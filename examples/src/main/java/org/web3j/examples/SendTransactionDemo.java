@@ -35,7 +35,10 @@ public class SendTransactionDemo {
         long validUntilBlock = currentHeight + 80;
         BigInteger nonce = BigInteger.valueOf(Math.abs(random.nextLong()));
         long quota = 1000000;
-        Transaction tx = Transaction.createContractTransaction(nonce, quota, validUntilBlock, VERSION, contractCode);
+
+        String chain_id="1";
+
+        Transaction tx = Transaction.createContractTransaction(nonce, quota, validUntilBlock, VERSION, contractCode,chain_id);
         String rawTx = tx.sign(privateKey);
 
         return service.ethSendRawTransaction(rawTx).send().getSendTransactionResult().getHash();
@@ -50,7 +53,10 @@ public class SendTransactionDemo {
         long validUntilBlock = currentHeight + 80;
         BigInteger nonce = BigInteger.valueOf(Math.abs(random.nextLong()));
         long quota = 1000000;
-        Transaction tx = Transaction.createFunctionCallTransaction(contractAddress, nonce, quota, validUntilBlock, VERSION, functionCallData);
+
+        String chain_id="1";
+
+        Transaction tx = Transaction.createFunctionCallTransaction(contractAddress, nonce, quota, validUntilBlock, VERSION, functionCallData ,chain_id);
         String rawTx = tx.sign(privateKey);
 
         return service.ethSendRawTransaction(rawTx).send().getSendTransactionResult().getHash();

@@ -108,14 +108,13 @@ public class PermissionManager extends Contract {
         });
     }
 
-    public RemoteCall<TransactionReceipt> grantPermission(String _user, BigInteger _permission, BigInteger quota,
-                                                          BigInteger nonce, BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> grantPermission(String _user, BigInteger _permission, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "grantPermission", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_user), 
                 new org.web3j.abi.datatypes.generated.Uint8(_permission)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
     public RemoteCall<BigInteger> queryPermission(String _user) {
@@ -139,14 +138,13 @@ public class PermissionManager extends Contract {
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public RemoteCall<TransactionReceipt> revokePermission(String _user, BigInteger _permission, BigInteger quota,
-                                                           BigInteger nonce, BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> revokePermission(String _user, BigInteger _permission, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "revokePermission", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_user), 
                 new org.web3j.abi.datatypes.generated.Uint8(_permission)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
     public static RemoteCall<PermissionManager> deploy(Web3j web3j, TransactionManager transactionManager,

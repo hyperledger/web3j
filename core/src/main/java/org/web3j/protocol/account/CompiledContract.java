@@ -15,6 +15,7 @@ import java.util.List;
 public class CompiledContract {
     public static class ContractCompileError extends Exception {
         private String errorMessage;
+
         public ContractCompileError(String error) {
             errorMessage = error;
         }
@@ -28,6 +29,7 @@ public class CompiledContract {
     public static class ContractFuncNotFound extends Exception {
         private String funcName;
         private int numOfArgs;
+
         public ContractFuncNotFound(String func, int num) {
             this.funcName = func;
             this.numOfArgs = num;
@@ -66,6 +68,7 @@ public class CompiledContract {
     /// TODO: support windows OS
     private void generateAbiAndBin(File contractFile) throws IOException, InterruptedException, ContractCompileError {
         String callSolcCmd = String.format("solc %s --abi --bin --optimize --overwrite -o /tmp/", contractFile.getAbsolutePath());
+
         CallCmd.ExecutedResult result = CallCmd.callCmd(callSolcCmd);
         if (result.exitCode != 0) {
             throw new ContractCompileError(result.output);
@@ -92,18 +95,18 @@ public class CompiledContract {
 
     /// TODO: how to distinguish overload function which the num of args are same???
     public AbiDefinition getFunctionAbi(String funcName, int numOfArgs) throws ContractFuncNotFound {
-        Object[] abiDefinitions =  this.typedABI
+        Object[] abiDefinitions = this.typedABI
                 .stream()
                 .filter(abiDefinition ->
                         abiDefinition.getType().equals("function") &&
-                        abiDefinition.getName().equals(funcName) &&
-                        abiDefinition.getInputs().size() == numOfArgs)
+                                abiDefinition.getName().equals(funcName) &&
+                                abiDefinition.getInputs().size() == numOfArgs)
                 .toArray();
 
         if (abiDefinitions.length == 0) {
             throw new ContractFuncNotFound(funcName, numOfArgs);
         } else {
-            return (AbiDefinition)abiDefinitions[0];
+            return (AbiDefinition) abiDefinitions[0];
         }
     }
 
@@ -112,7 +115,7 @@ public class CompiledContract {
                 .stream()
                 .filter(abiDefinition ->
                         abiDefinition.getType().equals("event") &&
-                        abiDefinition.getName().equals(eventName))
+                                abiDefinition.getName().equals(eventName))
                 .toArray();
         return (AbiDefinition) abiDefinitions[0];
     }

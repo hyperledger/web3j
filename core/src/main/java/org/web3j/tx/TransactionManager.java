@@ -54,17 +54,17 @@ public abstract class TransactionManager {
     // adapt to cita
     protected TransactionReceipt executeTransaction(
             String to, String data, BigInteger quota,
-            BigInteger nonce, BigInteger validUntilBlock, BigInteger version)
+            BigInteger nonce, BigInteger validUntilBlock, BigInteger version , String chain_id)
             throws IOException, TransactionException {
         EthSendTransaction ethSendTransaction = sendTransaction(
-                to, data, quota, nonce, validUntilBlock, version);
+                to, data, quota, nonce, validUntilBlock, version , chain_id);
         return processResponse(ethSendTransaction);
     }
 
     // adapt to cita, return empty EthSendTransaction default, only CitaTransactionManager will override this method
     public EthSendTransaction sendTransaction(
             String to, String data, BigInteger quota,
-            BigInteger nonce, BigInteger validUntilBlock, BigInteger version)
+            BigInteger nonce, BigInteger validUntilBlock, BigInteger version , String chain_id)
             throws IOException {
         return new EthSendTransaction();
     }

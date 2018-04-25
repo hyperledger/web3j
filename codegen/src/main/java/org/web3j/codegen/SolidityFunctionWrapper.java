@@ -73,6 +73,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String NONCE = "nonce";
     private static final String VALID_UNTIL_BLOCK = "validUntilBlock";
     private static final String VERSION = "version";
+    private static final String CHAIN_ID = "chain_id";
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
             + "<p><strong>Do not modify!</strong>\n"
@@ -340,8 +341,8 @@ public class SolidityFunctionWrapper extends Generator {
                         + ")",
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         methodBuilder.addStatement(
-                "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, $L, encodedConstructor)",
-                className, WEB3J, authName, QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION, BINARY);
+                "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                className, WEB3J, authName, QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION, BINARY, CHAIN_ID);
         return methodBuilder.build();
     }
 
@@ -365,8 +366,8 @@ public class SolidityFunctionWrapper extends Generator {
             MethodSpec.Builder methodBuilder, String className,
             String authName) {
         methodBuilder.addStatement(
-                "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, $L)",
-                className, WEB3J, authName, QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION, BINARY);
+                "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, $L, $L)",
+                className, WEB3J, authName, QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION, BINARY, CHAIN_ID);
         return methodBuilder.build();
     }
 
@@ -399,7 +400,8 @@ public class SolidityFunctionWrapper extends Generator {
                 .addParameter(BigInteger.class, QUOTA)
                 .addParameter(BigInteger.class, NONCE)
                 .addParameter(BigInteger.class, VALID_UNTIL_BLOCK)
-                .addParameter(BigInteger.class, VERSION);
+                .addParameter(BigInteger.class, VERSION)
+                .addParameter(String.class, CHAIN_ID);
         return builder;
     }
 
@@ -688,7 +690,8 @@ public class SolidityFunctionWrapper extends Generator {
         methodBuilder.addParameter(BigInteger.class, QUOTA)
                 .addParameter(BigInteger.class, NONCE)
                 .addParameter(BigInteger.class, VALID_UNTIL_BLOCK)
-                .addParameter(BigInteger.class, VERSION);
+                .addParameter(BigInteger.class, VERSION)
+                .addParameter(String.class, CHAIN_ID);
 
         String functionName = functionDefinition.getName();
 
@@ -701,9 +704,9 @@ public class SolidityFunctionWrapper extends Generator {
                 TypeReference.class);
         if (functionDefinition.isPayable()) {
             methodBuilder.addStatement(
-                    "return executeRemoteCallTransaction(function, $N, $N, $N, $N, $N)", WEI_VALUE, QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION);
+                    "return executeRemoteCallTransaction(function, $N, $N, $N, $N, $N)", WEI_VALUE, QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION, CHAIN_ID);
         } else {
-            methodBuilder.addStatement("return executeRemoteCallTransaction(function, $N, $N, $N, $N)", QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION);
+            methodBuilder.addStatement("return executeRemoteCallTransaction(function, $N, $N, $N, $N, $N)", QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION, CHAIN_ID);
         }
     }
 

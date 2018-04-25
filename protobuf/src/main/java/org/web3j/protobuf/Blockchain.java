@@ -5,19 +5,19 @@ package org.web3j.protobuf;
 public final class Blockchain {
   private Blockchain() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+          com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+          com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+            (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   /**
    * Protobuf enum {@code ProofType}
    */
   public enum ProofType
-      implements com.google.protobuf.ProtocolMessageEnum {
+          implements com.google.protobuf.ProtocolMessageEnum {
     /**
      * <code>AuthorityRound = 0;</code>
      */
@@ -50,7 +50,7 @@ public final class Blockchain {
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
         throw new java.lang.IllegalArgumentException(
-            "Can't get the number of an unknown enum value.");
+                "Can't get the number of an unknown enum value.");
       }
       return value;
     }
@@ -73,37 +73,37 @@ public final class Blockchain {
     }
 
     public static com.google.protobuf.Internal.EnumLiteMap<ProofType>
-        internalGetValueMap() {
+    internalGetValueMap() {
       return internalValueMap;
     }
     private static final com.google.protobuf.Internal.EnumLiteMap<
-        ProofType> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<ProofType>() {
-            public ProofType findValueByNumber(int number) {
-              return ProofType.forNumber(number);
-            }
-          };
+            ProofType> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<ProofType>() {
+              public ProofType findValueByNumber(int number) {
+                return ProofType.forNumber(number);
+              }
+            };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+    getDescriptorForType() {
       return getDescriptor();
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final ProofType[] VALUES = values();
 
     public static ProofType valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+            com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
         throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+                "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
         return UNRECOGNIZED;
@@ -124,7 +124,7 @@ public final class Blockchain {
    * Protobuf enum {@code Crypto}
    */
   public enum Crypto
-      implements com.google.protobuf.ProtocolMessageEnum {
+          implements com.google.protobuf.ProtocolMessageEnum {
     /**
      * <code>SECP = 0;</code>
      */
@@ -149,7 +149,7 @@ public final class Blockchain {
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
         throw new java.lang.IllegalArgumentException(
-            "Can't get the number of an unknown enum value.");
+                "Can't get the number of an unknown enum value.");
       }
       return value;
     }
@@ -171,37 +171,37 @@ public final class Blockchain {
     }
 
     public static com.google.protobuf.Internal.EnumLiteMap<Crypto>
-        internalGetValueMap() {
+    internalGetValueMap() {
       return internalValueMap;
     }
     private static final com.google.protobuf.Internal.EnumLiteMap<
-        Crypto> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<Crypto>() {
-            public Crypto findValueByNumber(int number) {
-              return Crypto.forNumber(number);
-            }
-          };
+            Crypto> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Crypto>() {
+              public Crypto findValueByNumber(int number) {
+                return Crypto.forNumber(number);
+              }
+            };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+    getDescriptorForType() {
       return getDescriptor();
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final Crypto[] VALUES = values();
 
     public static Crypto valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+            com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
         throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+                "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
         return UNRECOGNIZED;
@@ -219,8 +219,8 @@ public final class Blockchain {
   }
 
   public interface ProofOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Proof)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:Proof)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>bytes content = 1;</code>
@@ -240,10 +240,10 @@ public final class Blockchain {
    * Protobuf type {@code Proof}
    */
   public  static final class Proof extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Proof)
-      ProofOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:Proof)
+          ProofOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use Proof.newBuilder() to construct.
     private Proof(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -259,16 +259,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private Proof(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -279,7 +279,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -301,22 +301,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_Proof_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_Proof_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.Proof.class, Blockchain.Proof.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.Proof.class, Blockchain.Proof.Builder.class);
     }
 
     public static final int CONTENT_FIELD_NUMBER = 1;
@@ -355,7 +355,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (!content_.isEmpty()) {
         output.writeBytes(1, content_);
       }
@@ -372,11 +372,11 @@ public final class Blockchain {
       size = 0;
       if (!content_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, content_);
+                .computeBytesSize(1, content_);
       }
       if (type_ != Blockchain.ProofType.AuthorityRound.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, type_);
+                .computeEnumSize(2, type_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -386,7 +386,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.Proof)) {
         return super.equals(obj);
@@ -395,7 +395,7 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && getContent()
-          .equals(other.getContent());
+              .equals(other.getContent());
       result = result && type_ == other.type_;
       result = result && unknownFields.equals(other.unknownFields);
       return result;
@@ -418,73 +418,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.Proof parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Proof parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Proof parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Proof parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Proof parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Proof parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Proof parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Proof parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Proof parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.Proof parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Proof parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Proof parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -496,12 +496,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -509,19 +509,19 @@ public final class Blockchain {
      * Protobuf type {@code Proof}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Proof)
-        Blockchain.ProofOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:Proof)
+            Blockchain.ProofOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_Proof_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_Proof_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.Proof.class, Blockchain.Proof.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.Proof.class, Blockchain.Proof.Builder.class);
       }
 
       // Construct using Blockchain.Proof.newBuilder()
@@ -530,7 +530,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -549,7 +549,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_Proof_descriptor;
       }
 
@@ -577,26 +577,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -626,9 +626,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.Proof parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -655,9 +655,9 @@ public final class Blockchain {
        */
       public Builder setContent(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         content_ = value;
         onChanged();
         return this;
@@ -666,7 +666,7 @@ public final class Blockchain {
        * <code>bytes content = 1;</code>
        */
       public Builder clearContent() {
-        
+
         content_ = getDefaultInstance().getContent();
         onChanged();
         return this;
@@ -701,7 +701,7 @@ public final class Blockchain {
         if (value == null) {
           throw new NullPointerException();
         }
-        
+
         type_ = value.getNumber();
         onChanged();
         return this;
@@ -710,18 +710,18 @@ public final class Blockchain {
        * <code>.ProofType type = 2;</code>
        */
       public Builder clearType() {
-        
+
         type_ = 0;
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -740,11 +740,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<Proof>
-        PARSER = new com.google.protobuf.AbstractParser<Proof>() {
+            PARSER = new com.google.protobuf.AbstractParser<Proof>() {
       public Proof parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new Proof(input, extensionRegistry);
       }
     };
@@ -765,8 +765,8 @@ public final class Blockchain {
   }
 
   public interface BlockHeaderOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:BlockHeader)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:BlockHeader)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>bytes prevhash = 1;</code>
@@ -825,10 +825,10 @@ public final class Blockchain {
    * Protobuf type {@code BlockHeader}
    */
   public  static final class BlockHeader extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:BlockHeader)
-      BlockHeaderOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:BlockHeader)
+          BlockHeaderOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use BlockHeader.newBuilder() to construct.
     private BlockHeader(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -850,16 +850,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private BlockHeader(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -870,7 +870,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -934,22 +934,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_BlockHeader_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_BlockHeader_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.BlockHeader.class, Blockchain.BlockHeader.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.BlockHeader.class, Blockchain.BlockHeader.Builder.class);
     }
 
     public static final int PREVHASH_FIELD_NUMBER = 1;
@@ -1056,7 +1056,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (!prevhash_.isEmpty()) {
         output.writeBytes(1, prevhash_);
       }
@@ -1094,39 +1094,39 @@ public final class Blockchain {
       size = 0;
       if (!prevhash_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, prevhash_);
+                .computeBytesSize(1, prevhash_);
       }
       if (timestamp_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(2, timestamp_);
+                .computeUInt64Size(2, timestamp_);
       }
       if (height_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(3, height_);
+                .computeUInt64Size(3, height_);
       }
       if (!stateRoot_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, stateRoot_);
+                .computeBytesSize(4, stateRoot_);
       }
       if (!transactionsRoot_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, transactionsRoot_);
+                .computeBytesSize(5, transactionsRoot_);
       }
       if (!receiptsRoot_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, receiptsRoot_);
+                .computeBytesSize(6, receiptsRoot_);
       }
       if (gasUsed_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(7, gasUsed_);
+                .computeUInt64Size(7, gasUsed_);
       }
       if (gasLimit_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(8, gasLimit_);
+                .computeUInt64Size(8, gasLimit_);
       }
       if (proof_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, getProof());
+                .computeMessageSize(9, getProof());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1136,7 +1136,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.BlockHeader)) {
         return super.equals(obj);
@@ -1145,25 +1145,25 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && getPrevhash()
-          .equals(other.getPrevhash());
+              .equals(other.getPrevhash());
       result = result && (getTimestamp()
-          == other.getTimestamp());
+              == other.getTimestamp());
       result = result && (getHeight()
-          == other.getHeight());
+              == other.getHeight());
       result = result && getStateRoot()
-          .equals(other.getStateRoot());
+              .equals(other.getStateRoot());
       result = result && getTransactionsRoot()
-          .equals(other.getTransactionsRoot());
+              .equals(other.getTransactionsRoot());
       result = result && getReceiptsRoot()
-          .equals(other.getReceiptsRoot());
+              .equals(other.getReceiptsRoot());
       result = result && (getGasUsed()
-          == other.getGasUsed());
+              == other.getGasUsed());
       result = result && (getGasLimit()
-          == other.getGasLimit());
+              == other.getGasLimit());
       result = result && (hasProof() == other.hasProof());
       if (hasProof()) {
         result = result && getProof()
-            .equals(other.getProof());
+                .equals(other.getProof());
       }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
@@ -1180,10 +1180,10 @@ public final class Blockchain {
       hash = (53 * hash) + getPrevhash().hashCode();
       hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTimestamp());
+              getTimestamp());
       hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getHeight());
+              getHeight());
       hash = (37 * hash) + STATE_ROOT_FIELD_NUMBER;
       hash = (53 * hash) + getStateRoot().hashCode();
       hash = (37 * hash) + TRANSACTIONS_ROOT_FIELD_NUMBER;
@@ -1192,10 +1192,10 @@ public final class Blockchain {
       hash = (53 * hash) + getReceiptsRoot().hashCode();
       hash = (37 * hash) + GAS_USED_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getGasUsed());
+              getGasUsed());
       hash = (37 * hash) + GAS_LIMIT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getGasLimit());
+              getGasLimit());
       if (hasProof()) {
         hash = (37 * hash) + PROOF_FIELD_NUMBER;
         hash = (53 * hash) + getProof().hashCode();
@@ -1206,73 +1206,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.BlockHeader parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockHeader parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockHeader parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockHeader parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockHeader parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockHeader parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockHeader parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockHeader parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockHeader parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.BlockHeader parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockHeader parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockHeader parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -1284,12 +1284,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1297,19 +1297,19 @@ public final class Blockchain {
      * Protobuf type {@code BlockHeader}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:BlockHeader)
-        Blockchain.BlockHeaderOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:BlockHeader)
+            Blockchain.BlockHeaderOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_BlockHeader_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_BlockHeader_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.BlockHeader.class, Blockchain.BlockHeader.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.BlockHeader.class, Blockchain.BlockHeader.Builder.class);
       }
 
       // Construct using Blockchain.BlockHeader.newBuilder()
@@ -1318,7 +1318,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1355,7 +1355,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_BlockHeader_descriptor;
       }
 
@@ -1394,26 +1394,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1464,9 +1464,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.BlockHeader parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1493,9 +1493,9 @@ public final class Blockchain {
        */
       public Builder setPrevhash(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         prevhash_ = value;
         onChanged();
         return this;
@@ -1504,7 +1504,7 @@ public final class Blockchain {
        * <code>bytes prevhash = 1;</code>
        */
       public Builder clearPrevhash() {
-        
+
         prevhash_ = getDefaultInstance().getPrevhash();
         onChanged();
         return this;
@@ -1521,7 +1521,7 @@ public final class Blockchain {
        * <code>uint64 timestamp = 2;</code>
        */
       public Builder setTimestamp(long value) {
-        
+
         timestamp_ = value;
         onChanged();
         return this;
@@ -1530,7 +1530,7 @@ public final class Blockchain {
        * <code>uint64 timestamp = 2;</code>
        */
       public Builder clearTimestamp() {
-        
+
         timestamp_ = 0L;
         onChanged();
         return this;
@@ -1547,7 +1547,7 @@ public final class Blockchain {
        * <code>uint64 height = 3;</code>
        */
       public Builder setHeight(long value) {
-        
+
         height_ = value;
         onChanged();
         return this;
@@ -1556,7 +1556,7 @@ public final class Blockchain {
        * <code>uint64 height = 3;</code>
        */
       public Builder clearHeight() {
-        
+
         height_ = 0L;
         onChanged();
         return this;
@@ -1574,9 +1574,9 @@ public final class Blockchain {
        */
       public Builder setStateRoot(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         stateRoot_ = value;
         onChanged();
         return this;
@@ -1585,7 +1585,7 @@ public final class Blockchain {
        * <code>bytes state_root = 4;</code>
        */
       public Builder clearStateRoot() {
-        
+
         stateRoot_ = getDefaultInstance().getStateRoot();
         onChanged();
         return this;
@@ -1603,9 +1603,9 @@ public final class Blockchain {
        */
       public Builder setTransactionsRoot(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         transactionsRoot_ = value;
         onChanged();
         return this;
@@ -1614,7 +1614,7 @@ public final class Blockchain {
        * <code>bytes transactions_root = 5;</code>
        */
       public Builder clearTransactionsRoot() {
-        
+
         transactionsRoot_ = getDefaultInstance().getTransactionsRoot();
         onChanged();
         return this;
@@ -1632,9 +1632,9 @@ public final class Blockchain {
        */
       public Builder setReceiptsRoot(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         receiptsRoot_ = value;
         onChanged();
         return this;
@@ -1643,7 +1643,7 @@ public final class Blockchain {
        * <code>bytes receipts_root = 6;</code>
        */
       public Builder clearReceiptsRoot() {
-        
+
         receiptsRoot_ = getDefaultInstance().getReceiptsRoot();
         onChanged();
         return this;
@@ -1660,7 +1660,7 @@ public final class Blockchain {
        * <code>uint64 gas_used = 7;</code>
        */
       public Builder setGasUsed(long value) {
-        
+
         gasUsed_ = value;
         onChanged();
         return this;
@@ -1669,7 +1669,7 @@ public final class Blockchain {
        * <code>uint64 gas_used = 7;</code>
        */
       public Builder clearGasUsed() {
-        
+
         gasUsed_ = 0L;
         onChanged();
         return this;
@@ -1686,7 +1686,7 @@ public final class Blockchain {
        * <code>uint64 gas_limit = 8;</code>
        */
       public Builder setGasLimit(long value) {
-        
+
         gasLimit_ = value;
         onChanged();
         return this;
@@ -1695,7 +1695,7 @@ public final class Blockchain {
        * <code>uint64 gas_limit = 8;</code>
        */
       public Builder clearGasLimit() {
-        
+
         gasLimit_ = 0L;
         onChanged();
         return this;
@@ -1703,7 +1703,7 @@ public final class Blockchain {
 
       private Blockchain.Proof proof_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder> proofBuilder_;
+              Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder> proofBuilder_;
       /**
        * <code>.Proof proof = 9;</code>
        */
@@ -1740,7 +1740,7 @@ public final class Blockchain {
        * <code>.Proof proof = 9;</code>
        */
       public Builder setProof(
-          Blockchain.Proof.Builder builderForValue) {
+              Blockchain.Proof.Builder builderForValue) {
         if (proofBuilder_ == null) {
           proof_ = builderForValue.build();
           onChanged();
@@ -1757,7 +1757,7 @@ public final class Blockchain {
         if (proofBuilder_ == null) {
           if (proof_ != null) {
             proof_ =
-              Blockchain.Proof.newBuilder(proof_).mergeFrom(value).buildPartial();
+                    Blockchain.Proof.newBuilder(proof_).mergeFrom(value).buildPartial();
           } else {
             proof_ = value;
           }
@@ -1786,7 +1786,7 @@ public final class Blockchain {
        * <code>.Proof proof = 9;</code>
        */
       public Blockchain.Proof.Builder getProofBuilder() {
-        
+
         onChanged();
         return getProofFieldBuilder().getBuilder();
       }
@@ -1798,18 +1798,18 @@ public final class Blockchain {
           return proofBuilder_.getMessageOrBuilder();
         } else {
           return proof_ == null ?
-              Blockchain.Proof.getDefaultInstance() : proof_;
+                  Blockchain.Proof.getDefaultInstance() : proof_;
         }
       }
       /**
        * <code>.Proof proof = 9;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder> 
-          getProofFieldBuilder() {
+              Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder>
+      getProofFieldBuilder() {
         if (proofBuilder_ == null) {
           proofBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder>(
+                  Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder>(
                   getProof(),
                   getParentForChildren(),
                   isClean());
@@ -1818,12 +1818,12 @@ public final class Blockchain {
         return proofBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -1842,11 +1842,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<BlockHeader>
-        PARSER = new com.google.protobuf.AbstractParser<BlockHeader>() {
+            PARSER = new com.google.protobuf.AbstractParser<BlockHeader>() {
       public BlockHeader parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new BlockHeader(input, extensionRegistry);
       }
     };
@@ -1867,8 +1867,8 @@ public final class Blockchain {
   }
 
   public interface StatusOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Status)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:Status)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>bytes hash = 1;</code>
@@ -1884,10 +1884,10 @@ public final class Blockchain {
    * Protobuf type {@code Status}
    */
   public  static final class Status extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Status)
-      StatusOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:Status)
+          StatusOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use Status.newBuilder() to construct.
     private Status(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -1903,16 +1903,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private Status(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -1923,7 +1923,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -1944,22 +1944,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_Status_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_Status_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.Status.class, Blockchain.Status.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.Status.class, Blockchain.Status.Builder.class);
     }
 
     public static final int HASH_FIELD_NUMBER = 1;
@@ -1991,7 +1991,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (!hash_.isEmpty()) {
         output.writeBytes(1, hash_);
       }
@@ -2008,11 +2008,11 @@ public final class Blockchain {
       size = 0;
       if (!hash_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, hash_);
+                .computeBytesSize(1, hash_);
       }
       if (height_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(2, height_);
+                .computeUInt64Size(2, height_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2022,7 +2022,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.Status)) {
         return super.equals(obj);
@@ -2031,9 +2031,9 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && getHash()
-          .equals(other.getHash());
+              .equals(other.getHash());
       result = result && (getHeight()
-          == other.getHeight());
+              == other.getHeight());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -2049,80 +2049,80 @@ public final class Blockchain {
       hash = (53 * hash) + getHash().hashCode();
       hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getHeight());
+              getHeight());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
     public static Blockchain.Status parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Status parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Status parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Status parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Status parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Status parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Status parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Status parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Status parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.Status parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Status parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Status parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -2134,12 +2134,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2147,19 +2147,19 @@ public final class Blockchain {
      * Protobuf type {@code Status}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Status)
-        Blockchain.StatusOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:Status)
+            Blockchain.StatusOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_Status_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_Status_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.Status.class, Blockchain.Status.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.Status.class, Blockchain.Status.Builder.class);
       }
 
       // Construct using Blockchain.Status.newBuilder()
@@ -2168,7 +2168,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2187,7 +2187,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_Status_descriptor;
       }
 
@@ -2215,26 +2215,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2264,9 +2264,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.Status parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -2293,9 +2293,9 @@ public final class Blockchain {
        */
       public Builder setHash(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         hash_ = value;
         onChanged();
         return this;
@@ -2304,7 +2304,7 @@ public final class Blockchain {
        * <code>bytes hash = 1;</code>
        */
       public Builder clearHash() {
-        
+
         hash_ = getDefaultInstance().getHash();
         onChanged();
         return this;
@@ -2321,7 +2321,7 @@ public final class Blockchain {
        * <code>uint64 height = 2;</code>
        */
       public Builder setHeight(long value) {
-        
+
         height_ = value;
         onChanged();
         return this;
@@ -2330,18 +2330,18 @@ public final class Blockchain {
        * <code>uint64 height = 2;</code>
        */
       public Builder clearHeight() {
-        
+
         height_ = 0L;
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -2360,11 +2360,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<Status>
-        PARSER = new com.google.protobuf.AbstractParser<Status>() {
+            PARSER = new com.google.protobuf.AbstractParser<Status>() {
       public Status parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new Status(input, extensionRegistry);
       }
     };
@@ -2385,8 +2385,8 @@ public final class Blockchain {
   }
 
   public interface AccountGasLimitOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:AccountGasLimit)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:AccountGasLimit)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>uint64 common_gas_limit = 1;</code>
@@ -2401,7 +2401,7 @@ public final class Blockchain {
      * <code>map&lt;string, uint64&gt; specific_gas_limit = 2;</code>
      */
     boolean containsSpecificGasLimit(
-        java.lang.String key);
+            java.lang.String key);
     /**
      * Use {@link #getSpecificGasLimitMap()} instead.
      */
@@ -2418,23 +2418,23 @@ public final class Blockchain {
      */
 
     long getSpecificGasLimitOrDefault(
-        java.lang.String key,
-        long defaultValue);
+            java.lang.String key,
+            long defaultValue);
     /**
      * <code>map&lt;string, uint64&gt; specific_gas_limit = 2;</code>
      */
 
     long getSpecificGasLimitOrThrow(
-        java.lang.String key);
+            java.lang.String key);
   }
   /**
    * Protobuf type {@code AccountGasLimit}
    */
   public  static final class AccountGasLimit extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:AccountGasLimit)
-      AccountGasLimitOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:AccountGasLimit)
+          AccountGasLimitOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use AccountGasLimit.newBuilder() to construct.
     private AccountGasLimit(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -2449,16 +2449,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private AccountGasLimit(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -2469,7 +2469,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -2482,14 +2482,14 @@ public final class Blockchain {
             case 18: {
               if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                 specificGasLimit_ = com.google.protobuf.MapField.newMapField(
-                    SpecificGasLimitDefaultEntryHolder.defaultEntry);
+                        SpecificGasLimitDefaultEntryHolder.defaultEntry);
                 mutable_bitField0_ |= 0x00000002;
               }
               com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
-              specificGasLimit__ = input.readMessage(
-                  SpecificGasLimitDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+                      specificGasLimit__ = input.readMessage(
+                      SpecificGasLimitDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
               specificGasLimit_.getMutableMap().put(
-                  specificGasLimit__.getKey(), specificGasLimit__.getValue());
+                      specificGasLimit__.getKey(), specificGasLimit__.getValue());
               break;
             }
           }
@@ -2498,33 +2498,33 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_AccountGasLimit_descriptor;
     }
 
     @SuppressWarnings({"rawtypes"})
     protected com.google.protobuf.MapField internalGetMapField(
-        int number) {
+            int number) {
       switch (number) {
         case 2:
           return internalGetSpecificGasLimit();
         default:
           throw new RuntimeException(
-              "Invalid map field number: " + number);
+                  "Invalid map field number: " + number);
       }
     }
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_AccountGasLimit_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.AccountGasLimit.class, Blockchain.AccountGasLimit.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.AccountGasLimit.class, Blockchain.AccountGasLimit.Builder.class);
     }
 
     private int bitField0_;
@@ -2540,22 +2540,22 @@ public final class Blockchain {
     public static final int SPECIFIC_GAS_LIMIT_FIELD_NUMBER = 2;
     private static final class SpecificGasLimitDefaultEntryHolder {
       static final com.google.protobuf.MapEntry<
-          java.lang.String, java.lang.Long> defaultEntry =
+              java.lang.String, java.lang.Long> defaultEntry =
               com.google.protobuf.MapEntry
-              .<java.lang.String, java.lang.Long>newDefaultInstance(
-                  Blockchain.internal_static_AccountGasLimit_SpecificGasLimitEntry_descriptor, 
-                  com.google.protobuf.WireFormat.FieldType.STRING,
-                  "",
-                  com.google.protobuf.WireFormat.FieldType.UINT64,
-                  0L);
+                      .<java.lang.String, java.lang.Long>newDefaultInstance(
+                              Blockchain.internal_static_AccountGasLimit_SpecificGasLimitEntry_descriptor,
+                              com.google.protobuf.WireFormat.FieldType.STRING,
+                              "",
+                              com.google.protobuf.WireFormat.FieldType.UINT64,
+                              0L);
     }
     private com.google.protobuf.MapField<
-        java.lang.String, java.lang.Long> specificGasLimit_;
+            java.lang.String, java.lang.Long> specificGasLimit_;
     private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
     internalGetSpecificGasLimit() {
       if (specificGasLimit_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
-            SpecificGasLimitDefaultEntryHolder.defaultEntry);
+                SpecificGasLimitDefaultEntryHolder.defaultEntry);
       }
       return specificGasLimit_;
     }
@@ -2568,7 +2568,7 @@ public final class Blockchain {
      */
 
     public boolean containsSpecificGasLimit(
-        java.lang.String key) {
+            java.lang.String key) {
       if (key == null) { throw new java.lang.NullPointerException(); }
       return internalGetSpecificGasLimit().getMap().containsKey(key);
     }
@@ -2591,11 +2591,11 @@ public final class Blockchain {
      */
 
     public long getSpecificGasLimitOrDefault(
-        java.lang.String key,
-        long defaultValue) {
+            java.lang.String key,
+            long defaultValue) {
       if (key == null) { throw new java.lang.NullPointerException(); }
       java.util.Map<java.lang.String, java.lang.Long> map =
-          internalGetSpecificGasLimit().getMap();
+              internalGetSpecificGasLimit().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
@@ -2603,10 +2603,10 @@ public final class Blockchain {
      */
 
     public long getSpecificGasLimitOrThrow(
-        java.lang.String key) {
+            java.lang.String key) {
       if (key == null) { throw new java.lang.NullPointerException(); }
       java.util.Map<java.lang.String, java.lang.Long> map =
-          internalGetSpecificGasLimit().getMap();
+              internalGetSpecificGasLimit().getMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
       }
@@ -2624,16 +2624,16 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (commonGasLimit_ != 0L) {
         output.writeUInt64(1, commonGasLimit_);
       }
       com.google.protobuf.GeneratedMessageV3
-        .serializeStringMapTo(
-          output,
-          internalGetSpecificGasLimit(),
-          SpecificGasLimitDefaultEntryHolder.defaultEntry,
-          2);
+              .serializeStringMapTo(
+                      output,
+                      internalGetSpecificGasLimit(),
+                      SpecificGasLimitDefaultEntryHolder.defaultEntry,
+                      2);
       unknownFields.writeTo(output);
     }
 
@@ -2644,17 +2644,17 @@ public final class Blockchain {
       size = 0;
       if (commonGasLimit_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(1, commonGasLimit_);
+                .computeUInt64Size(1, commonGasLimit_);
       }
       for (java.util.Map.Entry<java.lang.String, java.lang.Long> entry
-           : internalGetSpecificGasLimit().getMap().entrySet()) {
+              : internalGetSpecificGasLimit().getMap().entrySet()) {
         com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
-        specificGasLimit__ = SpecificGasLimitDefaultEntryHolder.defaultEntry.newBuilderForType()
-            .setKey(entry.getKey())
-            .setValue(entry.getValue())
-            .build();
+                specificGasLimit__ = SpecificGasLimitDefaultEntryHolder.defaultEntry.newBuilderForType()
+                .setKey(entry.getKey())
+                .setValue(entry.getValue())
+                .build();
         size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(2, specificGasLimit__);
+                .computeMessageSize(2, specificGasLimit__);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2664,7 +2664,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.AccountGasLimit)) {
         return super.equals(obj);
@@ -2673,9 +2673,9 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && (getCommonGasLimit()
-          == other.getCommonGasLimit());
+              == other.getCommonGasLimit());
       result = result && internalGetSpecificGasLimit().equals(
-          other.internalGetSpecificGasLimit());
+              other.internalGetSpecificGasLimit());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -2689,7 +2689,7 @@ public final class Blockchain {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + COMMON_GAS_LIMIT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getCommonGasLimit());
+              getCommonGasLimit());
       if (!internalGetSpecificGasLimit().getMap().isEmpty()) {
         hash = (37 * hash) + SPECIFIC_GAS_LIMIT_FIELD_NUMBER;
         hash = (53 * hash) + internalGetSpecificGasLimit().hashCode();
@@ -2700,73 +2700,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.AccountGasLimit parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.AccountGasLimit parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.AccountGasLimit parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.AccountGasLimit parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.AccountGasLimit parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.AccountGasLimit parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.AccountGasLimit parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.AccountGasLimit parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.AccountGasLimit parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.AccountGasLimit parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.AccountGasLimit parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.AccountGasLimit parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -2778,12 +2778,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2791,41 +2791,41 @@ public final class Blockchain {
      * Protobuf type {@code AccountGasLimit}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:AccountGasLimit)
-        Blockchain.AccountGasLimitOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:AccountGasLimit)
+            Blockchain.AccountGasLimitOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_AccountGasLimit_descriptor;
       }
 
       @SuppressWarnings({"rawtypes"})
       protected com.google.protobuf.MapField internalGetMapField(
-          int number) {
+              int number) {
         switch (number) {
           case 2:
             return internalGetSpecificGasLimit();
           default:
             throw new RuntimeException(
-                "Invalid map field number: " + number);
+                    "Invalid map field number: " + number);
         }
       }
       @SuppressWarnings({"rawtypes"})
       protected com.google.protobuf.MapField internalGetMutableMapField(
-          int number) {
+              int number) {
         switch (number) {
           case 2:
             return internalGetMutableSpecificGasLimit();
           default:
             throw new RuntimeException(
-                "Invalid map field number: " + number);
+                    "Invalid map field number: " + number);
         }
       }
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_AccountGasLimit_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.AccountGasLimit.class, Blockchain.AccountGasLimit.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.AccountGasLimit.class, Blockchain.AccountGasLimit.Builder.class);
       }
 
       // Construct using Blockchain.AccountGasLimit.newBuilder()
@@ -2834,7 +2834,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2852,7 +2852,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_AccountGasLimit_descriptor;
       }
 
@@ -2884,26 +2884,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2921,7 +2921,7 @@ public final class Blockchain {
           setCommonGasLimit(other.getCommonGasLimit());
         }
         internalGetMutableSpecificGasLimit().mergeFrom(
-            other.internalGetSpecificGasLimit());
+                other.internalGetSpecificGasLimit());
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -2932,9 +2932,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.AccountGasLimit parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -2961,7 +2961,7 @@ public final class Blockchain {
        * <code>uint64 common_gas_limit = 1;</code>
        */
       public Builder setCommonGasLimit(long value) {
-        
+
         commonGasLimit_ = value;
         onChanged();
         return this;
@@ -2970,19 +2970,19 @@ public final class Blockchain {
        * <code>uint64 common_gas_limit = 1;</code>
        */
       public Builder clearCommonGasLimit() {
-        
+
         commonGasLimit_ = 0L;
         onChanged();
         return this;
       }
 
       private com.google.protobuf.MapField<
-          java.lang.String, java.lang.Long> specificGasLimit_;
+              java.lang.String, java.lang.Long> specificGasLimit_;
       private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
       internalGetSpecificGasLimit() {
         if (specificGasLimit_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
-              SpecificGasLimitDefaultEntryHolder.defaultEntry);
+                  SpecificGasLimitDefaultEntryHolder.defaultEntry);
         }
         return specificGasLimit_;
       }
@@ -2991,7 +2991,7 @@ public final class Blockchain {
         onChanged();;
         if (specificGasLimit_ == null) {
           specificGasLimit_ = com.google.protobuf.MapField.newMapField(
-              SpecificGasLimitDefaultEntryHolder.defaultEntry);
+                  SpecificGasLimitDefaultEntryHolder.defaultEntry);
         }
         if (!specificGasLimit_.isMutable()) {
           specificGasLimit_ = specificGasLimit_.copy();
@@ -3007,7 +3007,7 @@ public final class Blockchain {
        */
 
       public boolean containsSpecificGasLimit(
-          java.lang.String key) {
+              java.lang.String key) {
         if (key == null) { throw new java.lang.NullPointerException(); }
         return internalGetSpecificGasLimit().getMap().containsKey(key);
       }
@@ -3030,11 +3030,11 @@ public final class Blockchain {
        */
 
       public long getSpecificGasLimitOrDefault(
-          java.lang.String key,
-          long defaultValue) {
+              java.lang.String key,
+              long defaultValue) {
         if (key == null) { throw new java.lang.NullPointerException(); }
         java.util.Map<java.lang.String, java.lang.Long> map =
-            internalGetSpecificGasLimit().getMap();
+                internalGetSpecificGasLimit().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
@@ -3042,10 +3042,10 @@ public final class Blockchain {
        */
 
       public long getSpecificGasLimitOrThrow(
-          java.lang.String key) {
+              java.lang.String key) {
         if (key == null) { throw new java.lang.NullPointerException(); }
         java.util.Map<java.lang.String, java.lang.Long> map =
-            internalGetSpecificGasLimit().getMap();
+                internalGetSpecificGasLimit().getMap();
         if (!map.containsKey(key)) {
           throw new java.lang.IllegalArgumentException();
         }
@@ -3054,7 +3054,7 @@ public final class Blockchain {
 
       public Builder clearSpecificGasLimit() {
         internalGetMutableSpecificGasLimit().getMutableMap()
-            .clear();
+                .clear();
         return this;
       }
       /**
@@ -3062,10 +3062,10 @@ public final class Blockchain {
        */
 
       public Builder removeSpecificGasLimit(
-          java.lang.String key) {
+              java.lang.String key) {
         if (key == null) { throw new java.lang.NullPointerException(); }
         internalGetMutableSpecificGasLimit().getMutableMap()
-            .remove(key);
+                .remove(key);
         return this;
       }
       /**
@@ -3080,12 +3080,12 @@ public final class Blockchain {
        * <code>map&lt;string, uint64&gt; specific_gas_limit = 2;</code>
        */
       public Builder putSpecificGasLimit(
-          java.lang.String key,
-          long value) {
+              java.lang.String key,
+              long value) {
         if (key == null) { throw new java.lang.NullPointerException(); }
-        
+
         internalGetMutableSpecificGasLimit().getMutableMap()
-            .put(key, value);
+                .put(key, value);
         return this;
       }
       /**
@@ -3093,18 +3093,18 @@ public final class Blockchain {
        */
 
       public Builder putAllSpecificGasLimit(
-          java.util.Map<java.lang.String, java.lang.Long> values) {
+              java.util.Map<java.lang.String, java.lang.Long> values) {
         internalGetMutableSpecificGasLimit().getMutableMap()
-            .putAll(values);
+                .putAll(values);
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -3123,11 +3123,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<AccountGasLimit>
-        PARSER = new com.google.protobuf.AbstractParser<AccountGasLimit>() {
+            PARSER = new com.google.protobuf.AbstractParser<AccountGasLimit>() {
       public AccountGasLimit parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new AccountGasLimit(input, extensionRegistry);
       }
     };
@@ -3148,8 +3148,8 @@ public final class Blockchain {
   }
 
   public interface RichStatusOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:RichStatus)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:RichStatus)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>bytes hash = 1;</code>
@@ -3178,10 +3178,10 @@ public final class Blockchain {
    * Protobuf type {@code RichStatus}
    */
   public  static final class RichStatus extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:RichStatus)
-      RichStatusOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:RichStatus)
+          RichStatusOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use RichStatus.newBuilder() to construct.
     private RichStatus(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -3198,16 +3198,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private RichStatus(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -3218,7 +3218,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -3247,7 +3247,7 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           nodes_ = java.util.Collections.unmodifiableList(nodes_);
@@ -3257,15 +3257,15 @@ public final class Blockchain {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_RichStatus_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_RichStatus_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.RichStatus.class, Blockchain.RichStatus.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.RichStatus.class, Blockchain.RichStatus.Builder.class);
     }
 
     private int bitField0_;
@@ -3293,7 +3293,7 @@ public final class Blockchain {
      * <code>repeated bytes nodes = 3;</code>
      */
     public java.util.List<com.google.protobuf.ByteString>
-        getNodesList() {
+    getNodesList() {
       return nodes_;
     }
     /**
@@ -3320,7 +3320,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (!hash_.isEmpty()) {
         output.writeBytes(1, hash_);
       }
@@ -3340,17 +3340,17 @@ public final class Blockchain {
       size = 0;
       if (!hash_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, hash_);
+                .computeBytesSize(1, hash_);
       }
       if (height_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(2, height_);
+                .computeUInt64Size(2, height_);
       }
       {
         int dataSize = 0;
         for (int i = 0; i < nodes_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(nodes_.get(i));
+                  .computeBytesSizeNoTag(nodes_.get(i));
         }
         size += dataSize;
         size += 1 * getNodesList().size();
@@ -3363,7 +3363,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.RichStatus)) {
         return super.equals(obj);
@@ -3372,11 +3372,11 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && getHash()
-          .equals(other.getHash());
+              .equals(other.getHash());
       result = result && (getHeight()
-          == other.getHeight());
+              == other.getHeight());
       result = result && getNodesList()
-          .equals(other.getNodesList());
+              .equals(other.getNodesList());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -3392,7 +3392,7 @@ public final class Blockchain {
       hash = (53 * hash) + getHash().hashCode();
       hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getHeight());
+              getHeight());
       if (getNodesCount() > 0) {
         hash = (37 * hash) + NODES_FIELD_NUMBER;
         hash = (53 * hash) + getNodesList().hashCode();
@@ -3403,73 +3403,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.RichStatus parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.RichStatus parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.RichStatus parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.RichStatus parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.RichStatus parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.RichStatus parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.RichStatus parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.RichStatus parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.RichStatus parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.RichStatus parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.RichStatus parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.RichStatus parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -3481,12 +3481,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -3494,19 +3494,19 @@ public final class Blockchain {
      * Protobuf type {@code RichStatus}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:RichStatus)
-        Blockchain.RichStatusOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:RichStatus)
+            Blockchain.RichStatusOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_RichStatus_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_RichStatus_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.RichStatus.class, Blockchain.RichStatus.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.RichStatus.class, Blockchain.RichStatus.Builder.class);
       }
 
       // Construct using Blockchain.RichStatus.newBuilder()
@@ -3515,7 +3515,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3536,7 +3536,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_RichStatus_descriptor;
       }
 
@@ -3572,26 +3572,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -3631,9 +3631,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.RichStatus parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -3661,9 +3661,9 @@ public final class Blockchain {
        */
       public Builder setHash(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         hash_ = value;
         onChanged();
         return this;
@@ -3672,7 +3672,7 @@ public final class Blockchain {
        * <code>bytes hash = 1;</code>
        */
       public Builder clearHash() {
-        
+
         hash_ = getDefaultInstance().getHash();
         onChanged();
         return this;
@@ -3689,7 +3689,7 @@ public final class Blockchain {
        * <code>uint64 height = 2;</code>
        */
       public Builder setHeight(long value) {
-        
+
         height_ = value;
         onChanged();
         return this;
@@ -3698,7 +3698,7 @@ public final class Blockchain {
        * <code>uint64 height = 2;</code>
        */
       public Builder clearHeight() {
-        
+
         height_ = 0L;
         onChanged();
         return this;
@@ -3709,13 +3709,13 @@ public final class Blockchain {
         if (!((bitField0_ & 0x00000004) == 0x00000004)) {
           nodes_ = new java.util.ArrayList<com.google.protobuf.ByteString>(nodes_);
           bitField0_ |= 0x00000004;
-         }
+        }
       }
       /**
        * <code>repeated bytes nodes = 3;</code>
        */
       public java.util.List<com.google.protobuf.ByteString>
-          getNodesList() {
+      getNodesList() {
         return java.util.Collections.unmodifiableList(nodes_);
       }
       /**
@@ -3734,11 +3734,11 @@ public final class Blockchain {
        * <code>repeated bytes nodes = 3;</code>
        */
       public Builder setNodes(
-          int index, com.google.protobuf.ByteString value) {
+              int index, com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureNodesIsMutable();
+          throw new NullPointerException();
+        }
+        ensureNodesIsMutable();
         nodes_.set(index, value);
         onChanged();
         return this;
@@ -3748,9 +3748,9 @@ public final class Blockchain {
        */
       public Builder addNodes(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureNodesIsMutable();
+          throw new NullPointerException();
+        }
+        ensureNodesIsMutable();
         nodes_.add(value);
         onChanged();
         return this;
@@ -3759,10 +3759,10 @@ public final class Blockchain {
        * <code>repeated bytes nodes = 3;</code>
        */
       public Builder addAllNodes(
-          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+              java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
         ensureNodesIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, nodes_);
+                values, nodes_);
         onChanged();
         return this;
       }
@@ -3776,12 +3776,12 @@ public final class Blockchain {
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -3800,11 +3800,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<RichStatus>
-        PARSER = new com.google.protobuf.AbstractParser<RichStatus>() {
+            PARSER = new com.google.protobuf.AbstractParser<RichStatus>() {
       public RichStatus parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new RichStatus(input, extensionRegistry);
       }
     };
@@ -3825,8 +3825,8 @@ public final class Blockchain {
   }
 
   public interface TransactionOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Transaction)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:Transaction)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>string to = 1;</code>
@@ -3836,7 +3836,7 @@ public final class Blockchain {
      * <code>string to = 1;</code>
      */
     com.google.protobuf.ByteString
-        getToBytes();
+    getToBytes();
 
     /**
      * <code>string nonce = 2;</code>
@@ -3846,7 +3846,7 @@ public final class Blockchain {
      * <code>string nonce = 2;</code>
      */
     com.google.protobuf.ByteString
-        getNonceBytes();
+    getNonceBytes();
 
     /**
      * <code>uint64 quota = 3;</code>
@@ -3867,15 +3867,25 @@ public final class Blockchain {
      * <code>uint32 version = 6;</code>
      */
     int getVersion();
+
+    /**
+     * <code>string chain_id = 7;</code>
+     */
+    java.lang.String getChainId();
+    /**
+     * <code>string chain_id = 7;</code>
+     */
+    com.google.protobuf.ByteString
+    getChainIdBytes();
   }
   /**
    * Protobuf type {@code Transaction}
    */
   public  static final class Transaction extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Transaction)
-      TransactionOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:Transaction)
+          TransactionOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use Transaction.newBuilder() to construct.
     private Transaction(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -3887,6 +3897,7 @@ public final class Blockchain {
       validUntilBlock_ = 0L;
       data_ = com.google.protobuf.ByteString.EMPTY;
       version_ = 0;
+      chainId_ = "";
     }
 
     @java.lang.Override
@@ -3895,16 +3906,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private Transaction(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -3915,7 +3926,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -3952,28 +3963,34 @@ public final class Blockchain {
               version_ = input.readUInt32();
               break;
             }
+            case 58: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              chainId_ = s;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_Transaction_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_Transaction_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.Transaction.class, Blockchain.Transaction.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.Transaction.class, Blockchain.Transaction.Builder.class);
     }
 
     public static final int TO_FIELD_NUMBER = 1;
@@ -3986,8 +4003,8 @@ public final class Blockchain {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         to_ = s;
         return s;
@@ -3997,12 +4014,12 @@ public final class Blockchain {
      * <code>string to = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getToBytes() {
+    getToBytes() {
       java.lang.Object ref = to_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                        (java.lang.String) ref);
         to_ = b;
         return b;
       } else {
@@ -4020,8 +4037,8 @@ public final class Blockchain {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         nonce_ = s;
         return s;
@@ -4031,12 +4048,12 @@ public final class Blockchain {
      * <code>string nonce = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getNonceBytes() {
+    getNonceBytes() {
       java.lang.Object ref = nonce_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                        (java.lang.String) ref);
         nonce_ = b;
         return b;
       } else {
@@ -4080,6 +4097,40 @@ public final class Blockchain {
       return version_;
     }
 
+    public static final int CHAIN_ID_FIELD_NUMBER = 7;
+    private volatile java.lang.Object chainId_;
+    /**
+     * <code>string chain_id = 7;</code>
+     */
+    public java.lang.String getChainId() {
+      java.lang.Object ref = chainId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        chainId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string chain_id = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+    getChainIdBytes() {
+      java.lang.Object ref = chainId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                        (java.lang.String) ref);
+        chainId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -4091,7 +4142,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (!getToBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, to_);
       }
@@ -4110,6 +4161,9 @@ public final class Blockchain {
       if (version_ != 0) {
         output.writeUInt32(6, version_);
       }
+      if (!getChainIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, chainId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -4126,19 +4180,22 @@ public final class Blockchain {
       }
       if (quota_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(3, quota_);
+                .computeUInt64Size(3, quota_);
       }
       if (validUntilBlock_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(4, validUntilBlock_);
+                .computeUInt64Size(4, validUntilBlock_);
       }
       if (!data_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, data_);
+                .computeBytesSize(5, data_);
       }
       if (version_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(6, version_);
+                .computeUInt32Size(6, version_);
+      }
+      if (!getChainIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, chainId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -4148,7 +4205,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.Transaction)) {
         return super.equals(obj);
@@ -4157,17 +4214,19 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && getTo()
-          .equals(other.getTo());
+              .equals(other.getTo());
       result = result && getNonce()
-          .equals(other.getNonce());
+              .equals(other.getNonce());
       result = result && (getQuota()
-          == other.getQuota());
+              == other.getQuota());
       result = result && (getValidUntilBlock()
-          == other.getValidUntilBlock());
+              == other.getValidUntilBlock());
       result = result && getData()
-          .equals(other.getData());
+              .equals(other.getData());
       result = result && (getVersion()
-          == other.getVersion());
+              == other.getVersion());
+      result = result && getChainId()
+              .equals(other.getChainId());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -4185,87 +4244,89 @@ public final class Blockchain {
       hash = (53 * hash) + getNonce().hashCode();
       hash = (37 * hash) + QUOTA_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getQuota());
+              getQuota());
       hash = (37 * hash) + VALID_UNTIL_BLOCK_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getValidUntilBlock());
+              getValidUntilBlock());
       hash = (37 * hash) + DATA_FIELD_NUMBER;
       hash = (53 * hash) + getData().hashCode();
       hash = (37 * hash) + VERSION_FIELD_NUMBER;
       hash = (53 * hash) + getVersion();
+      hash = (37 * hash) + CHAIN_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getChainId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
     public static Blockchain.Transaction parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Transaction parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Transaction parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Transaction parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Transaction parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Transaction parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Transaction parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Transaction parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Transaction parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.Transaction parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Transaction parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Transaction parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -4277,12 +4338,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -4290,19 +4351,19 @@ public final class Blockchain {
      * Protobuf type {@code Transaction}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Transaction)
-        Blockchain.TransactionOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:Transaction)
+            Blockchain.TransactionOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_Transaction_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_Transaction_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.Transaction.class, Blockchain.Transaction.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.Transaction.class, Blockchain.Transaction.Builder.class);
       }
 
       // Construct using Blockchain.Transaction.newBuilder()
@@ -4311,7 +4372,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4334,11 +4395,13 @@ public final class Blockchain {
 
         version_ = 0;
 
+        chainId_ = "";
+
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_Transaction_descriptor;
       }
 
@@ -4362,6 +4425,7 @@ public final class Blockchain {
         result.validUntilBlock_ = validUntilBlock_;
         result.data_ = data_;
         result.version_ = version_;
+        result.chainId_ = chainId_;
         onBuilt();
         return result;
       }
@@ -4370,26 +4434,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -4423,6 +4487,10 @@ public final class Blockchain {
         if (other.getVersion() != 0) {
           setVersion(other.getVersion());
         }
+        if (!other.getChainId().isEmpty()) {
+          chainId_ = other.chainId_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -4433,9 +4501,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.Transaction parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -4458,7 +4526,7 @@ public final class Blockchain {
         java.lang.Object ref = to_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+                  (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           to_ = s;
           return s;
@@ -4470,12 +4538,12 @@ public final class Blockchain {
        * <code>string to = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getToBytes() {
+      getToBytes() {
         java.lang.Object ref = to_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+          com.google.protobuf.ByteString b =
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                          (java.lang.String) ref);
           to_ = b;
           return b;
         } else {
@@ -4486,11 +4554,11 @@ public final class Blockchain {
        * <code>string to = 1;</code>
        */
       public Builder setTo(
-          java.lang.String value) {
+              java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         to_ = value;
         onChanged();
         return this;
@@ -4499,7 +4567,7 @@ public final class Blockchain {
        * <code>string to = 1;</code>
        */
       public Builder clearTo() {
-        
+
         to_ = getDefaultInstance().getTo();
         onChanged();
         return this;
@@ -4508,12 +4576,12 @@ public final class Blockchain {
        * <code>string to = 1;</code>
        */
       public Builder setToBytes(
-          com.google.protobuf.ByteString value) {
+              com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
         to_ = value;
         onChanged();
         return this;
@@ -4527,7 +4595,7 @@ public final class Blockchain {
         java.lang.Object ref = nonce_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+                  (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           nonce_ = s;
           return s;
@@ -4539,12 +4607,12 @@ public final class Blockchain {
        * <code>string nonce = 2;</code>
        */
       public com.google.protobuf.ByteString
-          getNonceBytes() {
+      getNonceBytes() {
         java.lang.Object ref = nonce_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+          com.google.protobuf.ByteString b =
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                          (java.lang.String) ref);
           nonce_ = b;
           return b;
         } else {
@@ -4555,11 +4623,11 @@ public final class Blockchain {
        * <code>string nonce = 2;</code>
        */
       public Builder setNonce(
-          java.lang.String value) {
+              java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         nonce_ = value;
         onChanged();
         return this;
@@ -4568,7 +4636,7 @@ public final class Blockchain {
        * <code>string nonce = 2;</code>
        */
       public Builder clearNonce() {
-        
+
         nonce_ = getDefaultInstance().getNonce();
         onChanged();
         return this;
@@ -4577,12 +4645,12 @@ public final class Blockchain {
        * <code>string nonce = 2;</code>
        */
       public Builder setNonceBytes(
-          com.google.protobuf.ByteString value) {
+              com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
         nonce_ = value;
         onChanged();
         return this;
@@ -4599,7 +4667,7 @@ public final class Blockchain {
        * <code>uint64 quota = 3;</code>
        */
       public Builder setQuota(long value) {
-        
+
         quota_ = value;
         onChanged();
         return this;
@@ -4608,7 +4676,7 @@ public final class Blockchain {
        * <code>uint64 quota = 3;</code>
        */
       public Builder clearQuota() {
-        
+
         quota_ = 0L;
         onChanged();
         return this;
@@ -4625,7 +4693,7 @@ public final class Blockchain {
        * <code>uint64 valid_until_block = 4;</code>
        */
       public Builder setValidUntilBlock(long value) {
-        
+
         validUntilBlock_ = value;
         onChanged();
         return this;
@@ -4634,7 +4702,7 @@ public final class Blockchain {
        * <code>uint64 valid_until_block = 4;</code>
        */
       public Builder clearValidUntilBlock() {
-        
+
         validUntilBlock_ = 0L;
         onChanged();
         return this;
@@ -4652,9 +4720,9 @@ public final class Blockchain {
        */
       public Builder setData(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         data_ = value;
         onChanged();
         return this;
@@ -4663,7 +4731,7 @@ public final class Blockchain {
        * <code>bytes data = 5;</code>
        */
       public Builder clearData() {
-        
+
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
@@ -4680,7 +4748,7 @@ public final class Blockchain {
        * <code>uint32 version = 6;</code>
        */
       public Builder setVersion(int value) {
-        
+
         version_ = value;
         onChanged();
         return this;
@@ -4689,18 +4757,87 @@ public final class Blockchain {
        * <code>uint32 version = 6;</code>
        */
       public Builder clearVersion() {
-        
+
         version_ = 0;
         onChanged();
         return this;
       }
+
+      private java.lang.Object chainId_ = "";
+      /**
+       * <code>string chain_id = 7;</code>
+       */
+      public java.lang.String getChainId() {
+        java.lang.Object ref = chainId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+                  (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          chainId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string chain_id = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+      getChainIdBytes() {
+        java.lang.Object ref = chainId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                          (java.lang.String) ref);
+          chainId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string chain_id = 7;</code>
+       */
+      public Builder setChainId(
+              java.lang.String value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        chainId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string chain_id = 7;</code>
+       */
+      public Builder clearChainId() {
+
+        chainId_ = getDefaultInstance().getChainId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string chain_id = 7;</code>
+       */
+      public Builder setChainIdBytes(
+              com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        chainId_ = value;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -4719,11 +4856,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<Transaction>
-        PARSER = new com.google.protobuf.AbstractParser<Transaction>() {
+            PARSER = new com.google.protobuf.AbstractParser<Transaction>() {
       public Transaction parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new Transaction(input, extensionRegistry);
       }
     };
@@ -4744,8 +4881,8 @@ public final class Blockchain {
   }
 
   public interface UnverifiedTransactionOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:UnverifiedTransaction)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:UnverifiedTransaction)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>.Transaction transaction = 1;</code>
@@ -4778,10 +4915,10 @@ public final class Blockchain {
    * Protobuf type {@code UnverifiedTransaction}
    */
   public  static final class UnverifiedTransaction extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:UnverifiedTransaction)
-      UnverifiedTransactionOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:UnverifiedTransaction)
+          UnverifiedTransactionOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use UnverifiedTransaction.newBuilder() to construct.
     private UnverifiedTransaction(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -4797,16 +4934,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private UnverifiedTransaction(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -4817,7 +4954,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -4852,22 +4989,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_UnverifiedTransaction_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_UnverifiedTransaction_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.UnverifiedTransaction.class, Blockchain.UnverifiedTransaction.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.UnverifiedTransaction.class, Blockchain.UnverifiedTransaction.Builder.class);
     }
 
     public static final int TRANSACTION_FIELD_NUMBER = 1;
@@ -4927,7 +5064,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (transaction_ != null) {
         output.writeMessage(1, getTransaction());
       }
@@ -4947,15 +5084,15 @@ public final class Blockchain {
       size = 0;
       if (transaction_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getTransaction());
+                .computeMessageSize(1, getTransaction());
       }
       if (!signature_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, signature_);
+                .computeBytesSize(2, signature_);
       }
       if (crypto_ != Blockchain.Crypto.SECP.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, crypto_);
+                .computeEnumSize(3, crypto_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -4965,7 +5102,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.UnverifiedTransaction)) {
         return super.equals(obj);
@@ -4976,10 +5113,10 @@ public final class Blockchain {
       result = result && (hasTransaction() == other.hasTransaction());
       if (hasTransaction()) {
         result = result && getTransaction()
-            .equals(other.getTransaction());
+                .equals(other.getTransaction());
       }
       result = result && getSignature()
-          .equals(other.getSignature());
+              .equals(other.getSignature());
       result = result && crypto_ == other.crypto_;
       result = result && unknownFields.equals(other.unknownFields);
       return result;
@@ -5006,73 +5143,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.UnverifiedTransaction parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.UnverifiedTransaction parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.UnverifiedTransaction parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.UnverifiedTransaction parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -5084,12 +5221,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -5097,19 +5234,19 @@ public final class Blockchain {
      * Protobuf type {@code UnverifiedTransaction}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:UnverifiedTransaction)
-        Blockchain.UnverifiedTransactionOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:UnverifiedTransaction)
+            Blockchain.UnverifiedTransactionOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_UnverifiedTransaction_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_UnverifiedTransaction_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.UnverifiedTransaction.class, Blockchain.UnverifiedTransaction.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.UnverifiedTransaction.class, Blockchain.UnverifiedTransaction.Builder.class);
       }
 
       // Construct using Blockchain.UnverifiedTransaction.newBuilder()
@@ -5118,7 +5255,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -5143,7 +5280,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_UnverifiedTransaction_descriptor;
       }
 
@@ -5176,26 +5313,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -5228,9 +5365,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.UnverifiedTransaction parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -5247,7 +5384,7 @@ public final class Blockchain {
 
       private Blockchain.Transaction transaction_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Transaction, Blockchain.Transaction.Builder, Blockchain.TransactionOrBuilder> transactionBuilder_;
+              Blockchain.Transaction, Blockchain.Transaction.Builder, Blockchain.TransactionOrBuilder> transactionBuilder_;
       /**
        * <code>.Transaction transaction = 1;</code>
        */
@@ -5284,7 +5421,7 @@ public final class Blockchain {
        * <code>.Transaction transaction = 1;</code>
        */
       public Builder setTransaction(
-          Blockchain.Transaction.Builder builderForValue) {
+              Blockchain.Transaction.Builder builderForValue) {
         if (transactionBuilder_ == null) {
           transaction_ = builderForValue.build();
           onChanged();
@@ -5301,7 +5438,7 @@ public final class Blockchain {
         if (transactionBuilder_ == null) {
           if (transaction_ != null) {
             transaction_ =
-              Blockchain.Transaction.newBuilder(transaction_).mergeFrom(value).buildPartial();
+                    Blockchain.Transaction.newBuilder(transaction_).mergeFrom(value).buildPartial();
           } else {
             transaction_ = value;
           }
@@ -5330,7 +5467,7 @@ public final class Blockchain {
        * <code>.Transaction transaction = 1;</code>
        */
       public Blockchain.Transaction.Builder getTransactionBuilder() {
-        
+
         onChanged();
         return getTransactionFieldBuilder().getBuilder();
       }
@@ -5342,18 +5479,18 @@ public final class Blockchain {
           return transactionBuilder_.getMessageOrBuilder();
         } else {
           return transaction_ == null ?
-              Blockchain.Transaction.getDefaultInstance() : transaction_;
+                  Blockchain.Transaction.getDefaultInstance() : transaction_;
         }
       }
       /**
        * <code>.Transaction transaction = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Transaction, Blockchain.Transaction.Builder, Blockchain.TransactionOrBuilder> 
-          getTransactionFieldBuilder() {
+              Blockchain.Transaction, Blockchain.Transaction.Builder, Blockchain.TransactionOrBuilder>
+      getTransactionFieldBuilder() {
         if (transactionBuilder_ == null) {
           transactionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.Transaction, Blockchain.Transaction.Builder, Blockchain.TransactionOrBuilder>(
+                  Blockchain.Transaction, Blockchain.Transaction.Builder, Blockchain.TransactionOrBuilder>(
                   getTransaction(),
                   getParentForChildren(),
                   isClean());
@@ -5374,9 +5511,9 @@ public final class Blockchain {
        */
       public Builder setSignature(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         signature_ = value;
         onChanged();
         return this;
@@ -5385,7 +5522,7 @@ public final class Blockchain {
        * <code>bytes signature = 2;</code>
        */
       public Builder clearSignature() {
-        
+
         signature_ = getDefaultInstance().getSignature();
         onChanged();
         return this;
@@ -5420,7 +5557,7 @@ public final class Blockchain {
         if (value == null) {
           throw new NullPointerException();
         }
-        
+
         crypto_ = value.getNumber();
         onChanged();
         return this;
@@ -5429,18 +5566,18 @@ public final class Blockchain {
        * <code>.Crypto crypto = 3;</code>
        */
       public Builder clearCrypto() {
-        
+
         crypto_ = 0;
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -5459,11 +5596,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<UnverifiedTransaction>
-        PARSER = new com.google.protobuf.AbstractParser<UnverifiedTransaction>() {
+            PARSER = new com.google.protobuf.AbstractParser<UnverifiedTransaction>() {
       public UnverifiedTransaction parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new UnverifiedTransaction(input, extensionRegistry);
       }
     };
@@ -5484,8 +5621,8 @@ public final class Blockchain {
   }
 
   public interface SignedTransactionOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:SignedTransaction)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:SignedTransaction)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>.UnverifiedTransaction transaction_with_sig = 1;</code>
@@ -5522,10 +5659,10 @@ public final class Blockchain {
    * Protobuf type {@code SignedTransaction}
    */
   public  static final class SignedTransaction extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:SignedTransaction)
-      SignedTransactionOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:SignedTransaction)
+          SignedTransactionOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use SignedTransaction.newBuilder() to construct.
     private SignedTransaction(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -5541,16 +5678,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private SignedTransaction(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -5561,7 +5698,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -5595,22 +5732,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_SignedTransaction_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_SignedTransaction_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.SignedTransaction.class, Blockchain.SignedTransaction.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.SignedTransaction.class, Blockchain.SignedTransaction.Builder.class);
     }
 
     public static final int TRANSACTION_WITH_SIG_FIELD_NUMBER = 1;
@@ -5671,7 +5808,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (transactionWithSig_ != null) {
         output.writeMessage(1, getTransactionWithSig());
       }
@@ -5691,15 +5828,15 @@ public final class Blockchain {
       size = 0;
       if (transactionWithSig_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getTransactionWithSig());
+                .computeMessageSize(1, getTransactionWithSig());
       }
       if (!txHash_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, txHash_);
+                .computeBytesSize(2, txHash_);
       }
       if (!signer_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, signer_);
+                .computeBytesSize(3, signer_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -5709,7 +5846,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.SignedTransaction)) {
         return super.equals(obj);
@@ -5720,12 +5857,12 @@ public final class Blockchain {
       result = result && (hasTransactionWithSig() == other.hasTransactionWithSig());
       if (hasTransactionWithSig()) {
         result = result && getTransactionWithSig()
-            .equals(other.getTransactionWithSig());
+                .equals(other.getTransactionWithSig());
       }
       result = result && getTxHash()
-          .equals(other.getTxHash());
+              .equals(other.getTxHash());
       result = result && getSigner()
-          .equals(other.getSigner());
+              .equals(other.getSigner());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -5751,73 +5888,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.SignedTransaction parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.SignedTransaction parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.SignedTransaction parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.SignedTransaction parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.SignedTransaction parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.SignedTransaction parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.SignedTransaction parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.SignedTransaction parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.SignedTransaction parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.SignedTransaction parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.SignedTransaction parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.SignedTransaction parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -5829,12 +5966,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -5842,19 +5979,19 @@ public final class Blockchain {
      * Protobuf type {@code SignedTransaction}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:SignedTransaction)
-        Blockchain.SignedTransactionOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:SignedTransaction)
+            Blockchain.SignedTransactionOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_SignedTransaction_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_SignedTransaction_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.SignedTransaction.class, Blockchain.SignedTransaction.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.SignedTransaction.class, Blockchain.SignedTransaction.Builder.class);
       }
 
       // Construct using Blockchain.SignedTransaction.newBuilder()
@@ -5863,7 +6000,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -5888,7 +6025,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_SignedTransaction_descriptor;
       }
 
@@ -5921,26 +6058,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -5973,9 +6110,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.SignedTransaction parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -5992,7 +6129,7 @@ public final class Blockchain {
 
       private Blockchain.UnverifiedTransaction transactionWithSig_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.UnverifiedTransaction, Blockchain.UnverifiedTransaction.Builder, Blockchain.UnverifiedTransactionOrBuilder> transactionWithSigBuilder_;
+              Blockchain.UnverifiedTransaction, Blockchain.UnverifiedTransaction.Builder, Blockchain.UnverifiedTransactionOrBuilder> transactionWithSigBuilder_;
       /**
        * <code>.UnverifiedTransaction transaction_with_sig = 1;</code>
        */
@@ -6029,7 +6166,7 @@ public final class Blockchain {
        * <code>.UnverifiedTransaction transaction_with_sig = 1;</code>
        */
       public Builder setTransactionWithSig(
-          Blockchain.UnverifiedTransaction.Builder builderForValue) {
+              Blockchain.UnverifiedTransaction.Builder builderForValue) {
         if (transactionWithSigBuilder_ == null) {
           transactionWithSig_ = builderForValue.build();
           onChanged();
@@ -6046,7 +6183,7 @@ public final class Blockchain {
         if (transactionWithSigBuilder_ == null) {
           if (transactionWithSig_ != null) {
             transactionWithSig_ =
-              Blockchain.UnverifiedTransaction.newBuilder(transactionWithSig_).mergeFrom(value).buildPartial();
+                    Blockchain.UnverifiedTransaction.newBuilder(transactionWithSig_).mergeFrom(value).buildPartial();
           } else {
             transactionWithSig_ = value;
           }
@@ -6075,7 +6212,7 @@ public final class Blockchain {
        * <code>.UnverifiedTransaction transaction_with_sig = 1;</code>
        */
       public Blockchain.UnverifiedTransaction.Builder getTransactionWithSigBuilder() {
-        
+
         onChanged();
         return getTransactionWithSigFieldBuilder().getBuilder();
       }
@@ -6087,18 +6224,18 @@ public final class Blockchain {
           return transactionWithSigBuilder_.getMessageOrBuilder();
         } else {
           return transactionWithSig_ == null ?
-              Blockchain.UnverifiedTransaction.getDefaultInstance() : transactionWithSig_;
+                  Blockchain.UnverifiedTransaction.getDefaultInstance() : transactionWithSig_;
         }
       }
       /**
        * <code>.UnverifiedTransaction transaction_with_sig = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.UnverifiedTransaction, Blockchain.UnverifiedTransaction.Builder, Blockchain.UnverifiedTransactionOrBuilder> 
-          getTransactionWithSigFieldBuilder() {
+              Blockchain.UnverifiedTransaction, Blockchain.UnverifiedTransaction.Builder, Blockchain.UnverifiedTransactionOrBuilder>
+      getTransactionWithSigFieldBuilder() {
         if (transactionWithSigBuilder_ == null) {
           transactionWithSigBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.UnverifiedTransaction, Blockchain.UnverifiedTransaction.Builder, Blockchain.UnverifiedTransactionOrBuilder>(
+                  Blockchain.UnverifiedTransaction, Blockchain.UnverifiedTransaction.Builder, Blockchain.UnverifiedTransactionOrBuilder>(
                   getTransactionWithSig(),
                   getParentForChildren(),
                   isClean());
@@ -6127,9 +6264,9 @@ public final class Blockchain {
        */
       public Builder setTxHash(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         txHash_ = value;
         onChanged();
         return this;
@@ -6142,7 +6279,7 @@ public final class Blockchain {
        * <code>bytes tx_hash = 2;</code>
        */
       public Builder clearTxHash() {
-        
+
         txHash_ = getDefaultInstance().getTxHash();
         onChanged();
         return this;
@@ -6168,9 +6305,9 @@ public final class Blockchain {
        */
       public Builder setSigner(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         signer_ = value;
         onChanged();
         return this;
@@ -6183,18 +6320,18 @@ public final class Blockchain {
        * <code>bytes signer = 3;</code>
        */
       public Builder clearSigner() {
-        
+
         signer_ = getDefaultInstance().getSigner();
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -6213,11 +6350,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<SignedTransaction>
-        PARSER = new com.google.protobuf.AbstractParser<SignedTransaction>() {
+            PARSER = new com.google.protobuf.AbstractParser<SignedTransaction>() {
       public SignedTransaction parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new SignedTransaction(input, extensionRegistry);
       }
     };
@@ -6238,14 +6375,14 @@ public final class Blockchain {
   }
 
   public interface BlockBodyOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:BlockBody)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:BlockBody)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>repeated .SignedTransaction transactions = 1;</code>
      */
-    java.util.List<Blockchain.SignedTransaction> 
-        getTransactionsList();
+    java.util.List<Blockchain.SignedTransaction>
+    getTransactionsList();
     /**
      * <code>repeated .SignedTransaction transactions = 1;</code>
      */
@@ -6257,22 +6394,22 @@ public final class Blockchain {
     /**
      * <code>repeated .SignedTransaction transactions = 1;</code>
      */
-    java.util.List<? extends Blockchain.SignedTransactionOrBuilder> 
-        getTransactionsOrBuilderList();
+    java.util.List<? extends Blockchain.SignedTransactionOrBuilder>
+    getTransactionsOrBuilderList();
     /**
      * <code>repeated .SignedTransaction transactions = 1;</code>
      */
     Blockchain.SignedTransactionOrBuilder getTransactionsOrBuilder(
-        int index);
+            int index);
   }
   /**
    * Protobuf type {@code BlockBody}
    */
   public  static final class BlockBody extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:BlockBody)
-      BlockBodyOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:BlockBody)
+          BlockBodyOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use BlockBody.newBuilder() to construct.
     private BlockBody(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -6287,16 +6424,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private BlockBody(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -6307,7 +6444,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -6318,7 +6455,7 @@ public final class Blockchain {
                 mutable_bitField0_ |= 0x00000001;
               }
               transactions_.add(
-                  input.readMessage(Blockchain.SignedTransaction.parser(), extensionRegistry));
+                      input.readMessage(Blockchain.SignedTransaction.parser(), extensionRegistry));
               break;
             }
           }
@@ -6327,7 +6464,7 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           transactions_ = java.util.Collections.unmodifiableList(transactions_);
@@ -6337,15 +6474,15 @@ public final class Blockchain {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_BlockBody_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_BlockBody_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.BlockBody.class, Blockchain.BlockBody.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.BlockBody.class, Blockchain.BlockBody.Builder.class);
     }
 
     public static final int TRANSACTIONS_FIELD_NUMBER = 1;
@@ -6359,8 +6496,8 @@ public final class Blockchain {
     /**
      * <code>repeated .SignedTransaction transactions = 1;</code>
      */
-    public java.util.List<? extends Blockchain.SignedTransactionOrBuilder> 
-        getTransactionsOrBuilderList() {
+    public java.util.List<? extends Blockchain.SignedTransactionOrBuilder>
+    getTransactionsOrBuilderList() {
       return transactions_;
     }
     /**
@@ -6379,7 +6516,7 @@ public final class Blockchain {
      * <code>repeated .SignedTransaction transactions = 1;</code>
      */
     public Blockchain.SignedTransactionOrBuilder getTransactionsOrBuilder(
-        int index) {
+            int index) {
       return transactions_.get(index);
     }
 
@@ -6394,7 +6531,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       for (int i = 0; i < transactions_.size(); i++) {
         output.writeMessage(1, transactions_.get(i));
       }
@@ -6408,7 +6545,7 @@ public final class Blockchain {
       size = 0;
       for (int i = 0; i < transactions_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, transactions_.get(i));
+                .computeMessageSize(1, transactions_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -6418,7 +6555,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.BlockBody)) {
         return super.equals(obj);
@@ -6427,7 +6564,7 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && getTransactionsList()
-          .equals(other.getTransactionsList());
+              .equals(other.getTransactionsList());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -6449,73 +6586,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.BlockBody parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockBody parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockBody parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockBody parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockBody parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockBody parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockBody parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockBody parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockBody parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.BlockBody parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockBody parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockBody parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -6527,12 +6664,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -6540,19 +6677,19 @@ public final class Blockchain {
      * Protobuf type {@code BlockBody}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:BlockBody)
-        Blockchain.BlockBodyOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:BlockBody)
+            Blockchain.BlockBodyOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_BlockBody_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_BlockBody_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.BlockBody.class, Blockchain.BlockBody.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.BlockBody.class, Blockchain.BlockBody.Builder.class);
       }
 
       // Construct using Blockchain.BlockBody.newBuilder()
@@ -6561,7 +6698,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -6583,7 +6720,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_BlockBody_descriptor;
       }
 
@@ -6619,26 +6756,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -6670,9 +6807,9 @@ public final class Blockchain {
               transactionsBuilder_ = null;
               transactions_ = other.transactions_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              transactionsBuilder_ = 
-                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getTransactionsFieldBuilder() : null;
+              transactionsBuilder_ =
+                      com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                              getTransactionsFieldBuilder() : null;
             } else {
               transactionsBuilder_.addAllMessages(other.transactions_);
             }
@@ -6688,9 +6825,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.BlockBody parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -6707,16 +6844,16 @@ public final class Blockchain {
       private int bitField0_;
 
       private java.util.List<Blockchain.SignedTransaction> transactions_ =
-        java.util.Collections.emptyList();
+              java.util.Collections.emptyList();
       private void ensureTransactionsIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           transactions_ = new java.util.ArrayList<Blockchain.SignedTransaction>(transactions_);
           bitField0_ |= 0x00000001;
-         }
+        }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          Blockchain.SignedTransaction, Blockchain.SignedTransaction.Builder, Blockchain.SignedTransactionOrBuilder> transactionsBuilder_;
+              Blockchain.SignedTransaction, Blockchain.SignedTransaction.Builder, Blockchain.SignedTransactionOrBuilder> transactionsBuilder_;
 
       /**
        * <code>repeated .SignedTransaction transactions = 1;</code>
@@ -6752,7 +6889,7 @@ public final class Blockchain {
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Builder setTransactions(
-          int index, Blockchain.SignedTransaction value) {
+              int index, Blockchain.SignedTransaction value) {
         if (transactionsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -6769,7 +6906,7 @@ public final class Blockchain {
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Builder setTransactions(
-          int index, Blockchain.SignedTransaction.Builder builderForValue) {
+              int index, Blockchain.SignedTransaction.Builder builderForValue) {
         if (transactionsBuilder_ == null) {
           ensureTransactionsIsMutable();
           transactions_.set(index, builderForValue.build());
@@ -6799,7 +6936,7 @@ public final class Blockchain {
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Builder addTransactions(
-          int index, Blockchain.SignedTransaction value) {
+              int index, Blockchain.SignedTransaction value) {
         if (transactionsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -6816,7 +6953,7 @@ public final class Blockchain {
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Builder addTransactions(
-          Blockchain.SignedTransaction.Builder builderForValue) {
+              Blockchain.SignedTransaction.Builder builderForValue) {
         if (transactionsBuilder_ == null) {
           ensureTransactionsIsMutable();
           transactions_.add(builderForValue.build());
@@ -6830,7 +6967,7 @@ public final class Blockchain {
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Builder addTransactions(
-          int index, Blockchain.SignedTransaction.Builder builderForValue) {
+              int index, Blockchain.SignedTransaction.Builder builderForValue) {
         if (transactionsBuilder_ == null) {
           ensureTransactionsIsMutable();
           transactions_.add(index, builderForValue.build());
@@ -6844,11 +6981,11 @@ public final class Blockchain {
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Builder addAllTransactions(
-          java.lang.Iterable<? extends Blockchain.SignedTransaction> values) {
+              java.lang.Iterable<? extends Blockchain.SignedTransaction> values) {
         if (transactionsBuilder_ == null) {
           ensureTransactionsIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, transactions_);
+                  values, transactions_);
           onChanged();
         } else {
           transactionsBuilder_.addAllMessages(values);
@@ -6885,14 +7022,14 @@ public final class Blockchain {
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Blockchain.SignedTransaction.Builder getTransactionsBuilder(
-          int index) {
+              int index) {
         return getTransactionsFieldBuilder().getBuilder(index);
       }
       /**
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Blockchain.SignedTransactionOrBuilder getTransactionsOrBuilder(
-          int index) {
+              int index) {
         if (transactionsBuilder_ == null) {
           return transactions_.get(index);  } else {
           return transactionsBuilder_.getMessageOrBuilder(index);
@@ -6901,8 +7038,8 @@ public final class Blockchain {
       /**
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
-      public java.util.List<? extends Blockchain.SignedTransactionOrBuilder> 
-           getTransactionsOrBuilderList() {
+      public java.util.List<? extends Blockchain.SignedTransactionOrBuilder>
+      getTransactionsOrBuilderList() {
         if (transactionsBuilder_ != null) {
           return transactionsBuilder_.getMessageOrBuilderList();
         } else {
@@ -6914,29 +7051,29 @@ public final class Blockchain {
        */
       public Blockchain.SignedTransaction.Builder addTransactionsBuilder() {
         return getTransactionsFieldBuilder().addBuilder(
-            Blockchain.SignedTransaction.getDefaultInstance());
+                Blockchain.SignedTransaction.getDefaultInstance());
       }
       /**
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
       public Blockchain.SignedTransaction.Builder addTransactionsBuilder(
-          int index) {
+              int index) {
         return getTransactionsFieldBuilder().addBuilder(
-            index, Blockchain.SignedTransaction.getDefaultInstance());
+                index, Blockchain.SignedTransaction.getDefaultInstance());
       }
       /**
        * <code>repeated .SignedTransaction transactions = 1;</code>
        */
-      public java.util.List<Blockchain.SignedTransaction.Builder> 
-           getTransactionsBuilderList() {
+      public java.util.List<Blockchain.SignedTransaction.Builder>
+      getTransactionsBuilderList() {
         return getTransactionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          Blockchain.SignedTransaction, Blockchain.SignedTransaction.Builder, Blockchain.SignedTransactionOrBuilder> 
-          getTransactionsFieldBuilder() {
+              Blockchain.SignedTransaction, Blockchain.SignedTransaction.Builder, Blockchain.SignedTransactionOrBuilder>
+      getTransactionsFieldBuilder() {
         if (transactionsBuilder_ == null) {
           transactionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              Blockchain.SignedTransaction, Blockchain.SignedTransaction.Builder, Blockchain.SignedTransactionOrBuilder>(
+                  Blockchain.SignedTransaction, Blockchain.SignedTransaction.Builder, Blockchain.SignedTransactionOrBuilder>(
                   transactions_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
@@ -6946,12 +7083,12 @@ public final class Blockchain {
         return transactionsBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -6970,11 +7107,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<BlockBody>
-        PARSER = new com.google.protobuf.AbstractParser<BlockBody>() {
+            PARSER = new com.google.protobuf.AbstractParser<BlockBody>() {
       public BlockBody parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new BlockBody(input, extensionRegistry);
       }
     };
@@ -6995,8 +7132,8 @@ public final class Blockchain {
   }
 
   public interface BlockOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Block)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:Block)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>uint32 version = 1;</code>
@@ -7033,10 +7170,10 @@ public final class Blockchain {
    * Protobuf type {@code Block}
    */
   public  static final class Block extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Block)
-      BlockOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:Block)
+          BlockOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use Block.newBuilder() to construct.
     private Block(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -7051,16 +7188,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private Block(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -7071,7 +7208,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -7113,22 +7250,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_Block_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_Block_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.Block.class, Blockchain.Block.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.Block.class, Blockchain.Block.Builder.class);
     }
 
     public static final int VERSION_FIELD_NUMBER = 1;
@@ -7193,7 +7330,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (version_ != 0) {
         output.writeUInt32(1, version_);
       }
@@ -7213,15 +7350,15 @@ public final class Blockchain {
       size = 0;
       if (version_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, version_);
+                .computeUInt32Size(1, version_);
       }
       if (header_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getHeader());
+                .computeMessageSize(2, getHeader());
       }
       if (body_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getBody());
+                .computeMessageSize(3, getBody());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -7231,7 +7368,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.Block)) {
         return super.equals(obj);
@@ -7240,16 +7377,16 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && (getVersion()
-          == other.getVersion());
+              == other.getVersion());
       result = result && (hasHeader() == other.hasHeader());
       if (hasHeader()) {
         result = result && getHeader()
-            .equals(other.getHeader());
+                .equals(other.getHeader());
       }
       result = result && (hasBody() == other.hasBody());
       if (hasBody()) {
         result = result && getBody()
-            .equals(other.getBody());
+                .equals(other.getBody());
       }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
@@ -7278,73 +7415,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.Block parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Block parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Block parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Block parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Block parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.Block parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.Block parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Block parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Block parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.Block parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.Block parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.Block parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -7356,12 +7493,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -7369,19 +7506,19 @@ public final class Blockchain {
      * Protobuf type {@code Block}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Block)
-        Blockchain.BlockOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:Block)
+            Blockchain.BlockOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_Block_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_Block_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.Block.class, Blockchain.Block.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.Block.class, Blockchain.Block.Builder.class);
       }
 
       // Construct using Blockchain.Block.newBuilder()
@@ -7390,7 +7527,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -7419,7 +7556,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_Block_descriptor;
       }
 
@@ -7456,26 +7593,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -7508,9 +7645,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.Block parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -7536,7 +7673,7 @@ public final class Blockchain {
        * <code>uint32 version = 1;</code>
        */
       public Builder setVersion(int value) {
-        
+
         version_ = value;
         onChanged();
         return this;
@@ -7545,7 +7682,7 @@ public final class Blockchain {
        * <code>uint32 version = 1;</code>
        */
       public Builder clearVersion() {
-        
+
         version_ = 0;
         onChanged();
         return this;
@@ -7553,7 +7690,7 @@ public final class Blockchain {
 
       private Blockchain.BlockHeader header_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.BlockHeader, Blockchain.BlockHeader.Builder, Blockchain.BlockHeaderOrBuilder> headerBuilder_;
+              Blockchain.BlockHeader, Blockchain.BlockHeader.Builder, Blockchain.BlockHeaderOrBuilder> headerBuilder_;
       /**
        * <code>.BlockHeader header = 2;</code>
        */
@@ -7590,7 +7727,7 @@ public final class Blockchain {
        * <code>.BlockHeader header = 2;</code>
        */
       public Builder setHeader(
-          Blockchain.BlockHeader.Builder builderForValue) {
+              Blockchain.BlockHeader.Builder builderForValue) {
         if (headerBuilder_ == null) {
           header_ = builderForValue.build();
           onChanged();
@@ -7607,7 +7744,7 @@ public final class Blockchain {
         if (headerBuilder_ == null) {
           if (header_ != null) {
             header_ =
-              Blockchain.BlockHeader.newBuilder(header_).mergeFrom(value).buildPartial();
+                    Blockchain.BlockHeader.newBuilder(header_).mergeFrom(value).buildPartial();
           } else {
             header_ = value;
           }
@@ -7636,7 +7773,7 @@ public final class Blockchain {
        * <code>.BlockHeader header = 2;</code>
        */
       public Blockchain.BlockHeader.Builder getHeaderBuilder() {
-        
+
         onChanged();
         return getHeaderFieldBuilder().getBuilder();
       }
@@ -7648,18 +7785,18 @@ public final class Blockchain {
           return headerBuilder_.getMessageOrBuilder();
         } else {
           return header_ == null ?
-              Blockchain.BlockHeader.getDefaultInstance() : header_;
+                  Blockchain.BlockHeader.getDefaultInstance() : header_;
         }
       }
       /**
        * <code>.BlockHeader header = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.BlockHeader, Blockchain.BlockHeader.Builder, Blockchain.BlockHeaderOrBuilder> 
-          getHeaderFieldBuilder() {
+              Blockchain.BlockHeader, Blockchain.BlockHeader.Builder, Blockchain.BlockHeaderOrBuilder>
+      getHeaderFieldBuilder() {
         if (headerBuilder_ == null) {
           headerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.BlockHeader, Blockchain.BlockHeader.Builder, Blockchain.BlockHeaderOrBuilder>(
+                  Blockchain.BlockHeader, Blockchain.BlockHeader.Builder, Blockchain.BlockHeaderOrBuilder>(
                   getHeader(),
                   getParentForChildren(),
                   isClean());
@@ -7670,7 +7807,7 @@ public final class Blockchain {
 
       private Blockchain.BlockBody body_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder> bodyBuilder_;
+              Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder> bodyBuilder_;
       /**
        * <code>.BlockBody body = 3;</code>
        */
@@ -7707,7 +7844,7 @@ public final class Blockchain {
        * <code>.BlockBody body = 3;</code>
        */
       public Builder setBody(
-          Blockchain.BlockBody.Builder builderForValue) {
+              Blockchain.BlockBody.Builder builderForValue) {
         if (bodyBuilder_ == null) {
           body_ = builderForValue.build();
           onChanged();
@@ -7724,7 +7861,7 @@ public final class Blockchain {
         if (bodyBuilder_ == null) {
           if (body_ != null) {
             body_ =
-              Blockchain.BlockBody.newBuilder(body_).mergeFrom(value).buildPartial();
+                    Blockchain.BlockBody.newBuilder(body_).mergeFrom(value).buildPartial();
           } else {
             body_ = value;
           }
@@ -7753,7 +7890,7 @@ public final class Blockchain {
        * <code>.BlockBody body = 3;</code>
        */
       public Blockchain.BlockBody.Builder getBodyBuilder() {
-        
+
         onChanged();
         return getBodyFieldBuilder().getBuilder();
       }
@@ -7765,18 +7902,18 @@ public final class Blockchain {
           return bodyBuilder_.getMessageOrBuilder();
         } else {
           return body_ == null ?
-              Blockchain.BlockBody.getDefaultInstance() : body_;
+                  Blockchain.BlockBody.getDefaultInstance() : body_;
         }
       }
       /**
        * <code>.BlockBody body = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder> 
-          getBodyFieldBuilder() {
+              Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder>
+      getBodyFieldBuilder() {
         if (bodyBuilder_ == null) {
           bodyBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder>(
+                  Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder>(
                   getBody(),
                   getParentForChildren(),
                   isClean());
@@ -7785,12 +7922,12 @@ public final class Blockchain {
         return bodyBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -7809,11 +7946,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<Block>
-        PARSER = new com.google.protobuf.AbstractParser<Block>() {
+            PARSER = new com.google.protobuf.AbstractParser<Block>() {
       public Block parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new Block(input, extensionRegistry);
       }
     };
@@ -7834,8 +7971,8 @@ public final class Blockchain {
   }
 
   public interface BlockWithProofOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:BlockWithProof)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:BlockWithProof)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>.Block blk = 1;</code>
@@ -7867,10 +8004,10 @@ public final class Blockchain {
    * Protobuf type {@code BlockWithProof}
    */
   public  static final class BlockWithProof extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:BlockWithProof)
-      BlockWithProofOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:BlockWithProof)
+          BlockWithProofOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use BlockWithProof.newBuilder() to construct.
     private BlockWithProof(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -7884,16 +8021,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private BlockWithProof(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -7904,7 +8041,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -7941,22 +8078,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_BlockWithProof_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_BlockWithProof_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.BlockWithProof.class, Blockchain.BlockWithProof.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.BlockWithProof.class, Blockchain.BlockWithProof.Builder.class);
     }
 
     public static final int BLK_FIELD_NUMBER = 1;
@@ -8012,7 +8149,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (blk_ != null) {
         output.writeMessage(1, getBlk());
       }
@@ -8029,11 +8166,11 @@ public final class Blockchain {
       size = 0;
       if (blk_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getBlk());
+                .computeMessageSize(1, getBlk());
       }
       if (proof_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getProof());
+                .computeMessageSize(2, getProof());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -8043,7 +8180,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.BlockWithProof)) {
         return super.equals(obj);
@@ -8054,12 +8191,12 @@ public final class Blockchain {
       result = result && (hasBlk() == other.hasBlk());
       if (hasBlk()) {
         result = result && getBlk()
-            .equals(other.getBlk());
+                .equals(other.getBlk());
       }
       result = result && (hasProof() == other.hasProof());
       if (hasProof()) {
         result = result && getProof()
-            .equals(other.getProof());
+                .equals(other.getProof());
       }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
@@ -8086,73 +8223,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.BlockWithProof parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockWithProof parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockWithProof parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockWithProof parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockWithProof parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockWithProof parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockWithProof parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockWithProof parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockWithProof parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.BlockWithProof parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockWithProof parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockWithProof parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -8164,12 +8301,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -8177,19 +8314,19 @@ public final class Blockchain {
      * Protobuf type {@code BlockWithProof}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:BlockWithProof)
-        Blockchain.BlockWithProofOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:BlockWithProof)
+            Blockchain.BlockWithProofOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_BlockWithProof_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_BlockWithProof_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.BlockWithProof.class, Blockchain.BlockWithProof.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.BlockWithProof.class, Blockchain.BlockWithProof.Builder.class);
       }
 
       // Construct using Blockchain.BlockWithProof.newBuilder()
@@ -8198,7 +8335,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -8225,7 +8362,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_BlockWithProof_descriptor;
       }
 
@@ -8261,26 +8398,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -8310,9 +8447,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.BlockWithProof parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -8329,7 +8466,7 @@ public final class Blockchain {
 
       private Blockchain.Block blk_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Block, Blockchain.Block.Builder, Blockchain.BlockOrBuilder> blkBuilder_;
+              Blockchain.Block, Blockchain.Block.Builder, Blockchain.BlockOrBuilder> blkBuilder_;
       /**
        * <code>.Block blk = 1;</code>
        */
@@ -8366,7 +8503,7 @@ public final class Blockchain {
        * <code>.Block blk = 1;</code>
        */
       public Builder setBlk(
-          Blockchain.Block.Builder builderForValue) {
+              Blockchain.Block.Builder builderForValue) {
         if (blkBuilder_ == null) {
           blk_ = builderForValue.build();
           onChanged();
@@ -8383,7 +8520,7 @@ public final class Blockchain {
         if (blkBuilder_ == null) {
           if (blk_ != null) {
             blk_ =
-              Blockchain.Block.newBuilder(blk_).mergeFrom(value).buildPartial();
+                    Blockchain.Block.newBuilder(blk_).mergeFrom(value).buildPartial();
           } else {
             blk_ = value;
           }
@@ -8412,7 +8549,7 @@ public final class Blockchain {
        * <code>.Block blk = 1;</code>
        */
       public Blockchain.Block.Builder getBlkBuilder() {
-        
+
         onChanged();
         return getBlkFieldBuilder().getBuilder();
       }
@@ -8424,18 +8561,18 @@ public final class Blockchain {
           return blkBuilder_.getMessageOrBuilder();
         } else {
           return blk_ == null ?
-              Blockchain.Block.getDefaultInstance() : blk_;
+                  Blockchain.Block.getDefaultInstance() : blk_;
         }
       }
       /**
        * <code>.Block blk = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Block, Blockchain.Block.Builder, Blockchain.BlockOrBuilder> 
-          getBlkFieldBuilder() {
+              Blockchain.Block, Blockchain.Block.Builder, Blockchain.BlockOrBuilder>
+      getBlkFieldBuilder() {
         if (blkBuilder_ == null) {
           blkBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.Block, Blockchain.Block.Builder, Blockchain.BlockOrBuilder>(
+                  Blockchain.Block, Blockchain.Block.Builder, Blockchain.BlockOrBuilder>(
                   getBlk(),
                   getParentForChildren(),
                   isClean());
@@ -8446,7 +8583,7 @@ public final class Blockchain {
 
       private Blockchain.Proof proof_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder> proofBuilder_;
+              Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder> proofBuilder_;
       /**
        * <code>.Proof proof = 2;</code>
        */
@@ -8483,7 +8620,7 @@ public final class Blockchain {
        * <code>.Proof proof = 2;</code>
        */
       public Builder setProof(
-          Blockchain.Proof.Builder builderForValue) {
+              Blockchain.Proof.Builder builderForValue) {
         if (proofBuilder_ == null) {
           proof_ = builderForValue.build();
           onChanged();
@@ -8500,7 +8637,7 @@ public final class Blockchain {
         if (proofBuilder_ == null) {
           if (proof_ != null) {
             proof_ =
-              Blockchain.Proof.newBuilder(proof_).mergeFrom(value).buildPartial();
+                    Blockchain.Proof.newBuilder(proof_).mergeFrom(value).buildPartial();
           } else {
             proof_ = value;
           }
@@ -8529,7 +8666,7 @@ public final class Blockchain {
        * <code>.Proof proof = 2;</code>
        */
       public Blockchain.Proof.Builder getProofBuilder() {
-        
+
         onChanged();
         return getProofFieldBuilder().getBuilder();
       }
@@ -8541,18 +8678,18 @@ public final class Blockchain {
           return proofBuilder_.getMessageOrBuilder();
         } else {
           return proof_ == null ?
-              Blockchain.Proof.getDefaultInstance() : proof_;
+                  Blockchain.Proof.getDefaultInstance() : proof_;
         }
       }
       /**
        * <code>.Proof proof = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder> 
-          getProofFieldBuilder() {
+              Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder>
+      getProofFieldBuilder() {
         if (proofBuilder_ == null) {
           proofBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder>(
+                  Blockchain.Proof, Blockchain.Proof.Builder, Blockchain.ProofOrBuilder>(
                   getProof(),
                   getParentForChildren(),
                   isClean());
@@ -8561,12 +8698,12 @@ public final class Blockchain {
         return proofBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -8585,11 +8722,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<BlockWithProof>
-        PARSER = new com.google.protobuf.AbstractParser<BlockWithProof>() {
+            PARSER = new com.google.protobuf.AbstractParser<BlockWithProof>() {
       public BlockWithProof parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new BlockWithProof(input, extensionRegistry);
       }
     };
@@ -8610,8 +8747,8 @@ public final class Blockchain {
   }
 
   public interface BlockTxsOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:BlockTxs)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:BlockTxs)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>uint64 height = 1;</code>
@@ -8635,10 +8772,10 @@ public final class Blockchain {
    * Protobuf type {@code BlockTxs}
    */
   public  static final class BlockTxs extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:BlockTxs)
-      BlockTxsOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:BlockTxs)
+          BlockTxsOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use BlockTxs.newBuilder() to construct.
     private BlockTxs(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -8653,16 +8790,16 @@ public final class Blockchain {
       return this.unknownFields;
     }
     private BlockTxs(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -8673,7 +8810,7 @@ public final class Blockchain {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -8702,22 +8839,22 @@ public final class Blockchain {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return Blockchain.internal_static_BlockTxs_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return Blockchain.internal_static_BlockTxs_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Blockchain.BlockTxs.class, Blockchain.BlockTxs.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      Blockchain.BlockTxs.class, Blockchain.BlockTxs.Builder.class);
     }
 
     public static final int HEIGHT_FIELD_NUMBER = 1;
@@ -8761,7 +8898,7 @@ public final class Blockchain {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (height_ != 0L) {
         output.writeUInt64(1, height_);
       }
@@ -8778,11 +8915,11 @@ public final class Blockchain {
       size = 0;
       if (height_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(1, height_);
+                .computeUInt64Size(1, height_);
       }
       if (body_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getBody());
+                .computeMessageSize(3, getBody());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -8792,7 +8929,7 @@ public final class Blockchain {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof Blockchain.BlockTxs)) {
         return super.equals(obj);
@@ -8801,11 +8938,11 @@ public final class Blockchain {
 
       boolean result = true;
       result = result && (getHeight()
-          == other.getHeight());
+              == other.getHeight());
       result = result && (hasBody() == other.hasBody());
       if (hasBody()) {
         result = result && getBody()
-            .equals(other.getBody());
+                .equals(other.getBody());
       }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
@@ -8820,7 +8957,7 @@ public final class Blockchain {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getHeight());
+              getHeight());
       if (hasBody()) {
         hash = (37 * hash) + BODY_FIELD_NUMBER;
         hash = (53 * hash) + getBody().hashCode();
@@ -8831,73 +8968,73 @@ public final class Blockchain {
     }
 
     public static Blockchain.BlockTxs parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockTxs parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockTxs parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockTxs parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockTxs parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static Blockchain.BlockTxs parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static Blockchain.BlockTxs parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockTxs parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockTxs parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static Blockchain.BlockTxs parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static Blockchain.BlockTxs parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static Blockchain.BlockTxs parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -8909,12 +9046,12 @@ public final class Blockchain {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -8922,19 +9059,19 @@ public final class Blockchain {
      * Protobuf type {@code BlockTxs}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:BlockTxs)
-        Blockchain.BlockTxsOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:BlockTxs)
+            Blockchain.BlockTxsOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return Blockchain.internal_static_BlockTxs_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return Blockchain.internal_static_BlockTxs_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Blockchain.BlockTxs.class, Blockchain.BlockTxs.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        Blockchain.BlockTxs.class, Blockchain.BlockTxs.Builder.class);
       }
 
       // Construct using Blockchain.BlockTxs.newBuilder()
@@ -8943,7 +9080,7 @@ public final class Blockchain {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -8966,7 +9103,7 @@ public final class Blockchain {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return Blockchain.internal_static_BlockTxs_descriptor;
       }
 
@@ -8998,26 +9135,26 @@ public final class Blockchain {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -9047,9 +9184,9 @@ public final class Blockchain {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         Blockchain.BlockTxs parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -9075,7 +9212,7 @@ public final class Blockchain {
        * <code>uint64 height = 1;</code>
        */
       public Builder setHeight(long value) {
-        
+
         height_ = value;
         onChanged();
         return this;
@@ -9084,7 +9221,7 @@ public final class Blockchain {
        * <code>uint64 height = 1;</code>
        */
       public Builder clearHeight() {
-        
+
         height_ = 0L;
         onChanged();
         return this;
@@ -9092,7 +9229,7 @@ public final class Blockchain {
 
       private Blockchain.BlockBody body_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder> bodyBuilder_;
+              Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder> bodyBuilder_;
       /**
        * <code>.BlockBody body = 3;</code>
        */
@@ -9129,7 +9266,7 @@ public final class Blockchain {
        * <code>.BlockBody body = 3;</code>
        */
       public Builder setBody(
-          Blockchain.BlockBody.Builder builderForValue) {
+              Blockchain.BlockBody.Builder builderForValue) {
         if (bodyBuilder_ == null) {
           body_ = builderForValue.build();
           onChanged();
@@ -9146,7 +9283,7 @@ public final class Blockchain {
         if (bodyBuilder_ == null) {
           if (body_ != null) {
             body_ =
-              Blockchain.BlockBody.newBuilder(body_).mergeFrom(value).buildPartial();
+                    Blockchain.BlockBody.newBuilder(body_).mergeFrom(value).buildPartial();
           } else {
             body_ = value;
           }
@@ -9175,7 +9312,7 @@ public final class Blockchain {
        * <code>.BlockBody body = 3;</code>
        */
       public Blockchain.BlockBody.Builder getBodyBuilder() {
-        
+
         onChanged();
         return getBodyFieldBuilder().getBuilder();
       }
@@ -9187,18 +9324,18 @@ public final class Blockchain {
           return bodyBuilder_.getMessageOrBuilder();
         } else {
           return body_ == null ?
-              Blockchain.BlockBody.getDefaultInstance() : body_;
+                  Blockchain.BlockBody.getDefaultInstance() : body_;
         }
       }
       /**
        * <code>.BlockBody body = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder> 
-          getBodyFieldBuilder() {
+              Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder>
+      getBodyFieldBuilder() {
         if (bodyBuilder_ == null) {
           bodyBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder>(
+                  Blockchain.BlockBody, Blockchain.BlockBody.Builder, Blockchain.BlockBodyOrBuilder>(
                   getBody(),
                   getParentForChildren(),
                   isClean());
@@ -9207,12 +9344,12 @@ public final class Blockchain {
         return bodyBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -9231,11 +9368,11 @@ public final class Blockchain {
     }
 
     private static final com.google.protobuf.Parser<BlockTxs>
-        PARSER = new com.google.protobuf.AbstractParser<BlockTxs>() {
+            PARSER = new com.google.protobuf.AbstractParser<BlockTxs>() {
       public BlockTxs parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new BlockTxs(input, extensionRegistry);
       }
     };
@@ -9256,201 +9393,201 @@ public final class Blockchain {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Proof_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Proof_fieldAccessorTable;
+          internal_static_Proof_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_Proof_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BlockHeader_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_BlockHeader_fieldAccessorTable;
+          internal_static_BlockHeader_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_BlockHeader_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Status_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Status_fieldAccessorTable;
+          internal_static_Status_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_Status_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_AccountGasLimit_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_AccountGasLimit_fieldAccessorTable;
+          internal_static_AccountGasLimit_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_AccountGasLimit_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_AccountGasLimit_SpecificGasLimitEntry_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_AccountGasLimit_SpecificGasLimitEntry_fieldAccessorTable;
+          internal_static_AccountGasLimit_SpecificGasLimitEntry_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_AccountGasLimit_SpecificGasLimitEntry_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_RichStatus_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_RichStatus_fieldAccessorTable;
+          internal_static_RichStatus_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_RichStatus_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Transaction_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Transaction_fieldAccessorTable;
+          internal_static_Transaction_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_Transaction_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_UnverifiedTransaction_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_UnverifiedTransaction_fieldAccessorTable;
+          internal_static_UnverifiedTransaction_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_UnverifiedTransaction_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_SignedTransaction_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_SignedTransaction_fieldAccessorTable;
+          internal_static_SignedTransaction_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_SignedTransaction_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BlockBody_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_BlockBody_fieldAccessorTable;
+          internal_static_BlockBody_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_BlockBody_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Block_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Block_fieldAccessorTable;
+          internal_static_Block_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_Block_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BlockWithProof_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_BlockWithProof_fieldAccessorTable;
+          internal_static_BlockWithProof_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_BlockWithProof_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BlockTxs_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_BlockTxs_fieldAccessorTable;
+          internal_static_BlockTxs_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_BlockTxs_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  getDescriptor() {
     return descriptor;
   }
   private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+          descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020blockchain.proto\"2\n\005Proof\022\017\n\007content\030\001" +
-      " \001(\014\022\030\n\004type\030\002 \001(\0162\n.ProofType\"\304\001\n\013Block" +
-      "Header\022\020\n\010prevhash\030\001 \001(\014\022\021\n\ttimestamp\030\002 " +
-      "\001(\004\022\016\n\006height\030\003 \001(\004\022\022\n\nstate_root\030\004 \001(\014\022" +
-      "\031\n\021transactions_root\030\005 \001(\014\022\025\n\rreceipts_r" +
-      "oot\030\006 \001(\014\022\020\n\010gas_used\030\007 \001(\004\022\021\n\tgas_limit" +
-      "\030\010 \001(\004\022\025\n\005proof\030\t \001(\0132\006.Proof\"&\n\006Status\022" +
-      "\014\n\004hash\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\"\250\001\n\017Accoun" +
-      "tGasLimit\022\030\n\020common_gas_limit\030\001 \001(\004\022B\n\022s" +
-      "pecific_gas_limit\030\002 \003(\0132&.AccountGasLimi" +
-      "t.SpecificGasLimitEntry\0327\n\025SpecificGasLi" +
-      "mitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\004:\0028\001" +
-      "\"9\n\nRichStatus\022\014\n\004hash\030\001 \001(\014\022\016\n\006height\030\002" +
-      " \001(\004\022\r\n\005nodes\030\003 \003(\014\"q\n\013Transaction\022\n\n\002to" +
-      "\030\001 \001(\t\022\r\n\005nonce\030\002 \001(\t\022\r\n\005quota\030\003 \001(\004\022\031\n\021" +
-      "valid_until_block\030\004 \001(\004\022\014\n\004data\030\005 \001(\014\022\017\n" +
-      "\007version\030\006 \001(\r\"f\n\025UnverifiedTransaction\022" +
-      "!\n\013transaction\030\001 \001(\0132\014.Transaction\022\021\n\tsi" +
-      "gnature\030\002 \001(\014\022\027\n\006crypto\030\003 \001(\0162\007.Crypto\"j" +
-      "\n\021SignedTransaction\0224\n\024transaction_with_" +
-      "sig\030\001 \001(\0132\026.UnverifiedTransaction\022\017\n\007tx_" +
-      "hash\030\002 \001(\014\022\016\n\006signer\030\003 \001(\014\"5\n\tBlockBody\022" +
-      "(\n\014transactions\030\001 \003(\0132\022.SignedTransactio" +
-      "n\"P\n\005Block\022\017\n\007version\030\001 \001(\r\022\034\n\006header\030\002 " +
-      "\001(\0132\014.BlockHeader\022\030\n\004body\030\003 \001(\0132\n.BlockB" +
-      "ody\"<\n\016BlockWithProof\022\023\n\003blk\030\001 \001(\0132\006.Blo" +
-      "ck\022\025\n\005proof\030\002 \001(\0132\006.Proof\"4\n\010BlockTxs\022\016\n" +
-      "\006height\030\001 \001(\004\022\030\n\004body\030\003 \001(\0132\n.BlockBody*" +
-      "9\n\tProofType\022\022\n\016AuthorityRound\020\000\022\010\n\004Raft" +
-      "\020\001\022\016\n\nTendermint\020\002*\033\n\006Crypto\022\010\n\004SECP\020\000\022\007" +
-      "\n\003SM2\020\001b\006proto3"
+            "\n\020blockchain.proto\"2\n\005Proof\022\017\n\007content\030\001" +
+                    " \001(\014\022\030\n\004type\030\002 \001(\0162\n.ProofType\"\304\001\n\013Block" +
+                    "Header\022\020\n\010prevhash\030\001 \001(\014\022\021\n\ttimestamp\030\002 " +
+                    "\001(\004\022\016\n\006height\030\003 \001(\004\022\022\n\nstate_root\030\004 \001(\014\022" +
+                    "\031\n\021transactions_root\030\005 \001(\014\022\025\n\rreceipts_r" +
+                    "oot\030\006 \001(\014\022\020\n\010gas_used\030\007 \001(\004\022\021\n\tgas_limit" +
+                    "\030\010 \001(\004\022\025\n\005proof\030\t \001(\0132\006.Proof\"&\n\006Status\022" +
+                    "\014\n\004hash\030\001 \001(\014\022\016\n\006height\030\002 \001(\004\"\250\001\n\017Accoun" +
+                    "tGasLimit\022\030\n\020common_gas_limit\030\001 \001(\004\022B\n\022s" +
+                    "pecific_gas_limit\030\002 \003(\0132&.AccountGasLimi" +
+                    "t.SpecificGasLimitEntry\0327\n\025SpecificGasLi" +
+                    "mitEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\004:\0028\001" +
+                    "\"9\n\nRichStatus\022\014\n\004hash\030\001 \001(\014\022\016\n\006height\030\002" +
+                    " \001(\004\022\r\n\005nodes\030\003 \003(\014\"\203\001\n\013Transaction\022\n\n\002t" +
+                    "o\030\001 \001(\t\022\r\n\005nonce\030\002 \001(\t\022\r\n\005quota\030\003 \001(\004\022\031\n" +
+                    "\021valid_until_block\030\004 \001(\004\022\014\n\004data\030\005 \001(\014\022\017" +
+                    "\n\007version\030\006 \001(\r\022\020\n\010chain_id\030\007 \001(\t\"f\n\025Unv" +
+                    "erifiedTransaction\022!\n\013transaction\030\001 \001(\0132" +
+                    "\014.Transaction\022\021\n\tsignature\030\002 \001(\014\022\027\n\006cryp" +
+                    "to\030\003 \001(\0162\007.Crypto\"j\n\021SignedTransaction\0224" +
+                    "\n\024transaction_with_sig\030\001 \001(\0132\026.Unverifie" +
+                    "dTransaction\022\017\n\007tx_hash\030\002 \001(\014\022\016\n\006signer\030" +
+                    "\003 \001(\014\"5\n\tBlockBody\022(\n\014transactions\030\001 \003(\013" +
+                    "2\022.SignedTransaction\"P\n\005Block\022\017\n\007version" +
+                    "\030\001 \001(\r\022\034\n\006header\030\002 \001(\0132\014.BlockHeader\022\030\n\004" +
+                    "body\030\003 \001(\0132\n.BlockBody\"<\n\016BlockWithProof" +
+                    "\022\023\n\003blk\030\001 \001(\0132\006.Block\022\025\n\005proof\030\002 \001(\0132\006.P" +
+                    "roof\"4\n\010BlockTxs\022\016\n\006height\030\001 \001(\004\022\030\n\004body" +
+                    "\030\003 \001(\0132\n.BlockBody*9\n\tProofType\022\022\n\016Autho" +
+                    "rityRound\020\000\022\010\n\004Raft\020\001\022\016\n\nTendermint\020\002*\033\n" +
+                    "\006Crypto\022\010\n\004SECP\020\000\022\007\n\003SM2\020\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+            new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+              public com.google.protobuf.ExtensionRegistry assignDescriptors(
+                      com.google.protobuf.Descriptors.FileDescriptor root) {
+                descriptor = root;
+                return null;
+              }
+            };
     com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+            .internalBuildGeneratedFileFrom(descriptorData,
+                    new com.google.protobuf.Descriptors.FileDescriptor[] {
+                    }, assigner);
     internal_static_Proof_descriptor =
-      getDescriptor().getMessageTypes().get(0);
+            getDescriptor().getMessageTypes().get(0);
     internal_static_Proof_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Proof_descriptor,
-        new java.lang.String[] { "Content", "Type", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Proof_descriptor,
+            new java.lang.String[] { "Content", "Type", });
     internal_static_BlockHeader_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+            getDescriptor().getMessageTypes().get(1);
     internal_static_BlockHeader_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BlockHeader_descriptor,
-        new java.lang.String[] { "Prevhash", "Timestamp", "Height", "StateRoot", "TransactionsRoot", "ReceiptsRoot", "GasUsed", "GasLimit", "Proof", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_BlockHeader_descriptor,
+            new java.lang.String[] { "Prevhash", "Timestamp", "Height", "StateRoot", "TransactionsRoot", "ReceiptsRoot", "GasUsed", "GasLimit", "Proof", });
     internal_static_Status_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+            getDescriptor().getMessageTypes().get(2);
     internal_static_Status_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Status_descriptor,
-        new java.lang.String[] { "Hash", "Height", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Status_descriptor,
+            new java.lang.String[] { "Hash", "Height", });
     internal_static_AccountGasLimit_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(3);
     internal_static_AccountGasLimit_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_AccountGasLimit_descriptor,
-        new java.lang.String[] { "CommonGasLimit", "SpecificGasLimit", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_AccountGasLimit_descriptor,
+            new java.lang.String[] { "CommonGasLimit", "SpecificGasLimit", });
     internal_static_AccountGasLimit_SpecificGasLimitEntry_descriptor =
-      internal_static_AccountGasLimit_descriptor.getNestedTypes().get(0);
+            internal_static_AccountGasLimit_descriptor.getNestedTypes().get(0);
     internal_static_AccountGasLimit_SpecificGasLimitEntry_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_AccountGasLimit_SpecificGasLimitEntry_descriptor,
-        new java.lang.String[] { "Key", "Value", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_AccountGasLimit_SpecificGasLimitEntry_descriptor,
+            new java.lang.String[] { "Key", "Value", });
     internal_static_RichStatus_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(4);
     internal_static_RichStatus_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_RichStatus_descriptor,
-        new java.lang.String[] { "Hash", "Height", "Nodes", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_RichStatus_descriptor,
+            new java.lang.String[] { "Hash", "Height", "Nodes", });
     internal_static_Transaction_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(5);
     internal_static_Transaction_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Transaction_descriptor,
-        new java.lang.String[] { "To", "Nonce", "Quota", "ValidUntilBlock", "Data", "Version", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Transaction_descriptor,
+            new java.lang.String[] { "To", "Nonce", "Quota", "ValidUntilBlock", "Data", "Version", "ChainId", });
     internal_static_UnverifiedTransaction_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(6);
     internal_static_UnverifiedTransaction_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_UnverifiedTransaction_descriptor,
-        new java.lang.String[] { "Transaction", "Signature", "Crypto", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_UnverifiedTransaction_descriptor,
+            new java.lang.String[] { "Transaction", "Signature", "Crypto", });
     internal_static_SignedTransaction_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(7);
     internal_static_SignedTransaction_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_SignedTransaction_descriptor,
-        new java.lang.String[] { "TransactionWithSig", "TxHash", "Signer", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_SignedTransaction_descriptor,
+            new java.lang.String[] { "TransactionWithSig", "TxHash", "Signer", });
     internal_static_BlockBody_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+            getDescriptor().getMessageTypes().get(8);
     internal_static_BlockBody_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BlockBody_descriptor,
-        new java.lang.String[] { "Transactions", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_BlockBody_descriptor,
+            new java.lang.String[] { "Transactions", });
     internal_static_Block_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+            getDescriptor().getMessageTypes().get(9);
     internal_static_Block_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Block_descriptor,
-        new java.lang.String[] { "Version", "Header", "Body", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Block_descriptor,
+            new java.lang.String[] { "Version", "Header", "Body", });
     internal_static_BlockWithProof_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+            getDescriptor().getMessageTypes().get(10);
     internal_static_BlockWithProof_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BlockWithProof_descriptor,
-        new java.lang.String[] { "Blk", "Proof", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_BlockWithProof_descriptor,
+            new java.lang.String[] { "Blk", "Proof", });
     internal_static_BlockTxs_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+            getDescriptor().getMessageTypes().get(11);
     internal_static_BlockTxs_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BlockTxs_descriptor,
-        new java.lang.String[] { "Height", "Body", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_BlockTxs_descriptor,
+            new java.lang.String[] { "Height", "Body", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

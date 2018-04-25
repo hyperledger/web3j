@@ -30,38 +30,34 @@ public class PermissionManagement extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager);
     }
 
-    public RemoteCall<TransactionReceipt> setAuthorization(String _account, String _permission, BigInteger quota, BigInteger nonce,
-                                                           BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> setAuthorization(String _account, String _permission, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "setAuthorization", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_account), 
                 new org.web3j.abi.datatypes.Address(_permission)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
-    public RemoteCall<TransactionReceipt> cancelAuthorization(String _account, String _permission, BigInteger quota,
-                                                              BigInteger nonce, BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> cancelAuthorization(String _account, String _permission, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "cancelAuthorization", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_account), 
                 new org.web3j.abi.datatypes.Address(_permission)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
-    public RemoteCall<TransactionReceipt> updatePermissionName(String _permission, byte[] _name, BigInteger quota,
-                                                               BigInteger nonce, BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> updatePermissionName(String _permission, byte[] _name, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "updatePermissionName", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_permission), 
                 new org.web3j.abi.datatypes.generated.Bytes32(_name)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
-    public RemoteCall<TransactionReceipt> deleteResources(String _permission, List<String> _conts, List<byte[]> _funcs,
-                                                          BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> deleteResources(String _permission, List<String> _conts, List<byte[]> _funcs, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "deleteResources", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_permission), 
@@ -70,29 +66,26 @@ public class PermissionManagement extends Contract {
                 new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Bytes4>(
                         org.web3j.abi.Utils.typeMap(_funcs, org.web3j.abi.datatypes.generated.Bytes4.class))), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
-    public RemoteCall<TransactionReceipt> deletePermission(String _permission, BigInteger quota, BigInteger nonce,
-                                                           BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> deletePermission(String _permission, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "deletePermission", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_permission)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
-    public RemoteCall<TransactionReceipt> clearAuthorization(String _account, BigInteger quota, BigInteger nonce,
-                                                             BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> clearAuthorization(String _account, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version,String chain_id) {
         Function function = new Function(
                 "clearAuthorization", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_account)), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
-    public RemoteCall<TransactionReceipt> addResources(String _permission, List<String> _conts, List<byte[]> _funcs,
-                                                       BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> addResources(String _permission, List<String> _conts, List<byte[]> _funcs, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "addResources", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_permission), 
@@ -101,11 +94,10 @@ public class PermissionManagement extends Contract {
                 new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Bytes4>(
                         org.web3j.abi.Utils.typeMap(_funcs, org.web3j.abi.datatypes.generated.Bytes4.class))), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
-    public RemoteCall<TransactionReceipt> newPermission(byte[] _name, List<String> _conts, List<byte[]> _funcs,
-                                                        BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version) {
+    public RemoteCall<TransactionReceipt> newPermission(byte[] _name, List<String> _conts, List<byte[]> _funcs, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version, String chain_id) {
         Function function = new Function(
                 "newPermission", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(_name), 
@@ -114,7 +106,7 @@ public class PermissionManagement extends Contract {
                 new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Bytes4>(
                         org.web3j.abi.Utils.typeMap(_funcs, org.web3j.abi.datatypes.generated.Bytes4.class))), 
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version));
+        return executeRemoteCallTransaction(function, quota, nonce, validUntilBlock, BigInteger.valueOf(version), chain_id);
     }
 
     public static RemoteCall<PermissionManagement> deploy(Web3j web3j, TransactionManager transactionManager,
