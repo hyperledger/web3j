@@ -10,9 +10,9 @@ contract Token {
     );
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
-//    function Token(uint256 initialSupply) {
-//        balanceOf[msg.sender] = initialSupply;
-//    }
+    function Token(uint256 initialSupply) {
+        balanceOf[msg.sender] = initialSupply;
+    }
 
     /* Send coins */
     function transfer(address _to, uint256 _value) {
