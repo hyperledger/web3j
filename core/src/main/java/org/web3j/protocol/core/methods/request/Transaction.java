@@ -56,12 +56,12 @@ public class Transaction {
     }
 
     public static Transaction createContractTransaction(
-            BigInteger nonce, long quota, long valid_until_block, int version, int chainId, String init) {
+         BigInteger nonce, long quota, long valid_until_block, int version, int chainId, String init) {
         return new Transaction("", nonce, quota, valid_until_block, version, chainId, init);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, int chainId) {
+         String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, int chainId) {
 
         return new Transaction(to, nonce, quota, valid_until_block, version, chainId, data);
     }
