@@ -98,7 +98,9 @@ public class CompiledContract {
         Object[] abiDefinitions = this.typedABI
                 .stream()
                 .filter(abiDefinition ->
-                        abiDefinition.getType().equals("function") && abiDefinition.getName().equals(funcName) &&                        abiDefinition.getInputs().size() == numOfArgs)
+                        abiDefinition.getType().equals("function") &&
+                                abiDefinition.getName().equals(funcName) &&
+                                abiDefinition.getInputs().size() == numOfArgs)
                 .toArray();
 
         if (abiDefinitions.length == 0) {

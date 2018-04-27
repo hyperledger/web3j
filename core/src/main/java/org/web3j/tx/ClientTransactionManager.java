@@ -44,7 +44,7 @@ public class ClientTransactionManager extends TransactionManager {
 
         // Note: useless for use, just for compile
         Transaction transaction = new Transaction(
-                to, BigInteger.valueOf(1), 1000000, 99, 0, data, 1);
+                to, BigInteger.valueOf(1), 1000000, 99, 0, 1, data);
 
         return web3j.ethSendTransaction(transaction)
                 .send();

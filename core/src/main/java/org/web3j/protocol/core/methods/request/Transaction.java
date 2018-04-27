@@ -42,7 +42,7 @@ public class Transaction {
     private int chainId;
     private final Hash hash = new Hash();
 
-    public Transaction(String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, int chainId) {
+    public Transaction(String to, BigInteger nonce, long quota, long valid_until_block, int version, int chainId, String data) {
         this.to = to;
         this.nonce = nonce;
         this.quota = quota;
@@ -56,15 +56,14 @@ public class Transaction {
     }
 
     public static Transaction createContractTransaction(
-            BigInteger nonce, long quota, long valid_until_block, int version, String init, int chainId) {
-
-        return new Transaction("", nonce, quota, valid_until_block, version, init, chainId);
+            BigInteger nonce, long quota, long valid_until_block, int version, int chainId, String init) {
+        return new Transaction("", nonce, quota, valid_until_block, version, chainId, init);
     }
 
     public static Transaction createFunctionCallTransaction(
             String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, int chainId) {
 
-        return new Transaction(to, nonce, quota, valid_until_block, version, data, chainId);
+        return new Transaction(to, nonce, quota, valid_until_block, version, chainId, data);
     }
 
     public String getTo() {

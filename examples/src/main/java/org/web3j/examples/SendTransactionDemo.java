@@ -38,7 +38,7 @@ public class SendTransactionDemo {
         BigInteger nonce = BigInteger.valueOf(Math.abs(random.nextLong()));
         long quota = 1000000;
 
-        Transaction tx = Transaction.createContractTransaction(nonce, quota, validUntilBlock, VERSION, contractCode, chainId);
+        Transaction tx = Transaction.createContractTransaction(nonce, quota, validUntilBlock, VERSION, chainId, contractCode);
         String rawTx = tx.sign(privateKey);
 
         return service.ethSendRawTransaction(rawTx).send().getSendTransactionResult().getHash();
