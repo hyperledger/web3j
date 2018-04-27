@@ -98,15 +98,13 @@ public class CompiledContract {
         Object[] abiDefinitions = this.typedABI
                 .stream()
                 .filter(abiDefinition ->
-                        abiDefinition.getType().equals("function") &&
-                                abiDefinition.getName().equals(funcName) &&
-                                abiDefinition.getInputs().size() == numOfArgs)
+                        abiDefinition.getType().equals("function") && abiDefinition.getName().equals(funcName) &&                        abiDefinition.getInputs().size() == numOfArgs)
                 .toArray();
 
         if (abiDefinitions.length == 0) {
             throw new ContractFuncNotFound(funcName, numOfArgs);
         } else {
-            return (AbiDefinition) abiDefinitions[0];
+            return (AbiDefinition)abiDefinitions[0];
         }
     }
 
@@ -114,8 +112,7 @@ public class CompiledContract {
         Object[] abiDefinitions = this.typedABI
                 .stream()
                 .filter(abiDefinition ->
-                        abiDefinition.getType().equals("event") &&
-                                abiDefinition.getName().equals(eventName))
+                        abiDefinition.getType().equals("event") && abiDefinition.getName().equals(eventName))
                 .toArray();
         return (AbiDefinition) abiDefinitions[0];
     }

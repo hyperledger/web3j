@@ -341,7 +341,7 @@ public class SolidityFunctionWrapper extends Generator {
                         + ")",
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         methodBuilder.addStatement(
-                "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, $L, $L, encodedConstructor)",
                 className, WEB3J, authName, QUOTA, NONCE, VALID_UNTIL_BLOCK, VERSION, BINARY, CHAIN_ID);
         return methodBuilder.build();
     }
