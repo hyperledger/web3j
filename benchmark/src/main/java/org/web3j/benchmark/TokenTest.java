@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class TokenTest {
     private final long initialSupply = 1000000;
     private final static int version = 0;
+    private final static int chainId = 1;
     private final BigInteger offset = BigInteger.valueOf(80);
     private final Random random = new Random(System.currentTimeMillis());
     private Map<Credentials, Long> accounts;
@@ -42,7 +43,7 @@ public class TokenTest {
         BigInteger currentHeight = this.getCurrentHeight();
         CompletableFuture<Token> tokenFuture = Token.deploy(service, creatorManager,
                 BigInteger.valueOf(1000000), nextNonce(),
-                currentHeight.add(this.offset), BigInteger.valueOf(version), "1", BigInteger.valueOf(initialSupply)).sendAsync();
+                currentHeight.add(this.offset), BigInteger.valueOf(version), BigInteger.valueOf(chainId), BigInteger.valueOf(initialSupply)).sendAsync();
         tokenFuture.whenCompleteAsync((contract, exception) -> {
             if (exception != null) {
                 System.out.println("deploy contract failed because of " + exception);
@@ -256,7 +257,7 @@ public class TokenTest {
             Token token = TokenTest.this.tokenOf(this.from);
             BigInteger currentHeight = TokenTest.this.getCurrentHeight();
             return token.transfer(this.to.getAddress(), BigInteger.valueOf(tokens),
-                    BigInteger.valueOf(100000), TokenTest.this.nextNonce(),BigInteger.valueOf(0), currentHeight.add(TokenTest.this.offset), "1").sendAsync();
+                    BigInteger.valueOf(100000), TokenTest.this.nextNonce(),BigInteger.valueOf(0), currentHeight.add(TokenTest.this.offset), BigInteger.valueOf(chainId)).sendAsync();
         }
 
 

@@ -73,7 +73,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String NONCE = "nonce";
     private static final String VALID_UNTIL_BLOCK = "validUntilBlock";
     private static final String VERSION = "version";
-    private static final String CHAIN_ID = "chain_id";
+    private static final String CHAIN_ID = "chainId";
 
     private static final String CODEGEN_WARNING = "<p>Auto generated code.\n"
             + "<p><strong>Do not modify!</strong>\n"
@@ -401,7 +401,7 @@ public class SolidityFunctionWrapper extends Generator {
                 .addParameter(BigInteger.class, NONCE)
                 .addParameter(BigInteger.class, VALID_UNTIL_BLOCK)
                 .addParameter(BigInteger.class, VERSION)
-                .addParameter(String.class, CHAIN_ID);
+                .addParameter(BigInteger.class, CHAIN_ID);
         return builder;
     }
 
@@ -691,7 +691,7 @@ public class SolidityFunctionWrapper extends Generator {
                 .addParameter(BigInteger.class, NONCE)
                 .addParameter(BigInteger.class, VALID_UNTIL_BLOCK)
                 .addParameter(BigInteger.class, VERSION)
-                .addParameter(String.class, CHAIN_ID);
+                .addParameter(BigInteger.class, CHAIN_ID);
 
         String functionName = functionDefinition.getName();
 

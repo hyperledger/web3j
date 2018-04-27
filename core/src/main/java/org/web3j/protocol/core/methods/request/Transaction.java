@@ -39,16 +39,16 @@ public class Transaction {
     private long valid_until_block;
     private int version = 0;
     private String data;
-    private String chain_id;
+    private int chainId;
     private final Hash hash = new Hash();
 
-    public Transaction(String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, String chain_id) {
+    public Transaction(String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, int chainId) {
         this.to = to;
         this.nonce = nonce;
         this.quota = quota;
         this.version = version;
         this.valid_until_block = valid_until_block;
-        this.chain_id = chain_id;
+        this.chainId = chainId;
 
         if (data != null) {
             this.data = Numeric.prependHexPrefix(data);
@@ -56,15 +56,15 @@ public class Transaction {
     }
 
     public static Transaction createContractTransaction(
-            BigInteger nonce, long quota, long valid_until_block, int version, String init, String chain_id) {
+            BigInteger nonce, long quota, long valid_until_block, int version, String init, int chainId) {
 
-        return new Transaction("", nonce, quota, valid_until_block, version, init, chain_id);
+        return new Transaction("", nonce, quota, valid_until_block, version, init, chainId);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, String chain_id) {
+            String to, BigInteger nonce, long quota, long valid_until_block, int version, String data, int chainId) {
 
-        return new Transaction(to, nonce, quota, valid_until_block, version, data, chain_id);
+        return new Transaction(to, nonce, quota, valid_until_block, version, data, chainId);
     }
 
     public String getTo() {
@@ -91,7 +91,7 @@ public class Transaction {
         return data;
     }
 
-    public String getChain_id() { return chain_id; }
+    public int getChainId() { return chainId; }
 
 
     private static String convert(BigInteger value) {
@@ -117,7 +117,7 @@ public class Transaction {
         builder.setValidUntilBlock(get_valid_until_block());
         builder.setVersion(getVersion());
         builder.setQuota(getQuota());
-        builder.setChainId(getChain_id());
+        builder.setChainId(getChainId());
         Blockchain.Transaction tx = builder.build();
 
         byte[] sig;
@@ -157,7 +157,7 @@ public class Transaction {
         builder.setValidUntilBlock(get_valid_until_block());
         builder.setQuota(getQuota());
         builder.setVersion(getVersion());
-        builder.setChainId(getChain_id());
+        builder.setChainId(getChainId());
         Blockchain.Transaction tx = builder.build();
 
         ECKeyPair keyPair = credentials.getEcKeyPair();

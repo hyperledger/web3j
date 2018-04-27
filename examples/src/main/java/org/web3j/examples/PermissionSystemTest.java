@@ -22,6 +22,7 @@ public class PermissionSystemTest {
     private static Random random;
     private static BigInteger quota = BigInteger.valueOf(1000000);
     private static final int version = 0;
+    private static final int chainId = 1;
 
     static {
         service = Web3j.build(new HttpService("http://127.0.0.1:1337"));
@@ -59,7 +60,7 @@ public class PermissionSystemTest {
 
         // set send transaction permission
         System.out.println("set send transaction permission");
-        TransactionReceipt tx1 = permissionManager.grantPermission(admin.getAddress(), BigInteger.valueOf(1), quota, newNonce(), getValidUntilBlock(), version,"").send();
+        TransactionReceipt tx1 = permissionManager.grantPermission(admin.getAddress(), BigInteger.valueOf(1), quota, newNonce(), getValidUntilBlock(), version,chainId).send();
         if (tx1.getErrorMessage() != null) {
             System.out.println("set send transaction permission failed because of " + tx1.getErrorMessage());
             System.exit(1);
@@ -76,7 +77,7 @@ public class PermissionSystemTest {
         newUsers.add("0x1a702a25c6bca72b67987968f0bfb3a3213c5602");
         TransactionReceipt tx2 = permissionSystem.newGroup( Strings.asciiToHex("zz", 32),
                 Strings.asciiToHex("test_group", 32), newUsers, true, BigInteger.valueOf(0),
-                Strings.asciiToHex("", 32), "This is a test group", quota, newNonce(), getValidUntilBlock(), version, "").send();
+                Strings.asciiToHex("", 32), "This is a test group", quota, newNonce(), getValidUntilBlock(), version, chainId).send();
 
         if (tx2.getErrorMessage() != null) {
             System.out.println("create new group failed because of " + tx2.getErrorMessage());
@@ -92,7 +93,7 @@ public class PermissionSystemTest {
         List<byte[]> funcs = new ArrayList<>();
         conts.add(Address.DEFAULT.toString());
         funcs.add(Bytes4.DEFAULT.getValue());
-        TransactionReceipt tx3 = permissionManagement.newPermission(Bytes32.DEFAULT.getValue(), conts, funcs, quota, newNonce(), getValidUntilBlock(), version,"").send();
+        TransactionReceipt tx3 = permissionManagement.newPermission(Bytes32.DEFAULT.getValue(), conts, funcs, quota, newNonce(), getValidUntilBlock(), version, BigInteger.valueOf(chainId)).send();
         if (tx3.getErrorMessage() != null) {
             System.out.println("call newPermission failed because of " + tx3.getErrorMessage());
             System.exit(1);

@@ -41,35 +41,35 @@ public class Account {
     }
 
     /// TODO: get contract address from receipt after deploy, then return contract name(ENS)
-    public EthSendTransaction deploy(File contractFile, BigInteger nonce, BigInteger quota, int version, String chain_id)
+    public EthSendTransaction deploy(File contractFile, BigInteger nonce, BigInteger quota, int version, int chainId)
             throws IOException, InterruptedException, CompiledContract.ContractCompileError {
         CompiledContract contract = new CompiledContract(contractFile);
         String contractBin = contract.getBin();
         return this.transactionManager.
-                sendTransaction("", contractBin, quota, nonce, getValidUntilBlock(), BigInteger.valueOf(version), chain_id);
+                sendTransaction("", contractBin, quota, nonce, getValidUntilBlock(), BigInteger.valueOf(version), BigInteger.valueOf(chainId));
     }
 
-    public CompletableFuture<EthSendTransaction> deployAsync(File contractFile, BigInteger nonce, BigInteger quota, BigInteger version, String chain_id)
+    public CompletableFuture<EthSendTransaction> deployAsync(File contractFile, BigInteger nonce, BigInteger quota, BigInteger version, int chainId)
             throws IOException, InterruptedException, CompiledContract.ContractCompileError {
         CompiledContract contract = new CompiledContract(contractFile);
         String contractBin = contract.getBin();
         return this.transactionManager.
-                sendTransactionAsync("", contractBin, quota, nonce, getValidUntilBlock(), version, chain_id);
+                sendTransactionAsync("", contractBin, quota, nonce, getValidUntilBlock(), version, chainId);
     }
 
     // eth_call: nonce and quota is null
     // sendTransaction: nonce and quota is necessary
-    public Object callContract(String contractAddress, String funcName, BigInteger nonce, BigInteger quota, int version, String chain_id, Object... args)
+    public Object callContract(String contractAddress, String funcName, BigInteger nonce, BigInteger quota, int version, int chainId, Object... args)
             throws Exception {
         if (abi == null) {
             abi = getAbi(contractAddress);
         }
         CompiledContract contract = new CompiledContract(abi);
         AbiDefinition functionAbi = contract.getFunctionAbi(funcName, args.length);
-        return callContract(contractAddress, functionAbi, nonce, quota, version, chain_id,args);
+        return callContract(contractAddress, functionAbi, nonce, quota, version, chainId,args);
     }
 
-    public Object callContract(String contractAddress, AbiDefinition functionAbi, BigInteger nonce, BigInteger quota, int version, String chain_id, Object... args)
+    public Object callContract(String contractAddress, AbiDefinition functionAbi, BigInteger nonce, BigInteger quota, int version,int chainId, Object... args)
             throws Exception {
         List<Type> params = new ArrayList<>();
         List<AbiDefinition.NamedType> inputs = functionAbi.getInputs();
@@ -95,7 +95,7 @@ public class Account {
         } else {
             // send_transaction
             func = new Function(functionAbi.getName(), params, Collections.emptyList());
-            return sendTransaction(contractAddress, func, nonce, quota.longValue(), version, chain_id);
+            return sendTransaction(contractAddress, func, nonce, quota.longValue(), version, chainId);
         }
     }
 
@@ -117,15 +117,15 @@ public class Account {
         }
     }
 
-    public Object sendTransaction(String contractAddress, Function func, BigInteger nonce, long quota, long version, String chain_id)
+    public Object sendTransaction(String contractAddress, Function func, BigInteger nonce, long quota, long version, int chainId)
             throws IOException {
         String data = FunctionEncoder.encode(func);
-        return this.transactionManager.sendTransaction(contractAddress, data, BigInteger.valueOf(quota), nonce, getValidUntilBlock(), BigInteger.valueOf(version), chain_id);
+        return this.transactionManager.sendTransaction(contractAddress, data, BigInteger.valueOf(quota), nonce, getValidUntilBlock(), BigInteger.valueOf(version), BigInteger.valueOf(chainId));
     }
 
-    public Object uploadAbi(String contractAddress, String abi, BigInteger nonce, BigInteger quota, long version, String chain_id) throws Exception {
+    public Object uploadAbi(String contractAddress, String abi, BigInteger nonce, BigInteger quota, long version, int chainId) throws Exception {
         String data = hex_remove_0x(contractAddress) + hex_remove_0x(bytesToHexStr(abi.getBytes()));
-        return this.transactionManager.sendTransaction(ABI_ADDRESS, data, quota, nonce, getValidUntilBlock(), BigInteger.valueOf(version), chain_id);
+        return this.transactionManager.sendTransaction(ABI_ADDRESS, data, quota, nonce, getValidUntilBlock(), BigInteger.valueOf(version), BigInteger.valueOf(chainId));
     }
 
     public String getAbi(String contractAddress) throws IOException {

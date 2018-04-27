@@ -51,7 +51,7 @@ message Transaction {
     uint64 valid_until_block = 4;
     bytes data = 5;
     uint32 version = 6;
-    string chain_id = 7;
+    uint32 chainId = 7;
 }
 
 message UnverifiedTransaction {

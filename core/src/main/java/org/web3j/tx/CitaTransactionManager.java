@@ -47,15 +47,15 @@ public class CitaTransactionManager extends TransactionManager {
     // adapt to cita
     @Override
     public EthSendTransaction sendTransaction(
-            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version, String chain_id) throws IOException {
-        Transaction transaction = new Transaction(to, nonce, quota.longValue(), validUntilBlock.longValue(), version.intValue(), data,chain_id);
+            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version, BigInteger chainId) throws IOException {
+        Transaction transaction = new Transaction(to, nonce, quota.longValue(), validUntilBlock.longValue(), version.intValue(), data, chainId.intValue());
         return web3j.ethSendRawTransaction(transaction.sign(credentials)).send();
     }
 
     // adapt to cita
     public CompletableFuture<EthSendTransaction> sendTransactionAsync(
-            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version, String chain_id) throws IOException {
-        Transaction transaction = new Transaction(to, nonce, quota.longValue(), validUntilBlock.longValue(), version.intValue(), data, chain_id);
+            String to, String data, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version, int chainId) throws IOException {
+        Transaction transaction = new Transaction(to, nonce, quota.longValue(), validUntilBlock.longValue(), version.intValue(), data, chainId);
         return web3j.ethSendRawTransaction(transaction.sign(credentials)).sendAsync();
     }
 

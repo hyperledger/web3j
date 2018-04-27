@@ -33,7 +33,7 @@ public class CreateRawTransactionIT extends Scenario {
 
         EthSendTransaction ethSendTransaction =
                 web3j.ethSendRawTransaction(hexValue).sendAsync().get();
-        String transactionHash = ethSendTransaction.getTransactionHash();
+        String transactionHash = ethSendTransaction.getSendTransactionResult().getHash();
 
         assertFalse(transactionHash.isEmpty());
 
@@ -53,7 +53,7 @@ public class CreateRawTransactionIT extends Scenario {
 
         EthSendTransaction ethSendTransaction =
                 web3j.ethSendRawTransaction(hexValue).sendAsync().get();
-        String transactionHash = ethSendTransaction.getTransactionHash();
+        String transactionHash = ethSendTransaction.getSendTransactionResult().getHash();
 
         assertFalse(transactionHash.isEmpty());
 
