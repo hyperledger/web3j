@@ -153,7 +153,7 @@ public class PermissionManager extends Contract {
                         org.web3j.abi.Utils.typeMap(_senders, org.web3j.abi.datatypes.Address.class)), 
                 new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
                         org.web3j.abi.Utils.typeMap(_creators, org.web3j.abi.datatypes.Address.class))));
-        return deployRemoteCall(PermissionManager.class, web3j, transactionManager, quota, nonce, validUntilBlock, BigInteger.valueOf(version), BINARY, BigInteger.valueOf(chainId), encodedConstructor);
+        return deployRemoteCall(PermissionManager.class, web3j, transactionManager, quota, nonce, validUntilBlock, BigInteger.valueOf(version), BigInteger.valueOf(chainId), BINARY, encodedConstructor);
     }
 
     public static PermissionManager load(String contractAddress, Web3j web3j, TransactionManager transactionManager) {

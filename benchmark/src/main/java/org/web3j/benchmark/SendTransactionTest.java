@@ -49,7 +49,7 @@ public class SendTransactionTest {
         Transaction tx;
         long nonce = Math.abs(this.random.nextLong());
         if (this.config.getTo().equals("")) {
-            tx = Transaction.createContractTransaction(BigInteger.valueOf(nonce), this.config.getQuota(), this.currentHeight + 88, 0, this.config.getCode(), chainId);
+            tx = Transaction.createContractTransaction(BigInteger.valueOf(nonce), this.config.getQuota(), this.currentHeight + 88, 0, chainId, this.config.getCode());
         } else {
             tx = Transaction.createFunctionCallTransaction(this.config.getTo(), BigInteger.valueOf(nonce), this.config.getQuota(), this.currentHeight + 88, 0, this.config.getCode(), chainId);
         }

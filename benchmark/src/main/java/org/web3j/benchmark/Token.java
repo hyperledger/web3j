@@ -94,7 +94,7 @@ public class Token extends Contract {
 
     public static RemoteCall<Token> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, BigInteger version, BigInteger chainId, BigInteger initialSupply) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initialSupply)));
-        return deployRemoteCall(Token.class, web3j, transactionManager, quota, nonce, validUntilBlock, version, BINARY, chainId, encodedConstructor);
+        return deployRemoteCall(Token.class, web3j, transactionManager, quota, nonce, validUntilBlock, version, chainId, BINARY, encodedConstructor);
     }
 
     public static Token load(String contractAddress, Web3j web3j, TransactionManager transactionManager) {

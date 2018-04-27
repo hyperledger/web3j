@@ -748,7 +748,7 @@ public class PermissionSystem extends Contract {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_superAdmin), 
                 new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
                         org.web3j.abi.Utils.typeMap(_adamEve, org.web3j.abi.datatypes.Address.class))));
-        return deployRemoteCall(PermissionSystem.class, web3j, transactionManager, quota, nonce, validUntilBlock, BigInteger.valueOf(version), BINARY, BigInteger.valueOf(chainId), encodedConstructor);
+        return deployRemoteCall(PermissionSystem.class, web3j, transactionManager, quota, nonce, validUntilBlock, BigInteger.valueOf(version), BigInteger.valueOf(chainId), BINARY, encodedConstructor);
     }
 
     public static PermissionSystem load(String contractAddress, Web3j web3j, TransactionManager transactionManager) {

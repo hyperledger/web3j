@@ -111,7 +111,7 @@ public class PermissionManagement extends Contract {
 
     public static RemoteCall<PermissionManagement> deploy(Web3j web3j, TransactionManager transactionManager,
                                                           BigInteger quota, BigInteger nonce, BigInteger validUntilBlock, int version) {
-        return deployRemoteCall(PermissionManagement.class, web3j, transactionManager, quota, nonce, validUntilBlock, BigInteger.valueOf(version), BINARY, BigInteger.valueOf(chainId), "");
+        return deployRemoteCall(PermissionManagement.class, web3j, transactionManager, quota, nonce, validUntilBlock, BigInteger.valueOf(version), BigInteger.valueOf(chainId), BINARY, "");
     }
 
     public static PermissionManagement load(String contractAddress, Web3j web3j, TransactionManager transactionManager) {
