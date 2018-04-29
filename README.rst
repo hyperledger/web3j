@@ -517,6 +517,8 @@ Please submit a pull request if you wish to include your project on the list:
 - `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
 - `Presto Ethereum <https://github.com/xiaoyao1991/presto-ethereum>`_
 - `Kundera-Ethereum data importer and sync utility <https://github.com/impetus-opensource/Kundera/tree/trunk/src/kundera-ethereum>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
+- `Ethereum Tool <https://github.com/e-Contract/ethereum-tool>`_ for secure offline key management.
+- `Ethereum Java EE JCA Resource Adapter <https://github.com/e-Contract/ethereum-resource-adapter>`_ provides integration of Ethereum within Java EE 6+.
 
 
 Companies using web3j
