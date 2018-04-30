@@ -409,8 +409,35 @@ contract they were generated from::
 
 
 
+Dynamic gas price and limit
+---------------------------
 
+When working with smart contracts you might want to specify different gas and limit values depending
+on the function executed. You can do that by setting your own ContractGasProvider to the contract wrapper.
+Every generated wrapper also have all the functions listed as a constants so that you can do
+simple compilation-time matching with 'switch'.
+Here is an example from Greeter contract::
 
+    Greeter greeter = new Greeter(...);
+    greeter.setGasProvider(new DefaultGasProvider() {
+        @Override
+        public BigInteger getGasPrice(String contractFunc) {
+            switch (contractFunc) {
+                case Greeter.FUNC_GREET: return BigInteger.valueOf(22_000_000_000L);
+                case Greeter.FUNC_KILL: return BigInteger.valueOf(44_000_000_000L);
+                default: throw new NotImplementedException();
+            }
+        }
+
+        @Override
+        public BigInteger getGasLimit(String contractFunc) {
+            switch (contractFunc) {
+                case Greeter.FUNC_GREET: return BigInteger.valueOf(4_300_000);
+                case Greeter.FUNC_KILL: return BigInteger.valueOf(5_300_000);
+                default: throw new NotImplementedException();
+            }
+        }
+    });
 
 
 Examples

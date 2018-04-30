@@ -305,6 +305,14 @@ To call a smart contract:
 
    Type result = contract.someMethod(<param1>, ...).send();
 
+To fine control your gas price:
+
+.. code-block:: java
+
+    contract.setGasProvider(new DefaultGasProvider() {
+            ...
+            });
+
 For more information refer to `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
 
 
