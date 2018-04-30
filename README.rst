@@ -543,6 +543,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `Pactum <https://pactum.io/>`_
 - `TrustWallet <http://trustwalletapp.com>`_
 - `Impetus <http://www.impetus.com/>`_
+- `Argent Labs <http://www.argent.im/>`_
 
 
 Build instructions
