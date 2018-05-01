@@ -1,13 +1,9 @@
 package org.web3j.rlp;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.List;
 
-import com.sun.tools.javac.util.ArrayUtils;
 import org.junit.Test;
-import org.web3j.utils.Bytes;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
