@@ -1,30 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Getting Started &mdash; web3j 3.3.1 documentation</title>
-    
+    <title>Getting Started &#8212; web3j 3.4.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '3.3.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.3.1 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Modules" href="modules.html" />
     <link rel="prev" title="Quickstart" href="quickstart.html" />
    
@@ -35,8 +26,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
 
     <div class="document">
@@ -50,15 +40,15 @@
 <div class="section" id="maven">
 <h2>Maven<a class="headerlink" href="#maven" title="Permalink to this headline">¶</a></h2>
 <p>Java 8:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>3.3.1<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>3.4.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
 <p>Android:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dependency&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
   <span class="nt">&lt;version&gt;</span>3.3.1-android<span class="nt">&lt;/version&gt;</span>
@@ -69,49 +59,53 @@
 <div class="section" id="gradle">
 <h2>Gradle<a class="headerlink" href="#gradle" title="Permalink to this headline">¶</a></h2>
 <p>Java 8:</p>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.3.1&#39;</span><span class="o">)</span>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.4.0&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Android:</p>
-<div class="highlight-groovy"><div class="highlight"><pre><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.3.1-android&#39;</span><span class="o">)</span>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:3.3.1-android&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="start-a-client">
 <h2>Start a client<a class="headerlink" href="#start-a-client" title="Permalink to this headline">¶</a></h2>
-<p>Start up an Ethereum client if you don&#8217;t already have one running, such as
+<p>Start up an Ethereum client if you don’t already have one running, such as
 <a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/geth">Geth</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>geth --rpcapi personal,db,eth,net,web3 --rpc --rinkeby
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ geth --rpcapi personal,db,eth,net,web3 --rpc --rinkeby
 </pre></div>
 </div>
 <p>Or <a class="reference external" href="https://github.com/paritytech/parity">Parity</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>parity --chain testnet
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ parity --chain testnet
 </pre></div>
 </div>
 <p>Or use <a class="reference external" href="https://infura.io/">Infura</a>, which provides <strong>free clients</strong> running in the cloud:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">(</span><span class="s">&quot;https://morden.infura.io/your-token&quot;</span><span class="o">));</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">(</span><span class="s">&quot;https://morden.infura.io/your-token&quot;</span><span class="o">));</span>
 </pre></div>
 </div>
-<p>For further information refer to <a class="reference internal" href="infura.html"><em>Using Infura with web3j</em></a>.</p>
+<p>For further information refer to <a class="reference internal" href="infura.html"><span class="doc">Using Infura with web3j</span></a>.</p>
 <p>Instructions on obtaining Ether to transact on the network can be found in the
-<a class="reference internal" href="transactions.html#ethereum-testnets"><span>testnet section of the docs</span></a>.</p>
+<a class="reference internal" href="transactions.html#ethereum-testnets"><span class="std std-ref">testnet section of the docs</span></a>.</p>
+<p>When you no longer need a <cite>Web3j</cite> instance you need to call the <cite>shutdown</cite> method to close resources used by it.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">web3</span><span class="o">.</span><span class="na">shutdown</span><span class="o">()</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="start-sending-requests">
 <h2>Start sending requests<a class="headerlink" href="#start-sending-requests" title="Permalink to this headline">¶</a></h2>
 <p>To send synchronous requests:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Web3ClientVersion</span> <span class="n">web3ClientVersion</span> <span class="o">=</span> <span class="n">web3</span><span class="o">.</span><span class="na">web3ClientVersion</span><span class="o">().</span><span class="na">send</span><span class="o">();</span>
 <span class="n">String</span> <span class="n">clientVersion</span> <span class="o">=</span> <span class="n">web3ClientVersion</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">();</span>
 </pre></div>
 </div>
 <p>To send asynchronous requests using a CompletableFuture (Future on Android):</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Web3ClientVersion</span> <span class="n">web3ClientVersion</span> <span class="o">=</span> <span class="n">web3</span><span class="o">.</span><span class="na">web3ClientVersion</span><span class="o">().</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
 <span class="n">String</span> <span class="n">clientVersion</span> <span class="o">=</span> <span class="n">web3ClientVersion</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">();</span>
 </pre></div>
 </div>
 <p>To use an RxJava Observable:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">web3</span><span class="o">.</span><span class="na">web3ClientVersion</span><span class="o">().</span><span class="na">observable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="o">{</span>
     <span class="n">String</span> <span class="n">clientVersion</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">();</span>
     <span class="o">...</span>
@@ -119,7 +113,7 @@
 </pre></div>
 </div>
 <p><strong>Note:</strong> for Android use:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3jFactory</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3jFactory</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="o">...</span>
 </pre></div>
 </div>
@@ -129,7 +123,7 @@
 <p>web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
 the same host as web3j. To connect simply use the relevant <em>IpcService</em> implementation instead of
 <em>HttpService</em> when you create your service:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="c1">// OS X/Linux/Unix:</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// OS X/Linux/Unix:</span>
 <span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">UnixIpcService</span><span class="o">(</span><span class="s">&quot;/path/to/socketfile&quot;</span><span class="o">));</span>
 <span class="o">...</span>
 
@@ -145,15 +139,15 @@ the same host as web3j. To connect simply use the relevant <em>IpcService</em> i
 <p>web3j can auto-generate smart contract wrapper code to deploy and interact with smart contracts
 without leaving the JVM.</p>
 <p>To generate the wrapper code, compile your smart contract:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>solc &lt;contract&gt;.sol --bin --abi --optimize -o &lt;output-dir&gt;/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ solc &lt;contract&gt;.sol --bin --abi --optimize -o &lt;output-dir&gt;/
 </pre></div>
 </div>
-<p>Then generate the wrapper code using web3j&#8217;s <a class="reference internal" href="command_line.html"><em>Command Line Tools</em></a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre>web3j solidity generate /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+<p>Then generate the wrapper code using web3j’s <a class="reference internal" href="command_line.html"><span class="doc">Command Line Tools</span></a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>web3j solidity generate /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
 <p>Now you can create and deploy your smart contract:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span><span class="s">&quot;password&quot;</span><span class="o">,</span> <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
 
 <span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
@@ -163,57 +157,57 @@ without leaving the JVM.</p>
 </pre></div>
 </div>
 <p>Or use an existing contract:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
         <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>To transact with a smart contract:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span>
              <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span>
              <span class="o">...).</span><span class="na">send</span><span class="o">();</span>
 </pre></div>
 </div>
 <p>To call a smart contract:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Type</span> <span class="n">result</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...).</span><span class="na">send</span><span class="o">();</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Type</span> <span class="n">result</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...).</span><span class="na">send</span><span class="o">();</span>
 </pre></div>
 </div>
-<p>For more information refer to <a class="reference internal" href="smart_contracts.html#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a>.</p>
+<p>For more information refer to <a class="reference internal" href="smart_contracts.html#smart-contract-wrappers"><span class="std std-ref">Solidity smart contract wrappers</span></a>.</p>
 </div>
 <div class="section" id="filters">
 <h2>Filters<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h2>
 <p>web3j functional-reactive nature makes it really simple to setup observers that notify subscribers
 of events taking place on the blockchain.</p>
 <p>To receive all new blocks as they are added to the blockchain:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">blockObservable</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">blockObservable</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
     <span class="o">...</span>
 <span class="o">});</span>
 </pre></div>
 </div>
 <p>To receive all new transactions as they are added to the blockchain:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">transactionObservable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">transactionObservable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
     <span class="o">...</span>
 <span class="o">});</span>
 </pre></div>
 </div>
 <p>To receive all pending transactions as they are submitted to the network (i.e. before they have
 been grouped into a block together):</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">pendingTransactionObservable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">pendingTransactionObservable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
     <span class="o">...</span>
 <span class="o">});</span>
 </pre></div>
 </div>
-<p>Or, if you&#8217;d rather replay all blocks to the most current, and be notified of new subsequent
+<p>Or, if you’d rather replay all blocks to the most current, and be notified of new subsequent
 blocks being created:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">catchUpToLatestAndSubscribeToNewBlocksObservable</span><span class="o">(</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">catchUpToLatestAndSubscribeToNewBlocksObservable</span><span class="o">(</span>
         <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">fullTxObjects</span><span class="o">&gt;)</span>
         <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
             <span class="o">...</span>
 <span class="o">});</span>
 </pre></div>
 </div>
-<p>There are a number of other transaction and block replay Observables described in <a class="reference internal" href="filters.html"><em>Filters and Events</em></a>.</p>
+<p>There are a number of other transaction and block replay Observables described in <a class="reference internal" href="filters.html"><span class="doc">Filters and Events</span></a>.</p>
 <p>Topic filters are also supported:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">EthFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EthFilter</span><span class="o">(</span><span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">EARLIEST</span><span class="o">,</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">EthFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EthFilter</span><span class="o">(</span><span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">EARLIEST</span><span class="o">,</span>
         <span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">LATEST</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">contract</span><span class="o">-</span><span class="n">address</span><span class="o">&gt;)</span>
              <span class="o">.</span><span class="na">addSingleTopic</span><span class="o">(...)|.</span><span class="na">addOptionalTopics</span><span class="o">(...,</span> <span class="o">...)|...;</span>
 <span class="n">web3j</span><span class="o">.</span><span class="na">ethLogObservable</span><span class="o">(</span><span class="n">filter</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">log</span> <span class="o">-&gt;</span> <span class="o">{</span>
@@ -222,11 +216,11 @@ blocks being created:</p>
 </pre></div>
 </div>
 <p>Subscriptions should always be cancelled when no longer required:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">subscription</span><span class="o">.</span><span class="na">unsubscribe</span><span class="o">();</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">subscription</span><span class="o">.</span><span class="na">unsubscribe</span><span class="o">();</span>
 </pre></div>
 </div>
 <p><strong>Note:</strong> filters are not supported on Infura.</p>
-<p>For further information refer to <a class="reference internal" href="filters.html"><em>Filters and Events</em></a> and the
+<p>For further information refer to <a class="reference internal" href="filters.html"><span class="doc">Filters and Events</span></a> and the
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java">Web3jRx</a>
 interface.</p>
 </div>
@@ -235,7 +229,7 @@ interface.</p>
 <p>web3j provides support for both working with Ethereum wallet files (<em>recommended</em>) and Ethereum
 client admin commands for sending transactions.</p>
 <p>To send Ether to another party using your Ethereum wallet file:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span><span class="s">&quot;password&quot;</span><span class="o">,</span> <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
 <span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">Transfer</span><span class="o">.</span><span class="na">sendFunds</span><span class="o">(</span>
         <span class="n">web3</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span>
@@ -244,7 +238,7 @@ client admin commands for sending transactions.</p>
 </pre></div>
 </div>
 <p>Or if you wish to create your own custom transaction:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3j</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">Credentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="n">WalletUtils</span><span class="o">.</span><span class="na">loadCredentials</span><span class="o">(</span><span class="s">&quot;password&quot;</span><span class="o">,</span> <span class="s">&quot;/path/to/walletfile&quot;</span><span class="o">);</span>
 
 <span class="c1">// get the next available nonce</span>
@@ -263,20 +257,20 @@ client admin commands for sending transactions.</p>
 <span class="c1">// ...</span>
 </pre></div>
 </div>
-<p>Although it&#8217;s far simpler using web3j&#8217;s <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java">Transfer</a>
+<p>Although it’s far simpler using web3j’s <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java">Transfer</a>
 for transacting with Ether.</p>
-<p>Using an Ethereum client&#8217;s admin commands (make sure you have your wallet in the client&#8217;s
+<p>Using an Ethereum client’s admin commands (make sure you have your wallet in the client’s
 keystore):</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Admin</span> <span class="n">web3j</span> <span class="o">=</span> <span class="n">Admin</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Admin</span> <span class="n">web3j</span> <span class="o">=</span> <span class="n">Admin</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
 <span class="n">PersonalUnlockAccount</span> <span class="n">personalUnlockAccount</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">personalUnlockAccount</span><span class="o">(</span><span class="s">&quot;0x000...&quot;</span><span class="o">,</span> <span class="s">&quot;a password&quot;</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
 <span class="k">if</span> <span class="o">(</span><span class="n">personalUnlockAccount</span><span class="o">.</span><span class="na">accountUnlocked</span><span class="o">())</span> <span class="o">{</span>
     <span class="c1">// send a transaction</span>
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>If you want to make use of Parity&#8217;s
+<p>If you want to make use of Parity’s
 <a class="reference external" href="https://github.com/paritytech/parity/wiki/JSONRPC-personal-module">Personal</a> or
-<a class="reference external" href="https://github.com/paritytech/parity/wiki/JSONRPC-trace-module">Trace</a>, or Geth&#8217;s
+<a class="reference external" href="https://github.com/paritytech/parity/wiki/JSONRPC-trace-module">Trace</a>, or Geth’s
 <a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal">Personal</a> client APIs,
 you can use the <em>org.web3j:parity</em> and <em>org.web3j:geth</em> modules respectively.</p>
 </div>
@@ -290,7 +284,7 @@ tools allow you to use some of the functionality of web3j from the command line:
 <li>Transfer of funds from one wallet to another</li>
 <li>Generate Solidity smart contract function wrappers</li>
 </ul>
-<p>Please refer to the <a class="reference internal" href="command_line.html"><em>documentation</em></a> for further
+<p>Please refer to the <a class="reference internal" href="command_line.html"><span class="doc">documentation</span></a> for further
 information.</p>
 </div>
 <div class="section" id="further-details">
@@ -298,7 +292,7 @@ information.</p>
 <p>In the Java 8 build:</p>
 <ul class="simple">
 <li>web3j provides type safe access to all responses. Optional or null responses
-are wrapped in Java 8&#8217;s
+are wrapped in Java 8’s
 <a class="reference external" href="https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html">Optional</a> type.</li>
 <li>Asynchronous requests are wrapped in a Java 8
 <a class="reference external" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html">CompletableFutures</a>.
@@ -314,7 +308,7 @@ causing problems with detection. See the
 <li>Quantity payload types are returned as <a class="reference external" href="https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html">BigIntegers</a>.
 For simple results, you can obtain the quantity as a String via
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/Response.java">Response</a>.getResult().</li>
-<li>It&#8217;s also possible to include the raw JSON payload in responses via the <em>includeRawResponse</em>
+<li>It’s also possible to include the raw JSON payload in responses via the <em>includeRawResponse</em>
 parameter, present in the
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/http/HttpService.java">HttpService</a>
 and
@@ -382,7 +376,7 @@ classes.</li>
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#maven">Maven</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gradle">Gradle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#start-a-client">Start a client</a></li>
@@ -424,15 +418,14 @@ classes.</li>
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -440,14 +433,14 @@ classes.</li>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016-2017, Conor Svensson.
+      &copy;2016-2018, Conor Svensson.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/getting_started.txt"
+      <a href="_sources/getting_started.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

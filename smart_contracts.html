@@ -1,30 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Smart Contracts &mdash; web3j 3.3.1 documentation</title>
-    
+    <title>Smart Contracts &#8212; web3j 3.4.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '3.3.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="web3j 3.3.1 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Application Binary Interface" href="abi.html" />
     <link rel="prev" title="Transactions" href="transactions.html" />
    
@@ -35,8 +26,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
 
     <div class="document">
@@ -53,15 +43,15 @@
 <dt><a class="reference external" href="https://github.com/ethereum/wiki/wiki/Serpent">Serpent</a></dt>
 <dd>A Python like language for writing smart contracts.</dd>
 <dt>LISP Like Language (LLL)</dt>
-<dd>A low level language, Serpent provides a superset of LLL. There&#8217;s not a great deal of information
+<dd>A low level language, Serpent provides a superset of LLL. There’s not a great deal of information
 for working with LLL, the following blog <a class="reference external" href="http://blog.syrinx.net/">/var/log/syrinx</a> and
 associated <a class="reference external" href="https://github.com/zigguratt/lll-resurrected">lll-resurrected GitHub</a> repository
 is a good place to start.</dd>
 </dl>
 <p>In order to deploy a smart contract onto the Ethereum blockchain, it must first be compiled into
 a bytecode format, then it can be sent as part of a transaction. web3j can do all of this for you
-with its <a class="reference internal" href="#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a>. To understand what is happening behind the scenes, you
-can refer to the details in <a class="reference internal" href="transactions.html#creation-of-smart-contract"><span>Creation of a smart contract</span></a>.</p>
+with its <a class="reference internal" href="#smart-contract-wrappers"><span class="std std-ref">Solidity smart contract wrappers</span></a>. To understand what is happening behind the scenes, you
+can refer to the details in <a class="reference internal" href="transactions.html#creation-of-smart-contract"><span class="std std-ref">Creation of a smart contract</span></a>.</p>
 <p>Given that Solidity is the language of choice for writing smart contracts, it is the language
 supported by web3j, and is used for all subsequent examples.</p>
 <div class="section" id="getting-started-with-solidity">
@@ -83,22 +73,22 @@ in the Ethereum Homestead Guide</li>
 locally following the instructions as per
 <a class="reference external" href="http://solidity.readthedocs.io/en/develop/installing-solidity.html">the project documentation</a>.</p>
 <p>To compile the Solidity code run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>solc &lt;contract&gt;.sol --bin --abi --optimize -o &lt;output-dir&gt;/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ solc &lt;contract&gt;.sol --bin --abi --optimize -o &lt;output-dir&gt;/
 </pre></div>
 </div>
-<p>The <em>&#8211;bin</em> and <em>&#8211;abi</em> compiler arguments are both required to take full advantage of working
+<p>The <em>–bin</em> and <em>–abi</em> compiler arguments are both required to take full advantage of working
 with smart contracts from web3j.</p>
 <dl class="docutils">
-<dt><em>&#8211;bin</em></dt>
+<dt><em>–bin</em></dt>
 <dd>Outputs a Solidity binary file containing the hex-encoded binary to provide with the transaction
 request.</dd>
-<dt><em>&#8211;abi</em></dt>
-<dd>Outputs a Solidity <a class="reference internal" href="abi.html"><em>Application Binary Interface</em></a> (ABI) file which details all of the publicly
+<dt><em>–abi</em></dt>
+<dd>Outputs a Solidity <a class="reference internal" href="abi.html"><span class="doc">Application Binary Interface</span></a> (ABI) file which details all of the publicly
 accessible contract methods and their associated parameters. These details along with the
 contract address are crucial for interacting with smart contracts. The ABI file is also used for
-the generation of <a class="reference internal" href="#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a>.</dd>
+the generation of <a class="reference internal" href="#smart-contract-wrappers"><span class="std std-ref">Solidity smart contract wrappers</span></a>.</dd>
 </dl>
-<p>There is also a <em>&#8211;gas</em> argument for providing estimates of the <a class="reference internal" href="transactions.html#gas"><span>Gas</span></a> required to create a
+<p>There is also a <em>–gas</em> argument for providing estimates of the <a class="reference internal" href="transactions.html#gas"><span class="std std-ref">Gas</span></a> required to create a
 contract and transact with its methods.</p>
 <p>Alternatively, you can write and compile Solidity code in your browser via the
 <a class="reference external" href="https://ethereum.github.io/browser-solidity/">browser-solidity</a> project. browser-solidity is
@@ -114,11 +104,11 @@ in the Homestead documentation.</p>
 <div class="section" id="deploying-and-interacting-with-smart-contracts">
 <h2>Deploying and interacting with smart contracts<a class="headerlink" href="#deploying-and-interacting-with-smart-contracts" title="Permalink to this headline">¶</a></h2>
 <p>If you want to avoid the underlying implementation detail for working with smart contracts, web3j
-provides <a class="reference internal" href="#smart-contract-wrappers"><span>Solidity smart contract wrappers</span></a> which enable you to interact directly with all of a smart
-contract&#8217;s methods via a generated wrapper object.</p>
+provides <a class="reference internal" href="#smart-contract-wrappers"><span class="std std-ref">Solidity smart contract wrappers</span></a> which enable you to interact directly with all of a smart
+contract’s methods via a generated wrapper object.</p>
 <p>Alternatively, if you wish to send regular transactions or have more control over your
 interactions with your smart contracts, please refer to the sections
-<a class="reference internal" href="transactions.html#creation-of-smart-contract"><span>Creation of a smart contract</span></a>, <a class="reference internal" href="transactions.html#transacting-with-contract"><span>Transacting with a smart contract</span></a> and <a class="reference internal" href="transactions.html#querying-state"><span>Querying the state of a smart contract</span></a>
+<a class="reference internal" href="transactions.html#creation-of-smart-contract"><span class="std std-ref">Creation of a smart contract</span></a>, <a class="reference internal" href="transactions.html#transacting-with-contract"><span class="std std-ref">Transacting with a smart contract</span></a> and <a class="reference internal" href="transactions.html#querying-state"><span class="std std-ref">Querying the state of a smart contract</span></a>
 for details.</p>
 </div>
 <div class="section" id="smart-contract-examples">
@@ -140,7 +130,7 @@ standard functions that a smart contract providing tokens should implement.</p>
 <p>The EIP-20 standard provides function definitions, but does not provide an implementation example.
 However, there is an implementation provided in
 <a class="reference external" href="https://github.com/web3j/web3j/tree/master/codegen/src/test/resources/solidity/contracts">codegen/src/test/resources/solidity/contracts</a>,
-which has been taken from ConsenSys&#8217;
+which has been taken from ConsenSys’
 <a class="reference external" href="https://github.com/ConsenSys/Tokens">Tokens project</a>.</p>
 <p>Open Zepplin also provide an example implementation on
 <a class="reference external" href="https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token">GitHub</a>.</p>
@@ -149,7 +139,7 @@ this token smart contract.</p>
 <p><a class="reference external" href="https://github.com/web3j/web3j/tree/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/HumanStandardTokenGeneratedIT.java">HumanStandardTokenGeneratedIT</a>
 uses the generated
 <a class="reference external" href="https://github.com/web3j/web3j/tree/master/integration-tests/src/test/java/org/web3j/generated/HumanStandardTokenGenerated.java">HumanStandardTokenGenerated</a>
-<a class="reference internal" href="#smart-contract-wrappers"><span>smart contract wrapper</span></a> to demonstrate this.</p>
+<a class="reference internal" href="#smart-contract-wrappers"><span class="std std-ref">smart contract wrapper</span></a> to demonstrate this.</p>
 <p>Alternatively, if you do not wish to use a smart contract wrapper and would like to work directly
 with the underlying JSON-RPC calls, please refer to
 <a class="reference external" href="https://github.com/web3j/web3j/tree/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/HumanStandardTokenIT.java">HumanStandardTokenIT</a>.</p>
@@ -158,46 +148,46 @@ with the underlying JSON-RPC calls, please refer to
 <span id="smart-contract-wrappers"></span><h2>Solidity smart contract wrappers<a class="headerlink" href="#solidity-smart-contract-wrappers" title="Permalink to this headline">¶</a></h2>
 <p>web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI
 files.</p>
-<p>The web3j <a class="reference internal" href="command_line.html"><em>Command Line Tools</em></a> tools ship with a command line utility for generating the smart contract function wrappers:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j solidity generate <span class="o">[</span>--javaTypes<span class="p">|</span>--solidityTypes<span class="o">]</span> /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+<p>The web3j <a class="reference internal" href="command_line.html"><span class="doc">Command Line Tools</span></a> tools ship with a command line utility for generating the smart contract function wrappers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ web3j solidity generate <span class="o">[</span>--javaTypes<span class="p">|</span>--solidityTypes<span class="o">]</span> /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
 <p>In versions prior to 3.x of web3j, the generated smart contract wrappers used native Solidity
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
-using the <em>&#8211;solidityTypes</em> command line argument.</p>
+using the <em>–solidityTypes</em> command line argument.</p>
 <p>You can also generate the wrappers by calling the Java class directly:</p>
-<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
-<p>Where the <em>bin</em> and <em>abi</em> are obtained as per <a class="reference internal" href="#compiling-solidity"><span>Compiling Solidity source code</span></a>.</p>
-<p>The native Java to Solidity type conversions used are detailed in the <a class="reference internal" href="abi.html"><em>Application Binary Interface</em></a> section.</p>
+<p>Where the <em>bin</em> and <em>abi</em> are obtained as per <a class="reference internal" href="#compiling-solidity"><span class="std std-ref">Compiling Solidity source code</span></a>.</p>
+<p>The native Java to Solidity type conversions used are detailed in the <a class="reference internal" href="abi.html"><span class="doc">Application Binary Interface</span></a> section.</p>
 <p>The smart contract wrappers support all common operations for working with smart contracts:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#construction-and-deployment"><span>Construction and deployment</span></a></li>
-<li><a class="reference internal" href="#invoking-transactions"><span>Invoking transactions and events</span></a></li>
-<li><a class="reference internal" href="#constant-methods"><span>Calling constant methods</span></a></li>
-<li><a class="reference internal" href="#contract-validity"><span>Contract validity</span></a></li>
+<li><a class="reference internal" href="#construction-and-deployment"><span class="std std-ref">Construction and deployment</span></a></li>
+<li><a class="reference internal" href="#invoking-transactions"><span class="std std-ref">Invoking transactions and events</span></a></li>
+<li><a class="reference internal" href="#constant-methods"><span class="std std-ref">Calling constant methods</span></a></li>
+<li><a class="reference internal" href="#contract-validity"><span class="std std-ref">Contract validity</span></a></li>
 </ul>
 <p>Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.</p>
 <p>web3j also supports the generation of Java smart contract function wrappers directly from
-<a class="reference external" href="http://truffleframework.com/">Truffle&#8217;s</a>
+<a class="reference external" href="http://truffleframework.com/">Truffle’s</a>
 <a class="reference external" href="https://github.com/trufflesuite/truffle-contract-schema">Contract Schema</a>
-via the <a class="reference internal" href="command_line.html"><em>Command Line Tools</em></a> utility.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>web3j truffle generate <span class="o">[</span>--javaTypes<span class="p">|</span>--solidityTypes<span class="o">]</span> /path/to/&lt;truffle-smart-contract-output&gt;.json -o /path/to/src/main/java -p com.your.organisation.name
+via the <a class="reference internal" href="command_line.html"><span class="doc">Command Line Tools</span></a> utility.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ web3j truffle generate <span class="o">[</span>--javaTypes<span class="p">|</span>--solidityTypes<span class="o">]</span> /path/to/&lt;truffle-smart-contract-output&gt;.json -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
 <p>And this also can be invoked by calling the Java class:</p>
-<div class="highlight-bash"><div class="highlight"><pre>org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/&lt;truffle-smart-contract-output&gt;.json -o /path/to/src/main/java -p com.your.organisation.name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/&lt;truffle-smart-contract-output&gt;.json -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
-<p>A wrapper generated this way ia &#8220;enhanced&#8221; to expose the per-network deployed address of the
+<p>A wrapper generated this way ia “enhanced” to expose the per-network deployed address of the
 contract.  These addresses are from the truffle deployment at the time the wrapper is generared.</p>
 </div>
 <div class="section" id="construction-and-deployment">
 <span id="id1"></span><h2>Construction and deployment<a class="headerlink" href="#construction-and-deployment" title="Permalink to this headline">¶</a></h2>
 <p>Construction and deployment of smart contracts happens with the <em>deploy</em> method:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
         <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">credentials</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">,</span>
         <span class="o">[&lt;</span><span class="n">initialValue</span><span class="o">&gt;,]</span>
         <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...,</span> <span class="o">&lt;</span><span class="n">paramN</span><span class="o">&gt;).</span><span class="na">send</span><span class="o">();</span>
@@ -211,8 +201,8 @@ construction. This requires the Solidity
 modifier to be present in the contract.</p>
 <p>It returns a new smart contract wrapper instance which contains the underlying address of the
 smart contract. If you wish to construct an instance of a smart contract wrapper with an existing
-smart contract, simply pass in it&#8217;s address:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
+smart contract, simply pass in it’s address:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">load</span><span class="o">(</span>
         <span class="s">&quot;0x&lt;address&gt;|&lt;ensName&gt;&quot;</span><span class="o">,</span> <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">);</span>
 </pre></div>
 </div>
@@ -223,7 +213,7 @@ smart contract, simply pass in it&#8217;s address:</p>
 smart contract that you expect. For this you can use the <em>isValid</em> smart contract method, which will
 only return true if the deployed bytecode at the contract address matches the bytecode in the
 smart contract wrapper.:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">contract</span><span class="o">.</span><span class="na">isValid</span><span class="o">();</span>  <span class="c1">// returns false if the contract bytecode does not match what&#39;s deployed</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">contract</span><span class="o">.</span><span class="na">isValid</span><span class="o">();</span>  <span class="c1">// returns false if the contract bytecode does not match what&#39;s deployed</span>
                      <span class="c1">// at the provided address</span>
 </pre></div>
 </div>
@@ -233,13 +223,13 @@ smart contract wrapper.:</p>
 <p>web3j provides a
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/TransactionManager.java">TransactionManager</a>
 abstraction to control the manner you connect to Ethereum clients with. The default mechanism uses
-web3j&#8217;s
+web3j’s
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/RawTransactionManager.java">RawTransactionManager</a>
 which works with Ethereum wallet files to sign transactions offline before submitting them to the
 network.</p>
 <p>However, you may wish to modify the transaction manager, which you can pass to the smart
 contract deployment and creation methods instead of a credentials object, i.e.:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">YourSmartContract</span> <span class="n">contract</span> <span class="o">=</span> <span class="n">YourSmartContract</span><span class="o">.</span><span class="na">deploy</span><span class="o">(</span>
         <span class="o">&lt;</span><span class="n">web3j</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">transactionManager</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">,</span>
         <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...,</span> <span class="o">&lt;</span><span class="n">paramN</span><span class="o">&gt;).</span><span class="na">send</span><span class="o">();</span>
 </pre></div>
@@ -258,16 +248,16 @@ for when you only want to retrieve data from a smart contract, but not transact 
 on transactions as per
 <a class="reference external" href="https://github.com/ethereum/EIPs/issues/155">EIP-155</a>. This prevents transactions from one chain
 being re-broadcast onto another chain, such as from Ropsten to Mainnet:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">TransactionManager</span> <span class="n">transactionManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RawTransactionManager</span><span class="o">(</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TransactionManager</span> <span class="n">transactionManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RawTransactionManager</span><span class="o">(</span>
         <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">ChainId</span><span class="o">.</span><span class="na">MAIN_NET</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>In order to avoid having to change config or code to specify which chain you are working with,
-web3j&#8217;s default behaviour is to not specify chain ids on transactions to simplify working with the
+web3j’s default behaviour is to not specify chain ids on transactions to simplify working with the
 library. However, the recommendation of the Ethereum community is to use them.</p>
 <p>You can obtain the chain id of the network that your Ethereum client is connected to with the
 following request:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">web3j</span><span class="o">.</span><span class="na">netVersion</span><span class="o">().</span><span class="na">send</span><span class="o">().</span><span class="na">getNetVersion</span><span class="o">();</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">web3j</span><span class="o">.</span><span class="na">netVersion</span><span class="o">().</span><span class="na">send</span><span class="o">().</span><span class="na">getNetVersion</span><span class="o">();</span>
 </pre></div>
 </div>
 </div>
@@ -304,15 +294,15 @@ network.</p>
 <p>If you do not wish to use the default processor
 (<a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/PollingTransactionReceiptProcessor.java">PollingTransactionReceiptProcessor</a>), you can
 specify the transaction receipt processor to use as follows:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">TransactionReceiptProcessor</span> <span class="n">transactionReceiptProcessor</span> <span class="o">=</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TransactionReceiptProcessor</span> <span class="n">transactionReceiptProcessor</span> <span class="o">=</span>
         <span class="k">new</span> <span class="n">QueuingTransactionReceiptProcessor</span><span class="o">(</span><span class="n">web3j</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callback</span><span class="o">()</span> <span class="o">{</span>
                  <span class="nd">@Override</span>
-                 <span class="kd">public</span> <span class="kt">void</span> <span class="n">accept</span><span class="o">(</span><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span><span class="o">)</span> <span class="o">{</span>
+                 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span><span class="o">)</span> <span class="o">{</span>
                      <span class="c1">// process transactionReceipt</span>
                  <span class="o">}</span>
 
                  <span class="nd">@Override</span>
-                 <span class="kd">public</span> <span class="kt">void</span> <span class="n">exception</span><span class="o">(</span><span class="n">Exception</span> <span class="n">exception</span><span class="o">)</span> <span class="o">{</span>
+                 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">exception</span><span class="o">(</span><span class="n">Exception</span> <span class="n">exception</span><span class="o">)</span> <span class="o">{</span>
                      <span class="c1">// handle exception</span>
                  <span class="o">}</span>
 <span class="n">TransactionManager</span> <span class="n">transactionManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RawTransactionManager</span><span class="o">(</span>
@@ -330,7 +320,7 @@ the same parameter values. Transactional calls do not return any values, regardl
 type specified on the method. Hence, for all transactional methods the
 <a class="reference external" href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">Transaction Receipt</a>
 associated with the transaction is returned.:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(</span>
              <span class="o">&lt;</span><span class="n">param1</span><span class="o">&gt;,</span>
              <span class="o">...).</span><span class="na">send</span><span class="o">();</span>
 </pre></div>
@@ -347,16 +337,16 @@ extracts the indexed and non-indexed event parameters, which are returned decode
 the
 <a class="reference external" href="https://github.com/web3j/web3j/blob/master/abi/src/main/java/org/web3j/abi/EventValues.java">EventValues</a>
 object.:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">EventValues</span> <span class="n">eventValues</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">processSomeEvent</span><span class="o">(</span><span class="n">transactionReceipt</span><span class="o">);</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">EventValues</span> <span class="n">eventValues</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">processSomeEvent</span><span class="o">(</span><span class="n">transactionReceipt</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>Alternatively you can use an Observable filter instead which will listen for events associated with
 the smart contract:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">contract</span><span class="o">.</span><span class="na">someEventObservable</span><span class="o">(</span><span class="n">startBlock</span><span class="o">,</span> <span class="n">endBlock</span><span class="o">).</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">contract</span><span class="o">.</span><span class="na">someEventObservable</span><span class="o">(</span><span class="n">startBlock</span><span class="o">,</span> <span class="n">endBlock</span><span class="o">).</span>
         <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">event</span> <span class="o">-&gt;</span> <span class="o">...);</span>
 </pre></div>
 </div>
-<p>For more information on working with Observable filters, refer to <a class="reference internal" href="filters.html"><em>Filters and Events</em></a>.</p>
+<p>For more information on working with Observable filters, refer to <a class="reference internal" href="filters.html"><span class="doc">Filters and Events</span></a>.</p>
 <p><strong>Remember</strong> that for any indexed array, bytes and string Solidity parameter
 types, a Keccak-256 hash of their values will be returned, see the
 <a class="reference external" href="http://Solidity.readthedocs.io/en/latest/contracts.html#events">documentation</a>
@@ -367,13 +357,43 @@ for further information.</p>
 <p>Constant methods are those that read a value in a smart contract, and do not alter the state of
 the smart contract. These methods are available with the same method signature as the smart
 contract they were generated from:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">Type</span> <span class="n">result</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...).</span><span class="na">send</span><span class="o">();</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Type</span> <span class="n">result</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">someMethod</span><span class="o">(&lt;</span><span class="n">param1</span><span class="o">&gt;,</span> <span class="o">...).</span><span class="na">send</span><span class="o">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dynamic-gas-price-and-limit">
+<h2>Dynamic gas price and limit<a class="headerlink" href="#dynamic-gas-price-and-limit" title="Permalink to this headline">¶</a></h2>
+<p>When working with smart contracts you might want to specify different gas and limit values depending
+on the function executed. You can do that by setting your own ContractGasProvider to the contract wrapper.
+Every generated wrapper also have all the functions listed as a constants so that you can do
+simple compilation-time matching with ‘switch’.
+Here is an example from Greeter contract:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Greeter</span> <span class="n">greeter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Greeter</span><span class="o">(...);</span>
+<span class="n">greeter</span><span class="o">.</span><span class="na">setGasProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">DefaultGasProvider</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">BigInteger</span> <span class="nf">getGasPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">contractFunc</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">contractFunc</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="n">Greeter</span><span class="o">.</span><span class="na">FUNC_GREET</span><span class="o">:</span> <span class="k">return</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">22_000_000_000L</span><span class="o">);</span>
+            <span class="k">case</span> <span class="n">Greeter</span><span class="o">.</span><span class="na">FUNC_KILL</span><span class="o">:</span> <span class="k">return</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">44_000_000_000L</span><span class="o">);</span>
+            <span class="k">default</span><span class="o">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">NotImplementedException</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">BigInteger</span> <span class="nf">getGasLimit</span><span class="o">(</span><span class="n">String</span> <span class="n">contractFunc</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">contractFunc</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="n">Greeter</span><span class="o">.</span><span class="na">FUNC_GREET</span><span class="o">:</span> <span class="k">return</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">4_300_000</span><span class="o">);</span>
+            <span class="k">case</span> <span class="n">Greeter</span><span class="o">.</span><span class="na">FUNC_KILL</span><span class="o">:</span> <span class="k">return</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">5_300_000</span><span class="o">);</span>
+            <span class="k">default</span><span class="o">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">NotImplementedException</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">});</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>Please refer to <a class="reference internal" href="#eip"><span>EIP-20 Ethereum token standard smart contract</span></a>.</p>
+<p>Please refer to <a class="reference internal" href="#eip"><span class="std std-ref">EIP-20 Ethereum token standard smart contract</span></a>.</p>
 </div>
 </div>
 
@@ -438,7 +458,7 @@ contract they were generated from:</p>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transactions.html">Transactions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Smart Contracts</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Smart Contracts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started-with-solidity">Getting started with Solidity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#compiling-solidity-source-code">Compiling Solidity source code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deploying-and-interacting-with-smart-contracts">Deploying and interacting with smart contracts</a></li>
@@ -452,6 +472,7 @@ contract they were generated from:</p>
 <li class="toctree-l2"><a class="reference internal" href="#transaction-receipt-processors">Transaction Receipt Processors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#invoking-transactions-and-events">Invoking transactions and events</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#calling-constant-methods">Calling constant methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dynamic-gas-price-and-limit">Dynamic gas price and limit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
@@ -481,15 +502,14 @@ contract they were generated from:</p>
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -497,14 +517,14 @@ contract they were generated from:</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016-2017, Conor Svensson.
+      &copy;2016-2018, Conor Svensson.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/smart_contracts.txt"
+      <a href="_sources/smart_contracts.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
