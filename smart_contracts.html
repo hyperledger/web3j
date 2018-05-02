@@ -362,12 +362,16 @@ contract they were generated from:</p>
 </div>
 </div>
 <div class="section" id="dynamic-gas-price-and-limit">
-<h2>Dynamic gas price and limit<a class="headerlink" href="#dynamic-gas-price-and-limit" title="Permalink to this headline">¶</a></h2>
-<p>When working with smart contracts you might want to specify different gas and limit values depending
-on the function executed. You can do that by setting your own ContractGasProvider to the contract wrapper.
-Every generated wrapper also have all the functions listed as a constants so that you can do
-simple compilation-time matching with ‘switch’.
-Here is an example from Greeter contract:</p>
+<span id="dynamic-gas"></span><h2>Dynamic gas price and limit<a class="headerlink" href="#dynamic-gas-price-and-limit" title="Permalink to this headline">¶</a></h2>
+<p>When working with smart contracts you may want to specify different gas price and limit values
+depending on the function being invoked. You can do that by creating your own
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/gas/ContractGasProvider.java">ContractGasProvider</a>
+for the smart contract wrapper.</p>
+<p>Every generated wrapper contains all smart contract method names listed as a constants, which
+facilitates compilation-time matching via a <em>switch</em> statement.</p>
+<p>For example, using the
+<a class="reference external" href="https://github.com/web3j/web3j/blob/master/codegen/src/test/resources/solidity/greeter/Greeter.sol">Greeter</a>
+contract:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Greeter</span> <span class="n">greeter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Greeter</span><span class="o">(...);</span>
 <span class="n">greeter</span><span class="o">.</span><span class="na">setGasProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">DefaultGasProvider</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
