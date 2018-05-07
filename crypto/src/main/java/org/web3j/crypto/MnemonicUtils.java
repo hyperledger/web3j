@@ -49,7 +49,7 @@ public class MnemonicUtils {
         if (WORD_LIST == null) {
             WORD_LIST = populateWordList();
         }
-        validateInitialEntropy(initialEntropy);
+        validateEntropy(initialEntropy);
 
         int ent = initialEntropy.length * 8;
         int checksumLength = ent / 32;
@@ -73,6 +73,39 @@ public class MnemonicUtils {
     }
 
     /**
+     * Create entropy from the mnemonic.
+     * @param mnemonic The input mnemonic which should be 128-160 bits in length containing
+     *                 only valid words
+     * @return Byte array representation of the entropy
+     */
+    public static byte[] generateEntropy(String mnemonic) {
+        if (WORD_LIST == null) {
+            WORD_LIST = populateWordList();
+        }
+        if (isMnemonicEmpty(mnemonic)) {
+            throw new IllegalArgumentException("Mnemonic is empty");
+        }
+
+        String bits = mnemonicToBits(mnemonic);
+
+        // split the binary string into ENT/CS.
+        int totalLength = bits.length();
+        int ent = (int) Math.floor(totalLength / 33) * 32;
+        String entropyBits = bits.substring(0, ent);
+        String checksumBits = rightPad(bits.substring(ent), "0", 8);
+
+        byte[] entropy = bitsToBytes(entropyBits);
+        validateEntropy(entropy);
+
+        byte newChecksum = calculateChecksum(entropy);
+        if (newChecksum != (byte) Integer.parseInt(checksumBits, 2)) {
+            throw new IllegalArgumentException("Checksum of mnemonic is invalid");
+        }
+
+        return entropy;
+    }
+
+    /**
      * To create a binary seed from the mnemonic, we use the PBKDF2 function with a
      * mnemonic sentence (in UTF-8 NFKD) used as the password and the string "mnemonic"
      * + passphrase (again in UTF-8 NFKD) used as the salt. The iteration count is set
@@ -86,7 +119,9 @@ public class MnemonicUtils {
      * @return Byte array representation of the generated seed
      */
     public static byte[] generateSeed(String mnemonic, String passphrase) {
-        validateMnemonic(mnemonic);
+        if (isMnemonicEmpty(mnemonic)) {
+            throw new IllegalArgumentException("Mnemonic is required to generate a seed");
+        }
         passphrase = passphrase == null ? "" : passphrase;
 
         String salt = String.format("mnemonic%s", passphrase);
@@ -96,10 +131,17 @@ public class MnemonicUtils {
         return ((KeyParameter) gen.generateDerivedParameters(SEED_KEY_SIZE)).getKey();
     }
 
-    private static void validateMnemonic(String mnemonic) {
-        if (mnemonic == null || mnemonic.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mnemonic is required to generate a seed");
+    public static boolean validateMnemonic(String mnemonic) {
+        try {
+            generateEntropy(mnemonic);
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
+    }
+
+    private static boolean isMnemonicEmpty(String mnemonic) {
+        return mnemonic == null || mnemonic.trim().isEmpty();
     }
 
     private static boolean[] nextElevenBits(boolean[] bits, int i) {
@@ -108,12 +150,12 @@ public class MnemonicUtils {
         return Arrays.copyOfRange(bits, from, to);
     }
 
-    private static void validateInitialEntropy(byte[] initialEntropy) {
-        if (initialEntropy == null) {
-            throw new IllegalArgumentException("Initial entropy is required");
+    private static void validateEntropy(byte[] entropy) {
+        if (entropy == null) {
+            throw new IllegalArgumentException("Entropy is required");
         }
 
-        int ent = initialEntropy.length * 8;
+        int ent = entropy.length * 8;
         if (ent < 128 || ent > 256 || ent % 32 != 0) {
             throw new IllegalArgumentException("The allowed size of ENT is 128-256 bits of "
                     + "multiples of 32");
@@ -154,6 +196,50 @@ public class MnemonicUtils {
         }
 
         return value;
+    }
+
+    private static String mnemonicToBits(String mnemonic) {
+        String[] words = mnemonic.split(" ");
+
+        StringBuilder bits = new StringBuilder();
+        for (String word : words) {
+            int index = WORD_LIST.indexOf(word);
+            if (index == -1) {
+                throw new IllegalArgumentException(String.format(
+                        "Mnemonic word '%s' should be in the word list", word));
+            }
+            bits.append(leftPad(Integer.toBinaryString(index), "0", 11));
+        }
+
+        return bits.toString();
+    }
+
+    private static byte[] bitsToBytes(String bits) {
+        byte[] bytes = new byte[(int) Math.ceil(bits.length() / 8f)];
+        int index = 0;
+        for (int iByte = 0; iByte < bytes.length; iByte++) {
+            String byteStr = bits.substring(index, Math.min(index + 8, bits.length()));
+            bytes[iByte] = (byte) Integer.parseInt(byteStr, 2);
+            index += 8;
+        }
+
+        return bytes;
+    }
+
+    private static String leftPad(String str, String padString, int length) {
+        StringBuilder resultStr = new StringBuilder(str);
+        while (resultStr.length() < length) {
+            resultStr.insert(0, padString);
+        }
+        return resultStr.toString();
+    }
+
+    private static String rightPad(String str, String padString, int length) {
+        StringBuilder resultStr = new StringBuilder(str);
+        for (int i = str.length(); i < length; i++) {
+            resultStr.append(padString);
+        }
+        return resultStr.toString();
     }
 
     private static byte calculateChecksum(byte[] initialEntropy) {
