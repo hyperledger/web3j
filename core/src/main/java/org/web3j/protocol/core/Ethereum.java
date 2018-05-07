@@ -35,6 +35,8 @@ public interface Ethereum {
 
     Request<?, EthBlockNumber> ethBlockNumber();
 
+    Request<?, EthMetaData> ethMetaData(DefaultBlockParameter defaultBlockParameter);
+
     Request<?, EthGetBalance> ethGetBalance(
             String address, DefaultBlockParameter defaultBlockParameter);
 

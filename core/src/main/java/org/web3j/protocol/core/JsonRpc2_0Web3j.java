@@ -154,6 +154,15 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
+    public Request<?, EthMetaData> ethMetaData(DefaultBlockParameter defaultBlockParameter){
+        return new Request<>(
+                "cita_getMetaData",
+                Arrays.asList(defaultBlockParameter.getValue()),
+                web3jService,
+                EthMetaData.class);
+    }
+
+    @Override
     public Request<?, EthBlockNumber> ethBlockNumber() {
         return new Request<>(
                 "cita_blockNumber",
