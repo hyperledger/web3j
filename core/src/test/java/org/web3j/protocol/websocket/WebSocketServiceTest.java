@@ -232,7 +232,7 @@ public class WebSocketServiceTest {
                 requestSent.await(2, TimeUnit.SECONDS);
                 sendGethVersionReply();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 

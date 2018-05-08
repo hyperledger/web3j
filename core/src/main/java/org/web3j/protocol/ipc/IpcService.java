@@ -43,12 +43,7 @@ public class IpcService extends Service {
 
     @Override
     protected InputStream performIO(String payload) throws IOException {
-        IOFacade io;
-        if (ioFacade != null) {
-            io = ioFacade;
-        } else {
-            io = getIO();
-        }
+        IOFacade io = getIoFacade();
         io.write(payload);
         log.debug(">> " + payload);
 
@@ -64,10 +59,22 @@ public class IpcService extends Service {
         return new ByteArrayInputStream(result.getBytes("UTF-8"));
     }
 
+    private IOFacade getIoFacade() {
+        IOFacade io;
+        if (ioFacade != null) {
+            io = ioFacade;
+        } else {
+            io = getIO();
+        }
+        return io;
+    }
+
     @Override
     public void close() throws IOException {
-        if (ioFacade != null) {
-            ioFacade.close();
+        IOFacade io = getIoFacade();
+
+        if (io != null) {
+            io.close();
         }
     }
 }

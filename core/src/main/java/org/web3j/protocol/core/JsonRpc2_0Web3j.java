@@ -69,8 +69,6 @@ import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
 import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
-import org.web3j.protocol.websocket.events.PendingTransactionNotification;
-import org.web3j.protocol.websocket.events.SyncingNotfication;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -734,32 +732,6 @@ public class JsonRpc2_0Web3j implements Web3j {
             params.put("topics", topics);
         }
         return params;
-    }
-
-    @Override
-    public Observable<PendingTransactionNotification> newPendingTransactionsNotifications() {
-        return web3jService.subscribe(
-                new Request<>(
-                        "eth_subscribe",
-                        Arrays.asList("newPendingTransactions"),
-                        web3jService,
-                        EthSubscribe.class),
-                "eth_unsubscribe",
-                PendingTransactionNotification.class
-        );
-    }
-
-    @Override
-    public Observable<SyncingNotfication> syncingStatusNotifications() {
-        return web3jService.subscribe(
-                new Request<>(
-                        "eth_subscribe",
-                        Arrays.asList("syncing"),
-                        web3jService,
-                        EthSubscribe.class),
-                "eth_unsubscribe",
-                SyncingNotfication.class
-        );
     }
 
     @Override

@@ -13,7 +13,7 @@ dependencies {
             "org.java-websocket:Java-WebSocket:$javaWebSocketVersion"
     testCompile project(path: ':crypto', configuration: 'testArtifacts'),
             "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
-            group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+            "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 task createProperties(dependsOn: processResources) doLast {

@@ -115,7 +115,7 @@ public class WebSocketService implements Web3jService {
 
             @Override
             public void onError(Exception e) {
-
+                log.error("Received error from a WebSocket connection", e);
             }
 
             @Override
@@ -177,7 +177,7 @@ public class WebSocketService implements Web3jService {
     }
 
     void closeRequest(long requestId, Exception e) {
-        CompletableFuture result = requestForId.get(requestId).getCompletableFuture();
+        CompletableFuture result = requestForId.get(requestId).getOnReply();
         requestForId.remove(requestId);
         result.completeExceptionally(e);
     }
@@ -261,14 +261,14 @@ public class WebSocketService implements Web3jService {
     }
 
     private void sendReplyToListener(WebSocketRequest request, Object reply) {
-        request.getCompletableFuture().complete(reply);
+        request.getOnReply().complete(reply);
     }
 
     private void sendExceptionToListener(
             String replyStr,
             WebSocketRequest request,
             IllegalArgumentException e) {
-        request.getCompletableFuture().completeExceptionally(
+        request.getOnReply().completeExceptionally(
                 new IOException(
                         String.format(
                                 "Failed to parse '%s' as type %s",
@@ -431,7 +431,7 @@ public class WebSocketService implements Web3jService {
 
     private void closeOutstandingRequests() {
         requestForId.values().forEach(request -> {
-            request.getCompletableFuture()
+            request.getOnReply()
                     .completeExceptionally(new IOException("Connection was closed"));
         });
     }

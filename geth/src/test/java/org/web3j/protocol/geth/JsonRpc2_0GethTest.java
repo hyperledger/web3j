@@ -1,8 +1,6 @@
-package org.web3j.protocol.core;
+package org.web3j.protocol.geth;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.websocket.WebSocketClient;
 import org.web3j.protocol.websocket.WebSocketListener;
 import org.web3j.protocol.websocket.WebSocketService;
@@ -24,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class WebSocketEventTest {
+public class JsonRpc2_0GethTest {
 
     private WebSocketClient webSocketClient = mock(WebSocketClient.class);
 
@@ -32,7 +29,7 @@ public class WebSocketEventTest {
             webSocketClient, true
     );
 
-    private Web3j web3j = Web3j.build(webSocketService);
+    private Geth geth = Geth.build(webSocketService);
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
@@ -58,34 +55,23 @@ public class WebSocketEventTest {
         webSocketService.connect();
     }
 
+
     @Test
-    public void testNewHeadsNotifications() {
-        web3j.newHeadsNotifications();
+    public void testPendingTransactionsNotifications() {
+        geth.newPendingTransactionsNotifications();
 
         verify(webSocketClient).send(matches(
-                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
-                        + "\"params\":\\[\"newHeads\"],\"id\":[0-9]{1,}}"));
+                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\",\"params\":"
+                        + "\\[\"newPendingTransactions\"],\"id\":[0-9]{1,}}"));
     }
 
     @Test
-    public void testLogsNotificationsWithoutArguments() {
-        web3j.logsNotifications(new ArrayList<>(), new ArrayList<>());
+    public void testSyncingStatusNotifications() {
+        geth.syncingStatusNotifications();
 
         verify(webSocketClient).send(matches(
                 "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
-                        + "\"params\":\\[\"logs\",\\{}],\"id\":[0-9]{1,}}"));
-    }
-
-    @Test
-    public void testLogsNotificationsWithArguments() {
-        web3j.logsNotifications(
-                Collections.singletonList("0x1"),
-                Collections.singletonList("0x2"));
-
-        verify(webSocketClient).send(matches(
-                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
-                        + "\"params\":\\[\"logs\",\\{\"address\":\\[\"0x1\"],"
-                        + "\"topics\":\\[\"0x2\"]}],\"id\":[0-9]{1,}}"));
+                        + "\"params\":\\[\"syncing\"],\"id\":[0-9]{1,}}"));
     }
 
     private int getRequestId(String message) throws IOException {

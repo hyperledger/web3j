@@ -10,11 +10,9 @@ import org.web3j.protocol.Web3jService;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-public class JsonRpc2_0WebSocketClientJTest {
+public class JsonRpc2_0Web3jTest {
 
     private ScheduledExecutorService scheduledExecutorService
             = mock(ScheduledExecutorService.class);
