@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
@@ -24,6 +25,11 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
         super(web3jService);
     }
     
+    public JsonRpc2_0Admin(Web3jService web3jService, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        super(web3jService, pollingInterval, scheduledExecutorService);
+    }
+
     @Override
     public Request<?, PersonalListAccounts> personalListAccounts() {
         return new Request<>(

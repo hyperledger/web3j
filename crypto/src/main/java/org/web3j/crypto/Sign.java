@@ -40,10 +40,10 @@ public class Sign {
         return signMessage(message, keyPair, true);
     }
 
-    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean isHashed) {
+    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean needToHash) {
         BigInteger publicKey = keyPair.getPublicKey();
         byte[] messageHash;
-        if (isHashed) {
+        if (needToHash) {
             messageHash = Hash.sha3(message);
         } else {
             messageHash = message;
@@ -96,7 +96,7 @@ public class Sign {
      * @param message Hash of the data that was signed.
      * @return An ECKey containing only the public part, or null if recovery wasn't possible.
      */
-    private static BigInteger recoverFromSignature(int recId, ECDSASignature sig, byte[] message) {
+    public static BigInteger recoverFromSignature(int recId, ECDSASignature sig, byte[] message) {
         verifyPrecondition(recId >= 0, "recId must be positive");
         verifyPrecondition(sig.r.signum() >= 0, "r must be positive");
         verifyPrecondition(sig.s.signum() >= 0, "s must be positive");

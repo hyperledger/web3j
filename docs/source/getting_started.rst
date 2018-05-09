@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.3.1</version>
+     <version>3.4.0</version>
    </dependency>
 
 Android:
@@ -33,7 +33,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.3.1')
+   compile ('org.web3j:core:3.4.0')
 
 Android:
 
@@ -68,6 +68,12 @@ For further information refer to :doc:`infura`.
 
 Instructions on obtaining Ether to transact on the network can be found in the
 :ref:`testnet section of the docs <ethereum-testnets>`.
+
+When you no longer need a `Web3j` instance you need to call the `shutdown` method to close resources used by it.
+
+.. code-block:: java
+
+   web3.shutdown()
 
 
 Start sending requests
