@@ -5,5 +5,5 @@ dependencies {
     compile project(':core'),
             "com.squareup:javapoet:$javapoetVersion"
     testCompile project(path: ':core', configuration: 'testArtifacts')
-    compile 'commons-cli:commons-cli:1.4'
+    compile 'info.picocli:picocli:3.0.0'
 }

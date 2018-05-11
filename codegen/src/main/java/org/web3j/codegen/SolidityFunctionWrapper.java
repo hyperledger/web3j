@@ -242,6 +242,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private List<MethodSpec> buildFunctionDefinitions(
+            String className,
             TypeSpec.Builder classBuilder,
             List<AbiDefinition> functionDefinitions) throws ClassNotFoundException {
 
@@ -252,24 +253,10 @@ public class SolidityFunctionWrapper extends Generator {
 
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
-
             }
         }
 
         return methodSpecs;
-    }
-
-    private static MethodSpec buildConstructor(Class authType, String authName) {
-        return MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PROTECTED)
-                .addParameter(String.class, CONTRACT_ADDRESS)
-                .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName)
-                .addParameter(BigInteger.class, GAS_PRICE)
-                .addParameter(BigInteger.class, GAS_LIMIT)
-                .addStatement("super($N, $N, $N, $N, $N, $N)",
-                        BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
-                .build();
     }
 
     List<MethodSpec> buildDeployMethods(String className,
@@ -301,6 +288,7 @@ public class SolidityFunctionWrapper extends Generator {
             methodSpecs.add(buildDeployNoParams(
                     transactionManagerMethodBuilder, className, TRANSACTION_MANAGER, false));
         }
+
         return methodSpecs;
     }
 
@@ -325,19 +313,6 @@ public class SolidityFunctionWrapper extends Generator {
             }
         }
         return fields;
-    }
-
-    private static MethodSpec buildConstructor(Class authType, String authName) {
-        return MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PROTECTED)
-                .addParameter(String.class, CONTRACT_ADDRESS)
-                .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName)
-                .addParameter(BigInteger.class, GAS_PRICE)
-                .addParameter(BigInteger.class, GAS_LIMIT)
-                .addStatement("super($N, $N, $N, $N, $N, $N)",
-                        BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
-                .build();
     }
 
     private static MethodSpec buildConstructor(Class authType, String authName) {
