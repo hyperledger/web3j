@@ -153,6 +153,12 @@ public abstract class Contract extends ManagedTransaction {
      * @throws IOException if unable to connect to web3j node
      */
     public boolean isValid() throws IOException {
+        if (contractBinary.equals(BIN_NOT_PROVIDED)) {
+            throw new UnsupportedOperationException(
+                    "Contract binary not present in contract wrapper, "
+                            + "please generate your wrapper using -abiFile=<file>");
+        }
+
         if (contractAddress.equals("")) {
             throw new UnsupportedOperationException(
                     "Contract binary not present, you will need to regenerate your smart "
