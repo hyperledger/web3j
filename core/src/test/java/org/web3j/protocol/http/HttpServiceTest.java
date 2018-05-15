@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.mockito.Mockito;
+
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
@@ -56,37 +57,37 @@ public class HttpServiceTest {
     public void httpWebException() throws IOException {
         String content = "400 error";
         Response response = new Response.Builder()
-            .code(400)
-            .message("")
-            .body(ResponseBody.create(null, content))
-            .request(new okhttp3.Request.Builder()
-                .url(HttpService.DEFAULT_URL)
-                .build())
-            .protocol(Protocol.HTTP_1_1)
-            .build();
+                .code(400)
+                .message("")
+                .body(ResponseBody.create(null, content))
+                .request(new okhttp3.Request.Builder()
+                        .url(HttpService.DEFAULT_URL)
+                        .build())
+                .protocol(Protocol.HTTP_1_1)
+                .build();
 
         OkHttpClient httpClient = Mockito.mock(OkHttpClient.class);
         Mockito.when(httpClient.newCall(Mockito.any()))
-            .thenAnswer(invocation -> {
-                Call call = Mockito.mock(Call.class);
-                Mockito.when(call.execute()).thenReturn(response);
+                .thenAnswer(invocation -> {
+                    Call call = Mockito.mock(Call.class);
+                    Mockito.when(call.execute()).thenReturn(response);
 
-                return call;
-            });
+                    return call;
+                });
         HttpService mockedHttpService = new HttpService(httpClient);
 
         Request<String, EthBlockNumber> request = new Request<>(
-            "eth_blockNumber1",
-            Collections.emptyList(),
-            mockedHttpService,
-            EthBlockNumber.class);
+                "eth_blockNumber1",
+                Collections.emptyList(),
+                mockedHttpService,
+                EthBlockNumber.class);
         try {
             mockedHttpService.send(request, EthBlockNumber.class);
         } catch (ClientConnectionException e) {
             Assert.assertEquals(
-                e.getMessage(),
-                "Invalid response received: "
-                    + response.code() + "; " + content);
+                    e.getMessage(),
+                    "Invalid response received: "
+                            + response.code() + "; " + content);
             return;
         }
 
