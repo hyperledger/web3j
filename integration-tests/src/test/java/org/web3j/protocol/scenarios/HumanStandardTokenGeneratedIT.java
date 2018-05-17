@@ -47,7 +47,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         Disposable transferEventSubscription = contract.transferEventObservable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
-                        transferEventResponse -> transferEventCountDownLatch.countDown()
+                transferEventResponse -> transferEventCountDownLatch.countDown()
         );
 
         CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);

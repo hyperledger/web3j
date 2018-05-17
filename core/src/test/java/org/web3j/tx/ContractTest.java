@@ -39,6 +39,9 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -55,6 +58,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ContractTest extends ManagedTransactionTester {
@@ -72,7 +76,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+                DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
     }
 
     @Test
@@ -276,7 +280,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, transactionManager,
-                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+                new DefaultGasProvider());
 
         testErrorScenario();
     }
@@ -312,6 +316,23 @@ public class ContractTest extends ManagedTransactionTester {
         BigInteger newPrice = ManagedTransaction.GAS_PRICE.multiply(BigInteger.valueOf(2));
         contract.setGasPrice(newPrice);
         assertEquals(newPrice, contract.getGasPrice());
+    }
+
+    @Test
+    public void testStaticGasProvider() throws IOException, TransactionException {
+        StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.TEN, BigInteger.ONE);
+        TransactionManager txManager = mock(TransactionManager.class);
+        when(txManager.executeTransaction(any(), any(), any(), any(), any()))
+                .thenReturn(new TransactionReceipt());
+
+        contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
+
+        Function func = new Function("test",
+                Arrays.<Type>asList(), Collections.<TypeReference<?>>emptyList());
+        contract.executeTransaction(func);
+
+        verify(txManager).executeTransaction(eq(BigInteger.TEN),
+                eq(BigInteger.ONE), any(), any(), any());
     }
 
     @Test(expected = RuntimeException.class)
@@ -430,9 +451,8 @@ public class ContractTest extends ManagedTransactionTester {
         public TestContract(
                 String contractAddress,
                 Web3j web3j, TransactionManager transactionManager,
-                BigInteger gasPrice, BigInteger gasLimit) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasPrice,
-                    gasLimit);
+                ContractGasProvider gasProvider) {
+            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasProvider);
         }
 
         public RemoteCall<Utf8String> callSingleValue() {

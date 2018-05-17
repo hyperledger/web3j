@@ -18,7 +18,7 @@ public class RawTransaction {
     private BigInteger value;
     private String data;
 
-    private RawTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+    protected RawTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
                            BigInteger value, String data) {
         this.nonce = nonce;
         this.gasPrice = gasPrice;

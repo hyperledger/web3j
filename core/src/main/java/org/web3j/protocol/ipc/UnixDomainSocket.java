@@ -65,8 +65,7 @@ public class UnixDomainSocket implements IOFacade {
             response.clear();
             reader.read(response);
             result += new String(response.array(), response.arrayOffset(), response.position());
-        } while (response.position() == response.limit()
-                && response.get(response.limit() - 1) != '\n');
+        } while (response.get(response.position() - 1) != '\n');
 
         return result;
     }

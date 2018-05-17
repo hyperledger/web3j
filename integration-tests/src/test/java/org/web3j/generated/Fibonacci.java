@@ -35,6 +35,10 @@ import java.util.List;
 public class Fibonacci extends Contract {
     private static final String BINARY = "6060604052341561000f57600080fd5b6101498061001e6000396000f30060606040526004361061004b5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633c7fdc70811461005057806361047ff414610078575b600080fd5b341561005b57600080fd5b61006660043561008e565b60405190815260200160405180910390f35b341561008357600080fd5b6100666004356100da565b6000610099826100da565b90507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed828260405191825260208201526040908101905180910390a1919050565b60008115156100eb57506000610118565b81600114156100fc57506001610118565b610108600283036100da565b610114600184036100da565b0190505b9190505600a165627a7a72305820b79593e85095f5c09ecad21be0e9501a5528960f09cf22e8543ff6221976ea8e0029";
 
+    public static final String FUNC_FIBONACCINOTIFY = "fibonacciNotify";
+
+    public static final String FUNC_FIBONACCI = "fibonacci";
+
     public static final Event NOTIFY_EVENT = new Event("Notify", 
             Arrays.<TypeReference<?>>asList(),
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
@@ -46,6 +50,21 @@ public class Fibonacci extends Contract {
 
     protected Fibonacci(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    }
+
+    public RemoteCall<TransactionReceipt> fibonacciNotify(BigInteger number) {
+        final Function function = new Function(
+                FUNC_FIBONACCINOTIFY, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(number)), 
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteCall<BigInteger> fibonacci(BigInteger number) {
+        final Function function = new Function(FUNC_FIBONACCI, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(number)), 
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public List<NotifyEventResponse> getNotifyEvents(TransactionReceipt transactionReceipt) {
@@ -76,21 +95,6 @@ public class Fibonacci extends Contract {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NOTIFY_EVENT));
         return notifyEventObservable(filter);
-    }
-
-    public RemoteCall<TransactionReceipt> fibonacciNotify(BigInteger number) {
-        final Function function = new Function(
-                "fibonacciNotify", 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(number)), 
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteCall<BigInteger> fibonacci(BigInteger number) {
-        final Function function = new Function("fibonacci", 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(number)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public static RemoteCall<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

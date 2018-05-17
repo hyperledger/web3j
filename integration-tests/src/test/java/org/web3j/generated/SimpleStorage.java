@@ -26,6 +26,10 @@ import org.web3j.tx.TransactionManager;
 public class SimpleStorage extends Contract {
     private static final String BINARY = "6060604052341561000f57600080fd5b600560005560bb806100226000396000f30060606040526004361060485763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166360fe47b18114604d5780636d4ce63c146062575b600080fd5b3415605757600080fd5b60606004356084565b005b3415606c57600080fd5b60726089565b60405190815260200160405180910390f35b600055565b600054905600a165627a7a72305820430774b8a91f549acbaaace2b6ac7d17f15706f8ac365056ab9775a9d20e1be40029";
 
+    public static final String FUNC_SET = "set";
+
+    public static final String FUNC_GET = "get";
+
     protected SimpleStorage(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
@@ -36,14 +40,14 @@ public class SimpleStorage extends Contract {
 
     public RemoteCall<TransactionReceipt> set(BigInteger x) {
         final Function function = new Function(
-                "set", 
+                FUNC_SET, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(x)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<BigInteger> get() {
-        final Function function = new Function("get", 
+        final Function function = new Function(FUNC_GET, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
