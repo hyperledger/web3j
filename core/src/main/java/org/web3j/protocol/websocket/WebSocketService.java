@@ -389,7 +389,6 @@ public class WebSocketService implements Web3jService {
 
     private <T extends Notification<?>> void closeSubscription(
             BehaviorSubject<T> subject, String unsubscribeMethod) {
-        subject.onComplete();
         String subscriptionId = getSubscriptionId(subject);
         if (subscriptionId != null) {
             subscriptionForId.remove(subscriptionId);

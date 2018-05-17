@@ -257,7 +257,7 @@ public class WebSocketServiceTest {
     @Test
     public void testPropagateSubscriptionEvent() throws Exception {
         CountDownLatch eventReceived = new CountDownLatch(1);
-        CountDownLatch completedCalled = new CountDownLatch(1);
+        CountDownLatch disposed = new CountDownLatch(1);
         AtomicReference<NewHeadsNotification> actualNotificationRef = new AtomicReference<>();
 
         runAsync(() -> {
@@ -265,11 +265,11 @@ public class WebSocketServiceTest {
                     .subscribe(newHeadsNotification -> {
                         actualNotificationRef.set(newHeadsNotification);
                         eventReceived.countDown();
-                    }, error -> { /*nothing*/ },
-                            completedCalled::countDown);
+                    });
             try {
                 eventReceived.await(2, TimeUnit.SECONDS);
                 disposable.dispose();
+                disposed.countDown();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -279,7 +279,7 @@ public class WebSocketServiceTest {
         sendSubscriptionConfirmation();
         sendWebSocketEvent();
 
-        assertTrue(completedCalled.await(6, TimeUnit.SECONDS));
+        assertTrue(disposed.await(6, TimeUnit.SECONDS));
         assertEquals(
                 "0xd9263f42a87",
                 actualNotificationRef.get().getParams().getResult().getDifficulty());
