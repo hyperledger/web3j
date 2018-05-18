@@ -12,7 +12,6 @@ import java.util.Optional;
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
@@ -905,6 +904,14 @@ public class ResponseTest extends ResponseTester {
         transaction.setV(0x25);
         assertThat(transaction.getChainId(), equalTo(1L));
     }
+
+    @Test
+    public void testTransactionLongChainId() {
+        Transaction transaction = new Transaction();
+        transaction.setV(0x4A817C823L);
+        assertThat(transaction.getChainId(), equalTo(10000000000L));
+    }
+
 
     @Test
     public void testEthTransactionNull() {
