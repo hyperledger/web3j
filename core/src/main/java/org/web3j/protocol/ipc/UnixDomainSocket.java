@@ -59,15 +59,15 @@ public class UnixDomainSocket implements IOFacade {
     @Override
     public String read() throws IOException {
         CharBuffer response = CharBuffer.allocate(bufferSize);
-        String result = "";
+        StringBuffer result = new StringBuffer();
 
         do {
             response.clear();
             reader.read(response);
-            result += new String(response.array(), response.arrayOffset(), response.position());
+            result.append(response.array(), response.arrayOffset(), response.position());
         } while (response.get(response.position() - 1) != '\n');
 
-        return result;
+        return result.toString();
     }
 
     @Override
