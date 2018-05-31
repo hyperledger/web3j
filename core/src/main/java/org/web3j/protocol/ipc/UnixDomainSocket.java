@@ -59,7 +59,7 @@ public class UnixDomainSocket implements IOFacade {
     @Override
     public String read() throws IOException {
         CharBuffer response = CharBuffer.allocate(bufferSize);
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         do {
             response.clear();
