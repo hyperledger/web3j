@@ -158,7 +158,8 @@ public class WalletUtils {
      * @return
      */
     public static String getRinkebyKeyDirectory() {
-        return String.format("%s%srinkeby%skeystore", WalletUtils.getDefaultKeyDirectory(), File.separator, File.separator);
+        return String.format(
+                "%s%srinkeby%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
     }
 
     public static boolean isValidPrivateKey(String privateKey) {
