@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Hash;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.tx.exceptions.TxHashMismatchException;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.TxHashVerifier;
 
 /**
  * TransactionManager implementation using Ethereum wallet file to create and sign transactions
@@ -26,6 +29,8 @@ public class RawTransactionManager extends TransactionManager {
     final Credentials credentials;
 
     private final byte chainId;
+
+    protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
     public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
         super(web3j, credentials.getAddress());
@@ -73,6 +78,14 @@ public class RawTransactionManager extends TransactionManager {
         return ethGetTransactionCount.getTransactionCount();
     }
 
+    public TxHashVerifier getTxHashVerifier() {
+        return txHashVerifier;
+    }
+
+    public void setTxHashVerifier(TxHashVerifier txHashVerifier) {
+        this.txHashVerifier = txHashVerifier;
+    }
+
     @Override
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
@@ -103,7 +116,16 @@ public class RawTransactionManager extends TransactionManager {
         }
 
         String hexValue = Numeric.toHexString(signedMessage);
+        EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
 
-        return web3j.ethSendRawTransaction(hexValue).send();
+        if (ethSendTransaction != null && !ethSendTransaction.hasError()) {
+            String txHashLocal = Hash.sha3(hexValue);
+            String txHashRemote = ethSendTransaction.getTransactionHash();
+            if (!txHashVerifier.verify(txHashLocal, txHashRemote)) {
+                throw new TxHashMismatchException(txHashLocal, txHashRemote);
+            }
+        }
+
+        return ethSendTransaction;
     }
 }
