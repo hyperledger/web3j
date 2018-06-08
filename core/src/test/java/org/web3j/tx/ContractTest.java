@@ -75,8 +75,8 @@ public class ContractTest extends ManagedTransactionTester {
         super.setUp();
 
         contract = new TestContract(
-                ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
+                ADDRESS, web3j, getVerifiedTransactionManager(SampleKeys.CREDENTIALS),
+                new DefaultGasProvider());
     }
 
     @Test

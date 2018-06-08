@@ -362,12 +362,12 @@ public abstract class Contract extends ManagedTransaction {
             Constructor<T> constructor = type.getDeclaredConstructor(
                     String.class,
                     Web3j.class, TransactionManager.class,
-                    BigInteger.class, BigInteger.class);
+                    ContractGasProvider.class);
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
             T contract = constructor.newInstance(
-                    null, web3j, transactionManager, gasPrice, gasLimit);
+                    null, web3j, transactionManager, new StaticGasProvider(gasPrice, gasLimit));
             return create(contract, binary, encodedConstructor, value);
         } catch (TransactionException e) {
             throw e;
