@@ -1,8 +1,12 @@
 package org.web3j.protocol.core;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
 import rx.Observable;
@@ -44,6 +48,7 @@ import org.web3j.protocol.core.methods.response.EthProtocolVersion;
 import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
 import org.web3j.protocol.core.methods.response.EthSubmitWork;
+import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
@@ -62,6 +67,8 @@ import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
+import org.web3j.protocol.websocket.events.LogNotification;
+import org.web3j.protocol.websocket.events.NewHeadsNotification;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -75,6 +82,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     protected final Web3jService web3jService;
     private final JsonRpc2_0Rx web3jRx;
     private final long blockTime;
+    private final ScheduledExecutorService scheduledExecutorService;
 
     public JsonRpc2_0Web3j(Web3jService web3jService) {
         this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
@@ -86,6 +94,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         this.web3jService = web3jService;
         this.web3jRx = new JsonRpc2_0Rx(this, scheduledExecutorService);
         this.blockTime = pollingInterval;
+        this.scheduledExecutorService = scheduledExecutorService;
     }
 
     @Override
@@ -685,6 +694,47 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
+    public Observable<NewHeadsNotification> newHeadsNotifications() {
+        return web3jService.subscribe(
+                new Request<>(
+                        "eth_subscribe",
+                        Collections.singletonList("newHeads"),
+                        web3jService,
+                        EthSubscribe.class),
+                "eth_unsubscribe",
+                NewHeadsNotification.class
+        );
+    }
+
+    @Override
+    public Observable<LogNotification> logsNotifications(
+            List<String> addresses, List<String> topics) {
+
+        Map<String, Object> params = createLogsParams(addresses, topics);
+
+        return web3jService.subscribe(
+                new Request<>(
+                        "eth_subscribe",
+                        Arrays.asList("logs", params),
+                        web3jService,
+                        EthSubscribe.class),
+                "eth_unsubscribe",
+                LogNotification.class
+        );
+    }
+
+    private Map<String, Object> createLogsParams(List<String> addresses, List<String> topics) {
+        Map<String, Object> params = new HashMap<>();
+        if (!addresses.isEmpty()) {
+            params.put("address", addresses);
+        }
+        if (!topics.isEmpty()) {
+            params.put("topics", topics);
+        }
+        return params;
+    }
+
+    @Override
     public Observable<String> ethBlockHashObservable() {
         return web3jRx.ethBlockHashObservable(blockTime);
     }
@@ -772,5 +822,15 @@ public class JsonRpc2_0Web3j implements Web3j {
             DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(
                 startBlock, blockTime);
+    }
+
+    @Override
+    public void shutdown() {
+        scheduledExecutorService.shutdown();
+        try {
+            web3jService.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to close web3j service", e);
+        }
     }
 }

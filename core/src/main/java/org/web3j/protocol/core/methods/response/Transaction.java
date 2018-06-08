@@ -8,6 +8,9 @@ import org.web3j.utils.Numeric;
  * Transaction object used by both {@link EthTransaction} and {@link EthBlock}.
  */
 public class Transaction {
+    private static final int CHAIN_ID_INC = 35;
+    private static final int LOWER_REAL_V = 27;
+
     private String hash;
     private String nonce;
     private String blockHash;
@@ -24,7 +27,7 @@ public class Transaction {
     private String raw;
     private String r;
     private String s;
-    private int v;  // see https://github.com/web3j/web3j/issues/44
+    private long v;  // see https://github.com/web3j/web3j/issues/44
 
     public Transaction() {
     }
@@ -32,7 +35,7 @@ public class Transaction {
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,
                        String gas, String gasPrice, String input, String creates,
-                       String publicKey, String raw, String r, String s, int v) {
+                       String publicKey, String raw, String r, String s, long v) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -204,8 +207,16 @@ public class Transaction {
         this.s = s;
     }
 
-    public int getV() {
+    public long getV() {
         return v;
+    }
+
+    public Long getChainId() {
+        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
+            return null;
+        }
+        Long chainId = (v - CHAIN_ID_INC) / 2;
+        return chainId;
     }
 
     // public void setV(byte v) {
@@ -217,9 +228,11 @@ public class Transaction {
     // https://github.com/ethereum/go-ethereum/issues/3339
     public void setV(Object v) {
         if (v instanceof String) {
-            this.v = Numeric.toBigInt((String) v).intValueExact();
+            this.v = Numeric.toBigInt((String) v).longValueExact();
+        } else if (v instanceof Integer) {
+            this.v = ((Integer) v).longValue();
         } else {
-            this.v = ((Integer) v);
+            this.v = (Long) v;
         }
     }
 
@@ -315,7 +328,7 @@ public class Transaction {
         result = 31 * result + (getRaw() != null ? getRaw().hashCode() : 0);
         result = 31 * result + (getR() != null ? getR().hashCode() : 0);
         result = 31 * result + (getS() != null ? getS().hashCode() : 0);
-        result = 31 * result + getV();
+        result = 31 * result + BigInteger.valueOf(getV()).hashCode();
         return result;
     }
 }

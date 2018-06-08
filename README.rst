@@ -121,7 +121,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.2.0</version>
+     <version>3.4.0</version>
    </dependency>
 
 Android:
@@ -131,7 +131,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.1.1-android</version>
+     <version>3.3.1-android</version>
    </dependency>
 
 Gradle
@@ -141,13 +141,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.2.0')
+   compile ('org.web3j:core:3.4.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.1.1-android')
+   compile ('org.web3j:core:3.3.1-android')
 
 
 Start a client
@@ -304,6 +304,14 @@ To call a smart contract:
 .. code-block:: java
 
    Type result = contract.someMethod(<param1>, ...).send();
+
+To fine control your gas price:
+
+.. code-block:: java
+
+    contract.setGasProvider(new DefaultGasProvider() {
+            ...
+            });
 
 For more information refer to `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
 
@@ -517,6 +525,8 @@ Please submit a pull request if you wish to include your project on the list:
 - `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
 - `Presto Ethereum <https://github.com/xiaoyao1991/presto-ethereum>`_
 - `Kundera-Ethereum data importer and sync utility <https://github.com/impetus-opensource/Kundera/tree/trunk/src/kundera-ethereum>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
+- `Ethereum Tool <https://github.com/e-Contract/ethereum-tool>`_ for secure offline key management.
+- `Ethereum Java EE JCA Resource Adapter <https://github.com/e-Contract/ethereum-resource-adapter>`_ provides integration of Ethereum within Java EE 6+.
 
 
 Companies using web3j
@@ -533,6 +543,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `Pactum <https://pactum.io/>`_
 - `TrustWallet <http://trustwalletapp.com>`_
 - `Impetus <http://www.impetus.com/>`_
+- `Argent Labs <http://www.argent.im/>`_
 
 
 Build instructions

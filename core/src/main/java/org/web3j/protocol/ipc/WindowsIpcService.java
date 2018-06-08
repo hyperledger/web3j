@@ -6,12 +6,20 @@ package org.web3j.protocol.ipc;
  * <p>This implementation is experimental.
  */
 public class WindowsIpcService extends IpcService {
+    private final String ipcSocketPath;
 
     public WindowsIpcService(String ipcSocketPath) {
-        super(new WindowsNamedPipe(ipcSocketPath));
+        super();
+        this.ipcSocketPath = ipcSocketPath;
     }
 
     public WindowsIpcService(String ipcSocketPath, boolean includeRawResponse) {
-        super(new WindowsNamedPipe(ipcSocketPath), includeRawResponse);
+        super(includeRawResponse);
+        this.ipcSocketPath = ipcSocketPath;
+    }
+
+    @Override
+    protected IOFacade getIO() {
+        return new WindowsNamedPipe(ipcSocketPath);
     }
 }

@@ -9,7 +9,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import org.junit.rules.ExpectedException;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
@@ -36,6 +39,9 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -52,6 +58,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ContractTest extends ManagedTransactionTester {
@@ -60,13 +67,16 @@ public class ContractTest extends ManagedTransactionTester {
 
     private TestContract contract;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
         contract = new TestContract(
-                ADDRESS, web3j, getVerifiedTransactionManager(SampleKeys.CREDENTIALS),
-                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+                ADDRESS, web3j, SampleKeys.CREDENTIALS,
+                DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
     }
 
     @Test
@@ -89,11 +99,23 @@ public class ContractTest extends ManagedTransactionTester {
         assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
     }
 
-    private TransactionReceipt createTransactionReceipt() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setContractAddress(ADDRESS);
-        return transactionReceipt;
+    @Test
+    public void testContractDeployFails() throws Exception {
+        thrown.expect(TransactionException.class);
+        thrown.expectMessage(
+                "Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+        TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
+        deployContract(transactionReceipt);
+    }
+
+    @Test
+    public void testContractDeployWithNullStatusSucceeds() throws Exception {
+        TransactionReceipt transactionReceipt = createTransactionReceiptWithStatus(null);
+        Contract deployedContract = deployContract(transactionReceipt);
+
+        assertThat(deployedContract.getContractAddress(), is(ADDRESS));
+        assertTrue(deployedContract.getTransactionReceipt().isPresent());
+        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
     }
 
     @Test
@@ -201,12 +223,29 @@ public class ContractTest extends ManagedTransactionTester {
     public void testTransaction() throws Exception {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setStatus("0x1");
 
         prepareTransaction(transactionReceipt);
 
         assertThat(contract.performTransaction(
                 new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send(),
                 is(transactionReceipt));
+    }
+
+    @Test
+    public void testTransactionFailed() throws Exception {
+        thrown.expect(TransactionException.class);
+        thrown.expectMessage(
+                "Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setStatus("0x0");
+        transactionReceipt.setGasUsed("0x1");
+
+        prepareTransaction(transactionReceipt);
+        contract.performTransaction(
+                new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send();
     }
 
     @Test
@@ -241,7 +280,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         contract = new TestContract(
                 ADDRESS, web3j, transactionManager,
-                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+                new DefaultGasProvider());
 
         testErrorScenario();
     }
@@ -277,6 +316,23 @@ public class ContractTest extends ManagedTransactionTester {
         BigInteger newPrice = ManagedTransaction.GAS_PRICE.multiply(BigInteger.valueOf(2));
         contract.setGasPrice(newPrice);
         assertEquals(newPrice, contract.getGasPrice());
+    }
+
+    @Test
+    public void testStaticGasProvider() throws IOException, TransactionException {
+        StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.TEN, BigInteger.ONE);
+        TransactionManager txManager = mock(TransactionManager.class);
+        when(txManager.executeTransaction(any(), any(), any(), any(), any()))
+                .thenReturn(new TransactionReceipt());
+
+        contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
+
+        Function func = new Function("test",
+                Arrays.<Type>asList(), Collections.<TypeReference<?>>emptyList());
+        contract.executeTransaction(func);
+
+        verify(txManager).executeTransaction(eq(BigInteger.TEN),
+                eq(BigInteger.ONE), any(), any(), any());
     }
 
     @Test(expected = RuntimeException.class)
@@ -342,6 +398,23 @@ public class ContractTest extends ManagedTransactionTester {
         }
     }
 
+    private TransactionReceipt createTransactionReceipt() {
+        return createTransactionReceiptWithStatus("0x1");
+    }
+
+    private TransactionReceipt createFailedTransactionReceipt() {
+        return createTransactionReceiptWithStatus("0x0");
+    }
+
+    private TransactionReceipt createTransactionReceiptWithStatus(String status) {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setContractAddress(ADDRESS);
+        transactionReceipt.setStatus(status);
+        transactionReceipt.setGasUsed("0x1");
+        return transactionReceipt;
+    }
+
     private Contract deployContract(TransactionReceipt transactionReceipt)
             throws Exception {
 
@@ -378,9 +451,8 @@ public class ContractTest extends ManagedTransactionTester {
         public TestContract(
                 String contractAddress,
                 Web3j web3j, TransactionManager transactionManager,
-                BigInteger gasPrice, BigInteger gasLimit) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasPrice,
-                    gasLimit);
+                ContractGasProvider gasProvider) {
+            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasProvider);
         }
 
         public RemoteCall<Utf8String> callSingleValue() {
