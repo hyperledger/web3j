@@ -77,8 +77,8 @@ public final class Numeric {
     }
 
     public static boolean containsHexPrefix(String input) {
-        return !Strings.isEmpty(input) && input.length() > 1 &&
-                input.charAt(0) == '0' && input.charAt(1) == 'x';
+        return !Strings.isEmpty(input) && input.length() > 1
+                && input.charAt(0) == '0' && input.charAt(1) == 'x';
     }
 
     public static BigInteger toBigInt(byte[] value, int offset, int length) {
