@@ -16,8 +16,11 @@ import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
+import org.web3j.protocol.core.Response.Error;
+import org.web3j.protocol.core.RpcErrors;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
+import org.web3j.protocol.core.methods.response.EthLog.LogResult;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 
 
@@ -34,6 +37,10 @@ public abstract class Filter<T> {
     private volatile BigInteger filterId;
 
     private ScheduledFuture<?> schedule;
+    
+    private ScheduledExecutorService scheduledExecutorService;
+
+    private long blockTime;
 
     public Filter(Web3j web3j, Callback<T> callback) {
         this.web3j = web3j;
@@ -48,6 +55,8 @@ public abstract class Filter<T> {
             }
 
             filterId = ethFilter.getFilterId();
+            this.scheduledExecutorService = scheduledExecutorService;
+            this.blockTime = blockTime;
             // this runs in the caller thread as if any exceptions are encountered, we shouldn't
             // proceed with creating the scheduled task below
             getInitialFilterLogs();
@@ -106,11 +115,24 @@ public abstract class Filter<T> {
         EthLog ethLog = null;
         try {
             ethLog = web3j.ethGetFilterChanges(filterId).send();
+            System.out.println("Responce: " + ethLog.getJsonrpc());
+            System.out.println("Raw responce: " + ethLog.getRawResponse());
+            for (LogResult logResult : ethLog.getResult()) {
+            	System.out.println(logResult.get());
+            }
+            
         } catch (IOException e) {
             throwException(e);
         }
         if (ethLog.hasError()) {
-            throwException(ethLog.getError());
+            Error error = ethLog.getError();
+            switch (error.getCode()) {
+                case RpcErrors.FILTER_NOT_FOUND: reinstallFilter();
+                    break;
+                default:
+                    break;
+            }
+            throwException(error);
         } else {
             process(ethLog.getLogs());
         }
@@ -119,6 +141,11 @@ public abstract class Filter<T> {
     abstract EthFilter sendRequest() throws IOException;
 
     abstract void process(List<EthLog.LogResult> logResults);
+    
+    private void reinstallFilter() {
+        schedule.cancel(true);
+        this.run(scheduledExecutorService, blockTime);
+    }
 
     public void cancel() {
         schedule.cancel(false);
