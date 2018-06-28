@@ -2,5 +2,5 @@
 description 'Ethereum Recursive Length Prefix (RLP) encoding for serializing objects'
 
 dependencies {
-    testCompile project(':utils')
+    compile project(':utils')
 }

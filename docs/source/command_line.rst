@@ -14,7 +14,8 @@ These tools provide:
 The command line tools can be obtained as a zipfile/tarball from the
 `releases <https://github.com/web3j/web3j/releases/latest>`_ page of the project repository, under
 the **Downloads** section, or for OS X users via
-`Homebrew <https://github.com/web3j/homebrew-web3j>`_.
+`Homebrew <https://github.com/web3j/homebrew-web3j>`_, or for Arch linux users via the
+`AUR <https://aur.archlinux.org/packages/web3j/>`_.
 
 .. code-block:: bash
 
@@ -23,7 +24,7 @@ the **Downloads** section, or for OS X users via
 
 To run via the zipfile, simply extract the zipfile and run the binary:
 
-.. code-block:: bash
+.. code-block:: console 
 
    $ unzip web3j-<version>.zip
       creating: web3j-3.0.0/lib/
@@ -71,7 +72,7 @@ transaction takes place. See the below for a full example
 
 The following example demonstrates using web3j to send Ether to another wallet.
 
-.. code-block:: bash
+.. code-block:: console
 
    $ ./web3j-<version>/bin/web3j wallet send <walletfile> 0x<address>|<ensName>
 

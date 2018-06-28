@@ -28,4 +28,9 @@ public class WindowsNamedPipe implements IOFacade {
     public String read() throws IOException {
         return pipe.readLine();
     }
+
+    @Override
+    public void close() throws IOException {
+        pipe.close();
+    }
 }

@@ -408,9 +408,43 @@ contract they were generated from::
    Type result = contract.someMethod(<param1>, ...).send();
 
 
+.. _dynamic-gas:
 
+Dynamic gas price and limit
+---------------------------
 
+When working with smart contracts you may want to specify different gas price and limit values
+depending on the function being invoked. You can do that by creating your own
+`ContractGasProvider <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/gas/ContractGasProvider.java>`_
+for the smart contract wrapper.
 
+Every generated wrapper contains all smart contract method names listed as a constants, which
+facilitates compilation-time matching via a *switch* statement.
+
+For example, using the
+`Greeter <https://github.com/web3j/web3j/blob/master/codegen/src/test/resources/solidity/greeter/Greeter.sol>`_
+contract::
+
+    Greeter greeter = new Greeter(...);
+    greeter.setGasProvider(new DefaultGasProvider() {
+        @Override
+        public BigInteger getGasPrice(String contractFunc) {
+            switch (contractFunc) {
+                case Greeter.FUNC_GREET: return BigInteger.valueOf(22_000_000_000L);
+                case Greeter.FUNC_KILL: return BigInteger.valueOf(44_000_000_000L);
+                default: throw new NotImplementedException();
+            }
+        }
+
+        @Override
+        public BigInteger getGasLimit(String contractFunc) {
+            switch (contractFunc) {
+                case Greeter.FUNC_GREET: return BigInteger.valueOf(4_300_000);
+                case Greeter.FUNC_KILL: return BigInteger.valueOf(5_300_000);
+                default: throw new NotImplementedException();
+            }
+        }
+    });
 
 
 Examples
