@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -48,10 +49,8 @@ public class MnemonicUtils {
      * @throws IllegalStateException If the word list has not been loaded
      */
     public static String generateMnemonic(byte[] initialEntropy) {
-        if (WORD_LIST == null) {
-            WORD_LIST = populateWordList();
-        }
         validateEntropy(initialEntropy);
+        final List<String> words = getWords();
 
         int ent = initialEntropy.length * 8;
         int checksumLength = ent / 32;
@@ -63,7 +62,7 @@ public class MnemonicUtils {
         StringBuilder mnemonicBuilder = new StringBuilder();
         for (int i = 0; i < iterations; i++) {
             int index = toInt(nextElevenBits(bits, i));
-            mnemonicBuilder.append(WORD_LIST.get(index));
+            mnemonicBuilder.append(words.get(index));
 
             boolean notLastIteration = i < iterations - 1;
             if (notLastIteration) {
@@ -81,9 +80,6 @@ public class MnemonicUtils {
      * @return Byte array representation of the entropy
      */
     public static byte[] generateEntropy(String mnemonic) {
-        if (WORD_LIST == null) {
-            WORD_LIST = populateWordList();
-        }
         final BitSet bits = new BitSet();
         final int size = mnemonicToBits(mnemonic, bits);
         if (size == 0) {
@@ -107,6 +103,13 @@ public class MnemonicUtils {
         }
 
         return entropy;
+    }
+
+    public static List<String> getWords() {
+        if (WORD_LIST == null) {
+            WORD_LIST = Collections.unmodifiableList(populateWordList());
+        }
+        return WORD_LIST;
     }
 
     /**
@@ -204,12 +207,14 @@ public class MnemonicUtils {
 
     private static int mnemonicToBits(String mnemonic, BitSet bits) {
         int bit = 0;
+        final List<String> vocabulary = getWords();
         final StringTokenizer tokenizer = new StringTokenizer(mnemonic, " ");
         while (tokenizer.hasMoreTokens()) {
             final String word = tokenizer.nextToken();
-            final int index = WORD_LIST.indexOf(word);
+            final int index = vocabulary.indexOf(word);
             if (index < 0) {
-                throw new IllegalArgumentException("Illegal word: " + word);
+                throw new IllegalArgumentException(String.format(
+                        "Mnemonic word '%s' should be in the word list", word));
             }
             for (int k = 0; k < 11; k++) {
                 bits.set(bit++, isBitSet(index, 10 - k));
@@ -232,7 +237,7 @@ public class MnemonicUtils {
         return ((n >> k) & 1) == 1;
     }
 
-    private static byte calculateChecksum(byte[] initialEntropy) {
+    public static byte calculateChecksum(byte[] initialEntropy) {
         int ent = initialEntropy.length * 8;
         byte mask = (byte) (0xff << 8 - ent / 32);
         byte[] bytes = sha256(initialEntropy);
