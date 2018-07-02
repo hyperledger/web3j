@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.bouncycastle.crypto.digests.SHA512Digest;
@@ -46,10 +47,8 @@ public class MnemonicUtils {
      * @throws IllegalStateException If the word list has not been loaded
      */
     public static String generateMnemonic(byte[] initialEntropy) {
-        if (WORD_LIST == null) {
-            WORD_LIST = populateWordList();
-        }
         validateInitialEntropy(initialEntropy);
+        final List<String> words = getWords();
 
         int ent = initialEntropy.length * 8;
         int checksumLength = ent / 32;
@@ -61,7 +60,7 @@ public class MnemonicUtils {
         StringBuilder mnemonicBuilder = new StringBuilder();
         for (int i = 0; i < iterations; i++) {
             int index = toInt(nextElevenBits(bits, i));
-            mnemonicBuilder.append(WORD_LIST.get(index));
+            mnemonicBuilder.append(words.get(index));
 
             boolean notLastIteration = i < iterations - 1;
             if (notLastIteration) {
@@ -70,6 +69,13 @@ public class MnemonicUtils {
         }
 
         return mnemonicBuilder.toString();
+    }
+
+    public static List<String> getWords() {
+        if (WORD_LIST == null) {
+            WORD_LIST = Collections.unmodifiableList(populateWordList());
+        }
+        return WORD_LIST;
     }
 
     /**
@@ -156,7 +162,7 @@ public class MnemonicUtils {
         return value;
     }
 
-    private static byte calculateChecksum(byte[] initialEntropy) {
+    public static byte calculateChecksum(byte[] initialEntropy) {
         int ent = initialEntropy.length * 8;
         byte mask = (byte) (0xff << 8 - ent / 32);
         byte[] bytes = sha256(initialEntropy);
