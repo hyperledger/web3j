@@ -1,5 +1,7 @@
 .. To build this file locally ensure docutils Python package is installed and run:
    $ rst2html.py README.rst README.html
+   
+.. image:: https://raw.githubusercontent.com/familqasimov/web3j/master/logo/128px.png
 
 web3j: Web3 Java Ethereum Ðapp API
 ==================================
