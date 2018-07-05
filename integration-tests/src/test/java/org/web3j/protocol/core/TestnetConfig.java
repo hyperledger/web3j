@@ -1,7 +1,7 @@
 package org.web3j.protocol.core;
 
 import java.math.BigInteger;
-import java.util.Collections;
+import java.util.Arrays;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
@@ -86,8 +86,9 @@ public class TestnetConfig implements IntegrationTestConfig {
     @Override
     public String encodedEvent() {
         Event event = new Event("Notify",
-                Collections.singletonList(new TypeReference<Uint>() {}),
-                Collections.singletonList(new TypeReference<Uint>() {}));
+                Arrays.asList(
+                        new TypeReference<Uint>(true) {},
+                        new TypeReference<Uint>() {}));
 
         return EventEncoder.encode(event);
     }

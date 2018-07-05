@@ -40,7 +40,6 @@ public class Fibonacci extends Contract {
     public static final String FUNC_FIBONACCI = "fibonacci";
 
     public static final Event NOTIFY_EVENT = new Event("Notify", 
-            Arrays.<TypeReference<?>>asList(),
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
     ;
 
