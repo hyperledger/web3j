@@ -50,7 +50,7 @@ public class WalletUtils {
     public static String generateNewWalletFile(String password, File destinationDirectory)
             throws CipherException, InvalidAlgorithmParameterException,
             NoSuchAlgorithmException, NoSuchProviderException, IOException {
-        return generateLightNewWalletFile(password, destinationDirectory);
+        return generateFullNewWalletFile(password, destinationDirectory);
     }
 
     public static String generateNewWalletFile(

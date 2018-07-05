@@ -56,7 +56,7 @@ public class WalletUtilsTest {
 
     @Test
     public void testGenerateNewWalletFile() throws Exception {
-        String fileName = WalletUtils.generateLightNewWalletFile(PASSWORD, tempDir);
+        String fileName = WalletUtils.generateNewWalletFile(PASSWORD, tempDir);
         testGeneratedNewWalletFile(fileName);
     }
 
