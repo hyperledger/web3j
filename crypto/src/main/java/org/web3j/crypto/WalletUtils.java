@@ -47,6 +47,12 @@ public class WalletUtils {
         return generateNewWalletFile(password, destinationDirectory, false);
     }
 
+    public static String generateNewWalletFile(String password, File destinationDirectory)
+            throws CipherException, InvalidAlgorithmParameterException,
+            NoSuchAlgorithmException, NoSuchProviderException, IOException {
+        return generateFullNewWalletFile(password, destinationDirectory);
+    }
+
     public static String generateNewWalletFile(
             String password, File destinationDirectory, boolean useFullScrypt)
             throws CipherException, IOException, InvalidAlgorithmParameterException,
