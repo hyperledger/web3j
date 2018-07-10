@@ -353,17 +353,19 @@ public class HumanStandardTokenIT extends Scenario {
     private Event transferEvent() {
         return new Event(
                 "Transfer",
-                Arrays.<TypeReference<?>>asList(
-                        new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint256>() {}));
+                Arrays.asList(
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Uint256>() {}));
     }
 
     private Event approvalEvent() {
         return new Event(
                 "Approval",
-                Arrays.<TypeReference<?>>asList(
-                        new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint256>() {}));
+                Arrays.asList(
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Uint256>() {}));
     }
 
     private static String getHumanStandardTokenBinary() throws Exception {

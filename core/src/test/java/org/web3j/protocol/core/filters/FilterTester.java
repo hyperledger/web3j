@@ -62,8 +62,14 @@ public abstract class FilterTester {
         EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 
-        final List<T> expected = createExpected(ethLog);
-        final Set<T> results = Collections.synchronizedSet(new HashSet<T>());
+        EthLog notFoundFilter = objectMapper.readValue(
+                "{\"jsonrpc\":\"2.0\",\"id\":1,"
+                + "\"error\":{\"code\":-32000,\"message\":\"filter not found\"}}",
+                EthLog.class);
+
+        @SuppressWarnings("unchecked")
+        List<T> expected = createExpected(ethLog);
+        Set<T> results = Collections.synchronizedSet(new HashSet<T>());
 
         final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
 
@@ -72,7 +78,7 @@ public abstract class FilterTester {
         when(web3jService.send(any(Request.class), eq(EthFilter.class)))
                 .thenReturn(ethFilter);
         when(web3jService.send(any(Request.class), eq(EthLog.class)))
-                .thenReturn(ethLog);
+            .thenReturn(ethLog).thenReturn(notFoundFilter).thenReturn(ethLog);
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 

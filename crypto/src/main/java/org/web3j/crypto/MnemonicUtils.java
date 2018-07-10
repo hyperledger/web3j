@@ -7,11 +7,11 @@ import org.spongycastle.crypto.params.KeyParameter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.Charset;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.web3j.crypto.Hash.sha256;
@@ -27,7 +27,7 @@ public class MnemonicUtils {
 
     private static final int SEED_ITERATIONS = 2048;
     private static final int SEED_KEY_SIZE = 512;
-    private static final List<String> WORD_LIST = populateWordList();
+    private static List<String> WORD_LIST = null;
 
     /**
      * The mnemonic must encode entropy in a multiple of 32 bits. With more entropy security is
@@ -44,8 +44,12 @@ public class MnemonicUtils {
      * @param initialEntropy The initial entropy to generate mnemonic from
      * @return The generated mnemonic
      * @throws IllegalArgumentException If the given entropy is invalid
+     * @throws IllegalStateException If the word list has not been loaded
      */
     public static String generateMnemonic(byte[] initialEntropy) {
+        if (WORD_LIST == null) {
+            WORD_LIST = populateWordList();
+        }
         validateInitialEntropy(initialEntropy);
 
         int ent = initialEntropy.length * 8;
@@ -162,13 +166,22 @@ public class MnemonicUtils {
     }
 
     private static List<String> populateWordList() {
-        URL url = Thread.currentThread().getContextClassLoader()
-                .getResource("en-mnemonic-word-list.txt");
+        InputStream inputStream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("en-mnemonic-word-list.txt");
         try {
-            return readAllLines(url.toURI().getSchemeSpecificPart());
+            return readAllLines(inputStream);
         } catch (Exception e) {
-            return Collections.emptyList();
+            throw new IllegalStateException(e);
         }
+    }
+
+    private static List<String> readAllLines(InputStream inputStream) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        List<String> data = new ArrayList<>();
+        for (String line; (line = br.readLine()) != null; ) {
+            data.add(line);
+        }
+        return data;
     }
 
     public static List<String> readAllLines(String path) throws IOException {

@@ -1,6 +1,7 @@
 package org.web3j.rlp;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -77,5 +78,14 @@ public class RlpEncoderTest {
                 is(new byte[]{
                         (byte) 0xc6, (byte) 0x82, (byte) 0x7a, (byte) 0x77, (byte) 0xc1,
                         (byte) 0x04, (byte) 0x01}));
+
+        // 55 bytes. See https://github.com/web3j/web3j/issues/519
+        byte[] encodeMe = new byte[55];
+        Arrays.fill(encodeMe, (byte) 0);
+        byte[] expectedEncoding = new byte[56];
+        expectedEncoding[0] = (byte) 0xb7;
+        System.arraycopy(encodeMe, 0, expectedEncoding, 1, encodeMe.length);
+        assertThat(RlpEncoder.encode(RlpString.create(encodeMe)),
+                is(expectedEncoding));
     }
 }

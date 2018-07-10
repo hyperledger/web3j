@@ -128,6 +128,12 @@ public class JsonRpc2_0Rx {
                         return web3j.ethGetTransactionByHash(transactionHash).observable();
                     }
                 })
+                .filter(new Func1<EthTransaction, Boolean>() {
+                    @Override
+                    public Boolean call(EthTransaction ethTransaction) {
+                        return ethTransaction.getTransaction() != null;
+                    }
+                })
                 .map(new Func1<EthTransaction, Transaction>() {
                     @Override
                     public Transaction call(final EthTransaction ethTransaction) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.web3j.protocol.core.Response;
 
 /**
+ * parity_listAccounts
  * parity_getGetDappAddresses
  * parity_getGetNewDappsAddresses
  * parity_importGethAccounts

@@ -67,7 +67,7 @@ public class HttpService extends Service {
         this(DEFAULT_URL, httpClient);
     }
 
-    public  HttpService(boolean includeRawResponse) {
+    public HttpService(boolean includeRawResponse) {
         this(DEFAULT_URL, includeRawResponse);
     }
 
@@ -108,16 +108,18 @@ public class HttpService extends Service {
                 .build();
 
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
+        ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 return buildInputStream(responseBody);
             } else {
                 return null;
             }
         } else {
-            throw new ClientConnectionException(
-                    "Invalid response received: " + response.body());
+            int code = response.code();
+            String text = responseBody == null ? "N/A" : responseBody.string();
+
+            throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
         }
     }
 
@@ -164,5 +166,10 @@ public class HttpService extends Service {
 
     public HashMap<String, String> getHeaders() {
         return headers;
+    }
+
+    @Override
+    public void close() throws IOException {
+
     }
 }

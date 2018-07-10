@@ -7,8 +7,11 @@ import java.util.concurrent.Future;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import rx.Observable;
+
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
+import org.web3j.protocol.websocket.events.Notification;
 import org.web3j.utils.Async;
 
 /**
@@ -46,5 +49,16 @@ public abstract class Service implements Web3jService {
                 return Service.this.send(jsonRpc20Request, responseType);
             }
         });
+    }
+
+    @Override
+    public <T extends Notification<?>> Observable<T> subscribe(
+            Request request,
+            String unsubscribeMethod,
+            Class<T> responseType) {
+        throw new UnsupportedOperationException(
+                String.format(
+                        "Service %s does not support subscriptions",
+                        this.getClass().getSimpleName()));
     }
 }
