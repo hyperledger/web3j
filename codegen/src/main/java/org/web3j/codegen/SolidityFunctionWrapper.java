@@ -1139,11 +1139,15 @@ public class SolidityFunctionWrapper extends Generator {
                 new Collection.Function<NamedTypeName, String>() {
                     @Override
                     public String apply(NamedTypeName typeName) {
-                        return "new $T<$T>() {}";
+                        if (typeName.indexed) {
+                            return "new $T<$T>(true) {}";
+                        } else {
+                            return "new $T<$T>() {}";
+                        }
                     }
                 });
 
-        return CodeBlock.builder().addStatement("final $T event = new $T($S, \n"
+        return CodeBlock.builder().addStatement("new $T($S, \n"
                 + "$T.<$T<?>>asList(" + asListParams + "))", objects.toArray()).build();
     }
 
