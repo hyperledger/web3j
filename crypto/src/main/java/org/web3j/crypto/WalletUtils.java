@@ -154,8 +154,8 @@ public class WalletUtils {
     }
     
     /**
-     * Get keystore destination directory for a Rinkeby network
-     * @return
+     * Get keystore destination directory for a Rinkeby network.
+     * @return a String containing destination directory
      */
     public static String getRinkebyKeyDirectory() {
         return String.format(
