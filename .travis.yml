@@ -14,9 +14,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-# Don't run integrationTests as they require a live Ethereum client to be running
 # Add --info to view details of test failures
-script: ./gradlew --info check jacocoRootTestReport
+script: ./gradlew --info check -Pintegration-tests=true :integration-tests:test jacocoRootTestReport
 
 # Upload code coverage metrics
 after_success:
