@@ -78,6 +78,7 @@ allprojects {
     }
 
     tasks.withType(Test) {
+        systemProperty "WEB3J_TEST_URL", System.getProperty("WEB3J_TEST_URL", System.getenv("WEB3J_TEST_URL"))
         reports.html.destination = file("${reporting.baseDir}/${name}")
     }
 
