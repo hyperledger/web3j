@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -50,26 +53,46 @@ import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.http.HttpService;
 
 import static junit.framework.TestCase.assertFalse;
+
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeThat;
+import static org.web3j.protocol.core.TestURL.isInfura;
 
 /**
  * JSON-RPC 2.0 Integration Tests.
  */
 public class CoreIT {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CoreIT.class);
+
+    private static final int METHOD_NOT_FOUND = -32601;
+
     private Web3j web3j;
 
     private IntegrationTestConfig config = new TestnetConfig();
+    private Boolean syncing;
 
     public CoreIT() { }
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService());
+        this.web3j = Web3j.build(new HttpService(TestURL.URL));
+
+        try {
+            EthSyncing ethSyncing = web3j.ethSyncing().send();
+            syncing = ethSyncing.isSyncing();
+        } catch (Exception e) {
+            LOGGER.warn("Unable to get ethSyncing", e);
+        }
     }
 
     @Test
@@ -119,6 +142,10 @@ public class CoreIT {
 
     @Test
     public void testEthCoinbase() throws Exception {
+        assumeFalse("Infura does NOT support eth_coinbase - "
+                + "https://github.com/INFURA/infura/wiki/FAQ#q-does-infura-support-all-rpc-methods",
+                isInfura());
+
         EthCoinbase ethCoinbase = web3j.ethCoinbase().send();
         assertNotNull(ethCoinbase.getAddress());
     }
@@ -162,6 +189,14 @@ public class CoreIT {
 
     @Test
     public void testEthGetStorageAt() throws Exception {
+        assumeThat("Skipping testEthGetStorageAt() because we are still syncing, which means we "
+                + "will NOT be able to accurately do ethGetStorageAt",
+                syncing,
+                allOf(
+                        notNullValue(),
+                        is(false)
+                ));
+
         EthGetStorageAt ethGetStorageAt = web3j.ethGetStorageAt(
                 config.validContractAddress(),
                 BigInteger.valueOf(0),
@@ -307,9 +342,11 @@ public class CoreIT {
     public void testEthGetTransactionByHash() throws Exception {
         EthTransaction ethTransaction = web3j.ethGetTransactionByHash(
                 config.validTransactionHash()).send();
-        assertTrue(ethTransaction.getTransaction().isPresent());
+        assertTrue("Transaction should be present",
+                ethTransaction.getTransaction().isPresent());
         Transaction transaction = ethTransaction.getTransaction().get();
-        assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
+        assertThat("Transaction block hash should match",
+                transaction.getBlockHash(), is(config.validBlockHash()));
     }
 
     @Test
@@ -364,6 +401,15 @@ public class CoreIT {
     @Test
     public void testEthGetCompilers() throws Exception {
         EthGetCompilers ethGetCompilers = web3j.ethGetCompilers().send();
+
+        String assumptionMessage = "ethGetCompilers should have errors because it is no longer "
+                + "supported. see - https://github.com/ethereum/EIPs/issues/209, and "
+                + "https://github.com/ethereum/wiki/issues/403";
+        assumeThat(assumptionMessage, ethGetCompilers.getError(), nullValue());
+        assumeThat(
+                assumptionMessage, ethGetCompilers.getError().getCode(),
+                not(equalTo(METHOD_NOT_FOUND)));
+
         assertNotNull(ethGetCompilers.getCompilers());
     }
 
@@ -384,6 +430,15 @@ public class CoreIT {
                 + "   return a * 7;   } }";
         EthCompileSolidity ethCompileSolidity = web3j.ethCompileSolidity(sourceCode)
                 .send();
+
+        String assumptionMessage = "ethCompileSolidity should have errors because it is no longer "
+                + "supported. see - https://github.com/ethereum/EIPs/issues/209, and "
+                + "https://github.com/ethereum/wiki/issues/403";
+        assumeThat(assumptionMessage, ethCompileSolidity.getError(), nullValue());
+        assumeThat(
+                assumptionMessage, ethCompileSolidity.getError().getCode(),
+                not(equalTo(METHOD_NOT_FOUND)));
+
         assertNotNull(ethCompileSolidity.getCompiledSolidity());
         assertThat(
                 ethCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
@@ -400,6 +455,20 @@ public class CoreIT {
 
     @Test
     public void testFiltersByFilterId() throws Exception {
+        assumeFalse("Infura does NOT support eth_newFilter, eth_getFilterLogs, "
+                + "eth_getFilterChanges, and eth_uninstallFilter - "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfura());
+
+        assumeThat("Skipping testFiltersByFilterId() because we are still syncing, which means we "
+                + "will NOT be able to accurately do ethGetFilterLogs",
+                syncing,
+                allOf(
+                        notNullValue(),
+                        is(false)
+                ));
+
         org.web3j.protocol.core.methods.request.EthFilter ethFilter =
                 new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,
@@ -429,12 +498,22 @@ public class CoreIT {
 
     @Test
     public void testEthNewBlockFilter() throws Exception {
+        assumeFalse("Infura does NOT support eth_newBlockFilter - "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfura());
+
         EthFilter ethNewBlockFilter = web3j.ethNewBlockFilter().send();
         assertNotNull(ethNewBlockFilter.getFilterId());
     }
 
     @Test
     public void testEthNewPendingTransactionFilter() throws Exception {
+        assumeFalse("Infura does NOT support eth_newPendingTransactionFilter - "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfura());
+
         EthFilter ethNewPendingTransactionFilter =
                 web3j.ethNewPendingTransactionFilter().send();
         assertNotNull(ethNewPendingTransactionFilter.getFilterId());
@@ -442,6 +521,14 @@ public class CoreIT {
 
     @Test
     public void testEthGetLogs() throws Exception {
+        assumeThat("Skipping testEthGetLogs() because we are still syncing, which means we will "
+                + "NOT be able to accurately do ethGetLogs",
+                syncing,
+                allOf(
+                        notNullValue(),
+                        is(false)
+                ));
+
         org.web3j.protocol.core.methods.request.EthFilter ethFilter =
                 new org.web3j.protocol.core.methods.request.EthFilter(
                 DefaultBlockParameterName.EARLIEST,

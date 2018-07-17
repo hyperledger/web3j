@@ -16,8 +16,8 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {
-        https://testnet.etherscan.io/block/1627453
-        return "0xd67e59db999c3bd78bd4c2ba54689dba0c372ebcad09c8b9677970f37d64ca46";
+        // https://ropsten.etherscan.io/block/71032
+        return "0xd18e6e9b74b11993242efddd22a458831ac4540d2866d5706af7e624481bb391";
     }
 
     @Override
@@ -44,13 +44,13 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validContractAddress() {
-        // Deployed fibonacci example
-        return "0x3c05b2564139fb55820b18b72e94b2178eaace7d";
+        // https://ropsten.etherscan.io/address/0x479cc461fecd078f766ecc58533d6f69580cf3ac
+        return "0x479CC461fEcd078F766eCc58533D6F69580CF3AC";
     }
 
     @Override
     public String validContractAddressPositionZero() {
-        return "0x0000000000000000000000000000000000000000000000000000000000000000";
+        return "0x000000000000000000000000a8e9fa8f91e5ae138c74648c9c304f1c75003a8d";
     }
 
     @Override
@@ -70,26 +70,25 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validTransactionHash() {
-        return "0xf26d441775da4e01cb557dfe35e09ab8c8a69134b2687209e34348c11ae54509";
+        // https://ropsten.etherscan.io/tx/0x1f77ebd5f1bea5065027671bc99b6237033f861692c568496d19fd37dddabe55
+        return "0x1f77ebd5f1bea5065027671bc99b6237033f861692c568496d19fd37dddabe55";
     }
 
     @Override
     public String validUncleBlockHash() {
-        return "0x9d512dd0cad173dd3e7ec568794db03541c4a98448cc5940b695da604d118754";
+        // https://ropsten.etherscan.io/block/71194
+        return "0x3913b9f417047e711ec6dc1e42e7075d924c3ad0d013f74945e5680170cde1e9";
     }
 
     @Override
     public BigInteger validUncleBlock() {
-        return BigInteger.valueOf(1640092);
+        // https://ropsten.etherscan.io/block/71194
+        return BigInteger.valueOf(71194);
     }
 
     @Override
     public String encodedEvent() {
-        Event event = new Event("Notify",
-                Arrays.asList(
-                        new TypeReference<Uint>(true) {},
-                        new TypeReference<Uint>() {}));
-
-        return EventEncoder.encode(event);
+        return EventEncoder.buildEventSignature("LogCancel(address,address,address,address,uint256"
+            + ",uint256,bytes32,bytes32)");
     }
 }
