@@ -176,12 +176,29 @@ public class CoreIT {
 
     @Test
     public void testEthBlockNumber() throws Exception {
+        assumeThat("Skipping testEthBlockNumber() because we are still syncing, which means we "
+                + "will NOT be able to accurately get the block number - See "
+                + "https://github.com/ethereum/go-ethereum/issues/14338",
+                syncing,
+                allOf(
+                        notNullValue(),
+                        is(false)
+                ));
+
         EthBlockNumber ethBlockNumber = web3j.ethBlockNumber().send();
         assertTrue(ethBlockNumber.getBlockNumber().signum() == 1);
     }
 
     @Test
     public void testEthGetBalance() throws Exception {
+        assumeThat("Skipping testEthGetBalance() because we are still syncing, which means we "
+                + "will NOT be able to accurately do ethGetFilterLogs",
+                syncing,
+                allOf(
+                        notNullValue(),
+                        is(false)
+                ));
+
         EthGetBalance ethGetBalance = web3j.ethGetBalance(
                 config.validAccount(), DefaultBlockParameter.valueOf("latest")).send();
         assertTrue(ethGetBalance.getBalance().signum() == 1);
@@ -206,6 +223,14 @@ public class CoreIT {
 
     @Test
     public void testEthGetTransactionCount() throws Exception {
+        assumeThat("Skipping testEthGetTransactionCount() because we are still syncing, which "
+                + "means we will NOT be able to accurately do ethGetTransactionCount",
+                syncing,
+                allOf(
+                        notNullValue(),
+                        is(false)
+                ));
+
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                 config.validAccount(),
                 DefaultBlockParameter.valueOf("latest")).send();
@@ -249,6 +274,14 @@ public class CoreIT {
 
     @Test
     public void testEthGetCode() throws Exception {
+        assumeThat("Skipping testEthGetCode() because we are still syncing, which means we will "
+                + "NOT be able to accurately do ethGetCode",
+                syncing,
+                allOf(
+                        notNullValue(),
+                        is(false)
+                ));
+
         EthGetCode ethGetCode = web3j.ethGetCode(config.validContractAddress(),
                 DefaultBlockParameter.valueOf(config.validBlock())).send();
         assertThat(ethGetCode.getCode(), is(config.validContractCode()));
@@ -258,11 +291,20 @@ public class CoreIT {
     @Test
     public void testEthSign() throws Exception {
         // EthSign ethSign = web3j.ethSign();
+        assumeFalse("Infura does NOT support eth_sign - "
+                + "https://github.com/INFURA/infura/wiki/FAQ"
+                + "#q-does-infura-support-all-rpc-methods",
+                isInfura());
     }
 
     @Ignore  // TODO: Once account unlock functionality is available
     @Test
     public void testEthSendTransaction() throws Exception {
+        assumeFalse("Infura does NOT support eth_sendTransaction - "
+                + "https://github.com/INFURA/infura/wiki/FAQ"
+                + "#q-does-infura-support-all-rpc-methods",
+                isInfura());
+
         EthSendTransaction ethSendTransaction = web3j.ethSendTransaction(
                 config.buildTransaction()).send();
         assertFalse(ethSendTransaction.getTransactionHash().isEmpty());
