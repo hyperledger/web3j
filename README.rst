@@ -8,12 +8,12 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: http://docs.web3j.io
    :alt: Documentation Status
 
-.. image:: https://travis-ci.org/web3j/web3j.svg?branch=master
-   :target: https://travis-ci.org/web3j/web3j
+.. image:: https://travis-ci.org/franz-see/web3j.svg?branch=master
+   :target: https://travis-ci.org/franz-see/web3j
    :alt: Build Status
 
-.. image:: https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/web3j/web3j
+.. image:: https://codecov.io/gh/franz-see/web3j/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/franz-see/web3j
    :alt: codecov
 
 .. image:: https://badges.gitter.im/web3j/web3j.svg
