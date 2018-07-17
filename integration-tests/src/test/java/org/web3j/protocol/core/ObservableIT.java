@@ -5,7 +5,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 import rx.Observable;
 import rx.Subscription;
 
@@ -20,6 +22,9 @@ import static org.junit.Assert.assertTrue;
  * Observable callback tests.
  */
 public class ObservableIT {
+
+    @Rule
+    public Timeout globalTimeout = new Timeout(10_000);
 
     private static final int EVENT_COUNT = 5;
     private static final int TIMEOUT_MINUTES = 5;
