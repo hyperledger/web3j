@@ -3,6 +3,7 @@ package org.web3j.protocol.core;
 import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +18,8 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.http.HttpService;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.web3j.protocol.core.TestURL.isInfura;
 
 /**
  * Observable callback tests.
@@ -33,38 +36,63 @@ public class ObservableIT {
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService());
+        this.web3j = Web3j.build(new HttpService(TestURL.URL));
     }
 
     @Test
-    public void testBlockObservable() throws Exception {
+    public void testBlockObservable() throws Throwable {
+        assumeFalse("Infura does NOT support eth_newBlockFilter - "
+                        + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                        + "#supported-json-rpc-methods",
+                isInfura());
+
         run(web3j.blockObservable(false));
     }
 
     @Test
-    public void testPendingTransactionObservable() throws Exception {
+    public void testPendingTransactionObservable() throws Throwable {
+        assumeFalse("Infura does NOT support eth_newPendingTransactionFilter - "
+                        + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                        + "#supported-json-rpc-methods",
+                isInfura());
+
         run(web3j.pendingTransactionObservable());
     }
 
     @Test
-    public void testTransactionObservable() throws Exception {
+    public void testTransactionObservable() throws Throwable {
+        assumeFalse("Infura does NOT support eth_newBlockFilter - "
+                        + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                        + "#supported-json-rpc-methods",
+                isInfura());
+
         run(web3j.transactionObservable());
     }
 
     @Test
-    public void testLogObservable() throws Exception {
+    public void testLogObservable() throws Throwable {
+        assumeFalse("Infura does NOT support eth_newFilter - "
+                        + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                        + "#supported-json-rpc-methods",
+                isInfura());
+
         run(web3j.ethLogObservable(new EthFilter()));
     }
 
     @Test
-    public void testReplayObservable() throws Exception {
+    public void testReplayObservable() throws Throwable {
         run(web3j.replayBlocksObservable(
                 new DefaultBlockParameterNumber(0),
                 new DefaultBlockParameterNumber(EVENT_COUNT), true));
     }
 
     @Test
-    public void testCatchUpToLatestAndSubscribeToNewBlocksObservable() throws Exception {
+    public void testCatchUpToLatestAndSubscribeToNewBlocksObservable() throws Throwable {
+        assumeFalse("Infura does NOT support eth_newBlockFilter - "
+                        + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                        + "#supported-json-rpc-methods",
+                isInfura());
+
         EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
                 .send();
         BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
@@ -73,18 +101,28 @@ public class ObservableIT {
                 false));
     }
 
-    private <T> void run(Observable<T> observable) throws Exception {
-        CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
-        CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
+    private <T> void run(Observable<T> observable) throws Throwable {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        CountDownLatch completedLatch = new CountDownLatch(1);
+
+        AtomicReference<Throwable> exceptionThrown = new AtomicReference<>();
 
         Subscription subscription = observable.subscribe(
                 x -> countDownLatch.countDown(),
-                Throwable::printStackTrace,
+                e -> {
+                    exceptionThrown.set(e);
+                    countDownLatch.countDown();
+                },
                 completedLatch::countDown
         );
 
         countDownLatch.await(TIMEOUT_MINUTES, TimeUnit.MINUTES);
         subscription.unsubscribe();
+
+        if (exceptionThrown.get() != null) {
+            throw exceptionThrown.get();
+        }
+
         completedLatch.await(1, TimeUnit.SECONDS);
         assertTrue(subscription.isUnsubscribed());
     }
