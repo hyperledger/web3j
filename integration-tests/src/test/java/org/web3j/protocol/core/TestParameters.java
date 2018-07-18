@@ -64,12 +64,12 @@ public class TestParameters {
         TEST_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_URL", DEFAULT_URL);
 
         LOGGER.info(
-                ""
-                + "WEB3J_ALICE_PRIVKEY = {}\n"
-                + "WEB3J_ALICE_PUBKEY = {}\n"
-                + "WEB3J_BOB_PRIVKEY = {}\n"
-                + "WEB3J_BOB_PUBKEY = {}\n"
-                + "WEB3J_TEST_URL = {}\n"
+                "\n"
+                + " * WEB3J_ALICE_PRIVKEY = {}\n"
+                + " * WEB3J_ALICE_PUBKEY = {}\n"
+                + " * WEB3J_BOB_PRIVKEY = {}\n"
+                + " * WEB3J_BOB_PUBKEY = {}\n"
+                + " * WEB3J_TEST_URL = {}\n"
                 + "{}",
                 ALICE_PRIVKEY,
                 ALICE_PUBKEY,
