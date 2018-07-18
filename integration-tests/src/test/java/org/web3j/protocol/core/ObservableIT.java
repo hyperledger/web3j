@@ -27,9 +27,9 @@ import static org.web3j.protocol.core.TestParameters.isInfuraTestUrl;
 public class ObservableIT {
 
     @Rule
-    public Timeout globalTimeout = new Timeout(10_000);
+    public Timeout globalTimeout = new Timeout(10 * 60_000);
 
-    private static final int EVENT_COUNT = 5;
+    private static final int EVENT_COUNT = 1;
     private static final int TIMEOUT_MINUTES = 5;
 
     private Web3j web3j;
@@ -102,8 +102,8 @@ public class ObservableIT {
     }
 
     private <T> void run(Observable<T> observable) throws Throwable {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
+        CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
 
         AtomicReference<Throwable> exceptionThrown = new AtomicReference<>();
 
