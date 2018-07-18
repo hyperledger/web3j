@@ -78,7 +78,11 @@ allprojects {
     }
 
     tasks.withType(Test) {
-        systemProperty "WEB3J_TEST_URL", System.getProperty("WEB3J_TEST_URL", System.getenv("WEB3J_TEST_URL"))
+        System.properties.keySet()
+                .findAll { it.startsWith('WEB3J_') }
+                .each {
+                    systemProperty it, System.getProperty(it, System.getenv(it))
+                }
         reports.html.destination = file("${reporting.baseDir}/${name}")
     }
 

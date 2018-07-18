@@ -3,7 +3,7 @@ package org.web3j.ens;
 import org.junit.Test;
 
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.TestURL;
+import org.web3j.protocol.core.TestParameters;
 import org.web3j.protocol.http.HttpService;
 
 import static org.hamcrest.CoreMatchers.allOf;
@@ -17,7 +17,7 @@ public class EnsIT {
     @Test
     public void testEns() throws Exception {
 
-        Web3j web3j = Web3j.build(new HttpService(TestURL.URL));
+        Web3j web3j = Web3j.build(new HttpService(TestParameters.TEST_URL));
 
         assumeThat("Skipping testEns() because we are still syncing, which means we will NOT be "
                         + "able to accurately do EnsResolver#resolve()",

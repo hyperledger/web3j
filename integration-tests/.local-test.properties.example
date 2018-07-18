@@ -1,0 +1,7 @@
+## Copy this over to integration-tests/local-test.properties and uncomment and fill in the values
+
+#WEB3J_ALICE_PRIVKEY=
+#WEB3J_ALICE_PUBKEY=
+#WEB3J_BOB_PRIVKEY=
+#WEB3J_BOB_PUBKEY=
+#WEB3J_TEST_URL=

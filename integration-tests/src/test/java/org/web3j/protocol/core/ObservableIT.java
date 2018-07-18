@@ -19,7 +19,7 @@ import org.web3j.protocol.http.HttpService;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
-import static org.web3j.protocol.core.TestURL.isInfura;
+import static org.web3j.protocol.core.TestParameters.isInfuraTestUrl;
 
 /**
  * Observable callback tests.
@@ -36,7 +36,7 @@ public class ObservableIT {
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService(TestURL.URL));
+        this.web3j = Web3j.build(new HttpService(TestParameters.TEST_URL));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class ObservableIT {
         assumeFalse("Infura does NOT support eth_newBlockFilter - "
                         + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                         + "#supported-json-rpc-methods",
-                isInfura());
+                isInfuraTestUrl());
 
         run(web3j.blockObservable(false));
     }
@@ -54,7 +54,7 @@ public class ObservableIT {
         assumeFalse("Infura does NOT support eth_newPendingTransactionFilter - "
                         + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                         + "#supported-json-rpc-methods",
-                isInfura());
+                isInfuraTestUrl());
 
         run(web3j.pendingTransactionObservable());
     }
@@ -64,7 +64,7 @@ public class ObservableIT {
         assumeFalse("Infura does NOT support eth_newBlockFilter - "
                         + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                         + "#supported-json-rpc-methods",
-                isInfura());
+                isInfuraTestUrl());
 
         run(web3j.transactionObservable());
     }
@@ -74,7 +74,7 @@ public class ObservableIT {
         assumeFalse("Infura does NOT support eth_newFilter - "
                         + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                         + "#supported-json-rpc-methods",
-                isInfura());
+                isInfuraTestUrl());
 
         run(web3j.ethLogObservable(new EthFilter()));
     }
@@ -91,7 +91,7 @@ public class ObservableIT {
         assumeFalse("Infura does NOT support eth_newBlockFilter - "
                         + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                         + "#supported-json-rpc-methods",
-                isInfura());
+                isInfuraTestUrl());
 
         EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
                 .send();

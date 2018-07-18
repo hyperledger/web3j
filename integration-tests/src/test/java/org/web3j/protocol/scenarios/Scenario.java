@@ -18,6 +18,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.TestParameters;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -42,13 +43,13 @@ public class Scenario {
     WALLET address variable you've defined.
     */
     static final Credentials ALICE = Credentials.create(
-            "",  // 32 byte hex value
-            "0x"  // 64 byte hex value
+            TestParameters.ALICE_PRIVKEY, // 32 byte hex value
+            TestParameters.ALICE_PUBKEY // 64 byte hex value
     );
 
     static final Credentials BOB = Credentials.create(
-            "",  // 32 byte hex value
-            "0x"  // 64 byte hex value
+            TestParameters.BOB_PRIVKEY, // 32 byte hex value
+            TestParameters.BOB_PUBKEY // 64 byte hex value
     );
 
     private static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
@@ -62,7 +63,7 @@ public class Scenario {
 
     @Before
     public void setUp() {
-        this.web3j = Admin.build(new HttpService());
+        this.web3j = Admin.build(new HttpService(TestParameters.TEST_URL));
     }
 
     boolean unlockAccount() throws Exception {

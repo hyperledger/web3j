@@ -36,6 +36,7 @@ gradle-app.setting
 .idea
 *.iml
 geth.sh
+integration-tests/local-test.properties
 
 # Sphinx generated docs
 docs/build
