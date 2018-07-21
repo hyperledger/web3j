@@ -249,7 +249,9 @@ public class SolidityFunctionWrapper extends Generator {
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
                 MethodSpec ms = buildFunction(functionDefinition);
-                if (ms != null) methodSpecs.add(ms);
+                if (ms != null) {
+                    methodSpecs.add(ms);
+                }
 
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
