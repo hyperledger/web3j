@@ -296,7 +296,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
-        assertNull(methodSpec);
+
+        //CHECKSTYLE:OFF
+        String expected =
+                "public void functionName(java.math.BigInteger param) {\n"
+                + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
+                + "}\n";
+        //CHECKSTYLE:ON
+
+        assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test

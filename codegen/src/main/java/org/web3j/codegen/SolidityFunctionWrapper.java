@@ -249,9 +249,7 @@ public class SolidityFunctionWrapper extends Generator {
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
                 MethodSpec ms = buildFunction(functionDefinition);
-                if (ms != null) {
-                    methodSpecs.add(ms);
-                }
+                methodSpecs.add(ms);
 
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
@@ -597,10 +595,6 @@ public class SolidityFunctionWrapper extends Generator {
 
         List<TypeName> outputParameterTypes = buildTypeNames(functionDefinition.getOutputs());
         if (functionDefinition.isConstant()) {
-            if (outputParameterTypes.isEmpty()) {
-                // ignore constant functions that are not meant to be transacted
-                return null;
-            }
             buildConstantFunction(
                     functionDefinition, methodBuilder, outputParameterTypes, inputParams);
         } else {
@@ -620,7 +614,8 @@ public class SolidityFunctionWrapper extends Generator {
         String functionName = functionDefinition.getName();
 
         if (outputParameterTypes.isEmpty()) {
-            // should not happen
+            methodBuilder.addStatement("throw new RuntimeException"
+                    + "(\"cannot call constant function with void return type\")");
         } else if (outputParameterTypes.size() == 1) {
 
             TypeName typeName = outputParameterTypes.get(0);
