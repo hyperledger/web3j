@@ -31,6 +31,7 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -283,7 +284,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(methodSpec.toString(), is(expected));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testBuildFunctionConstantInvalid() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 true,
@@ -294,7 +295,16 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 "type",
                 false);
 
-        solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        //CHECKSTYLE:OFF
+        String expected =
+                "public void functionName(java.math.BigInteger param) {\n"
+                + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
+                + "}\n";
+        //CHECKSTYLE:ON
+
+        assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test

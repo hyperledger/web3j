@@ -248,7 +248,8 @@ public class SolidityFunctionWrapper extends Generator {
 
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
-                methodSpecs.add(buildFunction(functionDefinition));
+                MethodSpec ms = buildFunction(functionDefinition);
+                methodSpecs.add(ms);
 
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
@@ -613,7 +614,8 @@ public class SolidityFunctionWrapper extends Generator {
         String functionName = functionDefinition.getName();
 
         if (outputParameterTypes.isEmpty()) {
-            throw new RuntimeException("Only transactional methods should have void return types");
+            methodBuilder.addStatement("throw new RuntimeException"
+                    + "(\"cannot call constant function with void return type\")");
         } else if (outputParameterTypes.size() == 1) {
 
             TypeName typeName = outputParameterTypes.get(0);
