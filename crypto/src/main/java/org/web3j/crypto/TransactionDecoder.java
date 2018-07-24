@@ -21,8 +21,10 @@ public class TransactionDecoder {
         String data = ((RlpString) values.getValues().get(5)).asString();
         if (values.getValues().size() > 6) {
             byte v = ((RlpString) values.getValues().get(6)).getBytes()[0];
-            byte[] r = zeroPadded(((RlpString) values.getValues().get(7)).getBytes(), 32);
-            byte[] s = zeroPadded(((RlpString) values.getValues().get(8)).getBytes(), 32);
+            byte[] r = Numeric.toBytesPadded(
+                Numeric.toBigInt(((RlpString) values.getValues().get(7)).getBytes()), 32);
+            byte[] s = Numeric.toBytesPadded(
+                Numeric.toBigInt(((RlpString) values.getValues().get(8)).getBytes()), 32);
             Sign.SignatureData signatureData = new Sign.SignatureData(v, r, s);
             return new SignedRawTransaction(nonce, gasPrice, gasLimit,
                 to, value, data, signatureData);
@@ -31,14 +33,5 @@ public class TransactionDecoder {
                 gasPrice, gasLimit, to, value, data);
         }
     }
-
-    private static byte[] zeroPadded(byte[] value, int size) {
-        if (value.length == size) {
-            return value;
-        }
-        int diff = size - value.length;
-        byte[] paddedValue = new byte[size];
-        System.arraycopy(value, 0, paddedValue, diff, value.length);
-        return paddedValue;
-    }
+    
 }
