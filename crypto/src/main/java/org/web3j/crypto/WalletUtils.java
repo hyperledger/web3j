@@ -158,6 +158,15 @@ public class WalletUtils {
     public static String getMainnetKeyDirectory() {
         return String.format("%s%skeystore", getDefaultKeyDirectory(), File.separator);
     }
+    
+    /**
+     * Get keystore destination directory for a Rinkeby network.
+     * @return a String containing destination directory
+     */
+    public static String getRinkebyKeyDirectory() {
+        return String.format(
+                "%s%srinkeby%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
+    }
 
     public static boolean isValidPrivateKey(String privateKey) {
         String cleanPrivateKey = Numeric.cleanHexPrefix(privateKey);

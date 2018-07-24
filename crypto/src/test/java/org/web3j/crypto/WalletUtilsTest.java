@@ -146,8 +146,12 @@ public class WalletUtilsTest {
                 .endsWith(String.format("%skeystore", File.separator)));
         assertTrue(WalletUtils.getTestnetKeyDirectory()
                 .endsWith(String.format("%stestnet%skeystore", File.separator, File.separator)));
+        assertTrue(WalletUtils.getRinkebyKeyDirectory()
+                .endsWith(String.format("%srinkeby%skeystore", File.separator, File.separator)));
+        
     }
-
+ 
+    
     private static File createTempDir() throws Exception {
         return Files.createTempDirectory(
                 WalletUtilsTest.class.getSimpleName() + "-testkeys").toFile();
