@@ -36,15 +36,37 @@ public class Sign {
             CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
 
+    static final String MessagePrefix = "\u0019Ethereum Signed Message:\n";
+
+    static byte[] getMessagePrefix(int messageLength) {
+        return MessagePrefix.concat(String.valueOf(messageLength)).getBytes();
+    }
+
+    static byte[] getMessageHash(byte[] message) {
+        byte[] prefix = getMessagePrefix(message.length);
+
+        byte[] result = new byte[prefix.length + message.length];
+        System.arraycopy(prefix, 0, result, 0, prefix.length);
+        System.arraycopy(message, 0, result, prefix.length, message.length);
+
+        return Hash.sha3(result);
+    }
+
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
         return signMessage(message, keyPair, true);
     }
+
+    // WIP - RicMoo: When is needToHash used? Should it not always be true?
+    //
+    // I'm also concerned anyone who has historically used this function will
+    // now get different results, if they try to recover the address. Should
+    // there be a new recover function?
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean needToHash) {
         BigInteger publicKey = keyPair.getPublicKey();
         byte[] messageHash;
         if (needToHash) {
-            messageHash = Hash.sha3(message);
+            messageHash = getMessageHash(message);
         } else {
             messageHash = message;
         }
@@ -192,7 +214,7 @@ public class Sign {
                 new BigInteger(1, signatureData.getR()),
                 new BigInteger(1, signatureData.getS()));
 
-        byte[] messageHash = Hash.sha3(message);
+        byte[] messageHash = getMessageHash(message);
         int recId = header - 27;
         BigInteger key = recoverFromSignature(recId, sig, messageHash);
         if (key == null) {
