@@ -52,12 +52,12 @@ public class Sign {
         return Hash.sha3(result);
     }
 
-    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
-        return signMessage(message, keyPair, true);
-    }
-
     public static SignatureData signPrefixedMessage(byte[] message, ECKeyPair keyPair) {
         return signMessage(getMessageHash(message), keyPair, false);
+    }
+
+    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
+        return signMessage(message, keyPair, true);
     }
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean needToHash) {
