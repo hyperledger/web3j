@@ -25,6 +25,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 
 import static junit.framework.TestCase.fail;
+import static org.junit.Assume.assumeFalse;
+import static org.web3j.protocol.core.TestParameters.isInfuraTestUrl;
 
 /**
  * Common methods & settings used accross scenarios.
@@ -67,6 +69,11 @@ public class Scenario {
     }
 
     boolean unlockAccount() throws Exception {
+        assumeFalse("Infura does NOT support personal_unlockAccount - "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfuraTestUrl());
+
         PersonalUnlockAccount personalUnlockAccount =
                 web3j.personalUnlockAccount(
                         ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
