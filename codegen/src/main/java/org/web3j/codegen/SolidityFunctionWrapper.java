@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
@@ -51,6 +52,7 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
@@ -250,7 +252,7 @@ public class SolidityFunctionWrapper extends Generator {
             if (functionDefinition.getType().equals("function")) {
                 MethodSpec ms = buildFunction(functionDefinition);
                 methodSpecs.add(ms);
-
+                buildFunctionTxId(functionDefinition).ifPresent(methodSpecs::add);
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
 
@@ -599,10 +601,27 @@ public class SolidityFunctionWrapper extends Generator {
                     functionDefinition, methodBuilder, outputParameterTypes, inputParams);
         } else {
             buildTransactionFunction(
-                    functionDefinition, methodBuilder, inputParams);
+                    functionDefinition, methodBuilder, inputParams, false);
         }
 
         return methodBuilder.build();
+    }
+    
+    Optional<MethodSpec> buildFunctionTxId(
+        AbiDefinition functionDefinition) throws ClassNotFoundException {
+      if (functionDefinition.isConstant())
+        return Optional.empty();
+      String functionName = functionDefinition.getName();
+      MethodSpec.Builder methodBuilder =
+            MethodSpec.methodBuilder(functionName + "TxId")
+            .addException(TypeName.get(IOException.class))
+                    .addModifiers(Modifier.PUBLIC);
+
+      String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
+
+      buildTransactionFunction(functionDefinition, methodBuilder, inputParams, true);
+
+      return Optional.of(methodBuilder.build());
     }
 
     private void buildConstantFunction(
@@ -700,7 +719,7 @@ public class SolidityFunctionWrapper extends Generator {
     private void buildTransactionFunction(
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
-            String inputParams) throws ClassNotFoundException {
+            String inputParams, boolean returnTxid) throws ClassNotFoundException {
 
         if (functionDefinition.hasOutputs()) {
             //CHECKSTYLE:OFF
@@ -716,19 +735,37 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         String functionName = functionDefinition.getName();
-
-        methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
+        if (returnTxid) {
+          methodBuilder.returns(TypeName.get(EthSendTransaction.class));
+        } else {
+          methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
+        }
 
         methodBuilder.addStatement("final $T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
                         + ".<$T<?>>emptyList())",
                 Function.class, Function.class, funcNameToConst(functionName),
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
-        if (functionDefinition.isPayable()) {
+        if (returnTxid) {
+          if (functionDefinition.isPayable()) {
             methodBuilder.addStatement(
-                    "return executeRemoteCallTransaction(function, $N)", WEI_VALUE);
+                    "return transactionManager.sendTransaction(\n" + 
+                    "gasProvider.getGasPrice(function.getName()),\n" + 
+                    "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
+                    "org.web3j.abi.FunctionEncoder.encode(function), $N)", WEI_VALUE);
+          } else {
+              methodBuilder.addStatement("return transactionManager.sendTransaction(\n" + 
+                  "gasProvider.getGasPrice(function.getName()),\n" + 
+                  "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
+                  "org.web3j.abi.FunctionEncoder.encode(function), BigInteger.ZERO)");
+          }
         } else {
-            methodBuilder.addStatement("return executeRemoteCallTransaction(function)");
+          if (functionDefinition.isPayable()) {
+              methodBuilder.addStatement(
+                      "return executeRemoteCallTransaction(function, $N)", WEI_VALUE);
+          } else {
+              methodBuilder.addStatement("return executeRemoteCallTransaction(function)");
+          }
         }
     }
 
