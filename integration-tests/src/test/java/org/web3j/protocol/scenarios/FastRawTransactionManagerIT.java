@@ -15,6 +15,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.FastRawTransactionManager;
@@ -26,22 +30,37 @@ import org.web3j.utils.Convert;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.web3j.protocol.core.TestParameters.BENCHMARK_TESTING_ON;
+import static org.web3j.protocol.core.TestParameters.FAST_RAW_TRANSACTION_MANAGER_IT_COUNT;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
 
+@RunWith(Parameterized.class)
 public class FastRawTransactionManagerIT extends Scenario {
 
-    private static final int COUNT = 10;  // don't set too high if using a real Ethereum network
+    private static final int COUNT = FAST_RAW_TRANSACTION_MANAGER_IT_COUNT;
     private static final long POLLING_FREQUENCY = 15000;
 
     @Rule
-    public TestRule benchmarkRun = new BenchmarkRule();
+    public TestRule benchmarkRun = BENCHMARK_TESTING_ON ? new BenchmarkRule() :
+            (base, description) -> base;
+
+    private final Credentials sender;
+    private final Credentials receipient;
+
+    public FastRawTransactionManagerIT(
+            @SuppressWarnings("unused") String ignoredTestName,
+            Credentials sender,
+            Credentials recipient) {
+        this.sender = sender;
+        this.receipient = recipient;
+    }
 
     @Test
     public void testTransactionPolling() throws Exception {
 
         List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                web3j, ALICE,
+                web3j, sender,
                 new PollingTransactionReceiptProcessor(
                         web3j, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
 
@@ -83,7 +102,7 @@ public class FastRawTransactionManagerIT extends Scenario {
                 new ConcurrentLinkedQueue<>();
 
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                web3j, ALICE,
+                web3j, sender,
                 new QueuingTransactionReceiptProcessor(web3j, new Callback() {
                     @Override
                     public void accept(TransactionReceipt transactionReceipt) {
@@ -123,7 +142,12 @@ public class FastRawTransactionManagerIT extends Scenario {
     private RemoteCall<TransactionReceipt> createTransaction(
             Transfer transfer, BigInteger gasPrice) {
         return transfer.sendFunds(
-                BOB.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI,
+                receipient.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI,
                 gasPrice, Transfer.GAS_LIMIT);
+    }
+
+    @Parameterized.Parameters(name = "Test #{index}: {0}")
+    public static List<Object[]> parameters() {
+        return transferTestParameters();
     }
 }

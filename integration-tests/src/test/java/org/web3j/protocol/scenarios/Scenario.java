@@ -7,6 +7,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -24,6 +25,7 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assume.assumeFalse;
 import static org.web3j.protocol.core.TestParameters.isInfuraTestUrl;
@@ -141,5 +143,12 @@ public class Scenario {
 
     static String getFibonacciSolidityBinary() throws Exception {
         return load("/solidity/fibonacci/build/Fibonacci.bin");
+    }
+
+    public static List<Object[]> transferTestParameters() {
+        return asList(
+            new Object[] { "From ALICE to BOB", ALICE, BOB },
+            new Object[] { "From BOB to ALICE", BOB, ALICE }
+        );
     }
 }

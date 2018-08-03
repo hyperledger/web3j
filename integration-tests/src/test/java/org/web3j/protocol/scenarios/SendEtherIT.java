@@ -16,7 +16,6 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 
-import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -30,7 +29,10 @@ public class SendEtherIT extends Scenario {
     private final Credentials sender;
     private final Credentials receipient;
 
-    public SendEtherIT(String ignoredTestName, Credentials sender, Credentials recipient) {
+    public SendEtherIT(
+            @SuppressWarnings("unused") String ignoredTestName,
+            Credentials sender,
+            Credentials recipient) {
         this.sender = sender;
         this.receipient = recipient;
     }
@@ -88,9 +90,6 @@ public class SendEtherIT extends Scenario {
 
     @Parameterized.Parameters(name = "Test #{index}: {0}")
     public static List<Object[]> parameters() {
-        return asList(
-            new Object[] { "From ALICE to BOB", ALICE, BOB },
-            new Object[] { "From BOB to ALICE", BOB, ALICE }
-        );
+        return transferTestParameters();
     }
 }

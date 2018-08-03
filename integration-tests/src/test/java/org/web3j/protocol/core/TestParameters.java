@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Properties;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +39,13 @@ public class TestParameters {
 
     public static final String ALICE_PUBKEY;
 
+    public static final boolean BENCHMARK_TESTING_ON;
+
     public static final String BOB_PRIVKEY;
 
     public static final String BOB_PUBKEY;
+
+    public static final int FAST_RAW_TRANSACTION_MANAGER_IT_COUNT;
 
     public static final String TEST_URL;
 
@@ -59,37 +64,67 @@ public class TestParameters {
 
         ALICE_PRIVKEY = getPropertyOrEnv(localTestProperties, "WEB3J_ALICE_PRIVKEY", "");
         ALICE_PUBKEY = getPropertyOrEnv(localTestProperties, "WEB3J_ALICE_PUBKEY", "0x");
+        BENCHMARK_TESTING_ON = getPropertyOrEnv(localTestProperties, "WEB3J_BENCHMARK_TESTING_ON",
+            true);
         BOB_PRIVKEY = getPropertyOrEnv(localTestProperties, "WEB3J_BOB_PRIVKEY", "");
         BOB_PUBKEY = getPropertyOrEnv(localTestProperties, "WEB3J_BOB_PUBKEY", "0x");
+        FAST_RAW_TRANSACTION_MANAGER_IT_COUNT = getPropertyOrEnv(localTestProperties,
+            "WEB3J_FAST_RAW_TRANSACTION_MANAGER_IT_COUNT", 1);
         TEST_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_URL", DEFAULT_URL);
 
         LOGGER.info(
                 "\n"
                 + " * WEB3J_ALICE_PRIVKEY = {}\n"
                 + " * WEB3J_ALICE_PUBKEY = {}\n"
+                + " * WEB3J_BENCHMARK_TESTING_ON = {}\n"
                 + " * WEB3J_BOB_PRIVKEY = {}\n"
                 + " * WEB3J_BOB_PUBKEY = {}\n"
+                + " * WEB3J_FAST_RAW_TRANSACTION_MANAGER_IT_COUNT = {}\n"
                 + " * WEB3J_TEST_URL = {}\n"
                 + "{}",
                 ALICE_PRIVKEY,
                 ALICE_PUBKEY,
+                BENCHMARK_TESTING_ON,
                 BOB_PRIVKEY,
                 BOB_PUBKEY,
+                FAST_RAW_TRANSACTION_MANAGER_IT_COUNT,
                 TEST_URL,
                 "");
+    }
+
+    private static Boolean getPropertyOrEnv(
+            Properties localTestProperties,
+            String name,
+            Boolean defaultValue) {
+        return getPropertyOrEnv(localTestProperties, name, Boolean::valueOf, defaultValue);
+    }
+
+    private static Integer getPropertyOrEnv(
+            Properties localTestProperties,
+            String name,
+            Integer defaultValue) {
+        return getPropertyOrEnv(localTestProperties, name, Integer::valueOf, defaultValue);
     }
 
     private static String getPropertyOrEnv(
             Properties localTestProperties,
             String name,
             String defaultValue) {
-        String value = System.getProperty(name,
+        return getPropertyOrEnv(localTestProperties, name, String::valueOf, defaultValue);
+    }
+
+
+
+    private static <T> T getPropertyOrEnv(
+            Properties localTestProperties,
+            String name,
+            Function<String, T> valueConverter,
+            T defaultValue) {
+        String propertyValue = System.getProperty(name,
                 localTestProperties.getProperty(name,
-                        System.getenv(name)));
-        if (value == null) {
-            value = defaultValue;
-        }
-        return value;
+                System.getenv(name)));
+
+        return propertyValue != null ? valueConverter.apply(propertyValue) : defaultValue;
     }
 
     public static boolean isInfuraTestUrl() {
