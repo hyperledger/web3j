@@ -20,7 +20,7 @@ import rx.functions.Func1;
 import java.math.BigInteger;
 import java.util.*;
 
-public class ERC20Contract  extends Contract implements ERC20Interface {
+public class ERC20Contract extends Contract implements ERC20Interface {
     private static final String BINARY = "";
     public static final String FUNC_NAME = "name";
     public static final String FUNC_APPROVE = "approve";
@@ -33,13 +33,11 @@ public class ERC20Contract  extends Contract implements ERC20Interface {
     public static final String FUNC_ALLOWANCE = "allowance";
 
     public static final Event APPROVAL_EVENT = new Event("Approval",
-            Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
     ;
 
     public static final Event TRANSFER_EVENT = new Event("Transfer",
-            Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
     ;
 
     protected static final HashMap<String, String> _addresses;
@@ -141,7 +139,7 @@ public class ERC20Contract  extends Contract implements ERC20Interface {
         return responses;
     }
 
-    public rx.Observable<ApprovalEventResponse> approvalEventObservable(EthFilter filter) {
+    public Observable<ApprovalEventResponse> approvalEventObservable(EthFilter filter) {
         return web3j.ethLogObservable(filter).map(new Func1<Log, ApprovalEventResponse>() {
             @Override
             public ApprovalEventResponse call(Log log) {
@@ -156,7 +154,7 @@ public class ERC20Contract  extends Contract implements ERC20Interface {
         });
     }
 
-    public rx.Observable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Observable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(APPROVAL_EVENT));
         return approvalEventObservable(filter);
@@ -176,7 +174,7 @@ public class ERC20Contract  extends Contract implements ERC20Interface {
         return responses;
     }
 
-    public rx.Observable<TransferEventResponse> transferEventObservable(EthFilter filter) {
+    public Observable<TransferEventResponse> transferEventObservable(EthFilter filter) {
         return web3j.ethLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
             @Override
             public TransferEventResponse call(Log log) {
@@ -215,15 +213,21 @@ public class ERC20Contract  extends Contract implements ERC20Interface {
 
     public static class ApprovalEventResponse {
         public Log log;
+
         public String owner;
+
         public String spender;
+
         public BigInteger value;
     }
 
     public static class TransferEventResponse {
         public Log log;
+
         public String from;
+
         public String to;
+
         public BigInteger value;
     }
 }
