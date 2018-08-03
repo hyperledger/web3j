@@ -324,7 +324,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private static MethodSpec buildGasConstructor(Class authType, String authName) {
-      return MethodSpec.constructorBuilder()
+        return MethodSpec.constructorBuilder()
               .addModifiers(Modifier.PROTECTED)
               .addParameter(String.class, CONTRACT_ADDRESS)
               .addParameter(Web3j.class, WEB3J)
@@ -333,7 +333,7 @@ public class SolidityFunctionWrapper extends Generator {
               .addStatement("super($N, $N, $N, $N, $N)",
                       BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PROVIDER)
               .build();
-  }
+    }
 
     private MethodSpec buildDeploy(
             String className, AbiDefinition functionDefinition,
