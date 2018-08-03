@@ -21,6 +21,8 @@ public class UnixDomainSocket implements IOFacade {
     private final InputStreamReader reader;
     private final PrintWriter writer;
 
+    private final UnixSocketChannel channel;
+    
     public UnixDomainSocket(String ipcSocketPath) {
         this(ipcSocketPath, DEFAULT_BUFFER_SIZE);
     }
@@ -30,7 +32,7 @@ public class UnixDomainSocket implements IOFacade {
 
         try {
             UnixSocketAddress address = new UnixSocketAddress(ipcSocketPath);
-            UnixSocketChannel channel = UnixSocketChannel.open(address);
+            channel = UnixSocketChannel.open(address);
 
             reader = new InputStreamReader(Channels.newInputStream(channel));
             writer = new PrintWriter(Channels.newOutputStream(channel));
@@ -45,6 +47,7 @@ public class UnixDomainSocket implements IOFacade {
         this.bufferSize = bufferSize;
         this.writer = writer;
         this.reader = reader;
+        this.channel = null;
     }
 
     @Override
@@ -56,15 +59,23 @@ public class UnixDomainSocket implements IOFacade {
     @Override
     public String read() throws IOException {
         CharBuffer response = CharBuffer.allocate(bufferSize);
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         do {
             response.clear();
             reader.read(response);
-            result += new String(response.array(), response.arrayOffset(), response.position());
-        } while (response.position() == response.limit()
-                && response.get(response.limit() - 1) != '\n');
+            result.append(response.array(), response.arrayOffset(), response.position());
+        } while (response.get(response.position() - 1) != '\n');
 
-        return result;
+        return result.toString();
+    }
+
+    @Override
+    public void close() throws IOException {
+        reader.close();
+        writer.close();
+        if (null != channel) {
+            channel.close();
+        }
     }
 }

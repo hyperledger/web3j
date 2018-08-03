@@ -14,6 +14,10 @@ public class Bool implements Type<Boolean> {
         this.value = value;
     }
 
+    public Bool(Boolean value) {
+        this.value = value;
+    }
+    
     @Override
     public String getTypeAsString() {
         return TYPE_NAME;

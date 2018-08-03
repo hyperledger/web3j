@@ -9,16 +9,18 @@ dependencies {
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
-            "io.reactivex:rxjava:$rxjavaVersion"
-    testCompile project(path: ':crypto', configuration: 'archives'),
-            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion"
+            "io.reactivex:rxjava:$rxjavaVersion",
+            "org.java-websocket:Java-WebSocket:$javaWebSocketVersion"
+    testCompile project(path: ':crypto', configuration: 'testArtifacts'),
+            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
+            "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 task createProperties(dependsOn: processResources) doLast {
     // if resources dir is empty we need to create this ourselves
     new File("$buildDir/resources/main/").mkdirs()
 
-    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+    new File("$buildDir/resources/main/web3j-version.properties").withWriter { w ->
         Properties p = new Properties()
         p['version'] = project.version.toString()
         p['timestamp'] = getTimestamp()
@@ -35,4 +37,12 @@ def getTimestamp() {
 
 classes {
     dependsOn createProperties
+}
+
+configurations {
+    testArtifacts.extendsFrom testRuntime
+}
+
+artifacts {
+    testArtifacts testJar
 }

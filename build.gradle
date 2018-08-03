@@ -7,6 +7,7 @@ buildscript {
     ext.okhttpVersion = '3.8.1'
     ext.rxjavaVersion = '1.2.4'
     ext.slf4jVersion = '1.7.25'
+    ext.javaWebSocketVersion = '1.3.8'
 
     // test dependencies
     ext.equalsverifierVersion = '2.1.7'
@@ -44,7 +45,7 @@ allprojects {
     targetCompatibility = 1.8
 
     group 'org.web3j'
-    version '3.3.0'
+    version '3.5.0'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -60,6 +61,10 @@ allprojects {
     }
     compileTestJava {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
+    javadoc {
+        options.encoding = 'UTF-8'
     }
 
     jacoco {

@@ -56,8 +56,7 @@ public final class PublicResolver extends Contract {
 
     public List<AddrChangedEventResponse> getAddrChangedEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("AddrChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<AddrChangedEventResponse> responses = new ArrayList<AddrChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -71,8 +70,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<AddrChangedEventResponse> addrChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("AddrChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, AddrChangedEventResponse>() {
@@ -89,8 +87,7 @@ public final class PublicResolver extends Contract {
 
     public List<ContentChangedEventResponse> getContentChangedEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("ContentChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ContentChangedEventResponse> responses = new ArrayList<ContentChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -104,8 +101,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<ContentChangedEventResponse> contentChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("ContentChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, ContentChangedEventResponse>() {
@@ -122,8 +118,7 @@ public final class PublicResolver extends Contract {
 
     public List<NameChangedEventResponse> getNameChangedEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("NameChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NameChangedEventResponse> responses = new ArrayList<NameChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -137,8 +132,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<NameChangedEventResponse> nameChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NameChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, NameChangedEventResponse>() {
@@ -155,8 +149,7 @@ public final class PublicResolver extends Contract {
 
     public List<ABIChangedEventResponse> getABIChangedEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("ABIChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Uint256>() {}),
-                Arrays.<TypeReference<?>>asList());
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint256>(true) {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ABIChangedEventResponse> responses = new ArrayList<ABIChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -170,8 +163,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<ABIChangedEventResponse> aBIChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("ABIChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Uint256>() {}),
-                Arrays.<TypeReference<?>>asList());
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint256>(true) {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, ABIChangedEventResponse>() {
@@ -188,8 +180,7 @@ public final class PublicResolver extends Contract {
 
     public List<PubkeyChangedEventResponse> getPubkeyChangedEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("PubkeyChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<PubkeyChangedEventResponse> responses = new ArrayList<PubkeyChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -204,8 +195,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<PubkeyChangedEventResponse> pubkeyChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("PubkeyChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, PubkeyChangedEventResponse>() {
@@ -223,8 +213,7 @@ public final class PublicResolver extends Contract {
 
     public List<TextChangedEventResponse> getTextChangedEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("TextChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Utf8String>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TextChangedEventResponse> responses = new ArrayList<TextChangedEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -239,8 +228,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<TextChangedEventResponse> textChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("TextChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Utf8String>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, TextChangedEventResponse>() {

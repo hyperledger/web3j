@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.CharBuffer;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -82,5 +86,35 @@ public class UnixDomainSocketTest {
 
         verify(writer).write("test request");
         verify(writer).flush();
+    }
+
+    @Test
+    public void testSlowResponse() throws Exception {
+        String response = "{\"jsonrpc\":\"2.0\",\"id\":1,"
+                        + "\"result\":\"Geth/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n";
+        unixDomainSocket = new UnixDomainSocket(reader, writer, response.length());
+        final LinkedList<String> segments = new LinkedList<>();
+        // 1st part of response
+        segments.add(response.substring(0, 50));
+        // rest of response
+        segments.add(response.substring(50));
+        doAnswer(invocation -> {
+            String segment = segments.poll();
+            if (segment == null) {
+                return 0;
+            } else {
+                Object[] args = invocation.getArguments();
+                ((CharBuffer) args[0]).append(segment);
+                return segment.length();
+            }
+        }).when(reader).read(any(CharBuffer.class));
+
+        IpcService ipcService = new IpcService() {
+            @Override
+            protected IOFacade getIO() {
+                return unixDomainSocket;
+            }
+        };
+        ipcService.send(new Request(), Web3ClientVersion.class);
     }
 }

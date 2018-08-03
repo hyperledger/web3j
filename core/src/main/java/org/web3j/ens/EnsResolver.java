@@ -11,6 +11,7 @@ import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.tx.ClientTransactionManager;
 import org.web3j.tx.ManagedTransaction;
 import org.web3j.tx.TransactionManager;
+import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
 
 /**
@@ -122,14 +123,14 @@ public class EnsResolver {
 
         ENS ensRegistry = ENS.load(
                 registryContract, web3j, transactionManager,
-                ManagedTransaction.GAS_PRICE, org.web3j.tx.Contract.GAS_LIMIT);
+                DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
 
         String resolverAddress = ensRegistry.resolver(nameHash).send();
         PublicResolver resolver = PublicResolver.load(
                 resolverAddress, web3j, transactionManager,
-                ManagedTransaction.GAS_PRICE, org.web3j.tx.Contract.GAS_LIMIT);
+                DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
 
         return resolver;
     }

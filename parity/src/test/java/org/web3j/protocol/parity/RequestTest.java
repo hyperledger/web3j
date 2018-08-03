@@ -12,7 +12,9 @@ import org.junit.Test;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.RequestTester;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.parity.methods.request.Derivation;
@@ -27,7 +29,7 @@ public class RequestTest extends RequestTester {
     protected void initWeb3Client(HttpService httpService) {
         web3j = Parity.build(httpService);
     }
-    
+
     @Test
     public void testParityAllAccountsInfo() throws Exception {
         web3j.parityAllAccountsInfo().send();
@@ -133,7 +135,51 @@ public class RequestTest extends RequestTester {
                 + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],\"id\":1}");
         //CHECKSTYLE:ON
     }
-    
+
+    @Test
+    public void testParityListAccountsNoAccountOffsetNoBlockTag() throws Exception {
+        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        web3j.parityListAccounts(maxQuantityReturned, null, null).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
+                + "\"params\":[100,null],\"id\":1}");
+    }
+
+    @Test
+    public void testParityListAccountsNoAccountOffsetWithBlockTag() throws Exception {
+        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        DefaultBlockParameter blockParameter = new DefaultBlockParameterNumber(BigInteger.ONE);
+        web3j.parityListAccounts(maxQuantityReturned, null, blockParameter).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
+                + "\"params\":[100,null,\"0x1\"],\"id\":1}");
+    }
+
+    @Test
+    public void testParityListAccountsWithAccountOffsetWithBlockTag() throws Exception {
+        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        DefaultBlockParameter blockParameter = DefaultBlockParameterName.LATEST;
+        web3j.parityListAccounts(maxQuantityReturned,
+                "0x407d73d8a49eeb85d32cf465507dd71d507100c1", blockParameter).send();
+
+        //CHECKSTYLE:OFF
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
+                + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"latest\"],\"id\":1}");
+        //CHECKSTYLE:ON
+    }
+
+    @Test
+    public void testParityListAccountsWithAccountOffsetNoBlockTag() throws Exception {
+        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        web3j.parityListAccounts(maxQuantityReturned,
+                "0x407d73d8a49eeb85d32cf465507dd71d507100c1", null).send();
+
+        //CHECKSTYLE:OFF
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
+                + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],\"id\":1}");
+        //CHECKSTYLE:ON
+    }
+
     public void testParityListGethAccounts() throws Exception {
         web3j.parityListGethAccounts().send();
 

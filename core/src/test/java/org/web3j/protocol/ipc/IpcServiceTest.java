@@ -20,7 +20,12 @@ public class IpcServiceTest {
     @Before
     public void setUp() {
         ioFacade = mock(IOFacade.class);
-        ipcService = new IpcService(ioFacade);
+        ipcService = new IpcService() {
+            @Override
+            protected IOFacade getIO() {
+                return ioFacade;
+            }
+        };
     }
 
     @Test
@@ -32,5 +37,12 @@ public class IpcServiceTest {
         ipcService.send(new Request(), Web3ClientVersion.class);
 
         verify(ioFacade).write("{\"jsonrpc\":\"2.0\",\"method\":null,\"params\":null,\"id\":0}");
+    }
+
+    @Test
+    public void testClose() throws IOException {
+        ipcService.close();
+
+        verify(ioFacade).close();
     }
 }
