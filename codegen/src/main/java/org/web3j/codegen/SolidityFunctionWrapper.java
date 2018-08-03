@@ -750,15 +750,15 @@ public class SolidityFunctionWrapper extends Generator {
         if (returnTxid) {
             if (functionDefinition.isPayable()) {
                 methodBuilder.addStatement(
-                      "return transactionManager.sendTransaction(\n" + 
-                      "gasProvider.getGasPrice(function.getName()),\n" + 
-                      "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
-                      "org.web3j.abi.FunctionEncoder.encode(function), $N)", WEI_VALUE);
+                        "return transactionManager.sendTransaction(\n"
+                                + "gasProvider.getGasPrice(function.getName()),\n"
+                                + "gasProvider.getGasLimit(function.getName()), contractAddress,\n"
+                                + "org.web3j.abi.FunctionEncoder.encode(function), $N)", WEI_VALUE);
             } else {
-                methodBuilder.addStatement("return transactionManager.sendTransaction(\n" + 
-                      "gasProvider.getGasPrice(function.getName()),\n" + 
-                      "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
-                      "org.web3j.abi.FunctionEncoder.encode(function), BigInteger.ZERO)");
+                methodBuilder.addStatement("return transactionManager.sendTransaction(\n"
+                        + "gasProvider.getGasPrice(function.getName()),\n"
+                        + "gasProvider.getGasLimit(function.getName()), contractAddress,\n"
+                        + "org.web3j.abi.FunctionEncoder.encode(function), BigInteger.ZERO)");
             }
         } else {
             if (functionDefinition.isPayable()) {
