@@ -6,4 +6,5 @@
 
 <suppressions>
     <suppress files="[\\/]generated[\\/]" checks="."/>
+    <suppress files="ERC20Contract.java" checks="."/>
 </suppressions>
