@@ -65,7 +65,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeThat;
-import static org.web3j.protocol.core.TestParameters.isInfuraTestUrl;
+import static org.web3j.protocol.core.TestParameters.isInfuraTestRinkebyUrl;
 
 /**
  * JSON-RPC 2.0 Integration Tests.
@@ -85,7 +85,7 @@ public class CoreIT {
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService(TestParameters.TEST_URL));
+        this.web3j = Web3j.build(new HttpService(TestParameters.TEST_RINKEBY_URL));
 
         try {
             EthSyncing ethSyncing = web3j.ethSyncing().send();
@@ -144,7 +144,7 @@ public class CoreIT {
     public void testEthCoinbase() throws Exception {
         assumeFalse("Infura does NOT support eth_coinbase - "
                 + "https://github.com/INFURA/infura/wiki/FAQ#q-does-infura-support-all-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
 
         EthCoinbase ethCoinbase = web3j.ethCoinbase().send();
         assertNotNull(ethCoinbase.getAddress());
@@ -294,7 +294,7 @@ public class CoreIT {
         assumeFalse("Infura does NOT support eth_sign - "
                 + "https://github.com/INFURA/infura/wiki/FAQ"
                 + "#q-does-infura-support-all-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
     }
 
     @Ignore  // TODO: Once account unlock functionality is available
@@ -303,7 +303,7 @@ public class CoreIT {
         assumeFalse("Infura does NOT support eth_sendTransaction - "
                 + "https://github.com/INFURA/infura/wiki/FAQ"
                 + "#q-does-infura-support-all-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
 
         EthSendTransaction ethSendTransaction = web3j.ethSendTransaction(
                 config.buildTransaction()).send();
@@ -501,7 +501,7 @@ public class CoreIT {
                 + "eth_getFilterChanges, and eth_uninstallFilter - "
                 + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                 + "#supported-json-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
 
         assumeThat("Skipping testFiltersByFilterId() because we are still syncing, which means we "
                 + "will NOT be able to accurately do ethGetFilterLogs",
@@ -543,7 +543,7 @@ public class CoreIT {
         assumeFalse("Infura does NOT support eth_newBlockFilter - "
                 + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                 + "#supported-json-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
 
         EthFilter ethNewBlockFilter = web3j.ethNewBlockFilter().send();
         assertNotNull(ethNewBlockFilter.getFilterId());
@@ -554,7 +554,7 @@ public class CoreIT {
         assumeFalse("Infura does NOT support eth_newPendingTransactionFilter - "
                 + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                 + "#supported-json-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
 
         EthFilter ethNewPendingTransactionFilter =
                 web3j.ethNewPendingTransactionFilter().send();

@@ -28,7 +28,7 @@ import org.web3j.protocol.http.HttpService;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assume.assumeFalse;
-import static org.web3j.protocol.core.TestParameters.isInfuraTestUrl;
+import static org.web3j.protocol.core.TestParameters.isInfuraTestRinkebyUrl;
 
 /**
  * Common methods & settings used accross scenarios.
@@ -67,14 +67,14 @@ public class Scenario {
 
     @Before
     public void setUp() {
-        this.web3j = Admin.build(new HttpService(TestParameters.TEST_URL));
+        this.web3j = Admin.build(new HttpService(TestParameters.TEST_RINKEBY_URL));
     }
 
     boolean unlockAccount() throws Exception {
         assumeFalse("Infura does NOT support personal_unlockAccount - "
                 + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                 + "#supported-json-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
 
         PersonalUnlockAccount personalUnlockAccount =
                 web3j.personalUnlockAccount(

@@ -17,7 +17,7 @@ public class EnsIT {
     @Test
     public void testEns() throws Exception {
 
-        Web3j web3j = Web3j.build(new HttpService(TestParameters.TEST_URL));
+        Web3j web3j = Web3j.build(new HttpService(TestParameters.TEST_RINKEBY_URL));
 
         assumeThat("Skipping testEns() because we are still syncing, which means we will NOT be "
                         + "able to accurately do EnsResolver#resolve()",

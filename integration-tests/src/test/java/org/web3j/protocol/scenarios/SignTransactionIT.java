@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
-import static org.web3j.protocol.core.TestParameters.isInfuraTestUrl;
+import static org.web3j.protocol.core.TestParameters.isInfuraTestRinkebyUrl;
 
 /**
  * Sign transaction using Ethereum node.
@@ -27,7 +27,7 @@ public class SignTransactionIT extends Scenario {
         assumeFalse("Infura does NOT support personal_unlockAccount - "
                         + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                         + "#supported-json-rpc-methods",
-                isInfuraTestUrl());
+                isInfuraTestRinkebyUrl());
 
         boolean accountUnlocked = unlockAccount();
         assertTrue(accountUnlocked);

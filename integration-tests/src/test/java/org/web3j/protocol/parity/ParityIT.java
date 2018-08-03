@@ -12,6 +12,9 @@ import org.web3j.protocol.http.HttpService;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.web3j.protocol.core.TestParameters.TEST_KOVAN_URL;
+import static org.web3j.protocol.core.TestParameters.isInfuraTestKovanUrl;
 
 /**
  * JSON-RPC 2.0 Integration Tests.
@@ -23,11 +26,16 @@ public class ParityIT {
 
     @Before
     public void setUp() {
-        this.parity = Parity.build(new HttpService());
+        this.parity = Parity.build(new HttpService(TEST_KOVAN_URL));
     }
 
     @Test
     public void testPersonalListAccounts() throws Exception {
+        assumeFalse("Infura does NOT support personal_listAccounts - "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfuraTestKovanUrl());
+
         PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
     }
@@ -48,6 +56,11 @@ public class ParityIT {
 
     @Test
     public void testPersonalSign() throws Exception {
+        assumeFalse("Infura does NOT support personal_listAccounts - "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfuraTestKovanUrl());
+
         PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
 
@@ -60,6 +73,10 @@ public class ParityIT {
     }
 
     private NewAccountIdentifier createAccount() throws Exception {
+        assumeFalse("Infura does NOT support personal_newAccount - "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfuraTestKovanUrl());
         return parity.personalNewAccount(PASSWORD).send();
     }
 }

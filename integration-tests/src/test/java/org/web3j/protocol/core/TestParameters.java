@@ -17,11 +17,13 @@ import static org.web3j.protocol.http.HttpService.DEFAULT_URL;
  * local-test.properties, or via the system property. The environment variable name or property
  * entry name or system property name used per constant is WEB3J_&lt;CONSTANT_NAME&gt;.
  *
- * <p>For example, you can configure {@link #TEST_URL} by supplying a value to the environment
- * variable WEB3J_TEST_URL (i.e. export WEB3J_TEST_URL="https://ropsten.infura.io/yourtoken") or
- * by adding an entry in local-test.properties for WEB3J_TEST_URL (i.e.
- * WEB3J_TEST_URL=https://ropsten.infura.io/yourtoken) or by supplying a value to the system
- * property WEB3J_TEST_URL (i.e. -DWEB3J_TEST_URL="https://ropsten.infura.io/yourtoken").
+ * <p>For example, you can configure {@link #TEST_ROPSTEN_URL} by supplying a value to the
+ * environment variable WEB3J_TEST_ROPSTEN_URL (i.e. export
+ * WEB3J_TEST_ROPSTEN_URL="https://ropsten.infura.io/yourtoken") or by adding an entry in
+ * local-test.properties for WEB3J_TEST_ROPSTEN_URL (i.e.
+ * WEB3J_TEST_ROPSTEN_URL=https://ropsten.infura.io/yourtoken) or by supplying a value to the
+ * system property WEB3J_TEST_ROPSTEN_URL (i.e.
+ * -DWEB3J_TEST_ROPSTEN_URL="https://ropsten.infura.io/yourtoken").
  *
  * <p>The priority of lookup starts from the System property to the local-test.properties to the
  * environment variables. That is, if the variable exists both in the System property and in the
@@ -47,7 +49,20 @@ public class TestParameters {
 
     public static final int FAST_RAW_TRANSACTION_MANAGER_IT_COUNT;
 
-    public static final String TEST_URL;
+    /**
+     * For parity.
+     */
+    public static final String TEST_KOVAN_URL;
+
+    /**
+     * For geth.
+     */
+    public static final String TEST_RINKEBY_URL;
+
+    /**
+     * For both geth and parity.
+     */
+    public static final String TEST_ROPSTEN_URL;
 
     static {
         Properties localTestProperties = new Properties();
@@ -70,7 +85,13 @@ public class TestParameters {
         BOB_PUBKEY = getPropertyOrEnv(localTestProperties, "WEB3J_BOB_PUBKEY", "0x");
         FAST_RAW_TRANSACTION_MANAGER_IT_COUNT = getPropertyOrEnv(localTestProperties,
             "WEB3J_FAST_RAW_TRANSACTION_MANAGER_IT_COUNT", 1);
-        TEST_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_URL", DEFAULT_URL);
+
+        TEST_ROPSTEN_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_ROPSTEN_URL",
+            DEFAULT_URL);
+        TEST_KOVAN_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_KOVAN_URL",
+            TEST_ROPSTEN_URL);
+        TEST_RINKEBY_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_RINKEBY_URL",
+            TEST_ROPSTEN_URL);
 
         LOGGER.info(
                 "\n"
@@ -80,7 +101,9 @@ public class TestParameters {
                 + " * WEB3J_BOB_PRIVKEY = {}\n"
                 + " * WEB3J_BOB_PUBKEY = {}\n"
                 + " * WEB3J_FAST_RAW_TRANSACTION_MANAGER_IT_COUNT = {}\n"
-                + " * WEB3J_TEST_URL = {}\n"
+                + " * WEB3J_TEST_KOVAN_URL = {}\n"
+                + " * WEB3J_TEST_RINKEBY_URL = {}\n"
+                + " * WEB3J_TEST_ROPSTEN_URL = {}\n"
                 + "{}",
                 ALICE_PRIVKEY,
                 ALICE_PUBKEY,
@@ -88,7 +111,9 @@ public class TestParameters {
                 BOB_PRIVKEY,
                 BOB_PUBKEY,
                 FAST_RAW_TRANSACTION_MANAGER_IT_COUNT,
-                TEST_URL,
+                TEST_KOVAN_URL,
+                TEST_RINKEBY_URL,
+                TEST_ROPSTEN_URL,
                 "");
     }
 
@@ -127,7 +152,15 @@ public class TestParameters {
         return propertyValue != null ? valueConverter.apply(propertyValue) : defaultValue;
     }
 
-    public static boolean isInfuraTestUrl() {
-        return TestParameters.TEST_URL.contains("infura.io");
+    public static boolean isInfuraTestKovanUrl() {
+        return isInfuraTestUrl(TestParameters.TEST_KOVAN_URL);
+    }
+
+    public static boolean isInfuraTestRinkebyUrl() {
+        return isInfuraTestUrl(TestParameters.TEST_RINKEBY_URL);
+    }
+
+    private static boolean isInfuraTestUrl(String url) {
+        return url.contains("infura.io");
     }
 }
