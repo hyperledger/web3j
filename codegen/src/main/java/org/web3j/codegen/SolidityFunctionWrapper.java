@@ -57,6 +57,7 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
+import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.utils.Collection;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
@@ -79,6 +80,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String END_BLOCK = "endBlock";
     private static final String WEI_VALUE = "weiValue";
     private static final String FUNC_NAME_PREFIX = "FUNC_";
+    private static final String GAS_PROVIDER = "gasProvider";
 
     private static final ClassName LOG = ClassName.get(Log.class);
     private static final Logger LOGGER = LoggerFactory.getLogger(SolidityFunctionWrapper.class);
@@ -126,6 +128,8 @@ public class SolidityFunctionWrapper extends Generator {
 
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildConstructor(TransactionManager.class,
+                TRANSACTION_MANAGER));
+        classBuilder.addMethod(buildGasConstructor(TransactionManager.class,
                 TRANSACTION_MANAGER));
         classBuilder.addFields(buildFuncNameConstants(abi));
         classBuilder.addMethods(
@@ -318,6 +322,18 @@ public class SolidityFunctionWrapper extends Generator {
                         BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
                 .build();
     }
+
+    private static MethodSpec buildGasConstructor(Class authType, String authName) {
+      return MethodSpec.constructorBuilder()
+              .addModifiers(Modifier.PROTECTED)
+              .addParameter(String.class, CONTRACT_ADDRESS)
+              .addParameter(Web3j.class, WEB3J)
+              .addParameter(authType, authName)
+              .addParameter(ContractGasProvider.class, GAS_PROVIDER)
+              .addStatement("super($N, $N, $N, $N, $N)",
+                      BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PROVIDER)
+              .build();
+  }
 
     private MethodSpec buildDeploy(
             String className, AbiDefinition functionDefinition,
