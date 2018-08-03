@@ -608,20 +608,21 @@ public class SolidityFunctionWrapper extends Generator {
     }
     
     Optional<MethodSpec> buildFunctionTxId(
-        AbiDefinition functionDefinition) throws ClassNotFoundException {
-      if (functionDefinition.isConstant())
-        return Optional.empty();
-      String functionName = functionDefinition.getName();
-      MethodSpec.Builder methodBuilder =
-            MethodSpec.methodBuilder(functionName + "TxId")
-            .addException(TypeName.get(IOException.class))
-                    .addModifiers(Modifier.PUBLIC);
+            AbiDefinition functionDefinition) throws ClassNotFoundException {
+        if (functionDefinition.isConstant()) {
+            return Optional.empty();
+        }
+        String functionName = functionDefinition.getName();
+        MethodSpec.Builder methodBuilder =
+                MethodSpec.methodBuilder(functionName + "TxId")
+                        .addException(TypeName.get(IOException.class))
+                        .addModifiers(Modifier.PUBLIC);
 
-      String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
+        String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
 
-      buildTransactionFunction(functionDefinition, methodBuilder, inputParams, true);
+        buildTransactionFunction(functionDefinition, methodBuilder, inputParams, true);
 
-      return Optional.of(methodBuilder.build());
+        return Optional.of(methodBuilder.build());
     }
 
     private void buildConstantFunction(
@@ -736,9 +737,9 @@ public class SolidityFunctionWrapper extends Generator {
 
         String functionName = functionDefinition.getName();
         if (returnTxid) {
-          methodBuilder.returns(TypeName.get(EthSendTransaction.class));
+            methodBuilder.returns(TypeName.get(EthSendTransaction.class));
         } else {
-          methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
+            methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
         }
 
         methodBuilder.addStatement("final $T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
@@ -747,25 +748,25 @@ public class SolidityFunctionWrapper extends Generator {
                 Arrays.class, Type.class, inputParams, Collections.class,
                 TypeReference.class);
         if (returnTxid) {
-          if (functionDefinition.isPayable()) {
-            methodBuilder.addStatement(
-                    "return transactionManager.sendTransaction(\n" + 
-                    "gasProvider.getGasPrice(function.getName()),\n" + 
-                    "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
-                    "org.web3j.abi.FunctionEncoder.encode(function), $N)", WEI_VALUE);
-          } else {
-              methodBuilder.addStatement("return transactionManager.sendTransaction(\n" + 
-                  "gasProvider.getGasPrice(function.getName()),\n" + 
-                  "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
-                  "org.web3j.abi.FunctionEncoder.encode(function), BigInteger.ZERO)");
-          }
+            if (functionDefinition.isPayable()) {
+                methodBuilder.addStatement(
+                      "return transactionManager.sendTransaction(\n" + 
+                      "gasProvider.getGasPrice(function.getName()),\n" + 
+                      "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
+                      "org.web3j.abi.FunctionEncoder.encode(function), $N)", WEI_VALUE);
+            } else {
+                methodBuilder.addStatement("return transactionManager.sendTransaction(\n" + 
+                      "gasProvider.getGasPrice(function.getName()),\n" + 
+                      "gasProvider.getGasLimit(function.getName()), contractAddress,\n" + 
+                      "org.web3j.abi.FunctionEncoder.encode(function), BigInteger.ZERO)");
+            }
         } else {
-          if (functionDefinition.isPayable()) {
-              methodBuilder.addStatement(
+            if (functionDefinition.isPayable()) {
+                methodBuilder.addStatement(
                       "return executeRemoteCallTransaction(function, $N)", WEI_VALUE);
-          } else {
-              methodBuilder.addStatement("return executeRemoteCallTransaction(function)");
-          }
+            } else {
+                methodBuilder.addStatement("return executeRemoteCallTransaction(function)");
+            }
         }
     }
 
