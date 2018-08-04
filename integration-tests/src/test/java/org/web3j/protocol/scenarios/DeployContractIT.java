@@ -5,10 +5,14 @@ import java.util.List;
 
 import org.junit.Test;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -23,7 +27,19 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration test demonstrating the full contract deployment workflow.
  */
+@RunWith(Parameterized.class)
 public class DeployContractIT extends Scenario {
+
+    private final Credentials sender;
+    private final Credentials recipient;
+
+    public DeployContractIT(
+            @SuppressWarnings("unused") String ignoredTestName,
+            Credentials sender,
+            Credentials recipient) {
+        this.sender = sender;
+        this.recipient = recipient;
+    }
 
     @Test
     public void testContractCreation() throws Exception {
@@ -57,10 +73,10 @@ public class DeployContractIT extends Scenario {
     }
 
     private String sendTransaction() throws Exception {
-        BigInteger nonce = getNonce(ALICE.getAddress());
+        BigInteger nonce = getNonce(sender.getAddress());
 
         Transaction transaction = Transaction.createContractTransaction(
-                ALICE.getAddress(),
+                sender.getAddress(),
                 nonce,
                 GAS_PRICE,
                 GAS_LIMIT,
@@ -81,10 +97,15 @@ public class DeployContractIT extends Scenario {
 
         org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
                 Transaction.createEthCallTransaction(
-                        ALICE.getAddress(), contractAddress, encodedFunction),
+                        sender.getAddress(), contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();
 
         return response.getValue();
+    }
+
+    @Parameterized.Parameters(name = "Test #{index}: {0}")
+    public static List<Object[]> parameters() {
+        return transferTestParameters();
     }
 }
