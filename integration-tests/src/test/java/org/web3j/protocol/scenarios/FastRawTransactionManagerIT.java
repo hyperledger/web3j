@@ -45,14 +45,14 @@ public class FastRawTransactionManagerIT extends Scenario {
             (base, description) -> base;
 
     private final Credentials sender;
-    private final Credentials receipient;
+    private final Credentials recipient;
 
     public FastRawTransactionManagerIT(
             @SuppressWarnings("unused") String ignoredTestName,
             Credentials sender,
             Credentials recipient) {
         this.sender = sender;
-        this.receipient = recipient;
+        this.recipient = recipient;
     }
 
     @Test
@@ -142,7 +142,7 @@ public class FastRawTransactionManagerIT extends Scenario {
     private RemoteCall<TransactionReceipt> createTransaction(
             Transfer transfer, BigInteger gasPrice) {
         return transfer.sendFunds(
-                receipient.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI,
+                recipient.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI,
                 gasPrice, Transfer.GAS_LIMIT);
     }
 

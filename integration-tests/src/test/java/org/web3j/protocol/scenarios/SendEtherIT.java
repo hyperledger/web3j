@@ -27,14 +27,14 @@ import static org.junit.Assert.assertThat;
 public class SendEtherIT extends Scenario {
 
     private final Credentials sender;
-    private final Credentials receipient;
+    private final Credentials recipient;
 
     public SendEtherIT(
             @SuppressWarnings("unused") String ignoredTestName,
             Credentials sender,
             Credentials recipient) {
         this.sender = sender;
-        this.receipient = recipient;
+        this.recipient = recipient;
     }
 
     @Test
@@ -45,7 +45,7 @@ public class SendEtherIT extends Scenario {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
         Transaction transaction = Transaction.createEtherTransaction(
-                sender.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, receipient.getAddress(), value);
+                sender.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, recipient.getAddress(), value);
 
         EthSendTransaction ethSendTransaction =
                 web3j.ethSendTransaction(transaction).sendAsync().get();
@@ -83,7 +83,7 @@ public class SendEtherIT extends Scenario {
     @Test
     public void testTransfer() throws Exception {
         TransactionReceipt transactionReceipt = Transfer.sendFunds(
-                web3j, sender, receipient.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER)
+                web3j, sender, recipient.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER)
                 .send();
         assertFalse(transactionReceipt.getBlockHash().isEmpty());
     }
