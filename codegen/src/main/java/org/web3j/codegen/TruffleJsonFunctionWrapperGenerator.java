@@ -40,7 +40,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             + "[--javaTypes|--solidityTypes] "
             + "<input truffle json file>.json "
             + "-p|--package <base package name> "
-            + "-o|--output <destination base directory>";
+            + "-o|--outputDir <destination base directory>";
 
 
     private String jsonFileLocation;

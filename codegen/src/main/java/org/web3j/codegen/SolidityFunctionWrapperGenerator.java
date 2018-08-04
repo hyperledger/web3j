@@ -24,7 +24,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             + "[--javaTypes|--solidityTypes] "
             + "<input binary file>.bin <input abi file>.abi "
             + "-p|--package <base package name> "
-            + "-o|--output <destination base directory>";
+            + "-o|--outputDir <destination base directory>";
 
     private final String binaryFileLocation;
     private final String absFileLocation;
