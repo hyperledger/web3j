@@ -6,7 +6,8 @@ dependencies {
             project(':parity')
     testCompile "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion",
-            "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion"
+            "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion",
+            project(path: ':codegen', configuration: 'testArtifacts')
 }
 
 // we don't want integration tests to run by default

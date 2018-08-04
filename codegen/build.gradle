@@ -6,3 +6,11 @@ dependencies {
             "com.squareup:javapoet:$javapoetVersion"
     testCompile project(path: ':core', configuration: 'testArtifacts')
 }
+
+configurations {
+    testArtifacts.extendsFrom testRuntime
+}
+
+artifacts {
+    testArtifacts testJar
+}
