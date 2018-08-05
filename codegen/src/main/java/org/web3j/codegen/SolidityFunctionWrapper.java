@@ -64,6 +64,7 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.BaseEventResponse;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
@@ -275,6 +276,7 @@ public class SolidityFunctionWrapper extends Generator {
             throws ClassNotFoundException {
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
+        List<String> eventNames = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
                 MethodSpec ms = buildFunction(functionDefinition);
@@ -282,6 +284,7 @@ public class SolidityFunctionWrapper extends Generator {
 
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
+                eventNames.add(buildEventDefinitionName(functionDefinition.getName()));
             }
         }
 
@@ -997,7 +1000,7 @@ public class SolidityFunctionWrapper extends Generator {
         TypeSpec.Builder builder =
                 TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
-        builder.addField(LOG, "log", Modifier.PUBLIC);
+        builder.superclass(BaseEventResponse.class);
         for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType :
                 indexedParameters) {
             TypeName typeName = getIndexedEventWrapperType(namedType.typeName);

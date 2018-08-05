@@ -688,14 +688,23 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
+        return staticExtractEventParametersWithLog(event,log);
+    }
+
+    protected static EventValuesWithLog staticExtractEventParametersWithLog(Event event, Log log) {
         final EventValues eventValues = staticExtractEventParameters(event, log);
         return (eventValues == null) ? null : new EventValuesWithLog(eventValues, log);
     }
 
     protected List<EventValuesWithLog> extractEventParametersWithLog(
             Event event, TransactionReceipt transactionReceipt) {
+        return staticExtractEventParametersWithLog(event, transactionReceipt);
+    }
+
+    protected static List<EventValuesWithLog> staticExtractEventParametersWithLog(
+            Event event, TransactionReceipt transactionReceipt) {
         return transactionReceipt.getLogs().stream()
-                .map(log -> extractEventParametersWithLog(event, log))
+                .map(log -> staticExtractEventParametersWithLog(event, log))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
