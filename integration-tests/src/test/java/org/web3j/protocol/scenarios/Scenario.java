@@ -1,11 +1,8 @@
 package org.web3j.protocol.scenarios;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -97,7 +94,9 @@ public class Scenario {
     }
 
     private Optional<TransactionReceipt> getTransactionReceipt(
-            String transactionHash, int sleepDuration, int attempts) throws Exception {
+            String transactionHash,
+            @SuppressWarnings("SameParameterValue") int sleepDuration,
+            @SuppressWarnings("SameParameterValue") int attempts) throws Exception {
 
         Optional<TransactionReceipt> receiptOptional =
                 sendTransactionReceiptRequest(transactionHash);
@@ -135,20 +134,24 @@ public class Scenario {
                 Collections.singletonList(new TypeReference<Uint>() {}));
     }
 
-    static String load(String filePath) throws URISyntaxException, IOException {
-        URL url = Scenario.class.getClass().getResource(filePath);
-        byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
-        return new String(bytes);
+
+    static String load(String filePath) throws IOException {
+        InputStream fileStream = Scenario.class.getResourceAsStream(filePath);
+        byte[] allBytes = new byte[fileStream.available()];
+        @SuppressWarnings("unused") int read = fileStream.read(allBytes);
+        return new String(allBytes);
     }
 
     static String getFibonacciSolidityBinary() throws Exception {
         return load("/solidity/fibonacci/build/Fibonacci.bin");
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static List<Object[]> transferTestParameters() {
         return asList(
             new Object[] { "From ALICE to BOB", ALICE, BOB },
             new Object[] { "From BOB to ALICE", BOB, ALICE }
         );
     }
+
 }
