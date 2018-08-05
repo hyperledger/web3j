@@ -35,7 +35,7 @@ import static org.junit.Assert.assertThat;
 public class EventFilterIT extends Scenario {
 
     // Deployed Fibonacci contract instance in testnet
-    private static final String CONTRACT_ADDRESS = "0x3c05b2564139fb55820b18b72e94b2178eaace7d";
+    private static final String CONTRACT_ADDRESS = "0x581f4ef871aef69324cff1df9708678e2bff9870";
 
     @Test
     public void testEventFilter() throws Exception {
