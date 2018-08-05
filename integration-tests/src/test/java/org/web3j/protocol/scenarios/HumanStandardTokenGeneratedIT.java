@@ -8,9 +8,10 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.web3j.crypto.Credentials;
+
 import rx.Subscription;
 
+import org.web3j.crypto.Credentials;
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -19,7 +20,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeThat;
 import static org.web3j.generated.HumanStandardToken.ApprovalEventResponse;
 import static org.web3j.generated.HumanStandardToken.TransferEventResponse;
 import static org.web3j.generated.HumanStandardToken.deploy;
