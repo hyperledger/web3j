@@ -1,10 +1,14 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.web3j.crypto.Credentials;
 import rx.Subscription;
 
 import org.web3j.generated.HumanStandardToken;
@@ -14,33 +18,52 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeThat;
 import static org.web3j.generated.HumanStandardToken.ApprovalEventResponse;
 import static org.web3j.generated.HumanStandardToken.TransferEventResponse;
 import static org.web3j.generated.HumanStandardToken.deploy;
+import static org.web3j.protocol.core.TestParameters.isInfuraTestRinkebyUrl;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 
 /**
  * Generated HumanStandardToken integration test for all supported scenarios.
  */
+@RunWith(Parameterized.class)
 public class HumanStandardTokenGeneratedIT extends Scenario {
+
+    private final Credentials sender;
+    private final Credentials recipient;
+
+    public HumanStandardTokenGeneratedIT(
+            @SuppressWarnings("unused") String ignoredTestName,
+            Credentials sender,
+            Credentials recipient) {
+        this.sender = sender;
+        this.recipient = recipient;
+    }
 
     @Test
     public void testContract() throws Exception {
-        BigInteger aliceQty = BigInteger.valueOf(1_000_000);
-        final String aliceAddress = ALICE.getAddress();
-        final String bobAddress = BOB.getAddress();
+        assumeFalse("Infura does NOT support eth_newFilter, "
+                + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
+                + "#supported-json-rpc-methods",
+                isInfuraTestRinkebyUrl());
+        BigInteger senderQty = BigInteger.valueOf(1_000_000);
+        final String senderAddress = sender.getAddress();
+        final String recipientAddress = recipient.getAddress();
 
-        HumanStandardToken contract = deploy(web3j, ALICE,
+        HumanStandardToken contract = deploy(web3j, sender,
                 GAS_PRICE, GAS_LIMIT,
-                aliceQty, "web3j tokens",
+                senderQty, "web3j tokens",
                 BigInteger.valueOf(18), "w3j$").send();
 
         assertTrue(contract.isValid());
 
-        assertThat(contract.totalSupply().send(), equalTo(aliceQty));
+        assertThat(contract.totalSupply().send(), equalTo(senderQty));
 
-        assertThat(contract.balanceOf(ALICE.getAddress()).send(),
-                equalTo(aliceQty));
+        assertThat(contract.balanceOf(sender.getAddress()).send(),
+                equalTo(senderQty));
 
         // CHECKSTYLE:OFF
         CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
@@ -61,80 +84,80 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         // transfer tokens
         BigInteger transferQuantity = BigInteger.valueOf(100_000);
 
-        TransactionReceipt aliceTransferReceipt = contract.transfer(
-                BOB.getAddress(), transferQuantity).send();
+        TransactionReceipt senderTransferReceipt = contract.transfer(
+                recipient.getAddress(), transferQuantity).send();
 
-        TransferEventResponse aliceTransferEventValues =
-                contract.getTransferEvents(aliceTransferReceipt).get(0);
+        TransferEventResponse senderTransferEventValues =
+                contract.getTransferEvents(senderTransferReceipt).get(0);
 
-        assertThat(aliceTransferEventValues._from,
-                equalTo(aliceAddress));
-        assertThat(aliceTransferEventValues._to,
-                equalTo(bobAddress));
-        assertThat(aliceTransferEventValues._value,
+        assertThat(senderTransferEventValues._from,
+                equalTo(senderAddress));
+        assertThat(senderTransferEventValues._to,
+                equalTo(recipientAddress));
+        assertThat(senderTransferEventValues._value,
                 equalTo(transferQuantity));
 
-        aliceQty = aliceQty.subtract(transferQuantity);
+        senderQty = senderQty.subtract(transferQuantity);
 
-        BigInteger bobQty = BigInteger.ZERO;
-        bobQty = bobQty.add(transferQuantity);
+        BigInteger recipientQty = BigInteger.ZERO;
+        recipientQty = recipientQty.add(transferQuantity);
 
-        assertThat(contract.balanceOf(ALICE.getAddress()).send(),
-                equalTo(aliceQty));
-        assertThat(contract.balanceOf(BOB.getAddress()).send(),
-                equalTo(bobQty));
+        assertThat(contract.balanceOf(sender.getAddress()).send(),
+                equalTo(senderQty));
+        assertThat(contract.balanceOf(recipient.getAddress()).send(),
+                equalTo(recipientQty));
 
         // set an allowance
         assertThat(contract.allowance(
-                aliceAddress, bobAddress).send(),
+                senderAddress, recipientAddress).send(),
                 equalTo(BigInteger.ZERO));
 
         transferQuantity = BigInteger.valueOf(50);
         TransactionReceipt approveReceipt = contract.approve(
-                BOB.getAddress(), transferQuantity).send();
+                recipient.getAddress(), transferQuantity).send();
 
         ApprovalEventResponse approvalEventValues =
                 contract.getApprovalEvents(approveReceipt).get(0);
 
         assertThat(approvalEventValues._owner,
-                equalTo(aliceAddress));
+                equalTo(senderAddress));
         assertThat(approvalEventValues._spender,
-                equalTo(bobAddress));
+                equalTo(recipientAddress));
         assertThat(approvalEventValues._value,
                 equalTo(transferQuantity));
 
         assertThat(contract.allowance(
-                aliceAddress, bobAddress).send(),
+                senderAddress, recipientAddress).send(),
                 equalTo(transferQuantity));
 
         // perform a transfer as Bob
         transferQuantity = BigInteger.valueOf(25);
 
         // Bob requires his own contract instance
-        HumanStandardToken bobsContract = HumanStandardToken.load(
-                contract.getContractAddress(), web3j, BOB, GAS_PRICE, GAS_LIMIT);
+        HumanStandardToken recipientsContract = HumanStandardToken.load(
+                contract.getContractAddress(), web3j, recipient, GAS_PRICE, GAS_LIMIT);
 
-        TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
-                aliceAddress,
-                bobAddress,
+        TransactionReceipt recipientTransferReceipt = recipientsContract.transferFrom(
+                senderAddress,
+                recipientAddress,
                 transferQuantity).send();
 
-        TransferEventResponse bobTransferEventValues =
-                contract.getTransferEvents(bobTransferReceipt).get(0);
-        assertThat(bobTransferEventValues._from,
-                equalTo(aliceAddress));
-        assertThat(bobTransferEventValues._to,
-                equalTo(bobAddress));
-        assertThat(bobTransferEventValues._value,
+        TransferEventResponse recipientTransferEventValues =
+                contract.getTransferEvents(recipientTransferReceipt).get(0);
+        assertThat(recipientTransferEventValues._from,
+                equalTo(senderAddress));
+        assertThat(recipientTransferEventValues._to,
+                equalTo(recipientAddress));
+        assertThat(recipientTransferEventValues._value,
                 equalTo(transferQuantity));
 
-        aliceQty = aliceQty.subtract(transferQuantity);
-        bobQty = bobQty.add(transferQuantity);
+        senderQty = senderQty.subtract(transferQuantity);
+        recipientQty = recipientQty.add(transferQuantity);
 
-        assertThat(contract.balanceOf(aliceAddress).send(),
-                equalTo(aliceQty));
-        assertThat(contract.balanceOf(bobAddress).send(),
-                equalTo(bobQty));
+        assertThat(contract.balanceOf(senderAddress).send(),
+                equalTo(senderQty));
+        assertThat(contract.balanceOf(recipientAddress).send(),
+                equalTo(recipientQty));
 
         transferEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);
         approvalEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);
@@ -144,5 +167,10 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         Thread.sleep(1000);
         assertTrue(approvalEventSubscription.isUnsubscribed());
         assertTrue(transferEventSubscription.isUnsubscribed());
+    }
+
+    @Parameterized.Parameters(name = "Test #{index}: {0}")
+    public static List<Object[]> parameters() {
+        return transferTestParameters();
     }
 }
