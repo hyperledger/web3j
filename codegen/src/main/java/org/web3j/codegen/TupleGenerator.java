@@ -89,6 +89,15 @@ public class TupleGenerator extends Generator {
                             .addStatement("return $N", value)
                             .build();
             methodSpecs.add(getterSpec);
+
+            MethodSpec getterSpec2 = MethodSpec.methodBuilder(
+                    "component"+i)
+                    .addModifiers(Modifier.PUBLIC)
+                    .returns(typeVariableName)
+                    .addStatement("return $N", value)
+                    .build();
+            methodSpecs.add(getterSpec2);
+
         }
 
         MethodSpec constructorSpec = constructorBuilder.build();

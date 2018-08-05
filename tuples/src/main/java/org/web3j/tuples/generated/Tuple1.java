@@ -21,6 +21,10 @@ public final class Tuple1<T1> implements Tuple {
         return value1;
     }
 
+    public T1 component1() {
+        return value1;
+    }
+
     @Override
     public int getSize() {
         return SIZE;

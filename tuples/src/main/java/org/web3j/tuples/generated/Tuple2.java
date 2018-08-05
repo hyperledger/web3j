@@ -24,7 +24,15 @@ public final class Tuple2<T1, T2> implements Tuple {
         return value1;
     }
 
+    public T1 component1() {
+        return value1;
+    }
+
     public T2 getValue2() {
+        return value2;
+    }
+
+    public T2 component2() {
         return value2;
     }
 
