@@ -267,7 +267,7 @@ public class CoreIT {
     public void testEthGetUncleCountByBlockNumber() throws Exception {
         EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber =
                 web3j.ethGetUncleCountByBlockNumber(
-                        DefaultBlockParameter.valueOf("latest")).send();
+                        DefaultBlockParameter.valueOf(new BigInteger("232"))).send();
         assertThat(ethGetUncleCountByBlockNumber.getUncleCount(),
                 equalTo(config.validBlockUncleCount()));
     }
