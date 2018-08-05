@@ -6,6 +6,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
@@ -32,6 +37,7 @@ import org.web3j.utils.Numeric;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -40,56 +46,70 @@ import static org.junit.Assert.assertThat;
  * <a href="https://github.com/ethereum/EIPs/issues/20">EIP-20</a>. Solidity implementation is
  * taken from <a href="https://github.com/ConsenSys/Tokens">ConsenSys Tokens</a>.
  */
+@RunWith(Parameterized.class)
 public class HumanStandardTokenIT extends Scenario {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HumanStandardTokenIT.class);
+
+    private final Credentials sender;
+    private final Credentials recipient;
+
+    public HumanStandardTokenIT(
+            @SuppressWarnings("unused") String ignoredTestName,
+            Credentials sender,
+            Credentials recipient) {
+        this.sender = sender;
+        this.recipient = recipient;
+    }
 
     @Test
     public void testContract() throws Exception {
+        BigInteger senderQty = BigInteger.valueOf(1_000);
+        LOGGER.info("Deploying contract with qty {}", senderQty);
 
-        // deploy contract
-        BigInteger aliceQty = BigInteger.valueOf(1_000_000);
+        String contractAddress = createContract(sender, senderQty);
 
-        String contractAddress = createContract(ALICE, aliceQty);
+        assertThat(getTotalSupply(contractAddress), is(senderQty));
 
-        assertThat(getTotalSupply(contractAddress), is(aliceQty));
+        confirmBalance(sender.getAddress(), contractAddress, senderQty);
 
-        confirmBalance(ALICE.getAddress(), contractAddress, aliceQty);
-
-        // transfer tokens
-        BigInteger transferQuantity = BigInteger.valueOf(100_000);
+        BigInteger transferQuantity = BigInteger.valueOf(100);
+        LOGGER.info("Transferring tokens {}", transferQuantity);
 
         sendTransferTokensTransaction(
-                ALICE, BOB.getAddress(), contractAddress, transferQuantity);
+                sender, recipient.getAddress(), contractAddress, transferQuantity);
 
-        aliceQty = aliceQty.subtract(transferQuantity);
+        senderQty = senderQty.subtract(transferQuantity);
 
-        BigInteger bobQty = BigInteger.ZERO;
-        bobQty = bobQty.add(transferQuantity);
+        BigInteger recipientQty = BigInteger.ZERO;
+        recipientQty = recipientQty.add(transferQuantity);
 
         confirmBalance(
-                ALICE.getAddress(), contractAddress, aliceQty);
-        confirmBalance(BOB.getAddress(), contractAddress, bobQty);
+                sender.getAddress(), contractAddress, senderQty);
+        confirmBalance(recipient.getAddress(), contractAddress, recipientQty);
 
-        // set an allowance
-        confirmAllowance(ALICE.getAddress(), BOB.getAddress(), contractAddress, BigInteger.ZERO);
+        LOGGER.info("Setting an allowance");
+        confirmAllowance(sender.getAddress(), recipient.getAddress(), contractAddress,
+                BigInteger.ZERO);
 
         transferQuantity = BigInteger.valueOf(50);
-        sendApproveTransaction(ALICE, BOB.getAddress(), transferQuantity, contractAddress);
+        sendApproveTransaction(sender, recipient.getAddress(), transferQuantity, contractAddress);
 
         confirmAllowance(
-                ALICE.getAddress(), BOB.getAddress(), contractAddress, transferQuantity);
+                sender.getAddress(), recipient.getAddress(), contractAddress, transferQuantity);
 
-        // perform a transfer
         transferQuantity = BigInteger.valueOf(25);
+        LOGGER.info("Perform a transfer of {}", transferQuantity);
 
-        sendTransferFromTransaction(BOB,
-                ALICE.getAddress(), BOB.getAddress(), transferQuantity, contractAddress);
+        sendTransferFromTransaction(recipient,
+                sender.getAddress(), recipient.getAddress(), transferQuantity, contractAddress);
 
-        aliceQty = aliceQty.subtract(transferQuantity);
-        bobQty = bobQty.add(transferQuantity);
+        senderQty = senderQty.subtract(transferQuantity);
+        recipientQty = recipientQty.add(transferQuantity);
 
         confirmBalance(
-                ALICE.getAddress(), contractAddress, aliceQty);
-        confirmBalance(BOB.getAddress(), contractAddress, bobQty);
+                sender.getAddress(), contractAddress, senderQty);
+        confirmBalance(recipient.getAddress(), contractAddress, recipientQty);
     }
 
     private BigInteger getTotalSupply(String contractAddress) throws Exception {
@@ -115,7 +135,7 @@ public class HumanStandardTokenIT extends Scenario {
     }
 
     private void confirmAllowance(String owner, String spender, String contractAddress,
-                                        BigInteger expected) throws Exception {
+                                  BigInteger expected) throws Exception {
         Function function = allowance(owner, spender);
         String responseValue = callSmartContractFunction(function, contractAddress);
 
@@ -129,15 +149,15 @@ public class HumanStandardTokenIT extends Scenario {
     private String createContract(
             Credentials credentials, BigInteger initialSupply) throws Exception {
         String createTransactionHash = sendCreateContractTransaction(credentials, initialSupply);
-        assertFalse(createTransactionHash.isEmpty());
+        assertNotEquals("Create transaction hash should not be empty", "", createTransactionHash);
 
         TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
         assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
 
-        assertFalse("Contract execution ran out of gas",
-                createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertNotEquals("Contract execution ran out of gas",
+                GAS_LIMIT, createTransactionReceipt.getGasUsed());
 
         String contractAddress = createTransactionReceipt.getContractAddress();
 
@@ -151,11 +171,11 @@ public class HumanStandardTokenIT extends Scenario {
 
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(
-                        Arrays.asList(
-                                new Uint256(initialSupply),
-                                new Utf8String("web3j tokens"),
-                                new Uint8(BigInteger.TEN),
-                                new Utf8String("w3j$")));
+                Arrays.asList(
+                    new Uint256(initialSupply),
+                    new Utf8String("web3j tokens"),
+                    new Uint8(BigInteger.TEN),
+                    new Utf8String("w3j$")));
 
         RawTransaction rawTransaction = RawTransaction.createContractTransaction(
                 nonce,
@@ -185,7 +205,7 @@ public class HumanStandardTokenIT extends Scenario {
         assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
 
         List<Log> logs = transferTransactionReceipt.getLogs();
-        assertFalse(logs.isEmpty());
+        assertFalse("Transfer transaction receipt logs should NOT be empty", logs.isEmpty());
         Log log = logs.get(0);
 
         // verify the event was called with the function parameters
@@ -218,7 +238,7 @@ public class HumanStandardTokenIT extends Scenario {
         assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
 
         List<Log> logs = transferTransactionReceipt.getLogs();
-        assertFalse(logs.isEmpty());
+        assertFalse("Transfer transaction receipt logs should NOT be empty", logs.isEmpty());
         Log log = logs.get(0);
 
         // verify the event was called with the function parameters
@@ -241,7 +261,7 @@ public class HumanStandardTokenIT extends Scenario {
         assertThat(results, equalTo(Collections.singletonList(new Uint256(value))));
     }
 
-    public void sendTransferFromTransaction(
+    private void sendTransferFromTransaction(
             Credentials credentials, String from, String to, BigInteger value,
             String contractAddress) throws Exception {
 
@@ -253,7 +273,7 @@ public class HumanStandardTokenIT extends Scenario {
         assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
 
         List<Log> logs = transferTransactionReceipt.getLogs();
-        assertFalse(logs.isEmpty());
+        assertFalse("Transfer transaction receipt logs should NOT be empty", logs.isEmpty());
         Log log = logs.get(0);
 
         Event transferEvent = transferEvent();
@@ -300,7 +320,7 @@ public class HumanStandardTokenIT extends Scenario {
 
         org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
                 Transaction.createEthCallTransaction(
-                        ALICE.getAddress(), contractAddress, encodedFunction),
+                        sender.getAddress(), contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();
 
@@ -309,65 +329,70 @@ public class HumanStandardTokenIT extends Scenario {
 
     private Function totalSupply() {
         return new Function(
-                "totalSupply",
-                Collections.emptyList(),
-                Collections.singletonList(new TypeReference<Uint256>() {}));
+            "totalSupply",
+            Collections.emptyList(),
+            Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function balanceOf(String owner) {
         return new Function(
-                "balanceOf",
-                Collections.singletonList(new Address(owner)),
-                Collections.singletonList(new TypeReference<Uint256>() {}));
+            "balanceOf",
+            Collections.singletonList(new Address(owner)),
+            Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function transfer(String to, BigInteger value) {
         return new Function(
-                "transfer",
-                Arrays.asList(new Address(to), new Uint256(value)),
-                Collections.singletonList(new TypeReference<Bool>() {}));
+            "transfer",
+            Arrays.asList(new Address(to), new Uint256(value)),
+            Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
     private Function allowance(String owner, String spender) {
         return new Function(
-                "allowance",
-                Arrays.asList(new Address(owner), new Address(spender)),
-                Collections.singletonList(new TypeReference<Uint256>() {}));
+            "allowance",
+            Arrays.asList(new Address(owner), new Address(spender)),
+            Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
     private Function approve(String spender, BigInteger value) {
         return new Function(
-                "approve",
-                Arrays.asList(new Address(spender), new Uint256(value)),
-                Collections.singletonList(new TypeReference<Bool>() {}));
+            "approve",
+            Arrays.asList(new Address(spender), new Uint256(value)),
+            Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
     private Function transferFrom(String from, String to, BigInteger value) {
         return new Function(
-                "transferFrom",
-                Arrays.asList(new Address(from), new Address(to), new Uint256(value)),
-                Collections.singletonList(new TypeReference<Bool>() {}));
+            "transferFrom",
+            Arrays.asList(new Address(from), new Address(to), new Uint256(value)),
+            Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
     private Event transferEvent() {
         return new Event(
-                "Transfer",
-                Arrays.asList(
-                        new TypeReference<Address>(true) {},
-                        new TypeReference<Address>(true) {},
-                        new TypeReference<Uint256>() {}));
+            "Transfer",
+            Arrays.asList(
+                new TypeReference<Address>(true) {},
+                new TypeReference<Address>(true) {},
+                new TypeReference<Uint256>() {}));
     }
 
     private Event approvalEvent() {
         return new Event(
-                "Approval",
-                Arrays.asList(
-                        new TypeReference<Address>(true) {},
-                        new TypeReference<Address>(true) {},
-                        new TypeReference<Uint256>() {}));
+            "Approval",
+            Arrays.asList(
+                new TypeReference<Address>(true) {},
+                new TypeReference<Address>(true) {},
+                new TypeReference<Uint256>() {}));
     }
 
     private static String getHumanStandardTokenBinary() throws Exception {
         return load("/solidity/contracts/build/HumanStandardToken.bin");
+    }
+
+    @Parameterized.Parameters(name = "Test #{index}: {0}")
+    public static List<Object[]> parameters() {
+        return transferTestParameters();
     }
 }
