@@ -21,7 +21,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
         super(serverUri);
     }
 
-    public WebSocketClient( URI serverUri, Map<String,String> httpHeaders) {
+    public WebSocketClient(URI serverUri, Map<String,String> httpHeaders) {
         super(serverUri, httpHeaders);
     }
 
