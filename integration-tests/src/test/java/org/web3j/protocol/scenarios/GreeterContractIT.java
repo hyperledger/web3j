@@ -99,7 +99,7 @@ public class GreeterContractIT extends Scenario {
     }
 
     private static String getGreeterSolidityBinary() throws Exception {
-        return load("/solidity/greeter/build/Greeter.bin");
+        return load("/solidity/greeter/build/greeter.bin");
     }
 
     Function createGreetFunction() {
