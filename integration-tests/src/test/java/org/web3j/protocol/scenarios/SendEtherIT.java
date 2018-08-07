@@ -39,9 +39,9 @@ public class SendEtherIT extends Scenario {
 
     @Test
     public void testTransferEther() throws Exception {
-        unlockAccount();
+        unlockAccount(sender.getAddress());
 
-        BigInteger nonce = getNonce(ALICE.getAddress());
+        BigInteger nonce = getNonce(sender.getAddress());
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
         Transaction transaction = Transaction.createEtherTransaction(

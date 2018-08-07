@@ -29,7 +29,7 @@ public class SignTransactionIT extends Scenario {
                         + "#supported-json-rpc-methods",
                 isInfuraTestRinkebyUrl());
 
-        boolean accountUnlocked = unlockAccount();
+        boolean accountUnlocked = unlockAccount(ALICE.getAddress());
         assertTrue(accountUnlocked);
 
         RawTransaction rawTransaction = createTransaction();

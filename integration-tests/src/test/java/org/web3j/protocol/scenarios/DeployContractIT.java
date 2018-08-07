@@ -43,7 +43,7 @@ public class DeployContractIT extends Scenario {
 
     @Test
     public void testContractCreation() throws Exception {
-        boolean accountUnlocked = unlockAccount();
+        boolean accountUnlocked = unlockAccount(sender.getAddress());
         assertTrue(accountUnlocked);
 
         String transactionHash = sendTransaction();

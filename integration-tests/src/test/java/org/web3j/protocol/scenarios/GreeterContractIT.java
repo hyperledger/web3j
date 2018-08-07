@@ -33,7 +33,7 @@ public class GreeterContractIT extends Scenario {
 
     @Test
     public void testGreeterContract() throws Exception {
-        boolean accountUnlocked = unlockAccount();
+        boolean accountUnlocked = unlockAccount(ALICE.getAddress());
         assertTrue(accountUnlocked);
 
         // create our smart contract

@@ -67,7 +67,7 @@ public class Scenario {
         this.web3j = Admin.build(new HttpService(TestParameters.TEST_RINKEBY_URL));
     }
 
-    boolean unlockAccount() throws Exception {
+    boolean unlockAccount(String address) throws Exception {
         assumeFalse("Infura does NOT support personal_unlockAccount - "
                 + "https://github.com/INFURA/infura/blob/master/docs/source/index.html.md"
                 + "#supported-json-rpc-methods",
@@ -75,7 +75,7 @@ public class Scenario {
 
         PersonalUnlockAccount personalUnlockAccount =
                 web3j.personalUnlockAccount(
-                        ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
+                        address, WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
                         .sendAsync().get();
         return personalUnlockAccount.accountUnlocked();
     }

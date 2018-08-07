@@ -39,7 +39,7 @@ public class EventFilterIT extends Scenario {
 
     @Test
     public void testEventFilter() throws Exception {
-        unlockAccount();
+        unlockAccount(ALICE.getAddress());
 
         Function function = createFibonacciFunction();
         String encodedFunction = FunctionEncoder.encode(function);
