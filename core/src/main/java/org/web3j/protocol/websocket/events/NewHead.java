@@ -5,6 +5,7 @@ public class NewHead {
     private String extraData;
     private String gasLimit;
     private String gasUsed;
+    private String hash;
     private String logsBloom;
     private String miner;
     private String nonce;
@@ -30,6 +31,10 @@ public class NewHead {
 
     public String getGasUsed() {
         return gasUsed;
+    }
+
+    public String getHash() {
+        return hash;
     }
 
     public String getLogsBloom() {
