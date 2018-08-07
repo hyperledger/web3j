@@ -36,9 +36,10 @@ public class BalanceHelper {
     public static void main(String[] args)
             throws Exception {
 
-        LOGGER.info("Connecting to {}", TestParameters.TEST_RINKEBY_URL);
+        String url = args.length == 0 ? TestParameters.TEST_RINKEBY_URL : args[0];
+        LOGGER.info("Connecting to {}", url);
 
-        Admin web3j = Admin.build(new HttpService(TestParameters.TEST_RINKEBY_URL));
+        Admin web3j = Admin.build(new HttpService(url));
 
         LOGGER.info("Retrieving latest balances of ALICE and BOB");
 
