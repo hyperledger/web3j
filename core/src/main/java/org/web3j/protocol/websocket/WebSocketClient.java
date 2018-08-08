@@ -1,6 +1,7 @@
 package org.web3j.protocol.websocket;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -18,6 +19,10 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     public WebSocketClient(URI serverUri) {
         super(serverUri);
+    }
+
+    public WebSocketClient(URI serverUri, Map<String,String> httpHeaders) {
+        super(serverUri, httpHeaders);
     }
 
     @Override
