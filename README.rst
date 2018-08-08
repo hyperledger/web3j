@@ -164,7 +164,7 @@ Or `Parity <https://github.com/paritytech/parity>`_:
 
 .. code-block:: bash
 
-   $ parity --chain testnet
+   $ parity --chain testnet --jsonrpc-apis=all
 
 Or use `Infura <https://infura.io/>`_, which provides **free clients** running in the cloud:
 
