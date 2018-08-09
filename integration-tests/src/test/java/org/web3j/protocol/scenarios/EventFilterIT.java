@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import org.mockito.internal.matchers.LessOrEqual;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
@@ -27,6 +28,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -50,8 +52,8 @@ public class EventFilterIT extends Scenario {
         TransactionReceipt transactionReceipt =
                 waitForTransactionReceipt(transactionHash);
 
-        assertFalse("Transaction execution ran out of gas",
-                gas.equals(transactionReceipt.getGasUsed()));
+        assertThat("Transaction execution ran out of gas",
+                transactionReceipt.getGasUsed(), new LessOrEqual<>(gas));
 
         List<Log> logs = transactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
@@ -84,11 +86,14 @@ public class EventFilterIT extends Scenario {
 
     private BigInteger estimateGas(String encodedFunction) throws Exception {
         EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(
-                Transaction.createEthCallTransaction(ALICE.getAddress(), null, encodedFunction))
+                Transaction.createEthCallTransaction(
+                        ALICE.getAddress(),
+                        CONTRACT_ADDRESS,
+                        encodedFunction))
                 .sendAsync().get();
         // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388
         // see eth.getBlock("latest")
-        return ethEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
+        return ethEstimateGas.getAmountUsed();
     }
 
     private String sendTransaction(
