@@ -283,7 +283,7 @@ public class CoreIT {
                 ));
 
         EthGetCode ethGetCode = web3j.ethGetCode(config.validContractAddress(),
-                DefaultBlockParameter.valueOf(config.validBlock())).send();
+                DefaultBlockParameter.valueOf("earliest")).send();
         assertThat(ethGetCode.getCode(), is(config.validContractCode()));
     }
 
