@@ -55,6 +55,8 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
+import org.web3j.tx.gas.ContractGasProvider;
+
 import org.web3j.utils.Collection;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
@@ -72,6 +74,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String CONTRACT_ADDRESS = "contractAddress";
     private static final String GAS_PRICE = "gasPrice";
     private static final String GAS_LIMIT = "gasLimit";
+    private static final String GAS_PROVIDER = "gasProvider";
     private static final String FILTER = "filter";
     private static final String START_BLOCK = "startBlock";
     private static final String END_BLOCK = "endBlock";
@@ -122,9 +125,14 @@ public class SolidityFunctionWrapper extends Generator {
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
-        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
-        classBuilder.addMethod(buildConstructor(TransactionManager.class,
-                TRANSACTION_MANAGER));
+        classBuilder.addMethod(buildConstructorWithGasPriceAndLimit(
+                Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildConstructorWithGasPriceAndLimit(
+                TransactionManager.class, TRANSACTION_MANAGER));
+        classBuilder.addMethod(buildConstructorWithGasProvider(
+                Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildConstructorWithGasProvider(
+                TransactionManager.class, TRANSACTION_MANAGER));
         classBuilder.addFields(buildFuncNameConstants(abi));
         classBuilder.addMethods(
                 buildFunctionDefinitions(className, classBuilder, abi));
@@ -304,17 +312,31 @@ public class SolidityFunctionWrapper extends Generator {
         return fields;
     }
 
-    private static MethodSpec buildConstructor(Class authType, String authName) {
+    private static MethodSpec buildConstructorWithGasPriceAndLimit(
+            Class authType, String authName) {
         return MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PROTECTED)
-                .addParameter(String.class, CONTRACT_ADDRESS)
-                .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName)
-                .addParameter(BigInteger.class, GAS_PRICE)
-                .addParameter(BigInteger.class, GAS_LIMIT)
-                .addStatement("super($N, $N, $N, $N, $N, $N)",
-                        BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
-                .build();
+            .addModifiers(Modifier.PROTECTED)
+            .addParameter(String.class, CONTRACT_ADDRESS)
+            .addParameter(Web3j.class, WEB3J)
+            .addParameter(authType, authName)
+            .addParameter(BigInteger.class, GAS_PRICE)
+            .addParameter(BigInteger.class, GAS_LIMIT)
+            .addStatement("super($N, $N, $N, $N, $N, $N)",
+                BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
+            .build();
+    }
+
+    private static MethodSpec buildConstructorWithGasProvider(
+            Class authType, String authName) {
+        return MethodSpec.constructorBuilder()
+            .addModifiers(Modifier.PROTECTED)
+            .addParameter(String.class, CONTRACT_ADDRESS)
+            .addParameter(Web3j.class, WEB3J)
+            .addParameter(authType, authName)
+            .addParameter(ContractGasProvider.class, GAS_PROVIDER)
+            .addStatement("super($N, $N, $N, $N, $N)",
+                BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PROVIDER)
+            .build();
     }
 
     private MethodSpec buildDeploy(

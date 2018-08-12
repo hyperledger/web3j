@@ -1,10 +1,27 @@
 package org.web3j.codegen;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -27,12 +44,16 @@ import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.gas.ContractGasProvider;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
@@ -151,7 +172,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildFunctionTransaction() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
                 Collections.emptyList(),
@@ -178,10 +199,10 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildingFunctionTransactionThatReturnsValueReportsWarning() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("result", "uint8")),
                 "type",
                 false);
@@ -199,7 +220,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildPayableFunctionTransaction() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
                 Collections.emptyList(),
@@ -226,10 +247,10 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildFunctionConstantSingleValueReturn() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 true,
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("result", "int8")),
                 "type",
                 false);
@@ -253,10 +274,10 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildFunctionConstantSingleValueRawListReturn() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 true,
-                Arrays.asList(
+                Collections.singletonList(
                     new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("result", "address[]")),
                 "type",
                 false);
@@ -288,7 +309,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildFunctionConstantInvalid() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 true,
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
                 Collections.emptyList(),
@@ -433,10 +454,10 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     }
 
     @Test
-    public void testBuildFuncNameConstants() throws Exception {
+    public void testBuildFuncNameConstants() {
         AbiDefinition functionDefinition = new AbiDefinition(
                 false,
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
                 Collections.emptyList(),
@@ -459,4 +480,137 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(builder.build().toString(), is(expected));
     }
 
+    @Test
+    public void testGenerateJavaFiles() throws IOException, ClassNotFoundException {
+        String contractName = "HumanStandardToken";
+        String abiPath = readPathFromClasspath("solidity/contracts/build/HumanStandardToken.abi");
+        String binPath = readPathFromClasspath("solidity/contracts/build/HumanStandardToken.bin");
+        String destinationDir = createTempDirectory(
+                getClass().getSimpleName() + "-testGenerateJavaFiles");
+        String basePackageName = "test";
+        solidityFunctionWrapper.generateJavaFiles(
+                contractName,
+                binPath,
+                abiPath,
+                destinationDir,
+                basePackageName
+        );
+
+        File generatedJavaFile = new File(
+                new File(destinationDir, basePackageName),
+                contractName + ".java");
+
+        assertTrue("Should have created a HumanStandardToken.java in "
+                + destinationDir + "/" + basePackageName,
+                generatedJavaFile.exists());
+
+        System.out.println("Generated java file is in " + generatedJavaFile);
+
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        compiler.run(null, null, null, generatedJavaFile.getPath());
+
+        URLClassLoader classLoader = URLClassLoader.newInstance(
+                new URL[] { new File(destinationDir).toURI().toURL() });
+        Class<?> generatedClass = Class.forName(
+                basePackageName + "." + contractName, true, classLoader);
+
+        assertProtectedDeclaredConstructor(
+                generatedClass,
+                new Class[]{
+                        String.class,
+                        Web3j.class,
+                        Credentials.class,
+                        BigInteger.class,
+                        BigInteger.class
+                });
+        assertProtectedDeclaredConstructor(
+                generatedClass,
+                new Class[]{
+                        String.class,
+                        Web3j.class,
+                        TransactionManager.class,
+                        BigInteger.class,
+                        BigInteger.class
+                });
+        assertProtectedDeclaredConstructor(
+                generatedClass,
+                new Class[]{
+                        String.class,
+                        Web3j.class,
+                        Credentials.class,
+                        ContractGasProvider.class
+                });
+        assertProtectedDeclaredConstructor(
+                generatedClass,
+                new Class[]{
+                        String.class,
+                        Web3j.class,
+                        TransactionManager.class,
+                        ContractGasProvider.class
+                });
+    }
+
+    private String createTempDirectory(String destination) throws IOException {
+        String testClasspathFile = getTestClasspathFile();
+        Path destinationPath = Paths.get(testClasspathFile, destination);
+
+        if (!Files.exists(destinationPath)) {
+            Files.createDirectory(destinationPath);
+        }
+
+        Files.walk(destinationPath)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(file -> {
+                    @SuppressWarnings("unused") boolean r = file.delete();
+                });
+
+        return destinationPath.toString();
+    }
+
+    private static void assertProtectedDeclaredConstructor(
+            Class<?> targetClass, Class[] parameters) {
+        Constructor<?> constructor = assertDeclaredConstructor(targetClass, parameters);
+        assertTrue(constructor.getName() + " should have been protected",
+                Modifier.isProtected(constructor.getModifiers()));
+    }
+
+    private static Constructor<?> assertDeclaredConstructor(
+            Class<?> targetClass, Class[] parameters) {
+        try {
+            return targetClass.getDeclaredConstructor(parameters);
+        } catch (NoSuchMethodException e) {
+            String parameterList = Stream.of(parameters)
+                    .map(Class::getSimpleName)
+                    .collect(Collectors.joining(", "));
+            String constructorName = targetClass.getSimpleName() + "(" + parameterList + ")";
+            throw new AssertionError(
+                "Should have generated a constructor `" + constructorName + "`");
+        }
+    }
+
+    private String getTestClasspathFile() throws IOException {
+        Enumeration<URL> candidates =
+                Thread.currentThread().getContextClassLoader().getResources("marker.txt");
+        while (candidates.hasMoreElements()) {
+            URL candidate = candidates.nextElement();
+            if ("file".equalsIgnoreCase(candidate.getProtocol())) {
+                return new File(candidate.getFile()).getParentFile().getAbsolutePath();
+            }
+        }
+        throw new RuntimeException("Unable to find test classpath. Unable to find marker.txt");
+    }
+
+    private String readPathFromClasspath(String classpath) throws IOException {
+        try (InputStream fileStream =
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(classpath)) {
+            if (fileStream == null) {
+                throw new FileNotFoundException(
+                        "Unable to find " + classpath + " from any of the classpaths");
+            }
+            byte[] allBytes = new byte[fileStream.available()];
+            @SuppressWarnings("unused") int read = fileStream.read(allBytes);
+            return new String(allBytes);
+        }
+    }
 }

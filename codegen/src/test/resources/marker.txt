@@ -1,0 +1,1 @@
+This is just a dummy file to help us locate the test classpath
