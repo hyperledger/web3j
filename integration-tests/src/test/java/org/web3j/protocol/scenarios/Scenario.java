@@ -64,7 +64,11 @@ public class Scenario {
 
     @Before
     public void setUp() {
-        this.web3j = Admin.build(new HttpService(TestParameters.TEST_RINKEBY_URL));
+        HttpService httpService = new HttpService(TestParameters.TEST_RINKEBY_URL);
+        if (TestParameters.hasRinkebyCredentials()) {
+            httpService.addHeader("Authorization", TestParameters.getRinkebyAuthorization());
+        }
+        this.web3j = Admin.build(httpService);
     }
 
     boolean unlockAccount(String address) throws Exception {

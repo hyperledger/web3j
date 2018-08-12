@@ -36,10 +36,15 @@ public class BalanceHelper {
     public static void main(String[] args)
             throws Exception {
 
-        String url = args.length == 0 ? TestParameters.TEST_RINKEBY_URL : args[0];
+        String url = args.length > 0 ? TestParameters.TEST_RINKEBY_URL : args[0];
         LOGGER.info("Connecting to {}", url);
 
-        Admin web3j = Admin.build(new HttpService(url));
+        HttpService httpService = new HttpService(url);
+        if (args.length >= 3) {
+            LOGGER.info("Adding authorization URL to {}", url);
+            httpService.addHeader("Authorization", okhttp3.Credentials.basic(args[1], args[2]));
+        }
+        Admin web3j = Admin.build(httpService);
 
         LOGGER.info("Retrieving latest balances of ALICE and BOB");
 

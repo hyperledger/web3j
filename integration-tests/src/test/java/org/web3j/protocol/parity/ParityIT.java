@@ -8,6 +8,7 @@ import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.core.TestParameters;
 import org.web3j.protocol.http.HttpService;
 
 import static org.junit.Assert.assertFalse;
@@ -27,7 +28,11 @@ public class ParityIT {
 
     @Before
     public void setUp() {
-        this.parity = Parity.build(new HttpService(TEST_KOVAN_URL));
+        HttpService httpService = new HttpService(TEST_KOVAN_URL);
+        if (TestParameters.hasKovanCredentials()) {
+            httpService.addHeader("Authorization", TestParameters.getKovanAuthorization());
+        }
+        this.parity = Parity.build(httpService);
     }
 
     @Test

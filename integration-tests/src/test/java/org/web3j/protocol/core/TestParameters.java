@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.util.Properties;
 import java.util.function.Function;
 
+import okhttp3.Credentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,14 +51,34 @@ public class TestParameters {
     public static final int FAST_RAW_TRANSACTION_MANAGER_IT_COUNT;
 
     /**
+     * Password for parity if needed.
+     */
+    public static final String TEST_KOVAN_PASSWORD;
+
+    /**
      * For parity.
      */
     public static final String TEST_KOVAN_URL;
 
     /**
+     * Username for parity if needed.
+     */
+    public static final String TEST_KOVAN_USERNAME;
+
+    /**
+     * Password for geth if needed.
+     */
+    public static final String TEST_RINKEBY_PASSWORD;
+
+    /**
      * For geth.
      */
     public static final String TEST_RINKEBY_URL;
+
+    /**
+     * Username for geth if needed.
+     */
+    public static final String TEST_RINKEBY_USERNAME;
 
     /**
      * For both geth and parity.
@@ -88,10 +109,18 @@ public class TestParameters {
 
         TEST_ROPSTEN_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_ROPSTEN_URL",
             DEFAULT_URL);
+        TEST_KOVAN_PASSWORD = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_KOVAN_PASSWORD",
+            (String) null);
         TEST_KOVAN_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_KOVAN_URL",
             TEST_ROPSTEN_URL);
+        TEST_KOVAN_USERNAME = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_KOVAN_USERNAME",
+            (String) null);
+        TEST_RINKEBY_PASSWORD = getPropertyOrEnv(localTestProperties,
+            "WEB3J_TEST_RINKEBY_PASSWORD", (String) null);
         TEST_RINKEBY_URL = getPropertyOrEnv(localTestProperties, "WEB3J_TEST_RINKEBY_URL",
             TEST_ROPSTEN_URL);
+        TEST_RINKEBY_USERNAME = getPropertyOrEnv(localTestProperties,
+            "WEB3J_TEST_RINKEBY_USERNAME", (String) null);
 
         LOGGER.info(
                 "\n"
@@ -101,8 +130,12 @@ public class TestParameters {
                 + " * WEB3J_BOB_PRIVKEY = {}\n"
                 + " * WEB3J_BOB_PUBKEY = {}\n"
                 + " * WEB3J_FAST_RAW_TRANSACTION_MANAGER_IT_COUNT = {}\n"
+                + " * WEB3J_TEST_KOVAN_PASSWORD = {}\n"
                 + " * WEB3J_TEST_KOVAN_URL = {}\n"
+                + " * WEB3J_TEST_KOVAN_USERNAME = {}\n"
+                + " * WEB3J_TEST_RINKEBY_PASSWORD = {}\n"
                 + " * WEB3J_TEST_RINKEBY_URL = {}\n"
+                + " * WEB3J_TEST_RINKEBY_USERNAME = {}\n"
                 + " * WEB3J_TEST_ROPSTEN_URL = {}\n"
                 + "{}",
                 ALICE_PRIVKEY,
@@ -111,10 +144,30 @@ public class TestParameters {
                 BOB_PRIVKEY,
                 BOB_PUBKEY,
                 FAST_RAW_TRANSACTION_MANAGER_IT_COUNT,
+                TEST_KOVAN_PASSWORD,
                 TEST_KOVAN_URL,
+                TEST_KOVAN_USERNAME,
+                TEST_RINKEBY_PASSWORD,
                 TEST_RINKEBY_URL,
+                TEST_RINKEBY_USERNAME,
                 TEST_ROPSTEN_URL,
                 "");
+    }
+
+    public static boolean hasKovanCredentials() {
+        return TEST_KOVAN_USERNAME != null && TEST_KOVAN_PASSWORD != null;
+    }
+
+    public static String getKovanAuthorization() {
+        return Credentials.basic(TEST_KOVAN_USERNAME, TEST_KOVAN_PASSWORD);
+    }
+
+    public static boolean hasRinkebyCredentials() {
+        return TEST_RINKEBY_USERNAME != null && TEST_RINKEBY_PASSWORD != null;
+    }
+
+    public static String getRinkebyAuthorization() {
+        return Credentials.basic(TEST_RINKEBY_USERNAME, TEST_RINKEBY_PASSWORD);
     }
 
     private static Boolean getPropertyOrEnv(
@@ -137,8 +190,6 @@ public class TestParameters {
             String defaultValue) {
         return getPropertyOrEnv(localTestProperties, name, String::valueOf, defaultValue);
     }
-
-
 
     private static <T> T getPropertyOrEnv(
             Properties localTestProperties,

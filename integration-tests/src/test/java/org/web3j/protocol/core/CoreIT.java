@@ -85,7 +85,11 @@ public class CoreIT {
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService(TestParameters.TEST_RINKEBY_URL));
+        HttpService httpService = new HttpService(TestParameters.TEST_RINKEBY_URL);
+        if (TestParameters.hasRinkebyCredentials()) {
+            httpService.addHeader("Authorization", TestParameters.getRinkebyAuthorization());
+        }
+        this.web3j = Web3j.build(httpService);
 
         try {
             EthSyncing ethSyncing = web3j.ethSyncing().send();
