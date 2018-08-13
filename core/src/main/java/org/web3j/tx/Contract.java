@@ -86,7 +86,6 @@ public abstract class Contract extends ManagedTransaction {
                 gasPrice, gasLimit);
     }
 
-    @Deprecated
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, Credentials credentials,
                        ContractGasProvider gasProvider) {
