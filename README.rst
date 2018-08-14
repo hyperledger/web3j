@@ -393,7 +393,7 @@ client admin commands for sending transactions.
 To send Ether to another party using your Ethereum wallet file:
 
 .. code-block:: java
-		
+
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
@@ -430,7 +430,7 @@ Using an Ethereum client's admin commands (make sure you have your wallet in the
 keystore):
 
 .. code-block:: java
-  		
+
    Admin web3j = Admin.build(new HttpService());  // defaults to http://localhost:8545/
    PersonalUnlockAccount personalUnlockAccount = web3j.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
@@ -528,7 +528,7 @@ Please submit a pull request if you wish to include your project on the list:
 - `Ethereum JDBC Connector <https://github.com/Impetus/eth-jdbc-connector/>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
 - `Ethereum Tool <https://github.com/e-Contract/ethereum-tool>`_ for secure offline key management.
 - `Ethereum Java EE JCA Resource Adapter <https://github.com/e-Contract/ethereum-resource-adapter>`_ provides integration of Ethereum within Java EE 6+.
-- `Apache Camel Ethereum Component <https://github.com/apache/camel/blob/master/components/camel-web3j/src/main/docs/web3j-component.adoc>` _ by `@bibryam <https://github.com/bibryam/>`_.
+- `Apache Camel Ethereum Component <https://github.com/apache/camel/blob/master/components/camel-web3j/src/main/docs/web3j-component.adoc>`_ by `@bibryam <https://github.com/bibryam/>`_.
 
 
 
