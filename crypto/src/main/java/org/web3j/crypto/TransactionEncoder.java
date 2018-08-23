@@ -52,7 +52,7 @@ public class TransactionEncoder {
         return encode(rawTransaction, signatureData);
     }
 
-    private static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
+    public static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
         List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         RlpList rlpList = new RlpList(values);
         return RlpEncoder.encode(rlpList);
