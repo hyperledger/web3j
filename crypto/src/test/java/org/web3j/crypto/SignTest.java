@@ -3,6 +3,7 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.security.SignatureException;
 
+import org.bouncycastle.math.ec.ECPoint;
 import org.junit.Test;
 
 import org.web3j.utils.Numeric;
@@ -47,5 +48,12 @@ public class SignTest {
     public void testInvalidSignature() throws SignatureException {
         Sign.signedMessageToKey(
                 TEST_MESSAGE, new Sign.SignatureData((byte) 27, new byte[]{1}, new byte[]{0}));
+    }
+
+    @Test
+    public void testPublicKeyFromPrivatePoint() {
+        ECPoint point = Sign.publicPointFromPrivate(SampleKeys.PRIVATE_KEY);
+        assertThat(Sign.publicFromPoint(Sign.CURVE.getCurve(), point.getEncoded(false)),
+                equalTo(SampleKeys.PUBLIC_KEY));
     }
 }
