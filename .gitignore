@@ -35,6 +35,9 @@ gradle-app.setting
 
 .idea
 *.iml
+*.ipr
+*.iws
+
 geth.sh
 
 # Sphinx generated docs
