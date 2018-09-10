@@ -362,7 +362,19 @@ public class WebSocketService implements Web3jService {
         // an Observable to a client before we got a reply
         // a client can unsubscribe before we know a subscription
         // id and this can cause a race condition
-        subscribeToEventsStream(request, subject, responseType);
+        try {
+            subscribeToEventsStream(request, subject, responseType);
+        } catch (IOException e) {
+            Web3jService fallback = request.next();
+            if (fallback != null) {
+                fallback.subscribe(request, unsubscribeMethod, responseType);
+            } else {
+                log.error("Failed to subscribe to RPC events with request id {}",
+                        request.getId());
+                subject.onError(e);
+            }
+        }
+
 
         return subject
                 .doOnUnsubscribe(() -> closeSubscription(subject, unsubscribeMethod));
@@ -371,18 +383,13 @@ public class WebSocketService implements Web3jService {
 
     private <T extends Notification<?>> void subscribeToEventsStream(
             Request request,
-            BehaviorSubject<T> subject, Class<T> responseType) {
+            BehaviorSubject<T> subject, Class<T> responseType) throws IOException{
 
         subscriptionRequestForId.put(
                 request.getId(),
                 new WebSocketSubscription<>(subject, responseType));
-        try {
-            send(request, EthSubscribe.class);
-        } catch (IOException e) {
-            log.error("Failed to subscribe to RPC events with request id {}",
-                    request.getId());
-            subject.onError(e);
-        }
+
+        send(request, EthSubscribe.class);
     }
 
     private <T extends Notification<?>> void closeSubscription(
@@ -411,10 +418,11 @@ public class WebSocketService implements Web3jService {
 
     private Request<String, EthUnsubscribe> unsubscribeRequest(
             String subscriptionId, String unsubscribeMethod) {
+        Web3jService[] web3jServices = {this};
         return new Request<>(
                         unsubscribeMethod,
                         Collections.singletonList(subscriptionId),
-                        this,
+                        web3jServices,
                         EthUnsubscribe.class);
     }
 

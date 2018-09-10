@@ -21,13 +21,13 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
  */
 public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
 
-    public JsonRpc2_0Admin(Web3jService web3jService) {
-        super(web3jService);
+    public JsonRpc2_0Admin(Web3jService... web3jServices) {
+        super(web3jServices);
     }
     
-    public JsonRpc2_0Admin(Web3jService web3jService, long pollingInterval,
+    public JsonRpc2_0Admin(Web3jService[] web3jServices, long pollingInterval,
             ScheduledExecutorService scheduledExecutorService) {
-        super(web3jService, pollingInterval, scheduledExecutorService);
+        super(web3jServices, pollingInterval, scheduledExecutorService);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
         return new Request<>(
                 "personal_listAccounts",
                 Collections.<String>emptyList(),
-                web3jService,
+                web3jServices,
                 PersonalListAccounts.class);
     }
 
@@ -44,7 +44,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
         return new Request<>(
                 "personal_newAccount",
                 Arrays.asList(password),
-                web3jService,
+                web3jServices,
                 NewAccountIdentifier.class);
     }   
 
@@ -68,7 +68,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
         return new Request<>(
                 "personal_unlockAccount",
                 attributes,
-                web3jService,
+                web3jServices,
                 PersonalUnlockAccount.class);
     }
     
@@ -85,7 +85,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
         return new Request<>(
                 "personal_sendTransaction",
                 Arrays.asList(transaction, passphrase),
-                web3jService,
+                web3jServices,
                 EthSendTransaction.class);
     }
     

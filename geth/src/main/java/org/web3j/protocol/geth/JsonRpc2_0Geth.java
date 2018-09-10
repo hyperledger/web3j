@@ -32,7 +32,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_importRawKey",
                 Arrays.asList(keydata, password),
-                web3jService,
+                web3jServices,
                 PersonalImportRawKey.class);
     }
 
@@ -41,7 +41,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_lockAccount",
                 Arrays.asList(accountId),
-                web3jService,
+                web3jServices,
                 BooleanResponse.class);
     }
 
@@ -51,7 +51,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_sign",
                 Arrays.asList(message,accountId,password),
-                web3jService,
+                web3jServices,
                 PersonalSign.class);
     }
 
@@ -61,7 +61,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage,signedMessage),
-                web3jService,
+                web3jServices,
                 PersonalEcRecover.class);
     }
 
@@ -70,7 +70,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "miner_start",
                 Arrays.asList(threadCount),
-                web3jService,
+                web3jServices,
                 MinerStartResponse.class);
     }
 
@@ -79,16 +79,16 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "miner_stop",
                 Collections.<String>emptyList(),
-                web3jService,
+                web3jServices,
                 BooleanResponse.class);
     }
 
     public Observable<PendingTransactionNotification> newPendingTransactionsNotifications() {
-        return web3jService.subscribe(
+        return web3jServices.subscribe(
                 new Request<>(
                         "eth_subscribe",
                         Arrays.asList("newPendingTransactions"),
-                        web3jService,
+                        web3jServices,
                         EthSubscribe.class),
                 "eth_unsubscribe",
                 PendingTransactionNotification.class
@@ -97,11 +97,11 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Observable<SyncingNotfication> syncingStatusNotifications() {
-        return web3jService.subscribe(
+        return web3jServices.subscribe(
                 new Request<>(
                         "eth_subscribe",
                         Arrays.asList("syncing"),
-                        web3jService,
+                        web3jServices,
                         EthSubscribe.class),
                 "eth_unsubscribe",
                 SyncingNotfication.class

@@ -17,14 +17,21 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
  */
 public interface Admin extends Web3j {
 
-    static Admin build(Web3jService web3jService) {
-        return new JsonRpc2_0Admin(web3jService);
+    static Admin build(Web3jService... web3jServices) {
+        return new JsonRpc2_0Admin(web3jServices);
     }
     
     static Admin build(
             Web3jService web3jService, long pollingInterval,
             ScheduledExecutorService scheduledExecutorService) {
-        return new JsonRpc2_0Admin(web3jService, pollingInterval, scheduledExecutorService);
+        Web3jService[] web3jServices = {web3jService};
+        return new JsonRpc2_0Admin(web3jServices, pollingInterval, scheduledExecutorService);
+    }
+
+    static Admin build(
+            Web3jService[] web3jServices, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        return new JsonRpc2_0Admin(web3jServices, pollingInterval, scheduledExecutorService);
     }
 
     public Request<?, PersonalListAccounts> personalListAccounts();
