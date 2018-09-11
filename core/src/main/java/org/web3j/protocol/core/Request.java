@@ -73,7 +73,7 @@ public class Request<S, T extends Response> {
     }
 
     public T send() throws IOException {
-        try{
+        try {
             return web3jServices[counter].send(this, responseType);
         } catch (IOException e) {
             Web3jService fallback = next();
@@ -103,7 +103,9 @@ public class Request<S, T extends Response> {
 
     public Web3jService next() {
         ++counter;
-        if (counter == web3jServices.length - 1) counter = 0;
+        if (counter == web3jServices.length - 1) {
+            counter = 0;
+        }
         return web3jServices[counter];
     }
 }

@@ -365,9 +365,9 @@ public class WebSocketService implements Web3jService {
         try {
             subscribeToEventsStream(request, subject, responseType);
         } catch (IOException e) {
-            Web3jService fallback = request.next();
+            WebSocketService fallback = (WebSocketService) request.next();
             if (fallback != null) {
-                fallback.subscribe(request, unsubscribeMethod, responseType);
+                return fallback.subscribe(request, unsubscribeMethod, responseType);
             } else {
                 log.error("Failed to subscribe to RPC events with request id {}",
                         request.getId());
@@ -383,7 +383,7 @@ public class WebSocketService implements Web3jService {
 
     private <T extends Notification<?>> void subscribeToEventsStream(
             Request request,
-            BehaviorSubject<T> subject, Class<T> responseType) throws IOException{
+            BehaviorSubject<T> subject, Class<T> responseType) throws IOException {
 
         subscriptionRequestForId.put(
                 request.getId(),

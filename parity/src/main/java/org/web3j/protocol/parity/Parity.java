@@ -4,10 +4,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.Admin;
+import org.web3j.protocol.admin.JsonRpc2_0Admin;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
@@ -20,14 +22,29 @@ import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
 import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
 import org.web3j.protocol.parity.methods.response.ParityExportAccount;
 import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
+import org.web3j.protocol.websocket.WebSocketService;
 
 /**
  * JSON-RPC Request object building factory for Parity.
  */
 public interface Parity extends Admin, Trace {
-    static Parity build(Web3jService web3jService) {
-        return new JsonRpc2_0Parity(web3jService);
+    static Parity build(Web3jService... web3jServices) {
+        return new JsonRpc2_0Parity(web3jServices);
     }
+
+    static Parity build(
+            Web3jService web3jService, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        Web3jService[] web3jServices = {web3jService};
+        return build(web3jServices, pollingInterval, scheduledExecutorService);
+    }
+
+    static Parity build(
+            Web3jService[] web3jServices, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        return new JsonRpc2_0Parity(web3jServices, pollingInterval, scheduledExecutorService);
+    }
+
 
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
     

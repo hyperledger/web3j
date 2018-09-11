@@ -25,7 +25,7 @@ public interface Admin extends Web3j {
             Web3jService web3jService, long pollingInterval,
             ScheduledExecutorService scheduledExecutorService) {
         Web3jService[] web3jServices = {web3jService};
-        return new JsonRpc2_0Admin(web3jServices, pollingInterval, scheduledExecutorService);
+        return build(web3jServices, pollingInterval, scheduledExecutorService);
     }
 
     static Admin build(

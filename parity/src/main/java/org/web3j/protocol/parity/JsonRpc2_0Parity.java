@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 import org.web3j.crypto.WalletFile;
@@ -35,8 +36,13 @@ import org.web3j.utils.Numeric;
  */
 public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
-    public JsonRpc2_0Parity(Web3jService web3jService) {
-        super(web3jService);
+    public JsonRpc2_0Parity(Web3jService... web3jServices) {
+        super(web3jServices);
+    }
+
+    public JsonRpc2_0Parity(Web3jService[] web3jServices, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        super(web3jServices, pollingInterval, scheduledExecutorService);
     }
 
     @Override

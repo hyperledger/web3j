@@ -18,7 +18,7 @@ public interface Web3j extends Ethereum, Web3jRx {
      * @param web3jServices web3j service instances - i.e. HTTP or IPC
      * @return new Web3j instance
      */
-    static Web3j build(Web3jService... web3jServices ) {
+    static Web3j build(Web3jService... web3jServices) {
         return new JsonRpc2_0Web3j(web3jServices);
     }
 

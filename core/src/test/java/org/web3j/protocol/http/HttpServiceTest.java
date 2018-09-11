@@ -82,10 +82,10 @@ public class HttpServiceTest {
                 .protocol(Protocol.HTTP_1_1)
                 .build();
 
-        OkHttpClient httpClients[] = new OkHttpClient[6];
+        OkHttpClient[] httpClients = new OkHttpClient[6];
         for (int i = 0; i <= 5; ++i) {
             OkHttpClient client = new Mockito().mock(OkHttpClient.class);
-            httpClients[i]=client;
+            httpClients[i] = client;
         }
         Mockito.when(httpClients[0].newCall(Mockito.any()))
                 .thenAnswer(invocation -> {
@@ -95,10 +95,9 @@ public class HttpServiceTest {
                     return call;
                 });
         HttpService[] mockedHttpServices = new HttpService[6];
-        for(int i= 0; i <=5; ++i) {
+        for (int i = 0; i <= 5; ++i) {
             mockedHttpServices[i] = new HttpService(httpClients[i]);
         }
-
         Request<String, EthBlockNumber> request = new Request<>(
                 "eth_blockNumber1",
                 Collections.emptyList(),
@@ -128,11 +127,11 @@ public class HttpServiceTest {
                 httpServices,
                 EthSubscribe.class);
 
-            httpService.subscribe(
-                    subscribeRequest,
-                    "eth_unsubscribe",
-                    NewHeadsNotification.class
-            );
+        httpService.subscribe(
+                subscribeRequest,
+                "eth_unsubscribe",
+                NewHeadsNotification.class
+        );
     }
     
 }

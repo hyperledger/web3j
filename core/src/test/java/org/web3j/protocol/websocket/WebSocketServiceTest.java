@@ -17,7 +17,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;

@@ -1,5 +1,7 @@
 package org.web3j.protocol.geth;
 
+import java.util.concurrent.ScheduledExecutorService;
+
 import rx.Observable;
 
 import org.web3j.protocol.Web3jService;
@@ -19,6 +21,19 @@ import org.web3j.protocol.websocket.events.SyncingNotfication;
 public interface Geth extends Admin {
     static Geth build(Web3jService web3jService) {
         return new JsonRpc2_0Geth(web3jService);
+    }
+
+    static Geth build(
+            Web3jService web3jService, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        Web3jService[] web3jServices = {web3jService};
+        return build(web3jServices, pollingInterval, scheduledExecutorService);
+    }
+
+    static Geth build(
+            Web3jService[] web3jServices, long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        return new JsonRpc2_0Geth(web3jServices, pollingInterval, scheduledExecutorService);
     }
         
     Request<?, PersonalImportRawKey> personalImportRawKey(String keydata, String password);

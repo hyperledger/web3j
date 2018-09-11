@@ -24,7 +24,8 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
     public JsonRpc2_0Admin(Web3jService... web3jServices) {
         super(web3jServices);
     }
-    
+
+
     public JsonRpc2_0Admin(Web3jService[] web3jServices, long pollingInterval,
             ScheduledExecutorService scheduledExecutorService) {
         super(web3jServices, pollingInterval, scheduledExecutorService);
