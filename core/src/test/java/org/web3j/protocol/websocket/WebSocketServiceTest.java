@@ -17,6 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -50,10 +51,21 @@ public class WebSocketServiceTest {
 
     private WebSocketService service = new WebSocketService(webSocketClient, executorService, true);
 
+    private WebSocketService[] services = new WebSocketService[6];
+
+    private WebSocketService[] buildWebSocketServices() {
+        for (int i = 0; i <= 5; ++i) {
+            services[i] =
+                    new WebSocketService(webSocketClient, executorService, true);
+        }
+
+        return services;
+    }
+
     private Request<?, Web3ClientVersion> request = new Request<>(
             "web3_clientVersion",
             Collections.<String>emptyList(),
-            service,
+            services,
             Web3ClientVersion.class);
 
     @Rule
@@ -422,7 +434,7 @@ public class WebSocketServiceTest {
         subscribeRequest = new Request<>(
                 "eth_subscribe",
                 Arrays.asList("newHeads", Collections.emptyMap()),
-                service,
+                services,
                 EthSubscribe.class);
         subscribeRequest.setId(1);
 
