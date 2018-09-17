@@ -389,7 +389,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private static MethodSpec buildLoad(
-            String className ) {
+            String className) {
         return MethodSpec.methodBuilder("load")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeVariableName.get(className, Type.class))
