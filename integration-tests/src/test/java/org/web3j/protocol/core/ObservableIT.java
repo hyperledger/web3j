@@ -64,7 +64,7 @@ public class ObservableIT {
                 .send();
         BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
         run(web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
-                new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
+                new DefaultBlockParameterNumber(latestBlockNumber),
                 false));
     }
 
