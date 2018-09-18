@@ -21,8 +21,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class ObservableIT {
 
-    private static final int EVENT_COUNT = 5;
-    private static final int TIMEOUT_MINUTES = 5;
+    private static final int EVENT_COUNT = 1;
+    private static final int TIMEOUT_MINUTES = 1;
 
     private Web3j web3j;
 
@@ -64,7 +64,7 @@ public class ObservableIT {
                 .send();
         BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
         run(web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
-                new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
+                new DefaultBlockParameterNumber(latestBlockNumber),
                 false));
     }
 
