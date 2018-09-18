@@ -103,7 +103,7 @@ public class Request<S, T extends Response> {
 
     public Web3jService next() {
         ++counter;
-        if (counter == web3jServices.length - 1) {
+        if (counter == web3jServices.length) {
             counter = 0;
         }
         return web3jServices[counter];
