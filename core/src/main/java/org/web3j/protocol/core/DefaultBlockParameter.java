@@ -10,6 +10,8 @@ import java.math.BigInteger;
  */
 public interface DefaultBlockParameter {
     static DefaultBlockParameter valueOf(BigInteger blockNumber) {
+        if (blockNumber.compareTo(BigInteger.ZERO) >= 0)
+            blockNumber = BigInteger.ZERO;
         return new DefaultBlockParameterNumber(blockNumber);
     }
 
