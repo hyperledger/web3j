@@ -50,21 +50,10 @@ public class WebSocketServiceTest {
 
     private WebSocketService service = new WebSocketService(webSocketClient, executorService, true);
 
-    private WebSocketService[] services = new WebSocketService[6];
-
-    private WebSocketService[] buildWebSocketServices() {
-        for (int i = 0; i <= 5; ++i) {
-            services[i] =
-                    new WebSocketService(webSocketClient, executorService, true);
-        }
-
-        return services;
-    }
-
     private Request<?, Web3ClientVersion> request = new Request<>(
             "web3_clientVersion",
             Collections.<String>emptyList(),
-            services,
+            service,
             Web3ClientVersion.class);
 
     @Rule
@@ -433,7 +422,7 @@ public class WebSocketServiceTest {
         subscribeRequest = new Request<>(
                 "eth_subscribe",
                 Arrays.asList("newHeads", Collections.emptyMap()),
-                services,
+                service,
                 EthSubscribe.class);
         subscribeRequest.setId(1);
 

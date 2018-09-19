@@ -2,7 +2,6 @@ package org.web3j.protocol;
 
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.web3j.abi.datatypes.Array;
 import org.web3j.protocol.core.Ethereum;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.rx.Web3jRx;
@@ -15,11 +14,11 @@ public interface Web3j extends Ethereum, Web3jRx {
     /**
      * Construct a new Web3j instance.
      *
-     * @param web3jServices web3j service instances - i.e. HTTP or IPC
+     * @param web3jService web3j service instance - i.e. HTTP or IPC
      * @return new Web3j instance
      */
-    static Web3j build(Web3jService... web3jServices) {
-        return new JsonRpc2_0Web3j(web3jServices);
+    static Web3j build(Web3jService web3jService) {
+        return new JsonRpc2_0Web3j(web3jService);
     }
 
     /**
@@ -35,24 +34,7 @@ public interface Web3j extends Ethereum, Web3jRx {
     static Web3j build(
             Web3jService web3jService, long pollingInterval,
             ScheduledExecutorService scheduledExecutorService) {
-        Web3jService[] web3jServices = {web3jService};
-        return new JsonRpc2_0Web3j(web3jServices, pollingInterval, scheduledExecutorService);
-    }
-
-    /**
-     * Construct a new Web3j instance.
-     *
-     * @param web3jServices web3j service instances - i.e. HTTP or IPC
-     * @param pollingInterval polling interval for responses from network nodes
-     * @param scheduledExecutorService executor service to use for scheduled tasks.
-     *                                 <strong>You are responsible for terminating this thread
-     *                                 pool</strong>
-     * @return new Web3j instance
-     */
-    static Web3j build(
-            Web3jService[] web3jServices, long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService) {
-        return new JsonRpc2_0Web3j(web3jServices, pollingInterval, scheduledExecutorService);
+        return new JsonRpc2_0Web3j(web3jService, pollingInterval, scheduledExecutorService);
     }
 
     /**

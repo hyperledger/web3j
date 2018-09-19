@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.concurrent.ScheduledExecutorService;
 
 import rx.Observable;
@@ -80,21 +79,19 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     public static final int DEFAULT_BLOCK_TIME = 15 * 1000;
 
-    protected final Web3jService[] web3jServices;
+    protected final Web3jService web3jService;
     private final JsonRpc2_0Rx web3jRx;
     private final long blockTime;
     private final ScheduledExecutorService scheduledExecutorService;
 
-
-    public JsonRpc2_0Web3j(Web3jService[] web3jServices) {
-        this(web3jServices, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
+    public JsonRpc2_0Web3j(Web3jService web3jService) {
+        this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
     }
 
     public JsonRpc2_0Web3j(
-            Web3jService[] web3jServices, long pollingInterval,
+            Web3jService web3jService, long pollingInterval,
             ScheduledExecutorService scheduledExecutorService) {
-
-        this.web3jServices = web3jServices;
+        this.web3jService = web3jService;
         this.web3jRx = new JsonRpc2_0Rx(this, scheduledExecutorService);
         this.blockTime = pollingInterval;
         this.scheduledExecutorService = scheduledExecutorService;
@@ -105,7 +102,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "web3_clientVersion",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 Web3ClientVersion.class);
     }
 
@@ -114,7 +111,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "web3_sha3",
                 Arrays.asList(data),
-                web3jServices,
+                web3jService,
                 Web3Sha3.class);
     }
 
@@ -123,7 +120,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "net_version",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 NetVersion.class);
     }
 
@@ -132,7 +129,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "net_listening",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 NetListening.class);
     }
 
@@ -141,7 +138,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "net_peerCount",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 NetPeerCount.class);
     }
 
@@ -150,7 +147,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_protocolVersion",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthProtocolVersion.class);
     }
 
@@ -159,7 +156,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_coinbase",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthCoinbase.class);
     }
 
@@ -168,7 +165,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_syncing",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthSyncing.class);
     }
 
@@ -177,7 +174,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_mining",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthMining.class);
     }
 
@@ -186,7 +183,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_hashrate",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthHashrate.class);
     }
 
@@ -195,7 +192,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_gasPrice",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthGasPrice.class);
     }
 
@@ -204,7 +201,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_accounts",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthAccounts.class);
     }
 
@@ -213,7 +210,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_blockNumber",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthBlockNumber.class);
     }
 
@@ -223,7 +220,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getBalance",
                 Arrays.asList(address, defaultBlockParameter.getValue()),
-                web3jServices,
+                web3jService,
                 EthGetBalance.class);
     }
 
@@ -236,7 +233,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                         address,
                         Numeric.encodeQuantity(position),
                         defaultBlockParameter.getValue()),
-                web3jServices,
+                web3jService,
                 EthGetStorageAt.class);
     }
 
@@ -246,7 +243,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getTransactionCount",
                 Arrays.asList(address, defaultBlockParameter.getValue()),
-                web3jServices,
+                web3jService,
                 EthGetTransactionCount.class);
     }
 
@@ -256,7 +253,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getBlockTransactionCountByHash",
                 Arrays.asList(blockHash),
-                web3jServices,
+                web3jService,
                 EthGetBlockTransactionCountByHash.class);
     }
 
@@ -266,7 +263,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getBlockTransactionCountByNumber",
                 Arrays.asList(defaultBlockParameter.getValue()),
-                web3jServices,
+                web3jService,
                 EthGetBlockTransactionCountByNumber.class);
     }
 
@@ -275,7 +272,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getUncleCountByBlockHash",
                 Arrays.asList(blockHash),
-                web3jServices,
+                web3jService,
                 EthGetUncleCountByBlockHash.class);
     }
 
@@ -285,7 +282,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getUncleCountByBlockNumber",
                 Arrays.asList(defaultBlockParameter.getValue()),
-                web3jServices,
+                web3jService,
                 EthGetUncleCountByBlockNumber.class);
     }
 
@@ -295,7 +292,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getCode",
                 Arrays.asList(address, defaultBlockParameter.getValue()),
-                web3jServices,
+                web3jService,
                 EthGetCode.class);
     }
 
@@ -304,29 +301,29 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_sign",
                 Arrays.asList(address, sha3HashOfDataToSign),
-                web3jServices,
+                web3jService,
                 EthSign.class);
     }
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
-            ethSendTransaction(
+    ethSendTransaction(
             Transaction transaction) {
         return new Request<>(
                 "eth_sendTransaction",
                 Arrays.asList(transaction),
-                web3jServices,
+                web3jService,
                 org.web3j.protocol.core.methods.response.EthSendTransaction.class);
     }
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
-            ethSendRawTransaction(
+    ethSendRawTransaction(
             String signedTransactionData) {
         return new Request<>(
                 "eth_sendRawTransaction",
                 Arrays.asList(signedTransactionData),
-                web3jServices,
+                web3jService,
                 org.web3j.protocol.core.methods.response.EthSendTransaction.class);
     }
 
@@ -336,7 +333,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_call",
                 Arrays.asList(transaction, defaultBlockParameter),
-                web3jServices,
+                web3jService,
                 org.web3j.protocol.core.methods.response.EthCall.class);
     }
 
@@ -345,7 +342,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_estimateGas",
                 Arrays.asList(transaction),
-                web3jServices,
+                web3jService,
                 EthEstimateGas.class);
     }
 
@@ -357,7 +354,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(
                         blockHash,
                         returnFullTransactionObjects),
-                web3jServices,
+                web3jService,
                 EthBlock.class);
     }
 
@@ -370,7 +367,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
                         returnFullTransactionObjects),
-                web3jServices,
+                web3jService,
                 EthBlock.class);
     }
 
@@ -379,7 +376,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getTransactionByHash",
                 Arrays.asList(transactionHash),
-                web3jServices,
+                web3jService,
                 EthTransaction.class);
     }
 
@@ -391,7 +388,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(
                         blockHash,
                         Numeric.encodeQuantity(transactionIndex)),
-                web3jServices,
+                web3jService,
                 EthTransaction.class);
     }
 
@@ -403,7 +400,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
                         Numeric.encodeQuantity(transactionIndex)),
-                web3jServices,
+                web3jService,
                 EthTransaction.class);
     }
 
@@ -412,7 +409,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getTransactionReceipt",
                 Arrays.asList(transactionHash),
-                web3jServices,
+                web3jService,
                 EthGetTransactionReceipt.class);
     }
 
@@ -424,7 +421,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(
                         blockHash,
                         Numeric.encodeQuantity(transactionIndex)),
-                web3jServices,
+                web3jService,
                 EthBlock.class);
     }
 
@@ -436,7 +433,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(
                         defaultBlockParameter.getValue(),
                         Numeric.encodeQuantity(uncleIndex)),
-                web3jServices,
+                web3jService,
                 EthBlock.class);
     }
 
@@ -445,7 +442,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getCompilers",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthGetCompilers.class);
     }
 
@@ -454,7 +451,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_compileLLL",
                 Arrays.asList(sourceCode),
-                web3jServices,
+                web3jService,
                 EthCompileLLL.class);
     }
 
@@ -463,7 +460,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_compileSolidity",
                 Arrays.asList(sourceCode),
-                web3jServices,
+                web3jService,
                 EthCompileSolidity.class);
     }
 
@@ -472,7 +469,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_compileSerpent",
                 Arrays.asList(sourceCode),
-                web3jServices,
+                web3jService,
                 EthCompileSerpent.class);
     }
 
@@ -482,7 +479,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_newFilter",
                 Arrays.asList(ethFilter),
-                web3jServices,
+                web3jService,
                 EthFilter.class);
     }
 
@@ -491,7 +488,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_newBlockFilter",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthFilter.class);
     }
 
@@ -500,7 +497,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_newPendingTransactionFilter",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthFilter.class);
     }
 
@@ -509,7 +506,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_uninstallFilter",
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                web3jServices,
+                web3jService,
                 EthUninstallFilter.class);
     }
 
@@ -518,7 +515,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getFilterChanges",
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                web3jServices,
+                web3jService,
                 EthLog.class);
     }
 
@@ -527,7 +524,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getFilterLogs",
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                web3jServices,
+                web3jService,
                 EthLog.class);
     }
 
@@ -537,7 +534,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getLogs",
                 Arrays.asList(ethFilter),
-                web3jServices,
+                web3jService,
                 EthLog.class);
     }
 
@@ -546,7 +543,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_getWork",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 EthGetWork.class);
     }
 
@@ -556,7 +553,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_submitWork",
                 Arrays.asList(nonce, headerPowHash, mixDigest),
-                web3jServices,
+                web3jService,
                 EthSubmitWork.class);
     }
 
@@ -565,7 +562,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "eth_submitHashrate",
                 Arrays.asList(hashrate, clientId),
-                web3jServices,
+                web3jService,
                 EthSubmitHashrate.class);
     }
 
@@ -575,7 +572,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "db_putString",
                 Arrays.asList(databaseName, keyName, stringToStore),
-                web3jServices,
+                web3jService,
                 DbPutString.class);
     }
 
@@ -584,7 +581,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "db_getString",
                 Arrays.asList(databaseName, keyName),
-                web3jServices,
+                web3jService,
                 DbGetString.class);
     }
 
@@ -593,7 +590,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "db_putHex",
                 Arrays.asList(databaseName, keyName, dataToStore),
-                web3jServices,
+                web3jService,
                 DbPutHex.class);
     }
 
@@ -602,7 +599,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "db_getHex",
                 Arrays.asList(databaseName, keyName),
-                web3jServices,
+                web3jService,
                 DbGetHex.class);
     }
 
@@ -611,7 +608,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_post",
                 Arrays.asList(shhPost),
-                web3jServices,
+                web3jService,
                 org.web3j.protocol.core.methods.response.ShhPost.class);
     }
 
@@ -620,7 +617,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_version",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 ShhVersion.class);
     }
 
@@ -629,7 +626,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_newIdentity",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 ShhNewIdentity.class);
     }
 
@@ -638,7 +635,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_hasIdentity",
                 Arrays.asList(identityAddress),
-                web3jServices,
+                web3jService,
                 ShhHasIdentity.class);
     }
 
@@ -647,7 +644,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_newGroup",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 ShhNewGroup.class);
     }
 
@@ -656,7 +653,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_addToGroup",
                 Arrays.asList(identityAddress),
-                web3jServices,
+                web3jService,
                 ShhAddToGroup.class);
     }
 
@@ -665,7 +662,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_newFilter",
                 Arrays.asList(shhFilter),
-                web3jServices,
+                web3jService,
                 ShhNewFilter.class);
     }
 
@@ -674,7 +671,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_uninstallFilter",
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                web3jServices,
+                web3jService,
                 ShhUninstallFilter.class);
     }
 
@@ -683,7 +680,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_getFilterChanges",
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                web3jServices,
+                web3jService,
                 ShhMessages.class);
     }
 
@@ -692,17 +689,17 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "shh_getMessages",
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                web3jServices,
+                web3jService,
                 ShhMessages.class);
     }
 
     @Override
     public Observable<NewHeadsNotification> newHeadsNotifications() {
-        return web3jServices[0].subscribe(
+        return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",
                         Collections.singletonList("newHeads"),
-                        web3jServices,
+                        web3jService,
                         EthSubscribe.class),
                 "eth_unsubscribe",
                 NewHeadsNotification.class
@@ -715,11 +712,11 @@ public class JsonRpc2_0Web3j implements Web3j {
 
         Map<String, Object> params = createLogsParams(addresses, topics);
 
-        return web3jServices[0].subscribe(
+        return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",
                         Arrays.asList("logs", params),
-                        web3jServices,
+                        web3jService,
                         EthSubscribe.class),
                 "eth_unsubscribe",
                 LogNotification.class
@@ -755,13 +752,13 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            transactionObservable() {
+    transactionObservable() {
         return web3jRx.transactionObservable(blockTime);
     }
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            pendingTransactionObservable() {
+    pendingTransactionObservable() {
         return web3jRx.pendingTransactionObservable(blockTime);
     }
 
@@ -787,7 +784,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            replayTransactionsObservable(
+    replayTransactionsObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return web3jRx.replayTransactionsObservable(startBlock, endBlock);
     }
@@ -808,7 +805,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
+    catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestTransactionObservable(startBlock);
     }
 
@@ -821,7 +818,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            catchUpToLatestAndSubscribeToNewTransactionsObservable(
+    catchUpToLatestAndSubscribeToNewTransactionsObservable(
             DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(
                 startBlock, blockTime);
@@ -831,9 +828,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     public void shutdown() {
         scheduledExecutorService.shutdown();
         try {
-            for (Web3jService service: web3jServices) {
-                service.close();
-            }
+            web3jService.close();
         } catch (IOException e) {
             throw new RuntimeException("Failed to close web3j service", e);
         }

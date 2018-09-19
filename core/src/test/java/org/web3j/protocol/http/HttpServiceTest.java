@@ -15,54 +15,38 @@ import org.junit.Test;
 
 import org.mockito.Mockito;
 
-import org.web3j.abi.datatypes.Array;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.exceptions.ClientConnectionException;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
-import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertTrue;
 
 public class HttpServiceTest {
 
     private HttpService httpService = new HttpService();
 
-
-    private HttpService[] httpServices = new HttpService[6];
-
-
-    private HttpService[] buildHttpServices() {
-        for (int i = 0; i <= 5; ++i) {
-            httpServices[i] = new HttpService();
-        }
-
-        return httpServices;
-    }
-
-
-
     @Test
     public void testAddHeader() {
-        this.buildHttpServices();
         String headerName = "customized_header0";
         String headerValue = "customized_value0";
         httpService.addHeader(headerName, headerValue);
         assertTrue(httpService.getHeaders().get(headerName).equals(headerValue));
     }
-    
+
     @Test
     public void testAddHeaders() {
         String headerName1 = "customized_header1";
         String headerValue1 = "customized_value1";
-        
+
         String headerName2 = "customized_header2";
         String headerValue2 = "customized_value2";
-        
+
         HashMap<String, String> headersToAdd = new HashMap<>();
         headersToAdd.put(headerName1, headerValue1);
         headersToAdd.put(headerName2, headerValue2);
+
         httpService.addHeaders(headersToAdd);
 
         assertTrue(httpService.getHeaders().get(headerName1).equals(headerValue1));
@@ -82,39 +66,30 @@ public class HttpServiceTest {
                 .protocol(Protocol.HTTP_1_1)
                 .build();
 
-        OkHttpClient[] httpClients = new OkHttpClient[6];
-        for (int i = 0; i <= 5; ++i) {
-            OkHttpClient client = new Mockito().mock(OkHttpClient.class);
-            httpClients[i] = client;
-        }
-        Mockito.when(httpClients[0].newCall(Mockito.any()))
+        OkHttpClient httpClient = Mockito.mock(OkHttpClient.class);
+        Mockito.when(httpClient.newCall(Mockito.any()))
                 .thenAnswer(invocation -> {
                     Call call = Mockito.mock(Call.class);
                     Mockito.when(call.execute()).thenReturn(response);
 
                     return call;
                 });
-        HttpService[] mockedHttpServices = new HttpService[6];
-        for (int i = 0; i <= 5; ++i) {
-            mockedHttpServices[i] = new HttpService(httpClients[i]);
-        }
+        HttpService mockedHttpService = new HttpService(httpClient);
+
         Request<String, EthBlockNumber> request = new Request<>(
                 "eth_blockNumber1",
                 Collections.emptyList(),
-                mockedHttpServices,
+                mockedHttpService,
                 EthBlockNumber.class);
-        for (HttpService mockedHttpService: mockedHttpServices) {
-            try {
-                mockedHttpService.send(request, EthBlockNumber.class);
-            } catch (ClientConnectionException e) {
-                Assert.assertEquals(
-                        e.getMessage(),
-                        "Invalid response received: "
-                                + response.code() + "; " + content);
-                return;
-            }
+        try {
+            mockedHttpService.send(request, EthBlockNumber.class);
+        } catch (ClientConnectionException e) {
+            Assert.assertEquals(
+                    e.getMessage(),
+                    "Invalid response received: "
+                            + response.code() + "; " + content);
+            return;
         }
-
 
         Assert.fail("No exception");
     }
@@ -124,7 +99,7 @@ public class HttpServiceTest {
         Request<Object, EthSubscribe> subscribeRequest = new Request<>(
                 "eth_subscribe",
                 Arrays.asList("newHeads", Collections.emptyMap()),
-                httpServices,
+                httpService,
                 EthSubscribe.class);
 
         httpService.subscribe(
@@ -133,5 +108,5 @@ public class HttpServiceTest {
                 NewHeadsNotification.class
         );
     }
-    
+
 }
