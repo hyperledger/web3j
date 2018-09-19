@@ -307,8 +307,8 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
-    ethSendTransaction(
-            Transaction transaction) {
+            ethSendTransaction(
+                Transaction transaction) {
         return new Request<>(
                 "eth_sendTransaction",
                 Arrays.asList(transaction),
@@ -318,8 +318,8 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
-    ethSendRawTransaction(
-            String signedTransactionData) {
+            ethSendRawTransaction(
+                    String signedTransactionData) {
         return new Request<>(
                 "eth_sendRawTransaction",
                 Arrays.asList(signedTransactionData),
@@ -752,13 +752,13 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-    transactionObservable() {
+            transactionObservable() {
         return web3jRx.transactionObservable(blockTime);
     }
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-    pendingTransactionObservable() {
+            pendingTransactionObservable() {
         return web3jRx.pendingTransactionObservable(blockTime);
     }
 
@@ -784,8 +784,8 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-    replayTransactionsObservable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+            replayTransactionsObservable(
+                DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return web3jRx.replayTransactionsObservable(startBlock, endBlock);
     }
 
@@ -805,7 +805,7 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-    catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
+            catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestTransactionObservable(startBlock);
     }
 
@@ -818,8 +818,8 @@ public class JsonRpc2_0Web3j implements Web3j {
 
     @Override
     public Observable<org.web3j.protocol.core.methods.response.Transaction>
-    catchUpToLatestAndSubscribeToNewTransactionsObservable(
-            DefaultBlockParameter startBlock) {
+            catchUpToLatestAndSubscribeToNewTransactionsObservable(
+                DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(
                 startBlock, blockTime);
     }

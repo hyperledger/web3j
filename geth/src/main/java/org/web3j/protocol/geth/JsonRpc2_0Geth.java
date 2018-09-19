@@ -2,7 +2,6 @@ package org.web3j.protocol.geth;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.ScheduledExecutorService;
 
 import rx.Observable;
 
@@ -23,22 +22,17 @@ import org.web3j.protocol.websocket.events.SyncingNotfication;
  */
 public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
-    public JsonRpc2_0Geth(Web3jService... web3jService) {
+    public JsonRpc2_0Geth(Web3jService web3jService) {
         super(web3jService);
     }
 
-    public JsonRpc2_0Geth(Web3jService[] web3jServices, long pollingInterval,
-                            ScheduledExecutorService scheduledExecutorService) {
-        super(web3jServices, pollingInterval, scheduledExecutorService);
-    }
-    
     @Override
     public Request<?, PersonalImportRawKey> personalImportRawKey(
             String keydata, String password) {
         return new Request<>(
                 "personal_importRawKey",
                 Arrays.asList(keydata, password),
-                web3jServices,
+                web3jService,
                 PersonalImportRawKey.class);
     }
 
@@ -47,7 +41,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_lockAccount",
                 Arrays.asList(accountId),
-                web3jServices,
+                web3jService,
                 BooleanResponse.class);
     }
 
@@ -57,7 +51,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_sign",
                 Arrays.asList(message,accountId,password),
-                web3jServices,
+                web3jService,
                 PersonalSign.class);
     }
 
@@ -67,7 +61,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage,signedMessage),
-                web3jServices,
+                web3jService,
                 PersonalEcRecover.class);
     }
 
@@ -76,7 +70,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "miner_start",
                 Arrays.asList(threadCount),
-                web3jServices,
+                web3jService,
                 MinerStartResponse.class);
     }
 
@@ -85,16 +79,16 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
         return new Request<>(
                 "miner_stop",
                 Collections.<String>emptyList(),
-                web3jServices,
+                web3jService,
                 BooleanResponse.class);
     }
 
     public Observable<PendingTransactionNotification> newPendingTransactionsNotifications() {
-        return web3jServices[0].subscribe(
+        return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",
                         Arrays.asList("newPendingTransactions"),
-                        web3jServices,
+                        web3jService,
                         EthSubscribe.class),
                 "eth_unsubscribe",
                 PendingTransactionNotification.class
@@ -103,11 +97,11 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Observable<SyncingNotfication> syncingStatusNotifications() {
-        return web3jServices[0].subscribe(
+        return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",
                         Arrays.asList("syncing"),
-                        web3jServices,
+                        web3jService,
                         EthSubscribe.class),
                 "eth_unsubscribe",
                 SyncingNotfication.class

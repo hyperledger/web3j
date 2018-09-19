@@ -99,15 +99,13 @@ public class HttpService extends Service {
         Headers headers = buildHeaders();
         okhttp3.Request httpRequest;
         String url = urls[counter];
-
         try {
-             httpRequest = new okhttp3.Request.Builder()
+            httpRequest = new okhttp3.Request.Builder()
                     .url(url)
                     .headers(headers)
                     .post(requestBody)
                     .build();
-
-        } catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             url = next();
             if (url != null) {
                 httpRequest = new okhttp3.Request.Builder()
@@ -119,8 +117,6 @@ public class HttpService extends Service {
                 throw e;
             }
         }
-
-
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
