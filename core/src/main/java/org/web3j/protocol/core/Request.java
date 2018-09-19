@@ -1,19 +1,15 @@
 package org.web3j.protocol.core;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import rx.Observable;
 
 import org.web3j.protocol.Web3jService;
 
 public class Request<S, T extends Response> {
-
     private static AtomicLong nextId = new AtomicLong(0);
 
     private String jsonrpc = "2.0";
@@ -21,8 +17,7 @@ public class Request<S, T extends Response> {
     private List<S> params;
     private long id;
 
-    private Web3jService[] web3jServices;
-    private int counter = 0;
+    private Web3jService web3jService;
 
     // Unfortunately require an instance of the type too, see
     // http://stackoverflow.com/a/3437930/3211687
@@ -32,11 +27,11 @@ public class Request<S, T extends Response> {
     }
 
     public Request(String method, List<S> params,
-                   Web3jService[] web3jServices, Class<T> type) {
+                   Web3jService web3jService, Class<T> type) {
         this.method = method;
         this.params = params;
         this.id = nextId.getAndIncrement();
-        this.web3jServices = web3jServices;
+        this.web3jService = web3jService;
         this.responseType = type;
     }
 
@@ -73,39 +68,14 @@ public class Request<S, T extends Response> {
     }
 
     public T send() throws IOException {
-        try {
-            return web3jServices[counter].send(this, responseType);
-        } catch (IOException e) {
-            Web3jService fallback = next();
-            if (fallback != null) {
-                return fallback.send(this, responseType);
-            } else {
-                throw e;
-            }
-        }
+        return web3jService.send(this, responseType);
     }
 
     public CompletableFuture<T> sendAsync() {
-        return web3jServices[0].sendAsync(this, responseType).handle((v, e) -> {
-            if (e != null && e.getClass().isAssignableFrom(IOException.class)) {
-                Web3jService fallback = next();
-                if (fallback != null) {
-                    return fallback.sendAsync(this, responseType).join();
-                }
-            }
-            return v;
-        });
+        return  web3jService.sendAsync(this, responseType);
     }
 
     public Observable<T> observable() {
         return new RemoteCall<>(this::send).observable();
-    }
-
-    public Web3jService next() {
-        ++counter;
-        if (counter == web3jServices.length) {
-            counter = 0;
-        }
-        return web3jServices[counter];
     }
 }
