@@ -256,11 +256,12 @@ public class MnemonicUtils {
         try {
             return readAllLines(inputStream);
         } catch (Exception e) {
-            throw new IllegalStateException(e);
+            return Collections.emptyList();
         }
     }
-
-    private static List<String> readAllLines(InputStream inputStream) throws IOException {
+    
+    
+    public static List<String> readAllLines(InputStream inputStream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         List<String> data = new ArrayList<>();
         for (String line; (line = br.readLine()) != null; ) {
