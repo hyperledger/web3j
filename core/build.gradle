@@ -1,0 +1,48 @@
+import java.text.SimpleDateFormat
+
+description 'web3j is a lightweight Java library for integration with Ethereum clients'
+
+dependencies {
+    compile project(':abi'),
+            project(':crypto'),
+            project(':tuples'),
+            "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
+            "com.squareup.okhttp3:okhttp:$okhttpVersion",
+            "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
+            "io.reactivex:rxjava:$rxjavaVersion",
+            "org.java-websocket:Java-WebSocket:$javaWebSocketVersion"
+    testCompile project(path: ':crypto', configuration: 'testArtifacts'),
+            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
+            "ch.qos.logback:logback-classic:$logbackVersion"
+}
+
+task createProperties(dependsOn: processResources) doLast {
+    // if resources dir is empty we need to create this ourselves
+    new File("$buildDir/resources/main/").mkdirs()
+
+    new File("$buildDir/resources/main/web3j-version.properties").withWriter { w ->
+        Properties p = new Properties()
+        p['version'] = project.version.toString()
+        p['timestamp'] = getTimestamp()
+        p.store w, null
+    }
+}
+
+def getTimestamp() {
+    Date today = new Date()
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(today)
+}
+
+classes {
+    dependsOn createProperties
+}
+
+configurations {
+    testArtifacts.extendsFrom testRuntime
+}
+
+artifacts {
+    testArtifacts testJar
+}
