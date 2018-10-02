@@ -52,9 +52,9 @@ public class MnemonicUtilsTest {
         return parameters;
     }
 
-    private static String readAllLinesWithDeliminator(
-            String path, String delimiter) throws IOException {
-        return Strings.join(MnemonicUtils.readAllLines(path), delimiter);
+    private static String readAllLinesWithDeliminator(String path, String delimiter) throws IOException {
+        InputStream inputStream = new FileInputStream(new File(path));
+        return Strings.join(MnemonicUtils.readAllLines(inputStream), delimiter);
     }
 
     /**
