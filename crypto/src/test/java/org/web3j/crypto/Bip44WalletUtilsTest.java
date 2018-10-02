@@ -51,6 +51,27 @@ public class Bip44WalletUtilsTest {
                 Base58.encode(addChecksum(serializePublic(bip44Keypair))));
     }
 
+    @SuppressWarnings("checkstyle:LineLength")
+    @Test
+    public void generateBip44KeyPairTestNet() {
+        String mnemonic = "spider elbow fossil truck deal circle divert sleep safe report laundry above";
+        byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
+        String seedStr = bytesToHex(seed);
+        assertEquals("f0d2ab78b96acd147119abad1cd70eb4fec4f0e0a95744cf532e6a09347b08101213b4cbf50eada0eb89cba444525fe28e69707e52aa301c6b47ce1c5ef82eb5",
+                seedStr);
+
+        Bip32ECKeyPair masterKeypair = Bip32ECKeyPair.generateKeyPair(seed);
+        assertEquals("xprv9s21ZrQH143K2yA9Cdad5gjqHRC7apVUgEyYq5jXeXigDZ3PfEnps44tJprtMXr7PZivEsin6Qrbad7PuiEy4tn5jAEK6A3U46f9KvfRCmD",
+                Base58.encode(addChecksum(serializePrivate(masterKeypair))));
+
+        Bip32ECKeyPair bip44Keypair = Bip44WalletUtils.generateBip44KeyPair(masterKeypair, true);
+
+        assertEquals("xprv9zhLxq63By3SX5hAMKnxjGy7L18bnn7GzDQv53eYYqeRX9M82riC1dqovamttwFpk2ZkDQxgcikBQzs1DTu2KShJJqnqgx83EftUB3k39uc",
+                Base58.encode(addChecksum(serializePrivate(bip44Keypair))));
+        assertEquals("xpub6DghNLcw2LbjjZmdTMKy6Quqt2y6CEq8MSLWsS4A7BBQPwgGaQ2SZSAHmsrqBVxLegjW2mBfcvDBhpeEqCmucTTPJiNLHQkiDuKwHs9gEtk",
+                Base58.encode(addChecksum(serializePublic(bip44Keypair))));
+    }
+
     @Test
     public void testGenerateBip44Wallets() throws Exception {
         Bip39Wallet wallet = Bip44WalletUtils.generateBip44Wallet(PASSWORD, tempDir);
