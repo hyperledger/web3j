@@ -573,8 +573,6 @@ To run the integration tests:
    $ ./gradlew  -Pintegration-tests=true :integration-tests:test
 
 
-.. _snapshot-dependencies:
-
 Snapshot Dependencies
 ---------------------
 
