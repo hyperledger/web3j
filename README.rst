@@ -134,9 +134,6 @@ Android:
      <version>3.3.1-android</version>
    </dependency>
 
-If you would like to use snapshots instead please add a new maven repository pointing to:
-https://oss.sonatype.org/content/repositories/snapshots
-into the relevant maven settings or POM file, please see: https://maven.apache.org/guides/mini/guide-multiple-repositories.html
 
 Gradle
 ------
@@ -154,14 +151,39 @@ Android:
    compile ('org.web3j:core:3.3.1-android')
 
 
-If you would like to use snapshots instead please add the following into your gradle script.
+Snapshot dependencies
+---------------------
 
-.. code-block: groovy
+If you would like to use snapshots instead please add a new maven repository pointing to:
+
+::
+
+  https://oss.sonatype.org/content/repositories/snapshots
+
+Please refer to the `maven <https://maven.apache.org/guides/mini/guide-multiple-repositories.html>`_ or `gradle <https://maven.apache.org/guides/mini/guide-multiple-repositories.html>`_ documentation for further detail.
+
+Sample gradle configuration:
+
+.. code-block:: groovy
+
    repositories {
       maven {
          url "https://oss.sonatype.org/content/repositories/snapshots"
       }
    }
+
+Sample maven configuration:
+
+.. code-block:: xml
+
+   <repositories>
+     <repository>
+       <id>sonatype-snasphots</id>
+       <name>Sonatype rnapshots repo</name>
+       <url>https://oss.sonatype.org/content/repositories/snapshot</url>
+     </repository>
+   </repositories>
+
 
 Start a client
 --------------
