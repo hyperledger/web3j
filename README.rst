@@ -180,7 +180,7 @@ Sample maven configuration:
      <repository>
        <id>sonatype-snasphots</id>
        <name>Sonatype rnapshots repo</name>
-       <url>https://oss.sonatype.org/content/repositories/snapshot</url>
+       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
      </repository>
    </repositories>
 
