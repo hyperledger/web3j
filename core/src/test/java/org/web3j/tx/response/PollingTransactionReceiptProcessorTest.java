@@ -14,6 +14,8 @@ import org.web3j.protocol.exceptions.TransactionException;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -54,7 +56,8 @@ public class PollingTransactionReceiptProcessorTest {
             processor.waitForTransactionReceipt(TRANSACTION_HASH);
             fail("call should fail with TransactionException");
         } catch (TransactionException e) {
-            // this is expected
+            assertTrue(e.getTransactionHash().isPresent());
+            assertEquals(e.getTransactionHash().get(), TRANSACTION_HASH);
         }
     }
 
