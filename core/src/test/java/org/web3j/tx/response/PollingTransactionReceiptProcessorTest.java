@@ -23,15 +23,15 @@ public class PollingTransactionReceiptProcessorTest {
     private static final String TRANSACTION_HASH = "0x00";
     private Web3j web3j;
     private long sleepDuration;
-    private int attemps;
+    private int attempts;
     private PollingTransactionReceiptProcessor processor;
 
     @Before
     public void setUp() {
         web3j = mock(Web3j.class);
         sleepDuration = 100;
-        attemps = 3;
-        processor = new PollingTransactionReceiptProcessor(web3j, sleepDuration, attemps);
+        attempts = 3;
+        processor = new PollingTransactionReceiptProcessor(web3j, sleepDuration, attempts);
     }
 
     @Test
