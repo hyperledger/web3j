@@ -644,7 +644,7 @@ public class SolidityFunctionWrapper extends Generator {
                     CodeBlock.Builder callCode = CodeBlock.builder();
                     callCode.addStatement(
                             "$T result = "
-                            + "($T) executeCallSingleValueReturn(function, $T.class)",
+                                    + "($T) executeCallSingleValueReturn(function, $T.class)",
                             listType, listType, nativeReturnTypeName);
                     callCode.addStatement("return convertToNative(result)");
 
@@ -848,7 +848,7 @@ public class SolidityFunctionWrapper extends Generator {
         transactionMethodBuilder.addStatement("$T valueList = extractEventParametersWithLog("
                 + buildEventDefinitionName(functionName) + ", "
                 + "transactionReceipt)", ParameterizedTypeName.get(List.class,
-                        Contract.EventValuesWithLog.class))
+                Contract.EventValuesWithLog.class))
                 .addStatement("$1T responses = new $1T(valueList.size())",
                         ParameterizedTypeName.get(ClassName.get(ArrayList.class),
                                 ClassName.get("", responseClassName)))
@@ -879,10 +879,10 @@ public class SolidityFunctionWrapper extends Generator {
 
         for (AbiDefinition.NamedType namedType : inputs) {
             NamedTypeName parameter = new NamedTypeName(
-                                namedType.getName(),
-                                buildTypeName(namedType.getType()),
-                                namedType.isIndexed()
-                    );
+                    namedType.getName(),
+                    buildTypeName(namedType.getType()),
+                    namedType.isIndexed()
+            );
             if (namedType.isIndexed()) {
                 indexedParameters.add(parameter);
             } else {
@@ -1081,7 +1081,7 @@ public class SolidityFunctionWrapper extends Generator {
             }
 
             tupleConstructor
-                .add(resultString, convertTo, i);
+                    .add(resultString, convertTo, i);
             tupleConstructor.add(i < size - 1 ? ", " : ");\n");
         }
         tupleConstructor.add("$<$<");
