@@ -124,13 +124,16 @@ public class SolidityFunctionWrapper extends Generator {
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
+        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
         classBuilder.addMethod(buildConstructor(TransactionManager.class,
                 TRANSACTION_MANAGER));
         classBuilder.addFields(buildFuncNameConstants(abi));
         classBuilder.addMethods(
                 buildFunctionDefinitions(className, classBuilder, abi));
-        classBuilder.addMethod(buildLoad(className));
-        
+        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildLoad(className, TransactionManager.class,
+                TRANSACTION_MANAGER));
+
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
@@ -389,16 +392,16 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private static MethodSpec buildLoad(
-            String className) {
+            String className, Class authType, String authName) {
         return MethodSpec.methodBuilder("load")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeVariableName.get(className, Type.class))
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(TransactionManager.class, TRANSACTION_MANAGER)
+                .addParameter(authType, authName)
                 .addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
                 .addStatement("return new $L($L, $L, $L, $L)", className,
-                        CONTRACT_ADDRESS, WEB3J, TRANSACTION_MANAGER, CONTRACT_GAS_PROVIDER)
+                        CONTRACT_ADDRESS, WEB3J, authName, CONTRACT_GAS_PROVIDER)
                 .build();
     }
 

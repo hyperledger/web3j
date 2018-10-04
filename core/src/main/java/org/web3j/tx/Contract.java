@@ -70,6 +70,15 @@ public abstract class Contract extends ManagedTransaction {
         this.gasProvider = gasProvider;
     }
 
+    protected Contract(String contractBinary, String contractAddress,
+                       Web3j web3j, Credentials credentials,
+                       ContractGasProvider gasProvider) {
+
+        this(contractBinary, contractAddress, web3j,
+                new RawTransactionManager(web3j, credentials),
+                gasProvider);
+    }
+
     @Deprecated
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, TransactionManager transactionManager,
