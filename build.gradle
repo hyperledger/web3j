@@ -27,6 +27,7 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.7.3"
+    id "net.researchgate.release" version "2.7.0"
 }
 
 apply plugin: 'java'
@@ -225,6 +226,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         }
         tasks.findByName('uploadArchives').mustRunAfter 'build'
     }
+
+release {
+    tagTemplate = 'v${version}'
+    failOnCommitNeeded = true
 }
 
 
