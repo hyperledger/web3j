@@ -226,6 +226,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         }
         tasks.findByName('uploadArchives').mustRunAfter 'build'
     }
+}
 
 release {
     tagTemplate = 'v${version}'
