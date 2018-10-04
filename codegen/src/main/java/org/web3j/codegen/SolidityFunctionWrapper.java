@@ -280,26 +280,34 @@ public class SolidityFunctionWrapper extends Generator {
         // constructor will not be specified in ABI file if its empty
         if (!constructor) {
             MethodSpec.Builder credentialsMethodBuilder =
-                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS, false, true);
+                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS,
+                            false, true);
             methodSpecs.add(buildDeployNoParams(
-                    credentialsMethodBuilder, className, CREDENTIALS, false, true));
+                    credentialsMethodBuilder, className, CREDENTIALS,
+                    false, true));
 
             MethodSpec.Builder credentialsMethodBuilderNoGasProvider =
-                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS, false, false);
+                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS,
+                            false, false);
             methodSpecs.add(buildDeployNoParams(
-                    credentialsMethodBuilderNoGasProvider, className, CREDENTIALS, false, false));
+                    credentialsMethodBuilderNoGasProvider, className, CREDENTIALS,
+                    false, false));
 
             MethodSpec.Builder transactionManagerMethodBuilder =
                     getDeployMethodSpec(
-                            className, TransactionManager.class, TRANSACTION_MANAGER, false, true);
+                            className, TransactionManager.class, TRANSACTION_MANAGER,
+                            false, true);
             methodSpecs.add(buildDeployNoParams(
-                    transactionManagerMethodBuilder, className, TRANSACTION_MANAGER, false, true));
+                    transactionManagerMethodBuilder, className, TRANSACTION_MANAGER,
+                    false, true));
 
             MethodSpec.Builder transactionManagerMethodBuilderNoGasProvider =
                     getDeployMethodSpec(
-                            className, TransactionManager.class, TRANSACTION_MANAGER, false, false);
+                            className, TransactionManager.class, TRANSACTION_MANAGER,
+                            false, false);
             methodSpecs.add(buildDeployNoParams(
-                    transactionManagerMethodBuilderNoGasProvider, className, TRANSACTION_MANAGER, false, false));
+                    transactionManagerMethodBuilderNoGasProvider, className, TRANSACTION_MANAGER,
+                    false, false));
         }
 
         return methodSpecs;
@@ -328,14 +336,15 @@ public class SolidityFunctionWrapper extends Generator {
         return fields;
     }
 
-    private static MethodSpec buildConstructor(Class authType, String authName, boolean withGasProvider) {
+    private static MethodSpec buildConstructor(Class authType, String authName,
+                                               boolean withGasProvider) {
         MethodSpec.Builder toReturn = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PROTECTED)
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
                 .addParameter(authType, authName);
 
-        if(withGasProvider) {
+        if (withGasProvider) {
             toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
                     .addStatement("super($N, $N, $N, $N, $N)",
                             BINARY, CONTRACT_ADDRESS, WEB3J, authName, CONTRACT_GAS_PROVIDER);
@@ -362,9 +371,11 @@ public class SolidityFunctionWrapper extends Generator {
 
         if (!inputParams.isEmpty()) {
             return buildDeployWithParams(
-                    methodBuilder, className, inputParams, authName, isPayable, withGasProvider);
+                    methodBuilder, className, inputParams, authName,
+                    isPayable, withGasProvider);
         } else {
-            return buildDeployNoParams(methodBuilder, className, authName, isPayable, withGasProvider);
+            return buildDeployNoParams(methodBuilder, className, authName,
+                    isPayable, withGasProvider);
         }
     }
 
@@ -428,7 +439,8 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private static MethodSpec.Builder getDeployMethodSpec(
-            String className, Class authType, String authName, boolean isPayable, boolean withGasProvider) {
+            String className, Class authType, String authName,
+            boolean isPayable, boolean withGasProvider) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("deploy")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(
@@ -444,8 +456,7 @@ public class SolidityFunctionWrapper extends Generator {
                     .addParameter(BigInteger.class, INITIAL_VALUE);
         } else if (!isPayable && withGasProvider) {
             return builder.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER);
-        }
-        else {
+        } else {
             return builder.addParameter(BigInteger.class, GAS_PRICE)
                     .addParameter(BigInteger.class, GAS_LIMIT);
         }
@@ -460,7 +471,7 @@ public class SolidityFunctionWrapper extends Generator {
                 .addParameter(Web3j.class, WEB3J)
                 .addParameter(authType, authName);
 
-        if(withGasProvider) {
+        if (withGasProvider) {
             toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
                     .addStatement("return new $L($L, $L, $L, $L)", className,
                             CONTRACT_ADDRESS, WEB3J, authName, CONTRACT_GAS_PROVIDER);
