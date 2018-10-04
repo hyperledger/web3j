@@ -338,19 +338,19 @@ public abstract class Contract extends ManagedTransaction {
     protected static <T extends Contract> T deploy(
             Class<T> type,
             Web3j web3j, Credentials credentials,
-            BigInteger gasPrice, BigInteger gasLimit,
-            String binary, String encodedConstructor, BigInteger value) throws
-            IOException, TransactionException {
+            ContractGasProvider contractGasProvider,
+            String binary, String encodedConstructor, BigInteger value)
+            throws RuntimeException, TransactionException {
 
         try {
             Constructor<T> constructor = type.getDeclaredConstructor(
                     String.class,
                     Web3j.class, Credentials.class,
-                    BigInteger.class, BigInteger.class);
+                    ContractGasProvider.class);
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
-            T contract = constructor.newInstance(null, web3j, credentials, gasPrice, gasLimit);
+            T contract = constructor.newInstance(null, web3j, credentials, contractGasProvider);
 
             return create(contract, binary, encodedConstructor, value);
         } catch (TransactionException e) {
@@ -363,9 +363,9 @@ public abstract class Contract extends ManagedTransaction {
     protected static <T extends Contract> T deploy(
             Class<T> type,
             Web3j web3j, TransactionManager transactionManager,
-            BigInteger gasPrice, BigInteger gasLimit,
+            ContractGasProvider contractGasProvider,
             String binary, String encodedConstructor, BigInteger value)
-            throws IOException, TransactionException {
+            throws RuntimeException, TransactionException {
 
         try {
             Constructor<T> constructor = type.getDeclaredConstructor(
@@ -376,13 +376,26 @@ public abstract class Contract extends ManagedTransaction {
 
             // we want to use null here to ensure that "to" parameter on message is not populated
             T contract = constructor.newInstance(
-                    null, web3j, transactionManager, new StaticGasProvider(gasPrice, gasLimit));
+                    null, web3j, transactionManager, contractGasProvider);
             return create(contract, binary, encodedConstructor, value);
         } catch (TransactionException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Deprecated
+    protected static <T extends Contract> T deploy(
+            Class<T> type,
+            Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit,
+            String binary, String encodedConstructor, BigInteger value)
+            throws RuntimeException, TransactionException {
+
+        return deploy(type, web3j, credentials,
+                new StaticGasProvider(gasPrice, gasLimit),
+                binary, encodedConstructor, value);
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -404,6 +417,39 @@ public abstract class Contract extends ManagedTransaction {
                 type, web3j, credentials, gasPrice, gasLimit,
                 binary, encodedConstructor, BigInteger.ZERO);
     }
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider,
+            String binary, String encodedConstructor, BigInteger value) {
+        return new RemoteCall<>(() -> deploy(
+                type, web3j, credentials, contractGasProvider, binary,
+                encodedConstructor, value));
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider,
+            String binary, String encodedConstructor) {
+        return new RemoteCall<>(() -> deploy(
+                type, web3j, credentials, contractGasProvider, binary,
+                encodedConstructor, BigInteger.ZERO));
+    }
+
+    @Deprecated
+    protected static <T extends Contract> T deploy(
+            Class<T> type,
+            Web3j web3j, TransactionManager transactionManager,
+            BigInteger gasPrice, BigInteger gasLimit,
+            String binary, String encodedConstructor, BigInteger value)
+            throws IOException, TransactionException {
+
+        return deploy(type, web3j, transactionManager,
+                new StaticGasProvider(gasPrice, gasLimit),
+                binary, encodedConstructor, value);
+    }
+
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
@@ -423,6 +469,26 @@ public abstract class Contract extends ManagedTransaction {
         return deployRemoteCall(
                 type, web3j, transactionManager, gasPrice, gasLimit, binary,
                 encodedConstructor, BigInteger.ZERO);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider,
+            String binary, String encodedConstructor, BigInteger value) {
+        return new RemoteCall<>(() -> deploy(
+                type, web3j, transactionManager, contractGasProvider, binary,
+                encodedConstructor, value));
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider,
+            String binary, String encodedConstructor) {
+        return new RemoteCall<>(() -> deploy(
+                type, web3j, transactionManager, contractGasProvider, binary,
+                encodedConstructor, BigInteger.ZERO));
     }
 
     public static EventValues staticExtractEventParameters(
