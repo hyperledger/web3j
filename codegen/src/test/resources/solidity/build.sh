@@ -19,7 +19,7 @@ for target in ${targets}; do
     echo "Complete"
 
     echo "Generating web3j bindings"
-    /home/ivaylo/dev/playground/web3j/console/build/distributions/web3j-3.6.0-SNAPSHOT/bin/web3j solidity generate \
+    web3j solidity generate \
         build/${fileName}.bin \
         build/${fileName}.abi \
         -p org.web3j.generated \
