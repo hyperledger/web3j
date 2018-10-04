@@ -404,7 +404,7 @@ public abstract class Contract extends ManagedTransaction {
             Web3j web3j, TransactionManager transactionManager,
             BigInteger gasPrice, BigInteger gasLimit,
             String binary, String encodedConstructor, BigInteger value)
-            throws IOException, TransactionException {
+            throws RuntimeException, TransactionException {
 
         return deploy(type, web3j, transactionManager,
                 new StaticGasProvider(gasPrice, gasLimit),
