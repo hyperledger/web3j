@@ -45,8 +45,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGreeterGeneration() throws Exception {
-        testCodeGenerationJvmTypes("greeter", "greeter");
-        testCodeGenerationSolidityTypes("greeter", "greeter");
+        testCodeGenerationJvmTypes("greeter", "Greeter");
+        testCodeGenerationSolidityTypes("greeter", "Greeter");
     }
 
     @Test

@@ -61,7 +61,7 @@ public class Sign {
         }
         if (recId == -1) {
             throw new RuntimeException(
-                    "Could not construct a recoverable key. This should never happen.");
+                    "Could not construct a recoverable key. Are your credentials valid?");
         }
 
         int headerByte = recId + 27;

@@ -26,7 +26,7 @@ public class FunctionWrappersIT extends Scenario {
     public void testFibonacci() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
                 "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()),
-                ALICE, GAS_PRICE, GAS_LIMIT);
+                ALICE, STATIC_GAS_PROVIDER);
 
         BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).send();
         assertThat(result, equalTo(BigInteger.valueOf(55)));
@@ -36,7 +36,7 @@ public class FunctionWrappersIT extends Scenario {
     public void testFibonacciNotify() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
                 "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()),
-                ALICE, GAS_PRICE, GAS_LIMIT);
+                ALICE, STATIC_GAS_PROVIDER);
 
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(
                 BigInteger.valueOf(15)).send();
