@@ -14,8 +14,14 @@ cache:
   - target/
 
 stages:
-- build
-- test
+ - gitstuff
+#- build
+#- test
+
+gitstuff:
+  stage: build
+  script:
+    - git status
 
 build:
   stage: build
