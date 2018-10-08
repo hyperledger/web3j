@@ -22,6 +22,7 @@ unit tests:
   - gradle test
 
 # integration tests:
+
 #  stage: test
 #  script:
 #    - $ ./gradlew  -Pintegration-tests=true :integration-tests:test
