@@ -37,7 +37,7 @@ publish_snapshot:
     url: http://oss.sonatype.org/content/repositories/snapshots/
   when: manual
   only:
-  - release/*
+  - /release/.*$/
 
 # integration tests:
 
