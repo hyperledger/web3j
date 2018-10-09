@@ -27,6 +27,17 @@ unit tests:
   script:
   - gradle test
 
+publish_snapshot:
+  stage: deploy
+  script:
+  - echo "Publish to snapshot repository"
+  environment:
+    name: staging
+    url: http://oss.sonatype.org/content/repositories/snapshots/
+  when: manual
+  only:
+  - release/*
+
 # integration tests:
 
 #  stage: test
