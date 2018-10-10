@@ -240,9 +240,8 @@ task sam {
         if (project.hasProperty('ossrhUsername')) {
             println("USERNAME lc: " + project.property('ossrhUsername'))
         }
-        else {
-            println("UERNAME env: " +  System.getenv('OSSRH_USERNAME'))
-        }
+        println("USERNAME env1: " + System.getenv('OSSRH_USERNAME'))
+        println("USERNAME env2: ${env.OSSRH_USERNAME}")
 
         // println("The project version is: " + getBranchName())
     }
