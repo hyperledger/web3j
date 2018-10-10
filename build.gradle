@@ -147,17 +147,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     }
 
     uploadArchives {
-        println("Has property: " + project.hasProperty('ossrhUsername'))
-        if (project.hasProperty('ossrhUsername')) {
-            println("USERNAME lc: " + project.property('ossrhUsername'))
-        }
-        println("USERNAME t0: " + ossrhUsername)
-        println("USERNAME t1: " + System.getenv('OSSRH_USERNAME'))
-        println("URL t2: " + System.getenv('OSSRH_URL'))
-
-    }
-
-    uploadArchivesProper {
         repositories {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
