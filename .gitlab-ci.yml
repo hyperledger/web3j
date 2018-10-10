@@ -4,6 +4,8 @@ variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_OSSRH_PARAMS: "-PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD"
+
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -32,7 +34,7 @@ publish_snapshot:
   stage: deploy
   script:
   - echo "Publish to snapshot repository using username: $OSSRH_USERNAME"
-  - gradle uploadArchives \-PossrhUsername=$OSSRH_USERNAME \-PossrhPassword=$OSSRH_PASSWORD
+  - "gradle uploadArchives $GRADLE_OSSRH_PARAMS"
 
   environment:
     name: staging
