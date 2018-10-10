@@ -34,9 +34,9 @@ build:
 publish_snapshot:
   stage: deploy
   script:
-#  - "echo \"Publish to snapshot repository using username: $OSSRH_USERNAME\""
-   - "gradle uploadArchives $GRADLE_OSSRH_PARAMS"
-@   - echo "Username is: $OSSRH_USERNAME"
+  - echo "Publish to snapshot repository using username"
+#    - "gradle uploadArchives $GRADLE_OSSRH_PARAMS"
+#   - echo "Username is: $OSSRH_USERNAME"
 
   environment:
     name: staging
