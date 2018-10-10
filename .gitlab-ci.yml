@@ -21,7 +21,7 @@ stages:
 build:
   stage: build
   script:
-  - gradle clean build
+  - gradle clean build -x test
 
 #unit tests:
 #  stage: test
@@ -31,8 +31,8 @@ build:
 publish_snapshot:
   stage: deploy
   script:
-  - echo "Publish to snapshot repository"
-  - gradle uploadArchives
+  - echo "Publish to snapshot repository using username: $OSSRH_USERNAME"
+  - gradle uploadArchives -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=OSSRH_PASSWORD
 
   environment:
     name: staging
