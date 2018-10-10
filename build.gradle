@@ -27,7 +27,8 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.7.3"
-    id "net.researchgate.release" version "2.7.0"
+    id "org.ajoberstar.grgit" version "3.0.0-rc.2"
+//    id "net.researchgate.release" version "2.7.0"
 }
 
 apply plugin: 'java'
@@ -122,8 +123,8 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     }
 
     ext {
-        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
-        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
+        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
+        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
         bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
         bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
         isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
@@ -228,9 +229,24 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     }
 }
 
-release {
-    tagTemplate = 'v${version}'
-    failOnCommitNeeded = true
+//release {
+//    tagTemplate = 'v${version}'
+//    failOnCommitNeeded = true
+//}
+
+task sam {
+    doLast {
+        println("The project version is: " + getBranchName())
+    }
+}
+
+def getBranchName() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
 }
 
 

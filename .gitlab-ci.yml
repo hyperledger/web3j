@@ -15,7 +15,7 @@ cache:
 
 stages:
 - build
-- test
+# - test
 - deploy
 
 build:
@@ -23,15 +23,16 @@ build:
   script:
   - gradle clean build
 
-unit tests:
-  stage: test
-  script:
-  - gradle test
+#unit tests:
+#  stage: test
+#  script:
+#  - gradle test
 
 publish_snapshot:
   stage: deploy
   script:
   - echo "Publish to snapshot repository"
+
   environment:
     name: staging
     url: http://oss.sonatype.org/content/repositories/snapshots/
