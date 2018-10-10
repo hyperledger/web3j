@@ -32,6 +32,7 @@ publish_snapshot:
   stage: deploy
   script:
   - echo "Publish to snapshot repository"
+  - gradle uploadArchives
 
   environment:
     name: staging
