@@ -9,6 +9,7 @@ variables:
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
+  - export OSSRH_USERNAME=$OSSRH_USERNAME
 
 cache:
   paths:
