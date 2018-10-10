@@ -241,7 +241,6 @@ task sam {
             println("USERNAME lc: " + project.property('ossrhUsername'))
         }
         println("USERNAME env1: " + System.getenv('OSSRH_USERNAME'))
-        println("USERNAME env2: ${env.OSSRH_USERNAME}")
 
         // println("The project version is: " + getBranchName())
     }
