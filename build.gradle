@@ -236,7 +236,15 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
 task sam {
     doLast {
-        println("The project version is: " + getBranchName())
+        println("Has property: " + project.hasProperty('ossrhUsername'))
+        if (project.hasProperty('ossrhUsername')) {
+            println("USERNAME lc: " + project.property('ossrhUsername'))
+        }
+        else {
+            println("UERNAME env: " +  System.getenv('OSSRH_USERNAME'))
+        }
+
+        // println("The project version is: " + getBranchName())
     }
 }
 

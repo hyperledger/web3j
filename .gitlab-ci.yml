@@ -23,7 +23,8 @@ stages:
 build:
   stage: build
   script:
-  - gradle clean build -x test
+    - gradle sam
+#  - gradle clean build -x test
 
 #unit tests:
 #  stage: test
