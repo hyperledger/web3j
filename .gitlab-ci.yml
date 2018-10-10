@@ -32,7 +32,7 @@ publish_snapshot:
   stage: deploy
   script:
   - echo "Publish to snapshot repository using username: $OSSRH_USERNAME"
-  - gradle uploadArchives -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=OSSRH_PASSWORD
+  - "gradle uploadArchives -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD"
 
   environment:
     name: staging
