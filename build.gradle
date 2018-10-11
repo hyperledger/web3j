@@ -236,25 +236,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
 task sam {
     doLast {
-        println("Has property: " + project.hasProperty('ossrhUsername'))
-        if (project.hasProperty('ossrhUsername')) {
-            println("USERNAME lc: " + project.property('ossrhUsername'))
-        }
-        println("USERNAME env1: " + System.getenv('OSSRH_USERNAME'))
-
-        // println("The project version is: " + getBranchName())
+        String url = project.hasProperty('ossrhUrl') ? project.property('ossrhPassword') : System.getenv('OSSRH_URL')
+        println("The URL is: " + url);
     }
 }
-
-def getBranchName() {
-    def branch = ""
-    def proc = "git rev-parse --abbrev-ref HEAD".execute()
-    proc.in.eachLine { line -> branch = line }
-    proc.err.eachLine { line -> println line }
-    proc.waitFor()
-    branch
-}
-
 
 task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     dependsOn = subprojects.test
