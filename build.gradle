@@ -125,6 +125,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     ext {
         ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
         ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
+        ossrhRepoUrl = project.hasProperty('ossrhRepoUrl') ? project.property('ossrhRepoUrl') : System.getenv('OSSRH_REPO_URL')
         bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
         bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
         isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
@@ -152,11 +153,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 onlyIf {
-                    ossrhUsername != '' && ossrhPassword != ''
+                    ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
                 }
 
-                String repoUrl = isSnapshotVersion ? "http://oss.sonatype.org/content/repositories/snapshots/" : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                repository(url: repoUrl) {
+                repository(url: ossrhRepoUrl) {
                     authentication(
                             userName: ossrhUsername,
                             password: ossrhPassword
@@ -233,13 +233,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 //    tagTemplate = 'v${version}'
 //    failOnCommitNeeded = true
 //}
-
-task sam {
-    doLast {
-        String url = project.hasProperty('ossrhUrl') ? project.property('ossrhPassword') : System.getenv('OSSRH_URL')
-        println("The URL is: " + url);
-    }
-}
 
 task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     dependsOn = subprojects.test
