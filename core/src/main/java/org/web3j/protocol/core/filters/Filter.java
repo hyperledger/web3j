@@ -1,19 +1,9 @@
 package org.web3j.protocol.core.filters;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
+import java8.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.web3j.protocol.Web3j;
-
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.Response.Error;
@@ -21,6 +11,14 @@ import org.web3j.protocol.core.RpcErrors;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -48,7 +46,7 @@ public abstract class Filter<T> {
 
     public void run(ScheduledExecutorService scheduledExecutorService, long blockTime) {
         try {
-            EthFilter ethFilter = sendRequest();
+            final EthFilter ethFilter = sendRequest();
             if (ethFilter.hasError()) {
                 throwException(ethFilter.getError());
             }
@@ -78,13 +76,16 @@ public abstract class Filter<T> {
             which isn't ideal given the aforementioned issues.
             */
             schedule = scheduledExecutorService.scheduleAtFixedRate(
-                    () -> {
-                        try {
-                            this.pollFilter(ethFilter);
-                        } catch (Throwable e) {
-                            // All exceptions must be caught, otherwise our job terminates without
-                            // any notification
-                            log.error("Error sending request", e);
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Filter.this.pollFilter(ethFilter);
+                            } catch (Throwable e) {
+                                // All exceptions must be caught, otherwise our job terminates without
+                                // any notification
+                                log.error("Error sending request", e);
+                            }
                         }
                     },
                     0, blockTime, TimeUnit.MILLISECONDS);

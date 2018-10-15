@@ -1,13 +1,13 @@
 package org.web3j.protocol.core;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicLong;
-
+import org.web3j.protocol.Web3jService;
 import rx.Observable;
 
-import org.web3j.protocol.Web3jService;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
@@ -71,11 +71,16 @@ public class Request<S, T extends Response> {
         return web3jService.send(this, responseType);
     }
 
-    public CompletableFuture<T> sendAsync() {
-        return  web3jService.sendAsync(this, responseType);
+    public Future<T> sendAsync() {
+        return web3jService.sendAsync(this, responseType);
     }
 
     public Observable<T> observable() {
-        return new RemoteCall<>(this::send).observable();
+        return new RemoteCall<T>(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return Request.this.send();
+            }
+        }).observable();
     }
 }

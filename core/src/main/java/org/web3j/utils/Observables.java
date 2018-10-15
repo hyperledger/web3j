@@ -3,6 +3,7 @@ package org.web3j.utils;
 import java.math.BigInteger;
 
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Observable utility functions.
@@ -32,29 +33,35 @@ public class Observables {
         }
 
         if (ascending) {
-            return Observable.create(subscriber -> {
-                for (BigInteger i = startValue;
-                        i.compareTo(endValue) < 1
-                             && !subscriber.isUnsubscribed();
-                        i = i.add(BigInteger.ONE)) {
-                    subscriber.onNext(i);
-                }
+            return Observable.create(new Observable.OnSubscribe<BigInteger>() {
+                @Override
+                public void call(Subscriber<? super BigInteger> subscriber) {
+                    for (BigInteger i = startValue;
+                         i.compareTo(endValue) < 1
+                                 && !subscriber.isUnsubscribed();
+                         i = i.add(BigInteger.ONE)) {
+                        subscriber.onNext(i);
+                    }
 
-                if (!subscriber.isUnsubscribed()) {
-                    subscriber.onCompleted();
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onCompleted();
+                    }
                 }
             });
         } else {
-            return Observable.create(subscriber -> {
-                for (BigInteger i = endValue;
-                        i.compareTo(startValue) > -1
-                             && !subscriber.isUnsubscribed();
-                        i = i.subtract(BigInteger.ONE)) {
-                    subscriber.onNext(i);
-                }
+            return Observable.create(new Observable.OnSubscribe<BigInteger>() {
+                @Override
+                public void call(Subscriber<? super BigInteger> subscriber) {
+                    for (BigInteger i = endValue;
+                         i.compareTo(startValue) > -1
+                                 && !subscriber.isUnsubscribed();
+                         i = i.subtract(BigInteger.ONE)) {
+                        subscriber.onNext(i);
+                    }
 
-                if (!subscriber.isUnsubscribed()) {
-                    subscriber.onCompleted();
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onCompleted();
+                    }
                 }
             });
         }
