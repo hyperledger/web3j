@@ -80,8 +80,7 @@ public class JsonRpc2_0Rx {
         return Observable.create(new Observable.OnSubscribe<Log>() {
             @Override
             public void call(final Subscriber<? super Log> subscriber) {
-                LogFilter logFilter = new LogFilter(
-                        web3j, new Callback<Log>() {
+                LogFilter logFilter = new LogFilter(web3j, new Callback<Log>() {
                     @Override
                     public void onEvent(final Log t) {
                         subscriber.onNext(t);

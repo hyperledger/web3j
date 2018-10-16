@@ -17,7 +17,9 @@ public class Files {
         try {
             fileInputStream.read(bytes);
         } finally {
-            if (fileInputStream != null) fileInputStream.close();
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
         }
         return bytes;
     }

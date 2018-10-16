@@ -27,7 +27,6 @@ import rx.Observable;
 import rx.functions.Action0;
 import rx.subjects.BehaviorSubject;
 
-
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
@@ -68,7 +67,8 @@ public class WebSocketService implements Web3jService {
     private Map<Long, WebSocketSubscription<?>> subscriptionRequestForId
             = new ConcurrentHashMap<Long, WebSocketSubscription<?>>();
     // Map of a subscription id to objects necessary to process incoming events
-    private Map<String, WebSocketSubscription<?>> subscriptionForId = new ConcurrentHashMap<String, WebSocketSubscription<?>>();
+    private Map<String, WebSocketSubscription<?>> subscriptionForId =
+            new ConcurrentHashMap<String, WebSocketSubscription<?>>();
 
     public WebSocketService(String serverUrl, boolean includeRawResponses) {
         this(new WebSocketClient(parseURI(serverUrl)), includeRawResponses);

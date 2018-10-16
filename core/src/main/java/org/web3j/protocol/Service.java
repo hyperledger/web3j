@@ -8,12 +8,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java9.util.concurrent.CompletableFuture;
 
+import rx.Observable;
+
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.websocket.events.Notification;
 import org.web3j.utils.Async;
 
-import rx.Observable;
 
 /**
  * Base service implementation.

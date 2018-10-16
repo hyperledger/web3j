@@ -36,8 +36,9 @@ public class Observables {
             return Observable.create(new Observable.OnSubscribe<BigInteger>() {
                 @Override
                 public void call(Subscriber<? super BigInteger> subscriber) {
-                    for (BigInteger i = startValue; i.compareTo(endValue) < 1 && !subscriber.isUnsubscribed();
-                         i = i.add(BigInteger.ONE)) {
+                    for (BigInteger i = startValue;
+                            i.compareTo(endValue) < 1 && !subscriber.isUnsubscribed();
+                            i = i.add(BigInteger.ONE)) {
                         subscriber.onNext(i);
                     }
 
@@ -51,7 +52,7 @@ public class Observables {
                 @Override
                 public void call(Subscriber<? super BigInteger> subscriber) {
                     for (BigInteger i = endValue; i.compareTo(startValue) > -1 && !subscriber.isUnsubscribed();
-                         i = i.subtract(BigInteger.ONE)) {
+                            i = i.subtract(BigInteger.ONE)) {
                         subscriber.onNext(i);
                     }
 
