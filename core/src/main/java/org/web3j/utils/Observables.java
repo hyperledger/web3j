@@ -19,8 +19,8 @@ public class Observables {
      * Simple Observable implementation to emit a range of BigInteger values.
      *
      * @param startValue first value to emit in range
-     * @param endValue final value to emit in range
-     * @param ascending direction to iterate through range
+     * @param endValue   final value to emit in range
+     * @param ascending  direction to iterate through range
      * @return Observable to emit this range of values
      */
     public static Observable<BigInteger> range(
@@ -36,9 +36,7 @@ public class Observables {
             return Observable.create(new Observable.OnSubscribe<BigInteger>() {
                 @Override
                 public void call(Subscriber<? super BigInteger> subscriber) {
-                    for (BigInteger i = startValue;
-                         i.compareTo(endValue) < 1
-                                 && !subscriber.isUnsubscribed();
+                    for (BigInteger i = startValue; i.compareTo(endValue) < 1 && !subscriber.isUnsubscribed();
                          i = i.add(BigInteger.ONE)) {
                         subscriber.onNext(i);
                     }
@@ -52,9 +50,7 @@ public class Observables {
             return Observable.create(new Observable.OnSubscribe<BigInteger>() {
                 @Override
                 public void call(Subscriber<? super BigInteger> subscriber) {
-                    for (BigInteger i = endValue;
-                         i.compareTo(startValue) > -1
-                                 && !subscriber.isUnsubscribed();
+                    for (BigInteger i = endValue; i.compareTo(startValue) > -1 && !subscriber.isUnsubscribed();
                          i = i.subtract(BigInteger.ONE)) {
                         subscriber.onNext(i);
                     }

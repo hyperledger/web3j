@@ -48,8 +48,7 @@ public class JsonRpc2_0Rx {
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
-                BlockFilter blockFilter = new BlockFilter(
-                        web3j, new Callback<String>() {
+                BlockFilter blockFilter = new BlockFilter(web3j, new Callback<String>() {
                     @Override
                     public void onEvent(final String value) {
                         subscriber.onNext(value);
@@ -66,11 +65,11 @@ public class JsonRpc2_0Rx {
             public void call(final Subscriber<? super String> subscriber) {
                 PendingTransactionFilter pendingTransactionFilter = new PendingTransactionFilter(
                         web3j, new Callback<String>() {
-                    @Override
-                    public void onEvent(final String value) {
-                        subscriber.onNext(value);
-                    }
-                });
+                            @Override
+                            public void onEvent(final String value) {
+                                subscriber.onNext(value);
+                            }
+                        });
                 JsonRpc2_0Rx.this.run(pendingTransactionFilter, subscriber, pollingInterval);
             }
         });
@@ -238,6 +237,7 @@ public class JsonRpc2_0Rx {
         return catchUpToLatestBlockObservable(
                 startBlock, fullTransactionObjects, Observable.<EthBlock>empty());
     }
+
     private Observable<EthBlock> catchUpToLatestBlockObservableSync(
             DefaultBlockParameter startBlock, final boolean fullTransactionObjects,
             final Observable<EthBlock> onCompleteObservable) {
@@ -324,7 +324,7 @@ public class JsonRpc2_0Rx {
         // If you ever see an exception thrown here, it's probably due to an incomplete chain in
         // Geth/Parity. You should resync to solve.
         final List<EthBlock.TransactionResult> transactionResults = ethBlock.getBlock().getTransactions();
-        final List<Transaction> transactions = new ArrayList<Transaction>(transactionResults.size()) ;
+        final List<Transaction> transactions = new ArrayList<Transaction>(transactionResults.size());
 
         for (EthBlock.TransactionResult transactionResult : ethBlock.getBlock().getTransactions()) {
             transactions.add((Transaction) transactionResult.get());

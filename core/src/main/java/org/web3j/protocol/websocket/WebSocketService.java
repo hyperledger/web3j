@@ -1,13 +1,33 @@
 package org.web3j.protocol.websocket;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java9.util.concurrent.CompletableFuture;
 import java9.util.function.Consumer;
 import java9.util.function.Function;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import rx.Observable;
+import rx.functions.Action0;
+import rx.subjects.BehaviorSubject;
+
+
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
@@ -15,17 +35,6 @@ import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.core.methods.response.EthUnsubscribe;
 import org.web3j.protocol.websocket.events.Notification;
-import rx.Observable;
-import rx.functions.Action0;
-import rx.subjects.BehaviorSubject;
-
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.*;
 
 /**
  * Web socket service that allows to interact with JSON-RPC via WebSocket protocol.

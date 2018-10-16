@@ -1,6 +1,12 @@
 package org.web3j.protocol;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.Callable;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java9.util.concurrent.CompletableFuture;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
@@ -8,12 +14,6 @@ import org.web3j.protocol.websocket.events.Notification;
 import org.web3j.utils.Async;
 
 import rx.Observable;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.Callable;
-
-import java9.util.concurrent.CompletableFuture;
 
 /**
  * Base service implementation.

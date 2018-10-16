@@ -1,13 +1,14 @@
 package org.web3j.protocol.core;
 
-import org.web3j.protocol.Web3jService;
-import rx.Observable;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
+
+import rx.Observable;
+
+import org.web3j.protocol.Web3jService;
 
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
