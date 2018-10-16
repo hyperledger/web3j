@@ -1,7 +1,8 @@
 package org.web3j.protocol;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
+
+import java9.util.concurrent.CompletableFuture;
 
 import rx.Observable;
 

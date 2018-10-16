@@ -24,9 +24,9 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
     public JsonRpc2_0Admin(Web3jService web3jService) {
         super(web3jService);
     }
-    
+
     public JsonRpc2_0Admin(Web3jService web3jService, long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService) {
+                           ScheduledExecutorService scheduledExecutorService) {
         super(web3jService, pollingInterval, scheduledExecutorService);
     }
 
@@ -46,7 +46,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
                 Arrays.asList(password),
                 web3jService,
                 NewAccountIdentifier.class);
-    }   
+    }
 
     @Override
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(
@@ -55,7 +55,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
         List<Object> attributes = new ArrayList<>(3);
         attributes.add(accountId);
         attributes.add(password);
-        
+
         if (duration != null) {
             // Parity has a bug where it won't support a duration
             // See https://github.com/ethcore/parity/issues/1215
@@ -64,21 +64,21 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
             // we still need to include the null value, otherwise Parity rejects request
             attributes.add(null);
         }
-        
+
         return new Request<>(
                 "personal_unlockAccount",
                 attributes,
                 web3jService,
                 PersonalUnlockAccount.class);
     }
-    
+
     @Override
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(
             String accountId, String password) {
-        
+
         return personalUnlockAccount(accountId, password, null);
     }
-    
+
     @Override
     public Request<?, EthSendTransaction> personalSendTransaction(
             Transaction transaction, String passphrase) {
@@ -88,5 +88,5 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
                 web3jService,
                 EthSendTransaction.class);
     }
-    
+
 }

@@ -2,9 +2,11 @@ package org.web3j.protocol;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Callable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java9.util.concurrent.CompletableFuture;
 
 import rx.Observable;
 
@@ -12,6 +14,7 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.websocket.events.Notification;
 import org.web3j.utils.Async;
+
 
 /**
  * Base service implementation.
@@ -42,8 +45,13 @@ public abstract class Service implements Web3jService {
 
     @Override
     public <T extends Response> CompletableFuture<T> sendAsync(
-            Request jsonRpc20Request, Class<T> responseType) {
-        return Async.run(() -> send(jsonRpc20Request, responseType));
+            final Request jsonRpc20Request, final Class<T> responseType) {
+        return Async.run(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return send(jsonRpc20Request, responseType);
+            }
+        });
     }
 
     @Override

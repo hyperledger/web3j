@@ -2,13 +2,16 @@ package org.web3j.protocol.rx;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.stream.Collectors;
 
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
+import rx.functions.Action0;
+import rx.functions.Func0;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
@@ -17,9 +20,11 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.filters.BlockFilter;
+import org.web3j.protocol.core.filters.Callback;
 import org.web3j.protocol.core.filters.LogFilter;
 import org.web3j.protocol.core.filters.PendingTransactionFilter;
 import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.utils.Observables;
@@ -39,59 +44,111 @@ public class JsonRpc2_0Rx {
         this.scheduler = Schedulers.from(scheduledExecutorService);
     }
 
-    public Observable<String> ethBlockHashObservable(long pollingInterval) {
-        return Observable.create(subscriber -> {
-            BlockFilter blockFilter = new BlockFilter(
-                    web3j, subscriber::onNext);
-            run(blockFilter, subscriber, pollingInterval);
+    public Observable<String> ethBlockHashObservable(final long pollingInterval) {
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(final Subscriber<? super String> subscriber) {
+                BlockFilter blockFilter = new BlockFilter(web3j, new Callback<String>() {
+                    @Override
+                    public void onEvent(final String value) {
+                        subscriber.onNext(value);
+                    }
+                });
+                JsonRpc2_0Rx.this.run(blockFilter, subscriber, pollingInterval);
+            }
         });
     }
 
-    public Observable<String> ethPendingTransactionHashObservable(long pollingInterval) {
-        return Observable.create(subscriber -> {
-            PendingTransactionFilter pendingTransactionFilter = new PendingTransactionFilter(
-                    web3j, subscriber::onNext);
-
-            run(pendingTransactionFilter, subscriber, pollingInterval);
+    public Observable<String> ethPendingTransactionHashObservable(final long pollingInterval) {
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(final Subscriber<? super String> subscriber) {
+                PendingTransactionFilter pendingTransactionFilter = new PendingTransactionFilter(
+                        web3j, new Callback<String>() {
+                            @Override
+                            public void onEvent(final String value) {
+                                subscriber.onNext(value);
+                            }
+                        });
+                JsonRpc2_0Rx.this.run(pendingTransactionFilter, subscriber, pollingInterval);
+            }
         });
     }
 
     public Observable<Log> ethLogObservable(
-            org.web3j.protocol.core.methods.request.EthFilter ethFilter, long pollingInterval) {
-        return Observable.create((Subscriber<? super Log> subscriber) -> {
-            LogFilter logFilter = new LogFilter(
-                    web3j, subscriber::onNext, ethFilter);
+            final org.web3j.protocol.core.methods.request.EthFilter ethFilter, final long pollingInterval) {
+        return Observable.create(new Observable.OnSubscribe<Log>() {
+            @Override
+            public void call(final Subscriber<? super Log> subscriber) {
+                LogFilter logFilter = new LogFilter(web3j, new Callback<Log>() {
+                    @Override
+                    public void onEvent(final Log t) {
+                        subscriber.onNext(t);
+                    }
+                }, ethFilter);
 
-            run(logFilter, subscriber, pollingInterval);
+                JsonRpc2_0Rx.this.run(logFilter, subscriber, pollingInterval);
+            }
         });
     }
 
     private <T> void run(
-            org.web3j.protocol.core.filters.Filter<T> filter, Subscriber<? super T> subscriber,
-            long pollingInterval) {
+            final org.web3j.protocol.core.filters.Filter<T> filter,
+            Subscriber<? super T> subscriber,
+            final long pollingInterval) {
 
         filter.run(scheduledExecutorService, pollingInterval);
-        subscriber.add(Subscriptions.create(filter::cancel));
+        subscriber.add(Subscriptions.create(new Action0() {
+            @Override
+            public void call() {
+                filter.cancel();
+            }
+        }));
     }
 
-    public Observable<Transaction> transactionObservable(long pollingInterval) {
+
+    public Observable<Transaction> transactionObservable(final long pollingInterval) {
         return blockObservable(true, pollingInterval)
-                .flatMapIterable(JsonRpc2_0Rx::toTransactions);
+                .flatMapIterable(new Func1<EthBlock, Iterable<? extends Transaction>>() {
+                    @Override
+                    public Iterable<? extends Transaction> call(final EthBlock ethBlock) {
+                        return JsonRpc2_0Rx.this.toTransactions(ethBlock);
+                    }
+                });
     }
 
-    public Observable<Transaction> pendingTransactionObservable(long pollingInterval) {
+    public Observable<Transaction> pendingTransactionObservable(final long pollingInterval) {
         return ethPendingTransactionHashObservable(pollingInterval)
-                .flatMap(transactionHash ->
-                        web3j.ethGetTransactionByHash(transactionHash).observable())
-                .filter(ethTransaction -> ethTransaction.getTransaction().isPresent())
-                .map(ethTransaction -> ethTransaction.getTransaction().get());
+                .flatMap(new Func1<String, Observable<EthTransaction>>() {
+                    @Override
+                    public Observable<EthTransaction> call(final String transactionHash) {
+                        return web3j.ethGetTransactionByHash(transactionHash).observable();
+                    }
+                })
+                .filter(new Func1<EthTransaction, Boolean>() {
+                    @Override
+                    public Boolean call(EthTransaction ethTransaction) {
+                        return ethTransaction.getTransaction().isPresent();
+                    }
+                })
+                .map(new Func1<EthTransaction, Transaction>() {
+                    @Override
+                    public Transaction call(final EthTransaction ethTransaction) {
+                        return ethTransaction.getTransaction().get();
+                    }
+                });
     }
 
     public Observable<EthBlock> blockObservable(
-            boolean fullTransactionObjects, long pollingInterval) {
-        return ethBlockHashObservable(pollingInterval)
-                .flatMap(blockHash ->
-                        web3j.ethGetBlockByHash(blockHash, fullTransactionObjects).observable());
+            final boolean fullTransactionObjects, final long pollingInterval) {
+        return this.ethBlockHashObservable(pollingInterval)
+                .flatMap(new Func1<String, Observable<? extends EthBlock>>() {
+                    @Override
+                    public Observable<? extends EthBlock> call(final String blockHash) {
+                        return web3j.ethGetBlockByHash(blockHash,
+                                fullTransactionObjects).observable();
+                    }
+                });
     }
 
     public Observable<EthBlock> replayBlocksObservable(
@@ -117,7 +174,7 @@ public class JsonRpc2_0Rx {
 
     private Observable<EthBlock> replayBlocksObservableSync(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
-            boolean fullTransactionObjects, boolean ascending) {
+            final boolean fullTransactionObjects, boolean ascending) {
 
         BigInteger startBlockNumber = null;
         BigInteger endBlockNumber = null;
@@ -130,21 +187,38 @@ public class JsonRpc2_0Rx {
 
         if (ascending) {
             return Observables.range(startBlockNumber, endBlockNumber)
-                    .flatMap(i -> web3j.ethGetBlockByNumber(
-                            new DefaultBlockParameterNumber(i),
-                            fullTransactionObjects).observable());
+                    .flatMap(new Func1<BigInteger, Observable<? extends EthBlock>>() {
+                        @Override
+                        public Observable<? extends EthBlock> call(BigInteger i) {
+                            return web3j.ethGetBlockByNumber(
+                                    new DefaultBlockParameterNumber(i),
+                                    fullTransactionObjects).observable();
+                        }
+                    });
         } else {
             return Observables.range(startBlockNumber, endBlockNumber, false)
-                    .flatMap(i -> web3j.ethGetBlockByNumber(
-                            new DefaultBlockParameterNumber(i),
-                            fullTransactionObjects).observable());
+                    .flatMap(new Func1<BigInteger, Observable<? extends EthBlock>>() {
+                        @Override
+                        public Observable<? extends EthBlock> call(BigInteger i) {
+                            return web3j.ethGetBlockByNumber(
+                                    new DefaultBlockParameterNumber(i),
+                                    fullTransactionObjects).observable();
+                        }
+                    });
         }
+
+
     }
 
     public Observable<Transaction> replayTransactionsObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return replayBlocksObservable(startBlock, endBlock, true)
-                .flatMapIterable(JsonRpc2_0Rx::toTransactions);
+                .flatMapIterable(new Func1<EthBlock, Iterable<? extends Transaction>>() {
+                    @Override
+                    public Iterable<? extends Transaction> call(EthBlock ethBlock) {
+                        return toTransactions(ethBlock);
+                    }
+                });
     }
 
     public Observable<EthBlock> catchUpToLatestBlockObservable(
@@ -160,15 +234,15 @@ public class JsonRpc2_0Rx {
     public Observable<EthBlock> catchUpToLatestBlockObservable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
         return catchUpToLatestBlockObservable(
-                startBlock, fullTransactionObjects, Observable.empty());
+                startBlock, fullTransactionObjects, Observable.<EthBlock>empty());
     }
 
     private Observable<EthBlock> catchUpToLatestBlockObservableSync(
-            DefaultBlockParameter startBlock, boolean fullTransactionObjects,
-            Observable<EthBlock> onCompleteObservable) {
+            DefaultBlockParameter startBlock, final boolean fullTransactionObjects,
+            final Observable<EthBlock> onCompleteObservable) {
 
         BigInteger startBlockNumber;
-        BigInteger latestBlockNumber;
+        final BigInteger latestBlockNumber;
         try {
             startBlockNumber = getBlockNumber(startBlock);
             latestBlockNumber = getLatestBlockNumber();
@@ -184,18 +258,29 @@ public class JsonRpc2_0Rx {
                             new DefaultBlockParameterNumber(startBlockNumber),
                             new DefaultBlockParameterNumber(latestBlockNumber),
                             fullTransactionObjects),
-                    Observable.defer(() -> catchUpToLatestBlockObservableSync(
-                            new DefaultBlockParameterNumber(latestBlockNumber.add(BigInteger.ONE)),
-                            fullTransactionObjects,
-                            onCompleteObservable)));
+                    Observable.defer(new Func0<Observable<EthBlock>>() {
+                        @Override
+                        public Observable<EthBlock> call() {
+                            return JsonRpc2_0Rx.this.catchUpToLatestBlockObservableSync(
+                                    new DefaultBlockParameterNumber(
+                                            latestBlockNumber.add(BigInteger.ONE)),
+                                    fullTransactionObjects,
+                                    onCompleteObservable);
+                        }
+                    }));
         }
     }
 
     public Observable<Transaction> catchUpToLatestTransactionObservable(
             DefaultBlockParameter startBlock) {
         return catchUpToLatestBlockObservable(
-                startBlock, true, Observable.empty())
-                .flatMapIterable(JsonRpc2_0Rx::toTransactions);
+                startBlock, true, Observable.<EthBlock>empty())
+                .flatMapIterable(new Func1<EthBlock, Iterable<? extends Transaction>>() {
+                    @Override
+                    public Iterable<? extends Transaction> call(EthBlock ethBlock) {
+                        return toTransactions(ethBlock);
+                    }
+                });
     }
 
     public Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
@@ -211,7 +296,12 @@ public class JsonRpc2_0Rx {
             DefaultBlockParameter startBlock, long pollingInterval) {
         return catchUpToLatestAndSubscribeToNewBlocksObservable(
                 startBlock, true, pollingInterval)
-                .flatMapIterable(JsonRpc2_0Rx::toTransactions);
+                .flatMapIterable(new Func1<EthBlock, Iterable<? extends Transaction>>() {
+                    @Override
+                    public Iterable<? extends Transaction> call(EthBlock ethBlock) {
+                        return toTransactions(ethBlock);
+                    }
+                });
     }
 
     private BigInteger getLatestBlockNumber() throws IOException {
@@ -232,8 +322,13 @@ public class JsonRpc2_0Rx {
     private static List<Transaction> toTransactions(EthBlock ethBlock) {
         // If you ever see an exception thrown here, it's probably due to an incomplete chain in
         // Geth/Parity. You should resync to solve.
-        return ethBlock.getBlock().getTransactions().stream()
-                .map(transactionResult -> (Transaction) transactionResult.get())
-                .collect(Collectors.toList());
+        final List<EthBlock.TransactionResult> transactionResults = ethBlock.getBlock().getTransactions();
+        final List<Transaction> transactions = new ArrayList<Transaction>(transactionResults.size());
+
+        for (EthBlock.TransactionResult transactionResult : ethBlock.getBlock().getTransactions()) {
+            transactions.add((Transaction) transactionResult.get());
+        }
+
+        return transactions;
     }
 }

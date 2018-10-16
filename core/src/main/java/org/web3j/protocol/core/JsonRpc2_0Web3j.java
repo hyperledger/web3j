@@ -45,6 +45,7 @@ import org.web3j.protocol.core.methods.response.EthHashrate;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthMining;
 import org.web3j.protocol.core.methods.response.EthProtocolVersion;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
 import org.web3j.protocol.core.methods.response.EthSubmitWork;
@@ -306,25 +307,19 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
-            ethSendTransaction(
-            Transaction transaction) {
+    public Request<?, EthSendTransaction> ethSendTransaction(Transaction transaction) {
         return new Request<>(
                 "eth_sendTransaction",
                 Arrays.asList(transaction),
-                web3jService,
-                org.web3j.protocol.core.methods.response.EthSendTransaction.class);
+                web3jService, EthSendTransaction.class);
     }
 
     @Override
-    public Request<?, org.web3j.protocol.core.methods.response.EthSendTransaction>
-            ethSendRawTransaction(
-            String signedTransactionData) {
+    public Request<?, EthSendTransaction> ethSendRawTransaction(String signedTransactionData) {
         return new Request<>(
                 "eth_sendRawTransaction",
                 Arrays.asList(signedTransactionData),
-                web3jService,
-                org.web3j.protocol.core.methods.response.EthSendTransaction.class);
+                web3jService, EthSendTransaction.class);
     }
 
     @Override
@@ -751,14 +746,12 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            transactionObservable() {
+    public Observable<org.web3j.protocol.core.methods.response.Transaction> transactionObservable() {
         return web3jRx.transactionObservable(blockTime);
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            pendingTransactionObservable() {
+    public Observable<org.web3j.protocol.core.methods.response.Transaction> pendingTransactionObservable() {
         return web3jRx.pendingTransactionObservable(blockTime);
     }
 
@@ -783,8 +776,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
-            replayTransactionsObservable(
+    public Observable<org.web3j.protocol.core.methods.response.Transaction> replayTransactionsObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return web3jRx.replayTransactionsObservable(startBlock, endBlock);
     }
