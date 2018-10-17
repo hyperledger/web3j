@@ -38,7 +38,7 @@ public class HttpService extends Service {
 
     private final boolean includeRawResponse;
 
-    private HashMap<String, String> headers = new HashMap<>();
+    private HashMap<String, String> headers = new HashMap<String, String>();
 
     public HttpService(String url, OkHttpClient httpClient, boolean includeRawResponses) {
         super(includeRawResponses);
@@ -83,7 +83,13 @@ public class HttpService extends Service {
 
     private static void configureLogging(OkHttpClient.Builder builder) {
         if (log.isDebugEnabled()) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(log::debug);
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
+                    new HttpLoggingInterceptor.Logger() {
+                        @Override
+                        public void log(String msg) {
+                            log.debug(msg);
+                        }
+                    });
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(logging);
         }

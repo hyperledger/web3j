@@ -354,7 +354,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
             encodedIndices.add(Numeric.encodeQuantity(index));
         }
 
-        return new Request(
+        return new Request<Object, ParityTraceGet>(
             "trace_get",
             Arrays.asList(hash, encodedIndices),
             web3jService,
@@ -363,7 +363,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityTracesResponse> traceTransaction(String hash) {
-        return new Request(
+        return new Request<String, ParityTracesResponse>(
             "trace_transaction",
             Arrays.asList(hash),
             web3jService,

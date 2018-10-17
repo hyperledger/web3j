@@ -16,20 +16,29 @@ public class Async {
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
     static {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(executor)));
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                shutdown(executor);
+            }
+        }));
     }
 
-    public static <T> CompletableFuture<T> run(Callable<T> callable) {
-        CompletableFuture<T> result = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> {
-            // we need to explicitly catch any exceptions,
-            // otherwise they will be silently discarded
-            try {
-                result.complete(callable.call());
-            } catch (Throwable e) {
-                result.completeExceptionally(e);
+    public static <T> CompletableFuture<T> run(final Callable<T> callable) {
+        final CompletableFuture<T> result = new CompletableFuture<T>();
+        CompletableFuture.runAsync(new Runnable() {
+            @Override
+            public void run() {
+                // we need to explicitly catch any exceptions,
+                // otherwise they will be silently discarded
+                try {
+                    result.complete(callable.call());
+                } catch (Throwable e) {
+                    result.completeExceptionally(e);
+                }
             }
         }, executor);
+
         return result;
     }
 
@@ -45,10 +54,15 @@ public class Async {
      * @return new ScheduledExecutorService
      */
     public static ScheduledExecutorService defaultExecutorService() {
-        ScheduledExecutorService scheduledExecutorService =
+        final ScheduledExecutorService scheduledExecutorService =
                 Executors.newScheduledThreadPool(getCpuCount());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(scheduledExecutorService)));
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                shutdown(scheduledExecutorService);
+            }
+        }));
 
         return scheduledExecutorService;
     }

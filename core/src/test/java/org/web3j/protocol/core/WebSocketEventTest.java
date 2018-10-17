@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.websocket.WebSocketClient;
 import org.web3j.protocol.websocket.WebSocketListener;
 import org.web3j.protocol.websocket.WebSocketService;
@@ -32,7 +33,7 @@ public class WebSocketEventTest {
             webSocketClient, true
     );
 
-    private Web3j web3j = Web3j.build(webSocketService);
+    private Web3j web3j = Web3jFactory.build(webSocketService);
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 

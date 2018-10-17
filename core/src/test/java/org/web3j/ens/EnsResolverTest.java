@@ -10,6 +10,7 @@ import org.web3j.abi.TypeDecoder;
 import org.web3j.abi.TypeEncoder;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
@@ -41,7 +42,7 @@ public class EnsResolverTest {
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService);
+        web3j = Web3jFactory.build(web3jService);
         ensResolver = new EnsResolver(web3j);
     }
 

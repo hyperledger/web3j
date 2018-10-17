@@ -30,22 +30,18 @@ public class Runner {
         if (args.length < 1) {
             Console.exitError(USAGE);
         } else {
-            switch (args[0]) {
-                case "wallet":
-                    WalletRunner.run(tail(args));
-                    break;
-                case "solidity":
-                    SolidityFunctionWrapperGenerator.run(tail(args));
-                    break;
-                case "truffle":
-                    TruffleJsonFunctionWrapperGenerator.run(tail(args));
-                    break;
-                case "version":
-                    Console.exitSuccess("Version: " + Version.getVersion() + "\n"
-                            + "Build timestamp: " + Version.getTimestamp());
-                    break;
-                default:
-                    Console.exitError(USAGE);
+            String arg = args[0];
+            if (arg.equals("wallet")) {
+                WalletRunner.run(tail(args));
+            } else if (arg.equals("solidity")) {
+                SolidityFunctionWrapperGenerator.run(tail(args));
+            } else if (arg.equals("truffle")) {
+                TruffleJsonFunctionWrapperGenerator.run(tail(args));
+            } else if (arg.equals("version")) {
+                Console.exitSuccess("Version: " + Version.getVersion() + "\n"
+                        + "Build timestamp: " + Version.getTimestamp());
+            } else {
+                Console.exitError(USAGE);
             }
         }
     }

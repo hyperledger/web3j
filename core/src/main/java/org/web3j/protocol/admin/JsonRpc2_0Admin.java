@@ -32,7 +32,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
 
     @Override
     public Request<?, PersonalListAccounts> personalListAccounts() {
-        return new Request<>(
+        return new Request<String, PersonalListAccounts>(
                 "personal_listAccounts",
                 Collections.<String>emptyList(),
                 web3jService,
@@ -41,7 +41,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
 
     @Override
     public Request<?, NewAccountIdentifier> personalNewAccount(String password) {
-        return new Request<>(
+        return new Request<String, NewAccountIdentifier>(
                 "personal_newAccount",
                 Arrays.asList(password),
                 web3jService,
@@ -52,7 +52,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(
             String accountId, String password,
             BigInteger duration) {
-        List<Object> attributes = new ArrayList<>(3);
+        List<Object> attributes = new ArrayList<Object>(3);
         attributes.add(accountId);
         attributes.add(password);
 
@@ -65,7 +65,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
             attributes.add(null);
         }
 
-        return new Request<>(
+        return new Request<Object, PersonalUnlockAccount>(
                 "personal_unlockAccount",
                 attributes,
                 web3jService,
@@ -82,7 +82,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
     @Override
     public Request<?, EthSendTransaction> personalSendTransaction(
             Transaction transaction, String passphrase) {
-        return new Request<>(
+        return new Request<Object, EthSendTransaction>(
                 "personal_sendTransaction",
                 Arrays.asList(transaction, passphrase),
                 web3jService,

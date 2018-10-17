@@ -61,11 +61,11 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         if (getType() instanceof ParameterizedType) {
             return (Class<T>) ((ParameterizedType) clsType).getRawType();
         } else {
-            return (Class<T>) Class.forName(clsType.getTypeName());
+            return (Class<T>) Class.forName(((Class) clsType).getName());
         }
     }
 
-    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls) {
+    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(final Class<T> cls) {
         return new TypeReference<T>() {
             @Override
             public Type getType() {

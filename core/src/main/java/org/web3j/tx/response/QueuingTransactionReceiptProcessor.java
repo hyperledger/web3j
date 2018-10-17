@@ -1,11 +1,12 @@
 package org.web3j.tx.response;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import java8.util.Optional;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -33,11 +34,16 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
         super(web3j);
         this.scheduledExecutorService = Async.defaultExecutorService();
         this.callback = callback;
-        this.pendingTransactions = new LinkedBlockingQueue<>();
+        this.pendingTransactions = new LinkedBlockingQueue();
         this.pollingAttemptsPerTxHash = pollingAttemptsPerTxHash;
 
         scheduledExecutorService.scheduleAtFixedRate(
-                this::sendTransactionReceiptRequests,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        QueuingTransactionReceiptProcessor.this.sendTransactionReceiptRequests();
+                    }
+                },
                 pollingFrequency, pollingFrequency, TimeUnit.MILLISECONDS);
     }
 
@@ -68,7 +74,10 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
                         requestWrapper.incrementCount();
                     }
                 }
-            } catch (IOException | TransactionException e) {
+            } catch (IOException e) {
+                pendingTransactions.remove(requestWrapper);
+                callback.exception(e);
+            } catch (TransactionException e) {
                 pendingTransactions.remove(requestWrapper);
                 callback.exception(e);
             }

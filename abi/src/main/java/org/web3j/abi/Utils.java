@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -32,7 +31,7 @@ public class Utils {
                 type = (Class<?>) ((ParameterizedType) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
             } else {
-                type = Class.forName(reflectedType.getTypeName());
+                type = Class.forName(((Class) reflectedType).getName());
                 return getSimpleTypeName(type);
             }
         } catch (ClassNotFoundException e) {
@@ -86,16 +85,18 @@ public class Utils {
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();
 
-        String parameterizedTypeName = typeArguments[0].getTypeName();
+        String parameterizedTypeName = ((Class) typeArguments[0]).getName();
         return (Class<T>) Class.forName(parameterizedTypeName);
     }
 
     @SuppressWarnings("unchecked")
     public static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
-        List<TypeReference<Type>> result = new ArrayList<>(input.size());
-        result.addAll(input.stream()
-                .map(typeReference -> (TypeReference<Type>) typeReference)
-                .collect(Collectors.toList()));
+        List<TypeReference<Type>> result = new ArrayList<TypeReference<Type>>(input.size());
+
+        for (TypeReference<?> typeReference:input) {
+            result.add((TypeReference<Type>) typeReference);
+        }
+
         return result;
     }
 
@@ -103,17 +104,20 @@ public class Utils {
             List<List<T>> input,
             Class<E> outerDestType,
             Class<R> innerType) {
-        List<E> result = new ArrayList<>();
+        List<E> result = new ArrayList<E>();
         try {
             Constructor<E> constructor = outerDestType.getDeclaredConstructor(List.class);
             for (List<T> ts : input) {
                 E e = constructor.newInstance(typeMap(ts, innerType));
                 result.add(e);
             }
-        } catch (NoSuchMethodException
-                | IllegalAccessException
-                | InstantiationException
-                | InvocationTargetException e) {
+        } catch (NoSuchMethodException e) {
+            throw new TypeMappingException(e);
+        } catch (IllegalAccessException e) {
+            throw new TypeMappingException(e);
+        } catch (InvocationTargetException e) {
+            throw new TypeMappingException(e);
+        } catch (InstantiationException e) {
             throw new TypeMappingException(e);
         }
         return result;
@@ -131,10 +135,13 @@ public class Utils {
                 for (T value : input) {
                     result.add(constructor.newInstance(value));
                 }
-            } catch (NoSuchMethodException
-                    | IllegalAccessException
-                    | InvocationTargetException
-                    | InstantiationException e) {
+            } catch (NoSuchMethodException e) {
+                throw new TypeMappingException(e);
+            } catch (IllegalAccessException e) {
+                throw new TypeMappingException(e);
+            } catch (InvocationTargetException e) {
+                throw new TypeMappingException(e);
+            } catch (InstantiationException e) {
                 throw new TypeMappingException(e);
             }
         }

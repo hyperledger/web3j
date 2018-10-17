@@ -17,7 +17,7 @@ public abstract class Filter<T extends Filter> {
 
     Filter() {
         thisObj = getThis();
-        topics = new ArrayList<>();
+        topics = new ArrayList<FilterTopic>();
     }
 
     public T addSingleTopic(String topic) {
@@ -69,7 +69,7 @@ public abstract class Filter<T extends Filter> {
         private List<SingleTopic> topics;
 
         public ListTopic(String... optionalTopics) {
-            topics = new ArrayList<>();
+            topics = new ArrayList<SingleTopic>();
             for (String topic : optionalTopics) {
                 if (topic != null) {
                     topics.add(new SingleTopic(topic));

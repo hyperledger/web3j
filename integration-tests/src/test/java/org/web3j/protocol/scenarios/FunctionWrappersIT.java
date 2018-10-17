@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.generated.Fibonacci;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 
@@ -25,7 +26,7 @@ public class FunctionWrappersIT extends Scenario {
     @Test
     public void testFibonacci() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
-                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()),
+                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3jFactory.build(new HttpService()),
                 ALICE, STATIC_GAS_PROVIDER);
 
         BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).send();
@@ -35,7 +36,7 @@ public class FunctionWrappersIT extends Scenario {
     @Test
     public void testFibonacciNotify() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
-                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()),
+                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3jFactory.build(new HttpService()),
                 ALICE, STATIC_GAS_PROVIDER);
 
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(

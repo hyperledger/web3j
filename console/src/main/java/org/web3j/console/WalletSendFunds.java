@@ -10,6 +10,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.EnsResolver;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.exceptions.TransactionException;
@@ -120,7 +121,13 @@ public class WalletSendFunds extends WalletManager {
             }
             console.printf("$%n%n");
             return future.get();
-        } catch (InterruptedException | ExecutionException | TransactionException | IOException e) {
+        } catch (ExecutionException e) {
+            exitError("Problem encountered transferring funds: \n" + e.getMessage());
+        } catch (InterruptedException e) {
+            exitError("Problem encountered transferring funds: \n" + e.getMessage());
+        } catch (IOException e) {
+            exitError("Problem encountered transferring funds: \n" + e.getMessage());
+        } catch (TransactionException e) {
             exitError("Problem encountered transferring funds: \n" + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");
@@ -134,11 +141,11 @@ public class WalletSendFunds extends WalletManager {
 
         Web3j web3j;
         if (clientAddress.equals("")) {
-            web3j = Web3j.build(new HttpService());
+            web3j = Web3jFactory.build(new HttpService());
         } else if (clientAddress.contains("infura.io")) {
-            web3j = Web3j.build(new InfuraHttpService(clientAddress));
+            web3j = Web3jFactory.build(new InfuraHttpService(clientAddress));
         } else {
-            web3j = Web3j.build(new HttpService(clientAddress));
+            web3j = Web3jFactory.build(new HttpService(clientAddress));
         }
 
         try {
@@ -151,7 +158,9 @@ public class WalletSendFunds extends WalletManager {
                         web3ClientVersion.getWeb3ClientVersion());
                 return web3j;
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            exitError("Problem encountered verifying client: " + e.getMessage());
+        } catch (ExecutionException e) {
             exitError("Problem encountered verifying client: " + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");

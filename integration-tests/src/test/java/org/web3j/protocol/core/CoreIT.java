@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
@@ -69,7 +70,7 @@ public class CoreIT {
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService());
+        this.web3j = Web3jFactory.build(new HttpService());
     }
 
     @Test
@@ -156,7 +157,7 @@ public class CoreIT {
     @Test
     public void testEthGetBalance() throws Exception {
         EthGetBalance ethGetBalance = web3j.ethGetBalance(
-                config.validAccount(), DefaultBlockParameter.valueOf("latest")).send();
+                config.validAccount(), DefaultBlockParameterFactory.valueOf("latest")).send();
         assertTrue(ethGetBalance.getBalance().signum() == 1);
     }
 
@@ -165,7 +166,7 @@ public class CoreIT {
         EthGetStorageAt ethGetStorageAt = web3j.ethGetStorageAt(
                 config.validContractAddress(),
                 BigInteger.valueOf(0),
-                DefaultBlockParameter.valueOf("latest")).send();
+                DefaultBlockParameterFactory.valueOf("latest")).send();
         assertThat(ethGetStorageAt.getData(), is(config.validContractAddressPositionZero()));
     }
 
@@ -173,7 +174,7 @@ public class CoreIT {
     public void testEthGetTransactionCount() throws Exception {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                 config.validAccount(),
-                DefaultBlockParameter.valueOf("latest")).send();
+                DefaultBlockParameterFactory.valueOf("latest")).send();
         assertTrue(ethGetTransactionCount.getTransactionCount().signum() == 1);
     }
 
@@ -190,7 +191,7 @@ public class CoreIT {
     public void testEthGetBlockTransactionCountByNumber() throws Exception {
         EthGetBlockTransactionCountByNumber ethGetBlockTransactionCountByNumber =
                 web3j.ethGetBlockTransactionCountByNumber(
-                        DefaultBlockParameter.valueOf(config.validBlock())).send();
+                        DefaultBlockParameterFactory.valueOf(config.validBlock())).send();
         assertThat(ethGetBlockTransactionCountByNumber.getTransactionCount(),
                 equalTo(config.validBlockTransactionCount()));
     }
@@ -207,7 +208,7 @@ public class CoreIT {
     public void testEthGetUncleCountByBlockNumber() throws Exception {
         EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber =
                 web3j.ethGetUncleCountByBlockNumber(
-                        DefaultBlockParameter.valueOf("latest")).send();
+                        DefaultBlockParameterFactory.valueOf("latest")).send();
         assertThat(ethGetUncleCountByBlockNumber.getUncleCount(),
                 equalTo(config.validBlockUncleCount()));
     }
@@ -215,7 +216,7 @@ public class CoreIT {
     @Test
     public void testEthGetCode() throws Exception {
         EthGetCode ethGetCode = web3j.ethGetCode(config.validContractAddress(),
-                DefaultBlockParameter.valueOf(config.validBlock())).send();
+                DefaultBlockParameterFactory.valueOf(config.validBlock())).send();
         assertThat(ethGetCode.getCode(), is(config.validContractCode()));
     }
 
@@ -242,7 +243,7 @@ public class CoreIT {
     @Test
     public void testEthCall() throws Exception {
         EthCall ethCall = web3j.ethCall(config.buildTransaction(),
-                DefaultBlockParameter.valueOf("latest")).send();
+                DefaultBlockParameterFactory.valueOf("latest")).send();
 
         assertThat(DefaultBlockParameterName.LATEST.getValue(), is("latest"));
         assertThat(ethCall.getValue(), is("0x"));
@@ -282,7 +283,7 @@ public class CoreIT {
     @Test
     public void testEthGetBlockByNumberReturnHashObjects() throws Exception {
         EthBlock ethBlock = web3j.ethGetBlockByNumber(
-                DefaultBlockParameter.valueOf(config.validBlock()), false).send();
+                DefaultBlockParameterFactory.valueOf(config.validBlock()), false).send();
 
         EthBlock.Block block = ethBlock.getBlock();
         assertNotNull(ethBlock.getBlock());
@@ -294,7 +295,7 @@ public class CoreIT {
     @Test
     public void testEthGetBlockByNumberReturnTransactionObjects() throws Exception {
         EthBlock ethBlock = web3j.ethGetBlockByNumber(
-                DefaultBlockParameter.valueOf(config.validBlock()), true).send();
+                DefaultBlockParameterFactory.valueOf(config.validBlock()), true).send();
 
         EthBlock.Block block = ethBlock.getBlock();
         assertNotNull(ethBlock.getBlock());
@@ -329,7 +330,7 @@ public class CoreIT {
         BigInteger index = BigInteger.ONE;
 
         EthTransaction ethTransaction = web3j.ethGetTransactionByBlockNumberAndIndex(
-                DefaultBlockParameter.valueOf(config.validBlock()), index).send();
+                DefaultBlockParameterFactory.valueOf(config.validBlock()), index).send();
         assertTrue(ethTransaction.getTransaction().isPresent());
         Transaction transaction = ethTransaction.getTransaction().get();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
@@ -356,7 +357,7 @@ public class CoreIT {
     @Test
     public void testEthGetUncleByBlockNumberAndIndex() throws Exception {
         EthBlock ethBlock = web3j.ethGetUncleByBlockNumberAndIndex(
-                DefaultBlockParameter.valueOf(config.validUncleBlock()), BigInteger.ZERO)
+                DefaultBlockParameterFactory.valueOf(config.validUncleBlock()), BigInteger.ZERO)
                 .send();
         assertNotNull(ethBlock.getBlock());
     }

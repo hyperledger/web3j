@@ -6,6 +6,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.junit.Test;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jService;
 
 import static org.mockito.Mockito.doThrow;
@@ -18,7 +19,7 @@ public class JsonRpc2_0Web3jTest {
             = mock(ScheduledExecutorService.class);
     private Web3jService service = mock(Web3jService.class);
 
-    private Web3j web3j = Web3j.build(service, 10, scheduledExecutorService);
+    private Web3j web3j = Web3jFactory.build(service, 10, scheduledExecutorService);
 
     @Test
     public void testStopExecutorOnShutdown() throws Exception {

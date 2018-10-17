@@ -25,9 +25,6 @@ import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
  * JSON-RPC Request object building factory for Parity.
  */
 public interface Parity extends Admin, Trace {
-    static Parity build(Web3jService web3jService) {
-        return new JsonRpc2_0Parity(web3jService);
-    }
 
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
     

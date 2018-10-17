@@ -91,7 +91,7 @@ public class FunctionReturnDecoder {
 
     private static List<Type> build(
             String input, List<TypeReference<Type>> outputParameters) {
-        List<Type> results = new ArrayList<>(outputParameters.size());
+        List<Type> results = new ArrayList<Type>(outputParameters.size());
 
         int offset = 0;
         for (TypeReference<?> typeReference:outputParameters) {

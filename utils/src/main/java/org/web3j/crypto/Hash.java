@@ -1,6 +1,6 @@
 package org.web3j.crypto;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -57,7 +57,7 @@ public class Hash {
      * @return hash value as hex encoded string
      */
     public static String sha3String(String utf8String) {
-        return Numeric.toHexString(sha3(utf8String.getBytes(StandardCharsets.UTF_8)));
+        return Numeric.toHexString(sha3(utf8String.getBytes(Charset.forName("UTF-8"))));
     }
 
     /**

@@ -1,12 +1,11 @@
 package org.web3j.abi;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
@@ -110,12 +109,25 @@ public class TypeDecoder {
             BigInteger numericValue = new BigInteger(resultByteArray);
             return type.getConstructor(BigInteger.class).newInstance(numericValue);
 
-        } catch (NoSuchMethodException | SecurityException
-                | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            throw new UnsupportedOperationException(
-                    "Unable to create instance of " + type.getName(), e);
+        } catch (NoSuchMethodException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (SecurityException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InstantiationException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalAccessException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalArgumentException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InvocationTargetException e) {
+            return throwUnsupportedOperation(e, type);
         }
+    }
+
+    private static <T> T throwUnsupportedOperation(Exception e, Class<T> type)
+            throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(
+                "Unable to create instance of " + type.getName(), e);
     }
 
     static <T extends NumericType> int getTypeLengthInBytes(Class<T> type) {
@@ -167,11 +179,18 @@ public class TypeDecoder {
             byte[] bytes = Numeric.hexStringToByteArray(
                     input.substring(offset, offset + hexStringLength));
             return type.getConstructor(byte[].class).newInstance(bytes);
-        } catch (NoSuchMethodException | SecurityException
-                | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            throw new UnsupportedOperationException(
-                    "Unable to create instance of " + type.getName(), e);
+        } catch (NoSuchMethodException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (SecurityException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InstantiationException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalAccessException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (IllegalArgumentException e) {
+            return throwUnsupportedOperation(e, type);
+        } catch (InvocationTargetException e) {
+            return throwUnsupportedOperation(e, type);
         }
     }
 
@@ -192,7 +211,11 @@ public class TypeDecoder {
         DynamicBytes dynamicBytesResult = decodeDynamicBytes(input, offset);
         byte[] bytes = dynamicBytesResult.getValue();
 
-        return new Utf8String(new String(bytes, StandardCharsets.UTF_8));
+        try {
+            return new Utf8String(new String(bytes, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            return throwUnsupportedOperation(e, Utf8String.class);
+        }
     }
 
     /**
@@ -202,15 +225,7 @@ public class TypeDecoder {
     static <T extends Type> T decodeStaticArray(
             String input, int offset, TypeReference<T> typeReference, int length) {
 
-        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
-            if (elements.isEmpty()) {
-                throw new UnsupportedOperationException("Zero length fixed array is invalid type");
-            } else {
-                return instantiateStaticArray(typeReference, elements);
-            }
-        };
-
-        return decodeArrayElements(input, offset, typeReference, length, function);
+        return decodeArrayElements(input, offset, typeReference, length, false);
     }
 
     @SuppressWarnings("unchecked")
@@ -219,10 +234,23 @@ public class TypeDecoder {
         try {
             Class<List> listClass = List.class;
             return typeReference.getClassType().getConstructor(listClass).newInstance(elements);
-        } catch (ReflectiveOperationException e) {
+        } catch (ClassNotFoundException e) {
             //noinspection unchecked
-            return (T) new StaticArray<>(elements);
+            return instantiateStaticArray(elements);
+        } catch (IllegalAccessException e) {
+            return instantiateStaticArray(elements);
+        } catch (InstantiationException e) {
+            return instantiateStaticArray(elements);
+        } catch (NoSuchMethodException e) {
+            return instantiateStaticArray(elements);
+        } catch (InvocationTargetException e) {
+            return instantiateStaticArray(elements);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Type> T instantiateStaticArray(List<T> elements) {
+        return (T) new StaticArray<T>(elements);
     }
 
     @SuppressWarnings("unchecked")
@@ -230,23 +258,15 @@ public class TypeDecoder {
             String input, int offset, TypeReference<T> typeReference) {
 
         int length = decodeUintAsInt(input, offset);
-
-        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
-            if (elements.isEmpty()) {
-                return (T) DynamicArray.empty(typeName);
-            } else {
-                return (T) new DynamicArray<>(elements);
-            }
-        };
-
         int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
-        return decodeArrayElements(input, valueOffset, typeReference, length, function);
+        return decodeArrayElements(input, valueOffset, typeReference, length, true);
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Type> T decodeArrayElements(
             String input, int offset, TypeReference<T> typeReference, int length,
-            BiFunction<List<T>, String, T> consumer) {
+            boolean isDynamic) {
 
         try {
             Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
@@ -255,10 +275,9 @@ public class TypeDecoder {
                         "Arrays of arrays are not currently supported for external functions, see"
                                 + "http://solidity.readthedocs.io/en/develop/types.html#members");
             } else {
-                List<T> elements = new ArrayList<>(length);
+                List<T> elements = new ArrayList<T>(length);
 
-                for (int i = 0, currOffset = offset;
-                        i < length;
+                for (int i = 0, currOffset = offset; i < length;
                         i++, currOffset += getSingleElementLength(input, currOffset, cls)
                              * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
                     T value = decode(input, currOffset, cls);
@@ -267,11 +286,24 @@ public class TypeDecoder {
 
                 String typeName = Utils.getSimpleTypeName(cls);
 
-                return consumer.apply(elements, typeName);
+                if (isDynamic) {
+                    if (elements.isEmpty()) {
+                        return (T) DynamicArray.empty(typeName);
+                    } else {
+                        return (T) new DynamicArray<T>(elements);
+                    }
+                } else {
+                    if (elements.isEmpty()) {
+                        throw new UnsupportedOperationException(
+                                "Zero length fixed array is invalid type");
+                    } else {
+                        return instantiateStaticArray(typeReference, elements);
+                    }
+                }
             }
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type " + typeReference.getType().toString(),
                     e);
         }
     }

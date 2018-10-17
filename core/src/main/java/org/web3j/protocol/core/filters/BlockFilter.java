@@ -43,12 +43,11 @@ public class BlockFilter extends Filter<String> {
      * and an empty optional is returned.
      * @param filterId
      * Id of the filter for which the historic log should be retrieved
-     * @return
-     * Optional.empty()
+     * @return null
      */
     @Override
-    protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
-        return Optional.empty();
+    protected Request<?, EthLog> getFilterLogs(BigInteger filterId) {
+        return null;
     }
 }
 

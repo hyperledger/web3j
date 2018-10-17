@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +13,6 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.bouncycastle.crypto.params.KeyParameter;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.web3j.crypto.Hash.sha256;
 
 /**
@@ -126,7 +126,8 @@ public class MnemonicUtils {
 
         String salt = String.format("mnemonic%s", passphrase);
         PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA512Digest());
-        gen.init(mnemonic.getBytes(UTF_8), salt.getBytes(UTF_8), SEED_ITERATIONS);
+        gen.init(mnemonic.getBytes(Charset.forName("UTF-8")),
+                salt.getBytes(Charset.forName("UTF-8")), SEED_ITERATIONS);
 
         return ((KeyParameter) gen.generateDerivedParameters(SEED_KEY_SIZE)).getKey();
     }
@@ -262,7 +263,7 @@ public class MnemonicUtils {
 
     private static List<String> readAllLines(InputStream inputStream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        List<String> data = new ArrayList<>();
+        List<String> data = new ArrayList<String>();
         for (String line; (line = br.readLine()) != null; ) {
             data.add(line);
         }

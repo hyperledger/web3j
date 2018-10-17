@@ -9,13 +9,6 @@ import java.math.BigInteger;
  *     specification</a> for further information.
  */
 public interface DefaultBlockParameter {
-    static DefaultBlockParameter valueOf(BigInteger blockNumber) {
-        return new DefaultBlockParameterNumber(blockNumber);
-    }
-
-    static DefaultBlockParameter valueOf(String blockName) {
-        return DefaultBlockParameterName.fromString(blockName);
-    }
 
     String getValue();
 }

@@ -5,6 +5,7 @@ import java.util.concurrent.Callable;
 import java9.util.concurrent.CompletableFuture;
 
 import rx.Observable;
+import rx.Subscriber;
 
 import org.web3j.utils.Async;
 
@@ -37,7 +38,12 @@ public class RemoteCall<T> {
      * @return a future containing our function
      */
     public CompletableFuture<T> sendAsync() {
-        return Async.run(this::send);
+        return Async.run(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return RemoteCall.this.send();
+            }
+        });
     }
 
     /**
@@ -47,14 +53,18 @@ public class RemoteCall<T> {
      */
     public Observable<T> observable() {
         return Observable.create(
-                subscriber -> {
-                    try {
-                        subscriber.onNext(send());
-                        subscriber.onCompleted();
-                    } catch (Exception e) {
-                        subscriber.onError(e);
+                new Observable.OnSubscribe<T>() {
+                    @Override
+                    public void call(Subscriber<? super T> subscriber) {
+                        try {
+                            subscriber.onNext(RemoteCall.this.send());
+                            subscriber.onCompleted();
+                        } catch (Exception e) {
+                            subscriber.onError(e);
+                        }
                     }
                 }
         );
+
     }
 }

@@ -1,13 +1,13 @@
 package org.web3j.protocol.scenarios;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.Optional;
+
+import java8.util.Optional;
 
 import org.junit.Before;
 
@@ -16,6 +16,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.admin.Admin;
+import org.web3j.protocol.admin.AdminFactory;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
@@ -24,6 +25,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
+import org.web3j.utils.Files;
 
 import static junit.framework.TestCase.fail;
 
@@ -66,7 +68,7 @@ public class Scenario {
 
     @Before
     public void setUp() {
-        this.web3j = Admin.build(new HttpService());
+        this.web3j = AdminFactory.build(new HttpService());
     }
 
     boolean unlockAccount() throws Exception {
@@ -131,7 +133,7 @@ public class Scenario {
 
     static String load(String filePath) throws URISyntaxException, IOException {
         URL url = Scenario.class.getClass().getResource(filePath);
-        byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
+        byte[] bytes = Files.readBytes(new File(url.toURI()));
         return new String(bytes);
     }
 

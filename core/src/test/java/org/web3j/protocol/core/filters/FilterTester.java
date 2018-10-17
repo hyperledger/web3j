@@ -1,5 +1,6 @@
 package org.web3j.protocol.core.filters;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -8,15 +9,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.Before;
+
 import rx.Observable;
 import rx.Subscription;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthFilter;
@@ -24,9 +27,11 @@ import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -44,7 +49,7 @@ public abstract class FilterTester {
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService, 1000, scheduledExecutorService);
+        web3j = Web3jFactory.build(web3jService, 1000, scheduledExecutorService);
     }
 
     <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {
@@ -95,13 +100,17 @@ public abstract class FilterTester {
         assertTrue(subscription.isUnsubscribed());
     }
 
+    @SuppressWarnings("unchecked")
     List createExpected(EthLog ethLog) {
         List<EthLog.LogResult> logResults = ethLog.getLogs();
         if (logResults.isEmpty()) {
             fail("Results cannot be empty");
         }
 
-        return ethLog.getLogs().stream()
-                .map(t -> t.get()).collect(Collectors.toList());
+        List expected = new ArrayList();
+        for (EthLog.LogResult logResult : ethLog.getLogs()) {
+            expected.add(logResult.get());
+        }
+        return expected;
     }
 }

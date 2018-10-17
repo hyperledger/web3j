@@ -1,8 +1,8 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
@@ -75,9 +75,21 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
-                .map(Type::getTypeAsString)
-                .collect(Collectors.joining(","));
+
+        List<String> types = new ArrayList<String>(parameters.size());
+        String params = "";
+
+        for (int i = 0; i < parameters.size(); i++) {
+            Type type = parameters.get(i);
+
+            params += type.getTypeAsString();
+            if (i + 1 < parameters.size()) {
+                params += ",";  // no whitespace
+            }
+
+            types.add(type.getTypeAsString());
+        }
+
         result.append(params);
         result.append(")");
         return result.toString();

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -121,12 +121,14 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         } else {
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            Map<String, String> addresses;
+            Map<String, String> addresses = new HashMap<String, String>();
             if (c.networks != null && !c.networks.isEmpty()) {
-                addresses = c.networks.entrySet().stream()
-                        .filter(e -> (e.getValue() != null && e.getValue().getAddress() != null))
-                        .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAddress()
-                        ));
+                Set<Map.Entry<String, NetworkInfo>> entrySet = c.networks.entrySet();
+                for (Map.Entry<String, NetworkInfo> entry : entrySet) {
+                    if (entry.getValue() != null && entry.getValue().getAddress() != null) {
+                        addresses.put(entry.getKey(), entry.getValue().getAddress());
+                    }
+                }
             } else {
                 addresses = Collections.EMPTY_MAP;
             }

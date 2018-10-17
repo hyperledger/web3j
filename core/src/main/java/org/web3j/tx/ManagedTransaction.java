@@ -19,7 +19,7 @@ public abstract class ManagedTransaction {
      * @deprecated use ContractGasProvider
      * @see org.web3j.tx.gas.DefaultGasProvider
      */
-    public static final BigInteger GAS_PRICE = BigInteger.valueOf(22_000_000_000L);
+    public static final BigInteger GAS_PRICE = BigInteger.valueOf(22000000000L);
 
     protected Web3j web3j;
 

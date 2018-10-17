@@ -17,16 +17,6 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
  */
 public interface Admin extends Web3j {
 
-    static Admin build(Web3jService web3jService) {
-        return new JsonRpc2_0Admin(web3jService);
-    }
-    
-    static Admin build(
-            Web3jService web3jService, long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService) {
-        return new JsonRpc2_0Admin(web3jService, pollingInterval, scheduledExecutorService);
-    }
-
     public Request<?, PersonalListAccounts> personalListAccounts();
     
     public Request<?, NewAccountIdentifier> personalNewAccount(String password);

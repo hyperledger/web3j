@@ -27,7 +27,7 @@ public class RequestTest extends RequestTester {
 
     @Override
     protected void initWeb3Client(HttpService httpService) {
-        web3j = Parity.build(httpService);
+        web3j = ParityFactory.build(httpService);
     }
 
     @Test

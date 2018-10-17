@@ -29,7 +29,7 @@ public class JsonRpc2_0GethTest {
             webSocketClient, true
     );
 
-    private Geth geth = Geth.build(webSocketService);
+    private Geth geth = GethFactory.build(webSocketService);
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 

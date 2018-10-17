@@ -1,7 +1,6 @@
 package org.web3j.protocol.core.filters;
 
 import org.junit.Test;
-
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 

@@ -9,14 +9,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
+
 import rx.Observable;
 import rx.Subscription;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.Request;
@@ -46,7 +49,7 @@ public class JsonRpc2_0RxTest {
     @Before
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService, 1000, Executors.newSingleThreadScheduledExecutor());
+        web3j = Web3jFactory.build(web3jService, 1000, Executors.newSingleThreadScheduledExecutor());
     }
 
     @Test

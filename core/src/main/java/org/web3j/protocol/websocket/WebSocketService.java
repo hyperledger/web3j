@@ -61,7 +61,8 @@ public class WebSocketService implements Web3jService {
     private final ObjectMapper objectMapper;
 
     // Map of a sent request id to objects necessary to process this request
-    private Map<Long, WebSocketRequest<?>> requestForId = new ConcurrentHashMap<>();
+    private Map<Long, WebSocketRequest<?>> requestForId =
+            new ConcurrentHashMap<Long, WebSocketRequest<?>>();
     // Map of a sent subscription request id to objects necessary to process
     // subscription events
     private Map<Long, WebSocketSubscription<?>> subscriptionRequestForId

@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.function.BiFunction;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -355,20 +355,18 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testExtractEventParametersWithLogGivenATransactionReceipt() {
+        final Event testEvent1 = new Event(
+                "TestEvent1", Collections.<TypeReference<?>>emptyList());
 
-        final java.util.function.Function<String, Event> eventFactory = name ->
-                new Event(name, emptyList());
-
-        final BiFunction<Integer, Event, Log> logFactory = (logIndex, event) ->
-                new Log(false, "" + logIndex, "0", "0x0", "0x0", "0", "0x" + logIndex, "", "",
-                        singletonList(EventEncoder.encode(event)));
-
-        final Event testEvent1 = eventFactory.apply("TestEvent1");
-        final Event testEvent2 = eventFactory.apply("TestEvent2");
+        final Event testEvent2 = new Event(
+                "TestEvent2",
+                Collections.<TypeReference<?>>emptyList());
 
         final List<Log> logs = Arrays.asList(
-                logFactory.apply(0, testEvent1),
-                logFactory.apply(1, testEvent2)
+                new Log(false, "" + 0, "0", "0x0", "0x0", "0", "0x1", "", "",
+                        singletonList(EventEncoder.encode(testEvent1))),
+                new Log(false, "" + 0, "0", "0x0", "0x0", "0", "0x2", "", "",
+                        singletonList(EventEncoder.encode(testEvent2)))
         );
 
         final TransactionReceipt transactionReceipt = new TransactionReceipt();
@@ -377,14 +375,15 @@ public class ContractTest extends ManagedTransactionTester {
         final List<Contract.EventValuesWithLog> eventValuesWithLogs1 =
                 contract.extractEventParametersWithLog(testEvent1, transactionReceipt);
 
-        assertEquals(eventValuesWithLogs1.size(), 1);
-        assertEquals(eventValuesWithLogs1.get(0).getLog(), logs.get(0));
+        assertThat(eventValuesWithLogs1.size(), equalTo(1));
+        assertThat(eventValuesWithLogs1.get(0).getLog(), equalTo(logs.get(0)));
 
         final List<Contract.EventValuesWithLog> eventValuesWithLogs2 =
                 contract.extractEventParametersWithLog(testEvent2, transactionReceipt);
 
-        assertEquals(eventValuesWithLogs2.size(), 1);
-        assertEquals(eventValuesWithLogs2.get(0).getLog(), logs.get(1));
+        assertThat(eventValuesWithLogs2.size(), equalTo(1));
+        assertThat(eventValuesWithLogs2.get(0).getLog(), equalTo(logs.get(1)));
+
     }
 
     void testErrorScenario() throws Throwable {
@@ -468,8 +467,10 @@ public class ContractTest extends ManagedTransactionTester {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(
-                            new TypeReference<Uint256>() { },
-                            new TypeReference<Uint256>() { }));
+                            new TypeReference<Uint256>() {
+                            },
+                            new TypeReference<Uint256>() {
+                            }));
             return executeRemoteCallMultipleValueReturn(function);
         }
 
@@ -484,8 +485,10 @@ public class ContractTest extends ManagedTransactionTester {
         public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {
             Event event = new Event("Event",
                     Arrays.<TypeReference<?>>asList(
-                            new TypeReference<Address>(true) { },
-                            new TypeReference<Uint256>() { }));
+                            new TypeReference<Address>(true) {
+                            },
+                            new TypeReference<Uint256>() {
+                            }));
             return extractEventParameters(event, transactionReceipt);
         }
     }

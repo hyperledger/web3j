@@ -29,7 +29,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     @Override
     public Request<?, PersonalImportRawKey> personalImportRawKey(
             String keydata, String password) {
-        return new Request<>(
+        return new Request<String, PersonalImportRawKey>(
                 "personal_importRawKey",
                 Arrays.asList(keydata, password),
                 web3jService,
@@ -38,7 +38,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Request<?, BooleanResponse> personalLockAccount(String accountId) {
-        return new Request<>(
+        return new Request<String, BooleanResponse>(
                 "personal_lockAccount",
                 Arrays.asList(accountId),
                 web3jService,
@@ -48,7 +48,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     @Override
     public Request<?, PersonalSign> personalSign(
             String message, String accountId, String password) {
-        return new Request<>(
+        return new Request<String, PersonalSign>(
                 "personal_sign",
                 Arrays.asList(message,accountId,password),
                 web3jService,
@@ -58,7 +58,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     @Override
     public Request<?, PersonalEcRecover> personalEcRecover(
             String hexMessage, String signedMessage) {
-        return new Request<>(
+        return new Request<String, PersonalEcRecover>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage,signedMessage),
                 web3jService,
@@ -67,7 +67,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Request<?, MinerStartResponse> minerStart(int threadCount) {
-        return new Request<>(
+        return new Request<Integer, MinerStartResponse>(
                 "miner_start",
                 Arrays.asList(threadCount),
                 web3jService,
@@ -76,7 +76,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Request<?, BooleanResponse> minerStop() {
-        return new Request<>(
+        return new Request(
                 "miner_stop",
                 Collections.<String>emptyList(),
                 web3jService,
@@ -85,7 +85,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     public Observable<PendingTransactionNotification> newPendingTransactionsNotifications() {
         return web3jService.subscribe(
-                new Request<>(
+                new Request<String, EthSubscribe>(
                         "eth_subscribe",
                         Arrays.asList("newPendingTransactions"),
                         web3jService,
@@ -98,7 +98,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     @Override
     public Observable<SyncingNotfication> syncingStatusNotifications() {
         return web3jService.subscribe(
-                new Request<>(
+                new Request<String, EthSubscribe>(
                         "eth_subscribe",
                         Arrays.asList("syncing"),
                         web3jService,
