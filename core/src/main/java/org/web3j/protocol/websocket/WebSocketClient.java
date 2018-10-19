@@ -36,7 +36,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
             log.debug("Received message {} from server {}", s, uri);
             listener.onMessage(s);
         } catch (Exception e) {
-            log.error("Failed to process message '{}' from server {}", s, uri);
+            log.error(String.format("Failed to process message '%s' from server %s", s, uri),e);
         }
     }
 
@@ -49,7 +49,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onError(Exception e) {
-        log.error(String.format("WebSocket connection to {} failed with error", uri), e);
+        log.error(String.format("WebSocket connection to %s failed with error", uri), e);
         listener.onError(e);
     }
 
