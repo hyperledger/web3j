@@ -161,9 +161,11 @@ The web3j :doc:`command_line` tools ship with a command line utility for generat
       -jt, --javaTypes                  use native java types. Default: true
       -st, --solidityTypes              use solidity types.
       -a, --abiFile=<abiFile>           abi file with contract definition.
-      -b, --binFile=<binFile>           optional bin file with contract compiled code in order to generate deploy methods. Required for :ref:`contract-validity`.
+      -b, --binFile=<binFile>           optional bin file with contract compiled code in order to generate deploy methods.
       -o, --output=<destinationFileDir> destination base directory.
       -p, --package=<packageName>       base package name.
+
+BinFile is required for :ref:`contract-validity`.
 
 In versions prior to 3.x of web3j, the generated smart contract wrappers used native Solidity
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
@@ -248,7 +250,7 @@ smart contract wrapper.::
    contract.isValid();  // returns false if the contract bytecode does not match what's deployed
                         // at the provided address
 
-Note: Contract wrapper has to be generated with *--bin* provided.
+Note: Contract wrapper has to be generated with *--bin* for this to work.
 
 .. _transaction-managers:
 
