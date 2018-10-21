@@ -182,7 +182,7 @@ avoid blocking.
 
 web3j also supports the generation of Java smart contract function wrappers directly from
 `Truffle's <http://truffleframework.com/>`_
-`Contract Schema <https://github.com/trufflesuite/truffle-contract-schema>`_
+`Contract Schema <https://github.com/trufflesuite/truffle/tree/develop/packages/truffle-contract-schema>`_
 via the :doc:`command_line` utility.
 
 .. code-block:: bash
@@ -279,7 +279,7 @@ on transactions as per
 being re-broadcast onto another chain, such as from Ropsten to Mainnet::
 
    TransactionManager transactionManager = new RawTransactionManager(
-           web3j, credentials, ChainId.MAIN_NET);
+           web3j, credentials, ChainId.MAINNET);
 
 In order to avoid having to change config or code to specify which chain you are working with,
 web3j's default behaviour is to not specify chain ids on transactions to simplify working with the
@@ -343,7 +343,7 @@ specify the transaction receipt processor to use as follows::
                         // handle exception
                     }
    TransactionManager transactionManager = new RawTransactionManager(
-           web3j, credentials, ChainId.MAIN_NET, transactionReceiptProcessor);
+           web3j, credentials, ChainId.MAINNET, transactionReceiptProcessor);
 
 
 If you require further information, the

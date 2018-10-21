@@ -104,7 +104,6 @@ public class Wallet {
         WalletFile.Crypto crypto = new WalletFile.Crypto();
         crypto.setCipher(CIPHER);
         crypto.setCiphertext(Numeric.toHexStringNoPrefix(cipherText));
-        walletFile.setCrypto(crypto);
 
         WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();
         cipherParams.setIv(Numeric.toHexStringNoPrefix(iv));

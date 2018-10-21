@@ -22,7 +22,11 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.*;
+import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
+import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_GENERATE;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
 
 
 public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
@@ -47,8 +51,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGreeterGeneration() throws Exception {
-        testCodeGenerationJvmTypes("greeter", "greeter");
-        testCodeGenerationSolidityTypes("greeter", "greeter");
+        testCodeGenerationJvmTypes("greeter", "Greeter");
+        testCodeGenerationSolidityTypes("greeter", "Greeter");
     }
 
     @Test

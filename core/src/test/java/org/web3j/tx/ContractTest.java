@@ -75,8 +75,8 @@ public class ContractTest extends ManagedTransactionTester {
         super.setUp();
 
         contract = new TestContract(
-                ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
+                ADDRESS, web3j, getVerifiedTransactionManager(SampleKeys.CREDENTIALS),
+                new DefaultGasProvider());
     }
 
     @Test
@@ -284,8 +284,8 @@ public class ContractTest extends ManagedTransactionTester {
     public void testTimeout() throws Throwable {
         prepareTransaction(null);
 
-        TransactionManager transactionManager = new RawTransactionManager(
-                web3j, SampleKeys.CREDENTIALS, 1, 1);
+        TransactionManager transactionManager =
+                getVerifiedTransactionManager(SampleKeys.CREDENTIALS, 1, 1);
 
         contract = new TestContract(
                 ADDRESS, web3j, transactionManager,
@@ -366,7 +366,7 @@ public class ContractTest extends ManagedTransactionTester {
     public void testExtractEventParametersWithLogGivenATransactionReceipt() {
 
         final java.util.function.Function<String, Event> eventFactory = name ->
-                new Event(name, emptyList(), emptyList());
+                new Event(name, emptyList());
 
         final BiFunction<Integer, Event, Log> logFactory = (logIndex, event) ->
                 new Log(false, "" + logIndex, "0", "0x0", "0x0", "0", "0x" + logIndex, "", "",
@@ -433,7 +433,7 @@ public class ContractTest extends ManagedTransactionTester {
                 Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
 
         return TestContract.deployRemoteCall(
-                TestContract.class, web3j, SampleKeys.CREDENTIALS,
+                TestContract.class, web3j, getVerifiedTransactionManager(SampleKeys.CREDENTIALS),
                 ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                 "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
     }
@@ -498,8 +498,9 @@ public class ContractTest extends ManagedTransactionTester {
 
         public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {
             Event event = new Event("Event",
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Address>() { }),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() { }));
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<Address>(true) { },
+                            new TypeReference<Uint256>() { }));
             return extractEventParameters(event, transactionReceipt);
         }
     }

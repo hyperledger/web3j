@@ -1,0 +1,28 @@
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+  - .m2/repository/
+  - target/
+
+stages:
+- build
+- test
+
+build:
+  stage: build
+  script:
+  - gradle clean build
+
+unit tests:
+  stage: test
+  script:
+  - gradle test
+
+# integration tests:
+
+#  stage: test
+#  script:
+#    - $ ./gradlew  -Pintegration-tests=true :integration-tests:test

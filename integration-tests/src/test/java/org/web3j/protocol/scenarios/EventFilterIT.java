@@ -62,7 +62,6 @@ public class EventFilterIT extends Scenario {
         assertThat(topics.size(), is(1));
 
         Event event = new Event("Notify",
-                Collections.emptyList(),
                 Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
 
         // check function signature - we only have a single topic our event signature,

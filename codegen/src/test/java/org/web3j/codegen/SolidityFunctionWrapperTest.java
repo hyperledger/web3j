@@ -31,6 +31,7 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -283,7 +284,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(methodSpec.toString(), is(expected));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testBuildFunctionConstantInvalid() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 true,
@@ -294,7 +295,16 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 "type",
                 false);
 
-        solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        //CHECKSTYLE:OFF
+        String expected =
+                "public void functionName(java.math.BigInteger param) {\n"
+                + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
+                + "}\n";
+        //CHECKSTYLE:ON
+
+        assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
@@ -362,9 +372,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "class testClass {\n"
-                        + "  public static final org.web3j.abi.datatypes.Event TRANSFER_EVENT = new org.web3j.abi.datatypes.Event(\"Transfer\", \n" +
-                        "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {}),\n" +
-                        "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n  ;\n\n"
+                        + "  public static final org.web3j.abi.datatypes.Event TRANSFER_EVENT = new org.web3j.abi.datatypes.Event(\"Transfer\", \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n  ;\n\n"
                         + "  public java.util.List<TransferEventResponse> getTransferEvents(org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n"
                         + "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);\n"
                         + "    java.util.ArrayList<TransferEventResponse> responses = new java.util.ArrayList<TransferEventResponse>(valueList.size());\n"

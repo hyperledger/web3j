@@ -88,4 +88,11 @@ public class MnemonicUtilsTest {
 
         assertArrayEquals(seed, actualSeed);
     }
+
+    @Test
+    public void generateEntropyShouldGenerateExpectedEntropy() {
+        byte[] actualEntropy = MnemonicUtils.generateEntropy(mnemonic);
+
+        assertArrayEquals(initialEntropy, actualEntropy);
+    }
 }

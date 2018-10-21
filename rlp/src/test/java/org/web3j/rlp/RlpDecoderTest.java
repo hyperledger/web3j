@@ -21,6 +21,12 @@ public class RlpDecoderTest {
     @Test
     public void testRLPDecode() {
 
+        // big positive number should stay positive after encoding-decoding
+        // https://github.com/web3j/web3j/issues/562
+        long value = 3000000000L;
+        assertThat(RlpString.create(BigInteger.valueOf(value)).asPositiveBigInteger().longValue(),
+                equalTo(value));
+
         // empty array of binary
         assertTrue(RlpDecoder.decode(new byte[]{}).getValues().isEmpty());
 
@@ -187,6 +193,5 @@ public class RlpDecoderTest {
         assertThat(((RlpList)
                    ((RlpList) rlpList.getValues().get(0)).getValues().get(1)).getValues().size(),
                 equalTo(9));
-
     }
 }

@@ -225,4 +225,10 @@ public class NumericTest {
         assertFalse(Numeric.isIntegerValue(BigDecimal.valueOf(1.1)));
         assertFalse(Numeric.isIntegerValue(BigDecimal.valueOf(-1.1)));
     }
+
+    @Test
+    public void testHandleNPE() {
+        assertFalse(Numeric.containsHexPrefix(null));
+        assertFalse(Numeric.containsHexPrefix(""));
+    }
 }

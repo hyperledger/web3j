@@ -14,6 +14,7 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Strings;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
@@ -36,7 +37,7 @@ public class FunctionReturnDecoder {
             String rawInput, List<TypeReference<Type>> outputParameters) {
         String input = Numeric.cleanHexPrefix(rawInput);
 
-        if (input.isEmpty()) {
+        if (Strings.isEmpty(input)) {
             return Collections.emptyList();
         } else {
             return build(input, outputParameters);

@@ -50,8 +50,9 @@ public final class ENS extends Contract {
 
     public List<NewOwnerEventResponse> getNewOwnerEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("NewOwner", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(
+                        new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Address>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NewOwnerEventResponse> responses = new ArrayList<NewOwnerEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -66,8 +67,8 @@ public final class ENS extends Contract {
 
     public Observable<NewOwnerEventResponse> newOwnerEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewOwner", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, NewOwnerEventResponse>() {
@@ -85,8 +86,8 @@ public final class ENS extends Contract {
 
     public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("Transfer", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Address>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -100,8 +101,8 @@ public final class ENS extends Contract {
 
     public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("Transfer", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
@@ -118,8 +119,8 @@ public final class ENS extends Contract {
 
     public List<NewResolverEventResponse> getNewResolverEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("NewResolver", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Address>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NewResolverEventResponse> responses = new ArrayList<NewResolverEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -133,8 +134,8 @@ public final class ENS extends Contract {
 
     public Observable<NewResolverEventResponse> newResolverEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewResolver", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, NewResolverEventResponse>() {
@@ -151,8 +152,8 @@ public final class ENS extends Contract {
 
     public List<NewTTLEventResponse> getNewTTLEvents(TransactionReceipt transactionReceipt) {
         final Event event = new Event("NewTTL", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Uint64>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NewTTLEventResponse> responses = new ArrayList<NewTTLEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
@@ -166,8 +167,8 @@ public final class ENS extends Contract {
 
     public Observable<NewTTLEventResponse> newTTLEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewTTL", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
+                        new TypeReference<Uint64>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return web3j.ethLogObservable(filter).map(new Func1<Log, NewTTLEventResponse>() {
