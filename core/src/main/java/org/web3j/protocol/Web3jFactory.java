@@ -34,4 +34,5 @@ public class Web3jFactory {
             ScheduledExecutorService scheduledExecutorService) {
         return new JsonRpc2_0Web3j(web3jService, pollingInterval, scheduledExecutorService);
     }
+
 }

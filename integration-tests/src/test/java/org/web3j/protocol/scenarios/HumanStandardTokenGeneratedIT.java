@@ -44,7 +44,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                 equalTo(aliceQty));
 
         // CHECKSTYLE:OFF
-        final CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
+        CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
         Subscription transferEventSubscription = contract.transferEventObservable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
@@ -56,7 +56,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                 }
         );
 
-        final CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
+        CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
         Subscription approvalEventSubscription = contract.approvalEventObservable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
@@ -123,7 +123,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         // Bob requires his own contract instance
         HumanStandardToken bobsContract = HumanStandardToken.load(
-                contract.getContractAddress(), web3j, BOB, GAS_PRICE, GAS_LIMIT);
+                contract.getContractAddress(), web3j, BOB, STATIC_GAS_PROVIDER);
 
         TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
                 aliceAddress,

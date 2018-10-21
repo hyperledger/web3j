@@ -8,4 +8,8 @@ import org.web3j.protocol.rx.Web3jRx;
  */
 public interface Web3j extends Ethereum, Web3jRx {
 
+    /**
+     * Shutdowns a Web3j instance and closes opened resources.
+     */
+    void shutdown();
 }

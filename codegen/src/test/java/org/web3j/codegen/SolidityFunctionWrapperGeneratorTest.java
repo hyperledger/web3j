@@ -45,12 +45,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGreeterGeneration() throws Exception {
-        testCodeGenerationJvmTypes("greeter", "greeter");
-        testCodeGenerationSolidityTypes("greeter", "greeter");
+        testCodeGenerationJvmTypes("greeter", "Greeter");
+        testCodeGenerationSolidityTypes("greeter", "Greeter");
     }
 
     @Test
-    public void testContractsGeneration() throws Exception {
+    public void testHumanStandardTokenGeneration() throws Exception {
         testCodeGenerationJvmTypes("contracts", "HumanStandardToken");
         testCodeGenerationSolidityTypes("contracts", "HumanStandardToken");
     }
@@ -115,7 +115,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     private void verifyGeneratedCode(String sourceFile) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         StandardJavaFileManager fileManager =
                 compiler.getStandardFileManager(diagnostics, null, null);
@@ -123,6 +123,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 .getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
         JavaCompiler.CompilationTask task = compiler.getTask(
                 null, fileManager, diagnostics, null, null, compilationUnits);
-        assertTrue("Generated contract contains compile time error", task.call());
+        boolean result = task.call();
+
+        System.out.println(diagnostics.getDiagnostics());
+        assertTrue("Generated contract contains compile time error", result);
+
     }
 }

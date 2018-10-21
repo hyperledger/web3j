@@ -109,7 +109,10 @@ demonstrates a number of core features of Ethereum with web3j, including:
 Getting started
 ---------------
 
-Add the relevant dependency to your project:
+Typically your application should depend on release versions of web3j, but you may also use snapshot dependencies
+for early access to features and fixes, refer to the  `Snapshot Dependencies`_ section.
+
+| Add the relevant dependency to your project:
 
 Maven
 -----
@@ -121,7 +124,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.2.0</version>
+     <version>3.5.0</version>
    </dependency>
 
 Android:
@@ -131,8 +134,9 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.1.1-android</version>
+     <version>3.3.1-android</version>
    </dependency>
+
 
 Gradle
 ------
@@ -141,13 +145,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.2.0')
+   compile ('org.web3j:core:3.5.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.1.1-android')
+   compile ('org.web3j:core:3.3.1-android')
 
 
 Start a client
@@ -305,6 +309,14 @@ To call a smart contract:
 
    Type result = contract.someMethod(<param1>, ...).send();
 
+To fine control your gas price:
+
+.. code-block:: java
+
+    contract.setGasProvider(new DefaultGasProvider() {
+            ...
+            });
+
 For more information refer to `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
 
 
@@ -385,7 +397,7 @@ client admin commands for sending transactions.
 To send Ether to another party using your Ethereum wallet file:
 
 .. code-block:: java
-		
+
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
@@ -422,7 +434,7 @@ Using an Ethereum client's admin commands (make sure you have your wallet in the
 keystore):
 
 .. code-block:: java
-  		
+
    Admin web3j = Admin.build(new HttpService());  // defaults to http://localhost:8545/
    PersonalUnlockAccount personalUnlockAccount = web3j.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
@@ -517,6 +529,11 @@ Please submit a pull request if you wish to include your project on the list:
 - `Trust Ethereum Wallet <https://github.com/TrustWallet/trust-wallet-android>`_
 - `Presto Ethereum <https://github.com/xiaoyao1991/presto-ethereum>`_
 - `Kundera-Ethereum data importer and sync utility <https://github.com/impetus-opensource/Kundera/tree/trunk/src/kundera-ethereum>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
+- `Ethereum JDBC Connector <https://github.com/Impetus/eth-jdbc-connector/>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
+- `Ethereum Tool <https://github.com/e-Contract/ethereum-tool>`_ for secure offline key management.
+- `Ethereum Java EE JCA Resource Adapter <https://github.com/e-Contract/ethereum-resource-adapter>`_ provides integration of Ethereum within Java EE 6+.
+- `Apache Camel Ethereum Component <https://github.com/apache/camel/blob/master/components/camel-web3j/src/main/docs/web3j-component.adoc>`_ by `@bibryam <https://github.com/bibryam/>`_.
+
 
 
 Companies using web3j
@@ -533,6 +550,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `Pactum <https://pactum.io/>`_
 - `TrustWallet <http://trustwalletapp.com>`_
 - `Impetus <http://www.impetus.com/>`_
+- `Argent Labs <http://www.argent.im/>`_
 
 
 Build instructions
@@ -553,6 +571,42 @@ To run the integration tests:
 .. code-block:: bash
 
    $ ./gradlew  -Pintegration-tests=true :integration-tests:test
+
+
+Snapshot Dependencies
+---------------------
+
+Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 3.6.0-SNAPSHOT.
+
+| If you would like to use snapshots instead please add a new maven repository pointing to:
+
+::
+
+  https://oss.sonatype.org/content/repositories/snapshots
+
+Please refer to the `maven <https://maven.apache.org/guides/mini/guide-multiple-repositories.html>`_ or `gradle <https://maven.apache.org/guides/mini/guide-multiple-repositories.html>`_ documentation for further detail.
+
+Sample gradle configuration:
+
+.. code-block:: groovy
+
+   repositories {
+      maven {
+         url "https://oss.sonatype.org/content/repositories/snapshots"
+      }
+   }
+
+Sample maven configuration:
+
+.. code-block:: xml
+
+   <repositories>
+     <repository>
+       <id>sonatype-snasphots</id>
+       <name>Sonatype snapshots repo</name>
+       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+     </repository>
+   </repositories>
 
 Thanks and credits
 ------------------

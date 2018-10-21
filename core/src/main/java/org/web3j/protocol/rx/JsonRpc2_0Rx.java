@@ -203,8 +203,6 @@ public class JsonRpc2_0Rx {
                         }
                     });
         }
-
-
     }
 
     public Observable<Transaction> replayTransactionsObservable(

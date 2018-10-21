@@ -1,6 +1,9 @@
 package org.web3j.protocol.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import org.web3j.protocol.deserializer.KeepAsJsonDeserialzier;
 
 /**
  * Our common JSON-RPC response type.
@@ -65,6 +68,8 @@ public class Response<T> {
     public static class Error {
         private int code;
         private String message;
+
+        @JsonDeserialize(using = KeepAsJsonDeserialzier.class)
         private String data;
 
         public Error() {

@@ -112,7 +112,7 @@ public class HumanStandardTokenIT extends Scenario {
         List<Type> response = FunctionReturnDecoder.decode(
                 responseValue, function.getOutputParameters());
         assertThat(response.size(), is(1));
-        assertThat((Uint256) response.get(0), equalTo(new Uint256(expected)));
+        assertThat(response.get(0), equalTo(new Uint256(expected)));
     }
 
     private void confirmAllowance(String owner, String spender, String contractAddress,
@@ -124,7 +124,7 @@ public class HumanStandardTokenIT extends Scenario {
                 responseValue, function.getOutputParameters());
 
         assertThat(response.size(), is(function.getOutputParameters().size()));
-        assertThat((Uint256) response.get(0), equalTo(new Uint256(expected)));
+        assertThat(response.get(0), equalTo(new Uint256(expected)));
     }
 
     private String createContract(
@@ -353,17 +353,19 @@ public class HumanStandardTokenIT extends Scenario {
     private Event transferEvent() {
         return new Event(
                 "Transfer",
-                Arrays.<TypeReference<?>>asList(
-                        new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint256>() {}));
+                Arrays.asList(
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Uint256>() {}));
     }
 
     private Event approvalEvent() {
         return new Event(
                 "Approval",
-                Arrays.<TypeReference<?>>asList(
-                        new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint256>() {}));
+                Arrays.asList(
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Address>(true) {},
+                        new TypeReference<Uint256>() {}));
     }
 
     private static String getHumanStandardTokenBinary() throws Exception {

@@ -1,28 +1,25 @@
 package org.web3j.protocol.parity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.web3j.crypto.WalletFile;
-import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.parity.methods.request.Derivation;
-import org.web3j.protocol.parity.methods.response.ParityAddressesResponse;
-import org.web3j.protocol.parity.methods.response.ParityAllAccountsInfo;
-import org.web3j.protocol.parity.methods.response.ParityDefaultAddressResponse;
-import org.web3j.protocol.parity.methods.response.ParityDeriveAddress;
-import org.web3j.protocol.parity.methods.response.ParityExportAccount;
-import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
+import org.web3j.protocol.parity.methods.response.*;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * JSON-RPC Request object building factory for Parity.
  */
 public interface Parity extends Admin, Trace {
+
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
     
     Request<?, BooleanResponse> parityChangePassword(
@@ -47,7 +44,10 @@ public interface Parity extends Admin, Trace {
     Request<?, ParityAddressesResponse> parityImportGethAccounts(ArrayList<String> gethAddresses);
     
     Request<?, BooleanResponse> parityKillAccount(String accountId, String password);
-    
+
+    Request<?, ParityAddressesResponse> parityListAccounts(
+            BigInteger quantity, String accountId, DefaultBlockParameter blockParameter);
+
     Request<?, ParityAddressesResponse> parityListGethAccounts();
     
     Request<?, ParityListRecentDapps> parityListRecentDapps();

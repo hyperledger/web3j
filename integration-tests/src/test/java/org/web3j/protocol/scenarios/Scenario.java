@@ -1,14 +1,6 @@
 package org.web3j.protocol.scenarios;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collections;
-
 import org.junit.Before;
-
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
@@ -22,7 +14,15 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collections;
 
 import static junit.framework.TestCase.fail;
 
@@ -33,6 +33,8 @@ public class Scenario {
 
     static final BigInteger GAS_PRICE = BigInteger.valueOf(22000000000L);
     static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
+    static final StaticGasProvider STATIC_GAS_PROVIDER =
+            new StaticGasProvider(GAS_PRICE, GAS_LIMIT);
 
     // testnet
     private static final String WALLET_PASSWORD = "";
@@ -59,7 +61,8 @@ public class Scenario {
 
     Admin web3j;
 
-    public Scenario() { }
+    public Scenario() {
+    }
 
     @Before
     public void setUp() {
@@ -123,7 +126,8 @@ public class Scenario {
         return new Function(
                 "fibonacciNotify",
                 Collections.<Type>singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {}));
+                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {
+                }));
     }
 
     static String load(String filePath) throws URISyntaxException, IOException {

@@ -27,6 +27,7 @@ import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -62,17 +63,23 @@ public abstract class FilterTester {
         EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 
-        final List<T> expected = createExpected(ethLog);
-        final Set<T> results = Collections.synchronizedSet(new HashSet<T>());
+        EthLog notFoundFilter = objectMapper.readValue(
+                "{\"jsonrpc\":\"2.0\",\"id\":1,"
+                + "\"error\":{\"code\":-32000,\"message\":\"filter not found\"}}",
+                EthLog.class);
 
-        final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
+        @SuppressWarnings("unchecked")
+        List<T> expected = createExpected(ethLog);
+        Set<T> results = Collections.synchronizedSet(new HashSet<T>());
 
-        final CountDownLatch completedLatch = new CountDownLatch(1);
+        CountDownLatch transactionLatch = new CountDownLatch(expected.size());
+
+        CountDownLatch completedLatch = new CountDownLatch(1);
 
         when(web3jService.send(any(Request.class), eq(EthFilter.class)))
                 .thenReturn(ethFilter);
         when(web3jService.send(any(Request.class), eq(EthLog.class)))
-                .thenReturn(ethLog);
+            .thenReturn(ethLog).thenReturn(notFoundFilter).thenReturn(ethLog);
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 

@@ -52,7 +52,7 @@ public class NameHash {
      * @return normalised ens name
      * @throws EnsResolutionException if the name cannot be normalised
      */
-    static String normalise(String ensName) {
+    public static String normalise(String ensName) {
         try {
             return IDN.toASCII(ensName, IDN.USE_STD3_ASCII_RULES)
                     .toLowerCase();

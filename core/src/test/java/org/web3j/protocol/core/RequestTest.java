@@ -626,5 +626,4 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"shh_getMessages\","
                 + "\"params\":[\"0x07\"],\"id\":1}");
     }
-
 }

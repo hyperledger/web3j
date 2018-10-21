@@ -62,9 +62,7 @@ public class EventFilterIT extends Scenario {
         assertThat(topics.size(), is(1));
 
         Event event = new Event("Notify",
-                Collections.<TypeReference<?>>emptyList(),
-                Arrays.<TypeReference<?>>asList(
-                        new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+                Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
