@@ -58,7 +58,7 @@ with smart contracts from web3j.
 
 *--bin*
   Outputs a Solidity binary file containing the hex-encoded binary to provide with the transaction
-  request.
+  request. This is required only for *deploy* and *isValid* :ref:`smart-contract-wrappers` methods.
 
 *--abi*
   Outputs a Solidity :doc:`abi` (ABI) file which details all of the publicly
@@ -154,7 +154,16 @@ The web3j :doc:`command_line` tools ship with a command line utility for generat
 
 .. code-block:: bash
 
-   $ web3j solidity generate [--javaTypes|--solidityTypes] /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   $ web3j solidity generate [-hV] [-jt] [-st] -a=<abiFile> [-b=<binFile>] -o=<destinationFileDir> -p=<packageName>
+
+      -h, --help                        Show this help message and exit.
+      -V, --version                     Print version information and exit.
+      -jt, --javaTypes                  use native java types. Default: true
+      -st, --solidityTypes              use solidity types.
+      -a, --abiFile=<abiFile>           abi file with contract definition.
+      -b, --binFile=<binFile>           optional bin file with contract compiled code in order to generate deploy methods. Required for :ref:`contract-validity`.
+      -o, --output=<destinationFileDir> destination base directory.
+      -p, --package=<packageName>       base package name.
 
 In versions prior to 3.x of web3j, the generated smart contract wrappers used native Solidity
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
@@ -164,7 +173,7 @@ You can also generate the wrappers by calling the Java class directly:
 
 .. code-block:: bash
 
-   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   org.web3j.codegen.SolidityFunctionWrapperGenerator -b /path/to/<smart-contract>.bin -a /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Where the *bin* and *abi* are obtained as per :ref:`compiling-Solidity`.
 
@@ -239,6 +248,7 @@ smart contract wrapper.::
    contract.isValid();  // returns false if the contract bytecode does not match what's deployed
                         // at the provided address
 
+Note: Contract wrapper has to be generated with *--bin* provided.
 
 .. _transaction-managers:
 
