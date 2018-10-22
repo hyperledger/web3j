@@ -1,20 +1,10 @@
 package org.web3j.generated;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Event;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
@@ -27,6 +17,12 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -225,22 +221,20 @@ public class HumanStandardToken extends Contract {
         return responses;
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
-            @Override
-            public TransferEventResponse call(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
-                TransferEventResponse typedResponse = new TransferEventResponse();
-                typedResponse.log = log;
-                typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
-                typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
-        });
+    public Flowable<TransferEventResponse> transferEventObservable(EthFilter filter) {
+        return web3j.ethLogObservable(filter).map(log -> {
+                    Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
+                    TransferEventResponse typedResponse = new TransferEventResponse();
+                    typedResponse.log = log;
+                    typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
+                    typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
+                    typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+                    return typedResponse;
+                }
+        );
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
         return transferEventObservable(filter);
@@ -260,19 +254,17 @@ public class HumanStandardToken extends Contract {
         return responses;
     }
 
-    public Observable<ApprovalEventResponse> approvalEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, ApprovalEventResponse>() {
-            @Override
-            public ApprovalEventResponse call(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVAL_EVENT, log);
-                ApprovalEventResponse typedResponse = new ApprovalEventResponse();
-                typedResponse.log = log;
-                typedResponse._owner = (String) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse._spender = (String) eventValues.getIndexedValues().get(1).getValue();
-                typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
-        });
+    public Flowable<ApprovalEventResponse> approvalEventObservable(EthFilter filter) {
+        return web3j.ethLogObservable(filter).map(log -> {
+                    Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVAL_EVENT, log);
+                    ApprovalEventResponse typedResponse = new ApprovalEventResponse();
+                    typedResponse.log = log;
+                    typedResponse._owner = (String) eventValues.getIndexedValues().get(0).getValue();
+                    typedResponse._spender = (String) eventValues.getIndexedValues().get(1).getValue();
+                    typedResponse._value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+                    return typedResponse;
+                }
+        );
     }
 
     public Flowable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {

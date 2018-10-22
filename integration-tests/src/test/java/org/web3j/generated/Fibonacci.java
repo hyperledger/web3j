@@ -90,21 +90,19 @@ public class Fibonacci extends Contract {
         return responses;
     }
 
-    public Observable<NotifyEventResponse> notifyEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, NotifyEventResponse>() {
-            @Override
-            public NotifyEventResponse call(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NOTIFY_EVENT, log);
-                NotifyEventResponse typedResponse = new NotifyEventResponse();
-                typedResponse.log = log;
-                typedResponse.input = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-                typedResponse.result = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
-                return typedResponse;
-            }
-        });
+    public Flowable<NotifyEventResponse> notifyEventObservable(EthFilter filter) {
+        return web3j.ethLogObservable(filter).map(log -> {
+                    Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NOTIFY_EVENT, log);
+                    NotifyEventResponse typedResponse = new NotifyEventResponse();
+                    typedResponse.log = log;
+                    typedResponse.input = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+                    typedResponse.result = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+                    return typedResponse;
+                }
+        );
     }
 
-    public Observable<NotifyEventResponse> notifyEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NotifyEventResponse> notifyEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NOTIFY_EVENT));
         return notifyEventObservable(filter);
