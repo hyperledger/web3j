@@ -3,11 +3,12 @@ package org.web3j.contracts.token;
 import java.math.BigInteger;
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+
 
 /**
  * Describes the Ethereum "Basic" subset of the ERC-20 token standard.
@@ -30,7 +31,7 @@ public interface ERC20BasicInterface<T> {
     
     List<T> getTransferEvents(TransactionReceipt transactionReceipt);
 
-    Observable<T> transferEventObservable(DefaultBlockParameter startBlock,
-            DefaultBlockParameter endBlock);
+    Flowable<T> transferEventObservable(DefaultBlockParameter startBlock,
+                                        DefaultBlockParameter endBlock);
 
 }

@@ -1,6 +1,6 @@
 package org.web3j.protocol.geth;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.Admin;
@@ -40,12 +40,12 @@ public interface Geth extends Admin {
      * @return Observable that emits a notification when a new transaction is added
      *         to the pending state
      */
-    Observable<PendingTransactionNotification> newPendingTransactionsNotifications();
+    Flowable<PendingTransactionNotification> newPendingTransactionsNotifications();
 
     /**
      * Creates an observable that emits a notification when a node starts or stops syncing.
      * @return Observalbe that emits changes to syncing status
      */
-    Observable<SyncingNotfication> syncingStatusNotifications();
+    Flowable<SyncingNotfication> syncingStatusNotifications();
 
 }

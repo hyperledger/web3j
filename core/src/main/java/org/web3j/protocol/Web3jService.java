@@ -3,7 +3,7 @@ package org.web3j.protocol;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
@@ -56,7 +56,7 @@ public interface Web3jService {
      * @param <T> type of incoming event objects
      * @return Observable that emits incoming events
      */
-    <T extends Notification<?>> Observable<T> subscribe(
+    <T extends Notification<?>> Flowable<T> subscribe(
             Request request,
             String unsubscribeMethod,
             Class<T> responseType);

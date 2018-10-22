@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
 import org.junit.Test;
-import rx.Observable;
-import rx.Subscription;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -21,7 +21,7 @@ public class ObservablesTests {
     public void testRangeObservable() throws InterruptedException {
         int count = 10;
 
-        Observable<BigInteger> observable = Observables.range(
+        Flowable<BigInteger> observable = Observables.range(
                 BigInteger.ZERO, BigInteger.valueOf(count - 1));
 
         List<BigInteger> expected = new ArrayList<>(count);
@@ -36,7 +36,7 @@ public class ObservablesTests {
     public void testRangeDescendingObservable() throws InterruptedException {
         int count = 10;
 
-        Observable<BigInteger> observable = Observables.range(
+        Flowable<BigInteger> observable = Observables.range(
                 BigInteger.ZERO, BigInteger.valueOf(count - 1), false);
 
         List<BigInteger> expected = new ArrayList<>(count);
@@ -48,7 +48,7 @@ public class ObservablesTests {
     }
 
     private void runRangeTest(
-            Observable<BigInteger> observable, List<BigInteger> expected)
+            Flowable<BigInteger> observable, List<BigInteger> expected)
             throws InterruptedException {
 
         CountDownLatch transactionLatch = new CountDownLatch(expected.size());
@@ -56,7 +56,7 @@ public class ObservablesTests {
 
         List<BigInteger> results = new ArrayList<>(expected.size());
 
-        Subscription subscription = observable.subscribe(
+        Disposable subscription = observable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -67,10 +67,10 @@ public class ObservablesTests {
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(expected));
 
-        subscription.unsubscribe();
+        subscription.dispose();
 
         completedLatch.await(1, TimeUnit.SECONDS);
-        assertTrue(subscription.isUnsubscribed());
+        assertTrue(subscription.isDisposed());
     }
 
     @Test(expected = IllegalArgumentException.class)

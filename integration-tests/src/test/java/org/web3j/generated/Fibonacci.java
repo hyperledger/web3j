@@ -1,10 +1,6 @@
 package org.web3j.generated;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
@@ -21,8 +17,12 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
-import rx.Observable;
-import rx.functions.Func1;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>Auto generated code.
@@ -40,7 +40,7 @@ public class Fibonacci extends Contract {
 
     public static final String FUNC_FIBONACCI = "fibonacci";
 
-    public static final Event NOTIFY_EVENT = new Event("Notify", 
+    public static final Event NOTIFY_EVENT = new Event("Notify",
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
     ;
 

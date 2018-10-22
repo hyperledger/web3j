@@ -3,7 +3,7 @@ package org.web3j.protocol.core;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.utils.Async;
 
@@ -44,16 +44,7 @@ public class RemoteCall<T> {
      *
      * @return an observable
      */
-    public Observable<T> observable() {
-        return Observable.create(
-                subscriber -> {
-                    try {
-                        subscriber.onNext(send());
-                        subscriber.onCompleted();
-                    } catch (Exception e) {
-                        subscriber.onError(e);
-                    }
-                }
-        );
+    public Flowable<T> observable() {
+        return Flowable.fromCallable(this::send);
     }
 }

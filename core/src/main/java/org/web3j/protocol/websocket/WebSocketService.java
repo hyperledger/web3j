@@ -19,11 +19,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.subjects.BehaviorSubject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3jService;
@@ -349,7 +349,7 @@ public class WebSocketService implements Web3jService {
     }
 
     @Override
-    public <T extends Notification<?>> Observable<T> subscribe(
+    public <T extends Notification<?>> Flowable<T> subscribe(
             Request request,
             String unsubscribeMethod,
             Class<T> responseType) {
@@ -364,8 +364,10 @@ public class WebSocketService implements Web3jService {
         // id and this can cause a race condition
         subscribeToEventsStream(request, subject, responseType);
 
+
         return subject
-                .doOnUnsubscribe(() -> closeSubscription(subject, unsubscribeMethod));
+                .doOnDispose(() -> closeSubscription(subject, unsubscribeMethod))
+                .toFlowable(BackpressureStrategy.BUFFER);
 
     }
 
@@ -387,7 +389,6 @@ public class WebSocketService implements Web3jService {
 
     private <T extends Notification<?>> void closeSubscription(
             BehaviorSubject<T> subject, String unsubscribeMethod) {
-        subject.onCompleted();
         String subscriptionId = getSubscriptionId(subject);
         if (subscriptionId != null) {
             subscriptionForId.remove(subscriptionId);

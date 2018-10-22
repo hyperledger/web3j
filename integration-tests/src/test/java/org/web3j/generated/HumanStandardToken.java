@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -25,8 +27,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
-import rx.Observable;
-import rx.functions.Func1;
+
 
 /**
  * <p>Auto generated code.
@@ -177,17 +178,17 @@ public class HumanStandardToken extends Contract {
     }
 
     public static RemoteCall<HumanStandardToken> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_initialAmount), 
-                new org.web3j.abi.datatypes.Utf8String(_tokenName), 
-                new org.web3j.abi.datatypes.generated.Uint8(_decimalUnits), 
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_initialAmount),
+                new org.web3j.abi.datatypes.Utf8String(_tokenName),
+                new org.web3j.abi.datatypes.generated.Uint8(_decimalUnits),
                 new org.web3j.abi.datatypes.Utf8String(_tokenSymbol)));
         return deployRemoteCall(HumanStandardToken.class, web3j, credentials, contractGasProvider, BINARY, encodedConstructor);
     }
 
     public static RemoteCall<HumanStandardToken> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_initialAmount), 
-                new org.web3j.abi.datatypes.Utf8String(_tokenName), 
-                new org.web3j.abi.datatypes.generated.Uint8(_decimalUnits), 
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(_initialAmount),
+                new org.web3j.abi.datatypes.Utf8String(_tokenName),
+                new org.web3j.abi.datatypes.generated.Uint8(_decimalUnits),
                 new org.web3j.abi.datatypes.Utf8String(_tokenSymbol)));
         return deployRemoteCall(HumanStandardToken.class, web3j, transactionManager, contractGasProvider, BINARY, encodedConstructor);
     }
@@ -274,7 +275,7 @@ public class HumanStandardToken extends Contract {
         });
     }
 
-    public Observable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(APPROVAL_EVENT));
         return approvalEventObservable(filter);

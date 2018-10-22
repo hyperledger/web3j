@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
@@ -694,7 +694,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Observable<NewHeadsNotification> newHeadsNotifications() {
+    public Flowable<NewHeadsNotification> newHeadsNotifications() {
         return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",
@@ -707,7 +707,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Observable<LogNotification> logsNotifications(
+    public Flowable<LogNotification> logsNotifications(
             List<String> addresses, List<String> topics) {
 
         Map<String, Object> params = createLogsParams(addresses, topics);
@@ -735,47 +735,47 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Observable<String> ethBlockHashObservable() {
+    public Flowable<String> ethBlockHashObservable() {
         return web3jRx.ethBlockHashObservable(blockTime);
     }
 
     @Override
-    public Observable<String> ethPendingTransactionHashObservable() {
+    public Flowable<String> ethPendingTransactionHashObservable() {
         return web3jRx.ethPendingTransactionHashObservable(blockTime);
     }
 
     @Override
-    public Observable<Log> ethLogObservable(
+    public Flowable<Log> ethLogObservable(
             org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         return web3jRx.ethLogObservable(ethFilter, blockTime);
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+    public Flowable<org.web3j.protocol.core.methods.response.Transaction>
             transactionObservable() {
         return web3jRx.transactionObservable(blockTime);
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+    public Flowable<org.web3j.protocol.core.methods.response.Transaction>
             pendingTransactionObservable() {
         return web3jRx.pendingTransactionObservable(blockTime);
     }
 
     @Override
-    public Observable<EthBlock> blockObservable(boolean fullTransactionObjects) {
+    public Flowable<EthBlock> blockObservable(boolean fullTransactionObjects) {
         return web3jRx.blockObservable(fullTransactionObjects, blockTime);
     }
 
     @Override
-    public Observable<EthBlock> replayBlocksObservable(
+    public Flowable<EthBlock> replayBlocksObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects) {
         return web3jRx.replayBlocksObservable(startBlock, endBlock, fullTransactionObjects);
     }
 
     @Override
-    public Observable<EthBlock> replayBlocksObservable(
+    public Flowable<EthBlock> replayBlocksObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects, boolean ascending) {
         return web3jRx.replayBlocksObservable(startBlock, endBlock,
@@ -783,41 +783,41 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+    public Flowable<org.web3j.protocol.core.methods.response.Transaction>
             replayTransactionsObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return web3jRx.replayTransactionsObservable(startBlock, endBlock);
     }
 
     @Override
-    public Observable<EthBlock> catchUpToLatestBlockObservable(
+    public Flowable<EthBlock> catchUpToLatestBlockObservable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
-            Observable<EthBlock> onCompleteObservable) {
+            Flowable<EthBlock> onCompleteObservable) {
         return web3jRx.catchUpToLatestBlockObservable(
                 startBlock, fullTransactionObjects, onCompleteObservable);
     }
 
     @Override
-    public Observable<EthBlock> catchUpToLatestBlockObservable(
+    public Flowable<EthBlock> catchUpToLatestBlockObservable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
         return web3jRx.catchUpToLatestBlockObservable(startBlock, fullTransactionObjects);
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+    public Flowable<org.web3j.protocol.core.methods.response.Transaction>
             catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestTransactionObservable(startBlock);
     }
 
     @Override
-    public Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
+    public Flowable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
         return web3jRx.catchUpToLatestAndSubscribeToNewBlocksObservable(
                 startBlock, fullTransactionObjects, blockTime);
     }
 
     @Override
-    public Observable<org.web3j.protocol.core.methods.response.Transaction>
+    public Flowable<org.web3j.protocol.core.methods.response.Transaction>
             catchUpToLatestAndSubscribeToNewTransactionsObservable(
             DefaultBlockParameter startBlock) {
         return web3jRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(

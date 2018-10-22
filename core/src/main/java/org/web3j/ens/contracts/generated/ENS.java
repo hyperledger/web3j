@@ -6,9 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Func1;
-
+import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.TypeReference;
@@ -65,22 +63,19 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Observable<NewOwnerEventResponse> newOwnerEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NewOwnerEventResponse> newOwnerEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewOwner", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>(true) {},
                         new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(new Func1<Log, NewOwnerEventResponse>() {
-            @Override
-            public NewOwnerEventResponse call(Log log) {
-                EventValues eventValues = extractEventParameters(event, log);
-                NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
-                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse.label = (byte[]) eventValues.getIndexedValues().get(1).getValue();
-                typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
+        return web3j.ethLogObservable(filter).map(log -> {
+            EventValues eventValues = extractEventParameters(event, log);
+            NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
+            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+            typedResponse.label = (byte[]) eventValues.getIndexedValues().get(1).getValue();
+            typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
+            return typedResponse;
         });
     }
 
@@ -99,21 +94,18 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("Transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
                         new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
-            @Override
-            public TransferEventResponse call(Log log) {
-                EventValues eventValues = extractEventParameters(event, log);
-                TransferEventResponse typedResponse = new TransferEventResponse();
-                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
+        return web3j.ethLogObservable(filter).map(log -> {
+            EventValues eventValues = extractEventParameters(event, log);
+            TransferEventResponse typedResponse = new TransferEventResponse();
+            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+            typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
+            return typedResponse;
         });
     }
 
@@ -132,21 +124,18 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Observable<NewResolverEventResponse> newResolverEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NewResolverEventResponse> newResolverEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewResolver", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
                         new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(new Func1<Log, NewResolverEventResponse>() {
-            @Override
-            public NewResolverEventResponse call(Log log) {
-                EventValues eventValues = extractEventParameters(event, log);
-                NewResolverEventResponse typedResponse = new NewResolverEventResponse();
-                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse.resolver = (String) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
+        return web3j.ethLogObservable(filter).map(log -> {
+            EventValues eventValues = extractEventParameters(event, log);
+            NewResolverEventResponse typedResponse = new NewResolverEventResponse();
+            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+            typedResponse.resolver = (String) eventValues.getNonIndexedValues().get(0).getValue();
+            return typedResponse;
         });
     }
 
@@ -165,21 +154,18 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Observable<NewTTLEventResponse> newTTLEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NewTTLEventResponse> newTTLEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewTTL", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
                         new TypeReference<Uint64>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(new Func1<Log, NewTTLEventResponse>() {
-            @Override
-            public NewTTLEventResponse call(Log log) {
-                EventValues eventValues = extractEventParameters(event, log);
-                NewTTLEventResponse typedResponse = new NewTTLEventResponse();
-                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse.ttl = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
+        return web3j.ethLogObservable(filter).map(log -> {
+            EventValues eventValues = extractEventParameters(event, log);
+            NewTTLEventResponse typedResponse = new NewTTLEventResponse();
+            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+            typedResponse.ttl = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            return typedResponse;
         });
     }
 
