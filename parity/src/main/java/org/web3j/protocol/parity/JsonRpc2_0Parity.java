@@ -147,13 +147,13 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     public Request<?, ParityAddressesResponse> parityListAccounts(
             BigInteger quantity, String accountId, DefaultBlockParameter blockParameter) {
         if (blockParameter == null) {
-            return new Request<>(
+            return new Request(
                     "parity_listAccounts",
                     Arrays.asList(quantity, accountId),
                     web3jService,
                     ParityAddressesResponse.class);
         } else {
-            return new Request<>(
+            return new Request(
                     "parity_listAccounts",
                     Arrays.asList(quantity, accountId, blockParameter),
                     web3jService,

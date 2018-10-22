@@ -316,8 +316,8 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     Iterable<FieldSpec> buildFuncNameConstants(List<AbiDefinition> functionDefinitions) {
-        List<FieldSpec> fields = new ArrayList<>();
-        Set<String> fieldNames = new HashSet<>();
+        List<FieldSpec> fields = new ArrayList<FieldSpec>();
+        Set<String> fieldNames = new HashSet<String>();
         fieldNames.add(Contract.FUNC_DEPLOY);
 
         for (AbiDefinition functionDefinition : functionDefinitions) {
@@ -967,9 +967,9 @@ public class SolidityFunctionWrapper extends Generator {
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 
-        List<NamedTypeName> parameters = new ArrayList<>();
-        List<NamedTypeName> indexedParameters = new ArrayList<>();
-        List<NamedTypeName> nonIndexedParameters = new ArrayList<>();
+        List<NamedTypeName> parameters = new ArrayList<NamedTypeName>();
+        List<NamedTypeName> indexedParameters = new ArrayList<NamedTypeName>();
+        List<NamedTypeName> nonIndexedParameters = new ArrayList<NamedTypeName>();
 
         for (AbiDefinition.NamedType namedType : inputs) {
             NamedTypeName parameter = new NamedTypeName(
@@ -990,7 +990,7 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addType(buildEventResponseObject(responseClassName, indexedParameters,
                 nonIndexedParameters));
 
-        List<MethodSpec> methods = new ArrayList<>();
+        List<MethodSpec> methods = new ArrayList<MethodSpec>();
         methods.add(buildEventTransactionReceiptFunction(responseClassName,
                 functionName, indexedParameters, nonIndexedParameters));
 

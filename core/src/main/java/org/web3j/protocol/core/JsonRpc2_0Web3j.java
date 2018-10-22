@@ -331,7 +331,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, org.web3j.protocol.core.methods.response.EthCall> ethCall(
             Transaction transaction, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
+        return new Request<Object, org.web3j.protocol.core.methods.response.EthCall>(
                 "eth_call",
                 Arrays.asList(transaction, defaultBlockParameter),
                 web3jService,
@@ -697,7 +697,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Observable<NewHeadsNotification> newHeadsNotifications() {
         return web3jService.subscribe(
-                new Request<>(
+                new Request<String, EthSubscribe>(
                         "eth_subscribe",
                         Collections.singletonList("newHeads"),
                         web3jService,
@@ -714,7 +714,7 @@ public class JsonRpc2_0Web3j implements Web3j {
         Map<String, Object> params = createLogsParams(addresses, topics);
 
         return web3jService.subscribe(
-                new Request<>(
+                new Request<Object, EthSubscribe>(
                         "eth_subscribe",
                         Arrays.asList("logs", params),
                         web3jService,
@@ -725,7 +725,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     private Map<String, Object> createLogsParams(List<String> addresses, List<String> topics) {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<String, Object>();
         if (!addresses.isEmpty()) {
             params.put("address", addresses);
         }

@@ -104,17 +104,20 @@ public class Utils {
             List<List<T>> input,
             Class<E> outerDestType,
             Class<R> innerType) {
-        List<E> result = new ArrayList<>();
+        List<E> result = new ArrayList<E>();
         try {
             Constructor<E> constructor = outerDestType.getDeclaredConstructor(List.class);
             for (List<T> ts : input) {
                 E e = constructor.newInstance(typeMap(ts, innerType));
                 result.add(e);
             }
-        } catch (NoSuchMethodException
-                | IllegalAccessException
-                | InstantiationException
-                | InvocationTargetException e) {
+        } catch (InstantiationException e) {
+            throw new TypeMappingException(e);
+        }  catch (NoSuchMethodException e) {
+            throw new TypeMappingException(e);
+        } catch (IllegalAccessException e) {
+            throw new TypeMappingException(e);
+        } catch (InvocationTargetException e) {
             throw new TypeMappingException(e);
         }
         return result;
