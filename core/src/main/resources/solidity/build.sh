@@ -19,8 +19,8 @@ for target in ${targets}; do
 
     echo "Generating web3j bindings"
     web3j solidity generate \
-        build/${fileName}.bin \
-        build/${fileName}.abi \
+        -b build/${fileName}.bin \
+        -a build/${fileName}.abi \
         -p org.web3j.ens.contracts.generated \
         -o ../../../../main/java/ > /dev/null
     echo "Complete"
