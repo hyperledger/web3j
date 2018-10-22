@@ -112,7 +112,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         // Bob requires his own contract instance
         HumanStandardToken bobsContract = HumanStandardToken.load(
-                contract.getContractAddress(), web3j, BOB, GAS_PRICE, GAS_LIMIT);
+                contract.getContractAddress(), web3j, BOB, STATIC_GAS_PROVIDER);
 
         TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
                 aliceAddress,
