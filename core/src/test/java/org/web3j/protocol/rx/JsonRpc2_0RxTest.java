@@ -125,8 +125,13 @@ public class JsonRpc2_0RxTest {
         assertTrue(subscription.isDisposed());
     }
 
+    /**
+     * This test was previously named: <code>testCatchUpToLatestBlockObservable</code>.
+     *
+     * @throws Exception
+     */
     @Test
-    public void testCatchUpToLatestBlockObservable() throws Exception {
+    public void testBlockCatchupObservable() throws Exception {
         List<EthBlock> expected = Arrays.asList(
                 createBlock(0), createBlock(1), createBlock(2),
                 createBlock(3), createBlock(4));
@@ -190,8 +195,14 @@ public class JsonRpc2_0RxTest {
         assertTrue(subscription.isDisposed());
     }
 
+    /**
+     * Tests subscription to new blocks once it has caught up. <br />
+     * This test was previously named: <code>testCatchUpToLatestAndSubscribeToNewBlockObservable</code>.
+     *
+     * @throws Exception
+     */
     @Test
-    public void testCatchUpToLatestAndSubscribeToNewBlockObservable() throws Exception {
+    public void testBlockCatchupAndSubscriptionObservable() throws Exception {
         List<EthBlock> expected = Arrays.asList(
                 createBlock(0), createBlock(1), createBlock(2),
                 createBlock(3), createBlock(4), createBlock(5),

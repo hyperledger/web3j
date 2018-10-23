@@ -34,17 +34,17 @@ public interface Geth extends Admin {
     Request<?, BooleanResponse> minerStop();
 
     /**
-     * Creates an observable that emits a notification when a new transaction is added
+     * Creates an {@link Flowable} instance that emits a notification when a new transaction is added
      * to the pending state and is signed with a key that is available in the node.
      *
-     * @return Observable that emits a notification when a new transaction is added
+     * @return a @{@link Flowable} instance that emits a notification when a new transaction is added
      *         to the pending state
      */
     Flowable<PendingTransactionNotification> newPendingTransactionsNotifications();
 
     /**
-     * Creates an observable that emits a notification when a node starts or stops syncing.
-     * @return Observalbe that emits changes to syncing status
+     * Creates an {@link Flowable} instance that emits a notification when a node starts or stops syncing.
+     * @return a @{@link Flowable} instance that emits changes to syncing status
      */
     Flowable<SyncingNotfication> syncingStatusNotifications();
 

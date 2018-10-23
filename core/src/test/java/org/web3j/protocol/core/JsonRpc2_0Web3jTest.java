@@ -29,7 +29,7 @@ public class JsonRpc2_0Web3jTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void testThrowsRuntimeExceptionIfFailedToCloseService() throws Exception {
+    public void testExceptionOnServiceClosure() throws Exception {
         doThrow(new IOException("Failed to close"))
                 .when(service).close();
 

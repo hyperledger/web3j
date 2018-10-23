@@ -54,7 +54,7 @@ public interface Web3jService {
      *                          stream of notifications
      * @param responseType class of incoming events objects in a stream
      * @param <T> type of incoming event objects
-     * @return Observable that emits incoming events
+     * @return a @{@link Flowable} instance that emits incoming events
      */
     <T extends Notification<?>> Flowable<T> subscribe(
             Request request,

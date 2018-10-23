@@ -16,12 +16,12 @@ public class Observables {
     }
 
     /**
-     * Simple Observable implementation to emit a range of BigInteger values.
+     * Simple {@link Flowable} implementation to emit a range of BigInteger values.
      *
      * @param startValue first value to emit in range
      * @param endValue final value to emit in range
      * @param ascending direction to iterate through range
-     * @return Observable to emit this range of values
+     * @return a @{@link Flowable} instance to emit this range of values
      */
     public static Flowable<BigInteger> range(
             final BigInteger startValue, final BigInteger endValue, final boolean ascending) {
