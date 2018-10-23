@@ -22,7 +22,7 @@ import org.web3j.protocol.core.filters.PendingTransactionFilter;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.Transaction;
-import org.web3j.utils.Observables;
+import org.web3j.utils.Flowables;
 
 /**
  * web3j reactive API implementation.
@@ -39,7 +39,7 @@ public class JsonRpc2_0Rx {
         this.scheduler = Schedulers.from(scheduledExecutorService);
     }
 
-    public Flowable<String> ethBlockHashObservable(long pollingInterval) {
+    public Flowable<String> ethBlockHashFlowable(long pollingInterval) {
         return Flowable.create(subscriber -> {
             BlockFilter blockFilter = new BlockFilter(
                     web3j, subscriber::onNext);
@@ -47,7 +47,7 @@ public class JsonRpc2_0Rx {
         }, BackpressureStrategy.BUFFER);
     }
 
-    public Flowable<String> ethPendingTransactionHashObservable(long pollingInterval) {
+    public Flowable<String> ethPendingTransactionHashFlowable(long pollingInterval) {
         return Flowable.create(subscriber -> {
             PendingTransactionFilter pendingTransactionFilter = new PendingTransactionFilter(
                     web3j, subscriber::onNext);
@@ -56,7 +56,7 @@ public class JsonRpc2_0Rx {
         }, BackpressureStrategy.BUFFER);
     }
 
-    public Flowable<Log> ethLogObservable(
+    public Flowable<Log> ethLogFlowable(
             org.web3j.protocol.core.methods.request.EthFilter ethFilter, long pollingInterval) {
         return Flowable.create(subscriber -> {
             LogFilter logFilter = new LogFilter(
@@ -74,48 +74,48 @@ public class JsonRpc2_0Rx {
         emitter.setCancellable(filter::cancel);
     }
 
-    public Flowable<Transaction> transactionObservable(long pollingInterval) {
-        return blockObservable(true, pollingInterval)
+    public Flowable<Transaction> transactionFlowable(long pollingInterval) {
+        return blockFlowable(true, pollingInterval)
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
-    public Flowable<Transaction> pendingTransactionObservable(long pollingInterval) {
-        return ethPendingTransactionHashObservable(pollingInterval)
+    public Flowable<Transaction> pendingTransactionFlowable(long pollingInterval) {
+        return ethPendingTransactionHashFlowable(pollingInterval)
                 .flatMap(transactionHash ->
-                        web3j.ethGetTransactionByHash(transactionHash).observable())
+                        web3j.ethGetTransactionByHash(transactionHash).flowable())
                 .filter(ethTransaction -> ethTransaction.getTransaction().isPresent())
                 .map(ethTransaction -> ethTransaction.getTransaction().get());
     }
 
-    public Flowable<EthBlock> blockObservable(
+    public Flowable<EthBlock> blockFlowable(
             boolean fullTransactionObjects, long pollingInterval) {
-        return ethBlockHashObservable(pollingInterval)
+        return ethBlockHashFlowable(pollingInterval)
                 .flatMap(blockHash ->
-                        web3j.ethGetBlockByHash(blockHash, fullTransactionObjects).observable());
+                        web3j.ethGetBlockByHash(blockHash, fullTransactionObjects).flowable());
     }
 
-    public Flowable<EthBlock> replayBlocksObservable(
+    public Flowable<EthBlock> replayBlocksFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects) {
-        return replayBlocksObservable(startBlock, endBlock, fullTransactionObjects, true);
+        return replayBlocksFlowable(startBlock, endBlock, fullTransactionObjects, true);
     }
 
-    public Flowable<EthBlock> replayBlocksObservable(
+    public Flowable<EthBlock> replayBlocksFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects, boolean ascending) {
-        // We use a scheduler to ensure this Observable runs asynchronously for users to be
-        // consistent with the other Observables
-        return replayBlocksObservableSync(startBlock, endBlock, fullTransactionObjects, ascending)
+        // We use a scheduler to ensure this Flowable runs asynchronously for users to be
+        // consistent with the other Flowables
+        return replayBlocksFlowableSync(startBlock, endBlock, fullTransactionObjects, ascending)
                 .subscribeOn(scheduler);
     }
 
-    private Flowable<EthBlock> replayBlocksObservableSync(
+    private Flowable<EthBlock> replayBlocksFlowableSync(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects) {
-        return replayBlocksObservableSync(startBlock, endBlock, fullTransactionObjects, true);
+        return replayBlocksFlowableSync(startBlock, endBlock, fullTransactionObjects, true);
     }
 
-    private Flowable<EthBlock> replayBlocksObservableSync(
+    private Flowable<EthBlock> replayBlocksFlowableSync(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects, boolean ascending) {
 
@@ -129,43 +129,43 @@ public class JsonRpc2_0Rx {
         }
 
         if (ascending) {
-            return Observables.range(startBlockNumber, endBlockNumber)
+            return Flowables.range(startBlockNumber, endBlockNumber)
                     .flatMap(i -> web3j.ethGetBlockByNumber(
                             new DefaultBlockParameterNumber(i),
-                            fullTransactionObjects).observable());
+                            fullTransactionObjects).flowable());
         } else {
-            return Observables.range(startBlockNumber, endBlockNumber, false)
+            return Flowables.range(startBlockNumber, endBlockNumber, false)
                     .flatMap(i -> web3j.ethGetBlockByNumber(
                             new DefaultBlockParameterNumber(i),
-                            fullTransactionObjects).observable());
+                            fullTransactionObjects).flowable());
         }
     }
 
-    public Flowable<Transaction> replayTransactionsObservable(
+    public Flowable<Transaction> replayTransactionsFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        return replayBlocksObservable(startBlock, endBlock, true)
+        return replayBlocksFlowable(startBlock, endBlock, true)
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
-    public Flowable<EthBlock> catchUpToLatestBlockObservable(
+    public Flowable<EthBlock> replayAllBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
-            Flowable<EthBlock> onCompleteObservable) {
-        // We use a scheduler to ensure this Observable runs asynchronously for users to be
-        // consistent with the other Observables
-        return catchUpToLatestBlockObservableSync(
-                startBlock, fullTransactionObjects, onCompleteObservable)
+            Flowable<EthBlock> onCompleteFlowable) {
+        // We use a scheduler to ensure this Flowable runs asynchronously for users to be
+        // consistent with the other Flowables
+        return replayAllBlocksFlowableSync(
+                startBlock, fullTransactionObjects, onCompleteFlowable)
                 .subscribeOn(scheduler);
     }
 
-    public Flowable<EthBlock> catchUpToLatestBlockObservable(
+    public Flowable<EthBlock> replayAllBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
-        return catchUpToLatestBlockObservable(
+        return replayAllBlocksFlowable(
                 startBlock, fullTransactionObjects, Flowable.empty());
     }
 
-    private Flowable<EthBlock> catchUpToLatestBlockObservableSync(
+    private Flowable<EthBlock> replayAllBlocksFlowableSync(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
-            Flowable<EthBlock> onCompleteObservable) {
+            Flowable<EthBlock> onCompleteFlowable) {
 
         BigInteger startBlockNumber;
         BigInteger latestBlockNumber;
@@ -177,39 +177,40 @@ public class JsonRpc2_0Rx {
         }
 
         if (startBlockNumber.compareTo(latestBlockNumber) > -1) {
-            return onCompleteObservable;
+            return onCompleteFlowable;
         } else {
             return Flowable.concat(
-                    replayBlocksObservableSync(
+                    replayBlocksFlowableSync(
                             new DefaultBlockParameterNumber(startBlockNumber),
                             new DefaultBlockParameterNumber(latestBlockNumber),
                             fullTransactionObjects),
-                    Flowable.defer(() -> catchUpToLatestBlockObservableSync(
+                    Flowable.defer(() -> replayAllBlocksFlowableSync(
                             new DefaultBlockParameterNumber(latestBlockNumber.add(BigInteger.ONE)),
                             fullTransactionObjects,
-                            onCompleteObservable)));
+                            onCompleteFlowable)));
         }
     }
 
-    public Flowable<Transaction> catchUpToLatestTransactionObservable(
+    public Flowable<Transaction> replayAllTransactionsFlowable(
             DefaultBlockParameter startBlock) {
-        return catchUpToLatestBlockObservable(
+        return replayAllBlocksFlowable(
                 startBlock, true, Flowable.empty())
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
-    public Flowable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
+    // replayAllAndFutureBlocksFlowable
+    public Flowable<EthBlock> replayAllAndFutureBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             long pollingInterval) {
 
-        return catchUpToLatestBlockObservable(
+        return replayAllBlocksFlowable(
                 startBlock, fullTransactionObjects,
-                blockObservable(fullTransactionObjects, pollingInterval));
+                blockFlowable(fullTransactionObjects, pollingInterval));
     }
 
-    public Flowable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(
+    public Flowable<Transaction> replayAllAndFutureTransactionsFlowable(
             DefaultBlockParameter startBlock, long pollingInterval) {
-        return catchUpToLatestAndSubscribeToNewBlocksObservable(
+        return replayAllAndFutureBlocksFlowable(
                 startBlock, true, pollingInterval)
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }

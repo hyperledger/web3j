@@ -40,11 +40,11 @@ public class RemoteCall<T> {
     }
 
     /**
-     * Provide an observable to emit result from our function.
+     * Provide an flowable to emit result from our function.
      *
-     * @return an observable
+     * @return an flowable
      */
-    public Flowable<T> observable() {
+    public Flowable<T> flowable() {
         return Flowable.fromCallable(this::send);
     }
 }

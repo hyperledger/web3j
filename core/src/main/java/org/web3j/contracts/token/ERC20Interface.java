@@ -30,7 +30,7 @@ public interface ERC20Interface<R, T> extends ERC20BasicInterface<T> {
 
     List<R> getApprovalEvents(TransactionReceipt transactionReceipt);
 
-    Flowable<R> approvalEventObservable(DefaultBlockParameter startBlock,
+    Flowable<R> approvalEventFlowable(DefaultBlockParameter startBlock,
                                         DefaultBlockParameter endBlock);
 
 }

@@ -290,8 +290,8 @@ public class WebSocketServiceTest {
         CountDownLatch unsubscribed = new CountDownLatch(1);
 
         runAsync(() -> {
-            Flowable<NewHeadsNotification> observable = subscribeToEvents();
-            observable.subscribe().dispose();
+            Flowable<NewHeadsNotification> flowable = subscribeToEvents();
+            flowable.subscribe().dispose();
             unsubscribed.countDown();
 
         });

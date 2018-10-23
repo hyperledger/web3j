@@ -837,7 +837,7 @@ public class SolidityFunctionWrapper extends Generator {
         return builder.build();
     }
 
-    MethodSpec buildEventObservableFunction(
+    MethodSpec buildEventFlowableFunction(
             String responseClassName,
             String functionName,
             List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
@@ -845,12 +845,12 @@ public class SolidityFunctionWrapper extends Generator {
             throws ClassNotFoundException {
 
         String generatedFunctionName =
-                Strings.lowercaseFirstLetter(functionName) + "EventObservable";
+                Strings.lowercaseFirstLetter(functionName) + "EventFlowable";
         ParameterizedTypeName parameterizedTypeName =
                 ParameterizedTypeName.get(ClassName.get(Flowable.class),
                 ClassName.get("", responseClassName));
 
-        MethodSpec.Builder observableMethodBuilder =
+        MethodSpec.Builder flowableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(EthFilter.class, FILTER)
@@ -877,37 +877,37 @@ public class SolidityFunctionWrapper extends Generator {
                         .build())
                 .build();
 
-        observableMethodBuilder
-                .addStatement("return web3j.ethLogObservable(filter).map($L)", converter);
+        flowableMethodBuilder
+                .addStatement("return web3j.ethLogFlowable(filter).map($L)", converter);
 
-        return observableMethodBuilder
+        return flowableMethodBuilder
                 .build();
     }
 
-    MethodSpec buildDefaultEventObservableFunction(
+    MethodSpec buildDefaultEventFlowableFunction(
             String responseClassName,
             String functionName) {
 
         String generatedFunctionName =
-                Strings.lowercaseFirstLetter(functionName) + "EventObservable";
+                Strings.lowercaseFirstLetter(functionName) + "EventFlowable";
         ParameterizedTypeName parameterizedTypeName =
                 ParameterizedTypeName.get(ClassName.get(Flowable.class),
                 ClassName.get("", responseClassName));
 
-        MethodSpec.Builder observableMethodBuilder =
+        MethodSpec.Builder flowableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(DefaultBlockParameter.class, START_BLOCK)
                         .addParameter(DefaultBlockParameter.class, END_BLOCK)
                         .returns(parameterizedTypeName);
 
-        observableMethodBuilder.addStatement("$1T filter = new $1T($2L, $3L, "
+        flowableMethodBuilder.addStatement("$1T filter = new $1T($2L, $3L, "
                 + "getContractAddress())", EthFilter.class, START_BLOCK, END_BLOCK)
                 .addStatement("filter.addSingleTopic($T.encode("
                         + buildEventDefinitionName(functionName) + "))", EventEncoder.class)
                 .addStatement("return " + generatedFunctionName + "(filter)");
 
-        return observableMethodBuilder
+        return flowableMethodBuilder
                 .build();
     }
 
@@ -983,9 +983,9 @@ public class SolidityFunctionWrapper extends Generator {
         methods.add(buildEventTransactionReceiptFunction(responseClassName,
                 functionName, indexedParameters, nonIndexedParameters));
 
-        methods.add(buildEventObservableFunction(responseClassName, functionName,
+        methods.add(buildEventFlowableFunction(responseClassName, functionName,
                 indexedParameters, nonIndexedParameters));
-        methods.add(buildDefaultEventObservableFunction(responseClassName,
+        methods.add(buildDefaultEventFlowableFunction(responseClassName,
                 functionName));
         return methods;
     }
@@ -994,7 +994,7 @@ public class SolidityFunctionWrapper extends Generator {
             String objectName,
             List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
             List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters,
-            boolean observable) {
+            boolean flowable) {
         String nativeConversion;
 
         if (useNativeJavaTypes) {
@@ -1004,7 +1004,7 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         CodeBlock.Builder builder = CodeBlock.builder();
-        if (observable) {
+        if (flowable) {
             builder.addStatement("$L.log = log", objectName);
         } else {
             builder.addStatement(

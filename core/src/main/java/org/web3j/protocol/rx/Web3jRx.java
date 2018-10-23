@@ -13,76 +13,76 @@ import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
 /**
- * The Observables JSON-RPC client event API.
+ * The Flowables JSON-RPC client event API.
  */
 public interface Web3jRx {
 
     /**
-     * Create an observable to filter for specific log events on the blockchain.
+     * Create an flowable to filter for specific log events on the blockchain.
      *
      * @param ethFilter filter criteria
-     * @return a @{@link Flowable} instance that emits all Log events matching the filter
+     * @return a {@link Flowable} instance that emits all Log events matching the filter
      */
-    Flowable<Log> ethLogObservable(EthFilter ethFilter);
+    Flowable<Log> ethLogFlowable(EthFilter ethFilter);
 
     /**
-     * Create an Observable to emit block hashes.
+     * Create an Flowable to emit block hashes.
      *
-     * @return a @{@link Flowable} instance that emits all new block hashes as new blocks are
+     * @return a {@link Flowable} instance that emits all new block hashes as new blocks are
      *      created on the blockchain
      */
-    Flowable<String> ethBlockHashObservable();
+    Flowable<String> ethBlockHashFlowable();
 
     /**
-     * Create an Observable to emit pending transactions, i.e. those transactions that have been
+     * Create an Flowable to emit pending transactions, i.e. those transactions that have been
      * submitted by a node, but don't yet form part of a block (haven't been mined yet).
      *
-     * @return a @{@link Flowable} instance to emit pending transaction hashes.
+     * @return a {@link Flowable} instance to emit pending transaction hashes.
      */
-    Flowable<String> ethPendingTransactionHashObservable();
+    Flowable<String> ethPendingTransactionHashFlowable();
 
     /**
-     * Create an @{@link Flowable} instance to emit all new transactions as they are confirmed on
+     * Create an {@link Flowable} instance to emit all new transactions as they are confirmed on
      * the blockchain. i.e. they have been mined and are incorporated into a block.
      *
-     * @return a @{@link Flowable} instance to emit new transactions on the blockchain
+     * @return a {@link Flowable} instance to emit new transactions on the blockchain
      */
-    Flowable<Transaction> transactionObservable();
+    Flowable<Transaction> transactionFlowable();
 
     /**
-     * Create an @{@link Flowable} instance to emit all pending transactions that have yet to be
+     * Create an {@link Flowable} instance to emit all pending transactions that have yet to be
      * placed into a block on the blockchain.
      *
-     * @return a @{@link Flowable} instance to emit pending transactions
+     * @return a {@link Flowable} instance to emit pending transactions
      */
-    Flowable<Transaction> pendingTransactionObservable();
+    Flowable<Transaction> pendingTransactionFlowable();
 
     /**
-     * Create an @{@link Flowable} instance that emits newly created blocks on the blockchain.
+     * Create an {@link Flowable} instance that emits newly created blocks on the blockchain.
      *
      * @param fullTransactionObjects if true, provides transactions embedded in blocks, otherwise
      *                              transaction hashes
-     * @return a @{@link Flowable} instance that emits all new blocks as they are added to the
+     * @return a {@link Flowable} instance that emits all new blocks as they are added to the
      *         blockchain
      */
-    Flowable<EthBlock> blockObservable(boolean fullTransactionObjects);
+    Flowable<EthBlock> blockFlowable(boolean fullTransactionObjects);
 
     /**
-     * Create an @{@link Flowable} instance that emits all blocks from the blockchain contained
+     * Create an {@link Flowable} instance that emits all blocks from the blockchain contained
      * within the requested range.
      *
      * @param startBlock block number to commence with
      * @param endBlock block number to finish with
      * @param fullTransactionObjects if true, provides transactions embedded in blocks, otherwise
      *                               transaction hashes
-     * @return a @{@link Flowable} instance to emit these blocks
+     * @return a {@link Flowable} instance to emit these blocks
      */
-    Flowable<EthBlock> replayBlocksObservable(
+    Flowable<EthBlock> replayAllBlocksFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects);
 
     /**
-     * Create an @{@link Flowable} instance that emits all blocks from the blockchain contained
+     * Create an {@link Flowable} instance that emits all blocks from the blockchain contained
      * within the requested range.
      *
      * @param startBlock block number to commence with
@@ -91,107 +91,107 @@ public interface Web3jRx {
      *                               transaction hashes
      * @param ascending if true, emits blocks in ascending order between range, otherwise
      *                  in descending order
-     * @return a @{@link Flowable} instance to emit these blocks
+     * @return a {@link Flowable} instance to emit these blocks
      */
-    Flowable<EthBlock> replayBlocksObservable(
+    Flowable<EthBlock> replayAllBlocksFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects, boolean ascending);
 
     /**
-     * Create a @{@link Flowable} instance that emits all transactions from the blockchain
-     * contained within the requested range.
-     *
-     * @param startBlock block number to commence with
-     * @param endBlock block number to finish with
-     * @return a @{@link Flowable} instance to emit these transactions in the order they
-     *         appear in the blocks
-     */
-    Flowable<Transaction> replayTransactionsObservable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
-
-    /**
-     * Create a @{@link Flowable} instance that emits all transactions from the blockchain
+     * Create a {@link Flowable} instance that emits all transactions from the blockchain
      * starting with a provided block number. Once it has replayed up to the most current block,
      * the provided Flowable is invoked.
      *
      * <p>To automatically subscribe to new blocks, use
-     * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(DefaultBlockParameter, boolean)}.
+     * {@link #replayAllAndFutureBlocksFlowable(DefaultBlockParameter, boolean)}.
      *
      * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
      *                              in the {@link EthBlock} responses
-     * @param onCompleteObservable a subsequent Observable that we wish to run once we are caught
+     * @param onCompleteFlowable a subsequent Flowable that we wish to run once we are caught
      *                             up with the latest block
-     * @return a @{@link Flowable} instance to emit all requested blocks
+     * @return a {@link Flowable} instance to emit all requested blocks
      */
-    Flowable<EthBlock> catchUpToLatestBlockObservable(
+    Flowable<EthBlock> replayAllBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
-            Flowable<EthBlock> onCompleteObservable);
+            Flowable<EthBlock> onCompleteFlowable);
 
     /**
-     * Creates a @{@link Flowable} instance that emits all blocks from the requested block number
+     * Creates a {@link Flowable} instance that emits all blocks from the requested block number
      * to the most current. Once it has emitted the most current block, onComplete is called.
      *
      * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
      *                               in the {@link EthBlock} responses
-     * @return a @{@link Flowable} instance to emit all requested blocks
+     * @return a {@link Flowable} instance to emit all requested blocks
      */
-    Flowable<EthBlock> catchUpToLatestBlockObservable(
+    Flowable<EthBlock> replayAllBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects);
 
     /**
-     * Creates a @{@link Flowable} instance that emits all transactions from the requested block
+     * Create a {@link Flowable} instance that emits all transactions from the blockchain
+     * contained within the requested range.
+     *
+     * @param startBlock block number to commence with
+     * @param endBlock block number to finish with
+     * @return a {@link Flowable} instance to emit these transactions in the order they
+     *         appear in the blocks
+     */
+    Flowable<Transaction> replayAllTransactionsFlowable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
+
+    /**
+     * Creates a {@link Flowable} instance that emits all transactions from the requested block
      * number to the most current. Once it has emitted the most current block's transactions,
      * onComplete is called.
      *
      * @param startBlock the block number we wish to request from
-     * @return a @{@link Flowable} instance to emit all requested transactions
+     * @return a {@link Flowable} instance to emit all requested transactions
      */
-    Flowable<Transaction> catchUpToLatestTransactionObservable(
+    Flowable<Transaction> replayAllTransactionsFlowable(
             DefaultBlockParameter startBlock);
 
     /**
-     * Creates a @{@link Flowable} instance that emits all blocks from the requested block number
+     * Creates a {@link Flowable} instance that emits all blocks from the requested block number
      * to the most current. Once it has emitted the most current block, it starts emitting new
      * blocks as they are created.
      *
      * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
      *                               in the {@link EthBlock} responses
-     * @return a @{@link Flowable} instance to emit all requested blocks and future
+     * @return a {@link Flowable} instance to emit all requested blocks and future
      */
-    Flowable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(
+    Flowable<EthBlock> replayAllAndFutureBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects);
 
     /**
      * As per
-     * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(DefaultBlockParameter, boolean)},
+     * {@link #replayAllAndFutureBlocksFlowable(DefaultBlockParameter, boolean)},
      * except that all transactions contained within the blocks are emitted.
      *
      * @param startBlock the block number we wish to request from
-     * @return a @{@link Flowable} instance to emit all requested transactions and future
+     * @return a {@link Flowable} instance to emit all requested transactions and future
      */
-    Flowable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(
+    Flowable<Transaction> replayAllAndFutureTransactionsFlowable(
             DefaultBlockParameter startBlock);
 
     /**
-     * Creates a @{@link Flowable} instance that emits a notification when a new header is appended
+     * Creates a {@link Flowable} instance that emits a notification when a new header is appended
      * to a chain, including chain reorganizations.
      *
-     * @return a @{@link Flowable} instance that emits a notification for every new header
+     * @return a {@link Flowable} instance that emits a notification for every new header
      */
     Flowable<NewHeadsNotification> newHeadsNotifications();
 
     /**
-     * Creates aa @{@link Flowable} instance that emits notifications for logs included in new
+     * Creates aa {@link Flowable} instance that emits notifications for logs included in new
      * imported blocks.
      *
      * @param addresses only return logs from this list of address. Return logs from all addresses
      *                  if the list is empty
      * @param topics only return logs that match specified topics. Returns logs for all topics if
      *               the list is empty
-     * @return a @{@link Flowable} instance that emits logs included in new blocks
+     * @return a {@link Flowable} instance that emits logs included in new blocks
      */
     Flowable<LogNotification> logsNotifications(List<String> addresses, List<String> topics);
 }

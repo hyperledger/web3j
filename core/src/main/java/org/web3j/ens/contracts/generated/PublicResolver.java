@@ -66,12 +66,12 @@ public final class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<AddrChangedEventResponse> addrChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<AddrChangedEventResponse> addrChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("AddrChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -94,12 +94,12 @@ public final class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<ContentChangedEventResponse> contentChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ContentChangedEventResponse> contentChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("ContentChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -122,12 +122,12 @@ public final class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<NameChangedEventResponse> nameChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NameChangedEventResponse> nameChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NameChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             NameChangedEventResponse typedResponse = new NameChangedEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -150,12 +150,12 @@ public final class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<ABIChangedEventResponse> aBIChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ABIChangedEventResponse> aBIChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("ABIChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint256>(true) {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -179,12 +179,12 @@ public final class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("PubkeyChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -209,12 +209,12 @@ public final class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<TextChangedEventResponse> textChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TextChangedEventResponse> textChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("TextChanged", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             TextChangedEventResponse typedResponse = new TextChangedEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();

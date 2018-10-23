@@ -15,13 +15,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class ObservablesTests {
+public class FlowablesTests {
 
     @Test
-    public void testRangeObservable() throws InterruptedException {
+    public void testRangeFlowable() throws InterruptedException {
         int count = 10;
 
-        Flowable<BigInteger> observable = Observables.range(
+        Flowable<BigInteger> flowable = Flowables.range(
                 BigInteger.ZERO, BigInteger.valueOf(count - 1));
 
         List<BigInteger> expected = new ArrayList<>(count);
@@ -29,14 +29,14 @@ public class ObservablesTests {
             expected.add(BigInteger.valueOf(i));
         }
 
-        runRangeTest(observable, expected);
+        runRangeTest(flowable, expected);
     }
 
     @Test
-    public void testRangeDescendingObservable() throws InterruptedException {
+    public void testRangeDescendingFlowable() throws InterruptedException {
         int count = 10;
 
-        Flowable<BigInteger> observable = Observables.range(
+        Flowable<BigInteger> flowable = Flowables.range(
                 BigInteger.ZERO, BigInteger.valueOf(count - 1), false);
 
         List<BigInteger> expected = new ArrayList<>(count);
@@ -44,11 +44,11 @@ public class ObservablesTests {
             expected.add(BigInteger.valueOf(i));
         }
 
-        runRangeTest(observable, expected);
+        runRangeTest(flowable, expected);
     }
 
     private void runRangeTest(
-            Flowable<BigInteger> observable, List<BigInteger> expected)
+            Flowable<BigInteger> flowable, List<BigInteger> expected)
             throws InterruptedException {
 
         CountDownLatch transactionLatch = new CountDownLatch(expected.size());
@@ -56,7 +56,7 @@ public class ObservablesTests {
 
         List<BigInteger> results = new ArrayList<>(expected.size());
 
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -74,12 +74,12 @@ public class ObservablesTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testRangeObservableIllegalLowerBound() throws InterruptedException {
-        Observables.range(BigInteger.valueOf(-1), BigInteger.ONE);
+    public void testRangeFlowableIllegalLowerBound() throws InterruptedException {
+        Flowables.range(BigInteger.valueOf(-1), BigInteger.ONE);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testRangeObservableIllegalBounds() throws InterruptedException {
-        Observables.range(BigInteger.TEN, BigInteger.ONE);
+    public void testRangeFlowableIllegalBounds() throws InterruptedException {
+        Flowables.range(BigInteger.TEN, BigInteger.ONE);
     }
 }

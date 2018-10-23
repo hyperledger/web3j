@@ -90,8 +90,8 @@ public class Fibonacci extends Contract {
         return responses;
     }
 
-    public Flowable<NotifyEventResponse> notifyEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(log -> {
+    public Flowable<NotifyEventResponse> notifyEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> {
                     Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NOTIFY_EVENT, log);
                     NotifyEventResponse typedResponse = new NotifyEventResponse();
                     typedResponse.log = log;
@@ -102,10 +102,10 @@ public class Fibonacci extends Contract {
         );
     }
 
-    public Flowable<NotifyEventResponse> notifyEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NotifyEventResponse> notifyEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NOTIFY_EVENT));
-        return notifyEventObservable(filter);
+        return notifyEventFlowable(filter);
     }
 
     public static RemoteCall<Fibonacci> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {

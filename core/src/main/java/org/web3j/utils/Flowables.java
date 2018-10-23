@@ -6,9 +6,9 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 
 /**
- * Observable utility functions.
+ * Flowable utility functions.
  */
-public class Observables {
+public class Flowables {
 
     public static Flowable<BigInteger> range(
             final BigInteger startValue, final BigInteger endValue) {
@@ -21,7 +21,7 @@ public class Observables {
      * @param startValue first value to emit in range
      * @param endValue final value to emit in range
      * @param ascending direction to iterate through range
-     * @return a @{@link Flowable} instance to emit this range of values
+     * @return a {@link Flowable} instance to emit this range of values
      */
     public static Flowable<BigInteger> range(
             final BigInteger startValue, final BigInteger endValue, final boolean ascending) {

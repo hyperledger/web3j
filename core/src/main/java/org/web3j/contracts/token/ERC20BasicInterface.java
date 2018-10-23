@@ -31,7 +31,7 @@ public interface ERC20BasicInterface<T> {
     
     List<T> getTransferEvents(TransactionReceipt transactionReceipt);
 
-    Flowable<T> transferEventObservable(DefaultBlockParameter startBlock,
+    Flowable<T> transferEventFlowable(DefaultBlockParameter startBlock,
                                         DefaultBlockParameter endBlock);
 
 }

@@ -359,7 +359,7 @@ public class WebSocketService implements Web3jService {
         BehaviorSubject<T> subject = BehaviorSubject.create();
 
         // We need to subscribe synchronously, since if we return
-        // an Observable to a client before we got a reply
+        // an Flowable to a client before we got a reply
         // a client can unsubscribe before we know a subscription
         // id and this can cause a race condition
         subscribeToEventsStream(request, subject, responseType);

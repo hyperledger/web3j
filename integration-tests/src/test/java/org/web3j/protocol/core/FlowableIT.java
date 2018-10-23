@@ -17,9 +17,9 @@ import org.web3j.protocol.http.HttpService;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Observable callback tests.
+ * Flowable callback tests.
  */
-public class ObservableIT {
+public class FlowableIT {
 
     private static final int EVENT_COUNT = 5;
     private static final int TIMEOUT_MINUTES = 5;
@@ -32,47 +32,47 @@ public class ObservableIT {
     }
 
     @Test
-    public void testBlockObservable() throws Exception {
-        run(web3j.blockObservable(false));
+    public void testBlockFlowable() throws Exception {
+        run(web3j.blockFlowable(false));
     }
 
     @Test
-    public void testPendingTransactionObservable() throws Exception {
-        run(web3j.pendingTransactionObservable());
+    public void testPendingTransactionFlowable() throws Exception {
+        run(web3j.pendingTransactionFlowable());
     }
 
     @Test
-    public void testTransactionObservable() throws Exception {
-        run(web3j.transactionObservable());
+    public void testTransactionFlowable() throws Exception {
+        run(web3j.transactionFlowable());
     }
 
     @Test
-    public void testLogObservable() throws Exception {
-        run(web3j.ethLogObservable(new EthFilter()));
+    public void testLogFlowable() throws Exception {
+        run(web3j.ethLogFlowable(new EthFilter()));
     }
 
     @Test
-    public void testReplayObservable() throws Exception {
-        run(web3j.replayBlocksObservable(
+    public void testReplayFlowable() throws Exception {
+        run(web3j.replayAllBlocksFlowable(
                 new DefaultBlockParameterNumber(0),
                 new DefaultBlockParameterNumber(EVENT_COUNT), true));
     }
 
     @Test
-    public void testCatchUpToLatestAndSubscribeToNewBlocksObservable() throws Exception {
+    public void testReplayAllAndFutureBlocksFlowable() throws Exception {
         EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
                 .send();
         BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
-        run(web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
+        run(web3j.replayAllAndFutureBlocksFlowable(
                 new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
                 false));
     }
 
-    private <T> void run(Flowable<T> observable) throws Exception {
+    private <T> void run(Flowable<T> flowable) throws Exception {
         CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
         CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
 
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 x -> countDownLatch.countDown(),
                 Throwable::printStackTrace,
                 completedLatch::countDown

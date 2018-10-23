@@ -47,7 +47,7 @@ public abstract class FilterTester {
         web3j = Web3j.build(web3jService, 1000, scheduledExecutorService);
     }
 
-    <T> void runTest(EthLog ethLog, Flowable<T> observable) throws Exception {
+    <T> void runTest(EthLog ethLog, Flowable<T> flowable) throws Exception {
         EthFilter ethFilter = objectMapper.readValue(
                 "{\n"
                         + "  \"id\":1,\n"
@@ -78,7 +78,7 @@ public abstract class FilterTester {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();

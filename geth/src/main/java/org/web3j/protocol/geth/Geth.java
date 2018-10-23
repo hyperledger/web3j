@@ -37,7 +37,7 @@ public interface Geth extends Admin {
      * Creates an {@link Flowable} instance that emits a notification when a new transaction is
      * added to the pending state and is signed with a key that is available in the node.
      *
-     * @return a @{@link Flowable} instance that emits a notification when a new transaction is
+     * @return a {@link Flowable} instance that emits a notification when a new transaction is
      *         added to the pending state
      */
     Flowable<PendingTransactionNotification> newPendingTransactionsNotifications();
@@ -45,7 +45,7 @@ public interface Geth extends Admin {
     /**
      * Creates an {@link Flowable} instance that emits a notification when a node starts or stops
      * syncing.
-     * @return a @{@link Flowable} instance that emits changes to syncing status
+     * @return a {@link Flowable} instance that emits changes to syncing status
      */
     Flowable<SyncingNotfication> syncingStatusNotifications();
 

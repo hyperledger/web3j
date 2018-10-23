@@ -52,7 +52,7 @@ public class JsonRpc2_0RxTest {
     }
 
     @Test
-    public void testReplayBlocksObservable() throws Exception {
+    public void testReplayBlocksFlowable() throws Exception {
 
         List<EthBlock> ethBlocks = Arrays.asList(createBlock(0), createBlock(1), createBlock(2));
 
@@ -62,7 +62,7 @@ public class JsonRpc2_0RxTest {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Flowable<EthBlock> observable = web3j.replayBlocksObservable(
+        Flowable<EthBlock> flowable = web3j.replayAllBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false);
@@ -71,7 +71,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<EthBlock> results = new ArrayList<>(ethBlocks.size());
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -89,7 +89,7 @@ public class JsonRpc2_0RxTest {
     }
 
     @Test
-    public void testReplayBlocksDescendingObservable() throws Exception {
+    public void testReplayBlocksDescendingFlowable() throws Exception {
 
         List<EthBlock> ethBlocks = Arrays.asList(createBlock(2), createBlock(1), createBlock(0));
 
@@ -99,7 +99,7 @@ public class JsonRpc2_0RxTest {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Flowable<EthBlock> observable = web3j.replayBlocksObservable(
+        Flowable<EthBlock> flowable = web3j.replayAllBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false, false);
@@ -108,7 +108,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<EthBlock> results = new ArrayList<>(ethBlocks.size());
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -125,13 +125,8 @@ public class JsonRpc2_0RxTest {
         assertTrue(subscription.isDisposed());
     }
 
-    /**
-     * This test was previously named: testCatchUpToLatestBlockObservable
-     *
-     * @throws Exception if something went wrong.
-     */
     @Test
-    public void testBlockCatchupObservable() throws Exception {
+    public void testReplayAllBlocksFlowable() throws Exception {
         List<EthBlock> expected = Arrays.asList(
                 createBlock(0), createBlock(1), createBlock(2),
                 createBlock(3), createBlock(4));
@@ -170,7 +165,7 @@ public class JsonRpc2_0RxTest {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Flowable<EthBlock> observable = web3j.catchUpToLatestBlockObservable(
+        Flowable<EthBlock> flowable = web3j.replayAllBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 false);
 
@@ -178,7 +173,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<EthBlock> results = new ArrayList<>(expected.size());
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -195,14 +190,7 @@ public class JsonRpc2_0RxTest {
         assertTrue(subscription.isDisposed());
     }
 
-    /**
-     * Tests subscription to new blocks once it has caught up. <br />
-     * This test was previously named: testCatchUpToLatestAndSubscribeToNewBlockObservable
-     *
-     * @throws Exception if something went wrong.
-     */
-    @Test
-    public void testBlockCatchupAndSubscriptionObservable() throws Exception {
+    public void testReplayAllAndFutureBlocksFlowable() throws Exception {
         List<EthBlock> expected = Arrays.asList(
                 createBlock(0), createBlock(1), createBlock(2),
                 createBlock(3), createBlock(4), createBlock(5),
@@ -215,7 +203,7 @@ public class JsonRpc2_0RxTest {
                 expected.get(3), expected.get(4),
                 expected.get(4),  // greatest block
                 expected.get(5),  // initial response from ethGetFilterLogs call
-                expected.get(6)); // subsequent block from new block observable
+                expected.get(6)); // subsequent block from new block flowable
 
         OngoingStubbing<EthBlock> stubbing =
                 when(web3jService.send(any(Request.class), eq(EthBlock.class)));
@@ -244,7 +232,7 @@ public class JsonRpc2_0RxTest {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Flowable<EthBlock> observable = web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
+        Flowable<EthBlock> flowable = web3j.replayAllAndFutureBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 false);
 
@@ -252,7 +240,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<EthBlock> results = new ArrayList<>(expected.size());
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -270,7 +258,7 @@ public class JsonRpc2_0RxTest {
     }
 
     @Test
-    public void testReplayTransactionsObservable() throws Exception {
+    public void testReplayTransactionsFlowable() throws Exception {
 
         List<EthBlock> ethBlocks = Arrays.asList(
                 createBlockWithTransactions(0,
@@ -296,7 +284,7 @@ public class JsonRpc2_0RxTest {
                 .map(it -> (Transaction) it.get())
                 .collect(Collectors.toList());
 
-        Flowable<Transaction> observable = web3j.replayTransactionsObservable(
+        Flowable<Transaction> flowable = web3j.replayAllTransactionsFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)));
 
@@ -304,7 +292,7 @@ public class JsonRpc2_0RxTest {
         CountDownLatch completedLatch = new CountDownLatch(1);
 
         List<Transaction> results = new ArrayList<>(expectedTransactions.size());
-        Disposable subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();

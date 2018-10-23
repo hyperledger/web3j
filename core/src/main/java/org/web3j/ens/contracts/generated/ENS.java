@@ -63,13 +63,13 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<NewOwnerEventResponse> newOwnerEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NewOwnerEventResponse> newOwnerEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewOwner", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>(true) {},
                         new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -94,13 +94,13 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TransferEventResponse> transferEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("Transfer", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
                         new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             TransferEventResponse typedResponse = new TransferEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -124,13 +124,13 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<NewResolverEventResponse> newResolverEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NewResolverEventResponse> newResolverEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewResolver", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
                         new TypeReference<Address>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             NewResolverEventResponse typedResponse = new NewResolverEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
@@ -154,13 +154,13 @@ public final class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<NewTTLEventResponse> newTTLEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NewTTLEventResponse> newTTLEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewTTL", 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {},
                         new TypeReference<Uint64>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogObservable(filter).map(log -> {
+        return web3j.ethLogFlowable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
             NewTTLEventResponse typedResponse = new NewTTLEventResponse();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();

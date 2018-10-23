@@ -44,14 +44,14 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         // CHECKSTYLE:OFF
         CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
-        Disposable transferEventSubscription = contract.transferEventObservable(
+        Disposable transferEventSubscription = contract.transferEventFlowable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
                 transferEventResponse -> transferEventCountDownLatch.countDown()
         );
 
         CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
-        Disposable approvalEventSubscription = contract.approvalEventObservable(
+        Disposable approvalEventSubscription = contract.approvalEventFlowable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
                 transferEventResponse -> transferEventCountDownLatch.countDown()

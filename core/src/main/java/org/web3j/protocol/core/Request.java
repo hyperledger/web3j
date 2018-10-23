@@ -76,7 +76,7 @@ public class Request<S, T extends Response> {
         return  web3jService.sendAsync(this, responseType);
     }
 
-    public Flowable<T> observable() {
-        return new RemoteCall<>(this::send).observable();
+    public Flowable<T> flowable() {
+        return new RemoteCall<>(this::send).flowable();
     }
 }

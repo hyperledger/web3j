@@ -221,8 +221,8 @@ public class HumanStandardToken extends Contract {
         return responses;
     }
 
-    public Flowable<TransferEventResponse> transferEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(log -> {
+    public Flowable<TransferEventResponse> transferEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> {
                     Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
                     TransferEventResponse typedResponse = new TransferEventResponse();
                     typedResponse.log = log;
@@ -234,10 +234,10 @@ public class HumanStandardToken extends Contract {
         );
     }
 
-    public Flowable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TransferEventResponse> transferEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
-        return transferEventObservable(filter);
+        return transferEventFlowable(filter);
     }
 
     public List<ApprovalEventResponse> getApprovalEvents(TransactionReceipt transactionReceipt) {
@@ -254,8 +254,8 @@ public class HumanStandardToken extends Contract {
         return responses;
     }
 
-    public Flowable<ApprovalEventResponse> approvalEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(log -> {
+    public Flowable<ApprovalEventResponse> approvalEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(log -> {
                     Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVAL_EVENT, log);
                     ApprovalEventResponse typedResponse = new ApprovalEventResponse();
                     typedResponse.log = log;
@@ -267,10 +267,10 @@ public class HumanStandardToken extends Contract {
         );
     }
 
-    public Flowable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ApprovalEventResponse> approvalEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(APPROVAL_EVENT));
-        return approvalEventObservable(filter);
+        return approvalEventFlowable(filter);
     }
 
     @Deprecated
