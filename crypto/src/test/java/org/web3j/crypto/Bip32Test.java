@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 
 import org.junit.Test;
 
+import org.web3j.utils.Numeric;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.web3j.crypto.Bip32ECKeyPair.HARDENED_BIT;
@@ -113,7 +115,7 @@ public class Bip32Test {
     }
 
     private void testGenerated(String seed, String expectedPriv, String expectedPub, int[] path) {
-        Bip32ECKeyPair pair = Bip32ECKeyPair.generateKeyPair(hexToByte(seed));
+        Bip32ECKeyPair pair = Bip32ECKeyPair.generateKeyPair(Numeric.hexStringToByteArray(seed));
         assertNotNull(pair);
 
         pair = Bip32ECKeyPair.deriveKeyPair(pair, path);
@@ -138,16 +140,6 @@ public class Bip32Test {
 
     static byte[] serializePrivate(Bip32ECKeyPair pair) {
         return serialize(pair, 0x0488ADE4, false);
-    }
-
-    private byte[] hexToByte(String encoded) {
-        byte[] result = new byte[encoded.length() / 2];
-        int len = encoded.length();
-        for (int i = 0; i < len; i += 2) {
-            result[i / 2] = (byte) ((Character.digit(encoded.charAt(i), 16) << 4)
-                    + Character.digit(encoded.charAt(i + 1), 16));
-        }
-        return result;
     }
 
     private static byte[] hashTwice(byte[] input) {
