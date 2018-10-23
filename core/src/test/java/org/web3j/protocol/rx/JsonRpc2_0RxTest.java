@@ -126,9 +126,9 @@ public class JsonRpc2_0RxTest {
     }
 
     /**
-     * This test was previously named: <code>testCatchUpToLatestBlockObservable</code>.
+     * This test was previously named: testCatchUpToLatestBlockObservable
      *
-     * @throws Exception
+     * @throws Exception if something went wrong.
      */
     @Test
     public void testBlockCatchupObservable() throws Exception {
@@ -197,9 +197,9 @@ public class JsonRpc2_0RxTest {
 
     /**
      * Tests subscription to new blocks once it has caught up. <br />
-     * This test was previously named: <code>testCatchUpToLatestAndSubscribeToNewBlockObservable</code>.
+     * This test was previously named: testCatchUpToLatestAndSubscribeToNewBlockObservable
      *
-     * @throws Exception
+     * @throws Exception if something went wrong.
      */
     @Test
     public void testBlockCatchupAndSubscriptionObservable() throws Exception {

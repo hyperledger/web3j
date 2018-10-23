@@ -28,8 +28,8 @@ public interface Web3jRx {
     /**
      * Create an Observable to emit block hashes.
      *
-     * @return a @{@link Flowable} instance that emits all new block hashes as new blocks are created on the
-     *         blockchain
+     * @return a @{@link Flowable} instance that emits all new block hashes as new blocks are
+     *      created on the blockchain
      */
     Flowable<String> ethBlockHashObservable();
 
@@ -42,16 +42,16 @@ public interface Web3jRx {
     Flowable<String> ethPendingTransactionHashObservable();
 
     /**
-     * Create an @{@link Flowable} instance to emit all new transactions as they are confirmed on the blockchain.
-     * i.e. they have been mined and are incorporated into a block.
+     * Create an @{@link Flowable} instance to emit all new transactions as they are confirmed on
+     * the blockchain. i.e. they have been mined and are incorporated into a block.
      *
      * @return a @{@link Flowable} instance to emit new transactions on the blockchain
      */
     Flowable<Transaction> transactionObservable();
 
     /**
-     * Create an @{@link Flowable} instance to emit all pending transactions that have yet to be placed into a
-     * block on the blockchain.
+     * Create an @{@link Flowable} instance to emit all pending transactions that have yet to be
+     * placed into a block on the blockchain.
      *
      * @return a @{@link Flowable} instance to emit pending transactions
      */
@@ -62,13 +62,14 @@ public interface Web3jRx {
      *
      * @param fullTransactionObjects if true, provides transactions embedded in blocks, otherwise
      *                              transaction hashes
-     * @return a @{@link Flowable} instance that emits all new blocks as they are added to the blockchain
+     * @return a @{@link Flowable} instance that emits all new blocks as they are added to the
+     *         blockchain
      */
     Flowable<EthBlock> blockObservable(boolean fullTransactionObjects);
 
     /**
-     * Create an @{@link Flowable} instance that emits all blocks from the blockchain contained within the
-     * requested range.
+     * Create an @{@link Flowable} instance that emits all blocks from the blockchain contained
+     * within the requested range.
      *
      * @param startBlock block number to commence with
      * @param endBlock block number to finish with
@@ -81,8 +82,8 @@ public interface Web3jRx {
             boolean fullTransactionObjects);
 
     /**
-     * Create an @{@link Flowable} instance that emits all blocks from the blockchain contained within the
-     * requested range.
+     * Create an @{@link Flowable} instance that emits all blocks from the blockchain contained
+     * within the requested range.
      *
      * @param startBlock block number to commence with
      * @param endBlock block number to finish with
@@ -97,20 +98,21 @@ public interface Web3jRx {
             boolean fullTransactionObjects, boolean ascending);
 
     /**
-     * Create a @{@link Flowable} instance that emits all transactions from the blockchain contained within the
-     * requested range.
+     * Create a @{@link Flowable} instance that emits all transactions from the blockchain
+     * contained within the requested range.
      *
      * @param startBlock block number to commence with
      * @param endBlock block number to finish with
-     * @return a @{@link Flowable} instance to emit these transactions in the order they appear in the blocks
+     * @return a @{@link Flowable} instance to emit these transactions in the order they
+     *         appear in the blocks
      */
     Flowable<Transaction> replayTransactionsObservable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
 
     /**
-     * Create a @{@link Flowable} instance that emits all transactions from the blockchain starting with a
-     * provided block number. Once it has replayed up to the most current block, the provided
-     * Observable is invoked.
+     * Create a @{@link Flowable} instance that emits all transactions from the blockchain
+     * starting with a provided block number. Once it has replayed up to the most current block,
+     * the provided Flowable is invoked.
      *
      * <p>To automatically subscribe to new blocks, use
      * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(DefaultBlockParameter, boolean)}.
@@ -127,8 +129,8 @@ public interface Web3jRx {
             Flowable<EthBlock> onCompleteObservable);
 
     /**
-     * Creates a @{@link Flowable} instance that emits all blocks from the requested block number to the most
-     * current. Once it has emitted the most current block, onComplete is called.
+     * Creates a @{@link Flowable} instance that emits all blocks from the requested block number
+     * to the most current. Once it has emitted the most current block, onComplete is called.
      *
      * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
@@ -139,8 +141,9 @@ public interface Web3jRx {
             DefaultBlockParameter startBlock, boolean fullTransactionObjects);
 
     /**
-     * Creates a @{@link Flowable} instance that emits all transactions from the requested block number to the most
-     * current. Once it has emitted the most current block's transactions, onComplete is called.
+     * Creates a @{@link Flowable} instance that emits all transactions from the requested block
+     * number to the most current. Once it has emitted the most current block's transactions,
+     * onComplete is called.
      *
      * @param startBlock the block number we wish to request from
      * @return a @{@link Flowable} instance to emit all requested transactions
@@ -149,9 +152,9 @@ public interface Web3jRx {
             DefaultBlockParameter startBlock);
 
     /**
-     * Creates a @{@link Flowable} instance that emits all blocks from the requested block number to the most
-     * current. Once it has emitted the most current block, it starts emitting new blocks as they
-     * are created.
+     * Creates a @{@link Flowable} instance that emits all blocks from the requested block number
+     * to the most current. Once it has emitted the most current block, it starts emitting new
+     * blocks as they are created.
      *
      * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
@@ -173,15 +176,16 @@ public interface Web3jRx {
             DefaultBlockParameter startBlock);
 
     /**
-     * Creates a @{@link Flowable} instance that emits a notification when a new header is appended to a chain,
-     * including chain reorganizations.
+     * Creates a @{@link Flowable} instance that emits a notification when a new header is appended
+     * to a chain, including chain reorganizations.
      *
      * @return a @{@link Flowable} instance that emits a notification for every new header
      */
     Flowable<NewHeadsNotification> newHeadsNotifications();
 
     /**
-     * Creates aa @{@link Flowable} instance that emits notifications for logs included in new imported blocks.
+     * Creates aa @{@link Flowable} instance that emits notifications for logs included in new
+     * imported blocks.
      *
      * @param addresses only return logs from this list of address. Return logs from all addresses
      *                  if the list is empty
