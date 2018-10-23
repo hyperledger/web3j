@@ -85,7 +85,7 @@ public class Bip32ECKeyPair extends ECKeyPair {
             ECPoint ki = Sign.publicPointFromPrivate(ilInt).add(getPublicKeyPoint());
 
             return new Bip32ECKeyPair(null,
-                    Sign.publicFromPoint(Sign.CURVE.getCurve(), ki.getEncoded(true)),
+                    Sign.publicFromPoint(ki.getEncoded(true)),
                     childNumber, chainCode, this);
         } else {
             ByteBuffer data = ByteBuffer.allocate(37);

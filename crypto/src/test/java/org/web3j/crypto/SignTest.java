@@ -53,7 +53,7 @@ public class SignTest {
     @Test
     public void testPublicKeyFromPrivatePoint() {
         ECPoint point = Sign.publicPointFromPrivate(SampleKeys.PRIVATE_KEY);
-        assertThat(Sign.publicFromPoint(Sign.CURVE.getCurve(), point.getEncoded(false)),
+        assertThat(Sign.publicFromPoint(point.getEncoded(false)),
                 equalTo(SampleKeys.PUBLIC_KEY));
     }
 }

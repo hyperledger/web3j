@@ -235,11 +235,10 @@ public class Sign {
     /**
      * Returns public key point from the given curve.
      *
-     * @param curve the curve
      * @param bits representing the point on the curve
      * @return BigInteger encoded public key
      */
-    public static BigInteger publicFromPoint(ECCurve curve, byte[] bits) {
+    public static BigInteger publicFromPoint(byte[] bits) {
         return new BigInteger(1, Arrays.copyOfRange(bits, 1, bits.length));  // remove prefix
     }
 
