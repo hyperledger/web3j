@@ -124,7 +124,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.5.0</version>
+     <version>4.0.0</version>
    </dependency>
 
 Android:
@@ -145,7 +145,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.5.0')
+   compile ('org.web3j:core:4.0.0')
 
 Android:
 
@@ -576,7 +576,7 @@ To run the integration tests:
 Snapshot Dependencies
 ---------------------
 
-Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 3.6.0-SNAPSHOT.
+Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 4.0.0-SNAPSHOT.
 
 | If you would like to use snapshots instead please add a new maven repository pointing to:
 

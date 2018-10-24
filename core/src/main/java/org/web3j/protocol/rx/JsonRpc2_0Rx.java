@@ -198,7 +198,6 @@ public class JsonRpc2_0Rx {
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
-    // replayAllAndFutureBlocksFlowable
     public Flowable<EthBlock> replayAllAndFutureBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             long pollingInterval) {
