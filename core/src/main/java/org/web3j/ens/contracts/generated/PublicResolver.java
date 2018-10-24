@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Flowable;
+
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
@@ -36,7 +37,7 @@ import org.web3j.tx.TransactionManager;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 3.0.1.
@@ -53,7 +54,7 @@ public final class PublicResolver extends Contract {
     }
 
     public List<AddrChangedEventResponse> getAddrChangedEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("AddrChanged", 
+        final Event event = new Event("AddrChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<AddrChangedEventResponse> responses = new ArrayList<AddrChangedEventResponse>(valueList.size());
@@ -67,21 +68,30 @@ public final class PublicResolver extends Contract {
     }
 
     public Flowable<AddrChangedEventResponse> addrChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("AddrChanged", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
+        final Event event = new Event("AddrChanged",
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {
+                }, new TypeReference<Address>() {
+                }));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogFlowable(filter).map(log -> {
-            EventValues eventValues = extractEventParameters(event, log);
-            AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
-            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-            typedResponse.a = (String) eventValues.getNonIndexedValues().get(0).getValue();
-            return typedResponse;
-        });
+
+        io.reactivex.functions.Function<Log, AddrChangedEventResponse> function  =
+                new io.reactivex.functions.Function<Log, AddrChangedEventResponse>() {
+                    @Override
+                    public AddrChangedEventResponse apply(Log log) throws Exception {
+                        EventValues eventValues = extractEventParameters(event, log);
+                        AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
+                        typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+                        typedResponse.a = (String) eventValues.getNonIndexedValues().get(0).getValue();
+                        return typedResponse;
+                    }
+                };
+
+        return web3j.ethLogFlowable(filter).map(function);
     }
 
     public List<ContentChangedEventResponse> getContentChangedEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("ContentChanged", 
+        final Event event = new Event("ContentChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ContentChangedEventResponse> responses = new ArrayList<ContentChangedEventResponse>(valueList.size());
@@ -95,21 +105,25 @@ public final class PublicResolver extends Contract {
     }
 
     public Flowable<ContentChangedEventResponse> contentChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("ContentChanged", 
+        final Event event = new Event("ContentChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogFlowable(filter).map(log -> {
-            EventValues eventValues = extractEventParameters(event, log);
-            ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
-            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-            typedResponse.hash = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
-            return typedResponse;
+
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, ContentChangedEventResponse>() {
+            @Override
+            public ContentChangedEventResponse apply(Log log) throws Exception {
+                final EventValues eventValues = extractEventParameters(event, log);
+                final ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
+                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+                typedResponse.hash = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
+                return typedResponse;
+            }
         });
     }
 
     public List<NameChangedEventResponse> getNameChangedEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("NameChanged", 
+        final Event event = new Event("NameChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<NameChangedEventResponse> responses = new ArrayList<NameChangedEventResponse>(valueList.size());
@@ -123,21 +137,24 @@ public final class PublicResolver extends Contract {
     }
 
     public Flowable<NameChangedEventResponse> nameChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("NameChanged", 
+        final Event event = new Event("NameChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogFlowable(filter).map(log -> {
-            EventValues eventValues = extractEventParameters(event, log);
-            NameChangedEventResponse typedResponse = new NameChangedEventResponse();
-            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-            typedResponse.name = (String) eventValues.getNonIndexedValues().get(0).getValue();
-            return typedResponse;
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, NameChangedEventResponse>() {
+            @Override
+            public NameChangedEventResponse apply(Log log) throws Exception {
+                final EventValues eventValues = extractEventParameters(event, log);
+                final NameChangedEventResponse typedResponse = new NameChangedEventResponse();
+                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+                typedResponse.name = (String) eventValues.getNonIndexedValues().get(0).getValue();
+                return typedResponse;
+            }
         });
     }
 
     public List<ABIChangedEventResponse> getABIChangedEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("ABIChanged", 
+        final Event event = new Event("ABIChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint256>(true) {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<ABIChangedEventResponse> responses = new ArrayList<ABIChangedEventResponse>(valueList.size());
@@ -151,21 +168,25 @@ public final class PublicResolver extends Contract {
     }
 
     public Flowable<ABIChangedEventResponse> aBIChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("ABIChanged", 
+        final Event event = new Event("ABIChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint256>(true) {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogFlowable(filter).map(log -> {
-            EventValues eventValues = extractEventParameters(event, log);
-            ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
-            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-            typedResponse.contentType = (BigInteger) eventValues.getIndexedValues().get(1).getValue();
-            return typedResponse;
+
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, ABIChangedEventResponse>() {
+            @Override
+            public ABIChangedEventResponse apply(Log log) throws Exception {
+                EventValues eventValues = extractEventParameters(event, log);
+                ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
+                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+                typedResponse.contentType = (BigInteger) eventValues.getIndexedValues().get(1).getValue();
+                return typedResponse;
+            }
         });
     }
 
     public List<PubkeyChangedEventResponse> getPubkeyChangedEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("PubkeyChanged", 
+        final Event event = new Event("PubkeyChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<PubkeyChangedEventResponse> responses = new ArrayList<PubkeyChangedEventResponse>(valueList.size());
@@ -180,22 +201,25 @@ public final class PublicResolver extends Contract {
     }
 
     public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("PubkeyChanged", 
+        final Event event = new Event("PubkeyChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogFlowable(filter).map(log -> {
-            EventValues eventValues = extractEventParameters(event, log);
-            PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
-            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-            typedResponse.x = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
-            typedResponse.y = (byte[]) eventValues.getNonIndexedValues().get(1).getValue();
-            return typedResponse;
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, PubkeyChangedEventResponse>() {
+            @Override
+            public PubkeyChangedEventResponse apply(Log log) throws Exception {
+                final EventValues eventValues = extractEventParameters(event, log);
+                final PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
+                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+                typedResponse.x = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
+                typedResponse.y = (byte[]) eventValues.getNonIndexedValues().get(1).getValue();
+                return typedResponse;
+            }
         });
     }
 
     public List<TextChangedEventResponse> getTextChangedEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("TextChanged", 
+        final Event event = new Event("TextChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}));
         List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
         ArrayList<TextChangedEventResponse> responses = new ArrayList<TextChangedEventResponse>(valueList.size());
@@ -210,30 +234,34 @@ public final class PublicResolver extends Contract {
     }
 
     public Flowable<TextChangedEventResponse> textChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("TextChanged", 
+        final Event event = new Event("TextChanged",
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}));
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
-        return web3j.ethLogFlowable(filter).map(log -> {
-            EventValues eventValues = extractEventParameters(event, log);
-            TextChangedEventResponse typedResponse = new TextChangedEventResponse();
-            typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
-            typedResponse.indexedKey = (String) eventValues.getIndexedValues().get(1).getValue();
-            typedResponse.key = (String) eventValues.getNonIndexedValues().get(0).getValue();
-            return typedResponse;
+
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, TextChangedEventResponse>() {
+            @Override
+            public TextChangedEventResponse apply(Log log) throws Exception {
+                final EventValues eventValues = extractEventParameters(event, log);
+                final TextChangedEventResponse typedResponse = new TextChangedEventResponse();
+                typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
+                typedResponse.indexedKey = (String) eventValues.getIndexedValues().get(1).getValue();
+                typedResponse.key = (String) eventValues.getNonIndexedValues().get(0).getValue();
+                return typedResponse;
+            }
         });
     }
 
     public RemoteCall<Boolean> supportsInterface(byte[] interfaceID) {
-        Function function = new Function("supportsInterface", 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)), 
+        Function function = new Function("supportsInterface",
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}));
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
     public RemoteCall<TransactionReceipt> setText(byte[] node, String key, String value) {
         Function function = new Function(
-                "setText", 
+                "setText",
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
                 new org.web3j.abi.datatypes.Utf8String(key),
                 new org.web3j.abi.datatypes.Utf8String(value)),
