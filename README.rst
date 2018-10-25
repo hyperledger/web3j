@@ -203,12 +203,12 @@ To send asynchronous requests using a CompletableFuture (Future on Android):
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
-To use an RxJava Observable:
+To use an RxJava Flowable:
 
 .. code-block:: java
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3.web3ClientVersion().observable().subscribe(x -> {
+   web3.web3ClientVersion().flowable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -330,7 +330,7 @@ To receive all new blocks as they are added to the blockchain:
 
 .. code-block:: java
 
-   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+   Subscription subscription = web3j.blockFlowable(false).subscribe(block -> {
        ...
    });
 
@@ -338,7 +338,7 @@ To receive all new transactions as they are added to the blockchain:
 
 .. code-block:: java
 
-   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.transactionFlowable().subscribe(tx -> {
        ...
    });
 
@@ -347,7 +347,7 @@ been grouped into a block together):
 
 .. code-block:: java
 
-   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.pendingTransactionFlowable().subscribe(tx -> {
        ...
    });
 
@@ -355,13 +355,13 @@ Or, if you'd rather replay all blocks to the most current, and be notified of ne
 blocks being created:
 
 .. code-block:: java
-   Subscription subscription = catchUpToLatestAndSubscribeToNewBlocksObservable(
+   Subscription subscription = replayPastAndFutureBlocksFlowable(
            <startBlockNumber>, <fullTxObjects>)
            .subscribe(block -> {
                ...
    });
 
-There are a number of other transaction and block replay Observables described in the
+There are a number of other transaction and block replay Flowables described in the
 `docs <http://docs.web3j.io/filters.html>`_.
 
 Topic filters are also supported:
@@ -371,7 +371,7 @@ Topic filters are also supported:
    EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
            DefaultBlockParameterName.LATEST, <contract-address>)
                 .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
-   web3j.ethLogObservable(filter).subscribe(log -> {
+   web3j.ethLogFlowable(filter).subscribe(log -> {
        ...
    });
 

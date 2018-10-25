@@ -382,13 +382,13 @@ object.::
 
    EventValues eventValues = contract.processSomeEvent(transactionReceipt);
 
-Alternatively you can use an Observable filter instead which will listen for events associated with
+Alternatively you can use an Flowable filter instead which will listen for events associated with
 the smart contract::
 
-   contract.someEventObservable(startBlock, endBlock).
+   contract.someEventFlowable(startBlock, endBlock).
            .subscribe(event -> ...);
 
-For more information on working with Observable filters, refer to :doc:`filters`.
+For more information on working with Flowable filters, refer to :doc:`filters`.
 
 **Remember** that for any indexed array, bytes and string Solidity parameter
 types, a Keccak-256 hash of their values will be returned, see the
