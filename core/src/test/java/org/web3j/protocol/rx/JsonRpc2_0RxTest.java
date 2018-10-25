@@ -62,7 +62,7 @@ public class JsonRpc2_0RxTest {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Flowable<EthBlock> flowable = web3j.replayAllBlocksFlowable(
+        Flowable<EthBlock> flowable = web3j.replayPastBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false);
@@ -99,7 +99,7 @@ public class JsonRpc2_0RxTest {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Flowable<EthBlock> flowable = web3j.replayAllBlocksFlowable(
+        Flowable<EthBlock> flowable = web3j.replayPastBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                 false, false);
@@ -126,7 +126,7 @@ public class JsonRpc2_0RxTest {
     }
 
     @Test
-    public void testReplayAllBlocksFlowable() throws Exception {
+    public void testReplayPastBlocksFlowable() throws Exception {
         List<EthBlock> expected = Arrays.asList(
                 createBlock(0), createBlock(1), createBlock(2),
                 createBlock(3), createBlock(4));
@@ -165,7 +165,7 @@ public class JsonRpc2_0RxTest {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Flowable<EthBlock> flowable = web3j.replayAllBlocksFlowable(
+        Flowable<EthBlock> flowable = web3j.replayPastBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 false);
 
@@ -190,7 +190,7 @@ public class JsonRpc2_0RxTest {
         assertTrue(subscription.isDisposed());
     }
 
-    public void testReplayAllAndFutureBlocksFlowable() throws Exception {
+    public void testReplayPastAndFutureBlocksFlowable() throws Exception {
         List<EthBlock> expected = Arrays.asList(
                 createBlock(0), createBlock(1), createBlock(2),
                 createBlock(3), createBlock(4), createBlock(5),
@@ -232,7 +232,7 @@ public class JsonRpc2_0RxTest {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Flowable<EthBlock> flowable = web3j.replayAllAndFutureBlocksFlowable(
+        Flowable<EthBlock> flowable = web3j.replayPastAndFutureBlocksFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 false);
 
@@ -284,7 +284,7 @@ public class JsonRpc2_0RxTest {
                 .map(it -> (Transaction) it.get())
                 .collect(Collectors.toList());
 
-        Flowable<Transaction> flowable = web3j.replayAllTransactionsFlowable(
+        Flowable<Transaction> flowable = web3j.replayPastTransactionsFlowable(
                 new DefaultBlockParameterNumber(BigInteger.ZERO),
                 new DefaultBlockParameterNumber(BigInteger.valueOf(2)));
 

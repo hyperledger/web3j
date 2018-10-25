@@ -147,23 +147,23 @@ public class JsonRpc2_0Rx {
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
-    public Flowable<EthBlock> replayAllBlocksFlowable(
+    public Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             Flowable<EthBlock> onCompleteFlowable) {
         // We use a scheduler to ensure this Flowable runs asynchronously for users to be
         // consistent with the other Flowables
-        return replayAllBlocksFlowableSync(
+        return replayPastBlocksFlowableSync(
                 startBlock, fullTransactionObjects, onCompleteFlowable)
                 .subscribeOn(scheduler);
     }
 
-    public Flowable<EthBlock> replayAllBlocksFlowable(
+    public Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
-        return replayAllBlocksFlowable(
+        return replayPastBlocksFlowable(
                 startBlock, fullTransactionObjects, Flowable.empty());
     }
 
-    private Flowable<EthBlock> replayAllBlocksFlowableSync(
+    private Flowable<EthBlock> replayPastBlocksFlowableSync(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             Flowable<EthBlock> onCompleteFlowable) {
 
@@ -184,32 +184,32 @@ public class JsonRpc2_0Rx {
                             new DefaultBlockParameterNumber(startBlockNumber),
                             new DefaultBlockParameterNumber(latestBlockNumber),
                             fullTransactionObjects),
-                    Flowable.defer(() -> replayAllBlocksFlowableSync(
+                    Flowable.defer(() -> replayPastBlocksFlowableSync(
                             new DefaultBlockParameterNumber(latestBlockNumber.add(BigInteger.ONE)),
                             fullTransactionObjects,
                             onCompleteFlowable)));
         }
     }
 
-    public Flowable<Transaction> replayAllTransactionsFlowable(
+    public Flowable<Transaction> replayPastTransactionsFlowable(
             DefaultBlockParameter startBlock) {
-        return replayAllBlocksFlowable(
+        return replayPastBlocksFlowable(
                 startBlock, true, Flowable.empty())
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
-    public Flowable<EthBlock> replayAllAndFutureBlocksFlowable(
+    public Flowable<EthBlock> replayPastAndFutureBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             long pollingInterval) {
 
-        return replayAllBlocksFlowable(
+        return replayPastBlocksFlowable(
                 startBlock, fullTransactionObjects,
                 blockFlowable(fullTransactionObjects, pollingInterval));
     }
 
-    public Flowable<Transaction> replayAllAndFutureTransactionsFlowable(
+    public Flowable<Transaction> replayPastAndFutureTransactionsFlowable(
             DefaultBlockParameter startBlock, long pollingInterval) {
-        return replayAllAndFutureBlocksFlowable(
+        return replayPastAndFutureBlocksFlowable(
                 startBlock, true, pollingInterval)
                 .flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }

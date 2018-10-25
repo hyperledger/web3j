@@ -53,17 +53,17 @@ public class FlowableIT {
 
     @Test
     public void testReplayFlowable() throws Exception {
-        run(web3j.replayAllBlocksFlowable(
+        run(web3j.replayPastBlocksFlowable(
                 new DefaultBlockParameterNumber(0),
                 new DefaultBlockParameterNumber(EVENT_COUNT), true));
     }
 
     @Test
-    public void testReplayAllAndFutureBlocksFlowable() throws Exception {
+    public void testReplayPastAndFutureBlocksFlowable() throws Exception {
         EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
                 .send();
         BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
-        run(web3j.replayAllAndFutureBlocksFlowable(
+        run(web3j.replayPastAndFutureBlocksFlowable(
                 new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
                 false));
     }

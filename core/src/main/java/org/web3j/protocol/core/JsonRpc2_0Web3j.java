@@ -768,14 +768,14 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Flowable<EthBlock> replayAllBlocksFlowable(
+    public Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects) {
         return web3jRx.replayBlocksFlowable(startBlock, endBlock, fullTransactionObjects);
     }
 
     @Override
-    public Flowable<EthBlock> replayAllBlocksFlowable(DefaultBlockParameter startBlock,
+    public Flowable<EthBlock> replayPastBlocksFlowable(DefaultBlockParameter startBlock,
                                                       DefaultBlockParameter endBlock,
                                                       boolean fullTransactionObjects,
                                                       boolean ascending) {
@@ -784,43 +784,43 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
-    public Flowable<EthBlock> replayAllBlocksFlowable(
+    public Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             Flowable<EthBlock> onCompleteFlowable) {
-        return web3jRx.replayAllBlocksFlowable(
+        return web3jRx.replayPastBlocksFlowable(
                 startBlock, fullTransactionObjects, onCompleteFlowable);
     }
 
     @Override
-    public Flowable<EthBlock> replayAllBlocksFlowable(
+    public Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
-        return web3jRx.replayAllBlocksFlowable(startBlock, fullTransactionObjects);
+        return web3jRx.replayPastBlocksFlowable(startBlock, fullTransactionObjects);
     }
 
     @Override
     public Flowable<org.web3j.protocol.core.methods.response.Transaction>
-            replayAllTransactionsFlowable(DefaultBlockParameter startBlock,
+            replayPastTransactionsFlowable(DefaultBlockParameter startBlock,
                                           DefaultBlockParameter endBlock) {
         return web3jRx.replayTransactionsFlowable(startBlock, endBlock);
     }
 
     @Override
     public Flowable<org.web3j.protocol.core.methods.response.Transaction>
-            replayAllTransactionsFlowable(DefaultBlockParameter startBlock) {
-        return web3jRx.replayAllTransactionsFlowable(startBlock);
+            replayPastTransactionsFlowable(DefaultBlockParameter startBlock) {
+        return web3jRx.replayPastTransactionsFlowable(startBlock);
     }
 
     @Override
-    public Flowable<EthBlock> replayAllAndFutureBlocksFlowable(
+    public Flowable<EthBlock> replayPastAndFutureBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects) {
-        return web3jRx.replayAllAndFutureBlocksFlowable(
+        return web3jRx.replayPastAndFutureBlocksFlowable(
                 startBlock, fullTransactionObjects, blockTime);
     }
 
     @Override
     public Flowable<org.web3j.protocol.core.methods.response.Transaction>
-            replayAllAndFutureTransactionsFlowable(DefaultBlockParameter startBlock) {
-        return web3jRx.replayAllAndFutureTransactionsFlowable(
+            replayPastAndFutureTransactionsFlowable(DefaultBlockParameter startBlock) {
+        return web3jRx.replayPastAndFutureTransactionsFlowable(
                 startBlock, blockTime);
     }
 

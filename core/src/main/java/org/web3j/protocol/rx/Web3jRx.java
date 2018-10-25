@@ -77,7 +77,7 @@ public interface Web3jRx {
      *                               transaction hashes
      * @return a {@link Flowable} instance to emit these blocks
      */
-    Flowable<EthBlock> replayAllBlocksFlowable(
+    Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects);
 
@@ -93,7 +93,7 @@ public interface Web3jRx {
      *                  in descending order
      * @return a {@link Flowable} instance to emit these blocks
      */
-    Flowable<EthBlock> replayAllBlocksFlowable(
+    Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
             boolean fullTransactionObjects, boolean ascending);
 
@@ -103,7 +103,7 @@ public interface Web3jRx {
      * the provided Flowable is invoked.
      *
      * <p>To automatically subscribe to new blocks, use
-     * {@link #replayAllAndFutureBlocksFlowable(DefaultBlockParameter, boolean)}.
+     * {@link #replayPastAndFutureBlocksFlowable(DefaultBlockParameter, boolean)}.
      *
      * @param startBlock the block number we wish to request from
      * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
@@ -112,7 +112,7 @@ public interface Web3jRx {
      *                             up with the latest block
      * @return a {@link Flowable} instance to emit all requested blocks
      */
-    Flowable<EthBlock> replayAllBlocksFlowable(
+    Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects,
             Flowable<EthBlock> onCompleteFlowable);
 
@@ -125,7 +125,7 @@ public interface Web3jRx {
      *                               in the {@link EthBlock} responses
      * @return a {@link Flowable} instance to emit all requested blocks
      */
-    Flowable<EthBlock> replayAllBlocksFlowable(
+    Flowable<EthBlock> replayPastBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects);
 
     /**
@@ -137,7 +137,7 @@ public interface Web3jRx {
      * @return a {@link Flowable} instance to emit these transactions in the order they
      *         appear in the blocks
      */
-    Flowable<Transaction> replayAllTransactionsFlowable(
+    Flowable<Transaction> replayPastTransactionsFlowable(
             DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
 
     /**
@@ -148,7 +148,7 @@ public interface Web3jRx {
      * @param startBlock the block number we wish to request from
      * @return a {@link Flowable} instance to emit all requested transactions
      */
-    Flowable<Transaction> replayAllTransactionsFlowable(
+    Flowable<Transaction> replayPastTransactionsFlowable(
             DefaultBlockParameter startBlock);
 
     /**
@@ -161,18 +161,18 @@ public interface Web3jRx {
      *                               in the {@link EthBlock} responses
      * @return a {@link Flowable} instance to emit all requested blocks and future
      */
-    Flowable<EthBlock> replayAllAndFutureBlocksFlowable(
+    Flowable<EthBlock> replayPastAndFutureBlocksFlowable(
             DefaultBlockParameter startBlock, boolean fullTransactionObjects);
 
     /**
      * As per
-     * {@link #replayAllAndFutureBlocksFlowable(DefaultBlockParameter, boolean)},
+     * {@link #replayPastAndFutureBlocksFlowable(DefaultBlockParameter, boolean)},
      * except that all transactions contained within the blocks are emitted.
      *
      * @param startBlock the block number we wish to request from
      * @return a {@link Flowable} instance to emit all requested transactions and future
      */
-    Flowable<Transaction> replayAllAndFutureTransactionsFlowable(
+    Flowable<Transaction> replayPastAndFutureTransactionsFlowable(
             DefaultBlockParameter startBlock);
 
     /**
