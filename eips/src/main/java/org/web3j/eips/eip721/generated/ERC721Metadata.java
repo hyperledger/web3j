@@ -15,12 +15,11 @@ import org.web3j.tx.gas.ContractGasProvider;
 
 /**
  * <p>Auto generated code.
- * <p><strong>Do not modify!</strong>
- * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
- * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
+ * <p>@title ERC-721 Non-Fungible Token Standard
+ * See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
+ * Note: the ERC-165 identifier for this interface is 0x5b5e139f.
  *
- * <p>Generated with web3j version 3.6.1-SNAPSHOT.
+ * <p>Generated with web3j version 4.0.0-SNAPSHOT.
  */
 public class ERC721Metadata extends Contract {
     private static final String BINARY = "Bin file was not provided";
