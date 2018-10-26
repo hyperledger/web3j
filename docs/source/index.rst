@@ -32,6 +32,7 @@ Features
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
 - Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
+- Support for ERC20 and ERC721 token standards
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
@@ -93,6 +94,7 @@ Contents:
    management_apis.rst
    infura.rst
    ens.rst
+   eips.rst
    trouble.rst
    projects.rst
    companies.rst

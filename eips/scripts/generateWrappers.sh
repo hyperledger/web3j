@@ -33,7 +33,7 @@ for i in ${!targetFileIn[@]}; do
     echo "Complete"
 
     echo "Generating web3j bindings"
-    ${eipsRootDir}/scripts/bin/web3j solidity generate \
+    web3j solidity generate \
         -a ${eipsRootDir}build/${fileName}.abi \
         -p ${packageOut} \
         -o ${eipsRootDir}/src/main/java/ > /dev/null
