@@ -162,7 +162,7 @@ The web3j :doc:`command_line` tools ship with a command line utility for generat
       -st, --solidityTypes              use solidity types.
       -a, --abiFile=<abiFile>           abi file with contract definition.
       -b, --binFile=<binFile>           optional bin file with contract compiled code in order to generate deploy methods.
-      -o, --output=<destinationFileDir> destination base directory.
+      -o, --outputDir=<destinationFileDir> destination base directory.
       -p, --package=<packageName>       base package name.
 
 BinFile is required for :ref:`contract-validity`.

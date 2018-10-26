@@ -37,7 +37,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
      * -a, --abiFile=<abiFile>    abi file with contract definition.
      * -b, --binFile=<binFile>    bin file with contract compiled code in order to
      * generate deploy methods.
-     * -o, --output=<destinationFileDir>
+     * -o, --outputDir=<destinationFileDir>
      * destination base directory.
      * -p, --package=<packageName>
      * base package name.
@@ -118,7 +118,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 required = false)
         private File binFile;
 
-        @Option(names = { "-o", "--output" },
+        @Option(names = { "-o", "--outputDir" },
                 description = "destination base directory.",
                 required = true)
         private File destinationFileDir;
