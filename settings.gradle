@@ -12,3 +12,5 @@ include 'parity'
 include 'rlp'
 include 'tuples'
 include 'utils'
+include 'eips'
+
