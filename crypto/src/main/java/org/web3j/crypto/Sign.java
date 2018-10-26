@@ -14,6 +14,7 @@ import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.math.ec.ECAlgorithms;
+import org.bouncycastle.math.ec.ECCurve;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
@@ -216,8 +217,11 @@ public class Sign {
 
     /**
      * Returns public key point from the given private key.
+     *
+     * @param privKey the private key to derive the public key from
+     * @return ECPoint public key
      */
-    private static ECPoint publicPointFromPrivate(BigInteger privKey) {
+    public static ECPoint publicPointFromPrivate(BigInteger privKey) {
         /*
          * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
          * order, but that could change in future versions.
@@ -226,6 +230,16 @@ public class Sign {
             privKey = privKey.mod(CURVE.getN());
         }
         return new FixedPointCombMultiplier().multiply(CURVE.getG(), privKey);
+    }
+
+    /**
+     * Returns public key point from the given curve.
+     *
+     * @param bits representing the point on the curve
+     * @return BigInteger encoded public key
+     */
+    public static BigInteger publicFromPoint(byte[] bits) {
+        return new BigInteger(1, Arrays.copyOfRange(bits, 1, bits.length));  // remove prefix
     }
 
     public static class SignatureData {
