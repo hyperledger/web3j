@@ -19,6 +19,6 @@ public class BlockFilterTest extends FilterTester {
                         + "]}",
                 EthLog.class);
 
-        runTest(ethLog, web3j.ethBlockHashObservable());
+        runTest(ethLog, web3j.ethBlockHashFlowable());
     }
 }

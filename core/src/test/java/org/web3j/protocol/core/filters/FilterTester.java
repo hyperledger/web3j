@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
 import org.junit.Before;
-import rx.Observable;
-import rx.Subscription;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -47,7 +47,7 @@ public abstract class FilterTester {
         web3j = Web3j.build(web3jService, 1000, scheduledExecutorService);
     }
 
-    <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {
+    <T> void runTest(EthLog ethLog, Flowable<T> flowable) throws Exception {
         EthFilter ethFilter = objectMapper.readValue(
                 "{\n"
                         + "  \"id\":1,\n"
@@ -78,7 +78,7 @@ public abstract class FilterTester {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Subscription subscription = observable.subscribe(
+        Disposable subscription = flowable.subscribe(
                 result -> {
                     results.add(result);
                     transactionLatch.countDown();
@@ -89,10 +89,10 @@ public abstract class FilterTester {
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(new HashSet<>(expected)));
 
-        subscription.unsubscribe();
+        subscription.dispose();
 
         completedLatch.await(1, TimeUnit.SECONDS);
-        assertTrue(subscription.isUnsubscribed());
+        assertTrue(subscription.isDisposed());
     }
 
     List createExpected(EthLog ethLog) {
