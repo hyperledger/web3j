@@ -50,6 +50,6 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
 
         throw new TransactionException("Transaction receipt was not generated after "
                 + ((sleepDuration * attempts) / 1000
-                + " seconds for transaction: " + transactionHash));
+                + " seconds for transaction: " + transactionHash), transactionHash);
     }
 }
