@@ -1,3 +1,5 @@
+pragma solidity ^0.4.20;
+
 /// @title ERC-721 Non-Fungible Token Standard, optional enumeration extension
 /// @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
 ///  Note: the ERC-165 identifier for this interface is 0x780e9d63.

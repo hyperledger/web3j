@@ -1,5 +1,7 @@
 pragma solidity ^0.4.20;
 
+
+/// @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md
 interface ERC165 {
     /// @notice Query if a contract implements an interface
     /// @param interfaceID The interface identifier, as specified in ERC-165
