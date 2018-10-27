@@ -139,6 +139,9 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, true));
         classBuilder.addMethod(buildLoad(className, TransactionManager.class,
                 TRANSACTION_MANAGER, true));
+        if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
+            classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
+        }
 
         addAddressesSupport(classBuilder, addresses);
 
@@ -252,8 +255,6 @@ public class SolidityFunctionWrapper extends Generator {
             List<AbiDefinition> functionDefinitions) throws ClassNotFoundException {
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
-        boolean constructor = false;
-
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
                 MethodSpec ms = buildFunction(functionDefinition);
@@ -261,8 +262,19 @@ public class SolidityFunctionWrapper extends Generator {
 
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
+            }
+        }
 
-            } else if (functionDefinition.getType().equals("constructor")) {
+        return methodSpecs;
+    }
+
+    List<MethodSpec> buildDeployMethods(String className,
+                                        TypeSpec.Builder classBuilder,
+                                        List<AbiDefinition> functionDefinitions) {
+        boolean constructor = false;
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        for (AbiDefinition functionDefinition : functionDefinitions) {
+            if (functionDefinition.getType().equals("constructor")) {
                 constructor = true;
                 methodSpecs.add(buildDeploy(
                         className, functionDefinition, Credentials.class, CREDENTIALS, true));
