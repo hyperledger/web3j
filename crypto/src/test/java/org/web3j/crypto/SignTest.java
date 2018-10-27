@@ -18,7 +18,8 @@ public class SignTest {
 
     @Test
     public void testSignMessage() {
-        Sign.SignatureData signatureData = Sign.signPrefixedMessage(TEST_MESSAGE, SampleKeys.KEY_PAIR);
+        Sign.SignatureData signatureData = Sign.signPrefixedMessage(TEST_MESSAGE,
+                SampleKeys.KEY_PAIR);
 
         Sign.SignatureData expected = new Sign.SignatureData(
                 (byte) 28,
@@ -33,7 +34,8 @@ public class SignTest {
 
     @Test
     public void testSignedMessageToKey() throws SignatureException {
-        Sign.SignatureData signatureData = Sign.signPrefixedMessage(TEST_MESSAGE, SampleKeys.KEY_PAIR);
+        Sign.SignatureData signatureData = Sign.signPrefixedMessage(TEST_MESSAGE,
+                SampleKeys.KEY_PAIR);
         BigInteger key = Sign.signedPrefixedMessageToKey(TEST_MESSAGE, signatureData);
         assertThat(key, equalTo(SampleKeys.PUBLIC_KEY));
     }
