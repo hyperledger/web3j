@@ -3,18 +3,12 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.security.SignatureException;
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
-import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
-import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
-import org.bouncycastle.crypto.signers.ECDSASigner;
-import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.math.ec.ECAlgorithms;
-import org.bouncycastle.math.ec.ECCurve;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
@@ -37,14 +31,14 @@ public class Sign {
             CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
 
-    static final String MessagePrefix = "\u0019Ethereum Signed Message:\n";
+    static final String MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
-    static byte[] getMessagePrefix(int messageLength) {
-        return MessagePrefix.concat(String.valueOf(messageLength)).getBytes();
+    static byte[] getEthereumMessagePrefix(int messageLength) {
+        return MESSAGE_PREFIX.concat(String.valueOf(messageLength)).getBytes();
     }
 
-    static byte[] getMessageHash(byte[] message) {
-        byte[] prefix = getMessagePrefix(message.length);
+    static byte[] getEthereumMessageHash(byte[] message) {
+        byte[] prefix = getEthereumMessagePrefix(message.length);
 
         byte[] result = new byte[prefix.length + message.length];
         System.arraycopy(prefix, 0, result, 0, prefix.length);
@@ -54,7 +48,7 @@ public class Sign {
     }
 
     public static SignatureData signPrefixedMessage(byte[] message, ECKeyPair keyPair) {
-        return signMessage(getMessageHash(message), keyPair, false);
+        return signMessage(getEthereumMessageHash(message), keyPair, false);
     }
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
@@ -212,7 +206,7 @@ public class Sign {
      */
     public static BigInteger signedPrefixedMessageToKey(
             byte[] message, SignatureData signatureData) throws SignatureException {
-        return signedMessageHashToKey(getMessageHash(message), signatureData);
+        return signedMessageHashToKey(getEthereumMessageHash(message), signatureData);
     }
 
     static BigInteger signedMessageHashToKey(
