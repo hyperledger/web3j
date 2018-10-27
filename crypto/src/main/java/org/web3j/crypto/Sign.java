@@ -37,6 +37,26 @@ public class Sign {
             CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
 
+    static final String MessagePrefix = "\u0019Ethereum Signed Message:\n";
+
+    static byte[] getMessagePrefix(int messageLength) {
+        return MessagePrefix.concat(String.valueOf(messageLength)).getBytes();
+    }
+
+    static byte[] getMessageHash(byte[] message) {
+        byte[] prefix = getMessagePrefix(message.length);
+
+        byte[] result = new byte[prefix.length + message.length];
+        System.arraycopy(prefix, 0, result, 0, prefix.length);
+        System.arraycopy(message, 0, result, prefix.length, message.length);
+
+        return Hash.sha3(result);
+    }
+
+    public static SignatureData signPrefixedMessage(byte[] message, ECKeyPair keyPair) {
+        return signMessage(getMessageHash(message), keyPair, false);
+    }
+
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
         return signMessage(message, keyPair, true);
     }
@@ -176,6 +196,27 @@ public class Sign {
      */
     public static BigInteger signedMessageToKey(
             byte[] message, SignatureData signatureData) throws SignatureException {
+        return signedMessageHashToKey(Hash.sha3(message), signatureData);
+    }
+
+    /**
+     * Given an arbitrary message and an Ethereum message signature encoded in bytes,
+     * returns the public key that was used to sign it. This can then be compared to the
+     * expected public key to determine if the signature was correct.
+     *
+     * @param message The message.
+     * @param signatureData The message signature components
+     * @return the public key used to sign the message
+     * @throws SignatureException If the public key could not be recovered or if there was a
+     *     signature format error.
+     */
+    public static BigInteger signedPrefixedMessageToKey(
+            byte[] message, SignatureData signatureData) throws SignatureException {
+        return signedMessageHashToKey(getMessageHash(message), signatureData);
+    }
+
+    static BigInteger signedMessageHashToKey(
+            byte[] messageHash, SignatureData signatureData) throws SignatureException {
 
         byte[] r = signatureData.getR();
         byte[] s = signatureData.getS();
@@ -193,7 +234,6 @@ public class Sign {
                 new BigInteger(1, signatureData.getR()),
                 new BigInteger(1, signatureData.getS()));
 
-        byte[] messageHash = Hash.sha3(message);
         int recId = header - 27;
         BigInteger key = recoverFromSignature(recId, sig, messageHash);
         if (key == null) {
