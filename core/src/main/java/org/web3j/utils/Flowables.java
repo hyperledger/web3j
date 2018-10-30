@@ -2,27 +2,28 @@ package org.web3j.utils;
 
 import java.math.BigInteger;
 
-import rx.Observable;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 
 /**
- * Observable utility functions.
+ * Flowable utility functions.
  */
-public class Observables {
+public class Flowables {
 
-    public static Observable<BigInteger> range(
+    public static Flowable<BigInteger> range(
             final BigInteger startValue, final BigInteger endValue) {
         return range(startValue, endValue, true);
     }
 
     /**
-     * Simple Observable implementation to emit a range of BigInteger values.
+     * Simple {@link Flowable} implementation to emit a range of BigInteger values.
      *
      * @param startValue first value to emit in range
      * @param endValue final value to emit in range
      * @param ascending direction to iterate through range
-     * @return Observable to emit this range of values
+     * @return a {@link Flowable} instance to emit this range of values
      */
-    public static Observable<BigInteger> range(
+    public static Flowable<BigInteger> range(
             final BigInteger startValue, final BigInteger endValue, final boolean ascending) {
         if (startValue.compareTo(BigInteger.ZERO) == -1) {
             throw new IllegalArgumentException("Negative start index cannot be used");
@@ -32,31 +33,31 @@ public class Observables {
         }
 
         if (ascending) {
-            return Observable.create(subscriber -> {
+            return Flowable.create(subscriber -> {
                 for (BigInteger i = startValue;
                         i.compareTo(endValue) < 1
-                             && !subscriber.isUnsubscribed();
+                             && !subscriber.isCancelled();
                         i = i.add(BigInteger.ONE)) {
                     subscriber.onNext(i);
                 }
 
-                if (!subscriber.isUnsubscribed()) {
-                    subscriber.onCompleted();
+                if (!subscriber.isCancelled()) {
+                    subscriber.onComplete();
                 }
-            });
+            }, BackpressureStrategy.BUFFER);
         } else {
-            return Observable.create(subscriber -> {
+            return Flowable.create(subscriber -> {
                 for (BigInteger i = endValue;
                         i.compareTo(startValue) > -1
-                             && !subscriber.isUnsubscribed();
+                             && !subscriber.isCancelled();
                         i = i.subtract(BigInteger.ONE)) {
                     subscriber.onNext(i);
                 }
 
-                if (!subscriber.isUnsubscribed()) {
-                    subscriber.onCompleted();
+                if (!subscriber.isCancelled()) {
+                    subscriber.onComplete();
                 }
-            });
+            }, BackpressureStrategy.BUFFER);
         }
     }
 }

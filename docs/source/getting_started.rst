@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.6.0</version>
+     <version>4.0.0</version>
    </dependency>
 
 Android:
@@ -33,7 +33,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.6.0')
+   compile ('org.web3j:core:4.0.0')
 
 Android:
 
@@ -91,10 +91,10 @@ To send asynchronous requests using a CompletableFuture (Future on Android)::
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
-To use an RxJava Observable::
+To use an RxJava Flowable::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3.web3ClientVersion().observable().subscribe(x -> {
+   web3.web3ClientVersion().flowable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -143,7 +143,7 @@ Then generate the wrapper code using web3j's :doc:`command_line`:
 
 .. code-block:: bash
 
-   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   web3j solidity generate -b /path/to/<smart-contract>.bin -a /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Now you can create and deploy your smart contract::
 
@@ -181,40 +181,40 @@ of events taking place on the blockchain.
 
 To receive all new blocks as they are added to the blockchain::
 
-   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+   Subscription subscription = web3j.blockFlowable(false).subscribe(block -> {
        ...
    });
 
 To receive all new transactions as they are added to the blockchain::
 
-   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.transactionFlowable().subscribe(tx -> {
        ...
    });
 
 To receive all pending transactions as they are submitted to the network (i.e. before they have
 been grouped into a block together)::
 
-   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.pendingTransactionFlowable().subscribe(tx -> {
        ...
    });
 
 Or, if you'd rather replay all blocks to the most current, and be notified of new subsequent
 blocks being created::
 
-   Subscription subscription = catchUpToLatestAndSubscribeToNewBlocksObservable(
+   Subscription subscription = replayPastAndFutureBlocksFlowable(
            <startBlockNumber>, <fullTxObjects>)
            .subscribe(block -> {
                ...
    });
 
-There are a number of other transaction and block replay Observables described in :doc:`filters`.
+There are a number of other transaction and block replay Flowables described in :doc:`filters`.
 
 Topic filters are also supported::
 
    EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
            DefaultBlockParameterName.LATEST, <contract-address>)
                 .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
-   web3j.ethLogObservable(filter).subscribe(log -> {
+   web3j.ethLogFlowable(filter).subscribe(log -> {
        ...
    });
 

@@ -38,11 +38,4 @@ public class IpcServiceTest {
 
         verify(ioFacade).write("{\"jsonrpc\":\"2.0\",\"method\":null,\"params\":null,\"id\":0}");
     }
-
-    @Test
-    public void testClose() throws IOException {
-        ipcService.close();
-
-        verify(ioFacade).close();
-    }
 }

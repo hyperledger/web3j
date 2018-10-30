@@ -152,7 +152,7 @@ public class WalletUtilsTest {
     }
  
     
-    private static File createTempDir() throws Exception {
+    static File createTempDir() throws Exception {
         return Files.createTempDirectory(
                 WalletUtilsTest.class.getSimpleName() + "-testkeys").toFile();
     }

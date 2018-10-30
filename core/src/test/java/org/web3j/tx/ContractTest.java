@@ -142,6 +142,15 @@ public class ContractTest extends ManagedTransactionTester {
         assertFalse(contract.isValid());
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIsValidNoBinThrows() throws Exception {
+        TransactionManager txManager = mock(TransactionManager.class);
+        TestContract contract = new TestContract(
+                Contract.BIN_NOT_PROVIDED, ADDRESS, web3j, txManager,
+                new DefaultGasProvider());
+        contract.isValid();
+    }
+
     @Test(expected = RuntimeException.class)
     public void testDeployInvalidContractAddress() throws Throwable {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
@@ -452,7 +461,13 @@ public class ContractTest extends ManagedTransactionTester {
                 String contractAddress,
                 Web3j web3j, TransactionManager transactionManager,
                 ContractGasProvider gasProvider) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasProvider);
+            this(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasProvider);
+        }
+
+        public TestContract(String binary, String contractAddress,
+                Web3j web3j, TransactionManager transactionManager,
+                ContractGasProvider gasProvider) {
+            super(binary, contractAddress, web3j, transactionManager, gasProvider);
         }
 
         public RemoteCall<Utf8String> callSingleValue() {
