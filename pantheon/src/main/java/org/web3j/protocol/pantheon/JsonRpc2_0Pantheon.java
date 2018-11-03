@@ -1,5 +1,8 @@
 package org.web3j.protocol.pantheon;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -8,9 +11,6 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     public JsonRpc2_0Pantheon(Web3jService web3jService) {
