@@ -27,4 +27,6 @@ public interface Pantheon extends Web3j {
     Request<?, BooleanResponse> cliquePropose(String address, Boolean signerAddition);
 
     Request<?, PantheonEthAccountsMapResponse> cliqueProposals();
+
+    Request<?, DebugTraceTransactionResponse> debugTraceTransaction(String transactionHash, Map<String, Boolean> options);
 }

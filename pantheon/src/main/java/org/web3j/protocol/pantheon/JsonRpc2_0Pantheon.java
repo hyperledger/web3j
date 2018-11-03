@@ -79,4 +79,13 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
                 web3jService,
                 PantheonEthAccountsMapResponse.class);
     }
+
+    @Override
+    public Request<?, DebugTraceTransactionResponse> debugTraceTransaction(String transactionHash, Map<String, Boolean> options) {
+        return new Request<>(
+                "debug_traceTransaction",
+                Arrays.asList(transactionHash, options),
+                web3jService,
+                DebugTraceTransactionResponse.class);
+    }
 }
