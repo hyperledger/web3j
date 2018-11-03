@@ -7,7 +7,7 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
-import org.web3j.protocol.pantheon.response.PantheonEthAccountsMap;
+import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
 
 public interface Pantheon extends Web3j {
     static Pantheon build(Web3jService web3jService) {
@@ -26,5 +26,5 @@ public interface Pantheon extends Web3j {
 
     Request<?, BooleanResponse> cliquePropose(String address, Boolean signerAddition);
 
-    Request<?, PantheonEthAccountsMap> cliqueProposals();
+    Request<?, PantheonEthAccountsMapResponse> cliqueProposals();
 }

@@ -7,7 +7,7 @@ import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
-import org.web3j.protocol.pantheon.response.PantheonEthAccountsMap;
+import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,11 +72,11 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     }
 
     @Override
-    public Request<?, PantheonEthAccountsMap> cliqueProposals() {
+    public Request<?, PantheonEthAccountsMapResponse> cliqueProposals() {
         return new Request<>(
                 "clique_proposals",
                 Collections.<String>emptyList(),
                 web3jService,
-                PantheonEthAccountsMap.class);
+                PantheonEthAccountsMapResponse.class);
     }
 }
