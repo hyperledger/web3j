@@ -2,10 +2,14 @@ package org.web3j.protocol.pantheon;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
+import org.web3j.protocol.pantheon.response.PantheonEthAccountsMap;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
@@ -29,5 +33,50 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
                 Collections.<String>emptyList(),
                 web3jService,
                 BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> clicqueDiscard(String address) {
+        return new Request<>(
+                "clique_discard",
+                Arrays.asList(address),
+                web3jService,
+                BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, EthAccounts> clicqueGetSigners(DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>(
+                "clique_getSigners",
+                Arrays.asList(defaultBlockParameter.getValue()),
+                web3jService,
+                EthAccounts.class);
+    }
+
+    @Override
+    public Request<?, EthAccounts> clicqueGetSignersAtHash(String blockHash) {
+        return new Request<>(
+                "clique_getSignersAtHash",
+                Arrays.asList(blockHash),
+                web3jService,
+                EthAccounts.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> cliquePropose(String address, Boolean signerAddition) {
+        return new Request<>(
+                "clique_propose",
+                Arrays.asList(address, signerAddition),
+                web3jService,
+                BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, PantheonEthAccountsMap> cliqueProposals() {
+        return new Request<>(
+                "clique_proposals",
+                Collections.<String>emptyList(),
+                web3jService,
+                PantheonEthAccountsMap.class);
     }
 }
