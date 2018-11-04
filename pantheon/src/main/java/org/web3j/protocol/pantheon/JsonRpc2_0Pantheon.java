@@ -2,6 +2,7 @@ package org.web3j.protocol.pantheon;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
@@ -11,6 +12,7 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
+import org.web3j.protocol.pantheon.response.PantheonFullDebugTraceResponse;
 
 public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     public JsonRpc2_0Pantheon(Web3jService web3jService) {
@@ -81,11 +83,11 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     }
 
     @Override
-    public Request<?, DebugTraceTransactionResponse> debugTraceTransaction(String transactionHash, Map<String, Boolean> options) {
+    public Request<?, PantheonFullDebugTraceResponse> debugTraceTransaction(String transactionHash, Map<String, Boolean> options) {
         return new Request<>(
                 "debug_traceTransaction",
                 Arrays.asList(transactionHash, options),
                 web3jService,
-                DebugTraceTransactionResponse.class);
+                PantheonFullDebugTraceResponse.class);
     }
 }

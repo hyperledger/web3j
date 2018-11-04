@@ -2,14 +2,14 @@ package org.web3j.protocol.pantheon.response;
 
 import java.util.List;
 
-public class DebugTraceInfo {
+public class FullDebugTraceInfo {
 
     private int gas;
     private boolean failed;
     private String returnValue;
     private List<StructLogs> structLogs;
 
-    public DebugTraceInfo(int gas, boolean failed, String returnValue, List<StructLogs> structLogs) {
+    public FullDebugTraceInfo(int gas, boolean failed, String returnValue, List<StructLogs> structLogs) {
         this.gas = gas;
         this.failed = failed;
         this.returnValue = returnValue;

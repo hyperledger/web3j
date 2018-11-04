@@ -1,4 +1,6 @@
+package org.web3j.protocol.pantheon.response;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 

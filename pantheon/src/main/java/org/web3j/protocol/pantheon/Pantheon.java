@@ -8,6 +8,9 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
+import org.web3j.protocol.pantheon.response.PantheonFullDebugTraceResponse;
+
+import java.util.Map;
 
 public interface Pantheon extends Web3j {
     static Pantheon build(Web3jService web3jService) {
@@ -28,5 +31,5 @@ public interface Pantheon extends Web3j {
 
     Request<?, PantheonEthAccountsMapResponse> cliqueProposals();
 
-    Request<?, DebugTraceTransactionResponse> debugTraceTransaction(String transactionHash, Map<String, Boolean> options);
+    Request<?, PantheonFullDebugTraceResponse> debugTraceTransaction(String transactionHash, Map<String, Boolean> options);
 }
