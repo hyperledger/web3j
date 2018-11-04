@@ -282,6 +282,108 @@ If you want to make use of Parity's
 `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs,
 you can use the *org.web3j:parity* and *org.web3j:geth* modules respectively.
 
+PUB SUB
+-------
+
+Ethereum clients implement `pub/sub <https://github.com/ethereum/go-ethereum/wiki/RPC-PUB-SUB>`_
+mechanism that allows to subscribe for events from the network.
+This allows to avoid using polling and be notified when a particular event occurs.
+This is implemented using WebSocket protocol instead of HTTP protocol.
+
+pub/sub methods are available via the `WebSocketService` class that allows to:
+
+- send an RPC call over WebSocket protocol
+- subscribe to WebSocket events
+- unsubscribe from a stream of events
+
+To create an instance of the `WebSocketService` class one need first to create an instance of
+the `WebSocketClient` that connects to an Ethereum client via WebSocket protocol and then pass it
+to the `WebSocketService` constructor::
+
+   WebSocketClient webSocketClient = new WebSocketClient(new URI("ws://localhost/"));
+   boolean includeRawResponses = false;
+   WebSocketService webSocketService = new WebSocketService(
+     webSocketClient,
+     includeRawResponses)
+
+
+To send an RPC request using WebSocket protocol one need to use the `sendAsync` method on
+the `WebSocketService` instance::
+
+   // Request to get a version of an Ethereum client
+   Request<?, Web3ClientVersion> request = new Request<>(
+        // Name of an RPC method to call
+        "web3_clientVersion",
+        // Parameters for the method. "web3_clientVersion" does not expect any
+        Collections.<String>emptyList(),
+        // Service that is used to send a request
+        webSocketService,
+        // Type of an RPC call to get an Ethereum client version
+        Web3ClientVersion.class);
+
+   // Send an asynchronous request via WebSocket protocol
+   CompletableFuture<Web3ClientVersion> reply = webSocketService.sendAsync(
+                   request,
+                   Web3ClientVersion.class);
+
+   // Get result of the reply
+   Web3ClientVersion clientVersion = reply.get();
+
+This would send a request and wait for a reply one need to use the `sync` method instead::
+
+   // Send a request via WebSocket protocol
+   Web3ClientVersion clientVersion = webSocketService.send(
+                   request,
+                   Web3ClientVersion.class);
+
+To subscribe to WebSocket events `WebSocketService` provides the `subscribe` method.
+`subscribe` returns an instance of `Flowable <http://reactivex.io/RxJava/2.x/javadoc/io/reactivex/Flowable.html>`_
+interface from the RxJava library. It allows to process incoming events from an Ethereum network as a reactive stream.
+
+To subscribe to a stream of events `WebSocketService` send an RPC method via WebSocket which
+is usually `eth_subscribe`. Events that it subscribes to depend on parameters to the `eth_subscribe`
+method. You can find more in the `RPC documentation <https://github.com/ethereum/go-ethereum/wiki/RPC-PUB-SUB#supported-subscriptions>`_::
+
+   // A request to subscribe to a stream of events
+   Request<EthSubscribe> subscribeRequest = new Request<>(
+       // RPC method to subscribe to events
+       "eth_subscribe",
+       // Parameters that specify what events to subscribe to
+       Arrays.asList("newHeads", Collections.emptyMap()),
+       // Service that is used to send a request
+       webSocketService,
+       EthSubscribe.class);
+
+   Flowable<NewHeadsNotifications> events = webSocketService.subscribe(
+        subscribeRequest,
+        // RPC method that should be used to unsubscribe from events
+        "eth_unsubscribe",
+        // Type of events returned by a request
+        NewHeadsNotification.class
+   );
+
+   // Subscribe to incoming events and process incoming events
+   Disposable disposable = events.subscribe(event -> {
+       // Process new heads event
+   });
+
+
+Notice that we need to provide a name of a method `WebSocketService` need to call to unsubscribe from
+a stream of events. This is because different Ethereum clients may have different methods to unsubscribe from
+particular events. E.g. Parity client requires to use `parity_unsubscribe` method to unsubscribe
+from Parity specific `pub/sub events <https://wiki.parity.io/JSONRPC-eth_pubsub-module>`_.
+
+To unsubscribe from a stream of events one need to use a `Flowable` instance for a particular events stream::
+
+   Flowable<NewHeadsNotifications> events = ...
+   Disposable disposable = events.subscribe(...)
+   disposable.dispose();
+
+The methods described above are quite low-level, so we can use `Web3j` implementation instead::
+
+   WebSocketService webSocketService = ...
+   Web3j web3j = Web3j.build(webSocketService)
+   Flowable<NewHeadsNotification> notifications = web3j.newHeadsNotifications()
 
 Command line tools
 ------------------
