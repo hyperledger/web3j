@@ -3,8 +3,10 @@ package org.web3j.protocol.http;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.CipherSuite;
@@ -22,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import org.web3j.protocol.Service;
 import org.web3j.protocol.exceptions.ClientConnectionException;
+
+import static okhttp3.ConnectionSpec.CLEARTEXT;
 
 /**
  * HTTP implementation of our services API.
@@ -60,6 +64,11 @@ public class HttpService extends Service {
     
     private static final ConnectionSpec INFURA_CIPHER_SUITE_SPEC = new ConnectionSpec
             .Builder(ConnectionSpec.MODERN_TLS).cipherSuites(INFURA_CIPHER_SUITES).build();
+
+    /**
+     * The list of {@link ConnectionSpec} instances used by the connection.
+     */
+    private static final List<ConnectionSpec> CONNECTION_SPEC_LIST = Arrays.asList(INFURA_CIPHER_SUITE_SPEC, CLEARTEXT);
 
     public static final MediaType JSON_MEDIA_TYPE
             = MediaType.parse("application/json; charset=utf-8");
@@ -112,8 +121,7 @@ public class HttpService extends Service {
     }
 
     private static OkHttpClient createOkHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectionSpecs(Collections.singletonList(INFURA_CIPHER_SUITE_SPEC));
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectionSpecs(CONNECTION_SPEC_LIST);
         configureLogging(builder);
         return builder.build();
     }
