@@ -14,6 +14,8 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -679,6 +681,12 @@ public class SolidityFunctionWrapper extends Generator {
     MethodSpec buildFunction(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
+
+        // If the solidity function name is a reserved word
+        // in the current java version prepend it with "_"
+        if(!SourceVersion.isName(functionName)) {
+            functionName = "_" + functionName;
+        }
 
         MethodSpec.Builder methodBuilder =
                 MethodSpec.methodBuilder(functionName)
