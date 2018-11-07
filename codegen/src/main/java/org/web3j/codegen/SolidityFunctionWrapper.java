@@ -684,7 +684,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         // If the solidity function name is a reserved word
         // in the current java version prepend it with "_"
-        if(!SourceVersion.isName(functionName)) {
+        if (!SourceVersion.isName(functionName)) {
             functionName = "_" + functionName;
         }
 
