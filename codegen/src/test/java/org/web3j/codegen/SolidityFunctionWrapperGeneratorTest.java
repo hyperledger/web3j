@@ -86,6 +86,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testComplexStorage() throws Exception {
+        testCodeGenerationJvmTypes("complexstorage", "ComplexStorage");
+        testCodeGenerationSolidityTypes("complexstorage", "ComplexStorage");
+    }
+
+    @Test
     public void testContractsNoBin() throws Exception {
         testCodeGeneration("contracts", "HumanStandardToken", JAVA_TYPES_ARG, false);
         testCodeGeneration("contracts", "HumanStandardToken", SOLIDITY_TYPES_ARG, false);
