@@ -1,11 +1,12 @@
 package org.web3j.protocol.pantheon;
 
-import org.junit.Test;
-import org.web3j.protocol.RequestTester;
-import org.web3j.protocol.http.HttpService;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.Test;
+
+import org.web3j.protocol.RequestTester;
+import org.web3j.protocol.http.HttpService;
 
 public class RequestTest extends RequestTester {
     private Pantheon web3j;
@@ -33,13 +34,12 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testTraceTransaction() throws Exception {
+        final String transactionHash = "0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e";
 
-        String transactionHash = "0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e";
-
-        Map <String,Boolean> options=  new HashMap <>();
+        Map<String, Boolean> options = new HashMap<>();
         options.put("disableStorage", false);
-        options.put("disableStack",false);
-        options.put("disableMemory",true);
+        options.put("disableStack", false);
+        options.put("disableMemory", true);
 
         web3j.debugTraceTransaction(transactionHash, options).send();
 

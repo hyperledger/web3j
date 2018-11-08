@@ -9,7 +9,8 @@ public class FullDebugTraceInfo {
     private String returnValue;
     private List<StructLogs> structLogs;
 
-    public FullDebugTraceInfo(int gas, boolean failed, String returnValue, List<StructLogs> structLogs) {
+    public FullDebugTraceInfo(int gas, boolean failed, String returnValue,
+                              List<StructLogs> structLogs) {
         this.gas = gas;
         this.failed = failed;
         this.returnValue = returnValue;
@@ -20,7 +21,9 @@ public class FullDebugTraceInfo {
         return gas;
     }
 
-    public void setGas() { this.gas = gas; }
+    public void setGas() {
+        this.gas = gas;
+    }
 
     public boolean getFailed() {
         return failed;
@@ -30,13 +33,19 @@ public class FullDebugTraceInfo {
         this.failed = failed;
     }
 
-    public String getReturnValue() { return returnValue; }
+    public String getReturnValue() {
+        return returnValue;
+    }
 
-    public void serReturnValye() { this.returnValue = returnValue; }
+    public void serReturnValye() {
+        this.returnValue = returnValue;
+    }
 
     public List<StructLogs> getStructLogs() {
         return structLogs;
     }
 
-    public void setStructLogs() { this.structLogs = structLogs; }
+    public void setStructLogs() {
+        this.structLogs = structLogs;
+    }
 }

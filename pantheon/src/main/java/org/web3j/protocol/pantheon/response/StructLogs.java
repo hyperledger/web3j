@@ -15,7 +15,8 @@ public class StructLogs {
     private List<String> memory;
     private Map<BigInteger, String> storage; // maybe List<Map<BigInteger, String>>
 
-    public StructLogs(int pc, String op, int gas, int gasCost, int depth, List<String> stack, List<String> memory, Map<BigInteger, String> storage) {
+    public StructLogs(int pc, String op, int gas, int gasCost, int depth,
+                      List<String> stack, List<String> memory, Map<BigInteger, String> storage) {
         this.pc = pc;
         this.op = op;
         this.gas = gas;

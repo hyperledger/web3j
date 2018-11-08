@@ -83,7 +83,8 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     }
 
     @Override
-    public Request<?, PantheonFullDebugTraceResponse> debugTraceTransaction(String transactionHash, Map<String, Boolean> options) {
+    public Request<?, PantheonFullDebugTraceResponse> debugTraceTransaction(
+            String transactionHash, Map<String, Boolean> options) {
         return new Request<>(
                 "debug_traceTransaction",
                 Arrays.asList(transactionHash, options),
