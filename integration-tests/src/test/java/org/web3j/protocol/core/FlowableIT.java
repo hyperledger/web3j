@@ -58,10 +58,10 @@ public class FlowableIT {
 
 //        Web3j web3 = Web3j.build(new HttpService("https://morden.infura.io/your-token"));
 
-        final String apiSecret = "????";
-        final String ethUrl = "https://rinkeby.infura.io/v3/a1504fcad53249f5a7b8df6bc2e3c3fb";
+        final String apiSecret = "???";
+        final String ethUrl = "https://rinkeby.infura.io/v3/???";
         final String wsUrl = "wss://rinkeby.infura.io/ws";
-        boolean useWebSockets = true;
+        boolean useWebSockets = false;
 
         if (useWebSockets) {
             final WebSocketClient webSocketClient = new WebSocketClient(new URI(wsUrl));
