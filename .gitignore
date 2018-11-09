@@ -19,8 +19,6 @@ hs_err_pid*
 */build/
 */out/
 
-gradle.properties
-
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -35,6 +33,9 @@ gradle-app.setting
 
 .idea
 *.iml
+*.ipr
+*.iws
+
 geth.sh
 integration-tests/local-test.properties
 

@@ -13,7 +13,9 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -23,15 +25,15 @@ public class PollingTransactionReceiptProcessorTest {
     private static final String TRANSACTION_HASH = "0x00";
     private Web3j web3j;
     private long sleepDuration;
-    private int attemps;
+    private int attempts;
     private PollingTransactionReceiptProcessor processor;
 
     @Before
     public void setUp() {
         web3j = mock(Web3j.class);
         sleepDuration = 100;
-        attemps = 3;
-        processor = new PollingTransactionReceiptProcessor(web3j, sleepDuration, attemps);
+        attempts = 3;
+        processor = new PollingTransactionReceiptProcessor(web3j, sleepDuration, attempts);
     }
 
     @Test
@@ -54,7 +56,8 @@ public class PollingTransactionReceiptProcessorTest {
             processor.waitForTransactionReceipt(TRANSACTION_HASH);
             fail("call should fail with TransactionException");
         } catch (TransactionException e) {
-            // this is expected
+            assertTrue(e.getTransactionHash().isPresent());
+            assertEquals(e.getTransactionHash().get(), TRANSACTION_HASH);
         }
     }
 

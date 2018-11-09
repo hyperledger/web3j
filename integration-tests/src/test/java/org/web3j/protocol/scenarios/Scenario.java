@@ -21,6 +21,8 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.gas.StaticGasProvider;
 
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.fail;
@@ -34,6 +36,8 @@ public class Scenario {
 
     static final BigInteger GAS_PRICE = BigInteger.valueOf(22_000_000_000L);
     static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
+    static final StaticGasProvider STATIC_GAS_PROVIDER =
+            new StaticGasProvider(GAS_PRICE, GAS_LIMIT);
 
     // testnet
     private static final String WALLET_PASSWORD = "";

@@ -1,0 +1,3 @@
+environment: local
+service:
+  url: http://localhost:8545

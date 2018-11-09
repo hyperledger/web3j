@@ -12,15 +12,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
-import rx.Subscription;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
@@ -31,7 +30,6 @@ import org.web3j.protocol.websocket.events.NewHeadsNotification;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -259,31 +257,19 @@ public class WebSocketServiceTest {
     @Test
     public void testPropagateSubscriptionEvent() throws Exception {
         CountDownLatch eventReceived = new CountDownLatch(1);
-        CountDownLatch completedCalled = new CountDownLatch(1);
+        CountDownLatch disposed = new CountDownLatch(1);
         AtomicReference<NewHeadsNotification> actualNotificationRef = new AtomicReference<>();
 
         runAsync(() -> {
-            final Subscription subscription = subscribeToEvents()
-                    .subscribe(new Subscriber<NewHeadsNotification>() {
-                        @Override
-                        public void onCompleted() {
-                            completedCalled.countDown();
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onNext(NewHeadsNotification newHeadsNotification) {
-                            actualNotificationRef.set(newHeadsNotification);
-                            eventReceived.countDown();
-                        }
+            Disposable disposable = subscribeToEvents()
+                    .subscribe(newHeadsNotification -> {
+                        actualNotificationRef.set(newHeadsNotification);
+                        eventReceived.countDown();
                     });
             try {
                 eventReceived.await(2, TimeUnit.SECONDS);
-                subscription.unsubscribe();
+                disposable.dispose();
+                disposed.countDown();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -293,7 +279,7 @@ public class WebSocketServiceTest {
         sendSubscriptionConfirmation();
         sendWebSocketEvent();
 
-        assertTrue(completedCalled.await(6, TimeUnit.SECONDS));
+        assertTrue(disposed.await(6, TimeUnit.SECONDS));
         assertEquals(
                 "0xd9263f42a87",
                 actualNotificationRef.get().getParams().getResult().getDifficulty());
@@ -304,8 +290,8 @@ public class WebSocketServiceTest {
         CountDownLatch unsubscribed = new CountDownLatch(1);
 
         runAsync(() -> {
-            Observable<NewHeadsNotification> observable = subscribeToEvents();
-            observable.subscribe().unsubscribe();
+            Flowable<NewHeadsNotification> flowable = subscribeToEvents();
+            flowable.subscribe().dispose();
             unsubscribed.countDown();
 
         });
@@ -321,15 +307,19 @@ public class WebSocketServiceTest {
         CountDownLatch errorReceived = new CountDownLatch(1);
         AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
 
-        runAsync(() -> subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
+        runAsync(() -> subscribeToEvents().subscribe(new Subscriber<NewHeadsNotification>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
             public void onError(Throwable e) {
                 actualThrowable.set(e);
                 errorReceived.countDown();
+            }
+
+            @Override
+            public void onSubscribe(Subscription s) {
             }
 
             @Override
@@ -351,15 +341,19 @@ public class WebSocketServiceTest {
         CountDownLatch errorReceived = new CountDownLatch(1);
         AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
 
-        runAsync(() -> subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
+        runAsync(() -> subscribeToEvents().subscribe(new Subscriber<NewHeadsNotification>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
             public void onError(Throwable e) {
                 actualThrowable.set(e);
                 errorReceived.countDown();
+            }
+
+            @Override
+            public void onSubscribe(Subscription s) {
             }
 
             @Override
@@ -382,15 +376,19 @@ public class WebSocketServiceTest {
         CountDownLatch errorReceived = new CountDownLatch(1);
         AtomicReference<Throwable> actualThrowable = new AtomicReference<>();
 
-        runAsync(() -> subscribeToEvents().subscribe(new Observer<NewHeadsNotification>() {
+        runAsync(() -> subscribeToEvents().subscribe(new Subscriber<NewHeadsNotification>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
             public void onError(Throwable e) {
                 actualThrowable.set(e);
                 errorReceived.countDown();
+            }
+
+            @Override
+            public void onSubscribe(Subscription s) {
             }
 
             @Override
@@ -418,7 +416,7 @@ public class WebSocketServiceTest {
         Executors.newSingleThreadExecutor().execute(runnable);
     }
 
-    private Observable<NewHeadsNotification> subscribeToEvents() {
+    private Flowable<NewHeadsNotification> subscribeToEvents() {
         subscribeRequest = new Request<>(
                 "eth_subscribe",
                 Arrays.asList("newHeads", Collections.emptyMap()),

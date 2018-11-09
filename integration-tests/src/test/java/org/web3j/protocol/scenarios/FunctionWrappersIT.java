@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.generated.Fibonacci;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.TestParameters;
@@ -37,9 +38,11 @@ public class FunctionWrappersIT extends Scenario {
     @Test
     public void testFibonacci() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
-                "0x581f4ef871aef69324cff1df9708678e2bff9870",
-                web3j,
-                ALICE, GAS_PRICE, GAS_LIMIT);
+                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()),
+                ALICE, STATIC_GAS_PROVIDER);
+//                "0x581f4ef871aef69324cff1df9708678e2bff9870",
+//                web3j,
+//                ALICE, GAS_PRICE, GAS_LIMIT);
 
         BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).send();
         assertThat(result, equalTo(BigInteger.valueOf(55)));
@@ -48,9 +51,11 @@ public class FunctionWrappersIT extends Scenario {
     @Test
     public void testFibonacciNotify() throws Exception {
         Fibonacci fibonacci = Fibonacci.load(
-                "0x581f4ef871aef69324cff1df9708678e2bff9870",
-                web3j,
-                ALICE, GAS_PRICE, GAS_LIMIT);
+                "0x3c05b2564139fb55820b18b72e94b2178eaace7d", Web3j.build(new HttpService()),
+                ALICE, STATIC_GAS_PROVIDER);
+//                "0x581f4ef871aef69324cff1df9708678e2bff9870",
+//                web3j,
+//                ALICE, GAS_PRICE, GAS_LIMIT);
 
         TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(
                 BigInteger.valueOf(15)).send();
@@ -58,9 +63,9 @@ public class FunctionWrappersIT extends Scenario {
         Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
         assertThat(result.input,
-                equalTo(BigInteger.valueOf(15)));
+                equalTo(new Uint256(BigInteger.valueOf(15))));
 
         assertThat(result.result,
-                equalTo(BigInteger.valueOf(610)));
+                equalTo(new Uint256(BigInteger.valueOf(610))));
     }
 }

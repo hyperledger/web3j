@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
@@ -82,24 +84,26 @@ public class MnemonicUtils {
         if (WORD_LIST == null) {
             WORD_LIST = populateWordList();
         }
-        if (isMnemonicEmpty(mnemonic)) {
-            throw new IllegalArgumentException("Mnemonic is empty");
+        final BitSet bits = new BitSet();
+        final int size = mnemonicToBits(mnemonic, bits);
+        if (size == 0) {
+            throw new IllegalArgumentException("Empty mnemonic");
         }
 
-        String bits = mnemonicToBits(mnemonic);
-
-        // split the binary string into ENT/CS.
-        int totalLength = bits.length();
-        int ent = (int) Math.floor(totalLength / 33) * 32;
-        String entropyBits = bits.substring(0, ent);
-        String checksumBits = rightPad(bits.substring(ent), "0", 8);
-
-        byte[] entropy = bitsToBytes(entropyBits);
+        final int ent = 32 * size / 33;
+        if (ent % 8 != 0) {
+            throw new IllegalArgumentException("Wrong mnemonic size");
+        }
+        final byte[] entropy = new byte[ent / 8];
+        for (int i = 0; i < entropy.length; i++) {
+            entropy[i] = readByte(bits, i);
+        }
         validateEntropy(entropy);
 
-        byte newChecksum = calculateChecksum(entropy);
-        if (newChecksum != (byte) Integer.parseInt(checksumBits, 2)) {
-            throw new IllegalArgumentException("Checksum of mnemonic is invalid");
+        final byte expectedChecksum = calculateChecksum(entropy);
+        final byte actualChecksum = readByte(bits, entropy.length);
+        if (expectedChecksum != actualChecksum) {
+            throw new IllegalArgumentException("Wrong checksum");
         }
 
         return entropy;
@@ -198,48 +202,34 @@ public class MnemonicUtils {
         return value;
     }
 
-    private static String mnemonicToBits(String mnemonic) {
-        String[] words = mnemonic.split(" ");
-
-        StringBuilder bits = new StringBuilder();
-        for (String word : words) {
-            int index = WORD_LIST.indexOf(word);
-            if (index == -1) {
-                throw new IllegalArgumentException(String.format(
-                        "Mnemonic word '%s' should be in the word list", word));
+    private static int mnemonicToBits(String mnemonic, BitSet bits) {
+        int bit = 0;
+        final StringTokenizer tokenizer = new StringTokenizer(mnemonic, " ");
+        while (tokenizer.hasMoreTokens()) {
+            final String word = tokenizer.nextToken();
+            final int index = WORD_LIST.indexOf(word);
+            if (index < 0) {
+                throw new IllegalArgumentException("Illegal word: " + word);
             }
-            bits.append(leftPad(Integer.toBinaryString(index), "0", 11));
+            for (int k = 0; k < 11; k++) {
+                bits.set(bit++, isBitSet(index, 10 - k));
+            }
         }
-
-        return bits.toString();
+        return bit;
     }
 
-    private static byte[] bitsToBytes(String bits) {
-        byte[] bytes = new byte[(int) Math.ceil(bits.length() / 8f)];
-        int index = 0;
-        for (int iByte = 0; iByte < bytes.length; iByte++) {
-            String byteStr = bits.substring(index, Math.min(index + 8, bits.length()));
-            bytes[iByte] = (byte) Integer.parseInt(byteStr, 2);
-            index += 8;
+    private static byte readByte(BitSet bits, int startByte) {
+        byte res = 0;
+        for (int k = 0; k < 8; k++) {
+            if (bits.get(startByte * 8 + k)) {
+                res = (byte) (res | (1 << (7 - k)));
+            }
         }
-
-        return bytes;
+        return res;
     }
 
-    private static String leftPad(String str, String padString, int length) {
-        StringBuilder resultStr = new StringBuilder(str);
-        while (resultStr.length() < length) {
-            resultStr.insert(0, padString);
-        }
-        return resultStr.toString();
-    }
-
-    private static String rightPad(String str, String padString, int length) {
-        StringBuilder resultStr = new StringBuilder(str);
-        for (int i = str.length(); i < length; i++) {
-            resultStr.append(padString);
-        }
-        return resultStr.toString();
+    private static boolean isBitSet(int n, int k) {
+        return ((n >> k) & 1) == 1;
     }
 
     private static byte calculateChecksum(byte[] initialEntropy) {

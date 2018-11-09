@@ -7,9 +7,10 @@ buildscript {
     ext.javapoetVersion = '1.7.0'
     ext.jnr_unixsocketVersion = '0.15'
     ext.okhttpVersion = '3.8.1'
-    ext.rxjavaVersion = '1.2.4'
+    ext.rxjavaVersion = '2.2.2'
     ext.slf4jVersion = '1.7.25'
     ext.javaWebSocketVersion = '1.3.8'
+    ext.picocliVersion = '3.0.0'
 
     // test dependencies
     ext.equalsverifierVersion = '2.1.7'
@@ -30,6 +31,9 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.7.3"
+    id "org.ajoberstar.grgit" version "3.0.0-rc.2"
+    // TODO: sort out the tagging
+//    id "net.researchgate.release" version "2.7.0"
 }
 
 apply plugin: 'java'
@@ -45,9 +49,6 @@ allprojects {
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
-
-    group 'org.web3j'
-    version '3.5.0'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -134,11 +135,11 @@ subprojects {
 
     dependencies {
         testCompile "junit:junit:$junitVersion",
-                    "org.mockito:mockito-core:$mockitoVersion"
+                "org.mockito:mockito-core:$mockitoVersion"
     }
 }
 
-configure(subprojects.findAll {it.name != 'integration-tests'}) {
+configure(subprojects.findAll { it.name != 'integration-tests' }) {
     // Required for Maven Nexus repository
     apply plugin: 'maven'
     apply plugin: 'signing'
@@ -167,8 +168,12 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
     }
 
     ext {
-        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
-        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
+        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
+        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
+        ossrhRepoUrl = project.hasProperty('ossrhRepoUrl') ? project.property('ossrhRepoUrl') : System.getenv('OSSRH_REPO_URL')
+        bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+        bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+        isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
     }
 
     publishing {
@@ -192,7 +197,11 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                onlyIf {
+                    ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
+                }
+
+                repository(url: ossrhRepoUrl) {
                     authentication(
                             userName: ossrhUsername,
                             password: ossrhPassword
@@ -235,8 +244,8 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
     }
 
     bintray {
-        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+        user = bintrayUser
+        key = bintrayKey
         publications = ['mavenJava']
         publish = true
         pkg {
@@ -256,19 +265,25 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         //TODO run clean & closeAndPromoteRepository once
         dependsOn 'build'
         dependsOn 'uploadArchives'
-        dependsOn 'bintrayUpload'
 
+        if (!isSnapshotVersion && bintrayUser != '' && bintrayKey != '') {
+            dependsOn 'bintrayUpload'
+            tasks.findByName('bintrayUpload').mustRunAfter 'build'
+        }
         tasks.findByName('uploadArchives').mustRunAfter 'build'
-        tasks.findByName('bintrayUpload').mustRunAfter 'build'
     }
 }
 
+//release {
+//    tagTemplate = 'v${version}'
+//    failOnCommitNeeded = true
+//}
 
 task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     dependsOn = subprojects.test
     additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories =  files(subprojects.sourceSets.main.output)
+    classDirectories = files(subprojects.sourceSets.main.output)
     executionData = files(subprojects.jacocoTestReport.executionData)
     reports {
         xml.enabled = true

@@ -1,0 +1,52 @@
+image: gradle:alpine
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+
+before_script:
+- export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+  - .m2/repository/
+  - target/
+
+stages:
+- build
+- test
+- deploy
+
+build:
+  stage: build
+  script:
+  - gradle clean build -x test
+
+unit tests:
+  stage: test
+  script:
+  - gradle test
+
+publish_snapshot:
+  stage: deploy
+  script:
+  - gradle uploadArchives
+
+  environment:
+    name: publish_snapshot
+  when: manual
+  only:
+  - /release/.*$/
+
+publish_release:
+  stage: deploy
+  script:
+  - gradle uploadArchives
+
+  environment:
+    name: publish_release
+  when: manual
+  only:
+  - master

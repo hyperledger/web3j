@@ -73,7 +73,8 @@ public class TestParameters {
     /**
      * For geth.
      */
-    public static final String TEST_RINKEBY_URL;
+    public static final String TEST_RINKEBY_URL
+            ;
 
     /**
      * Username for geth if needed.

@@ -3,7 +3,7 @@ package org.web3j.protocol;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
@@ -44,8 +44,8 @@ public interface Web3jService {
      * the unsubscribe method. Different WebSocket implementations use different pair of
      * subscribe/unsubscribe methods.
      *
-     * <p>This method creates an Observable that can be used to subscribe to new notifications.
-     * When a client unsubscribes from this Observable the service unsubscribes from
+     * <p>This method creates an Flowable that can be used to subscribe to new notifications.
+     * When a client unsubscribes from this Flowable the service unsubscribes from
      * the underlying stream of events.
      *
      * @param request JSON-RPC request that will be send to subscribe to a stream of
@@ -54,9 +54,9 @@ public interface Web3jService {
      *                          stream of notifications
      * @param responseType class of incoming events objects in a stream
      * @param <T> type of incoming event objects
-     * @return Observable that emits incoming events
+     * @return a {@link Flowable} instance that emits incoming events
      */
-    <T extends Notification<?>> Observable<T> subscribe(
+    <T extends Notification<?>> Flowable<T> subscribe(
             Request request,
             String unsubscribeMethod,
             Class<T> responseType);
