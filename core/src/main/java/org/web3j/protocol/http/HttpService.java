@@ -170,7 +170,6 @@ public class HttpService extends Service {
         }
     }
 
-
     private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
         InputStream inputStream = responseBody.byteStream();
 
