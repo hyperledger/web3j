@@ -31,31 +31,31 @@ public class HttpService extends Service {
      * Copied from {@link ConnectionSpec#APPROVED_CIPHER_SUITES}.
      */
     private static final CipherSuite[] INFURA_CIPHER_SUITES = new CipherSuite[] {
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-        CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+            CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
 
-        // Note that the following cipher suites are all on HTTP/2's bad cipher suites list. We'll
-        // continue to include them until better suites are commonly available. For example, none
-        // of the better cipher suites listed above shipped with Android 4.4 or Java 7.
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-        CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
-        CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
-        CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
-        CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
-        CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
+            // Note that the following cipher suites are all on HTTP/2's bad cipher suites list. We'll
+            // continue to include them until better suites are commonly available. For example, none
+            // of the better cipher suites listed above shipped with Android 4.4 or Java 7.
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+            CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
+            CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
+            CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
+            CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
+            CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
 
-        // Additional INFURA CipherSuites
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-        CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
-        CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256
+            // Additional INFURA CipherSuites
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+            CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
+            CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256
     };
 
     private static final ConnectionSpec INFURA_CIPHER_SUITE_SPEC = new ConnectionSpec
@@ -89,16 +89,16 @@ public class HttpService extends Service {
         this(httpClient, includeRawResponses, DEFAULT_URL);
     }
 
-    private HttpService(OkHttpClient httpClient, String url) {
-        this(httpClient, false, url);
+    private HttpService(OkHttpClient httpClient, String... urls) {
+        this(httpClient, false, urls);
     }
 
-    public HttpService(String url) {
-        this(createOkHttpClient(), url);
+    public HttpService(String... urls) {
+        this(createOkHttpClient(), urls);
     }
 
-    public HttpService(boolean includeRawResponse, String url) {
-        this(createOkHttpClient(), includeRawResponse, url);
+    public HttpService(boolean includeRawResponse, String... urls) {
+        this(createOkHttpClient(), includeRawResponse, urls);
     }
 
     public HttpService(OkHttpClient httpClient) {
@@ -142,7 +142,8 @@ public class HttpService extends Service {
                     .post(requestBody)
                     .build();
         } catch (IllegalStateException e) {
-            url = next();
+            log.error("Node connection has failed", e);
+            url = nextUrl();
             if (url != null) {
                 httpRequest = new okhttp3.Request.Builder()
                         .url(url)
@@ -215,7 +216,7 @@ public class HttpService extends Service {
         return headers;
     }
 
-    public String next() {
+    private String nextUrl() {
         ++counter;
         if (counter == urls.length) {
             counter = 0;
