@@ -136,20 +136,12 @@ public class HttpService extends Service {
         okhttp3.Request httpRequest;
         String url = urls[counter];
         try {
-            httpRequest = new okhttp3.Request.Builder()
-                    .url(url)
-                    .headers(headers)
-                    .post(requestBody)
-                    .build();
+            httpRequest = buildHttpRequest(url, headers, requestBody);
         } catch (IllegalStateException e) {
             log.error("Node connection has failed", e);
             url = nextUrl();
             if (url != null) {
-                httpRequest = new okhttp3.Request.Builder()
-                        .url(url)
-                        .headers(headers)
-                        .post(requestBody)
-                        .build();
+                httpRequest = buildHttpRequest(url, headers, requestBody);
             } else {
                 throw e;
             }
@@ -201,6 +193,17 @@ public class HttpService extends Service {
 
     private Headers buildHeaders() {
         return Headers.of(headers);
+    }
+
+    private okhttp3.Request buildHttpRequest(String url, okhttp3.Headers headers,
+                                             RequestBody requestBody) {
+        okhttp3.Request httpRequest = new okhttp3.Request.Builder()
+                .url(url)
+                .headers(headers)
+                .post(requestBody)
+                .build();
+
+        return httpRequest;
     }
 
     public void addHeader(String key, String value) {
