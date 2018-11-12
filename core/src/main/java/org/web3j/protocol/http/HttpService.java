@@ -57,7 +57,7 @@ public class HttpService extends Service {
         CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
         CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256
     };
-    
+
     private static final ConnectionSpec INFURA_CIPHER_SUITE_SPEC = new ConnectionSpec
             .Builder(ConnectionSpec.MODERN_TLS).cipherSuites(INFURA_CIPHER_SUITES).build();
 
@@ -70,41 +70,43 @@ public class HttpService extends Service {
 
     private OkHttpClient httpClient;
 
-    private final String url;
+    private String[] urls;
 
-    private final boolean includeRawResponse;
+    private int counter = 0;
+
+    private boolean includeRawResponse;
 
     private HashMap<String, String> headers = new HashMap<>();
 
-    public HttpService(String url, OkHttpClient httpClient, boolean includeRawResponses) {
+    public HttpService(OkHttpClient httpClient, boolean includeRawResponses, String... urls) {
         super(includeRawResponses);
-        this.url = url;
         this.httpClient = httpClient;
         this.includeRawResponse = includeRawResponses;
+        this.urls = urls;
     }
 
     public HttpService(OkHttpClient httpClient, boolean includeRawResponses) {
-        this(DEFAULT_URL, httpClient, includeRawResponses);
+        this(httpClient, includeRawResponses, DEFAULT_URL);
     }
 
-    private HttpService(String url, OkHttpClient httpClient) {
-        this(url, httpClient, false);
+    private HttpService(OkHttpClient httpClient, String url) {
+        this(httpClient, false, url);
     }
 
     public HttpService(String url) {
-        this(url, createOkHttpClient());
+        this(createOkHttpClient(), url);
     }
 
-    public HttpService(String url, boolean includeRawResponse) {
-        this(url, createOkHttpClient(), includeRawResponse);
+    public HttpService(boolean includeRawResponse, String url) {
+        this(createOkHttpClient(), includeRawResponse, url);
     }
 
     public HttpService(OkHttpClient httpClient) {
-        this(DEFAULT_URL, httpClient);
+        this(httpClient, DEFAULT_URL);
     }
 
     public HttpService(boolean includeRawResponse) {
-        this(DEFAULT_URL, includeRawResponse);
+        this(includeRawResponse, DEFAULT_URL);
     }
 
     public HttpService() {
@@ -131,13 +133,26 @@ public class HttpService extends Service {
 
         RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, request);
         Headers headers = buildHeaders();
-
-        okhttp3.Request httpRequest = new okhttp3.Request.Builder()
-                .url(url)
-                .headers(headers)
-                .post(requestBody)
-                .build();
-
+        okhttp3.Request httpRequest;
+        String url = urls[counter];
+        try {
+            httpRequest = new okhttp3.Request.Builder()
+                    .url(url)
+                    .headers(headers)
+                    .post(requestBody)
+                    .build();
+        } catch (IllegalStateException e) {
+            url = next();
+            if (url != null) {
+                httpRequest = new okhttp3.Request.Builder()
+                        .url(url)
+                        .headers(headers)
+                        .post(requestBody)
+                        .build();
+            } else {
+                throw e;
+            }
+        }
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
@@ -153,6 +168,7 @@ public class HttpService extends Service {
             throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
         }
     }
+
 
     private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
         InputStream inputStream = responseBody.byteStream();
@@ -197,6 +213,14 @@ public class HttpService extends Service {
 
     public HashMap<String, String> getHeaders() {
         return headers;
+    }
+
+    public String next() {
+        ++counter;
+        if (counter == urls.length) {
+            counter = 0;
+        }
+        return urls[counter];
     }
 
     @Override
