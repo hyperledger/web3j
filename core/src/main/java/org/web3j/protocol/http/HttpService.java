@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,35 +30,36 @@ import static okhttp3.ConnectionSpec.CLEARTEXT;
  * HTTP implementation of our services API.
  */
 public class HttpService extends Service {
+
     /**
      * Copied from {@link ConnectionSpec#APPROVED_CIPHER_SUITES}.
      */
-    private static final CipherSuite[] INFURA_CIPHER_SUITES = new CipherSuite[]{
-            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-            CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-            CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-            CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+    private static final CipherSuite[] INFURA_CIPHER_SUITES = new CipherSuite[] {
+        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+        CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+        CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
 
-            // Note that the following cipher suites are all on HTTP/2's bad cipher suites list. We'll
-            // continue to include them until better suites are commonly available. For example, none
-            // of the better cipher suites listed above shipped with Android 4.4 or Java 7.
-            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
-            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
-            CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-            CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
-            CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
-            CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
-            CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
-            CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
+        // Note that the following cipher suites are all on HTTP/2's bad cipher suites list. We'll
+        // continue to include them until better suites are commonly available. For example, none
+        // of the better cipher suites listed above shipped with Android 4.4 or Java 7.
+        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
+        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+        CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
+        CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
+        CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
+        CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
+        CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
 
-            // Additional INFURA CipherSuites
-            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-            CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-            CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
-            CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256
+        // Additional INFURA CipherSuites
+        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+        CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
+        CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256
     };
 
     private static final ConnectionSpec INFURA_CIPHER_SUITE_SPEC = new ConnectionSpec
