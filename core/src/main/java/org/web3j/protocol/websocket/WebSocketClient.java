@@ -49,7 +49,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onError(Exception e) {
-        log.error(String.format("WebSocket connection to {} failed with error", uri), e);
+        log.error("WebSocket connection to {} failed with error", uri, e);
         listener.onError(e);
     }
 
