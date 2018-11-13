@@ -1,12 +1,12 @@
 package org.web3j.protocol.websocket;
 
-import org.java_websocket.handshake.ServerHandshake;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
+
+import org.java_websocket.handshake.ServerHandshake;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Web socket client implementation that connects to a specify URI. Allows to provide a listener
@@ -52,7 +52,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onError(Exception e) {
-        log.error(String.format("WebSocket connection to {} failed with error", uri), e);
+        log.error("WebSocket connection to {} failed with error", uri, e);
         listenerOpt.ifPresent(listener -> listener.onError(e));
     }
 
