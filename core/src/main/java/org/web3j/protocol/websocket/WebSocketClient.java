@@ -38,7 +38,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
             try {
                 listener.onMessage(s);
             } catch (Exception e) {
-                log.error("Failed to process message '{}' from server {}", s, uri);
+                log.error("Failed to process message '{}' from server {}", s, uri, e);
             }
         });
     }
