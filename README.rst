@@ -109,7 +109,10 @@ demonstrates a number of core features of Ethereum with web3j, including:
 Getting started
 ---------------
 
-Add the relevant dependency to your project:
+Typically your application should depend on release versions of web3j, but you may also use snapshot dependencies
+for early access to features and fixes, refer to the  `Snapshot Dependencies`_ section.
+
+| Add the relevant dependency to your project:
 
 Maven
 -----
@@ -121,7 +124,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.5.0</version>
+     <version>4.0.0</version>
    </dependency>
 
 Android:
@@ -134,6 +137,7 @@ Android:
      <version>3.3.1-android</version>
    </dependency>
 
+
 Gradle
 ------
 
@@ -141,7 +145,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.5.0')
+   compile ('org.web3j:core:4.0.0')
 
 Android:
 
@@ -199,12 +203,12 @@ To send asynchronous requests using a CompletableFuture (Future on Android):
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
-To use an RxJava Observable:
+To use an RxJava Flowable:
 
 .. code-block:: java
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3.web3ClientVersion().observable().subscribe(x -> {
+   web3.web3ClientVersion().flowable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -253,7 +257,7 @@ Then generate the wrapper code using web3j's `Command line tools`_:
 
 .. code-block:: bash
 
-   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   web3j solidity generate -b /path/to/<smart-contract>.bin -a /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Now you can create and deploy your smart contract:
 
@@ -326,7 +330,7 @@ To receive all new blocks as they are added to the blockchain:
 
 .. code-block:: java
 
-   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+   Subscription subscription = web3j.blockFlowable(false).subscribe(block -> {
        ...
    });
 
@@ -334,7 +338,7 @@ To receive all new transactions as they are added to the blockchain:
 
 .. code-block:: java
 
-   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.transactionFlowable().subscribe(tx -> {
        ...
    });
 
@@ -343,7 +347,7 @@ been grouped into a block together):
 
 .. code-block:: java
 
-   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.pendingTransactionFlowable().subscribe(tx -> {
        ...
    });
 
@@ -351,13 +355,13 @@ Or, if you'd rather replay all blocks to the most current, and be notified of ne
 blocks being created:
 
 .. code-block:: java
-   Subscription subscription = catchUpToLatestAndSubscribeToNewBlocksObservable(
+   Subscription subscription = replayPastAndFutureBlocksFlowable(
            <startBlockNumber>, <fullTxObjects>)
            .subscribe(block -> {
                ...
    });
 
-There are a number of other transaction and block replay Observables described in the
+There are a number of other transaction and block replay Flowables described in the
 `docs <http://docs.web3j.io/filters.html>`_.
 
 Topic filters are also supported:
@@ -367,7 +371,7 @@ Topic filters are also supported:
    EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
            DefaultBlockParameterName.LATEST, <contract-address>)
                 .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
-   web3j.ethLogObservable(filter).subscribe(log -> {
+   web3j.ethLogFlowable(filter).subscribe(log -> {
        ...
    });
 
@@ -567,6 +571,42 @@ To run the integration tests:
 .. code-block:: bash
 
    $ ./gradlew  -Pintegration-tests=true :integration-tests:test
+
+
+Snapshot Dependencies
+---------------------
+
+Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 4.0.0-SNAPSHOT.
+
+| If you would like to use snapshots instead please add a new maven repository pointing to:
+
+::
+
+  https://oss.sonatype.org/content/repositories/snapshots
+
+Please refer to the `maven <https://maven.apache.org/guides/mini/guide-multiple-repositories.html>`_ or `gradle <https://maven.apache.org/guides/mini/guide-multiple-repositories.html>`_ documentation for further detail.
+
+Sample gradle configuration:
+
+.. code-block:: groovy
+
+   repositories {
+      maven {
+         url "https://oss.sonatype.org/content/repositories/snapshots"
+      }
+   }
+
+Sample maven configuration:
+
+.. code-block:: xml
+
+   <repositories>
+     <repository>
+       <id>sonatype-snasphots</id>
+       <name>Sonatype snapshots repo</name>
+       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+     </repository>
+   </repositories>
 
 Thanks and credits
 ------------------

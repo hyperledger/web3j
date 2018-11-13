@@ -4,8 +4,8 @@ import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.disposables.Disposable;
 import org.junit.Test;
-import rx.Subscription;
 
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -44,14 +44,14 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         // CHECKSTYLE:OFF
         CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
-        Subscription transferEventSubscription = contract.transferEventObservable(
+        Disposable transferEventSubscription = contract.transferEventFlowable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
                 transferEventResponse -> transferEventCountDownLatch.countDown()
         );
 
         CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
-        Subscription approvalEventSubscription = contract.approvalEventObservable(
+        Disposable approvalEventSubscription = contract.approvalEventFlowable(
                 DefaultBlockParameterName.EARLIEST,
                 DefaultBlockParameterName.LATEST).subscribe(
                 transferEventResponse -> transferEventCountDownLatch.countDown()
@@ -112,7 +112,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         // Bob requires his own contract instance
         HumanStandardToken bobsContract = HumanStandardToken.load(
-                contract.getContractAddress(), web3j, BOB, GAS_PRICE, GAS_LIMIT);
+                contract.getContractAddress(), web3j, BOB, STATIC_GAS_PROVIDER);
 
         TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(
                 aliceAddress,
@@ -139,10 +139,10 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         transferEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);
         approvalEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);
 
-        approvalEventSubscription.unsubscribe();
-        transferEventSubscription.unsubscribe();
+        approvalEventSubscription.dispose();
+        transferEventSubscription.dispose();
         Thread.sleep(1000);
-        assertTrue(approvalEventSubscription.isUnsubscribed());
-        assertTrue(transferEventSubscription.isUnsubscribed());
+        assertTrue(approvalEventSubscription.isDisposed());
+        assertTrue(transferEventSubscription.isDisposed());
     }
 }

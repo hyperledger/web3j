@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
@@ -47,7 +47,7 @@ public abstract class Service implements Web3jService {
     }
 
     @Override
-    public <T extends Notification<?>> Observable<T> subscribe(
+    public <T extends Notification<?>> Flowable<T> subscribe(
             Request request,
             String unsubscribeMethod,
             Class<T> responseType) {

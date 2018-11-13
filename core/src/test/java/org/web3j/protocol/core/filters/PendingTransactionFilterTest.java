@@ -17,6 +17,6 @@ public class PendingTransactionFilterTest extends FilterTester {
                 //CHECKSTYLE:ON
                 EthLog.class);
 
-        runTest(ethLog, web3j.ethPendingTransactionHashObservable());
+        runTest(ethLog, web3j.ethPendingTransactionHashFlowable());
     }
 }
