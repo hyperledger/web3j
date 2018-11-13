@@ -154,7 +154,7 @@ public class HttpService extends Service {
                 response = httpClient.newCall(httpRequest).execute();
                 break;
             } catch (Exception e) {
-                log.warn("Failed called, trying next url");
+                log.error("Failed called, trying next url", e);
                 url = nextUrl();
             }
         } while (true);
