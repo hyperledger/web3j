@@ -81,6 +81,14 @@ public class CoreIT {
     }
 
     @Test
+    public void testWeb3MultiClientVersion() throws Exception {
+        this.web3j = Web3j.build(new HttpService("http://localhost:22001","http://localhost:22002","http://127.0.0.1:7545"));
+        Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
+        String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+        assertFalse(clientVersion.isEmpty());
+    }
+
+    @Test
     public void testWeb3Sha3() throws Exception {
         Web3Sha3 web3Sha3 = web3j.web3Sha3("0x68656c6c6f20776f726c64").send();
         assertThat(web3Sha3.getResult(),

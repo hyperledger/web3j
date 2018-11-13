@@ -143,23 +143,21 @@ public class HttpService extends Service {
 
     @Override
     protected InputStream performIO(String request) throws IOException {
-
         RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, request);
         Headers headers = buildHeaders();
-        okhttp3.Request httpRequest;
         String url = urls[counter];
-        try {
+        okhttp3.Request httpRequest;
+        okhttp3.Response response;
+        do {
             httpRequest = buildHttpRequest(url, headers, requestBody);
-        } catch (IllegalStateException e) {
-            log.error("Node connection has failed", e);
-            url = nextUrl();
-            if (url != null) {
-                httpRequest = buildHttpRequest(url, headers, requestBody);
-            } else {
-                throw e;
+            try {
+                response = httpClient.newCall(httpRequest).execute();
+                break;
+            } catch (Exception e) {
+                log.warn("Failed called, trying next url");
+                url = nextUrl();
             }
-        }
-        okhttp3.Response response = httpClient.newCall(httpRequest).execute();
+        } while (true);
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
             if (responseBody != null) {
