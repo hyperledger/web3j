@@ -42,8 +42,8 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        log.info("Closed WebSocket connection to {}, because of reason: '{}'."
-                + "Connection closed remotely: {}", uri, reason, remote);
+        log.info("Closed WebSocket connection to {}, because of reason: '{}'. Connection closed remotely: {}",
+                uri, reason, remote);
         listener.onClose();
     }
 
