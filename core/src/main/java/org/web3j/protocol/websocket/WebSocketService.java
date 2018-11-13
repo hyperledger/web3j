@@ -53,6 +53,8 @@ public class WebSocketService implements Web3jService {
 
     // WebSocket client
     private final WebSocketClient webSocketClient;
+    // WebSocket listener
+    private final WebSocketListener webSocketListener;
     // Executor to schedule request timeouts
     private final ScheduledExecutorService executor;
     // Object mapper to map incoming JSON objects
@@ -73,15 +75,22 @@ public class WebSocketService implements Web3jService {
 
     public WebSocketService(WebSocketClient webSocketClient,
                      boolean includeRawResponses) {
-        this(webSocketClient, Executors.newScheduledThreadPool(1), includeRawResponses);
+        this(webSocketClient, includeRawResponses, null);
+    }
+
+    public WebSocketService(WebSocketClient webSocketClient, boolean includeRawResponses
+                    , WebSocketListener webSocketListener) {
+        this(webSocketClient, Executors.newScheduledThreadPool(1), includeRawResponses, webSocketListener);
     }
 
     WebSocketService(WebSocketClient webSocketClient,
                      ScheduledExecutorService executor,
-                     boolean includeRawResponses) {
+                     boolean includeRawResponses,
+                     WebSocketListener webSocketListener) {
         this.webSocketClient = webSocketClient;
         this.executor = executor;
         this.objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
+        this.webSocketListener = webSocketListener;
     }
 
     /**
@@ -111,16 +120,25 @@ public class WebSocketService implements Web3jService {
             @Override
             public void onMessage(String message) throws IOException {
                 onWebSocketMessage(message);
+                if (webSocketListener != null) {
+                    webSocketListener.onMessage(message);
+                }
             }
 
             @Override
             public void onError(Exception e) {
                 log.error("Received error from a WebSocket connection", e);
+                if (webSocketListener != null) {
+                    webSocketListener.onError(e);
+                }
             }
 
             @Override
             public void onClose() {
                 onWebSocketClose();
+                if (webSocketListener != null) {
+                    webSocketListener.onClose();
+                }
             }
         });
     }
@@ -146,7 +164,6 @@ public class WebSocketService implements Web3jService {
     public <T extends Response> CompletableFuture<T> sendAsync(
             Request request,
             Class<T> responseType) {
-
         CompletableFuture<T> result = new CompletableFuture<>();
         long requestId = request.getId();
         requestForId.put(requestId, new WebSocketRequest<>(result, responseType));

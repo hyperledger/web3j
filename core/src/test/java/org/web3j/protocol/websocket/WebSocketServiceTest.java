@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.stubbing.Answer;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -31,10 +32,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.startsWith;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,9 +48,10 @@ public class WebSocketServiceTest {
     private static final int REQUEST_ID = 1;
 
     private WebSocketClient webSocketClient = mock(WebSocketClient.class);
+    private WebSocketListener webSocketListener = mock(WebSocketListener.class);
     private ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
 
-    private WebSocketService service = new WebSocketService(webSocketClient, executorService, true);
+    private WebSocketService service = new WebSocketService(webSocketClient, executorService, true, webSocketListener);
 
     private Request<?, Web3ClientVersion> request = new Request<>(
             "web3_clientVersion",
@@ -410,6 +415,41 @@ public class WebSocketServiceTest {
         assertEquals(
                 "Subscription request failed with error: Error message",
                 throwable.getMessage());
+    }
+
+    @Test
+    public void testAddedWebSocketListener() throws IOException {
+        // setup
+        doCallRealMethod().when(webSocketClient).setListener(any(WebSocketListener.class));
+        doCallRealMethod().when(webSocketClient).onMessage(anyString());
+        doCallRealMethod().when(webSocketClient).onError(any(Exception.class));
+        doCallRealMethod().when(webSocketClient).onClose(anyInt(), anyString(), anyBoolean());
+
+        CountDownLatch countDownLatch = new CountDownLatch(3);
+        Answer answer = invocation -> {
+            countDownLatch.countDown();
+            return null;
+        };
+        doAnswer(answer).when(webSocketListener).onMessage(anyString());
+        doAnswer(answer).when(webSocketListener).onError(any(Exception.class));
+        doAnswer(answer).when(webSocketListener).onClose();
+        service.connect();
+
+        // onMessage
+        String replyMessage = "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"Geth\"}";
+        service.sendAsync(request, Web3ClientVersion.class);
+        webSocketClient.onMessage(replyMessage);
+        assertTrue(countDownLatch.getCount() == 2);
+
+        // onError
+        service.sendAsync(request, Web3ClientVersion.class);
+        webSocketClient.onError(new Exception());
+        assertTrue(countDownLatch.getCount() == 1);
+
+        // close
+        webSocketClient.onClose(100, "rror", true);
+        assertTrue(countDownLatch.getCount() == 0);
+
     }
 
     private void runAsync(Runnable runnable) {
