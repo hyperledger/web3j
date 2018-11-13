@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class WebSocketClientTest {
@@ -34,6 +35,15 @@ public class WebSocketClientTest {
         client.onError(e);
 
         verify(listener).onError(e);
+    }
+
+    @Test
+    public void testErrorBeforeListenerSet() throws Exception {
+        final IOException e = new IOException("123");
+        client.setListener(null);
+        client.onError(e);
+
+        verify(listener, never()).onError(e);
     }
 
     @Test
