@@ -13,7 +13,7 @@ public class StructLogs {
     private int depth;
     private List<String> stack;
     private List<String> memory;
-    private Map<BigInteger, String> storage; // maybe List<Map<BigInteger, String>>
+    private Map<BigInteger, String> storage;
 
     public StructLogs(int pc, String op, int gas, int gasCost, int depth,
                       List<String> stack, List<String> memory, Map<BigInteger, String> storage) {
@@ -60,7 +60,6 @@ public class StructLogs {
     }
 
     public int getPc() {
-
         return pc;
     }
 
