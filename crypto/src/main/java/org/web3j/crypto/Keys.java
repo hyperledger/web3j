@@ -6,6 +6,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Arrays;
@@ -48,16 +49,30 @@ public class Keys {
      */
     static KeyPair createSecp256k1KeyPair() throws NoSuchProviderException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        return createSecp256k1KeyPair(secureRandom());
+    }
+
+    static KeyPair createSecp256k1KeyPair(SecureRandom random) throws NoSuchProviderException,
+            NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
-        keyPairGenerator.initialize(ecGenParameterSpec, secureRandom());
+        if (random != null) {
+            keyPairGenerator.initialize(ecGenParameterSpec, random);
+        } else {
+            keyPairGenerator.initialize(ecGenParameterSpec);
+        }
         return keyPairGenerator.generateKeyPair();
     }
 
     public static ECKeyPair createEcKeyPair() throws InvalidAlgorithmParameterException,
             NoSuchAlgorithmException, NoSuchProviderException {
-        KeyPair keyPair = createSecp256k1KeyPair();
+        return createEcKeyPair(secureRandom());
+    }
+
+    public static ECKeyPair createEcKeyPair(SecureRandom random) throws
+            InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+        KeyPair keyPair = createSecp256k1KeyPair(random);
         return ECKeyPair.create(keyPair);
     }
 
