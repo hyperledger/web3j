@@ -21,7 +21,6 @@ import org.junit.rules.ExpectedException;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
@@ -59,11 +58,6 @@ public class WebSocketServiceTest {
     public ExpectedException thrown = ExpectedException.none();
     private Request<Object, EthSubscribe> subscribeRequest;
 
-    public void d() {
-        final Web3j web3j = Web3j.build(service);
-        final Flowable<NewHeadsNotification> notifications = web3j.newHeadsNotifications();
-
-    }
     @Before
     public void before() throws InterruptedException {
         when(webSocketClient.connectBlocking()).thenReturn(true);
