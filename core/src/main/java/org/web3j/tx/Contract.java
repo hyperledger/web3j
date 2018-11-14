@@ -500,10 +500,9 @@ public abstract class Contract extends ManagedTransaction {
 
     public static EventValues staticExtractEventParameters(
             Event event, Log log) {
-
-        List<String> topics = log.getTopics();
+        final List<String> topics = log.getTopics();
         String encodedEventSignature = EventEncoder.encode(event);
-        if (!topics.get(0).equals(encodedEventSignature)) {
+        if (topics == null || topics.size() == 0 || !topics.get(0).equals(encodedEventSignature)) {
             return null;
         }
 
