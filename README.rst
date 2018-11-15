@@ -533,6 +533,7 @@ Please submit a pull request if you wish to include your project on the list:
 - `Ethereum Tool <https://github.com/e-Contract/ethereum-tool>`_ for secure offline key management.
 - `Ethereum Java EE JCA Resource Adapter <https://github.com/e-Contract/ethereum-resource-adapter>`_ provides integration of Ethereum within Java EE 6+.
 - `Apache Camel Ethereum Component <https://github.com/apache/camel/blob/master/components/camel-web3j/src/main/docs/web3j-component.adoc>`_ by `@bibryam <https://github.com/bibryam/>`_.
+- `Etherlinker for UE4 <https://bitbucket.org/kelheor/etherlinker-for-ue4>`_ - interact with Ethereum blockchain from Unreal Engine 4.
 
 
 
