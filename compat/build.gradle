@@ -1,0 +1,4 @@
+
+description 'Android compatibility module'
+
+useReducedJdk(project)
