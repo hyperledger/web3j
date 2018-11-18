@@ -280,6 +280,19 @@ public class ContractTest extends ManagedTransactionTester {
                 equalTo(singletonList(new Uint256(BigInteger.ONE))));
     }
 
+    @Test
+    public void testProcessEventForLogWithoutTopics() {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        final Log log = new Log();
+        log.setTopics(Collections.emptyList());
+        // non-indexed value
+        log.setData("0000000000000000000000000000000000000000000000000000000000000001");
+        transactionReceipt.setLogs(Arrays.asList(log));
+
+        final List<EventValues> eventValues = contract.processEvent(transactionReceipt);
+        assertTrue("No events expected", eventValues.isEmpty());
+    }
+
     @Test(expected = TransactionException.class)
     public void testTimeout() throws Throwable {
         prepareTransaction(null);
@@ -465,8 +478,8 @@ public class ContractTest extends ManagedTransactionTester {
         }
 
         public TestContract(String binary, String contractAddress,
-                Web3j web3j, TransactionManager transactionManager,
-                ContractGasProvider gasProvider) {
+                            Web3j web3j, TransactionManager transactionManager,
+                            ContractGasProvider gasProvider) {
             super(binary, contractAddress, web3j, transactionManager, gasProvider);
         }
 
@@ -483,8 +496,10 @@ public class ContractTest extends ManagedTransactionTester {
             Function function = new Function("call",
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(
-                            new TypeReference<Uint256>() { },
-                            new TypeReference<Uint256>() { }));
+                            new TypeReference<Uint256>() {
+                            },
+                            new TypeReference<Uint256>() {
+                            }));
             return executeRemoteCallMultipleValueReturn(function);
         }
 
@@ -499,8 +514,10 @@ public class ContractTest extends ManagedTransactionTester {
         public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {
             Event event = new Event("Event",
                     Arrays.<TypeReference<?>>asList(
-                            new TypeReference<Address>(true) { },
-                            new TypeReference<Uint256>() { }));
+                            new TypeReference<Address>(true) {
+                            },
+                            new TypeReference<Uint256>() {
+                            }));
             return extractEventParameters(event, transactionReceipt);
         }
     }

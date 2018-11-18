@@ -5,6 +5,7 @@ arrays/Arrays
 contracts/HumanStandardToken
 fibonacci/Fibonacci
 greeter/Greeter
+misc/Misc
 shipit/ShipIt
 simplestorage/SimpleStorage
 "
