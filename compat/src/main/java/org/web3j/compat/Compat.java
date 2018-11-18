@@ -1,10 +1,17 @@
 package org.web3j.compat;
 
+import java.nio.charset.Charset;
+
 /**
  * Provides compatibility methods to substitute those methods from Java SDK that
  * are not supported on Android.
  */
 public final class Compat {
+
+    /**
+     * Ports {@link java.nio.charset.StandardCharsets#UTF_8}.
+     */
+    public static final Charset UTF_8 = Charset.forName("UTF-8");
 
     private Compat() {
     }
