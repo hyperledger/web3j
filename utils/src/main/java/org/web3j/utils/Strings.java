@@ -2,6 +2,8 @@ package org.web3j.utils;
 
 import java.util.List;
 
+import org.web3j.compat.Compat;
+
 /**
  * String utility functions.
  */
@@ -15,7 +17,7 @@ public class Strings {
     }
 
     public static String join(List<String> src, String delimiter) {
-        return src == null ? null : String.join(delimiter, src.toArray(new String[0]));
+        return src == null ? null : Compat.join(delimiter, src.toArray(new String[0]));
     }
 
     public static String capitaliseFirstLetter(String string) {
