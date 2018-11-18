@@ -220,7 +220,8 @@ public class TypeDecoder {
         try {
             Class<List> listClass = List.class;
             return typeReference.getClassType().getConstructor(listClass).newInstance(elements);
-        } catch (ReflectiveOperationException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException
+                | InvocationTargetException | NoSuchMethodException e) {
             //noinspection unchecked
             return (T) new StaticArray<>(elements);
         }
