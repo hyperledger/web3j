@@ -4,7 +4,7 @@ targets="
 arrays/Arrays
 contracts/HumanStandardToken
 fibonacci/Fibonacci
-greeter/Greeter]
+greeter/Greeter
 misc/Misc
 shipit/ShipIt
 simplestorage/SimpleStorage
