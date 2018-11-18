@@ -2,5 +2,8 @@
 description 'Ethereum Application Binary Interface (ABI) for working with smart contracts'
 
 dependencies {
+    compile project(':compat')
     compile project(':utils')
 }
+
+useReducedJdk(project)
