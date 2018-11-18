@@ -5,7 +5,8 @@ import java.lang.reflect.ParameterizedType;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
+
+import java8.util.function.BiFunction;
 
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;

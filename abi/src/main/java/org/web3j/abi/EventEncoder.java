@@ -1,7 +1,9 @@
 package org.web3j.abi;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Type;
@@ -33,7 +35,7 @@ public class EventEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
+        String params = StreamSupport.stream(parameters)
                 .map(p -> Utils.getTypeName(p))
                 .collect(Collectors.joining(","));
         result.append(params);
