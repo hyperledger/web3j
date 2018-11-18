@@ -4,3 +4,6 @@ description 'Ethereum Recursive Length Prefix (RLP) encoding for serializing obj
 dependencies {
     compile project(':utils')
 }
+
+
+useReducedJdk(project)
