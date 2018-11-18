@@ -348,7 +348,9 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 // Makes a submodule to be compiled against a reduced JDK, currently an Android JDK.
 ext.useReducedJdk = { Project project ->
     // Use Android JDK instead of normal JDK in order to limit language APIs allowed in the project
-    project.tasks.withType(JavaCompile) {
+    project.tasks.withType(JavaCompile) { Task task ->
+        // As tests are run on a local Java VM they don't have to be compatible with Android JDK.
+        if (task.name.contains("compileTest")) return
         options.bootstrapClasspath = files(
                 // Contains lambda-related classes such as java.lang.invoke.LambdaMetafactory.
                 // Copied from [android-sdk]/build-tools/27.0.3
