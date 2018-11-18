@@ -1,5 +1,6 @@
 package org.web3j.compat;
 
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
 /**
@@ -31,5 +32,39 @@ public final class Compat {
 
         }
         return sb.toString();
+    }
+
+    /**
+     * Ports {@link Type#getTypeName()}.
+     */
+    public static String getTypeName(Type type) {
+        if (type instanceof Class) {
+            return getClassName((Class)type);
+        }
+        return type.toString();
+
+    }
+
+    /**
+     * Copied from {@link Class#getTypeName()}.
+     */
+    private static String getClassName(Class type) {
+        if (type.isArray()) {
+            try {
+                Class<?> cl = type;
+                int dimensions = 0;
+                while (cl.isArray()) {
+                    dimensions++;
+                    cl = cl.getComponentType();
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.append(cl.getName());
+                for (int i = 0; i < dimensions; i++) {
+                    sb.append("[]");
+                }
+                return sb.toString();
+            } catch (Throwable e) { /*FALLTHRU*/ }
+        }
+        return type.getName();
     }
 }
