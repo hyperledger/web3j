@@ -192,7 +192,7 @@ public class TypeDecoder {
         DynamicBytes dynamicBytesResult = decodeDynamicBytes(input, offset);
         byte[] bytes = dynamicBytesResult.getValue();
 
-        return new Utf8String(new String(bytes, StandardCharsets.UTF_8));
+        return new Utf8String(new String(bytes, Compat.UTF_8));
     }
 
     /**
