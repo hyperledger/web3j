@@ -16,6 +16,7 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.compat.Compat;
 
 /**
  * Utility functions.
@@ -32,7 +33,7 @@ public class Utils {
                 type = (Class<?>) ((ParameterizedType) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
             } else {
-                type = Class.forName(reflectedType.getTypeName());
+                type = Class.forName(Compat.getTypeName(reflectedType));
                 return getSimpleTypeName(type);
             }
         } catch (ClassNotFoundException e) {
@@ -86,7 +87,7 @@ public class Utils {
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();
 
-        String parameterizedTypeName = typeArguments[0].getTypeName();
+        String parameterizedTypeName = Compat.getTypeName(typeArguments[0]);
         return (Class<T>) Class.forName(parameterizedTypeName);
     }
 
