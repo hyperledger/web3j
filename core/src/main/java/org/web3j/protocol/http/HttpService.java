@@ -97,7 +97,7 @@ public class HttpService extends Service {
         this(DEFAULT_URL, httpClient, includeRawResponses);
     }
 
-    private HttpService(String url, OkHttpClient httpClient) {
+    public HttpService(String url, OkHttpClient httpClient) {
         this(url, httpClient, false);
     }
 
