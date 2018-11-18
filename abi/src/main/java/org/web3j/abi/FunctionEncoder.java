@@ -2,7 +2,9 @@ package org.web3j.abi;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
@@ -75,7 +77,8 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
+
+        String params = StreamSupport.stream(parameters)
                 .map(Type::getTypeAsString)
                 .collect(Collectors.joining(","));
         result.append(params);
