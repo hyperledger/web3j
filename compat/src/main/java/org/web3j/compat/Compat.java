@@ -1,6 +1,7 @@
 package org.web3j.compat;
 
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 
 /**
@@ -13,6 +14,9 @@ public final class Compat {
      * Ports {@link java.nio.charset.StandardCharsets#UTF_8}.
      */
     public static final Charset UTF_8 = Charset.forName("UTF-8");
+
+    private static final BigInteger LONG_MAX = BigInteger.valueOf(Long.MAX_VALUE);
+    private static final BigInteger LONG_MIN = BigInteger.valueOf(Long.MIN_VALUE);
 
     private Compat() {
     }
@@ -32,6 +36,16 @@ public final class Compat {
 
         }
         return sb.toString();
+    }
+
+    /**
+     * Ports {@link BigInteger#longValueExact()}.
+     */
+    public static long longValueExact(BigInteger value) {
+        if (value.compareTo(LONG_MIN) >= 0 && value.compareTo(LONG_MAX) <= 0) {
+            return value.longValue();
+        }
+        throw new ArithmeticException("BigInteger out of long range");
     }
 
     /**
