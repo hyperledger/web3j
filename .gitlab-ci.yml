@@ -37,8 +37,8 @@ publish_snapshot:
   environment:
     name: publish_snapshot
   when: manual
-  only:
-  - /release/.*$/
+#  only:
+#  - /release/.*$/
 
 publish_release:
   stage: deploy
