@@ -2,7 +2,6 @@
 description 'Android compatibility module'
 
 dependencies {
-    compile "net.sourceforge.streamsupport:streamsupport:1.7.0"
 }
 
 useReducedJdk(project)
