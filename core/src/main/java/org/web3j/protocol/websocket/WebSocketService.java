@@ -20,6 +20,7 @@ import io.reactivex.Flowable;
 import io.reactivex.subjects.BehaviorSubject;
 import java8.lang.Iterables;
 import java8.util.concurrent.CompletableFuture;
+import java8.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -239,7 +240,7 @@ public class WebSocketService implements Web3jService {
     }
 
     private <T extends Notification<?>> String getSubscriptionId(BehaviorSubject<T> subject) {
-        return subscriptionForId.entrySet().stream()
+        return StreamSupport.stream(subscriptionForId.entrySet())
                 .filter(entry -> entry.getValue().getSubject() == subject)
                 .map(Map.Entry::getKey)
                 .findFirst()
