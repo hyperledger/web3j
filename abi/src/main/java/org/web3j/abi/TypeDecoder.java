@@ -6,8 +6,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import java8.util.function.BiFunction;
-
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
@@ -25,6 +23,7 @@ import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint160;
+import org.web3j.compat.BiFunction;
 import org.web3j.compat.Compat;
 import org.web3j.utils.Numeric;
 
