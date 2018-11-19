@@ -2,10 +2,11 @@ package org.web3j.protocol.core;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.reactivex.Flowable;
+
+import java8.util.concurrent.CompletableFuture;
 
 import org.web3j.protocol.Web3jService;
 
