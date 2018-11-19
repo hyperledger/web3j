@@ -1,5 +1,6 @@
 package org.web3j.ens;
 
+import org.web3j.compat.Compat;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.contracts.generated.ENS;
 import org.web3j.ens.contracts.generated.PublicResolver;
@@ -9,7 +10,6 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.tx.ClientTransactionManager;
-import org.web3j.tx.ManagedTransaction;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
@@ -142,7 +142,7 @@ public class EnsResolver {
         } else {
             EthBlock ethBlock =
                     web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
-            long timestamp = ethBlock.getBlock().getTimestamp().longValueExact() * 1000;
+            long timestamp = Compat.longValueExact(ethBlock.getBlock().getTimestamp()) * 1000;
 
             return System.currentTimeMillis() - syncThreshold < timestamp;
         }
