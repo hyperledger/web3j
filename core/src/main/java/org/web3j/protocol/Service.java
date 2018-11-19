@@ -2,11 +2,12 @@ package org.web3j.protocol;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.reactivex.Flowable;
+
+import java8.util.concurrent.CompletableFuture;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;

@@ -1,9 +1,10 @@
 package org.web3j.protocol;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
+
+import java8.util.concurrent.CompletableFuture;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
