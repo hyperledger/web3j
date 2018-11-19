@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import org.web3j.compat.Compat;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 
@@ -134,7 +135,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         @Override
         public int hashCode() {
             int result = getStartingBlock() != null ? getStartingBlock().hashCode() : 0;
-            result = 31 * result + Boolean.hashCode(isSyncing());
+            result = 31 * result + Compat.hashCode(isSyncing());
             result = 31 * result + (getCurrentBlock() != null ? getCurrentBlock().hashCode() : 0);
             result = 31 * result + (getHighestBlock() != null ? getHighestBlock().hashCode() : 0);
             result = 31 * result + (knownStates != null ? knownStates.hashCode() : 0);
