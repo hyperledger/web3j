@@ -1,9 +1,9 @@
 package org.web3j.ens;
 
 import java.net.IDN;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import org.web3j.compat.Compat;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
@@ -37,7 +37,7 @@ public class NameHash {
             byte[] remainderHash = nameHash(tail);
             byte[] result = Arrays.copyOf(remainderHash, 64);
 
-            byte[] labelHash = Hash.sha3(labels[0].getBytes(StandardCharsets.UTF_8));
+            byte[] labelHash = Hash.sha3(labels[0].getBytes(Compat.UTF_8));
             System.arraycopy(labelHash, 0, result, 32, labelHash.length);
 
             return Hash.sha3(result);
