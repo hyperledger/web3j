@@ -3,14 +3,12 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.util.List;
 
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
-
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
+import org.web3j.utils.Collection;
 import org.web3j.utils.Numeric;
 
 /**
@@ -78,9 +76,7 @@ public class FunctionEncoder {
         result.append(methodName);
         result.append("(");
 
-        String params = StreamSupport.stream(parameters)
-                .map(Type::getTypeAsString)
-                .collect(Collectors.joining(","));
+        final String params = Collection.join(parameters, ",", Type::getTypeAsString);
         result.append(params);
         result.append(")");
         return result.toString();
