@@ -81,4 +81,11 @@ public final class Compat {
         }
         return type.getName();
     }
+
+    /**
+     * Ports {@link Boolean#hashCode(boolean)}.
+     */
+    public static int hashCode(boolean value) {
+        return value ? 1231 : 1237;
+    }
 }
