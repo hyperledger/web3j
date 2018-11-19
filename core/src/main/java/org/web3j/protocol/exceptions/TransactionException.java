@@ -1,6 +1,6 @@
 package org.web3j.protocol.exceptions;
 
-import java.util.Optional;
+import java8.util.Optional;
 
 /**
  * Transaction timeout exception indicates that we have breached some threshold waiting for a
