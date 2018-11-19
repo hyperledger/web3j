@@ -6,9 +6,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
-
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Fixed;
@@ -96,9 +93,9 @@ public class Utils {
     @SuppressWarnings("unchecked")
     public static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
         List<TypeReference<Type>> result = new ArrayList<>(input.size());
-        result.addAll(StreamSupport.stream(input)
-                .map(typeReference -> (TypeReference<Type>) typeReference)
-                .collect(Collectors.toList()));
+        for (TypeReference<?> ref : input) {
+            result.add((TypeReference<Type>) ref);
+        }
         return result;
     }
 
