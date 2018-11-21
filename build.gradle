@@ -130,6 +130,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         ossrhRepoUrl = project.hasProperty('ossrhRepoUrl') ? project.property('ossrhRepoUrl') : System.getenv('OSSRH_REPO_URL')
         bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
         bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+        bintrayGpgPassphrase = project.hasProperty('bintrayGpgPassphrase') ? project.property('bintrayGpgPassphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
         isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
     }
 
@@ -152,7 +153,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     uploadArchives {
         repositories {
             mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 onlyIf {
                     ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
@@ -195,10 +196,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         }
     }
 
-    signing {
-        required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
-        sign configurations.archives
-    }
+//    signing {
+//        required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
+//        sign configurations.archives
+//    }
 
     bintray {
         user = bintrayUser
@@ -215,6 +216,13 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
             vcsUrl = 'https://github.com/web3j/web3j.git'
             websiteUrl = 'https://web3j.io'
             publicDownloadNumbers = true
+
+            version {
+                gpg {
+                    sign = true
+                    passphrase = bintrayGpgPassphrase
+                }
+            }
         }
     }
 
@@ -223,7 +231,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         dependsOn 'build'
         dependsOn 'uploadArchives'
 
-        if (!isSnapshotVersion && bintrayUser != '' && bintrayKey != '') {
+        if (!isSnapshotVersion && bintrayUser != '' && bintrayKey != '' && bintrayGpgPassphrase != '') {
             dependsOn 'bintrayUpload'
             tasks.findByName('bintrayUpload').mustRunAfter 'build'
         }
