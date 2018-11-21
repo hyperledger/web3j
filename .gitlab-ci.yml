@@ -43,7 +43,7 @@ publish_snapshot:
 publish_release:
   stage: deploy
   script:
-  - gradle build release -x test
+  - gradle clean build release -x test
 
   environment:
     name: publish_release
