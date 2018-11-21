@@ -28,6 +28,8 @@ unit tests:
   stage: test
   script:
   - gradle test
+  only:
+  - /release/.*$/
 
 publish_snapshot:
   stage: deploy
@@ -37,8 +39,6 @@ publish_snapshot:
   environment:
     name: publish_snapshot
   when: manual
-  only:
-  - /release/.*$/
 
 publish_release:
   stage: deploy
@@ -48,5 +48,3 @@ publish_release:
   environment:
     name: publish_release
   when: manual
-  only:
-  - master
