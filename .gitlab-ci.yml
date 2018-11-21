@@ -16,7 +16,6 @@ cache:
 
 stages:
 - build
-#- test
 - deploy
 
 build:
