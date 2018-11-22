@@ -27,8 +27,8 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.7.3"
-    id "org.ajoberstar.grgit" version "3.0.0-rc.2"
+    id "com.jfrog.bintray" version "1.8.4"
+//    id "org.ajoberstar.grgit" version "3.0.0-rc.2"
     // TODO: sort out the tagging
 //    id "net.researchgate.release" version "2.7.0"
 }
