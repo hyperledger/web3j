@@ -105,9 +105,10 @@ public class Utils {
             Class<R> innerType) {
         List<E> result = new ArrayList<>();
         try {
-            Constructor<E> constructor = outerDestType.getDeclaredConstructor(List.class);
+            Constructor<E> constructor = outerDestType.getDeclaredConstructor(
+                    Class.class, List.class);
             for (List<T> ts : input) {
-                E e = constructor.newInstance(typeMap(ts, innerType));
+                E e = constructor.newInstance(outerDestType, typeMap(ts, innerType));
                 result.add(e);
             }
         } catch (NoSuchMethodException

@@ -1,6 +1,9 @@
 package org.web3j.abi.datatypes;
 
+import java.util.Arrays;
 import java.util.List;
+
+import org.web3j.abi.datatypes.generated.AbiTypes;
 
 /**
  * Static array type.
@@ -13,30 +16,67 @@ public class StaticArray<T extends Type> extends Array<T> {
      */
     public static int MAX_SIZE_OF_STATIC_ARRAY = 32;
 
-    private Integer expectedSize;
+    private final Integer expectedSize;
 
+    @Deprecated
     @SafeVarargs
+    @SuppressWarnings("unchecked")
     public StaticArray(T... values) {
-        super(values[0].getTypeAsString() + "[" + values.length + "]", values);
+        super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
+        this.expectedSize = null;
+        isValid();
+    }
+
+    @Deprecated
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
+    public StaticArray(int expectedSize, T... values) {
+        super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
+        this.expectedSize = expectedSize;
+        isValid();
+    }
+
+    @Deprecated
+    @SuppressWarnings("unchecked")
+    public StaticArray(List<T> values) {
+        super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+        this.expectedSize = null;
+        isValid();
+    }
+
+    @Deprecated
+    @SuppressWarnings("unchecked")
+    public StaticArray(int expectedSize, List<T> values) {
+        super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+        this.expectedSize = expectedSize;
         isValid();
     }
 
     @SafeVarargs
-    public StaticArray(int expectedSize, T... values) {
-        super(values[0].getTypeAsString() + "[" + values.length + "]", values);
+    public StaticArray(Class<T> type, T... values) {
+       this(type, Arrays.asList(values));
+    }
+
+    @SafeVarargs
+    public StaticArray(Class<T> type, int expectedSize, T... values) {
+        this(type, expectedSize, Arrays.asList(values));
+    }
+
+    public StaticArray(Class<T> type, List<T> values) {
+        super(type, values);
+        this.expectedSize = null;
+        isValid();
+    }
+
+    public StaticArray(Class<T> type, int expectedSize, List<T> values) {
+        super(type, values);
         this.expectedSize = expectedSize;
         isValid();
     }
 
-    public StaticArray(List<T> values) {
-        super(values.get(0).getTypeAsString() + "[" + values.size() + "]", values);
-        isValid();
-    }
-
-    public StaticArray(int expectedSize, List<T> values) {
-        super(values.get(0).getTypeAsString() + "[" + values.size() + "]", values);
-        this.expectedSize = expectedSize;
-        isValid();
+    @Override
+    public String getTypeAsString() {
+        return AbiTypes.getTypeAString(getComponentType()) + "[" + value.size() + "]";
     }
 
     private void isValid() {

@@ -5,32 +5,43 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.web3j.abi.datatypes.generated.AbiTypes;
+
 /**
  * Fixed size array.
  */
 public abstract class Array<T extends Type> implements Type<List<T>> {
 
-    private String type;
+    private final Class<T> type;
     protected final List<T> value;
 
+    @Deprecated
     @SafeVarargs
     Array(String type, T... values) {
-        checkValid(type, Arrays.asList(values));
-        
-        this.type = type;
-        this.value = Arrays.asList(values);
+        this(type, Arrays.asList(values));
     }
 
+    @Deprecated
+    @SuppressWarnings("unchecked")
     Array(String type, List<T> values) {
+        this((Class<T>) AbiTypes.getType(type), values);
+    }
+
+    @Deprecated
+    Array(String type) {
+        this(type, Collections.emptyList());
+    }
+
+    @SafeVarargs
+    Array(Class<T> type, T... values) {
+        this(type, Arrays.asList(values));
+    }
+
+    Array(Class<T> type, List<T> values) {
         checkValid(type, values);
 
         this.type = type;
         this.value = values;
-    }
-
-    Array(String type) {
-        this.type = type;
-        this.value = Collections.emptyList();
     }
 
     @Override
@@ -38,20 +49,25 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
         return value;
     }
 
-    @Override
-    public String getTypeAsString() {
+    public Class<T> getComponentType() {
         return type;
     }
 
-    private void checkValid(String type, List<T> values) {
+    @Override
+    public String getTypeAsString() {
+        return AbiTypes.getTypeAString(type) + "[]";
+    }
+
+    private void checkValid(Class<T> type, List<T> values) {
         Objects.requireNonNull(type);
-   
-        if (values == null || values.size() == 0) {
+        Objects.requireNonNull(values);
+
+        if (values.size() == 0) {
             throw new UnsupportedOperationException(
-                "If empty list is provided, use empty array instance");
+                    "If empty list is provided, use empty array instance");
         }
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -66,8 +82,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
         if (!type.equals(array.type)) {
             return false;
         }
-        return value != null ? value.equals(array.value) : array.value == null;
-
+        return Objects.equals(value, array.value);
     }
 
     @Override

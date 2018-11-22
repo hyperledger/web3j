@@ -22,7 +22,6 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
 import static junit.framework.TestCase.fail;
@@ -65,7 +64,7 @@ public class Scenario {
     public Scenario() { }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.web3j = Admin.build(new HttpService());
     }
 

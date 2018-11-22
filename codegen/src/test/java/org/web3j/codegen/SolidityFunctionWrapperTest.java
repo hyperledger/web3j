@@ -31,7 +31,6 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -254,7 +253,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition = new AbiDefinition(
                 true,
                 Arrays.asList(
-                    new AbiDefinition.NamedType("param", "uint8")),
+                        new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
                 Arrays.asList(
                         new AbiDefinition.NamedType("result", "address[]")),
@@ -266,19 +265,94 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.math.BigInteger param) {\n"
-                + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
-                + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
-                + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
-                + "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n"
-                + "      new java.util.concurrent.Callable<java.util.List>() {\n"
-                + "        @java.lang.Override\n"
-                + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
-                + "        public java.util.List call() throws java.lang.Exception {\n"
-                + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
-                + "          return convertToNative(result);\n"
-                + "        }\n"
-                + "      });\n"
-                + "}\n";
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
+                        + "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n"
+                        + "      new java.util.concurrent.Callable<java.util.List>() {\n"
+                        + "        @java.lang.Override\n"
+                        + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
+                        + "        public java.util.List call() throws java.lang.Exception {\n"
+                        + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
+                        + "          return convertToNative(result);\n"
+                        + "        }\n"
+                        + "      });\n"
+                        + "}\n";
+        //CHECKSTYLE:ON
+
+        assertThat(methodSpec.toString(), is(expected));
+    }
+
+    @Test
+    public void testBuildFunctionConstantDynamicArrayRawListReturn() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                true,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8[]")),
+                "functionName",
+                Arrays.asList(
+                        new AbiDefinition.NamedType("result", "address[]")),
+                "type",
+                false);
+
+        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        //CHECKSTYLE:OFF
+        String expected =
+                "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.util.List<java.math.BigInteger> param) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint8>(\n"
+                        + "              org.web3j.abi.datatypes.generated.Uint8.class,\n"
+                        + "              org.web3j.abi.Utils.typeMap(param, org.web3j.abi.datatypes.generated.Uint8.class))), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
+                        + "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n"
+                        + "      new java.util.concurrent.Callable<java.util.List>() {\n"
+                        + "        @java.lang.Override\n"
+                        + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
+                        + "        public java.util.List call() throws java.lang.Exception {\n"
+                        + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
+                        + "          return convertToNative(result);\n"
+                        + "        }\n"
+                        + "      });\n"
+                        + "}\n";
+        //CHECKSTYLE:ON
+
+        assertThat(methodSpec.toString(), is(expected));
+    }
+
+    @Test
+    public void testBuildFunctionConstantMultiDynamicArrayRawListReturn() throws Exception {
+        AbiDefinition functionDefinition = new AbiDefinition(
+                true,
+                Arrays.asList(
+                        new AbiDefinition.NamedType("param", "uint8[][]")),
+                "functionName",
+                Arrays.asList(
+                        new AbiDefinition.NamedType("result", "address[]")),
+                "type",
+                false);
+
+        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        //CHECKSTYLE:OFF
+        String expected =
+                "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n" +
+                        "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n" +
+                        "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.DynamicArray>(\n" +
+                        "              org.web3j.abi.datatypes.DynamicArray.class,\n" +
+                        "              org.web3j.abi.Utils.typeMap(param, org.web3j.abi.datatypes.DynamicArray.class,\n" +
+                        "      org.web3j.abi.datatypes.generated.Uint8.class))), \n" +
+                        "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n" +
+                        "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n" +
+                        "      new java.util.concurrent.Callable<java.util.List>() {\n" +
+                        "        @java.lang.Override\n" +
+                        "        @java.lang.SuppressWarnings(\"unchecked\")\n" +
+                        "        public java.util.List call() throws java.lang.Exception {\n" +
+                        "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n" +
+                        "          return convertToNative(result);\n" +
+                        "        }\n" +
+                        "      });\n" +
+                        "}\n";
         //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
@@ -300,8 +374,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         //CHECKSTYLE:OFF
         String expected =
                 "public void functionName(java.math.BigInteger param) {\n"
-                + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
-                + "}\n";
+                        + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
+                        + "}\n";
         //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));

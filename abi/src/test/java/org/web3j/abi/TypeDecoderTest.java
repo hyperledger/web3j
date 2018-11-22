@@ -251,7 +251,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {},
                 2),
-                is(new StaticArray<Uint256>(
+                is(new StaticArray<>(Uint256.class,
                         new Uint256(BigInteger.TEN),
                         new Uint256(BigInteger.valueOf(Long.MAX_VALUE)))));
 
@@ -264,7 +264,7 @@ public class TypeDecoderTest {
                 new TypeReference.StaticArrayTypeReference<StaticArray<Utf8String>>(2){},
                 2
                 ),
-                equalTo(new StaticArray<Utf8String>(
+                equalTo(new StaticArray<>(Utf8String.class,
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
     }
@@ -294,7 +294,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference<DynamicArray<Uint256>>() { }
                 ),
-                equalTo(new DynamicArray<Uint256>(
+                equalTo(new DynamicArray<>(Uint256.class,
                         new Uint256(BigInteger.TEN),
                         new Uint256(BigInteger.valueOf(Long.MAX_VALUE)))));
 
@@ -307,7 +307,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference<DynamicArray<Utf8String>>() { }
                 ),
-                equalTo(new DynamicArray<Utf8String>(
+                equalTo(new DynamicArray<>(Utf8String.class,
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
     }
