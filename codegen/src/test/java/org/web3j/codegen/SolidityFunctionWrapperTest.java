@@ -336,23 +336,23 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         //CHECKSTYLE:OFF
         String expected =
-                "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n" +
-                        "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n" +
-                        "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.DynamicArray>(\n" +
-                        "              org.web3j.abi.datatypes.DynamicArray.class,\n" +
-                        "              org.web3j.abi.Utils.typeMap(param, org.web3j.abi.datatypes.DynamicArray.class,\n" +
-                        "      org.web3j.abi.datatypes.generated.Uint8.class))), \n" +
-                        "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n" +
-                        "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n" +
-                        "      new java.util.concurrent.Callable<java.util.List>() {\n" +
-                        "        @java.lang.Override\n" +
-                        "        @java.lang.SuppressWarnings(\"unchecked\")\n" +
-                        "        public java.util.List call() throws java.lang.Exception {\n" +
-                        "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n" +
-                        "          return convertToNative(result);\n" +
-                        "        }\n" +
-                        "      });\n" +
-                        "}\n";
+                "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.DynamicArray>(\n"
+                        + "              org.web3j.abi.datatypes.DynamicArray.class,\n"
+                        + "              org.web3j.abi.Utils.typeMap(param, org.web3j.abi.datatypes.DynamicArray.class,\n"
+                        + "      org.web3j.abi.datatypes.generated.Uint8.class))), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
+                        + "  return new org.web3j.protocol.core.RemoteCall<java.util.List>(\n"
+                        + "      new java.util.concurrent.Callable<java.util.List>() {\n"
+                        + "        @java.lang.Override\n"
+                        + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
+                        + "        public java.util.List call() throws java.lang.Exception {\n"
+                        + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
+                        + "          return convertToNative(result);\n"
+                        + "        }\n"
+                        + "      });\n"
+                        + "}\n";
         //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
@@ -520,7 +520,6 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         builder.addFields(solidityFunctionWrapper
                 .buildFuncNameConstants(Collections.singletonList(functionDefinition)));
-
 
         //CHECKSTYLE:OFF
         String expected =
