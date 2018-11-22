@@ -96,33 +96,33 @@ public class ArraysIT extends Scenario {
     public void testMultiFixed() throws Exception {
 
         final List<BigInteger> array1 = java.util.Arrays.asList(
-                new BigInteger("2"),
-                new BigInteger("1")
+                new BigInteger("1"),
+                new BigInteger("2")
         );
 
         final List<BigInteger> array2 = java.util.Arrays.asList(
-                new BigInteger("4"),
-                new BigInteger("3")
+                new BigInteger("3"),
+                new BigInteger("4")
         );
 
         final List<BigInteger> array3 = java.util.Arrays.asList(
-                new BigInteger("6"),
-                new BigInteger("5")
+                new BigInteger("5"),
+                new BigInteger("6")
         );
 
         final List<BigInteger> array4 = java.util.Arrays.asList(
-                new BigInteger("8"),
-                new BigInteger("7")
+                new BigInteger("7"),
+                new BigInteger("8")
         );
 
         final List<BigInteger> array5 = java.util.Arrays.asList(
-                new BigInteger("10"),
-                new BigInteger("9")
+                new BigInteger("9"),
+                new BigInteger("10")
         );
 
         final List<BigInteger> array6 = java.util.Arrays.asList(
-                new BigInteger("12"),
-                new BigInteger("11")
+                new BigInteger("11"),
+                new BigInteger("12")
         );
 
         List<List<BigInteger>> input = java.util.Arrays.asList(
