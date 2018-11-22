@@ -210,12 +210,14 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     scm {
                         connection 'scm:git:https://github.com/web3j/web3j.git'
                         url 'https://github.com/web3j/web3j.git'
+                        developerConnection 'scm:git://github.com/web3j/web3j.git'
                     }
 
                     licenses {
                         license {
                             name 'The Apache License, Version 2.0'
                             url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
                         }
                     }
 
