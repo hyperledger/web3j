@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.web3j.generated.Arrays;
 import org.web3j.tx.gas.DefaultGasProvider;
 
+import static java.math.BigInteger.valueOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -33,16 +34,9 @@ public class ArraysIT extends Scenario {
     public void testFixedReverse() throws Exception {
 
         final List<BigInteger> array = java.util.Arrays.asList(
-                new BigInteger("10"),
-                new BigInteger("9"),
-                new BigInteger("8"),
-                new BigInteger("7"),
-                new BigInteger("6"),
-                new BigInteger("5"),
-                new BigInteger("4"),
-                new BigInteger("3"),
-                new BigInteger("2"),
-                new BigInteger("1"));
+                valueOf(10), valueOf(9), valueOf(8), valueOf(7),
+                valueOf(6), valueOf(5), valueOf(4),
+                valueOf(3), valueOf(2), valueOf(1));
 
         final List result = contract.fixedReverse(array).send();
         array.sort(Comparator.comparing(BigInteger::intValue));
@@ -54,9 +48,7 @@ public class ArraysIT extends Scenario {
     public void testDynamicReverse() throws Exception {
 
         final List<BigInteger> array = java.util.Arrays.asList(
-                new BigInteger("3"),
-                new BigInteger("2"),
-                new BigInteger("1"));
+                valueOf(3), valueOf(2), valueOf(1));
 
         final List result = contract.dynamicReverse(array).send();
         array.sort(Comparator.comparing(BigInteger::intValue));
@@ -75,20 +67,15 @@ public class ArraysIT extends Scenario {
     public void testMultiDynamic() throws Exception {
 
         final List<BigInteger> array1 = java.util.Arrays.asList(
-                new BigInteger("1"),
-                new BigInteger("2"));
+                valueOf(1), valueOf(2));
 
         final List<BigInteger> array2 = java.util.Arrays.asList(
-                new BigInteger("3"),
-                new BigInteger("4"));
+                valueOf(3), valueOf(4));
 
         final List result = contract.multiDynamic(java.util.Arrays.asList(array1, array2)).send();
 
         assertThat(result, equalTo(java.util.Arrays.asList(
-                new BigInteger("1"),
-                new BigInteger("2"),
-                new BigInteger("3"),
-                new BigInteger("4"))));
+                valueOf(1), valueOf(2), valueOf(3), valueOf(4))));
     }
 
     @Test
@@ -96,34 +83,22 @@ public class ArraysIT extends Scenario {
     public void testMultiFixed() throws Exception {
 
         final List<BigInteger> array1 = java.util.Arrays.asList(
-                new BigInteger("1"),
-                new BigInteger("2")
-        );
+                valueOf(1), valueOf(2));
 
         final List<BigInteger> array2 = java.util.Arrays.asList(
-                new BigInteger("3"),
-                new BigInteger("4")
-        );
+                valueOf(3), valueOf(4));
 
         final List<BigInteger> array3 = java.util.Arrays.asList(
-                new BigInteger("5"),
-                new BigInteger("6")
-        );
+                valueOf(5), valueOf(6));
 
         final List<BigInteger> array4 = java.util.Arrays.asList(
-                new BigInteger("7"),
-                new BigInteger("8")
-        );
+                valueOf(7), valueOf(8));
 
         final List<BigInteger> array5 = java.util.Arrays.asList(
-                new BigInteger("9"),
-                new BigInteger("10")
-        );
+                valueOf(9), valueOf(10));
 
         final List<BigInteger> array6 = java.util.Arrays.asList(
-                new BigInteger("11"),
-                new BigInteger("12")
-        );
+                valueOf(11), valueOf(12));
 
         List<List<BigInteger>> input = java.util.Arrays.asList(
                 array1, array2, array3, array4, array5, array6);
@@ -131,18 +106,9 @@ public class ArraysIT extends Scenario {
         final List result = contract.multiFixed(input).send();
 
         assertThat(result, equalTo(java.util.Arrays.asList(
-                new BigInteger("1"),
-                new BigInteger("2"),
-                new BigInteger("3"),
-                new BigInteger("4"),
-                new BigInteger("5"),
-                new BigInteger("6"),
-                new BigInteger("7"),
-                new BigInteger("8"),
-                new BigInteger("9"),
-                new BigInteger("10"),
-                new BigInteger("11"),
-                new BigInteger("12"))));
+                valueOf(1), valueOf(2), valueOf(3), valueOf(4),
+                valueOf(5), valueOf(6), valueOf(7), valueOf(8),
+                valueOf(9), valueOf(10), valueOf(11), valueOf(12))));
     }
 
 }
