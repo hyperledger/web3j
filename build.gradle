@@ -140,6 +140,28 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
     }
 
+    def pomConfig = {
+        scm {
+            url 'https://github.com/web3j/web3j'
+            connection 'scm:https://github.com/web3j/web3j.git'
+            developerConnection 'scm:git://github.com/web3j/web3j.git'
+        }
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        developers {
+            developer {
+                id 'conor10'
+                name 'Conor Svensson'
+                email 'conor10@gmail.com'
+            }
+        }
+    }
+
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -151,6 +173,13 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
                 artifact testJar {
                     classifier 'tests'
+                }
+                pom.withXml {
+                    def root = asNode()
+                    root.appendNode('name', project.description)
+                    root.appendNode('description', 'Java library for integrating with Ethereum.')
+                    root.appendNode('url', 'https://github.com/web3j/web3j')
+                    root.children().last() + pomConfig
                 }
             }
         }
