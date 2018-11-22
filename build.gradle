@@ -202,14 +202,14 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                         }
                     }
                 }
-
-                pom.withXml {
-                    def root = asNode()
-                    root.appendNode('name', project.description)
-                    root.appendNode('description', 'Java library for integrating with Ethereum.')
-                    root.appendNode('url', 'https://github.com/web3j/web3j')
-                    root.children().last() + pomConfig
-                }
+//
+//                pom.withXml {
+//                    def root = asNode()
+//                    root.appendNode('name', project.description)
+//                    root.appendNode('description', 'Java library for integrating with Ethereum.')
+//                    root.appendNode('url', 'https://github.com/web3j/web3j')
+//                    root.children().last() + pomConfig
+//                }
             }
         }
     }
