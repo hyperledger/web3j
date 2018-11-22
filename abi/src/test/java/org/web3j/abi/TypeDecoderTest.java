@@ -285,7 +285,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference<DynamicArray<Uint256>>() { }
                 ),
-                equalTo(DynamicArray.empty("uint256")));
+                equalTo(new DynamicArray<>(Uint256.class)));
 
         assertThat(TypeDecoder.decodeDynamicArray(
                 "0000000000000000000000000000000000000000000000000000000000000002"  // length
