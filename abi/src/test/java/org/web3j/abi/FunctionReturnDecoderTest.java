@@ -116,7 +116,6 @@ public class FunctionReturnDecoderTest {
                         new Utf8String("jkl1"), new Utf8String("mno2"))));
     }
 
-
     @Test
     @SuppressWarnings("unchecked")
     public void testDecodeStaticArrayValue() {
@@ -219,7 +218,9 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedDynamicArrayValue() {
-        DynamicArray<Uint256> array = new DynamicArray<>(new Uint256(BigInteger.TEN));
+        DynamicArray<Uint256> array = new DynamicArray<>(
+                Uint256.class, new Uint256(BigInteger.TEN));
+
         String encoded = TypeEncoder.encodeDynamicArray(array);
         String hash = Hash.sha3(encoded);
 
