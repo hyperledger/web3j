@@ -1,4 +1,4 @@
-image: gradle:alpine
+# image: gradle:alpine
 
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
