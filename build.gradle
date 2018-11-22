@@ -28,6 +28,15 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.8.4"
+
+    // Required for JFrog Artifactory repository
+    id 'jacoco'
+    id 'maven-publish'
+
+    // Required for Maven Nexus repository
+    id 'maven'
+    id 'signing'
+    id 'idea'
 }
 
 apply plugin: 'java'
