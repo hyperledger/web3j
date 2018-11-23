@@ -159,8 +159,8 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                 }
 
                 pom {
-                    name = "web3j"
-                    description = "Connect JVM applications to Ethereum blockchains with web3j - a lightweight, reactive, type safe library for Java, Android, Kotlin and Scala."
+                    name = project.name
+                    description = project.description
                     url = "https://github.com/web3j/web3j"
                     licenses {
                         license {
@@ -189,9 +189,11 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     uploadArchives {
         repositories {
             mavenDeployer {
+                // TODO: re-enable this!
 //                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 onlyIf {
+                    // TODO: only enable if snapshot release OR manual release
                     isSnapshotVersion && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
                 }
 
