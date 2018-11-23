@@ -172,7 +172,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                             email = "conor10@gmail.com"
                         }
                         developer {
-                            id = "snazha"
+                            id = "snazha-blkio"
                             name = "Sam Nazha"
                             email = "sam@blk.io"
                         }
