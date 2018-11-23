@@ -276,13 +276,13 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
             // Only need OSSRH details.
             logger.lifecycle("About to perform {} snapshot release ...", manualRelease ? "a manual" : "an automated")
 
-            logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
-            logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-            logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
-
             if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
                 throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
             }
+
+            logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
+            logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
+            logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
         } else {
             // Release => Need OSSRH and bintray.
             if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
