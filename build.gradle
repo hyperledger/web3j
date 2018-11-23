@@ -154,6 +154,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     classifier 'tests'
                 }
 
+                artifact javadocJar {
+                    classifier 'javadoc'
+                }
+
                 pom {
                     name = "web3j"
                     description = "Connect JVM applications to Ethereum blockchains with web3j - a lightweight, reactive, type safe library for Java, Android, Kotlin and Scala."
