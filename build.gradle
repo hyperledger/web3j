@@ -45,6 +45,7 @@ apply plugin: 'idea'
 // https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'jacoco'
+apply plugin: 'maven-publish'
 
 description 'web3j base project'
 
@@ -140,28 +141,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
     }
 
-    def pomConfig = {
-        scm {
-            url 'https://github.com/web3j/web3j'
-            connection 'scm:https://github.com/web3j/web3j.git'
-            developerConnection 'scm:git://github.com/web3j/web3j.git'
-        }
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
-            }
-        }
-        developers {
-            developer {
-                id 'conor10'
-                name 'Conor Svensson'
-                email 'conor10@gmail.com'
-            }
-        }
-    }
-
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -175,41 +154,35 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     classifier 'tests'
                 }
 
-                pom.withXml {
-                    asNode().children().last() + {
-                        resolveStrategy = Closure.DELEGATE_FIRST
-                        name 'web3j'
-                        description project.description
-                        url 'https://web3j.io'
-                        connection 'scm:git:https://github.com/web3j/web3j.git'
-                        url 'https://github.com/web3j/web3j.git'
-                        developerConnection 'scm:git://github.com/web3j/web3j.git'
-                    }
-
+                pom {
+                    name = "web3j"
+                    description = "Connect JVM applications to Ethereum blockchains with web3j - a lightweight, reactive, type safe library for Java, Android, Kotlin and Scala."
+                    url = "https://github.com/web3j/web3j"
                     licenses {
                         license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution 'repo'
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                            distribution = "repo"
                         }
                     }
-
                     developers {
                         developer {
-                            id 'conor10'
-                            name 'Conor Svensson'
-                            email 'conor10@gmail.com'
+                            id = "conor10"
+                            name = "Conor Svensson"
+                            email = "conor10@gmail.com"
+                        }
+                        developer {
+                            id = "snazha"
+                            name = "Sam Nazha"
+                            email = "sam@blk.io"
                         }
                     }
+                    scm {
+                        connection = "scm:git:https://github.com/web3j/web3j.git"
+                        developerConnection = "scm:git://github.com/web3j/web3j.git"
+                        url = "https://github.com/web3j/web3j.git"
+                    }
                 }
-//
-//                pom.withXml {
-//                    def root = asNode()
-//                    root.appendNode('name', project.description)
-//                    root.appendNode('description', 'Java library for integrating with Ethereum.')
-//                    root.appendNode('url', 'https://github.com/web3j/web3j')
-//                    root.children().last() + pomConfig
-//                }
             }
         }
     }
