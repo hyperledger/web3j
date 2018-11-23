@@ -271,33 +271,35 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         dependsOn 'build'
         dependsOn 'uploadArchives'
 
-        // Validates the user inputs before a release can be performed.
-        if (isSnapshotVersion) {
-            // Only need OSSRH details.
-            logger.lifecycle("About to perform {} snapshot release ...", manualRelease ? "a manual" : "an automated")
+        doLast {
+            // Validates the user inputs before a release can be performed.
+            if (isSnapshotVersion) {
+                // Only need OSSRH details.
+                logger.lifecycle("About to perform {} snapshot release ...", manualRelease ? "a manual" : "an automated")
 
-            if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
-                throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
-            }
+                if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
+                    throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
+                }
 
-            logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
-            logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-            logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
-        } else {
-            // Release => Need OSSRH and bintray.
-            if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
-                throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
+                logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
+                logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
+                logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
+            } else {
+                // Release => Need OSSRH and bintray.
+                if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
+                    throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
+                }
+                if (!bintrayUser || !bintrayKey || !bintrayGpgPassphrase) {
+                    throw new InvalidUserDataException("Required parameters missing:  'bintrayUser', 'bintrayKey', 'bintrayGpgPassphrase'")
+                }
+                logger.lifecycle("About to perform {} full release ...", manualRelease ? "a manual" : "an automated")
+                logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
+                logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
+                logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
+                logger.lifecycle(" - bintrayUser={}", bintrayUser)
+                logger.lifecycle(" - bintrayKey={}", bintrayKey ? "provided" : "not_provided")
+                logger.lifecycle(" - bintrayGpgPassphrase={}", bintrayGpgPassphrase ? "provided" : "not_provided")
             }
-            if (!bintrayUser || !bintrayKey || !bintrayGpgPassphrase) {
-                throw new InvalidUserDataException("Required parameters missing:  'bintrayUser', 'bintrayKey', 'bintrayGpgPassphrase'")
-            }
-            logger.lifecycle("About to perform {} full release ...", manualRelease ? "a manual" : "an automated")
-            logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
-            logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-            logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
-            logger.lifecycle(" - bintrayUser={}", bintrayUser)
-            logger.lifecycle(" - bintrayKey={}", bintrayKey ? "provided" : "not_provided")
-            logger.lifecycle(" - bintrayGpgPassphrase={}", bintrayGpgPassphrase ? "provided" : "not_provided")
         }
 
         // Snapshots go to nexus, non-snapshots go to bintray.
