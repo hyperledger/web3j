@@ -192,7 +192,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 //                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 onlyIf {
-                    ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
+                    isSnapshotVersion && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
                 }
 
                 repository(url: ossrhRepoUrl) {
