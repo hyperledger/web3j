@@ -35,7 +35,7 @@ unit tests:
 publish_snapshot:
   stage: deploy
   script:
-  - gradle uploadArchives
+  - gradle clean release -x test
 
   environment:
     name: publish_snapshot
@@ -44,7 +44,7 @@ publish_snapshot:
 publish_release:
   stage: deploy
   script:
-  - gradle clean build release -x test
+  - gradle clean release -x test
 
   environment:
     name: publish_release
