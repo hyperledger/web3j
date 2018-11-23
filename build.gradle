@@ -139,6 +139,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
         bintrayGpgPassphrase = project.hasProperty('bintrayGpgPassphrase') ? project.property('bintrayGpgPassphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
         isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
+        manualRelease = project.hasProperty('manualRelease') ? project.property('manualRelease').toBoolean() : false
     }
 
     publishing {
@@ -189,12 +190,12 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     uploadArchives {
         repositories {
             mavenDeployer {
-                // TODO: re-enable this!
-//                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 onlyIf {
-                    // TODO: only enable if snapshot release OR manual release
-                    isSnapshotVersion && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
+                    // Only run if this is a manual release triggered by a user, or an automated release for snapshots.
+                    // We don't need to run this for automated releases.
+                    (manualRelease || isSnapshotVersion) && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
                 }
 
                 repository(url: ossrhRepoUrl) {
@@ -236,9 +237,9 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         }
     }
 
-// TODO :ADD an arg to skip signing
 //    signing {
-//        required { gradle.taskGraph.hasTask('uploadArchives') }  // only execute as part of this task
+//        // Only sign if this is a manual release.
+//        required { gradle.taskGraph.hasTask('uploadArchives') && manualRelease }  // only execute as part of this task
 //        sign configurations.archives
 //    }
 
