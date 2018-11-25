@@ -1,4 +1,3 @@
-#image: java:8-jdk
 image: gradle:alpine
 
 variables:
