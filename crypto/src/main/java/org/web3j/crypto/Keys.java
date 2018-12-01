@@ -6,7 +6,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
@@ -34,13 +33,7 @@ public class Keys {
     public static final int PRIVATE_KEY_LENGTH_IN_HEX = PRIVATE_KEY_SIZE << 1;
 
     static {
-        final Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
-        if (provider == null) {
-            Security.addProvider(new BouncyCastleProvider());
-        } else if (!provider.getClass().equals(BouncyCastleProvider.class)) {
-            // If there is already a "BC" provider registered that has incompatible implementation
-            // (doesn't come from Bouncy Castle library) - substitute it.
-            Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
         }
     }
