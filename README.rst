@@ -153,6 +153,15 @@ Android:
 
    compile ('org.web3j:core:3.3.1-android')
 
+Plugins
+-------
+There are also gradle and maven plugins to help you generate web3j Java wrappers for your Solidity smart contracts,
+thus allowing you to integrate such activities into your project lifecycle.
+
+Take a look at the project homepage for the
+`web3j-gradle-plugin <https://github.com/web3j/web3j-gradle-plugin>`_
+and `web3j-maven-plugin <https://github.com/web3j/web3j-maven-plugin>`_ for details on how to use these plugins.
+
 
 Start a client
 --------------
