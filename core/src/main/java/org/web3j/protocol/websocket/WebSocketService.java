@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -90,9 +91,14 @@ public class WebSocketService implements Web3jService {
      * @throws ConnectException thrown if failed to connect to the server via WebSocket protocol
      */
     public void connect() throws ConnectException {
+        connect(null, null, null);
+    }
+
+    public void connect(Consumer<String> onMessage, Consumer<Throwable> onError,
+            Consumer<Void> onClose) throws ConnectException {
         try {
             connectToWebSocket();
-            setWebSocketListener();
+            setWebSocketListener(onMessage, onError, onClose);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.warn("Interrupted while connecting via WebSocket protocol");
@@ -106,21 +112,32 @@ public class WebSocketService implements Web3jService {
         }
     }
 
-    private void setWebSocketListener() {
+    private void setWebSocketListener(Consumer<String> onMessage, Consumer<Throwable> onError,
+                                      Consumer<Void> onClose) throws ConnectException {
+
         webSocketClient.setListener(new WebSocketListener() {
             @Override
             public void onMessage(String message) throws IOException {
                 onWebSocketMessage(message);
+                if (onMessage != null) {
+                    onMessage.accept(message);
+                }
             }
 
             @Override
             public void onError(Exception e) {
                 log.error("Received error from a WebSocket connection", e);
+                if (onError != null) {
+                    onError.accept(e);
+                }
             }
 
             @Override
             public void onClose() {
                 onWebSocketClose();
+                if (onClose != null) {
+                    onClose.accept(null);
+                }
             }
         });
     }
