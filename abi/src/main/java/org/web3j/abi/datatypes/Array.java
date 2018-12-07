@@ -3,7 +3,6 @@ package org.web3j.abi.datatypes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Fixed size array.
@@ -44,7 +43,9 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
     }
 
     private void checkValid(String type, List<T> values) {
-        Objects.requireNonNull(type);
+        if (type == null) {
+            throw new NullPointerException("No type provided");
+        }
    
         if (values == null || values.size() == 0) {
             throw new UnsupportedOperationException(
