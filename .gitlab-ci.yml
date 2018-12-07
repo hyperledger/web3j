@@ -22,17 +22,17 @@ stages:
 build:
   stage: build
   script:
-  - gradle clean build -x test
+  - ./gradlew clean build -x test
 
 unit tests:
   stage: test
   script:
-  - gradle test
+  - ./gradlew test
 
 publish_snapshot:
   stage: deploy
   script:
-  - gradle clean release -x test
+  - ./gradlew clean release -x test
 
   environment:
     name: publish_snapshot
@@ -43,7 +43,7 @@ publish_snapshot:
 publish_release:
   stage: deploy
   script:
-  - gradle clean release -x test
+  - ./gradlew clean release -x test
 
   environment:
     name: publish_release
