@@ -1,11 +1,11 @@
 package org.web3j.abi;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Hash;
+import org.web3j.utils.Collection;
 import org.web3j.utils.Numeric;
 
 /**
@@ -33,9 +33,7 @@ public class EventEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
-                .map(p -> Utils.getTypeName(p))
-                .collect(Collectors.joining(","));
+        final String params = Collection.join(parameters, ",", Utils::getTypeName);
         result.append(params);
         result.append(")");
         return result.toString();

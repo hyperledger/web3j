@@ -8,6 +8,7 @@ buildscript {
     ext.slf4jVersion = '1.7.25'
     ext.javaWebSocketVersion = '1.3.8'
     ext.picocliVersion = '3.0.0'
+    ext.streamsupportVersion = '1.7.0'
 
     // test dependencies
     ext.equalsverifierVersion = '2.1.7'
@@ -342,5 +343,22 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                         ])
             })
         }
+    }
+}
+
+// Makes a submodule to be compiled against a reduced JDK, currently an Android JDK.
+ext.useReducedJdk = { Project project ->
+    // Use Android JDK instead of normal JDK in order to limit language APIs allowed in the project
+    project.tasks.withType(JavaCompile) { Task task ->
+        // As tests are run on a local Java VM they don't have to be compatible with Android JDK.
+        if (task.name.contains("compileTest")) return
+        options.bootstrapClasspath = files(
+                // Contains lambda-related classes such as java.lang.invoke.LambdaMetafactory.
+                // Copied from [android-sdk]/build-tools/27.0.3
+                "$rootDir/compat/libs/core-lambda-stubs.jar",
+                // Android JDK. Copied from [android-sdk]/platforms/android-15. All Android specific
+                // packages were stripped. The only kept packages are:
+                // java.*, javax.*, org.w3c.* and org.xml.*
+                "$rootDir/compat/libs/android.jar")
     }
 }

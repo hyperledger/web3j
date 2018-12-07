@@ -1,14 +1,11 @@
 package org.web3j.protocol.websocket;
 
 import java.io.IOException;
-
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -18,10 +15,12 @@ import java.util.concurrent.TimeUnit;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.subjects.BehaviorSubject;
+import java8.lang.Iterables;
+import java8.util.concurrent.CompletableFuture;
+import java8.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -241,7 +240,7 @@ public class WebSocketService implements Web3jService {
     }
 
     private <T extends Notification<?>> String getSubscriptionId(BehaviorSubject<T> subject) {
-        return subscriptionForId.entrySet().stream()
+        return StreamSupport.stream(subscriptionForId.entrySet())
                 .filter(entry -> entry.getValue().getSubject() == subject)
                 .map(Map.Entry::getKey)
                 .findFirst()
@@ -431,14 +430,14 @@ public class WebSocketService implements Web3jService {
     }
 
     private void closeOutstandingRequests() {
-        requestForId.values().forEach(request -> {
+        Iterables.forEach(requestForId.values(), request -> {
             request.getOnReply()
                     .completeExceptionally(new IOException("Connection was closed"));
         });
     }
 
     private void closeOutstandingSubscriptions() {
-        subscriptionForId.values().forEach(subscription -> {
+        Iterables.forEach(subscriptionForId.values(), subscription -> {
             subscription.getSubject()
                     .onError(new IOException("Connection was closed"));
         });

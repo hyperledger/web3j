@@ -6,6 +6,9 @@ dependencies {
     compile project(':abi'),
             project(':crypto'),
             project(':tuples'),
+            project(':compat'),
+            "net.sourceforge.streamsupport:streamsupport:$streamsupportVersion",
+            "net.sourceforge.streamsupport:streamsupport-cfuture:$streamsupportVersion",
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
@@ -48,3 +51,5 @@ configurations {
 artifacts {
     testArtifacts testJar
 }
+
+useReducedJdk(project)

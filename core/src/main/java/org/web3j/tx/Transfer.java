@@ -3,8 +3,9 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+
+import java8.util.Optional;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;

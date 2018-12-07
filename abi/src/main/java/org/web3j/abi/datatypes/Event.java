@@ -1,7 +1,7 @@
 package org.web3j.abi.datatypes;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.TypeReference;
 
@@ -28,14 +28,22 @@ public class Event {
     }
 
     public List<TypeReference<Type>> getIndexedParameters() {
-        return parameters.stream()
-                .filter(TypeReference::isIndexed)
-                .collect(Collectors.toList());
+        final List<TypeReference<Type>> result = new ArrayList<>(parameters.size());
+        for (TypeReference<Type> parameter : parameters) {
+            if (parameter.isIndexed()) {
+                result.add(parameter);
+            }
+        }
+        return result;
     }
 
     public List<TypeReference<Type>> getNonIndexedParameters() {
-        return parameters.stream()
-                .filter(p -> !p.isIndexed())
-                .collect(Collectors.toList());
+        final List<TypeReference<Type>> result = new ArrayList<>(parameters.size());
+        for (TypeReference<Type> parameter : parameters) {
+            if (!parameter.isIndexed()) {
+                result.add(parameter);
+            }
+        }
+        return result;
     }
 }

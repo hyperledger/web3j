@@ -3,10 +3,8 @@ package org.web3j.abi;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
@@ -25,6 +23,8 @@ import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint160;
+import org.web3j.compat.BiFunction;
+import org.web3j.compat.Compat;
 import org.web3j.utils.Numeric;
 
 /**
@@ -192,7 +192,7 @@ public class TypeDecoder {
         DynamicBytes dynamicBytesResult = decodeDynamicBytes(input, offset);
         byte[] bytes = dynamicBytesResult.getValue();
 
-        return new Utf8String(new String(bytes, StandardCharsets.UTF_8));
+        return new Utf8String(new String(bytes, Compat.UTF_8));
     }
 
     /**
@@ -219,7 +219,8 @@ public class TypeDecoder {
         try {
             Class<List> listClass = List.class;
             return typeReference.getClassType().getConstructor(listClass).newInstance(elements);
-        } catch (ReflectiveOperationException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException
+                | InvocationTargetException | NoSuchMethodException e) {
             //noinspection unchecked
             return (T) new StaticArray<>(elements);
         }
@@ -271,8 +272,8 @@ public class TypeDecoder {
             }
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
-                    e);
+                    "Unable to access parameterized type "
+                            + Compat.getTypeName(typeReference.getType()), e);
         }
     }
 }

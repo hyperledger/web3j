@@ -19,7 +19,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 
 import org.web3j.utils.Numeric;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.web3j.compat.Compat.UTF_8;
 import static org.web3j.crypto.SecureRandomUtils.secureRandom;
 
 /**

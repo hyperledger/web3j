@@ -2,6 +2,10 @@ package org.web3j.crypto;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,6 +14,7 @@ import org.junit.Test;
 
 import org.web3j.utils.Numeric;
 
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -175,5 +180,16 @@ public class WalletUtilsTest {
         assertFalse(isValidAddress(""));
         assertFalse(isValidAddress(SampleKeys.ADDRESS + 'a'));
         assertFalse(isValidAddress(SampleKeys.ADDRESS.substring(1)));
+    }
+
+    @Test
+    public void testWalletTimestampHasntChanged() {
+        final Date date = new Date(0);
+        final ZonedDateTime dateTime = ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
+
+        final DateTimeFormatter oldFormat = DateTimeFormatter.ofPattern(
+                "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+
+        assertThat(WalletUtils.timestamp(date), is(equalTo(oldFormat.format(dateTime))));
     }
 }

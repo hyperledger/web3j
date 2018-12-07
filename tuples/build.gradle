@@ -1,2 +1,4 @@
 
 description 'Simple Java tuples library'
+
+useReducedJdk(project)
