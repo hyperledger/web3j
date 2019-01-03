@@ -6,13 +6,14 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Smart Contracts &#8212; web3j 3.4.0 documentation</title>
+    <title>Smart Contracts &#8212; web3j 4.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,6 +33,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="smart-contracts">
@@ -81,7 +84,7 @@ with smart contracts from web3j.</p>
 <dl class="docutils">
 <dt><em>–bin</em></dt>
 <dd>Outputs a Solidity binary file containing the hex-encoded binary to provide with the transaction
-request.</dd>
+request. This is required only for <em>deploy</em> and <em>isValid</em> <a class="reference internal" href="#smart-contract-wrappers"><span class="std std-ref">Solidity smart contract wrappers</span></a> methods.</dd>
 <dt><em>–abi</em></dt>
 <dd>Outputs a Solidity <a class="reference internal" href="abi.html"><span class="doc">Application Binary Interface</span></a> (ABI) file which details all of the publicly
 accessible contract methods and their associated parameters. These details along with the
@@ -149,14 +152,24 @@ with the underlying JSON-RPC calls, please refer to
 <p>web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI
 files.</p>
 <p>The web3j <a class="reference internal" href="command_line.html"><span class="doc">Command Line Tools</span></a> tools ship with a command line utility for generating the smart contract function wrappers:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ web3j solidity generate <span class="o">[</span>--javaTypes<span class="p">|</span>--solidityTypes<span class="o">]</span> /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ web3j solidity generate <span class="o">[</span>-hV<span class="o">]</span> <span class="o">[</span>-jt<span class="o">]</span> <span class="o">[</span>-st<span class="o">]</span> -a<span class="o">=</span>&lt;abiFile&gt; <span class="o">[</span>-b<span class="o">=</span>&lt;binFile&gt;<span class="o">]</span> -o<span class="o">=</span>&lt;destinationFileDir&gt; -p<span class="o">=</span>&lt;packageName&gt;
+
+   -h, --help                        Show this <span class="nb">help</span> message and exit.
+   -V, --version                     Print version information and exit.
+   -jt, --javaTypes                  use native java types. Default: <span class="nb">true</span>
+   -st, --solidityTypes              use solidity types.
+   -a, --abiFile<span class="o">=</span>&lt;abiFile&gt;           abi file with contract definition.
+   -b, --binFile<span class="o">=</span>&lt;binFile&gt;           optional bin file with contract compiled code in order to generate deploy methods.
+   -o, --outputDir<span class="o">=</span>&lt;destinationFileDir&gt; destination base directory.
+   -p, --package<span class="o">=</span>&lt;packageName&gt;       base package name.
 </pre></div>
 </div>
+<p>BinFile is required for <a class="reference internal" href="#contract-validity"><span class="std std-ref">Contract validity</span></a>.</p>
 <p>In versions prior to 3.x of web3j, the generated smart contract wrappers used native Solidity
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
 using the <em>–solidityTypes</em> command line argument.</p>
 <p>You can also generate the wrappers by calling the Java class directly:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/&lt;smart-contract&gt;.bin /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>org.web3j.codegen.SolidityFunctionWrapperGenerator -b /path/to/&lt;smart-contract&gt;.bin -a /path/to/&lt;smart-contract&gt;.abi -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
 </div>
 <p>Where the <em>bin</em> and <em>abi</em> are obtained as per <a class="reference internal" href="#compiling-solidity"><span class="std std-ref">Compiling Solidity source code</span></a>.</p>
@@ -172,7 +185,7 @@ using the <em>–solidityTypes</em> command line argument.</p>
 avoid blocking.</p>
 <p>web3j also supports the generation of Java smart contract function wrappers directly from
 <a class="reference external" href="http://truffleframework.com/">Truffle’s</a>
-<a class="reference external" href="https://github.com/trufflesuite/truffle-contract-schema">Contract Schema</a>
+<a class="reference external" href="https://github.com/trufflesuite/truffle/tree/develop/packages/truffle-contract-schema">Contract Schema</a>
 via the <a class="reference internal" href="command_line.html"><span class="doc">Command Line Tools</span></a> utility.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ web3j truffle generate <span class="o">[</span>--javaTypes<span class="p">|</span>--solidityTypes<span class="o">]</span> /path/to/&lt;truffle-smart-contract-output&gt;.json -o /path/to/src/main/java -p com.your.organisation.name
 </pre></div>
@@ -217,6 +230,7 @@ smart contract wrapper.:</p>
                      <span class="c1">// at the provided address</span>
 </pre></div>
 </div>
+<p>Note: Contract wrapper has to be generated with <em>–bin</em> for this to work.</p>
 </div>
 <div class="section" id="transaction-managers">
 <span id="id3"></span><h2>Transaction Managers<a class="headerlink" href="#transaction-managers" title="Permalink to this headline">¶</a></h2>
@@ -249,7 +263,7 @@ on transactions as per
 <a class="reference external" href="https://github.com/ethereum/EIPs/issues/155">EIP-155</a>. This prevents transactions from one chain
 being re-broadcast onto another chain, such as from Ropsten to Mainnet:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TransactionManager</span> <span class="n">transactionManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RawTransactionManager</span><span class="o">(</span>
-        <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">ChainId</span><span class="o">.</span><span class="na">MAIN_NET</span><span class="o">);</span>
+        <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">ChainId</span><span class="o">.</span><span class="na">MAINNET</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>In order to avoid having to change config or code to specify which chain you are working with,
@@ -306,7 +320,7 @@ specify the transaction receipt processor to use as follows:</p>
                      <span class="c1">// handle exception</span>
                  <span class="o">}</span>
 <span class="n">TransactionManager</span> <span class="n">transactionManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RawTransactionManager</span><span class="o">(</span>
-        <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">ChainId</span><span class="o">.</span><span class="na">MAIN_NET</span><span class="o">,</span> <span class="n">transactionReceiptProcessor</span><span class="o">);</span>
+        <span class="n">web3j</span><span class="o">,</span> <span class="n">credentials</span><span class="o">,</span> <span class="n">ChainId</span><span class="o">.</span><span class="na">MAINNET</span><span class="o">,</span> <span class="n">transactionReceiptProcessor</span><span class="o">);</span>
 </pre></div>
 </div>
 <p>If you require further information, the
@@ -340,13 +354,13 @@ object.:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">EventValues</span> <span class="n">eventValues</span> <span class="o">=</span> <span class="n">contract</span><span class="o">.</span><span class="na">processSomeEvent</span><span class="o">(</span><span class="n">transactionReceipt</span><span class="o">);</span>
 </pre></div>
 </div>
-<p>Alternatively you can use an Observable filter instead which will listen for events associated with
+<p>Alternatively you can use an Flowable filter instead which will listen for events associated with
 the smart contract:</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">contract</span><span class="o">.</span><span class="na">someEventObservable</span><span class="o">(</span><span class="n">startBlock</span><span class="o">,</span> <span class="n">endBlock</span><span class="o">).</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">contract</span><span class="o">.</span><span class="na">someEventFlowable</span><span class="o">(</span><span class="n">startBlock</span><span class="o">,</span> <span class="n">endBlock</span><span class="o">).</span>
         <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">event</span> <span class="o">-&gt;</span> <span class="o">...);</span>
 </pre></div>
 </div>
-<p>For more information on working with Observable filters, refer to <a class="reference internal" href="filters.html"><span class="doc">Filters and Events</span></a>.</p>
+<p>For more information on working with Flowable filters, refer to <a class="reference internal" href="filters.html"><span class="doc">Filters and Events</span></a>.</p>
 <p><strong>Remember</strong> that for any indexed array, bytes and string Solidity parameter
 types, a Keccak-256 hash of their values will be returned, see the
 <a class="reference external" href="http://Solidity.readthedocs.io/en/latest/contracts.html#events">documentation</a>
@@ -403,6 +417,7 @@ contract:</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -435,7 +450,7 @@ contract:</p>
     
 
 <p>
-<a href="https://travis-ci.org/web3j/web3j">
+<a class="badge" href="https://travis-ci.org/web3j/web3j">
     <img
         alt="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
         src="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
@@ -449,7 +464,7 @@ contract:</p>
     
 
 <p>
-<a href="https://codecov.io/github/web3j/web3j">
+<a class="badge" href="https://codecov.io/github/web3j/web3j">
     <img
     alt="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
     src="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
@@ -516,6 +531,14 @@ contract:</p>
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -524,8 +547,8 @@ contract:</p>
       &copy;2016-2018, Conor Svensson.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="_sources/smart_contracts.rst.txt"

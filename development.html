@@ -6,13 +6,14 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Developer Guide &#8212; web3j 3.4.0 documentation</title>
+    <title>Developer Guide &#8212; web3j 4.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,10 +33,47 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="developer-guide">
 <h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dependency-management">
+<h2>Dependency management<a class="headerlink" href="#dependency-management" title="Permalink to this headline">¶</a></h2>
+<p>We recommend you use formal releases of web3j, these can be found on most public maven <a class="reference external" href="https://mvnrepository.com/search?q=web3j">repositories</a>.</p>
+<div class="line-block">
+<div class="line">Release versions follow the <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;.&lt;minor&gt;.&lt;build&gt;</span></code> convention, for example: 4.0.0</div>
+</div>
+<div class="line-block">
+<div class="line">Snapshot versions of web3j follow the <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;.&lt;minor&gt;.&lt;build&gt;-SNAPSHOT</span></code> convention, for example: 4.0.0-SNAPSHOT.</div>
+</div>
+<div class="line-block">
+<div class="line">If you would like to use snapshots instead please add a new maven repository pointing to:</div>
+</div>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nl">https:</span><span class="c1">//oss.sonatype.org/content/repositories/snapshots</span>
+</pre></div>
+</div>
+<p>Please refer to the <a class="reference external" href="https://maven.apache.org/guides/mini/guide-multiple-repositories.html">maven</a> or <a class="reference external" href="https://maven.apache.org/guides/mini/guide-multiple-repositories.html">gradle</a> documentation for further detail.</p>
+<p>Sample gradle configuration:</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">repositories</span> <span class="o">{</span>
+   <span class="n">maven</span> <span class="o">{</span>
+      <span class="n">url</span> <span class="s2">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Sample maven configuration:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;repositories&gt;</span>
+  <span class="nt">&lt;repository&gt;</span>
+    <span class="nt">&lt;id&gt;</span>sonatype-snasphots<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;name&gt;</span>Sonatype snapshots repo<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;url&gt;</span>https://oss.sonatype.org/content/repositories/snapshots<span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;/repository&gt;</span>
+<span class="nt">&lt;/repositories&gt;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="building-web3j">
 <h2>Building web3j<a class="headerlink" href="#building-web3j" title="Permalink to this headline">¶</a></h2>
 <p>web3j includes integration tests for running against a live Ethereum client. If you do not have a
@@ -68,6 +106,7 @@ $ make clean html
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -100,7 +139,7 @@ $ make clean html
     
 
 <p>
-<a href="https://travis-ci.org/web3j/web3j">
+<a class="badge" href="https://travis-ci.org/web3j/web3j">
     <img
         alt="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
         src="https://secure.travis-ci.org/web3j/web3j.svg?branch=master"
@@ -114,7 +153,7 @@ $ make clean html
     
 
 <p>
-<a href="https://codecov.io/github/web3j/web3j">
+<a class="badge" href="https://codecov.io/github/web3j/web3j">
     <img
     alt="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
     src="https://codecov.io/github/web3j/web3j/coverage.svg?branch=master"
@@ -139,6 +178,7 @@ $ make clean html
 <li class="toctree-l1"><a class="reference internal" href="projects.html">Projects using web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="companies.html">Companies using web3j</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependency-management">Dependency management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#building-web3j">Building web3j</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generating-documentation">Generating documentation</a></li>
 </ul>
@@ -168,6 +208,14 @@ $ make clean html
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -176,8 +224,8 @@ $ make clean html
       &copy;2016-2018, Conor Svensson.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="_sources/development.rst.txt"
