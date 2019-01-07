@@ -66,7 +66,7 @@ public class RlpEncoderTest {
         assertThat(RlpEncoder.encode(RlpString.create(BigInteger.ZERO)),
                 is(new byte[]{ (byte) 0x80 }));
 
-        // https://github.com/paritytech/parity/blob/master/util/rlp/tests/tests.rs#L239
+        // https://github.com/paritytech/parity-common/blob/master/rlp/tests/tests.rs#L237
         assertThat(RlpEncoder.encode(RlpString.create(new byte[] { 0 })),
                 is(new byte[]{ (byte) 0x00 }));
 
