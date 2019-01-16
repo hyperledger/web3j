@@ -1,22 +1,10 @@
 package org.web3j.abi;
 
+import org.web3j.abi.datatypes.*;
+import org.web3j.utils.Numeric;
+
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.Bytes;
-import org.web3j.abi.datatypes.BytesType;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.NumericType;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
 import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
@@ -156,11 +144,35 @@ public class TypeEncoder {
     static <T extends Type> String encodeDynamicArray(DynamicArray<T> value) {
         int size = value.getValue().size();
         String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
+        String valuesOffsets = encodeArrayValuesOffsets(value);
         String encodedValues = encodeArrayValues(value);
 
         StringBuilder result = new StringBuilder();
         result.append(encodedLength);
+        result.append(valuesOffsets);
         result.append(encodedValues);
+        return result.toString();
+    }
+
+    private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
+        StringBuilder result = new StringBuilder();
+        boolean arrayOfBytes = !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicBytes;
+        boolean arrayOfString = !value.getValue().isEmpty() && value.getValue().get(0) instanceof Utf8String;
+        if (arrayOfBytes || arrayOfString) {
+            long offset = 0;
+            for (int i = 0; i < value.getValue().size(); i++) {
+                if (i == 0) {
+                    offset = value.getValue().size() * MAX_BYTE_LENGTH;
+                } else {
+                    int bytesLength = arrayOfBytes ? ((byte[]) value.getValue().get(i - 1).getValue()).length
+                            : ((String) value.getValue().get(i - 1).getValue()).length();
+                    int numberOfWords = (int) Math.ceil(bytesLength / (double) 32);
+                    int totalBytesLength = numberOfWords * MAX_BYTE_LENGTH;
+                    offset += totalBytesLength + MAX_BYTE_LENGTH;
+                }
+                result.append(Numeric.toHexStringNoPrefix(Numeric.toBytesPadded(new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
+            }
+        }
         return result.toString();
     }
 }
