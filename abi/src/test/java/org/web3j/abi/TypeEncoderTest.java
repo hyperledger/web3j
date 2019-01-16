@@ -248,13 +248,13 @@ public class TypeEncoderTest {
     public void testArrayOfBytes() {
         DynamicArray<DynamicBytes> array = new DynamicArray<>(
                 new DynamicBytes(Numeric.hexStringToByteArray(
-                        "0x3c329ee8cd725a7f74f984cac52598eb170d731e7f3" +
-                              "80d59a18aa861d2c8d6c43c880b2bfe0f3cde4efcd7" +
-                              "11c010c2f1d8af5e796f06716539446f95420df4211c")),
+                        "0x3c329ee8cd725a7f74f984cac52598eb170d731e7f3"
+                      + "80d59a18aa861d2c8d6c43c880b2bfe0f3cde4efcd7"
+                      + "11c010c2f1d8af5e796f06716539446f95420df4211c")),
                 new DynamicBytes(Numeric.hexStringToByteArray("0xcafe0000cafe0000cafe0000")),
                 new DynamicBytes(Numeric.hexStringToByteArray(
-                        "0x9215c928b97e0ebeeefd10003a4e3eea23f2eb3acba" +
-                               "b477eeb589d7a8874d7c5"))
+                        "0x9215c928b97e0ebeeefd10003a4e3eea23f2eb3acba"
+                      + "b477eeb589d7a8874d7c5"))
         );
         DynamicArray emptyArray = DynamicArray.empty("bytes[]");
         DynamicArray<DynamicBytes> arrayOfEmptyBytes = new DynamicArray<>(
@@ -287,7 +287,7 @@ public class TypeEncoderTest {
                            + "0000000000000000000000000000000000000000000000000000000000000020"
                            // length third bytes
                            + "9215c928b97e0ebeeefd10003a4e3eea23f2eb3acbab477eeb589d7a8874d7c5"
-                           // third bytes
+                // third bytes
                 )
         );
         assertThat(
@@ -305,7 +305,7 @@ public class TypeEncoderTest {
                            + "0000000000000000000000000000000000000000000000000000000000000000"
                            // length first bytes
                            + "0000000000000000000000000000000000000000000000000000000000000000"
-                           // length second bytes
+                // length second bytes
                 )
         );
     }
@@ -313,8 +313,8 @@ public class TypeEncoderTest {
     @Test
     public void testArrayOfStrings() {
         DynamicArray<Utf8String> array = new DynamicArray<>(
-                new Utf8String("This string value is extra long so that it " +
-                                       "requires more than 32 bytes"),
+                new Utf8String("This string value is extra long so that it "
+                                  + "requires more than 32 bytes"),
                 new Utf8String("abc"),
                 new Utf8String(""),
                 new Utf8String("web3j")
@@ -354,7 +354,7 @@ public class TypeEncoderTest {
                        + "0000000000000000000000000000000000000000000000000000000000000005"
                        // length fourth string
                        + "776562336a000000000000000000000000000000000000000000000000000000"
-                       // fourth string
+            // fourth string
             )
         );
         assertThat(
@@ -372,7 +372,7 @@ public class TypeEncoderTest {
                            + "0000000000000000000000000000000000000000000000000000000000000000"
                            // length first string
                            + "0000000000000000000000000000000000000000000000000000000000000000"
-                   // length second string
+                // length second string
                 )
         );
     }
