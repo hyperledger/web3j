@@ -168,19 +168,19 @@ public class TypeEncoder {
 
     private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
         StringBuilder result = new StringBuilder();
-        boolean arrayOfBytes = !value.getValue().isEmpty() &&
-                                       value.getValue().get(0) instanceof DynamicBytes;
-        boolean arrayOfString = !value.getValue().isEmpty() &&
-                                        value.getValue().get(0) instanceof Utf8String;
+        boolean arrayOfBytes = !value.getValue().isEmpty()
+                                       && value.getValue().get(0) instanceof DynamicBytes;
+        boolean arrayOfString = !value.getValue().isEmpty()
+                                        && value.getValue().get(0) instanceof Utf8String;
         if (arrayOfBytes || arrayOfString) {
             long offset = 0;
             for (int i = 0; i < value.getValue().size(); i++) {
                 if (i == 0) {
                     offset = value.getValue().size() * MAX_BYTE_LENGTH;
                 } else {
-                    int bytesLength = arrayOfBytes ?
-                                ((byte[]) value.getValue().get( i - 1).getValue()).length :
-                                ((String) value.getValue().get(i - 1).getValue()).length();
+                    int bytesLength = arrayOfBytes
+                            ? ((byte[]) value.getValue().get(i - 1).getValue()).length
+                            : ((String) value.getValue().get(i - 1).getValue()).length();
                     int numberOfWords = (int) Math.ceil(bytesLength / (double) 32);
                     int totalBytesLength = numberOfWords * MAX_BYTE_LENGTH;
                     offset += totalBytesLength + MAX_BYTE_LENGTH;
