@@ -6,9 +6,9 @@ Dependency management
 
 We recommend you use formal releases of web3j, these can be found on most public maven `repositories <https://mvnrepository.com/search?q=web3j>`_.
 
-| Release versions follow the ``<major>.<minor>.<build>`` convention, for example: 4.0.0
+| Release versions follow the ``<major>.<minor>.<build>`` convention, for example: 4.1.0
 
-| Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 4.0.0-SNAPSHOT.
+| Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 4.1.0-SNAPSHOT.
 
 | If you would like to use snapshots instead please add a new maven repository pointing to:
 
