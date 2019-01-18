@@ -1,7 +1,7 @@
 package org.web3j.abi.datatypes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
 
     @Deprecated
     Array(String type) {
-        this(type, Collections.emptyList());
+        this(type, new ArrayList<>());
     }
 
     @SafeVarargs
@@ -54,18 +54,11 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
     }
 
     @Override
-    public String getTypeAsString() {
-        return AbiTypes.getTypeAString(type) + "[]";
-    }
+    public abstract String getTypeAsString();
 
     private void checkValid(Class<T> type, List<T> values) {
         Objects.requireNonNull(type);
         Objects.requireNonNull(values);
-
-        if (values.size() == 0) {
-            throw new UnsupportedOperationException(
-                    "If empty list is provided, use empty array instance");
-        }
     }
 
     @Override

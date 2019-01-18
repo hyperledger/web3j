@@ -17,6 +17,7 @@ import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes16;
 import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
@@ -124,15 +125,17 @@ public class FunctionReturnDecoderTest {
                 new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {});
         outputParameters.add((TypeReference) new TypeReference<Uint256>() {});
 
-
         List<Type> decoded = FunctionReturnDecoder.decode(
                 "0x0000000000000000000000000000000000000000000000000000000000000037"
                         + "0000000000000000000000000000000000000000000000000000000000000001"
                         + "000000000000000000000000000000000000000000000000000000000000000a",
                 outputParameters);
 
+        StaticArray2<Uint256> uint256StaticArray2 = new StaticArray2<>(
+                new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE));
+
         List<Type> expected = Arrays.asList(
-                new StaticArray<>(new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE)),
+                uint256StaticArray2,
                 new Uint256(BigInteger.TEN));
         assertThat(decoded, equalTo(expected));
     }

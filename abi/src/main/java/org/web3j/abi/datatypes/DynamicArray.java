@@ -41,4 +41,9 @@ public class DynamicArray<T extends Type> extends Array<T> {
     public DynamicArray(Class<T> type, T... values) {
         super(type, values);
     }
+
+    @Override
+    public String getTypeAsString() {
+        return AbiTypes.getTypeAString(getComponentType()) + "[]";
+    }
 }

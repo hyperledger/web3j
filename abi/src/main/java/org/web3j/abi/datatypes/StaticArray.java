@@ -1,6 +1,7 @@
 package org.web3j.abi.datatypes;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.web3j.abi.datatypes.generated.AbiTypes;
@@ -8,53 +9,41 @@ import org.web3j.abi.datatypes.generated.AbiTypes;
 /**
  * Static array type.
  */
-public class StaticArray<T extends Type> extends Array<T> {
+public abstract class StaticArray<T extends Type> extends Array<T> {
 
     /**
      * Warning: increasing this constant will cause more generated StaticArrayN types, see:
      * org.web3j.codegen.AbiTypesGenerator#generateStaticArrayTypes
      */
-    public static int MAX_SIZE_OF_STATIC_ARRAY = 32;
-
-    private final Integer expectedSize;
+    public static final int MAX_SIZE_OF_STATIC_ARRAY = 32;
 
     @Deprecated
     @SafeVarargs
-    @SuppressWarnings("unchecked")
     public StaticArray(T... values) {
-        super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
-        this.expectedSize = null;
-        isValid();
+        this(values.length, values);
     }
 
     @Deprecated
     @SafeVarargs
-    @SuppressWarnings("unchecked")
     public StaticArray(int expectedSize, T... values) {
-        super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
-        this.expectedSize = expectedSize;
-        isValid();
+        this(expectedSize, Arrays.asList(values));
     }
 
     @Deprecated
-    @SuppressWarnings("unchecked")
     public StaticArray(List<T> values) {
-        super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
-        this.expectedSize = null;
-        isValid();
+        this(values.size(), values);
     }
 
     @Deprecated
     @SuppressWarnings("unchecked")
     public StaticArray(int expectedSize, List<T> values) {
         super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
-        this.expectedSize = expectedSize;
-        isValid();
+        checkValid(expectedSize);
     }
 
     @SafeVarargs
     public StaticArray(Class<T> type, T... values) {
-       this(type, Arrays.asList(values));
+        this(type, Arrays.asList(values));
     }
 
     @SafeVarargs
@@ -63,15 +52,18 @@ public class StaticArray<T extends Type> extends Array<T> {
     }
 
     public StaticArray(Class<T> type, List<T> values) {
-        super(type, values);
-        this.expectedSize = null;
-        isValid();
+        this(type, values == null ? 0 : values.size(), values);
     }
 
     public StaticArray(Class<T> type, int expectedSize, List<T> values) {
         super(type, values);
-        this.expectedSize = expectedSize;
-        isValid();
+        checkValid(expectedSize);
+    }
+
+    @Override
+    public List<T> getValue() {
+        // Static arrays cannot be modified
+        return Collections.unmodifiableList(value);
     }
 
     @Override
@@ -79,12 +71,12 @@ public class StaticArray<T extends Type> extends Array<T> {
         return AbiTypes.getTypeAString(getComponentType()) + "[" + value.size() + "]";
     }
 
-    private void isValid() {
-        MAX_SIZE_OF_STATIC_ARRAY = 32;
-        if (expectedSize == null && value.size() > MAX_SIZE_OF_STATIC_ARRAY) {
+    private void checkValid(int expectedSize) {
+        if (value.size() > MAX_SIZE_OF_STATIC_ARRAY) {
             throw new UnsupportedOperationException(
-                    "Static arrays with a length greater than 32 are not supported.");
-        } else if (expectedSize != null && value.size() != expectedSize) {
+                    "Static arrays with a length greater than "
+                            + MAX_SIZE_OF_STATIC_ARRAY + " are not supported.");
+        } else if (value.size() != expectedSize) {
             throw new UnsupportedOperationException(
                     "Expected array of type [" + getClass().getSimpleName() + "] to have ["
                             + expectedSize + "] elements.");
