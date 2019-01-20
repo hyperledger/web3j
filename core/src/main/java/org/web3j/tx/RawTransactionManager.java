@@ -21,7 +21,8 @@ import org.web3j.utils.TxHashVerifier;
  * locally.
  *
  * <p>This transaction manager provides support for specifying the chain id for transactions as per
- * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>.
+ * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>, as well as for locally signing
+ * RawTransaction instances without broadcasting them.
  */
 public class RawTransactionManager extends TransactionManager {
 
@@ -103,9 +104,12 @@ public class RawTransactionManager extends TransactionManager {
 
         return signAndSend(rawTransaction);
     }
-
-    public EthSendTransaction signAndSend(RawTransaction rawTransaction)
-            throws IOException {
+    
+    /*
+     * @param rawTransaction a RawTransaction istance to be signed
+     * @return The transaction signed and encoded without ever broadcasting it
+     */
+    public String sign(RawTransaction rawTransaction) {
 
         byte[] signedMessage;
 
@@ -115,7 +119,12 @@ public class RawTransactionManager extends TransactionManager {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         }
 
-        String hexValue = Numeric.toHexString(signedMessage);
+        return Numeric.toHexString(signedMessage);
+    }
+
+    public EthSendTransaction signAndSend(RawTransaction rawTransaction)
+            throws IOException {
+        String hexValue = sign(rawTransaction);
         EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
 
         if (ethSendTransaction != null && !ethSendTransaction.hasError()) {
