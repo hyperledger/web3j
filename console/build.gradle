@@ -20,11 +20,9 @@ applicationName = 'web3j'
 project.afterEvaluate {
     publishing {
         publications {
-            if (!isSnapshotVersion) {
-                mavenJava(MavenPublication) {
-                    artifactsource: distShadowZip
-                    extension: 'zip'
-                }
+            mavenJava(MavenPublication) {
+                artifact source: distShadowZip, extension: 'zip'
+                artifact source: distShadowTar, extension: 'tar'
             }
         }
 
