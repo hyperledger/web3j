@@ -39,6 +39,7 @@ publish_snapshot:
   when: manual
   only:
   - /release/.*$/
+  - /feature/.*$/
 
 publish_release:
   stage: deploy
@@ -50,4 +51,5 @@ publish_release:
   when: manual
   only:
   - /release/.*$/
+  - /feature/.*$/
   - master
