@@ -1,6 +1,8 @@
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
+apply plugin: 'distribution'
+
 description 'web3j command line tools'
 
 dependencies {
@@ -14,3 +16,18 @@ dependencies {
 // Build command line library release with target distShadowZip
 mainClassName = 'org.web3j.console.Runner'
 applicationName = 'web3j'
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            if (!isSnapshotVersion) {
+                mavenJava(MavenPublication) {
+                    artifactsource: distShadowZip
+                    extension: 'zip'
+                }
+            }
+        }
+
+    }
+
+}
