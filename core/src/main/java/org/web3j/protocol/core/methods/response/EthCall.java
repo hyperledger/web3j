@@ -1,14 +1,14 @@
 package org.web3j.protocol.core.methods.response;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.protocol.core.Response;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * eth_call.
