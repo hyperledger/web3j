@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 
 import org.web3j.abi.datatypes.generated.StaticArray3;
+import org.web3j.abi.datatypes.generated.StaticArray32;
 import org.web3j.abi.datatypes.generated.Uint8;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -15,7 +16,7 @@ public class StaticArrayTest {
 
     @Test
     public void canBeInstantiatedWithLessThan32Elements() {
-        final StaticArray<Uint> array = new StaticArray<>(arrayOfUints(32));
+        final StaticArray<Uint> array = new StaticArray32<>(arrayOfUints(32));
 
         assertThat(array.getValue().size(), equalTo(32));
     }
@@ -41,7 +42,7 @@ public class StaticArrayTest {
     @Test
     public void throwsIfSizeIsAboveMaxOf32() {
         try {
-            new StaticArray<>(arrayOfUints(33));
+            new StaticArray32<>(arrayOfUints(33));
             fail();
         } catch (UnsupportedOperationException e) {
             assertThat(e.getMessage(), equalTo(

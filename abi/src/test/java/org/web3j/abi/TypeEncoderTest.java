@@ -18,6 +18,7 @@ import org.web3j.abi.datatypes.generated.Bytes1;
 import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int64;
+import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.utils.Numeric;
 
@@ -207,7 +208,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testFixedArray() {
-        StaticArray<Ufixed> array = new StaticArray<>(
+        StaticArray<Ufixed> array = new StaticArray2<>(Ufixed.class,
                 new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
                 new Ufixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8))
         );
@@ -219,7 +220,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testDynamicArray() {
-        DynamicArray<Uint> array = new DynamicArray<>(
+        DynamicArray<Uint> array = new DynamicArray<>(Uint.class,
                 new Uint(BigInteger.ONE),
                 new Uint(BigInteger.valueOf(2)),
                 new Uint(BigInteger.valueOf(3))
@@ -237,7 +238,7 @@ public class TypeEncoderTest {
     @Test
     public void testEmptyArray() {
         @SuppressWarnings("unchecked")
-        DynamicArray<Uint> array = DynamicArray.empty("uint");
+        DynamicArray<Uint> array = new DynamicArray(Uint.class);
         assertThat(
                 TypeEncoder.encodeDynamicArray(array),
                 is("0000000000000000000000000000000000000000000000000000000000000000")
@@ -256,7 +257,7 @@ public class TypeEncoderTest {
                         "0x9215c928b97e0ebeeefd10003a4e3eea23f2eb3acba"
                       + "b477eeb589d7a8874d7c5"))
         );
-        DynamicArray emptyArray = DynamicArray.empty("bytes[]");
+        DynamicArray emptyArray = DynamicArray.empty("bytes");
         DynamicArray<DynamicBytes> arrayOfEmptyBytes = new DynamicArray<>(
                 new DynamicBytes(new byte[0]),
                 new DynamicBytes(new byte[0])
@@ -320,7 +321,7 @@ public class TypeEncoderTest {
                 new Utf8String(""),
                 new Utf8String("web3j")
         );
-        DynamicArray emptyArray = DynamicArray.empty("string[]");
+        DynamicArray emptyArray = DynamicArray.empty("string");
         DynamicArray<Utf8String> arrayOfEmptyStrings = new DynamicArray<>(
                 new Utf8String(""),
                 new Utf8String("")

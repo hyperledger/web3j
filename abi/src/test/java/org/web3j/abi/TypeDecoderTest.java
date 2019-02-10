@@ -16,6 +16,7 @@ import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int256;
 import org.web3j.abi.datatypes.generated.Int64;
+import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 
@@ -251,8 +252,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {},
                 2),
-                is(new StaticArray<Uint256>(
-                        new Uint256(BigInteger.TEN),
+                is(new StaticArray2<>(Uint256.class, new Uint256(BigInteger.TEN),
                         new Uint256(BigInteger.valueOf(Long.MAX_VALUE)))));
 
         assertThat(TypeDecoder.decodeStaticArray(
@@ -264,7 +264,7 @@ public class TypeDecoderTest {
                 new TypeReference.StaticArrayTypeReference<StaticArray<Utf8String>>(2){},
                 2
                 ),
-                equalTo(new StaticArray<Utf8String>(
+                equalTo(new StaticArray2<>(Utf8String.class,
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
     }
@@ -285,7 +285,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference<DynamicArray<Uint256>>() { }
                 ),
-                equalTo(DynamicArray.empty("uint256")));
+                equalTo(new DynamicArray<>(Uint256.class)));
 
         assertThat(TypeDecoder.decodeDynamicArray(
                 "0000000000000000000000000000000000000000000000000000000000000002"  // length
@@ -294,7 +294,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference<DynamicArray<Uint256>>() { }
                 ),
-                equalTo(new DynamicArray<Uint256>(
+                equalTo(new DynamicArray<>(Uint256.class,
                         new Uint256(BigInteger.TEN),
                         new Uint256(BigInteger.valueOf(Long.MAX_VALUE)))));
 
@@ -307,7 +307,7 @@ public class TypeDecoderTest {
                 0,
                 new TypeReference<DynamicArray<Utf8String>>() { }
                 ),
-                equalTo(new DynamicArray<Utf8String>(
+                equalTo(new DynamicArray<>(Utf8String.class,
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
     }
