@@ -16,6 +16,6 @@ public class LogFilterTest extends FilterTester {
                 //CHECKSTYLE:ON
                 EthLog.class);
 
-        runTest(ethLog, web3j.ethLogObservable(new EthFilter().addSingleTopic("test")));
+        runTest(ethLog, web3j.ethLogFlowable(new EthFilter().addSingleTopic("test")));
     }
 }

@@ -47,6 +47,12 @@ public class WalletUtils {
         return generateNewWalletFile(password, destinationDirectory, false);
     }
 
+    public static String generateNewWalletFile(String password, File destinationDirectory)
+            throws CipherException, InvalidAlgorithmParameterException,
+            NoSuchAlgorithmException, NoSuchProviderException, IOException {
+        return generateFullNewWalletFile(password, destinationDirectory);
+    }
+
     public static String generateNewWalletFile(
             String password, File destinationDirectory, boolean useFullScrypt)
             throws CipherException, IOException, InvalidAlgorithmParameterException,
@@ -151,6 +157,15 @@ public class WalletUtils {
 
     public static String getMainnetKeyDirectory() {
         return String.format("%s%skeystore", getDefaultKeyDirectory(), File.separator);
+    }
+    
+    /**
+     * Get keystore destination directory for a Rinkeby network.
+     * @return a String containing destination directory
+     */
+    public static String getRinkebyKeyDirectory() {
+        return String.format(
+                "%s%srinkeby%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
     }
 
     public static boolean isValidPrivateKey(String privateKey) {

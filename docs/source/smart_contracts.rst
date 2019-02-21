@@ -58,7 +58,7 @@ with smart contracts from web3j.
 
 *--bin*
   Outputs a Solidity binary file containing the hex-encoded binary to provide with the transaction
-  request.
+  request. This is required only for *deploy* and *isValid* :ref:`smart-contract-wrappers` methods.
 
 *--abi*
   Outputs a Solidity :doc:`abi` (ABI) file which details all of the publicly
@@ -154,7 +154,18 @@ The web3j :doc:`command_line` tools ship with a command line utility for generat
 
 .. code-block:: bash
 
-   $ web3j solidity generate [--javaTypes|--solidityTypes] /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   $ web3j solidity generate [-hV] [-jt] [-st] -a=<abiFile> [-b=<binFile>] -o=<destinationFileDir> -p=<packageName>
+
+      -h, --help                        Show this help message and exit.
+      -V, --version                     Print version information and exit.
+      -jt, --javaTypes                  use native java types. Default: true
+      -st, --solidityTypes              use solidity types.
+      -a, --abiFile=<abiFile>           abi file with contract definition.
+      -b, --binFile=<binFile>           optional bin file with contract compiled code in order to generate deploy methods.
+      -o, --outputDir=<destinationFileDir> destination base directory.
+      -p, --package=<packageName>       base package name.
+
+BinFile is required for :ref:`contract-validity`.
 
 In versions prior to 3.x of web3j, the generated smart contract wrappers used native Solidity
 types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
@@ -164,7 +175,7 @@ You can also generate the wrappers by calling the Java class directly:
 
 .. code-block:: bash
 
-   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   org.web3j.codegen.SolidityFunctionWrapperGenerator -b /path/to/<smart-contract>.bin -a /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Where the *bin* and *abi* are obtained as per :ref:`compiling-Solidity`.
 
@@ -182,7 +193,7 @@ avoid blocking.
 
 web3j also supports the generation of Java smart contract function wrappers directly from
 `Truffle's <http://truffleframework.com/>`_
-`Contract Schema <https://github.com/trufflesuite/truffle-contract-schema>`_
+`Contract Schema <https://github.com/trufflesuite/truffle/tree/develop/packages/truffle-contract-schema>`_
 via the :doc:`command_line` utility.
 
 .. code-block:: bash
@@ -239,6 +250,7 @@ smart contract wrapper.::
    contract.isValid();  // returns false if the contract bytecode does not match what's deployed
                         // at the provided address
 
+Note: Contract wrapper has to be generated with *--bin* for this to work.
 
 .. _transaction-managers:
 
@@ -279,7 +291,7 @@ on transactions as per
 being re-broadcast onto another chain, such as from Ropsten to Mainnet::
 
    TransactionManager transactionManager = new RawTransactionManager(
-           web3j, credentials, ChainId.MAIN_NET);
+           web3j, credentials, ChainId.MAINNET);
 
 In order to avoid having to change config or code to specify which chain you are working with,
 web3j's default behaviour is to not specify chain ids on transactions to simplify working with the
@@ -343,7 +355,7 @@ specify the transaction receipt processor to use as follows::
                         // handle exception
                     }
    TransactionManager transactionManager = new RawTransactionManager(
-           web3j, credentials, ChainId.MAIN_NET, transactionReceiptProcessor);
+           web3j, credentials, ChainId.MAINNET, transactionReceiptProcessor);
 
 
 If you require further information, the
@@ -382,13 +394,13 @@ object.::
 
    EventValues eventValues = contract.processSomeEvent(transactionReceipt);
 
-Alternatively you can use an Observable filter instead which will listen for events associated with
+Alternatively you can use an Flowable filter instead which will listen for events associated with
 the smart contract::
 
-   contract.someEventObservable(startBlock, endBlock).
+   contract.someEventFlowable(startBlock, endBlock).
            .subscribe(event -> ...);
 
-For more information on working with Observable filters, refer to :doc:`filters`.
+For more information on working with Flowable filters, refer to :doc:`filters`.
 
 **Remember** that for any indexed array, bytes and string Solidity parameter
 types, a Keccak-256 hash of their values will be returned, see the
@@ -408,9 +420,43 @@ contract they were generated from::
    Type result = contract.someMethod(<param1>, ...).send();
 
 
+.. _dynamic-gas:
 
+Dynamic gas price and limit
+---------------------------
 
+When working with smart contracts you may want to specify different gas price and limit values
+depending on the function being invoked. You can do that by creating your own
+`ContractGasProvider <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/gas/ContractGasProvider.java>`_
+for the smart contract wrapper.
 
+Every generated wrapper contains all smart contract method names listed as a constants, which
+facilitates compilation-time matching via a *switch* statement.
+
+For example, using the
+`Greeter <https://github.com/web3j/web3j/blob/master/codegen/src/test/resources/solidity/greeter/Greeter.sol>`_
+contract::
+
+    Greeter greeter = new Greeter(...);
+    greeter.setGasProvider(new DefaultGasProvider() {
+        @Override
+        public BigInteger getGasPrice(String contractFunc) {
+            switch (contractFunc) {
+                case Greeter.FUNC_GREET: return BigInteger.valueOf(22_000_000_000L);
+                case Greeter.FUNC_KILL: return BigInteger.valueOf(44_000_000_000L);
+                default: throw new NotImplementedException();
+            }
+        }
+
+        @Override
+        public BigInteger getGasLimit(String contractFunc) {
+            switch (contractFunc) {
+                case Greeter.FUNC_GREET: return BigInteger.valueOf(4_300_000);
+                case Greeter.FUNC_KILL: return BigInteger.valueOf(5_300_000);
+                default: throw new NotImplementedException();
+            }
+        }
+    });
 
 
 Examples

@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.3.1</version>
+     <version>4.1.0</version>
    </dependency>
 
 Android:
@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>3.3.1-android</version>
+     <version>4.1.0-android</version>
    </dependency>
 
 Gradle
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.3.1')
+   compile ('org.web3j:core:4.1.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.3.1-android')
+   compile ('org.web3j:core:4.1.0-android')
 
 
 Start a client
@@ -91,10 +91,10 @@ To send asynchronous requests using a CompletableFuture (Future on Android)::
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
    String clientVersion = web3ClientVersion.getWeb3ClientVersion();
 
-To use an RxJava Observable::
+To use an RxJava Flowable::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3.web3ClientVersion().observable().subscribe(x -> {
+   web3.web3ClientVersion().flowable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -143,7 +143,7 @@ Then generate the wrapper code using web3j's :doc:`command_line`:
 
 .. code-block:: bash
 
-   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   web3j solidity generate -b /path/to/<smart-contract>.bin -a /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Now you can create and deploy your smart contract::
 
@@ -181,40 +181,40 @@ of events taking place on the blockchain.
 
 To receive all new blocks as they are added to the blockchain::
 
-   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+   Subscription subscription = web3j.blockFlowable(false).subscribe(block -> {
        ...
    });
 
 To receive all new transactions as they are added to the blockchain::
 
-   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.transactionFlowable().subscribe(tx -> {
        ...
    });
 
 To receive all pending transactions as they are submitted to the network (i.e. before they have
 been grouped into a block together)::
 
-   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+   Subscription subscription = web3j.pendingTransactionFlowable().subscribe(tx -> {
        ...
    });
 
 Or, if you'd rather replay all blocks to the most current, and be notified of new subsequent
 blocks being created::
 
-   Subscription subscription = catchUpToLatestAndSubscribeToNewBlocksObservable(
+   Subscription subscription = replayPastAndFutureBlocksFlowable(
            <startBlockNumber>, <fullTxObjects>)
            .subscribe(block -> {
                ...
    });
 
-There are a number of other transaction and block replay Observables described in :doc:`filters`.
+There are a number of other transaction and block replay Flowables described in :doc:`filters`.
 
 Topic filters are also supported::
 
    EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
            DefaultBlockParameterName.LATEST, <contract-address>)
                 .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
-   web3j.ethLogObservable(filter).subscribe(log -> {
+   web3j.ethLogFlowable(filter).subscribe(log -> {
        ...
    });
 
@@ -282,6 +282,106 @@ If you want to make use of Parity's
 `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs,
 you can use the *org.web3j:parity* and *org.web3j:geth* modules respectively.
 
+Publish/Subscribe (pub/sub)
+---------------------------
+
+Ethereum clients implement the `pub/sub <https://github.com/ethereum/go-ethereum/wiki/RPC-PUB-SUB>`_
+mechanism that provides the capability to subscribe to events from the network, allowing these clients to take custom
+actions as needed. In doing so it alleviates the need to use polling and is more efficient.
+This is achieved by using the WebSocket protocol instead of HTTP protocol.
+
+Pub/Sub methods are available via the `WebSocketService` class, and allows the client to:
+
+- send an RPC call over WebSocket protocol
+- subscribe to WebSocket events
+- unsubscribe from a stream of events
+
+To create an instance of the `WebSocketService` class you need to first to create an instance of
+the `WebSocketClient` that connects to an Ethereum client via WebSocket protocol, and then pass it
+to the `WebSocketService` constructor::
+
+   final WebSocketClient webSocketClient = new WebSocketClient(new URI("ws://localhost/"));
+   final boolean includeRawResponses = false;
+   final WebSocketService webSocketService = new WebSocketService(webSocketClient, includeRawResponses)
+
+
+To send an RPC request using the WebSocket protocol one need to use the `sendAsync` method on
+the `WebSocketService` instance::
+
+   // Request to get a version of an Ethereum client
+   final Request<?, Web3ClientVersion> request = new Request<>(
+        // Name of an RPC method to call
+        "web3_clientVersion",
+        // Parameters for the method. "web3_clientVersion" does not expect any
+        Collections.<String>emptyList(),
+        // Service that is used to send a request
+        webSocketService,
+        // Type of an RPC call to get an Ethereum client version
+        Web3ClientVersion.class);
+
+   // Send an asynchronous request via WebSocket protocol
+   final CompletableFuture<Web3ClientVersion> reply = webSocketService.sendAsync(
+                   request,
+                   Web3ClientVersion.class);
+
+   // Get result of the reply
+   final Web3ClientVersion clientVersion = reply.get();
+
+To use synchronous communication (i.e send a request and await a response) one would need to use the `sync` method instead::
+
+   // Send a (synchronous) request via WebSocket protocol
+   final Web3ClientVersion clientVersion = webSocketService.send(
+                   request,
+                   Web3ClientVersion.class);
+
+To subscribe to WebSocket events `WebSocketService` provides the `subscribe` method.
+`subscribe` returns an instance of the `Flowable <http://reactivex.io/RxJava/2.x/javadoc/io/reactivex/Flowable.html>`_
+interface from the RxJava library, which allows the processing of incoming events from an Ethereum network as a reactive stream.
+
+To subscribe to a stream of events you should use `WebSocketService` to send an RPC method via WebSocket; this
+is usually `eth_subscribe`. Events that it subscribes to depend on parameters to the `eth_subscribe`
+method. You can find more in the `RPC documentation <https://github.com/ethereum/go-ethereum/wiki/RPC-PUB-SUB#supported-subscriptions>`_::
+
+   // A request to subscribe to a stream of events
+   final Request<EthSubscribe> subscribeRequest = new Request<>(
+       // RPC method to subscribe to events
+       "eth_subscribe",
+       // Parameters that specify what events to subscribe to
+       Arrays.asList("newHeads", Collections.emptyMap()),
+       // Service that is used to send a request
+       webSocketService,
+       EthSubscribe.class);
+
+   final Flowable<NewHeadsNotification> events = webSocketService.subscribe(
+        subscribeRequest,
+        // RPC method that should be used to unsubscribe from events
+        "eth_unsubscribe",
+        // Type of events returned by a request
+        NewHeadsNotification.class
+   );
+
+   // Subscribe to incoming events and process incoming events
+   final Disposable disposable = events.subscribe(event -> {
+       // Process new heads event
+   });
+
+
+Notice that we need to provide a name of a method to `WebSocketService` that needs to be called to unsubscribe from
+a stream of events. This is because different Ethereum clients may have different methods to unsubscribe from
+particular events. For example, the Parity client requires use of the `parity_unsubscribe` method to unsubscribe
+from `pub/sub events <https://wiki.parity.io/JSONRPC-eth_pubsub-module>`_.
+
+To unsubscribe from a stream of events one needs to use a `Flowable` instance for a particular events stream::
+
+   final Flowable<NewHeadsNotification> events = ...
+   final Disposable disposable = events.subscribe(...)
+   disposable.dispose();
+
+The methods described above are quite low-level, so we can use `Web3j` implementation instead::
+
+   final WebSocketService webSocketService = ...
+   final Web3j web3j = Web3j.build(webSocketService)
+   final Flowable<NewHeadsNotification> notifications = web3j.newHeadsNotifications()
 
 Command line tools
 ------------------

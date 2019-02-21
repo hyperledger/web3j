@@ -16,6 +16,8 @@ import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
+import org.web3j.protocol.core.Response.Error;
+import org.web3j.protocol.core.RpcErrors;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
@@ -34,6 +36,10 @@ public abstract class Filter<T> {
     private volatile BigInteger filterId;
 
     private ScheduledFuture<?> schedule;
+    
+    private ScheduledExecutorService scheduledExecutorService;
+
+    private long blockTime;
 
     public Filter(Web3j web3j, Callback<T> callback) {
         this.web3j = web3j;
@@ -48,6 +54,8 @@ public abstract class Filter<T> {
             }
 
             filterId = ethFilter.getFilterId();
+            this.scheduledExecutorService = scheduledExecutorService;
+            this.blockTime = blockTime;
             // this runs in the caller thread as if any exceptions are encountered, we shouldn't
             // proceed with creating the scheduled task below
             getInitialFilterLogs();
@@ -110,7 +118,13 @@ public abstract class Filter<T> {
             throwException(e);
         }
         if (ethLog.hasError()) {
-            throwException(ethLog.getError());
+            Error error = ethLog.getError();
+            switch (error.getCode()) {
+                case RpcErrors.FILTER_NOT_FOUND: reinstallFilter();
+                    break;
+                default: throwException(error);
+                    break;
+            }
         } else {
             process(ethLog.getLogs());
         }
@@ -119,6 +133,12 @@ public abstract class Filter<T> {
     abstract EthFilter sendRequest() throws IOException;
 
     abstract void process(List<EthLog.LogResult> logResults);
+    
+    private void reinstallFilter() {
+        log.warn("The filter has not been found. Filter id: " + filterId);
+        schedule.cancel(true);
+        this.run(scheduledExecutorService, blockTime);
+    }
 
     public void cancel() {
         schedule.cancel(false);
@@ -156,4 +176,3 @@ public abstract class Filter<T> {
         throw new FilterException("Error sending request", cause);
     }
 }
-

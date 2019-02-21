@@ -2,7 +2,7 @@ pragma solidity ^0.4.2;
 
 contract Arrays {
 
-    function fixedReverse(uint[10] input) returns(uint[10] result) {
+    function fixedReverse(uint[10] input) public pure returns(uint[10] result) {
         uint length = input.length;
         for (uint i = 0; i < length; i++) {
             result[i] = input[length - (i + 1)];
@@ -10,7 +10,7 @@ contract Arrays {
         return result;
     }
 
-    function dynamicReverse(uint[] input) returns (uint[] result) {
+    function dynamicReverse(uint[] input) public pure returns (uint[] result) {
         uint length = input.length;
         result = new uint[](length);
 
@@ -20,7 +20,7 @@ contract Arrays {
         return result;
     }
 
-    function multiDynamic(uint[2][] input) returns (uint[] result) {
+    function multiDynamic(uint[2][] input) public pure returns (uint[] result) {
         uint length = input.length;
         result = new uint[](length*2);
         uint resultIndex = 0;
@@ -33,7 +33,7 @@ contract Arrays {
         return result;
     }
 
-    function multiFixed(uint[2][6] input) returns (uint[] result) {
+    function multiFixed(uint[2][6] input) public pure returns (uint[] result) {
         uint length = input.length;
         result = new uint[](length*2);
         uint resultIndex = 0;
@@ -46,7 +46,7 @@ contract Arrays {
         return result;
     }
 
-    function returnArray() constant returns (address[]) {
+    function returnArray() public pure returns (address[]) {
         return new address[](0);
     }
 }

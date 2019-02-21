@@ -21,11 +21,11 @@ public class RlpString implements RlpType {
         return value;
     }
 
-    public BigInteger asBigInteger() {
+    public BigInteger asPositiveBigInteger() {
         if (value.length == 0) {
             return BigInteger.ZERO;
         }
-        return new BigInteger(value);
+        return new BigInteger(1, value);
     }
 
     public String asString() {

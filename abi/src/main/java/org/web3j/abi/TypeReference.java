@@ -18,13 +18,19 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         implements Comparable<TypeReference<T>> {
 
     private final Type type;
+    private final boolean indexed;
 
     protected TypeReference() {
+        this(false);
+    }
+
+    protected TypeReference(boolean indexed) {
         Type superclass = getClass().getGenericSuperclass();
         if (superclass instanceof Class) {
             throw new RuntimeException("Missing type parameter.");
         }
         this.type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+        this.indexed = indexed;
     }
 
     public int compareTo(TypeReference<T> o) {
@@ -35,6 +41,10 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
     public Type getType() {
         return type;
+    }
+
+    public boolean isIndexed() {
+        return indexed;
     }
 
     /**

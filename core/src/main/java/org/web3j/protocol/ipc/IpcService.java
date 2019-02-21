@@ -16,25 +16,12 @@ public class IpcService extends Service {
 
     private static final Logger log = LoggerFactory.getLogger(IpcService.class);
 
-    private final IOFacade ioFacade;
-
-    @Deprecated
-    public IpcService(IOFacade ioFacade, boolean includeRawResponses) {
-        super(includeRawResponses);
-        this.ioFacade = ioFacade;
-    }
-
-    @Deprecated
-    public IpcService(IOFacade ioFacade) {
-        this(ioFacade, false);
-    }
-
     public IpcService(boolean includeRawResponses) {
-        this(null, includeRawResponses);
+        super(includeRawResponses);
     }
 
     public IpcService() {
-        this(null, false);
+        this(false);
     }
 
     protected IOFacade getIO() {
@@ -43,20 +30,13 @@ public class IpcService extends Service {
 
     @Override
     protected InputStream performIO(String payload) throws IOException {
-        IOFacade io;
-        if (ioFacade != null) {
-            io = ioFacade;
-        } else {
-            io = getIO();
-        }
+        IOFacade io = getIO();
         io.write(payload);
         log.debug(">> " + payload);
 
         String result = io.read();
         log.debug("<< " + result);
-        if (io != ioFacade) {
-            io.close();
-        }
+        io.close();
 
         // It's not ideal converting back into an inputStream, but we want
         // to be consistent with the HTTPService API.
@@ -64,10 +44,7 @@ public class IpcService extends Service {
         return new ByteArrayInputStream(result.getBytes("UTF-8"));
     }
 
-    @Deprecated
+    @Override
     public void close() throws IOException {
-        if (ioFacade != null) {
-            ioFacade.close();
-        }
     }
 }
