@@ -343,7 +343,7 @@ is usually `eth_subscribe`. Events that it subscribes to depend on parameters to
 method. You can find more in the `RPC documentation <https://github.com/ethereum/go-ethereum/wiki/RPC-PUB-SUB#supported-subscriptions>`_::
 
    // A request to subscribe to a stream of events
-   final Request<EthSubscribe> subscribeRequest = new Request<>(
+   final Request<?, EthSubscribe> subscribeRequest = new Request<>(
        // RPC method to subscribe to events
        "eth_subscribe",
        // Parameters that specify what events to subscribe to
