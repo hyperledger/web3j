@@ -184,6 +184,10 @@ public abstract class Contract extends ManagedTransaction {
         }
 
         String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
+        int metadataIndex = code.indexOf("a165627a7a72305820");
+        if (metadataIndex != -1) {
+            code = code.substring(0, metadataIndex);
+        }
         // There may be multiple contracts in the Solidity bytecode, hence we only check for a
         // match with a subset
         return !code.isEmpty() && contractBinary.contains(code);
