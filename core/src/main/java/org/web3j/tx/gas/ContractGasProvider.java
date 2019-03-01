@@ -6,7 +6,7 @@ public interface ContractGasProvider {
     @Deprecated
     BigInteger getGasPrice(String contractFunc);
 
-    BigInteger getGasPrice(String funcName, String data);
+    BigInteger getGasPrice(String contractFunc, String data);
 
     @Deprecated
     BigInteger getGasPrice();
