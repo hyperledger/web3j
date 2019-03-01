@@ -289,8 +289,8 @@ public abstract class Contract extends ManagedTransaction {
             throws TransactionException, IOException {
 
         TransactionReceipt receipt = send(contractAddress, data, weiValue,
-                gasProvider.getGasPrice(funcName),
-                gasProvider.getGasLimit(funcName));
+                gasProvider.getGasPrice(funcName, data),
+                gasProvider.getGasLimit(funcName, data));
 
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
