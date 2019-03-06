@@ -3,7 +3,7 @@ package org.web3j.protocol.geth;
 import java.util.Arrays;
 import java.util.Collections;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.JsonRpc2_0Admin;
@@ -83,7 +83,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
                 BooleanResponse.class);
     }
 
-    public Observable<PendingTransactionNotification> newPendingTransactionsNotifications() {
+    public Flowable<PendingTransactionNotification> newPendingTransactionsNotifications() {
         return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",
@@ -96,7 +96,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     }
 
     @Override
-    public Observable<SyncingNotfication> syncingStatusNotifications() {
+    public Flowable<SyncingNotfication> syncingStatusNotifications() {
         return web3jService.subscribe(
                 new Request<>(
                         "eth_subscribe",

@@ -9,8 +9,10 @@ dependencies {
             "com.github.jnr:jnr-unixsocket:$jnr_unixsocketVersion",
             "com.squareup.okhttp3:okhttp:$okhttpVersion",
             "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
-            "io.reactivex:rxjava:$rxjavaVersion",
-            "org.java-websocket:Java-WebSocket:$javaWebSocketVersion"
+            "io.reactivex.rxjava2:rxjava:$rxjavaVersion",
+            "org.java-websocket:Java-WebSocket:$javaWebSocketVersion",
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion"
     testCompile project(path: ':crypto', configuration: 'testArtifacts'),
             "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
             "ch.qos.logback:logback-classic:$logbackVersion"

@@ -5,6 +5,7 @@ arrays/Arrays
 contracts/HumanStandardToken
 fibonacci/Fibonacci
 greeter/Greeter
+misc/Misc
 shipit/ShipIt
 simplestorage/SimpleStorage
 "
@@ -20,8 +21,8 @@ for target in ${targets}; do
 
     echo "Generating web3j bindings"
     web3j solidity generate \
-        build/${fileName}.bin \
-        build/${fileName}.abi \
+        -b build/${fileName}.bin \
+        -a build/${fileName}.abi \
         -p org.web3j.generated \
         -o ../../../../../../integration-tests/src/test/java/ > /dev/null
     echo "Complete"

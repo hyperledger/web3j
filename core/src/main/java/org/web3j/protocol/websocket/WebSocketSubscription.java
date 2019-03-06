@@ -1,6 +1,6 @@
 package org.web3j.protocol.websocket;
 
-import rx.subjects.BehaviorSubject;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Objects necessary to process a new item received via a WebSocket subscription.

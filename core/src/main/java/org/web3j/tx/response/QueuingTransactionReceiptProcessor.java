@@ -63,7 +63,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
                         throw new TransactionException(
                                 "No transaction receipt for txHash: " + transactionHash
                                         + "received after " + pollingAttemptsPerTxHash
-                                        + " attempts");
+                                        + " attempts", transactionHash);
                     } else {
                         requestWrapper.incrementCount();
                     }

@@ -50,6 +50,7 @@ public abstract class Contract extends ManagedTransaction {
      */
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
 
+    public static final String BIN_NOT_PROVIDED = "Bin file was not provided";
     public static final String FUNC_DEPLOY = "deploy";
 
     protected final String contractBinary;
@@ -161,6 +162,12 @@ public abstract class Contract extends ManagedTransaction {
      * @throws IOException if unable to connect to web3j node
      */
     public boolean isValid() throws IOException {
+        if (contractBinary.equals(BIN_NOT_PROVIDED)) {
+            throw new UnsupportedOperationException(
+                    "Contract binary not present in contract wrapper, "
+                            + "please generate your wrapper using -abiFile=<file>");
+        }
+
         if (contractAddress.equals("")) {
             throw new UnsupportedOperationException(
                     "Contract binary not present, you will need to regenerate your smart "
@@ -493,10 +500,9 @@ public abstract class Contract extends ManagedTransaction {
 
     public static EventValues staticExtractEventParameters(
             Event event, Log log) {
-
-        List<String> topics = log.getTopics();
+        final List<String> topics = log.getTopics();
         String encodedEventSignature = EventEncoder.encode(event);
-        if (!topics.get(0).equals(encodedEventSignature)) {
+        if (topics == null || topics.size() == 0 || !topics.get(0).equals(encodedEventSignature)) {
             return null;
         }
 

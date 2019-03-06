@@ -6,7 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
@@ -46,10 +49,8 @@ public class MnemonicUtils {
      * @throws IllegalStateException If the word list has not been loaded
      */
     public static String generateMnemonic(byte[] initialEntropy) {
-        if (WORD_LIST == null) {
-            WORD_LIST = populateWordList();
-        }
         validateEntropy(initialEntropy);
+        final List<String> words = getWords();
 
         int ent = initialEntropy.length * 8;
         int checksumLength = ent / 32;
@@ -61,7 +62,7 @@ public class MnemonicUtils {
         StringBuilder mnemonicBuilder = new StringBuilder();
         for (int i = 0; i < iterations; i++) {
             int index = toInt(nextElevenBits(bits, i));
-            mnemonicBuilder.append(WORD_LIST.get(index));
+            mnemonicBuilder.append(words.get(index));
 
             boolean notLastIteration = i < iterations - 1;
             if (notLastIteration) {
@@ -79,30 +80,36 @@ public class MnemonicUtils {
      * @return Byte array representation of the entropy
      */
     public static byte[] generateEntropy(String mnemonic) {
-        if (WORD_LIST == null) {
-            WORD_LIST = populateWordList();
+        final BitSet bits = new BitSet();
+        final int size = mnemonicToBits(mnemonic, bits);
+        if (size == 0) {
+            throw new IllegalArgumentException("Empty mnemonic");
         }
-        if (isMnemonicEmpty(mnemonic)) {
-            throw new IllegalArgumentException("Mnemonic is empty");
+
+        final int ent = 32 * size / 33;
+        if (ent % 8 != 0) {
+            throw new IllegalArgumentException("Wrong mnemonic size");
         }
-
-        String bits = mnemonicToBits(mnemonic);
-
-        // split the binary string into ENT/CS.
-        int totalLength = bits.length();
-        int ent = (int) Math.floor(totalLength / 33) * 32;
-        String entropyBits = bits.substring(0, ent);
-        String checksumBits = rightPad(bits.substring(ent), "0", 8);
-
-        byte[] entropy = bitsToBytes(entropyBits);
+        final byte[] entropy = new byte[ent / 8];
+        for (int i = 0; i < entropy.length; i++) {
+            entropy[i] = readByte(bits, i);
+        }
         validateEntropy(entropy);
 
-        byte newChecksum = calculateChecksum(entropy);
-        if (newChecksum != (byte) Integer.parseInt(checksumBits, 2)) {
-            throw new IllegalArgumentException("Checksum of mnemonic is invalid");
+        final byte expectedChecksum = calculateChecksum(entropy);
+        final byte actualChecksum = readByte(bits, entropy.length);
+        if (expectedChecksum != actualChecksum) {
+            throw new IllegalArgumentException("Wrong checksum");
         }
 
         return entropy;
+    }
+
+    public static List<String> getWords() {
+        if (WORD_LIST == null) {
+            WORD_LIST = Collections.unmodifiableList(populateWordList());
+        }
+        return WORD_LIST;
     }
 
     /**
@@ -198,51 +205,39 @@ public class MnemonicUtils {
         return value;
     }
 
-    private static String mnemonicToBits(String mnemonic) {
-        String[] words = mnemonic.split(" ");
-
-        StringBuilder bits = new StringBuilder();
-        for (String word : words) {
-            int index = WORD_LIST.indexOf(word);
-            if (index == -1) {
+    private static int mnemonicToBits(String mnemonic, BitSet bits) {
+        int bit = 0;
+        final List<String> vocabulary = getWords();
+        final StringTokenizer tokenizer = new StringTokenizer(mnemonic, " ");
+        while (tokenizer.hasMoreTokens()) {
+            final String word = tokenizer.nextToken();
+            final int index = vocabulary.indexOf(word);
+            if (index < 0) {
                 throw new IllegalArgumentException(String.format(
                         "Mnemonic word '%s' should be in the word list", word));
             }
-            bits.append(leftPad(Integer.toBinaryString(index), "0", 11));
+            for (int k = 0; k < 11; k++) {
+                bits.set(bit++, isBitSet(index, 10 - k));
+            }
         }
-
-        return bits.toString();
+        return bit;
     }
 
-    private static byte[] bitsToBytes(String bits) {
-        byte[] bytes = new byte[(int) Math.ceil(bits.length() / 8f)];
-        int index = 0;
-        for (int iByte = 0; iByte < bytes.length; iByte++) {
-            String byteStr = bits.substring(index, Math.min(index + 8, bits.length()));
-            bytes[iByte] = (byte) Integer.parseInt(byteStr, 2);
-            index += 8;
+    private static byte readByte(BitSet bits, int startByte) {
+        byte res = 0;
+        for (int k = 0; k < 8; k++) {
+            if (bits.get(startByte * 8 + k)) {
+                res = (byte) (res | (1 << (7 - k)));
+            }
         }
-
-        return bytes;
+        return res;
     }
 
-    private static String leftPad(String str, String padString, int length) {
-        StringBuilder resultStr = new StringBuilder(str);
-        while (resultStr.length() < length) {
-            resultStr.insert(0, padString);
-        }
-        return resultStr.toString();
+    private static boolean isBitSet(int n, int k) {
+        return ((n >> k) & 1) == 1;
     }
 
-    private static String rightPad(String str, String padString, int length) {
-        StringBuilder resultStr = new StringBuilder(str);
-        for (int i = str.length(); i < length; i++) {
-            resultStr.append(padString);
-        }
-        return resultStr.toString();
-    }
-
-    private static byte calculateChecksum(byte[] initialEntropy) {
+    public static byte calculateChecksum(byte[] initialEntropy) {
         int ent = initialEntropy.length * 8;
         byte mask = (byte) (0xff << 8 - ent / 32);
         byte[] bytes = sha256(initialEntropy);
