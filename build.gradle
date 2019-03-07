@@ -98,6 +98,10 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
+    javadoc {
+        options.encoding = 'UTF-8'
+    }
+
     dependencies {
         testCompile "junit:junit:$junitVersion",
                 "org.mockito:mockito-core:$mockitoVersion"
