@@ -195,5 +195,5 @@ public class TypeEncoder {
             }
         }
         return result.toString();
-}
+    }
 }
