@@ -99,11 +99,6 @@ To use an RxJava Flowable::
        ...
    });
 
-**Note:** for Android use::
-
-   Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
-   ...
-
 
 IPC
 ---
