@@ -223,7 +223,8 @@ public class TypeDecoder {
                             "org.web3j.abi.datatypes.generated.StaticArray" + length);
 
             return (T) arrayClass.getConstructor(List.class).newInstance(elements);
-        } catch (ReflectiveOperationException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException
+                | InvocationTargetException | NoSuchMethodException e) {
             throw new UnsupportedOperationException(e);
         }
     }

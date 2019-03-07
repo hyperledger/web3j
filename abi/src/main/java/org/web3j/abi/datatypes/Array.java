@@ -3,7 +3,6 @@ package org.web3j.abi.datatypes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
@@ -57,8 +56,14 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
     public abstract String getTypeAsString();
 
     private void checkValid(Class<T> type, List<T> values) {
-        Objects.requireNonNull(type);
-        Objects.requireNonNull(values);
+        if (type == null) {
+            throw new NullPointerException("No type provided");
+        }
+
+        if (values == null || values.size() == 0) {
+            throw new UnsupportedOperationException(
+                    "If empty list is provided, use empty array instance");
+        }
     }
 
     @Override
@@ -75,7 +80,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
         if (!type.equals(array.type)) {
             return false;
         }
-        return Objects.equals(value, array.value);
+        return value != null ? value.equals(array.value) : array.value == null;
     }
 
     @Override
