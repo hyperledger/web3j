@@ -1,9 +1,6 @@
 package org.web3j.abi;
 
-import java.math.BigInteger;
-
 import org.junit.Test;
-
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
@@ -19,6 +16,8 @@ import org.web3j.abi.datatypes.generated.Int64;
 import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
+
+import java.math.BigInteger;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -163,12 +162,12 @@ public class TypeDecoderTest {
 
     @Test
     public void testStaticBytes() {
-        Bytes6 staticBytes = new Bytes6(new byte[] { 0, 1, 2, 3, 4, 5 });
+        Bytes6 staticBytes = new Bytes6(new byte[]{0, 1, 2, 3, 4, 5});
         assertThat(TypeDecoder.decodeBytes(
                 "0001020304050000000000000000000000000000000000000000000000000000", Bytes6.class),
                 is(staticBytes));
 
-        Bytes empty = new Bytes1(new byte[] { 0 });
+        Bytes empty = new Bytes1(new byte[]{0});
         assertThat(TypeDecoder.decodeBytes(
                 "0000000000000000000000000000000000000000000000000000000000000000", Bytes1.class),
                 is(empty));
@@ -181,13 +180,13 @@ public class TypeDecoderTest {
 
     @Test
     public void testDynamicBytes() {
-        DynamicBytes dynamicBytes = new DynamicBytes(new byte[] { 0, 1, 2, 3, 4, 5 });
+        DynamicBytes dynamicBytes = new DynamicBytes(new byte[]{0, 1, 2, 3, 4, 5});
         assertThat(TypeDecoder.decodeDynamicBytes(
                 "0000000000000000000000000000000000000000000000000000000000000006"  // length
                         + "0001020304050000000000000000000000000000000000000000000000000000", 0),
                 is(dynamicBytes));
 
-        DynamicBytes empty = new DynamicBytes(new byte[] { 0 });
+        DynamicBytes empty = new DynamicBytes(new byte[]{0});
         assertThat(TypeDecoder.decodeDynamicBytes(
                 "0000000000000000000000000000000000000000000000000000000000000001"
                         + "0000000000000000000000000000000000000000000000000000000000000000", 0),
@@ -196,7 +195,7 @@ public class TypeDecoderTest {
         DynamicBytes dave = new DynamicBytes("dave".getBytes());
 
         assertThat(TypeDecoder.decodeDynamicBytes(
-                        "0000000000000000000000000000000000000000000000000000000000000004"
+                "0000000000000000000000000000000000000000000000000000000000000004"
                         + "6461766500000000000000000000000000000000000000000000000000000000", 0),
                 is(dave));
 
@@ -248,20 +247,22 @@ public class TypeDecoderTest {
     public void testStaticArray() {
         assertThat(TypeDecoder.decodeStaticArray(
                 "000000000000000000000000000000000000000000000000000000000000000a"
-                + "0000000000000000000000000000000000000000000000007fffffffffffffff",
+                        + "0000000000000000000000000000000000000000000000007fffffffffffffff",
                 0,
-                new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {},
+                new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {
+                },
                 2),
                 is(new StaticArray2<>(Uint256.class, new Uint256(BigInteger.TEN),
                         new Uint256(BigInteger.valueOf(Long.MAX_VALUE)))));
 
         assertThat(TypeDecoder.decodeStaticArray(
-                        "000000000000000000000000000000000000000000000000000000000000000d"
+                "000000000000000000000000000000000000000000000000000000000000000d"
                         + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"
                         + "000000000000000000000000000000000000000000000000000000000000000d"
                         + "776f726c64212048656c6c6f2c00000000000000000000000000000000000000",
                 0,
-                new TypeReference.StaticArrayTypeReference<StaticArray<Utf8String>>(2){},
+                new TypeReference.StaticArrayTypeReference<StaticArray<Utf8String>>(2) {
+                },
                 2
                 ),
                 equalTo(new StaticArray2<>(Utf8String.class,
@@ -274,7 +275,8 @@ public class TypeDecoderTest {
         assertThat(TypeDecoder.decodeStaticArray(
                 "0000000000000000000000000000000000000000000000000000000000000000",
                 0,
-                new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(0) {},
+                new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(0) {
+                },
                 0), is("invalid"));
     }
 
@@ -283,7 +285,8 @@ public class TypeDecoderTest {
         assertThat(TypeDecoder.decodeDynamicArray(
                 "0000000000000000000000000000000000000000000000000000000000000000",  // length
                 0,
-                new TypeReference<DynamicArray<Uint256>>() { }
+                new TypeReference<DynamicArray<Uint256>>() {
+                }
                 ),
                 equalTo(new DynamicArray<>(Uint256.class)));
 
@@ -292,7 +295,8 @@ public class TypeDecoderTest {
                         + "000000000000000000000000000000000000000000000000000000000000000a"
                         + "0000000000000000000000000000000000000000000000007fffffffffffffff",
                 0,
-                new TypeReference<DynamicArray<Uint256>>() { }
+                new TypeReference<DynamicArray<Uint256>>() {
+                }
                 ),
                 equalTo(new DynamicArray<>(Uint256.class,
                         new Uint256(BigInteger.TEN),
@@ -305,7 +309,8 @@ public class TypeDecoderTest {
                         + "000000000000000000000000000000000000000000000000000000000000000d"
                         + "776f726c64212048656c6c6f2c00000000000000000000000000000000000000",
                 0,
-                new TypeReference<DynamicArray<Utf8String>>() { }
+                new TypeReference<DynamicArray<Utf8String>>() {
+                }
                 ),
                 equalTo(new DynamicArray<>(Utf8String.class,
                         new Utf8String("Hello, world!"),
