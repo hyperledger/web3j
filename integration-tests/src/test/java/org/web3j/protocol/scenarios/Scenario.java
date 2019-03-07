@@ -65,7 +65,7 @@ public class Scenario {
     public Scenario() { }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.web3j = Admin.build(new HttpService());
     }
 

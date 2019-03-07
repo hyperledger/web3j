@@ -18,6 +18,7 @@ import org.web3j.abi.datatypes.generated.Bytes1;
 import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int64;
+import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.utils.Numeric;
 
@@ -47,13 +48,13 @@ public class TypeEncoderTest {
 
         Uint maxValue = new Uint(
                 new BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-                        16));
+                16));
         assertThat(TypeEncoder.encodeNumeric(maxValue),
                 is("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
         Uint largeValue = new Uint(
                 new BigInteger("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
-                        16));
+                16));
         assertThat(TypeEncoder.encodeNumeric(largeValue),
                 is("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe"));
     }
@@ -207,7 +208,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testFixedArray() {
-        StaticArray<Ufixed> array = new StaticArray<>(
+        StaticArray<Ufixed> array = new StaticArray2<>(Ufixed.class,
                 new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
                 new Ufixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8))
         );
@@ -219,7 +220,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testDynamicArray() {
-        DynamicArray<Uint> array = new DynamicArray<>(
+        DynamicArray<Uint> array = new DynamicArray<>(Uint.class,
                 new Uint(BigInteger.ONE),
                 new Uint(BigInteger.valueOf(2)),
                 new Uint(BigInteger.valueOf(3))
@@ -237,7 +238,7 @@ public class TypeEncoderTest {
     @Test
     public void testEmptyArray() {
         @SuppressWarnings("unchecked")
-        DynamicArray<Uint> array = DynamicArray.empty("uint");
+        DynamicArray<Uint> array = new DynamicArray(Uint.class);
         assertThat(
                 TypeEncoder.encodeDynamicArray(array),
                 is("0000000000000000000000000000000000000000000000000000000000000000")
@@ -249,14 +250,14 @@ public class TypeEncoderTest {
         DynamicArray<DynamicBytes> array = new DynamicArray<>(
                 new DynamicBytes(Numeric.hexStringToByteArray(
                         "0x3c329ee8cd725a7f74f984cac52598eb170d731e7f3"
-                                + "80d59a18aa861d2c8d6c43c880b2bfe0f3cde4efcd7"
-                                + "11c010c2f1d8af5e796f06716539446f95420df4211c")),
+                      + "80d59a18aa861d2c8d6c43c880b2bfe0f3cde4efcd7"
+                      + "11c010c2f1d8af5e796f06716539446f95420df4211c")),
                 new DynamicBytes(Numeric.hexStringToByteArray("0xcafe0000cafe0000cafe0000")),
                 new DynamicBytes(Numeric.hexStringToByteArray(
                         "0x9215c928b97e0ebeeefd10003a4e3eea23f2eb3acba"
-                                + "b477eeb589d7a8874d7c5"))
+                      + "b477eeb589d7a8874d7c5"))
         );
-        DynamicArray emptyArray = DynamicArray.empty("bytes[]");
+        DynamicArray emptyArray = DynamicArray.empty("bytes");
         DynamicArray<DynamicBytes> arrayOfEmptyBytes = new DynamicArray<>(
                 new DynamicBytes(new byte[0]),
                 new DynamicBytes(new byte[0])
@@ -266,28 +267,28 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeDynamicArray(array),
                 //  array length
                 is("0000000000000000000000000000000000000000000000000000000000000003"
-                        // offset first bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000060"
-                        // offset second bytes
-                        + "00000000000000000000000000000000000000000000000000000000000000e0"
-                        // offset third bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000120"
-                        // length first bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000041"
-                        // first bytes
-                        + "3c329ee8cd725a7f74f984cac52598eb170d731e7f380d59a18aa861d2c8d6c4"
-                        // first bytes continued
-                        + "3c880b2bfe0f3cde4efcd711c010c2f1d8af5e796f06716539446f95420df421"
-                        // first bytes continued
-                        + "1c00000000000000000000000000000000000000000000000000000000000000"
-                        // length second bytes
-                        + "000000000000000000000000000000000000000000000000000000000000000c"
-                        // second bytes
-                        + "cafe0000cafe0000cafe00000000000000000000000000000000000000000000"
-                        // length third bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000020"
-                        // third bytes
-                        + "9215c928b97e0ebeeefd10003a4e3eea23f2eb3acbab477eeb589d7a8874d7c5"
+                 // offset first bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000060"
+                 // offset second bytes
+                 + "00000000000000000000000000000000000000000000000000000000000000e0"
+                 // offset third bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000120"
+                 // length first bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000041"
+                 // first bytes
+                 + "3c329ee8cd725a7f74f984cac52598eb170d731e7f380d59a18aa861d2c8d6c4"
+                 // first bytes continued
+                 + "3c880b2bfe0f3cde4efcd711c010c2f1d8af5e796f06716539446f95420df421"
+                 // first bytes continued
+                 + "1c00000000000000000000000000000000000000000000000000000000000000"
+                 // length second bytes
+                 + "000000000000000000000000000000000000000000000000000000000000000c"
+                 // second bytes
+                 + "cafe0000cafe0000cafe00000000000000000000000000000000000000000000"
+                 // length third bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000020"
+                 // third bytes
+                 + "9215c928b97e0ebeeefd10003a4e3eea23f2eb3acbab477eeb589d7a8874d7c5"
                 )
         );
         assertThat(
@@ -299,14 +300,14 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeDynamicArray(arrayOfEmptyBytes),
                 //  array length
                 is("0000000000000000000000000000000000000000000000000000000000000002"
-                        // offset first bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000040"
-                        // offset second bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000060"
-                        // length first bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000000"
-                        // length second bytes
-                        + "0000000000000000000000000000000000000000000000000000000000000000"
+                 // offset first bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000040"
+                 // offset second bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000060"
+                 // length first bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000000"
+                 // length second bytes
+                 + "0000000000000000000000000000000000000000000000000000000000000000"
                 )
         );
     }
@@ -315,12 +316,12 @@ public class TypeEncoderTest {
     public void testArrayOfStrings() {
         DynamicArray<Utf8String> array = new DynamicArray<>(
                 new Utf8String("This string value is extra long so that it "
-                        + "requires more than 32 bytes"),
+                                  + "requires more than 32 bytes"),
                 new Utf8String("abc"),
                 new Utf8String(""),
                 new Utf8String("web3j")
         );
-        DynamicArray emptyArray = DynamicArray.empty("string[]");
+        DynamicArray emptyArray = DynamicArray.empty("string");
         DynamicArray<Utf8String> arrayOfEmptyStrings = new DynamicArray<>(
                 new Utf8String(""),
                 new Utf8String("")
@@ -330,33 +331,33 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeDynamicArray(array),
                 //  array length
                 is("0000000000000000000000000000000000000000000000000000000000000004"
-                        // offset first string
-                        + "0000000000000000000000000000000000000000000000000000000000000080"
-                        // offset second string
-                        + "0000000000000000000000000000000000000000000000000000000000000100"
-                        // offset third string
-                        + "0000000000000000000000000000000000000000000000000000000000000140"
-                        // offset fourth string
-                        + "0000000000000000000000000000000000000000000000000000000000000160"
-                        // length first string
-                        + "0000000000000000000000000000000000000000000000000000000000000046"
-                        // first string
-                        + "5468697320737472696e672076616c7565206973206578747261206c6f6e6720"
-                        // first string continued
-                        + "736f2074686174206974207265717569726573206d6f7265207468616e203332"
-                        // first string continued
-                        + "2062797465730000000000000000000000000000000000000000000000000000"
-                        // length second string
-                        + "0000000000000000000000000000000000000000000000000000000000000003"
-                        // second string
-                        + "6162630000000000000000000000000000000000000000000000000000000000"
-                        // length third string
-                        + "0000000000000000000000000000000000000000000000000000000000000000"
-                        // length fourth string
-                        + "0000000000000000000000000000000000000000000000000000000000000005"
-                        // fourth string
-                        + "776562336a000000000000000000000000000000000000000000000000000000"
-                )
+                 // offset first string
+                 + "0000000000000000000000000000000000000000000000000000000000000080"
+                 // offset second string
+                 + "0000000000000000000000000000000000000000000000000000000000000100"
+                 // offset third string
+                 + "0000000000000000000000000000000000000000000000000000000000000140"
+                 // offset fourth string
+                 + "0000000000000000000000000000000000000000000000000000000000000160"
+                 // length first string
+                 + "0000000000000000000000000000000000000000000000000000000000000046"
+                 // first string
+                 + "5468697320737472696e672076616c7565206973206578747261206c6f6e6720"
+                 // first string continued
+                 + "736f2074686174206974207265717569726573206d6f7265207468616e203332"
+                 // first string continued
+                 + "2062797465730000000000000000000000000000000000000000000000000000"
+                 // length second string
+                 + "0000000000000000000000000000000000000000000000000000000000000003"
+                 // second string
+                 + "6162630000000000000000000000000000000000000000000000000000000000"
+                 // length third string
+                 + "0000000000000000000000000000000000000000000000000000000000000000"
+                 // length fourth string
+                 + "0000000000000000000000000000000000000000000000000000000000000005"
+                 // fourth string
+                 + "776562336a000000000000000000000000000000000000000000000000000000"
+            )
         );
         assertThat(
                 TypeEncoder.encodeDynamicArray(emptyArray),
@@ -367,14 +368,14 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeDynamicArray(arrayOfEmptyStrings),
                 //  array length
                 is("0000000000000000000000000000000000000000000000000000000000000002"
-                        // offset first string
-                        + "0000000000000000000000000000000000000000000000000000000000000040"
-                        // offset second string
-                        + "0000000000000000000000000000000000000000000000000000000000000060"
-                        // length first string
-                        + "0000000000000000000000000000000000000000000000000000000000000000"
-                        // length second string
-                        + "0000000000000000000000000000000000000000000000000000000000000000"
+                 // offset first string
+                 + "0000000000000000000000000000000000000000000000000000000000000040"
+                 // offset second string
+                 + "0000000000000000000000000000000000000000000000000000000000000060"
+                 // length first string
+                 + "0000000000000000000000000000000000000000000000000000000000000000"
+                 // length second string
+                 + "0000000000000000000000000000000000000000000000000000000000000000"
                 )
         );
     }

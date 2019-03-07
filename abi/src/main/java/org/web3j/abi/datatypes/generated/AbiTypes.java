@@ -3,6 +3,7 @@ package org.web3j.abi.datatypes.generated;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 
 /**
@@ -15,7 +16,7 @@ public final class AbiTypes {
     private AbiTypes() {
     }
 
-    public static Class<?> getType(String type) {
+    public static Class<? extends Type> getType(String type) {
         switch (type) {
             case "address":
                     return Address.class;
@@ -220,6 +221,16 @@ public final class AbiTypes {
             default:
                     throw new UnsupportedOperationException("Unsupported type encountered: "
                             + type);
+        }
+    }
+
+    public static String getTypeAString(Class<? extends Type> type) {
+        if (Utf8String.class.equals(type)) {
+            return "string";
+        } else if (DynamicBytes.class.equals(type)) {
+            return "bytes";
+        } else {
+            return type.getSimpleName().toLowerCase();
         }
     }
 }
