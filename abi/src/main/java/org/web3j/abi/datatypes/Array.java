@@ -61,8 +61,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
         }
 
         if (values == null) {
-            throw new UnsupportedOperationException(
-                    "If empty list is provided, use empty array instance");
+            throw new NullPointerException("No list value provided");
         }
     }
 
