@@ -60,7 +60,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
             throw new NullPointerException("No type provided");
         }
 
-        if (values == null || values.size() == 0) {
+        if (values == null) {
             throw new UnsupportedOperationException(
                     "If empty list is provided, use empty array instance");
         }
