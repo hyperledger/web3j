@@ -11,11 +11,11 @@ targetFileIn=(
 "src/main/resources/eip721/solidity/ERC721Metadata")
 
 targetPackageOut=(
-"org.web3j.eips.eip20.generated"
-"org.web3j.eips.eip165.generated"
-"org.web3j.eips.eip721.generated"
-"org.web3j.eips.eip721.generated"
-"org.web3j.eips.eip721.generated")
+"org.web3j.contracts.eip20.generated"
+"org.web3j.contracts.eip165.generated"
+"org.web3j.contracts.eip721.generated"
+"org.web3j.contracts.eip721.generated"
+"org.web3j.contracts.eip721.generated")
 
 mkdir -p ../build/
 
@@ -26,17 +26,17 @@ for i in ${!targetFileIn[@]}; do
     fileName=$(basename $solcFileIn)
 
     cd ../$dirName
-    eipsRootDir="../../../../../"
+    contractsRootDir="../../../../../"
 
     echo "Compiling Solidity file ${fileName}.sol:"
-    solc --abi --optimize --overwrite ${fileName}.sol -o ${eipsRootDir}/build/
+    solc --abi --optimize --overwrite ${fileName}.sol -o ${contractsRootDir}/build/
     echo "Complete"
 
     echo "Generating web3j bindings"
     web3j solidity generate \
-        -a ${eipsRootDir}build/${fileName}.abi \
+        -a ${contractsRootDir}build/${fileName}.abi \
         -p ${packageOut} \
-        -o ${eipsRootDir}/src/main/java/ > /dev/null
+        -o ${contractsRootDir}/src/main/java/ > /dev/null
     echo "Complete"
 
     cd -

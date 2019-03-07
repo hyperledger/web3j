@@ -1,4 +1,4 @@
-package org.web3j.eips.eip165.generated;
+package org.web3j.contracts.eip165.generated;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -15,9 +15,12 @@ import org.web3j.tx.gas.ContractGasProvider;
 
 /**
  * <p>Auto generated code.
- * <p>See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md
+ * <p><strong>Do not modify!</strong>
+ * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 4.0.0-SNAPSHOT.
+ * <p>Generated with web3j version 4.1.1.
  */
 public class ERC165 extends Contract {
     private static final String BINARY = "Bin file was not provided";

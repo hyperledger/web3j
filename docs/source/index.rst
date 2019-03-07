@@ -94,7 +94,7 @@ Contents:
    management_apis.rst
    infura.rst
    ens.rst
-   eips.rst
+   contracts.rst
    trouble.rst
    projects.rst
    companies.rst

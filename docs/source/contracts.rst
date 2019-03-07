@@ -1,4 +1,4 @@
-EIPs supported by web3j
+Contracts supported by web3j
 =======================
 
 EIP20

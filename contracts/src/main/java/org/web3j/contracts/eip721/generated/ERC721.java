@@ -1,5 +1,6 @@
-package org.web3j.eips.eip721.generated;
+package org.web3j.contracts.eip721.generated;
 
+import io.reactivex.Flowable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,16 +24,15 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
-import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * <p>Auto generated code.
- * <p>ERC-721 Non-Fungible Token Standard
- * See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
- * the ERC-165 identifier for this interface is 0x80ac58cd.
+ * <p><strong>Do not modify!</strong>
+ * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 4.0.0-SNAPSHOT.
+ * <p>Generated with web3j version 4.1.1.
  */
 public class ERC721 extends Contract {
     private static final String BINARY = "Bin file was not provided";
@@ -175,10 +175,10 @@ public class ERC721 extends Contract {
         return responses;
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
+    public Flowable<TransferEventResponse> transferEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, TransferEventResponse>() {
             @Override
-            public TransferEventResponse call(Log log) {
+            public TransferEventResponse apply(Log log) {
                 Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
                 TransferEventResponse typedResponse = new TransferEventResponse();
                 typedResponse.log = log;
@@ -190,10 +190,10 @@ public class ERC721 extends Contract {
         });
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TransferEventResponse> transferEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
-        return transferEventObservable(filter);
+        return transferEventFlowable(filter);
     }
 
     public List<ApprovalEventResponse> getApprovalEvents(TransactionReceipt transactionReceipt) {
@@ -210,10 +210,10 @@ public class ERC721 extends Contract {
         return responses;
     }
 
-    public Observable<ApprovalEventResponse> approvalEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, ApprovalEventResponse>() {
+    public Flowable<ApprovalEventResponse> approvalEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, ApprovalEventResponse>() {
             @Override
-            public ApprovalEventResponse call(Log log) {
+            public ApprovalEventResponse apply(Log log) {
                 Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVAL_EVENT, log);
                 ApprovalEventResponse typedResponse = new ApprovalEventResponse();
                 typedResponse.log = log;
@@ -225,10 +225,10 @@ public class ERC721 extends Contract {
         });
     }
 
-    public Observable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ApprovalEventResponse> approvalEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(APPROVAL_EVENT));
-        return approvalEventObservable(filter);
+        return approvalEventFlowable(filter);
     }
 
     public List<ApprovalForAllEventResponse> getApprovalForAllEvents(TransactionReceipt transactionReceipt) {
@@ -245,10 +245,10 @@ public class ERC721 extends Contract {
         return responses;
     }
 
-    public Observable<ApprovalForAllEventResponse> approvalForAllEventObservable(EthFilter filter) {
-        return web3j.ethLogObservable(filter).map(new Func1<Log, ApprovalForAllEventResponse>() {
+    public Flowable<ApprovalForAllEventResponse> approvalForAllEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, ApprovalForAllEventResponse>() {
             @Override
-            public ApprovalForAllEventResponse call(Log log) {
+            public ApprovalForAllEventResponse apply(Log log) {
                 Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVALFORALL_EVENT, log);
                 ApprovalForAllEventResponse typedResponse = new ApprovalForAllEventResponse();
                 typedResponse.log = log;
@@ -260,10 +260,10 @@ public class ERC721 extends Contract {
         });
     }
 
-    public Observable<ApprovalForAllEventResponse> approvalForAllEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ApprovalForAllEventResponse> approvalForAllEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(APPROVALFORALL_EVENT));
-        return approvalForAllEventObservable(filter);
+        return approvalForAllEventFlowable(filter);
     }
 
     @Deprecated

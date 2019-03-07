@@ -20,7 +20,7 @@ The below modules only depend on the core module.
 * geth - Geth specific JSON-RPC module
 * parity - Parity specific JSON-RPC module
 * infura - Infura specific HTTP header support
-* eips - Support for specific EIP's (Ethereum Improvement Proposals)
+* contracts - Support for specific EIP's (Ethereum Improvement Proposals)
 
 For most use cases (interacting with the network and smart contracts) the *core* module should be
 all you need. The dependencies of the core module are very granular and only likely to be of use
