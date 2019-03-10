@@ -127,6 +127,16 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
+    public void testIsValidSkipMetadata() throws Exception {
+        prepareEthGetCode(TEST_CONTRACT_BINARY
+                + "a165627a7a72305820"
+                + "a9bc86938894dc250f6ea25dd823d4472fad6087edcda429a3504e3713a9fc880029");
+
+        Contract contract = deployContract(createTransactionReceipt());
+        assertTrue(contract.isValid());
+    }
+
+    @Test
     public void testIsValidDifferentCode() throws Exception {
         prepareEthGetCode(TEST_CONTRACT_BINARY + "0");
 
