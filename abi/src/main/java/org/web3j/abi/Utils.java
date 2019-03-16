@@ -105,9 +105,10 @@ public class Utils {
             Class<R> innerType) {
         List<E> result = new ArrayList<>();
         try {
-            Constructor<E> constructor = outerDestType.getDeclaredConstructor(List.class);
+            Constructor<E> constructor = outerDestType.getDeclaredConstructor(
+                    Class.class, List.class);
             for (List<T> ts : input) {
-                E e = constructor.newInstance(typeMap(ts, innerType));
+                E e = constructor.newInstance(innerType, typeMap(ts, innerType));
                 result.add(e);
             }
         } catch (NoSuchMethodException
@@ -122,7 +123,7 @@ public class Utils {
     public static <T, R extends Type<T>> List<R> typeMap(List<T> input, Class<R> destType)
             throws TypeMappingException {
 
-        List<R> result = new ArrayList<R>(input.size());
+        List<R> result = new ArrayList<>(input.size());
 
         if (!input.isEmpty()) {
             try {

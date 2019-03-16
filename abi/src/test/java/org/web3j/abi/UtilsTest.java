@@ -50,7 +50,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void testTypeMap() throws Exception {
+    public void testTypeMap() {
         final List<BigInteger> input = Arrays.asList(
                 BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN);
 
@@ -65,18 +65,25 @@ public class UtilsTest {
     public void testTypeMapNested() {
         List<BigInteger> innerList1 = Arrays.asList(BigInteger.valueOf(1), BigInteger.valueOf(2));
         List<BigInteger> innerList2 = Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(4));
+
         final List<List<BigInteger>> input = Arrays.asList(innerList1, innerList2);
 
-        StaticArray2<Uint256> staticArray1 = new StaticArray2<>(new Uint256(1), new Uint256(2));
-        StaticArray2<Uint256> staticArray2 = new StaticArray2<>(new Uint256(3), new Uint256(4));
-        List<StaticArray2<Uint256>> expectedList = Arrays.asList(staticArray1, staticArray2);
-        assertThat(typeMap(input, StaticArray2.class, Uint256.class),
-                equalTo(expectedList));
+        StaticArray2<Uint256> staticArray1 = new StaticArray2<>(Uint256.class,
+                new Uint256(1), new Uint256(2));
+
+        StaticArray2<Uint256> staticArray2 = new StaticArray2<>(Uint256.class,
+                new Uint256(3), new Uint256(4));
+
+        List<StaticArray2> actual = typeMap(input,
+                StaticArray2.class, Uint256.class);
+
+        assertThat(actual.get(0), equalTo(staticArray1));
+        assertThat(actual.get(1), equalTo(staticArray2));
     }
 
     @Test
     public void testTypeMapEmpty() {
-        assertThat(typeMap(new ArrayList<BigInteger>(), Uint256.class),
+        assertThat(typeMap(new ArrayList<>(), Uint256.class),
                 equalTo(new ArrayList<Uint256>()));
     }
 }

@@ -232,7 +232,7 @@ public class WebSocketService implements Web3jService {
 
     private <T extends Notification<?>> void establishSubscription(
             BehaviorSubject<T> subject, Class<T> responseType, EthSubscribe subscriptionReply) {
-        log.info("Subscribed to RPC events with id {}",
+        log.debug("Subscribed to RPC events with id {}",
                 subscriptionReply.getSubscriptionId());
         subscriptionForId.put(
                 subscriptionReply.getSubscriptionId(),
@@ -277,7 +277,7 @@ public class WebSocketService implements Web3jService {
     }
 
     private void processSubscriptionEvent(String replyStr, JsonNode replyJson) {
-        log.info("Processing event: {}", replyStr);
+        log.debug("Processing event: {}", replyStr);
         String subscriptionId = extractSubscriptionId(replyJson);
         WebSocketSubscription subscription = subscriptionForId.get(subscriptionId);
 

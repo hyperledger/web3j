@@ -124,7 +124,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.1.1</version>
+     <version>4.2.0</version>
    </dependency>
 
 Android:
@@ -134,7 +134,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.1.0-android</version>
+     <version>4.2.0-android</version>
    </dependency>
 
 
@@ -145,13 +145,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.1.1')
+   compile ('org.web3j:core:4.2.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.1.0-android')
+   compile ('org.web3j:core:4.2.0-android')
 
 Plugins
 -------
@@ -221,13 +221,6 @@ To use an RxJava Flowable:
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
-
-**Note:** for Android use:
-
-.. code-block:: java
-
-   Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
-   ...
 
 
 IPC
@@ -586,7 +579,7 @@ To run the integration tests:
 Snapshot Dependencies
 ---------------------
 
-Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 4.1.1-SNAPSHOT.
+Snapshot versions of web3j follow the ``<major>.<minor>.<build>-SNAPSHOT`` convention, for example: 4.2.0-SNAPSHOT.
 
 | If you would like to use snapshots instead please add a new maven repository pointing to:
 

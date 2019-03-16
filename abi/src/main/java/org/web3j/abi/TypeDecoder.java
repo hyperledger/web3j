@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.web3j.abi.TypeReference.StaticArrayTypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
@@ -206,7 +207,7 @@ public class TypeDecoder {
             if (elements.isEmpty()) {
                 throw new UnsupportedOperationException("Zero length fixed array is invalid type");
             } else {
-                return instantiateStaticArray(typeReference, elements);
+                return instantiateStaticArray(typeReference, elements, length);
             }
         };
 
@@ -215,14 +216,16 @@ public class TypeDecoder {
 
     @SuppressWarnings("unchecked")
     private static <T extends Type> T instantiateStaticArray(
-            TypeReference<T> typeReference, List<T> elements) {
+            TypeReference<T> typeReference, List<T> elements, int length) {
         try {
-            Class<List> listClass = List.class;
-            return typeReference.getClassType().getConstructor(listClass).newInstance(elements);
+            Class<? extends StaticArray> arrayClass =
+                    (Class<? extends StaticArray>) Class.forName(
+                            "org.web3j.abi.datatypes.generated.StaticArray" + length);
+
+            return (T) arrayClass.getConstructor(List.class).newInstance(elements);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException
                 | InvocationTargetException | NoSuchMethodException e) {
-            //noinspection unchecked
-            return (T) new StaticArray<>(elements);
+            throw new UnsupportedOperationException(e);
         }
     }
 

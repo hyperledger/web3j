@@ -29,7 +29,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        log.info("Opened WebSocket connection to {}", uri);
+        log.debug("Opened WebSocket connection to {}", uri);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        log.info("Closed WebSocket connection to {}, because of reason: '{}'."
+        log.debug("Closed WebSocket connection to {}, because of reason: '{}'."
                 + "Connection closed remotely: {}", uri, reason, remote);
         listenerOpt.ifPresent(WebSocketListener::onClose);
     }
