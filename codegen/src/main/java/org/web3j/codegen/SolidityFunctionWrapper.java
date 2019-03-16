@@ -540,6 +540,7 @@ public class SolidityFunctionWrapper extends Generator {
                 String parameterSpecType = parameterSpec.type.toString();
                 TypeName typeName = typeNames.get(0);
                 String typeMapInput = typeName + ".class";
+                String componentType = typeName.toString();
                 if (typeName instanceof ParameterizedTypeName) {
                     List<TypeName> typeArguments = ((ParameterizedTypeName) typeName).typeArguments;
                     if (typeArguments.size() != 1) {
@@ -547,12 +548,13 @@ public class SolidityFunctionWrapper extends Generator {
                                 "Only a single parameterized type is supported");
                     }
                     TypeName innerTypeName = typeArguments.get(0);
-                    parameterSpecType = ((ParameterizedTypeName) parameterSpec.type)
-                            .rawType.toString();
-                    typeMapInput = ((ParameterizedTypeName) typeName).rawType + ".class, "
-                            + innerTypeName + ".class";
+                    componentType = ((ParameterizedTypeName) typeName).rawType.toString();
+                    parameterSpecType = ((ParameterizedTypeName) parameterSpec.type).rawType
+                            + "<" + componentType + ">";
+                    typeMapInput = componentType + ".class,\n" + innerTypeName + ".class";
                 }
                 return "new " + parameterSpecType + "(\n"
+                        + "        " + componentType + ".class,\n"
                         + "        org.web3j.abi.Utils.typeMap("
                         + parameterSpec.name + ", " + typeMapInput + "))";
             }
@@ -868,7 +870,7 @@ public class SolidityFunctionWrapper extends Generator {
                 Strings.lowercaseFirstLetter(functionName) + "EventFlowable";
         ParameterizedTypeName parameterizedTypeName =
                 ParameterizedTypeName.get(ClassName.get(Flowable.class),
-                ClassName.get("", responseClassName));
+                        ClassName.get("", responseClassName));
 
         MethodSpec.Builder flowableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)
@@ -912,7 +914,7 @@ public class SolidityFunctionWrapper extends Generator {
                 Strings.lowercaseFirstLetter(functionName) + "EventFlowable";
         ParameterizedTypeName parameterizedTypeName =
                 ParameterizedTypeName.get(ClassName.get(Flowable.class),
-                ClassName.get("", responseClassName));
+                        ClassName.get("", responseClassName));
 
         MethodSpec.Builder flowableMethodBuilder =
                 MethodSpec.methodBuilder(generatedFunctionName)

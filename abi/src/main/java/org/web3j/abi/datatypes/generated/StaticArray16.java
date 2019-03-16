@@ -11,12 +11,23 @@ import org.web3j.abi.datatypes.Type;
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public class StaticArray16<T extends Type> extends StaticArray<T> {
+    @Deprecated
     public StaticArray16(List<T> values) {
         super(16, values);
     }
 
+    @Deprecated
     @SafeVarargs
     public StaticArray16(T... values) {
         super(16, values);
+    }
+
+    public StaticArray16(Class<T> type, List<T> values) {
+        super(type, 16, values);
+    }
+
+    @SafeVarargs
+    public StaticArray16(Class<T> type, T... values) {
+        super(type, 16, values);
     }
 }
