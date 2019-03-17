@@ -45,7 +45,7 @@
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>4.1.0<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>4.2.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -53,7 +53,7 @@
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>org.web3j<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>core<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>4.1.0-android<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>4.2.0-android<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -61,11 +61,11 @@
 <div class="section" id="gradle">
 <h2>Gradle<a class="headerlink" href="#gradle" title="Permalink to this headline">¶</a></h2>
 <p>Java 8:</p>
-<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:4.1.0&#39;</span><span class="o">)</span>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:4.2.0&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>Android:</p>
-<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:4.1.0-android&#39;</span><span class="o">)</span>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">compile</span> <span class="o">(</span><span class="s1">&#39;org.web3j:core:4.2.0-android&#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
@@ -112,11 +112,6 @@
     <span class="n">String</span> <span class="n">clientVersion</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="na">getWeb3ClientVersion</span><span class="o">();</span>
     <span class="o">...</span>
 <span class="o">});</span>
-</pre></div>
-</div>
-<p><strong>Note:</strong> for Android use:</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Web3j</span> <span class="n">web3</span> <span class="o">=</span> <span class="n">Web3jFactory</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpService</span><span class="o">());</span>  <span class="c1">// defaults to http://localhost:8545/</span>
-<span class="o">...</span>
 </pre></div>
 </div>
 </div>
@@ -332,7 +327,7 @@ interface from the RxJava library, which allows the processing of incoming event
 is usually <cite>eth_subscribe</cite>. Events that it subscribes to depend on parameters to the <cite>eth_subscribe</cite>
 method. You can find more in the <a class="reference external" href="https://github.com/ethereum/go-ethereum/wiki/RPC-PUB-SUB#supported-subscriptions">RPC documentation</a>:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// A request to subscribe to a stream of events</span>
-<span class="kd">final</span> <span class="n">Request</span><span class="o">&lt;</span><span class="n">EthSubscribe</span><span class="o">&gt;</span> <span class="n">subscribeRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Request</span><span class="o">&lt;&gt;(</span>
+<span class="kd">final</span> <span class="n">Request</span><span class="o">&lt;?,</span> <span class="n">EthSubscribe</span><span class="o">&gt;</span> <span class="n">subscribeRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Request</span><span class="o">&lt;&gt;(</span>
     <span class="c1">// RPC method to subscribe to events</span>
     <span class="s">&quot;eth_subscribe&quot;</span><span class="o">,</span>
     <span class="c1">// Parameters that specify what events to subscribe to</span>
@@ -499,6 +494,7 @@ classes.</li>
 <li class="toctree-l1"><a class="reference internal" href="management_apis.html">Management APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="infura.html">Using Infura with web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ens.html">Ethereum Name Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts supported by web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trouble.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projects.html">Projects using web3j</a></li>
 <li class="toctree-l1"><a class="reference internal" href="companies.html">Companies using web3j</a></li>

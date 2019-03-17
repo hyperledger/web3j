@@ -13,7 +13,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.1.0</version>
+     <version>4.2.0</version>
    </dependency>
 
 Android:
@@ -23,7 +23,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.1.0-android</version>
+     <version>4.2.0-android</version>
    </dependency>
 
 Gradle
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.1.0')
+   compile ('org.web3j:core:4.2.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.1.0-android')
+   compile ('org.web3j:core:4.2.0-android')
 
 
 Start a client
@@ -98,11 +98,6 @@ To use an RxJava Flowable::
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
-
-**Note:** for Android use::
-
-   Web3j web3 = Web3jFactory.build(new HttpService());  // defaults to http://localhost:8545/
-   ...
 
 
 IPC
@@ -343,7 +338,7 @@ is usually `eth_subscribe`. Events that it subscribes to depend on parameters to
 method. You can find more in the `RPC documentation <https://github.com/ethereum/go-ethereum/wiki/RPC-PUB-SUB#supported-subscriptions>`_::
 
    // A request to subscribe to a stream of events
-   final Request<EthSubscribe> subscribeRequest = new Request<>(
+   final Request<?, EthSubscribe> subscribeRequest = new Request<>(
        // RPC method to subscribe to events
        "eth_subscribe",
        // Parameters that specify what events to subscribe to
