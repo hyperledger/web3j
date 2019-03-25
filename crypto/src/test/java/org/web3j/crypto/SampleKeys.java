@@ -18,7 +18,8 @@ public class SampleKeys {
     public static final String ADDRESS_NO_PREFIX = Numeric.cleanHexPrefix(ADDRESS);
 
     public static final String PASSWORD = "Insecure Pa55w0rd";
-    public static final String MNEMONIC = "scatter major grant return flee easy female jungle vivid movie bicycle absent weather inspire carry";
+    public static final String MNEMONIC = "scatter major grant return flee easy female jungle"
+            + " vivid movie bicycle absent weather inspire carry";
 
     static final BigInteger PRIVATE_KEY = Numeric.toBigInt(PRIVATE_KEY_STRING);
     static final BigInteger PUBLIC_KEY = Numeric.toBigInt(PUBLIC_KEY_STRING);
