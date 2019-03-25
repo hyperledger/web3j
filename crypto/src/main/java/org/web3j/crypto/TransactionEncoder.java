@@ -84,7 +84,7 @@ public class TransactionEncoder {
     }
 
     private static byte[] longToBytes(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        ByteBuffer buffer = ByteBuffer.allocate(8); // Long.BYTES
         buffer.putLong(x);
         return buffer.array();
     }
