@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.SampleKeys.CREDENTIALS;
 import static org.web3j.crypto.SampleKeys.KEY_PAIR;
-import static org.web3j.crypto.SampleKeys.PASSWORD;
 import static org.web3j.crypto.SampleKeys.MNEMONIC;
+import static org.web3j.crypto.SampleKeys.PASSWORD;
 import static org.web3j.crypto.WalletUtils.isValidAddress;
 import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
 
@@ -51,7 +51,8 @@ public class WalletUtilsTest {
 
     @Test
     public void testGenerateBip39WalletFromMnemonic() throws Exception {
-        Bip39Wallet wallet = WalletUtils.generateBip39WalletFromMnemonic(PASSWORD, MNEMONIC, tempDir);
+        Bip39Wallet wallet = WalletUtils.generateBip39WalletFromMnemonic(
+                PASSWORD, MNEMONIC, tempDir);
         byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
         Credentials credentials = Credentials.create(ECKeyPair.create(sha256(seed)));
 
