@@ -118,7 +118,8 @@ public class WalletUtils {
      * @throws CipherException if the underlying cipher is not available
      * @throws IOException if the destination cannot be written to
      */
-    public static Bip39Wallet generateBip39WalletFromMnemonic(String password, String mnemonic, File destinationDirectory)
+    public static Bip39Wallet generateBip39WalletFromMnemonic(
+            String password, String mnemonic, File destinationDirectory)
             throws CipherException, IOException {
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
