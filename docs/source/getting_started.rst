@@ -71,7 +71,7 @@ Or use `Nodesmith <https://nodesmith.io/>`_, which provides **free API endpoints
 
 .. code-block:: java
 
-   Web3j web3 = Web3j.build(new HttpService("https://ethereum.api.nodesmith.io/v1/goerli/jsonrpc?apiKey=YOUR_KEY"));
+   Web3j web3 = Web3j.build(new NodesmithHttpService("https://ethereum.api.nodesmith.io/v1/goerli/jsonrpc?apiKey=YOUR_KEY"));
 
 For further information refer to :doc:`nodesmith`.
 

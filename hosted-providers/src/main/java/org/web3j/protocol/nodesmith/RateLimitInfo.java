@@ -44,6 +44,14 @@ public class RateLimitInfo {
         return this.resetTime;
     }
 
+    /**
+     * Tries to create a new instance of the RateLimitInfo class from the headers passed in.
+     * If successful, it returns the instance wrapped in Optional, otherwise Optional.empty().
+     * @param limitValue The x-ratelimit-limit header value.
+     * @param remainingValue The x-ratelimit-remaining header value.
+     * @param resetTimeValue The x-ratelimit-reset header value.
+     * @return If successful, RateLimitInfo wrapped in Optional, otherwise Optional.empty().
+     */
     public static Optional<RateLimitInfo> createFromHeaders(
             String limitValue, String remainingValue, String resetTimeValue) {
 
@@ -54,7 +62,6 @@ public class RateLimitInfo {
             Instant resetTime = Instant.ofEpochSecond(resetEpochSeconds);
             return Optional.of(new RateLimitInfo(limit, remaining, resetTime));
         } catch (NumberFormatException ex) {
-            // TODO - log
             return Optional.empty();
         }
     }
