@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Represents the current status of an api key's rate limit for Nodesmith's
  * service. This class can be used to inspect when more requests can be sent.
- * @see <a href="https://beta.docs.nodesmith.io/#/ethereum/rateLimiting>Rate Limiting</a>
+ * @see <a href="https://beta.docs.nodesmith.io/#/ethereum/rateLimiting">Rate Limiting</a>
  */
 public class RateLimitInfo {
 
