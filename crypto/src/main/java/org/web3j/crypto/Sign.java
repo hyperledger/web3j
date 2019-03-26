@@ -111,7 +111,7 @@ public class Sign {
      * @param message Hash of the data that was signed.
      * @return An ECKey containing only the public part, or null if recovery wasn't possible.
      */
-    public static BigInteger recoverFromSignature(int recId, ECDSASignature sig, byte[] message) {
+    public static BigInteger recoverFromSignature(long recId, ECDSASignature sig, byte[] message) {
         verifyPrecondition(recId >= 0, "recId must be positive");
         verifyPrecondition(sig.r.signum() >= 0, "r must be positive");
         verifyPrecondition(sig.s.signum() >= 0, "s must be positive");
@@ -120,7 +120,7 @@ public class Sign {
         // 1.0 For j from 0 to h   (h == recId here and the loop is outside this function)
         //   1.1 Let x = r + jn
         BigInteger n = CURVE.getN();  // Curve order.
-        BigInteger i = BigInteger.valueOf((long) recId / 2);
+        BigInteger i = BigInteger.valueOf(recId / 2);
         BigInteger x = sig.r.add(i.multiply(n));
         //   1.2. Convert the integer x to an octet string X of length mlen using the conversion
         //        routine specified in Section 2.3.7, where mlen = ⌈(log2 p)/8⌉ or mlen = ⌈m/8⌉.
@@ -217,7 +217,7 @@ public class Sign {
         verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
         verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
 
-        int header = signatureData.getV() & 0xFF;
+        long header = signatureData.getV() & 0xFF;
         // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
         //                  0x1D = second key with even y, 0x1E = second key with odd y
         if (header < 27 || header > 34) {
@@ -228,7 +228,7 @@ public class Sign {
                 new BigInteger(1, signatureData.getR()),
                 new BigInteger(1, signatureData.getS()));
 
-        int recId = header - 27;
+        long recId = header - 27;
         BigInteger key = recoverFromSignature(recId, sig, messageHash);
         if (key == null) {
             throw new SignatureException("Could not recover public key from signature");
@@ -277,17 +277,17 @@ public class Sign {
     }
 
     public static class SignatureData {
-        private final byte v;
+        private final long v;
         private final byte[] r;
         private final byte[] s;
 
-        public SignatureData(byte v, byte[] r, byte[] s) {
+        public SignatureData(long v, byte[] r, byte[] s) {
             this.v = v;
             this.r = r;
             this.s = s;
         }
 
-        public byte getV() {
+        public long getV() {
             return v;
         }
 

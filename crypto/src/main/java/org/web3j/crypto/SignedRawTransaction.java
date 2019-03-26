@@ -22,14 +22,14 @@ public class SignedRawTransaction extends RawTransaction {
     }
 
     public String getFrom() throws SignatureException {
-        Integer chainId = getChainId();
+        Long chainId = getChainId();
         byte[] encodedTransaction;
         if (null == chainId) {
             encodedTransaction = TransactionEncoder.encode(this);
         } else {
             encodedTransaction = TransactionEncoder.encode(this, chainId.byteValue());
         }
-        byte v = signatureData.getV();
+        long v = signatureData.getV();
         byte[] r = signatureData.getR();
         byte[] s = signatureData.getS();
         Sign.SignatureData signatureDataV = new Sign.SignatureData(getRealV(v), r, s);
@@ -44,7 +44,7 @@ public class SignedRawTransaction extends RawTransaction {
         }
     }
 
-    private byte getRealV(byte v) {
+    private long getRealV(long v) {
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return v;
         }
@@ -56,12 +56,12 @@ public class SignedRawTransaction extends RawTransaction {
         return (byte) (realV + inc);
     }
 
-    public Integer getChainId() {
-        byte v = signatureData.getV();
+    public Long getChainId() {
+        long v = signatureData.getV();
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return null;
         }
-        Integer chainId = (v - CHAIN_ID_INC) / 2;
+        Long chainId = (v - CHAIN_ID_INC) / 2;
         return chainId;
     }
 }
