@@ -27,7 +27,7 @@ See `Rate Limiting <https://beta.docs.nodesmith.io/#/ethereum/rateLimiting>`_ fo
 
 If you want to test a number of the JSON RPC calls against Nodesmith, update the integration test
 `CoreIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/CoreIT.java>`_
-with your Infura URL & run it.
+with your Nodesmith URL & run it.
 
 Sending Transactions
 --------------------
