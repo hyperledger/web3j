@@ -51,7 +51,7 @@ public class EnsResolverTest {
         configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
 
         NetVersion netVersion = new NetVersion();
-        netVersion.setResult(Byte.toString(ChainId.MAINNET));
+        netVersion.setResult(Long.toString(ChainId.MAINNET));
 
         String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
@@ -81,7 +81,7 @@ public class EnsResolverTest {
         configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
 
         NetVersion netVersion = new NetVersion();
-        netVersion.setResult(Byte.toString(ChainId.MAINNET));
+        netVersion.setResult(Long.toString(ChainId.MAINNET));
 
         String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";

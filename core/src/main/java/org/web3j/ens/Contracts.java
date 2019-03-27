@@ -12,16 +12,16 @@ public class Contracts {
     public static final String RINKEBY = "0xe7410170f87102df0055eb195163a03b7f2bff4a";
 
     public static String resolveRegistryContract(String chainId) {
-        switch (Byte.valueOf(chainId)) {
-            case ChainId.MAINNET:
-                return MAINNET;
-            case ChainId.ROPSTEN:
-                return ROPSTEN;
-            case ChainId.RINKEBY:
-                return RINKEBY;
-            default:
-                throw new EnsResolutionException(
-                        "Unable to resolve ENS registry contract for network id: " + chainId);
+        final Long chainIdLong = Long.parseLong(chainId);
+        if(chainIdLong.equals(ChainId.MAINNET)) {
+            return MAINNET;
+        } else if(chainIdLong.equals(ChainId.ROPSTEN)) {
+            return ROPSTEN;
+        } else if(chainIdLong.equals(ChainId.RINKEBY)) {
+            return RINKEBY;
+        } else {
+            throw new EnsResolutionException(
+                "Unable to resolve ENS registry contract for network id: " + chainId);
         }
     }
 }
