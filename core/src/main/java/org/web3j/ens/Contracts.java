@@ -13,11 +13,11 @@ public class Contracts {
 
     public static String resolveRegistryContract(String chainId) {
         final Long chainIdLong = Long.parseLong(chainId);
-        if(chainIdLong.equals(ChainId.MAINNET)) {
+        if (chainIdLong.equals(ChainId.MAINNET)) {
             return MAINNET;
-        } else if(chainIdLong.equals(ChainId.ROPSTEN)) {
+        } else if (chainIdLong.equals(ChainId.ROPSTEN)) {
             return ROPSTEN;
-        } else if(chainIdLong.equals(ChainId.RINKEBY)) {
+        } else if (chainIdLong.equals(ChainId.RINKEBY)) {
             return RINKEBY;
         } else {
             throw new EnsResolutionException(
