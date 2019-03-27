@@ -1,6 +1,7 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class TransactionEncoder {
     }
 
     public static byte[] signMessage(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            RawTransaction rawTransaction, long chainId, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
@@ -38,8 +39,15 @@ public class TransactionEncoder {
         return encode(rawTransaction, eip155SignatureData);
     }
 
+    public static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+
+
     public static Sign.SignatureData createEip155SignatureData(
-            Sign.SignatureData signatureData, byte chainId) {
+            Sign.SignatureData signatureData, long chainId) {
         BigInteger v = Numeric.toBigInt(signatureData.getV());
         v = v.subtract(BigInteger.valueOf(LOWER_REAL_V));
         v = v.add(BigInteger.valueOf(chainId * 2));
@@ -53,9 +61,9 @@ public class TransactionEncoder {
         return encode(rawTransaction, null);
     }
 
-    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+    public static byte[] encode(RawTransaction rawTransaction, long chainId) {
         Sign.SignatureData signatureData = new Sign.SignatureData(
-                new byte[]{chainId}, new byte[] {}, new byte[] {});
+                longToBytes(chainId), new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
     }
 
@@ -90,7 +98,7 @@ public class TransactionEncoder {
         result.add(RlpString.create(data));
 
         if (signatureData != null) {
-            result.add(RlpString.create(signatureData.getV()));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getV())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }
