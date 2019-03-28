@@ -21,11 +21,32 @@ public interface Pantheon extends Web3j {
 
     Request<?, BooleanResponse> minerStop();
 
-    Request<?, BooleanResponse> clicqueDiscard(String address);
+    /**
+     * @deprecated This is deprecated as the method name is wrong.
+     */
+    default Request<?, BooleanResponse> clicqueDiscard(String address) {
+        return cliqueDiscard(address);
+    }
 
-    Request<?, EthAccounts> clicqueGetSigners(DefaultBlockParameter defaultBlockParameter);
+    /**
+     * @deprecated This is deprecated as the method name is wrong.
+     */
+    default Request<?, EthAccounts> clicqueGetSigners(DefaultBlockParameter defaultBlockParameter) {
+        return cliqueGetSigners(defaultBlockParameter);
+    }
 
-    Request<?, EthAccounts> clicqueGetSignersAtHash(String blockHash);
+    /**
+     * @deprecated This is deprecated as the method name is wrong.
+     */
+    default Request<?, EthAccounts> clicqueGetSignersAtHash(String blockHash) {
+        return cliqueGetSignersAtHash(blockHash);
+    }
+
+    Request<?, BooleanResponse> cliqueDiscard(String address);
+
+    Request<?, EthAccounts> cliqueGetSigners(DefaultBlockParameter defaultBlockParameter);
+
+    Request<?, EthAccounts> cliqueGetSignersAtHash(String blockHash);
 
     Request<?, BooleanResponse> cliquePropose(String address, Boolean signerAddition);
 

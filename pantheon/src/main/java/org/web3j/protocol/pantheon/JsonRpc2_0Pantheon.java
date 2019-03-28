@@ -38,7 +38,7 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     }
 
     @Override
-    public Request<?, BooleanResponse> clicqueDiscard(String address) {
+    public Request<?, BooleanResponse> cliqueDiscard(String address) {
         return new Request<>(
                 "clique_discard",
                 Arrays.asList(address),
@@ -47,7 +47,7 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     }
 
     @Override
-    public Request<?, EthAccounts> clicqueGetSigners(DefaultBlockParameter defaultBlockParameter) {
+    public Request<?, EthAccounts> cliqueGetSigners(DefaultBlockParameter defaultBlockParameter) {
         return new Request<>(
                 "clique_getSigners",
                 Arrays.asList(defaultBlockParameter.getValue()),
@@ -56,7 +56,7 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     }
 
     @Override
-    public Request<?, EthAccounts> clicqueGetSignersAtHash(String blockHash) {
+    public Request<?, EthAccounts> cliqueGetSignersAtHash(String blockHash) {
         return new Request<>(
                 "clique_getSignersAtHash",
                 Arrays.asList(blockHash),
