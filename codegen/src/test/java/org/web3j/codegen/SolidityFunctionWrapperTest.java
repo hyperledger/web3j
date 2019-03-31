@@ -61,6 +61,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildTypeName() {
+        final int maxArraySize = StaticArray.MAX_SIZE_OF_STATIC_ARRAY;
+
         assertThat(buildTypeName("uint256"),
                 is(ClassName.get(Uint256.class)));
         assertThat(buildTypeName("uint64"),
@@ -80,7 +82,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(buildTypeName("uint256[10]"),
                 is(ParameterizedTypeName.get(StaticArray10.class, Uint256.class)));
 
-        assertThat(buildTypeName("uint256[33]"),
+        assertThat(buildTypeName(String.format("uint256[%d]", maxArraySize + 1)),
                 is(ParameterizedTypeName.get(StaticArray.class, Uint256.class)));
 
         assertThat(buildTypeName("uint256[10][3]"),
@@ -91,7 +93,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
                         ParameterizedTypeName.get(StaticArray2.class, Uint256.class))));
 
-        assertThat(buildTypeName("uint256[33][]"),
+        assertThat(buildTypeName(String.format("uint256[%d][]", maxArraySize + 1)),
                 is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
                         ParameterizedTypeName.get(StaticArray.class, Uint256.class))));
 

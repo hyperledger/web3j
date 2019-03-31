@@ -4,9 +4,10 @@ import java.util.stream.IntStream;
 
 import org.junit.Test;
 
+import org.web3j.abi.datatypes.generated.StaticArray1024;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.StaticArray32;
-import org.web3j.abi.datatypes.generated.Uint8;
+import org.web3j.abi.datatypes.generated.Uint16;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,17 +41,18 @@ public class StaticArrayTest {
     }
 
     @Test
-    public void throwsIfSizeIsAboveMaxOf32() {
+    public void throwsIfSizeIsAboveMax() {
+        final int maxArraySize = StaticArray.MAX_SIZE_OF_STATIC_ARRAY;
         try {
-            new StaticArray32<>(arrayOfUints(33));
+            new StaticArray1024<>(arrayOfUints(maxArraySize + 1));
             fail();
         } catch (UnsupportedOperationException e) {
-            assertThat(e.getMessage(), equalTo(
-                    "Static arrays with a length greater than 32 are not supported."));
+            assertThat(e.getMessage(), equalTo("Static arrays with a length greater than "
+                    + maxArraySize + " are not supported."));
         }
     }
 
     private Uint[] arrayOfUints(int length) {
-        return IntStream.rangeClosed(1, length).mapToObj(Uint8::new).toArray(Uint[]::new);
+        return IntStream.rangeClosed(1, length).mapToObj(Uint16::new).toArray(Uint[]::new);
     }
 }
