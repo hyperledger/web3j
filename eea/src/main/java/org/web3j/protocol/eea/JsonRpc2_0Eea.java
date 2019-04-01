@@ -1,6 +1,5 @@
 package org.web3j.protocol.eea;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.web3j.protocol.Web3jService;
