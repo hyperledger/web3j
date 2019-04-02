@@ -78,17 +78,18 @@ public class PrivateTransactionEncoder {
                         )
                 )
         );
+        result.add(RlpString.create(privateTransaction.getRestriction()));
 
         return result;
     }
 
     private static RawTransaction buildRawTransaction(PrivateTransaction privateTransaction) {
         return RawTransaction.createTransaction(
-                new BigInteger(privateTransaction.getNonce()),
-                new BigInteger(privateTransaction.getGasPrice()),
-                new BigInteger(privateTransaction.getGas()),
+                Numeric.decodeQuantity(privateTransaction.getNonce()),
+                Numeric.decodeQuantity(privateTransaction.getGasPrice()),
+                Numeric.decodeQuantity(privateTransaction.getGas()),
                 privateTransaction.getTo(),
-                new BigInteger(privateTransaction.getValue()),
+                Numeric.decodeQuantity(privateTransaction.getValue()),
                 privateTransaction.getData());
     }
 }
