@@ -1,21 +1,19 @@
 package org.web3j.protocol.eea.tx;
 
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.eea.Eea;
+import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
+import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
+import org.web3j.tx.TransactionManager;
+import org.web3j.utils.Numeric;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.TransactionEncoder;
-import org.web3j.crypto.TransactionUtils;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.eea.Eea;
-import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
-import org.web3j.protocol.eea.request.PrivateTransaction;
-import org.web3j.tx.TransactionManager;
-import org.web3j.utils.Numeric;
-
 /**
- * TransactionManager implementation for using a Quorum node to transact.
+ * PrivateTransactionManager implementation for using a Quorum node to transact.
  */
 public class EeaTransactionManager extends TransactionManager {
 
@@ -28,12 +26,12 @@ public class EeaTransactionManager extends TransactionManager {
     private List<String> privateFor;
 
     public EeaTransactionManager(
-            Eea eea,
-            Credentials credentials,
-            String privateFrom,
-            List<String> privateFor,
-            int attempts,
-            int sleepDuration) {
+            final Eea eea,
+            final Credentials credentials,
+            final String privateFrom,
+            final List<String> privateFor,
+            final int attempts,
+            final int sleepDuration) {
         super(eea, attempts, sleepDuration, credentials.getAddress());
         this.eea = eea;
         this.credentials = credentials;
@@ -42,7 +40,8 @@ public class EeaTransactionManager extends TransactionManager {
     }
 
     public EeaTransactionManager(
-            Eea eea, Credentials credentials, String privateFrom, List<String> privateFor) {
+            final Eea eea, final Credentials credentials,
+            final String privateFrom, final List<String> privateFor) {
         this(eea, credentials, privateFrom, privateFor, ATTEMPTS, SLEEP_DURATION);
     }
 
@@ -54,21 +53,23 @@ public class EeaTransactionManager extends TransactionManager {
         return privateFor;
     }
 
-    public void setPrivateFor(List<String> privateFor) {
+    public void setPrivateFor(final List<String> privateFor) {
         this.privateFor = privateFor;
     }
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
+            final BigInteger gasPrice, final BigInteger gasLimit, final String to,
+            final String data, final BigInteger value)
             throws IOException {
 
-        PrivateTransaction transaction = new PrivateTransaction(
-                credentials.getAddress(), null, gasLimit, BigInteger.ZERO, to,
-                BigInteger.ZERO, data, privateFrom, privateFor, "restricted");
+        final RawPrivateTransaction transaction = RawPrivateTransaction.createTransaction(
+                null, gasLimit, BigInteger.ZERO, to,
+                data, privateFrom, privateFor, "restricted");
 
-        String rawSignedTransaction = Numeric.toHexString(PrivateTransactionEncoder.signMessage(transaction, credentials));
+        final String rawSignedTransaction =
+                Numeric.toHexString(
+                        PrivateTransactionEncoder.signMessage(transaction, credentials));
 
         return eea.eeaSendRawTransaction(rawSignedTransaction).send();
     }
