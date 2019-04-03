@@ -4,7 +4,6 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.eea.response.EeaClientCapabilities;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 
 public interface Eea extends Web3j {
@@ -15,6 +14,4 @@ public interface Eea extends Web3j {
     Request<?, EthSendTransaction> eeaSendRawTransaction(String signedTransactionData);
 
     Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(String transactionHash);
-
-    Request<?, EeaClientCapabilities> eeaClientCapabilities();
 }
