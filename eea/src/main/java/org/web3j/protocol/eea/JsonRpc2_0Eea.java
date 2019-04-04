@@ -1,5 +1,6 @@
 package org.web3j.protocol.eea;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.web3j.protocol.Web3jService;
@@ -14,7 +15,7 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     }
 
     @Override
-    public Request<?, EthSendTransaction> eeaSendRawTransaction(String signedTransactionData) {
+    public Request<?, EthSendTransaction> eeaSendRawTransaction(final String signedTransactionData) {
         return new Request<>(
                 "eea_sendRawTransaction",
                 Collections.singletonList(signedTransactionData),
@@ -23,10 +24,11 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     }
 
     @Override
-    public Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(String transactionHash) {
+    public Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(
+            final String transactionHash, final String enclavePublicKey) {
         return new Request<>(
                 "eea_getTransactionReceipt",
-                Collections.singletonList(transactionHash),
+                Arrays.asList(transactionHash, enclavePublicKey),
                 web3jService,
                 EeaGetTransactionReceipt.class);
     }

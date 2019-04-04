@@ -64,4 +64,15 @@ public class PrivateTransactionReceipt {
     public int hashCode() {
         return Objects.hash(contractAddress, from, to, output, logs);
     }
+
+    @Override
+    public String toString() {
+        return "PrivateTransactionReceipt{" +
+                "contractAddress='" + contractAddress + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", output='" + output + '\'' +
+                ", logs=" + logs +
+                '}';
+    }
 }

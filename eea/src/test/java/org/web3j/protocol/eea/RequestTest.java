@@ -31,9 +31,9 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEeaGetTransactionReceipt() throws Exception {
-        web3j.eeaGetTransactionReceipt("0x123").send();
+        web3j.eeaGetTransactionReceipt("0x123", "myEnclavePubKey").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_getTransactionReceipt\","
-                + "\"params\":[\"0x123\"],\"id\":1}");
+                + "\"params\":[\"0x123\",\"myEnclavePubKey\"],\"id\":1}");
     }
 }

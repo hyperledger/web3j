@@ -11,7 +11,8 @@ public interface Eea extends Web3j {
         return new JsonRpc2_0Eea(web3jService);
     }
 
-    Request<?, EthSendTransaction> eeaSendRawTransaction(String signedTransactionData);
+    Request<?, EthSendTransaction> eeaSendRawTransaction(final String signedTransactionData);
 
-    Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(String transactionHash);
+    Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(
+            final String transactionHash, final String enclavePublicKey);
 }
