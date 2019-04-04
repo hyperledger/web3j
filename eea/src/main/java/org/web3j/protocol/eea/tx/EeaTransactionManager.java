@@ -1,5 +1,9 @@
 package org.web3j.protocol.eea.tx;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.Eea;
@@ -7,10 +11,6 @@ import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.tx.TransactionManager;
 import org.web3j.utils.Numeric;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.List;
 
 /**
  * PrivateTransactionManager implementation for using a Quorum node to transact.

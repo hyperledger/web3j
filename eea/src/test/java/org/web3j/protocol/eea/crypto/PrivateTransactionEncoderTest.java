@@ -1,11 +1,12 @@
 package org.web3j.protocol.eea.crypto;
 
-import org.junit.Test;
-import org.web3j.crypto.Credentials;
-import org.web3j.utils.Numeric;
-
 import java.math.BigInteger;
 import java.util.Collections;
+
+import org.junit.Test;
+
+import org.web3j.crypto.Credentials;
+import org.web3j.utils.Numeric;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,7 +19,8 @@ public class PrivateTransactionEncoderTest {
         final String data = "0x608060405234801561001057600080fd5b5060008054600160a060020a03191633179055610199806100326000396000f3fe6080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633fa4f245811461005b5780636057361d1461008257806367e404ce146100ae575b600080fd5b34801561006757600080fd5b506100706100ec565b60408051918252519081900360200190f35b34801561008e57600080fd5b506100ac600480360360208110156100a557600080fd5b50356100f2565b005b3480156100ba57600080fd5b506100c3610151565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b60025490565b604080513381526020810183905281517fc9db20adedc6cf2b5d25252b101ab03e124902a73fcb12b753f3d1aaa2d8f9f5929181900390910190a16002556001805473ffffffffffffffffffffffffffffffffffffffff191633179055565b60015473ffffffffffffffffffffffffffffffffffffffff169056fea165627a7a72305820c7f729cb24e05c221f5aa913700793994656f233fe2ce3b9fd9a505ea17e8d8a0029";
         //CHECKSTYLE:ON
         final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final String privateKey = "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
         final RawPrivateTransaction privateTransactionCreation = new RawPrivateTransaction(
                 BigInteger.ZERO,
@@ -32,7 +34,8 @@ public class PrivateTransactionEncoderTest {
         );
         final byte chainId = (byte) 44;
         final String privateRawTransaction = Numeric.toHexString(
-                PrivateTransactionEncoder.signMessage(privateTransactionCreation, chainId, credentials));
+                PrivateTransactionEncoder.signMessage(
+                        privateTransactionCreation, chainId, credentials));
 
         assertEquals(expected, privateRawTransaction);
     }

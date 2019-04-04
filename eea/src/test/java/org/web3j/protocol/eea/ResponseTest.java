@@ -1,13 +1,14 @@
 package org.web3j.protocol.eea;
 
+import java.util.Collections;
+
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
-
-import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -17,11 +18,13 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaSendRawTransaction() {
+        //CHECKSTYLE:OFF
         buildResponse("{\n"
                 + "    \"jsonrpc\": \"2.0\",\n"
                 + "    \"id\": 1,\n"
                 + "    \"result\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
                 + "}");
+        //CHECKSTYLE:ON
 
         EthSendTransaction ethSendTransaction = deserialiseResponse(
                 EthSendTransaction.class);
@@ -63,7 +66,7 @@ public class ResponseTest extends ResponseTester {
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
                         "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
                         "myRlpEncodedOutputFromPrivateContract",
-                        Arrays.asList(
+                        Collections.singletonList(
                                 new Log(
                                         false,
                                         "0x1",
@@ -74,7 +77,7 @@ public class ResponseTest extends ResponseTester {
                                         "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                                         "mined",
-                                        Arrays.asList(
+                                        Collections.singletonList(
                                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
                                         )
                                 )

@@ -1,15 +1,16 @@
 package org.web3j.protocol.eea.response;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
+
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
-
-import java.io.IOException;
-import java.util.Optional;
 
 public class EeaGetTransactionReceipt extends Response<PrivateTransactionReceipt> {
     public Optional<PrivateTransactionReceipt> getTransactionReceipt() {

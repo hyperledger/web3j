@@ -1,14 +1,20 @@
 package org.web3j.protocol.eea.crypto;
 
-import org.junit.Test;
-import org.web3j.crypto.*;
-import org.web3j.utils.Numeric;
-
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Sign;
+import org.web3j.utils.Numeric;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 
 public class PrivateTransactionDecoderTest {
 
@@ -19,7 +25,8 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
         final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final List<String> privateFor = Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+        final List<String> privateFor =
+                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
         final String restriction = "restricted";
         final RawPrivateTransaction rawTransaction = RawPrivateTransaction.createTransaction(
                 nonce, gasPrice, gasLimit, to, "", privateFrom, privateFor, restriction);
@@ -42,13 +49,16 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
         final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final List<String> privateFor = Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+        final List<String> privateFor =
+                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
         final String restriction = "restricted";
         final RawPrivateTransaction rawTransaction = RawPrivateTransaction.createTransaction(
                 nonce, gasPrice, gasLimit, to, "", privateFrom, privateFor, restriction);
-        final String privateKey = "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
-        final byte[] encodedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
+        final byte[] encodedMessage =
+                PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
         final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
@@ -81,11 +91,13 @@ public class PrivateTransactionDecoderTest {
         final String to = "0x0add5355";
         final Integer chainId = 1;
         final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final List<String> privateFor = Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+        final List<String> privateFor =
+                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
         final String restriction = "restricted";
         final RawPrivateTransaction rawTransaction = RawPrivateTransaction.createTransaction(
                 nonce, gasPrice, gasLimit, to, "", privateFrom, privateFor, restriction);
-        final String privateKey = "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
         byte[] signedMessage = PrivateTransactionEncoder.signMessage(
                 rawTransaction, chainId.byteValue(), credentials);

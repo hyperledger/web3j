@@ -1,11 +1,12 @@
 package org.web3j.protocol.eea.response;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.web3j.protocol.core.methods.response.Log;
-
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.web3j.protocol.core.methods.response.Log;
 
 public class PrivateTransactionReceipt {
 
@@ -16,11 +17,12 @@ public class PrivateTransactionReceipt {
     private final List<Log> logs;
 
     @JsonCreator
-    public PrivateTransactionReceipt(@JsonProperty(value ="contractAddress") final String contractAddress,
-                                     @JsonProperty(value ="from") final String from,
-                                     @JsonProperty(value ="to") final String to,
-                                     @JsonProperty(value ="output") final String output,
-                                     @JsonProperty(value ="logs") final List<Log> logs) {
+    public PrivateTransactionReceipt(
+            @JsonProperty(value = "contractAddress") final String contractAddress,
+            @JsonProperty(value = "from") final String from,
+            @JsonProperty(value = "to") final String to,
+            @JsonProperty(value = "output") final String output,
+            @JsonProperty(value = "logs") final List<Log> logs) {
         this.contractAddress = contractAddress;
         this.from = from;
         this.to = to;
@@ -50,14 +52,18 @@ public class PrivateTransactionReceipt {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
-        return Objects.equals(contractAddress, that.contractAddress) &&
-                from.equals(that.from) &&
-                Objects.equals(to, that.to) &&
-                Objects.equals(output, that.output) &&
-                Objects.equals(logs, that.logs);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
+        return Objects.equals(contractAddress, that.contractAddress)
+                && from.equals(that.from)
+                && Objects.equals(to, that.to)
+                && Objects.equals(output, that.output)
+                && Objects.equals(logs, that.logs);
     }
 
     @Override
@@ -67,12 +73,12 @@ public class PrivateTransactionReceipt {
 
     @Override
     public String toString() {
-        return "PrivateTransactionReceipt{" +
-                "contractAddress='" + contractAddress + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", output='" + output + '\'' +
-                ", logs=" + logs +
-                '}';
+        return "PrivateTransactionReceipt{"
+                + "contractAddress='" + contractAddress + '\''
+                + ", from='" + from + '\''
+                + ", to='" + to + '\''
+                + ", output='" + output + '\''
+                + ", logs=" + logs
+                + '}';
     }
 }
