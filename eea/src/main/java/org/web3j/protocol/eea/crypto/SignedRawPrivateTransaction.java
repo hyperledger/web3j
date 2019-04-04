@@ -1,11 +1,15 @@
 package org.web3j.protocol.eea.crypto;
 
-import org.web3j.crypto.*;
-
 import java.math.BigInteger;
 import java.util.List;
 
-public class SignedRawPrivateTransaction extends RawPrivateTransaction implements SignatureDataOperations {
+import org.web3j.crypto.Sign;
+import org.web3j.crypto.SignatureDataOperations;
+import org.web3j.crypto.SignedRawTransaction;
+
+public class SignedRawPrivateTransaction
+        extends RawPrivateTransaction
+        implements SignatureDataOperations {
 
     private final Sign.SignatureData signatureData;
 

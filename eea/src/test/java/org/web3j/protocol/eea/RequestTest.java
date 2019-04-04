@@ -1,13 +1,8 @@
 package org.web3j.protocol.eea;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Test;
 
 import org.web3j.protocol.RequestTester;
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.http.HttpService;
 
 public class RequestTest extends RequestTester {

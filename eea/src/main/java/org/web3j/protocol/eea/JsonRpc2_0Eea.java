@@ -15,7 +15,8 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     }
 
     @Override
-    public Request<?, EthSendTransaction> eeaSendRawTransaction(final String signedTransactionData) {
+    public Request<?, EthSendTransaction> eeaSendRawTransaction(
+            final String signedTransactionData) {
         return new Request<>(
                 "eea_sendRawTransaction",
                 Collections.singletonList(signedTransactionData),

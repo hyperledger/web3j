@@ -1,10 +1,9 @@
 package org.web3j.protocol.eea.crypto;
 
-import org.web3j.crypto.RawTransaction;
-import org.web3j.utils.Numeric;
-
 import java.math.BigInteger;
 import java.util.List;
+
+import org.web3j.crypto.RawTransaction;
 
 /**
  * Transaction class used for signing transactions locally.<br>
@@ -29,8 +28,9 @@ public class RawPrivateTransaction extends RawTransaction {
 
     protected RawPrivateTransaction(final RawTransaction rawTransaction, final String privateFrom,
                                     final List<String> privateFor, final String restriction) {
-        this(rawTransaction.getNonce(), rawTransaction.getGasPrice(), rawTransaction.getGasLimit(),
-                rawTransaction.getTo(), rawTransaction.getData(), privateFrom, privateFor, restriction);
+        this(rawTransaction.getNonce(), rawTransaction.getGasPrice(),
+                rawTransaction.getGasLimit(), rawTransaction.getTo(),
+                rawTransaction.getData(), privateFrom, privateFor, restriction);
     }
 
     public static RawPrivateTransaction createContractTransaction(

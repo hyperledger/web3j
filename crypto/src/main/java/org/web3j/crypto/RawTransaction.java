@@ -25,7 +25,7 @@ public class RawTransaction {
         this.gasLimit = gasLimit;
         this.to = to;
         this.value = value;
-        this.data = data != null ? Numeric.cleanHexPrefix(data): null;
+        this.data = data != null ? Numeric.cleanHexPrefix(data) : null;
     }
 
     public static RawTransaction createContractTransaction(

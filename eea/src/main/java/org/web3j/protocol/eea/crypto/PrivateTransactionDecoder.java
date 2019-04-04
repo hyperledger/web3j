@@ -1,5 +1,8 @@
 package org.web3j.protocol.eea.crypto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.SignedRawTransaction;
 import org.web3j.crypto.TransactionDecoder;
@@ -7,9 +10,6 @@ import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.utils.Numeric;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class PrivateTransactionDecoder {
 
