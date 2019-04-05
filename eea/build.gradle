@@ -1,5 +1,5 @@
 
-description 'Eea JSON-RPC API'
+description 'EEA JSON-RPC API'
 
 dependencies {
     compile project(':core')
