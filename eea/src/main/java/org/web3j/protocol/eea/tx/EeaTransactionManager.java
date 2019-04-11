@@ -23,12 +23,14 @@ public class EeaTransactionManager extends TransactionManager {
 
     private final Eea eea;
     private final Credentials credentials;
+    private final long chainId;
     private final String privateFrom;
     private List<String> privateFor;
 
     public EeaTransactionManager(
             final Eea eea,
             final Credentials credentials,
+            final long chainId,
             final String privateFrom,
             final List<String> privateFor,
             final int attempts,
@@ -36,14 +38,15 @@ public class EeaTransactionManager extends TransactionManager {
         super(eea, attempts, sleepDuration, credentials.getAddress());
         this.eea = eea;
         this.credentials = credentials;
+        this.chainId = chainId;
         this.privateFrom = privateFrom;
         this.privateFor = privateFor;
     }
 
     public EeaTransactionManager(
-            final Eea eea, final Credentials credentials,
+            final Eea eea, final Credentials credentials, final long chainId,
             final String privateFrom, final List<String> privateFor) {
-        this(eea, credentials, privateFrom, privateFor, ATTEMPTS, SLEEP_DURATION);
+        this(eea, credentials, chainId, privateFrom, privateFor, ATTEMPTS, SLEEP_DURATION);
     }
 
     public String getPrivateFrom() {
@@ -74,7 +77,7 @@ public class EeaTransactionManager extends TransactionManager {
 
         final String rawSignedTransaction =
                 Numeric.toHexString(
-                        PrivateTransactionEncoder.signMessage(transaction, credentials));
+                        PrivateTransactionEncoder.signMessage(transaction, chainId, credentials));
 
         return eea.eeaSendRawTransaction(rawSignedTransaction).send();
     }
