@@ -89,7 +89,7 @@ public class TransactionEncoder {
         return buffer.array();
     }
 
-    static List<RlpType> asRlpValues(
+    public static List<RlpType> asRlpValues(
             RawTransaction rawTransaction, Sign.SignatureData signatureData) {
         List<RlpType> result = new ArrayList<>();
 

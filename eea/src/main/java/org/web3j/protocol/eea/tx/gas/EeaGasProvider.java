@@ -1,8 +1,8 @@
 package org.web3j.protocol.eea.tx.gas;
 
-import org.web3j.tx.gas.StaticGasProvider;
-
 import java.math.BigInteger;
+
+import org.web3j.tx.gas.StaticGasProvider;
 
 public class EeaGasProvider extends StaticGasProvider {
     public EeaGasProvider(BigInteger gasPrice) {

@@ -3,6 +3,8 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.security.SignatureException;
 
+import org.web3j.utils.Numeric;
+
 public interface SignatureDataOperations {
 
     int CHAIN_ID_INC = 35;
@@ -13,10 +15,8 @@ public interface SignatureDataOperations {
     byte[] getEncodedTransaction(Integer chainId);
 
     default String getFrom() throws SignatureException {
-        Integer chainId = getChainId();
-        byte[] encodedTransaction = getEncodedTransaction(chainId);
-
-        byte v = getSignatureData().getV();
+        byte[] encodedTransaction = getEncodedTransaction(getChainId());
+        BigInteger v = Numeric.toBigInt(getSignatureData().getV());
         byte[] r = getSignatureData().getR();
         byte[] s = getSignatureData().getS();
         Sign.SignatureData signatureDataV = new Sign.SignatureData(getRealV(v), r, s);
@@ -31,9 +31,10 @@ public interface SignatureDataOperations {
         }
     }
 
-    default byte getRealV(byte v) {
+    default byte getRealV(BigInteger bv) {
+        long v = bv.longValue();
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
-            return v;
+            return (byte) v;
         }
         byte realV = LOWER_REAL_V;
         int inc = 0;
@@ -44,11 +45,12 @@ public interface SignatureDataOperations {
     }
 
     default Integer getChainId() {
-        byte v = getSignatureData().getV();
+        BigInteger bv = Numeric.toBigInt(getSignatureData().getV());
+        long v = bv.longValue();
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return null;
         }
-        Integer chainId = (v - CHAIN_ID_INC) / 2;
+        Integer chainId = (int)((v - CHAIN_ID_INC) / 2);
         return chainId;
     }
 }
