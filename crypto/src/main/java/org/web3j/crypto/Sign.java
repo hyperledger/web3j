@@ -79,10 +79,10 @@ public class Sign {
                     "Could not construct a recoverable key. Are your credentials valid?");
         }
 
-        Integer headerByte = recId + 27;
+        int headerByte = recId + 27;
 
         // 1 header + 32 bytes for R + 32 bytes for S
-        byte[] v = new byte[]{headerByte.byteValue()};
+        byte[] v = new byte[]{(byte) headerByte};
         byte[] r = Numeric.toBytesPadded(sig.r, 32);
         byte[] s = Numeric.toBytesPadded(sig.s, 32);
 

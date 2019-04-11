@@ -6,19 +6,16 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.abi.TypeDecoder;
 import org.web3j.abi.TypeEncoder;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.NetVersion;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.ChainId;
+import org.web3j.tx.ChainIdLong;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -51,7 +48,7 @@ public class EnsResolverTest {
         configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
 
         NetVersion netVersion = new NetVersion();
-        netVersion.setResult(Long.toString(ChainId.MAINNET));
+        netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
 
         String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
@@ -81,7 +78,7 @@ public class EnsResolverTest {
         configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
 
         NetVersion netVersion = new NetVersion();
-        netVersion.setResult(Long.toString(ChainId.MAINNET));
+        netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
 
         String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
