@@ -39,12 +39,11 @@ public class TransactionEncoder {
         return encode(rawTransaction, eip155SignatureData);
     }
 
-    public static byte[] longToBytes(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(x);
-        return buffer.array();
+    @Deprecated
+    public static byte[] signMessage(
+            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+        return signMessage(rawTransaction, (long) chainId, credentials);
     }
-
 
     public static Sign.SignatureData createEip155SignatureData(
             Sign.SignatureData signatureData, long chainId) {
@@ -57,6 +56,12 @@ public class TransactionEncoder {
                 v.toByteArray(), signatureData.getR(), signatureData.getS());
     }
 
+    @Deprecated
+    public static Sign.SignatureData createEip155SignatureData(
+            Sign.SignatureData signatureData, byte chainId) {
+        return createEip155SignatureData(signatureData, (long) chainId);
+    }
+
     public static byte[] encode(RawTransaction rawTransaction) {
         return encode(rawTransaction, null);
     }
@@ -67,10 +72,21 @@ public class TransactionEncoder {
         return encode(rawTransaction, signatureData);
     }
 
+    @Deprecated
+    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+        return encode(rawTransaction, (long) chainId);
+    }
+
     private static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
         List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         RlpList rlpList = new RlpList(values);
         return RlpEncoder.encode(rlpList);
+    }
+
+    private static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
     }
 
     static List<RlpType> asRlpValues(
