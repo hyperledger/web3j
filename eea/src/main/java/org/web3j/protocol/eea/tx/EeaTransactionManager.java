@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
@@ -63,8 +64,12 @@ public class EeaTransactionManager extends TransactionManager {
             final String data, final BigInteger value)
             throws IOException {
 
+        final BigInteger nonce = eea.ethGetTransactionCount(
+                credentials.getAddress(), DefaultBlockParameterName.LATEST)
+                .send().getTransactionCount();
+
         final RawPrivateTransaction transaction = RawPrivateTransaction.createTransaction(
-                null, gasLimit, BigInteger.ZERO, to,
+                nonce, gasPrice, gasLimit, to,
                 data, privateFrom, privateFor, "restricted");
 
         final String rawSignedTransaction =
