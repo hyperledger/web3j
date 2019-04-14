@@ -54,7 +54,8 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
             try {
                 String transactionHash = requestWrapper.getTransactionHash();
                 Optional<TransactionReceipt> transactionReceipt =
-                        sendTransactionReceiptRequest(transactionHash);
+                        (Optional<TransactionReceipt>)
+                                sendTransactionReceiptRequest(transactionHash);
                 if (transactionReceipt.isPresent()) {
                     callback.accept(transactionReceipt.get());
                     pendingTransactions.remove(requestWrapper);
