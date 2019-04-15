@@ -3,6 +3,8 @@ package org.web3j.crypto;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,11 +12,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import javax.xml.bind.ValidationException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javafx.util.Pair; 
 
 import org.web3j.abi.TypeEncoder;
 import org.web3j.abi.datatypes.Type;
@@ -26,6 +35,11 @@ import static org.web3j.crypto.Hash.sha3String;
 
 public class StructuredDataEncoder {
     public static StructuredData.EIP712Message jsonMessageObject;
+
+    // Matches array declarations like arr[5][10], arr[][], arr[][34][], etc.
+    // Doesn't match array declarations where there is a 0 in any dimension.
+    // Eg- arr[0][5] is not matched.
+    static String arrayTypeRegex = "^([a-zA-Z_$][a-zA-Z_$0-9]*)((\\[([1-9]\\d*)?\\])+)$";
 
     public static HashSet<String> getDependencies(String primaryType) {
         // Find all the dependencies of a type
@@ -97,9 +111,109 @@ public class StructuredDataEncoder {
         return Numeric.hexStringToByteArray(sha3String(encodeType(primaryType)));
     }
 
+    public static List<Integer> getArrayDimensionsFromDeclaration(String declaration) {
+        Pattern arrayTypePattern = Pattern.compile(arrayTypeRegex);
+
+        // This regex tries to extract the dimensions from the
+        // square brackets of an array declaration using the ``Regex Groups``.
+        // Eg- It extracts ``5, 6, 7`` from ``[5][6][7]``
+        String arrayDimensionRegex = "\\[([1-9]\\d*)?\\]";
+        Pattern arrayDimensionPattern = Pattern.compile(arrayDimensionRegex);
+
+        // Get the dimensions which were declared in Schema.
+        // If any dimension is empty, then it's value is set to -1.
+        Matcher arrayTypeMatcher = arrayTypePattern.matcher(declaration);
+        arrayTypeMatcher.find();
+        String dimensionsString = arrayTypeMatcher.group(1);
+        Matcher dimensionTypeMatcher = arrayDimensionPattern.matcher(dimensionsString);
+        List<Integer> dimensions = new ArrayList<>();
+        while (dimensionTypeMatcher.find()) {
+            String currentDimension = dimensionTypeMatcher.group(1);
+            if (currentDimension == null) {
+                dimensions.add(Integer.parseInt("-1"));
+            } else {
+                dimensions.add(Integer.parseInt(currentDimension));
+            }
+        }
+
+        return dimensions;
+    }
+
+    public static ArrayList<Pair> getDepthsAndDimensions(Object data, int depth) {
+        if (!List.class.isInstance(data)) {
+            // Nothing more to recurse, since the data is no more an array
+            return new ArrayList<>();
+        }
+
+        ArrayList<Pair> list = new ArrayList<>();
+        ArrayList<Object> dataAsArray = (ArrayList<Object>) data;
+        list.add(new Pair(depth, dataAsArray.size()));
+        for (Object subdimensionalData: dataAsArray) {
+            list.addAll(getDepthsAndDimensions(subdimensionalData,depth + 1));
+        }
+
+        return list;
+    }
+
+    public static ArrayList<Integer> getArrayDimensionsFromData(
+            Object data) throws ValidationException {
+        ArrayList<Pair> depthsAndDimensions = getDepthsAndDimensions(data, 0);
+        // groupedByDepth has key as depth and value as ArrayList(pair(Depth, Dimension))
+        Map<Object, List<Pair>> groupedByDepth = depthsAndDimensions.stream().collect(
+                Collectors.groupingBy(
+                        depthDimensionPair -> depthDimensionPair.getKey()
+                )
+        );
+
+        // depthDimensionsMap is aimed to have key as depth and value as ArrayList(Dimension)
+        Map<Integer, List<Integer>> depthDimensionsMap = new HashMap<>();
+        for (Map.Entry<Object, List<Pair>> entry : groupedByDepth.entrySet()) {
+            List<Integer> pureDimensions = new ArrayList<>();
+            for (Pair depthDimensionPair: entry.getValue()) {
+                pureDimensions.add((Integer) depthDimensionPair.getValue());
+            }
+            depthDimensionsMap.put((Integer) entry.getKey(), pureDimensions);
+        }
+
+        ArrayList<Integer> dimensions = new ArrayList<>();
+        for (Map.Entry<Integer, List<Integer>> entry : depthDimensionsMap.entrySet()) {
+            Set<Integer> setOfDimensionsInParticularDepth = new TreeSet<>(entry.getValue());
+            if (setOfDimensionsInParticularDepth.size() != 1) {
+                throw new ValidationException(
+                        String.format(
+                                "Depth %d of array data has more than one dimensions",
+                                entry.getKey()
+                        )
+                );
+            }
+            dimensions.add(setOfDimensionsInParticularDepth.stream().findFirst().get());
+        }
+
+        return dimensions;
+    }
+
+    public static ArrayList<Object> flattenMultidimensionalArray(Object data) {
+        if (!ArrayList.class.isInstance(data)) {
+            return new ArrayList<Object>() {
+                {
+                    add(data);
+                }
+            };
+        }
+
+        ArrayList<Object> flattenedArray = new ArrayList<>();
+        for (Object arrayItem: (ArrayList) data) {
+            for (Object otherArrayItem: flattenMultidimensionalArray(arrayItem)) {
+                flattenedArray.add(otherArrayItem);
+            }
+        }
+
+        return flattenedArray;
+    }
+
     public static byte[] encodeData(
             String primaryType,
-            LinkedHashMap<String, Object> data) throws Throwable {
+            LinkedHashMap<String, Object> data) throws ValidationException {
         HashMap<String, Vector<StructuredData.Entry>> types = jsonMessageObject.types;
 
         List<String> encTypes = new ArrayList<>();
@@ -128,9 +242,60 @@ public class StructuredDataEncoder {
                 );
                 encTypes.add("bytes32");
                 encValues.add(hashedValue);
-            } else if (field.type.lastIndexOf(']') == field.type.length() - 1) {
-                // Still not implemented
-                throw new Throwable("TODO: Arrays currently unimplemented in encodeData");
+            } else if (Pattern.matches(arrayTypeRegex, field.type)) {
+                String baseTypeName = field.type.substring(0, field.type.indexOf('['));
+                List<Integer> expectedDimensions = getArrayDimensionsFromDeclaration(field.type);
+                // This function will itself give out errors in case
+                // that the data is not a proper array
+                ArrayList<Integer> dataDimensions = getArrayDimensionsFromData(value);
+
+                if (expectedDimensions.size() != dataDimensions.size()) {
+                    // Ex: Expected a 3d array, but got only a 2d array
+                    throw new ValidationException(
+                            String.format(
+                                    "Array Data %s has dimensions %s, "
+                                            + "but expected dimensions are %s",
+                                    value.toString(),
+                                    dataDimensions.toString(),
+                                    expectedDimensions.toString()
+                            )
+                    );
+                }
+                for (int i = 0 ; i < expectedDimensions.size(); i++) {
+                    if (expectedDimensions.get(i) == -1) {
+                        // Skip empty or dynamically declared dimensions
+                        continue;
+                    }
+                    if (expectedDimensions.get(i) != dataDimensions.get(i)) {
+                        throw new ValidationException(
+                                String.format(
+                                        "Array Data %s has dimensions %s, "
+                                                + "but expected dimensions are %s",
+                                        value.toString(),
+                                        dataDimensions.toString(),
+                                        expectedDimensions.toString()
+                                )
+                        );
+                    }
+                }
+
+                ArrayList<Object> arrayItems = flattenMultidimensionalArray(value);
+                ByteArrayOutputStream concatenatedArrayEncodingBuffer = new ByteArrayOutputStream();
+                for (Object arrayItem: arrayItems) {
+                    byte[] arrayItemEncoding = encodeData(
+                            baseTypeName,
+                            (LinkedHashMap<String, Object>) arrayItem
+                    );
+                    concatenatedArrayEncodingBuffer.write(
+                            arrayItemEncoding,
+                            0,
+                            arrayItemEncoding.length
+                    );
+                }
+                byte[] concatenatedArrayEncodings = concatenatedArrayEncodingBuffer.toByteArray();
+                byte[] hashedValue = sha3(concatenatedArrayEncodings);
+                encTypes.add("bytes32");
+                encValues.add(hashedValue);
             } else {
                 encTypes.add(field.type);
                 encValues.add(value);
@@ -158,7 +323,11 @@ public class StructuredDataEncoder {
                     baos.write(temp, 0, temp.length);
                     atleastOneConstructorExistsForGivenParametersType = true;
                     break;
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException
+                                | NoSuchMethodException
+                                | InstantiationException
+                                | IllegalAccessException
+                                | InvocationTargetException e) {
                     continue;
                 }
             }
@@ -180,11 +349,11 @@ public class StructuredDataEncoder {
 
     public static byte[] hashMessage(
             String primaryType,
-            LinkedHashMap<String, Object> data) throws Throwable {
+            LinkedHashMap<String, Object> data) throws ValidationException {
         return sha3(encodeData(primaryType, data));
     }
 
-    public static byte[] hashDomain() throws Throwable {
+    public static byte[] hashDomain() throws ValidationException {
         ObjectMapper oMapper = new ObjectMapper();
         LinkedHashMap<String, Object> data = oMapper.convertValue(
                 jsonMessageObject.domain,
@@ -204,7 +373,10 @@ public class StructuredDataEncoder {
 
     public static void validateStructuredData() throws ValidationException {
         // Fields of Entry Objects need to follow a regex pattern
+
+        // Type Regex matches to a valid name or an array declaration.
         String typeRegex = "^[a-zA-Z_$][a-zA-Z_$0-9]*(\\[([1-9]\\d*)*\\])*$";
+        // Identifier Regex matches to a valid name, but can't be an array declaration.
         String identifierRegex = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
         Iterator typesIterator = jsonMessageObject.types.keySet().iterator();
         while (typesIterator.hasNext()) {
@@ -246,7 +418,8 @@ public class StructuredDataEncoder {
         validateStructuredData();
     }
 
-    public static byte[] hashStructuredData(String jsonMessageInString) throws Throwable {
+    public static byte[] hashStructuredData(
+            String jsonMessageInString) throws ValidationException, IOException {
         // Parse String Message into object and validate
         parseJSONMessage(jsonMessageInString);
 
