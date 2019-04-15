@@ -4,18 +4,25 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.web3j.crypto.Credentials;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Numeric;
 
 /**
  * PrivateTransactionManager implementation for using a Quorum node to transact.
  */
 public class EeaTransactionManager extends PrivateTransactionManager {
+
+    private static final Logger log = LoggerFactory.getLogger(EeaTransactionManager.class);
 
     private static final int SLEEP_DURATION = 1000;
     private static final int ATTEMPTS = 20;
@@ -79,5 +86,16 @@ public class EeaTransactionManager extends PrivateTransactionManager {
                         PrivateTransactionEncoder.signMessage(transaction, chainId, credentials));
 
         return eea.eeaSendRawTransaction(rawSignedTransaction).send();
+    }
+
+    @Override
+    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+            throws IOException {
+        try {
+            return executeCall(to, data);
+        } catch (TransactionException e) {
+            log.error("Failed to execute call", e);
+            return null;
+        }
     }
 }
