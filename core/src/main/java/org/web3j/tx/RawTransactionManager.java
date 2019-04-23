@@ -8,7 +8,9 @@ import org.web3j.crypto.Hash;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.tx.exceptions.TxHashMismatchException;
@@ -104,7 +106,16 @@ public class RawTransactionManager extends TransactionManager {
 
         return signAndSend(rawTransaction);
     }
-    
+
+    @Override
+    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+            throws IOException {
+        return web3j.ethCall(
+                Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                defaultBlockParameter)
+                .send().getValue();
+    }
+
     /*
      * @param rawTransaction a RawTransaction istance to be signed
      * @return The transaction signed and encoded without ever broadcasting it
