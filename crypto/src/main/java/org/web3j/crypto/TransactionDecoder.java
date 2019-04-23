@@ -20,7 +20,7 @@ public class TransactionDecoder {
         BigInteger value = ((RlpString) values.getValues().get(4)).asPositiveBigInteger();
         String data = ((RlpString) values.getValues().get(5)).asString();
         if (values.getValues().size() > 6) {
-            byte v = ((RlpString) values.getValues().get(6)).getBytes()[0];
+            byte[] v = ((RlpString) values.getValues().get(6)).getBytes();
             byte[] r = Numeric.toBytesPadded(
                 Numeric.toBigInt(((RlpString) values.getValues().get(7)).getBytes()), 32);
             byte[] s = Numeric.toBytesPadded(
@@ -33,5 +33,4 @@ public class TransactionDecoder {
                 gasPrice, gasLimit, to, value, data);
         }
     }
-    
 }
