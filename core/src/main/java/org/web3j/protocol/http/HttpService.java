@@ -149,6 +149,7 @@ public class HttpService extends Service {
                 .build();
 
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
+        processHeaders(response.headers());
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
             if (responseBody != null) {
@@ -162,6 +163,10 @@ public class HttpService extends Service {
 
             throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
         }
+    }
+
+    protected void processHeaders(Headers headers) {
+        // Default implementation is empty
     }
 
     private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
