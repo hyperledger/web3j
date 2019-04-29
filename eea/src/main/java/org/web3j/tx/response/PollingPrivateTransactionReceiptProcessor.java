@@ -12,9 +12,8 @@ public class PollingPrivateTransactionReceiptProcessor extends PrivateTransactio
     private final int attempts;
 
     public PollingPrivateTransactionReceiptProcessor(
-            Eea eea, String enclavePublicKey,
-            long sleepDuration, int attempts) {
-        super(eea, enclavePublicKey);
+            Eea eea, long sleepDuration, int attempts) {
+        super(eea);
         this.sleepDuration = sleepDuration;
         this.attempts = attempts;
     }

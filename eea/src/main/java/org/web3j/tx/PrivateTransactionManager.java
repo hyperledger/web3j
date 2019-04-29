@@ -24,7 +24,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     protected PrivateTransactionManager(
             Eea eea, String enclavePublicKey, String fromAddress) {
         this(new PollingPrivateTransactionReceiptProcessor(
-                        eea, enclavePublicKey,
+                        eea,
                         DEFAULT_POLLING_FREQUENCY,
                         DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH),
                 fromAddress);
@@ -34,8 +34,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             Eea eea, String enclavePublicKey,
             int attempts, long sleepDuration, String fromAddress) {
         this(new PollingPrivateTransactionReceiptProcessor(
-                eea, enclavePublicKey,
-                sleepDuration, attempts), fromAddress);
+                eea, sleepDuration, attempts), fromAddress);
     }
 
     @Override

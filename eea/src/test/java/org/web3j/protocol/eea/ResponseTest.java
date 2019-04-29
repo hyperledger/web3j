@@ -1,10 +1,12 @@
 package org.web3j.protocol.eea;
 
+import java.math.BigInteger;
 import java.util.Collections;
 
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
