@@ -21,6 +21,7 @@ import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int256;
 import org.web3j.abi.datatypes.generated.Int64;
 import org.web3j.abi.datatypes.generated.StaticArray2;
+import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 
@@ -415,6 +416,26 @@ public class TypeDecoderTest {
             assert (arr instanceof  DynamicArray);
             assertThat(arr.getValue().get(0), is(new Utf8String("Hello, world!")));
             assertThat(arr.getValue().get(1), is(new Utf8String("world! Hello,")));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void multiDimArrays() {
+        byte[] bytes1d = new byte[]{1, 2, 3};
+        byte[][] bytes2d = new byte[][]{bytes1d, bytes1d, bytes1d};
+        //byte[][][] byte3d = new byte[][][]{bytes2d, bytes2d, bytes2d};
+
+        try {
+            assertThat(TypeDecoder.instantiateType("bytes",bytes1d), is(new DynamicBytes(bytes1d)));
+            StaticArray3<DynamicArray<Uint256>> twoDim = (StaticArray3<DynamicArray<Uint256>>)
+                    TypeDecoder.instantiateType("uint256[][3]",bytes2d);
+            assert (twoDim instanceof StaticArray3);
+            DynamicArray<Uint256> row1 = twoDim.getValue().get(1);
+            assert (row1 instanceof DynamicArray);
+            assertThat(row1.getValue().get(2),is(new Uint256(3)));
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
