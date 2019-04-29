@@ -53,13 +53,13 @@ public class TypeDecoderTest {
                         "0000000000000000000000000000000000000000000000000000000000000001", 0),
                 is(new Bool(true)));
         try {
-            assertThat(TypeDecoder.instantiateType ("bool",true),
+            assertThat(TypeDecoder.instantiateType("bool",true),
                     is(new Bool(true)));
-            assertThat(TypeDecoder.instantiateType ("bool",1),
+            assertThat(TypeDecoder.instantiateType("bool",1),
                     is(new Bool(true)));
-            assertThat(TypeDecoder.instantiateType ("bool",false),
+            assertThat(TypeDecoder.instantiateType("bool",false),
                     is(new Bool(false)));
-            assertThat(TypeDecoder.instantiateType ("bool",0),
+            assertThat(TypeDecoder.instantiateType("bool",0),
                     is(new Bool(false)));
 
         } catch (Exception e) {
@@ -112,7 +112,7 @@ public class TypeDecoderTest {
                         Uint64.class),
                 is(new Uint64(new BigInteger("0ffffffffffffffff", 16))));
         try {
-            assertThat(TypeDecoder.instantiateType ("uint",123),
+            assertThat(TypeDecoder.instantiateType("uint",123),
                     is(new Uint(BigInteger.valueOf(123))));
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,9 +152,9 @@ public class TypeDecoderTest {
                         Int256.class),
                 is(new Int256(BigInteger.valueOf(-1))));
         try {
-            assertThat(TypeDecoder.instantiateType ("int",123),
+            assertThat(TypeDecoder.instantiateType("int",123),
                     is(new Int(BigInteger.valueOf(123))));
-            assertThat(TypeDecoder.instantiateType ("int",-123),
+            assertThat(TypeDecoder.instantiateType("int",-123),
                     is(new Int(BigInteger.valueOf(-123))));
 
         } catch (Exception e) {
@@ -237,7 +237,7 @@ public class TypeDecoderTest {
                         Bytes4.class),
                 is(dave));
         try {
-            assertThat(TypeDecoder.instantiateType ("bytes6",testbytes),
+            assertThat(TypeDecoder.instantiateType("bytes6",testbytes),
                     is(new Bytes6(testbytes)));
         } catch (Exception e) {
             e.printStackTrace();
@@ -304,7 +304,7 @@ public class TypeDecoderTest {
                         0),
                 is(loremIpsum));
         try {
-            assertThat(TypeDecoder.instantiateType ("bytes",testbytes),
+            assertThat(TypeDecoder.instantiateType("bytes",testbytes),
                     is(new DynamicBytes(testbytes)));
         } catch (Exception e) {
             e.printStackTrace();
@@ -322,7 +322,8 @@ public class TypeDecoderTest {
                 "000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"),
                 is(new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338")));
         try {
-            assertThat(TypeDecoder.instantiateType ("address","0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338"),
+            assertThat(TypeDecoder.instantiateType("address",
+                    "0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338"),
                     is(new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338")));
         } catch (Exception e) {
             e.printStackTrace();
@@ -339,7 +340,7 @@ public class TypeDecoderTest {
                         0),
                 is(new Utf8String("Hello, world!")));
         try {
-            assertThat(TypeDecoder.instantiateType ("string","Hello, world!"),
+            assertThat(TypeDecoder.instantiateType("string","Hello, world!"),
                     is(new Utf8String("Hello, world!")));
         } catch (Exception e) {
             e.printStackTrace();
@@ -377,8 +378,9 @@ public class TypeDecoderTest {
                                 new Utf8String("Hello, world!"),
                                 new Utf8String("world! Hello,"))));
         try {
-            StaticArray2 arr = (StaticArray2) TypeDecoder.instantiateType ("uint256[2]",new long[]{10,Long.MAX_VALUE});
-            assert(arr instanceof  StaticArray2);
+            StaticArray2 arr = (StaticArray2) TypeDecoder.instantiateType("uint256[2]",
+                    new long[]{10,Long.MAX_VALUE});
+            assert (arr instanceof  StaticArray2);
             assertThat(arr.getValue().get(0), is(new Uint256(BigInteger.TEN)));
             assertThat(arr.getValue().get(1), is(new Uint256(BigInteger.valueOf(Long.MAX_VALUE))));
         } catch (Exception e) {
@@ -401,12 +403,16 @@ public class TypeDecoderTest {
     @Test(expected = ClassNotFoundException.class)
     public void testEmptyStaticArrayInstantiateType() throws ClassNotFoundException {
         try {
-            TypeDecoder.instantiateType ("uint256[0]",new long[]{});
+            TypeDecoder.instantiateType("uint256[0]",new long[]{});
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-        catch (InvocationTargetException e) {}
-        catch (NoSuchMethodException e) {}
-        catch (InstantiationException e) {}
-        catch (IllegalAccessException e) {}
     }
 
 
@@ -450,11 +456,12 @@ public class TypeDecoderTest {
 
         try {
 
-            DynamicArray arr = (DynamicArray) TypeDecoder.instantiateType("string[]",new String[]{"Hello, world!","world! Hello,"} );
-            assert(arr instanceof  DynamicArray);
+            DynamicArray arr = (DynamicArray) TypeDecoder.instantiateType("string[]",
+                    new String[]{"Hello, world!","world! Hello,"});
+            assert (arr instanceof  DynamicArray);
             assertThat(arr.getValue().get(0), is(new Utf8String("Hello, world!")));
             assertThat(arr.getValue().get(1), is(new Utf8String("world! Hello,")));
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

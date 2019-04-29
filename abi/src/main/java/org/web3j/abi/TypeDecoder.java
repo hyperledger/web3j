@@ -305,6 +305,7 @@ public class TypeDecoder {
                     e);
         }
     }
+
     static BigInteger asBigInteger(Object arg) {
         if (arg instanceof BigInteger) {
             return (BigInteger) arg;
@@ -319,6 +320,7 @@ public class TypeDecoder {
         }
         return null;
     }
+
     static List arrayToList(Object array) {
         int len = java.lang.reflect.Array.getLength(array);
         ArrayList rslt = new ArrayList(len);
@@ -327,44 +329,53 @@ public class TypeDecoder {
         }
         return rslt;
     }
-    public static Type instantiateType(String solidity_type, Object value) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-        return instantiateType(makeTypeReference(solidity_type), value);
+
+    public static Type instantiateType(String solidityType, Object value) throws
+            InvocationTargetException, NoSuchMethodException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
+        return instantiateType(makeTypeReference(solidityType), value);
     }
-    public static Type instantiateType(TypeReference ref, Object value) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+
+    public static Type instantiateType(TypeReference ref, Object value) throws
+            NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+            InstantiationException, ClassNotFoundException {
         Class rc = ref.getClassType();
-        if(Array.class.isAssignableFrom(rc)){
+        if (Array.class.isAssignableFrom(rc)) {
             List values;
             if (value instanceof List) {
                 values = (List) value;
             } else if (value.getClass().isArray()) {
                 values = arrayToList(value);
             } else {
-                throw new ClassCastException("Arg of type " + value.getClass() + " should be a list to instantiate web3j Array");
+                throw new ClassCastException("Arg of type " + value.getClass()
+                        + " should be a list to instantiate web3j Array");
             }
             Constructor listcons;
-            int arraySize = ref instanceof TypeReference.StaticArrayTypeReference ? ((TypeReference.StaticArrayTypeReference) ref).getSize() : -1;
+            int arraySize = ref instanceof TypeReference.StaticArrayTypeReference
+                    ? ((TypeReference.StaticArrayTypeReference) ref).getSize() : -1;
             if (arraySize <= 0) {
                 listcons = DynamicArray.class.getConstructor(new Class[]{Class.class, List.class});
             } else {
-                Class arrayClass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
+                Class arrayClass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray"
+                        + arraySize);
                 listcons = arrayClass.getConstructor(new Class[]{Class.class, List.class});
             }
             //create a list of transformed arguments
             ArrayList transformedList = new ArrayList(values.size());
-            java.lang.reflect.Type subtype = ((ParameterizedType) ref.getType()).getActualTypeArguments()[0];
+            java.lang.reflect.Type subtype = ((ParameterizedType) ref.getType())
+                    .getActualTypeArguments()[0];
             for (Object o : values) {
                 TypeReference elementTR;
                 //array of arrays
-                if(subtype instanceof ParameterizedType){
+                if (subtype instanceof ParameterizedType) {
                     elementTR = new TypeReference<Array>() {
                         @Override
-                        public java.lang.reflect.Type getType(){
+                        public java.lang.reflect.Type getType() {
                             return subtype;
                         }
                     };
-                }
-                //array of basic types
-                else{
+                } else {
+                    //array of basic types
                     elementTR = TypeReference.create((Class) subtype);
                 }
                 transformedList.add(instantiateType(elementTR, o));
@@ -396,7 +407,8 @@ public class TypeDecoder {
             }
         }
         if (constructorArg == null) {
-            throw new InstantiationException("Could not create type " + rc + " from arg " + value.toString() + " of type " + value.getClass());
+            throw new InstantiationException("Could not create type " + rc + " from arg "
+                    + value.toString() + " of type " + value.getClass());
         }
         Constructor cons = rc.getConstructor(new Class[]{constructorArg.getClass()});
         return (Type) cons.newInstance(constructorArg);

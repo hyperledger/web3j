@@ -103,16 +103,20 @@ public class FunctionEncoder {
         byte[] hash = Hash.sha3(input);
         return Numeric.toHexString(hash).substring(0, 10);
     }
-    public static Function encodeFunction(String fnname, List<String> solidity_inputtypes, List<Object> arguments, List<String> solidity_output_types) throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        List<Type> encoded_input = new ArrayList<>();
+
+    public static Function encodeFunction(String fnname, List<String> solidityInputtypes,
+            List<Object> arguments, List<String> solidityOutputTypes)
+            throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
+        List<Type> encodedInput = new ArrayList<>();
         Iterator argit = arguments.iterator();
-        for (String st : solidity_inputtypes) {
-            encoded_input.add(instantiateType(st, argit.next()));
+        for (String st : solidityInputtypes) {
+            encodedInput.add(instantiateType(st, argit.next()));
         }
-        List<TypeReference<?>> encoded_output = new ArrayList<>();
-        for (String st : solidity_output_types) {
-            encoded_output.add(makeTypeReference(st));
+        List<TypeReference<?>> encodedOutput = new ArrayList<>();
+        for (String st : solidityOutputTypes) {
+            encodedOutput.add(makeTypeReference(st));
         }
-        return new Function(fnname, encoded_input, encoded_output);
+        return new Function(fnname, encodedInput, encodedOutput);
     }
 }
