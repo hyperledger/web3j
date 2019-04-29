@@ -10,19 +10,17 @@ import org.web3j.protocol.exceptions.TransactionException;
 
 public abstract class PrivateTransactionReceiptProcessor extends TransactionReceiptProcessor {
     private Eea eea;
-    private String enclavePublicKey;
 
-    public PrivateTransactionReceiptProcessor(Eea eea, String enclavePublicKey) {
+    public PrivateTransactionReceiptProcessor(Eea eea) {
         super(eea);
         this.eea = eea;
-        this.enclavePublicKey = enclavePublicKey;
     }
 
     @Override
     Optional<PrivateTransactionReceipt> sendTransactionReceiptRequest(
             String transactionHash) throws IOException, TransactionException {
         EeaGetTransactionReceipt transactionReceipt =
-                eea.eeaGetTransactionReceipt(transactionHash, enclavePublicKey).send();
+                eea.eeaGetTransactionReceipt(transactionHash).send();
         if (transactionReceipt.hasError()) {
             throw new TransactionException("Error processing request: "
                     + transactionReceipt.getError().getMessage());
