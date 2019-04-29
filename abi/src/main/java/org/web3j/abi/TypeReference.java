@@ -1,15 +1,16 @@
 package org.web3j.abi;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Int;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Type wrapper to get around limitations of Java's type erasure.
@@ -77,33 +78,34 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls) {
         return create(cls, false);
     }
-    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls, boolean indexed) {
+
+    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls,
+                   boolean indexed) {
         return new TypeReference<T>(indexed) {
             public java.lang.reflect.Type getType() {
                 return cls;
             }
         };
     }
-    /**
-     * This is a helper method that only works for atomic types (uint, bytes, etc). Array types must be wrapped by a java.lang.reflect.ParamaterizedType
-     * @param solidity_type
-     * @return
-     * @throws ClassNotFoundException
+
+    /*
+     * This is a helper method that only works for atomic types (uint, bytes, etc).
+     * Array types must be wrapped by a java.lang.reflect.ParamaterizedType
      */
 
-    protected static Class getAtomicTypeClass(String solidity_type) throws ClassNotFoundException {
-        Matcher m = ARRAY_SUFFIX.matcher(solidity_type);
+    protected static Class getAtomicTypeClass(String solidityType) throws ClassNotFoundException {
+        Matcher m = ARRAY_SUFFIX.matcher(solidityType);
         if (m.find()) {
-            throw new ClassNotFoundException("getTypeClass does not work with array types. See makeTypeRefernce()");
+            throw new ClassNotFoundException("getTypeClass does not work with array types."
+                    + " See makeTypeRefernce()");
         }
-        switch (solidity_type) {
+        switch (solidityType) {
             case "int":
                 return Int.class;
             case "uint":
                 return Uint.class;
+            default: return AbiTypes.getType(solidityType);
         }
-        Class c = AbiTypes.getType(solidity_type);
-        return c;
     }
 
     public abstract static class StaticArrayTypeReference<T extends org.web3j.abi.datatypes.Type>
@@ -120,22 +122,27 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
             return size;
         }
     }
-    public static TypeReference makeTypeReference(String solidity_type) throws ClassNotFoundException {
-        return makeTypeReference(solidity_type,false);
+
+    public static TypeReference makeTypeReference(String solidityType) throws
+            ClassNotFoundException {
+        return makeTypeReference(solidityType,false);
     }
-    public static TypeReference makeTypeReference(String solidity_type, final boolean indexed) throws ClassNotFoundException {
-        Matcher m = ARRAY_SUFFIX.matcher(solidity_type);
-        if(!m.find()) {
-            final Class tc = getAtomicTypeClass(solidity_type);
+
+    public static TypeReference makeTypeReference(String solidityType, final boolean indexed)
+            throws ClassNotFoundException {
+        Matcher m = ARRAY_SUFFIX.matcher(solidityType);
+        if (!m.find()) {
+            final Class tc = getAtomicTypeClass(solidityType);
             return create(tc, indexed);
         }
         String digits = m.group(1);
-        TypeReference baseTr = makeTypeReference(solidity_type.substring(0,solidity_type.length() - m.group(0).length()));
+        TypeReference baseTr = makeTypeReference(solidityType.substring(0,solidityType.length()
+                - m.group(0).length()));
         TypeReference<?> ref;
         if (digits == null || digits.equals("")) {
             ref = new TypeReference<DynamicArray>(indexed) {
                 @Override
-                public java.lang.reflect.Type getType(){
+                public java.lang.reflect.Type getType() {
                     return new ParameterizedType() {
                         @Override
                         public java.lang.reflect.Type[] getActualTypeArguments() {
@@ -154,25 +161,29 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                     };
                 }
             };
-        }
-        else {
-            final Class arrayclass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + digits);
-            ref = new TypeReference.StaticArrayTypeReference<StaticArray>(Integer.parseInt(digits)){
+        } else {
+            final Class arrayclass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray"
+                    + digits);
+            ref = new TypeReference
+                    .StaticArrayTypeReference<StaticArray>(Integer.parseInt(digits)) {
                 @Override
-                public boolean isIndexed(){
+                public boolean isIndexed() {
                     return indexed;
                 }
+
                 @Override
-                public java.lang.reflect.Type getType(){
+                public java.lang.reflect.Type getType() {
                     return new ParameterizedType() {
                         @Override
                         public java.lang.reflect.Type[] getActualTypeArguments() {
                             return new java.lang.reflect.Type[]{baseTr.getType()};
                         }
+
                         @Override
                         public java.lang.reflect.Type getRawType() {
-                           return arrayclass;
+                            return arrayclass;
                         }
+
                         @Override
                         public java.lang.reflect.Type getOwnerType() {
                             return Class.class;
