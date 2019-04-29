@@ -1,7 +1,9 @@
 package org.web3j.abi;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -9,24 +11,11 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import org.web3j.abi.TypeReference.StaticArrayTypeReference;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.Bytes;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.Fixed;
-import org.web3j.abi.datatypes.FixedPointType;
-import org.web3j.abi.datatypes.Int;
-import org.web3j.abi.datatypes.IntType;
-import org.web3j.abi.datatypes.NumericType;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.utils.Numeric;
+
+import static org.web3j.abi.TypeReference.makeTypeReference;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) decoding for types.
@@ -277,5 +266,101 @@ public class TypeDecoder {
                     "Unable to access parameterized type " + typeReference.getType().getTypeName(),
                     e);
         }
+    }
+    static BigInteger asBigInteger(Object arg) {
+        if (arg instanceof BigInteger) {
+            return (BigInteger) arg;
+        } else if (arg instanceof BigDecimal) {
+            return ((BigDecimal) arg).toBigInteger();
+        } else if (arg instanceof String) {
+            return Numeric.toBigInt((String) arg);
+        } else if (arg instanceof byte[]) {
+            return Numeric.toBigInt((byte[]) arg);
+        } else if (arg instanceof Number) {
+            return BigInteger.valueOf(((Number) arg).longValue());
+        }
+        return null;
+    }
+    static List arrayToList(Object array) {
+        int len = java.lang.reflect.Array.getLength(array);
+        ArrayList rslt = new ArrayList(len);
+        for (int i = 0; i < len; i++) {
+            rslt.add(java.lang.reflect.Array.get(array, i));
+        }
+        return rslt;
+    }
+    public static Type instantiateType(String solidity_type, Object value) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        return instantiateType(makeTypeReference(solidity_type), value);
+    }
+    public static Type instantiateType(TypeReference ref, Object value) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+        Class rc = ref.getClassType();
+        if(Array.class.isAssignableFrom(rc)){
+            List values;
+            if (value instanceof List) {
+                values = (List) value;
+            } else if (value.getClass().isArray()) {
+                values = arrayToList(value);
+            } else {
+                throw new ClassCastException("Arg of type " + value.getClass() + " should be a list to instantiate web3j Array");
+            }
+            Constructor listcons;
+            int arraySize = ref instanceof TypeReference.StaticArrayTypeReference ? ((TypeReference.StaticArrayTypeReference) ref).getSize() : -1;
+            if (arraySize <= 0) {
+                listcons = DynamicArray.class.getConstructor(new Class[]{Class.class, List.class});
+            } else {
+                Class arrayClass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
+                listcons = arrayClass.getConstructor(new Class[]{Class.class, List.class});
+            }
+            //create a list of transformed arguments
+            ArrayList transformedList = new ArrayList(values.size());
+            java.lang.reflect.Type subtype = ((ParameterizedType) ref.getType()).getActualTypeArguments()[0];
+            for (Object o : values) {
+                TypeReference elementTR;
+                //array of arrays
+                if(subtype instanceof ParameterizedType){
+                    elementTR = new TypeReference<Array>() {
+                        @Override
+                        public java.lang.reflect.Type getType(){
+                            return subtype;
+                        }
+                    };
+                }
+                //array of basic types
+                else{
+                    elementTR = TypeReference.create((Class) subtype);
+                }
+                transformedList.add(instantiateType(elementTR, o));
+            }
+            return (Type) listcons.newInstance(ref.getClassType(), transformedList);
+        }
+
+        Object constructorArg = null;
+        if (NumericType.class.isAssignableFrom(rc)) {
+            constructorArg = asBigInteger(value);
+        } else if (BytesType.class.isAssignableFrom(rc)) {
+            if (value instanceof byte[]) {
+                constructorArg = value;
+            } else if (value instanceof BigInteger) {
+                constructorArg = ((BigInteger) value).toByteArray();
+            } else if (value instanceof String) {
+                constructorArg = Numeric.hexStringToByteArray((String) value);
+            }
+        } else if (Utf8String.class.isAssignableFrom(rc)) {
+            constructorArg = value.toString();
+        } else if (Address.class.isAssignableFrom(rc)) {
+            constructorArg = value.toString();
+        } else if (Bool.class.isAssignableFrom(rc)) {
+            if (value instanceof Boolean) {
+                constructorArg = value;
+            } else {
+                BigInteger bival = asBigInteger(value);
+                constructorArg = bival == null ? null : !bival.equals(BigInteger.ZERO);
+            }
+        }
+        if (constructorArg == null) {
+            throw new InstantiationException("Could not create type " + rc + " from arg " + value.toString() + " of type " + value.getClass());
+        }
+        Constructor cons = rc.getConstructor(new Class[]{constructorArg.getClass()});
+        return (Type) cons.newInstance(constructorArg);
     }
 }
