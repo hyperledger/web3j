@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.http.HttpService;
 
+
 public class RequestTest extends RequestTester {
     private Eea web3j;
 
@@ -26,9 +27,20 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEeaGetTransactionReceipt() throws Exception {
-        web3j.eeaGetTransactionReceipt("0x123", "myEnclavePubKey").send();
+        web3j.eeaGetTransactionReceipt("0x123").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_getTransactionReceipt\","
-                + "\"params\":[\"0x123\",\"myEnclavePubKey\"],\"id\":1}");
+                + "\"params\":[\"0x123\"],\"id\":1}");
     }
+
+    @Test
+    public void testEthGetTransactionCount() throws Exception {
+        web3j.eeaGetTransactionCount("0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                "0x0").send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_getTransactionCount\","
+                + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"0x0\"],"
+                + "\"id\":1}");
+    }
+
 }
