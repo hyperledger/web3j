@@ -326,6 +326,10 @@ public class TypeDecoderTest {
             assertThat(TypeDecoder.instantiateType("address",
                     "0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338"),
                     is(new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338")));
+            assertThat(TypeDecoder.instantiateType("address",
+                    BigInteger.ONE),
+                    is(new Address("0x0000000000000000000000000000000000000001")));
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
