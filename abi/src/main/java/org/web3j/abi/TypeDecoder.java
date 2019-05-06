@@ -374,10 +374,11 @@ public class TypeDecoder {
         } else if (Utf8String.class.isAssignableFrom(rc)) {
             constructorArg = value.toString();
         } else if (Address.class.isAssignableFrom(rc)) {
-            if(value instanceof BigInteger || value instanceof Uint160)
+            if (value instanceof BigInteger || value instanceof Uint160) {
                 constructorArg = value;
-            else
+            } else {
                 constructorArg = value.toString();
+            }
         } else if (Bool.class.isAssignableFrom(rc)) {
             if (value instanceof Boolean) {
                 constructorArg = value;
