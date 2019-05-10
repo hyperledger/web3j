@@ -2,5 +2,5 @@
 description 'Ethereum Application Binary Interface (ABI) for working with smart contracts'
 
 dependencies {
-    compile project(':utils')
+    compile project(':utils'), project(':tuples')
 }

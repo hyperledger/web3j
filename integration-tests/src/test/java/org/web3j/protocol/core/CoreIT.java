@@ -69,7 +69,7 @@ public class CoreIT {
 
     @Before
     public void setUp() {
-        this.web3j = Web3j.build(new HttpService());
+        this.web3j = Web3j.build(new HttpService("https://rinkeby.infura.io/a1504fcad53249f5a7b8df6bc2e3c3fb"));
     }
 
     @Test

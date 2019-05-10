@@ -1,22 +1,27 @@
 package org.web3j.abi;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
+import org.web3j.abi.datatypes.CompositeDataHolderType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStructType;
 import org.web3j.abi.datatypes.NumericType;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.StaticStructType;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.utils.Numeric;
+
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
 import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
@@ -29,12 +34,70 @@ import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
  */
 public class TypeEncoder {
 
-    private TypeEncoder() { }
+    private TypeEncoder() {
+    }
 
-    static boolean isDynamic(Type parameter) {
+//    public static boolean isDynamic(Class<Type> parameter) {
+////        if (StaticStructType.class.isAssignableFrom(parameter.getClass())) {
+////            // A static struct with at least one dynamic member is deemed dynamic.
+////            final StaticStructType t = (StaticStructType) parameter;
+////            for (Type type : t.getValue()) {
+////                if (isDynamic(type)) {
+////                    return true;
+////                }
+////            }
+////            return false;
+////        }
+////
+////        return parameter instanceof DynamicBytes
+////                || parameter instanceof Utf8String
+////                || parameter instanceof DynamicArray
+////                || parameter instanceof DynamicStructType;
+//
+//        return false;
+//    }
+
+
+    public static boolean isDynamic(Type parameter) {
+        if (StaticStructType.class.isAssignableFrom(parameter.getClass())) {
+            // A static struct with at least one dynamic member is deemed dynamic.
+            final StaticStructType t = (StaticStructType) parameter;
+            for (Type type : t.getValue()) {
+                if (isDynamic(type)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         return parameter instanceof DynamicBytes
                 || parameter instanceof Utf8String
-                || parameter instanceof DynamicArray;
+                || parameter instanceof DynamicArray
+                || parameter instanceof DynamicStructType;
+    }
+
+    // May not be the best place for this, but we'll move things around later.
+    public static boolean isDynamic(TypeReference typeReference) {
+        final Class typeClass = ((Class) typeReference.getType());
+
+        // TODO: do static struct first.
+        if (typeClass.isAssignableFrom(StaticStructType.class)) {
+            // A static struct with at least one dynamic member is deemed dynamic.
+//            final StaticStructType t = (StaticStructType) parameter;
+//            for (Type type : t.getValue()) {
+//                if (isDynamic(type)) {
+//                    return true;
+//                }
+//            }
+//            return false;
+            throw new UnsupportedOperationException("TODO: add support for static structs!");
+        }
+
+
+        return typeClass.isAssignableFrom(DynamicBytes.class)
+                || typeClass.isAssignableFrom(Utf8String.class)
+                || typeClass.isAssignableFrom(DynamicArray.class)
+                || DynamicStructType.class.isAssignableFrom(typeClass);
     }
 
     @SuppressWarnings("unchecked")
@@ -51,8 +114,14 @@ public class TypeEncoder {
             return encodeDynamicBytes((DynamicBytes) parameter);
         } else if (parameter instanceof Utf8String) {
             return encodeString((Utf8String) parameter);
-        } else if (parameter instanceof StaticArray) {
+        } else if (parameter instanceof StaticStructType || parameter instanceof StaticArray) {
             return encodeArrayValues((StaticArray) parameter);
+        } else if (parameter instanceof DynamicStructType) {
+            if (CompositeDataHolderType.class.isAssignableFrom(parameter.getClass())) {
+                return encodeCompositeDataHolder((CompositeDataHolderType) parameter);
+            } else {
+                return encodeDynamicStruct((DynamicStructType) parameter);
+            }
         } else if (parameter instanceof DynamicArray) {
             return encodeDynamicArray((DynamicArray) parameter);
         } else {
@@ -147,14 +216,14 @@ public class TypeEncoder {
 
     static <T extends Type> String encodeArrayValues(Array<T> value) {
         StringBuilder result = new StringBuilder();
-        for (Type type:value.getValue()) {
+        for (Type type : value.getValue()) {
             result.append(TypeEncoder.encode(type));
         }
         return result.toString();
     }
 
     static <T extends Type> String encodeDynamicArray(DynamicArray<T> value) {
-        int size = value.getValue().size();
+        final int size = value.getValue().size();
         String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
         String valuesOffsets = encodeArrayValuesOffsets(value);
         String encodedValues = encodeArrayValues(value);
@@ -166,21 +235,80 @@ public class TypeEncoder {
         return result.toString();
     }
 
-    private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
-        StringBuilder result = new StringBuilder();
-        boolean arrayOfBytes = !value.getValue().isEmpty()
-                                       && value.getValue().get(0) instanceof DynamicBytes;
-        boolean arrayOfString = !value.getValue().isEmpty()
-                                        && value.getValue().get(0) instanceof Utf8String;
+
+    private static String encodeCompositeDataHolder(CompositeDataHolderType value) {
+        return encodeDynamicStruct(value, false);
+    }
+
+    private static String encodeDynamicStruct(DynamicStructType value) {
+        return encodeDynamicStruct(value, true);
+    }
+
+    /**
+     * A struct is encoded by writing a preamble (0x20), followed by offsets for dynamic data or in-place encoding
+     * for static data.
+     *
+     * @param value            the struct value.
+     * @param isTopLevelStruct wheter this is a top-level (not a nested/embedded).
+     * @return the encoding of the struct.
+     */
+    private static String encodeDynamicStruct(DynamicStructType value, boolean isTopLevelStruct) {
+        final StringBuilder structOffsetsAndStaticData = new StringBuilder();
+        if (isTopLevelStruct) {
+            // 0000000000000000000000000000000000000000000000000000000000000020
+            structOffsetsAndStaticData.append(encode(new Uint(BigInteger.valueOf(MAX_BYTE_LENGTH))));
+        }
+
+        // Struct args.
+        final int numStructArgs = value.getValue().size();
+
+        // The first block is offset by 32 bytes to allow for the preamble.
+        final int currentBlockOffset = isTopLevelStruct ? MAX_BYTE_LENGTH : 0;
+        int dynamicDataOffset = numStructArgs * MAX_BYTE_LENGTH + currentBlockOffset;
+
+
+        final StringBuilder structDynamicData = new StringBuilder();
+        // We want to encode the data in a BFS-manner, encoding the current struct meta-data (offsets for dynamic values,
+        // and in-place encoding for static values), and then follow it with the encoded data segment for the dynamic values.
+        for (Type structFieldType : value.getValue())
+            if (isDynamic(structFieldType)) {
+                String encodedData = "";
+                if (DynamicStructType.class.isAssignableFrom(structFieldType.getClass())) {
+                    // Embedded struct.
+                    encodedData = encodeDynamicStruct((DynamicStructType) structFieldType, false);
+                } else {
+                    encodedData = encode(structFieldType);
+                }
+
+                structOffsetsAndStaticData.append(encode(new Uint(BigInteger.valueOf(dynamicDataOffset - currentBlockOffset)))); // The offset.
+                structDynamicData.append(encodedData); // Add the dynamic data to another stringbuilder for appending later on.
+                dynamicDataOffset += encodedData.length() / 2;
+
+            } else {
+                // Static type - encode and append in-place.
+                structOffsetsAndStaticData.append(encode(structFieldType));
+            }
+        // Finally
+        return structOffsetsAndStaticData.toString() + structDynamicData.toString();
+    }
+
+    private static <T extends Type> String encodeArrayValuesOffsets(Array<T> value) {
+        final StringBuilder result = new StringBuilder();
+        final List<T> valuesList = value.getValue();
+        boolean arrayOfBytes = !valuesList.isEmpty()
+                && valuesList.get(0) instanceof DynamicBytes;
+        boolean arrayOfString = !valuesList.isEmpty()
+                && valuesList.get(0) instanceof Utf8String;
         if (arrayOfBytes || arrayOfString) {
             long offset = 0;
-            for (int i = 0; i < value.getValue().size(); i++) {
+            for (int i = 0; i < valuesList.size(); i++) {
                 if (i == 0) {
-                    offset = value.getValue().size() * MAX_BYTE_LENGTH;
+                    offset = valuesList.size() * MAX_BYTE_LENGTH;
                 } else {
-                    int bytesLength = arrayOfBytes
-                            ? ((byte[]) value.getValue().get(i - 1).getValue()).length
-                            : ((String) value.getValue().get(i - 1).getValue()).length();
+                    final T previousValueType = valuesList.get(i - 1);
+                    final int bytesLength = arrayOfBytes
+                            ? ((byte[]) previousValueType.getValue()).length
+                            : ((String) previousValueType.getValue()).length();
                     int numberOfWords = (bytesLength + MAX_BYTE_LENGTH - 1) / MAX_BYTE_LENGTH;
                     int totalBytesLength = numberOfWords * MAX_BYTE_LENGTH;
                     offset += totalBytesLength + MAX_BYTE_LENGTH;
@@ -196,4 +324,5 @@ public class TypeEncoder {
         }
         return result.toString();
     }
+
 }

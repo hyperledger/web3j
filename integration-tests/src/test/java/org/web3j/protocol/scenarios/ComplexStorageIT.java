@@ -1,21 +1,21 @@
 package org.web3j.protocol.scenarios;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Optional;
-
 import org.junit.Before;
-
+import org.junit.Test;
+import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStructType;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Credentials;
-import org.web3j.protocol.Web3j;
+import org.web3j.crypto.WalletUtils;
+import org.web3j.generated.ComplexStorage;
+import org.web3j.generated.SimpleStorage;
+import org.web3j.generated.SimpleStruct3;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -23,14 +23,26 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
-import static junit.framework.TestCase.fail;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 
-/**
- * Common methods & settings used accross scenarios.
- */
-public class Scenario {
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+public class ComplexStorageIT {
 
     static final BigInteger GAS_PRICE = BigInteger.valueOf(22_000_000_000L);
     static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
@@ -45,15 +57,7 @@ public class Scenario {
     "0x..." // 20 bytes (40 hex characters) & replace instances of ALICE.getAddress() with this
     WALLET address variable you've defined.
     */
-    static final Credentials ALICE = Credentials.create(
-            "",  // 32 byte hex value
-            "0x"  // 64 byte hex value
-    );
-
-    static final Credentials BOB = Credentials.create(
-            "",  // 32 byte hex value
-            "0x"  // 64 byte hex value
-    );
+    private Credentials credentials;
 
     private static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
 
@@ -62,18 +66,66 @@ public class Scenario {
 
     Admin web3j;
 
-    public Scenario() { }
-
     @Before
     public void setUp() throws Exception {
-        this.web3j = Admin.build(new HttpService("https://rinkeby.infura.io/a1504fcad53249f5a7b8df6bc2e3c3fb"));
-//        this.web3j = Admin.build(new HttpService());
+        this.web3j = Admin.build(new HttpService("https://rinkeby.infura.io/v3/a1504fcad53249f5a7b8df6bc2e3c3fb"));
+
+        this.credentials = WalletUtils.loadCredentials(
+                "hello",
+                "/Users/sam/development/work/blk_io/wallets/test/UTC--2019-04-03T09-08-31.959000000Z--fa8d1f97740206b9b785193af60d6c8138b0cadb.json");
+    }
+
+    @Test
+    public void testDeploySimpleContract() throws Exception {
+        final BigInteger value = BigInteger.valueOf(1000L);
+        final SimpleStorage simpleStorage = SimpleStorage.deploy(web3j, this.credentials, GAS_PRICE, GAS_LIMIT).send();
+        assertNotNull(simpleStorage.set(value).send());
+        assertThat(simpleStorage.get().send(), is(value));
+    }
+
+    @Test
+    public void testDeploySimpleStruct3Contract() throws Exception {
+        final SimpleStruct3.TupleClass1 ivaylo = new SimpleStruct3.TupleClass1(BigInteger.valueOf(33), "Ivaylo");
+        final SimpleStruct3 simpleStruct3 = SimpleStruct3.deploy(web3j, credentials, new DefaultGasProvider(), ivaylo).send();
+
+        final SimpleStruct3.TupleClass1 ivayloResult = simpleStruct3.getBar().send();
+        System.out.println(ivayloResult);
+
+        final SimpleStruct3.TupleClass1 sam = new SimpleStruct3.TupleClass1(BigInteger.valueOf(22), "Sam");
+        assertNotNull(simpleStruct3.setBar(sam).send());
+
+        final SimpleStruct3.TupleClass1 result1 = simpleStruct3.getBar().send();
+        System.out.println(result1);
+
+        final SimpleStruct3.TupleClass1 tony = new SimpleStruct3.TupleClass1(BigInteger.valueOf(77), "Tony");
+        assertNotNull(simpleStruct3.setBar(tony).send());
+
+        final SimpleStruct3.TupleClass1 result2 = simpleStruct3.getBar().send();
+        System.out.println(result2);
+
+//        assertNotNull(complexStorage.setBar(bar).send()); // TODO: re-enable once we are done with tuple1
+    }
+
+    @Test
+    public void testDeployContract() throws Exception {
+        final ComplexStorage.TupleClass1 foo = new ComplexStorage.TupleClass1("Sam", "Na");
+        final ComplexStorage.TupleClass2 bar = new ComplexStorage.TupleClass2("First", BigInteger.valueOf(100L));
+
+        final ComplexStorage complexStorage = ComplexStorage.deploy(web3j, credentials, new DefaultGasProvider(), foo, bar).send();
+
+        final ComplexStorage.TupleClass1 foo2 = new ComplexStorage.TupleClass1("Ivaylo", "K");
+        assertNotNull(complexStorage.setFoo(foo2).send());
+
+        // Now test the decoder.
+        complexStorage.getFooBar().send();
+
+//        assertNotNull(complexStorage.setBar(bar).send()); // TODO: re-enable once we are done with tuple1
     }
 
     boolean unlockAccount() throws Exception {
         PersonalUnlockAccount personalUnlockAccount =
                 web3j.personalUnlockAccount(
-                        ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
+                        credentials.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
                         .sendAsync().get();
         return personalUnlockAccount.accountUnlocked();
     }
@@ -127,7 +179,8 @@ public class Scenario {
         return new Function(
                 "fibonacciNotify",
                 Collections.singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.singletonList(new TypeReference<Uint>() {}));
+                Collections.singletonList(new TypeReference<Uint>() {
+                }));
     }
 
     static String load(String filePath) throws URISyntaxException, IOException {

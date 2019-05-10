@@ -13,6 +13,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.web3j.TempFileProvider;
@@ -50,6 +51,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testComplexStorageGeneration() throws Exception {
+        testCodeGenerationJvmTypes("abiv2/complexstorage", "ComplexStorage");
+//        testCodeGenerationSolidityTypes("greeter", "Greeter");
+    }
+
+    @Test
     public void testGreeterGeneration() throws Exception {
         testCodeGenerationJvmTypes("greeter", "Greeter");
         testCodeGenerationSolidityTypes("greeter", "Greeter");
@@ -68,9 +75,15 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testSimpleStruct1Generation() throws Exception {
+        testCodeGenerationJvmTypes("simplestruct1", "SimpleStruct1");
+//        testCodeGenerationSolidityTypes("simplestorage", "SimpleStorage");
+    }
+
+    @Test
     public void testFibonacciGeneration() throws Exception {
         testCodeGenerationJvmTypes("fibonacci", "Fibonacci");
-        testCodeGenerationSolidityTypes("fibonacci", "Fibonacci");
+//        testCodeGenerationSolidityTypes("fibonacci", "Fibonacci");
     }
 
     @Test
@@ -83,6 +96,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     public void testShipIt() throws Exception {
         testCodeGenerationJvmTypes("shipit", "ShipIt");
         testCodeGenerationSolidityTypes("shipit", "ShipIt");
+    }
+
+    @Test
+    public void testComplexStorage() throws Exception {
+        testCodeGenerationJvmTypes("complexstorage", "ComplexStorage");
+//        testCodeGenerationSolidityTypes("complexstorage", "ComplexStorage");
     }
 
     @Test

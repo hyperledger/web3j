@@ -1,0 +1,176 @@
+package org.web3j.abi;
+
+import org.junit.Test;
+import org.web3j.abi.datatypes.DynamicStructType;
+import org.web3j.abi.datatypes.StaticStructType;
+import org.web3j.abi.structs.DynamicStruct7;
+import org.web3j.abi.structs.DynamicStructWithUintAndString;
+import org.web3j.abi.structs.NestedDynamicStruct;
+import org.web3j.abi.structs.NestedDynamicStruct2;
+import org.web3j.abi.structs.StaticStructWithBigInt;
+import org.web3j.abi.structs.StaticStructWithBigIntAndArray;
+
+import java.math.BigInteger;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+public class TypeEncoderDecoderTest {
+
+    @Test
+    public void assertStaticStructsTest1() {
+        reflexiveTest(new StaticStructWithBigInt(BigInteger.valueOf(100)),
+                "0000000000000000000000000000000000000000000000000000000000000064");
+    }
+
+    @Test
+    public void assertDynamicStructsTest3() {
+        final DynamicStructWithUintAndString dynamicStruct1 = new DynamicStructWithUintAndString(BigInteger.valueOf(100), "hello");
+
+        final String expectedEncodedValue = "0000000000000000000000000000000000000000000000000000000000000020" +
+                "0000000000000000000000000000000000000000000000000000000000000064" +
+                "0000000000000000000000000000000000000000000000000000000000000040" +
+                "0000000000000000000000000000000000000000000000000000000000000005" +
+                "68656c6c6f000000000000000000000000000000000000000000000000000000";
+
+        assertTrue(TypeEncoder.isDynamic(dynamicStruct1));
+        reflexiveTest(dynamicStruct1, expectedEncodedValue);
+    }
+
+    @Test
+    public void assertDynamicStructsTest7() {
+        final DynamicStruct7 dynamicStruct1 = new DynamicStruct7(BigInteger.ONE, BigInteger.valueOf(2), "third", "fourth", BigInteger.valueOf(5), false, "seventh", BigInteger.valueOf(8));
+        final String expectedEncodedValue = "0000000000000000000000000000000000000000000000000000000000000020" +
+                "0000000000000000000000000000000000000000000000000000000000000001" +
+                "0000000000000000000000000000000000000000000000000000000000000002" +
+                "0000000000000000000000000000000000000000000000000000000000000100" +
+                "0000000000000000000000000000000000000000000000000000000000000140" +
+                "0000000000000000000000000000000000000000000000000000000000000005" +
+                "0000000000000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000180" +
+                "0000000000000000000000000000000000000000000000000000000000000008" +
+                "0000000000000000000000000000000000000000000000000000000000000005" +
+                "7468697264000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000006" +
+                "666f757274680000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000007" +
+                "736576656e746800000000000000000000000000000000000000000000000000";
+
+        assertTrue(TypeEncoder.isDynamic(dynamicStruct1));
+        reflexiveTest(dynamicStruct1, expectedEncodedValue);
+    }
+
+    @Test // assertDynamicStructsComplexTest1
+    public void assertNestedStructsTest() {
+        final NestedDynamicStruct dynamicStruct1 = new NestedDynamicStruct("First", "Second", new NestedDynamicStruct.Foo(BigInteger.valueOf(100), "foobar"));
+
+        final String expectedEncodedValue = "0000000000000000000000000000000000000000000000000000000000000020" +
+                "0000000000000000000000000000000000000000000000000000000000000060" +
+                "00000000000000000000000000000000000000000000000000000000000000a0" +
+                "00000000000000000000000000000000000000000000000000000000000000e0" +
+                "0000000000000000000000000000000000000000000000000000000000000005" +
+                "4669727374000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000006" +
+                "5365636f6e640000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000064" +
+                "0000000000000000000000000000000000000000000000000000000000000040" +
+                "0000000000000000000000000000000000000000000000000000000000000006" +
+                "666f6f6261720000000000000000000000000000000000000000000000000000";
+
+        assertTrue(TypeEncoder.isDynamic(dynamicStruct1));
+        reflexiveTest(dynamicStruct1, expectedEncodedValue);
+    }
+
+    @Test
+    public void assertNestedStructsTest2() { // assertDynamicStructsComplexTest2
+        // [["Sam", "Na", [2, "Leonard Street", "London"], [37, ["Mobile", [61, "04", "12332112"]], ["Home", [61, "02", "99872000"]]]]]);
+
+        final String expectedEncodedValue = "0000000000000000000000000000000000000000000000000000000000000020" +
+                "0000000000000000000000000000000000000000000000000000000000000080" +
+                "00000000000000000000000000000000000000000000000000000000000000c0" +
+                "0000000000000000000000000000000000000000000000000000000000000100" +
+                "00000000000000000000000000000000000000000000000000000000000001e0" +
+                "0000000000000000000000000000000000000000000000000000000000000003" +
+                "53616d0000000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000002" +
+                "4e61000000000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000002" +
+                "0000000000000000000000000000000000000000000000000000000000000060" +
+                "00000000000000000000000000000000000000000000000000000000000000a0" +
+                "000000000000000000000000000000000000000000000000000000000000000e" +
+                "4c656f6e61726420537472656574000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000006" +
+                "4c6f6e646f6e0000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000025" +
+                "0000000000000000000000000000000000000000000000000000000000000060" +
+                "00000000000000000000000000000000000000000000000000000000000001c0" +
+                "0000000000000000000000000000000000000000000000000000000000000040" +
+                "0000000000000000000000000000000000000000000000000000000000000080" +
+                "0000000000000000000000000000000000000000000000000000000000000006" +
+                "4d6f62696c650000000000000000000000000000000000000000000000000000" +
+                "000000000000000000000000000000000000000000000000000000000000003d" +
+                "0000000000000000000000000000000000000000000000000000000000000060" +
+                "00000000000000000000000000000000000000000000000000000000000000a0" +
+                "0000000000000000000000000000000000000000000000000000000000000002" +
+                "3034000000000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000008" +
+                "3132333332313132000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000040" +
+                "0000000000000000000000000000000000000000000000000000000000000080" +
+                "0000000000000000000000000000000000000000000000000000000000000004" +
+                "486f6d6500000000000000000000000000000000000000000000000000000000" +
+                "000000000000000000000000000000000000000000000000000000000000003d" +
+                "0000000000000000000000000000000000000000000000000000000000000060" +
+                "00000000000000000000000000000000000000000000000000000000000000a0" +
+                "0000000000000000000000000000000000000000000000000000000000000002" +
+                "3032000000000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000008" +
+                "3939383732303030000000000000000000000000000000000000000000000000";
+
+        // (BigInteger streetNumber, String streetName, String suburb)
+        final NestedDynamicStruct2.HomeAddressStruct homeAddress = new NestedDynamicStruct2.HomeAddressStruct(BigInteger.valueOf(2), "Leonard Street", "London");
+
+        // Mobile
+        final NestedDynamicStruct2.AreaCodeAndNumber mobileNumber = new NestedDynamicStruct2.AreaCodeAndNumber(BigInteger.valueOf(61), "04", "12332112");
+        final NestedDynamicStruct2.PhoneNumber mobile = new NestedDynamicStruct2.PhoneNumber("Mobile", mobileNumber);
+
+        // Home
+        final NestedDynamicStruct2.AreaCodeAndNumber homeNumber = new NestedDynamicStruct2.AreaCodeAndNumber(BigInteger.valueOf(61), "02", "99872000");
+        final NestedDynamicStruct2.PhoneNumber home = new NestedDynamicStruct2.PhoneNumber("Home", homeNumber);
+        final NestedDynamicStruct2.ContactNumbers contactNumbers = new NestedDynamicStruct2.ContactNumbers(BigInteger.valueOf(37), mobile, home);
+
+        final NestedDynamicStruct2 dynamicStruct1 = new NestedDynamicStruct2("Sam", "Na", homeAddress, contactNumbers);
+        assertTrue(TypeEncoder.isDynamic(dynamicStruct1));
+        reflexiveTest(dynamicStruct1, expectedEncodedValue);
+    }
+
+    @Test
+    public void staticArraysInStructTest() {
+        reflexiveTest(new StaticStructWithBigIntAndArray(BigInteger.valueOf(100),
+                new BigInteger[]{
+                        BigInteger.valueOf(150),
+                        BigInteger.valueOf(200)
+                }), "0000000000000000000000000000000000000000000000000000000000000064" +
+                "0000000000000000000000000000000000000000000000000000000000000096" +
+                "00000000000000000000000000000000000000000000000000000000000000c8");
+    }
+
+    private void reflexiveTest(StaticStructType structToTest, String expectedEncodedValue) {
+        assertThat(TypeEncoder.encode(structToTest), is(expectedEncodedValue));
+
+        final StaticStructType reconstructedStruct1 = TypeDecoder.decode(expectedEncodedValue, structToTest.getClass());
+        assertNotNull(reconstructedStruct1);
+        assertEquals(structToTest, reconstructedStruct1);
+    }
+
+    private void reflexiveTest(DynamicStructType structToTest, String expectedEncodedValue) {
+        assertThat(TypeEncoder.encode(structToTest), is(expectedEncodedValue));
+
+        final DynamicStructType reconstructedStruct1 = TypeDecoder.decode(expectedEncodedValue, structToTest.getClass());
+        assertNotNull(reconstructedStruct1);
+        assertEquals(structToTest, reconstructedStruct1);
+    }
+}

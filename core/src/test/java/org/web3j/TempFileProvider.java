@@ -15,8 +15,10 @@ public class TempFileProvider {
 
     @Before
     public void setUp() throws Exception {
-        tempDir = Files.createTempDirectory(
-                TempFileProvider.class.getSimpleName()).toFile();
+        tempDir = new File("/Users/sam/development/work/blk_io/web3j/output");
+        tempDir.mkdirs(); // TODO[Sam]: reinstate the below!
+//        tempDir = Files.createTempDirectory(
+//                TempFileProvider.class.getSimpleName()).toFile();
         tempDirPath = tempDir.getPath();
     }
 

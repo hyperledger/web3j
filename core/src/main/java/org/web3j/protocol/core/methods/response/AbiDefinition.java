@@ -1,8 +1,8 @@
 package org.web3j.protocol.core.methods.response;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.List;
 
 /**
  * AbiDefinition wrapper.
@@ -22,17 +22,17 @@ public class AbiDefinition {
      * since multiple functions with the same signature that only differ in mutability are not
      * allowed in Solidity.</p>
      * <p>
-     *     Valid values are:
-     *     <ul>
-     *         <li>pure</li>
-     *         <li>view</li>
-     *         <li>nonpayable</li>
-     *         <li>payable</li>
-     *     </ul>
+     * Valid values are:
+     * <ul>
+     * <li>pure</li>
+     * <li>view</li>
+     * <li>nonpayable</li>
+     * <li>payable</li>
+     * </ul>
      * </p>
      */
     private String stateMutability;
-    
+
     public AbiDefinition() {
     }
 
@@ -42,8 +42,8 @@ public class AbiDefinition {
     }
 
     public AbiDefinition(boolean constant, List<NamedType> inputs, String name,
-            List<NamedType> outputs, String type, boolean payable,
-            String stateMutability) {
+                         List<NamedType> outputs, String type, boolean payable,
+                         String stateMutability) {
         this.constant = constant;
         this.inputs = inputs;
         this.name = name;
@@ -164,7 +164,47 @@ public class AbiDefinition {
         return result;
     }
 
+    public static class NamedTypeComponent {
+        private String name;
+        private String type;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            NamedTypeComponent that = (NamedTypeComponent) o;
+
+            if (name != null ? !name.equals(that.name) : that.name != null) return false;
+            return type != null ? type.equals(that.type) : that.type == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = name != null ? name.hashCode() : 0;
+            result = 31 * result + (type != null ? type.hashCode() : 0);
+            return result;
+        }
+    }
+
     public static class NamedType {
+        private List<NamedTypeComponent> components;
         private String name;
         private String type;
         private boolean indexed;
@@ -207,34 +247,34 @@ public class AbiDefinition {
             this.indexed = indexed;
         }
 
+        public List<NamedTypeComponent> getComponents() {
+            return components;
+        }
+
+        public void setComponents(List<NamedTypeComponent> components) {
+            this.components = components;
+        }
+
         @Override
         public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof NamedType)) {
-                return false;
-            }
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
 
             NamedType namedType = (NamedType) o;
 
-            if (isIndexed() != namedType.isIndexed()) {
+            if (indexed != namedType.indexed) return false;
+            if (components != null ? !components.equals(namedType.components) : namedType.components != null)
                 return false;
-            }
-
-            if (getName() != null
-                    ? !getName().equals(namedType.getName()) : namedType.getName() != null) {
-                return false;
-            }
-            return getType() != null
-                    ? getType().equals(namedType.getType()) : namedType.getType() == null;
+            if (name != null ? !name.equals(namedType.name) : namedType.name != null) return false;
+            return type != null ? type.equals(namedType.type) : namedType.type == null;
         }
 
         @Override
         public int hashCode() {
-            int result = getName() != null ? getName().hashCode() : 0;
-            result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-            result = 31 * result + (isIndexed() ? 1 : 0);
+            int result = components != null ? components.hashCode() : 0;
+            result = 31 * result + (name != null ? name.hashCode() : 0);
+            result = 31 * result + (type != null ? type.hashCode() : 0);
+            result = 31 * result + (indexed ? 1 : 0);
             return result;
         }
     }

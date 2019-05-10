@@ -9,6 +9,7 @@ import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStructType;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
@@ -23,15 +24,16 @@ import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
  */
 public class FunctionReturnDecoder {
 
-    private FunctionReturnDecoder() { }
+    private FunctionReturnDecoder() {
+    }
 
     /**
      * Decode ABI encoded return values from smart contract function call.
      *
-     * @param rawInput ABI encoded input
+     * @param rawInput         ABI encoded input
      * @param outputParameters list of return types as {@link TypeReference}
      * @return {@link List} of values returned by function, {@link Collections#emptyList()} if
-     *         invalid response
+     * invalid response
      */
     public static List<Type> decode(
             String rawInput, List<TypeReference<Type>> outputParameters) {
@@ -53,18 +55,18 @@ public class FunctionReturnDecoder {
      * returned instead. These are returned as a bytes32 value.</p>
      *
      * <ul>
-     *     <li>Arrays</li>
-     *     <li>Strings</li>
-     *     <li>Bytes</li>
+     * <li>Arrays</li>
+     * <li>Strings</li>
+     * <li>Bytes</li>
      * </ul>
      *
      * <p>See the
      * <a href="http://solidity.readthedocs.io/en/latest/contracts.html#events">
      * Solidity documentation</a> for further information.</p>
      *
-     * @param rawInput ABI encoded input
+     * @param rawInput      ABI encoded input
      * @param typeReference of expected result type
-     * @param <T> type of TypeReference
+     * @param <T>           type of TypeReference
      * @return the decode value
      */
     @SuppressWarnings("unchecked")
@@ -94,7 +96,7 @@ public class FunctionReturnDecoder {
         List<Type> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
-        for (TypeReference<?> typeReference:outputParameters) {
+        for (TypeReference<?> typeReference : outputParameters) {
             try {
                 @SuppressWarnings("unchecked")
                 Class<Type> type = (Class<Type>) typeReference.getClassType();
@@ -102,7 +104,12 @@ public class FunctionReturnDecoder {
                 int hexStringDataOffset = getDataOffset(input, offset, type);
 
                 Type result;
-                if (DynamicArray.class.isAssignableFrom(type)) {
+                // TODO[Sam]: add support for DynamicStructType.
+                if (DynamicStructType.class.isAssignableFrom(type)) {
+                    result = TypeDecoder.decode(input, type);
+                    offset += TypeEncoder.encode(result).length();
+                    // TODO[sam]: there has to be a better way of doing this! Improve this!
+                } else if (DynamicArray.class.isAssignableFrom(type)) {
                     result = TypeDecoder.decodeDynamicArray(
                             input, hexStringDataOffset, typeReference);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;

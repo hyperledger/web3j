@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.web3j.abi.datatypes.DynamicStructType;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
@@ -19,7 +20,8 @@ import org.web3j.utils.Numeric;
  */
 public class FunctionEncoder {
 
-    private FunctionEncoder() { }
+    private FunctionEncoder() {
+    }
 
     public static String encode(Function function) {
         List<Type> parameters = function.getInputParameters();
@@ -30,22 +32,52 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodId);
 
-        return encodeParameters(parameters, result);
+        return encodeParameters(parameters, false, result);
     }
 
     public static String encodeConstructor(List<Type> parameters) {
-        return encodeParameters(parameters, new StringBuilder());
-    }
+//        return encodeParameters(parameters, true, new StringBuilder());
+        if (parameters.isEmpty()) {
+            return "";
+        }
 
-    private static String encodeParameters(List<Type> parameters, StringBuilder result) {
+        final StringBuilder result = new StringBuilder();
+        final StringBuilder dynamicData = new StringBuilder();
+
+        final boolean hasDynamicParams = parameters.stream().filter(t -> TypeEncoder.isDynamic(t)).findFirst().isPresent();
         int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
-        StringBuilder dynamicData = new StringBuilder();
 
-        for (Type parameter:parameters) {
-            String encodedValue = TypeEncoder.encode(parameter);
+        for (int i = 0; i < parameters.size(); i++) {
+            final Type parameter = parameters.get(i);
+            final String encodedValue = TypeEncoder.encode(parameter);
 
             if (TypeEncoder.isDynamic(parameter)) {
-                String encodedDataOffset = TypeEncoder.encodeNumeric(
+                final String encodedDataOffset = TypeEncoder.encodeNumeric(new Uint(BigInteger.valueOf(dynamicDataOffset)));
+                result.append(encodedDataOffset);
+                dynamicData.append(encodedValue);
+                dynamicDataOffset += encodedValue.length() >> 1;
+            } else {
+                result.append(encodedValue);
+            }
+        }
+
+        result.append(dynamicData);
+        return result.toString();
+
+    }
+
+    private static String encodeParameters(List<Type> parameters, boolean isConstructorCall, StringBuilder result) {
+        int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
+        final StringBuilder dynamicData = new StringBuilder();
+
+        for (Type parameter : parameters) {
+            String encodedValue = TypeEncoder.encode(parameter);
+
+            // TODO: we should not add the offset for a dynamic struct!
+            if (DynamicStructType.class.isAssignableFrom(parameter.getClass())) {
+                dynamicData.append(encodedValue);
+            } else if (TypeEncoder.isDynamic(parameter)) {
+                final String encodedDataOffset = TypeEncoder.encodeNumeric(
                         new Uint(BigInteger.valueOf(dynamicDataOffset)));
                 result.append(encodedDataOffset);
                 dynamicData.append(encodedValue);
@@ -61,7 +93,7 @@ public class FunctionEncoder {
 
     private static int getLength(List<Type> parameters) {
         int count = 0;
-        for (Type type:parameters) {
+        for (Type type : parameters) {
             if (type instanceof StaticArray) {
                 count += ((StaticArray) type).getValue().size();
             } else {
