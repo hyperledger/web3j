@@ -1,100 +1,54 @@
-/*
- * Copyright 2019 Web3 Labs LTD.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
 package org.web3j.abi;
 
-import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ServiceLoader;
 
 import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.crypto.Hash;
-import org.web3j.utils.Numeric;
+import org.web3j.abi.spi.FunctionEncoderProvider;
 
 /**
- * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
- * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
+ * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
+ * Further details are available
+ * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
+ * </p>
+ * <p>
+ * Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI
+ * is found, in which case the first implementation found will be used.
+ *
+ * @see DefaultFunctionEncoder
+ * @see FunctionEncoderProvider
  */
-public class FunctionEncoder {
+public abstract class FunctionEncoder {
 
-    private FunctionEncoder() {}
+    private static FunctionEncoder DEFAULT_ENCODER;
 
-    public static String encode(Function function) {
-        List<Type> parameters = function.getInputParameters();
+    private static final ServiceLoader<FunctionEncoderProvider> loader =
+            ServiceLoader.load(FunctionEncoderProvider.class);
 
-        String methodSignature = buildMethodSignature(function.getName(), parameters);
-        String methodId = buildMethodId(methodSignature);
-
-        StringBuilder result = new StringBuilder();
-        result.append(methodId);
-
-        return encodeParameters(parameters, result);
+    public static String encode(final Function function) {
+        return encoder().encodeFunction(function);
     }
 
-    public static String encodeConstructor(List<Type> parameters) {
-        return encodeParameters(parameters, new StringBuilder());
+    public static String encodeConstructor(final List<Type> parameters) {
+        return encoder().encodeParameters(parameters);
     }
 
-    private static String encodeParameters(List<Type> parameters, StringBuilder result) {
-        int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
-        StringBuilder dynamicData = new StringBuilder();
+    public abstract String encodeFunction(Function function);
 
-        for (Type parameter : parameters) {
-            String encodedValue = TypeEncoder.encode(parameter);
+    public abstract String encodeParameters(List<Type> parameters);
 
-            if (TypeEncoder.isDynamic(parameter)) {
-                String encodedDataOffset =
-                        TypeEncoder.encodeNumeric(new Uint(BigInteger.valueOf(dynamicDataOffset)));
-                result.append(encodedDataOffset);
-                dynamicData.append(encodedValue);
-                dynamicDataOffset += encodedValue.length() >> 1;
-            } else {
-                result.append(encodedValue);
-            }
+    private static FunctionEncoder encoder() {
+        final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
+        return iterator.hasNext() ? iterator.next().get() : defaultEncoder();
+    }
+
+    private static FunctionEncoder defaultEncoder() {
+        if (DEFAULT_ENCODER == null) {
+            DEFAULT_ENCODER = new DefaultFunctionEncoder();
         }
-        result.append(dynamicData);
-
-        return result.toString();
+        return DEFAULT_ENCODER;
     }
 
-    private static int getLength(List<Type> parameters) {
-        int count = 0;
-        for (Type type : parameters) {
-            if (type instanceof StaticArray) {
-                count += ((StaticArray) type).getValue().size();
-            } else {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    static String buildMethodSignature(String methodName, List<Type> parameters) {
-        StringBuilder result = new StringBuilder();
-        result.append(methodName);
-        result.append("(");
-        String params =
-                parameters.stream().map(Type::getTypeAsString).collect(Collectors.joining(","));
-        result.append(params);
-        result.append(")");
-        return result.toString();
-    }
-
-    static String buildMethodId(String methodSignature) {
-        byte[] input = methodSignature.getBytes();
-        byte[] hash = Hash.sha3(input);
-        return Numeric.toHexString(hash).substring(0, 10);
-    }
 }
