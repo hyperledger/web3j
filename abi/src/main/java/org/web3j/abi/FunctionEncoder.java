@@ -13,9 +13,9 @@ import org.web3j.abi.spi.FunctionEncoderProvider;
  * Further details are available
  * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  * </p>
- * <p>
- * Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI
+ * <p>Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI
  * is found, in which case the first implementation found will be used.
+ * </p>
  *
  * @see DefaultFunctionEncoder
  * @see FunctionEncoderProvider
