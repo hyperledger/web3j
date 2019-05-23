@@ -18,17 +18,17 @@ import org.web3j.abi.datatypes.generated.Uint32;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class FunctionEncoderTest {
+public class DefaultFunctionEncoderTest {
 
     @Test
     public void testBuildMethodId() {
-        assertThat(FunctionEncoder.buildMethodId("baz(uint32,bool)"), is("0xcdcd77c0"));
+        assertThat(DefaultFunctionEncoder.buildMethodId("baz(uint32,bool)"), is("0xcdcd77c0"));
     }
 
     @Test
     public void testBuildMessageSignature() {
         assertThat(
-                FunctionEncoder.buildMethodSignature(
+                DefaultFunctionEncoder.buildMethodSignature(
                         "baz",
                         Arrays.asList(
                                 new Uint32(BigInteger.valueOf(69)),
@@ -40,7 +40,7 @@ public class FunctionEncoderTest {
     @Test
     public void testBuildEmptyMethodSignature() {
         assertThat(
-                FunctionEncoder.buildMethodSignature("empty", Collections.emptyList()),
+                DefaultFunctionEncoder.buildMethodSignature("empty", Collections.emptyList()),
                 is("empty()"));
     }
 
@@ -71,14 +71,13 @@ public class FunctionEncoderTest {
         Function function = new Function(
                 "baz",
                 Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),
-                Collections.<TypeReference<?>>emptyList()
+                Collections.emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),
                 is("0xcdcd77c0"
                         + "0000000000000000000000000000000000000000000000000000000000000045"
-                        + "0000000000000000000000000000000000000000000000000000000000000001"
-                ));
+                        + "0000000000000000000000000000000000000000000000000000000000000001"));
     }
 
     @Test
@@ -92,7 +91,7 @@ public class FunctionEncoderTest {
                             new Uint(BigInteger.ONE),
                             new Uint(BigInteger.valueOf(2)),
                             new Uint(BigInteger.valueOf(3)))),
-                Collections.<TypeReference<?>>emptyList()
+                Collections.emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),
@@ -120,7 +119,7 @@ public class FunctionEncoderTest {
                     ),
                     new Bytes10("1234567890".getBytes()),
                     new DynamicBytes("Hello, world!".getBytes())),
-                Collections.<TypeReference<?>>emptyList()
+                Collections.emptyList()
         );
 
         assertThat(FunctionEncoder.encode(function),
