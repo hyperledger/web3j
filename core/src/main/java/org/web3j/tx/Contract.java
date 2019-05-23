@@ -65,8 +65,7 @@ public abstract class Contract extends ManagedTransaction {
                        ContractGasProvider gasProvider) {
         super(web3j, transactionManager);
 
-        this.contractAddress = ensResolver.resolve(contractAddress);
-
+        this.contractAddress = resolveContractAddress(contractAddress);
         this.contractBinary = contractBinary;
         this.gasProvider = gasProvider;
     }
@@ -517,6 +516,10 @@ public abstract class Contract extends ManagedTransaction {
             indexedValues.add(value);
         }
         return new EventValues(indexedValues, nonIndexedValues);
+    }
+
+    protected String resolveContractAddress(String contractAddress) {
+        return ensResolver.resolve(contractAddress);
     }
 
     protected EventValues extractEventParameters(Event event, Log log) {
