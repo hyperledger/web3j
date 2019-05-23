@@ -11,7 +11,7 @@ import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
-public class DefaultFunctionEncoder extends FunctionEncoder {
+class DefaultFunctionEncoder extends FunctionEncoder {
 
     @Override
     public String encodeFunction(final Function function) {
@@ -65,5 +65,25 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
             }
         }
         return count;
+    }
+
+    static String buildMethodSignature(
+            final String methodName, final List<Type> parameters) {
+
+        final StringBuilder result = new StringBuilder();
+        result.append(methodName);
+        result.append("(");
+        final String params = parameters.stream()
+                .map(Type::getTypeAsString)
+                .collect(Collectors.joining(","));
+        result.append(params);
+        result.append(")");
+        return result.toString();
+    }
+
+    static String buildMethodId(final String methodSignature) {
+        final byte[] input = methodSignature.getBytes();
+        final byte[] hash = Hash.sha3(input);
+        return Numeric.toHexString(hash).substring(0, 10);
     }
 }
