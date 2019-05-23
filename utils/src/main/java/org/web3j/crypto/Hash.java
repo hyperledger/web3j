@@ -22,12 +22,28 @@ import org.bouncycastle.crypto.macs.HMac;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.jcajce.provider.digest.Blake2b;
 import org.bouncycastle.jcajce.provider.digest.Keccak;
-
 import org.web3j.utils.Numeric;
 
 /** Cryptographic hash functions. */
 public class Hash {
     private Hash() {}
+
+    /**
+     * Generates a digest for the given {@code input}.
+     *
+     * @param input The input to digest
+     * @param algorithm The hash algorithm to use
+     * @return The hash value for the given input
+     * @throws RuntimeException If we couldn't find any provider for the given algorithm
+     */
+    public static byte[] hash(byte[] input, String algorithm) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance(algorithm.toUpperCase());
+            return digest.digest(input);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Couldn't find a " + algorithm + " provider", e);
+        }
+    }
 
     /**
      * Generates a digest for the given {@code input}.
