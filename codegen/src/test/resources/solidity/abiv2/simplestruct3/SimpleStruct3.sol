@@ -1,6 +1,6 @@
 //in order for experimental ABIEncoderV2 to be “stable” when passing structs as arguments we must
-//use at least version 0.4.19 of solidity
-pragma solidity ^0.4.19;
+//use at least version 0.5.8 of solidity
+pragma solidity ^0.5.8;
 pragma experimental ABIEncoderV2;
 
 contract SimpleStruct3 {
@@ -12,18 +12,16 @@ contract SimpleStruct3 {
 
     Bar bar;
 
-    constructor(Bar _bar) public {
+    constructor(Bar memory _bar) public {
         bar = _bar;
     }
 
-    function setBar(Bar _toSet) public {
+    function setBar(Bar memory _toSet) public {
         bar = _toSet;
     }
 
-    function getBar() public returns (Bar _bar) {
-        emit Access(msg.sender, _bar);
+    function getBar() public view returns (Bar memory) {
         return (bar);
     }
 
-    event Access(address indexed _address, Bar _bar);
 }

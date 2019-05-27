@@ -36,7 +36,6 @@ public class FunctionEncoder {
     }
 
     public static String encodeConstructor(List<Type> parameters) {
-//        return encodeParameters(parameters, true, new StringBuilder());
         if (parameters.isEmpty()) {
             return "";
         }
