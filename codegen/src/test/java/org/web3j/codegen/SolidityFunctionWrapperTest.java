@@ -61,7 +61,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void setUp() throws Exception {
         super.setUp();
         generationReporter = mock(GenerationReporter.class);
-        solidityFunctionWrapper = new SolidityFunctionWrapper(true, generationReporter);
+        solidityFunctionWrapper = new SolidityFunctionWrapper(
+                true, Address.DEFAULT_LENGTH, generationReporter);
     }
 
     @Test

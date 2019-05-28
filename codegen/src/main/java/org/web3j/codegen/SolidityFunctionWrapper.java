@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.lang.model.SourceVersion;
@@ -30,19 +31,16 @@ import com.squareup.javapoet.TypeVariableName;
 import io.reactivex.Flowable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Double;
@@ -99,14 +97,23 @@ public class SolidityFunctionWrapper extends Generator {
             + "codegen module</a> to update.\n";
 
     private final boolean useNativeJavaTypes;
+    private final int addressLength;
+
+    private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
+    private static final Pattern pattern = Pattern.compile(regex);
+
     private final GenerationReporter reporter;
 
-    public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
-        this(useNativeJavaTypes, new LogGenerationReporter(LOGGER));
+    public SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
+        this(useNativeJavaTypes, addressLength, new LogGenerationReporter(LOGGER));
     }
 
-    SolidityFunctionWrapper(boolean useNativeJavaTypes, GenerationReporter reporter) {
+    SolidityFunctionWrapper(
+            boolean useNativeJavaTypes,
+            int addressLength,
+            GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
+        this.addressLength = addressLength;
         this.reporter = reporter;
     }
 
@@ -568,7 +575,13 @@ public class SolidityFunctionWrapper extends Generator {
                         + parameterSpec.name + ", " + typeMapInput + "))";
             }
         } else {
-            return "new " + parameterSpec.type + "(" + parameterSpec.name + ")";
+            String constructor = "new " + parameterSpec.type + "(";
+            if (Address.class.getSimpleName().equalsIgnoreCase(parameterSpec.type.toString())
+                    && addressLength != Address.DEFAULT_LENGTH) {
+
+                constructor += addressLength + ", ";
+            }
+            return constructor + parameterSpec.name + ")";
         }
     }
 
@@ -613,7 +626,9 @@ public class SolidityFunctionWrapper extends Generator {
             return TypeName.get(BigInteger.class);
         } else if (simpleName.equals(Utf8String.class.getSimpleName())) {
             return TypeName.get(String.class);
-        } else if (simpleName.endsWith("Bytes")) {
+        } else if (simpleName.startsWith("Bytes")) {
+            return TypeName.get(byte[].class);
+        } else if (simpleName.equals(DynamicBytes.class.getSimpleName())) {
             return TypeName.get(byte[].class);
         } else if (simpleName.startsWith("Bool")) {
             return TypeName.get(java.lang.Boolean.class);
