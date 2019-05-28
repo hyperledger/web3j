@@ -209,14 +209,16 @@ public class TypeEncoderTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testInvalidAddress() {
-        Address address = new Address("0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
+        Address address = new Address(
+                "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
         assertThat(address.getTypeAsString(), is("address"));
         TypeEncoder.encodeAddress(address);
     }
 
     @Test
     public void testLongAddress() {
-        Address address = new Address(256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
+        Address address = new Address(256,
+                "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
         assertThat(address.getTypeAsString(), is("address"));
         TypeEncoder.encodeAddress(address);
     }
@@ -422,11 +424,11 @@ public class TypeEncoderTest {
     @Test
     public void testPrimitiveChar() {
         assertThat(encode(new Char('a')),
-                is("0000000000000000000000000000000000000000000000000000000000000001" +
-                        "6100000000000000000000000000000000000000000000000000000000000000"));
+                is("0000000000000000000000000000000000000000000000000000000000000001"
+                        + "6100000000000000000000000000000000000000000000000000000000000000"));
         assertThat(encode(new Char(' ')),
-                is("0000000000000000000000000000000000000000000000000000000000000001" +
-                        "2000000000000000000000000000000000000000000000000000000000000000"));
+                is("0000000000000000000000000000000000000000000000000000000000000001"
+                        + "2000000000000000000000000000000000000000000000000000000000000000"));
     }
 
     @Test
