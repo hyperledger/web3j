@@ -16,6 +16,7 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.primitive.PrimitiveType;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
@@ -55,6 +56,8 @@ public class TypeEncoder {
             return encodeArrayValues((StaticArray) parameter);
         } else if (parameter instanceof DynamicArray) {
             return encodeDynamicArray((DynamicArray) parameter);
+        } else if (parameter instanceof PrimitiveType) {
+            return encode(((PrimitiveType) parameter).toSolidityType());
         } else {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
@@ -62,7 +65,7 @@ public class TypeEncoder {
     }
 
     static String encodeAddress(Address address) {
-        return encodeNumeric(address.toUint160());
+        return encodeNumeric(address.toUint());
     }
 
     static String encodeNumeric(NumericType numericType) {
@@ -147,8 +150,8 @@ public class TypeEncoder {
 
     static <T extends Type> String encodeArrayValues(Array<T> value) {
         StringBuilder result = new StringBuilder();
-        for (Type type:value.getValue()) {
-            result.append(TypeEncoder.encode(type));
+        for (Type type : value.getValue()) {
+            result.append(encode(type));
         }
         return result.toString();
     }
@@ -169,9 +172,9 @@ public class TypeEncoder {
     private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
         StringBuilder result = new StringBuilder();
         boolean arrayOfBytes = !value.getValue().isEmpty()
-                                       && value.getValue().get(0) instanceof DynamicBytes;
+                && value.getValue().get(0) instanceof DynamicBytes;
         boolean arrayOfString = !value.getValue().isEmpty()
-                                        && value.getValue().get(0) instanceof Utf8String;
+                && value.getValue().get(0) instanceof Utf8String;
         if (arrayOfBytes || arrayOfString) {
             long offset = 0;
             for (int i = 0; i < value.getValue().size(); i++) {
