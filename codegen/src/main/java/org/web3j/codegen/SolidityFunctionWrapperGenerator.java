@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.web3j.abi.datatypes.Address;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -49,19 +50,23 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     private final File binFile;
     private final File abiFile;
 
+    private final int addressLength;
+
     private SolidityFunctionWrapperGenerator(
             File binFile,
             File abiFile,
             File destinationDir,
             String basePackageName,
-            boolean useJavaNativeTypes) {
+            boolean useJavaNativeTypes,
+            int addressLength) {
 
         super(destinationDir, basePackageName, useJavaNativeTypes);
         this.binFile = binFile;
         this.abiFile = abiFile;
+        this.addressLength = addressLength;
     }
 
-    static List<AbiDefinition> loadContractDefinition(File absFile)
+    private static List<AbiDefinition> loadContractDefinition(File absFile)
             throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
@@ -85,8 +90,8 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         } else {
             String contractName = getFileNameNoExtension(abiFile.getName());
             String className = Strings.capitaliseFirstLetter(contractName);
-            System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            new SolidityFunctionWrapper(useJavaNativeTypes).generateJavaFiles(
+            System.out.print("Generating " + basePackageName + "." + className + " ... ");
+            new SolidityFunctionWrapper(useJavaNativeTypes, addressLength).generateJavaFiles(
                     contractName, binary, abi, destinationDirLocation.toString(), basePackageName);
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }
@@ -139,6 +144,11 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 required = false)
         private boolean solidityTypes;
 
+        @Option(names = { "-al", "--address-length" },
+                description = "address length in bits.",
+                required = false)
+        private int addressLengh = Address.DEFAULT_LENGTH;
+
         @Override
         public void run() {
             try {
@@ -146,7 +156,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 //simply check if solidityTypes were requested
                 boolean useJavaTypes = !(solidityTypes);
                 new SolidityFunctionWrapperGenerator(binFile, abiFile, destinationFileDir,
-                        packageName, useJavaTypes).generate();
+                        packageName, useJavaTypes, addressLengh).generate();
             } catch (Exception e) {
                 exitError(e);
             }
