@@ -644,9 +644,7 @@ public class SolidityFunctionWrapper extends Generator {
             return TypeName.get(BigInteger.class);
         } else if (simpleName.equals(Utf8String.class.getSimpleName())) {
             return TypeName.get(String.class);
-        } else if (simpleName.startsWith("Bytes")) {
-            return TypeName.get(byte[].class);
-        } else if (simpleName.equals(DynamicBytes.class.getSimpleName())) {
+        } else if (simpleName.endsWith("Bytes")) {
             return TypeName.get(byte[].class);
         } else if (simpleName.startsWith("Bool")) {
             return TypeName.get(java.lang.Boolean.class);
