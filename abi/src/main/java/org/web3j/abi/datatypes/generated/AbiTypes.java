@@ -5,6 +5,14 @@ import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.primitive.Boolean;
+import org.web3j.abi.datatypes.primitive.Byte;
+import org.web3j.abi.datatypes.primitive.Char;
+import org.web3j.abi.datatypes.primitive.Double;
+import org.web3j.abi.datatypes.primitive.Float;
+import org.web3j.abi.datatypes.primitive.Int;
+import org.web3j.abi.datatypes.primitive.Long;
+import org.web3j.abi.datatypes.primitive.Short;
 
 /**
  * Auto generated code.
@@ -26,6 +34,22 @@ public final class AbiTypes {
                     return Utf8String.class;
             case "bytes":
                     return DynamicBytes.class;
+            case "boolean":
+                    return Boolean.class;
+            case "byte":
+                    return Byte.class;
+            case "char":
+                    return Char.class;
+            case "double":
+                    return Double.class;
+            case "float":
+                    return Float.class;
+            case "int":
+                    return Int.class;
+            case "long":
+                    return Long.class;
+            case "short":
+                    return Short.class;
             case "uint8":
                     return Uint8.class;
             case "int8":

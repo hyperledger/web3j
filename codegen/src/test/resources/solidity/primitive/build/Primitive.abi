@@ -1,0 +1,210 @@
+[
+  {
+    "inputs": [
+      {
+        "type": "boolean"
+      },
+      {
+        "type": "boolean[]"
+      },
+      {
+        "type": "boolean[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "boolean"
+      },
+      {
+        "type": "boolean[]"
+      },
+      {
+        "type": "boolean[][]"
+      }
+    ],
+    "name": "booleanFunction",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "type": "byte"
+      },
+      {
+        "type": "byte[]"
+      },
+      {
+        "type": "byte[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "byte"
+      },
+      {
+        "type": "byte[]"
+      },
+      {
+        "type": "byte[][]"
+      }
+    ],
+    "name": "byteFunction",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "type": "char"
+      },
+      {
+        "type": "char[]"
+      },
+      {
+        "type": "char[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "char"
+      },
+      {
+        "type": "char[]"
+      },
+      {
+        "type": "char[][]"
+      }
+    ],
+    "name": "charFunction",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "type": "int"
+      },
+      {
+        "type": "int[]"
+      },
+      {
+        "type": "int[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "int"
+      },
+      {
+        "type": "int[]"
+      },
+      {
+        "type": "int[][]"
+      }
+    ],
+    "name": "intFunction",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "type": "long"
+      },
+      {
+        "type": "long[]"
+      },
+      {
+        "type": "long[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "long"
+      },
+      {
+        "type": "long[]"
+      },
+      {
+        "type": "long[][]"
+      }
+    ],
+    "name": "longFunction",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "type": "short"
+      },
+      {
+        "type": "short[]"
+      },
+      {
+        "type": "short[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "short"
+      },
+      {
+        "type": "short[]"
+      },
+      {
+        "type": "short[][]"
+      }
+    ],
+    "name": "shortFunction",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "type": "float"
+      },
+      {
+        "type": "float[]"
+      },
+      {
+        "type": "float[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "float"
+      },
+      {
+        "type": "float[]"
+      },
+      {
+        "type": "float[][]"
+      }
+    ],
+    "name": "floatFunction",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "type": "double"
+      },
+      {
+        "type": "double[]"
+      },
+      {
+        "type": "double[][]"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "double"
+      },
+      {
+        "type": "double[]"
+      },
+      {
+        "type": "double[][]"
+      }
+    ],
+    "name": "doubleFunction",
+    "type": "function"
+  }
+]

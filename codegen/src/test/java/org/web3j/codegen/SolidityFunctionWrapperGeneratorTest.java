@@ -105,7 +105,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 "contracts", "HumanStandardToken", SOLIDITY_TYPES_ARG, true);
     }
 
-
+    @Test
+    public void testPrimitiveTypes() throws Exception {
+        testCodeGenerationJvmTypes("primitive", "Primitive");
+    }
 
     private void testCodeGenerationJvmTypes(
             String contractName, String inputFileName) throws Exception {

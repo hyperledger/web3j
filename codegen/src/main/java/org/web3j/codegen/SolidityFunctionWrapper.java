@@ -46,6 +46,13 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.AbiTypes;
+import org.web3j.abi.datatypes.primitive.Byte;
+import org.web3j.abi.datatypes.primitive.Char;
+import org.web3j.abi.datatypes.primitive.Double;
+import org.web3j.abi.datatypes.primitive.Float;
+import org.web3j.abi.datatypes.primitive.Int;
+import org.web3j.abi.datatypes.primitive.Long;
+import org.web3j.abi.datatypes.primitive.Short;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -602,16 +609,29 @@ public class SolidityFunctionWrapper extends Generator {
             return TypeName.get(String.class);
         } else if (simpleName.startsWith("Uint")) {
             return TypeName.get(BigInteger.class);
-        } else if (simpleName.startsWith("Int")) {
-            return TypeName.get(BigInteger.class);
         } else if (simpleName.equals(Utf8String.class.getSimpleName())) {
             return TypeName.get(String.class);
-        } else if (simpleName.startsWith("Bytes")) {
+        } else if (simpleName.endsWith("Bytes")) {
             return TypeName.get(byte[].class);
-        } else if (simpleName.equals(DynamicBytes.class.getSimpleName())) {
-            return TypeName.get(byte[].class);
-        } else if (simpleName.equals(Bool.class.getSimpleName())) {
-            return TypeName.get(Boolean.class);  // boolean cannot be a parameterized type
+        } else if (simpleName.startsWith("Bool")) {
+            return TypeName.get(java.lang.Boolean.class);
+            // boolean cannot be a parameterized type
+        } else if (simpleName.equals(Byte.class.getSimpleName())) {
+            return TypeName.get(java.lang.Byte.class);
+        } else if (simpleName.equals(Char.class.getSimpleName())) {
+            return TypeName.get(Character.class);
+        } else if (simpleName.equals(Double.class.getSimpleName())) {
+            return TypeName.get(java.lang.Double.class);
+        } else if (simpleName.equals(Float.class.getSimpleName())) {
+            return TypeName.get(java.lang.Float.class);
+        } else if (simpleName.equals(Int.class.getSimpleName())) {
+            return TypeName.get(Integer.class);
+        } else if (simpleName.equals(Long.class.getSimpleName())) {
+            return TypeName.get(java.lang.Long.class);
+        } else if (simpleName.equals(Short.class.getSimpleName())) {
+            return TypeName.get(java.lang.Short.class);
+        } else if (simpleName.startsWith("Int")) {
+            return TypeName.get(BigInteger.class);
         } else {
             throw new UnsupportedOperationException(
                     "Unsupported type: " + typeName
@@ -665,7 +685,7 @@ public class SolidityFunctionWrapper extends Generator {
      * @return non-empty parameter name
      */
     static String createValidParamName(String name, int idx) {
-        if (name.equals("")) {
+        if (name == null || name.equals("")) {
             return "param" + idx;
         } else {
             return name;
