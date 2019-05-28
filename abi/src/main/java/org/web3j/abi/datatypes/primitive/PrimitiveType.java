@@ -28,11 +28,15 @@ public abstract class PrimitiveType<T> implements Type<T> {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         final PrimitiveType<?> that = (PrimitiveType<?>) o;
-        return type.equals(that.type) &&
-                value.equals(that.value);
+        return type.equals(that.type)
+                && value.equals(that.value);
     }
 
     @Override
