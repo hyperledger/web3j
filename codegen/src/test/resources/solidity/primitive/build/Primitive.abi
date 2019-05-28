@@ -23,7 +23,8 @@
       }
     ],
     "name": "booleanFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -49,7 +50,8 @@
       }
     ],
     "name": "byteFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -75,7 +77,8 @@
       }
     ],
     "name": "charFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -101,7 +104,8 @@
       }
     ],
     "name": "intFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -127,7 +131,8 @@
       }
     ],
     "name": "longFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -153,7 +158,8 @@
       }
     ],
     "name": "shortFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -179,7 +185,8 @@
       }
     ],
     "name": "floatFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -205,6 +212,7 @@
       }
     ],
     "name": "doubleFunction",
-    "type": "function"
+    "type": "function",
+    "constant": true
   }
 ]
