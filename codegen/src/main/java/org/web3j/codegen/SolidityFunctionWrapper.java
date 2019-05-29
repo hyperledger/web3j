@@ -576,7 +576,7 @@ public class SolidityFunctionWrapper extends Generator {
             }
         } else {
             String constructor = "new " + parameterSpec.type + "(";
-            if (Address.class.getSimpleName().equalsIgnoreCase(parameterSpec.type.toString())
+            if (Address.class.getCanonicalName().equals(parameterSpec.type.toString())
                     && addressLength != Address.DEFAULT_LENGTH) {
 
                 constructor += addressLength + ", ";
