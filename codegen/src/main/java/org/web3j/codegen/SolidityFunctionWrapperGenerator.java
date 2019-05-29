@@ -52,7 +52,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
     private final int addressLength;
 
-    private SolidityFunctionWrapperGenerator(
+    protected SolidityFunctionWrapperGenerator(
             File binFile,
             File abiFile,
             File destinationDir,
@@ -66,14 +66,14 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         this.addressLength = addressLength;
     }
 
-    private static List<AbiDefinition> loadContractDefinition(File absFile)
+    protected List<AbiDefinition> loadContractDefinition(File absFile)
             throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
         return Arrays.asList(abiDefinition);
     }
 
-    private void generate() throws IOException, ClassNotFoundException {
+    protected final void generate() throws IOException, ClassNotFoundException {
         String binary = Contract.BIN_NOT_PROVIDED;
         if (binFile != null) {
             byte[] bytes = Files.readBytes(binFile);
@@ -111,7 +111,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
     @Command(name = COMMAND_PREFIX, mixinStandardHelpOptions = true, version = "4.0",
             sortOptions = false)
-    static class PicocliRunner implements Runnable {
+    private static class PicocliRunner implements Runnable {
         @Option(names = { "-a", "--abiFile" },
                 description = "abi file with contract definition.",
                 required = true)
