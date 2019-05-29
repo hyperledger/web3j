@@ -144,11 +144,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 required = false)
         private boolean solidityTypes;
 
-        @Option(names = { "-al", "--address-length" },
-                description = "address length in bits.",
-                required = false)
-        private int addressLength = Address.DEFAULT_LENGTH;
-
         @Override
         public void run() {
             try {
@@ -156,7 +151,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 //simply check if solidityTypes were requested
                 boolean useJavaTypes = !(solidityTypes);
                 new SolidityFunctionWrapperGenerator(binFile, abiFile, destinationFileDir,
-                        packageName, useJavaTypes, addressLength).generate();
+                        packageName, useJavaTypes, Address.DEFAULT_LENGTH).generate();
             } catch (Exception e) {
                 exitError(e);
             }
