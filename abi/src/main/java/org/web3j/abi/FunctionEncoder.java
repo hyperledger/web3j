@@ -35,9 +35,9 @@ public abstract class FunctionEncoder {
         return encoder().encodeParameters(parameters);
     }
 
-    public abstract String encodeFunction(Function function);
+    protected abstract String encodeFunction(Function function);
 
-    public abstract String encodeParameters(List<Type> parameters);
+    protected abstract String encodeParameters(List<Type> parameters);
 
     private static FunctionEncoder encoder() {
         final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
