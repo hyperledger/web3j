@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Binary sequence of bytes.
  */
-public class BytesType implements Type<byte[]> {
+public abstract class BytesType implements Type<byte[]> {
 
     private byte[] value;
     private String type;
