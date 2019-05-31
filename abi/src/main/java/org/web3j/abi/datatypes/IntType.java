@@ -18,7 +18,7 @@ public abstract class IntType extends NumericType {
         this.bitSize = bitSize;
     }
 
-    int getBitSize() {
+    public int getBitSize() {
         return bitSize;
     }
 
