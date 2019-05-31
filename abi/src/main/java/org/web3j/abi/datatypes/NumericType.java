@@ -25,6 +25,8 @@ public abstract class NumericType implements Type<BigInteger> {
         return value;
     }
 
+    public abstract int getBitSize();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

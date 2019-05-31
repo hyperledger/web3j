@@ -9,12 +9,20 @@ public abstract class FixedPointType extends NumericType {
 
     static final int DEFAULT_BIT_LENGTH = MAX_BIT_LENGTH >> 1;
 
+    private final int bitSize;
+
     public FixedPointType(String typePrefix, int mBitSize, int nBitSize, BigInteger value) {
         super(typePrefix + mBitSize + "x" + nBitSize, value);
+        this.bitSize = mBitSize + nBitSize;
         if (!valid(mBitSize, nBitSize, value)) {
             throw new UnsupportedOperationException(
                     "Bitsize must be 8 bit aligned, and in range 0 < bitSize <= 256");
         }
+    }
+
+    @Override
+    public int getBitSize() {
+        return bitSize;
     }
 
     boolean valid(int mBitSize, int nBitSize, BigInteger value) {
@@ -22,8 +30,7 @@ public abstract class FixedPointType extends NumericType {
                 && isValidBitCount(mBitSize, nBitSize, value);
     }
 
-    static boolean isValidBitSize(int mBitSize, int nBitSize) {
-        int bitSize = mBitSize + nBitSize;
+    private boolean isValidBitSize(int mBitSize, int nBitSize) {
         return mBitSize % 8 == 0
                 && nBitSize % 8 == 0
                 && bitSize > 0
