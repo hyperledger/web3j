@@ -5,7 +5,6 @@ import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.primitive.Boolean;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Double;
@@ -34,8 +33,6 @@ public final class AbiTypes {
                     return Utf8String.class;
             case "bytes":
                     return DynamicBytes.class;
-            case "boolean":
-                    return Boolean.class;
             case "byte":
                     return Byte.class;
             case "char":
@@ -244,7 +241,7 @@ public final class AbiTypes {
                     return Bytes32.class;
             default:
                     throw new UnsupportedOperationException("Unsupported type encountered: "
-                            + type);
+                    + type);
         }
     }
 

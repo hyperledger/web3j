@@ -20,7 +20,6 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.primitive.Boolean;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Double;
@@ -113,9 +112,6 @@ public class AbiTypesMapperGenerator extends Generator {
     }
 
     private MethodSpec.Builder addPrimitiveTypes(MethodSpec.Builder builder, String packageName) {
-        builder = addStatement(builder, packageName,
-                Boolean.class.getSimpleName().toLowerCase(), Boolean.class.getSimpleName());
-
         builder = addStatement(builder, packageName,
                 Byte.class.getSimpleName().toLowerCase(), Byte.class.getSimpleName());
 
