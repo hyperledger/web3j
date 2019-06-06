@@ -120,17 +120,6 @@ public class SolidityFunctionWrapper extends Generator {
         this.reporter = reporter;
     }
 
-    @SuppressWarnings("unchecked")
-    public void generateJavaFiles(
-            String contractName, String bin, String abi, String destinationDir,
-            String basePackageName)
-            throws IOException, ClassNotFoundException {
-        generateJavaFiles(contractName, bin,
-                loadContractDefinition(abi),
-                destinationDir, basePackageName,
-                null);
-    }
-
     void generateJavaFiles(
             String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
             String basePackageName, Map<String, String> addresses)
