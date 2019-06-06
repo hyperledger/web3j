@@ -20,7 +20,6 @@ import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int64;
 import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint64;
-import org.web3j.abi.datatypes.primitive.Boolean;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Long;
@@ -403,14 +402,6 @@ public class TypeEncoderTest {
                  + "0000000000000000000000000000000000000000000000000000000000000000"
                 )
         );
-    }
-
-    @Test
-    public void testPrimitiveBoolean() {
-        assertThat(encode(new Boolean(false)),
-                is("0000000000000000000000000000000000000000000000000000000000000000"));
-        assertThat(encode(new Boolean(true)),
-                is("0000000000000000000000000000000000000000000000000000000000000001"));
     }
 
     @Test
