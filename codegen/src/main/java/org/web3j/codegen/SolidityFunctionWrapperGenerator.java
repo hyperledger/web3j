@@ -79,10 +79,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             byte[] bytes = Files.readBytes(binFile);
             binary = new String(bytes);
         }
-
-        byte[] bytes = Files.readBytes(abiFile);
-        String abi = new String(bytes);
-
         List<AbiDefinition> functionDefinitions = loadContractDefinition(abiFile);
 
         if (functionDefinitions.isEmpty()) {
@@ -91,8 +87,11 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String contractName = getFileNameNoExtension(abiFile.getName());
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
-            new SolidityFunctionWrapper(useJavaNativeTypes, addressLength).generateJavaFiles(
-                    contractName, binary, abi, destinationDirLocation.toString(), basePackageName);
+
+            new SolidityFunctionWrapper(useJavaNativeTypes, addressLength)
+                    .generateJavaFiles(contractName, binary, functionDefinitions,
+                            destinationDirLocation.toString(), basePackageName, null);
+
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }
     }
