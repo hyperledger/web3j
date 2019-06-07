@@ -102,6 +102,9 @@ public class AbiTypesMapperGenerator extends Generator {
                 Bool.TYPE_NAME, Bool.class.getSimpleName());
 
         builder = addStatement(builder, packageName,
+                Boolean.class.getSimpleName().toLowerCase(), Bool.class.getSimpleName());
+
+        builder = addStatement(builder, packageName,
                 Utf8String.TYPE_NAME, Utf8String.class.getSimpleName());
 
         builder = addStatement(builder, packageName,
@@ -112,6 +115,7 @@ public class AbiTypesMapperGenerator extends Generator {
     }
 
     private MethodSpec.Builder addPrimitiveTypes(MethodSpec.Builder builder, String packageName) {
+
         builder = addStatement(builder, packageName,
                 Byte.class.getSimpleName().toLowerCase(), Byte.class.getSimpleName());
 
