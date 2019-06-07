@@ -29,6 +29,8 @@ public final class AbiTypes {
                     return Address.class;
             case "bool":
                     return Bool.class;
+            case "boolean":
+                    return Bool.class;
             case "string":
                     return Utf8String.class;
             case "bytes":
