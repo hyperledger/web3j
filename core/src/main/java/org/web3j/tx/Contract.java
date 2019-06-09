@@ -22,11 +22,11 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
+import org.web3j.ens.EnsResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -60,52 +60,65 @@ public abstract class Contract extends ManagedTransaction {
     protected Map<String, String> deployedAddresses;
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
 
-    protected Contract(String contractBinary, String contractAddress,
-                       Web3j web3j, TransactionManager transactionManager,
-                       ContractGasProvider gasProvider) {
-        super(web3j, transactionManager);
+    protected Contract(
+            String contractBinary, String contractAddress,
+            Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider gasProvider) {
 
+        this(new EnsResolver(web3j), contractBinary, contractAddress, web3j,
+                transactionManager, gasProvider);
+    }
+
+    protected Contract(
+            EnsResolver ensResolver, String contractBinary, String contractAddress,
+            Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider gasProvider) {
+
+        super(ensResolver, web3j, transactionManager);
         this.contractAddress = resolveContractAddress(contractAddress);
         this.contractBinary = contractBinary;
         this.gasProvider = gasProvider;
     }
 
-    protected Contract(String contractBinary, String contractAddress,
-                       Web3j web3j, Credentials credentials,
-                       ContractGasProvider gasProvider) {
-
-        this(contractBinary, contractAddress, web3j,
-                new RawTransactionManager(web3j, credentials),
-                gasProvider);
+    protected Contract(
+            String contractBinary, String contractAddress,
+            Web3j web3j, Credentials credentials,
+            ContractGasProvider gasProvider) {
+        this(new EnsResolver(web3j), contractBinary, contractAddress, web3j,
+                new RawTransactionManager(web3j, credentials), gasProvider);
     }
 
     @Deprecated
-    protected Contract(String contractBinary, String contractAddress,
-                       Web3j web3j, TransactionManager transactionManager,
-                       BigInteger gasPrice, BigInteger gasLimit) {
-        this(contractBinary, contractAddress, web3j, transactionManager,
+    protected Contract(
+            String contractBinary, String contractAddress,
+            Web3j web3j, TransactionManager transactionManager,
+            BigInteger gasPrice, BigInteger gasLimit) {
+        this(new EnsResolver(web3j), contractBinary, contractAddress, web3j, transactionManager,
                 new StaticGasProvider(gasPrice, gasLimit));
     }
 
     @Deprecated
-    protected Contract(String contractBinary, String contractAddress,
-                       Web3j web3j, Credentials credentials,
-                       BigInteger gasPrice, BigInteger gasLimit) {
+    protected Contract(
+            String contractBinary, String contractAddress,
+            Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit) {
         this(contractBinary, contractAddress, web3j, new RawTransactionManager(web3j, credentials),
                 gasPrice, gasLimit);
     }
 
     @Deprecated
-    protected Contract(String contractAddress,
-                       Web3j web3j, TransactionManager transactionManager,
-                       BigInteger gasPrice, BigInteger gasLimit) {
+    protected Contract(
+            String contractAddress,
+            Web3j web3j, TransactionManager transactionManager,
+            BigInteger gasPrice, BigInteger gasLimit) {
         this("", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
     @Deprecated
-    protected Contract(String contractAddress,
-                       Web3j web3j, Credentials credentials,
-                       BigInteger gasPrice, BigInteger gasLimit) {
+    protected Contract(
+            String contractAddress,
+            Web3j web3j, Credentials credentials,
+            BigInteger gasPrice, BigInteger gasLimit) {
         this("", contractAddress, web3j, new RawTransactionManager(web3j, credentials),
                 gasPrice, gasLimit);
     }
@@ -132,6 +145,7 @@ public abstract class Contract extends ManagedTransaction {
 
     /**
      * Allow {@code gasPrice} to be set.
+     *
      * @param newPrice gas price to use for subsequent transactions
      * @deprecated use ContractGasProvider
      */
@@ -141,6 +155,7 @@ public abstract class Contract extends ManagedTransaction {
 
     /**
      * Get the current {@code gasPrice} value this contract uses when executing transactions.
+     *
      * @return the gas price set on this contract
      * @deprecated use ContractGasProvider
      */
@@ -277,10 +292,10 @@ public abstract class Contract extends ManagedTransaction {
     /**
      * Given the duration required to execute a transaction.
      *
-     * @param data  to send in transaction
+     * @param data     to send in transaction
      * @param weiValue in Wei to send in transaction
      * @return {@link Optional} containing our transaction receipt
-     * @throws IOException                 if the call to the node fails
+     * @throws IOException          if the call to the node fails
      * @throws TransactionException if the transaction was not mined while waiting
      */
     TransactionReceipt executeTransaction(
@@ -599,11 +614,11 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     @SuppressWarnings("unchecked")
-    protected static <S extends Type, T> 
-            List<T> convertToNative(List<S> arr) {
+    protected static <S extends Type, T>
+    List<T> convertToNative(List<S> arr) {
         List<T> out = new ArrayList<T>();
         for (Iterator<S> it = arr.iterator(); it.hasNext(); ) {
-            out.add((T)it.next().getValue());
+            out.add((T) it.next().getValue());
         }
         return out;
     }

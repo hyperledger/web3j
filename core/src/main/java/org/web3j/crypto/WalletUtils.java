@@ -195,6 +195,10 @@ public class WalletUtils {
     }
 
     public static boolean isValidAddress(String input) {
+        return isValidAddress(input, ADDRESS_LENGTH_IN_HEX);
+    }
+
+    public static boolean isValidAddress(String input, int addressLength) {
         String cleanInput = Numeric.cleanHexPrefix(input);
 
         try {
@@ -203,6 +207,6 @@ public class WalletUtils {
             return false;
         }
 
-        return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
+        return cleanInput.length() == addressLength;
     }
 }
