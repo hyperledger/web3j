@@ -1,6 +1,9 @@
 package org.web3j.codegen;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.web3j.tx.Contract;
 
 import static org.web3j.codegen.Console.exitError;
 
@@ -16,7 +19,18 @@ abstract class FunctionWrapperGenerator {
     final String basePackageName;
     final boolean useJavaNativeTypes;
 
+    final Class<? extends Contract> contractClass;
+
     FunctionWrapperGenerator(
+            File destinationDirLocation,
+            String basePackageName,
+            boolean useJavaNativeTypes) {
+
+        this(Contract.class, destinationDirLocation, basePackageName, useJavaNativeTypes);
+    }
+
+    FunctionWrapperGenerator(
+            Class<? extends Contract> contractClass,
             File destinationDirLocation,
             String basePackageName,
             boolean useJavaNativeTypes) {
@@ -24,7 +38,10 @@ abstract class FunctionWrapperGenerator {
         this.destinationDirLocation = destinationDirLocation;
         this.basePackageName = basePackageName;
         this.useJavaNativeTypes = useJavaNativeTypes;
+        this.contractClass = contractClass;
     }
+
+    public abstract void generate() throws IOException, ClassNotFoundException;
 
     static boolean useJavaNativeTypes(String argVal, String usageString) {
         boolean useJavaNativeTypes = true;

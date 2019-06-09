@@ -107,13 +107,18 @@ public class SolidityFunctionWrapper extends Generator {
 
     private final GenerationReporter reporter;
 
-    public SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
+    protected SolidityFunctionWrapper(boolean useNativeJavaTypes) {
+        this(useNativeJavaTypes, Address.DEFAULT_LENGTH);
+    }
+
+    protected SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
         this(useNativeJavaTypes, addressLength, new LogGenerationReporter(LOGGER));
     }
 
-    SolidityFunctionWrapper(
+    protected SolidityFunctionWrapper(
             boolean useNativeJavaTypes,
             int addressLength,
+
             GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.addressLength = addressLength;
@@ -124,9 +129,23 @@ public class SolidityFunctionWrapper extends Generator {
             String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
             String basePackageName, Map<String, String> addresses)
             throws IOException, ClassNotFoundException {
-        String className = Strings.capitaliseFirstLetter(contractName);
 
-        TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
+        generateJavaFiles(Contract.class, contractName, bin, abi,
+                destinationDir, basePackageName, addresses);
+    }
+
+    void generateJavaFiles(
+            Class<? extends Contract> contractClass,
+            String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
+            String basePackageName, Map<String, String> addresses)
+            throws IOException, ClassNotFoundException {
+
+        if (!java.lang.reflect.Modifier.isAbstract(contractClass.getModifiers())) {
+            throw new IllegalArgumentException("Contract base class must be abstract");
+        }
+
+        String className = Strings.capitaliseFirstLetter(contractName);
+        TypeSpec.Builder classBuilder = createClassBuilder(contractClass, className, bin);
 
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, true));
@@ -152,8 +171,9 @@ public class SolidityFunctionWrapper extends Generator {
         write(basePackageName, classBuilder.build(), destinationDir);
     }
 
-    private void addAddressesSupport(TypeSpec.Builder classBuilder,
-                                     Map<String, String> addresses) {
+    private void addAddressesSupport(
+            TypeSpec.Builder classBuilder,
+            Map<String, String> addresses) {
         if (addresses != null) {
 
             ClassName stringType = ClassName.get(String.class);
@@ -205,14 +225,17 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
 
-    private TypeSpec.Builder createClassBuilder(String className, String binary) {
+    private TypeSpec.Builder createClassBuilder(
+            Class<? extends Contract> contractClass,
+            String className,
+            String binary) {
 
         String javadoc = CODEGEN_WARNING + getWeb3jVersion();
 
         return TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(javadoc)
-                .superclass(Contract.class)
+                .superclass(contractClass)
                 .addField(createBinaryDefinition(binary));
     }
 
@@ -272,9 +295,10 @@ public class SolidityFunctionWrapper extends Generator {
         return methodSpecs;
     }
 
-    List<MethodSpec> buildDeployMethods(String className,
-                                        TypeSpec.Builder classBuilder,
-                                        List<AbiDefinition> functionDefinitions) {
+    List<MethodSpec> buildDeployMethods(
+            String className,
+            TypeSpec.Builder classBuilder,
+            List<AbiDefinition> functionDefinitions) {
         boolean constructor = false;
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
@@ -352,8 +376,9 @@ public class SolidityFunctionWrapper extends Generator {
         return fields;
     }
 
-    private static MethodSpec buildConstructor(Class authType, String authName,
-                                               boolean withGasProvider) {
+    private static MethodSpec buildConstructor(
+            Class authType, String authName,
+            boolean withGasProvider) {
         MethodSpec.Builder toReturn = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PROTECTED)
                 .addParameter(String.class, CONTRACT_ADDRESS)
@@ -1198,8 +1223,8 @@ public class SolidityFunctionWrapper extends Generator {
             // If we use native java types we need to convert
             // elements of arrays to native java types too
             if (useNativeJavaTypes && param instanceof ParameterizedTypeName) {
-                ParameterizedTypeName oldContainer = (ParameterizedTypeName)param;
-                ParameterizedTypeName newContainer = (ParameterizedTypeName)convertTo;
+                ParameterizedTypeName oldContainer = (ParameterizedTypeName) param;
+                ParameterizedTypeName newContainer = (ParameterizedTypeName) convertTo;
                 if (newContainer.rawType.compareTo(classList) == 0
                         && newContainer.typeArguments.size() == 1) {
                     convertTo = ParameterizedTypeName.get(classList,

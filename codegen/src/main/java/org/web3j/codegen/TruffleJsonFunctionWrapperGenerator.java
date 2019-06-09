@@ -106,7 +106,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
     }
 
     @SuppressWarnings("unchecked")
-    private void generate() throws IOException, ClassNotFoundException {
+    public void generate() throws IOException, ClassNotFoundException {
 
         File truffleJsonFile = new File(jsonFileLocation);
         if (!truffleJsonFile.exists() || !truffleJsonFile.canRead()) {

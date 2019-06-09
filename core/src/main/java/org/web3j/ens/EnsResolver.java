@@ -1,5 +1,6 @@
 package org.web3j.ens;
 
+import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.contracts.generated.ENS;
 import org.web3j.ens.contracts.generated.PublicResolver;
@@ -22,13 +23,19 @@ public class EnsResolver {
     static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
 
     private final Web3j web3j;
+    private final int addressLength;
     private final TransactionManager transactionManager;
     private long syncThreshold;  // non-final in case this value needs to be tweaked
 
-    public EnsResolver(Web3j web3j, long syncThreshold) {
+    public EnsResolver(Web3j web3j, long syncThreshold, int addressLength) {
         this.web3j = web3j;
         transactionManager = new ClientTransactionManager(web3j, null);  // don't use empty string
         this.syncThreshold = syncThreshold;
+        this.addressLength = addressLength;
+    }
+
+    public EnsResolver(Web3j web3j, long syncThreshold) {
+        this(web3j, syncThreshold, Keys.ADDRESS_LENGTH_IN_HEX);
     }
 
     public EnsResolver(Web3j web3j) {
@@ -48,8 +55,8 @@ public class EnsResolver {
      * @param ensName our user input ENS name
      * @return PublicResolver
      */
-    public PublicResolver obtainPublicResolver(String ensName) {
-        if (isValidEnsName(ensName)) {
+    protected PublicResolver obtainPublicResolver(String ensName) {
+        if (isValidEnsName(ensName, addressLength)) {
             try {
                 if (!isSynced()) {
                     throw new EnsResolutionException("Node is not currently synced");
@@ -66,7 +73,7 @@ public class EnsResolver {
     }
 
     public String resolve(String contractId) {
-        if (isValidEnsName(contractId)) {
+        if (isValidEnsName(contractId, addressLength)) {
             PublicResolver resolver = obtainPublicResolver(contractId);
 
             byte[] nameHash = NameHash.nameHashAsBytes(contractId);
@@ -94,19 +101,19 @@ public class EnsResolver {
      * @return a EnsName registered for provided address
      */
     public String reverseResolve(String address) {
-        if (WalletUtils.isValidAddress(address)) {
+        if (WalletUtils.isValidAddress(address, addressLength)) {
             String reverseName = Numeric.cleanHexPrefix(address) + REVERSE_NAME_SUFFIX;
             PublicResolver resolver = obtainPublicResolver(reverseName);
 
             byte[] nameHash = NameHash.nameHashAsBytes(reverseName);
-            String name = null;
+            String name;
             try {
                 name = resolver.name(nameHash).send();
             } catch (Exception e) {
                 throw new RuntimeException("Unable to execute Ethereum request", e);
             }
 
-            if (!isValidEnsName(name)) {
+            if (!isValidEnsName(name, addressLength)) {
                 throw new RuntimeException("Unable to resolve name for address: " + address);
             } else {
                 return name;
@@ -116,7 +123,7 @@ public class EnsResolver {
         }
     }
 
-    PublicResolver lookupResolver(String ensName) throws Exception {
+    private PublicResolver lookupResolver(String ensName) throws Exception {
         NetVersion netVersion = web3j.netVersion().send();
         String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
@@ -125,13 +132,11 @@ public class EnsResolver {
                 DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-
         String resolverAddress = ensRegistry.resolver(nameHash).send();
-        PublicResolver resolver = PublicResolver.load(
+
+        return PublicResolver.load(
                 resolverAddress, web3j, transactionManager,
                 DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
-
-        return resolver;
     }
 
     boolean isSynced() throws Exception {
@@ -148,7 +153,11 @@ public class EnsResolver {
     }
 
     public static boolean isValidEnsName(String input) {
+        return isValidEnsName(input, Keys.ADDRESS_LENGTH_IN_HEX);
+    }
+
+    public static boolean isValidEnsName(String input, int addressLength) {
         return input != null  // will be set to null on new Contract creation
-                && (input.contains(".") || !WalletUtils.isValidAddress(input));
+                && (input.contains(".") || !WalletUtils.isValidAddress(input, addressLength));
     }
 }

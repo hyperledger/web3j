@@ -60,7 +60,20 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             boolean useJavaNativeTypes,
             int addressLength) {
 
-        super(destinationDir, basePackageName, useJavaNativeTypes);
+        this(binFile, abiFile, destinationDir, basePackageName,
+                useJavaNativeTypes, Contract.class, addressLength);
+    }
+
+    protected SolidityFunctionWrapperGenerator(
+            File binFile,
+            File abiFile,
+            File destinationDir,
+            String basePackageName,
+            boolean useJavaNativeTypes,
+            Class<? extends Contract> contractClass,
+            int addressLength) {
+
+        super(contractClass, destinationDir, basePackageName, useJavaNativeTypes);
         this.binFile = binFile;
         this.abiFile = abiFile;
         this.addressLength = addressLength;
@@ -73,7 +86,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         return Arrays.asList(abiDefinition);
     }
 
-    protected final void generate() throws IOException, ClassNotFoundException {
+    public final void generate() throws IOException, ClassNotFoundException {
         String binary = Contract.BIN_NOT_PROVIDED;
         if (binFile != null) {
             byte[] bytes = Files.readBytes(binFile);
@@ -89,7 +102,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
             new SolidityFunctionWrapper(useJavaNativeTypes, addressLength)
-                    .generateJavaFiles(contractName, binary, functionDefinitions,
+                    .generateJavaFiles(contractClass, contractName, binary, functionDefinitions,
                             destinationDirLocation.toString(), basePackageName, null);
 
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");

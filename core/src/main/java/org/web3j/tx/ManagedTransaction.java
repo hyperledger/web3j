@@ -29,13 +29,19 @@ public abstract class ManagedTransaction {
     protected EnsResolver ensResolver;
 
     protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
+        this(new EnsResolver(web3j), web3j, transactionManager);
+    }
+
+    protected ManagedTransaction(
+            EnsResolver ensResolver, Web3j web3j,
+            TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
+        this.ensResolver = ensResolver;
         this.web3j = web3j;
-        this.ensResolver = new EnsResolver(web3j);
     }
 
     /**
-     * This should only be used in case you need to get the {@link EnsResolver#syncThreshold}
+     * This should only be used in case you need to get the {@link EnsResolver#getSyncThreshold()}
      * parameter, which dictates the threshold in milliseconds since the last processed block
      * timestamp should be to considered in sync the blockchain.
      *
@@ -49,7 +55,7 @@ public abstract class ManagedTransaction {
     }
 
     /**
-     * This should only be used in case you need to modify the {@link EnsResolver#syncThreshold}
+     * This should only be used in case you need to modify the {@link EnsResolver#getSyncThreshold}
      * parameter, which dictates the threshold in milliseconds since the last processed block
      * timestamp should be to considered in sync the blockchain.
      *
@@ -65,13 +71,14 @@ public abstract class ManagedTransaction {
     /**
      * Return the current gas price from the ethereum node.
      * <p>
-     *     Note: this method was previously called {@code getGasPrice} but was renamed to
-     *     distinguish it when a bean accessor method on {@link Contract} was added with that name.
-     *     If you have a Contract subclass that is calling this method (unlikely since those
-     *     classes are usually generated and until very recently those generated subclasses were
-     *     marked {@code final}), then you will need to change your code to call this method
-     *     instead, if you want the dynamic behavior.
+     * Note: this method was previously called {@code getGasPrice} but was renamed to
+     * distinguish it when a bean accessor method on {@link Contract} was added with that name.
+     * If you have a Contract subclass that is calling this method (unlikely since those
+     * classes are usually generated and until very recently those generated subclasses were
+     * marked {@code final}), then you will need to change your code to call this method
+     * instead, if you want the dynamic behavior.
      * </p>
+     *
      * @return the current gas price, determined dynamically at invocation
      * @throws IOException if there's a problem communicating with the ethereum node
      */
