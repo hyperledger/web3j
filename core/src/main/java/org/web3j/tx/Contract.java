@@ -621,7 +621,12 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
-    protected static <S extends Type<T>, T> List<T> convertToNative(List<S> arr) {
-        return arr.stream().map(Type::getValue).collect(Collectors.toList());
+    @SuppressWarnings("unchecked")
+    protected static <S extends Type, T> List<T> convertToNative(List<S> arr) {
+        List<T> out = new ArrayList<>();
+        for (final S s : arr) {
+            out.add((T) s.getValue());
+        }
+        return out;
     }
 }
