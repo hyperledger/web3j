@@ -19,8 +19,8 @@ import org.web3j.utils.Numeric;
  */
 public class EnsResolver {
 
-    static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
-    static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
+    public static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
+    public static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
 
     private final Web3j web3j;
     private final int addressLength;
