@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -31,16 +32,19 @@ import com.squareup.javapoet.TypeVariableName;
 import io.reactivex.Flowable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Double;
@@ -104,13 +108,18 @@ public class SolidityFunctionWrapper extends Generator {
 
     private final GenerationReporter reporter;
 
-    public SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
+    protected SolidityFunctionWrapper(boolean useNativeJavaTypes) {
+        this(useNativeJavaTypes, Address.DEFAULT_LENGTH);
+    }
+
+    protected SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
         this(useNativeJavaTypes, addressLength, new LogGenerationReporter(LOGGER));
     }
 
-    SolidityFunctionWrapper(
+    protected SolidityFunctionWrapper(
             boolean useNativeJavaTypes,
             int addressLength,
+
             GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.addressLength = addressLength;
@@ -121,9 +130,23 @@ public class SolidityFunctionWrapper extends Generator {
             String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
             String basePackageName, Map<String, String> addresses)
             throws IOException, ClassNotFoundException {
-        String className = Strings.capitaliseFirstLetter(contractName);
 
-        TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
+        generateJavaFiles(Contract.class, contractName, bin, abi,
+                destinationDir, basePackageName, addresses);
+    }
+
+    void generateJavaFiles(
+            Class<? extends Contract> contractClass,
+            String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
+            String basePackageName, Map<String, String> addresses)
+            throws IOException, ClassNotFoundException {
+
+        if (!java.lang.reflect.Modifier.isAbstract(contractClass.getModifiers())) {
+            throw new IllegalArgumentException("Contract base class must be abstract");
+        }
+
+        String className = Strings.capitaliseFirstLetter(contractName);
+        TypeSpec.Builder classBuilder = createClassBuilder(contractClass, className, bin);
 
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, true));
@@ -149,8 +172,9 @@ public class SolidityFunctionWrapper extends Generator {
         write(basePackageName, classBuilder.build(), destinationDir);
     }
 
-    private void addAddressesSupport(TypeSpec.Builder classBuilder,
-                                     Map<String, String> addresses) {
+    private void addAddressesSupport(
+            TypeSpec.Builder classBuilder,
+            Map<String, String> addresses) {
         if (addresses != null) {
 
             ClassName stringType = ClassName.get(String.class);
@@ -202,14 +226,17 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
 
-    private TypeSpec.Builder createClassBuilder(String className, String binary) {
+    private TypeSpec.Builder createClassBuilder(
+            Class<? extends Contract> contractClass,
+            String className,
+            String binary) {
 
         String javadoc = CODEGEN_WARNING + getWeb3jVersion();
 
         return TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(javadoc)
-                .superclass(Contract.class)
+                .superclass(contractClass)
                 .addField(createBinaryDefinition(binary));
     }
 
@@ -351,8 +378,9 @@ public class SolidityFunctionWrapper extends Generator {
         return fields;
     }
 
-    private static MethodSpec buildConstructor(Class authType, String authName,
-                                               boolean withGasProvider) {
+    private static MethodSpec buildConstructor(
+            Class authType, String authName,
+            boolean withGasProvider) {
         MethodSpec.Builder toReturn = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PROTECTED)
                 .addParameter(String.class, CONTRACT_ADDRESS)
@@ -1181,8 +1209,8 @@ public class SolidityFunctionWrapper extends Generator {
             // If we use native java types we need to convert
             // elements of arrays to native java types too
             if (useNativeJavaTypes && param instanceof ParameterizedTypeName) {
-                ParameterizedTypeName oldContainer = (ParameterizedTypeName)param;
-                ParameterizedTypeName newContainer = (ParameterizedTypeName)convertTo;
+                ParameterizedTypeName oldContainer = (ParameterizedTypeName) param;
+                ParameterizedTypeName newContainer = (ParameterizedTypeName) convertTo;
                 if (newContainer.rawType.compareTo(classList) == 0
                         && newContainer.typeArguments.size() == 1) {
                     convertTo = ParameterizedTypeName.get(classList,
