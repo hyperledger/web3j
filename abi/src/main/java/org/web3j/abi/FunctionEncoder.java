@@ -3,10 +3,13 @@ package org.web3j.abi;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionEncoderProvider;
+import org.web3j.crypto.Hash;
+import org.web3j.utils.Numeric;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
@@ -39,6 +42,26 @@ public abstract class FunctionEncoder {
 
     protected abstract String encodeParameters(List<Type> parameters);
 
+    protected static String buildMethodSignature(
+            final String methodName, final List<Type> parameters) {
+
+        final StringBuilder result = new StringBuilder();
+        result.append(methodName);
+        result.append("(");
+        final String params = parameters.stream()
+                .map(Type::getTypeAsString)
+                .collect(Collectors.joining(","));
+        result.append(params);
+        result.append(")");
+        return result.toString();
+    }
+
+    protected static String buildMethodId(final String methodSignature) {
+        final byte[] input = methodSignature.getBytes();
+        final byte[] hash = Hash.sha3(input);
+        return Numeric.toHexString(hash).substring(0, 10);
+    }
+
     private static FunctionEncoder encoder() {
         final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
         return iterator.hasNext() ? iterator.next().get() : defaultEncoder();
@@ -50,5 +73,4 @@ public abstract class FunctionEncoder {
         }
         return DEFAULT_ENCODER;
     }
-
 }
