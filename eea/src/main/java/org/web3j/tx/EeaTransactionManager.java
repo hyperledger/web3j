@@ -83,7 +83,7 @@ public class EeaTransactionManager extends PrivateTransactionManager {
     @Override
     public EthSendTransaction sendTransaction(
             final BigInteger gasPrice, final BigInteger gasLimit, final String to,
-            final String data, final BigInteger value)
+            final String data, final BigInteger value, boolean constructor)
             throws IOException {
 
         final BigInteger nonce = eea.eeaGetTransactionCount(
