@@ -289,6 +289,13 @@ public abstract class Contract extends ManagedTransaction {
         return executeTransaction(FunctionEncoder.encode(function), weiValue, function.getName());
     }
 
+    TransactionReceipt executeTransaction(
+            String data, BigInteger weiValue, String funcName)
+            throws TransactionException, IOException {
+
+        return executeTransaction(data, weiValue, funcName, false);
+    }
+
     /**
      * Given the duration required to execute a transaction.
      *
@@ -299,12 +306,13 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionException if the transaction was not mined while waiting
      */
     TransactionReceipt executeTransaction(
-            String data, BigInteger weiValue, String funcName)
+            String data, BigInteger weiValue, String funcName, boolean constructor)
             throws TransactionException, IOException {
 
         TransactionReceipt receipt = send(contractAddress, data, weiValue,
                 gasProvider.getGasPrice(funcName),
-                gasProvider.getGasLimit(funcName));
+                gasProvider.getGasLimit(funcName),
+                constructor);
 
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
@@ -348,7 +356,7 @@ public abstract class Contract extends ManagedTransaction {
             T contract, String binary, String encodedConstructor, BigInteger value)
             throws IOException, TransactionException {
         TransactionReceipt transactionReceipt =
-                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY);
+                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY, true);
 
         String contractAddress = transactionReceipt.getContractAddress();
         if (contractAddress == null) {

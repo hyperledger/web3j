@@ -96,6 +96,16 @@ public abstract class ManagedTransaction {
                 gasPrice, gasLimit, to, data, value);
     }
 
+    protected TransactionReceipt send(
+            String to, String data, BigInteger value,
+            BigInteger gasPrice, BigInteger gasLimit,
+            boolean constructor)
+            throws IOException, TransactionException {
+
+        return transactionManager.executeTransaction(
+                gasPrice, gasLimit, to, data, value, constructor);
+    }
+
     protected String call(
             String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
