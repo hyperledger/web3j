@@ -11,7 +11,7 @@ import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
-class DefaultFunctionEncoder extends FunctionEncoder {
+public class DefaultFunctionEncoder extends FunctionEncoder {
 
     @Override
     public String encodeFunction(final Function function) {
