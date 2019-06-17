@@ -1,15 +1,3 @@
-/*
- * Copyright 2019 Web3 Labs LTD.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
 package org.web3j.tx;
 
 import java.io.IOException;
@@ -26,8 +14,8 @@ import org.web3j.tx.response.TransactionReceiptProcessor;
 import static org.web3j.protocol.core.JsonRpc2_0Web3j.DEFAULT_BLOCK_TIME;
 
 /**
- * Transaction manager abstraction for executing transactions with Ethereum client via various
- * mechanisms.
+ * Transaction manager abstraction for executing transactions with Ethereum client via
+ * various mechanisms.
  */
 public abstract class TransactionManager {
 
@@ -44,8 +32,7 @@ public abstract class TransactionManager {
     }
 
     protected TransactionManager(Web3j web3j, String fromAddress) {
-        this(
-                new PollingTransactionReceiptProcessor(
+        this(new PollingTransactionReceiptProcessor(
                         web3j, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH),
                 fromAddress);
     }
@@ -56,20 +43,38 @@ public abstract class TransactionManager {
     }
 
     protected TransactionReceipt executeTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            BigInteger gasPrice, BigInteger gasLimit, String to,
+            String data, BigInteger value)
             throws IOException, TransactionException {
 
-        EthSendTransaction ethSendTransaction =
-                sendTransaction(gasPrice, gasLimit, to, data, value);
+        return executeTransaction(gasPrice, gasLimit, to, data, value, false);
+    }
+
+    protected TransactionReceipt executeTransaction(
+            BigInteger gasPrice, BigInteger gasLimit, String to,
+            String data, BigInteger value, boolean constructor)
+            throws IOException, TransactionException {
+
+        EthSendTransaction ethSendTransaction = sendTransaction(
+                gasPrice, gasLimit, to, data, value, constructor);
         return processResponse(ethSendTransaction);
     }
 
+    public EthSendTransaction sendTransaction(
+            BigInteger gasPrice, BigInteger gasLimit, String to,
+            String data, BigInteger value)
+            throws IOException {
+        return sendTransaction(gasPrice, gasLimit, to, data, value, false);
+    }
+
     public abstract EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            BigInteger gasPrice, BigInteger gasLimit, String to,
+            String data, BigInteger value, boolean constructor)
             throws IOException;
 
     public abstract String sendCall(
-            String to, String data, DefaultBlockParameter defaultBlockParameter) throws IOException;
+            String to, String data, DefaultBlockParameter defaultBlockParameter)
+            throws IOException;
 
     public String getFromAddress() {
         return fromAddress;
@@ -78,13 +83,14 @@ public abstract class TransactionManager {
     private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
             throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
-            throw new RuntimeException(
-                    "Error processing transaction request: "
-                            + transactionResponse.getError().getMessage());
+            throw new RuntimeException("Error processing transaction request: "
+                    + transactionResponse.getError().getMessage());
         }
 
         String transactionHash = transactionResponse.getTransactionHash();
 
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
     }
+
+
 }
