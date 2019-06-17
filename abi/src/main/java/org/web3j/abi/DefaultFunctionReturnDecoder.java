@@ -18,7 +18,7 @@ import org.web3j.utils.Strings;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
-class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
+public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
     public List<Type> decodeFunctionResult(
             String rawInput, List<TypeReference<Type>> outputParameters) {
