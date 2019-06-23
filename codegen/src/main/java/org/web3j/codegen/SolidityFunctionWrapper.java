@@ -1,6 +1,7 @@
 package org.web3j.codegen;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,6 +98,8 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
     private static final Pattern pattern = Pattern.compile(regex);
     private final GenerationReporter reporter;
+
+    private static Set<String> parentsMethodNames = getParentsMethodNames();
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
         this(useNativeJavaTypes, new LogGenerationReporter(LOGGER));
@@ -686,7 +689,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         // If the solidity function name is a reserved word
         // in the current java version prepend it with "_"
-        if (!SourceVersion.isName(functionName)) {
+        if (!SourceVersion.isName(functionName) || duplicateWithParentsMethods(functionName)) {
             functionName = "_" + functionName;
         }
 
@@ -706,6 +709,19 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         return methodBuilder.build();
+    }
+
+    private boolean duplicateWithParentsMethods(String functionName) {
+        return parentsMethodNames.contains(functionName);
+    }
+
+    private static Set<String> getParentsMethodNames() {
+        Class parent = Object.class;
+        parentsMethodNames = new HashSet<>();
+        for (Method declaredMethod : parent.getDeclaredMethods()) {
+            parentsMethodNames.add(declaredMethod.getName());
+        }
+        return parentsMethodNames;
     }
 
     private void buildConstantFunction(
