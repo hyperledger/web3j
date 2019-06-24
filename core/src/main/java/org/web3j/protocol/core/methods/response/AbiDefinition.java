@@ -1,22 +1,13 @@
-/*
- * Copyright 2019 Web3 Labs LTD.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
 package org.web3j.protocol.core.methods.response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-/** AbiDefinition wrapper. */
+/**
+ * AbiDefinition wrapper.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AbiDefinition {
     private boolean constant;
@@ -28,41 +19,36 @@ public class AbiDefinition {
 
     /**
      * The stateMutability function modifier.
-     *
      * <p>this does not factor into the <code>#hashCode()</code> or <code>#equals()</code> logic
      * since multiple functions with the same signature that only differ in mutability are not
-     * allowed in Solidity.
-     *
-     * <p>Valid values are:
-     *
-     * <ul>
-     *   <li>pure
-     *   <li>view
-     *   <li>nonpayable
-     *   <li>payable
-     * </ul>
+     * allowed in Solidity.</p>
+     * <p>
+     *     Valid values are:
+     *     <ul>
+     *         <li>pure</li>
+     *         <li>view</li>
+     *         <li>nonpayable</li>
+     *         <li>payable</li>
+     *     </ul>
+     * </p>
      */
     private String stateMutability;
+    
+    public AbiDefinition() {
+    }
 
-    public AbiDefinition() {}
+    public AbiDefinition(AbiDefinition from) {
+        this(from.constant, clone(from.inputs), from.name, clone(from.outputs), 
+                from.type, from.payable, from.stateMutability);
+    }
 
-    public AbiDefinition(
-            boolean constant,
-            List<NamedType> inputs,
-            String name,
-            List<NamedType> outputs,
-            String type,
-            boolean payable) {
+    public AbiDefinition(boolean constant, List<NamedType> inputs, String name,
+                         List<NamedType> outputs, String type, boolean payable) {
         this(constant, inputs, name, outputs, type, payable, null);
     }
 
-    public AbiDefinition(
-            boolean constant,
-            List<NamedType> inputs,
-            String name,
-            List<NamedType> outputs,
-            String type,
-            boolean payable,
+    public AbiDefinition(boolean constant, List<NamedType> inputs, String name,
+            List<NamedType> outputs, String type, boolean payable,
             String stateMutability) {
         this.constant = constant;
         this.inputs = inputs;
@@ -72,6 +58,7 @@ public class AbiDefinition {
         this.payable = payable;
         this.stateMutability = stateMutability;
     }
+
 
     public boolean isConstant() {
         return constant;
@@ -151,16 +138,15 @@ public class AbiDefinition {
             return false;
         }
         if (getInputs() != null
-                ? !getInputs().equals(that.getInputs())
-                : that.getInputs() != null) {
+                ? !getInputs().equals(that.getInputs()) : that.getInputs() != null) {
             return false;
         }
-        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+        if (getName() != null
+                ? !getName().equals(that.getName()) : that.getName() != null) {
             return false;
         }
         if (getOutputs() != null
-                ? !getOutputs().equals(that.getOutputs())
-                : that.getOutputs() != null) {
+                ? !getOutputs().equals(that.getOutputs()) : that.getOutputs() != null) {
             return false;
         }
         if (getStateMutability() != null
@@ -168,7 +154,8 @@ public class AbiDefinition {
                 : that.getStateMutability() != null) {
             return false;
         }
-        return getType() != null ? getType().equals(that.getType()) : that.getType() == null;
+        return getType() != null
+                ? getType().equals(that.getType()) : that.getType() == null;
     }
 
     @Override
@@ -188,7 +175,12 @@ public class AbiDefinition {
         private String type;
         private boolean indexed;
 
-        public NamedType() {}
+        public NamedType() {
+        }
+
+        public NamedType(NamedType from) {
+            this(from.name, from.type, from.indexed);
+        }
 
         public NamedType(String name, String type) {
             this.name = name;
@@ -241,13 +233,11 @@ public class AbiDefinition {
             }
 
             if (getName() != null
-                    ? !getName().equals(namedType.getName())
-                    : namedType.getName() != null) {
+                    ? !getName().equals(namedType.getName()) : namedType.getName() != null) {
                 return false;
             }
             return getType() != null
-                    ? getType().equals(namedType.getType())
-                    : namedType.getType() == null;
+                    ? getType().equals(namedType.getType()) : namedType.getType() == null;
         }
 
         @Override
@@ -257,5 +247,9 @@ public class AbiDefinition {
             result = 31 * result + (isIndexed() ? 1 : 0);
             return result;
         }
+    }
+    
+    private static List<NamedType> clone(final List<NamedType> from) {
+        return from.stream().map(NamedType::new).collect(Collectors.toList());
     }
 }

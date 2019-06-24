@@ -101,6 +101,7 @@ public class SolidityFunctionWrapper extends Generator {
             + "codegen module</a> to update.\n";
 
     private final boolean useNativeJavaTypes;
+    private final boolean generateSendTxForCalls;
     private final int addressLength;
 
     private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
@@ -113,17 +114,24 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     protected SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
-        this(useNativeJavaTypes, addressLength, new LogGenerationReporter(LOGGER));
+        this(useNativeJavaTypes, false, addressLength, new LogGenerationReporter(LOGGER));
+    }
+
+    protected SolidityFunctionWrapper(
+            boolean useNativeJavaTypes, int addressLength, boolean generateSendTxForCalls) {
+        this(useNativeJavaTypes, generateSendTxForCalls, addressLength,
+                new LogGenerationReporter(LOGGER));
     }
 
     protected SolidityFunctionWrapper(
             boolean useNativeJavaTypes,
+            boolean generateSendTxForCalls,
             int addressLength,
-
             GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.addressLength = addressLength;
         this.reporter = reporter;
+        this.generateSendTxForCalls = generateSendTxForCalls;
     }
 
     void generateJavaFiles(
@@ -285,8 +293,7 @@ public class SolidityFunctionWrapper extends Generator {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals("function")) {
-                MethodSpec ms = buildFunction(functionDefinition);
-                methodSpecs.add(ms);
+                methodSpecs.addAll(buildFunctions(functionDefinition));
 
             } else if (functionDefinition.getType().equals("event")) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
@@ -736,14 +743,31 @@ public class SolidityFunctionWrapper extends Generator {
         return result;
     }
 
-    MethodSpec buildFunction(
+    MethodSpec buildFunction(AbiDefinition functionDefinition) throws ClassNotFoundException {
+        return buildFunctions(functionDefinition).get(0);
+    }
+ 
+    List<MethodSpec> buildFunctions(
             AbiDefinition functionDefinition) throws ClassNotFoundException {
+        
+        List<MethodSpec> results = new ArrayList<>(2);
         String functionName = functionDefinition.getName();
 
-        // If the solidity function name is a reserved word
-        // in the current java version prepend it with "_"
-        if (!SourceVersion.isName(functionName)) {
-            functionName = "_" + functionName;
+        if (generateSendTxForCalls) {
+            final String funcNamePrefix;
+            if (functionDefinition.isConstant()) {
+                funcNamePrefix = "call";
+            } else {
+                funcNamePrefix = "send";
+            }
+            // Prefix function name to avoid naming collision
+            functionName = funcNamePrefix + "_" + functionName;
+        } else {
+            // If the solidity function name is a reserved word
+            // in the current java version prepend it with "_"
+            if (!SourceVersion.isName(functionName)) {
+                functionName = "_" + functionName;
+            }
         }
 
         MethodSpec.Builder methodBuilder =
@@ -751,17 +775,29 @@ public class SolidityFunctionWrapper extends Generator {
                         .addModifiers(Modifier.PUBLIC);
 
         String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
-
         List<TypeName> outputParameterTypes = buildTypeNames(functionDefinition.getOutputs());
+        
         if (functionDefinition.isConstant()) {
-            buildConstantFunction(
-                    functionDefinition, methodBuilder, outputParameterTypes, inputParams);
-        } else {
-            buildTransactionFunction(
-                    functionDefinition, methodBuilder, inputParams);
+            // Avoid generating runtime exception call
+            if (functionDefinition.hasOutputs()) {
+                buildConstantFunction(
+                        functionDefinition, methodBuilder, outputParameterTypes, inputParams);
+                
+                results.add(methodBuilder.build());
+            }
+            if (generateSendTxForCalls) {
+                AbiDefinition sendFuncDefinition = new AbiDefinition(functionDefinition);
+                sendFuncDefinition.setConstant(false);
+                results.addAll(buildFunctions(sendFuncDefinition));
+            }
         }
 
-        return methodBuilder.build();
+        if (!functionDefinition.isConstant()) {
+            buildTransactionFunction(functionDefinition, methodBuilder, inputParams);
+            results.add(methodBuilder.build());
+        }
+        
+        return results;
     }
 
     private void buildConstantFunction(
@@ -841,8 +877,7 @@ public class SolidityFunctionWrapper extends Generator {
                     ClassName.get(
                             "org.web3j.tuples.generated",
                             "Tuple" + returnTypes.size()),
-                    returnTypes.toArray(
-                            new TypeName[returnTypes.size()]));
+                    returnTypes.toArray(new TypeName[0]));
 
             methodBuilder.returns(buildRemoteFunctionCall(parameterizedTupleType));
 
