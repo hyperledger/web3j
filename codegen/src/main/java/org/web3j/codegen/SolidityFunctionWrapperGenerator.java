@@ -51,6 +51,9 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     private final File abiFile;
 
     private final int addressLength;
+    
+    private final boolean generateSendTxForCalls;
+    
 
     protected SolidityFunctionWrapperGenerator(
             File binFile,
@@ -61,7 +64,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             int addressLength) {
 
         this(binFile, abiFile, destinationDir, basePackageName,
-                useJavaNativeTypes, Contract.class, addressLength);
+                useJavaNativeTypes, false, Contract.class, addressLength);
     }
 
     protected SolidityFunctionWrapperGenerator(
@@ -70,6 +73,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             File destinationDir,
             String basePackageName,
             boolean useJavaNativeTypes,
+            boolean generateSendTxForCalls,
             Class<? extends Contract> contractClass,
             int addressLength) {
 
@@ -77,6 +81,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         this.binFile = binFile;
         this.abiFile = abiFile;
         this.addressLength = addressLength;
+        this.generateSendTxForCalls = generateSendTxForCalls;
     }
 
     protected List<AbiDefinition> loadContractDefinition(File absFile)
@@ -101,7 +106,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
-            new SolidityFunctionWrapper(useJavaNativeTypes, addressLength)
+            new SolidityFunctionWrapper(useJavaNativeTypes, addressLength, generateSendTxForCalls)
                     .generateJavaFiles(contractClass, contractName, binary, functionDefinitions,
                             destinationDirLocation.toString(), basePackageName, null);
 
