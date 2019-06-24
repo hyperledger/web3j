@@ -11,9 +11,7 @@ import java.util.function.BiFunction;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.junit.rules.ExpectedException;
-
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
 import org.web3j.abi.FunctionEncoder;
@@ -56,6 +54,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -354,7 +354,9 @@ public class ContractTest extends ManagedTransactionTester {
     public void testStaticGasProvider() throws IOException, TransactionException {
         StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.TEN, BigInteger.ONE);
         TransactionManager txManager = mock(TransactionManager.class);
-        when(txManager.executeTransaction(any(), any(), any(), any(), any()))
+
+        when(txManager.executeTransaction(any(BigInteger.class), any(BigInteger.class),
+                anyString(), anyString(), any(BigInteger.class), anyBoolean()))
                 .thenReturn(new TransactionReceipt());
 
         contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
@@ -364,7 +366,8 @@ public class ContractTest extends ManagedTransactionTester {
         contract.executeTransaction(func);
 
         verify(txManager).executeTransaction(eq(BigInteger.TEN),
-                eq(BigInteger.ONE), any(), any(), any());
+                eq(BigInteger.ONE), anyString(), anyString(), 
+                any(BigInteger.class), anyBoolean());
     }
 
     @Test(expected = RuntimeException.class)
