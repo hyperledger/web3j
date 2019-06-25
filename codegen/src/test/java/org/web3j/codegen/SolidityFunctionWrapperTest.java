@@ -12,6 +12,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.Test;
+
 import org.web3j.TempFileProvider;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
