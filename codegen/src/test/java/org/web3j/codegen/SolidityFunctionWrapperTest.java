@@ -12,7 +12,6 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.Test;
-
 import org.web3j.TempFileProvider;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
@@ -32,6 +31,7 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
@@ -363,23 +363,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildFunctionConstantInvalid() throws Exception {
         AbiDefinition functionDefinition = new AbiDefinition(
                 true,
-                Arrays.asList(
+                Collections.singletonList(
                         new AbiDefinition.NamedType("param", "uint8")),
                 "functionName",
                 Collections.emptyList(),
                 "type",
                 false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
-
-        //CHECKSTYLE:OFF
-        String expected =
-                "public void functionName(java.math.BigInteger param) {\n"
-                        + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
-                        + "}\n";
-        //CHECKSTYLE:ON
-
-        assertThat(methodSpec.toString(), is(expected));
+        List<MethodSpec> methodSpecs = solidityFunctionWrapper.buildFunctions(functionDefinition);
+        assertTrue(methodSpecs.isEmpty());
     }
 
     @Test
