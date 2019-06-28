@@ -43,6 +43,22 @@ public class FunctionEncoder {
         return encodeParameters(parameters, new StringBuilder());
     }
 
+    public static Function makeFunction(String fnname, List<String> solidityInputTypes,
+                                          List<Object> arguments, List<String> solidityOutputTypes)
+            throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
+        List<Type> encodedInput = new ArrayList<>();
+        Iterator argit = arguments.iterator();
+        for (String st : solidityInputTypes) {
+            encodedInput.add(instantiateType(st, argit.next()));
+        }
+        List<TypeReference<?>> encodedOutput = new ArrayList<>();
+        for (String st : solidityOutputTypes) {
+            encodedOutput.add(makeTypeReference(st));
+        }
+        return new Function(fnname, encodedInput, encodedOutput);
+    }
+
     private static String encodeParameters(List<Type> parameters, StringBuilder result) {
         int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
         StringBuilder dynamicData = new StringBuilder();
@@ -93,21 +109,5 @@ public class FunctionEncoder {
         byte[] input = methodSignature.getBytes();
         byte[] hash = Hash.sha3(input);
         return Numeric.toHexString(hash).substring(0, 10);
-    }
-
-    public static Function encodeFunction(String fnname, List<String> solidityInputtypes,
-            List<Object> arguments, List<String> solidityOutputTypes)
-            throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
-            IllegalAccessException, InvocationTargetException {
-        List<Type> encodedInput = new ArrayList<>();
-        Iterator argit = arguments.iterator();
-        for (String st : solidityInputtypes) {
-            encodedInput.add(instantiateType(st, argit.next()));
-        }
-        List<TypeReference<?>> encodedOutput = new ArrayList<>();
-        for (String st : solidityOutputTypes) {
-            encodedOutput.add(makeTypeReference(st));
-        }
-        return new Function(fnname, encodedInput, encodedOutput);
     }
 }
