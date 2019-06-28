@@ -149,8 +149,7 @@ public class TypeDecoder {
         }
         return Type.MAX_BIT_LENGTH;
     }
-
-
+    
     static Type instantiateArrayType(TypeReference ref, Object value) throws
             NoSuchMethodException, IllegalAccessException, InvocationTargetException,
             InstantiationException, ClassNotFoundException {
