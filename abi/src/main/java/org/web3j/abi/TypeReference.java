@@ -108,7 +108,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     protected static Class getAtomicTypeClass(String solidityType) throws ClassNotFoundException {
         Matcher m = ARRAY_SUFFIX.matcher(solidityType);
         if (m.find()) {
-            throw new ClassNotFoundException("getTypeClass does not work with array types."
+            throw new ClassNotFoundException("getAtomicTypeClass does not work with array types."
                     + " See makeTypeRefernce()");
         }
         switch (solidityType) {
