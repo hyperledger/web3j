@@ -72,7 +72,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     }
 
     @Test
-    public void testBuildTypeName() {
+    public void testBuildTypeName() throws Exception {
         assertThat(buildTypeName("uint256"), is(ClassName.get(Uint256.class)));
         assertThat(buildTypeName("uint64"), is(ClassName.get(Uint64.class)));
         assertThat(buildTypeName("string"), is(ClassName.get(Utf8String.class)));
