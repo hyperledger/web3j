@@ -94,8 +94,6 @@ public class SolidityFunctionWrapper extends Generator {
             + "codegen module</a> to update.\n";
 
     private final boolean useNativeJavaTypes;
-    private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
-    private static final Pattern pattern = Pattern.compile(regex);
     private final GenerationReporter reporter;
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
@@ -272,7 +270,8 @@ public class SolidityFunctionWrapper extends Generator {
 
     List<MethodSpec> buildDeployMethods(String className,
                                         TypeSpec.Builder classBuilder,
-                                        List<AbiDefinition> functionDefinitions) {
+                                        List<AbiDefinition> functionDefinitions)
+            throws ClassNotFoundException {
         boolean constructor = false;
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
@@ -375,7 +374,8 @@ public class SolidityFunctionWrapper extends Generator {
 
     private MethodSpec buildDeploy(
             String className, AbiDefinition functionDefinition,
-            Class authType, String authName, boolean withGasProvider) {
+            Class authType, String authName, boolean withGasProvider)
+            throws ClassNotFoundException {
 
         boolean isPayable = functionDefinition.isPayable();
 
@@ -501,7 +501,8 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     String addParameters(
-            MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes) {
+            MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes)
+            throws ClassNotFoundException {
 
         List<ParameterSpec> inputParameterTypes = buildParameterTypes(namedTypes);
 
@@ -643,7 +644,8 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes) {
+    static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes)
+            throws ClassNotFoundException {
         List<ParameterSpec> result = new ArrayList<>(namedTypes.size());
         for (int i = 0; i < namedTypes.size(); i++) {
             AbiDefinition.NamedType namedType = namedTypes.get(i);
@@ -672,7 +674,8 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    static List<TypeName> buildTypeNames(List<AbiDefinition.NamedType> namedTypes) {
+    static List<TypeName> buildTypeNames(List<AbiDefinition.NamedType> namedTypes)
+            throws ClassNotFoundException {
         List<TypeName> result = new ArrayList<>(namedTypes.size());
         for (AbiDefinition.NamedType namedType : namedTypes) {
             result.add(buildTypeName(namedType.getType()));
@@ -1053,37 +1056,9 @@ public class SolidityFunctionWrapper extends Generator {
         return builder.build();
     }
 
-    static TypeName buildTypeName(String typeDeclaration) {
-        String type = trimStorageDeclaration(typeDeclaration);
-        Matcher matcher = pattern.matcher(type);
-        if (matcher.find()) {
-            Class<?> baseType = AbiTypes.getType(matcher.group(1));
-            String firstArrayDimension = matcher.group(2);
-            String secondArrayDimension = matcher.group(3);
-
-            TypeName typeName;
-
-            if ("".equals(firstArrayDimension)) {
-                typeName = ParameterizedTypeName.get(DynamicArray.class, baseType);
-            } else {
-                Class<?> rawType = getStaticArrayTypeReferenceClass(firstArrayDimension);
-                typeName = ParameterizedTypeName.get(rawType, baseType);
-            }
-
-            if (secondArrayDimension != null) {
-                if ("".equals(secondArrayDimension)) {
-                    return ParameterizedTypeName.get(ClassName.get(DynamicArray.class), typeName);
-                } else {
-                    Class<?> rawType = getStaticArrayTypeReferenceClass(secondArrayDimension);
-                    return ParameterizedTypeName.get(ClassName.get(rawType), typeName);
-                }
-            }
-
-            return typeName;
-        } else {
-            Class<?> cls = AbiTypes.getType(type);
-            return ClassName.get(cls);
-        }
+    static TypeName buildTypeName(String typeDeclaration) throws ClassNotFoundException {
+        String solidityType = trimStorageDeclaration(typeDeclaration);
+        return TypeName.get(TypeReference.makeTypeReference(solidityType).getType());
     }
 
     private static Class<?> getStaticArrayTypeReferenceClass(String type) {

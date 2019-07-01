@@ -135,11 +135,11 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
             final Class tc = getAtomicTypeClass(solidityType);
             return create(tc, indexed);
         }
-        String digits = m.group(1);
+        String arraySize = m.group(1);
         TypeReference baseTr = makeTypeReference(solidityType.substring(0,solidityType.length()
                 - m.group(0).length()));
         TypeReference<?> ref;
-        if (digits == null || digits.equals("")) {
+        if (arraySize == null || arraySize.equals("")) {
             ref = new TypeReference<DynamicArray>(indexed) {
                 @Override
                 public java.lang.reflect.Type getType() {
@@ -162,10 +162,15 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                 }
             };
         } else {
-            final Class arrayclass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray"
-                    + digits);
+            final Class arrayclass;
+            if (Integer.parseInt((arraySize)) <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY) {
+                arrayclass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray"
+                        + arraySize);
+            } else {
+                arrayclass = Class.forName("org.web3j.abi.datatypes.StaticArray");
+            }
             ref = new TypeReference
-                    .StaticArrayTypeReference<StaticArray>(Integer.parseInt(digits)) {
+                    .StaticArrayTypeReference<StaticArray>(Integer.parseInt(arraySize)) {
                 @Override
                 public boolean isIndexed() {
                     return indexed;
