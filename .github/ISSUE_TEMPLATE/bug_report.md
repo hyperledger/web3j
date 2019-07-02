@@ -1,4 +1,13 @@
-# _Issue_title_
+---
+name: Bug report
+about: Create a report to help us improve
+title: ""
+labels: bug
+assignees: ''
+
+---
+
+# _Bug_title_
 _A clear and concise description of what the issue is._
 
 ## Steps To Reproduce
