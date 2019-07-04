@@ -227,13 +227,18 @@ public class Transaction {
     // Parity returns a byte value, Geth returns a hex-encoded string
     // https://github.com/ethereum/go-ethereum/issues/3339
     public void setV(Object v) {
-        if (v instanceof String) {
-            this.v = Numeric.toBigInt((String) v).longValueExact();
-        } else if (v instanceof Integer) {
-            this.v = ((Integer) v).longValue();
-        } else {
-            this.v = (Long) v;
+        if(v==null){
+            this.v = 0l; // Rskj compliance workarround.
+        }else {
+            if (v instanceof String) {
+                this.v = Numeric.toBigInt((String) v).longValueExact();
+            } else if (v instanceof Integer) {
+                this.v = ((Integer) v).longValue();
+            } else {
+                this.v = (Long) v;
+            }
         }
+
     }
 
     @Override
