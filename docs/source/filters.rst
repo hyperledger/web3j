@@ -78,7 +78,7 @@ To replay a range of blocks from the blockchain::
 
 To replay the individual transactions contained within a range of blocks::
 
-   Subscription subscription = web3j.replayTransactionsFlowable(
+   Subscription subscription = web3j.replayPastTransactionsFlowable(
            <startBlockNumber>, <endBlockNumber>)
            .subscribe(tx -> {
                ...
