@@ -50,10 +50,11 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     private final File binFile;
     private final File abiFile;
 
+    private final String contractName;
+
     private final int addressLength;
-    
+
     private final boolean generateSendTxForCalls;
-    
 
     protected SolidityFunctionWrapperGenerator(
             File binFile,
@@ -63,7 +64,20 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             boolean useJavaNativeTypes,
             int addressLength) {
 
-        this(binFile, abiFile, destinationDir, basePackageName,
+        this(binFile, abiFile, destinationDir, getFileNameNoExtension(abiFile.getName()),
+                basePackageName, useJavaNativeTypes, false, Contract.class, addressLength);
+    }
+
+    protected SolidityFunctionWrapperGenerator(
+            File binFile,
+            File abiFile,
+            File destinationDir,
+            String contractName,
+            String basePackageName,
+            boolean useJavaNativeTypes,
+            int addressLength) {
+
+        this(binFile, abiFile, destinationDir, contractName, basePackageName,
                 useJavaNativeTypes, false, Contract.class, addressLength);
     }
 
@@ -71,6 +85,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             File binFile,
             File abiFile,
             File destinationDir,
+            String contractName,
             String basePackageName,
             boolean useJavaNativeTypes,
             boolean generateSendTxForCalls,
@@ -80,6 +95,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         super(contractClass, destinationDir, basePackageName, useJavaNativeTypes);
         this.binFile = binFile;
         this.abiFile = abiFile;
+        this.contractName = contractName;
         this.addressLength = addressLength;
         this.generateSendTxForCalls = generateSendTxForCalls;
     }
@@ -102,7 +118,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         if (functionDefinitions.isEmpty()) {
             exitError("Unable to parse input ABI file");
         } else {
-            String contractName = getFileNameNoExtension(abiFile.getName());
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
