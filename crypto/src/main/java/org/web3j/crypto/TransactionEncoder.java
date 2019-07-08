@@ -1,5 +1,7 @@
 package org.web3j.crypto;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,9 @@ import org.web3j.utils.Numeric;
  */
 public class TransactionEncoder {
 
+    private static final int CHAIN_ID_INC = 35;
+    private static final int LOWER_REAL_V = 27;
+
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
         Sign.SignatureData signatureData = Sign.signMessage(
@@ -25,7 +30,7 @@ public class TransactionEncoder {
     }
 
     public static byte[] signMessage(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            RawTransaction rawTransaction, long chainId, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
@@ -34,22 +39,42 @@ public class TransactionEncoder {
         return encode(rawTransaction, eip155SignatureData);
     }
 
+    @Deprecated
+    public static byte[] signMessage(
+            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+        return signMessage(rawTransaction, (long) chainId, credentials);
+    }
+
     public static Sign.SignatureData createEip155SignatureData(
-            Sign.SignatureData signatureData, byte chainId) {
-        byte v = (byte) (signatureData.getV() + (chainId << 1) + 8);
+            Sign.SignatureData signatureData, long chainId) {
+        BigInteger v = Numeric.toBigInt(signatureData.getV());
+        v = v.subtract(BigInteger.valueOf(LOWER_REAL_V));
+        v = v.add(BigInteger.valueOf(chainId * 2));
+        v = v.add(BigInteger.valueOf(CHAIN_ID_INC));
 
         return new Sign.SignatureData(
-                v, signatureData.getR(), signatureData.getS());
+                v.toByteArray(), signatureData.getR(), signatureData.getS());
+    }
+
+    @Deprecated
+    public static Sign.SignatureData createEip155SignatureData(
+            Sign.SignatureData signatureData, byte chainId) {
+        return createEip155SignatureData(signatureData, (long) chainId);
     }
 
     public static byte[] encode(RawTransaction rawTransaction) {
         return encode(rawTransaction, null);
     }
 
-    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+    public static byte[] encode(RawTransaction rawTransaction, long chainId) {
         Sign.SignatureData signatureData = new Sign.SignatureData(
-                chainId, new byte[] {}, new byte[] {});
+                longToBytes(chainId), new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
+    }
+
+    @Deprecated
+    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+        return encode(rawTransaction, (long) chainId);
     }
 
     private static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
@@ -58,7 +83,13 @@ public class TransactionEncoder {
         return RlpEncoder.encode(rlpList);
     }
 
-    static List<RlpType> asRlpValues(
+    private static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+
+    public static List<RlpType> asRlpValues(
             RawTransaction rawTransaction, Sign.SignatureData signatureData) {
         List<RlpType> result = new ArrayList<>();
 
@@ -83,7 +114,7 @@ public class TransactionEncoder {
         result.add(RlpString.create(data));
 
         if (signatureData != null) {
-            result.add(RlpString.create(signatureData.getV()));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getV())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }

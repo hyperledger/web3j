@@ -8,7 +8,9 @@ import org.web3j.crypto.Hash;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.tx.exceptions.TxHashMismatchException;
@@ -29,11 +31,11 @@ public class RawTransactionManager extends TransactionManager {
     private final Web3j web3j;
     final Credentials credentials;
 
-    private final byte chainId;
+    private final long chainId;
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
-    public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
+    public RawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
         super(web3j, credentials.getAddress());
 
         this.web3j = web3j;
@@ -43,7 +45,7 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId,
+            Web3j web3j, Credentials credentials, long chainId,
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
@@ -54,7 +56,7 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
+            Web3j web3j, Credentials credentials, long chainId, int attempts, long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
@@ -104,7 +106,16 @@ public class RawTransactionManager extends TransactionManager {
 
         return signAndSend(rawTransaction);
     }
-    
+
+    @Override
+    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+            throws IOException {
+        return web3j.ethCall(
+                Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                defaultBlockParameter)
+                .send().getValue();
+    }
+
     /*
      * @param rawTransaction a RawTransaction istance to be signed
      * @return The transaction signed and encoded without ever broadcasting it
