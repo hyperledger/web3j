@@ -108,6 +108,27 @@ public class WalletUtils {
         return new Bip39Wallet(walletFile, mnemonic);
     }
 
+    /**
+     * Generates a BIP-39 compatible Ethereum wallet using a mnemonic passed as argument.
+     *
+     * @param password Will be used for both wallet encryption and passphrase for BIP-39 seed
+     * @param mnemonic The mnemonic that will be used to generate the seed
+     * @param destinationDirectory The directory containing the wallet
+     * @return A BIP-39 compatible Ethereum wallet
+     * @throws CipherException if the underlying cipher is not available
+     * @throws IOException if the destination cannot be written to
+     */
+    public static Bip39Wallet generateBip39WalletFromMnemonic(String password, String mnemonic,
+                                                              File destinationDirectory)
+            throws CipherException, IOException {
+        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
+
+        String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
+
+        return new Bip39Wallet(walletFile, mnemonic);
+    }
+
     public static Credentials loadCredentials(String password, String source)
             throws IOException, CipherException {
         return loadCredentials(password, new File(source));

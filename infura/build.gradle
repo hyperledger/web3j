@@ -1,6 +1,0 @@
-
-description 'web3j customisations for working with Infura.io'
-
-dependencies {
-    compile project(':core')
-}

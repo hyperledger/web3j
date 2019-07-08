@@ -66,6 +66,15 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
 
 For further information refer to :doc:`infura`.
 
+
+Or use `Nodesmith <https://nodesmith.io/>`_, which provides **free API endpoints**:
+
+.. code-block:: java
+
+   Web3j web3 = Web3j.build(new NodesmithHttpService("https://ethereum.api.nodesmith.io/v1/goerli/jsonrpc?apiKey=YOUR_KEY"));
+
+For further information refer to :doc:`nodesmith`.
+
 Instructions on obtaining Ether to transact on the network can be found in the
 :ref:`testnet section of the docs <ethereum-testnets>`.
 

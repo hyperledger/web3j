@@ -13,8 +13,8 @@ import org.web3j.protocol.exceptions.TransactionException;
  */
 public class PollingTransactionReceiptProcessor extends TransactionReceiptProcessor {
 
-    private final long sleepDuration;
-    private final int attempts;
+    protected final long sleepDuration;
+    protected final int attempts;
 
     public PollingTransactionReceiptProcessor(Web3j web3j, long sleepDuration, int attempts) {
         super(web3j);
@@ -35,7 +35,7 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
             throws IOException, TransactionException {
 
         Optional<TransactionReceipt> receiptOptional =
-                sendTransactionReceiptRequest(transactionHash);
+                (Optional<TransactionReceipt>) sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
                 try {
@@ -43,7 +43,9 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
                 } catch (InterruptedException e) {
                     throw new TransactionException(e);
                 }
-                receiptOptional = sendTransactionReceiptRequest(transactionHash);
+                receiptOptional =
+                        (Optional<TransactionReceipt>)
+                                sendTransactionReceiptRequest(transactionHash);
             } else {
                 return receiptOptional.get();
             }

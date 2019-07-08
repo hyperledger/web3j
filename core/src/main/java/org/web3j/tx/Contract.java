@@ -223,13 +223,9 @@ public abstract class Contract extends ManagedTransaction {
     private List<Type> executeCall(
             Function function) throws IOException {
         String encodedFunction = FunctionEncoder.encode(function);
-        org.web3j.protocol.core.methods.response.EthCall ethCall = web3j.ethCall(
-                Transaction.createEthCallTransaction(
-                        transactionManager.getFromAddress(), contractAddress, encodedFunction),
-                defaultBlockParameter)
-                .send();
 
-        String value = ethCall.getValue();
+        String value = call(contractAddress, encodedFunction, defaultBlockParameter);
+
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 
