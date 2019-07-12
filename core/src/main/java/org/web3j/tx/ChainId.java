@@ -17,4 +17,3 @@ public class ChainId {
     public static final byte ETHEREUM_CLASSIC_MAINNET = 61;
     public static final byte ETHEREUM_CLASSIC_TESTNET = 62;
 }
-

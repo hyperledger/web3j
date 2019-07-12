@@ -1,11 +1,9 @@
 package org.web3j.protocol.websocket;
 
 import java.io.IOException;
-
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -449,4 +446,3 @@ public class WebSocketService implements Web3jService {
         return requestForId.containsKey(requestId);
     }
 }
-

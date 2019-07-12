@@ -50,4 +50,3 @@ public class BlockFilter extends Filter<String> {
         return Optional.empty();
     }
 }
-

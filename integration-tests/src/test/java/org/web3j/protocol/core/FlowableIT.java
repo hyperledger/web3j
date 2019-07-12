@@ -8,7 +8,6 @@ import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -12,7 +12,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.junit.Assert;
 import org.junit.Test;
-
 import org.mockito.Mockito;
 
 import org.web3j.protocol.core.Request;

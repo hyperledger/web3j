@@ -15,11 +15,9 @@ import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 
 import org.web3j.abi.datatypes.Bytes;
-import org.web3j.abi.datatypes.Fixed;
 import org.web3j.abi.datatypes.Int;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 
 /**

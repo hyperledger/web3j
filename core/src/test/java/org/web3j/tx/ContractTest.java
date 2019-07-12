@@ -11,7 +11,6 @@ import java.util.function.BiFunction;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.junit.rules.ExpectedException;
 
 import org.web3j.abi.EventEncoder;

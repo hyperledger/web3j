@@ -50,4 +50,3 @@ public class PendingTransactionFilter extends Filter<String> {
         return Optional.empty();
     }
 }
-

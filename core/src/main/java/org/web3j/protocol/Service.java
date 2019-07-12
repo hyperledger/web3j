@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.reactivex.Flowable;
 
 import org.web3j.protocol.core.Request;

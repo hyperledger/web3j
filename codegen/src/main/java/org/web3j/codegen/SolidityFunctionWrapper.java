@@ -14,7 +14,6 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 

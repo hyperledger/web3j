@@ -1,6 +1,5 @@
 package org.web3j.tx;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.junit.Before;
@@ -8,18 +7,11 @@ import org.junit.Test;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
-import org.web3j.utils.TxHashVerifier;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class TransferTest extends ManagedTransactionTester {
 
