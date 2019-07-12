@@ -12,6 +12,8 @@
  */
 package org.web3j.protocol.eea;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import org.web3j.protocol.RequestTester;
@@ -46,7 +48,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testEthGetTransactionCount() throws Exception {
+    public void testEeaGetTransactionCount() throws Exception {
         web3j.eeaGetTransactionCount("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x0").send();
 
         verifyResult(
@@ -54,4 +56,23 @@ public class RequestTest extends RequestTester {
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"0x0\"],"
                         + "\"id\":1}");
     }
+
+    @Test
+    public void testEeaCreatePrivacyGroup() throws Exception {
+        web3j.eeaCreatePrivacyGroup(
+                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                "testName",
+                "testDesc",
+                Arrays.asList(
+                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                        "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs="))
+                .send();
+
+        //CHECKSTYLE:OFF
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_createPrivacyGroup\","
+                + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"testName\",\"testDesc\",[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"]],"
+                + "\"id\":1}");
+        //CHECKSTYLE:ON
+    }
+
 }

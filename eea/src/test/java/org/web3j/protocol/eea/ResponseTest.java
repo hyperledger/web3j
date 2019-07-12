@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
+import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 
@@ -96,5 +97,21 @@ public class ResponseTest extends ResponseTester {
         assertThat(
                 eeaGetTransactionReceipt.getTransactionReceipt().get(),
                 equalTo(transactionReceipt));
+    }
+
+    @Test
+    public void testEeaCreatePrivacyGroup() {
+        //CHECKSTYLE:OFF
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 1,\n"
+                + "    \"result\": \"68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==\"\n"
+                + "}");
+        //CHECKSTYLE:ON
+
+        EeaCreatePrivacyGroup eeaCreatePrivacyGroup = deserialiseResponse(
+                EeaCreatePrivacyGroup.class);
+        assertThat(eeaCreatePrivacyGroup.getPrivacyGroupId(),
+                is("68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw=="));
     }
 }

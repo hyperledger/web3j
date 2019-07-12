@@ -14,12 +14,14 @@ package org.web3j.protocol.eea;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 
 public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
@@ -55,5 +57,18 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
                 Arrays.asList(address, privacyGroupId),
                 web3jService,
                 EthGetTransactionCount.class);
+    }
+
+    @Override
+    public Request<?, EeaCreatePrivacyGroup> eeaCreatePrivacyGroup(
+            final String from,
+            final String name,
+            final String description,
+            final List<String> addresses) {
+        return new Request<>(
+                "eea_createPrivacyGroup",
+                Arrays.asList(from, name, description, addresses),
+                web3jService,
+                EeaCreatePrivacyGroup.class);
     }
 }
