@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.eea;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.Test;
@@ -23,6 +24,8 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
 import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
+import org.web3j.protocol.eea.response.EeaPrivateTransaction;
+import org.web3j.protocol.eea.response.PrivateTransaction;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -100,6 +103,55 @@ public class ResponseTest extends ResponseTester {
                 eeaGetTransactionReceipt.getTransactionReceipt().get(),
                 equalTo(transactionReceipt));
     }
+    @Test
+    public void testEeaGetPrivateTransaction() {
+        //CHECKSTYLE:OFF
+        buildResponse(
+                "{\n"
+                        + "    \"id\":1,\n"
+                        + "    \"jsonrpc\":\"2.0\",\n"
+                        + "    \"result\": {\n"
+                        + "        \"hash\":\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n"
+                        + "        \"nonce\":\"0x\",\n"
+                        + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"value\":\"0x7f110\",\n"
+                        + "        \"gas\": \"0x7f110\",\n"
+                        + "        \"gasPrice\":\"0x09184e72a000\",\n"
+                        + "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\",\n"
+                        + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
+                        + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
+                        + "        \"v\":0,\n"
+                        + "        \"privateFrom\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
+                        + "        \"privateFor\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\n"
+                        + "        \"restriction\":\"restricted\""
+                        + "  }\n"
+                        + "}"
+        );
+        PrivateTransaction privateTransaction = new PrivateTransaction(
+                "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+                "0x",
+                "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                "0x7f110",
+                "0x7f110",
+                "0x09184e72a000",
+                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
+                "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                (byte) 0,
+                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                Arrays.asList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=", "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs="),
+                "restricted"
+        );
+        //CHECKSTYLE:ON
+
+        EeaPrivateTransaction eeaPrivateTransaction = deserialiseResponse(
+                EeaPrivateTransaction.class);
+        assertThat(eeaPrivateTransaction.getPrivateTransaction().get(),
+                equalTo(privateTransaction));
+    }
+
 
     @Test
     public void testEeaGetPrivacyPrecompileAddress() {

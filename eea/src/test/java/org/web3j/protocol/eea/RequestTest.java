@@ -58,6 +58,18 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEeaGetPrivateTransaction() throws Exception {
+        web3j.eeaGetPrivateTransaction("EnclaveKey")
+                .send();
+
+        //CHECKSTYLE:OFF
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_getPrivateTransaction\","
+                + "\"params\":[\"EnclaveKey\"],"
+                + "\"id\":1}");
+        //CHECKSTYLE:ON
+    }
+
+    @Test
     public void testEeaGetPrivacyPrecompileAddress() throws Exception {
         web3j.eeaGetPrivacyPrecompileAddress()
                 .send();
