@@ -21,6 +21,7 @@ import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
+import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 
@@ -101,6 +102,23 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
+    public void testEeaGetPrivacyPrecompileAddress() {
+        //CHECKSTYLE:OFF
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 1,\n"
+                + "    \"result\": \"0xb60e8dd61c5d32be8058bb8eb970870f07233155\"\n"
+                + "}");
+        //CHECKSTYLE:ON
+
+
+        EeaGetPrivacyPrecompileAddress eeaGetPrivacyPrecompileAddress = deserialiseResponse(
+                EeaGetPrivacyPrecompileAddress.class);
+        assertThat(eeaGetPrivacyPrecompileAddress.getAddress(),
+                is("0xb60e8dd61c5d32be8058bb8eb970870f07233155"));
+    }
+
+    @Test
     public void testEeaCreatePrivacyGroup() {
         //CHECKSTYLE:OFF
         buildResponse("{\n"
@@ -126,9 +144,9 @@ public class ResponseTest extends ResponseTester {
                 + "}");
         //CHECKSTYLE:ON
 
-        BooleanResponse eeaCreatePrivacyGroup = deserialiseResponse(
+        BooleanResponse eeaDeletePrivacyGroup = deserialiseResponse(
                 BooleanResponse.class);
-        assertThat(eeaCreatePrivacyGroup.success(),
+        assertThat(eeaDeletePrivacyGroup.success(),
                 is(true));
     }
 }

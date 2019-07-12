@@ -21,6 +21,7 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
+import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 
 
@@ -35,6 +36,8 @@ public interface Eea extends Web3j {
 
     Request<?, EthGetTransactionCount> eeaGetTransactionCount(
             final String address, final String privacyGroupId);
+
+    Request<?, EeaGetPrivacyPrecompileAddress> eeaGetPrivacyPrecompileAddress();
 
     Request<?, EeaCreatePrivacyGroup> eeaCreatePrivacyGroup(
             final String from, final String name,

@@ -58,6 +58,18 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEeaGetPrivacyPrecompileAddress() throws Exception {
+        web3j.eeaGetPrivacyPrecompileAddress()
+                .send();
+
+        //CHECKSTYLE:OFF
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_getPrivacyPrecompileAddress\","
+                + "\"params\":[],"
+                + "\"id\":1}");
+        //CHECKSTYLE:ON
+    }
+
+    @Test
     public void testEeaCreatePrivacyGroup() throws Exception {
         web3j.eeaCreatePrivacyGroup(
                 "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
