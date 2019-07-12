@@ -17,6 +17,7 @@ import java.util.Collections;
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
+import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
@@ -113,5 +114,21 @@ public class ResponseTest extends ResponseTester {
                 EeaCreatePrivacyGroup.class);
         assertThat(eeaCreatePrivacyGroup.getPrivacyGroupId(),
                 is("68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw=="));
+    }
+
+    @Test
+    public void testEeaDeletePrivacyGroup() {
+        //CHECKSTYLE:OFF
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 1,\n"
+                + "    \"result\": \"true\"\n"
+                + "}");
+        //CHECKSTYLE:ON
+
+        BooleanResponse eeaCreatePrivacyGroup = deserialiseResponse(
+                BooleanResponse.class);
+        assertThat(eeaCreatePrivacyGroup.success(),
+                is(true));
     }
 }

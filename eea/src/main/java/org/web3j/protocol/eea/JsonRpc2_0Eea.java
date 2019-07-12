@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
@@ -70,5 +71,16 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
                 Arrays.asList(from, name, description, addresses),
                 web3jService,
                 EeaCreatePrivacyGroup.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> eeaDeletePrivacyGroup(
+            final String from,
+            final String privacyGroupId) {
+        return new Request<>(
+                "eea_deletePrivacyGroup",
+                Arrays.asList(from, privacyGroupId),
+                web3jService,
+                BooleanResponse.class);
     }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -36,5 +37,9 @@ public interface Eea extends Web3j {
             final String address, final String privacyGroupId);
 
     Request<?, EeaCreatePrivacyGroup> eeaCreatePrivacyGroup(
-            String from, String name, String description, List<String> addresses);
+            final String from, final String name,
+            final String description, final List<String> addresses);
+
+    Request<?, BooleanResponse> eeaDeletePrivacyGroup(
+            final String from, final String privacyGroupId);
 }

@@ -75,4 +75,18 @@ public class RequestTest extends RequestTester {
         //CHECKSTYLE:ON
     }
 
+    @Test
+    public void testEeaDeletePrivacyGroup() throws Exception {
+        web3j.eeaDeletePrivacyGroup(
+                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                "68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==")
+                .send();
+
+        //CHECKSTYLE:OFF
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_deletePrivacyGroup\","
+                + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==\"],"
+                + "\"id\":1}");
+        //CHECKSTYLE:ON
+    }
+
 }
