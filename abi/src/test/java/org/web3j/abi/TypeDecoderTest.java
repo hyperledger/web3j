@@ -427,15 +427,23 @@ public class TypeDecoderTest {
     public void multiDimArrays() throws Exception {
         byte[] bytes1d = new byte[]{1, 2, 3};
         byte[][] bytes2d = new byte[][]{bytes1d, bytes1d, bytes1d};
+        final byte[][][] bytes3d = new byte[][][]{bytes2d, bytes2d, bytes2d};
+
         assertThat(TypeDecoder.instantiateType("bytes", bytes1d), is(new DynamicBytes(bytes1d)));
 
         StaticArray3<DynamicArray<Uint256>> twoDim = (StaticArray3<DynamicArray<Uint256>>)
                 TypeDecoder.instantiateType("uint256[][3]", bytes2d);
         assert (twoDim instanceof StaticArray3);
-
         DynamicArray<Uint256> row1 = twoDim.getValue().get(1);
         assert (row1 instanceof DynamicArray);
-
         assertThat(row1.getValue().get(2), is(new Uint256(3)));
+
+        StaticArray3<StaticArray3<DynamicArray<Uint256>>> threeDim =
+                (StaticArray3<StaticArray3<DynamicArray<Uint256>>>)
+                TypeDecoder.instantiateType("uint256[][3][3]", bytes3d);
+        assert (threeDim instanceof StaticArray3);
+        row1 = threeDim.getValue().get(1).getValue().get(1);
+        assert (row1 instanceof DynamicArray);
+        assertThat(row1.getValue().get(1), is(new Uint256(2)));
     }
 }
