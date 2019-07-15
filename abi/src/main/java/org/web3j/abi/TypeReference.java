@@ -43,6 +43,18 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         this.indexed = indexed;
     }
 
+    /**
+     * getSubTypeReference() is used by instantiateType to see what TypeReference
+     * is wrapped by this one. eg calling getSubTypeReference() on a TypeReference
+     * to DynamicArray[StaticArray3[Uint256]] would return a TypeReference to StaticArray3[Uint256]
+     *
+     * @return the type wrapped by this Array TypeReference, or null if not Array
+     */
+
+    TypeReference getSubTypeReference() {
+        return null;
+    }
+
     public int compareTo(TypeReference<T> o) {
         // taken from the blog post comments - this results in an errror if the
         // type parameter is left out.
@@ -56,6 +68,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     public boolean isIndexed() {
         return indexed;
     }
+
 
     /**
      * Workaround to ensure type does not come back as T due to erasure, this enables you to
@@ -150,11 +163,16 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
             if (arraySize == null || arraySize.equals("")) {
                 arrayWrappedType = new TypeReference<DynamicArray>(indexed) {
                     @Override
+                    TypeReference getSubTypeReference() {
+                        return baseTr;
+                    }
+
+                    @Override
                     public java.lang.reflect.Type getType() {
                         return new ParameterizedType() {
                             @Override
                             public java.lang.reflect.Type[] getActualTypeArguments() {
-                                return new java.lang.reflect.Type[]{baseTr.getType()};
+                                return new java.lang.reflect.Type[]{ baseTr.getType() };
                             }
 
                             @Override
@@ -180,6 +198,12 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                 }
                 arrayWrappedType = new TypeReference
                         .StaticArrayTypeReference<StaticArray>(arraySizeInt) {
+
+                    @Override
+                    TypeReference getSubTypeReference() {
+                        return baseTr;
+                    }
+
                     @Override
                     public boolean isIndexed() {
                         return indexed;
@@ -190,7 +214,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                         return new ParameterizedType() {
                             @Override
                             public java.lang.reflect.Type[] getActualTypeArguments() {
-                                return new java.lang.reflect.Type[]{baseTr.getType()};
+                                return new java.lang.reflect.Type[]{ baseTr.getType() };
                             }
 
                             @Override

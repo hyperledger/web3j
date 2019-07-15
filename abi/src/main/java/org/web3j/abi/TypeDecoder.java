@@ -172,25 +172,11 @@ public class TypeDecoder {
                     + arraySize);
             listcons = arrayClass.getConstructor(new Class[]{Class.class, List.class});
         }
-        //create a list of transformed arguments
+        //create a list of arguments coerced to the correct type of sub-TypeReference
         ArrayList transformedList = new ArrayList(values.size());
-        java.lang.reflect.Type subtype = ((ParameterizedType) ref.getType())
-                .getActualTypeArguments()[0];
+        TypeReference subTypeReference = ref.getSubTypeReference();
         for (Object o : values) {
-            TypeReference elementTR;
-            //array of arrays
-            if (subtype instanceof ParameterizedType) {
-                elementTR = new TypeReference<Array>() {
-                    @Override
-                    public java.lang.reflect.Type getType() {
-                        return subtype;
-                    }
-                };
-            } else {
-                //array of basic types
-                elementTR = TypeReference.create((Class) subtype);
-            }
-            transformedList.add(instantiateType(elementTR, o));
+            transformedList.add(instantiateType(subTypeReference, o));
         }
         return (Type) listcons.newInstance(ref.getClassType(), transformedList);
     }
