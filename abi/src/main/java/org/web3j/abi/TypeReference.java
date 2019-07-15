@@ -37,7 +37,7 @@ import org.web3j.abi.datatypes.generated.AbiTypes;
  */
 public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         implements Comparable<TypeReference<T>> {
-    protected static Pattern ARRAY_SUFFIX = Pattern.compile("\\[(\\d*)]$");
+    protected static Pattern ARRAY_SUFFIX = Pattern.compile("\\[(\\d*)]");
 
     private final Type type;
     private final boolean indexed;
@@ -143,75 +143,90 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
     public static TypeReference makeTypeReference(String solidityType, final boolean indexed)
             throws ClassNotFoundException {
-        Matcher m = ARRAY_SUFFIX.matcher(solidityType);
-        if (!m.find()) {
+        Matcher nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
+        if (!nextSquareBrackets.find()) {
             final Class<? extends org.web3j.abi.datatypes.Type> typeClass =
                     getAtomicTypeClass(solidityType);
             return create(typeClass, indexed);
         }
-        String arraySize = m.group(1);
-        TypeReference baseTr = makeTypeReference(solidityType.substring(0, solidityType.length()
-                - m.group(0).length()));
-        TypeReference<?> ref;
-        if (arraySize == null || arraySize.equals("")) {
-            ref = new TypeReference<DynamicArray>(indexed) {
-                @Override
-                public java.lang.reflect.Type getType() {
-                    return new ParameterizedType() {
-                        @Override
-                        public java.lang.reflect.Type[] getActualTypeArguments() {
-                            return new java.lang.reflect.Type[]{ baseTr.getType() };
-                        }
 
-                        @Override
-                        public java.lang.reflect.Type getRawType() {
-                            return DynamicArray.class;
-                        }
+        int lastReadStringPosition = nextSquareBrackets.start();
+        final Class<? extends org.web3j.abi.datatypes.Type> baseClass =
+                getAtomicTypeClass(solidityType.substring(0,lastReadStringPosition));
+        TypeReference arrayWrappedType = create(baseClass,indexed);
+        final int len = solidityType.length();
+        //for each [\d*], wrap the previous TypeReference in an array
+        while (lastReadStringPosition < len) {
+            String arraySize = nextSquareBrackets.group(1);
+            final TypeReference baseTr = arrayWrappedType;
+            if (arraySize == null || arraySize.equals("")) {
+                arrayWrappedType = new TypeReference<DynamicArray>(indexed) {
+                    @Override
+                    public java.lang.reflect.Type getType() {
+                        return new ParameterizedType() {
+                            @Override
+                            public java.lang.reflect.Type[] getActualTypeArguments() {
+                                return new java.lang.reflect.Type[]{baseTr.getType()};
+                            }
 
-                        @Override
-                        public java.lang.reflect.Type getOwnerType() {
-                            return Class.class;
-                        }
-                    };
-                }
-            };
-        } else {
-            final Class arrayclass;
-            int arraySizeInt = Integer.parseInt(arraySize);
-            if (arraySizeInt <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY) {
-                arrayclass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray"
-                        + arraySize);
+                            @Override
+                            public java.lang.reflect.Type getRawType() {
+                                return DynamicArray.class;
+                            }
+
+                            @Override
+                            public java.lang.reflect.Type getOwnerType() {
+                                return Class.class;
+                            }
+                        };
+                    }
+                };
             } else {
-                arrayclass = StaticArray.class;
+                final Class arrayclass;
+                int arraySizeInt = Integer.parseInt(arraySize);
+                if (arraySizeInt <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY) {
+                    arrayclass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray"
+                            + arraySize);
+                } else {
+                    arrayclass = StaticArray.class;
+                }
+                arrayWrappedType = new TypeReference
+                        .StaticArrayTypeReference<StaticArray>(arraySizeInt) {
+                    @Override
+                    public boolean isIndexed() {
+                        return indexed;
+                    }
+
+                    @Override
+                    public java.lang.reflect.Type getType() {
+                        return new ParameterizedType() {
+                            @Override
+                            public java.lang.reflect.Type[] getActualTypeArguments() {
+                                return new java.lang.reflect.Type[]{baseTr.getType()};
+                            }
+
+                            @Override
+                            public java.lang.reflect.Type getRawType() {
+                                return arrayclass;
+                            }
+
+                            @Override
+                            public java.lang.reflect.Type getOwnerType() {
+                                return Class.class;
+                            }
+                        };
+                    }
+                };
             }
-            ref = new TypeReference
-                    .StaticArrayTypeReference<StaticArray>(arraySizeInt) {
-                @Override
-                public boolean isIndexed() {
-                    return indexed;
-                }
-
-                @Override
-                public java.lang.reflect.Type getType() {
-                    return new ParameterizedType() {
-                        @Override
-                        public java.lang.reflect.Type[] getActualTypeArguments() {
-                            return new java.lang.reflect.Type[]{ baseTr.getType() };
-                        }
-
-                        @Override
-                        public java.lang.reflect.Type getRawType() {
-                            return arrayclass;
-                        }
-
-                        @Override
-                        public java.lang.reflect.Type getOwnerType() {
-                            return Class.class;
-                        }
-                    };
-                }
-            };
+            lastReadStringPosition = nextSquareBrackets.end();
+            nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
+            //cant find any more [] and string isn't fully parsed
+            if (!nextSquareBrackets.find(lastReadStringPosition)
+                    && lastReadStringPosition != len) {
+                throw new ClassNotFoundException("Unable to make TypeReference from "
+                        + solidityType);
+            }
         }
-        return ref;
+        return arrayWrappedType;
     }
 }
