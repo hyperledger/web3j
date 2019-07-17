@@ -134,7 +134,7 @@ public class SolidityFunctionWrapper extends Generator {
         this.generateSendTxForCalls = generateSendTxForCalls;
     }
 
-    void generateJavaFiles(
+    public void generateJavaFiles(
             String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
             String basePackageName, Map<String, String> addresses)
             throws IOException, ClassNotFoundException {
@@ -143,7 +143,7 @@ public class SolidityFunctionWrapper extends Generator {
                 destinationDir, basePackageName, addresses);
     }
 
-    void generateJavaFiles(
+    public void generateJavaFiles(
             Class<? extends Contract> contractClass,
             String contractName, String bin, List<AbiDefinition> abi, String destinationDir,
             String basePackageName, Map<String, String> addresses)
