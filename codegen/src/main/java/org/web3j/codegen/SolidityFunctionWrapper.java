@@ -109,21 +109,21 @@ public class SolidityFunctionWrapper extends Generator {
 
     private final GenerationReporter reporter;
 
-    protected SolidityFunctionWrapper(boolean useNativeJavaTypes) {
+    public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
         this(useNativeJavaTypes, Address.DEFAULT_LENGTH);
     }
 
-    protected SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
+    public SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
         this(useNativeJavaTypes, false, addressLength, new LogGenerationReporter(LOGGER));
     }
 
-    protected SolidityFunctionWrapper(
+    public SolidityFunctionWrapper(
             boolean useNativeJavaTypes, int addressLength, boolean generateSendTxForCalls) {
         this(useNativeJavaTypes, generateSendTxForCalls, addressLength,
                 new LogGenerationReporter(LOGGER));
     }
 
-    protected SolidityFunctionWrapper(
+    public SolidityFunctionWrapper(
             boolean useNativeJavaTypes,
             boolean generateSendTxForCalls,
             int addressLength,
