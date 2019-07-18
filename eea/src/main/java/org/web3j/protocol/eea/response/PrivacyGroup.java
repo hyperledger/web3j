@@ -57,15 +57,15 @@ public class PrivacyGroup {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PrivacyGroup that = (PrivacyGroup) o;
-        return privacyGroupId.equals(that.privacyGroupId) &&
-                name.equals(that.name) &&
-                description.equals(that.description) &&
-                type == that.type &&
-                members.equals(that.members);
+        return getPrivacyGroupId().equals(that.getPrivacyGroupId()) &&
+                getName().equals(that.getName()) &&
+                getDescription().equals(that.getDescription()) &&
+                getType() == that.getType() &&
+                getMembers().equals(that.getMembers());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(privacyGroupId, name, description, type, members);
+        return Objects.hash(getPrivacyGroupId(), getName(), getDescription(), getType(), getMembers());
     }
 }

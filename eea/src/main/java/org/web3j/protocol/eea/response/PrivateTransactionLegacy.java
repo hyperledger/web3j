@@ -37,21 +37,17 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
         return privateFor;
     }
 
-    public void setPrivateFor(List<String> privateFor) {
-        this.privateFor = privateFor;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         PrivateTransactionLegacy that = (PrivateTransactionLegacy) o;
-        return privateFor.equals(that.privateFor);
+        return getPrivateFor().equals(that.getPrivateFor());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), privateFor);
+        return Objects.hash(super.hashCode(), getPrivateFor());
     }
 }

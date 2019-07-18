@@ -37,21 +37,17 @@ public class PrivateTransactionWithPrivacyGroup extends PrivateTransaction {
         return privacyGroupId;
     }
 
-    public void setPrivacyGroupId(String privacyGroupId) {
-        this.privacyGroupId = privacyGroupId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         PrivateTransactionWithPrivacyGroup that = (PrivateTransactionWithPrivacyGroup) o;
-        return privacyGroupId.equals(that.privacyGroupId);
+        return getPrivacyGroupId().equals(that.getPrivacyGroupId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), privacyGroupId);
+        return Objects.hash(super.hashCode(), getPrivacyGroupId());
     }
 }
