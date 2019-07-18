@@ -20,9 +20,7 @@ import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
 import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 
-/**
- * Utility functions for working with Wallet files.
- */
+/** Utility functions for working with Wallet files. */
 public class WalletUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -35,28 +33,28 @@ public class WalletUtils {
 
     public static String generateFullNewWalletFile(String password, File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
-            InvalidAlgorithmParameterException, CipherException, IOException {
+                    InvalidAlgorithmParameterException, CipherException, IOException {
 
         return generateNewWalletFile(password, destinationDirectory, true);
     }
 
     public static String generateLightNewWalletFile(String password, File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
-            InvalidAlgorithmParameterException, CipherException, IOException {
+                    InvalidAlgorithmParameterException, CipherException, IOException {
 
         return generateNewWalletFile(password, destinationDirectory, false);
     }
 
     public static String generateNewWalletFile(String password, File destinationDirectory)
-            throws CipherException, InvalidAlgorithmParameterException,
-            NoSuchAlgorithmException, NoSuchProviderException, IOException {
+            throws CipherException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+                    NoSuchProviderException, IOException {
         return generateFullNewWalletFile(password, destinationDirectory);
     }
 
     public static String generateNewWalletFile(
             String password, File destinationDirectory, boolean useFullScrypt)
             throws CipherException, IOException, InvalidAlgorithmParameterException,
-            NoSuchAlgorithmException, NoSuchProviderException {
+                    NoSuchAlgorithmException, NoSuchProviderException {
 
         ECKeyPair ecKeyPair = Keys.createEcKeyPair();
         return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
@@ -82,8 +80,9 @@ public class WalletUtils {
     }
 
     /**
-     * Generates a BIP-39 compatible Ethereum wallet. The private key for the wallet can
-     * be calculated using following algorithm:
+     * Generates a BIP-39 compatible Ethereum wallet. The private key for the wallet can be
+     * calculated using following algorithm:
+     *
      * <pre>
      *     Key = SHA-256(BIP_39_SEED(mnemonic, password))
      * </pre>
@@ -146,8 +145,8 @@ public class WalletUtils {
     }
 
     private static String getWalletFileName(WalletFile walletFile) {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern(
-                "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+        DateTimeFormatter format =
+                DateTimeFormatter.ofPattern("'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
 
         return now.format(format) + walletFile.getAddress() + ".json";
@@ -162,8 +161,8 @@ public class WalletUtils {
 
         if (osName.startsWith("mac")) {
             return String.format(
-                    "%s%sLibrary%sEthereum", System.getProperty("user.home"), File.separator,
-                    File.separator);
+                    "%s%sLibrary%sEthereum",
+                    System.getProperty("user.home"), File.separator, File.separator);
         } else if (osName.startsWith("win")) {
             return String.format("%s%sEthereum", System.getenv("APPDATA"), File.separator);
         } else {
@@ -179,9 +178,10 @@ public class WalletUtils {
     public static String getMainnetKeyDirectory() {
         return String.format("%s%skeystore", getDefaultKeyDirectory(), File.separator);
     }
-    
+
     /**
      * Get keystore destination directory for a Rinkeby network.
+     *
      * @return a String containing destination directory
      */
     public static String getRinkebyKeyDirectory() {

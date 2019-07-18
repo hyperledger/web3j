@@ -14,8 +14,7 @@ public interface Eea extends Web3j {
 
     Request<?, EthSendTransaction> eeaSendRawTransaction(final String signedTransactionData);
 
-    Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(
-            final String transactionHash);
+    Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(final String transactionHash);
 
     Request<?, EthGetTransactionCount> eeaGetTransactionCount(
             final String address, final String privacyGroupId);

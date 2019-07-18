@@ -9,7 +9,6 @@ import io.reactivex.Flowable;
 
 import org.web3j.protocol.Web3jService;
 
-
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
 
@@ -24,11 +23,9 @@ public class Request<S, T extends Response> {
     // http://stackoverflow.com/a/3437930/3211687
     private Class<T> responseType;
 
-    public Request() {
-    }
+    public Request() {}
 
-    public Request(String method, List<S> params,
-                   Web3jService web3jService, Class<T> type) {
+    public Request(String method, List<S> params, Web3jService web3jService, Class<T> type) {
         this.method = method;
         this.params = params;
         this.id = nextId.getAndIncrement();
@@ -73,7 +70,7 @@ public class Request<S, T extends Response> {
     }
 
     public CompletableFuture<T> sendAsync() {
-        return  web3jService.sendAsync(this, responseType);
+        return web3jService.sendAsync(this, responseType);
     }
 
     public Flowable<T> flowable() {

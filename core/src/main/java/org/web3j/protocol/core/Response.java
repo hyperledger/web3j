@@ -18,8 +18,7 @@ public class Response<T> {
     private Error error;
     private String rawResponse;
 
-    public Response() {
-    }
+    public Response() {}
 
     public long getId() {
         return id;
@@ -72,8 +71,7 @@ public class Response<T> {
         @JsonDeserialize(using = KeepAsJsonDeserialzier.class)
         private String data;
 
-        public Error() {
-        }
+        public Error() {}
 
         public Error(int code, String message) {
             this.code = code;
@@ -119,7 +117,8 @@ public class Response<T> {
                 return false;
             }
             if (getMessage() != null
-                    ? !getMessage().equals(error.getMessage()) : error.getMessage() != null) {
+                    ? !getMessage().equals(error.getMessage())
+                    : error.getMessage() != null) {
                 return false;
             }
             return getData() != null ? getData().equals(error.getData()) : error.getData() == null;

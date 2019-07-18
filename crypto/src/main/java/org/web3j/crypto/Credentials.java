@@ -2,9 +2,7 @@ package org.web3j.crypto;
 
 import org.web3j.utils.Numeric;
 
-/**
- * Credentials wrapper.
- */
+/** Credentials wrapper. */
 public class Credentials {
 
     private final ECKeyPair ecKeyPair;

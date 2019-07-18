@@ -8,10 +8,11 @@ import org.web3j.utils.Numeric;
 
 /**
  * Transaction request object used the below methods.
+ *
  * <ol>
- *     <li>eth_call</li>
- *     <li>eth_sendTransaction</li>
- *     <li>eth_estimateGas</li>
+ *   <li>eth_call
+ *   <li>eth_sendTransaction
+ *   <li>eth_estimateGas
  * </ol>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,10 +26,16 @@ public class Transaction {
     private BigInteger gasPrice;
     private BigInteger value;
     private String data;
-    private BigInteger nonce;  // nonce field is not present on eth_call/eth_estimateGas
+    private BigInteger nonce; // nonce field is not present on eth_call/eth_estimateGas
 
-    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-                       String to, BigInteger value, String data) {
+    public Transaction(
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data) {
         this.from = from;
         this.to = to;
         this.gas = gasLimit;
@@ -43,8 +50,12 @@ public class Transaction {
     }
 
     public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-            BigInteger value, String init) {
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            BigInteger value,
+            String init) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, null, value, init);
     }
@@ -56,21 +67,34 @@ public class Transaction {
     }
 
     public static Transaction createEtherTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
             BigInteger value) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, value, null);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value, String data) {
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, value, data);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
             String data) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data);
@@ -113,7 +137,7 @@ public class Transaction {
         if (value != null) {
             return Numeric.encodeQuantity(value);
         } else {
-            return null;  // we don't want the field to be encoded if not present
+            return null; // we don't want the field to be encoded if not present
         }
     }
 }

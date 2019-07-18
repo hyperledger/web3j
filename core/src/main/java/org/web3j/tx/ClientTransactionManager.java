@@ -18,8 +18,7 @@ public class ClientTransactionManager extends TransactionManager {
 
     private final Web3j web3j;
 
-    public ClientTransactionManager(
-            Web3j web3j, String fromAddress) {
+    public ClientTransactionManager(Web3j web3j, String fromAddress) {
         super(web3j, fromAddress);
         this.web3j = web3j;
     }
@@ -31,7 +30,8 @@ public class ClientTransactionManager extends TransactionManager {
     }
 
     public ClientTransactionManager(
-            Web3j web3j, String fromAddress,
+            Web3j web3j,
+            String fromAddress,
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, fromAddress);
         this.web3j = web3j;
@@ -39,23 +39,22 @@ public class ClientTransactionManager extends TransactionManager {
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
+            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
             throws IOException {
 
-        Transaction transaction = new Transaction(
-                getFromAddress(), null, gasPrice, gasLimit, to, value, data);
+        Transaction transaction =
+                new Transaction(getFromAddress(), null, gasPrice, gasLimit, to, value, data);
 
-        return web3j.ethSendTransaction(transaction)
-                .send();
+        return web3j.ethSendTransaction(transaction).send();
     }
 
     @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         return web3j.ethCall(
-                Transaction.createEthCallTransaction(getFromAddress(), to, data),
-                defaultBlockParameter)
-                .send().getValue();
+                        Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                        defaultBlockParameter)
+                .send()
+                .getValue();
     }
 }

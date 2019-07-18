@@ -12,9 +12,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 
-/**
- * eth_getTransactionReceipt.
- */
+/** eth_getTransactionReceipt. */
 public class EthGetTransactionReceipt extends Response<TransactionReceipt> {
 
     public Optional<TransactionReceipt> getTransactionReceipt() {
@@ -27,12 +25,12 @@ public class EthGetTransactionReceipt extends Response<TransactionReceipt> {
 
         @Override
         public TransactionReceipt deserialize(
-                JsonParser jsonParser,
-                DeserializationContext deserializationContext) throws IOException {
+                JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
                 return objectReader.readValue(jsonParser, TransactionReceipt.class);
             } else {
-                return null;  // null is wrapped by Optional in above getter
+                return null; // null is wrapped by Optional in above getter
             }
         }
     }

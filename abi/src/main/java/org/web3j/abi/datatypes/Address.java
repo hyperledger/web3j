@@ -5,9 +5,7 @@ import java.math.BigInteger;
 import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.utils.Numeric;
 
-/**
- * Address type, which is equivalent to uint160.
- */
+/** Address type, which is equivalent to uint160. */
 public class Address implements Type<String> {
 
     public static final String TYPE_NAME = "address";
@@ -40,8 +38,7 @@ public class Address implements Type<String> {
 
     @Override
     public String toString() {
-        return Numeric.toHexStringWithPrefixZeroPadded(
-                value.getValue(), LENGTH_IN_HEX);
+        return Numeric.toHexStringWithPrefixZeroPadded(value.getValue(), LENGTH_IN_HEX);
     }
 
     @Override

@@ -4,9 +4,10 @@ import org.web3j.protocol.core.Response;
 
 /**
  * Null response object returned by the below methods.
+ *
  * <ul>
- * <li>personal_setAccountName</li>
- * <li>personal_setAccountMeta</li>
+ *   <li>personal_setAccountName
+ *   <li>personal_setAccountMeta
  * </ul>
  */
 public class VoidResponse extends Response<Void> {

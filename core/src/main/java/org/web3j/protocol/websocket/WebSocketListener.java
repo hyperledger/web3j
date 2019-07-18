@@ -2,9 +2,7 @@ package org.web3j.protocol.websocket;
 
 import java.io.IOException;
 
-/**
- * A listener used to notify about about new WebSocket messages.
- */
+/** A listener used to notify about about new WebSocket messages. */
 public interface WebSocketListener {
 
     /**

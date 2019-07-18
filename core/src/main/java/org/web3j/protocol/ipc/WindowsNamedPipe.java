@@ -3,9 +3,7 @@ package org.web3j.protocol.ipc;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-/**
- * Windows named pipe IO implementation for IPC.
- */
+/** Windows named pipe IO implementation for IPC. */
 public class WindowsNamedPipe implements IOFacade {
 
     private final RandomAccessFile pipe;
@@ -14,8 +12,7 @@ public class WindowsNamedPipe implements IOFacade {
         try {
             pipe = new RandomAccessFile(ipcSocketPath, "rw");
         } catch (IOException e) {
-            throw new RuntimeException(
-                    "Provided file pipe cannot be opened: " + ipcSocketPath, e);
+            throw new RuntimeException("Provided file pipe cannot be opened: " + ipcSocketPath, e);
         }
     }
 

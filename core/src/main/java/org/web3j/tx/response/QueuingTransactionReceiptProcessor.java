@@ -16,8 +16,8 @@ import org.web3j.utils.Async;
  * Transaction receipt processor that uses a single thread to query for transaction receipts.
  *
  * <p><em>Note:</em>When initially invoked, this processor returns a transaction receipt containing
- * only the transaction hash of the submitted transaction. This is encapsulated in an
- * {@link EmptyTransactionReceipt}.
+ * only the transaction hash of the submitted transaction. This is encapsulated in an {@link
+ * EmptyTransactionReceipt}.
  */
 public class QueuingTransactionReceiptProcessor extends TransactionReceiptProcessor {
 
@@ -28,8 +28,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
     private final BlockingQueue<RequestWrapper> pendingTransactions;
 
     public QueuingTransactionReceiptProcessor(
-            Web3j web3j, Callback callback,
-            int pollingAttemptsPerTxHash, long pollingFrequency) {
+            Web3j web3j, Callback callback, int pollingAttemptsPerTxHash, long pollingFrequency) {
         super(web3j);
         this.scheduledExecutorService = Async.defaultExecutorService();
         this.callback = callback;
@@ -38,7 +37,9 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
 
         scheduledExecutorService.scheduleAtFixedRate(
                 this::sendTransactionReceiptRequests,
-                pollingFrequency, pollingFrequency, TimeUnit.MILLISECONDS);
+                pollingFrequency,
+                pollingFrequency,
+                TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -62,9 +63,12 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
                 } else {
                     if (requestWrapper.getCount() == pollingAttemptsPerTxHash) {
                         throw new TransactionException(
-                                "No transaction receipt for txHash: " + transactionHash
-                                        + "received after " + pollingAttemptsPerTxHash
-                                        + " attempts", transactionHash);
+                                "No transaction receipt for txHash: "
+                                        + transactionHash
+                                        + "received after "
+                                        + pollingAttemptsPerTxHash
+                                        + " attempts",
+                                transactionHash);
                     } else {
                         requestWrapper.incrementCount();
                     }
@@ -78,8 +82,8 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
 
     /**
      * Java doesn't provide a concurrent linked hash set, so we use a simple wrapper to store
-     * details of the number of requests we've made against this specific transaction hash. This
-     * is so we can preserve submission order as we interate over the outstanding transactions.
+     * details of the number of requests we've made against this specific transaction hash. This is
+     * so we can preserve submission order as we interate over the outstanding transactions.
      *
      * <p>Note - the equals/hashcode methods only operate on the transactionHash field. This is
      * intentional.

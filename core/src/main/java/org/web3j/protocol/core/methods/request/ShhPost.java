@@ -7,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.web3j.utils.Numeric;
 
-/**
- * https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_post
- */
+/** https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_post */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ShhPost {
     private String from;
@@ -19,16 +17,20 @@ public class ShhPost {
     private BigInteger priority;
     private BigInteger ttl;
 
-    public ShhPost(List<String> topics, String payload, BigInteger priority,
-                   BigInteger ttl) {
+    public ShhPost(List<String> topics, String payload, BigInteger priority, BigInteger ttl) {
         this.topics = topics;
         this.payload = payload;
         this.priority = priority;
         this.ttl = ttl;
     }
 
-    public ShhPost(String from, String to, List<String> topics, String payload,
-                   BigInteger priority, BigInteger ttl) {
+    public ShhPost(
+            String from,
+            String to,
+            List<String> topics,
+            String payload,
+            BigInteger priority,
+            BigInteger ttl) {
         this.from = from;
         this.to = to;
         this.topics = topics;

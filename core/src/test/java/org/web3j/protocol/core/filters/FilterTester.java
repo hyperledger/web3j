@@ -48,20 +48,24 @@ public abstract class FilterTester {
     }
 
     <T> void runTest(EthLog ethLog, Flowable<T> flowable) throws Exception {
-        EthFilter ethFilter = objectMapper.readValue(
-                "{\n"
-                        + "  \"id\":1,\n"
-                        + "  \"jsonrpc\": \"2.0\",\n"
-                        + "  \"result\": \"0x1\"\n"
-                        + "}", EthFilter.class);
+        EthFilter ethFilter =
+                objectMapper.readValue(
+                        "{\n"
+                                + "  \"id\":1,\n"
+                                + "  \"jsonrpc\": \"2.0\",\n"
+                                + "  \"result\": \"0x1\"\n"
+                                + "}",
+                        EthFilter.class);
 
-        EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
+        EthUninstallFilter ethUninstallFilter =
+                objectMapper.readValue(
+                        "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 
-        EthLog notFoundFilter = objectMapper.readValue(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,"
-                + "\"error\":{\"code\":-32000,\"message\":\"filter not found\"}}",
-                EthLog.class);
+        EthLog notFoundFilter =
+                objectMapper.readValue(
+                        "{\"jsonrpc\":\"2.0\",\"id\":1,"
+                                + "\"error\":{\"code\":-32000,\"message\":\"filter not found\"}}",
+                        EthLog.class);
 
         @SuppressWarnings("unchecked")
         List<T> expected = createExpected(ethLog);
@@ -71,20 +75,22 @@ public abstract class FilterTester {
 
         CountDownLatch completedLatch = new CountDownLatch(1);
 
-        when(web3jService.send(any(Request.class), eq(EthFilter.class)))
-                .thenReturn(ethFilter);
+        when(web3jService.send(any(Request.class), eq(EthFilter.class))).thenReturn(ethFilter);
         when(web3jService.send(any(Request.class), eq(EthLog.class)))
-            .thenReturn(ethLog).thenReturn(notFoundFilter).thenReturn(ethLog);
+                .thenReturn(ethLog)
+                .thenReturn(notFoundFilter)
+                .thenReturn(ethLog);
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Disposable subscription = flowable.subscribe(
-                result -> {
-                    results.add(result);
-                    transactionLatch.countDown();
-                },
-                throwable -> fail(throwable.getMessage()),
-                () -> completedLatch.countDown());
+        Disposable subscription =
+                flowable.subscribe(
+                        result -> {
+                            results.add(result);
+                            transactionLatch.countDown();
+                        },
+                        throwable -> fail(throwable.getMessage()),
+                        () -> completedLatch.countDown());
 
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(new HashSet<>(expected)));
@@ -101,7 +107,6 @@ public abstract class FilterTester {
             fail("Results cannot be empty");
         }
 
-        return ethLog.getLogs().stream()
-                .map(t -> t.get()).collect(Collectors.toList());
+        return ethLog.getLogs().stream().map(t -> t.get()).collect(Collectors.toList());
     }
 }

@@ -20,9 +20,7 @@ import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
-/**
- * Java wrapper source code generator for Solidity ABI format.
- */
+/** Java wrapper source code generator for Solidity ABI format. */
 public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     public static final String COMMAND_SOLIDITY = "solidity";
     public static final String COMMAND_GENERATE = "generate";
@@ -60,8 +58,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         this.abiFile = abiFile;
     }
 
-    static List<AbiDefinition> loadContractDefinition(File absFile)
-            throws IOException {
+    static List<AbiDefinition> loadContractDefinition(File absFile) throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
         return Arrays.asList(abiDefinition);
@@ -85,8 +82,13 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String contractName = getFileNameNoExtension(abiFile.getName());
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            new SolidityFunctionWrapper(useJavaNativeTypes).generateJavaFiles(
-                    contractName, binary, abi, destinationDirLocation.toString(), basePackageName);
+            new SolidityFunctionWrapper(useJavaNativeTypes)
+                    .generateJavaFiles(
+                            contractName,
+                            binary,
+                            abi,
+                            destinationDirLocation.toString(),
+                            basePackageName);
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }
     }
@@ -103,37 +105,47 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         CommandLine.run(new PicocliRunner(), args);
     }
 
-    @Command(name = COMMAND_PREFIX, mixinStandardHelpOptions = true, version = "4.0",
+    @Command(
+            name = COMMAND_PREFIX,
+            mixinStandardHelpOptions = true,
+            version = "4.0",
             sortOptions = false)
     static class PicocliRunner implements Runnable {
-        @Option(names = { "-a", "--abiFile" },
+        @Option(
+                names = {"-a", "--abiFile"},
                 description = "abi file with contract definition.",
                 required = true)
         private File abiFile;
 
-        @Option(names = { "-b", "--binFile" },
-                description = "bin file with contract compiled code "
-                        + "in order to generate deploy methods.",
+        @Option(
+                names = {"-b", "--binFile"},
+                description =
+                        "bin file with contract compiled code "
+                                + "in order to generate deploy methods.",
                 required = false)
         private File binFile;
 
-        @Option(names = { "-o", "--outputDir" },
+        @Option(
+                names = {"-o", "--outputDir"},
                 description = "destination base directory.",
                 required = true)
         private File destinationFileDir;
 
-        @Option(names = { "-p", "--package" },
+        @Option(
+                names = {"-p", "--package"},
                 description = "base package name.",
                 required = true)
         private String packageName;
 
-        @Option(names = { "-jt", JAVA_TYPES_ARG },
+        @Option(
+                names = {"-jt", JAVA_TYPES_ARG},
                 description = "use native java types.",
                 required = false,
                 showDefaultValue = ALWAYS)
         private boolean javaTypes = true;
 
-        @Option(names = { "-st", SOLIDITY_TYPES_ARG },
+        @Option(
+                names = {"-st", SOLIDITY_TYPES_ARG},
                 description = "use solidity types.",
                 required = false)
         private boolean solidityTypes;
@@ -141,11 +153,12 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         @Override
         public void run() {
             try {
-                //grouping is not implemented in picocli yet(planned for 3.1), therefore
-                //simply check if solidityTypes were requested
+                // grouping is not implemented in picocli yet(planned for 3.1), therefore
+                // simply check if solidityTypes were requested
                 boolean useJavaTypes = !(solidityTypes);
-                new SolidityFunctionWrapperGenerator(binFile, abiFile, destinationFileDir,
-                        packageName, useJavaTypes).generate();
+                new SolidityFunctionWrapperGenerator(
+                                binFile, abiFile, destinationFileDir, packageName, useJavaTypes)
+                        .generate();
             } catch (Exception e) {
                 exitError(e);
             }

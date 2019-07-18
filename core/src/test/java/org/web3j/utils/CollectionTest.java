@@ -24,9 +24,9 @@ public class CollectionTest {
 
     @Test
     public void testCreate() {
-        assertThat(create("a"), is(new String[] { "a" }));
-        assertThat(create(""), is(new String[] { "" }));
-        assertThat(create("a", "b"), is(new String[] { "a", "b" }));
+        assertThat(create("a"), is(new String[] {"a"}));
+        assertThat(create(""), is(new String[] {""}));
+        assertThat(create("a", "b"), is(new String[] {"a", "b"}));
     }
 
     @Test
@@ -39,34 +39,24 @@ public class CollectionTest {
 
     @Test
     public void testJoinWithFunction() {
-        final List<FakeSpec> specs1 = Arrays.asList(
-                new FakeSpec("a"),
-                new FakeSpec("b"),
-                new FakeSpec("c"));
+        final List<FakeSpec> specs1 =
+                Arrays.asList(new FakeSpec("a"), new FakeSpec("b"), new FakeSpec("c"));
         assertThat(join(specs1, ",", FakeSpec::getName), is("a,b,c"));
 
-        final List<FakeSpec> specs2 = Arrays.asList(
-                new FakeSpec("a"),
-                new FakeSpec("b"),
-                new FakeSpec("c"));
+        final List<FakeSpec> specs2 =
+                Arrays.asList(new FakeSpec("a"), new FakeSpec("b"), new FakeSpec("c"));
         assertThat(join(specs2, ", ", FakeSpec::getName), is("a, b, c"));
 
-        final List<FakeSpec> specs3 = Arrays.asList(
-                new FakeSpec(" a"),
-                new FakeSpec("b  "),
-                new FakeSpec(" c "));
+        final List<FakeSpec> specs3 =
+                Arrays.asList(new FakeSpec(" a"), new FakeSpec("b  "), new FakeSpec(" c "));
         assertThat(join(specs3, ",", FakeSpec::getName), is("a,b,c"));
 
-        final List<FakeSpec> specs4 = Arrays.asList(
-                new FakeSpec(" a"),
-                new FakeSpec("b  "),
-                new FakeSpec(" c "));
+        final List<FakeSpec> specs4 =
+                Arrays.asList(new FakeSpec(" a"), new FakeSpec("b  "), new FakeSpec(" c "));
         assertThat(join(specs4, ", ", FakeSpec::getName), is("a, b, c"));
     }
 
-    /**
-     * Fake object to test {@link Collection#join(List, String, Function)}.
-     */
+    /** Fake object to test {@link Collection#join(List, String, Function)}. */
     private final class FakeSpec {
         private final String name;
 

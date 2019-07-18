@@ -4,11 +4,9 @@ import java.math.BigInteger;
 
 import org.web3j.protocol.core.methods.request.Transaction;
 
-/**
- * Common values used by integration tests.
- */
+/** Common values used by integration tests. */
 public interface IntegrationTestConfig {
-    
+
     String validBlockHash();
 
     BigInteger validBlock();

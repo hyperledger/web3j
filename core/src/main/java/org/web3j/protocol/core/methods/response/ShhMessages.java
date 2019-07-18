@@ -8,14 +8,14 @@ import org.web3j.utils.Numeric;
 
 /**
  * Whisper messages returned by:
+ *
  * <ul>
- * <li>shh_getFilterChanges</li>
- * <li>shh_getMessages</li>
+ *   <li>shh_getFilterChanges
+ *   <li>shh_getMessages
  * </ul>
  *
- * <p>See
- * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_getfilterchanges">docs</a>
- * for further details.</p>
+ * <p>See <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_getfilterchanges">docs</a> for
+ * further details.
  */
 public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
 
@@ -34,11 +34,18 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         private String payload;
         private String workProved;
 
-        public SshMessage() {
-        }
+        public SshMessage() {}
 
-        public SshMessage(String hash, String from, String to, String expiry, String ttl,
-                          String sent, List<String> topics, String payload, String workProved) {
+        public SshMessage(
+                String hash,
+                String from,
+                String to,
+                String expiry,
+                String ttl,
+                String sent,
+                List<String> topics,
+                String payload,
+                String workProved) {
             this.hash = hash;
             this.from = from;
             this.to = to;
@@ -159,23 +166,28 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
                 return false;
             }
             if (getExpiryRaw() != null
-                    ? !getExpiryRaw().equals(that.getExpiryRaw()) : that.getExpiryRaw() != null) {
+                    ? !getExpiryRaw().equals(that.getExpiryRaw())
+                    : that.getExpiryRaw() != null) {
                 return false;
             }
             if (getTtlRaw() != null
-                    ? !getTtlRaw().equals(that.getTtlRaw()) : that.getTtlRaw() != null) {
+                    ? !getTtlRaw().equals(that.getTtlRaw())
+                    : that.getTtlRaw() != null) {
                 return false;
             }
             if (getSentRaw() != null
-                    ? !getSentRaw().equals(that.getSentRaw()) : that.getSentRaw() != null) {
+                    ? !getSentRaw().equals(that.getSentRaw())
+                    : that.getSentRaw() != null) {
                 return false;
             }
             if (getTopics() != null
-                    ? !getTopics().equals(that.getTopics()) : that.getTopics() != null) {
+                    ? !getTopics().equals(that.getTopics())
+                    : that.getTopics() != null) {
                 return false;
             }
             if (getPayload() != null
-                    ? !getPayload().equals(that.getPayload()) : that.getPayload() != null) {
+                    ? !getPayload().equals(that.getPayload())
+                    : that.getPayload() != null) {
                 return false;
             }
             return getWorkProvedRaw() != null

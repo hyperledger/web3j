@@ -31,19 +31,13 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
     @Override
     public Request<?, BooleanResponse> minerStop() {
         return new Request<>(
-                "miner_stop",
-                Collections.<String>emptyList(),
-                web3jService,
-                BooleanResponse.class);
+                "miner_stop", Collections.<String>emptyList(), web3jService, BooleanResponse.class);
     }
 
     @Override
     public Request<?, BooleanResponse> cliqueDiscard(String address) {
         return new Request<>(
-                "clique_discard",
-                Arrays.asList(address),
-                web3jService,
-                BooleanResponse.class);
+                "clique_discard", Arrays.asList(address), web3jService, BooleanResponse.class);
     }
 
     @Override

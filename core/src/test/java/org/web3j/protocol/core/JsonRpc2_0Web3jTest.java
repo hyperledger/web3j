@@ -14,8 +14,8 @@ import static org.mockito.Mockito.verify;
 
 public class JsonRpc2_0Web3jTest {
 
-    private ScheduledExecutorService scheduledExecutorService
-            = mock(ScheduledExecutorService.class);
+    private ScheduledExecutorService scheduledExecutorService =
+            mock(ScheduledExecutorService.class);
     private Web3jService service = mock(Web3jService.class);
 
     private Web3j web3j = Web3j.build(service, 10, scheduledExecutorService);
@@ -30,8 +30,7 @@ public class JsonRpc2_0Web3jTest {
 
     @Test(expected = RuntimeException.class)
     public void testExceptionOnServiceClosure() throws Exception {
-        doThrow(new IOException("Failed to close"))
-                .when(service).close();
+        doThrow(new IOException("Failed to close")).when(service).close();
 
         web3j.shutdown();
     }

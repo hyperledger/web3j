@@ -17,13 +17,13 @@ public abstract class PrivateTransactionReceiptProcessor extends TransactionRece
     }
 
     @Override
-    Optional<PrivateTransactionReceipt> sendTransactionReceiptRequest(
-            String transactionHash) throws IOException, TransactionException {
+    Optional<PrivateTransactionReceipt> sendTransactionReceiptRequest(String transactionHash)
+            throws IOException, TransactionException {
         EeaGetTransactionReceipt transactionReceipt =
                 eea.eeaGetTransactionReceipt(transactionHash).send();
         if (transactionReceipt.hasError()) {
-            throw new TransactionException("Error processing request: "
-                    + transactionReceipt.getError().getMessage());
+            throw new TransactionException(
+                    "Error processing request: " + transactionReceipt.getError().getMessage());
         }
 
         return transactionReceipt.getTransactionReceipt();

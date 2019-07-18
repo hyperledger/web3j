@@ -67,10 +67,9 @@ allprojects {
                 exclude '**/generated/**'
             }
             removeUnusedImports()
-            indentWithSpaces(4)
+            googleJavaFormat("1.7").aosp()
             importOrder 'java', '', 'org.web3j', '\\#'
             paddedCell()
-            //            eclipse().configFile(rootProject.file('javaFormat.properties'))
         }
         groovyGradle {
             target '*.gradle'
@@ -79,7 +78,6 @@ allprojects {
             indentWithSpaces(4)
             paddedCell()
         }
-
     }
 
     repositories { mavenCentral() }

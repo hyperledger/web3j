@@ -3,9 +3,7 @@ package org.web3j.utils;
 import java.io.IOException;
 import java.util.Properties;
 
-/**
- * Build version utility method.
- */
+/** Build version utility method. */
 public class Version {
 
     private Version() {}

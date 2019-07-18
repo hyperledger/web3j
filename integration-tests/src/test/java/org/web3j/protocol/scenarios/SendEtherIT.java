@@ -15,9 +15,7 @@ import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-/**
- * Simple integration test to demonstrate sending of Ether between parties.
- */
+/** Simple integration test to demonstrate sending of Ether between parties. */
 public class SendEtherIT extends Scenario {
 
     @Test
@@ -27,8 +25,9 @@ public class SendEtherIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
-        Transaction transaction = Transaction.createEtherTransaction(
-                ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
+        Transaction transaction =
+                Transaction.createEtherTransaction(
+                        ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
 
         EthSendTransaction ethSendTransaction =
                 web3j.ethSendTransaction(transaction).sendAsync().get();
@@ -37,8 +36,7 @@ public class SendEtherIT extends Scenario {
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
     }
@@ -65,9 +63,14 @@ public class SendEtherIT extends Scenario {
      */
     @Test
     public void testTransfer() throws Exception {
-        TransactionReceipt transactionReceipt = Transfer.sendFunds(
-                web3j, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER)
-                .send();
+        TransactionReceipt transactionReceipt =
+                Transfer.sendFunds(
+                                web3j,
+                                ALICE,
+                                BOB.getAddress(),
+                                BigDecimal.valueOf(0.2),
+                                Convert.Unit.ETHER)
+                        .send();
         assertFalse(transactionReceipt.getBlockHash().isEmpty());
     }
 }

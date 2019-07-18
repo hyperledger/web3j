@@ -20,7 +20,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 public abstract class ManagedTransactionTester {
 
     static final String ADDRESS = "0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a";
@@ -35,8 +34,8 @@ public abstract class ManagedTransactionTester {
         when(txHashVerifier.verify(any(), any())).thenReturn(true);
     }
 
-    public TransactionManager getVerifiedTransactionManager(Credentials credentials,
-                                                            int attempts, int sleepDuration) {
+    public TransactionManager getVerifiedTransactionManager(
+            Credentials credentials, int attempts, int sleepDuration) {
         RawTransactionManager transactionManager =
                 new RawTransactionManager(web3j, credentials, attempts, sleepDuration);
         transactionManager.setTxHashVerifier(txHashVerifier);
@@ -61,8 +60,7 @@ public abstract class ManagedTransactionTester {
         ethGetTransactionCount.setResult("0x1");
 
         Request<?, EthGetTransactionCount> transactionCountRequest = mock(Request.class);
-        when(transactionCountRequest.send())
-                .thenReturn(ethGetTransactionCount);
+        when(transactionCountRequest.send()).thenReturn(ethGetTransactionCount);
         when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.PENDING))
                 .thenReturn((Request) transactionCountRequest);
     }
@@ -84,8 +82,7 @@ public abstract class ManagedTransactionTester {
         ethGetTransactionReceipt.setResult(transactionReceipt);
 
         Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
-        when(getTransactionReceiptRequest.send())
-                .thenReturn(ethGetTransactionReceipt);
+        when(getTransactionReceiptRequest.send()).thenReturn(ethGetTransactionReceipt);
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn((Request) getTransactionReceiptRequest);
     }

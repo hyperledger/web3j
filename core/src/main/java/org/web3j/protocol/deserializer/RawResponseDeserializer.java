@@ -14,11 +14,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import org.web3j.protocol.core.Response;
 
-/**
- * A jackson deserializer that sets the rawResponse variable of Response objects.
- */
-public class RawResponseDeserializer
-        extends StdDeserializer<Response> implements ResolvableDeserializer {
+/** A jackson deserializer that sets the rawResponse variable of Response objects. */
+public class RawResponseDeserializer extends StdDeserializer<Response>
+        implements ResolvableDeserializer {
 
     private final JsonDeserializer<?> defaultDeserializer;
 

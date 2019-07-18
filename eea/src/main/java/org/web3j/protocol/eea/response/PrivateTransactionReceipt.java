@@ -75,13 +75,20 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
     @Override
     public String toString() {
         return "PrivateTransactionReceipt{"
-                + "contractAddress='" + contractAddress + '\''
-                + ", from='" + from + '\''
-                + ", to='" + to + '\''
-                + ", output='" + output + '\''
-                + ", logs=" + logs
+                + "contractAddress='"
+                + contractAddress
+                + '\''
+                + ", from='"
+                + from
+                + '\''
+                + ", to='"
+                + to
+                + '\''
+                + ", output='"
+                + output
+                + '\''
+                + ", logs="
+                + logs
                 + '}';
     }
-
-
 }

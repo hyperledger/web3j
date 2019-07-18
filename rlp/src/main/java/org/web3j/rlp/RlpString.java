@@ -5,11 +5,9 @@ import java.util.Arrays;
 
 import org.web3j.utils.Numeric;
 
-/**
- * RLP string type.
- */
+/** RLP string type. */
 public class RlpString implements RlpType {
-    private static final byte[] EMPTY = new byte[]{ };
+    private static final byte[] EMPTY = new byte[] {};
 
     private final byte[] value;
 
@@ -37,7 +35,7 @@ public class RlpString implements RlpType {
     }
 
     public static RlpString create(byte value) {
-        return new RlpString(new byte[]{ value });
+        return new RlpString(new byte[] {value});
     }
 
     public static RlpString create(BigInteger value) {
@@ -46,7 +44,7 @@ public class RlpString implements RlpType {
             return new RlpString(EMPTY);
         } else {
             byte[] bytes = value.toByteArray();
-            if (bytes[0] == 0) {  // remove leading zero
+            if (bytes[0] == 0) { // remove leading zero
                 return new RlpString(Arrays.copyOfRange(bytes, 1, bytes.length));
             } else {
                 return new RlpString(bytes);

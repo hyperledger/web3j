@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import org.web3j.utils.Numeric;
 
-/**
- * DefaultBlockParameter implementation that takes a numeric value.
- */
+/** DefaultBlockParameter implementation that takes a numeric value. */
 public class DefaultBlockParameterNumber implements DefaultBlockParameter {
 
     private BigInteger blockNumber;

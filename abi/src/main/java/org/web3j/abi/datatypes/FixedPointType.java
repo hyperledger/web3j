@@ -2,9 +2,7 @@ package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
 
-/**
- * Common fixed-point type properties.
- */
+/** Common fixed-point type properties. */
 public abstract class FixedPointType extends NumericType {
 
     static final int DEFAULT_BIT_LENGTH = MAX_BIT_LENGTH >> 1;
@@ -18,16 +16,12 @@ public abstract class FixedPointType extends NumericType {
     }
 
     boolean valid(int mBitSize, int nBitSize, BigInteger value) {
-        return isValidBitSize(mBitSize, nBitSize)
-                && isValidBitCount(mBitSize, nBitSize, value);
+        return isValidBitSize(mBitSize, nBitSize) && isValidBitCount(mBitSize, nBitSize, value);
     }
 
     static boolean isValidBitSize(int mBitSize, int nBitSize) {
         int bitSize = mBitSize + nBitSize;
-        return mBitSize % 8 == 0
-                && nBitSize % 8 == 0
-                && bitSize > 0
-                && bitSize <= MAX_BIT_LENGTH;
+        return mBitSize % 8 == 0 && nBitSize % 8 == 0 && bitSize > 0 && bitSize <= MAX_BIT_LENGTH;
     }
 
     private static boolean isValidBitCount(int mBitSize, int nBitSize, BigInteger value) {

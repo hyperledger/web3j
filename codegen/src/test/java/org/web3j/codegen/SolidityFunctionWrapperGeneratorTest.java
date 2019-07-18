@@ -27,7 +27,6 @@ import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_GENERAT
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
 
-
 public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     private String solidityBaseDir;
@@ -98,31 +97,42 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGenerationCommandPrefixes() throws Exception {
-        testCodeGeneration(Arrays.asList(COMMAND_SOLIDITY, COMMAND_GENERATE),
-                "contracts", "HumanStandardToken", JAVA_TYPES_ARG, true);
-        testCodeGeneration(Arrays.asList(COMMAND_GENERATE),
-                "contracts", "HumanStandardToken", SOLIDITY_TYPES_ARG, true);
+        testCodeGeneration(
+                Arrays.asList(COMMAND_SOLIDITY, COMMAND_GENERATE),
+                "contracts",
+                "HumanStandardToken",
+                JAVA_TYPES_ARG,
+                true);
+        testCodeGeneration(
+                Arrays.asList(COMMAND_GENERATE),
+                "contracts",
+                "HumanStandardToken",
+                SOLIDITY_TYPES_ARG,
+                true);
     }
 
-
-
-    private void testCodeGenerationJvmTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
+            throws Exception {
         testCodeGeneration(contractName, inputFileName, JAVA_TYPES_ARG, true);
     }
 
-    private void testCodeGenerationSolidityTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationSolidityTypes(String contractName, String inputFileName)
+            throws Exception {
         testCodeGeneration(contractName, inputFileName, SOLIDITY_TYPES_ARG, true);
     }
 
-    private void testCodeGeneration(String contractName, String inputFileName,
-                                    String types, boolean useBin) throws Exception {
+    private void testCodeGeneration(
+            String contractName, String inputFileName, String types, boolean useBin)
+            throws Exception {
         testCodeGeneration(emptyList(), contractName, inputFileName, types, useBin);
     }
 
-    private void testCodeGeneration(List<String> prefixes,
-            String contractName, String inputFileName, String types, boolean useBin)
+    private void testCodeGeneration(
+            List<String> prefixes,
+            String contractName,
+            String inputFileName,
+            String types,
+            boolean useBin)
             throws Exception {
         String packageName = null;
         if (types.equals(JAVA_TYPES_ARG)) {
@@ -136,12 +146,26 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         options.add(types);
         if (useBin) {
             options.add("-b");
-            options.add(solidityBaseDir + File.separator + contractName + File.separator
-                    + "build" + File.separator + inputFileName + ".bin");
+            options.add(
+                    solidityBaseDir
+                            + File.separator
+                            + contractName
+                            + File.separator
+                            + "build"
+                            + File.separator
+                            + inputFileName
+                            + ".bin");
         }
         options.add("-a");
-        options.add(solidityBaseDir + File.separator + contractName + File.separator
-                + "build" + File.separator + inputFileName + ".abi");
+        options.add(
+                solidityBaseDir
+                        + File.separator
+                        + contractName
+                        + File.separator
+                        + "build"
+                        + File.separator
+                        + inputFileName
+                        + ".abi");
         options.add("-p");
         options.add(packageName);
         options.add("-o");
@@ -149,9 +173,13 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
         SolidityFunctionWrapperGenerator.main(options.toArray(new String[options.size()]));
 
-        verifyGeneratedCode(tempDirPath + File.separator
-                + packageName.replace('.', File.separatorChar) + File.separator
-                + Strings.capitaliseFirstLetter(inputFileName) + ".java");
+        verifyGeneratedCode(
+                tempDirPath
+                        + File.separator
+                        + packageName.replace('.', File.separatorChar)
+                        + File.separator
+                        + Strings.capitaliseFirstLetter(inputFileName)
+                        + ".java");
     }
 
     private void verifyGeneratedCode(String sourceFile) throws IOException {
@@ -159,11 +187,11 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         try (StandardJavaFileManager fileManager =
-                     compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits = fileManager
-                    .getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
-            JavaCompiler.CompilationTask task = compiler.getTask(
-                    null, fileManager, diagnostics, null, null, compilationUnits);
+                compiler.getStandardFileManager(diagnostics, null, null)) {
+            Iterable<? extends JavaFileObject> compilationUnits =
+                    fileManager.getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
+            JavaCompiler.CompilationTask task =
+                    compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
             boolean result = task.call();
 
             System.out.println(diagnostics.getDiagnostics());

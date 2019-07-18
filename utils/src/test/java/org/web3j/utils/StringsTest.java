@@ -18,7 +18,6 @@ import static org.web3j.utils.Strings.repeat;
 import static org.web3j.utils.Strings.toCsv;
 import static org.web3j.utils.Strings.zeros;
 
-
 public class StringsTest {
 
     @Test
@@ -72,5 +71,4 @@ public class StringsTest {
         assertTrue(isEmpty(""));
         assertFalse(isEmpty("hello world"));
     }
-    
 }

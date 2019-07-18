@@ -7,9 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Async task facilitation.
- */
+/** Async task facilitation. */
 public class Async {
 
     private static final ExecutorService executor = Executors.newCachedThreadPool();
@@ -20,15 +18,17 @@ public class Async {
 
     public static <T> CompletableFuture<T> run(Callable<T> callable) {
         CompletableFuture<T> result = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> {
-            // we need to explicitly catch any exceptions,
-            // otherwise they will be silently discarded
-            try {
-                result.complete(callable.call());
-            } catch (Throwable e) {
-                result.completeExceptionally(e);
-            }
-        }, executor);
+        CompletableFuture.runAsync(
+                () -> {
+                    // we need to explicitly catch any exceptions,
+                    // otherwise they will be silently discarded
+                    try {
+                        result.complete(callable.call());
+                    } catch (Throwable e) {
+                        result.completeExceptionally(e);
+                    }
+                },
+                executor);
         return result;
     }
 

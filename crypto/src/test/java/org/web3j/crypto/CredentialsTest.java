@@ -15,8 +15,8 @@ public class CredentialsTest {
 
     @Test
     public void testCredentialsFromECKeyPair() {
-        Credentials credentials = Credentials.create(
-                SampleKeys.PRIVATE_KEY_STRING, SampleKeys.PUBLIC_KEY_STRING);
+        Credentials credentials =
+                Credentials.create(SampleKeys.PRIVATE_KEY_STRING, SampleKeys.PUBLIC_KEY_STRING);
         verify(credentials);
     }
 

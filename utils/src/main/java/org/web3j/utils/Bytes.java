@@ -2,9 +2,7 @@ package org.web3j.utils;
 
 import java.util.Arrays;
 
-/**
- * Byte array utility functions.
- */
+/** Byte array utility functions. */
 public class Bytes {
 
     private Bytes() {}

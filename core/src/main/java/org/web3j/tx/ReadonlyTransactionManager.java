@@ -7,9 +7,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 
-/**
- * Transaction manager implementation for read-only operations on smart contracts.
- */
+/** Transaction manager implementation for read-only operations on smart contracts. */
 public class ReadonlyTransactionManager extends TransactionManager {
 
     public ReadonlyTransactionManager(Web3j web3j, String fromAddress) {

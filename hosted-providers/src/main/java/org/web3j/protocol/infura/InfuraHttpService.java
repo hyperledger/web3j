@@ -5,9 +5,7 @@ import java.util.Map;
 
 import org.web3j.protocol.http.HttpService;
 
-/**
- * HttpService for working with <a href="https://infura.io/">Infura</a> clients.
- */
+/** HttpService for working with <a href="https://infura.io/">Infura</a> clients. */
 public class InfuraHttpService extends HttpService {
 
     private static final String INFURA_ETHEREUM_PREFERRED_CLIENT =

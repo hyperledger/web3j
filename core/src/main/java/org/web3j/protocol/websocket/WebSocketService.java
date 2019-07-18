@@ -33,13 +33,12 @@ import org.web3j.protocol.websocket.events.Notification;
 /**
  * Web socket service that allows to interact with JSON-RPC via WebSocket protocol.
  *
- * <p>Allows to interact with JSON-RPC either by sending individual requests or by
- * subscribing to a stream of notifications. To subscribe to a notification it first
- * sends a special JSON-RPC request that returns a unique subscription id. A subscription
- * id is used to identify events for a single notifications stream.
+ * <p>Allows to interact with JSON-RPC either by sending individual requests or by subscribing to a
+ * stream of notifications. To subscribe to a notification it first sends a special JSON-RPC request
+ * that returns a unique subscription id. A subscription id is used to identify events for a single
+ * notifications stream.
  *
- * <p>To unsubscribe from a stream of notifications it should send another JSON-RPC
- * request.
+ * <p>To unsubscribe from a stream of notifications it should send another JSON-RPC request.
  */
 public class WebSocketService implements Web3jService {
 
@@ -59,8 +58,8 @@ public class WebSocketService implements Web3jService {
     private Map<Long, WebSocketRequest<?>> requestForId = new ConcurrentHashMap<>();
     // Map of a sent subscription request id to objects necessary to process
     // subscription events
-    private Map<Long, WebSocketSubscription<?>> subscriptionRequestForId
-            = new ConcurrentHashMap<>();
+    private Map<Long, WebSocketSubscription<?>> subscriptionRequestForId =
+            new ConcurrentHashMap<>();
     // Map of a subscription id to objects necessary to process incoming events
     private Map<String, WebSocketSubscription<?>> subscriptionForId = new ConcurrentHashMap<>();
 
@@ -68,14 +67,14 @@ public class WebSocketService implements Web3jService {
         this(new WebSocketClient(parseURI(serverUrl)), includeRawResponses);
     }
 
-    public WebSocketService(WebSocketClient webSocketClient,
-                     boolean includeRawResponses) {
+    public WebSocketService(WebSocketClient webSocketClient, boolean includeRawResponses) {
         this(webSocketClient, Executors.newScheduledThreadPool(1), includeRawResponses);
     }
 
-    WebSocketService(WebSocketClient webSocketClient,
-                     ScheduledExecutorService executor,
-                     boolean includeRawResponses) {
+    WebSocketService(
+            WebSocketClient webSocketClient,
+            ScheduledExecutorService executor,
+            boolean includeRawResponses) {
         this.webSocketClient = webSocketClient;
         this.executor = executor;
         this.objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
@@ -104,24 +103,24 @@ public class WebSocketService implements Web3jService {
     }
 
     private void setWebSocketListener() {
-        webSocketClient.setListener(new WebSocketListener() {
-            @Override
-            public void onMessage(String message) throws IOException {
-                onWebSocketMessage(message);
-            }
+        webSocketClient.setListener(
+                new WebSocketListener() {
+                    @Override
+                    public void onMessage(String message) throws IOException {
+                        onWebSocketMessage(message);
+                    }
 
-            @Override
-            public void onError(Exception e) {
-                log.error("Received error from a WebSocket connection", e);
-            }
+                    @Override
+                    public void onError(Exception e) {
+                        log.error("Received error from a WebSocket connection", e);
+                    }
 
-            @Override
-            public void onClose() {
-                onWebSocketClose();
-            }
-        });
+                    @Override
+                    public void onClose() {
+                        onWebSocketClose();
+                    }
+                });
     }
-
 
     @Override
     public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
@@ -141,8 +140,7 @@ public class WebSocketService implements Web3jService {
 
     @Override
     public <T extends Response> CompletableFuture<T> sendAsync(
-            Request request,
-            Class<T> responseType) {
+            Request request, Class<T> responseType) {
 
         CompletableFuture<T> result = new CompletableFuture<>();
         long requestId = request.getId();
@@ -165,10 +163,11 @@ public class WebSocketService implements Web3jService {
 
     private void setRequestTimeout(long requestId) {
         executor.schedule(
-                () -> closeRequest(
-                    requestId,
-                    new IOException(
-                        String.format("Request with id %d timed out", requestId))),
+                () ->
+                        closeRequest(
+                                requestId,
+                                new IOException(
+                                        String.format("Request with id %d timed out", requestId))),
                 REQUEST_TIMEOUT,
                 TimeUnit.SECONDS);
     }
@@ -211,16 +210,12 @@ public class WebSocketService implements Web3jService {
     private void processSubscriptionResponse(long replyId, EthSubscribe reply) throws IOException {
         WebSocketSubscription subscription = subscriptionRequestForId.get(replyId);
         processSubscriptionResponse(
-                reply,
-                subscription.getSubject(),
-                subscription.getResponseType()
-        );
+                reply, subscription.getSubject(), subscription.getResponseType());
     }
 
     private <T extends Notification<?>> void processSubscriptionResponse(
-            EthSubscribe subscriptionReply,
-            BehaviorSubject<T> subject,
-            Class<T> responseType) throws IOException {
+            EthSubscribe subscriptionReply, BehaviorSubject<T> subject, Class<T> responseType)
+            throws IOException {
         if (!subscriptionReply.hasError()) {
             establishSubscription(subject, responseType, subscriptionReply);
         } else {
@@ -230,8 +225,7 @@ public class WebSocketService implements Web3jService {
 
     private <T extends Notification<?>> void establishSubscription(
             BehaviorSubject<T> subject, Class<T> responseType, EthSubscribe subscriptionReply) {
-        log.debug("Subscribed to RPC events with id {}",
-                subscriptionReply.getSubscriptionId());
+        log.debug("Subscribed to RPC events with id {}", subscriptionReply.getSubscriptionId());
         subscriptionForId.put(
                 subscriptionReply.getSubscriptionId(),
                 new WebSocketSubscription<>(subject, responseType));
@@ -250,11 +244,9 @@ public class WebSocketService implements Web3jService {
         Response.Error error = subscriptionReply.getError();
         log.error("Subscription request returned error: {}", error.getMessage());
         subject.onError(
-                new IOException(String.format(
-                        "Subscription request failed with error: %s",
-                        error.getMessage()
-                ))
-        );
+                new IOException(
+                        String.format(
+                                "Subscription request failed with error: %s", error.getMessage())));
     }
 
     private void sendReplyToListener(WebSocketRequest request, Object reply) {
@@ -262,16 +254,14 @@ public class WebSocketService implements Web3jService {
     }
 
     private void sendExceptionToListener(
-            String replyStr,
-            WebSocketRequest request,
-            IllegalArgumentException e) {
-        request.getOnReply().completeExceptionally(
-                new IOException(
-                        String.format(
-                                "Failed to parse '%s' as type %s",
-                                replyStr,
-                                request.getResponseType()),
-                        e));
+            String replyStr, WebSocketRequest request, IllegalArgumentException e) {
+        request.getOnReply()
+                .completeExceptionally(
+                        new IOException(
+                                String.format(
+                                        "Failed to parse '%s' as type %s",
+                                        replyStr, request.getResponseType()),
+                                e));
     }
 
     private void processSubscriptionEvent(String replyStr, JsonNode replyJson) {
@@ -314,8 +304,7 @@ public class WebSocketService implements Web3jService {
     private WebSocketRequest getAndRemoveRequest(long id) throws IOException {
         if (!requestForId.containsKey(id)) {
             throw new IOException(
-                    String.format("Received reply for unexpected request id: %d",
-                            id));
+                    String.format("Received reply for unexpected request id: %d", id));
         }
         WebSocketRequest request = requestForId.get(id);
         requestForId.remove(id);
@@ -330,8 +319,7 @@ public class WebSocketService implements Web3jService {
 
         if (!idField.isIntegralNumber()) {
             throw new IOException(
-                    String.format("'id' expected to be long, but it is: '%s'",
-                            idField.asText()));
+                    String.format("'id' expected to be long, but it is: '%s'", idField.asText()));
         }
 
         return idField.longValue();
@@ -347,9 +335,7 @@ public class WebSocketService implements Web3jService {
 
     @Override
     public <T extends Notification<?>> Flowable<T> subscribe(
-            Request request,
-            String unsubscribeMethod,
-            Class<T> responseType) {
+            Request request, String unsubscribeMethod, Class<T> responseType) {
         // We can't use usual Observer since we can call "onError"
         // before first client is subscribed and we need to
         // preserve it
@@ -361,25 +347,19 @@ public class WebSocketService implements Web3jService {
         // id and this can cause a race condition
         subscribeToEventsStream(request, subject, responseType);
 
-
-        return subject
-                .doOnDispose(() -> closeSubscription(subject, unsubscribeMethod))
+        return subject.doOnDispose(() -> closeSubscription(subject, unsubscribeMethod))
                 .toFlowable(BackpressureStrategy.BUFFER);
-
     }
 
     private <T extends Notification<?>> void subscribeToEventsStream(
-            Request request,
-            BehaviorSubject<T> subject, Class<T> responseType) {
+            Request request, BehaviorSubject<T> subject, Class<T> responseType) {
 
         subscriptionRequestForId.put(
-                request.getId(),
-                new WebSocketSubscription<>(subject, responseType));
+                request.getId(), new WebSocketSubscription<>(subject, responseType));
         try {
             send(request, EthSubscribe.class);
         } catch (IOException e) {
-            log.error("Failed to subscribe to RPC events with request id {}",
-                    request.getId());
+            log.error("Failed to subscribe to RPC events with request id {}", request.getId());
             subject.onError(e);
         }
     }
@@ -397,23 +377,28 @@ public class WebSocketService implements Web3jService {
 
     private void unsubscribeFromEventsStream(String subscriptionId, String unsubscribeMethod) {
         sendAsync(unsubscribeRequest(subscriptionId, unsubscribeMethod), EthUnsubscribe.class)
-                .thenAccept(ethUnsubscribe -> {
-                    log.debug("Successfully unsubscribed from subscription with id {}",
-                            subscriptionId);
-                })
-                .exceptionally(throwable -> {
-                    log.error("Failed to unsubscribe from subscription with id {}", subscriptionId);
-                    return null;
-                });
+                .thenAccept(
+                        ethUnsubscribe -> {
+                            log.debug(
+                                    "Successfully unsubscribed from subscription with id {}",
+                                    subscriptionId);
+                        })
+                .exceptionally(
+                        throwable -> {
+                            log.error(
+                                    "Failed to unsubscribe from subscription with id {}",
+                                    subscriptionId);
+                            return null;
+                        });
     }
 
     private Request<String, EthUnsubscribe> unsubscribeRequest(
             String subscriptionId, String unsubscribeMethod) {
         return new Request<>(
-                        unsubscribeMethod,
-                        Collections.singletonList(subscriptionId),
-                        this,
-                        EthUnsubscribe.class);
+                unsubscribeMethod,
+                Collections.singletonList(subscriptionId),
+                this,
+                EthUnsubscribe.class);
     }
 
     @Override
@@ -428,17 +413,25 @@ public class WebSocketService implements Web3jService {
     }
 
     private void closeOutstandingRequests() {
-        requestForId.values().forEach(request -> {
-            request.getOnReply()
-                    .completeExceptionally(new IOException("Connection was closed"));
-        });
+        requestForId
+                .values()
+                .forEach(
+                        request -> {
+                            request.getOnReply()
+                                    .completeExceptionally(
+                                            new IOException("Connection was closed"));
+                        });
     }
 
     private void closeOutstandingSubscriptions() {
-        subscriptionForId.values().forEach(subscription -> {
-            subscription.getSubject()
-                    .onError(new IOException("Connection was closed"));
-        });
+        subscriptionForId
+                .values()
+                .forEach(
+                        subscription -> {
+                            subscription
+                                    .getSubject()
+                                    .onError(new IOException("Connection was closed"));
+                        });
     }
 
     // Method visible for unit-tests

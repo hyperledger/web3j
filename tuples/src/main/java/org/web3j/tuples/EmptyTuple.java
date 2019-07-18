@@ -1,8 +1,6 @@
 package org.web3j.tuples;
 
-/**
- * Empty Tuple type.
- */
+/** Empty Tuple type. */
 public class EmptyTuple implements Tuple {
 
     @Override

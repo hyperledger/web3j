@@ -7,8 +7,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 
 /**
- * Return an {@link EmptyTransactionReceipt} receipt back to callers containing only the
- * transaction hash.
+ * Return an {@link EmptyTransactionReceipt} receipt back to callers containing only the transaction
+ * hash.
  */
 public class NoOpProcessor extends TransactionReceiptProcessor {
 

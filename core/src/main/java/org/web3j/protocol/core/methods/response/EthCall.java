@@ -10,17 +10,16 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.protocol.core.Response;
 
-/**
- * eth_call.
- */
+/** eth_call. */
 public class EthCall extends Response<String> {
 
     // Numeric.toHexString(Hash.sha3("Error(string)".getBytes())).substring(0, 10)
     private static final String errorMethodId = "0x08c379a0";
 
     @SuppressWarnings("unchecked")
-    private static final List<TypeReference<Type>> revertReasonType = Collections.singletonList(
-            TypeReference.create((Class<Type>) AbiTypes.getType("string")));
+    private static final List<TypeReference<Type>> revertReasonType =
+            Collections.singletonList(
+                    TypeReference.create((Class<Type>) AbiTypes.getType("string")));
 
     public String getValue() {
         return getResult();

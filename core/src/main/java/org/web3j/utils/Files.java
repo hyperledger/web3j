@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-/**
- * File utility functions.
- */
+/** File utility functions. */
 public class Files {
 
-    private Files() { }
+    private Files() {}
 
     public static byte[] readBytes(File file) throws IOException {
         byte[] bytes = new byte[(int) file.length()];

@@ -3,14 +3,12 @@ package org.web3j.utils;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Utility functions for working with Collections.
- */
+/** Utility functions for working with Collections. */
 public class Collection {
 
-    static String[] EMPTY_STRING_ARRAY = { };
+    static String[] EMPTY_STRING_ARRAY = {};
 
-    private Collection() { }
+    private Collection() {}
 
     public static String[] tail(String[] args) {
         if (args.length == 0) {

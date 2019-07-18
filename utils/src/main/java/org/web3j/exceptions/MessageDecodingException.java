@@ -1,8 +1,6 @@
 package org.web3j.exceptions;
 
-/**
- * Encoding exception.
- */
+/** Encoding exception. */
 public class MessageDecodingException extends RuntimeException {
     public MessageDecodingException(String message) {
         super(message);

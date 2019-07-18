@@ -27,9 +27,7 @@ public class WebSocketEventTest {
 
     private WebSocketClient webSocketClient = mock(WebSocketClient.class);
 
-    private WebSocketService webSocketService = new WebSocketService(
-            webSocketClient, true
-    );
+    private WebSocketService webSocketService = new WebSocketService(webSocketClient, true);
 
     private Web3j web3j = Web3j.build(webSocketService);
 
@@ -41,18 +39,24 @@ public class WebSocketEventTest {
     public void before() throws Exception {
         when(webSocketClient.connectBlocking()).thenReturn(true);
 
-        doAnswer(invocation -> {
-            listener = invocation.getArgumentAt(0, WebSocketListener.class);
-            return null;
-        }).when(webSocketClient).setListener(any());
+        doAnswer(
+                        invocation -> {
+                            listener = invocation.getArgumentAt(0, WebSocketListener.class);
+                            return null;
+                        })
+                .when(webSocketClient)
+                .setListener(any());
 
-        doAnswer(invocation -> {
-            String message = invocation.getArgumentAt(0, String.class);
-            int requestId = getRequestId(message);
+        doAnswer(
+                        invocation -> {
+                            String message = invocation.getArgumentAt(0, String.class);
+                            int requestId = getRequestId(message);
 
-            sendSubscriptionConfirmation(requestId);
-            return null;
-        }).when(webSocketClient).send(anyString());
+                            sendSubscriptionConfirmation(requestId);
+                            return null;
+                        })
+                .when(webSocketClient)
+                .send(anyString());
 
         webSocketService.connect();
     }
@@ -61,30 +65,34 @@ public class WebSocketEventTest {
     public void testNewHeadsNotifications() {
         web3j.newHeadsNotifications();
 
-        verify(webSocketClient).send(matches(
-                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
-                        + "\"params\":\\[\"newHeads\"],\"id\":[0-9]{1,}}"));
+        verify(webSocketClient)
+                .send(
+                        matches(
+                                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
+                                        + "\"params\":\\[\"newHeads\"],\"id\":[0-9]{1,}}"));
     }
 
     @Test
     public void testLogsNotificationsWithoutArguments() {
         web3j.logsNotifications(new ArrayList<>(), new ArrayList<>());
 
-        verify(webSocketClient).send(matches(
-                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
-                        + "\"params\":\\[\"logs\",\\{}],\"id\":[0-9]{1,}}"));
+        verify(webSocketClient)
+                .send(
+                        matches(
+                                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
+                                        + "\"params\":\\[\"logs\",\\{}],\"id\":[0-9]{1,}}"));
     }
 
     @Test
     public void testLogsNotificationsWithArguments() {
-        web3j.logsNotifications(
-                Collections.singletonList("0x1"),
-                Collections.singletonList("0x2"));
+        web3j.logsNotifications(Collections.singletonList("0x1"), Collections.singletonList("0x2"));
 
-        verify(webSocketClient).send(matches(
-                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
-                        + "\"params\":\\[\"logs\",\\{\"address\":\\[\"0x1\"],"
-                        + "\"topics\":\\[\"0x2\"]}],\"id\":[0-9]{1,}}"));
+        verify(webSocketClient)
+                .send(
+                        matches(
+                                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
+                                        + "\"params\":\\[\"logs\",\\{\"address\":\\[\"0x1\"],"
+                                        + "\"topics\":\\[\"0x2\"]}],\"id\":[0-9]{1,}}"));
     }
 
     private int getRequestId(String message) throws IOException {

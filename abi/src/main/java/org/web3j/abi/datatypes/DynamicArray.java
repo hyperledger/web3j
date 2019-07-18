@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
-/**
- * Dynamic array type.
- */
+/** Dynamic array type. */
 public class DynamicArray<T extends Type> extends Array<T> {
 
     @Deprecated

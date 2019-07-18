@@ -23,7 +23,6 @@ public class EqualsVerifierParityResponseTest {
                 .verify();
     }
 
-
     @Test
     public void testFullTraceInfo() {
         VMTrace vmTrace1 = new VMTrace("one", new ArrayList<>());
@@ -70,10 +69,8 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testVMTrace() {
-        VMTrace.VMOperation op1 = new VMTrace.VMOperation(
-                null, BigInteger.ZERO, null, null);
-        VMTrace.VMOperation op2 = new VMTrace.VMOperation(
-                null, BigInteger.ONE, null, null);
+        VMTrace.VMOperation op1 = new VMTrace.VMOperation(null, BigInteger.ZERO, null, null);
+        VMTrace.VMOperation op2 = new VMTrace.VMOperation(null, BigInteger.ONE, null, null);
 
         EqualsVerifier.forClass(VMTrace.class)
                 .withPrefabValues(VMTrace.VMOperation.class, op1, op2)
@@ -157,5 +154,4 @@ public class EqualsVerifierParityResponseTest {
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
     }
-
 }

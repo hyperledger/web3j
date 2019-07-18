@@ -7,10 +7,10 @@ import static org.web3j.rlp.RlpDecoder.OFFSET_SHORT_LIST;
 import static org.web3j.rlp.RlpDecoder.OFFSET_SHORT_STRING;
 
 /**
- * <p>Recursive Length Prefix (RLP) encoder.</p>
+ * Recursive Length Prefix (RLP) encoder.
  *
- * <p>For the specification, refer to p16 of the <a href="http://gavwood.com/paper.pdf">
- * yellow paper</a> and <a href="https://github.com/ethereum/wiki/wiki/RLP">here</a>.</p>
+ * <p>For the specification, refer to p16 of the <a href="http://gavwood.com/paper.pdf">yellow
+ * paper</a> and <a href="https://github.com/ethereum/wiki/wiki/RLP">here</a>.
  */
 public class RlpEncoder {
 
@@ -58,25 +58,25 @@ public class RlpEncoder {
             }
         }
 
-        return new byte[]{ };
+        return new byte[] {};
     }
 
     private static byte[] toByteArray(int value) {
         return new byte[] {
-                (byte) ((value >> 24) & 0xff),
-                (byte) ((value >> 16) & 0xff),
-                (byte) ((value >> 8) & 0xff),
-                (byte) (value & 0xff)
+            (byte) ((value >> 24) & 0xff),
+            (byte) ((value >> 16) & 0xff),
+            (byte) ((value >> 8) & 0xff),
+            (byte) (value & 0xff)
         };
     }
 
     static byte[] encodeList(RlpList value) {
         List<RlpType> values = value.getValues();
         if (values.isEmpty()) {
-            return encode(new byte[]{ }, OFFSET_SHORT_LIST);
+            return encode(new byte[] {}, OFFSET_SHORT_LIST);
         } else {
             byte[] result = new byte[0];
-            for (RlpType entry:values) {
+            for (RlpType entry : values) {
                 result = concat(result, encode(entry));
             }
             return encode(result, OFFSET_SHORT_LIST);

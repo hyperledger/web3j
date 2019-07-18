@@ -45,7 +45,9 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, long chainId,
+            Web3j web3j,
+            Credentials credentials,
+            long chainId,
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
@@ -75,8 +77,10 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     protected BigInteger getNonce() throws IOException {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        EthGetTransactionCount ethGetTransactionCount =
+                web3j.ethGetTransactionCount(
+                                credentials.getAddress(), DefaultBlockParameterName.PENDING)
+                        .send();
 
         return ethGetTransactionCount.getTransactionCount();
     }
@@ -91,18 +95,13 @@ public class RawTransactionManager extends TransactionManager {
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value) throws IOException {
+            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            throws IOException {
 
         BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction = RawTransaction.createTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                to,
-                value,
-                data);
+        RawTransaction rawTransaction =
+                RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
 
         return signAndSend(rawTransaction);
     }
@@ -111,9 +110,10 @@ public class RawTransactionManager extends TransactionManager {
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         return web3j.ethCall(
-                Transaction.createEthCallTransaction(getFromAddress(), to, data),
-                defaultBlockParameter)
-                .send().getValue();
+                        Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                        defaultBlockParameter)
+                .send()
+                .getValue();
     }
 
     /*
@@ -133,8 +133,7 @@ public class RawTransactionManager extends TransactionManager {
         return Numeric.toHexString(signedMessage);
     }
 
-    public EthSendTransaction signAndSend(RawTransaction rawTransaction)
-            throws IOException {
+    public EthSendTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
         String hexValue = sign(rawTransaction);
         EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
 

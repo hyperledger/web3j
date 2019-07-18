@@ -33,10 +33,11 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
 
         try (StandardJavaFileManager fileManager =
                 compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits = fileManager
-                    .getJavaFileObjectsFromStrings(Collections.singletonList(sourceFile));
-            JavaCompiler.CompilationTask task = compiler.getTask(
-                    null, fileManager, diagnostics, null, null, compilationUnits);
+            Iterable<? extends JavaFileObject> compilationUnits =
+                    fileManager.getJavaFileObjectsFromStrings(
+                            Collections.singletonList(sourceFile));
+            JavaCompiler.CompilationTask task =
+                    compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
             assertTrue("Generated contract contains compile time error", task.call());
         }
     }
@@ -62,39 +63,40 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void testCodeGenerationJvmTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
+            throws Exception {
 
-        testCodeGeneration(
-                contractName, inputFileName, PackageName, JAVA_TYPES_ARG);
-
+        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG);
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void testCodeGenerationSolidtyTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationSolidtyTypes(String contractName, String inputFileName)
+            throws Exception {
 
-        testCodeGeneration(
-                contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG);
-
+        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG);
     }
 
     private void testCodeGeneration(
             String contractName, String inputFileName, String packageName, String types)
             throws Exception {
 
-        TruffleJsonFunctionWrapperGenerator.main(Arrays.asList(
-                types,
-                ContractJsonParseTest
-                        .jsonFileLocation(contractBaseDir, contractName, inputFileName),
-                "-p", packageName,
-                "-o", tempDirPath
-        ).toArray(new String[0]));
+        TruffleJsonFunctionWrapperGenerator.main(
+                Arrays.asList(
+                                types,
+                                ContractJsonParseTest.jsonFileLocation(
+                                        contractBaseDir, contractName, inputFileName),
+                                "-p",
+                                packageName,
+                                "-o",
+                                tempDirPath)
+                        .toArray(new String[0]));
 
-        verifyGeneratedCode(tempDirPath + File.separator
-                + packageName.replace('.', File.separatorChar) + File.separator
-                + Strings.capitaliseFirstLetter(inputFileName) + ".java");
+        verifyGeneratedCode(
+                tempDirPath
+                        + File.separator
+                        + packageName.replace('.', File.separatorChar)
+                        + File.separator
+                        + Strings.capitaliseFirstLetter(inputFileName)
+                        + ".java");
     }
-
-
 }

@@ -4,9 +4,7 @@ import java.io.File;
 
 import static org.web3j.codegen.Console.exitError;
 
-/**
- * Abstract base class for the concrete function wrapper generators.
- */
+/** Abstract base class for the concrete function wrapper generators. */
 abstract class FunctionWrapperGenerator {
 
     static final String JAVA_TYPES_ARG = "--javaTypes";
@@ -17,9 +15,7 @@ abstract class FunctionWrapperGenerator {
     final boolean useJavaNativeTypes;
 
     FunctionWrapperGenerator(
-            File destinationDirLocation,
-            String basePackageName,
-            boolean useJavaNativeTypes) {
+            File destinationDirLocation, String basePackageName, boolean useJavaNativeTypes) {
 
         this.destinationDirLocation = destinationDirLocation;
         this.basePackageName = basePackageName;
@@ -49,8 +45,7 @@ abstract class FunctionWrapperGenerator {
     static String parseParameterArgument(String[] args, String... parameters) {
         for (String parameter : parameters) {
             for (int i = 0; i < args.length; i++) {
-                if (args[i].equals(parameter)
-                        && i + 1 < args.length) {
+                if (args[i].equals(parameter) && i + 1 < args.length) {
                     String parameterValue = args[i + 1];
                     if (!parameterValue.startsWith("-")) {
                         return parameterValue;
@@ -65,5 +60,4 @@ abstract class FunctionWrapperGenerator {
         String[] splitName = fileName.split("\\.(?=[^.]*$)");
         return splitName[0];
     }
-
 }

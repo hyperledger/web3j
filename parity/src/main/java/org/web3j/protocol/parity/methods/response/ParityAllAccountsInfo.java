@@ -4,11 +4,9 @@ import java.util.Map;
 
 import org.web3j.protocol.core.Response;
 
-/**
- * parity_allAccountsInfo.
- */
-public class ParityAllAccountsInfo extends 
-        Response<Map<String, ParityAllAccountsInfo.AccountsInfo>> {
+/** parity_allAccountsInfo. */
+public class ParityAllAccountsInfo
+        extends Response<Map<String, ParityAllAccountsInfo.AccountsInfo>> {
 
     // we need to use a map type as a string value is returned with the account information
     public Map<String, AccountsInfo> getAccountsInfo() {
@@ -20,8 +18,7 @@ public class ParityAllAccountsInfo extends
         private String uuid;
         private Map<String, Object> meta;
 
-        public AccountsInfo() {
-        }
+        public AccountsInfo() {}
 
         public AccountsInfo(Map<String, Object> meta, String name, String uuid) {
             this.name = name;

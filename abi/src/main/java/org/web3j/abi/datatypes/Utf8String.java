@@ -1,8 +1,6 @@
 package org.web3j.abi.datatypes;
 
-/**
- * UTF-8 encoded string type.
- */
+/** UTF-8 encoded string type. */
 public class Utf8String implements Type<String> {
 
     public static final String TYPE_NAME = "string";

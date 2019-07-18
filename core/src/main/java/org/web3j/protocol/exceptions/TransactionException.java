@@ -25,6 +25,7 @@ public class TransactionException extends Exception {
 
     /**
      * Obtain the transaction hash .
+     *
      * @return optional transaction hash .
      */
     public Optional<String> getTransactionHash() {

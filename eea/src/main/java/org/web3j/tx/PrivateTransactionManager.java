@@ -20,36 +20,42 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         this.transactionReceiptProcessor = transactionReceiptProcessor;
     }
 
-    protected PrivateTransactionManager(
-            Eea eea, String enclavePublicKey, String fromAddress) {
-        this(new PollingPrivateTransactionReceiptProcessor(
-                        eea,
-                        DEFAULT_POLLING_FREQUENCY,
-                        DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH),
+    protected PrivateTransactionManager(Eea eea, String enclavePublicKey, String fromAddress) {
+        this(
+                new PollingPrivateTransactionReceiptProcessor(
+                        eea, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH),
                 fromAddress);
     }
 
     protected PrivateTransactionManager(
-            Eea eea, String enclavePublicKey,
-            int attempts, long sleepDuration, String fromAddress) {
-        this(new PollingPrivateTransactionReceiptProcessor(
-                eea, sleepDuration, attempts), fromAddress);
+            Eea eea,
+            String enclavePublicKey,
+            int attempts,
+            long sleepDuration,
+            String fromAddress) {
+        this(
+                new PollingPrivateTransactionReceiptProcessor(eea, sleepDuration, attempts),
+                fromAddress);
     }
 
     @Override
     protected TransactionReceipt executeTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
+            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
             throws IOException, TransactionException {
 
-        EthSendTransaction ethSendTransaction = sendTransaction(
-                gasPrice, gasLimit, to, data, value);
+        EthSendTransaction ethSendTransaction =
+                sendTransaction(gasPrice, gasLimit, to, data, value);
         return processResponse(ethSendTransaction);
     }
 
     protected String executeCall(String to, String data) throws IOException, TransactionException {
-        EthSendTransaction est = sendTransaction(
-                BigInteger.valueOf(5000), BigInteger.valueOf(3000000), to, data, BigInteger.ZERO);
+        EthSendTransaction est =
+                sendTransaction(
+                        BigInteger.valueOf(5000),
+                        BigInteger.valueOf(3000000),
+                        to,
+                        data,
+                        BigInteger.ZERO);
         TransactionReceipt ptr = processResponse(est);
         return ((PrivateTransactionReceipt) ptr).getOutput();
     }
@@ -57,8 +63,9 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
             throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
-            throw new RuntimeException("Error processing transaction request: "
-                    + transactionResponse.getError().getMessage());
+            throw new RuntimeException(
+                    "Error processing transaction request: "
+                            + transactionResponse.getError().getMessage());
         }
 
         String transactionHash = transactionResponse.getTransactionHash();

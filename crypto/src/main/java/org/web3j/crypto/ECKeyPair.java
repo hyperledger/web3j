@@ -13,9 +13,7 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
 import org.web3j.utils.Numeric;
 
-/**
- * Elliptic Curve SECP-256k1 generated key pair.
- */
+/** Elliptic Curve SECP-256k1 generated key pair. */
 public class ECKeyPair {
     private final BigInteger privateKey;
     private final BigInteger publicKey;
@@ -35,8 +33,9 @@ public class ECKeyPair {
 
     /**
      * Sign a hash with the private key of this key pair.
-     * @param transactionHash   the hash to sign
-     * @return  An {@link ECDSASignature} of the hash
+     *
+     * @param transactionHash the hash to sign
+     * @return An {@link ECDSASignature} of the hash
      */
     public ECDSASignature sign(byte[] transactionHash) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
@@ -84,12 +83,14 @@ public class ECKeyPair {
         ECKeyPair ecKeyPair = (ECKeyPair) o;
 
         if (privateKey != null
-                ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null) {
+                ? !privateKey.equals(ecKeyPair.privateKey)
+                : ecKeyPair.privateKey != null) {
             return false;
         }
 
         return publicKey != null
-                ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
+                ? publicKey.equals(ecKeyPair.publicKey)
+                : ecKeyPair.publicKey == null;
     }
 
     @Override

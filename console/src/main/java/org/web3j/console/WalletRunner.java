@@ -4,9 +4,7 @@ import org.web3j.codegen.Console;
 
 import static org.web3j.utils.Collection.tail;
 
-/**
- * Class for managing our wallet command line utilities.
- */
+/** Class for managing our wallet command line utilities. */
 public class WalletRunner {
     private static final String USAGE = "wallet create|update|send|fromkey";
 

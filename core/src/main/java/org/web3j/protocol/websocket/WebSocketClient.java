@@ -34,19 +34,24 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     @Override
     public void onMessage(String s) {
         log.debug("Received message {} from server {}", s, uri);
-        listenerOpt.ifPresent(listener -> {
-            try {
-                listener.onMessage(s);
-            } catch (Exception e) {
-                log.error("Failed to process message '{}' from server {}", s, uri, e);
-            }
-        });
+        listenerOpt.ifPresent(
+                listener -> {
+                    try {
+                        listener.onMessage(s);
+                    } catch (Exception e) {
+                        log.error("Failed to process message '{}' from server {}", s, uri, e);
+                    }
+                });
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        log.debug("Closed WebSocket connection to {}, because of reason: '{}'."
-                + "Connection closed remotely: {}", uri, reason, remote);
+        log.debug(
+                "Closed WebSocket connection to {}, because of reason: '{}'."
+                        + "Connection closed remotely: {}",
+                uri,
+                reason,
+                remote);
         listenerOpt.ifPresent(WebSocketListener::onClose);
     }
 

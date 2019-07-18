@@ -18,8 +18,10 @@ public class KeyImporterTest extends WalletTester {
 
     @Test
     public void testLoadPrivateKeyFromFile() {
-        prepareWalletCreation(KeyImporterTest.class.getResource("/keyfiles/"
-                + "sample-private-key.txt").getFile());
+        prepareWalletCreation(
+                KeyImporterTest.class
+                        .getResource("/keyfiles/" + "sample-private-key.txt")
+                        .getFile());
     }
 
     private void prepareWalletCreation(String input) {

@@ -24,13 +24,16 @@ public class FastRawTransactionManager extends RawTransactionManager {
     }
 
     public FastRawTransactionManager(
-            Web3j web3j, Credentials credentials,
+            Web3j web3j,
+            Credentials credentials,
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(web3j, credentials, ChainId.NONE, transactionReceiptProcessor);
     }
 
     public FastRawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId,
+            Web3j web3j,
+            Credentials credentials,
+            byte chainId,
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(web3j, credentials, chainId, transactionReceiptProcessor);
     }

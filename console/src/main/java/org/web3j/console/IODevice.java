@@ -1,8 +1,6 @@
 package org.web3j.console;
 
-/**
- * IO device abstraction.
- */
+/** IO device abstraction. */
 public interface IODevice {
     void printf(String format, Object... args);
 

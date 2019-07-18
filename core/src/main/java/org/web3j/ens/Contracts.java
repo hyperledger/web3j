@@ -2,9 +2,7 @@ package org.web3j.ens;
 
 import org.web3j.tx.ChainIdLong;
 
-/**
- * ENS registry contract addresses.
- */
+/** ENS registry contract addresses. */
 public class Contracts {
 
     public static final String MAINNET = "0x314159265dd8dbb310642f98f50c066173c1259b";
@@ -21,7 +19,7 @@ public class Contracts {
             return RINKEBY;
         } else {
             throw new EnsResolutionException(
-                "Unable to resolve ENS registry contract for network id: " + chainId);
+                    "Unable to resolve ENS registry contract for network id: " + chainId);
         }
     }
 }

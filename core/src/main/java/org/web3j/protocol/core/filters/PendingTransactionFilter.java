@@ -10,9 +10,7 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 
-/**
- * Handler for working with transaction filter requests.
- */
+/** Handler for working with transaction filter requests. */
 public class PendingTransactionFilter extends Filter<String> {
 
     public PendingTransactionFilter(Web3j web3j, Callback<String> callback) {
@@ -38,12 +36,11 @@ public class PendingTransactionFilter extends Filter<String> {
     }
 
     /**
-     * Since the pending transaction filter does not support historic filters,
-     * the filterId is ignored and an empty optional is returned
-     * @param filterId
-     * Id of the filter for which the historic log should be retrieved
-     * @return
-     * Optional.empty()
+     * Since the pending transaction filter does not support historic filters, the filterId is
+     * ignored and an empty optional is returned
+     *
+     * @param filterId Id of the filter for which the historic log should be retrieved
+     * @return Optional.empty()
      */
     @Override
     protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {

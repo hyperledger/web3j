@@ -7,9 +7,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 
-/**
- * With each provided transaction hash, poll until we obtain a transaction receipt.
- */
+/** With each provided transaction hash, poll until we obtain a transaction receipt. */
 public class PollingTransactionReceiptProcessor extends TransactionReceiptProcessor {
 
     protected final long sleepDuration;
@@ -22,8 +20,7 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(
-            String transactionHash)
+    public TransactionReceipt waitForTransactionReceipt(String transactionHash)
             throws IOException, TransactionException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
@@ -50,8 +47,11 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
             }
         }
 
-        throw new TransactionException("Transaction receipt was not generated after "
-                + ((sleepDuration * attempts) / 1000
-                + " seconds for transaction: " + transactionHash), transactionHash);
+        throw new TransactionException(
+                "Transaction receipt was not generated after "
+                        + ((sleepDuration * attempts) / 1000
+                                + " seconds for transaction: "
+                                + transactionHash),
+                transactionHash);
     }
 }

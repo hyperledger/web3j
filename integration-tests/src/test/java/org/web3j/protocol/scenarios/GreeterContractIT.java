@@ -23,9 +23,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Integration test demonstrating integration with Greeter contract taken from the
- * <a href="https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial">Contract Tutorial</a>
- * on the Go Ethereum Wiki.
+ * Integration test demonstrating integration with Greeter contract taken from the <a
+ * href="https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial">Contract Tutorial</a> on
+ * the Go Ethereum Wiki.
  */
 public class GreeterContractIT extends Scenario {
 
@@ -45,7 +45,8 @@ public class GreeterContractIT extends Scenario {
 
         assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
 
-        assertFalse("Contract execution ran out of gas",
+        assertFalse(
+                "Contract execution ran out of gas",
                 createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
         String contractAddress = createTransactionReceipt.getContractAddress();
@@ -57,8 +58,8 @@ public class GreeterContractIT extends Scenario {
         String responseValue = callSmartContractFunction(getFunction, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type> response = FunctionReturnDecoder.decode(
-                responseValue, getFunction.getOutputParameters());
+        List<Type> response =
+                FunctionReturnDecoder.decode(responseValue, getFunction.getOutputParameters());
         assertThat(response.size(), is(1));
         assertThat(response.get(0).getValue(), is(VALUE));
     }
@@ -69,31 +70,33 @@ public class GreeterContractIT extends Scenario {
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
 
-        Transaction transaction = Transaction.createContractTransaction(
-                ALICE.getAddress(),
-                nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
-                BigInteger.ZERO,
-                getGreeterSolidityBinary() + encodedConstructor);
+        Transaction transaction =
+                Transaction.createContractTransaction(
+                        ALICE.getAddress(),
+                        nonce,
+                        GAS_PRICE,
+                        GAS_LIMIT,
+                        BigInteger.ZERO,
+                        getGreeterSolidityBinary() + encodedConstructor);
 
-        org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = web3j.ethSendTransaction(transaction)
-                .sendAsync().get();
+        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
+                web3j.ethSendTransaction(transaction).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(
-            Function function, String contractAddress) throws Exception {
+    private String callSmartContractFunction(Function function, String contractAddress)
+            throws Exception {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
-                Transaction.createEthCallTransaction(
-                        ALICE.getAddress(), contractAddress, encodedFunction),
-                DefaultBlockParameterName.LATEST)
-                .sendAsync().get();
+        org.web3j.protocol.core.methods.response.EthCall response =
+                web3j.ethCall(
+                                Transaction.createEthCallTransaction(
+                                        ALICE.getAddress(), contractAddress, encodedFunction),
+                                DefaultBlockParameterName.LATEST)
+                        .sendAsync()
+                        .get();
 
         return response.getValue();
     }

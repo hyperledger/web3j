@@ -20,19 +20,21 @@ public class IpcServiceTest {
     @Before
     public void setUp() {
         ioFacade = mock(IOFacade.class);
-        ipcService = new IpcService() {
-            @Override
-            protected IOFacade getIO() {
-                return ioFacade;
-            }
-        };
+        ipcService =
+                new IpcService() {
+                    @Override
+                    protected IOFacade getIO() {
+                        return ioFacade;
+                    }
+                };
     }
 
     @Test
     public void testSend() throws IOException {
-        when(ioFacade.read()).thenReturn(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,"
-                        + "\"result\":\"Geth/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n");
+        when(ioFacade.read())
+                .thenReturn(
+                        "{\"jsonrpc\":\"2.0\",\"id\":1,"
+                                + "\"result\":\"Geth/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n");
 
         ipcService.send(new Request(), Web3ClientVersion.class);
 

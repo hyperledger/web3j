@@ -31,8 +31,8 @@ public class Bip44WalletUtils extends WalletUtils {
      * @throws CipherException if the underlying cipher is not available
      * @throws IOException if the destination cannot be written to
      */
-    public static Bip39Wallet generateBip44Wallet(String password, File destinationDirectory,
-                                                  boolean testNet)
+    public static Bip39Wallet generateBip44Wallet(
+            String password, File destinationDirectory, boolean testNet)
             throws CipherException, IOException {
         byte[] initialEntropy = new byte[16];
         SecureRandomUtils.secureRandom().nextBytes(initialEntropy);
@@ -68,8 +68,8 @@ public class Bip44WalletUtils extends WalletUtils {
         return loadBip44Credentials(password, mnemonic, false);
     }
 
-    public static Credentials loadBip44Credentials(String password, String mnemonic,
-                                                   boolean testNet) {
+    public static Credentials loadBip44Credentials(
+            String password, String mnemonic, boolean testNet) {
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         Bip32ECKeyPair masterKeypair = Bip32ECKeyPair.generateKeyPair(seed);
         Bip32ECKeyPair bip44Keypair = generateBip44KeyPair(masterKeypair, testNet);

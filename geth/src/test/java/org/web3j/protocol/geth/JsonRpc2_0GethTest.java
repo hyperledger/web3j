@@ -24,9 +24,7 @@ public class JsonRpc2_0GethTest {
 
     private WebSocketClient webSocketClient = mock(WebSocketClient.class);
 
-    private WebSocketService webSocketService = new WebSocketService(
-            webSocketClient, true
-    );
+    private WebSocketService webSocketService = new WebSocketService(webSocketClient, true);
 
     private Geth geth = Geth.build(webSocketService);
 
@@ -38,39 +36,48 @@ public class JsonRpc2_0GethTest {
     public void before() throws Exception {
         when(webSocketClient.connectBlocking()).thenReturn(true);
 
-        doAnswer(invocation -> {
-            listener = invocation.getArgumentAt(0, WebSocketListener.class);
-            return null;
-        }).when(webSocketClient).setListener(any());
+        doAnswer(
+                        invocation -> {
+                            listener = invocation.getArgumentAt(0, WebSocketListener.class);
+                            return null;
+                        })
+                .when(webSocketClient)
+                .setListener(any());
 
-        doAnswer(invocation -> {
-            String message = invocation.getArgumentAt(0, String.class);
-            int requestId = getRequestId(message);
+        doAnswer(
+                        invocation -> {
+                            String message = invocation.getArgumentAt(0, String.class);
+                            int requestId = getRequestId(message);
 
-            sendSubscriptionConfirmation(requestId);
-            return null;
-        }).when(webSocketClient).send(anyString());
+                            sendSubscriptionConfirmation(requestId);
+                            return null;
+                        })
+                .when(webSocketClient)
+                .send(anyString());
 
         webSocketService.connect();
     }
-
 
     @Test
     public void testPendingTransactionsNotifications() {
         geth.newPendingTransactionsNotifications();
 
-        verify(webSocketClient).send(matches(
-                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\",\"params\":"
-                        + "\\[\"newPendingTransactions\"],\"id\":[0-9]{1,}}"));
+        verify(webSocketClient)
+                .send(
+                        matches(
+                                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\",\"params\":"
+                                        + "\\[\"newPendingTransactions\"],\"id\":[0-9]{1,}}"));
     }
 
     @Test
     public void testSyncingStatusNotifications() {
         geth.syncingStatusNotifications();
 
-        verify(webSocketClient).send(matches(
-                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
-                        + "\"params\":\\[\"syncing\"],\"id\":[0-9]{1,}}"));
+        verify(webSocketClient)
+                .send(
+                        matches(
+                                "\\{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
+                                        + "\"params\":\\[\"syncing\"],\"id\":[0-9]{1,}}"));
     }
 
     private int getRequestId(String message) throws IOException {

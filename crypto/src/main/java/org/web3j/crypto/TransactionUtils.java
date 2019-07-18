@@ -2,9 +2,7 @@ package org.web3j.crypto;
 
 import org.web3j.utils.Numeric;
 
-/**
- * Transaction utility functions.
- */
+/** Transaction utility functions. */
 public class TransactionUtils {
 
     /**

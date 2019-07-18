@@ -1,8 +1,6 @@
 package org.web3j.protocol.core.filters;
 
-/**
- * Filter exception wrapper.
- */
+/** Filter exception wrapper. */
 public class FilterException extends RuntimeException {
 
     public FilterException(String message) {

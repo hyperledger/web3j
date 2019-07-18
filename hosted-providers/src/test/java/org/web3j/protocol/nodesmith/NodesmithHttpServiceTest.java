@@ -14,10 +14,12 @@ public class NodesmithHttpServiceTest {
 
     @Test
     public void testParseHeaders() {
-        Optional<RateLimitInfo> info = NodesmithHttpService.createRateLimitFromHeaders(Headers.of(
-                NodesmithHttpService.NS_RATELIMIT_LIMIT, "500",
-                NodesmithHttpService.NS_RATELIMIT_REMAINING, "442",
-                NodesmithHttpService.NS_RATELIMIT_RESET, "1553385403"));
+        Optional<RateLimitInfo> info =
+                NodesmithHttpService.createRateLimitFromHeaders(
+                        Headers.of(
+                                NodesmithHttpService.NS_RATELIMIT_LIMIT, "500",
+                                NodesmithHttpService.NS_RATELIMIT_REMAINING, "442",
+                                NodesmithHttpService.NS_RATELIMIT_RESET, "1553385403"));
 
         assertTrue(info.isPresent());
         assertEquals(500, info.get().getTotalAllowedInWindow());
@@ -28,20 +30,21 @@ public class NodesmithHttpServiceTest {
     @Test
     public void testParseHeader_FailureCases() {
         // Missing some of the required headers
-        assertFalse(NodesmithHttpService.createRateLimitFromHeaders(
-                Headers.of(NodesmithHttpService.NS_RATELIMIT_LIMIT, "42"))
-                .isPresent());
+        assertFalse(
+                NodesmithHttpService.createRateLimitFromHeaders(
+                                Headers.of(NodesmithHttpService.NS_RATELIMIT_LIMIT, "42"))
+                        .isPresent());
 
         // Invalid number format
-        assertFalse(NodesmithHttpService.createRateLimitFromHeaders(
-                Headers.of(
-                        NodesmithHttpService.NS_RATELIMIT_LIMIT, "42",
-                        NodesmithHttpService.NS_RATELIMIT_REMAINING, "xyz",
-                        NodesmithHttpService.NS_RATELIMIT_RESET, "1553385403"))
-                .isPresent());
+        assertFalse(
+                NodesmithHttpService.createRateLimitFromHeaders(
+                                Headers.of(
+                                        NodesmithHttpService.NS_RATELIMIT_LIMIT, "42",
+                                        NodesmithHttpService.NS_RATELIMIT_REMAINING, "xyz",
+                                        NodesmithHttpService.NS_RATELIMIT_RESET, "1553385403"))
+                        .isPresent());
 
         // Null headers
-        assertFalse(NodesmithHttpService.createRateLimitFromHeaders(null)
-                .isPresent());
+        assertFalse(NodesmithHttpService.createRateLimitFromHeaders(null).isPresent());
     }
 }

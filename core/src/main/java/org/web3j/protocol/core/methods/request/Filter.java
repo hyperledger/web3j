@@ -7,7 +7,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Filter implementation as per <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
+ * Filter implementation as per <a
+ * href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class Filter<T extends Filter> {
@@ -52,7 +53,7 @@ public abstract class Filter<T extends Filter> {
         private String topic;
 
         public SingleTopic() {
-            this.topic = null;  // null topic
+            this.topic = null; // null topic
         }
 
         public SingleTopic(String topic) {

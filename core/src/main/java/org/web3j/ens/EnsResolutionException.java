@@ -1,8 +1,6 @@
 package org.web3j.ens;
 
-/**
- * ENS resolution exception.
- */
+/** ENS resolution exception. */
 public class EnsResolutionException extends RuntimeException {
     public EnsResolutionException(String message) {
         super(message);

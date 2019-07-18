@@ -7,7 +7,6 @@ import org.web3j.TempFileProvider;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-
 public class AbiTypesGeneratorTest extends TempFileProvider {
 
     @Test
@@ -22,6 +21,6 @@ public class AbiTypesGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGeneration() throws Exception {
-        AbiTypesGenerator.main(new String[] { tempDirPath });
+        AbiTypesGenerator.main(new String[] {tempDirPath});
     }
 }

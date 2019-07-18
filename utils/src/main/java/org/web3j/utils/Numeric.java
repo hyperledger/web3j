@@ -8,16 +8,15 @@ import org.web3j.exceptions.MessageDecodingException;
 import org.web3j.exceptions.MessageEncodingException;
 
 /**
- * <p>Message codec functions.</p>
+ * Message codec functions.
  *
- * <p>Implementation as per https://github.com/ethereum/wiki/wiki/JSON-RPC#hex-value-encoding</p>
+ * <p>Implementation as per https://github.com/ethereum/wiki/wiki/JSON-RPC#hex-value-encoding
  */
 public final class Numeric {
 
     private static final String HEX_PREFIX = "0x";
 
-    private Numeric() {
-    }
+    private Numeric() {}
 
     public static String encodeQuantity(BigInteger value) {
         if (value.signum() != -1) {
@@ -77,8 +76,10 @@ public final class Numeric {
     }
 
     public static boolean containsHexPrefix(String input) {
-        return !Strings.isEmpty(input) && input.length() > 1
-                && input.charAt(0) == '0' && input.charAt(1) == 'x';
+        return !Strings.isEmpty(input)
+                && input.length() > 1
+                && input.charAt(0) == '0'
+                && input.charAt(1) == 'x';
     }
 
     public static BigInteger toBigInt(byte[] value, int offset, int length) {
@@ -113,7 +114,7 @@ public final class Numeric {
     public static String toHexStringWithPrefixZeroPadded(BigInteger value, int size) {
         return toHexStringZeroPadded(value, size, true);
     }
-    
+
     public static String toHexStringWithPrefixSafe(BigInteger value) {
         String result = toHexStringNoPrefix(value);
         if (result.length() < 2) {
@@ -192,8 +193,10 @@ public final class Numeric {
         }
 
         for (int i = startIdx; i < len; i += 2) {
-            data[(i + 1) / 2] = (byte) ((Character.digit(cleanInput.charAt(i), 16) << 4)
-                    + Character.digit(cleanInput.charAt(i + 1), 16));
+            data[(i + 1) / 2] =
+                    (byte)
+                            ((Character.digit(cleanInput.charAt(i), 16) << 4)
+                                    + Character.digit(cleanInput.charAt(i + 1), 16));
         }
         return data;
     }
@@ -219,8 +222,6 @@ public final class Numeric {
     }
 
     public static boolean isIntegerValue(BigDecimal value) {
-        return value.signum() == 0
-                || value.scale() <= 0
-                || value.stripTrailingZeros().scale() <= 0;
+        return value.signum() == 0 || value.scale() <= 0 || value.stripTrailingZeros().scale() <= 0;
     }
 }

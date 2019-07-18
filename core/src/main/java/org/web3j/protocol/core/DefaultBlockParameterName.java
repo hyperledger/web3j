@@ -2,9 +2,7 @@ package org.web3j.protocol.core;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * https://github.com/ethereum/wiki/wiki/JSON-RPC#the-default-block-parameter
- */
+/** https://github.com/ethereum/wiki/wiki/JSON-RPC#the-default-block-parameter */
 public enum DefaultBlockParameterName implements DefaultBlockParameter {
     EARLIEST("earliest"),
     LATEST("latest"),
@@ -24,7 +22,7 @@ public enum DefaultBlockParameterName implements DefaultBlockParameter {
 
     public static DefaultBlockParameterName fromString(String name) {
         if (name != null) {
-            for (DefaultBlockParameterName defaultBlockParameterName:
+            for (DefaultBlockParameterName defaultBlockParameterName :
                     DefaultBlockParameterName.values()) {
                 if (name.equalsIgnoreCase(defaultBlockParameterName.name)) {
                     return defaultBlockParameterName;

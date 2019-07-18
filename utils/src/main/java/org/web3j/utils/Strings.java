@@ -2,9 +2,7 @@ package org.web3j.utils;
 
 import java.util.List;
 
-/**
- * String utility functions.
- */
+/** String utility functions. */
 public class Strings {
 
     private Strings() {}

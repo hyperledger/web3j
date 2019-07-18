@@ -14,23 +14,25 @@ import static org.junit.Assert.assertTrue;
 import static org.web3j.codegen.TruffleJsonFunctionWrapperGenerator.Contract;
 import static org.web3j.codegen.TruffleJsonFunctionWrapperGenerator.loadContractDefinition;
 
-/**
- * Test that we can parse Truffle Contract from JSON file.
- */
+/** Test that we can parse Truffle Contract from JSON file. */
 public class ContractJsonParseTest {
 
     static final String BUILD_CONTRACTS = "build" + File.separator + "contracts";
     private String contractBaseDir;
 
-    static String jsonFileLocation(String baseDir,
-            String contractName, String inputFileName) {
-        return baseDir + File.separator + contractName + File.separator + BUILD_CONTRACTS
-                + File.separator + inputFileName + ".json";
+    static String jsonFileLocation(String baseDir, String contractName, String inputFileName) {
+        return baseDir
+                + File.separator
+                + contractName
+                + File.separator
+                + BUILD_CONTRACTS
+                + File.separator
+                + inputFileName
+                + ".json";
     }
 
     @SuppressWarnings("SameParameterValue")
-    static Contract parseContractJson(String baseDir,
-            String contractName, String inputFileName)
+    static Contract parseContractJson(String baseDir, String contractName, String inputFileName)
             throws Exception {
 
         String fileLocation = jsonFileLocation(baseDir, contractName, inputFileName);
@@ -61,8 +63,9 @@ public class ContractJsonParseTest {
         assertTrue("Expected function to be 'constant'", abi.isConstant());
         assertFalse("Expected function to not be 'payable'", abi.isPayable());
         assertEquals("Expected abi to represent a function", "function", abi.getType());
-        assertEquals("Expected the 'pure' for the state mutability setting", "pure",
+        assertEquals(
+                "Expected the 'pure' for the state mutability setting",
+                "pure",
                 abi.getStateMutability());
-
     }
 }

@@ -11,14 +11,10 @@ import org.web3j.protocol.parity.methods.response.ParityFullTraceResponse;
 import org.web3j.protocol.parity.methods.response.ParityTraceGet;
 import org.web3j.protocol.parity.methods.response.ParityTracesResponse;
 
-/**
- * * JSON-RPC Parity traces API request object building factory.
- */
+/** * JSON-RPC Parity traces API request object building factory. */
 public interface Trace {
     Request<?, ParityFullTraceResponse> traceCall(
-            Transaction transaction,
-            List<String> traceTypes,
-            DefaultBlockParameter blockParameter);
+            Transaction transaction, List<String> traceTypes, DefaultBlockParameter blockParameter);
 
     Request<?, ParityFullTraceResponse> traceRawTransaction(String data, List<String> traceTypes);
 

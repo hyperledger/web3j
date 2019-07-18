@@ -6,8 +6,8 @@ import org.web3j.utils.Numeric;
 
 /**
  * Transaction class used for signing transactions locally.<br>
- * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">
- * yellow paper</a>.
+ * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">yellow
+ * paper</a>.
  */
 public class RawTransaction {
 
@@ -18,8 +18,13 @@ public class RawTransaction {
     private BigInteger value;
     private String data;
 
-    protected RawTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-                           BigInteger value, String data) {
+    protected RawTransaction(
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data) {
         this.nonce = nonce;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
@@ -29,18 +34,23 @@ public class RawTransaction {
     }
 
     public static RawTransaction createContractTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            BigInteger value,
             String init) {
 
         return new RawTransaction(nonce, gasPrice, gasLimit, "", value, init);
     }
 
     public static RawTransaction createEtherTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
             BigInteger value) {
 
         return new RawTransaction(nonce, gasPrice, gasLimit, to, value, "");
-
     }
 
     public static RawTransaction createTransaction(
@@ -49,8 +59,12 @@ public class RawTransaction {
     }
 
     public static RawTransaction createTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value, String data) {
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data) {
 
         return new RawTransaction(nonce, gasPrice, gasLimit, to, value, data);
     }

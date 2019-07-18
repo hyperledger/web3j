@@ -7,9 +7,7 @@ import java.util.Objects;
 
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
-/**
- * Fixed size array.
- */
+/** Fixed size array. */
 public abstract class Array<T extends Type> implements Type<List<T>> {
 
     private final Class<T> type;

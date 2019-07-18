@@ -21,12 +21,17 @@ public class PrivateTransactionDecoder {
         final RawTransaction rawTransaction = TransactionDecoder.decode(hexTransaction);
 
         if (values.getValues().size() > 9) {
-            return new SignedRawPrivateTransaction((SignedRawTransaction) rawTransaction,
-                    extractString(values, 9),  extractStringList(values, 10),
+            return new SignedRawPrivateTransaction(
+                    (SignedRawTransaction) rawTransaction,
+                    extractString(values, 9),
+                    extractStringList(values, 10),
                     extractString(values, 11));
         } else {
-            return new RawPrivateTransaction(rawTransaction, extractString(values, 6),
-                    extractStringList(values, 7),  extractString(values, 8));
+            return new RawPrivateTransaction(
+                    rawTransaction,
+                    extractString(values, 6),
+                    extractStringList(values, 7),
+                    extractString(values, 8));
         }
     }
 
@@ -35,9 +40,9 @@ public class PrivateTransactionDecoder {
     }
 
     private static List<String> extractStringList(final RlpList values, int i) {
-        return ((RlpList) values.getValues().get(i)).getValues().stream()
-                .map(rlp -> new String(((RlpString) rlp).getBytes()))
-                .collect(Collectors.toList());
+        return ((RlpList) values.getValues().get(i))
+                .getValues().stream()
+                        .map(rlp -> new String(((RlpString) rlp).getBytes()))
+                        .collect(Collectors.toList());
     }
-
 }

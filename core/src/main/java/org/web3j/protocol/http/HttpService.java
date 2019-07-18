@@ -26,53 +26,52 @@ import org.web3j.protocol.exceptions.ClientConnectionException;
 
 import static okhttp3.ConnectionSpec.CLEARTEXT;
 
-/**
- * HTTP implementation of our services API.
- */
+/** HTTP implementation of our services API. */
 public class HttpService extends Service {
 
-    /**
-     * Copied from {@link ConnectionSpec#APPROVED_CIPHER_SUITES}.
-     */
-    private static final CipherSuite[] INFURA_CIPHER_SUITES = new CipherSuite[] {
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-        CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+    /** Copied from {@link ConnectionSpec#APPROVED_CIPHER_SUITES}. */
+    private static final CipherSuite[] INFURA_CIPHER_SUITES =
+            new CipherSuite[] {
+                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+                CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+                CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+                CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
 
-        // Note that the following cipher suites are all on HTTP/2's bad cipher suites list. We'll
-        // continue to include them until better suites are commonly available. For example, none
-        // of the better cipher suites listed above shipped with Android 4.4 or Java 7.
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-        CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
-        CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
-        CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
-        CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
-        CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
+                // Note that the following cipher suites are all on HTTP/2's bad cipher suites list.
+                // We'll
+                // continue to include them until better suites are commonly available. For example,
+                // none
+                // of the better cipher suites listed above shipped with Android 4.4 or Java 7.
+                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
+                CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+                CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256,
+                CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384,
+                CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA,
+                CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA,
+                CipherSuite.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
 
-        // Additional INFURA CipherSuites
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-        CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-        CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
-        CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256
-    };
+                // Additional INFURA CipherSuites
+                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+                CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+                CipherSuite.TLS_RSA_WITH_AES_128_CBC_SHA256,
+                CipherSuite.TLS_RSA_WITH_AES_256_CBC_SHA256
+            };
 
-    private static final ConnectionSpec INFURA_CIPHER_SUITE_SPEC = new ConnectionSpec
-            .Builder(ConnectionSpec.MODERN_TLS).cipherSuites(INFURA_CIPHER_SUITES).build();
+    private static final ConnectionSpec INFURA_CIPHER_SUITE_SPEC =
+            new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                    .cipherSuites(INFURA_CIPHER_SUITES)
+                    .build();
 
-    /**
-     * The list of {@link ConnectionSpec} instances used by the connection.
-     */
-    private static final List<ConnectionSpec> CONNECTION_SPEC_LIST = Arrays.asList(
-            INFURA_CIPHER_SUITE_SPEC, CLEARTEXT);
+    /** The list of {@link ConnectionSpec} instances used by the connection. */
+    private static final List<ConnectionSpec> CONNECTION_SPEC_LIST =
+            Arrays.asList(INFURA_CIPHER_SUITE_SPEC, CLEARTEXT);
 
-    public static final MediaType JSON_MEDIA_TYPE
-            = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType JSON_MEDIA_TYPE =
+            MediaType.parse("application/json; charset=utf-8");
 
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
@@ -122,8 +121,8 @@ public class HttpService extends Service {
     }
 
     private static OkHttpClient createOkHttpClient() {
-        final OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectionSpecs(CONNECTION_SPEC_LIST);
+        final OkHttpClient.Builder builder =
+                new OkHttpClient.Builder().connectionSpecs(CONNECTION_SPEC_LIST);
         configureLogging(builder);
         return builder.build();
     }
@@ -142,11 +141,8 @@ public class HttpService extends Service {
         RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, request);
         Headers headers = buildHeaders();
 
-        okhttp3.Request httpRequest = new okhttp3.Request.Builder()
-                .url(url)
-                .headers(headers)
-                .post(requestBody)
-                .build();
+        okhttp3.Request httpRequest =
+                new okhttp3.Request.Builder().url(url).headers(headers).post(requestBody).build();
 
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
         processHeaders(response.headers());
@@ -215,7 +211,5 @@ public class HttpService extends Service {
     }
 
     @Override
-    public void close() throws IOException {
-
-    }
+    public void close() throws IOException {}
 }

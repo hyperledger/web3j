@@ -12,9 +12,7 @@ import org.web3j.protocol.core.Response;
 import org.web3j.protocol.websocket.events.Notification;
 import org.web3j.utils.Async;
 
-/**
- * Base service implementation.
- */
+/** Base service implementation. */
 public abstract class Service implements Web3jService {
 
     protected final ObjectMapper objectMapper;
@@ -26,8 +24,7 @@ public abstract class Service implements Web3jService {
     protected abstract InputStream performIO(String payload) throws IOException;
 
     @Override
-    public <T extends Response> T send(
-            Request request, Class<T> responseType) throws IOException {
+    public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
         String payload = objectMapper.writeValueAsString(request);
 
         try (InputStream result = performIO(payload)) {
@@ -47,9 +44,7 @@ public abstract class Service implements Web3jService {
 
     @Override
     public <T extends Notification<?>> Flowable<T> subscribe(
-            Request request,
-            String unsubscribeMethod,
-            Class<T> responseType) {
+            Request request, String unsubscribeMethod, Class<T> responseType) {
         throw new UnsupportedOperationException(
                 String.format(
                         "Service %s does not support subscriptions",

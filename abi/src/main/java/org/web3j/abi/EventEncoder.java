@@ -9,20 +9,16 @@ import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
 /**
- * <p>Ethereum filter encoding.
- * Further limited details are available
- * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#events">here</a>.
- * </p>
+ * Ethereum filter encoding. Further limited details are available <a
+ * href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#events">here</a>.
  */
 public class EventEncoder {
 
-    private EventEncoder() { }
+    private EventEncoder() {}
 
     public static String encode(Event event) {
 
-        String methodSignature = buildMethodSignature(
-                event.getName(),
-                event.getParameters());
+        String methodSignature = buildMethodSignature(event.getName(), event.getParameters());
 
         return buildEventSignature(methodSignature);
     }
@@ -33,9 +29,8 @@ public class EventEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
-                .map(p -> Utils.getTypeName(p))
-                .collect(Collectors.joining(","));
+        String params =
+                parameters.stream().map(p -> Utils.getTypeName(p)).collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();

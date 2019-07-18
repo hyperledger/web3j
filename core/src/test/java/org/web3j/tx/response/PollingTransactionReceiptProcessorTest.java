@@ -40,7 +40,8 @@ public class PollingTransactionReceiptProcessorTest {
     public void returnsTransactionReceiptWhenItIsAvailableInstantly() throws Exception {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         doReturn(requestReturning(response(transactionReceipt)))
-                .when(web3j).ethGetTransactionReceipt(TRANSACTION_HASH);
+                .when(web3j)
+                .ethGetTransactionReceipt(TRANSACTION_HASH);
 
         TransactionReceipt receipt = processor.waitForTransactionReceipt(TRANSACTION_HASH);
 
@@ -50,7 +51,8 @@ public class PollingTransactionReceiptProcessorTest {
     @Test
     public void throwsTransactionExceptionWhenReceiptIsNotAvailableInTime() throws Exception {
         doReturn(requestReturning(response(null)))
-                .when(web3j).ethGetTransactionReceipt(TRANSACTION_HASH);
+                .when(web3j)
+                .ethGetTransactionReceipt(TRANSACTION_HASH);
 
         try {
             processor.waitForTransactionReceipt(TRANSACTION_HASH);

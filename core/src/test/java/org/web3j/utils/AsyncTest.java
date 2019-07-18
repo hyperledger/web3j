@@ -16,8 +16,10 @@ public class AsyncTest {
 
     @Test(expected = ExecutionException.class)
     public void testRunException() throws Exception {
-        Async.run(() -> {
-            throw new RuntimeException("");
-        }).get();
+        Async.run(
+                        () -> {
+                            throw new RuntimeException("");
+                        })
+                .get();
     }
 }

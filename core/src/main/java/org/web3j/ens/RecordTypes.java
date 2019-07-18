@@ -3,8 +3,8 @@ package org.web3j.ens;
 import org.web3j.utils.Numeric;
 
 /**
- * Record type interfaces supported by resolvers as per
- * <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#resolver-specification">EIP-137</a>
+ * Record type interfaces supported by resolvers as per <a
+ * href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#resolver-specification">EIP-137</a>
  */
 public class RecordTypes {
 

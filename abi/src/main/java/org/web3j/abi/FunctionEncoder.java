@@ -12,14 +12,12 @@ import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
 /**
- * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
- * Further details are available
- * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
- * </p>
+ * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
+ * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  */
 public class FunctionEncoder {
 
-    private FunctionEncoder() { }
+    private FunctionEncoder() {}
 
     public static String encode(Function function) {
         List<Type> parameters = function.getInputParameters();
@@ -41,12 +39,12 @@ public class FunctionEncoder {
         int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
         StringBuilder dynamicData = new StringBuilder();
 
-        for (Type parameter:parameters) {
+        for (Type parameter : parameters) {
             String encodedValue = TypeEncoder.encode(parameter);
 
             if (TypeEncoder.isDynamic(parameter)) {
-                String encodedDataOffset = TypeEncoder.encodeNumeric(
-                        new Uint(BigInteger.valueOf(dynamicDataOffset)));
+                String encodedDataOffset =
+                        TypeEncoder.encodeNumeric(new Uint(BigInteger.valueOf(dynamicDataOffset)));
                 result.append(encodedDataOffset);
                 dynamicData.append(encodedValue);
                 dynamicDataOffset += encodedValue.length() >> 1;
@@ -61,7 +59,7 @@ public class FunctionEncoder {
 
     private static int getLength(List<Type> parameters) {
         int count = 0;
-        for (Type type:parameters) {
+        for (Type type : parameters) {
             if (type instanceof StaticArray) {
                 count += ((StaticArray) type).getValue().size();
             } else {
@@ -75,9 +73,8 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
-                .map(Type::getTypeAsString)
-                .collect(Collectors.joining(","));
+        String params =
+                parameters.stream().map(Type::getTypeAsString).collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();

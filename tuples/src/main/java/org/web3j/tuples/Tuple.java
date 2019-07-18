@@ -1,8 +1,6 @@
 package org.web3j.tuples;
 
-/**
- * Tuple abstraction.
- */
+/** Tuple abstraction. */
 public interface Tuple {
 
     int getSize();

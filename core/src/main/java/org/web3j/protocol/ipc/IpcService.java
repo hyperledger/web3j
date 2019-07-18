@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import org.web3j.protocol.Service;
 
-/**
- * Ipc service implementation.
- */
+/** Ipc service implementation. */
 public class IpcService extends Service {
 
     private static final Logger log = LoggerFactory.getLogger(IpcService.class);
@@ -45,6 +43,5 @@ public class IpcService extends Service {
     }
 
     @Override
-    public void close() throws IOException {
-    }
+    public void close() throws IOException {}
 }

@@ -33,8 +33,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
     public static class Result {
         private boolean isSyncing = true;
 
-        public Result() {
-        }
+        public Result() {}
 
         public boolean isSyncing() {
             return isSyncing;
@@ -55,11 +54,13 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         private String knownStates;
         private String pulledStates;
 
-        public Syncing() {
-        }
+        public Syncing() {}
 
         public Syncing(
-                String startingBlock, String currentBlock, String highestBlock, String knownStates,
+                String startingBlock,
+                String currentBlock,
+                String highestBlock,
+                String knownStates,
                 String pulledStates) {
             this.startingBlock = startingBlock;
             this.currentBlock = currentBlock;

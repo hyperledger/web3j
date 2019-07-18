@@ -23,12 +23,12 @@ public class EeaGetTransactionReceipt extends Response<PrivateTransactionReceipt
 
         @Override
         public PrivateTransactionReceipt deserialize(
-                JsonParser jsonParser,
-                DeserializationContext deserializationContext) throws IOException {
+                JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
                 return objectReader.readValue(jsonParser, PrivateTransactionReceipt.class);
             } else {
-                return null;  // null is wrapped by Optional in above getter
+                return null; // null is wrapped by Optional in above getter
             }
         }
     }

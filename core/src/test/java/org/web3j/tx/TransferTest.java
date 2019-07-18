@@ -26,20 +26,21 @@ public class TransferTest extends ManagedTransactionTester {
 
     @Test
     public void testSendFunds() throws Exception {
-        assertThat(sendFunds(SampleKeys.CREDENTIALS, ADDRESS,
-                BigDecimal.TEN, Convert.Unit.ETHER),
+        assertThat(
+                sendFunds(SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.ETHER),
                 is(transactionReceipt));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testTransferInvalidValue() throws Exception {
-        sendFunds(SampleKeys.CREDENTIALS, ADDRESS,
-                new BigDecimal(0.1), Convert.Unit.WEI);
+        sendFunds(SampleKeys.CREDENTIALS, ADDRESS, new BigDecimal(0.1), Convert.Unit.WEI);
     }
 
-    protected TransactionReceipt sendFunds(Credentials credentials, String toAddress,
-                                           BigDecimal value, Convert.Unit unit) throws Exception {
+    protected TransactionReceipt sendFunds(
+            Credentials credentials, String toAddress, BigDecimal value, Convert.Unit unit)
+            throws Exception {
         return new Transfer(web3j, getVerifiedTransactionManager(credentials))
-                .sendFunds(toAddress, value, unit).send();
+                .sendFunds(toAddress, value, unit)
+                .send();
     }
 }

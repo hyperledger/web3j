@@ -1,8 +1,6 @@
 package org.web3j.abi.datatypes;
 
-/**
- * Boolean type.
- */
+/** Boolean type. */
 public class Bool implements Type<Boolean> {
 
     public static final String TYPE_NAME = "bool";
@@ -17,7 +15,7 @@ public class Bool implements Type<Boolean> {
     public Bool(Boolean value) {
         this.value = value;
     }
-    
+
     @Override
     public String getTypeAsString() {
         return TYPE_NAME;

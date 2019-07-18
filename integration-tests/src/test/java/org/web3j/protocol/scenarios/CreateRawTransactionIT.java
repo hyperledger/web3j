@@ -17,16 +17,13 @@ import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-/**
- * Create, sign and send a raw transaction.
- */
+/** Create, sign and send a raw transaction. */
 public class CreateRawTransactionIT extends Scenario {
 
     @Test
     public void testTransferEther() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
-        RawTransaction rawTransaction = createEtherTransaction(
-                nonce, BOB.getAddress());
+        RawTransaction rawTransaction = createEtherTransaction(nonce, BOB.getAddress());
 
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
@@ -37,8 +34,7 @@ public class CreateRawTransactionIT extends Scenario {
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
     }
@@ -57,20 +53,19 @@ public class CreateRawTransactionIT extends Scenario {
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
 
-        assertFalse("Contract execution ran out of gas",
+        assertFalse(
+                "Contract execution ran out of gas",
                 rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
     }
 
     private static RawTransaction createEtherTransaction(BigInteger nonce, String toAddress) {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
-        return RawTransaction.createEtherTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
+        return RawTransaction.createEtherTransaction(nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
     }
 
     private static RawTransaction createSmartContractTransaction(BigInteger nonce)
@@ -80,8 +75,10 @@ public class CreateRawTransactionIT extends Scenario {
     }
 
     BigInteger getNonce(String address) throws Exception {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+        EthGetTransactionCount ethGetTransactionCount =
+                web3j.ethGetTransactionCount(address, DefaultBlockParameterName.LATEST)
+                        .sendAsync()
+                        .get();
 
         return ethGetTransactionCount.getTransactionCount();
     }

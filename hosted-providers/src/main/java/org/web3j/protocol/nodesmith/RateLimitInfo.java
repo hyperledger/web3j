@@ -4,8 +4,9 @@ import java.time.Instant;
 import java.util.Optional;
 
 /**
- * Represents the current status of an api key's rate limit for Nodesmith's
- * service. This class can be used to inspect when more requests can be sent.
+ * Represents the current status of an api key's rate limit for Nodesmith's service. This class can
+ * be used to inspect when more requests can be sent.
+ *
  * @see <a href="https://beta.docs.nodesmith.io/#/ethereum/rateLimiting">Rate Limiting</a>
  */
 public class RateLimitInfo {
@@ -22,6 +23,7 @@ public class RateLimitInfo {
 
     /**
      * The total rate limit for this API key and endpoint.
+     *
      * @return total rate limit allowed.
      */
     public long getTotalAllowedInWindow() {
@@ -30,6 +32,7 @@ public class RateLimitInfo {
 
     /**
      * How many more requests can be sent in to current window.
+     *
      * @return Number of requests remaining.
      */
     public long getRemainingInWindow() {
@@ -38,6 +41,7 @@ public class RateLimitInfo {
 
     /**
      * When the current window ends and the rate limit will be reset.
+     *
      * @return Time when the rate limit resets.
      */
     public Instant getWindowResetTime() {
@@ -45,8 +49,9 @@ public class RateLimitInfo {
     }
 
     /**
-     * Tries to create a new instance of the RateLimitInfo class from the headers passed in.
-     * If successful, it returns the instance wrapped in Optional, otherwise Optional.empty().
+     * Tries to create a new instance of the RateLimitInfo class from the headers passed in. If
+     * successful, it returns the instance wrapped in Optional, otherwise Optional.empty().
+     *
      * @param limitValue The x-ratelimit-limit header value.
      * @param remainingValue The x-ratelimit-remaining header value.
      * @param resetTimeValue The x-ratelimit-reset header value.

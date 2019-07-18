@@ -18,9 +18,7 @@ import org.web3j.protocol.http.HttpService;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Flowable callback tests.
- */
+/** Flowable callback tests. */
 public class FlowableIT {
     private static Logger log = LoggerFactory.getLogger(FlowableIT.class);
 
@@ -56,36 +54,41 @@ public class FlowableIT {
 
     @Test
     public void testReplayFlowable() throws Exception {
-        run(web3j.replayPastBlocksFlowable(
-                new DefaultBlockParameterNumber(0),
-                new DefaultBlockParameterNumber(EVENT_COUNT), true));
+        run(
+                web3j.replayPastBlocksFlowable(
+                        new DefaultBlockParameterNumber(0),
+                        new DefaultBlockParameterNumber(EVENT_COUNT),
+                        true));
     }
 
     @Test
     public void testReplayPastAndFutureBlocksFlowable() throws Exception {
-        EthBlock ethBlock = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
-                .send();
+        EthBlock ethBlock =
+                web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
         BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
-        run(web3j.replayPastAndFutureBlocksFlowable(
-                new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
-                false));
+        run(
+                web3j.replayPastAndFutureBlocksFlowable(
+                        new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
+                        false));
     }
 
     private <T> void run(Flowable<T> flowable) throws Exception {
         CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
         CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
 
-        Disposable subscription = flowable.subscribe(
-                x -> countDownLatch.countDown(),
-                Throwable::printStackTrace,
-                completedLatch::countDown
-        );
+        Disposable subscription =
+                flowable.subscribe(
+                        x -> countDownLatch.countDown(),
+                        Throwable::printStackTrace,
+                        completedLatch::countDown);
 
         countDownLatch.await(TIMEOUT_MINUTES, TimeUnit.MINUTES);
         subscription.dispose();
         completedLatch.await(1, TimeUnit.SECONDS);
 
-        log.info("CountDownLatch={}, CompletedLatch={}", countDownLatch.getCount(),
+        log.info(
+                "CountDownLatch={}, CompletedLatch={}",
+                countDownLatch.getCount(),
                 completedLatch.getCount());
         assertTrue(subscription.isDisposed());
     }

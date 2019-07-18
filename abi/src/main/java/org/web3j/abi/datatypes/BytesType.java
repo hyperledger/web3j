@@ -2,9 +2,7 @@ package org.web3j.abi.datatypes;
 
 import java.util.Arrays;
 
-/**
- * Binary sequence of bytes.
- */
+/** Binary sequence of bytes. */
 public class BytesType implements Type<byte[]> {
 
     private byte[] value;
@@ -40,7 +38,6 @@ public class BytesType implements Type<byte[]> {
             return false;
         }
         return type.equals(bytesType.type);
-
     }
 
     @Override

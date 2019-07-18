@@ -13,9 +13,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.deserializer.RawResponseDeserializer;
 
-/**
- * Factory for managing our ObjectMapper instances.
- */
+/** Factory for managing our ObjectMapper instances. */
 public class ObjectMapperFactory {
 
     private static final ObjectMapper DEFAULT_OBJECT_MAPPER = new ObjectMapper();
@@ -44,18 +42,20 @@ public class ObjectMapperFactory {
             ObjectMapper objectMapper, boolean shouldIncludeRawResponses) {
         if (shouldIncludeRawResponses) {
             SimpleModule module = new SimpleModule();
-            module.setDeserializerModifier(new BeanDeserializerModifier() {
-                @Override
-                public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config,
-                                                              BeanDescription beanDesc,
-                                                              JsonDeserializer<?> deserializer) {
-                    if (Response.class.isAssignableFrom(beanDesc.getBeanClass())) {
-                        return new RawResponseDeserializer(deserializer);
-                    }
+            module.setDeserializerModifier(
+                    new BeanDeserializerModifier() {
+                        @Override
+                        public JsonDeserializer<?> modifyDeserializer(
+                                DeserializationConfig config,
+                                BeanDescription beanDesc,
+                                JsonDeserializer<?> deserializer) {
+                            if (Response.class.isAssignableFrom(beanDesc.getBeanClass())) {
+                                return new RawResponseDeserializer(deserializer);
+                            }
 
-                    return deserializer;
-                }
-            });
+                            return deserializer;
+                        }
+                    });
 
             objectMapper.registerModule(module);
         }

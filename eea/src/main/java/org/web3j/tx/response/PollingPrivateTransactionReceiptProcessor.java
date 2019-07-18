@@ -11,16 +11,14 @@ public class PollingPrivateTransactionReceiptProcessor extends PrivateTransactio
     private final long sleepDuration;
     private final int attempts;
 
-    public PollingPrivateTransactionReceiptProcessor(
-            Eea eea, long sleepDuration, int attempts) {
+    public PollingPrivateTransactionReceiptProcessor(Eea eea, long sleepDuration, int attempts) {
         super(eea);
         this.sleepDuration = sleepDuration;
         this.attempts = attempts;
     }
 
     @Override
-    public PrivateTransactionReceipt waitForTransactionReceipt(
-            String transactionHash)
+    public PrivateTransactionReceipt waitForTransactionReceipt(String transactionHash)
             throws IOException, TransactionException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
@@ -45,8 +43,11 @@ public class PollingPrivateTransactionReceiptProcessor extends PrivateTransactio
             }
         }
 
-        throw new TransactionException("Transaction receipt was not generated after "
-                + ((sleepDuration * attempts) / 1000
-                + " seconds for transaction: " + transactionHash), transactionHash);
+        throw new TransactionException(
+                "Transaction receipt was not generated after "
+                        + ((sleepDuration * attempts) / 1000
+                                + " seconds for transaction: "
+                                + transactionHash),
+                transactionHash);
     }
 }

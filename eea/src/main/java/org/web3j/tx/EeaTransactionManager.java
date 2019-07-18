@@ -26,9 +26,7 @@ import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
-/**
- * PrivateTransactionManager implementation for using a Quorum node to transact.
- */
+/** PrivateTransactionManager implementation for using a Quorum node to transact. */
 public class EeaTransactionManager extends PrivateTransactionManager {
 
     private static final Logger log = LoggerFactory.getLogger(EeaTransactionManager.class);
@@ -61,8 +59,11 @@ public class EeaTransactionManager extends PrivateTransactionManager {
     }
 
     public EeaTransactionManager(
-            final Eea eea, final Credentials credentials, final long chainId,
-            final String privateFrom, final List<String> privateFor) {
+            final Eea eea,
+            final Credentials credentials,
+            final long chainId,
+            final String privateFrom,
+            final List<String> privateFor) {
         this(eea, credentials, chainId, privateFrom, privateFor, ATTEMPTS, SLEEP_DURATION);
     }
 
@@ -81,17 +82,21 @@ public class EeaTransactionManager extends PrivateTransactionManager {
 
     @Override
     public EthSendTransaction sendTransaction(
-            final BigInteger gasPrice, final BigInteger gasLimit, final String to,
-            final String data, final BigInteger value)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value)
             throws IOException {
 
-        final BigInteger nonce = eea.eeaGetTransactionCount(
-                credentials.getAddress(), privacyGroupId)
-                .send().getTransactionCount();
+        final BigInteger nonce =
+                eea.eeaGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                        .send()
+                        .getTransactionCount();
 
-        final RawPrivateTransaction transaction = RawPrivateTransaction.createTransaction(
-                nonce, gasPrice, gasLimit, to,
-                data, privateFrom, privateFor, "restricted");
+        final RawPrivateTransaction transaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, "restricted");
 
         final String rawSignedTransaction =
                 Numeric.toHexString(
@@ -116,13 +121,14 @@ public class EeaTransactionManager extends PrivateTransactionManager {
         stringList.add(Base64.getDecoder().decode(privateFrom));
         privateFor.forEach(item -> stringList.add(Base64.getDecoder().decode(item)));
 
-        final List<RlpType> rlpList = stringList.stream().distinct()
-                .sorted(Comparator.comparing(Arrays::hashCode))
-                .map(RlpString::create).collect(Collectors.toList());
+        final List<RlpType> rlpList =
+                stringList.stream()
+                        .distinct()
+                        .sorted(Comparator.comparing(Arrays::hashCode))
+                        .map(RlpString::create)
+                        .collect(Collectors.toList());
 
         return Numeric.toHexString(
-                Base64.getEncoder().encode(
-                        Hash.sha3(
-                                RlpEncoder.encode(new RlpList(rlpList)))));
+                Base64.getEncoder().encode(Hash.sha3(RlpEncoder.encode(new RlpList(rlpList)))));
     }
 }

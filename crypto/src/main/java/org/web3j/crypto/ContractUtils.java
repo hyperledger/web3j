@@ -11,14 +11,12 @@ import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
-/**
- * Smart Contract utility functions.
- */
+/** Smart Contract utility functions. */
 public class ContractUtils {
 
     /**
-     *  Generate a smart contract address. This enables you to identify what address a
-     *  smart contract will be deployed to on the network.
+     * Generate a smart contract address. This enables you to identify what address a smart contract
+     * will be deployed to on the network.
      *
      * @param address of sender
      * @param nonce of transaction

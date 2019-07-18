@@ -15,9 +15,7 @@ import org.web3j.protocol.http.HttpService;
 import static org.junit.Assert.fail;
 import static org.web3j.protocol.http.HttpService.JSON_MEDIA_TYPE;
 
-/**
- * Protocol Response tests.
- */
+/** Protocol Response tests. */
 public abstract class ResponseTester {
 
     private HttpService web3jService;
@@ -27,9 +25,7 @@ public abstract class ResponseTester {
     @Before
     public void setUp() {
         responseInterceptor = new ResponseInterceptor();
-        okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(responseInterceptor)
-                .build();
+        okHttpClient = new OkHttpClient.Builder().addInterceptor(responseInterceptor).build();
         configureWeb3Service(false);
     }
 
@@ -66,13 +62,14 @@ public abstract class ResponseTester {
                 throw new UnsupportedOperationException("Response has not been configured");
             }
 
-            okhttp3.Response response = new okhttp3.Response.Builder()
-                    .body(ResponseBody.create(JSON_MEDIA_TYPE, jsonResponse))
-                    .request(chain.request())
-                    .protocol(Protocol.HTTP_2)
-                    .code(200)
-                    .message("")
-                    .build();
+            okhttp3.Response response =
+                    new okhttp3.Response.Builder()
+                            .body(ResponseBody.create(JSON_MEDIA_TYPE, jsonResponse))
+                            .request(chain.request())
+                            .protocol(Protocol.HTTP_2)
+                            .code(200)
+                            .message("")
+                            .build();
 
             return response;
         }

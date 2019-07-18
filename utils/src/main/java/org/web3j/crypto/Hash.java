@@ -12,11 +12,9 @@ import org.bouncycastle.jcajce.provider.digest.Keccak;
 
 import org.web3j.utils.Numeric;
 
-/**
- * Cryptographic hash functions.
- */
+/** Cryptographic hash functions. */
 public class Hash {
-    private Hash() { }
+    private Hash() {}
 
     /**
      * Keccak-256 hash function.

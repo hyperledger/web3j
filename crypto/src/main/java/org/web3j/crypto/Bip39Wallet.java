@@ -1,18 +1,12 @@
 package org.web3j.crypto;
 
-/**
- * Data class encapsulating a BIP-39 compatible Ethereum wallet.
- */
+/** Data class encapsulating a BIP-39 compatible Ethereum wallet. */
 public class Bip39Wallet {
 
-    /**
-     * Path to wallet file.
-     */
+    /** Path to wallet file. */
     private final String filename;
 
-    /**
-     * Generated BIP-39 mnemonic for the wallet.
-     */
+    /** Generated BIP-39 mnemonic for the wallet. */
     private final String mnemonic;
 
     public Bip39Wallet(String filename, String mnemonic) {
@@ -31,8 +25,12 @@ public class Bip39Wallet {
     @Override
     public String toString() {
         return "Bip39Wallet{"
-                + "filename='" + filename + '\''
-                + ", mnemonic='" + mnemonic + '\''
+                + "filename='"
+                + filename
+                + '\''
+                + ", mnemonic='"
+                + mnemonic
+                + '\''
                 + '}';
     }
 }

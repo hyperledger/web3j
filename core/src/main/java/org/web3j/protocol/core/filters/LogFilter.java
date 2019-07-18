@@ -11,20 +11,18 @@ import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.Log;
 
-/**
- * Log filter handler.
- */
+/** Log filter handler. */
 public class LogFilter extends Filter<Log> {
 
     private final org.web3j.protocol.core.methods.request.EthFilter ethFilter;
 
     public LogFilter(
-            Web3j web3j, Callback<Log> callback,
+            Web3j web3j,
+            Callback<Log> callback,
             org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         super(web3j, callback);
         this.ethFilter = ethFilter;
     }
-
 
     @Override
     EthFilter sendRequest() throws IOException {

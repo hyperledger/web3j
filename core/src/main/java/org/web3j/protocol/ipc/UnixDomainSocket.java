@@ -9,9 +9,7 @@ import java.nio.channels.Channels;
 import jnr.unixsocket.UnixSocketAddress;
 import jnr.unixsocket.UnixSocketChannel;
 
-/**
- * Unix domain socket IO implementation for IPC.
- */
+/** Unix domain socket IO implementation for IPC. */
 public class UnixDomainSocket implements IOFacade {
 
     private static final int DEFAULT_BUFFER_SIZE = 1024;
@@ -22,7 +20,7 @@ public class UnixDomainSocket implements IOFacade {
     private final PrintWriter writer;
 
     private final UnixSocketChannel channel;
-    
+
     public UnixDomainSocket(String ipcSocketPath) {
         this(ipcSocketPath, DEFAULT_BUFFER_SIZE);
     }

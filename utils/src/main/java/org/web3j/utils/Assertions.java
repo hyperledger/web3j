@@ -1,8 +1,6 @@
 package org.web3j.utils;
 
-/**
- * Assertion utility functions.
- */
+/** Assertion utility functions. */
 public class Assertions {
 
     /**

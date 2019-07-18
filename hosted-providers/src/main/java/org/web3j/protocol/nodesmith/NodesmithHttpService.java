@@ -10,7 +10,8 @@ import okhttp3.OkHttpClient;
 import org.web3j.protocol.http.HttpService;
 
 /**
- * HttpService for working with <a href="https://nodesmith.io/">Nodesmith's</a> hosted infrastructure.
+ * HttpService for working with <a href="https://nodesmith.io/">Nodesmith's</a> hosted
+ * infrastructure.
  */
 public class NodesmithHttpService extends HttpService {
 
@@ -46,8 +47,8 @@ public class NodesmithHttpService extends HttpService {
         }
 
         Set<String> names = headers.names();
-        if (!names.containsAll(Arrays.asList(
-                NS_RATELIMIT_LIMIT, NS_RATELIMIT_REMAINING, NS_RATELIMIT_RESET))) {
+        if (!names.containsAll(
+                Arrays.asList(NS_RATELIMIT_LIMIT, NS_RATELIMIT_REMAINING, NS_RATELIMIT_RESET))) {
             return Optional.empty();
         }
 
@@ -55,6 +56,5 @@ public class NodesmithHttpService extends HttpService {
                 headers.get(NS_RATELIMIT_LIMIT),
                 headers.get(NS_RATELIMIT_REMAINING),
                 headers.get(NS_RATELIMIT_RESET));
-
     }
 }

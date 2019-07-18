@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
 
-/**
- * TraceFilter used in trace_filter.
- */
+/** TraceFilter used in trace_filter. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TraceFilter {
 
@@ -17,8 +15,11 @@ public class TraceFilter {
     private List<String> fromAddress;
     private List<String> toAddress;
 
-    public TraceFilter(DefaultBlockParameter fromBlock, DefaultBlockParameter toBlock,
-            List<String> fromAddress, List<String> toAddress) {
+    public TraceFilter(
+            DefaultBlockParameter fromBlock,
+            DefaultBlockParameter toBlock,
+            List<String> fromAddress,
+            List<String> toAddress) {
         this.fromBlock = fromBlock;
         this.toBlock = toBlock;
         this.fromAddress = fromAddress;

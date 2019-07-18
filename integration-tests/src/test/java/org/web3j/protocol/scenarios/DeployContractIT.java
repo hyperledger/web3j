@@ -20,9 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Integration test demonstrating the full contract deployment workflow.
- */
+/** Integration test demonstrating the full contract deployment workflow. */
 public class DeployContractIT extends Scenario {
 
     @Test
@@ -33,12 +31,12 @@ public class DeployContractIT extends Scenario {
         String transactionHash = sendTransaction();
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
 
-        assertFalse("Contract execution ran out of gas",
+        assertFalse(
+                "Contract execution ran out of gas",
                 transactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
         String contractAddress = transactionReceipt.getContractAddress();
@@ -50,8 +48,8 @@ public class DeployContractIT extends Scenario {
         String responseValue = callSmartContractFunction(function, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type> uint = FunctionReturnDecoder.decode(
-                responseValue, function.getOutputParameters());
+        List<Type> uint =
+                FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
         assertThat(uint.size(), is(1));
         assertThat(uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
     }
@@ -59,31 +57,33 @@ public class DeployContractIT extends Scenario {
     private String sendTransaction() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
 
-        Transaction transaction = Transaction.createContractTransaction(
-                ALICE.getAddress(),
-                nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
-                BigInteger.ZERO,
-                getFibonacciSolidityBinary());
+        Transaction transaction =
+                Transaction.createContractTransaction(
+                        ALICE.getAddress(),
+                        nonce,
+                        GAS_PRICE,
+                        GAS_LIMIT,
+                        BigInteger.ZERO,
+                        getFibonacciSolidityBinary());
 
-        org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = web3j.ethSendTransaction(transaction)
-                .sendAsync().get();
+        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
+                web3j.ethSendTransaction(transaction).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(
-            Function function, String contractAddress) throws Exception {
+    private String callSmartContractFunction(Function function, String contractAddress)
+            throws Exception {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
-                Transaction.createEthCallTransaction(
-                        ALICE.getAddress(), contractAddress, encodedFunction),
-                DefaultBlockParameterName.LATEST)
-                .sendAsync().get();
+        org.web3j.protocol.core.methods.response.EthCall response =
+                web3j.ethCall(
+                                Transaction.createEthCallTransaction(
+                                        ALICE.getAddress(), contractAddress, encodedFunction),
+                                DefaultBlockParameterName.LATEST)
+                        .sendAsync()
+                        .get();
 
         return response.getValue();
     }

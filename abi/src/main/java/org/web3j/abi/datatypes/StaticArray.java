@@ -6,9 +6,7 @@ import java.util.List;
 
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
-/**
- * Static array type.
- */
+/** Static array type. */
 public abstract class StaticArray<T extends Type> extends Array<T> {
 
     /**
@@ -75,11 +73,15 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
         if (value.size() > MAX_SIZE_OF_STATIC_ARRAY) {
             throw new UnsupportedOperationException(
                     "Static arrays with a length greater than "
-                            + MAX_SIZE_OF_STATIC_ARRAY + " are not supported.");
+                            + MAX_SIZE_OF_STATIC_ARRAY
+                            + " are not supported.");
         } else if (value.size() != expectedSize) {
             throw new UnsupportedOperationException(
-                    "Expected array of type [" + getClass().getSimpleName() + "] to have ["
-                            + expectedSize + "] elements.");
+                    "Expected array of type ["
+                            + getClass().getSimpleName()
+                            + "] to have ["
+                            + expectedSize
+                            + "] elements.");
         }
     }
 }

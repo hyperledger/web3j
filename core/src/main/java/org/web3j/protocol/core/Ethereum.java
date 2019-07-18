@@ -52,9 +52,7 @@ import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 
-/**
- * Core Ethereum JSON-RPC API.
- */
+/** Core Ethereum JSON-RPC API. */
 public interface Ethereum {
     Request<?, Web3ClientVersion> web3ClientVersion();
 
@@ -86,8 +84,7 @@ public interface Ethereum {
             String address, DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthGetStorageAt> ethGetStorageAt(
-            String address, BigInteger position,
-            DefaultBlockParameter defaultBlockParameter);
+            String address, BigInteger position, DefaultBlockParameter defaultBlockParameter);
 
     Request<?, EthGetTransactionCount> ethGetTransactionCount(
             String address, DefaultBlockParameter defaultBlockParameter);
@@ -123,8 +120,7 @@ public interface Ethereum {
     Request<?, EthBlock> ethGetBlockByHash(String blockHash, boolean returnFullTransactionObjects);
 
     Request<?, EthBlock> ethGetBlockByNumber(
-            DefaultBlockParameter defaultBlockParameter,
-            boolean returnFullTransactionObjects);
+            DefaultBlockParameter defaultBlockParameter, boolean returnFullTransactionObjects);
 
     Request<?, EthTransaction> ethGetTransactionByHash(String transactionHash);
 
