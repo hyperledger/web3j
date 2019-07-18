@@ -25,7 +25,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
 import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
-import org.web3j.protocol.eea.response.EeaPrivateTransaction;
+import org.web3j.protocol.eea.response.EeaGetPrivateTransaction;
 
 public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     public JsonRpc2_0Eea(Web3jService web3jService) {
@@ -63,13 +63,13 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     }
 
     @Override
-    public Request<?, EeaPrivateTransaction> eeaGetPrivateTransaction(
+    public Request<?, EeaGetPrivateTransaction> eeaGetPrivateTransaction(
             final String enclaveKey) {
         return new Request<>(
                 "eea_getPrivateTransaction",
                 Collections.singletonList(enclaveKey),
                 web3jService,
-                EeaPrivateTransaction.class);
+                EeaGetPrivateTransaction.class);
     }
 
     @Override

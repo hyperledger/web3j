@@ -1,9 +1,16 @@
 package org.web3j.protocol.eea.response;
 
-import java.util.List;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+
+import java.io.IOException;
 import java.util.Objects;
 
-public class PrivateTransaction {
+@JsonDeserialize(using = PrivateTransaction.ResponseDeserialiser.class)
+public abstract class PrivateTransaction {
     private String hash;
     private String nonce;
     private String from;
@@ -16,12 +23,7 @@ public class PrivateTransaction {
     private String s;
     private long v;
     private String privateFrom;
-    private List<String> privateFor;
     private String restriction;
-
-    public PrivateTransaction() {
-        super();
-    }
 
     public PrivateTransaction(
             final String hash, final String nonce,
@@ -29,7 +31,7 @@ public class PrivateTransaction {
             final String value, final String gas,
             final String gasPrice, final String input,
             final String r, final String s, final long v,
-            final String privateFrom, final List<String> privateFor,
+            final String privateFrom,
             final String restriction) {
 
         this.hash = hash;
@@ -44,8 +46,25 @@ public class PrivateTransaction {
         this.s = s;
         this.v = v;
         this.privateFrom = privateFrom;
-        this.privateFor = privateFor;
         this.restriction = restriction;
+    }
+
+    public static class ResponseDeserialiser extends StdDeserializer<PrivateTransaction> {
+
+        protected ResponseDeserialiser() {
+            super(PrivateTransaction.class);
+        }
+
+        @Override
+        public PrivateTransaction deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+            final TreeNode node = p.readValueAsTree();
+
+            // Select the concrete class based on the existence of a property
+            if (node.get("privateFor") != null) {
+                return p.getCodec().treeToValue(node, PrivateTransactionLegacy.class);
+            }
+            return p.getCodec().treeToValue(node, PrivateTransactionWithPrivacyGroup.class);
+        }
     }
 
     public String getHash() {
@@ -144,14 +163,6 @@ public class PrivateTransaction {
         this.privateFrom = privateFrom;
     }
 
-    public List<String> getPrivateFor() {
-        return privateFor;
-    }
-
-    public void setPrivateFor(List<String> privateFor) {
-        this.privateFor = privateFor;
-    }
-
     public String getRestriction() {
         return restriction;
     }
@@ -169,7 +180,7 @@ public class PrivateTransaction {
                 hash.equals(that.hash) &&
                 nonce.equals(that.nonce) &&
                 from.equals(that.from) &&
-                Objects.equals(to, that.to) &&
+                to.equals(that.to) &&
                 value.equals(that.value) &&
                 gasPrice.equals(that.gasPrice) &&
                 gas.equals(that.gas) &&
@@ -177,12 +188,11 @@ public class PrivateTransaction {
                 r.equals(that.r) &&
                 s.equals(that.s) &&
                 privateFrom.equals(that.privateFrom) &&
-                privateFor.equals(that.privateFor) &&
                 restriction.equals(that.restriction);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hash, nonce, from, to, value, gasPrice, gas, input, r, s, v, privateFrom, privateFor, restriction);
+        return Objects.hash(hash, nonce, from, to, value, gasPrice, gas, input, r, s, v, privateFrom, restriction);
     }
 }

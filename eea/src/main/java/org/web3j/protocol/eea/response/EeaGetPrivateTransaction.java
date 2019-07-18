@@ -11,7 +11,7 @@ import org.web3j.protocol.core.Response;
 import java.io.IOException;
 import java.util.Optional;
 
-public class EeaPrivateTransaction extends Response<PrivateTransaction> {
+public class EeaGetPrivateTransaction extends Response<PrivateTransaction> {
     public Optional<PrivateTransaction> getPrivateTransaction() {
         return Optional.ofNullable(getResult());
     }
