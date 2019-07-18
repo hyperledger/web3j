@@ -69,6 +69,8 @@ allprojects {
             removeUnusedImports()
             googleJavaFormat("1.7").aosp()
             importOrder 'java', '', 'org.web3j', '\\#'
+            trimTrailingWhitespace()
+            endWithNewline()
             paddedCell()
         }
         groovyGradle {
