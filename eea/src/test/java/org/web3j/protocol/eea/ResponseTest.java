@@ -18,15 +18,18 @@ import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
+import org.web3j.protocol.eea.response.EeaFindPrivacyGroup;
 import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
 import org.web3j.protocol.eea.response.EeaGetPrivateTransaction;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
+import org.web3j.protocol.eea.response.PrivacyGroup;
 import org.web3j.protocol.eea.response.PrivateTransactionLegacy;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.eea.response.PrivateTransactionWithPrivacyGroup;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -264,5 +267,48 @@ public class ResponseTest extends ResponseTester {
                 BooleanResponse.class);
         assertThat(eeaDeletePrivacyGroup.success(),
                 is(true));
+    }
+
+    @Test
+    public void testEeaFindPrivacyGroup() {
+        //CHECKSTYLE:OFF
+        buildResponse("{\n"
+                + "    \"jsonrpc\": \"2.0\",\n"
+                + "    \"id\": 1,\n"
+                + "    \"result\": [\n"
+                + "         {\n"
+                + "            \"privacyGroupId\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
+                + "            \"name\":\"PrivacyGroupName\",\n"
+                + "            \"description\":\"PrivacyGroupDescription\",\n"
+                + "            \"type\":\"LEGACY\",\n"
+                + "            \"members\": [\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]\n"
+                + "         },\n"
+                + "         {\n"
+                + "            \"privacyGroupId\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
+                + "            \"name\":\"PrivacyGroupName\",\n"
+                + "            \"description\":\"PrivacyGroupDescription\",\n"
+                + "            \"type\":\"PANTHEON\",\n"
+                + "            \"members\": [\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]\n"
+                + "         }\n"
+                + "    ]\n"
+                + "}");
+        //CHECKSTYLE:ON
+        PrivacyGroup privacyGroup1 = new PrivacyGroup(
+                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                PrivacyGroup.Type.LEGACY,
+                "PrivacyGroupName",
+                "PrivacyGroupDescription",
+                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
+        PrivacyGroup privacyGroup2 = new PrivacyGroup(
+                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                PrivacyGroup.Type.PANTHEON,
+                "PrivacyGroupName",
+                "PrivacyGroupDescription",
+                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
+
+        EeaFindPrivacyGroup eeaFindPrivacyGroup = deserialiseResponse(
+                EeaFindPrivacyGroup.class);
+        assertThat(eeaFindPrivacyGroup.getGroups(),
+                is(Arrays.asList(privacyGroup1, privacyGroup2)));
     }
 }

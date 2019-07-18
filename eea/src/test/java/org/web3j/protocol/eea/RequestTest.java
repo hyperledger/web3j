@@ -100,6 +100,21 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEeaFindPrivacyGroup() throws Exception {
+        web3j.eeaFindPrivacyGroup(
+                Arrays.asList(
+                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="))
+                .send();
+
+        //CHECKSTYLE:OFF
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eea_findPrivacyGroup\","
+                + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]],"
+                + "\"id\":1}");
+        //CHECKSTYLE:ON
+    }
+
+    @Test
     public void testEeaDeletePrivacyGroup() throws Exception {
         web3j.eeaDeletePrivacyGroup(
                 "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",

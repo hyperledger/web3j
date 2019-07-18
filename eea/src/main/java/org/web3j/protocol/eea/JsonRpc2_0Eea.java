@@ -23,6 +23,7 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
+import org.web3j.protocol.eea.response.EeaFindPrivacyGroup;
 import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 import org.web3j.protocol.eea.response.EeaGetPrivateTransaction;
@@ -92,6 +93,16 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
                 Arrays.asList(from, name, description, addresses),
                 web3jService,
                 EeaCreatePrivacyGroup.class);
+    }
+
+    @Override
+    public Request<?, EeaFindPrivacyGroup> eeaFindPrivacyGroup(
+            final List<String> addresses) {
+        return new Request<>(
+                "eea_findPrivacyGroup",
+                Collections.singletonList(addresses),
+                web3jService,
+                EeaFindPrivacyGroup.class);
     }
 
     @Override
