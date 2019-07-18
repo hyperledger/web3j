@@ -14,6 +14,7 @@ package org.web3j.protocol.eea.crypto;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 import org.web3j.crypto.RawTransaction;
 
@@ -26,6 +27,7 @@ public class RawPrivateTransaction extends RawTransaction {
 
     private final String privateFrom;
     private final List<String> privateFor;
+    private final String privacyGroupId;
     private final String restriction;
 
     protected RawPrivateTransaction(
@@ -36,27 +38,36 @@ public class RawPrivateTransaction extends RawTransaction {
             final String data,
             final String privateFrom,
             final List<String> privateFor,
-            final String restriction) {
+            final String privacyGroupId,
+                                    final String restriction) {
         super(nonce, gasPrice, gasLimit, to, BigInteger.ZERO, data);
         this.privateFrom = privateFrom;
         this.privateFor = privateFor;
+        this.privacyGroupId = privacyGroupId;
         this.restriction = restriction;
     }
 
-    protected RawPrivateTransaction(
-            final RawTransaction rawTransaction,
-            final String privateFrom,
-            final List<String> privateFor,
-            final String restriction) {
-        this(
-                rawTransaction.getNonce(),
-                rawTransaction.getGasPrice(),
-                rawTransaction.getGasLimit(),
-                rawTransaction.getTo(),
-                rawTransaction.getData(),
-                privateFrom,
-                privateFor,
-                restriction);
+    protected RawPrivateTransaction(final RawTransaction rawTransaction,
+                                    final String privacyGroupId, final String restriction) {
+        this(rawTransaction, null, privacyGroupId, restriction);
+    }
+
+    protected RawPrivateTransaction(final RawTransaction rawTransaction, final String privateFrom,
+                                    final String privacyGroupId, final String restriction) {
+        this(rawTransaction, privateFrom, null, privacyGroupId, restriction);
+    }
+
+    protected RawPrivateTransaction(final RawTransaction rawTransaction, final String privateFrom,
+                                    final List<String> privateFor, final String restriction) {
+        this(rawTransaction, privateFrom, privateFor, null, restriction);
+    }
+
+    private RawPrivateTransaction(final RawTransaction rawTransaction, final String privateFrom,
+                                    final List<String> privateFor, final String privacyGroupId,
+                                    final String restriction) {
+        this(rawTransaction.getNonce(), rawTransaction.getGasPrice(),
+                rawTransaction.getGasLimit(), rawTransaction.getTo(),
+                rawTransaction.getData(), privateFrom, privateFor, privacyGroupId, restriction);
     }
 
     public static RawPrivateTransaction createContractTransaction(
@@ -69,7 +80,26 @@ public class RawPrivateTransaction extends RawTransaction {
             final String restriction) {
 
         return new RawPrivateTransaction(
-                nonce, gasPrice, gasLimit, "", init, privateFrom, privateFor, restriction);
+                nonce, gasPrice, gasLimit, "", init, privateFrom, privateFor, null, restriction);
+    }
+
+    public static RawPrivateTransaction createContractTransaction(
+            final BigInteger nonce, final BigInteger gasPrice,
+            final  BigInteger gasLimit, final String init,
+            final String privateFrom, final String privacyGroupId,
+            final String restriction) {
+
+        return new RawPrivateTransaction(nonce, gasPrice, gasLimit, "",init,
+                privateFrom, null, privacyGroupId, restriction);
+    }
+
+    public static RawPrivateTransaction createContractTransaction(
+            final BigInteger nonce, final BigInteger gasPrice,
+            final  BigInteger gasLimit, final String init, final String privacyGroupId,
+            final String restriction) {
+
+        return new RawPrivateTransaction(nonce, gasPrice, gasLimit, "",init,
+                null, null, privacyGroupId, restriction);
     }
 
     public static RawPrivateTransaction createTransaction(
@@ -83,15 +113,39 @@ public class RawPrivateTransaction extends RawTransaction {
             final String restriction) {
 
         return new RawPrivateTransaction(
-                nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, restriction);
+                nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, null, restriction);
     }
 
-    public String getPrivateFrom() {
-        return privateFrom;
+    public static RawPrivateTransaction createTransaction(
+            final BigInteger nonce, final BigInteger gasPrice,
+            final BigInteger gasLimit, final String to,
+            final String data, final String privateFrom,
+            final String privacyGroupId, final String restriction) {
+
+        return new RawPrivateTransaction(nonce, gasPrice, gasLimit, to, data,
+                privateFrom, null, privacyGroupId, restriction);
     }
 
-    public List<String> getPrivateFor() {
-        return privateFor;
+    public static RawPrivateTransaction createTransaction(
+            final BigInteger nonce, final BigInteger gasPrice,
+            final BigInteger gasLimit, final String to,
+            final String data, final String privacyGroupId,
+            final String restriction) {
+
+        return new RawPrivateTransaction(nonce, gasPrice, gasLimit, to, data,
+                null, null, privacyGroupId, restriction);
+    }
+
+    public Optional<String> getPrivateFrom() {
+        return Optional.ofNullable(privateFrom);
+    }
+
+    public Optional<List<String>> getPrivateFor() {
+        return Optional.ofNullable(privateFor);
+    }
+
+    public Optional<String> getPrivacyGroupId() {
+        return Optional.ofNullable(privacyGroupId);
     }
 
     public String getRestriction() {

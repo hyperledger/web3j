@@ -32,18 +32,47 @@ public class PrivateTransactionDecoder {
 
         final RawTransaction rawTransaction = TransactionDecoder.decode(hexTransaction);
 
-        if (values.getValues().size() > 9) {
+        if (values.getValues().size() == 8) {
+            return new RawPrivateTransaction(rawTransaction,
+                    extractString(values, 6),  extractString(values, 7));
+        } else if (values.getValues().size() == 9) {
+            final String privateFrom = extractString(values, 6);
+            final String restriction = extractString(values, 8);
+            if (values.getValues().get(7) instanceof RlpList) {
+                return new RawPrivateTransaction(
+                        rawTransaction,
+                        privateFrom,
+                        extractStringList(values, 7),
+                        restriction);
+            } else {
+                return new RawPrivateTransaction(
+                        rawTransaction,
+                        privateFrom,
+                        extractString(values, 7),
+                        restriction);
+            }
+
+        } else if (values.getValues().size() == 11) {
             return new SignedRawPrivateTransaction(
                     (SignedRawTransaction) rawTransaction,
                     extractString(values, 9),
-                    extractStringList(values, 10),
-                    extractString(values, 11));
+                    extractString(values, 10));
         } else {
-            return new RawPrivateTransaction(
-                    rawTransaction,
-                    extractString(values, 6),
-                    extractStringList(values, 7),
-                    extractString(values, 8));
+            final String privateFrom = extractString(values, 9);
+            final String restriction = extractString(values, 11);
+            if (values.getValues().get(10) instanceof RlpList) {
+                return new SignedRawPrivateTransaction(
+                        (SignedRawTransaction) rawTransaction,
+                        privateFrom,
+                        extractStringList(values, 10),
+                        restriction);
+            } else {
+                return new SignedRawPrivateTransaction(
+                        (SignedRawTransaction) rawTransaction,
+                        privateFrom,
+                        extractString(values, 10),
+                        restriction);
+            }
         }
     }
 

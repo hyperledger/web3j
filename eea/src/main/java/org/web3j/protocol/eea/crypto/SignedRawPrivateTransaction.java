@@ -30,11 +30,10 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
             final BigInteger gasLimit,
             final String to,
             final String data,
-            final String privateFrom,
-            final List<String> privateFor,
-            final String restriction,
-            final Sign.SignatureData signatureData) {
-        super(nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, restriction);
+            final Sign.SignatureData signatureData,
+                                       final String privateFrom, final List<String> privateFor,
+                                       final String privacyGroupId, final String restriction) {
+        super(nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, privacyGroupId, restriction);
         this.signatureData = signatureData;
     }
 
@@ -43,16 +42,28 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
             final String privateFrom,
             final List<String> privateFor,
             final String restriction) {
-        this(
-                signedRawTransaction.getNonce(),
-                signedRawTransaction.getGasPrice(),
-                signedRawTransaction.getGasLimit(),
-                signedRawTransaction.getTo(),
-                signedRawTransaction.getData(),
-                privateFrom,
-                privateFor,
-                restriction,
-                signedRawTransaction.getSignatureData());
+        this(signedRawTransaction, privateFrom, privateFor, null, restriction);
+    }
+
+    public SignedRawPrivateTransaction(final SignedRawTransaction signedRawTransaction,
+                                       final String privateFrom, final String privacyGroupId,
+                                       final String restriction) {
+        this(signedRawTransaction, privateFrom, null, privacyGroupId, restriction);
+    }
+
+    public SignedRawPrivateTransaction(final SignedRawTransaction signedRawTransaction,
+                                       final String privacyGroupId,
+                                       final String restriction) {
+        this(signedRawTransaction, null, null, privacyGroupId, restriction);
+    }
+
+    private SignedRawPrivateTransaction(final SignedRawTransaction signedRawTransaction,
+                                        final String privateFrom, final List<String> privateFor,
+                                        final String privacyGroupId,
+                                        final String restriction) {
+        this(signedRawTransaction.getNonce(), signedRawTransaction.getGasPrice(),
+                signedRawTransaction.getGasLimit(), signedRawTransaction.getTo(),
+                signedRawTransaction.getData(), signedRawTransaction.getSignatureData(), privateFrom, privateFor, privacyGroupId, restriction);
     }
 
     public Sign.SignatureData getSignatureData() {

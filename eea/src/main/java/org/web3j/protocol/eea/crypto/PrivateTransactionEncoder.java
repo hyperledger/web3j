@@ -28,9 +28,6 @@ import org.web3j.rlp.RlpType;
 /** Create signed RLP encoded private transaction. */
 public class PrivateTransactionEncoder {
 
-    private static final int CHAIN_ID_INC = 35;
-    private static final int LOWER_REAL_V = 27;
-
     public static byte[] signMessage(
             final RawPrivateTransaction rawTransaction, final Credentials credentials) {
         final byte[] encodedTransaction = encode(rawTransaction);
@@ -85,13 +82,22 @@ public class PrivateTransactionEncoder {
                         TransactionEncoder.asRlpValues(
                                 privateTransaction.asRawTransaction(), signatureData));
 
-        result.add(RlpString.create(privateTransaction.getPrivateFrom()));
+        privateTransaction.getPrivateFrom().ifPresent(
+                privateFrom -> result.add(RlpString.create(privateFrom)));
 
-        result.add(
-                new RlpList(
-                        privateTransaction.getPrivateFor().stream()
+        privateTransaction.getPrivateFor().ifPresent(
+                privateFor ->
+                    result.add(
+                        new RlpList(
+                            privateFor.stream()
                                 .map(RlpString::create)
-                                .collect(Collectors.toList())));
+                                .collect(Collectors.toList())
+                        )
+        ));
+
+        privateTransaction.getPrivacyGroupId()
+                .ifPresent(privacyGroupId ->
+                        result.add(RlpString.create(privacyGroupId)));
 
         result.add(RlpString.create(privateTransaction.getRestriction()));
 
