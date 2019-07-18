@@ -53,6 +53,8 @@ Features
 - Command line tools
 - Android compatible
 - Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
+- Support for `EEA Privacy features as described in EEA documentation <https://entethalliance.org/technical-documents/>`_
+  and implemented in `Pegasys Pantheon <https://docs.pantheon.pegasys.tech/en/stable/Reference/Pantheon-API-Methods/#eea-methods>`_.
 
 
 It has five runtime dependencies:
