@@ -1,13 +1,13 @@
 package org.web3j.protocol.eea.response;
 
+import java.io.IOException;
+import java.util.Objects;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
-import java.io.IOException;
-import java.util.Objects;
 
 @JsonDeserialize(using = PrivateTransaction.ResponseDeserialiser.class)
 public abstract class PrivateTransaction {
@@ -56,7 +56,8 @@ public abstract class PrivateTransaction {
         }
 
         @Override
-        public PrivateTransaction deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public PrivateTransaction deserialize(
+                JsonParser p, DeserializationContext ctxt) throws IOException {
             final TreeNode node = p.readValueAsTree();
 
             // Select the concrete class based on the existence of a property
@@ -121,26 +122,34 @@ public abstract class PrivateTransaction {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PrivateTransaction that = (PrivateTransaction) o;
-        return getV() == that.getV() &&
-                getHash().equals(that.getHash()) &&
-                getNonce().equals(that.getNonce()) &&
-                getFrom().equals(that.getFrom()) &&
-                getTo().equals(that.getTo()) &&
-                getValue().equals(that.getValue()) &&
-                getGasPrice().equals(that.getGasPrice()) &&
-                getGas().equals(that.getGas()) &&
-                getInput().equals(that.getInput()) &&
-                getR().equals(that.getR()) &&
-                getS().equals(that.getS()) &&
-                getPrivateFrom().equals(that.getPrivateFrom()) &&
-                getRestriction().equals(that.getRestriction());
+        return getV() == that.getV()
+                && getHash().equals(that.getHash())
+                && getNonce().equals(that.getNonce())
+                && getFrom().equals(that.getFrom())
+                && getTo().equals(that.getTo())
+                && getValue().equals(that.getValue())
+                && getGasPrice().equals(that.getGasPrice())
+                && getGas().equals(that.getGas())
+                && getInput().equals(that.getInput())
+                && getR().equals(that.getR())
+                && getS().equals(that.getS())
+                && getPrivateFrom().equals(that.getPrivateFrom())
+                && getRestriction().equals(that.getRestriction());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getHash(), getNonce(), getFrom(), getTo(), getValue(), getGasPrice(), getGas(), getInput(), getR(), getS(), getV(), getPrivateFrom(), getRestriction());
+        return Objects.hash(
+                getHash(), getNonce(), getFrom(),
+                getTo(), getValue(), getGasPrice(),
+                getGas(), getInput(), getR(), getS(),
+                getV(), getPrivateFrom(), getRestriction());
     }
 }

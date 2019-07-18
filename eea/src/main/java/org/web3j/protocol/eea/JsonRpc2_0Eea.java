@@ -25,8 +25,8 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
 import org.web3j.protocol.eea.response.EeaFindPrivacyGroup;
 import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
-import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 import org.web3j.protocol.eea.response.EeaGetPrivateTransaction;
+import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 
 public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     public JsonRpc2_0Eea(Web3jService web3jService) {

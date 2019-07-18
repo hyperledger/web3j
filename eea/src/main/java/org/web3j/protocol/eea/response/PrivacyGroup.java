@@ -1,10 +1,10 @@
 package org.web3j.protocol.eea.response;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PrivacyGroup {
     private final String privacyGroupId;
@@ -54,18 +54,23 @@ public class PrivacyGroup {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PrivacyGroup that = (PrivacyGroup) o;
-        return getPrivacyGroupId().equals(that.getPrivacyGroupId()) &&
-                getName().equals(that.getName()) &&
-                getDescription().equals(that.getDescription()) &&
-                getType() == that.getType() &&
-                getMembers().equals(that.getMembers());
+        return getPrivacyGroupId().equals(that.getPrivacyGroupId())
+                && getName().equals(that.getName())
+                && getDescription().equals(that.getDescription())
+                && getType() == that.getType()
+                && getMembers().equals(that.getMembers());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPrivacyGroupId(), getName(), getDescription(), getType(), getMembers());
+        return Objects.hash(getPrivacyGroupId(), getName(),
+                getDescription(), getType(), getMembers());
     }
 }

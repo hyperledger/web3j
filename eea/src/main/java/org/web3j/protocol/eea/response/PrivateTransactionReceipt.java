@@ -69,19 +69,26 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
-        return Objects.equals(getContractAddress(), that.getContractAddress()) &&
-                getFrom().equals(that.getFrom()) &&
-                Objects.equals(getTo(), that.getTo()) &&
-                getOutput().equals(that.getOutput()) &&
-                getLogs().equals(that.getLogs());
+        return Objects.equals(getContractAddress(), that.getContractAddress())
+                && getFrom().equals(that.getFrom())
+                && Objects.equals(getTo(), that.getTo())
+                && getOutput().equals(that.getOutput())
+                && getLogs().equals(that.getLogs());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getContractAddress(), getFrom(), getTo(), getOutput(), getLogs());
+        return Objects.hash(super.hashCode(), getContractAddress(),
+                getFrom(), getTo(), getOutput(), getLogs());
     }
 }

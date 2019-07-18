@@ -33,7 +33,8 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
             final Sign.SignatureData signatureData,
                                        final String privateFrom, final List<String> privateFor,
                                        final String privacyGroupId, final String restriction) {
-        super(nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, privacyGroupId, restriction);
+        super(nonce, gasPrice, gasLimit, to, data,
+                privateFrom, privateFor, privacyGroupId, restriction);
         this.signatureData = signatureData;
     }
 
@@ -63,7 +64,8 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
                                         final String restriction) {
         this(signedRawTransaction.getNonce(), signedRawTransaction.getGasPrice(),
                 signedRawTransaction.getGasLimit(), signedRawTransaction.getTo(),
-                signedRawTransaction.getData(), signedRawTransaction.getSignatureData(), privateFrom, privateFor, privacyGroupId, restriction);
+                signedRawTransaction.getData(), signedRawTransaction.getSignatureData(),
+                privateFrom, privateFor, privacyGroupId, restriction);
     }
 
     public Sign.SignatureData getSignatureData() {

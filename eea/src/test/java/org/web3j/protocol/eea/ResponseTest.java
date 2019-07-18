@@ -12,7 +12,12 @@
  */
 package org.web3j.protocol.eea;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
+
 import org.junit.Test;
+
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -26,11 +31,6 @@ import org.web3j.protocol.eea.response.PrivacyGroup;
 import org.web3j.protocol.eea.response.PrivateTransactionLegacy;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.eea.response.PrivateTransactionWithPrivacyGroup;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

@@ -1,12 +1,12 @@
 package org.web3j.protocol.eea.response;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import java.util.List;
-import java.util.Objects;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
 public class PrivateTransactionLegacy extends PrivateTransaction {
@@ -39,9 +39,15 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         PrivateTransactionLegacy that = (PrivateTransactionLegacy) o;
         return getPrivateFor().equals(that.getPrivateFor());
     }
