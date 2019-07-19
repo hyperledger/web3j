@@ -12,9 +12,13 @@
  */
 package org.web3j.protocol.http;
 
-import java.io.BufferedInputStream;
+import okhttp3.logging.HttpLoggingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.web3j.protocol.Service;
+import org.web3j.protocol.exceptions.ClientConnectionException;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,14 +31,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okio.Buffer;
-import okio.BufferedSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.web3j.protocol.Service;
-import org.web3j.protocol.exceptions.ClientConnectionException;
 
 import static okhttp3.ConnectionSpec.CLEARTEXT;
 
@@ -90,6 +86,7 @@ public class HttpService extends Service {
     private static final Logger log = LoggerFactory.getLogger(HttpService.class);
     private final String url;
     private final boolean includeRawResponse;
+    private OkHttpClient httpClient;
 
     private HashMap<String, String> headers = new HashMap<>();
 
@@ -144,7 +141,7 @@ public class HttpService extends Service {
     }
 
     @Override
-    protected InputStream performIO(String request) throws IOException {
+    protected String performIO(String request) throws IOException {
 
         RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, request);
         Headers headers = buildHeaders();
@@ -157,7 +154,7 @@ public class HttpService extends Service {
         try (ResponseBody responseBody = response.body()) {
             if (response.isSuccessful()) {
                 if (responseBody != null) {
-                    return buildInputStream(responseBody);
+                    return responseBody.string();
                 } else {
                     return null;
                 }
@@ -172,35 +169,6 @@ public class HttpService extends Service {
 
     protected void processHeaders(Headers headers) {
         // Default implementation is empty
-    }
-
-    private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
-        InputStream inputStream = responseBody.byteStream();
-
-        if (includeRawResponse) {
-            // we have to buffer the entire input payload, so that after processing
-            // it can be re-read and used to populate the rawResponse field.
-
-            BufferedSource source = responseBody.source();
-            source.request(Long.MAX_VALUE); // Buffer the entire body
-            Buffer buffer = source.buffer();
-
-            long size = buffer.size();
-            if (size > Integer.MAX_VALUE) {
-                throw new UnsupportedOperationException(
-                        "Non-integer input buffer size specified: " + size);
-            }
-
-            int bufferSize = (int) size;
-            BufferedInputStream bufferedinputStream =
-                    new BufferedInputStream(inputStream, bufferSize);
-
-            bufferedinputStream.mark(inputStream.available());
-            return bufferedinputStream;
-
-        } else {
-            return inputStream;
-        }
     }
 
     private Headers buildHeaders() {
