@@ -88,11 +88,7 @@ public class HttpService extends Service {
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
     private static final Logger log = LoggerFactory.getLogger(HttpService.class);
-
-    private OkHttpClient httpClient;
-
     private final String url;
-
     private final boolean includeRawResponse;
 
     private HashMap<String, String> headers = new HashMap<>();
@@ -158,18 +154,19 @@ public class HttpService extends Service {
 
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
         processHeaders(response.headers());
-        ResponseBody responseBody = response.body();
-        if (response.isSuccessful()) {
-            if (responseBody != null) {
-                return buildInputStream(responseBody);
+        try (ResponseBody responseBody = response.body()) {
+            if (response.isSuccessful()) {
+                if (responseBody != null) {
+                    return buildInputStream(responseBody);
+                } else {
+                    return null;
+                }
             } else {
-                return null;
-            }
-        } else {
-            int code = response.code();
-            String text = responseBody == null ? "N/A" : responseBody.string();
+                int code = response.code();
+                String text = responseBody == null ? "N/A" : responseBody.string();
 
-            throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
+                throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
+            }
         }
     }
 
