@@ -1,0 +1,145 @@
+package org.web3j.protocol.eea;
+
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.EeaTransactionManagerLegacy;
+import org.web3j.tx.EeaTransactionManagerPantheon;
+import org.web3j.tx.PrivateTransactionManager;
+import org.web3j.tx.gas.EeaGasProvider;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Arrays;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+/**
+ * Test designed to run with pantheon-quickstart
+ * https://github.com/PegaSysEng/pantheon-quickstart
+ */
+@Ignore
+public class PantheonQuickstartIntegrationTest {
+    private static final String CLIENT_VERSION = "pantheon/v1.2.1-dev-3ab368d7/linux-x86_64/oracle_openjdk-java-11";
+
+    private static final Credentials ALICE = Credentials
+            .create("8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63");
+    private static final Credentials BOB = Credentials
+            .create("c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3");
+    private static final Credentials CHARLIE = Credentials
+            .create("ae6ae8e5ccbfb04590405997ee2d52d2b330726137b875053c36d94e974d162f");
+
+    private static final String ENCLAVE_KEY_ALICE = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
+    private static final String ENCLAVE_KEY_BOB = "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=";
+    private static final String ENCLAVE_KEY_CHARLIE = "k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=";
+
+    private static final EeaGasProvider ZERO_GAS_PROVIDER = new EeaGasProvider(BigInteger.valueOf(0));
+
+    private static Eea nodeAlice;
+    private static Eea nodeBob;
+    private static Eea nodeCharlie;
+
+    @BeforeClass
+    public static void setUpOnce() {
+        nodeAlice = Eea.build(new HttpService("http://localhost:20000"));
+        nodeBob = Eea.build(new HttpService("http://localhost:20002"));
+        nodeCharlie = Eea.build(new HttpService("http://localhost:20004"));
+    }
+
+    @Test
+    public void testConnection() throws IOException {
+        assertThat(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
+        assertThat(nodeBob.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
+        assertThat(nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
+    }
+
+    @Test
+    public void legacyContract() throws Exception {
+        final PrivateTransactionManager tmAlice = new EeaTransactionManagerLegacy(
+                nodeAlice, ALICE,
+                2018, ENCLAVE_KEY_ALICE, Arrays.asList(ENCLAVE_KEY_BOB));
+        final PrivateTransactionManager tmBob = new EeaTransactionManagerLegacy(
+                nodeBob, BOB,
+                2018, ENCLAVE_KEY_BOB, Arrays.asList(ENCLAVE_KEY_ALICE));
+
+        final HumanStandardToken tokenAlice = HumanStandardToken.deploy(
+                nodeAlice, tmAlice, ZERO_GAS_PROVIDER,
+                BigInteger.TEN, "eea_token",
+                BigInteger.TEN, "EEATKN")
+                .send();
+
+        final HumanStandardToken tokenBob = HumanStandardToken.load(
+                tokenAlice.getContractAddress(),
+                nodeBob, tmBob, ZERO_GAS_PROVIDER);
+
+        tokenAlice.transfer(BOB.getAddress(), BigInteger.TEN).send();
+        testBalances(tokenAlice, tokenBob, BigInteger.ZERO, BigInteger.TEN);
+    }
+
+    @Test
+    public void privacyGroupContract() throws Exception {
+        // Build new privacy group using the create API
+        final String aliceBobGroup =
+                nodeAlice
+                        .eeaCreatePrivacyGroup(
+                                ENCLAVE_KEY_ALICE,
+                                "AliceBob",
+                                "AliceBob group",
+                                Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                        .send()
+                        .getPrivacyGroupId();
+
+        // Find the privacy group that was built by Alice from Bob's node
+        final String aliceBobGroupFromBobNode =
+                nodeBob.eeaFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                        .send()
+                        .getGroups()
+                        .stream()
+                        .filter(g ->
+                                g.getName().equals("AliceBob")
+                                        && g.getDescription().equals("AliceBob group")
+                                        && g.getPrivacyGroupId().equals(aliceBobGroup))
+                        .findFirst()
+                        .orElseThrow(RuntimeException::new)
+                        .getPrivacyGroupId();
+
+        final PrivateTransactionManager tmAlice = new EeaTransactionManagerPantheon(
+                nodeAlice, ALICE,
+                2018, ENCLAVE_KEY_ALICE, aliceBobGroup);
+        final PrivateTransactionManager tmBob = new EeaTransactionManagerPantheon(
+                nodeBob, BOB,
+                2018, ENCLAVE_KEY_BOB, aliceBobGroupFromBobNode);
+
+        final HumanStandardToken tokenAlice = HumanStandardToken.deploy(
+                nodeAlice, tmAlice, ZERO_GAS_PROVIDER,
+                BigInteger.TEN, "eea_token",
+                BigInteger.TEN, "EEATKN")
+                .send();
+
+        final HumanStandardToken tokenBob = HumanStandardToken.load(
+                tokenAlice.getContractAddress(),
+                nodeBob, tmBob, ZERO_GAS_PROVIDER);
+
+        tokenAlice.transfer(BOB.getAddress(), BigInteger.TEN).send();
+        testBalances(tokenAlice, tokenBob, BigInteger.ZERO, BigInteger.TEN);
+    }
+
+    private void testBalances(
+            final HumanStandardToken tokenAlice,
+            final HumanStandardToken tokenBob,
+            final BigInteger aliceBalance,
+            final BigInteger bobBalance) throws Exception {
+        BigInteger aliceAlice = tokenAlice.balanceOf(ALICE.getAddress()).send();
+        BigInteger aliceBob = tokenAlice.balanceOf(BOB.getAddress()).send();
+        BigInteger bobAlice = tokenBob.balanceOf(ALICE.getAddress()).send();
+        BigInteger bobBob = tokenBob.balanceOf(BOB.getAddress()).send();
+
+        assertThat(aliceAlice, is(aliceBalance));
+        assertThat(aliceBob, is(bobBalance));
+        assertThat(bobAlice, is(aliceBalance));
+        assertThat(bobBob, is(bobBalance));
+    }
+}

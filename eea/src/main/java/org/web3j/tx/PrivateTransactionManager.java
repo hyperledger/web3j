@@ -14,40 +14,69 @@ package org.web3j.tx;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.eea.Eea;
+import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
+import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.PrivateTransactionReceiptProcessor;
+import org.web3j.utils.Numeric;
 
 public abstract class PrivateTransactionManager extends TransactionManager {
+    private static final Logger log = LoggerFactory.getLogger(PrivateTransactionManager.class);
+
     private final PrivateTransactionReceiptProcessor transactionReceiptProcessor;
 
+    private final Eea eea;
+    private final Credentials credentials;
+    private final long chainId;
+    private final String privateFrom;
+
     protected PrivateTransactionManager(
-            PrivateTransactionReceiptProcessor transactionReceiptProcessor, String fromAddress) {
-        super(transactionReceiptProcessor, fromAddress);
+            final Eea eea,
+            final Credentials credentials,
+            final long chainId,
+            final String privateFrom,
+            final PrivateTransactionReceiptProcessor transactionReceiptProcessor) {
+        super(transactionReceiptProcessor, credentials.getAddress());
+        this.eea = eea;
+        this.credentials = credentials;
+        this.chainId = chainId;
+        this.privateFrom = privateFrom;
         this.transactionReceiptProcessor = transactionReceiptProcessor;
     }
 
-    protected PrivateTransactionManager(Eea eea, String enclavePublicKey, String fromAddress) {
+    protected PrivateTransactionManager(final Eea eea,
+            final Credentials credentials,
+            final long chainId,
+            final String privateFrom,
+            final int attempts,
+            final int sleepDuration) {
         this(
-                new PollingPrivateTransactionReceiptProcessor(
-                        eea, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH),
-                fromAddress);
+                eea, credentials, chainId, privateFrom,
+                new PollingPrivateTransactionReceiptProcessor(eea,
+                        attempts, sleepDuration));
     }
 
     protected PrivateTransactionManager(
-            Eea eea,
-            String enclavePublicKey,
-            int attempts,
-            long sleepDuration,
-            String fromAddress) {
+            final Eea eea,
+            final Credentials credentials,
+            final
+            long chainId,
+            final
+            String privateFrom) {
         this(
-                new PollingPrivateTransactionReceiptProcessor(eea, sleepDuration, attempts),
-                fromAddress);
+                eea, credentials, chainId, privateFrom, new PollingPrivateTransactionReceiptProcessor(
+                eea, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
     }
 
     @Override
@@ -60,16 +89,60 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         return processResponse(ethSendTransaction);
     }
 
-    protected String executeCall(String to, String data) throws IOException, TransactionException {
-        EthSendTransaction est =
-                sendTransaction(
-                        BigInteger.valueOf(5000),
-                        BigInteger.valueOf(3000000),
-                        to,
-                        data,
-                        BigInteger.ZERO);
-        TransactionReceipt ptr = processResponse(est);
-        return ((PrivateTransactionReceipt) ptr).getOutput();
+    public String getPrivateFrom() {
+        return privateFrom;
+    }
+
+    protected abstract String getPrivacyGroupId();
+
+    abstract Object privacyGroupIdOrPrivateFor();
+
+    @Override
+    public EthSendTransaction sendTransaction(
+            final BigInteger gasPrice, final BigInteger gasLimit, final String to,
+            final String data, final BigInteger value)
+            throws IOException {
+
+        final BigInteger nonce = eea.eeaGetTransactionCount(
+                credentials.getAddress(), getPrivacyGroupId())
+                .send().getTransactionCount();
+
+        final Object privacyGroupIdOrPrivateFor = privacyGroupIdOrPrivateFor();
+
+        final RawPrivateTransaction transaction;
+        if (privacyGroupIdOrPrivateFor instanceof String) {
+            transaction = RawPrivateTransaction.createTransaction(
+                    nonce, gasPrice, gasLimit, to,
+                    data, privateFrom, (String) privacyGroupIdOrPrivateFor,
+                    "restricted");
+        } else {
+            transaction = RawPrivateTransaction.createTransaction(
+                    nonce, gasPrice, gasLimit, to,
+                    data, privateFrom, (List<String>) privacyGroupIdOrPrivateFor,
+                    "restricted");
+        }
+
+        final String rawSignedTransaction =
+                Numeric.toHexString(
+                        PrivateTransactionEncoder.signMessage(transaction, chainId, credentials));
+
+        return eea.eeaSendRawTransaction(rawSignedTransaction).send();
+    }
+
+    @Override
+    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+            throws IOException {
+        try {
+            EthSendTransaction est = sendTransaction(
+                    BigInteger.valueOf(0),
+                    BigInteger.valueOf(3000000),
+                    to, data, BigInteger.ZERO);
+            TransactionReceipt ptr = processResponse(est);
+            return ((PrivateTransactionReceipt) ptr).getOutput();
+        } catch (TransactionException e) {
+            log.error("Failed to execute call", e);
+            return null;
+        }
     }
 
     private TransactionReceipt processResponse(EthSendTransaction transactionResponse)

@@ -15,6 +15,7 @@ package org.web3j.utils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Base64;
 
 import org.web3j.exceptions.MessageDecodingException;
 import org.web3j.exceptions.MessageEncodingException;
@@ -235,5 +236,13 @@ public final class Numeric {
 
     public static boolean isIntegerValue(BigDecimal value) {
         return value.signum() == 0 || value.scale() <= 0 || value.stripTrailingZeros().scale() <= 0;
+    }
+
+    public static byte[] base64ToByteArray(final String s) {
+        return Base64.getDecoder().decode(s);
+    }
+
+    public static String byteArrayToBase64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
     }
 }
