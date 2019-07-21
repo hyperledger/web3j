@@ -36,7 +36,8 @@ public class TransactionDecoder {
                     && ((RlpString) values.getValues().get(7)).getBytes().length == 10)
                 || (values.getValues().size() == 9
                     && ((RlpString) values.getValues().get(8)).getBytes().length == 10)) {
-            //the 9nth element is the hex representation of "restricted" for private transactions
+            // the 8th or 9nth element is the hex 
+            // representation of "restricted" for private transactions
             return RawTransaction.createTransaction(nonce,
                     gasPrice, gasLimit, to, value, data);
         } else {
