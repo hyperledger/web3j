@@ -1,5 +1,12 @@
 package org.web3j.tx;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Hash;
 import org.web3j.protocol.eea.Eea;
@@ -8,13 +15,6 @@ import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * PrivateTransactionManager implementation for using a Pantheon node to transact.

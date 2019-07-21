@@ -1,18 +1,20 @@
 package org.web3j.protocol.eea;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Arrays;
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import org.web3j.crypto.Credentials;
+import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.EeaTransactionManagerLegacy;
 import org.web3j.tx.EeaTransactionManagerPantheon;
 import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.EeaGasProvider;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -23,7 +25,8 @@ import static org.junit.Assert.assertThat;
  */
 @Ignore
 public class PantheonQuickstartIntegrationTest {
-    private static final String CLIENT_VERSION = "pantheon/v1.2.1-dev-3ab368d7/linux-x86_64/oracle_openjdk-java-11";
+    private static final String CLIENT_VERSION =
+            "pantheon/v1.2.1-dev-3ab368d7/linux-x86_64/oracle_openjdk-java-11";
 
     private static final Credentials ALICE = Credentials
             .create("8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63");
@@ -32,11 +35,15 @@ public class PantheonQuickstartIntegrationTest {
     private static final Credentials CHARLIE = Credentials
             .create("ae6ae8e5ccbfb04590405997ee2d52d2b330726137b875053c36d94e974d162f");
 
-    private static final String ENCLAVE_KEY_ALICE = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-    private static final String ENCLAVE_KEY_BOB = "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=";
-    private static final String ENCLAVE_KEY_CHARLIE = "k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=";
+    private static final String ENCLAVE_KEY_ALICE =
+            "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
+    private static final String ENCLAVE_KEY_BOB =
+            "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=";
+    private static final String ENCLAVE_KEY_CHARLIE =
+            "k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=";
 
-    private static final EeaGasProvider ZERO_GAS_PROVIDER = new EeaGasProvider(BigInteger.valueOf(0));
+    private static final EeaGasProvider ZERO_GAS_PROVIDER =
+            new EeaGasProvider(BigInteger.valueOf(0));
 
     private static Eea nodeAlice;
     private static Eea nodeBob;
@@ -51,9 +58,12 @@ public class PantheonQuickstartIntegrationTest {
 
     @Test
     public void testConnection() throws IOException {
-        assertThat(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
-        assertThat(nodeBob.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
-        assertThat(nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
+        assertThat(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion(),
+                is(CLIENT_VERSION));
+        assertThat(nodeBob.web3ClientVersion().send().getWeb3ClientVersion(),
+                is(CLIENT_VERSION));
+        assertThat(nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion(),
+                is(CLIENT_VERSION));
     }
 
     @Test
@@ -132,10 +142,10 @@ public class PantheonQuickstartIntegrationTest {
             final HumanStandardToken tokenBob,
             final BigInteger aliceBalance,
             final BigInteger bobBalance) throws Exception {
-        BigInteger aliceAlice = tokenAlice.balanceOf(ALICE.getAddress()).send();
-        BigInteger aliceBob = tokenAlice.balanceOf(BOB.getAddress()).send();
-        BigInteger bobAlice = tokenBob.balanceOf(ALICE.getAddress()).send();
-        BigInteger bobBob = tokenBob.balanceOf(BOB.getAddress()).send();
+        final BigInteger aliceAlice = tokenAlice.balanceOf(ALICE.getAddress()).send();
+        final BigInteger aliceBob = tokenAlice.balanceOf(BOB.getAddress()).send();
+        final BigInteger bobAlice = tokenBob.balanceOf(ALICE.getAddress()).send();
+        final BigInteger bobBob = tokenBob.balanceOf(BOB.getAddress()).send();
 
         assertThat(aliceAlice, is(aliceBalance));
         assertThat(aliceBob, is(bobBalance));
