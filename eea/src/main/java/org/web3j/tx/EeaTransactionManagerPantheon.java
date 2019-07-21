@@ -8,7 +8,7 @@ import org.web3j.protocol.eea.Eea;
  */
 public class EeaTransactionManagerPantheon extends PrivateTransactionManager {
 
-    private String privacyGroupId;
+    private final String privacyGroupId;
 
     public EeaTransactionManagerPantheon(
             final Eea eea,
