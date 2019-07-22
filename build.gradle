@@ -71,6 +71,7 @@ allprojects {
             importOrder 'java', '', 'org.web3j', '\\#'
             trimTrailingWhitespace()
             endWithNewline()
+            licenseHeaderFile "${rootDir}/gradle/spotless.java.license"
             paddedCell()
         }
         groovyGradle {
