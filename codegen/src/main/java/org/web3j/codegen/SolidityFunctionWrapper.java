@@ -597,7 +597,7 @@ public class SolidityFunctionWrapper extends Generator {
             if (Address.class.getCanonicalName().equals(parameterSpec.type.toString())
                     && addressLength != Address.DEFAULT_LENGTH) {
 
-                constructor += addressLength + ", ";
+                constructor += (addressLength * java.lang.Byte.SIZE) + ", ";
             }
             return constructor + parameterSpec.name + ")";
         }

@@ -18,6 +18,7 @@ import org.web3j.tx.Contract;
 import org.web3j.utils.Files;
 import org.web3j.utils.Strings;
 
+import static java.lang.Enum.valueOf;
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
@@ -55,18 +56,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     private final int addressLength;
 
     private final boolean generateSendTxForCalls;
-
-    protected SolidityFunctionWrapperGenerator(
-            File binFile,
-            File abiFile,
-            File destinationDir,
-            String basePackageName,
-            boolean useJavaNativeTypes,
-            int addressLength) {
-
-        this(binFile, abiFile, destinationDir, getFileNameNoExtension(abiFile.getName()),
-                basePackageName, useJavaNativeTypes, false, Contract.class, addressLength);
-    }
 
     protected SolidityFunctionWrapperGenerator(
             File binFile,
@@ -155,6 +144,11 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 required = false)
         private File binFile;
 
+        @Option(names = { "-c", "--contractName" },
+                description = "contract name (defaults to ABI file name).",
+                required = false)
+        private String contractName;
+
         @Option(names = { "-o", "--outputDir" },
                 description = "destination base directory.",
                 required = true)
@@ -164,6 +158,11 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 description = "base package name.",
                 required = true)
         private String packageName;
+
+        @Option(names = { "-al", "--addressLength" },
+                description = "address length in bytes (defaults to 20).",
+                required = false)
+        private int addressLength = Address.DEFAULT_LENGTH / Byte.SIZE;
 
         @Option(names = { "-jt", JAVA_TYPES_ARG },
                 description = "use native java types.",
@@ -182,8 +181,13 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 //grouping is not implemented in picocli yet(planned for 3.1), therefore
                 //simply check if solidityTypes were requested
                 boolean useJavaTypes = !(solidityTypes);
-                new SolidityFunctionWrapperGenerator(binFile, abiFile, destinationFileDir,
-                        packageName, useJavaTypes, Address.DEFAULT_LENGTH).generate();
+                
+                if (contractName == null || contractName.isEmpty()) {
+                    contractName = getFileNameNoExtension(abiFile.getName());
+                }
+                
+                new SolidityFunctionWrapperGenerator(binFile, abiFile, destinationFileDir, 
+                        contractName, packageName, useJavaTypes, addressLength).generate();
             } catch (Exception e) {
                 exitError(e);
             }
