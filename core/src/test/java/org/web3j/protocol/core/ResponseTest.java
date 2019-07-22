@@ -551,7 +551,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEthBlockTransactionHashes() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "\"id\":1,\n"
@@ -590,7 +590,6 @@ public class ResponseTest extends ResponseTester {
                         + "    ]\n"
                         + "  }\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         EthBlock.Block block =
@@ -631,7 +630,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEthBlockFullTransactionsParity() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "\"id\":1,\n"
@@ -685,7 +684,6 @@ public class ResponseTest extends ResponseTester {
                         + "    ]\n"
                         + "  }\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         EthBlock.Block block =
@@ -709,7 +707,6 @@ public class ResponseTest extends ResponseTester {
                         "0x9f759",
                         "0x9f759",
                         "0x54e34e8e",
-                        // CHECKSTYLE:OFF
                         Arrays.asList(
                                 new EthBlock.TransactionObject(
                                         "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
@@ -729,7 +726,6 @@ public class ResponseTest extends ResponseTester {
                                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                                         (byte) 0)),
-                        // CHECKSTYLE:ON
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
@@ -742,7 +738,7 @@ public class ResponseTest extends ResponseTester {
     // Remove once Geth & Parity return the same v value in transactions
     @Test
     public void testEthBlockFullTransactionsGeth() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "\"id\":1,\n"
@@ -796,7 +792,6 @@ public class ResponseTest extends ResponseTester {
                         + "    ]\n"
                         + "  }\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         EthBlock.Block block =
@@ -820,7 +815,6 @@ public class ResponseTest extends ResponseTester {
                         "0x9f759",
                         "0x9f759",
                         "0x54e34e8e",
-                        // CHECKSTYLE:OFF
                         Arrays.asList(
                                 new EthBlock.TransactionObject(
                                         "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
@@ -840,7 +834,6 @@ public class ResponseTest extends ResponseTester {
                                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                                         0x9d)),
-                        // CHECKSTYLE:ON
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
@@ -860,7 +853,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEthTransaction() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -904,7 +897,6 @@ public class ResponseTest extends ResponseTester {
                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                         (byte) 0);
-        // CHECKSTYLE:ON
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
         assertThat(ethTransaction.getTransaction().get(), equalTo(transaction));
@@ -934,7 +926,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testeEthGetTransactionReceiptBeforeByzantium() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -993,7 +985,6 @@ public class ResponseTest extends ResponseTester {
                                         Arrays.asList(
                                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))),
                         "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-        // CHECKSTYLE:ON
 
         EthGetTransactionReceipt ethGetTransactionReceipt =
                 deserialiseResponse(EthGetTransactionReceipt.class);
@@ -1004,7 +995,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testeEthGetTransactionReceiptAfterByzantium() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -1063,7 +1054,6 @@ public class ResponseTest extends ResponseTester {
                                         Arrays.asList(
                                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))),
                         "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-        // CHECKSTYLE:ON
 
         EthGetTransactionReceipt ethGetTransactionReceipt =
                 deserialiseResponse(EthGetTransactionReceipt.class);
@@ -1103,7 +1093,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEthCompileSolidity() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "  \"id\":1,\n"
@@ -1148,15 +1138,12 @@ public class ResponseTest extends ResponseTester {
                         + "    }"
                         + "  }\n"
                         + "}");
-        // CHECKSTYLE:OFF
 
         Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<>(1);
         compiledSolidity.put(
                 "test",
                 new EthCompileSolidity.Code(
-                        // CHECKSTYLE:OFF
                         "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
-                        // CHECKSTYLE:ON
                         new EthCompileSolidity.SolidityInfo(
                                 "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n"
                                         + "\t\treturn a * 7;\n\t}\n}\n",
@@ -1250,7 +1237,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEthLog() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -1268,7 +1255,6 @@ public class ResponseTest extends ResponseTester {
                         + "        \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]"
                         + "    }]"
                         + "}");
-        // CHECKSTYLE:ON
 
         List<Log> logs =
                 Collections.singletonList(
@@ -1291,7 +1277,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEthGetWork() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "  \"id\":1,\n"
@@ -1302,7 +1288,6 @@ public class ResponseTest extends ResponseTester {
                         + "      \"0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000\"\n"
                         + "    ]\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         EthGetWork ethGetWork = deserialiseResponse(EthGetWork.class);
         assertThat(

@@ -61,10 +61,8 @@ public class RequestTest extends RequestTester {
                         "password")
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"personal_sendTransaction\",\"params\":[{\"from\":\"FROM\",\"to\":\"TO\",\"gas\":\"0x1\",\"gasPrice\":\"0xa\",\"value\":\"0x0\",\"data\":\"0xDATA\",\"nonce\":\"0x1\"},\"password\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test

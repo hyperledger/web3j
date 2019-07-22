@@ -30,14 +30,13 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaSendRawTransaction() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
                         + "    \"id\": 1,\n"
                         + "    \"result\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
         assertThat(
@@ -47,7 +46,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaGetTransactionReceipt() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -91,7 +90,6 @@ public class ResponseTest extends ResponseTester {
                                         "mined",
                                         Collections.singletonList(
                                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))));
-        // CHECKSTYLE:ON
 
         EeaGetTransactionReceipt eeaGetTransactionReceipt =
                 deserialiseResponse(EeaGetTransactionReceipt.class);

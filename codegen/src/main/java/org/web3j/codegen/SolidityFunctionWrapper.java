@@ -954,13 +954,12 @@ public class SolidityFunctionWrapper extends Generator {
             throws ClassNotFoundException {
 
         if (functionDefinition.hasOutputs()) {
-            // CHECKSTYLE:OFF
+
             reporter.report(
                     String.format(
                             "Definition of the function %s returns a value but is not defined as a view function. "
                                     + "Please ensure it contains the view modifier if you want to read the return value",
                             functionDefinition.getName()));
-            // CHECKSTYLE:ON
         }
 
         if (functionDefinition.isPayable()) {

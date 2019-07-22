@@ -53,7 +53,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityChangePassword() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.parityChangePassword(
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", "bazqux5")
                 .send();
@@ -61,7 +61,6 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_changePassword\","
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\",\"bazqux5\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -75,12 +74,10 @@ public class RequestTest extends RequestTester {
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", hashType, false)
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_deriveAddressHash\","
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\","
                         + "{\"hash\":\"0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43\",\"type\":\"hard\"},false],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -89,7 +86,6 @@ public class RequestTest extends RequestTester {
         indexType.add(Derivation.createDerivationIndex(1, "hard"));
         indexType.add(Derivation.createDerivationIndex(2, "soft"));
 
-        // CHECKSTYLE:OFF
         web3j.parityDeriveAddressIndex(
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2", indexType, false)
                 .send();
@@ -98,18 +94,15 @@ public class RequestTest extends RequestTester {
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_deriveAddressIndex\","
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\","
                         + "[{\"index\":1,\"type\":\"hard\"},{\"index\":2,\"type\":\"soft\"}],false],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
     public void testParityExportAccount() throws Exception {
         web3j.parityExportAccount("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2").send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_exportAccount\","
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -159,11 +152,9 @@ public class RequestTest extends RequestTester {
     public void testParityKillAccount() throws Exception {
         web3j.parityKillAccount("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "hunter2").send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_killAccount\","
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"hunter2\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -197,11 +188,9 @@ public class RequestTest extends RequestTester {
                         blockParameter)
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
                         + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"latest\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -211,11 +200,9 @@ public class RequestTest extends RequestTester {
                         maxQuantityReturned, "0x407d73d8a49eeb85d32cf465507dd71d507100c1", null)
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_listAccounts\","
                         + "\"params\":[100,\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     public void testParityListGethAccounts() throws Exception {
@@ -245,7 +232,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityNewAccountFromSecret() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.parityNewAccountFromSecret(
                         "0x1db2c0cf57505d0f4a3d589414f0a0025ca97421d2cd596a9486bc7e2cd2bf8b",
                         "password")
@@ -254,7 +241,6 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromSecret\","
                         + "\"params\":[\"0x1db2c0cf57505d0f4a3d589414f0a0025ca97421d2cd596a9486bc7e2cd2bf8b\",\"password\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -287,10 +273,8 @@ public class RequestTest extends RequestTester {
 
         web3j.parityNewAccountFromWallet(walletFile, "password").send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_newAccountFromWallet\",\"params\":[{\"address\":\"0x...\",\"id\":\"cab06c9e-79a9-48ea-afc7-d3bdb3a59526\",\"version\":1,\"crypto\":{\"cipher\":\"CIPHER\",\"ciphertext\":\"CIPHERTEXT\",\"cipherparams\":{\"iv\":\"IV\"},\"kdf\":\"KDF\",\"kdfparams\":{\"dklen\":32,\"n\":1,\"p\":10,\"r\":100,\"salt\":\"SALT\"},\"mac\":\"MAC\"}},\"password\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     public void testParityRemoveAddress() throws Exception {
@@ -380,7 +364,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParitySignMessage() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.paritySignMessage(
                         "0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e",
                         "password1",
@@ -391,7 +375,6 @@ public class RequestTest extends RequestTester {
                 "{\"jsonrpc\":\"2.0\",\"method\":\"parity_signMessage\","
                         + "\"params\":[\"0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e\",\"password1\","
                         + "\"0xbc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -412,7 +395,6 @@ public class RequestTest extends RequestTester {
                         DefaultBlockParameterName.LATEST)
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"trace_call\","
                         + "\"params\":["
@@ -426,12 +408,11 @@ public class RequestTest extends RequestTester {
                         + "[\"trace\",\"vmTrace\",\"stateDiff\"],"
                         + "\"latest\"],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
     public void testTraceRawTransaction() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.traceRawTransaction(
                         "0xf869808504e3b292008305499d94781ab1a38837e351bfe1e318c6587766848abffa8084b46300ec26a0b1ffd8f843e08a9dbf0a42b3c7dd5288a48885cd6e3bcdb2609e943d0b0053d4a07bfdb3c12a7cec896bfc2cfc7c346a2cb411e1aca62ad085e8d7abbb6532e128",
                         Arrays.asList("trace", "vmTrace", "stateDiff"))
@@ -444,7 +425,6 @@ public class RequestTest extends RequestTester {
                         + "dd5288a48885cd6e3bcdb2609e943d0b0053d4a07bfdb3c12a7cec896bfc2cfc7c346a2cb411e1aca62ad085e8d7abbb6532e128\","
                         + "[\"trace\",\"vmTrace\",\"stateDiff\"]],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test

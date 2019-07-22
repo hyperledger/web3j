@@ -82,22 +82,20 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testPersonalSign() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
                         + "    \"id\": 1,\n"
                         + "    \"result\": \"0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c\"\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         PersonalSign personalSign = deserialiseResponse(PersonalSign.class);
-        // CHECKSTYLE:OFF
+
         assertThat(
                 personalSign.getSignedMessage(),
                 is(
                         "0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c"));
-        // CHECKSTYLE:ON
     }
 
     @Test

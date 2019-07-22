@@ -58,7 +58,6 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         assertThat(contract.balanceOf(ALICE.getAddress()).send(), equalTo(aliceQty));
 
-        // CHECKSTYLE:OFF
         CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
         Disposable transferEventSubscription =
                 contract.transferEventFlowable(
@@ -74,7 +73,6 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                                 DefaultBlockParameterName.LATEST)
                         .subscribe(
                                 transferEventResponse -> transferEventCountDownLatch.countDown());
-        // CHECKSTYLE:ON
 
         // transfer tokens
         BigInteger transferQuantity = BigInteger.valueOf(100_000);

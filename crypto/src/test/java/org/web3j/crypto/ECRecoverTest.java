@@ -30,10 +30,10 @@ public class ECRecoverTest {
 
     @Test
     public void testRecoverAddressFromSignature() {
-        // CHECKSTYLE:OFF
+
         String signature =
                 "0x2c6401216c9031b9a6fb8cbfccab4fcec6c951cdf40e2320108d1856eb532250576865fbcd452bcdc4c57321b619ed7a9cfd38bd973c3e1e0243ac2777fe9d5b1b";
-        // CHECKSTYLE:ON
+
         String address = "0x31b26e43651e9371c88af3d36c14cfd938baf4fd";
         String message = "v0G9u7huK4mJb2K1";
 

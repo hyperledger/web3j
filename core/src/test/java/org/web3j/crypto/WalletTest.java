@@ -82,7 +82,6 @@ public class WalletTest {
     private static final String SECRET =
             "a392604efc2fad9c0b3da43b5f698a2e3f270f170d859912be0d54742275c5f6";
 
-    // CHECKSTYLE:OFF
     private static final String AES_128_CTR =
             "{\n"
                     + "    \"crypto\" : {\n"
@@ -125,5 +124,4 @@ public class WalletTest {
                     + "    \"id\" : \"7654525c-17e0-4df5-94b5-c7fde752c9d2\",\n"
                     + "    \"version\" : 3\n"
                     + "}";
-    // CHECKSTYLE:ON
 }

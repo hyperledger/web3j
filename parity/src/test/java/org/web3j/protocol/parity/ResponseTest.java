@@ -123,7 +123,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testParityExportAccount() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
@@ -151,16 +151,15 @@ public class ResponseTest extends ResponseTester {
                         + "    \"version\": 3\n"
                         + "    }\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         WalletFile walletFile = new WalletFile();
         walletFile.setAddress("0042e5d2a662eeaca8a7e828c174f98f35d8925b");
 
         WalletFile.Crypto crypto = new WalletFile.Crypto();
         crypto.setCipher("aes-128-ctr");
-        // CHECKSTYLE:OFF
+
         crypto.setCiphertext("df27e3db64aa18d984b6439443f73660643c2d119a6f0fa2fa9a6456fc802d75");
-        // CHECKSTYLE:ON
+
         walletFile.setCrypto(crypto);
 
         WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();
@@ -213,7 +212,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testParityFullTraceResponseStateDiff() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
@@ -268,7 +267,6 @@ public class ResponseTest extends ResponseTester {
                         + "    },\n"
                         + "    \"id\": 1\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
         assertNotNull(response);
@@ -289,7 +287,7 @@ public class ResponseTest extends ResponseTester {
                         new StateDiff.UnchangedState(),
                         new StateDiff.ChangedState("0x15", "0x16"),
                         new HashMap<>()));
-        // CHECKSTYLE:OFF
+
         stateDiffMap.put(
                 "0x1a4298d0edc00618310e4c26f6479e5cccdfeaf8",
                 new StateDiff(
@@ -302,14 +300,14 @@ public class ResponseTest extends ResponseTester {
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                                         new StateDiff.AddedState(
                                                 "0x00000000000000000000000014772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a")))));
-        // CHECKSTYLE:ON
+
         FullTraceInfo info = new FullTraceInfo("0x", stateDiffMap, null, null);
         assertThat(response.getFullTraceInfo(), equalTo(info));
     }
 
     @Test
     public void testParityFullTraceResponseTraces() {
-        // CHECKSTYLE:OFF
+
         // hacked together from multiple requests and the code shortened
         buildResponse(
                 "{\n"
@@ -388,12 +386,10 @@ public class ResponseTest extends ResponseTester {
                         + "    },\n"
                         + "    \"id\": 1\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
         assertNotNull(response);
 
-        // CHECKSTYLE:OFF
         org.web3j.protocol.parity.methods.response.Trace trace1 =
                 new org.web3j.protocol.parity.methods.response.Trace();
         Trace.CreateAction action1 = new Trace.CreateAction();
@@ -461,7 +457,6 @@ public class ResponseTest extends ResponseTester {
         trace4.setSubtraces(BigInteger.ZERO);
         trace4.setTraceAddress(Collections.singletonList(BigInteger.ZERO));
         trace4.setType("reward");
-        // CHECKSTYLE:ON
 
         List<org.web3j.protocol.parity.methods.response.Trace> traces = new ArrayList<>();
         traces.add(trace1);
@@ -475,7 +470,7 @@ public class ResponseTest extends ResponseTester {
     @Test
     public void testParityFullTraceResponseVMTrace() {
         // hacked together from multiple requests and the code shortened
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
@@ -535,7 +530,6 @@ public class ResponseTest extends ResponseTester {
                         + "    },\n"
                         + "    \"id\": 1\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
         assertNotNull(response);

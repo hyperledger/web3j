@@ -106,7 +106,6 @@ public class RequestTest extends RequestTester {
 
         web3j.debugTraceTransaction(transactionHash, options).send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"debug_traceTransaction\","
                         + "\"params\":[\"0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e\","
@@ -114,6 +113,5 @@ public class RequestTest extends RequestTester {
                         + "\"disableStorage\":false,"
                         + "\"disableStack\":false}],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 }

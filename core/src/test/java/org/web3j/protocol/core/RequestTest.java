@@ -176,10 +176,8 @@ public class RequestTest extends RequestTester {
                         "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238")
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockTransactionCountByHash\",\"params\":[\"0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -199,10 +197,8 @@ public class RequestTest extends RequestTester {
                         "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238")
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getUncleCountByBlockHash\",\"params\":[\"0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -255,10 +251,8 @@ public class RequestTest extends RequestTester {
                                         + "970870f072445675058bb8eb970870f072445675"))
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendTransaction\",\"params\":[{\"from\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"gas\":\"0x76c0\",\"gasPrice\":\"0x9184e72a000\",\"value\":\"0x9184e72a\",\"data\":\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\",\"nonce\":\"0x1\"}],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -268,10 +262,8 @@ public class RequestTest extends RequestTester {
                                 + "072445675058bb8eb970870f072445675")
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -364,10 +356,8 @@ public class RequestTest extends RequestTester {
                         BigInteger.ZERO)
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionByBlockHashAndIndex\",\"params\":[\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\",\"0x0\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -627,7 +617,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testShhPost() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.shhPost(
                         new ShhPost(
                                 "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1",
@@ -642,7 +632,6 @@ public class RequestTest extends RequestTester {
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"shh_post\",\"params\":[{\"from\":\"0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1\",\"to\":\"0x3e245533f97284d442460f2998cd41858798ddf04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a0d4d661997d3940272b717b1\",\"topics\":[\"0x776869737065722d636861742d636c69656e74\",\"0x4d5a695276454c39425154466b61693532\"],\"payload\":\"0x7b2274797065223a226d6\",\"priority\":\"0x64\",\"ttl\":\"0x64\"}],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -654,14 +643,13 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testShhHasIdentity() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.shhHasIdentity(
                         "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1")
                 .send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"shh_hasIdentity\",\"params\":[\"0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
@@ -673,19 +661,18 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testShhAddToGroup() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.shhAddToGroup(
                         "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1")
                 .send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"shh_addToGroup\",\"params\":[\"0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
     public void testShhNewFilter() throws Exception {
-        // CHECKSTYLE:OFF
+
         web3j.shhNewFilter(
                         new ShhFilter(
                                         "0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1")
@@ -694,7 +681,6 @@ public class RequestTest extends RequestTester {
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"shh_newFilter\",\"params\":[{\"topics\":[\"0x12341234bf4b564f\"],\"to\":\"0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1\"}],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test

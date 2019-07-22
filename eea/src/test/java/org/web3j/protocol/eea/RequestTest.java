@@ -32,10 +32,8 @@ public class RequestTest extends RequestTester {
                                 + "072445675058bb8eb970870f072445675")
                 .send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eea_sendRawTransaction\",\"params\":[\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\"],\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test

@@ -30,7 +30,6 @@ import static org.web3j.crypto.Hash.sha256;
  * https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
  */
 public class Bip32Test {
-    @SuppressWarnings("checkstyle:LineLength")
     @Test
     public void deriveKeyPairVector1() {
         // Chain m
@@ -76,7 +75,6 @@ public class Bip32Test {
                 new int[] {0 | HARDENED_BIT, 1, 2 | HARDENED_BIT, 2, 1000000000});
     }
 
-    @SuppressWarnings("checkstyle:LineLength")
     @Test
     public void deriveKeyPairVector2() {
         // Chain m
@@ -122,7 +120,6 @@ public class Bip32Test {
                 new int[] {0, 2147483647 | HARDENED_BIT, 1, 2147483646 | HARDENED_BIT, 2});
     }
 
-    @SuppressWarnings("checkstyle:LineLength")
     @Test
     public void deriveKeyPairVector3() {
         // Chain m

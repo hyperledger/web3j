@@ -42,7 +42,6 @@ public class Bip44WalletUtilsTest {
         tempDir.delete();
     }
 
-    @SuppressWarnings("checkstyle:LineLength")
     @Test
     public void generateBip44KeyPair() {
         String mnemonic =
@@ -68,7 +67,6 @@ public class Bip44WalletUtilsTest {
                 Base58.encode(addChecksum(serializePublic(bip44Keypair))));
     }
 
-    @SuppressWarnings("checkstyle:LineLength")
     @Test
     public void generateBip44KeyPairTestNet() {
         String mnemonic =
