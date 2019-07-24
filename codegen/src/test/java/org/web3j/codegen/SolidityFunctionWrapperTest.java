@@ -1,10 +1,9 @@
 package org.web3j.codegen;
 
+import java.lang.reflect.Method;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -532,4 +531,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(builder.build().toString(), is(expected));
     }
 
+    @Test
+    public void testRestrictedMethodNames() {
+        Set<String> restrictedMethodNames
+                = Arrays.stream(Object.class.getDeclaredMethods()).map(Method::getName).collect(Collectors.toSet());
+
+        assertThat(restrictedMethodNames.contains("finalize"), is(true));
+        assertThat(restrictedMethodNames.contains("clone"), is(true));
+        assertThat(restrictedMethodNames.contains("finalized"), is(false));
+    }
 }

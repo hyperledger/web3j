@@ -99,7 +99,8 @@ public class SolidityFunctionWrapper extends Generator {
     private static final Pattern pattern = Pattern.compile(regex);
     private final GenerationReporter reporter;
 
-    private static final Set<String> restrictedMethodNames = new HashSet<>(Arrays.asList(Object.class.getDeclaredMethods()));
+    private static final Set<String> restrictedMethodNames
+            = Arrays.stream(Object.class.getDeclaredMethods()).map(Method::getName).collect(Collectors.toSet());
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
         this(useNativeJavaTypes, new LogGenerationReporter(LOGGER));
@@ -709,19 +710,6 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         return methodBuilder.build();
-    }
-
-    private boolean duplicateWithParentsMethods(String functionName) {
-        return parentsMethodNames.contains(functionName);
-    }
-
-    private static Set<String> getParentsMethodNames() {
-        Class parent = Object.class;
-        parentsMethodNames = new HashSet<>();
-        for (Method declaredMethod : parent.getDeclaredMethods()) {
-            parentsMethodNames.add(declaredMethod.getName());
-        }
-        return parentsMethodNames;
     }
 
     private void buildConstantFunction(
