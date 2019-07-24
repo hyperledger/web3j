@@ -99,7 +99,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final Pattern pattern = Pattern.compile(regex);
     private final GenerationReporter reporter;
 
-    private static Set<String> parentsMethodNames = getParentsMethodNames();
+    private static final Set<String> restrictedMethodNames = new HashSet<>(Arrays.asList(Object.class.getDeclaredMethods()));
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
         this(useNativeJavaTypes, new LogGenerationReporter(LOGGER));
@@ -689,7 +689,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         // If the solidity function name is a reserved word
         // in the current java version prepend it with "_"
-        if (!SourceVersion.isName(functionName) || duplicateWithParentsMethods(functionName)) {
+        if (!SourceVersion.isName(functionName) || restrictedMethodNames.contains(functionName)) {
             functionName = "_" + functionName;
         }
 
