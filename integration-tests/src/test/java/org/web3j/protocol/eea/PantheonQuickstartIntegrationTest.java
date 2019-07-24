@@ -22,11 +22,12 @@ import static org.junit.Assert.assertThat;
 /**
  * Test designed to run with pantheon-quickstart
  * https://github.com/PegaSysEng/pantheon-quickstart
+ * Using orion 1.3.1
  */
 @Ignore
 public class PantheonQuickstartIntegrationTest {
     private static final String CLIENT_VERSION =
-            "pantheon/v1.2.1-dev-3ab368d7/linux-x86_64/oracle_openjdk-java-11";
+            "pantheon/v1.2.1-dev-12d19a15/linux-x86_64/oracle_openjdk-java-11";
 
     private static final Credentials ALICE = Credentials
             .create("8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63");
