@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.abi;
 
 import java.math.BigInteger;
@@ -22,14 +34,12 @@ import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
 import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
 
 /**
- * <p>Ethereum Contract Application Binary Interface (ABI) encoding for types.
- * Further details are available
- * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
- * </p>
+ * Ethereum Contract Application Binary Interface (ABI) encoding for types. Further details are
+ * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  */
 public class TypeEncoder {
 
-    private TypeEncoder() { }
+    private TypeEncoder() {}
 
     static boolean isDynamic(Type parameter) {
         return parameter instanceof DynamicBytes
@@ -76,9 +86,7 @@ public class TypeEncoder {
         }
 
         System.arraycopy(
-                rawValue, 0,
-                paddedRawValue, MAX_BYTE_LENGTH - rawValue.length,
-                rawValue.length);
+                rawValue, 0, paddedRawValue, MAX_BYTE_LENGTH - rawValue.length, rawValue.length);
         return Numeric.toHexStringNoPrefix(paddedRawValue);
     }
 
@@ -147,7 +155,7 @@ public class TypeEncoder {
 
     static <T extends Type> String encodeArrayValues(Array<T> value) {
         StringBuilder result = new StringBuilder();
-        for (Type type:value.getValue()) {
+        for (Type type : value.getValue()) {
             result.append(TypeEncoder.encode(type));
         }
         return result.toString();
@@ -168,19 +176,20 @@ public class TypeEncoder {
 
     private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
         StringBuilder result = new StringBuilder();
-        boolean arrayOfBytes = !value.getValue().isEmpty()
-                                       && value.getValue().get(0) instanceof DynamicBytes;
-        boolean arrayOfString = !value.getValue().isEmpty()
-                                        && value.getValue().get(0) instanceof Utf8String;
+        boolean arrayOfBytes =
+                !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicBytes;
+        boolean arrayOfString =
+                !value.getValue().isEmpty() && value.getValue().get(0) instanceof Utf8String;
         if (arrayOfBytes || arrayOfString) {
             long offset = 0;
             for (int i = 0; i < value.getValue().size(); i++) {
                 if (i == 0) {
                     offset = value.getValue().size() * MAX_BYTE_LENGTH;
                 } else {
-                    int bytesLength = arrayOfBytes
-                            ? ((byte[]) value.getValue().get(i - 1).getValue()).length
-                            : ((String) value.getValue().get(i - 1).getValue()).length();
+                    int bytesLength =
+                            arrayOfBytes
+                                    ? ((byte[]) value.getValue().get(i - 1).getValue()).length
+                                    : ((String) value.getValue().get(i - 1).getValue()).length();
                     int numberOfWords = (bytesLength + MAX_BYTE_LENGTH - 1) / MAX_BYTE_LENGTH;
                     int totalBytesLength = numberOfWords * MAX_BYTE_LENGTH;
                     offset += totalBytesLength + MAX_BYTE_LENGTH;
@@ -188,10 +197,7 @@ public class TypeEncoder {
                 result.append(
                         Numeric.toHexStringNoPrefix(
                                 Numeric.toBytesPadded(
-                                        new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH
-                                )
-                        )
-                );
+                                        new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
             }
         }
         return result.toString();

@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.utils;
 
 import java.util.Arrays;
@@ -24,9 +36,9 @@ public class CollectionTest {
 
     @Test
     public void testCreate() {
-        assertThat(create("a"), is(new String[] { "a" }));
-        assertThat(create(""), is(new String[] { "" }));
-        assertThat(create("a", "b"), is(new String[] { "a", "b" }));
+        assertThat(create("a"), is(new String[] {"a"}));
+        assertThat(create(""), is(new String[] {""}));
+        assertThat(create("a", "b"), is(new String[] {"a", "b"}));
     }
 
     @Test
@@ -39,34 +51,24 @@ public class CollectionTest {
 
     @Test
     public void testJoinWithFunction() {
-        final List<FakeSpec> specs1 = Arrays.asList(
-                new FakeSpec("a"),
-                new FakeSpec("b"),
-                new FakeSpec("c"));
+        final List<FakeSpec> specs1 =
+                Arrays.asList(new FakeSpec("a"), new FakeSpec("b"), new FakeSpec("c"));
         assertThat(join(specs1, ",", FakeSpec::getName), is("a,b,c"));
 
-        final List<FakeSpec> specs2 = Arrays.asList(
-                new FakeSpec("a"),
-                new FakeSpec("b"),
-                new FakeSpec("c"));
+        final List<FakeSpec> specs2 =
+                Arrays.asList(new FakeSpec("a"), new FakeSpec("b"), new FakeSpec("c"));
         assertThat(join(specs2, ", ", FakeSpec::getName), is("a, b, c"));
 
-        final List<FakeSpec> specs3 = Arrays.asList(
-                new FakeSpec(" a"),
-                new FakeSpec("b  "),
-                new FakeSpec(" c "));
+        final List<FakeSpec> specs3 =
+                Arrays.asList(new FakeSpec(" a"), new FakeSpec("b  "), new FakeSpec(" c "));
         assertThat(join(specs3, ",", FakeSpec::getName), is("a,b,c"));
 
-        final List<FakeSpec> specs4 = Arrays.asList(
-                new FakeSpec(" a"),
-                new FakeSpec("b  "),
-                new FakeSpec(" c "));
+        final List<FakeSpec> specs4 =
+                Arrays.asList(new FakeSpec(" a"), new FakeSpec("b  "), new FakeSpec(" c "));
         assertThat(join(specs4, ", ", FakeSpec::getName), is("a, b, c"));
     }
 
-    /**
-     * Fake object to test {@link Collection#join(List, String, Function)}.
-     */
+    /** Fake object to test {@link Collection#join(List, String, Function)}. */
     private final class FakeSpec {
         private final String name;
 

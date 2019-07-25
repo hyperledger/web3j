@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core;
 
 import java.math.BigInteger;
@@ -9,14 +21,12 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.protocol.core.methods.request.Transaction;
 
-/**
- * Mordon Testnet Configuration.
- */
+/** Mordon Testnet Configuration. */
 public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {
-        https://testnet.etherscan.io/block/1627453
+        https: // testnet.etherscan.io/block/1627453
         return "0xd67e59db999c3bd78bd4c2ba54689dba0c372ebcad09c8b9677970f37d64ca46";
     }
 
@@ -62,10 +72,9 @@ public class TestnetConfig implements IntegrationTestConfig {
     public Transaction buildTransaction() {
         return Transaction.createContractTransaction(
                 validAccount(),
-                BigInteger.ZERO,  // nonce
+                BigInteger.ZERO, // nonce
                 Transaction.DEFAULT_GAS,
-                validContractCode()
-        );
+                validContractCode());
     }
 
     @Override
@@ -85,10 +94,11 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String encodedEvent() {
-        Event event = new Event("Notify",
-                Arrays.asList(
-                        new TypeReference<Uint>(true) {},
-                        new TypeReference<Uint>() {}));
+        Event event =
+                new Event(
+                        "Notify",
+                        Arrays.asList(
+                                new TypeReference<Uint>(true) {}, new TypeReference<Uint>() {}));
 
         return EventEncoder.encode(event);
     }

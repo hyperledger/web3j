@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.utils;
 
 import java.math.BigInteger;
@@ -5,9 +17,7 @@ import java.math.BigInteger;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 
-/**
- * Flowable utility functions.
- */
+/** Flowable utility functions. */
 public class Flowables {
 
     public static Flowable<BigInteger> range(
@@ -33,31 +43,33 @@ public class Flowables {
         }
 
         if (ascending) {
-            return Flowable.create(subscriber -> {
-                for (BigInteger i = startValue;
-                        i.compareTo(endValue) < 1
-                             && !subscriber.isCancelled();
-                        i = i.add(BigInteger.ONE)) {
-                    subscriber.onNext(i);
-                }
+            return Flowable.create(
+                    subscriber -> {
+                        for (BigInteger i = startValue;
+                                i.compareTo(endValue) < 1 && !subscriber.isCancelled();
+                                i = i.add(BigInteger.ONE)) {
+                            subscriber.onNext(i);
+                        }
 
-                if (!subscriber.isCancelled()) {
-                    subscriber.onComplete();
-                }
-            }, BackpressureStrategy.BUFFER);
+                        if (!subscriber.isCancelled()) {
+                            subscriber.onComplete();
+                        }
+                    },
+                    BackpressureStrategy.BUFFER);
         } else {
-            return Flowable.create(subscriber -> {
-                for (BigInteger i = endValue;
-                        i.compareTo(startValue) > -1
-                             && !subscriber.isCancelled();
-                        i = i.subtract(BigInteger.ONE)) {
-                    subscriber.onNext(i);
-                }
+            return Flowable.create(
+                    subscriber -> {
+                        for (BigInteger i = endValue;
+                                i.compareTo(startValue) > -1 && !subscriber.isCancelled();
+                                i = i.subtract(BigInteger.ONE)) {
+                            subscriber.onNext(i);
+                        }
 
-                if (!subscriber.isCancelled()) {
-                    subscriber.onComplete();
-                }
-            }, BackpressureStrategy.BUFFER);
+                        if (!subscriber.isCancelled()) {
+                            subscriber.onComplete();
+                        }
+                    },
+                    BackpressureStrategy.BUFFER);
         }
     }
 }

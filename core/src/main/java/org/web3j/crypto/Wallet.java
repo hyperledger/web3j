@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -23,27 +35,24 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.web3j.crypto.SecureRandomUtils.secureRandom;
 
 /**
- * <p>Ethereum wallet file management. For reference, refer to
- * <a href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition">
- * Web3 Secret Storage Definition</a> or the
- * <a href="https://github.com/ethereum/go-ethereum/blob/master/accounts/key_store_passphrase.go">
- * Go Ethereum client implementation</a>.</p>
+ * Ethereum wallet file management. For reference, refer to <a
+ * href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition">Web3 Secret Storage
+ * Definition</a> or the <a
+ * href="https://github.com/ethereum/go-ethereum/blob/master/accounts/key_store_passphrase.go">Go
+ * Ethereum client implementation</a>.
  *
- * <p><strong>Note:</strong> the Bouncy Castle Scrypt implementation
- * {@link SCrypt}, fails to comply with the following
- * Ethereum reference
- * <a href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#scrypt">
- * Scrypt test vector</a>:</p>
+ * <p><strong>Note:</strong> the Bouncy Castle Scrypt implementation {@link SCrypt}, fails to comply
+ * with the following Ethereum reference <a
+ * href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#scrypt">Scrypt test
+ * vector</a>:
  *
- * <pre>
- * {@code
+ * <pre>{@code
  * // Only value of r that cost (as an int) could be exceeded for is 1
  * if (r == 1 && N_STANDARD > 65536)
  * {
  *     throw new IllegalArgumentException("Cost parameter N_STANDARD must be > 1 and < 65536.");
  * }
- * }
- * </pre>
+ * }</pre>
  */
 public class Wallet {
 
@@ -67,8 +76,8 @@ public class Wallet {
 
         byte[] salt = generateRandomBytes(32);
 
-        byte[] derivedKey = generateDerivedScryptKey(
-                password.getBytes(UTF_8), salt, n, R, p, DKLEN);
+        byte[] derivedKey =
+                generateDerivedScryptKey(password.getBytes(UTF_8), salt, n, R, p, DKLEN);
 
         byte[] encryptKey = Arrays.copyOfRange(derivedKey, 0, 16);
         byte[] iv = generateRandomBytes(16);
@@ -76,8 +85,8 @@ public class Wallet {
         byte[] privateKeyBytes =
                 Numeric.toBytesPadded(ecKeyPair.getPrivateKey(), Keys.PRIVATE_KEY_SIZE);
 
-        byte[] cipherText = performCipherOperation(
-                    Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes);
+        byte[] cipherText =
+                performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes);
 
         byte[] mac = generateMac(derivedKey, cipherText);
 
@@ -95,8 +104,13 @@ public class Wallet {
     }
 
     private static WalletFile createWalletFile(
-            ECKeyPair ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
-            int n, int p) {
+            ECKeyPair ecKeyPair,
+            byte[] cipherText,
+            byte[] iv,
+            byte[] salt,
+            byte[] mac,
+            int n,
+            int p) {
 
         WalletFile walletFile = new WalletFile();
         walletFile.setAddress(Keys.getAddress(ecKeyPair));
@@ -156,9 +170,12 @@ public class Wallet {
             SecretKeySpec secretKeySpec = new SecretKeySpec(encryptKey, "AES");
             cipher.init(mode, secretKeySpec, ivParameterSpec);
             return cipher.doFinal(text);
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException
-                | InvalidAlgorithmParameterException | InvalidKeyException
-                | BadPaddingException | IllegalBlockSizeException e) {
+        } catch (NoSuchPaddingException
+                | NoSuchAlgorithmException
+                | InvalidAlgorithmParameterException
+                | InvalidKeyException
+                | BadPaddingException
+                | IllegalBlockSizeException e) {
             throw new CipherException("Error performing cipher operation", e);
         }
     }
@@ -172,8 +189,7 @@ public class Wallet {
         return Hash.sha3(result);
     }
 
-    public static ECKeyPair decrypt(String password, WalletFile walletFile)
-            throws CipherException {
+    public static ECKeyPair decrypt(String password, WalletFile walletFile) throws CipherException {
 
         validate(walletFile);
 

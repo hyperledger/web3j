@@ -14,8 +14,8 @@ dependencies {
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "org.slf4j:slf4j-api:$slf4jVersion"
     testCompile project(path: ':crypto', configuration: 'testArtifacts'),
-            "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
-            "ch.qos.logback:logback-classic:$logbackVersion"
+    "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
+    "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 task createProperties(dependsOn: processResources) doLast {
@@ -37,14 +37,8 @@ def getTimestamp() {
     return df.format(today)
 }
 
-classes {
-    dependsOn createProperties
-}
+classes { dependsOn createProperties }
 
-configurations {
-    testArtifacts.extendsFrom testRuntime
-}
+configurations { testArtifacts.extendsFrom testRuntime }
 
-artifacts {
-    testArtifacts testJar
-}
+artifacts { testArtifacts testJar }

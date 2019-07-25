@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.abi.datatypes;
 
 import java.util.Arrays;
@@ -6,9 +18,7 @@ import java.util.List;
 
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
-/**
- * Static array type.
- */
+/** Static array type. */
 public abstract class StaticArray<T extends Type> extends Array<T> {
 
     /**
@@ -75,11 +85,15 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
         if (value.size() > MAX_SIZE_OF_STATIC_ARRAY) {
             throw new UnsupportedOperationException(
                     "Static arrays with a length greater than "
-                            + MAX_SIZE_OF_STATIC_ARRAY + " are not supported.");
+                            + MAX_SIZE_OF_STATIC_ARRAY
+                            + " are not supported.");
         } else if (value.size() != expectedSize) {
             throw new UnsupportedOperationException(
-                    "Expected array of type [" + getClass().getSimpleName() + "] to have ["
-                            + expectedSize + "] elements.");
+                    "Expected array of type ["
+                            + getClass().getSimpleName()
+                            + "] to have ["
+                            + expectedSize
+                            + "] elements.");
         }
     }
 }

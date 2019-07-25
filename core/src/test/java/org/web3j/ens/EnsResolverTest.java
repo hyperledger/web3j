@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.ens;
 
 import java.io.IOException;
@@ -45,7 +57,7 @@ public class EnsResolverTest {
     @Test
     public void testResolve() throws Exception {
         configureSyncing(false);
-        configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
+        configureLatestBlock(System.currentTimeMillis() / 1000); // block timestamp is in seconds
 
         NetVersion netVersion = new NetVersion();
         netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
@@ -61,21 +73,20 @@ public class EnsResolverTest {
         EthCall contractAddressResponse = new EthCall();
         contractAddressResponse.setResult(contractAddress);
 
-        when(web3jService.send(any(Request.class), eq(NetVersion.class)))
-                .thenReturn(netVersion);
+        when(web3jService.send(any(Request.class), eq(NetVersion.class))).thenReturn(netVersion);
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(resolverAddressResponse);
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(contractAddressResponse);
 
-        assertThat(ensResolver.resolve("web3j.eth"),
-                is("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
+        assertThat(
+                ensResolver.resolve("web3j.eth"), is("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
     }
 
     @Test
     public void testReverseResolve() throws Exception {
         configureSyncing(false);
-        configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
+        configureLatestBlock(System.currentTimeMillis() / 1000); // block timestamp is in seconds
 
         NetVersion netVersion = new NetVersion();
         netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
@@ -84,7 +95,7 @@ public class EnsResolverTest {
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
         String contractName =
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
-                + TypeEncoder.encode(new Utf8String("web3j.eth"));
+                        + TypeEncoder.encode(new Utf8String("web3j.eth"));
         System.err.println(contractName);
 
         EthCall resolverAddressResponse = new EthCall();
@@ -93,14 +104,14 @@ public class EnsResolverTest {
         EthCall contractNameResponse = new EthCall();
         contractNameResponse.setResult(contractName);
 
-        when(web3jService.send(any(Request.class), eq(NetVersion.class)))
-                .thenReturn(netVersion);
+        when(web3jService.send(any(Request.class), eq(NetVersion.class))).thenReturn(netVersion);
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(resolverAddressResponse);
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(contractNameResponse);
 
-        assertThat(ensResolver.reverseResolve("0x19e03255f667bdfd50a32722df860b1eeaf4d635"),
+        assertThat(
+                ensResolver.reverseResolve("0x19e03255f667bdfd50a32722df860b1eeaf4d635"),
                 is("web3j.eth"));
     }
 
@@ -114,7 +125,7 @@ public class EnsResolverTest {
     @Test
     public void testIsSyncedFullySynced() throws Exception {
         configureSyncing(false);
-        configureLatestBlock(System.currentTimeMillis() / 1000);  // block timestamp is in seconds
+        configureLatestBlock(System.currentTimeMillis() / 1000); // block timestamp is in seconds
 
         assertTrue(ensResolver.isSynced());
     }
@@ -133,8 +144,7 @@ public class EnsResolverTest {
         result.setSyncing(isSyncing);
         ethSyncing.setResult(result);
 
-        when(web3jService.send(any(Request.class), eq(EthSyncing.class)))
-                .thenReturn(ethSyncing);
+        when(web3jService.send(any(Request.class), eq(EthSyncing.class))).thenReturn(ethSyncing);
     }
 
     private void configureLatestBlock(long timestamp) throws IOException {
@@ -143,8 +153,7 @@ public class EnsResolverTest {
         EthBlock ethBlock = new EthBlock();
         ethBlock.setResult(block);
 
-        when(web3jService.send(any(Request.class), eq(EthBlock.class)))
-                .thenReturn(ethBlock);
+        when(web3jService.send(any(Request.class), eq(EthBlock.class))).thenReturn(ethBlock);
     }
 
     @Test

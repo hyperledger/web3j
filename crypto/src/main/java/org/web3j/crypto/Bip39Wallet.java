@@ -1,18 +1,24 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
-/**
- * Data class encapsulating a BIP-39 compatible Ethereum wallet.
- */
+/** Data class encapsulating a BIP-39 compatible Ethereum wallet. */
 public class Bip39Wallet {
 
-    /**
-     * Path to wallet file.
-     */
+    /** Path to wallet file. */
     private final String filename;
 
-    /**
-     * Generated BIP-39 mnemonic for the wallet.
-     */
+    /** Generated BIP-39 mnemonic for the wallet. */
     private final String mnemonic;
 
     public Bip39Wallet(String filename, String mnemonic) {
@@ -31,8 +37,12 @@ public class Bip39Wallet {
     @Override
     public String toString() {
         return "Bip39Wallet{"
-                + "filename='" + filename + '\''
-                + ", mnemonic='" + mnemonic + '\''
+                + "filename='"
+                + filename
+                + '\''
+                + ", mnemonic='"
+                + mnemonic
+                + '\''
                 + '}';
     }
 }

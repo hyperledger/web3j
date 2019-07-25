@@ -11,10 +11,6 @@ dependencies {
 
 }
 
-configurations {
-    testArtifacts.extendsFrom testRuntime
-}
+configurations { testArtifacts.extendsFrom testRuntime }
 
-artifacts {
-    testArtifacts testJar
-}
+artifacts { testArtifacts testJar }

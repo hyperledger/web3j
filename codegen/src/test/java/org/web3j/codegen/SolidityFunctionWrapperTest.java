@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.codegen;
 
 import java.math.BigInteger;
@@ -39,7 +51,6 @@ import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
 import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
 import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
 
-
 public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     private SolidityFunctionWrapper solidityFunctionWrapper;
@@ -61,70 +72,85 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildTypeName() {
-        assertThat(buildTypeName("uint256"),
-                is(ClassName.get(Uint256.class)));
-        assertThat(buildTypeName("uint64"),
-                is(ClassName.get(Uint64.class)));
-        assertThat(buildTypeName("string"),
-                is(ClassName.get(Utf8String.class)));
+        assertThat(buildTypeName("uint256"), is(ClassName.get(Uint256.class)));
+        assertThat(buildTypeName("uint64"), is(ClassName.get(Uint64.class)));
+        assertThat(buildTypeName("string"), is(ClassName.get(Utf8String.class)));
 
-        assertThat(buildTypeName("uint256[]"),
+        assertThat(
+                buildTypeName("uint256[]"),
                 is(ParameterizedTypeName.get(DynamicArray.class, Uint256.class)));
 
-        assertThat(buildTypeName("uint256[] storage"),
+        assertThat(
+                buildTypeName("uint256[] storage"),
                 is(ParameterizedTypeName.get(DynamicArray.class, Uint256.class)));
 
-        assertThat(buildTypeName("uint256[] memory"),
+        assertThat(
+                buildTypeName("uint256[] memory"),
                 is(ParameterizedTypeName.get(DynamicArray.class, Uint256.class)));
 
-        assertThat(buildTypeName("uint256[10]"),
+        assertThat(
+                buildTypeName("uint256[10]"),
                 is(ParameterizedTypeName.get(StaticArray10.class, Uint256.class)));
 
-        assertThat(buildTypeName("uint256[33]"),
+        assertThat(
+                buildTypeName("uint256[33]"),
                 is(ParameterizedTypeName.get(StaticArray.class, Uint256.class)));
 
-        assertThat(buildTypeName("uint256[10][3]"),
-                is(ParameterizedTypeName.get(ClassName.get(StaticArray3.class),
-                        ParameterizedTypeName.get(StaticArray10.class, Uint256.class))));
+        assertThat(
+                buildTypeName("uint256[10][3]"),
+                is(
+                        ParameterizedTypeName.get(
+                                ClassName.get(StaticArray3.class),
+                                ParameterizedTypeName.get(StaticArray10.class, Uint256.class))));
 
-        assertThat(buildTypeName("uint256[2][]"),
-                is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
-                        ParameterizedTypeName.get(StaticArray2.class, Uint256.class))));
+        assertThat(
+                buildTypeName("uint256[2][]"),
+                is(
+                        ParameterizedTypeName.get(
+                                ClassName.get(DynamicArray.class),
+                                ParameterizedTypeName.get(StaticArray2.class, Uint256.class))));
 
-        assertThat(buildTypeName("uint256[33][]"),
-                is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
-                        ParameterizedTypeName.get(StaticArray.class, Uint256.class))));
+        assertThat(
+                buildTypeName("uint256[33][]"),
+                is(
+                        ParameterizedTypeName.get(
+                                ClassName.get(DynamicArray.class),
+                                ParameterizedTypeName.get(StaticArray.class, Uint256.class))));
 
-        assertThat(buildTypeName("uint256[][]"),
-                is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class),
-                        ParameterizedTypeName.get(DynamicArray.class, Uint256.class))));
+        assertThat(
+                buildTypeName("uint256[][]"),
+                is(
+                        ParameterizedTypeName.get(
+                                ClassName.get(DynamicArray.class),
+                                ParameterizedTypeName.get(DynamicArray.class, Uint256.class))));
     }
 
     @Test
     public void testGetNativeType() {
-        assertThat(getNativeType(TypeName.get(Address.class)),
-                equalTo(TypeName.get(String.class)));
-        assertThat(getNativeType(TypeName.get(Uint256.class)),
+        assertThat(getNativeType(TypeName.get(Address.class)), equalTo(TypeName.get(String.class)));
+        assertThat(
+                getNativeType(TypeName.get(Uint256.class)),
                 equalTo(TypeName.get(BigInteger.class)));
-        assertThat(getNativeType(TypeName.get(Int256.class)),
-                equalTo(TypeName.get(BigInteger.class)));
-        assertThat(getNativeType(TypeName.get(Utf8String.class)),
-                equalTo(TypeName.get(String.class)));
-        assertThat(getNativeType(TypeName.get(Bool.class)),
-                equalTo(TypeName.get(Boolean.class)));
-        assertThat(getNativeType(TypeName.get(Bytes32.class)),
-                equalTo(TypeName.get(byte[].class)));
-        assertThat(getNativeType(TypeName.get(DynamicBytes.class)),
+        assertThat(
+                getNativeType(TypeName.get(Int256.class)), equalTo(TypeName.get(BigInteger.class)));
+        assertThat(
+                getNativeType(TypeName.get(Utf8String.class)), equalTo(TypeName.get(String.class)));
+        assertThat(getNativeType(TypeName.get(Bool.class)), equalTo(TypeName.get(Boolean.class)));
+        assertThat(getNativeType(TypeName.get(Bytes32.class)), equalTo(TypeName.get(byte[].class)));
+        assertThat(
+                getNativeType(TypeName.get(DynamicBytes.class)),
                 equalTo(TypeName.get(byte[].class)));
     }
 
     @Test
     public void testGetNativeTypeParameterized() {
-        assertThat(getNativeType(
-                ParameterizedTypeName.get(
-                        ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
-                equalTo(ParameterizedTypeName.get(
-                        ClassName.get(List.class), TypeName.get(String.class))));
+        assertThat(
+                getNativeType(
+                        ParameterizedTypeName.get(
+                                ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
+                equalTo(
+                        ParameterizedTypeName.get(
+                                ClassName.get(List.class), TypeName.get(String.class))));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -134,32 +160,33 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testGetEventNativeType() {
-        assertThat(getEventNativeType(TypeName.get(Utf8String.class)),
+        assertThat(
+                getEventNativeType(TypeName.get(Utf8String.class)),
                 equalTo(TypeName.get(byte[].class)));
     }
 
     @Test
     public void testGetEventNativeTypeParameterized() {
-        assertThat(getEventNativeType(
-                ParameterizedTypeName.get(
-                        ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
+        assertThat(
+                getEventNativeType(
+                        ParameterizedTypeName.get(
+                                ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
                 equalTo(TypeName.get(byte[].class)));
     }
 
     @Test
     public void testBuildFunctionTransaction() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                false,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Collections.emptyList(),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        false,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Collections.emptyList(),
+                        "type",
+                        false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
@@ -168,46 +195,42 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
                         + "  return executeRemoteCallTransaction(function);\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
     public void testBuildingFunctionTransactionThatReturnsValueReportsWarning() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                false,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Arrays.asList(
-                        new AbiDefinition.NamedType("result", "uint8")),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        false,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Arrays.asList(new AbiDefinition.NamedType("result", "uint8")),
+                        "type",
+                        false);
 
         solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
-        verify(generationReporter).report(
-                "Definition of the function functionName returns a value but is not defined as a view function. " +
-                        "Please ensure it contains the view modifier if you want to read the return value");
-        //CHECKSTYLE:ON
+        verify(generationReporter)
+                .report(
+                        "Definition of the function functionName returns a value but is not defined as a view function. "
+                                + "Please ensure it contains the view modifier if you want to read the return value");
     }
 
     @Test
     public void testBuildPayableFunctionTransaction() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                false,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Collections.emptyList(),
-                "type",
-                true);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        false,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Collections.emptyList(),
+                        "type",
+                        true);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param, java.math.BigInteger weiValue) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
@@ -216,26 +239,23 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
                         + "  return executeRemoteCallTransaction(function, weiValue);\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
     public void testBuildFunctionConstantSingleValueReturn() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                true,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Arrays.asList(
-                        new AbiDefinition.NamedType("result", "int8")),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Arrays.asList(new AbiDefinition.NamedType("result", "int8")),
+                        "type",
+                        false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.math.BigInteger> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
@@ -243,26 +263,23 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n"
                         + "  return executeRemoteCallSingleValueReturn(function, java.math.BigInteger.class);\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
     public void testBuildFunctionConstantSingleValueRawListReturn() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                true,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Arrays.asList(
-                        new AbiDefinition.NamedType("result", "address[]")),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Arrays.asList(new AbiDefinition.NamedType("result", "address[]")),
+                        "type",
+                        false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
@@ -278,26 +295,23 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "        }\n"
                         + "      });\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
     public void testBuildFunctionConstantDynamicArrayRawListReturn() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                true,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8[]")),
-                "functionName",
-                Arrays.asList(
-                        new AbiDefinition.NamedType("result", "address[]")),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8[]")),
+                        "functionName",
+                        Arrays.asList(new AbiDefinition.NamedType("result", "address[]")),
+                        "type",
+                        false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.util.List<java.math.BigInteger> param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
@@ -315,26 +329,23 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "        }\n"
                         + "      });\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
     public void testBuildFunctionConstantMultiDynamicArrayRawListReturn() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                true,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8[][]")),
-                "functionName",
-                Arrays.asList(
-                        new AbiDefinition.NamedType("result", "address[]")),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8[][]")),
+                        "functionName",
+                        Arrays.asList(new AbiDefinition.NamedType("result", "address[]")),
+                        "type",
+                        false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
         String expected =
                 "public org.web3j.protocol.core.RemoteCall<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
@@ -353,30 +364,27 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "        }\n"
                         + "      });\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
     }
 
     @Test
     public void testBuildFunctionConstantInvalid() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                true,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Collections.emptyList(),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Collections.emptyList(),
+                        "type",
+                        false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
         String expected =
                 "public void functionName(java.math.BigInteger param) {\n"
                         + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(methodSpec.toString(), is(expected));
     }
@@ -384,38 +392,38 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     @Test
     public void testBuildFunctionConstantMultipleValueReturn() throws Exception {
 
-        AbiDefinition functionDefinition = new AbiDefinition(
-                true,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param1", "uint8"),
-                        new AbiDefinition.NamedType("param2", "uint32")),
-                "functionName",
-                Arrays.asList(
-                        new AbiDefinition.NamedType("result1", "int8"),
-                        new AbiDefinition.NamedType("result2", "int32")),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(
+                                new AbiDefinition.NamedType("param1", "uint8"),
+                                new AbiDefinition.NamedType("param2", "uint32")),
+                        "functionName",
+                        Arrays.asList(
+                                new AbiDefinition.NamedType("result1", "int8"),
+                                new AbiDefinition.NamedType("result2", "int32")),
+                        "type",
+                        false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        //CHECKSTYLE:OFF
-        String expected = "public org.web3j.protocol.core.RemoteCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
-                + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
-                + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param1), \n"
-                + "      new org.web3j.abi.datatypes.generated.Uint32(param2)), \n"
-                + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n"
-                + "  return new org.web3j.protocol.core.RemoteCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>(\n"
-                + "      new java.util.concurrent.Callable<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>() {\n"
-                + "        @java.lang.Override\n"
-                + "        public org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger> call() throws java.lang.Exception {\n"
-                + "          java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);\n"
-                + "          return new org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>(\n"
-                + "              (java.math.BigInteger) results.get(0).getValue(), \n"
-                + "              (java.math.BigInteger) results.get(1).getValue());\n"
-                + "        }\n"
-                + "      });\n"
-                + "}\n";
-        //CHECKSTYLE:ON
+        String expected =
+                "public org.web3j.protocol.core.RemoteCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param1), \n"
+                        + "      new org.web3j.abi.datatypes.generated.Uint32(param2)), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n"
+                        + "  return new org.web3j.protocol.core.RemoteCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>(\n"
+                        + "      new java.util.concurrent.Callable<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>() {\n"
+                        + "        @java.lang.Override\n"
+                        + "        public org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger> call() throws java.lang.Exception {\n"
+                        + "          java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);\n"
+                        + "          return new org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>(\n"
+                        + "              (java.math.BigInteger) results.get(0).getValue(), \n"
+                        + "              (java.math.BigInteger) results.get(1).getValue());\n"
+                        + "        }\n"
+                        + "      });\n"
+                        + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
     }
@@ -431,19 +439,19 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         fromAddress.setIndexed(true);
         toAddress.setIndexed(true);
 
-        AbiDefinition functionDefinition = new AbiDefinition(
-                false,
-                Arrays.asList(id, fromAddress, toAddress, value, message),
-                "Transfer",
-                new ArrayList<>(),
-                "event",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        false,
+                        Arrays.asList(id, fromAddress, toAddress, value, message),
+                        "Transfer",
+                        new ArrayList<>(),
+                        "event",
+                        false);
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addMethods(
                 solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
 
-        //CHECKSTYLE:OFF
         String expected =
                 "class testClass {\n"
                         + "  public static final org.web3j.abi.datatypes.Event TRANSFER_EVENT = new org.web3j.abi.datatypes.Event(\"Transfer\", \n"
@@ -501,35 +509,31 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "    public java.lang.String message;\n"
                         + "  }\n"
                         + "}\n";
-        //CHECKSTYLE:ON
 
         assertThat(builder.build().toString(), is(expected));
     }
 
     @Test
     public void testBuildFuncNameConstants() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                false,
-                Arrays.asList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Collections.emptyList(),
-                "function",
-                true);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        false,
+                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Collections.emptyList(),
+                        "function",
+                        true);
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
-        builder.addFields(solidityFunctionWrapper
-                .buildFuncNameConstants(Collections.singletonList(functionDefinition)));
+        builder.addFields(
+                solidityFunctionWrapper.buildFuncNameConstants(
+                        Collections.singletonList(functionDefinition)));
 
-        //CHECKSTYLE:OFF
         String expected =
-                "class testClass {\n" +
-                        "  public static final java.lang.String FUNC_FUNCTIONNAME = \"functionName\";\n" +
-                        "}\n";
-        //CHECKSTYLE:ON
-
+                "class testClass {\n"
+                        + "  public static final java.lang.String FUNC_FUNCTIONNAME = \"functionName\";\n"
+                        + "}\n";
 
         assertThat(builder.build().toString(), is(expected));
     }
-
 }

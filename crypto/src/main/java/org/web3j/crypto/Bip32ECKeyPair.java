@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
 import java.math.BigInteger;
@@ -28,8 +40,12 @@ public class Bip32ECKeyPair extends ECKeyPair {
 
     private ECPoint publicKeyPoint;
 
-    public Bip32ECKeyPair(BigInteger privateKey, BigInteger publicKey, int childNumber,
-                          byte[] chainCode, Bip32ECKeyPair parent) {
+    public Bip32ECKeyPair(
+            BigInteger privateKey,
+            BigInteger publicKey,
+            int childNumber,
+            byte[] chainCode,
+            Bip32ECKeyPair parent) {
         super(privateKey, publicKey);
         this.parentHasPrivate = parent != null && parent.hasPrivateKey();
         this.childNumber = childNumber;
@@ -39,8 +55,8 @@ public class Bip32ECKeyPair extends ECKeyPair {
     }
 
     public static Bip32ECKeyPair create(BigInteger privateKey, byte[] chainCode) {
-        return new Bip32ECKeyPair(privateKey, Sign.publicKeyFromPrivate(privateKey),
-                0, chainCode, null);
+        return new Bip32ECKeyPair(
+                privateKey, Sign.publicKeyFromPrivate(privateKey), 0, chainCode, null);
     }
 
     public static Bip32ECKeyPair create(byte[] privateKey, byte[] chainCode) {
@@ -84,9 +100,8 @@ public class Bip32ECKeyPair extends ECKeyPair {
             Arrays.fill(il, (byte) 0);
             ECPoint ki = Sign.publicPointFromPrivate(ilInt).add(getPublicKeyPoint());
 
-            return new Bip32ECKeyPair(null,
-                    Sign.publicFromPoint(ki.getEncoded(true)),
-                    childNumber, chainCode, this);
+            return new Bip32ECKeyPair(
+                    null, Sign.publicFromPoint(ki.getEncoded(true)), childNumber, chainCode, this);
         } else {
             ByteBuffer data = ByteBuffer.allocate(37);
             if (isHardened(childNumber)) {
@@ -104,8 +119,12 @@ public class Bip32ECKeyPair extends ECKeyPair {
             Arrays.fill(il, (byte) 0);
             BigInteger privateKey = getPrivateKey().add(ilInt).mod(Sign.CURVE.getN());
 
-            return new Bip32ECKeyPair(privateKey, Sign.publicKeyFromPrivate(privateKey),
-                    childNumber, chainCode, this);
+            return new Bip32ECKeyPair(
+                    privateKey,
+                    Sign.publicKeyFromPrivate(privateKey),
+                    childNumber,
+                    chainCode,
+                    this);
         }
     }
 

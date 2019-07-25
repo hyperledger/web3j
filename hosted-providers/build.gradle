@@ -1,6 +1,4 @@
 
 description 'web3j customisations for working with hosted web3 providers (Infura.io & Nodesmith.io)'
 
-dependencies {
-    compile project(':core')
-}
+dependencies { compile project(':core') }

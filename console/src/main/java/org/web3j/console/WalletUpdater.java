@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.console;
 
 import java.io.File;
@@ -9,13 +21,10 @@ import org.web3j.crypto.WalletUtils;
 
 import static org.web3j.codegen.Console.exitError;
 
-/**
- * Simple class for creating a wallet file.
- */
+/** Simple class for creating a wallet file. */
 public class WalletUpdater extends WalletManager {
 
-    public WalletUpdater() {
-    }
+    public WalletUpdater() {}
 
     public WalletUpdater(IODevice console) {
         super(console);
@@ -45,16 +54,21 @@ public class WalletUpdater extends WalletManager {
         File destination = createDir(destinationDir);
 
         try {
-            String walletFileName = WalletUtils.generateWalletFile(
-                    newPassword, credentials.getEcKeyPair(), destination, true);
-            console.printf("New wallet file " + walletFileName
-                    + " successfully created in: " + destinationDir + "\n");
+            String walletFileName =
+                    WalletUtils.generateWalletFile(
+                            newPassword, credentials.getEcKeyPair(), destination, true);
+            console.printf(
+                    "New wallet file "
+                            + walletFileName
+                            + " successfully created in: "
+                            + destinationDir
+                            + "\n");
         } catch (CipherException | IOException e) {
             exitError(e);
         }
 
-        String delete = console.readLine(
-                "Would you like to delete your existing wallet file (Y/N)? [N]: ");
+        String delete =
+                console.readLine("Would you like to delete your existing wallet file (Y/N)? [N]: ");
         if (delete.toUpperCase().equals("Y")) {
             if (!walletFile.delete()) {
                 exitError("Unable to remove wallet file\n");
