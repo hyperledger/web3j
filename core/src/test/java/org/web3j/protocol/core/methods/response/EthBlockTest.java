@@ -12,9 +12,9 @@
  */
 package org.web3j.protocol.core.methods.response;
 
-import org.junit.Test;
-
 import java.math.BigInteger;
+
+import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 

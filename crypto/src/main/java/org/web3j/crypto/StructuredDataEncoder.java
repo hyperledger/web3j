@@ -30,7 +30,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.bind.ValidationException;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.abi.TypeEncoder;
