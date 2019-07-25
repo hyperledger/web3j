@@ -14,7 +14,7 @@ package org.web3j.protocol.core.methods.response;
 
 import org.junit.Test;
 
-import org.web3j.utils.Numeric;
+import java.math.BigInteger;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -27,7 +27,7 @@ public class EthBlockTest {
                         null, null, null, null, null, null, null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null, null, null);
 
-        assertEquals(ethBlock.getSize(), Numeric.decodeQuantity("0x0"));
+        assertEquals(ethBlock.getSize(), BigInteger.valueOf(0));
     }
 
     @Test
@@ -37,6 +37,6 @@ public class EthBlockTest {
                         null, null, null, null, null, null, null, null, null, null, null, null,
                         null, null, null, "0x3e8", null, null, null, null, null, null);
 
-        assertEquals(ethBlock.getSize(), Numeric.decodeQuantity("0x3e8"));
+        assertEquals(ethBlock.getSize(), BigInteger.valueOf(1000));
     }
 }

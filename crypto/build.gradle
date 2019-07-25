@@ -6,7 +6,8 @@ dependencies {
             project(':rlp'),
             project(':utils'),
             "org.slf4j:slf4j-api:$slf4jVersion",
-            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "javax.xml.bind:jaxb-api:2.3.0"
 }
 
 configurations { testArtifacts.extendsFrom testRuntime }
