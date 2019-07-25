@@ -66,8 +66,16 @@ public class PrivateTransactionDecoderTest {
         final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
         final String privacyGroupId = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
         final String restriction = "restricted";
-        final RawPrivateTransaction rawTransaction = RawPrivateTransaction.createTransaction(
-                nonce, gasPrice, gasLimit, to, "", privateFrom, privacyGroupId, restriction);
+        final RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        to,
+                        "",
+                        privateFrom,
+                        privacyGroupId,
+                        restriction);
         byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
@@ -91,8 +99,9 @@ public class PrivateTransactionDecoderTest {
         final String to = "0x0add5355";
         final String privacyGroupId = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
         final String restriction = "restricted";
-        final RawPrivateTransaction rawTransaction = RawPrivateTransaction.createTransaction(
-                nonce, gasPrice, gasLimit, to, "", privacyGroupId, restriction);
+        final RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce, gasPrice, gasLimit, to, "", privacyGroupId, restriction);
         byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
@@ -158,8 +167,16 @@ public class PrivateTransactionDecoderTest {
         final String privacyGroupId = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
         final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
         final String restriction = "restricted";
-        final RawPrivateTransaction rawTransaction = RawPrivateTransaction.createTransaction(
-                nonce, gasPrice, gasLimit, to, "", privateFrom, privacyGroupId, restriction);
+        final RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        to,
+                        "",
+                        privateFrom,
+                        privacyGroupId,
+                        restriction);
         final String privateKey =
                 "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
@@ -197,8 +214,9 @@ public class PrivateTransactionDecoderTest {
         final String to = "0x0add5355";
         final String privacyGroupId = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
         final String restriction = "restricted";
-        final RawPrivateTransaction rawTransaction = RawPrivateTransaction.createTransaction(
-                nonce, gasPrice, gasLimit, to, "", privacyGroupId, restriction);
+        final RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce, gasPrice, gasLimit, to, "", privacyGroupId, restriction);
         final String privateKey =
                 "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
@@ -245,8 +263,7 @@ public class PrivateTransactionDecoderTest {
                 "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
         byte[] signedMessage =
-                PrivateTransactionEncoder.signMessage(
-                        rawTransaction, chainId, credentials);
+                PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         final String hexMessage = Numeric.toHexString(signedMessage);
 
         final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);

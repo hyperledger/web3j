@@ -35,8 +35,8 @@ public class PrivateTransactionDecoder {
         final RawTransaction rawTransaction = TransactionDecoder.decode(hexTransaction);
 
         if (values.size() == 8) {
-            return new RawPrivateTransaction(rawTransaction,
-                    extractBase64(values.get(6)),  extractString(values.get(7)));
+            return new RawPrivateTransaction(
+                    rawTransaction, extractBase64(values.get(6)), extractString(values.get(7)));
         } else if (values.size() == 9) {
             final String privateFrom = extractBase64(values.get(6));
             final String restriction = extractString(values.get(8));
@@ -48,10 +48,7 @@ public class PrivateTransactionDecoder {
                         restriction);
             } else {
                 return new RawPrivateTransaction(
-                        rawTransaction,
-                        privateFrom,
-                        extractBase64(values.get(7)),
-                        restriction);
+                        rawTransaction, privateFrom, extractBase64(values.get(7)), restriction);
             }
 
         } else if (values.size() == 11) {
@@ -87,7 +84,8 @@ public class PrivateTransactionDecoder {
     }
 
     private static List<String> extractBase64List(final RlpType values) {
-        return ((RlpList) values).getValues().stream()
+        return ((RlpList) values)
+                .getValues().stream()
                         .map(PrivateTransactionDecoder::extractBase64)
                         .collect(Collectors.toList());
     }

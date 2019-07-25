@@ -64,8 +64,7 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     }
 
     @Override
-    public Request<?, EeaGetPrivateTransaction> eeaGetPrivateTransaction(
-            final String enclaveKey) {
+    public Request<?, EeaGetPrivateTransaction> eeaGetPrivateTransaction(final String enclaveKey) {
         return new Request<>(
                 "eea_getPrivateTransaction",
                 Collections.singletonList(enclaveKey),
@@ -96,8 +95,7 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     }
 
     @Override
-    public Request<?, EeaFindPrivacyGroup> eeaFindPrivacyGroup(
-            final List<String> addresses) {
+    public Request<?, EeaFindPrivacyGroup> eeaFindPrivacyGroup(final List<String> addresses) {
         return new Request<>(
                 "eea_findPrivacyGroup",
                 Collections.singletonList(addresses),
@@ -107,8 +105,7 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
 
     @Override
     public Request<?, BooleanResponse> eeaDeletePrivacyGroup(
-            final String from,
-            final String privacyGroupId) {
+            final String from, final String privacyGroupId) {
         return new Request<>(
                 "eea_deletePrivacyGroup",
                 Arrays.asList(from, privacyGroupId),

@@ -56,28 +56,33 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         this.transactionReceiptProcessor = transactionReceiptProcessor;
     }
 
-    protected PrivateTransactionManager(final Eea eea,
+    protected PrivateTransactionManager(
+            final Eea eea,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final int attempts,
             final int sleepDuration) {
         this(
-                eea, credentials, chainId, privateFrom,
-                new PollingPrivateTransactionReceiptProcessor(eea,
-                        attempts, sleepDuration));
+                eea,
+                credentials,
+                chainId,
+                privateFrom,
+                new PollingPrivateTransactionReceiptProcessor(eea, attempts, sleepDuration));
     }
 
     protected PrivateTransactionManager(
             final Eea eea,
             final Credentials credentials,
-            final
-            long chainId,
-            final
-            String privateFrom) {
+            final long chainId,
+            final String privateFrom) {
         this(
-                eea, credentials, chainId, privateFrom, new PollingPrivateTransactionReceiptProcessor(
-                eea, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
+                eea,
+                credentials,
+                chainId,
+                privateFrom,
+                new PollingPrivateTransactionReceiptProcessor(
+                        eea, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
     }
 
     @Override
@@ -100,27 +105,43 @@ public abstract class PrivateTransactionManager extends TransactionManager {
 
     @Override
     public EthSendTransaction sendTransaction(
-            final BigInteger gasPrice, final BigInteger gasLimit, final String to,
-            final String data, final BigInteger value)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value)
             throws IOException {
 
-        final BigInteger nonce = eea.eeaGetTransactionCount(
-                credentials.getAddress(), getPrivacyGroupId())
-                .send().getTransactionCount();
+        final BigInteger nonce =
+                eea.eeaGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
+                        .send()
+                        .getTransactionCount();
 
         final Object privacyGroupIdOrPrivateFor = privacyGroupIdOrPrivateFor();
 
         final RawPrivateTransaction transaction;
         if (privacyGroupIdOrPrivateFor instanceof String) {
-            transaction = RawPrivateTransaction.createTransaction(
-                    nonce, gasPrice, gasLimit, to,
-                    data, privateFrom, (String) privacyGroupIdOrPrivateFor,
-                    "restricted");
+            transaction =
+                    RawPrivateTransaction.createTransaction(
+                            nonce,
+                            gasPrice,
+                            gasLimit,
+                            to,
+                            data,
+                            privateFrom,
+                            (String) privacyGroupIdOrPrivateFor,
+                            "restricted");
         } else {
-            transaction = RawPrivateTransaction.createTransaction(
-                    nonce, gasPrice, gasLimit, to,
-                    data, privateFrom, (List<String>) privacyGroupIdOrPrivateFor,
-                    "restricted");
+            transaction =
+                    RawPrivateTransaction.createTransaction(
+                            nonce,
+                            gasPrice,
+                            gasLimit,
+                            to,
+                            data,
+                            privateFrom,
+                            (List<String>) privacyGroupIdOrPrivateFor,
+                            "restricted");
         }
 
         final String rawSignedTransaction =
@@ -134,10 +155,13 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         try {
-            EthSendTransaction est = sendTransaction(
-                    BigInteger.valueOf(0),
-                    BigInteger.valueOf(3000000),
-                    to, data, BigInteger.ZERO);
+            EthSendTransaction est =
+                    sendTransaction(
+                            BigInteger.valueOf(0),
+                            BigInteger.valueOf(3000000),
+                            to,
+                            data,
+                            BigInteger.ZERO);
             TransactionReceipt ptr = processResponse(est);
             return ((PrivateTransactionReceipt) ptr).getOutput();
         } catch (TransactionException e) {

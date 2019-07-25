@@ -83,23 +83,35 @@ public class PrivateTransactionEncoder {
                         TransactionEncoder.asRlpValues(
                                 privateTransaction.asRawTransaction(), signatureData));
 
-        privateTransaction.getPrivateFrom().ifPresent(
-                privateFrom -> result.add(
-                        RlpString.create(Numeric.base64ToByteArray(privateFrom))));
+        privateTransaction
+                .getPrivateFrom()
+                .ifPresent(
+                        privateFrom ->
+                                result.add(
+                                        RlpString.create(Numeric.base64ToByteArray(privateFrom))));
 
-        privateTransaction.getPrivateFor().ifPresent(
-                privateFor ->
-                    result.add(
-                        new RlpList(
-                            privateFor.stream()
-                                .map(s -> RlpString.create(Numeric.base64ToByteArray(s)))
-                                .collect(Collectors.toList())
-                        )
-        ));
+        privateTransaction
+                .getPrivateFor()
+                .ifPresent(
+                        privateFor ->
+                                result.add(
+                                        new RlpList(
+                                                privateFor.stream()
+                                                        .map(
+                                                                s ->
+                                                                        RlpString.create(
+                                                                                Numeric
+                                                                                        .base64ToByteArray(
+                                                                                                s)))
+                                                        .collect(Collectors.toList()))));
 
-        privateTransaction.getPrivacyGroupId()
-                .ifPresent(privacyGroupId ->
-                        result.add(RlpString.create(Numeric.base64ToByteArray(privacyGroupId))));
+        privateTransaction
+                .getPrivacyGroupId()
+                .ifPresent(
+                        privacyGroupId ->
+                                result.add(
+                                        RlpString.create(
+                                                Numeric.base64ToByteArray(privacyGroupId))));
 
         result.add(RlpString.create(privateTransaction.getRestriction()));
 

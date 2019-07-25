@@ -26,7 +26,6 @@ import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
 import org.web3j.protocol.eea.response.EeaGetPrivateTransaction;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 
-
 public interface Eea extends Web3j {
     static Eea build(Web3jService web3jService) {
         return new JsonRpc2_0Eea(web3jService);
@@ -39,17 +38,17 @@ public interface Eea extends Web3j {
     Request<?, EthGetTransactionCount> eeaGetTransactionCount(
             final String address, final String privacyGroupId);
 
-    Request<?, EeaGetPrivateTransaction> eeaGetPrivateTransaction(
-            final String enclaveKey);
+    Request<?, EeaGetPrivateTransaction> eeaGetPrivateTransaction(final String enclaveKey);
 
     Request<?, EeaGetPrivacyPrecompileAddress> eeaGetPrivacyPrecompileAddress();
 
     Request<?, EeaCreatePrivacyGroup> eeaCreatePrivacyGroup(
-            final String from, final String name,
-            final String description, final List<String> addresses);
+            final String from,
+            final String name,
+            final String description,
+            final List<String> addresses);
 
-    Request<?, EeaFindPrivacyGroup> eeaFindPrivacyGroup(
-            List<String> addresses);
+    Request<?, EeaFindPrivacyGroup> eeaFindPrivacyGroup(List<String> addresses);
 
     Request<?, BooleanResponse> eeaDeletePrivacyGroup(
             final String from, final String privacyGroupId);

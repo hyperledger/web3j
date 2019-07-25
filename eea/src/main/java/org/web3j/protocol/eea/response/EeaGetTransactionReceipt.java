@@ -20,5 +20,4 @@ public class EeaGetTransactionReceipt extends Response<PrivateTransactionReceipt
     public Optional<PrivateTransactionReceipt> getTransactionReceipt() {
         return Optional.ofNullable(getResult());
     }
-
 }

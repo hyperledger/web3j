@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.eea.response;
 
 import java.util.Objects;
@@ -14,22 +26,34 @@ public class PrivateTransactionWithPrivacyGroup extends PrivateTransaction {
 
     @JsonCreator
     public PrivateTransactionWithPrivacyGroup(
-            @JsonProperty(value = "hash")final String hash,
-            @JsonProperty(value = "nonce")final String nonce,
-            @JsonProperty(value = "from")final String from,
-            @JsonProperty(value = "to")final String to,
-            @JsonProperty(value = "value")final String value,
-            @JsonProperty(value = "gas")final String gas,
-            @JsonProperty(value = "gasPrice")final String gasPrice,
-            @JsonProperty(value = "input")final String input,
-            @JsonProperty(value = "r")final String r,
-            @JsonProperty(value = "s")final String s,
-            @JsonProperty(value = "v")final long v,
-            @JsonProperty(value = "privateFrom")final String privateFrom,
-            @JsonProperty(value = "privacyGroupId")final String privacyGroupId,
-            @JsonProperty(value = "restriction")final String restriction) {
-        super(hash, nonce, from, to, value, gas, gasPrice,
-                input,r, s, v, privateFrom, restriction);
+            @JsonProperty(value = "hash") final String hash,
+            @JsonProperty(value = "nonce") final String nonce,
+            @JsonProperty(value = "from") final String from,
+            @JsonProperty(value = "to") final String to,
+            @JsonProperty(value = "value") final String value,
+            @JsonProperty(value = "gas") final String gas,
+            @JsonProperty(value = "gasPrice") final String gasPrice,
+            @JsonProperty(value = "input") final String input,
+            @JsonProperty(value = "r") final String r,
+            @JsonProperty(value = "s") final String s,
+            @JsonProperty(value = "v") final long v,
+            @JsonProperty(value = "privateFrom") final String privateFrom,
+            @JsonProperty(value = "privacyGroupId") final String privacyGroupId,
+            @JsonProperty(value = "restriction") final String restriction) {
+        super(
+                hash,
+                nonce,
+                from,
+                to,
+                value,
+                gas,
+                gasPrice,
+                input,
+                r,
+                s,
+                v,
+                privateFrom,
+                restriction);
         this.privacyGroupId = privacyGroupId;
     }
 

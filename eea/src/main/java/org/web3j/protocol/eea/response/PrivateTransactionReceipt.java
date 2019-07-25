@@ -88,7 +88,7 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getContractAddress(),
-                getFrom(), getTo(), getOutput(), getLogs());
+        return Objects.hash(
+                super.hashCode(), getContractAddress(), getFrom(), getTo(), getOutput(), getLogs());
     }
 }

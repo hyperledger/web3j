@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.eea.response;
 
 import java.io.IOException;
@@ -26,11 +38,17 @@ public abstract class PrivateTransaction {
     private String restriction;
 
     public PrivateTransaction(
-            final String hash, final String nonce,
-            final String from, final String to,
-            final String value, final String gas,
-            final String gasPrice, final String input,
-            final String r, final String s, final long v,
+            final String hash,
+            final String nonce,
+            final String from,
+            final String to,
+            final String value,
+            final String gas,
+            final String gasPrice,
+            final String input,
+            final String r,
+            final String s,
+            final long v,
             final String privateFrom,
             final String restriction) {
 
@@ -56,8 +74,8 @@ public abstract class PrivateTransaction {
         }
 
         @Override
-        public PrivateTransaction deserialize(
-                JsonParser p, DeserializationContext ctxt) throws IOException {
+        public PrivateTransaction deserialize(JsonParser p, DeserializationContext ctxt)
+                throws IOException {
             final TreeNode node = p.readValueAsTree();
 
             // Select the concrete class based on the existence of a property
@@ -147,9 +165,18 @@ public abstract class PrivateTransaction {
     @Override
     public int hashCode() {
         return Objects.hash(
-                getHash(), getNonce(), getFrom(),
-                getTo(), getValue(), getGasPrice(),
-                getGas(), getInput(), getR(), getS(),
-                getV(), getPrivateFrom(), getRestriction());
+                getHash(),
+                getNonce(),
+                getFrom(),
+                getTo(),
+                getValue(),
+                getGasPrice(),
+                getGas(),
+                getInput(),
+                getR(),
+                getS(),
+                getV(),
+                getPrivateFrom(),
+                getRestriction());
     }
 }
