@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.http;
 
+import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +24,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.CipherSuite;
-import okhttp3.ConnectionSpec;
-import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 import static okhttp3.ConnectionSpec.CLEARTEXT;
 
@@ -162,7 +155,8 @@ public class HttpService extends Service {
                 int code = response.code();
                 String text = responseBody == null ? "N/A" : responseBody.string();
 
-                throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
+                throw new ClientConnectionException(
+                        "Invalid response received: " + code + "; " + text);
             }
         }
     }

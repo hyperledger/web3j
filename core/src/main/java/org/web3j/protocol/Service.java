@@ -14,7 +14,6 @@ package org.web3j.protocol;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.Flowable;
-
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.websocket.events.Notification;
@@ -44,7 +43,6 @@ public abstract class Service implements Web3jService {
         } else {
             return null;
         }
-
     }
 
     @Override
