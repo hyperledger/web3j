@@ -197,26 +197,6 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     /**
-     * Allow {@code gasPrice} to be set.
-     *
-     * @param newPrice gas price to use for subsequent transactions
-     * @deprecated use ContractGasProvider
-     */
-    public void setGasPrice(BigInteger newPrice) {
-        this.gasProvider = new StaticGasProvider(newPrice, gasProvider.getGasLimit());
-    }
-
-    /**
-     * Get the current {@code gasPrice} value this contract uses when executing transactions.
-     *
-     * @return the gas price set on this contract
-     * @deprecated use ContractGasProvider
-     */
-    public BigInteger getGasPrice() {
-        return gasProvider.getGasPrice();
-    }
-
-    /**
      * Check that the contract deployed at the address associated with this smart contract wrapper
      * is in fact the contract you believe it is.
      *
@@ -358,13 +338,15 @@ public abstract class Contract extends ManagedTransaction {
             String data, BigInteger weiValue, String funcName, boolean constructor)
             throws TransactionException, IOException {
 
+        BigInteger gasPrice = gasProvider.getGasPrice();
+        BigInteger gasLimit = gasProvider.getGasLimit(transactionManager.getFromAddress(), gasPrice, contractAddress, weiValue, data);
         TransactionReceipt receipt =
                 send(
                         contractAddress,
                         data,
                         weiValue,
-                        gasProvider.getGasPrice(funcName),
-                        gasProvider.getGasLimit(funcName),
+                        gasPrice,
+                        gasLimit,
                         constructor);
 
         if (!receipt.isStatusOK()) {

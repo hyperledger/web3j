@@ -42,4 +42,9 @@ public class StaticGasProvider implements ContractGasProvider {
     public BigInteger getGasLimit() {
         return gasLimit;
     }
+
+    @Override
+    public BigInteger getGasLimit(String fromAddress, BigInteger gasPrice, String contractAddress, BigInteger weiValue, String data) {
+        return gasLimit;
+    }
 }

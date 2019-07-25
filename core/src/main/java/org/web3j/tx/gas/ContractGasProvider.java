@@ -12,16 +12,27 @@
  */
 package org.web3j.tx.gas;
 
+import java.io.IOException;
 import java.math.BigInteger;
 
 public interface ContractGasProvider {
-    BigInteger getGasPrice(String contractFunc);
 
     @Deprecated
-    BigInteger getGasPrice();
+    BigInteger getGasPrice(String contractFunc) throws IOException;
 
+    BigInteger getGasPrice() throws IOException;
+
+    @Deprecated
     BigInteger getGasLimit(String contractFunc);
 
     @Deprecated
     BigInteger getGasLimit();
+
+    BigInteger getGasLimit(
+            String fromAddress,
+            BigInteger gasPrice,
+            String contractAddress,
+            BigInteger weiValue,
+            String data
+    ) throws IOException;
 }
