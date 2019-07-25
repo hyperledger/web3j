@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
 import java.math.BigInteger;
@@ -18,10 +30,7 @@ import org.web3j.utils.Strings;
 
 import static org.web3j.crypto.SecureRandomUtils.secureRandom;
 
-
-/**
- * Crypto key utilities.
- */
+/** Crypto key utilities. */
 public class Keys {
 
     static final int PRIVATE_KEY_SIZE = 32;
@@ -38,7 +47,7 @@ public class Keys {
         }
     }
 
-    private Keys() { }
+    private Keys() {}
 
     /**
      * Create a keypair using SECP-256k1 curve.
@@ -47,13 +56,15 @@ public class Keys {
      *
      * <p>Private keys are encoded using X.509
      */
-    static KeyPair createSecp256k1KeyPair() throws NoSuchProviderException,
-            NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    static KeyPair createSecp256k1KeyPair()
+            throws NoSuchProviderException, NoSuchAlgorithmException,
+                    InvalidAlgorithmParameterException {
         return createSecp256k1KeyPair(secureRandom());
     }
 
-    static KeyPair createSecp256k1KeyPair(SecureRandom random) throws NoSuchProviderException,
-            NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    static KeyPair createSecp256k1KeyPair(SecureRandom random)
+            throws NoSuchProviderException, NoSuchAlgorithmException,
+                    InvalidAlgorithmParameterException {
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
@@ -65,13 +76,15 @@ public class Keys {
         return keyPairGenerator.generateKeyPair();
     }
 
-    public static ECKeyPair createEcKeyPair() throws InvalidAlgorithmParameterException,
-            NoSuchAlgorithmException, NoSuchProviderException {
+    public static ECKeyPair createEcKeyPair()
+            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+                    NoSuchProviderException {
         return createEcKeyPair(secureRandom());
     }
 
-    public static ECKeyPair createEcKeyPair(SecureRandom random) throws
-            InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public static ECKeyPair createEcKeyPair(SecureRandom random)
+            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+                    NoSuchProviderException {
         KeyPair keyPair = createSecp256k1KeyPair(random);
         return ECKeyPair.create(keyPair);
     }
@@ -89,22 +102,22 @@ public class Keys {
         String publicKeyNoPrefix = Numeric.cleanHexPrefix(publicKey);
 
         if (publicKeyNoPrefix.length() < PUBLIC_KEY_LENGTH_IN_HEX) {
-            publicKeyNoPrefix = Strings.zeros(
-                    PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length())
-                    + publicKeyNoPrefix;
+            publicKeyNoPrefix =
+                    Strings.zeros(PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length())
+                            + publicKeyNoPrefix;
         }
         String hash = Hash.sha3(publicKeyNoPrefix);
-        return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX);  // right most 160 bits
+        return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX); // right most 160 bits
     }
 
     public static byte[] getAddress(byte[] publicKey) {
         byte[] hash = Hash.sha3(publicKey);
-        return Arrays.copyOfRange(hash, hash.length - 20, hash.length);  // right most 160 bits
+        return Arrays.copyOfRange(hash, hash.length - 20, hash.length); // right most 160 bits
     }
 
     /**
-     * Checksum address encoding as per
-     * <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md">EIP-55</a>.
+     * Checksum address encoding as per <a
+     * href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md">EIP-55</a>.
      *
      * @param address a valid hex encoded address
      * @return hex encoded checksum address

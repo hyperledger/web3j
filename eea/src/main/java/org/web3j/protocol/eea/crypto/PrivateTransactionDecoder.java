@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.eea.crypto;
 
 import java.util.List;
@@ -21,12 +33,17 @@ public class PrivateTransactionDecoder {
         final RawTransaction rawTransaction = TransactionDecoder.decode(hexTransaction);
 
         if (values.getValues().size() > 9) {
-            return new SignedRawPrivateTransaction((SignedRawTransaction) rawTransaction,
-                    extractString(values, 9),  extractStringList(values, 10),
+            return new SignedRawPrivateTransaction(
+                    (SignedRawTransaction) rawTransaction,
+                    extractString(values, 9),
+                    extractStringList(values, 10),
                     extractString(values, 11));
         } else {
-            return new RawPrivateTransaction(rawTransaction, extractString(values, 6),
-                    extractStringList(values, 7),  extractString(values, 8));
+            return new RawPrivateTransaction(
+                    rawTransaction,
+                    extractString(values, 6),
+                    extractStringList(values, 7),
+                    extractString(values, 8));
         }
     }
 
@@ -35,9 +52,9 @@ public class PrivateTransactionDecoder {
     }
 
     private static List<String> extractStringList(final RlpList values, int i) {
-        return ((RlpList) values.getValues().get(i)).getValues().stream()
-                .map(rlp -> new String(((RlpString) rlp).getBytes()))
-                .collect(Collectors.toList());
+        return ((RlpList) values.getValues().get(i))
+                .getValues().stream()
+                        .map(rlp -> new String(((RlpString) rlp).getBytes()))
+                        .collect(Collectors.toList());
     }
-
 }

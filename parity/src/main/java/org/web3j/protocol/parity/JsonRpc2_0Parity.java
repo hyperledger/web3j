@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.parity;
 
 import java.math.BigInteger;
@@ -30,9 +42,7 @@ import org.web3j.protocol.parity.methods.response.ParityTraceGet;
 import org.web3j.protocol.parity.methods.response.ParityTracesResponse;
 import org.web3j.utils.Numeric;
 
-/**
- * JSON-RPC 2.0 factory implementation for Parity.
- */
+/** JSON-RPC 2.0 factory implementation for Parity. */
 public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     public JsonRpc2_0Parity(Web3jService web3jService) {
@@ -70,8 +80,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityDeriveAddress> parityDeriveAddressIndex(
-            String accountId, String password,
-            List<Derivation> indicesType, boolean toSave) {
+            String accountId, String password, List<Derivation> indicesType, boolean toSave) {
         return new Request<>(
                 "parity_deriveAddressIndex",
                 Arrays.asList(accountId, password, indicesType, toSave),
@@ -80,8 +89,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityExportAccount> parityExportAccount(
-            String accountId, String password) {
+    public Request<?, ParityExportAccount> parityExportAccount(String accountId, String password) {
         return new Request<>(
                 "parity_exportAccount",
                 Arrays.asList(accountId, password),
@@ -230,8 +238,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, BooleanResponse> paritySetAccountName(
-            String address, String name) {
+    public Request<?, BooleanResponse> paritySetAccountName(String address, String name) {
         return new Request<>(
                 "parity_setAccountName",
                 Arrays.asList(address, name),
@@ -292,79 +299,75 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
             String accountId, String password, String hexMessage) {
         return new Request<>(
                 "parity_signMessage",
-                Arrays.asList(accountId,password,hexMessage),
+                Arrays.asList(accountId, password, hexMessage),
                 web3jService,
                 PersonalSign.class);
     }
-    
+
     // TRACE API
-    
+
     @Override
     public Request<?, ParityFullTraceResponse> traceCall(
             Transaction transaction, List<String> traces, DefaultBlockParameter blockParameter) {
         return new Request<>(
-            "trace_call",
-            Arrays.asList(transaction, traces, blockParameter),
-            web3jService,
-            ParityFullTraceResponse.class);
+                "trace_call",
+                Arrays.asList(transaction, traces, blockParameter),
+                web3jService,
+                ParityFullTraceResponse.class);
     }
-    
+
     @Override
     public Request<?, ParityFullTraceResponse> traceRawTransaction(
             String data, List<String> traceTypes) {
         return new Request<>(
-            "trace_rawTransaction",
-            Arrays.asList(data, traceTypes),
-            web3jService,
-            ParityFullTraceResponse.class);
+                "trace_rawTransaction",
+                Arrays.asList(data, traceTypes),
+                web3jService,
+                ParityFullTraceResponse.class);
     }
-    
+
     @Override
     public Request<?, ParityFullTraceResponse> traceReplayTransaction(
             String hash, List<String> traceTypes) {
         return new Request<>(
-            "trace_replayTransaction",
-            Arrays.asList(hash, traceTypes),
-            web3jService,
-            ParityFullTraceResponse.class);
+                "trace_replayTransaction",
+                Arrays.asList(hash, traceTypes),
+                web3jService,
+                ParityFullTraceResponse.class);
     }
-    
+
     @Override
     public Request<?, ParityTracesResponse> traceBlock(DefaultBlockParameter blockParameter) {
         return new Request<>(
-            "trace_block",
-            Arrays.asList(blockParameter),
-            web3jService,
-            ParityTracesResponse.class);
+                "trace_block",
+                Arrays.asList(blockParameter),
+                web3jService,
+                ParityTracesResponse.class);
     }
-    
+
     @Override
     public Request<?, ParityTracesResponse> traceFilter(TraceFilter traceFilter) {
         return new Request<>(
-            "trace_filter",
-            Arrays.asList(traceFilter),
-            web3jService,
-            ParityTracesResponse.class);
+                "trace_filter",
+                Arrays.asList(traceFilter),
+                web3jService,
+                ParityTracesResponse.class);
     }
-    
+
     @Override
     public Request<?, ParityTraceGet> traceGet(String hash, List<BigInteger> indices) {
-        List<String> encodedIndices = indices.stream()
-                .map(Numeric::encodeQuantity)
-                .collect(Collectors.toList());
+        List<String> encodedIndices =
+                indices.stream().map(Numeric::encodeQuantity).collect(Collectors.toList());
         return new Request<>(
-            "trace_get",
-            Arrays.asList(hash, encodedIndices),
-            web3jService,
-            ParityTraceGet.class);
+                "trace_get",
+                Arrays.asList(hash, encodedIndices),
+                web3jService,
+                ParityTraceGet.class);
     }
 
     @Override
     public Request<?, ParityTracesResponse> traceTransaction(String hash) {
         return new Request<>(
-            "trace_transaction",
-            Arrays.asList(hash),
-            web3jService,
-            ParityTracesResponse.class);
+                "trace_transaction", Arrays.asList(hash), web3jService, ParityTracesResponse.class);
     }
 }

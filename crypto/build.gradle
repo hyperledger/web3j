@@ -9,10 +9,6 @@ dependencies {
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 }
 
-configurations {
-    testArtifacts.extendsFrom testRuntime
-}
+configurations { testArtifacts.extendsFrom testRuntime }
 
-artifacts {
-    testArtifacts testJar
-}
+artifacts { testArtifacts testJar }

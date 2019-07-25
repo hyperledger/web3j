@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.nodesmith;
 
 import java.util.Arrays;
@@ -10,7 +22,8 @@ import okhttp3.OkHttpClient;
 import org.web3j.protocol.http.HttpService;
 
 /**
- * HttpService for working with <a href="https://nodesmith.io/">Nodesmith's</a> hosted infrastructure.
+ * HttpService for working with <a href="https://nodesmith.io/">Nodesmith's</a> hosted
+ * infrastructure.
  */
 public class NodesmithHttpService extends HttpService {
 
@@ -46,8 +59,8 @@ public class NodesmithHttpService extends HttpService {
         }
 
         Set<String> names = headers.names();
-        if (!names.containsAll(Arrays.asList(
-                NS_RATELIMIT_LIMIT, NS_RATELIMIT_REMAINING, NS_RATELIMIT_RESET))) {
+        if (!names.containsAll(
+                Arrays.asList(NS_RATELIMIT_LIMIT, NS_RATELIMIT_REMAINING, NS_RATELIMIT_RESET))) {
             return Optional.empty();
         }
 
@@ -55,6 +68,5 @@ public class NodesmithHttpService extends HttpService {
                 headers.get(NS_RATELIMIT_LIMIT),
                 headers.get(NS_RATELIMIT_REMAINING),
                 headers.get(NS_RATELIMIT_RESET));
-
     }
 }

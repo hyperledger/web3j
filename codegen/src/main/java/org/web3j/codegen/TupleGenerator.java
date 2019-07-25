@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.codegen;
 
 import java.io.IOException;
@@ -13,9 +25,7 @@ import com.squareup.javapoet.TypeVariableName;
 import org.web3j.tuples.Tuple;
 import org.web3j.utils.Strings;
 
-/**
- * A class for generating arbitrary sized tuples.
- */
+/** A class for generating arbitrary sized tuples. */
 public class TupleGenerator extends Generator {
 
     static final int LIMIT = 20;
@@ -45,15 +55,18 @@ public class TupleGenerator extends Generator {
 
     private TypeSpec createTuple(int size) {
         String className = CLASS_NAME + size;
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className)
-                .addSuperinterface(Tuple.class)
-                .addField(FieldSpec.builder(int.class, SIZE)
-                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
-                        .initializer("$L", size)
-                        .build());
+        TypeSpec.Builder typeSpecBuilder =
+                TypeSpec.classBuilder(className)
+                        .addSuperinterface(Tuple.class)
+                        .addField(
+                                FieldSpec.builder(int.class, SIZE)
+                                        .addModifiers(
+                                                Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                                        .initializer("$L", size)
+                                        .build());
 
-        MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC);
+        MethodSpec.Builder constructorBuilder =
+                MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
 
         List<MethodSpec> methodSpecs = new ArrayList<>(size);
 
@@ -61,18 +74,20 @@ public class TupleGenerator extends Generator {
             String value = VALUE + i;
             TypeVariableName typeVariableName = TypeVariableName.get("T" + i);
 
-            typeSpecBuilder.addTypeVariable(typeVariableName)
+            typeSpecBuilder
+                    .addTypeVariable(typeVariableName)
                     .addField(typeVariableName, value, Modifier.PRIVATE, Modifier.FINAL);
 
-            constructorBuilder.addParameter(typeVariableName, value)
+            constructorBuilder
+                    .addParameter(typeVariableName, value)
                     .addStatement("this.$N = $N", value, value);
 
-            MethodSpec getterSpec = MethodSpec.methodBuilder(
-                    "get" + Strings.capitaliseFirstLetter(value))
-                    .addModifiers(Modifier.PUBLIC)
-                    .returns(typeVariableName)
-                    .addStatement("return $N", value)
-                    .build();
+            MethodSpec getterSpec =
+                    MethodSpec.methodBuilder("get" + Strings.capitaliseFirstLetter(value))
+                            .addModifiers(Modifier.PUBLIC)
+                            .returns(typeVariableName)
+                            .addStatement("return $N", value)
+                            .build();
             methodSpecs.add(getterSpec);
         }
 
@@ -95,8 +110,7 @@ public class TupleGenerator extends Generator {
     }
 
     private MethodSpec generateSizeSpec() {
-        return MethodSpec.methodBuilder(
-                "getSize")
+        return MethodSpec.methodBuilder("getSize")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(int.class)
@@ -105,56 +119,72 @@ public class TupleGenerator extends Generator {
     }
 
     private MethodSpec generateEqualsSpec(String className, int size) {
-        MethodSpec.Builder equalsSpecBuilder = MethodSpec.methodBuilder("equals")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(Object.class, "o")
-                .returns(boolean.class)
-                .beginControlFlow("if (this == o)")
-                .addStatement("return true")
-                .endControlFlow()
-                .beginControlFlow("if (o == null || getClass() != o.getClass())")
-                .addStatement("return false")
-                .endControlFlow();
+        MethodSpec.Builder equalsSpecBuilder =
+                MethodSpec.methodBuilder("equals")
+                        .addAnnotation(Override.class)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(Object.class, "o")
+                        .returns(boolean.class)
+                        .beginControlFlow("if (this == o)")
+                        .addStatement("return true")
+                        .endControlFlow()
+                        .beginControlFlow("if (o == null || getClass() != o.getClass())")
+                        .addStatement("return false")
+                        .endControlFlow();
 
         String typeParams = Strings.repeat('?', size).replaceAll("\\?", "?, ");
         typeParams = typeParams.substring(0, typeParams.length() - 2);
         String wildcardClassName = className + "<" + typeParams + ">";
 
         String name = "tuple" + size;
-        equalsSpecBuilder
-                .addStatement("$L $L = ($L) o", wildcardClassName, name, wildcardClassName);
+        equalsSpecBuilder.addStatement(
+                "$L $L = ($L) o", wildcardClassName, name, wildcardClassName);
 
         for (int i = 1; i < size; i++) {
             String value = VALUE + i;
 
-            equalsSpecBuilder.beginControlFlow(
-                    "if ($L != null ? !$L.equals($L.$L) : $L.$L != null)",
-                    value, value, name, value, name, value)
+            equalsSpecBuilder
+                    .beginControlFlow(
+                            "if ($L != null ? !$L.equals($L.$L) : $L.$L != null)",
+                            value,
+                            value,
+                            name,
+                            value,
+                            name,
+                            value)
                     .addStatement("return false")
                     .endControlFlow();
         }
 
         String lastValue = VALUE + size;
-        equalsSpecBuilder
-                .addStatement("return $L != null ? $L.equals($L.$L) : $L.$L == null",
-                        lastValue, lastValue, name, lastValue, name, lastValue);
+        equalsSpecBuilder.addStatement(
+                "return $L != null ? $L.equals($L.$L) : $L.$L == null",
+                lastValue,
+                lastValue,
+                name,
+                lastValue,
+                name,
+                lastValue);
 
         return equalsSpecBuilder.build();
     }
 
     private MethodSpec generateHashCodeSpec(int size) {
-        MethodSpec.Builder hashCodeSpec = MethodSpec.methodBuilder("hashCode")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .returns(int.class)
-                .addStatement("int $L = $L.hashCode()", RESULT, VALUE + 1);
+        MethodSpec.Builder hashCodeSpec =
+                MethodSpec.methodBuilder("hashCode")
+                        .addAnnotation(Override.class)
+                        .addModifiers(Modifier.PUBLIC)
+                        .returns(int.class)
+                        .addStatement("int $L = $L.hashCode()", RESULT, VALUE + 1);
 
         for (int i = 2; i <= size; i++) {
             String value = "value" + i;
             hashCodeSpec.addStatement(
                     "$L = 31 * $L + ($L != null ? $L.hashCode() : 0)",
-                    RESULT, RESULT, value, value);
+                    RESULT,
+                    RESULT,
+                    value,
+                    value);
         }
 
         hashCodeSpec.addStatement("return $L", RESULT);

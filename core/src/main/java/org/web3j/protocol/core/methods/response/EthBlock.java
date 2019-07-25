@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core.methods.response;
 
 import java.io.IOException;
@@ -19,19 +31,19 @@ import org.web3j.utils.Numeric;
 
 /**
  * Block object returned by:
+ *
  * <ul>
- * <li>eth_getBlockByHash</li>
- * <li>eth_getBlockByNumber</li>
- * <li>eth_getUncleByBlockHashAndIndex</li>
- * <li>eth_getUncleByBlockNumberAndIndex</li>
+ *   <li>eth_getBlockByHash
+ *   <li>eth_getBlockByNumber
+ *   <li>eth_getUncleByBlockHashAndIndex
+ *   <li>eth_getUncleByBlockNumberAndIndex
  * </ul>
  *
- * <p>See
- * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash">docs</a>
- * for further details.</p>
+ * <p>See <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash">docs</a>
+ * for further details.
  *
  * <p>See the following <a href="https://github.com/ethcore/parity/issues/2401">issue</a> for
- * details on additional Parity fields present in EthBlock.</p>
+ * details on additional Parity fields present in EthBlock.
  */
 public class EthBlock extends Response<EthBlock.Block> {
 
@@ -69,16 +81,31 @@ public class EthBlock extends Response<EthBlock.Block> {
         private List<String> uncles;
         private List<String> sealFields;
 
-        public Block() {
-        }
+        public Block() {}
 
-        public Block(String number, String hash, String parentHash, String nonce,
-                     String sha3Uncles, String logsBloom, String transactionsRoot,
-                     String stateRoot, String receiptsRoot, String author, String miner, 
-                     String mixHash, String difficulty, String totalDifficulty, String extraData, 
-                     String size, String gasLimit, String gasUsed, String timestamp,
-                     List<TransactionResult> transactions, List<String> uncles,
-                     List<String> sealFields) {
+        public Block(
+                String number,
+                String hash,
+                String parentHash,
+                String nonce,
+                String sha3Uncles,
+                String logsBloom,
+                String transactionsRoot,
+                String stateRoot,
+                String receiptsRoot,
+                String author,
+                String miner,
+                String mixHash,
+                String difficulty,
+                String totalDifficulty,
+                String extraData,
+                String size,
+                String gasLimit,
+                String gasUsed,
+                String timestamp,
+                List<TransactionResult> transactions,
+                List<String> uncles,
+                List<String> sealFields) {
             this.number = number;
             this.hash = hash;
             this.parentHash = parentHash;
@@ -324,7 +351,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             Block block = (Block) o;
 
             if (getNumberRaw() != null
-                    ? !getNumberRaw().equals(block.getNumberRaw()) : block.getNumberRaw() != null) {
+                    ? !getNumberRaw().equals(block.getNumberRaw())
+                    : block.getNumberRaw() != null) {
                 return false;
             }
             if (getHash() != null ? !getHash().equals(block.getHash()) : block.getHash() != null) {
@@ -336,7 +364,8 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             }
             if (getNonceRaw() != null
-                    ? !getNonceRaw().equals(block.getNonceRaw()) : block.getNonceRaw() != null) {
+                    ? !getNonceRaw().equals(block.getNonceRaw())
+                    : block.getNonceRaw() != null) {
                 return false;
             }
             if (getSha3Uncles() != null
@@ -365,15 +394,18 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             }
             if (getAuthor() != null
-                    ? !getAuthor().equals(block.getAuthor()) : block.getAuthor() != null) {
+                    ? !getAuthor().equals(block.getAuthor())
+                    : block.getAuthor() != null) {
                 return false;
             }
             if (getMiner() != null
-                    ? !getMiner().equals(block.getMiner()) : block.getMiner() != null) {
+                    ? !getMiner().equals(block.getMiner())
+                    : block.getMiner() != null) {
                 return false;
             }
             if (getMixHash() != null
-                    ? !getMixHash().equals(block.getMixHash()) : block.getMixHash() != null) {
+                    ? !getMixHash().equals(block.getMixHash())
+                    : block.getMixHash() != null) {
                 return false;
             }
             if (getDifficultyRaw() != null
@@ -417,11 +449,13 @@ public class EthBlock extends Response<EthBlock.Block> {
                 return false;
             }
             if (getUncles() != null
-                    ? !getUncles().equals(block.getUncles()) : block.getUncles() != null) {
+                    ? !getUncles().equals(block.getUncles())
+                    : block.getUncles() != null) {
                 return false;
             }
             return getSealFields() != null
-                    ? getSealFields().equals(block.getSealFields()) : block.getSealFields() == null;
+                    ? getSealFields().equals(block.getSealFields())
+                    : block.getSealFields() == null;
         }
 
         @Override
@@ -432,16 +466,22 @@ public class EthBlock extends Response<EthBlock.Block> {
             result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
             result = 31 * result + (getSha3Uncles() != null ? getSha3Uncles().hashCode() : 0);
             result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
-            result = 31 * result
-                    + (getTransactionsRoot() != null ? getTransactionsRoot().hashCode() : 0);
+            result =
+                    31 * result
+                            + (getTransactionsRoot() != null
+                                    ? getTransactionsRoot().hashCode()
+                                    : 0);
             result = 31 * result + (getStateRoot() != null ? getStateRoot().hashCode() : 0);
             result = 31 * result + (getReceiptsRoot() != null ? getReceiptsRoot().hashCode() : 0);
             result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
             result = 31 * result + (getMiner() != null ? getMiner().hashCode() : 0);
             result = 31 * result + (getMixHash() != null ? getMixHash().hashCode() : 0);
             result = 31 * result + (getDifficultyRaw() != null ? getDifficultyRaw().hashCode() : 0);
-            result = 31 * result
-                    + (getTotalDifficultyRaw() != null ? getTotalDifficultyRaw().hashCode() : 0);
+            result =
+                    31 * result
+                            + (getTotalDifficultyRaw() != null
+                                    ? getTotalDifficultyRaw().hashCode()
+                                    : 0);
             result = 31 * result + (getExtraData() != null ? getExtraData().hashCode() : 0);
             result = 31 * result + (getSizeRaw() != null ? getSizeRaw().hashCode() : 0);
             result = 31 * result + (getGasLimitRaw() != null ? getGasLimitRaw().hashCode() : 0);
@@ -461,8 +501,7 @@ public class EthBlock extends Response<EthBlock.Block> {
     public static class TransactionHash implements TransactionResult<String> {
         private String value;
 
-        public TransactionHash() {
-        }
+        public TransactionHash() {}
 
         public TransactionHash(String value) {
             this.value = value;
@@ -499,15 +538,44 @@ public class EthBlock extends Response<EthBlock.Block> {
 
     public static class TransactionObject extends Transaction
             implements TransactionResult<Transaction> {
-        public TransactionObject() {
-        }
+        public TransactionObject() {}
 
-        public TransactionObject(String hash, String nonce, String blockHash, String blockNumber,
-                                 String transactionIndex, String from, String to, String value,
-                                 String gasPrice, String gas, String input, String creates,
-                                 String publicKey, String raw, String r, String s, int v) {
-            super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value,
-                    gasPrice, gas, input, creates, publicKey, raw, r, s, v);
+        public TransactionObject(
+                String hash,
+                String nonce,
+                String blockHash,
+                String blockNumber,
+                String transactionIndex,
+                String from,
+                String to,
+                String value,
+                String gasPrice,
+                String gas,
+                String input,
+                String creates,
+                String publicKey,
+                String raw,
+                String r,
+                String s,
+                int v) {
+            super(
+                    hash,
+                    nonce,
+                    blockHash,
+                    blockNumber,
+                    transactionIndex,
+                    from,
+                    to,
+                    value,
+                    gasPrice,
+                    gas,
+                    input,
+                    creates,
+                    publicKey,
+                    raw,
+                    r,
+                    s,
+                    v);
         }
 
         @Override
@@ -523,8 +591,8 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         @Override
         public List<TransactionResult> deserialize(
-                JsonParser jsonParser,
-                DeserializationContext deserializationContext) throws IOException {
+                JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException {
 
             List<TransactionResult> transactionResults = new ArrayList<>();
             JsonToken nextToken = jsonParser.nextToken();
@@ -555,12 +623,12 @@ public class EthBlock extends Response<EthBlock.Block> {
 
         @Override
         public Block deserialize(
-                JsonParser jsonParser,
-                DeserializationContext deserializationContext) throws IOException {
+                JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
                 return objectReader.readValue(jsonParser, Block.class);
             } else {
-                return null;  // null is wrapped by Optional in above getter
+                return null; // null is wrapped by Optional in above getter
             }
         }
     }

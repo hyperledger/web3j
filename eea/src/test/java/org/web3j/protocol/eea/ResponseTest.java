@@ -1,12 +1,22 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.eea;
 
-import java.math.BigInteger;
 import java.util.Collections;
 
 import org.junit.Test;
 
 import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
@@ -20,23 +30,23 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaSendRawTransaction() {
-        //CHECKSTYLE:OFF
-        buildResponse("{\n"
-                + "    \"jsonrpc\": \"2.0\",\n"
-                + "    \"id\": 1,\n"
-                + "    \"result\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
-                + "}");
-        //CHECKSTYLE:ON
 
-        EthSendTransaction ethSendTransaction = deserialiseResponse(
-                EthSendTransaction.class);
-        assertThat(ethSendTransaction.getTransactionHash(),
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\": \"2.0\",\n"
+                        + "    \"id\": 1,\n"
+                        + "    \"result\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
+                        + "}");
+
+        EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
+        assertThat(
+                ethSendTransaction.getTransactionHash(),
                 is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 
     @Test
     public void testEeaGetTransactionReceipt() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -59,8 +69,7 @@ public class ResponseTest extends ResponseTester {
                         + "            \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]"
                         + "        }]\n"
                         + "    }\n"
-                        + "}"
-        );
+                        + "}");
 
         PrivateTransactionReceipt transactionReceipt =
                 new PrivateTransactionReceipt(
@@ -80,16 +89,12 @@ public class ResponseTest extends ResponseTester {
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                                         "mined",
                                         Collections.singletonList(
-                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
-                                        )
-                                )
-                        )
-                );
-        //CHECKSTYLE:ON
+                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))));
 
-        EeaGetTransactionReceipt eeaGetTransactionReceipt = deserialiseResponse(
-                EeaGetTransactionReceipt.class);
-        assertThat(eeaGetTransactionReceipt.getTransactionReceipt().get(),
+        EeaGetTransactionReceipt eeaGetTransactionReceipt =
+                deserialiseResponse(EeaGetTransactionReceipt.class);
+        assertThat(
+                eeaGetTransactionReceipt.getTransactionReceipt().get(),
                 equalTo(transactionReceipt));
     }
 }

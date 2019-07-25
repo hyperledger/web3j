@@ -11,7 +11,7 @@ dependencies {
             project(':contracts')
     runtime "org.slf4j:slf4j-nop:$slf4jVersion"  // prevent logging of the library to the console
     testCompile project(path: ':crypto', configuration: 'testArtifacts'),
-            project(path: ':core', configuration: 'testArtifacts')
+    project(path: ':core', configuration: 'testArtifacts')
 }
 
 // Build command line library release with target distShadowZip

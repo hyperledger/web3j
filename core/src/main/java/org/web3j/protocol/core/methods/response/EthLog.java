@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core.methods.response;
 
 import java.io.IOException;
@@ -17,15 +29,15 @@ import org.web3j.protocol.core.Response;
 
 /**
  * Log object returned by:
+ *
  * <ul>
- * <li>eth_getFilterChanges</li>
- * <li>eth_getFilterLogs</li>
- * <li>eth_getLogs</li>
+ *   <li>eth_getFilterChanges
+ *   <li>eth_getFilterLogs
+ *   <li>eth_getLogs
  * </ul>
  *
- * <p>See
- * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getfilterchanges">docs</a>
- * for further details.</p>
+ * <p>See <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getfilterchanges">docs</a> for
+ * further details.
  */
 public class EthLog extends Response<List<EthLog.LogResult>> {
 
@@ -45,14 +57,30 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
 
     public static class LogObject extends Log implements LogResult<Log> {
 
-        public LogObject() {
-        }
+        public LogObject() {}
 
-        public LogObject(boolean removed, String logIndex, String transactionIndex,
-                         String transactionHash, String blockHash, String blockNumber,
-                         String address, String data, String type, List<String> topics) {
-            super(removed, logIndex, transactionIndex, transactionHash, blockHash, blockNumber,
-                    address, data, type, topics);
+        public LogObject(
+                boolean removed,
+                String logIndex,
+                String transactionIndex,
+                String transactionHash,
+                String blockHash,
+                String blockNumber,
+                String address,
+                String data,
+                String type,
+                List<String> topics) {
+            super(
+                    removed,
+                    logIndex,
+                    transactionIndex,
+                    transactionHash,
+                    blockHash,
+                    blockNumber,
+                    address,
+                    data,
+                    type,
+                    topics);
         }
 
         @Override
@@ -64,8 +92,7 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
     public static class Hash implements LogResult<String> {
         private String value;
 
-        public Hash() {
-        }
+        public Hash() {}
 
         public Hash(String value) {
             this.value = value;
@@ -100,15 +127,14 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
         }
     }
 
-
     public static class LogResultDeserialiser extends JsonDeserializer<List<LogResult>> {
 
         private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public List<LogResult> deserialize(
-                JsonParser jsonParser,
-                DeserializationContext deserializationContext) throws IOException {
+                JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException {
 
             List<LogResult> logResults = new ArrayList<>();
             JsonToken nextToken = jsonParser.nextToken();

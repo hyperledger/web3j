@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.parity;
 
 import org.junit.Before;
@@ -13,9 +25,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * JSON-RPC 2.0 Integration Tests.
- */
+/** JSON-RPC 2.0 Integration Tests. */
 public class ParityIT {
 
     private static String PASSWORD = "1n5ecur3P@55w0rd";
@@ -41,8 +51,8 @@ public class ParityIT {
     @Test
     public void testPersonalUnlockAccount() throws Exception {
         NewAccountIdentifier newAccountIdentifier = createAccount();
-        PersonalUnlockAccount personalUnlockAccount = parity.personalUnlockAccount(
-                newAccountIdentifier.getAccountId(), PASSWORD).send();
+        PersonalUnlockAccount personalUnlockAccount =
+                parity.personalUnlockAccount(newAccountIdentifier.getAccountId(), PASSWORD).send();
         assertTrue(personalUnlockAccount.accountUnlocked());
     }
 
@@ -51,8 +61,10 @@ public class ParityIT {
         PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
 
-        PersonalSign personalSign = parity.paritySignMessage("0xdeadbeaf",
-                personalListAccounts.getAccountIds().get(0), "123").send();
+        PersonalSign personalSign =
+                parity.paritySignMessage(
+                                "0xdeadbeaf", personalListAccounts.getAccountIds().get(0), "123")
+                        .send();
         // address : 0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54
         assertNotNull(personalSign.getSignedMessage());
         // result : 0x80ab45a65bd5acce92eac60b52235a34eee647c8dbef8e62108be90a4ac9a22222f87dd8934f

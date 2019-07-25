@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.console;
 
 import java.io.File;
@@ -21,9 +33,7 @@ import org.web3j.utils.Convert;
 
 import static org.web3j.codegen.Console.exitError;
 
-/**
- * Simple class for creating a wallet file.
- */
+/** Simple class for creating a wallet file. */
 public class WalletSendFunds extends WalletManager {
 
     private static final String USAGE = "send <walletfile> <destination-address>";
@@ -54,10 +64,11 @@ public class WalletSendFunds extends WalletManager {
 
         confirmTransfer(amountToTransfer, transferUnit, amountInWei, destinationAddress);
 
-        TransactionReceipt transactionReceipt = performTransfer(
-                web3j, destinationAddress, credentials, amountInWei);
+        TransactionReceipt transactionReceipt =
+                performTransfer(web3j, destinationAddress, credentials, amountInWei);
 
-        console.printf("Funds have been successfully transferred from %s to %s%n"
+        console.printf(
+                "Funds have been successfully transferred from %s to %s%n"
                         + "Transaction hash: %s%nMined block number: %s%n",
                 credentials.getAddress(),
                 destinationAddress,
@@ -66,9 +77,11 @@ public class WalletSendFunds extends WalletManager {
     }
 
     private BigDecimal getAmountToTransfer() {
-        String amount = console.readLine("What amound would you like to transfer "
-                + "(please enter a numeric value): ")
-                .trim();
+        String amount =
+                console.readLine(
+                                "What amound would you like to transfer "
+                                        + "(please enter a numeric value): ")
+                        .trim();
         try {
             return new BigDecimal(amount);
         } catch (NumberFormatException e) {
@@ -78,8 +91,8 @@ public class WalletSendFunds extends WalletManager {
     }
 
     private Convert.Unit getTransferUnit() {
-        String unit = console.readLine("Please specify the unit (ether, wei, ...) [ether]: ")
-                .trim();
+        String unit =
+                console.readLine("Please specify the unit (ether, wei, ...) [ether]: ").trim();
 
         Convert.Unit transferUnit;
         if (unit.equals("")) {
@@ -92,13 +105,18 @@ public class WalletSendFunds extends WalletManager {
     }
 
     private void confirmTransfer(
-            BigDecimal amountToTransfer, Convert.Unit transferUnit, BigDecimal amountInWei,
+            BigDecimal amountToTransfer,
+            Convert.Unit transferUnit,
+            BigDecimal amountInWei,
             String destinationAddress) {
 
-        console.printf("Please confim that you wish to transfer %s %s (%s %s) to address %s%n",
-                amountToTransfer.stripTrailingZeros().toPlainString(), transferUnit,
+        console.printf(
+                "Please confim that you wish to transfer %s %s (%s %s) to address %s%n",
+                amountToTransfer.stripTrailingZeros().toPlainString(),
+                transferUnit,
                 amountInWei.stripTrailingZeros().toPlainString(),
-                Convert.Unit.WEI, destinationAddress);
+                Convert.Unit.WEI,
+                destinationAddress);
         String confirm = console.readLine("Please type 'yes' to proceed: ").trim();
         if (!confirm.toLowerCase().equals("yes")) {
             exitError("OK, some other time perhaps...");
@@ -106,14 +124,21 @@ public class WalletSendFunds extends WalletManager {
     }
 
     private TransactionReceipt performTransfer(
-            Web3j web3j, String destinationAddress, Credentials credentials,
+            Web3j web3j,
+            String destinationAddress,
+            Credentials credentials,
             BigDecimal amountInWei) {
 
         console.printf("Commencing transfer (this may take a few minutes) ");
         try {
-            Future<TransactionReceipt> future = Transfer.sendFunds(
-                    web3j, credentials, destinationAddress, amountInWei, Convert.Unit.WEI)
-                    .sendAsync();
+            Future<TransactionReceipt> future =
+                    Transfer.sendFunds(
+                                    web3j,
+                                    credentials,
+                                    destinationAddress,
+                                    amountInWei,
+                                    Convert.Unit.WEI)
+                            .sendAsync();
 
             while (!future.isDone()) {
                 console.printf(".");
@@ -128,10 +153,13 @@ public class WalletSendFunds extends WalletManager {
     }
 
     private Web3j getEthereumClient() {
-        String clientAddress = console.readLine(
-                "Please confirm address of running Ethereum client you wish to send "
-                + "the transfer request to [" + HttpService.DEFAULT_URL + "]: ")
-                .trim();
+        String clientAddress =
+                console.readLine(
+                                "Please confirm address of running Ethereum client you wish to send "
+                                        + "the transfer request to ["
+                                        + HttpService.DEFAULT_URL
+                                        + "]: ")
+                        .trim();
 
         Web3j web3j;
         if (clientAddress.equals("")) {
@@ -147,10 +175,11 @@ public class WalletSendFunds extends WalletManager {
         try {
             Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
             if (web3ClientVersion.hasError()) {
-                exitError("Unable to process response from client: "
-                        + web3ClientVersion.getError());
+                exitError(
+                        "Unable to process response from client: " + web3ClientVersion.getError());
             } else {
-                console.printf("Connected successfully to client: %s%n",
+                console.printf(
+                        "Connected successfully to client: %s%n",
                         web3ClientVersion.getWeb3ClientVersion());
                 return web3j;
             }

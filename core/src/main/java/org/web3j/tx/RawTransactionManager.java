@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.tx;
 
 import java.io.IOException;
@@ -45,7 +57,9 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, long chainId,
+            Web3j web3j,
+            Credentials credentials,
+            long chainId,
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
@@ -75,8 +89,10 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     protected BigInteger getNonce() throws IOException {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        EthGetTransactionCount ethGetTransactionCount =
+                web3j.ethGetTransactionCount(
+                                credentials.getAddress(), DefaultBlockParameterName.PENDING)
+                        .send();
 
         return ethGetTransactionCount.getTransactionCount();
     }
@@ -91,18 +107,13 @@ public class RawTransactionManager extends TransactionManager {
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value) throws IOException {
+            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            throws IOException {
 
         BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction = RawTransaction.createTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                to,
-                value,
-                data);
+        RawTransaction rawTransaction =
+                RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
 
         return signAndSend(rawTransaction);
     }
@@ -111,9 +122,10 @@ public class RawTransactionManager extends TransactionManager {
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         return web3j.ethCall(
-                Transaction.createEthCallTransaction(getFromAddress(), to, data),
-                defaultBlockParameter)
-                .send().getValue();
+                        Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                        defaultBlockParameter)
+                .send()
+                .getValue();
     }
 
     /*
@@ -133,8 +145,7 @@ public class RawTransactionManager extends TransactionManager {
         return Numeric.toHexString(signedMessage);
     }
 
-    public EthSendTransaction signAndSend(RawTransaction rawTransaction)
-            throws IOException {
+    public EthSendTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
         String hexValue = sign(rawTransaction);
         EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
 
