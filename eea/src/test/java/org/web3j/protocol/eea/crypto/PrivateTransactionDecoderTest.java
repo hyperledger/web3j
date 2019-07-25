@@ -233,7 +233,7 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final Integer chainId = 1;
+        final long chainId = 2018L;
         final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
         final List<String> privateFor =
                 Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
@@ -246,7 +246,7 @@ public class PrivateTransactionDecoderTest {
         final Credentials credentials = Credentials.create(privateKey);
         byte[] signedMessage =
                 PrivateTransactionEncoder.signMessage(
-                        rawTransaction, chainId.byteValue(), credentials);
+                        rawTransaction, chainId, credentials);
         final String hexMessage = Numeric.toHexString(signedMessage);
 
         final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
@@ -263,6 +263,6 @@ public class PrivateTransactionDecoderTest {
         final SignedRawPrivateTransaction signedResult = (SignedRawPrivateTransaction) result;
         assertEquals(credentials.getAddress(), signedResult.getFrom());
         signedResult.verify(credentials.getAddress());
-        assertEquals(chainId, signedResult.getChainId());
+        assertEquals(chainId, signedResult.getChainId().longValue());
     }
 }

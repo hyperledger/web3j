@@ -73,11 +73,11 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
     }
 
     @Override
-    public byte[] getEncodedTransaction(Integer chainId) {
+    public byte[] getEncodedTransaction(Long chainId) {
         if (null == chainId) {
             return PrivateTransactionEncoder.encode(this);
         } else {
-            return PrivateTransactionEncoder.encode(this, chainId.byteValue());
+            return PrivateTransactionEncoder.encode(this, chainId);
         }
     }
 }
