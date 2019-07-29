@@ -12,10 +12,6 @@
  */
 package org.web3j.crypto;
 
-import java.math.BigInteger;
-import java.security.SignatureException;
-import java.util.Arrays;
-
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
 import org.bouncycastle.crypto.ec.CustomNamedCurves;
@@ -24,8 +20,11 @@ import org.bouncycastle.math.ec.ECAlgorithms;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
-
 import org.web3j.utils.Numeric;
+
+import java.math.BigInteger;
+import java.security.SignatureException;
+import java.util.Arrays;
 
 import static org.web3j.utils.Assertions.verifyPrecondition;
 
@@ -224,7 +223,18 @@ public class Sign {
         return signedMessageHashToKey(getEthereumMessageHash(message), signatureData);
     }
 
-    static BigInteger signedMessageHashToKey(byte[] messageHash, SignatureData signatureData)
+    /**
+     * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns the
+     * public key that was used to sign it. This can then be compared to the expected public key to
+     * determine if the signature was correct.
+     *
+     * @param messageHash The message hash.
+     * @param signatureData The message signature components
+     * @return the public key used to sign the message
+     * @throws SignatureException If the public key could not be recovered or if there was a
+     *     signature format error.
+     */
+    public static BigInteger signedMessageHashToKey(byte[] messageHash, SignatureData signatureData)
             throws SignatureException {
 
         byte[] r = signatureData.getR();
