@@ -12,6 +12,10 @@
  */
 package org.web3j.crypto;
 
+import java.math.BigInteger;
+import java.security.SignatureException;
+import java.util.Arrays;
+
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.asn1.x9.X9IntegerConverter;
 import org.bouncycastle.crypto.ec.CustomNamedCurves;
@@ -20,11 +24,8 @@ import org.bouncycastle.math.ec.ECAlgorithms;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
-import org.web3j.utils.Numeric;
 
-import java.math.BigInteger;
-import java.security.SignatureException;
-import java.util.Arrays;
+import org.web3j.utils.Numeric;
 
 import static org.web3j.utils.Assertions.verifyPrecondition;
 
@@ -224,9 +225,9 @@ public class Sign {
     }
 
     /**
-     * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns the
-     * public key that was used to sign it. This can then be compared to the expected public key to
-     * determine if the signature was correct.
+     * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns
+     * the public key that was used to sign it. This can then be compared to the expected public key
+     * to determine if the signature was correct.
      *
      * @param messageHash The message hash.
      * @param signatureData The message signature components
