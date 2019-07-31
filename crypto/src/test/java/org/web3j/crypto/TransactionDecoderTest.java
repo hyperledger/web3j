@@ -91,8 +91,7 @@ public class TransactionDecoderTest {
         RawTransaction rawTransaction =
                 RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, value);
         byte[] signedMessage =
-                TransactionEncoder.signMessage(
-                        rawTransaction, chainId, SampleKeys.CREDENTIALS);
+                TransactionEncoder.signMessage(rawTransaction, chainId, SampleKeys.CREDENTIALS);
         String hexMessage = Numeric.toHexString(signedMessage);
 
         RawTransaction result = TransactionDecoder.decode(hexMessage);

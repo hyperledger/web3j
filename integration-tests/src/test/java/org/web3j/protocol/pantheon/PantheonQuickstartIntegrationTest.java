@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.eea;
+package org.web3j.protocol.pantheon;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -23,10 +23,10 @@ import org.junit.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.EeaTransactionManagerLegacy;
-import org.web3j.tx.EeaTransactionManagerPantheon;
+import org.web3j.tx.LegacyPrivateTransactionManager;
+import org.web3j.tx.PantheonPrivateTransactionManager;
 import org.web3j.tx.PrivateTransactionManager;
-import org.web3j.tx.gas.EeaGasProvider;
+import org.web3j.tx.gas.PantheonPrivacyGasProvider;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -52,18 +52,18 @@ public class PantheonQuickstartIntegrationTest {
     private static final String ENCLAVE_KEY_CHARLIE =
             "k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=";
 
-    private static final EeaGasProvider ZERO_GAS_PROVIDER =
-            new EeaGasProvider(BigInteger.valueOf(0));
+    private static final PantheonPrivacyGasProvider ZERO_GAS_PROVIDER =
+            new PantheonPrivacyGasProvider(BigInteger.valueOf(0));
 
-    private static Eea nodeAlice;
-    private static Eea nodeBob;
-    private static Eea nodeCharlie;
+    private static Pantheon nodeAlice;
+    private static Pantheon nodeBob;
+    private static Pantheon nodeCharlie;
 
     @BeforeClass
     public static void setUpOnce() {
-        nodeAlice = Eea.build(new HttpService("http://localhost:20000"));
-        nodeBob = Eea.build(new HttpService("http://localhost:20002"));
-        nodeCharlie = Eea.build(new HttpService("http://localhost:20004"));
+        nodeAlice = Pantheon.build(new HttpService("http://localhost:20000"));
+        nodeBob = Pantheon.build(new HttpService("http://localhost:20002"));
+        nodeCharlie = Pantheon.build(new HttpService("http://localhost:20004"));
     }
 
     @Test
@@ -77,10 +77,10 @@ public class PantheonQuickstartIntegrationTest {
     @Test
     public void legacyContract() throws Exception {
         final PrivateTransactionManager tmAlice =
-                new EeaTransactionManagerLegacy(
+                new LegacyPrivateTransactionManager(
                         nodeAlice, ALICE, 2018, ENCLAVE_KEY_ALICE, Arrays.asList(ENCLAVE_KEY_BOB));
         final PrivateTransactionManager tmBob =
-                new EeaTransactionManagerLegacy(
+                new LegacyPrivateTransactionManager(
                         nodeBob, BOB, 2018, ENCLAVE_KEY_BOB, Arrays.asList(ENCLAVE_KEY_ALICE));
 
         final HumanStandardToken tokenAlice =
@@ -107,17 +107,16 @@ public class PantheonQuickstartIntegrationTest {
         // Build new privacy group using the create API
         final String aliceBobGroup =
                 nodeAlice
-                        .eeaCreatePrivacyGroup(
-                                ENCLAVE_KEY_ALICE,
+                        .privCreatePrivacyGroup(
+                                Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB),
                                 "AliceBob",
-                                "AliceBob group",
-                                Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                                "AliceBob group")
                         .send()
                         .getPrivacyGroupId();
 
         // Find the privacy group that was built by Alice from Bob's node
         final String aliceBobGroupFromBobNode =
-                nodeBob.eeaFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                nodeBob.privFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
                         .send().getGroups().stream()
                         .filter(
                                 g ->
@@ -129,10 +128,10 @@ public class PantheonQuickstartIntegrationTest {
                         .getPrivacyGroupId();
 
         final PrivateTransactionManager tmAlice =
-                new EeaTransactionManagerPantheon(
+                new PantheonPrivateTransactionManager(
                         nodeAlice, ALICE, 2018, ENCLAVE_KEY_ALICE, aliceBobGroup);
         final PrivateTransactionManager tmBob =
-                new EeaTransactionManagerPantheon(
+                new PantheonPrivateTransactionManager(
                         nodeBob, BOB, 2018, ENCLAVE_KEY_BOB, aliceBobGroupFromBobNode);
 
         final HumanStandardToken tokenAlice =
