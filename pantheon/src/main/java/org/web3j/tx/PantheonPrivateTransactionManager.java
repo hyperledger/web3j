@@ -13,33 +13,33 @@
 package org.web3j.tx;
 
 import org.web3j.crypto.Credentials;
-import org.web3j.protocol.eea.Eea;
+import org.web3j.protocol.pantheon.Pantheon;
 
 /** PrivateTransactionManager implementation for using a Pantheon node to transact. */
-public class EeaTransactionManagerPantheon extends PrivateTransactionManager {
+public class PantheonPrivateTransactionManager extends PrivateTransactionManager {
 
     private final String privacyGroupId;
 
-    public EeaTransactionManagerPantheon(
-            final Eea eea,
+    public PantheonPrivateTransactionManager(
+            final Pantheon pantheon,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final String privacyGroupId,
             final int attempts,
             final int sleepDuration) {
-        super(eea, credentials, chainId, privateFrom, attempts, sleepDuration);
+        super(pantheon, credentials, chainId, privateFrom, attempts, sleepDuration);
         this.privacyGroupId = privacyGroupId;
     }
 
-    public EeaTransactionManagerPantheon(
-            final Eea eea,
+    public PantheonPrivateTransactionManager(
+            final Pantheon pantheon,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final String privacyGroupId) {
         this(
-                eea,
+                pantheon,
                 credentials,
                 chainId,
                 privateFrom,
@@ -55,6 +55,6 @@ public class EeaTransactionManagerPantheon extends PrivateTransactionManager {
 
     @Override
     Object privacyGroupIdOrPrivateFor() {
-        return getPrivacyGroupId();
+        return privacyGroupId;
     }
 }

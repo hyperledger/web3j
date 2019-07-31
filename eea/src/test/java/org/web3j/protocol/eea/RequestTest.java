@@ -12,8 +12,6 @@
  */
 package org.web3j.protocol.eea;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import org.web3j.protocol.RequestTester;
@@ -45,89 +43,5 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eea_getTransactionReceipt\","
                         + "\"params\":[\"0x123\"],\"id\":1}");
-    }
-
-    @Test
-    public void testEeaGetTransactionCount() throws Exception {
-        web3j.eeaGetTransactionCount("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x0").send();
-
-        verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_getTransactionCount\","
-                        + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"0x0\"],"
-                        + "\"id\":1}");
-    }
-
-    @Test
-    public void testEeaGetPrivateTransaction() throws Exception {
-        web3j.eeaGetPrivateTransaction("EnclaveKey").send();
-
-        // CHECKSTYLE:OFF
-        verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_getPrivateTransaction\","
-                        + "\"params\":[\"EnclaveKey\"],"
-                        + "\"id\":1}");
-        // CHECKSTYLE:ON
-    }
-
-    @Test
-    public void testEeaGetPrivacyPrecompileAddress() throws Exception {
-        web3j.eeaGetPrivacyPrecompileAddress().send();
-
-        // CHECKSTYLE:OFF
-        verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_getPrivacyPrecompileAddress\","
-                        + "\"params\":[],"
-                        + "\"id\":1}");
-        // CHECKSTYLE:ON
-    }
-
-    @Test
-    public void testEeaCreatePrivacyGroup() throws Exception {
-        web3j.eeaCreatePrivacyGroup(
-                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                        "testName",
-                        "testDesc",
-                        Arrays.asList(
-                                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                                "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs="))
-                .send();
-
-        // CHECKSTYLE:OFF
-        verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_createPrivacyGroup\","
-                        + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"testName\",\"testDesc\",[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"]],"
-                        + "\"id\":1}");
-        // CHECKSTYLE:ON
-    }
-
-    @Test
-    public void testEeaFindPrivacyGroup() throws Exception {
-        web3j.eeaFindPrivacyGroup(
-                        Arrays.asList(
-                                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="))
-                .send();
-
-        // CHECKSTYLE:OFF
-        verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_findPrivacyGroup\","
-                        + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]],"
-                        + "\"id\":1}");
-        // CHECKSTYLE:ON
-    }
-
-    @Test
-    public void testEeaDeletePrivacyGroup() throws Exception {
-        web3j.eeaDeletePrivacyGroup(
-                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                        "68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==")
-                .send();
-
-        // CHECKSTYLE:OFF
-        verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_deletePrivacyGroup\","
-                        + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==\"],"
-                        + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 }

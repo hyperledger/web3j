@@ -23,11 +23,11 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.protocol.pantheon.Pantheon;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.PrivateTransactionReceiptProcessor;
 import org.web3j.utils.Numeric;
@@ -37,19 +37,19 @@ public abstract class PrivateTransactionManager extends TransactionManager {
 
     private final PrivateTransactionReceiptProcessor transactionReceiptProcessor;
 
-    private final Eea eea;
+    private final Pantheon pantheon;
     private final Credentials credentials;
     private final long chainId;
     private final String privateFrom;
 
     protected PrivateTransactionManager(
-            final Eea eea,
+            final Pantheon pantheon,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final PrivateTransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
-        this.eea = eea;
+        this.pantheon = pantheon;
         this.credentials = credentials;
         this.chainId = chainId;
         this.privateFrom = privateFrom;
@@ -57,32 +57,32 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     }
 
     protected PrivateTransactionManager(
-            final Eea eea,
+            final Pantheon pantheon,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final int attempts,
             final int sleepDuration) {
         this(
-                eea,
+                pantheon,
                 credentials,
                 chainId,
                 privateFrom,
-                new PollingPrivateTransactionReceiptProcessor(eea, attempts, sleepDuration));
+                new PollingPrivateTransactionReceiptProcessor(pantheon, attempts, sleepDuration));
     }
 
     protected PrivateTransactionManager(
-            final Eea eea,
+            final Pantheon pantheon,
             final Credentials credentials,
             final long chainId,
             final String privateFrom) {
         this(
-                eea,
+                pantheon,
                 credentials,
                 chainId,
                 privateFrom,
                 new PollingPrivateTransactionReceiptProcessor(
-                        eea, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
+                        pantheon, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             throws IOException {
 
         final BigInteger nonce =
-                eea.eeaGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
+                pantheon.privGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
                         .send()
                         .getTransactionCount();
 
@@ -148,7 +148,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                 Numeric.toHexString(
                         PrivateTransactionEncoder.signMessage(transaction, chainId, credentials));
 
-        return eea.eeaSendRawTransaction(rawSignedTransaction).send();
+        return pantheon.eeaSendRawTransaction(rawSignedTransaction).send();
     }
 
     @Override

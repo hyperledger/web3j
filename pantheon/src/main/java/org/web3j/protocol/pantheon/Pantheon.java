@@ -12,19 +12,25 @@
  */
 package org.web3j.protocol.pantheon;
 
+import java.util.List;
 import java.util.Map;
 
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
+import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
 import org.web3j.protocol.pantheon.response.PantheonFullDebugTraceResponse;
+import org.web3j.protocol.pantheon.response.PrivCreatePrivacyGroup;
+import org.web3j.protocol.pantheon.response.PrivFindPrivacyGroup;
+import org.web3j.protocol.pantheon.response.PrivGetPrivacyPrecompileAddress;
+import org.web3j.protocol.pantheon.response.PrivGetPrivateTransaction;
 
-public interface Pantheon extends Web3j {
+public interface Pantheon extends Eea {
     static Pantheon build(Web3jService web3jService) {
         return new JsonRpc2_0Pantheon(web3jService);
     }
@@ -60,4 +66,18 @@ public interface Pantheon extends Web3j {
 
     Request<?, PantheonFullDebugTraceResponse> debugTraceTransaction(
             String transactionHash, Map<String, Boolean> options);
+
+    Request<?, EthGetTransactionCount> privGetTransactionCount(
+            final String address, final String privacyGroupId);
+
+    Request<?, PrivGetPrivateTransaction> privGetPrivateTransaction(final String enclaveKey);
+
+    Request<?, PrivGetPrivacyPrecompileAddress> privGetPrivacyPrecompileAddress();
+
+    Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
+            final List<String> addresses, final String name, final String description);
+
+    Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(final List<String> addresses);
+
+    Request<?, BooleanResponse> privDeletePrivacyGroup(final String privacyGroupId);
 }

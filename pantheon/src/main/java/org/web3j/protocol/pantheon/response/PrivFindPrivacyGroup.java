@@ -10,12 +10,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.eea.response;
+package org.web3j.protocol.pantheon.response;
+
+import java.util.List;
 
 import org.web3j.protocol.core.Response;
+import org.web3j.protocol.eea.response.PrivacyGroup;
 
-public class EeaGetPrivacyPrecompileAddress extends Response<String> {
-    public String getAddress() {
+public class PrivFindPrivacyGroup extends Response<List<PrivacyGroup>> {
+    public List<PrivacyGroup> getGroups() {
         return getResult();
     }
 }

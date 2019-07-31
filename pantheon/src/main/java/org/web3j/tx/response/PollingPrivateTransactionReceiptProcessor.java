@@ -15,16 +15,17 @@ package org.web3j.tx.response;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.protocol.pantheon.Pantheon;
 
 public class PollingPrivateTransactionReceiptProcessor extends PrivateTransactionReceiptProcessor {
     private final long sleepDuration;
     private final int attempts;
 
-    public PollingPrivateTransactionReceiptProcessor(Eea eea, long sleepDuration, int attempts) {
-        super(eea);
+    public PollingPrivateTransactionReceiptProcessor(
+            Pantheon pantheon, long sleepDuration, int attempts) {
+        super(pantheon);
         this.sleepDuration = sleepDuration;
         this.attempts = attempts;
     }

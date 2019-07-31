@@ -12,18 +12,10 @@
  */
 package org.web3j.protocol.eea;
 
-import java.util.List;
-
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.eea.response.EeaCreatePrivacyGroup;
-import org.web3j.protocol.eea.response.EeaFindPrivacyGroup;
-import org.web3j.protocol.eea.response.EeaGetPrivacyPrecompileAddress;
-import org.web3j.protocol.eea.response.EeaGetPrivateTransaction;
 import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 
 public interface Eea extends Web3j {
@@ -34,22 +26,4 @@ public interface Eea extends Web3j {
     Request<?, EthSendTransaction> eeaSendRawTransaction(final String signedTransactionData);
 
     Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(final String transactionHash);
-
-    Request<?, EthGetTransactionCount> eeaGetTransactionCount(
-            final String address, final String privacyGroupId);
-
-    Request<?, EeaGetPrivateTransaction> eeaGetPrivateTransaction(final String enclaveKey);
-
-    Request<?, EeaGetPrivacyPrecompileAddress> eeaGetPrivacyPrecompileAddress();
-
-    Request<?, EeaCreatePrivacyGroup> eeaCreatePrivacyGroup(
-            final String from,
-            final String name,
-            final String description,
-            final List<String> addresses);
-
-    Request<?, EeaFindPrivacyGroup> eeaFindPrivacyGroup(List<String> addresses);
-
-    Request<?, BooleanResponse> eeaDeletePrivacyGroup(
-            final String from, final String privacyGroupId);
 }

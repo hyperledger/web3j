@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Hash;
-import org.web3j.protocol.eea.Eea;
+import org.web3j.protocol.pantheon.Pantheon;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -29,32 +29,32 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
 /** PrivateTransactionManager implementation for using a Pantheon node to transact. */
-public class EeaTransactionManagerLegacy extends PrivateTransactionManager {
+public class LegacyPrivateTransactionManager extends PrivateTransactionManager {
 
     private final List<String> privateFor;
     private final String privacyGroupId;
 
-    public EeaTransactionManagerLegacy(
-            final Eea eea,
+    public LegacyPrivateTransactionManager(
+            final Pantheon pantheon,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final List<String> privateFor,
             final int attempts,
             final int sleepDuration) {
-        super(eea, credentials, chainId, privateFrom, attempts, sleepDuration);
+        super(pantheon, credentials, chainId, privateFrom, attempts, sleepDuration);
         this.privateFor = privateFor;
         this.privacyGroupId = generatePrivacyGroupId(privateFrom, privateFor);
     }
 
-    public EeaTransactionManagerLegacy(
-            final Eea eea,
+    public LegacyPrivateTransactionManager(
+            final Pantheon pantheon,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final List<String> privateFor) {
         this(
-                eea,
+                pantheon,
                 credentials,
                 chainId,
                 privateFrom,
