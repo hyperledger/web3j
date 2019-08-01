@@ -36,7 +36,7 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
             @JsonProperty(value = "input") final String input,
             @JsonProperty(value = "r") final String r,
             @JsonProperty(value = "s") final String s,
-            @JsonProperty(value = "v") final long v,
+            @JsonProperty(value = "v") final String v,
             @JsonProperty(value = "privateFrom") final String privateFrom,
             @JsonProperty(value = "privateFor") final List<String> privateFor,
             @JsonProperty(value = "restriction") final String restriction) {

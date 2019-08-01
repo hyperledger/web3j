@@ -33,7 +33,7 @@ public abstract class PrivateTransaction {
     private String input;
     private String r;
     private String s;
-    private long v;
+    private String v;
     private String privateFrom;
     private String restriction;
 
@@ -48,7 +48,7 @@ public abstract class PrivateTransaction {
             final String input,
             final String r,
             final String s,
-            final long v,
+            final String v,
             final String privateFrom,
             final String restriction) {
 
@@ -79,7 +79,7 @@ public abstract class PrivateTransaction {
             final TreeNode node = p.readValueAsTree();
 
             // Select the concrete class based on the existence of a property
-            if (node.get("privateFor") != null) {
+            if (node.get("privateFor").isArray()) {
                 return p.getCodec().treeToValue(node, PrivateTransactionLegacy.class);
             }
             return p.getCodec().treeToValue(node, PrivateTransactionWithPrivacyGroup.class);
@@ -126,7 +126,7 @@ public abstract class PrivateTransaction {
         return s;
     }
 
-    public long getV() {
+    public String getV() {
         return v;
     }
 
