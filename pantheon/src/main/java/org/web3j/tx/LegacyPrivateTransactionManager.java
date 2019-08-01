@@ -26,6 +26,7 @@ import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
+import org.web3j.tx.gas.PantheonPrivacyGasProvider;
 import org.web3j.utils.Numeric;
 
 /** PrivateTransactionManager implementation for using a Pantheon node to transact. */
@@ -36,25 +37,28 @@ public class LegacyPrivateTransactionManager extends PrivateTransactionManager {
 
     public LegacyPrivateTransactionManager(
             final Pantheon pantheon,
+            final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final List<String> privateFor,
             final int attempts,
             final int sleepDuration) {
-        super(pantheon, credentials, chainId, privateFrom, attempts, sleepDuration);
+        super(pantheon, gasProvider, credentials, chainId, privateFrom, attempts, sleepDuration);
         this.privateFor = privateFor;
         this.privacyGroupId = generatePrivacyGroupId(privateFrom, privateFor);
     }
 
     public LegacyPrivateTransactionManager(
             final Pantheon pantheon,
+            final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final List<String> privateFor) {
         this(
                 pantheon,
+                gasProvider,
                 credentials,
                 chainId,
                 privateFrom,

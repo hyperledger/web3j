@@ -28,6 +28,7 @@ import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.pantheon.Pantheon;
+import org.web3j.tx.gas.PantheonPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.PrivateTransactionReceiptProcessor;
 import org.web3j.utils.Numeric;
@@ -38,18 +39,21 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     private final PrivateTransactionReceiptProcessor transactionReceiptProcessor;
 
     private final Pantheon pantheon;
+    private final PantheonPrivacyGasProvider gasProvider;
     private final Credentials credentials;
     private final long chainId;
     private final String privateFrom;
 
     protected PrivateTransactionManager(
             final Pantheon pantheon,
+            final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
             final PrivateTransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.pantheon = pantheon;
+        this.gasProvider = gasProvider;
         this.credentials = credentials;
         this.chainId = chainId;
         this.privateFrom = privateFrom;
@@ -58,6 +62,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
 
     protected PrivateTransactionManager(
             final Pantheon pantheon,
+            final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
             final String privateFrom,
@@ -65,6 +70,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             final int sleepDuration) {
         this(
                 pantheon,
+                gasProvider,
                 credentials,
                 chainId,
                 privateFrom,
@@ -73,11 +79,13 @@ public abstract class PrivateTransactionManager extends TransactionManager {
 
     protected PrivateTransactionManager(
             final Pantheon pantheon,
+            final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
             final String privateFrom) {
         this(
                 pantheon,
+                gasProvider,
                 credentials,
                 chainId,
                 privateFrom,
@@ -157,8 +165,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         try {
             EthSendTransaction est =
                     sendTransaction(
-                            BigInteger.valueOf(0),
-                            BigInteger.valueOf(3000000),
+                            gasProvider.getGasPrice(),
+                            gasProvider.getGasLimit(),
                             to,
                             data,
                             BigInteger.ZERO);

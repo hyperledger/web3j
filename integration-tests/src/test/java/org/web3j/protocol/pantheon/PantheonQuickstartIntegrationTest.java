@@ -78,10 +78,20 @@ public class PantheonQuickstartIntegrationTest {
     public void legacyContract() throws Exception {
         final PrivateTransactionManager tmAlice =
                 new LegacyPrivateTransactionManager(
-                        nodeAlice, ALICE, 2018, ENCLAVE_KEY_ALICE, Arrays.asList(ENCLAVE_KEY_BOB));
+                        nodeAlice,
+                        ZERO_GAS_PROVIDER,
+                        ALICE,
+                        2018,
+                        ENCLAVE_KEY_ALICE,
+                        Arrays.asList(ENCLAVE_KEY_BOB));
         final PrivateTransactionManager tmBob =
                 new LegacyPrivateTransactionManager(
-                        nodeBob, BOB, 2018, ENCLAVE_KEY_BOB, Arrays.asList(ENCLAVE_KEY_ALICE));
+                        nodeBob,
+                        ZERO_GAS_PROVIDER,
+                        BOB,
+                        2018,
+                        ENCLAVE_KEY_BOB,
+                        Arrays.asList(ENCLAVE_KEY_ALICE));
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
@@ -129,10 +139,20 @@ public class PantheonQuickstartIntegrationTest {
 
         final PrivateTransactionManager tmAlice =
                 new PantheonPrivateTransactionManager(
-                        nodeAlice, ALICE, 2018, ENCLAVE_KEY_ALICE, aliceBobGroup);
+                        nodeAlice,
+                        ZERO_GAS_PROVIDER,
+                        ALICE,
+                        2018,
+                        ENCLAVE_KEY_ALICE,
+                        aliceBobGroup);
         final PrivateTransactionManager tmBob =
                 new PantheonPrivateTransactionManager(
-                        nodeBob, BOB, 2018, ENCLAVE_KEY_BOB, aliceBobGroupFromBobNode);
+                        nodeBob,
+                        ZERO_GAS_PROVIDER,
+                        BOB,
+                        2018,
+                        ENCLAVE_KEY_BOB,
+                        aliceBobGroupFromBobNode);
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
