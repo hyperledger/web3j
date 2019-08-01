@@ -27,10 +27,13 @@ import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.JsonRpc2_0Eea;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
 import org.web3j.protocol.pantheon.response.PantheonFullDebugTraceResponse;
-import org.web3j.protocol.pantheon.response.PrivCreatePrivacyGroup;
-import org.web3j.protocol.pantheon.response.PrivFindPrivacyGroup;
-import org.web3j.protocol.pantheon.response.PrivGetPrivacyPrecompileAddress;
-import org.web3j.protocol.pantheon.response.PrivGetPrivateTransaction;
+import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
+import org.web3j.utils.Base64String;
+
+import static org.web3j.utils.Base64Strings.unwrapList;
 
 public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
     public JsonRpc2_0Pantheon(Web3jService web3jService) {
@@ -106,20 +109,20 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
 
     @Override
     public Request<?, EthGetTransactionCount> privGetTransactionCount(
-            final String address, final String privacyGroupId) {
+            final String address, final Base64String privacyGroupId) {
         return new Request<>(
                 "priv_getTransactionCount",
-                Arrays.asList(address, privacyGroupId),
+                Arrays.asList(address, privacyGroupId.toString()),
                 web3jService,
                 EthGetTransactionCount.class);
     }
 
     @Override
     public Request<?, PrivGetPrivateTransaction> privGetPrivateTransaction(
-            final String enclaveKey) {
+            final String transactionHash) {
         return new Request<>(
                 "priv_getPrivateTransaction",
-                Collections.singletonList(enclaveKey),
+                Collections.singletonList(transactionHash),
                 web3jService,
                 PrivGetPrivateTransaction.class);
     }
@@ -135,28 +138,29 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
 
     @Override
     public Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
-            final List<String> addresses, final String name, final String description) {
+            final List<Base64String> addresses, final String name, final String description) {
         return new Request<>(
                 "priv_createPrivacyGroup",
-                Arrays.asList(addresses, name, description),
+                Arrays.asList(unwrapList(addresses), name, description),
                 web3jService,
                 PrivCreatePrivacyGroup.class);
     }
 
     @Override
-    public Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(final List<String> addresses) {
+    public Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(
+            final List<Base64String> addresses) {
         return new Request<>(
                 "priv_findPrivacyGroup",
-                Collections.singletonList(addresses),
+                Collections.singletonList(unwrapList(addresses)),
                 web3jService,
                 PrivFindPrivacyGroup.class);
     }
 
     @Override
-    public Request<?, BooleanResponse> privDeletePrivacyGroup(final String privacyGroupId) {
+    public Request<?, BooleanResponse> privDeletePrivacyGroup(final Base64String privacyGroupId) {
         return new Request<>(
                 "priv_deletePrivacyGroup",
-                Collections.singletonList(privacyGroupId),
+                Collections.singletonList(privacyGroupId.toString()),
                 web3jService,
                 BooleanResponse.class);
     }

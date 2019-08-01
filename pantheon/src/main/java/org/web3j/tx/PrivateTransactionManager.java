@@ -31,7 +31,10 @@ import org.web3j.protocol.pantheon.Pantheon;
 import org.web3j.tx.gas.PantheonPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.PrivateTransactionReceiptProcessor;
+import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
+
+import static org.web3j.utils.Restriction.RESTRICTED;
 
 public abstract class PrivateTransactionManager extends TransactionManager {
     private static final Logger log = LoggerFactory.getLogger(PrivateTransactionManager.class);
@@ -42,14 +45,14 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     private final PantheonPrivacyGasProvider gasProvider;
     private final Credentials credentials;
     private final long chainId;
-    private final String privateFrom;
+    private final Base64String privateFrom;
 
     protected PrivateTransactionManager(
             final Pantheon pantheon,
             final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
-            final String privateFrom,
+            final Base64String privateFrom,
             final PrivateTransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.pantheon = pantheon;
@@ -65,7 +68,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
-            final String privateFrom,
+            final Base64String privateFrom,
             final int attempts,
             final int sleepDuration) {
         this(
@@ -82,7 +85,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
-            final String privateFrom) {
+            final Base64String privateFrom) {
         this(
                 pantheon,
                 gasProvider,
@@ -103,14 +106,15 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         return processResponse(ethSendTransaction);
     }
 
-    public String getPrivateFrom() {
+    public Base64String getPrivateFrom() {
         return privateFrom;
     }
 
-    protected abstract String getPrivacyGroupId();
+    protected abstract Base64String getPrivacyGroupId();
 
-    abstract Object privacyGroupIdOrPrivateFor();
+    protected abstract Object privacyGroupIdOrPrivateFor();
 
+    @SuppressWarnings("unchecked")
     @Override
     public EthSendTransaction sendTransaction(
             final BigInteger gasPrice,
@@ -128,7 +132,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         final Object privacyGroupIdOrPrivateFor = privacyGroupIdOrPrivateFor();
 
         final RawPrivateTransaction transaction;
-        if (privacyGroupIdOrPrivateFor instanceof String) {
+        if (privacyGroupIdOrPrivateFor instanceof Base64String) {
             transaction =
                     RawPrivateTransaction.createTransaction(
                             nonce,
@@ -137,8 +141,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             to,
                             data,
                             privateFrom,
-                            (String) privacyGroupIdOrPrivateFor,
-                            "restricted");
+                            (Base64String) privacyGroupIdOrPrivateFor,
+                            RESTRICTED);
         } else {
             transaction =
                     RawPrivateTransaction.createTransaction(
@@ -148,8 +152,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             to,
                             data,
                             privateFrom,
-                            (List<String>) privacyGroupIdOrPrivateFor,
-                            "restricted");
+                            (List<Base64String>) privacyGroupIdOrPrivateFor,
+                            RESTRICTED);
         }
 
         final String rawSignedTransaction =
@@ -160,7 +164,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     }
 
     @Override
-    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+    public String sendCall(
+            final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         try {
             EthSendTransaction est =
@@ -170,7 +175,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             to,
                             data,
                             BigInteger.ZERO);
-            TransactionReceipt ptr = processResponse(est);
+            final TransactionReceipt ptr = processResponse(est);
             return ((PrivateTransactionReceipt) ptr).getOutput();
         } catch (TransactionException e) {
             log.error("Failed to execute call", e);
@@ -178,7 +183,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         }
     }
 
-    private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
+    private TransactionReceipt processResponse(final EthSendTransaction transactionResponse)
             throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
             throw new RuntimeException(
@@ -186,7 +191,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             + transactionResponse.getError().getMessage());
         }
 
-        String transactionHash = transactionResponse.getTransactionHash();
+        final String transactionHash = transactionResponse.getTransactionHash();
 
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
     }

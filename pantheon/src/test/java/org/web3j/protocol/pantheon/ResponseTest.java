@@ -21,14 +21,14 @@ import org.junit.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.EthAccounts;
-import org.web3j.protocol.eea.response.PrivacyGroup;
-import org.web3j.protocol.eea.response.PrivateTransactionLegacy;
-import org.web3j.protocol.eea.response.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
-import org.web3j.protocol.pantheon.response.PrivCreatePrivacyGroup;
-import org.web3j.protocol.pantheon.response.PrivFindPrivacyGroup;
-import org.web3j.protocol.pantheon.response.PrivGetPrivacyPrecompileAddress;
-import org.web3j.protocol.pantheon.response.PrivGetPrivateTransaction;
+import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
+import org.web3j.protocol.pantheon.response.privacy.PrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivateTransactionLegacy;
+import org.web3j.protocol.pantheon.response.privacy.PrivateTransactionWithPrivacyGroup;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -206,15 +206,15 @@ public class ResponseTest extends ResponseTester {
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
                         + "    \"id\": 1,\n"
-                        + "    \"result\": \"68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==\"\n"
+                        + "    \"result\": \"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"\n"
                         + "}");
         // CHECKSTYLE:ON
 
         PrivCreatePrivacyGroup privCreatePrivacyGroup =
                 deserialiseResponse(PrivCreatePrivacyGroup.class);
         assertThat(
-                privCreatePrivacyGroup.getPrivacyGroupId(),
-                is("68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw=="));
+                privCreatePrivacyGroup.getPrivacyGroupId().toString(),
+                is("DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w="));
     }
 
     @Test

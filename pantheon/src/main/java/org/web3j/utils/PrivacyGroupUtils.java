@@ -26,11 +26,11 @@ import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 
 public class PrivacyGroupUtils {
-    public static String generateLegacyGroup(
-            final String privateFrom, final List<String> privateFor) {
+    public static Base64String generateLegacyGroup(
+            final Base64String privateFrom, final List<Base64String> privateFor) {
         final List<byte[]> stringList = new ArrayList<>();
-        stringList.add(Base64.getDecoder().decode(privateFrom));
-        privateFor.forEach(item -> stringList.add(Base64.getDecoder().decode(item)));
+        stringList.add(Base64.getDecoder().decode(privateFrom.toString()));
+        privateFor.forEach(item -> stringList.add(item.raw()));
 
         final List<RlpType> rlpList =
                 stringList.stream()
@@ -39,6 +39,6 @@ public class PrivacyGroupUtils {
                         .map(RlpString::create)
                         .collect(Collectors.toList());
 
-        return Numeric.byteArrayToBase64(Hash.sha3(RlpEncoder.encode(new RlpList(rlpList))));
+        return Base64String.wrap(Hash.sha3(RlpEncoder.encode(new RlpList(rlpList))));
     }
 }

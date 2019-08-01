@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.eea.response;
+package org.web3j.protocol.pantheon.response.privacy;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,12 +18,15 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.web3j.utils.Base64String;
+import org.web3j.utils.Base64Strings;
+
 public class PrivacyGroup {
-    private final String privacyGroupId;
+    private final Base64String privacyGroupId;
     private final String name;
     private final String description;
     private final Type type;
-    private final List<String> members;
+    private final List<Base64String> members;
 
     public enum Type {
         LEGACY,
@@ -37,14 +40,14 @@ public class PrivacyGroup {
             @JsonProperty(value = "name") final String name,
             @JsonProperty(value = "description") final String description,
             @JsonProperty(value = "members") final List<String> members) {
-        this.privacyGroupId = privacyGroupId;
+        this.privacyGroupId = Base64String.wrap(privacyGroupId);
         this.type = type;
         this.name = name;
         this.description = description;
-        this.members = members;
+        this.members = Base64Strings.wrapList(members);
     }
 
-    public String getPrivacyGroupId() {
+    public Base64String getPrivacyGroupId() {
         return privacyGroupId;
     }
 
@@ -60,7 +63,7 @@ public class PrivacyGroup {
         return type;
     }
 
-    public List<String> getMembers() {
+    public List<Base64String> getMembers() {
         return members;
     }
 

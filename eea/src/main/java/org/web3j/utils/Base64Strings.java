@@ -10,12 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.pantheon.response;
+package org.web3j.utils;
 
-import org.web3j.protocol.core.Response;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class PrivGetPrivacyPrecompileAddress extends Response<String> {
-    public String getAddress() {
-        return getResult();
+public class Base64Strings {
+    public static List<Base64String> wrapList(final List<String> base64Strings) {
+        return base64Strings.stream().map(Base64String::wrap).collect(Collectors.toList());
+    }
+
+    public static List<String> unwrapList(final List<Base64String> base64Strings) {
+        return base64Strings.stream().map(Base64String::toString).collect(Collectors.toList());
     }
 }

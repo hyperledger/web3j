@@ -10,9 +10,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.eea.response;
+package org.web3j.protocol.pantheon.response.privacy;
 
-import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -20,12 +19,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import org.web3j.utils.Base64String;
+
 @JsonDeserialize(using = JsonDeserializer.None.class)
-public class PrivateTransactionLegacy extends PrivateTransaction {
-    private List<String> privateFor;
+public class PrivateTransactionWithPrivacyGroup extends PrivateTransaction {
+
+    private Base64String privacyGroupId;
 
     @JsonCreator
-    public PrivateTransactionLegacy(
+    public PrivateTransactionWithPrivacyGroup(
             @JsonProperty(value = "hash") final String hash,
             @JsonProperty(value = "nonce") final String nonce,
             @JsonProperty(value = "from") final String from,
@@ -38,7 +40,9 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
             @JsonProperty(value = "s") final String s,
             @JsonProperty(value = "v") final String v,
             @JsonProperty(value = "privateFrom") final String privateFrom,
-            @JsonProperty(value = "privateFor") final List<String> privateFor,
+            // FIXME: This label should be changed once
+            // https://pegasys1.atlassian.net/browse/PAN-3009 goes into production
+            @JsonProperty(value = "privateFor") final String privacyGroupId,
             @JsonProperty(value = "restriction") final String restriction) {
         super(
                 hash,
@@ -54,11 +58,11 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
                 v,
                 privateFrom,
                 restriction);
-        this.privateFor = privateFor;
+        this.privacyGroupId = Base64String.wrap(privacyGroupId);
     }
 
-    public List<String> getPrivateFor() {
-        return privateFor;
+    public Base64String getPrivacyGroupId() {
+        return privacyGroupId;
     }
 
     @Override
@@ -72,12 +76,12 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
         if (!super.equals(o)) {
             return false;
         }
-        PrivateTransactionLegacy that = (PrivateTransactionLegacy) o;
-        return getPrivateFor().equals(that.getPrivateFor());
+        PrivateTransactionWithPrivacyGroup that = (PrivateTransactionWithPrivacyGroup) o;
+        return getPrivacyGroupId().equals(that.getPrivacyGroupId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getPrivateFor());
+        return Objects.hash(super.hashCode(), getPrivacyGroupId());
     }
 }

@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.eea.response;
+package org.web3j.protocol.pantheon.response.privacy;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -22,53 +22,12 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Restriction;
 
 @JsonDeserialize(using = PrivateTransaction.ResponseDeserialiser.class)
 public abstract class PrivateTransaction {
-    private String hash;
-    private String nonce;
-    private String from;
-    private String to;
-    private String value;
-    private String gasPrice;
-    private String gas;
-    private String input;
-    private String r;
-    private String s;
-    private String v;
-    private String privateFrom;
-    private String restriction;
-
-    public PrivateTransaction(
-            final String hash,
-            final String nonce,
-            final String from,
-            final String to,
-            final String value,
-            final String gas,
-            final String gasPrice,
-            final String input,
-            final String r,
-            final String s,
-            final String v,
-            final String privateFrom,
-            final String restriction) {
-
-        this.hash = hash;
-        this.nonce = nonce;
-        this.from = from;
-        this.to = to;
-        this.value = value;
-        this.gasPrice = gasPrice;
-        this.gas = gas;
-        this.input = input;
-        this.r = r;
-        this.s = s;
-        this.v = v;
-        this.privateFrom = privateFrom;
-        this.restriction = restriction;
-    }
 
     public static class ResponseDeserialiser extends StdDeserializer<PrivateTransaction> {
 
@@ -89,12 +48,56 @@ public abstract class PrivateTransaction {
         }
     }
 
+    private String hash;
+    private BigInteger nonce;
+    private String from;
+    private String to;
+    private BigInteger value;
+    private BigInteger gasPrice;
+    private BigInteger gas;
+    private String input;
+    private String r;
+    private String s;
+    private long v;
+    private Base64String privateFrom;
+    private Restriction restriction;
+
+    public PrivateTransaction(
+            final String hash,
+            final String nonce,
+            final String from,
+            final String to,
+            final String value,
+            final String gas,
+            final String gasPrice,
+            final String input,
+            final String r,
+            final String s,
+            final String v,
+            final String privateFrom,
+            final String restriction) {
+
+        this.hash = hash;
+        this.nonce = Numeric.decodeQuantity(nonce);
+        this.from = from;
+        this.to = to;
+        this.value = Numeric.decodeQuantity(value);
+        this.gasPrice = Numeric.decodeQuantity(gasPrice);
+        this.gas = Numeric.decodeQuantity(gas);
+        this.input = input;
+        this.r = r;
+        this.s = s;
+        this.v = Numeric.decodeQuantity(v).longValue();
+        this.privateFrom = Base64String.wrap(privateFrom);
+        this.restriction = Restriction.fromString(restriction);
+    }
+
     public String getHash() {
         return hash;
     }
 
     public BigInteger getNonce() {
-        return Numeric.decodeQuantity(nonce);
+        return nonce;
     }
 
     public String getFrom() {
@@ -106,15 +109,15 @@ public abstract class PrivateTransaction {
     }
 
     public BigInteger getValue() {
-        return Numeric.decodeQuantity(value);
+        return value;
     }
 
     public BigInteger getGasPrice() {
-        return Numeric.decodeQuantity(gasPrice);
+        return gasPrice;
     }
 
     public BigInteger getGas() {
-        return Numeric.decodeQuantity(gas);
+        return gas;
     }
 
     public String getInput() {
@@ -130,14 +133,14 @@ public abstract class PrivateTransaction {
     }
 
     public long getV() {
-        return Numeric.decodeQuantity(v).longValue();
+        return v;
     }
 
-    public String getPrivateFrom() {
+    public Base64String getPrivateFrom() {
         return privateFrom;
     }
 
-    public String getRestriction() {
+    public Restriction getRestriction() {
         return restriction;
     }
 

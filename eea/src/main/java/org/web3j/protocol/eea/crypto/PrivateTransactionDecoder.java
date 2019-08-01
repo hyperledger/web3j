@@ -22,7 +22,11 @@ import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
+import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Restriction;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class PrivateTransactionDecoder {
 
@@ -35,22 +39,19 @@ public class PrivateTransactionDecoder {
         final RawTransaction rawTransaction = TransactionDecoder.decode(hexTransaction);
 
         if (values.size() == 9) {
-            final String privateFrom = extractBase64(values.get(6));
-            final String restriction = extractString(values.get(8));
+            final Base64String privateFrom = extractBase64(values.get(6));
+            final Restriction restriction = extractRestriction(values.get(8));
             if (values.get(7) instanceof RlpList) {
                 return new RawPrivateTransaction(
-                        rawTransaction,
-                        privateFrom,
-                        extractBase64List((RlpList) values.get(7)),
-                        restriction);
+                        rawTransaction, privateFrom, extractBase64List(values.get(7)), restriction);
             } else {
                 return new RawPrivateTransaction(
                         rawTransaction, privateFrom, extractBase64(values.get(7)), restriction);
             }
 
         } else {
-            final String privateFrom = extractBase64(values.get(9));
-            final String restriction = extractString(values.get(11));
+            final Base64String privateFrom = extractBase64(values.get(9));
+            final Restriction restriction = extractRestriction(values.get(11));
             if (values.get(10) instanceof RlpList) {
                 return new SignedRawPrivateTransaction(
                         (SignedRawTransaction) rawTransaction,
@@ -67,15 +68,15 @@ public class PrivateTransactionDecoder {
         }
     }
 
-    private static String extractString(final RlpType value) {
-        return new String(((RlpString) value).getBytes());
+    private static Restriction extractRestriction(final RlpType value) {
+        return Restriction.fromString(new String(((RlpString) value).getBytes(), UTF_8));
     }
 
-    private static String extractBase64(final RlpType value) {
-        return Numeric.byteArrayToBase64(((RlpString) value).getBytes());
+    private static Base64String extractBase64(final RlpType value) {
+        return Base64String.wrap(((RlpString) value).getBytes());
     }
 
-    private static List<String> extractBase64List(final RlpType values) {
+    private static List<Base64String> extractBase64List(final RlpType values) {
         return ((RlpList) values)
                 .getValues().stream()
                         .map(PrivateTransactionDecoder::extractBase64)

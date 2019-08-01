@@ -15,19 +15,20 @@ package org.web3j.tx;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.pantheon.Pantheon;
 import org.web3j.tx.gas.PantheonPrivacyGasProvider;
+import org.web3j.utils.Base64String;
 
 /** PrivateTransactionManager implementation for using a Pantheon node to transact. */
 public class PantheonPrivateTransactionManager extends PrivateTransactionManager {
 
-    private final String privacyGroupId;
+    private final Base64String privacyGroupId;
 
     public PantheonPrivateTransactionManager(
             final Pantheon pantheon,
             final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
-            final String privateFrom,
-            final String privacyGroupId,
+            final Base64String privateFrom,
+            final Base64String privacyGroupId,
             final int attempts,
             final int sleepDuration) {
         super(pantheon, gasProvider, credentials, chainId, privateFrom, attempts, sleepDuration);
@@ -39,8 +40,8 @@ public class PantheonPrivateTransactionManager extends PrivateTransactionManager
             final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
-            final String privateFrom,
-            final String privacyGroupId) {
+            final Base64String privateFrom,
+            final Base64String privacyGroupId) {
         this(
                 pantheon,
                 gasProvider,
@@ -53,12 +54,12 @@ public class PantheonPrivateTransactionManager extends PrivateTransactionManager
     }
 
     @Override
-    public String getPrivacyGroupId() {
+    public Base64String getPrivacyGroupId() {
         return privacyGroupId;
     }
 
     @Override
-    Object privacyGroupIdOrPrivateFor() {
+    protected Object privacyGroupIdOrPrivateFor() {
         return privacyGroupId;
     }
 }

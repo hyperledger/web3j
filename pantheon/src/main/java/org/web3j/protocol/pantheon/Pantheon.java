@@ -25,10 +25,11 @@ import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
 import org.web3j.protocol.pantheon.response.PantheonFullDebugTraceResponse;
-import org.web3j.protocol.pantheon.response.PrivCreatePrivacyGroup;
-import org.web3j.protocol.pantheon.response.PrivFindPrivacyGroup;
-import org.web3j.protocol.pantheon.response.PrivGetPrivacyPrecompileAddress;
-import org.web3j.protocol.pantheon.response.PrivGetPrivateTransaction;
+import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
+import org.web3j.utils.Base64String;
 
 public interface Pantheon extends Eea {
     static Pantheon build(Web3jService web3jService) {
@@ -68,16 +69,16 @@ public interface Pantheon extends Eea {
             String transactionHash, Map<String, Boolean> options);
 
     Request<?, EthGetTransactionCount> privGetTransactionCount(
-            final String address, final String privacyGroupId);
+            final String address, final Base64String privacyGroupId);
 
-    Request<?, PrivGetPrivateTransaction> privGetPrivateTransaction(final String enclaveKey);
+    Request<?, PrivGetPrivateTransaction> privGetPrivateTransaction(final String transactionHash);
 
     Request<?, PrivGetPrivacyPrecompileAddress> privGetPrivacyPrecompileAddress();
 
     Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
-            final List<String> addresses, final String name, final String description);
+            final List<Base64String> addresses, final String name, final String description);
 
-    Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(final List<String> addresses);
+    Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(final List<Base64String> addresses);
 
-    Request<?, BooleanResponse> privDeletePrivacyGroup(final String privacyGroupId);
+    Request<?, BooleanResponse> privDeletePrivacyGroup(final Base64String privacyGroupId);
 }

@@ -17,21 +17,22 @@ import java.util.List;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.pantheon.Pantheon;
 import org.web3j.tx.gas.PantheonPrivacyGasProvider;
+import org.web3j.utils.Base64String;
 import org.web3j.utils.PrivacyGroupUtils;
 
 /** PrivateTransactionManager implementation for using a Pantheon node to transact. */
 public class LegacyPrivateTransactionManager extends PrivateTransactionManager {
 
-    private final List<String> privateFor;
-    private final String privacyGroupId;
+    private final List<Base64String> privateFor;
+    private final Base64String privacyGroupId;
 
     public LegacyPrivateTransactionManager(
             final Pantheon pantheon,
             final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
-            final String privateFrom,
-            final List<String> privateFor,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
             final int attempts,
             final int sleepDuration) {
         super(pantheon, gasProvider, credentials, chainId, privateFrom, attempts, sleepDuration);
@@ -44,8 +45,8 @@ public class LegacyPrivateTransactionManager extends PrivateTransactionManager {
             final PantheonPrivacyGasProvider gasProvider,
             final Credentials credentials,
             final long chainId,
-            final String privateFrom,
-            final List<String> privateFor) {
+            final Base64String privateFrom,
+            final List<Base64String> privateFor) {
         this(
                 pantheon,
                 gasProvider,
@@ -57,12 +58,12 @@ public class LegacyPrivateTransactionManager extends PrivateTransactionManager {
                 15 * 1000);
     }
 
-    public String getPrivacyGroupId() {
+    public Base64String getPrivacyGroupId() {
         return privacyGroupId;
     }
 
     @Override
-    Object privacyGroupIdOrPrivateFor() {
+    protected Object privacyGroupIdOrPrivateFor() {
         return privateFor;
     }
 }

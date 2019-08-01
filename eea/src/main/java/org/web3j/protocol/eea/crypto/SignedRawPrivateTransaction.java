@@ -18,6 +18,8 @@ import java.util.List;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.SignatureDataOperations;
 import org.web3j.crypto.SignedRawTransaction;
+import org.web3j.utils.Base64String;
+import org.web3j.utils.Restriction;
 
 public class SignedRawPrivateTransaction extends RawPrivateTransaction
         implements SignatureDataOperations {
@@ -31,10 +33,10 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
             final String to,
             final String data,
             final Sign.SignatureData signatureData,
-            final String privateFrom,
-            final List<String> privateFor,
-            final String privacyGroupId,
-            final String restriction) {
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
         super(
                 nonce,
                 gasPrice,
@@ -50,26 +52,26 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
 
     public SignedRawPrivateTransaction(
             final SignedRawTransaction signedRawTransaction,
-            final String privateFrom,
-            final List<String> privateFor,
-            final String restriction) {
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Restriction restriction) {
         this(signedRawTransaction, privateFrom, privateFor, null, restriction);
     }
 
     public SignedRawPrivateTransaction(
             final SignedRawTransaction signedRawTransaction,
-            final String privateFrom,
-            final String privacyGroupId,
-            final String restriction) {
+            final Base64String privateFrom,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
         this(signedRawTransaction, privateFrom, null, privacyGroupId, restriction);
     }
 
     private SignedRawPrivateTransaction(
             final SignedRawTransaction signedRawTransaction,
-            final String privateFrom,
-            final List<String> privateFor,
-            final String privacyGroupId,
-            final String restriction) {
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
         this(
                 signedRawTransaction.getNonce(),
                 signedRawTransaction.getGasPrice(),

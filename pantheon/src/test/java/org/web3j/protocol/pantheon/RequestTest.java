@@ -14,6 +14,7 @@ package org.web3j.protocol.pantheon;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -21,8 +22,18 @@ import org.junit.Test;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.utils.Base64String;
 
 public class RequestTest extends RequestTester {
+    private static final Base64String MOCK_ENCLAVE_KEY =
+            Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+    private static final Base64String MOCK_ENCLAVE_KEY_2 =
+            Base64String.wrap("Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=");
+    private static final Base64String MOCK_PRIVACY_GROUP_ID =
+            Base64String.wrap("DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=");
+    private static final List<Base64String> BASE_64_STRINGS =
+            Arrays.asList(MOCK_ENCLAVE_KEY, MOCK_ENCLAVE_KEY_2);
+
     private Pantheon web3j;
 
     @Override
@@ -118,11 +129,13 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEeaGetTransactionCount() throws Exception {
-        web3j.privGetTransactionCount("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x0").send();
+        web3j.privGetTransactionCount(
+                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1", MOCK_PRIVACY_GROUP_ID)
+                .send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getTransactionCount\","
-                        + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"0x0\"],"
+                        + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],"
                         + "\"id\":1}");
     }
 
@@ -152,13 +165,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEeaCreatePrivacyGroup() throws Exception {
-        web3j.privCreatePrivacyGroup(
-                        Arrays.asList(
-                                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                                "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs="),
-                        "testName",
-                        "testDesc")
-                .send();
+        web3j.privCreatePrivacyGroup(BASE_64_STRINGS, "testName", "testDesc").send();
 
         // CHECKSTYLE:OFF
         verifyResult(
@@ -170,30 +177,24 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEeaFindPrivacyGroup() throws Exception {
-        web3j.privFindPrivacyGroup(
-                        Arrays.asList(
-                                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                                "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="))
-                .send();
+        web3j.privFindPrivacyGroup(BASE_64_STRINGS).send();
 
         // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_findPrivacyGroup\","
-                        + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]],"
+                        + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"]],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
     }
 
     @Test
     public void testEeaDeletePrivacyGroup() throws Exception {
-        web3j.privDeletePrivacyGroup(
-                        "68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==")
-                .send();
+        web3j.privDeletePrivacyGroup(MOCK_PRIVACY_GROUP_ID).send();
 
         // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_deletePrivacyGroup\","
-                        + "\"params\":[\"68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==\"],"
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
     }

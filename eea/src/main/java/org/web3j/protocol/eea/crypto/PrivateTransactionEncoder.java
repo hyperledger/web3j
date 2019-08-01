@@ -24,7 +24,6 @@ import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.Numeric;
 
 /** Create signed RLP encoded private transaction. */
 public class PrivateTransactionEncoder {
@@ -83,8 +82,7 @@ public class PrivateTransactionEncoder {
                         TransactionEncoder.asRlpValues(
                                 privateTransaction.asRawTransaction(), signatureData));
 
-        result.add(
-                RlpString.create(Numeric.base64ToByteArray(privateTransaction.getPrivateFrom())));
+        result.add(RlpString.create(privateTransaction.getPrivateFrom().raw()));
 
         privateTransaction
                 .getPrivateFor()
@@ -93,23 +91,14 @@ public class PrivateTransactionEncoder {
                                 result.add(
                                         new RlpList(
                                                 privateFor.stream()
-                                                        .map(
-                                                                s ->
-                                                                        RlpString.create(
-                                                                                Numeric
-                                                                                        .base64ToByteArray(
-                                                                                                s)))
+                                                        .map(s -> RlpString.create(s.raw()))
                                                         .collect(Collectors.toList()))));
 
         privateTransaction
                 .getPrivacyGroupId()
-                .ifPresent(
-                        privacyGroupId ->
-                                result.add(
-                                        RlpString.create(
-                                                Numeric.base64ToByteArray(privacyGroupId))));
+                .ifPresent(privacyGroupId -> result.add(RlpString.create(privacyGroupId.raw())));
 
-        result.add(RlpString.create(privateTransaction.getRestriction()));
+        result.add(RlpString.create(privateTransaction.getRestriction().getRestriction()));
 
         return result;
     }

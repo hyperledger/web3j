@@ -10,15 +10,13 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.pantheon.response;
-
-import java.util.Optional;
+package org.web3j.protocol.pantheon.response.privacy;
 
 import org.web3j.protocol.core.Response;
-import org.web3j.protocol.eea.response.PrivateTransaction;
+import org.web3j.utils.Base64String;
 
-public class PrivGetPrivateTransaction extends Response<PrivateTransaction> {
-    public Optional<PrivateTransaction> getPrivateTransaction() {
-        return Optional.ofNullable(getResult());
+public class PrivCreatePrivacyGroup extends Response<String> {
+    public Base64String getPrivacyGroupId() {
+        return Base64String.wrap(getResult());
     }
 }
