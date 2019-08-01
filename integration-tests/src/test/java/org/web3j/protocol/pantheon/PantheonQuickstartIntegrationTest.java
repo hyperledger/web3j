@@ -34,12 +34,14 @@ import org.web3j.tx.PantheonPrivateTransactionManager;
 import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.PantheonPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
+import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.web3j.utils.Restriction.RESTRICTED;
 
 /**
  * Test designed to run with pantheon-quickstart https://github.com/PegaSysEng/pantheon-quickstart
@@ -61,10 +63,12 @@ public class PantheonQuickstartIntegrationTest {
     private static final Credentials CHARLIE =
             Credentials.create("ae6ae8e5ccbfb04590405997ee2d52d2b330726137b875053c36d94e974d162f");
 
-    private static final String ENCLAVE_KEY_ALICE = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-    private static final String ENCLAVE_KEY_BOB = "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=";
-    private static final String ENCLAVE_KEY_CHARLIE =
-            "k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=";
+    private static final Base64String ENCLAVE_KEY_ALICE =
+            Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+    private static final Base64String ENCLAVE_KEY_BOB =
+            Base64String.wrap("Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=");
+    private static final Base64String ENCLAVE_KEY_CHARLIE =
+            Base64String.wrap("k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=");
 
     private static final PantheonPrivacyGasProvider ZERO_GAS_PROVIDER =
             new PantheonPrivacyGasProvider(BigInteger.valueOf(0));
@@ -92,7 +96,7 @@ public class PantheonQuickstartIntegrationTest {
     public void simplePrivateTransactions() throws Exception {
 
         // Build new privacy group using the create API
-        final String privacyGroupId =
+        final Base64String privacyGroupId =
                 nodeBob.privCreatePrivacyGroup(
                                 Arrays.asList(
                                         ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB, ENCLAVE_KEY_CHARLIE),
@@ -114,7 +118,7 @@ public class PantheonQuickstartIntegrationTest {
                         HUMAN_STANDARD_TOKEN_BINARY,
                         ENCLAVE_KEY_ALICE,
                         privacyGroupId,
-                        "restricted");
+                        RESTRICTED);
 
         final String signedTransactionData =
                 Numeric.toHexString(
@@ -164,10 +168,8 @@ public class PantheonQuickstartIntegrationTest {
 
         assertThat(privateTransaction.getPrivateFrom(), is(ENCLAVE_KEY_ALICE));
         assertThat(privateTransaction.getPrivacyGroupId(), is(privacyGroupId));
-        assertThat(privateTransaction.getRestriction(), is("restricted"));
+        assertThat(privateTransaction.getRestriction(), is(RESTRICTED));
         assertNull(privateTransaction.getTo());
-
-        System.out.println("");
     }
 
     @Test
@@ -211,7 +213,7 @@ public class PantheonQuickstartIntegrationTest {
     @Test
     public void privacyGroupContract() throws Exception {
         // Build new privacy group using the create API
-        final String aliceBobGroup =
+        final Base64String aliceBobGroup =
                 nodeAlice
                         .privCreatePrivacyGroup(
                                 Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB),
@@ -221,7 +223,7 @@ public class PantheonQuickstartIntegrationTest {
                         .getPrivacyGroupId();
 
         // Find the privacy group that was built by Alice from Bob's node
-        final String aliceBobGroupFromBobNode =
+        final Base64String aliceBobGroupFromBobNode =
                 nodeBob.privFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
                         .send().getGroups().stream()
                         .filter(
