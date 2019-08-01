@@ -25,6 +25,10 @@ import org.web3j.protocol.eea.response.PrivacyGroup;
 import org.web3j.protocol.eea.response.PrivateTransactionLegacy;
 import org.web3j.protocol.eea.response.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
+import org.web3j.protocol.pantheon.response.PrivCreatePrivacyGroup;
+import org.web3j.protocol.pantheon.response.PrivFindPrivacyGroup;
+import org.web3j.protocol.pantheon.response.PrivGetPrivacyPrecompileAddress;
+import org.web3j.protocol.pantheon.response.PrivGetPrivateTransaction;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

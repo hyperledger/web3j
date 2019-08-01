@@ -121,7 +121,7 @@ public class RequestTest extends RequestTester {
         web3j.privGetTransactionCount("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x0").send();
 
         verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_getTransactionCount\","
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getTransactionCount\","
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"0x0\"],"
                         + "\"id\":1}");
     }
@@ -132,7 +132,7 @@ public class RequestTest extends RequestTester {
 
         // CHECKSTYLE:OFF
         verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_getPrivateTransaction\","
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getPrivateTransaction\","
                         + "\"params\":[\"EnclaveKey\"],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
@@ -144,7 +144,7 @@ public class RequestTest extends RequestTester {
 
         // CHECKSTYLE:OFF
         verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_getPrivacyPrecompileAddress\","
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getPrivacyPrecompileAddress\","
                         + "\"params\":[],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
@@ -162,8 +162,8 @@ public class RequestTest extends RequestTester {
 
         // CHECKSTYLE:OFF
         verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_createPrivacyGroup\","
-                        + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"testName\",\"testDesc\",[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"]],"
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_createPrivacyGroup\","
+                        + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\"testName\",\"testDesc\"],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
     }
@@ -178,7 +178,7 @@ public class RequestTest extends RequestTester {
 
         // CHECKSTYLE:OFF
         verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_findPrivacyGroup\","
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_findPrivacyGroup\","
                         + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
@@ -192,7 +192,7 @@ public class RequestTest extends RequestTester {
 
         // CHECKSTYLE:OFF
         verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"eea_deletePrivacyGroup\","
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_deletePrivacyGroup\","
                         + "\"params\":[\"68/Cq0mVjB8FbXDLE1tbDRAvD/srluIok137uFOaClPU/dLFW34ovZebW+PTzy9wUawTXw==\"],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
