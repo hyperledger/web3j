@@ -89,34 +89,4 @@ public class PrivateTransactionEncoderTest {
 
         assertEquals(expected, privateRawTransaction);
     }
-
-    @Test
-    public void testSignPantheonTransactionWithoutPrivateFrom() {
-        // CHECKSTYLE:OFF
-        final String expected =
-                "0xf890808203e8832dc6c094627306090abab3a6e1400e9345bc60c78a8bef578080820fe8a077d74323a0f1b284514dad1c2d07ad935fdf228b321864f1e397494bfc48c659a03987daa894feafdd34fd20a232c79f246b66aee6decd60728698c79c1da050bda00f200e885ff29e973e2576b6600181d1b0a2b5294e30d9be4a1981ffb33a0b8c8a72657374726963746564";
-        // CHECKSTYLE:ON
-        final String privacyGroupId = "DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=";
-        final RawPrivateTransaction privateTransactionCreation =
-                new RawPrivateTransaction(
-                        BigInteger.ZERO,
-                        BigInteger.valueOf(1000),
-                        BigInteger.valueOf(3000000),
-                        "0x627306090abab3a6e1400e9345bc60c78a8bef57",
-                        "0x",
-                        null,
-                        null,
-                        privacyGroupId,
-                        "restricted");
-        final long chainId = 2018;
-        final String privateKey =
-                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
-        final Credentials credentials = Credentials.create(privateKey);
-        final String privateRawTransaction =
-                Numeric.toHexString(
-                        PrivateTransactionEncoder.signMessage(
-                                privateTransactionCreation, chainId, credentials));
-
-        assertEquals(expected, privateRawTransaction);
-    }
 }

@@ -83,12 +83,8 @@ public class PrivateTransactionEncoder {
                         TransactionEncoder.asRlpValues(
                                 privateTransaction.asRawTransaction(), signatureData));
 
-        privateTransaction
-                .getPrivateFrom()
-                .ifPresent(
-                        privateFrom ->
-                                result.add(
-                                        RlpString.create(Numeric.base64ToByteArray(privateFrom))));
+        result.add(
+                RlpString.create(Numeric.base64ToByteArray(privateTransaction.getPrivateFrom())));
 
         privateTransaction
                 .getPrivateFor()
