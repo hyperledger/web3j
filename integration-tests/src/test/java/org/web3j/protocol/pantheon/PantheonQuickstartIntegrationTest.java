@@ -24,10 +24,8 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.generated.HumanStandardToken;
-import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
-import org.web3j.protocol.eea.response.PrivateTransaction;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.eea.response.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.http.HttpService;
@@ -37,7 +35,6 @@ import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.PantheonPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.utils.Numeric;
-import org.web3j.utils.PrivacyGroupUtils;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
@@ -96,9 +93,9 @@ public class PantheonQuickstartIntegrationTest {
 
         // Build new privacy group using the create API
         final String privacyGroupId =
-                nodeBob
-                        .privCreatePrivacyGroup(
-                                Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB, ENCLAVE_KEY_CHARLIE),
+                nodeBob.privCreatePrivacyGroup(
+                                Arrays.asList(
+                                        ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB, ENCLAVE_KEY_CHARLIE),
                                 "AliceBobCharlie",
                                 "AliceBobCharlie group")
                         .send()
@@ -115,44 +112,60 @@ public class PantheonQuickstartIntegrationTest {
                         ZERO_GAS_PROVIDER.getGasPrice(),
                         ZERO_GAS_PROVIDER.getGasLimit(),
                         HUMAN_STANDARD_TOKEN_BINARY,
+                        ENCLAVE_KEY_ALICE,
                         privacyGroupId,
                         "restricted");
 
         final String signedTransactionData =
-                Numeric.toHexString( PrivateTransactionEncoder.signMessage(rawPrivateTransaction, 2018, ALICE));
+                Numeric.toHexString(
+                        PrivateTransactionEncoder.signMessage(rawPrivateTransaction, 2018, ALICE));
 
         final String transactionHash =
                 nodeAlice.eeaSendRawTransaction(signedTransactionData).send().getTransactionHash();
 
-        final PollingPrivateTransactionReceiptProcessor receiptProcessor = new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1*1000, 30);
-        final PrivateTransactionReceipt receipt = receiptProcessor.waitForTransactionReceipt(transactionHash);
+        final PollingPrivateTransactionReceiptProcessor receiptProcessor =
+                new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1 * 1000, 30);
+        final PrivateTransactionReceipt receipt =
+                receiptProcessor.waitForTransactionReceipt(transactionHash);
 
         assertThat(receipt.getFrom(), is(ALICE.getAddress()));
-        assertThat(receipt.getOutput(), is("0x"));
+        assertThat(receipt.getLogs().size(), is(0));
         assertNull(receipt.getTo());
         assertNotNull(receipt.getContractAddress());
 
-        final PrivateTransactionWithPrivacyGroup privateTransaction = (PrivateTransactionWithPrivacyGroup) nodeAlice.privGetPrivateTransaction(transactionHash).send().getPrivateTransaction().get();
+        final PrivateTransactionWithPrivacyGroup privateTransaction =
+                (PrivateTransactionWithPrivacyGroup)
+                        nodeAlice
+                                .privGetPrivateTransaction(transactionHash)
+                                .send()
+                                .getPrivateTransaction()
+                                .get();
 
         assertThat(privateTransaction.getFrom(), is(ALICE.getAddress()));
         assertThat(privateTransaction.getGas(), is(ZERO_GAS_PROVIDER.getGasLimit()));
         assertThat(privateTransaction.getGasPrice(), is(ZERO_GAS_PROVIDER.getGasPrice()));
         assertThat(privateTransaction.getNonce(), is(nonce));
 
-        final byte[] encodedTransaction = PrivateTransactionEncoder.encode(rawPrivateTransaction, 2018);
+        final byte[] encodedTransaction =
+                PrivateTransactionEncoder.encode(rawPrivateTransaction, 2018);
         final Sign.SignatureData signatureData =
                 Sign.signMessage(encodedTransaction, ALICE.getEcKeyPair());
         final Sign.SignatureData eip155SignatureData =
                 TransactionEncoder.createEip155SignatureData(signatureData, 2018);
-        assertThat(privateTransaction.getV(), is(eip155SignatureData.getV()));
-        assertThat(privateTransaction.getR(), is(eip155SignatureData.getR()));
-        assertThat(privateTransaction.getS(), is(eip155SignatureData.getS()));
+        assertThat(
+                Numeric.toBytesPadded(BigInteger.valueOf(privateTransaction.getV()), 2),
+                is(eip155SignatureData.getV()));
+        assertThat(
+                Numeric.hexStringToByteArray(privateTransaction.getR()),
+                is(eip155SignatureData.getR()));
+        assertThat(
+                Numeric.hexStringToByteArray(privateTransaction.getS()),
+                is(eip155SignatureData.getS()));
 
         assertThat(privateTransaction.getPrivateFrom(), is(ENCLAVE_KEY_ALICE));
         assertThat(privateTransaction.getPrivacyGroupId(), is(privacyGroupId));
         assertThat(privateTransaction.getRestriction(), is("restricted"));
         assertNull(privateTransaction.getTo());
-
 
         System.out.println("");
     }

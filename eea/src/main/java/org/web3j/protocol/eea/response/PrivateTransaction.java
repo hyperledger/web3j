@@ -13,6 +13,7 @@
 package org.web3j.protocol.eea.response;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+
+import org.web3j.utils.Numeric;
 
 @JsonDeserialize(using = PrivateTransaction.ResponseDeserialiser.class)
 public abstract class PrivateTransaction {
@@ -90,8 +93,8 @@ public abstract class PrivateTransaction {
         return hash;
     }
 
-    public String getNonce() {
-        return nonce;
+    public BigInteger getNonce() {
+        return Numeric.decodeQuantity(nonce);
     }
 
     public String getFrom() {
@@ -102,16 +105,16 @@ public abstract class PrivateTransaction {
         return to;
     }
 
-    public String getValue() {
-        return value;
+    public BigInteger getValue() {
+        return Numeric.decodeQuantity(value);
     }
 
-    public String getGasPrice() {
-        return gasPrice;
+    public BigInteger getGasPrice() {
+        return Numeric.decodeQuantity(gasPrice);
     }
 
-    public String getGas() {
-        return gas;
+    public BigInteger getGas() {
+        return Numeric.decodeQuantity(gas);
     }
 
     public String getInput() {
@@ -126,8 +129,8 @@ public abstract class PrivateTransaction {
         return s;
     }
 
-    public String getV() {
-        return v;
+    public long getV() {
+        return Numeric.decodeQuantity(v).longValue();
     }
 
     public String getPrivateFrom() {

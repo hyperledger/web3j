@@ -64,13 +64,6 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
         this(signedRawTransaction, privateFrom, null, privacyGroupId, restriction);
     }
 
-    public SignedRawPrivateTransaction(
-            final SignedRawTransaction signedRawTransaction,
-            final String privacyGroupId,
-            final String restriction) {
-        this(signedRawTransaction, null, null, privacyGroupId, restriction);
-    }
-
     private SignedRawPrivateTransaction(
             final SignedRawTransaction signedRawTransaction,
             final String privateFrom,

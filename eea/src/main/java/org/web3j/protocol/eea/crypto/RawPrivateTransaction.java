@@ -49,13 +49,6 @@ public class RawPrivateTransaction extends RawTransaction {
 
     protected RawPrivateTransaction(
             final RawTransaction rawTransaction,
-            final String privacyGroupId,
-            final String restriction) {
-        this(rawTransaction, null, privacyGroupId, restriction);
-    }
-
-    protected RawPrivateTransaction(
-            final RawTransaction rawTransaction,
             final String privateFrom,
             final String privacyGroupId,
             final String restriction) {
@@ -122,18 +115,6 @@ public class RawPrivateTransaction extends RawTransaction {
                 restriction);
     }
 
-    public static RawPrivateTransaction createContractTransaction(
-            final BigInteger nonce,
-            final BigInteger gasPrice,
-            final BigInteger gasLimit,
-            final String init,
-            final String privacyGroupId,
-            final String restriction) {
-
-        return new RawPrivateTransaction(
-                nonce, gasPrice, gasLimit, "", init, null, null, privacyGroupId, restriction);
-    }
-
     public static RawPrivateTransaction createTransaction(
             final BigInteger nonce,
             final BigInteger gasPrice,
@@ -170,21 +151,8 @@ public class RawPrivateTransaction extends RawTransaction {
                 restriction);
     }
 
-    public static RawPrivateTransaction createTransaction(
-            final BigInteger nonce,
-            final BigInteger gasPrice,
-            final BigInteger gasLimit,
-            final String to,
-            final String data,
-            final String privacyGroupId,
-            final String restriction) {
-
-        return new RawPrivateTransaction(
-                nonce, gasPrice, gasLimit, to, data, null, null, privacyGroupId, restriction);
-    }
-
-    public Optional<String> getPrivateFrom() {
-        return Optional.ofNullable(privateFrom);
+    public String getPrivateFrom() {
+        return privateFrom;
     }
 
     public Optional<List<String>> getPrivateFor() {

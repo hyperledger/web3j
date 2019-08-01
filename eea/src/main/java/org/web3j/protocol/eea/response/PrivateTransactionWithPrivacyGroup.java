@@ -38,7 +38,8 @@ public class PrivateTransactionWithPrivacyGroup extends PrivateTransaction {
             @JsonProperty(value = "s") final String s,
             @JsonProperty(value = "v") final String v,
             @JsonProperty(value = "privateFrom") final String privateFrom,
-            //FIXME: This label should be changed once https://pegasys1.atlassian.net/browse/PAN-3009 goes into production
+            // FIXME: This label should be changed once
+            // https://pegasys1.atlassian.net/browse/PAN-3009 goes into production
             @JsonProperty(value = "privateFor") final String privacyGroupId,
             @JsonProperty(value = "restriction") final String restriction) {
         super(
