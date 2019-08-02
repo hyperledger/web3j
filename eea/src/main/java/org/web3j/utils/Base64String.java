@@ -62,11 +62,8 @@ public class Base64String {
     private boolean isValid(final String b64String) {
         //   ([0-9a-zA-Z+/]{4})*      # Groups of 4 valid characters decode
         //                            # to 24 bits of data for each group
-        //   (                        # Either ending with:
-        //   ([0-9a-zA-Z+/]{2}==)     # two valid characters followed by ==
-        //   |                        # , or
+        //   (                        # ending with:
         //   ([0-9a-zA-Z+/]{3}=)      # three valid characters followed by =
-        //   )?                       # , or nothing
-        return b64String.matches("(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?");
+        return b64String.matches("(?:[A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=)");
     }
 }

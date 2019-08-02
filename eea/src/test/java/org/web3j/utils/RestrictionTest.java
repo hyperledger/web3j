@@ -12,27 +12,23 @@
  */
 package org.web3j.utils;
 
-public enum Restriction {
-    RESTRICTED("restricted"),
-    UNRESTRICTED("unrestricted");
+import org.junit.Test;
 
-    private String restriction;
+import static org.junit.Assert.assertEquals;
+import static org.web3j.utils.Restriction.RESTRICTED;
+import static org.web3j.utils.Restriction.UNRESTRICTED;
 
-    Restriction(final String restriction) {
+public class RestrictionTest {
 
-        this.restriction = restriction;
+    @Test
+    public void getRestriction() {
+        assertEquals(RESTRICTED.getRestriction(), "restricted");
+        assertEquals(UNRESTRICTED.getRestriction(), "unrestricted");
     }
 
-    public String getRestriction() {
-        return restriction;
-    }
-
-    public static Restriction fromString(final String text) {
-        for (Restriction b : Restriction.values()) {
-            if (b.toString().equalsIgnoreCase(text)) {
-                return b;
-            }
-        }
-        return null;
+    @Test
+    public void tesFromString() {
+        assertEquals(RESTRICTED, Restriction.fromString("restricted"));
+        assertEquals(UNRESTRICTED, Restriction.fromString("unrestricted"));
     }
 }
