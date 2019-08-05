@@ -13,7 +13,6 @@
 package org.web3j.protocol.pantheon;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -29,6 +28,7 @@ import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.protocol.pantheon.response.privacy.PrivacyGroup;
 import org.web3j.protocol.pantheon.response.privacy.PrivateTransactionLegacy;
 import org.web3j.protocol.pantheon.response.privacy.PrivateTransactionWithPrivacyGroup;
+import org.web3j.utils.Base64String;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -76,7 +76,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaGetPrivateTransactionLegacy() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -111,12 +111,11 @@ public class ResponseTest extends ResponseTester {
                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                         "0x00",
-                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                        Arrays.asList(
+                        Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="),
+                        Base64String.wrapList(
                                 "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
                                 "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs="),
                         "restricted");
-        // CHECKSTYLE:ON
 
         PrivGetPrivateTransaction eeaPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
@@ -126,7 +125,6 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaGetPrivateTransactionPrivacyGroup() {
-        // CHECKSTYLE:OFF
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -161,10 +159,9 @@ public class ResponseTest extends ResponseTester {
                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                         "0x00",
-                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                        Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="),
+                        Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="),
                         "restricted");
-        // CHECKSTYLE:ON
 
         PrivGetPrivateTransaction eeaPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
@@ -183,14 +180,13 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaGetPrivacyPrecompileAddress() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
                         + "    \"id\": 1,\n"
                         + "    \"result\": \"0xb60e8dd61c5d32be8058bb8eb970870f07233155\"\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         PrivGetPrivacyPrecompileAddress privGetPrivacyPrecompileAddress =
                 deserialiseResponse(PrivGetPrivacyPrecompileAddress.class);
@@ -201,14 +197,13 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaCreatePrivacyGroup() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
                         + "    \"id\": 1,\n"
                         + "    \"result\": \"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         PrivCreatePrivacyGroup privCreatePrivacyGroup =
                 deserialiseResponse(PrivCreatePrivacyGroup.class);
@@ -219,14 +214,13 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaDeletePrivacyGroup() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
                         + "    \"id\": 1,\n"
                         + "    \"result\": \"true\"\n"
                         + "}");
-        // CHECKSTYLE:ON
 
         BooleanResponse eeaDeletePrivacyGroup = deserialiseResponse(BooleanResponse.class);
         assertThat(eeaDeletePrivacyGroup.success(), is(true));
@@ -234,7 +228,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEeaFindPrivacyGroup() {
-        // CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
@@ -256,21 +250,21 @@ public class ResponseTest extends ResponseTester {
                         + "         }\n"
                         + "    ]\n"
                         + "}");
-        // CHECKSTYLE:ON
+
         PrivacyGroup privacyGroup1 =
                 new PrivacyGroup(
                         "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
                         PrivacyGroup.Type.LEGACY,
                         "PrivacyGroupName",
                         "PrivacyGroupDescription",
-                        Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
+                        Base64String.wrapList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
         PrivacyGroup privacyGroup2 =
                 new PrivacyGroup(
                         "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
                         PrivacyGroup.Type.PANTHEON,
                         "PrivacyGroupName",
                         "PrivacyGroupDescription",
-                        Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
+                        Base64String.wrapList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
 
         PrivFindPrivacyGroup privFindPrivacyGroup = deserialiseResponse(PrivFindPrivacyGroup.class);
         assertThat(

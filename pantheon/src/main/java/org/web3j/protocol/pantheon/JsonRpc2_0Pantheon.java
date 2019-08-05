@@ -33,8 +33,6 @@ import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddr
 import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.utils.Base64String;
 
-import static org.web3j.utils.Base64Strings.unwrapList;
-
 public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
     public JsonRpc2_0Pantheon(Web3jService web3jService) {
         super(web3jService);
@@ -141,7 +139,7 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
             final List<Base64String> addresses, final String name, final String description) {
         return new Request<>(
                 "priv_createPrivacyGroup",
-                Arrays.asList(unwrapList(addresses), name, description),
+                Arrays.asList(addresses, name, description),
                 web3jService,
                 PrivCreatePrivacyGroup.class);
     }
@@ -151,7 +149,7 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
             final List<Base64String> addresses) {
         return new Request<>(
                 "priv_findPrivacyGroup",
-                Collections.singletonList(unwrapList(addresses)),
+                Collections.singletonList(addresses),
                 web3jService,
                 PrivFindPrivacyGroup.class);
     }

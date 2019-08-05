@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.web3j.utils.Base64String;
-import org.web3j.utils.Base64Strings;
 
 public class PrivacyGroup {
     private final Base64String privacyGroupId;
@@ -39,12 +38,12 @@ public class PrivacyGroup {
             @JsonProperty(value = "type") final Type type,
             @JsonProperty(value = "name") final String name,
             @JsonProperty(value = "description") final String description,
-            @JsonProperty(value = "members") final List<String> members) {
+            @JsonProperty(value = "members") final List<Base64String> members) {
         this.privacyGroupId = Base64String.wrap(privacyGroupId);
         this.type = type;
         this.name = name;
         this.description = description;
-        this.members = Base64Strings.wrapList(members);
+        this.members = members;
     }
 
     public Base64String getPrivacyGroupId() {

@@ -74,7 +74,7 @@ public abstract class PrivateTransaction {
             final String r,
             final String s,
             final String v,
-            final String privateFrom,
+            final Base64String privateFrom,
             final String restriction) {
 
         this.hash = hash;
@@ -88,7 +88,7 @@ public abstract class PrivateTransaction {
         this.r = r;
         this.s = s;
         this.v = Numeric.decodeQuantity(v).longValue();
-        this.privateFrom = Base64String.wrap(privateFrom);
+        this.privateFrom = privateFrom;
         this.restriction = Restriction.fromString(restriction);
     }
 

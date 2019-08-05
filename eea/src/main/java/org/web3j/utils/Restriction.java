@@ -27,12 +27,7 @@ public enum Restriction {
         return restriction;
     }
 
-    public static Restriction fromString(final String text) {
-        for (Restriction b : Restriction.values()) {
-            if (b.toString().equalsIgnoreCase(text)) {
-                return b;
-            }
-        }
-        return null;
+    public static Restriction fromString(final String s) {
+        return valueOf(s.toUpperCase());
     }
 }

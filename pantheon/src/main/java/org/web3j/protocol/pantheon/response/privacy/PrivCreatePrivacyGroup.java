@@ -15,8 +15,8 @@ package org.web3j.protocol.pantheon.response.privacy;
 import org.web3j.protocol.core.Response;
 import org.web3j.utils.Base64String;
 
-public class PrivCreatePrivacyGroup extends Response<String> {
+public class PrivCreatePrivacyGroup extends Response<Base64String> {
     public Base64String getPrivacyGroupId() {
-        return Base64String.wrap(getResult());
+        return getResult();
     }
 }

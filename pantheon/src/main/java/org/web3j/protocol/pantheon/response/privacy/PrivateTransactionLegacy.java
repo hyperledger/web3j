@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import org.web3j.utils.Base64String;
-import org.web3j.utils.Base64Strings;
 
 @JsonDeserialize(using = JsonDeserializer.None.class)
 public class PrivateTransactionLegacy extends PrivateTransaction {
@@ -41,8 +40,8 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
             @JsonProperty(value = "r") final String r,
             @JsonProperty(value = "s") final String s,
             @JsonProperty(value = "v") final String v,
-            @JsonProperty(value = "privateFrom") final String privateFrom,
-            @JsonProperty(value = "privateFor") final List<String> privateFor,
+            @JsonProperty(value = "privateFrom") final Base64String privateFrom,
+            @JsonProperty(value = "privateFor") final List<Base64String> privateFor,
             @JsonProperty(value = "restriction") final String restriction) {
         super(
                 hash,
@@ -58,7 +57,7 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
                 v,
                 privateFrom,
                 restriction);
-        this.privateFor = Base64Strings.wrapList(privateFor);
+        this.privateFor = privateFor;
     }
 
     public List<Base64String> getPrivateFor() {

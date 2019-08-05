@@ -13,6 +13,7 @@
 package org.web3j.utils;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -39,6 +40,22 @@ public class Base64StringTest {
                 15, 32, 14, -120, 95, -14, -98, -105, 62, 37, 118, -74, 96, 1, -127, -47, -80, -94,
                 -75, 41, 78, 48, -39, -66, 74, 25, -127, -1, -77, 58, 11, -116
             };
+
+    private static final List<String> BASE64_LIST = Arrays.asList(BASE64_1, BASE64_1);
+    private static final Base64String BASE64_WRAPPED =
+            Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+    private static final List<Base64String> BASE64_WRAPPED_LIST =
+            Arrays.asList(BASE64_WRAPPED, BASE64_WRAPPED);
+
+    @Test
+    public void testWrapList() {
+        assertEquals(BASE64_WRAPPED_LIST, Base64String.wrapList(BASE64_LIST));
+    }
+
+    @Test
+    public void testUnwrapList() {
+        assertEquals(BASE64_LIST, Base64String.unwrapList(BASE64_WRAPPED_LIST));
+    }
 
     @Test
     public void testValidBase64String() {
