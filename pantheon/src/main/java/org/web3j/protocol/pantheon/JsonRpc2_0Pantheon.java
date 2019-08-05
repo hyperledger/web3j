@@ -14,19 +14,26 @@ package org.web3j.protocol.pantheon;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
+import org.web3j.protocol.eea.JsonRpc2_0Eea;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
 import org.web3j.protocol.pantheon.response.PantheonFullDebugTraceResponse;
+import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
+import org.web3j.utils.Base64String;
 
-public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
+public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
     public JsonRpc2_0Pantheon(Web3jService web3jService) {
         super(web3jService);
     }
@@ -96,5 +103,63 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Web3j implements Pantheon {
                 Arrays.asList(transactionHash, options),
                 web3jService,
                 PantheonFullDebugTraceResponse.class);
+    }
+
+    @Override
+    public Request<?, EthGetTransactionCount> privGetTransactionCount(
+            final String address, final Base64String privacyGroupId) {
+        return new Request<>(
+                "priv_getTransactionCount",
+                Arrays.asList(address, privacyGroupId.toString()),
+                web3jService,
+                EthGetTransactionCount.class);
+    }
+
+    @Override
+    public Request<?, PrivGetPrivateTransaction> privGetPrivateTransaction(
+            final String transactionHash) {
+        return new Request<>(
+                "priv_getPrivateTransaction",
+                Collections.singletonList(transactionHash),
+                web3jService,
+                PrivGetPrivateTransaction.class);
+    }
+
+    @Override
+    public Request<?, PrivGetPrivacyPrecompileAddress> privGetPrivacyPrecompileAddress() {
+        return new Request<>(
+                "priv_getPrivacyPrecompileAddress",
+                Collections.emptyList(),
+                web3jService,
+                PrivGetPrivacyPrecompileAddress.class);
+    }
+
+    @Override
+    public Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
+            final List<Base64String> addresses, final String name, final String description) {
+        return new Request<>(
+                "priv_createPrivacyGroup",
+                Arrays.asList(addresses, name, description),
+                web3jService,
+                PrivCreatePrivacyGroup.class);
+    }
+
+    @Override
+    public Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(
+            final List<Base64String> addresses) {
+        return new Request<>(
+                "priv_findPrivacyGroup",
+                Collections.singletonList(addresses),
+                web3jService,
+                PrivFindPrivacyGroup.class);
+    }
+
+    @Override
+    public Request<?, BooleanResponse> privDeletePrivacyGroup(final Base64String privacyGroupId) {
+        return new Request<>(
+                "priv_deletePrivacyGroup",
+                Collections.singletonList(privacyGroupId.toString()),
+                web3jService,
+                BooleanResponse.class);
     }
 }

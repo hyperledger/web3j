@@ -10,14 +10,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.eea.response;
+package org.web3j.tx.gas;
 
-import java.util.Optional;
+import java.math.BigInteger;
 
-import org.web3j.protocol.core.Response;
+public class PantheonPrivacyGasProvider extends StaticGasProvider {
+    public PantheonPrivacyGasProvider(BigInteger gasPrice) {
+        super(gasPrice, BigInteger.valueOf(3000000));
+    }
 
-public class EeaGetTransactionReceipt extends Response<PrivateTransactionReceipt> {
-    public Optional<PrivateTransactionReceipt> getTransactionReceipt() {
-        return Optional.ofNullable(getResult());
+    public PantheonPrivacyGasProvider(BigInteger gasPrice, BigInteger gasLimit) {
+        super(gasPrice, gasLimit);
     }
 }

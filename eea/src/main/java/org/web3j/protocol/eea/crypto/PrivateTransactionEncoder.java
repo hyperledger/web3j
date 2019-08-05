@@ -15,7 +15,6 @@ package org.web3j.protocol.eea.crypto;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
@@ -24,12 +23,10 @@ import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
+import org.web3j.utils.Base64String;
 
 /** Create signed RLP encoded private transaction. */
 public class PrivateTransactionEncoder {
-
-    private static final int CHAIN_ID_INC = 35;
-    private static final int LOWER_REAL_V = 27;
 
     public static byte[] signMessage(
             final RawPrivateTransaction rawTransaction, final Credentials credentials) {
@@ -85,15 +82,15 @@ public class PrivateTransactionEncoder {
                         TransactionEncoder.asRlpValues(
                                 privateTransaction.asRawTransaction(), signatureData));
 
-        result.add(RlpString.create(privateTransaction.getPrivateFrom()));
+        result.add(privateTransaction.getPrivateFrom().asRlp());
 
-        result.add(
-                new RlpList(
-                        privateTransaction.getPrivateFor().stream()
-                                .map(RlpString::create)
-                                .collect(Collectors.toList())));
+        privateTransaction
+                .getPrivateFor()
+                .ifPresent(privateFor -> result.add(Base64String.unwrapListToRlp(privateFor)));
 
-        result.add(RlpString.create(privateTransaction.getRestriction()));
+        privateTransaction.getPrivacyGroupId().map(Base64String::asRlp).ifPresent(result::add);
+
+        result.add(RlpString.create(privateTransaction.getRestriction().getRestriction()));
 
         return result;
     }

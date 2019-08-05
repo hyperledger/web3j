@@ -24,7 +24,7 @@ public interface SignatureDataOperations {
 
     Sign.SignatureData getSignatureData();
 
-    byte[] getEncodedTransaction(Integer chainId);
+    byte[] getEncodedTransaction(Long chainId);
 
     default String getFrom() throws SignatureException {
         byte[] encodedTransaction = getEncodedTransaction(getChainId());
@@ -56,13 +56,12 @@ public interface SignatureDataOperations {
         return (byte) (realV + inc);
     }
 
-    default Integer getChainId() {
+    default Long getChainId() {
         BigInteger bv = Numeric.toBigInt(getSignatureData().getV());
         long v = bv.longValue();
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return null;
         }
-        Integer chainId = (int) ((v - CHAIN_ID_INC) / 2);
-        return chainId;
+        return (v - CHAIN_ID_INC) / 2;
     }
 }

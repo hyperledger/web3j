@@ -42,6 +42,7 @@ import static okhttp3.ConnectionSpec.CLEARTEXT;
 public class HttpService extends Service {
 
     /** Copied from {@link ConnectionSpec#APPROVED_CIPHER_SUITES}. */
+    @SuppressWarnings("JavadocReference")
     private static final CipherSuite[] INFURA_CIPHER_SUITES =
             new CipherSuite[] {
                 CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,

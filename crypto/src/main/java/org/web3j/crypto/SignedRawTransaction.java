@@ -35,11 +35,11 @@ public class SignedRawTransaction extends RawTransaction implements SignatureDat
     }
 
     @Override
-    public byte[] getEncodedTransaction(Integer chainId) {
+    public byte[] getEncodedTransaction(Long chainId) {
         if (null == chainId) {
             return TransactionEncoder.encode(this);
         } else {
-            return TransactionEncoder.encode(this, chainId.byteValue());
+            return TransactionEncoder.encode(this, chainId);
         }
     }
 }

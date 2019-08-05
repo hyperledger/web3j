@@ -10,14 +10,12 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.protocol.eea.response;
-
-import java.util.Optional;
+package org.web3j.protocol.pantheon.response.privacy;
 
 import org.web3j.protocol.core.Response;
 
-public class EeaGetTransactionReceipt extends Response<PrivateTransactionReceipt> {
-    public Optional<PrivateTransactionReceipt> getTransactionReceipt() {
-        return Optional.ofNullable(getResult());
+public class PrivGetPrivacyPrecompileAddress extends Response<String> {
+    public String getAddress() {
+        return getResult();
     }
 }

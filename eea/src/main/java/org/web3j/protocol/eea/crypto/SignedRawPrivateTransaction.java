@@ -18,6 +18,8 @@ import java.util.List;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.SignatureDataOperations;
 import org.web3j.crypto.SignedRawTransaction;
+import org.web3j.utils.Base64String;
+import org.web3j.utils.Restriction;
 
 public class SignedRawPrivateTransaction extends RawPrivateTransaction
         implements SignatureDataOperations {
@@ -30,29 +32,57 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
             final BigInteger gasLimit,
             final String to,
             final String data,
-            final String privateFrom,
-            final List<String> privateFor,
-            final String restriction,
-            final Sign.SignatureData signatureData) {
-        super(nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, restriction);
+            final Sign.SignatureData signatureData,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
+        super(
+                nonce,
+                gasPrice,
+                gasLimit,
+                to,
+                data,
+                privateFrom,
+                privateFor,
+                privacyGroupId,
+                restriction);
         this.signatureData = signatureData;
     }
 
     public SignedRawPrivateTransaction(
             final SignedRawTransaction signedRawTransaction,
-            final String privateFrom,
-            final List<String> privateFor,
-            final String restriction) {
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Restriction restriction) {
+        this(signedRawTransaction, privateFrom, privateFor, null, restriction);
+    }
+
+    public SignedRawPrivateTransaction(
+            final SignedRawTransaction signedRawTransaction,
+            final Base64String privateFrom,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
+        this(signedRawTransaction, privateFrom, null, privacyGroupId, restriction);
+    }
+
+    private SignedRawPrivateTransaction(
+            final SignedRawTransaction signedRawTransaction,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
         this(
                 signedRawTransaction.getNonce(),
                 signedRawTransaction.getGasPrice(),
                 signedRawTransaction.getGasLimit(),
                 signedRawTransaction.getTo(),
                 signedRawTransaction.getData(),
+                signedRawTransaction.getSignatureData(),
                 privateFrom,
                 privateFor,
-                restriction,
-                signedRawTransaction.getSignatureData());
+                privacyGroupId,
+                restriction);
     }
 
     public Sign.SignatureData getSignatureData() {
@@ -60,11 +90,11 @@ public class SignedRawPrivateTransaction extends RawPrivateTransaction
     }
 
     @Override
-    public byte[] getEncodedTransaction(Integer chainId) {
+    public byte[] getEncodedTransaction(Long chainId) {
         if (null == chainId) {
             return PrivateTransactionEncoder.encode(this);
         } else {
-            return PrivateTransactionEncoder.encode(this, chainId.byteValue());
+            return PrivateTransactionEncoder.encode(this, chainId);
         }
     }
 }

@@ -10,16 +10,24 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.tx.gas;
+package org.web3j.utils;
 
-import java.math.BigInteger;
+public enum Restriction {
+    RESTRICTED("restricted"),
+    UNRESTRICTED("unrestricted");
 
-public class EeaGasProvider extends StaticGasProvider {
-    public EeaGasProvider(BigInteger gasPrice) {
-        super(gasPrice, BigInteger.valueOf(3000000));
+    private String restriction;
+
+    Restriction(final String restriction) {
+
+        this.restriction = restriction;
     }
 
-    public EeaGasProvider(BigInteger gasPrice, BigInteger gasLimit) {
-        super(gasPrice, gasLimit);
+    public String getRestriction() {
+        return restriction;
+    }
+
+    public static Restriction fromString(final String s) {
+        return valueOf(s.toUpperCase());
     }
 }

@@ -20,14 +20,21 @@ import org.junit.Test;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
+import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.web3j.utils.Restriction.RESTRICTED;
 
 public class PrivateTransactionDecoderTest {
+
+    private static final Base64String MOCK_ENCLAVE_KEY =
+            Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+    private static final List<Base64String> MOCK_PRIVATE_FOR =
+            Collections.singletonList(MOCK_ENCLAVE_KEY);
 
     @Test
     public void testDecoding() {
@@ -35,13 +42,16 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final List<String> privateFor =
-                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
-        final String restriction = "restricted";
         final RawPrivateTransaction rawTransaction =
                 RawPrivateTransaction.createTransaction(
-                        nonce, gasPrice, gasLimit, to, "", privateFrom, privateFor, restriction);
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        to,
+                        "",
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_PRIVATE_FOR,
+                        RESTRICTED);
         byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
@@ -52,6 +62,40 @@ public class PrivateTransactionDecoderTest {
         assertEquals(gasLimit, result.getGasLimit());
         assertEquals(to, result.getTo());
         assertEquals("", result.getData());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivateFrom());
+        assertEquals(MOCK_PRIVATE_FOR, result.getPrivateFor().get());
+        assertEquals(RESTRICTED, result.getRestriction());
+    }
+
+    @Test
+    public void testDecodingPrivacyGroup() {
+        final BigInteger nonce = BigInteger.ZERO;
+        final BigInteger gasPrice = BigInteger.ONE;
+        final BigInteger gasLimit = BigInteger.TEN;
+        final String to = "0x0add5355";
+        final RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        to,
+                        "",
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_ENCLAVE_KEY,
+                        RESTRICTED);
+        byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+        assertNotNull(result);
+        assertEquals(nonce, result.getNonce());
+        assertEquals(gasPrice, result.getGasPrice());
+        assertEquals(gasLimit, result.getGasLimit());
+        assertEquals(to, result.getTo());
+        assertEquals("", result.getData());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivateFrom());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivacyGroupId().get());
+        assertEquals(RESTRICTED, result.getRestriction());
     }
 
     @Test
@@ -60,13 +104,16 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final List<String> privateFor =
-                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
-        final String restriction = "restricted";
         final RawPrivateTransaction rawTransaction =
                 RawPrivateTransaction.createTransaction(
-                        nonce, gasPrice, gasLimit, to, "", privateFrom, privateFor, restriction);
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        to,
+                        "",
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_PRIVATE_FOR,
+                        RESTRICTED);
         final String privateKey =
                 "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
@@ -81,9 +128,54 @@ public class PrivateTransactionDecoderTest {
         assertEquals(gasLimit, result.getGasLimit());
         assertEquals(to, result.getTo());
         assertEquals("", result.getData());
-        assertEquals(privateFrom, result.getPrivateFrom());
-        assertEquals(privateFor, result.getPrivateFor());
-        assertEquals(restriction, result.getRestriction());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivateFrom());
+        assertEquals(MOCK_PRIVATE_FOR, result.getPrivateFor().get());
+        assertEquals(RESTRICTED, result.getRestriction());
+        assertTrue(result instanceof SignedRawPrivateTransaction);
+        final SignedRawPrivateTransaction signedResult = (SignedRawPrivateTransaction) result;
+        assertNotNull(signedResult.getSignatureData());
+        Sign.SignatureData signatureData = signedResult.getSignatureData();
+        final byte[] encodedTransaction = PrivateTransactionEncoder.encode(rawTransaction);
+        final BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
+        assertEquals(key, credentials.getEcKeyPair().getPublicKey());
+        assertEquals(credentials.getAddress(), signedResult.getFrom());
+        signedResult.verify(credentials.getAddress());
+        assertNull(signedResult.getChainId());
+    }
+
+    @Test
+    public void testDecodingSignedPrivacyGroup() throws Exception {
+        final BigInteger nonce = BigInteger.ZERO;
+        final BigInteger gasPrice = BigInteger.ONE;
+        final BigInteger gasLimit = BigInteger.TEN;
+        final String to = "0x0add5355";
+        final RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        to,
+                        "",
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_ENCLAVE_KEY,
+                        RESTRICTED);
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final Credentials credentials = Credentials.create(privateKey);
+        final byte[] encodedMessage =
+                PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
+        final String hexMessage = Numeric.toHexString(encodedMessage);
+
+        final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
+        assertNotNull(result);
+        assertEquals(nonce, result.getNonce());
+        assertEquals(gasPrice, result.getGasPrice());
+        assertEquals(gasLimit, result.getGasLimit());
+        assertEquals(to, result.getTo());
+        assertEquals("", result.getData());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivateFrom());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivacyGroupId().get());
+        assertEquals(RESTRICTED, result.getRestriction());
         assertTrue(result instanceof SignedRawPrivateTransaction);
         final SignedRawPrivateTransaction signedResult = (SignedRawPrivateTransaction) result;
         assertNotNull(signedResult.getSignatureData());
@@ -102,20 +194,22 @@ public class PrivateTransactionDecoderTest {
         final BigInteger gasPrice = BigInteger.ONE;
         final BigInteger gasLimit = BigInteger.TEN;
         final String to = "0x0add5355";
-        final Integer chainId = 1;
-        final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final List<String> privateFor =
-                Collections.singletonList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
-        final String restriction = "restricted";
+        final long chainId = 2018L;
         final RawPrivateTransaction rawTransaction =
                 RawPrivateTransaction.createTransaction(
-                        nonce, gasPrice, gasLimit, to, "", privateFrom, privateFor, restriction);
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        to,
+                        "",
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_PRIVATE_FOR,
+                        RESTRICTED);
         final String privateKey =
                 "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
         byte[] signedMessage =
-                PrivateTransactionEncoder.signMessage(
-                        rawTransaction, chainId.byteValue(), credentials);
+                PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         final String hexMessage = Numeric.toHexString(signedMessage);
 
         final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
@@ -125,13 +219,13 @@ public class PrivateTransactionDecoderTest {
         assertEquals(gasLimit, result.getGasLimit());
         assertEquals(to, result.getTo());
         assertEquals("", result.getData());
-        assertEquals(privateFrom, result.getPrivateFrom());
-        assertEquals(privateFor, result.getPrivateFor());
-        assertEquals(restriction, result.getRestriction());
+        assertEquals(MOCK_ENCLAVE_KEY, result.getPrivateFrom());
+        assertEquals(MOCK_PRIVATE_FOR, result.getPrivateFor().get());
+        assertEquals(RESTRICTED, result.getRestriction());
         assertTrue(result instanceof SignedRawPrivateTransaction);
         final SignedRawPrivateTransaction signedResult = (SignedRawPrivateTransaction) result;
         assertEquals(credentials.getAddress(), signedResult.getFrom());
         signedResult.verify(credentials.getAddress());
-        assertEquals(chainId, signedResult.getChainId());
+        assertEquals(chainId, signedResult.getChainId().longValue());
     }
 }

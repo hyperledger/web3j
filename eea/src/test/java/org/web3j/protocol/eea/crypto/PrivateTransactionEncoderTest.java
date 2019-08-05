@@ -13,40 +13,75 @@
 package org.web3j.protocol.eea.crypto;
 
 import java.math.BigInteger;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
 import static org.junit.Assert.assertEquals;
+import static org.web3j.utils.Restriction.RESTRICTED;
 
 public class PrivateTransactionEncoderTest {
 
+    private static final Base64String MOCK_ENCLAVE_KEY =
+            Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
+    private static final Base64String MOCK_ENCLAVE_KEY_2 =
+            Base64String.wrap("Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=");
+    private static final Base64String MOCK_PRIVACY_GROUP_ID =
+            Base64String.wrap("DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=");
+    private static final List<Base64String> MOCK_PRIVATE_FOR =
+            Arrays.asList(MOCK_ENCLAVE_KEY, MOCK_ENCLAVE_KEY_2);
+
     @Test
-    public void testSignMessage() {
-
+    public void testSignLegacyTransaction() {
         final String expected =
-                "0xf90254808203e8832dc6c08080b901cb608060405234801561001057600080fd5b5060008054600160a060020a03191633179055610199806100326000396000f3fe6080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633fa4f245811461005b5780636057361d1461008257806367e404ce146100ae575b600080fd5b34801561006757600080fd5b506100706100ec565b60408051918252519081900360200190f35b34801561008e57600080fd5b506100ac600480360360208110156100a557600080fd5b50356100f2565b005b3480156100ba57600080fd5b506100c3610151565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b60025490565b604080513381526020810183905281517fc9db20adedc6cf2b5d25252b101ab03e124902a73fcb12b753f3d1aaa2d8f9f5929181900390910190a16002556001805473ffffffffffffffffffffffffffffffffffffffff191633179055565b60015473ffffffffffffffffffffffffffffffffffffffff169056fea165627a7a72305820c7f729cb24e05c221f5aa913700793994656f233fe2ce3b9fd9a505ea17e8d8a00297ca03f20c3b52fa7aa7d1b17dbcd9f428116ac0abd6182bcae82549f400e01302ecfa074197aca5aaaf55ab4b2196cbfac6b17869dce96ae8cb196e1216f5de8231e1dac41316156744d784c4355486d425648586f5a7a7a42675062572f776a3561784470573958386c393153476f3dc08a72657374726963746564";
-        final String data =
-                "0x608060405234801561001057600080fd5b5060008054600160a060020a03191633179055610199806100326000396000f3fe6080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633fa4f245811461005b5780636057361d1461008257806367e404ce146100ae575b600080fd5b34801561006757600080fd5b506100706100ec565b60408051918252519081900360200190f35b34801561008e57600080fd5b506100ac600480360360208110156100a557600080fd5b50356100f2565b005b3480156100ba57600080fd5b506100c3610151565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b60025490565b604080513381526020810183905281517fc9db20adedc6cf2b5d25252b101ab03e124902a73fcb12b753f3d1aaa2d8f9f5929181900390910190a16002556001805473ffffffffffffffffffffffffffffffffffffffff191633179055565b60015473ffffffffffffffffffffffffffffffffffffffff169056fea165627a7a72305820c7f729cb24e05c221f5aa913700793994656f233fe2ce3b9fd9a505ea17e8d8a0029";
-
-        final String privateFrom = "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=";
-        final String privateKey =
-                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
-        final Credentials credentials = Credentials.create(privateKey);
+                "0xf8d4808203e8832dc6c094627306090abab3a6e1400e9345bc60c78a8bef578080820fe8a0e0b547d71d7a23d52382288b3a2a5a1610e0b504c404cc5009d7ada97d9015b2a076e997a83856d876fa2397b74510890eea3b73ffeda33daa4188120dac42d62fa0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486af842a0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa02a8d9b56a0fe9cd94d60be4413bcb721d3a7be27ed8e28b3a6346df874ee141b8a72657374726963746564";
         final RawPrivateTransaction privateTransactionCreation =
                 new RawPrivateTransaction(
                         BigInteger.ZERO,
                         BigInteger.valueOf(1000),
                         BigInteger.valueOf(3000000),
+                        "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                        "0x",
+                        MOCK_ENCLAVE_KEY,
+                        MOCK_PRIVATE_FOR,
                         null,
-                        data,
-                        privateFrom,
-                        Collections.emptyList(),
-                        "restricted");
-        final byte chainId = (byte) 44;
+                        RESTRICTED);
+        final long chainId = 2018;
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final Credentials credentials = Credentials.create(privateKey);
+        final String privateRawTransaction =
+                Numeric.toHexString(
+                        PrivateTransactionEncoder.signMessage(
+                                privateTransactionCreation, chainId, credentials));
+
+        assertEquals(expected, privateRawTransaction);
+    }
+
+    @Test
+    public void testSignPantheonTransaction() {
+        final String expected =
+                "0xf8b1808203e8832dc6c094627306090abab3a6e1400e9345bc60c78a8bef578080820fe7a060c70c3f989ef5459021142959f8fc1ad6e5fe8542cf238484c6d6b8c8a6dbcca075727642ce691c4bf5ae945523cdd172d44b451ddfe11ae67c376f1e5c7069eea0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa00f200e885ff29e973e2576b6600181d1b0a2b5294e30d9be4a1981ffb33a0b8c8a72657374726963746564";
+        final RawPrivateTransaction privateTransactionCreation =
+                new RawPrivateTransaction(
+                        BigInteger.ZERO,
+                        BigInteger.valueOf(1000),
+                        BigInteger.valueOf(3000000),
+                        "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+                        "0x",
+                        MOCK_ENCLAVE_KEY,
+                        null,
+                        MOCK_PRIVACY_GROUP_ID,
+                        RESTRICTED);
+        final long chainId = 2018;
+        final String privateKey =
+                "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+        final Credentials credentials = Credentials.create(privateKey);
         final String privateRawTransaction =
                 Numeric.toHexString(
                         PrivateTransactionEncoder.signMessage(

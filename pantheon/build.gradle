@@ -2,6 +2,6 @@
 description 'Pantheon JSON-RPC API'
 
 dependencies {
-    compile project(':core')
+    compile project(':eea')
     testCompile project(path: ':core', configuration: 'testArtifacts')
 }

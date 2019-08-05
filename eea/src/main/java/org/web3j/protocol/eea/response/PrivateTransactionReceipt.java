@@ -43,24 +43,28 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
         this.logs = logs;
     }
 
+    @Override
     public String getContractAddress() {
         return contractAddress;
     }
 
+    @Override
     public String getFrom() {
         return from;
     }
 
+    @Override
     public String getTo() {
         return to;
     }
 
-    public List<Log> getLogs() {
-        return logs;
-    }
-
     public String getOutput() {
         return output;
+    }
+
+    @Override
+    public List<Log> getLogs() {
+        return logs;
     }
 
     @Override
@@ -71,36 +75,20 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
-        return Objects.equals(contractAddress, that.contractAddress)
-                && from.equals(that.from)
-                && Objects.equals(to, that.to)
-                && Objects.equals(output, that.output)
-                && Objects.equals(logs, that.logs);
+        if (!super.equals(o)) {
+            return false;
+        }
+        PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
+        return Objects.equals(getContractAddress(), that.getContractAddress())
+                && getFrom().equals(that.getFrom())
+                && Objects.equals(getTo(), that.getTo())
+                && getOutput().equals(that.getOutput())
+                && getLogs().equals(that.getLogs());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(contractAddress, from, to, output, logs);
-    }
-
-    @Override
-    public String toString() {
-        return "PrivateTransactionReceipt{"
-                + "contractAddress='"
-                + contractAddress
-                + '\''
-                + ", from='"
-                + from
-                + '\''
-                + ", to='"
-                + to
-                + '\''
-                + ", output='"
-                + output
-                + '\''
-                + ", logs="
-                + logs
-                + '}';
+        return Objects.hash(
+                super.hashCode(), getContractAddress(), getFrom(), getTo(), getOutput(), getLogs());
     }
 }
