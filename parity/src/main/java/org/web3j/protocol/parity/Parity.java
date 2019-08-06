@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3jService;
@@ -25,8 +26,32 @@ import org.web3j.protocol.parity.methods.response.ParityListRecentDapps;
  * JSON-RPC Request object building factory for Parity.
  */
 public interface Parity extends Admin, Trace {
+
+    /**
+     * Construct a new Parity instance.
+     * @param web3jService web3j service instance - i.e. HTTP or IPC
+     * @return new Parity instance
+     */
     static Parity build(Web3jService web3jService) {
         return new JsonRpc2_0Parity(web3jService);
+    }
+
+    /**
+     * Construct a new Parity instance.
+     *
+     * @param web3jService web3j service instance - i.e. HTTP or IPC
+     * @param pollingInterval polling interval for responses from network nodes
+     * @param scheduledExecutorService executor service to use for scheduled tasks.
+     *                                 <strong>You are responsible for terminating this thread
+     *                                 pool</strong>
+     * @return new Parity instance
+     */
+    static Parity build(
+            Web3jService web3jService,
+            long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService
+    ) {
+        return new JsonRpc2_0Parity(web3jService, pollingInterval, scheduledExecutorService);
     }
 
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
