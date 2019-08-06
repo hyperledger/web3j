@@ -53,8 +53,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     public JsonRpc2_0Parity(
             Web3jService web3jService,
             long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService
-    ) {
+            ScheduledExecutorService scheduledExecutorService) {
         super(web3jService, pollingInterval, scheduledExecutorService);
     }
 
