@@ -224,7 +224,18 @@ public class Sign {
         return signedMessageHashToKey(getEthereumMessageHash(message), signatureData);
     }
 
-    static BigInteger signedMessageHashToKey(byte[] messageHash, SignatureData signatureData)
+    /**
+     * Given an arbitrary message hash and an Ethereum message signature encoded in bytes, returns
+     * the public key that was used to sign it. This can then be compared to the expected public key
+     * to determine if the signature was correct.
+     *
+     * @param messageHash The message hash.
+     * @param signatureData The message signature components
+     * @return the public key used to sign the message
+     * @throws SignatureException If the public key could not be recovered or if there was a
+     *     signature format error.
+     */
+    public static BigInteger signedMessageHashToKey(byte[] messageHash, SignatureData signatureData)
             throws SignatureException {
 
         byte[] r = signatureData.getR();
