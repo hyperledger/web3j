@@ -427,7 +427,7 @@ Or if you wish to create your own custom transaction:
 
    // sign & send our transaction
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-   String hexValue = Hex.toHexString(signedMessage);
+   String hexValue = Numeric.toHexString(signedMessage);
    EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
    // ...
 
