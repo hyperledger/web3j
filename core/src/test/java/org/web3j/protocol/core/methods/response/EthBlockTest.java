@@ -27,7 +27,7 @@ public class EthBlockTest {
                         null, null, null, null, null, null, null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null, null, null);
 
-        assertEquals(ethBlock.getSize(), BigInteger.valueOf(0));
+        assertEquals(ethBlock.getSize(), BigInteger.ZERO);
     }
 
     @Test
