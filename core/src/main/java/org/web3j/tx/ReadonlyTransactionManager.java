@@ -33,8 +33,7 @@ public class ReadonlyTransactionManager extends TransactionManager {
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
-            throws IOException {
+            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) {
         throw new UnsupportedOperationException(
                 "Only read operations are supported by this transaction manager");
     }

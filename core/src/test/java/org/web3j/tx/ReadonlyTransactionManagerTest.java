@@ -13,12 +13,16 @@
 package org.web3j.tx;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Arrays;
 
 import org.junit.Test;
 
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -29,19 +33,34 @@ import static org.mockito.Mockito.when;
 
 public class ReadonlyTransactionManagerTest {
 
+    Web3jService service = mock(Web3jService.class);
+    Web3j web3j = Web3j.build(service);
+    Transaction transaction = mock(Transaction.class);
+    DefaultBlockParameter defaultBlockParameter = mock(DefaultBlockParameter.class);
     EthCall response = mock(EthCall.class);
-    Request request = mock(Request.class);
-    Web3j web3j = mock(Web3j.class);
+
+    Request<?, EthCall> request =
+            new Request<>(
+                    "eth_call",
+                    Arrays.asList(transaction, defaultBlockParameter),
+                    service,
+                    org.web3j.protocol.core.methods.response.EthCall.class);
 
     @Test
     public void sendCallTest() throws IOException {
         when(response.getValue()).thenReturn("test");
-        when(request.send()).thenReturn(response);
-        when(web3j.ethCall(any(), any())).thenReturn(request);
+        when(service.send(any(), any())).thenReturn(response);
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
-        String value =
-                readonlyTransactionManager.sendCall("", "", DefaultBlockParameterName.LATEST);
+        String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
         assertThat(value, is("test"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testSendTransaction() {
+        ReadonlyTransactionManager readonlyTransactionManager =
+                new ReadonlyTransactionManager(web3j, "");
+        readonlyTransactionManager.sendTransaction(
+                BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO);
     }
 }
