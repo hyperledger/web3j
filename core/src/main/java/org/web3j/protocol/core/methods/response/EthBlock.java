@@ -267,7 +267,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         }
 
         public BigInteger getSize() {
-            return Numeric.decodeQuantity(size);
+            return size != null ? Numeric.decodeQuantity(size) : BigInteger.ZERO;
         }
 
         public String getSizeRaw() {
