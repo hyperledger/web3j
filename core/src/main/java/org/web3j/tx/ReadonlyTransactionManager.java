@@ -17,19 +17,23 @@ import java.math.BigInteger;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 
 /** Transaction manager implementation for read-only operations on smart contracts. */
 public class ReadonlyTransactionManager extends TransactionManager {
+    private final Web3j web3j;
+    private String fromAddress;
 
     public ReadonlyTransactionManager(Web3j web3j, String fromAddress) {
         super(web3j, fromAddress);
+        this.web3j = web3j;
+        this.fromAddress = fromAddress;
     }
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
-            throws IOException {
+            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) {
         throw new UnsupportedOperationException(
                 "Only read operations are supported by this transaction manager");
     }
@@ -37,6 +41,10 @@ public class ReadonlyTransactionManager extends TransactionManager {
     @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        throw new UnsupportedOperationException("Not implemented");
+        return web3j.ethCall(
+                        Transaction.createEthCallTransaction(fromAddress, to, data),
+                        defaultBlockParameter)
+                .send()
+                .getValue();
     }
 }
