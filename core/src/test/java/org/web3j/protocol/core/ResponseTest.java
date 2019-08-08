@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Test;
-
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.DbGetHex;
@@ -717,8 +716,8 @@ public class ResponseTest extends ResponseTester {
                                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
                                         "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
                                         "0x7f110",
-                                        "0x7f110",
                                         "0x09184e72a000",
+                                        "0x7f110",
                                         "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
                                         null,
                                         "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
@@ -825,8 +824,8 @@ public class ResponseTest extends ResponseTester {
                                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
                                         "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
                                         "0x7f110",
-                                        "0x7f110",
                                         "0x09184e72a000",
+                                        "0x7f110",
                                         "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
                                         null,
                                         "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
