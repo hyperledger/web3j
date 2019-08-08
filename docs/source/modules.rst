@@ -9,7 +9,7 @@ In dependency order, they are as follows:
 * utils -  Minimal set of utility classes
 * rlp - Recursive Length Prefix (RLP) encoders
 * abi - Application Binary Interface (ABI) encoders
-* crypto - cryptographic library for for transaction signing and key/wallet management in Ethereum
+* crypto - cryptographic library for transaction signing and key/wallet management in Ethereum
 * tuples - Simple tuples library
 * core - Much like the previous web3j core artifact without the code generators
 * codegen - code generators
