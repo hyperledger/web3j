@@ -35,6 +35,9 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
         this.value7 = value7;
     }
 
+    /**
+     * @deprecated use 'component1' method instead */
+    @Deprecated
     public T1 getValue1() {
         return value1;
     }
@@ -43,6 +46,9 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
         return value1;
     }
 
+    /**
+     * @deprecated use 'component2' method instead */
+    @Deprecated
     public T2 getValue2() {
         return value2;
     }
@@ -51,6 +57,9 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
         return value2;
     }
 
+    /**
+     * @deprecated use 'component3' method instead */
+    @Deprecated
     public T3 getValue3() {
         return value3;
     }
@@ -59,6 +68,9 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
         return value3;
     }
 
+    /**
+     * @deprecated use 'component4' method instead */
+    @Deprecated
     public T4 getValue4() {
         return value4;
     }
@@ -67,6 +79,9 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
         return value4;
     }
 
+    /**
+     * @deprecated use 'component5' method instead */
+    @Deprecated
     public T5 getValue5() {
         return value5;
     }
@@ -75,6 +90,9 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
         return value5;
     }
 
+    /**
+     * @deprecated use 'component6' method instead */
+    @Deprecated
     public T6 getValue6() {
         return value6;
     }
@@ -83,6 +101,9 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
         return value6;
     }
 
+    /**
+     * @deprecated use 'component7' method instead */
+    @Deprecated
     public T7 getValue7() {
         return value7;
     }

@@ -17,6 +17,9 @@ public final class Tuple1<T1> implements Tuple {
         this.value1 = value1;
     }
 
+    /**
+     * @deprecated use 'component1' method instead */
+    @Deprecated
     public T1 getValue1() {
         return value1;
     }
