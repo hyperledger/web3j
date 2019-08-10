@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.console;
 
 import java.io.File;
@@ -10,9 +22,7 @@ import org.web3j.crypto.WalletUtils;
 
 import static org.web3j.codegen.Console.exitError;
 
-/**
- * Common functions used by the wallet console tools.
- */
+/** Common functions used by the wallet console tools. */
 abstract class WalletManager {
 
     final IODevice console;
@@ -21,8 +31,9 @@ abstract class WalletManager {
         console = new ConsoleDevice();
 
         if (console == null) {
-            exitError("Unable to access console - please ensure you are running "
-                    + "from the command line");
+            exitError(
+                    "Unable to access console - please ensure you are running "
+                            + "from the command line");
         }
     }
 
@@ -45,8 +56,9 @@ abstract class WalletManager {
 
     String getDestinationDir() {
         String defaultDir = WalletUtils.getTestnetKeyDirectory();
-        String destinationDir = console.readLine(
-                "Please enter a destination directory location [" + defaultDir + "]: ");
+        String destinationDir =
+                console.readLine(
+                        "Please enter a destination directory location [" + defaultDir + "]: ");
         if (destinationDir.equals("")) {
             return defaultDir;
         } else if (destinationDir.startsWith("~")) {
@@ -62,8 +74,10 @@ abstract class WalletManager {
         if (!destination.exists()) {
             console.printf("Creating directory: " + destinationDir + " ...");
             if (!destination.mkdirs()) {
-                exitError("Unable to create destination directory ["
-                        + destinationDir + "], exiting...");
+                exitError(
+                        "Unable to create destination directory ["
+                                + destinationDir
+                                + "], exiting...");
             } else {
                 console.printf("complete\n");
             }
@@ -81,8 +95,8 @@ abstract class WalletManager {
 
     private Credentials loadWalletFile(File walletFile) {
         while (true) {
-            char[] password = console.readPassword(
-                    "Please enter your existing wallet file password: ");
+            char[] password =
+                    console.readPassword("Please enter your existing wallet file password: ");
             String currentPassword = new String(password);
             try {
                 return WalletUtils.loadCredentials(currentPassword, walletFile);

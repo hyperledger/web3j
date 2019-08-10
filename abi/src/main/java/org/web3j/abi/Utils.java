@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.abi;
 
 import java.lang.reflect.Constructor;
@@ -17,9 +29,7 @@ import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 
-/**
- * Utility functions.
- */
+/** Utility functions. */
 public class Utils {
     private Utils() {}
 
@@ -43,8 +53,10 @@ public class Utils {
     static String getSimpleTypeName(Class<?> type) {
         String simpleName = type.getSimpleName().toLowerCase();
 
-        if (type.equals(Uint.class) || type.equals(Int.class)
-                || type.equals(Ufixed.class) || type.equals(Fixed.class)) {
+        if (type.equals(Uint.class)
+                || type.equals(Int.class)
+                || type.equals(Ufixed.class)
+                || type.equals(Fixed.class)) {
             return simpleName + "256";
         } else if (type.equals(Utf8String.class)) {
             return "string";
@@ -79,8 +91,8 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Type> Class<T> getParameterizedTypeFromArray(
-            TypeReference typeReference) throws ClassNotFoundException {
+    static <T extends Type> Class<T> getParameterizedTypeFromArray(TypeReference typeReference)
+            throws ClassNotFoundException {
 
         java.lang.reflect.Type type = typeReference.getType();
         java.lang.reflect.Type[] typeArguments =
@@ -93,20 +105,19 @@ public class Utils {
     @SuppressWarnings("unchecked")
     public static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
         List<TypeReference<Type>> result = new ArrayList<>(input.size());
-        result.addAll(input.stream()
-                .map(typeReference -> (TypeReference<Type>) typeReference)
-                .collect(Collectors.toList()));
+        result.addAll(
+                input.stream()
+                        .map(typeReference -> (TypeReference<Type>) typeReference)
+                        .collect(Collectors.toList()));
         return result;
     }
 
     public static <T, R extends Type<T>, E extends Type<T>> List<E> typeMap(
-            List<List<T>> input,
-            Class<E> outerDestType,
-            Class<R> innerType) {
+            List<List<T>> input, Class<E> outerDestType, Class<R> innerType) {
         List<E> result = new ArrayList<>();
         try {
-            Constructor<E> constructor = outerDestType.getDeclaredConstructor(
-                    Class.class, List.class);
+            Constructor<E> constructor =
+                    outerDestType.getDeclaredConstructor(Class.class, List.class);
             for (List<T> ts : input) {
                 E e = constructor.newInstance(innerType, typeMap(ts, innerType));
                 result.add(e);
@@ -127,8 +138,8 @@ public class Utils {
 
         if (!input.isEmpty()) {
             try {
-                Constructor<R> constructor = destType.getDeclaredConstructor(
-                        input.get(0).getClass());
+                Constructor<R> constructor =
+                        destType.getDeclaredConstructor(input.get(0).getClass());
                 for (T value : input) {
                     result.add(constructor.newInstance(value));
                 }

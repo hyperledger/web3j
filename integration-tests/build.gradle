@@ -3,6 +3,7 @@ description 'web3j integration tests'
 
 dependencies {
     compile project(':core'),
+            project(':pantheon'),
             project(':parity')
     testCompile "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion",

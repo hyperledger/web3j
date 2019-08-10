@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core.methods.request;
 
 import java.math.BigInteger;
@@ -8,10 +20,11 @@ import org.web3j.utils.Numeric;
 
 /**
  * Transaction request object used the below methods.
+ *
  * <ol>
- *     <li>eth_call</li>
- *     <li>eth_sendTransaction</li>
- *     <li>eth_estimateGas</li>
+ *   <li>eth_call
+ *   <li>eth_sendTransaction
+ *   <li>eth_estimateGas
  * </ol>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,10 +38,16 @@ public class Transaction {
     private BigInteger gasPrice;
     private BigInteger value;
     private String data;
-    private BigInteger nonce;  // nonce field is not present on eth_call/eth_estimateGas
+    private BigInteger nonce; // nonce field is not present on eth_call/eth_estimateGas
 
-    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-                       String to, BigInteger value, String data) {
+    public Transaction(
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data) {
         this.from = from;
         this.to = to;
         this.gas = gasLimit;
@@ -43,8 +62,12 @@ public class Transaction {
     }
 
     public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-            BigInteger value, String init) {
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            BigInteger value,
+            String init) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, null, value, init);
     }
@@ -56,21 +79,34 @@ public class Transaction {
     }
 
     public static Transaction createEtherTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
             BigInteger value) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, value, null);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value, String data) {
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, value, data);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            String from,
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
             String data) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data);
@@ -113,7 +149,7 @@ public class Transaction {
         if (value != null) {
             return Numeric.encodeQuantity(value);
         } else {
-            return null;  // we don't want the field to be encoded if not present
+            return null; // we don't want the field to be encoded if not present
         }
     }
 }

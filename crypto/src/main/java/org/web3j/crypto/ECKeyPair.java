@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
 import java.math.BigInteger;
@@ -13,9 +25,7 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
 import org.web3j.utils.Numeric;
 
-/**
- * Elliptic Curve SECP-256k1 generated key pair.
- */
+/** Elliptic Curve SECP-256k1 generated key pair. */
 public class ECKeyPair {
     private final BigInteger privateKey;
     private final BigInteger publicKey;
@@ -35,8 +45,9 @@ public class ECKeyPair {
 
     /**
      * Sign a hash with the private key of this key pair.
-     * @param transactionHash   the hash to sign
-     * @return  An {@link ECDSASignature} of the hash
+     *
+     * @param transactionHash the hash to sign
+     * @return An {@link ECDSASignature} of the hash
      */
     public ECDSASignature sign(byte[] transactionHash) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
@@ -84,12 +95,14 @@ public class ECKeyPair {
         ECKeyPair ecKeyPair = (ECKeyPair) o;
 
         if (privateKey != null
-                ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null) {
+                ? !privateKey.equals(ecKeyPair.privateKey)
+                : ecKeyPair.privateKey != null) {
             return false;
         }
 
         return publicKey != null
-                ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
+                ? publicKey.equals(ecKeyPair.publicKey)
+                : ecKeyPair.publicKey == null;
     }
 
     @Override

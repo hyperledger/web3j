@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.parity.methods.response;
 
 import java.io.IOException;
@@ -15,13 +27,14 @@ import org.web3j.utils.Numeric;
 
 /**
  * Trace used in following methods.
+ *
  * <ol>
- *     <li>trace_call</li>
- *     <li>trace_rawTransaction</li>
- *     <li>trace_replayTransaction</li>
- *     <li>trace_block</li>
- *     <li>trace_filter</li>
- *     <li>trace_get</li>
+ *   <li>trace_call
+ *   <li>trace_rawTransaction
+ *   <li>trace_replayTransaction
+ *   <li>trace_block
+ *   <li>trace_filter
+ *   <li>trace_get
  * </ol>
  */
 public class Trace {
@@ -38,9 +51,7 @@ public class Trace {
     private BigInteger transactionPosition;
 
     @JsonDeserialize(using = ActionDeserializer.class)
-    public interface Action {
-
-    }
+    public interface Action {}
 
     @JsonDeserialize()
     public static class SuicideAction implements Action {
@@ -49,8 +60,7 @@ public class Trace {
         private String balance;
         private String refundAddress;
 
-        public SuicideAction() {
-        }
+        public SuicideAction() {}
 
         public SuicideAction(String address, String balance, String refundAddress) {
             this.address = address;
@@ -97,15 +107,18 @@ public class Trace {
 
             SuicideAction that = (SuicideAction) o;
 
-            if (getAddress() != null ? !getAddress().equals(that.getAddress())
+            if (getAddress() != null
+                    ? !getAddress().equals(that.getAddress())
                     : that.getAddress() != null) {
                 return false;
             }
-            if (getBalanceRaw() != null ? !getBalanceRaw().equals(that.getBalanceRaw())
+            if (getBalanceRaw() != null
+                    ? !getBalanceRaw().equals(that.getBalanceRaw())
                     : that.getBalanceRaw() != null) {
                 return false;
             }
-            return getRefundAddress() != null ? getRefundAddress().equals(that.getRefundAddress())
+            return getRefundAddress() != null
+                    ? getRefundAddress().equals(that.getRefundAddress())
                     : that.getRefundAddress() == null;
         }
 
@@ -120,9 +133,15 @@ public class Trace {
         @Override
         public String toString() {
             return "SuicideAction{"
-                    + "address='" + getAddress() + '\''
-                    + ", balance='" + getBalanceRaw() + '\''
-                    + ", refundAddress='" + getRefundAddress() + '\''
+                    + "address='"
+                    + getAddress()
+                    + '\''
+                    + ", balance='"
+                    + getBalanceRaw()
+                    + '\''
+                    + ", refundAddress='"
+                    + getRefundAddress()
+                    + '\''
                     + '}';
         }
     }
@@ -137,11 +156,10 @@ public class Trace {
         private String input;
         private String value;
 
-        public CallAction() {
-        }
+        public CallAction() {}
 
-        public CallAction(String callType, String from, String to, String gas, String input,
-                String value) {
+        public CallAction(
+                String callType, String from, String to, String gas, String input, String value) {
             this.callType = callType;
             this.from = from;
             this.to = to;
@@ -217,27 +235,29 @@ public class Trace {
 
             CallAction that = (CallAction) o;
 
-            if (getCallType() != null ? !getCallType().equals(that.getCallType())
+            if (getCallType() != null
+                    ? !getCallType().equals(that.getCallType())
                     : that.getCallType() != null) {
                 return false;
             }
-            if (getFrom() != null ? !getFrom().equals(that.getFrom())
-                    : that.getFrom() != null) {
+            if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
                 return false;
             }
-            if (getTo() != null ? !getTo().equals(that.getTo())
-                    : that.getTo() != null) {
+            if (getTo() != null ? !getTo().equals(that.getTo()) : that.getTo() != null) {
                 return false;
             }
-            if (getGasRaw() != null ? !getGasRaw().equals(that.getGasRaw())
+            if (getGasRaw() != null
+                    ? !getGasRaw().equals(that.getGasRaw())
                     : that.getGasRaw() != null) {
                 return false;
             }
-            if (getInput() != null ? !getInput().equals(that.getInput())
+            if (getInput() != null
+                    ? !getInput().equals(that.getInput())
                     : that.getInput() != null) {
                 return false;
             }
-            return getValueRaw() != null ? getValueRaw().equals(that.getValueRaw())
+            return getValueRaw() != null
+                    ? getValueRaw().equals(that.getValueRaw())
                     : that.getValueRaw() == null;
         }
 
@@ -255,12 +275,24 @@ public class Trace {
         @Override
         public String toString() {
             return "CallAction{"
-                    + "callType='" + getCallType() + '\''
-                    + ", from='" + getFrom() + '\''
-                    + ", to='" + getTo() + '\''
-                    + ", gas='" + getGasRaw() + '\''
-                    + ", input='" + getInput() + '\''
-                    + ", value='" + getValueRaw() + '\''
+                    + "callType='"
+                    + getCallType()
+                    + '\''
+                    + ", from='"
+                    + getFrom()
+                    + '\''
+                    + ", to='"
+                    + getTo()
+                    + '\''
+                    + ", gas='"
+                    + getGasRaw()
+                    + '\''
+                    + ", input='"
+                    + getInput()
+                    + '\''
+                    + ", value='"
+                    + getValueRaw()
+                    + '\''
                     + '}';
         }
     }
@@ -273,8 +305,7 @@ public class Trace {
         private String value;
         private String init;
 
-        public CreateAction() {
-        }
+        public CreateAction() {}
 
         public CreateAction(String from, String gas, String value, String init) {
             this.from = from;
@@ -334,20 +365,20 @@ public class Trace {
 
             CreateAction that = (CreateAction) o;
 
-            if (getFrom() != null ? !getFrom().equals(that.getFrom())
-                    : that.getFrom() != null) {
+            if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
                 return false;
             }
-            if (getGasRaw() != null ? !getGasRaw().equals(that.getGasRaw())
+            if (getGasRaw() != null
+                    ? !getGasRaw().equals(that.getGasRaw())
                     : that.getGasRaw() != null) {
                 return false;
             }
-            if (getValueRaw() != null ? !getValueRaw().equals(that.getValueRaw())
+            if (getValueRaw() != null
+                    ? !getValueRaw().equals(that.getValueRaw())
                     : that.getValueRaw() != null) {
                 return false;
             }
-            return getInit() != null ? getInit().equals(that.getInit())
-                    : that.getInit() == null;
+            return getInit() != null ? getInit().equals(that.getInit()) : that.getInit() == null;
         }
 
         @Override
@@ -362,10 +393,18 @@ public class Trace {
         @Override
         public String toString() {
             return "CreateAction{"
-                    + "from='" + getFrom() + '\''
-                    + ", gas='" + getGasRaw() + '\''
-                    + ", value='" + getValueRaw() + '\''
-                    + ", init='" + getInit() + '\''
+                    + "from='"
+                    + getFrom()
+                    + '\''
+                    + ", gas='"
+                    + getGasRaw()
+                    + '\''
+                    + ", value='"
+                    + getValueRaw()
+                    + '\''
+                    + ", init='"
+                    + getInit()
+                    + '\''
                     + '}';
         }
     }
@@ -377,8 +416,7 @@ public class Trace {
         private String value;
         private String rewardType;
 
-        public RewardAction() {
-        }
+        public RewardAction() {}
 
         public RewardAction(String author, String value, String rewardType) {
             this.author = author;
@@ -425,15 +463,18 @@ public class Trace {
 
             RewardAction that = (RewardAction) o;
 
-            if (getAuthor() != null ? !getAuthor().equals(that.getAuthor())
+            if (getAuthor() != null
+                    ? !getAuthor().equals(that.getAuthor())
                     : that.getAuthor() != null) {
                 return false;
             }
-            if (getValueRaw() != null ? !getValueRaw().equals(that.getValueRaw())
+            if (getValueRaw() != null
+                    ? !getValueRaw().equals(that.getValueRaw())
                     : that.getValueRaw() != null) {
                 return false;
             }
-            return getRewardType() != null ? getRewardType().equals(that.getRewardType())
+            return getRewardType() != null
+                    ? getRewardType().equals(that.getRewardType())
                     : that.getRewardType() == null;
         }
 
@@ -448,9 +489,15 @@ public class Trace {
         @Override
         public String toString() {
             return "RewardAction{"
-                    + "author='" + getAuthor() + '\''
-                    + ", value='" + getValueRaw() + '\''
-                    + ", rewardType='" + getRewardType() + '\''
+                    + "author='"
+                    + getAuthor()
+                    + '\''
+                    + ", value='"
+                    + getValueRaw()
+                    + '\''
+                    + ", rewardType='"
+                    + getRewardType()
+                    + '\''
                     + '}';
         }
     }
@@ -462,8 +509,7 @@ public class Trace {
         private String gasUsed;
         private String output;
 
-        public Result() {
-        }
+        public Result() {}
 
         public Result(String address, String code, String gasUsed, String output) {
             this.address = address;
@@ -519,19 +565,23 @@ public class Trace {
 
             Result result = (Result) o;
 
-            if (getAddress() != null ? !getAddress().equals(result.getAddress())
+            if (getAddress() != null
+                    ? !getAddress().equals(result.getAddress())
                     : result.getAddress() != null) {
                 return false;
             }
-            if (getCode() != null ? !getCode().equals(result.getCode())
+            if (getCode() != null
+                    ? !getCode().equals(result.getCode())
                     : result.getCode() != null) {
                 return false;
             }
-            if (getGasUsedRaw() != null ? !getGasUsedRaw().equals(result.getGasUsedRaw())
+            if (getGasUsedRaw() != null
+                    ? !getGasUsedRaw().equals(result.getGasUsedRaw())
                     : result.getGasUsedRaw() != null) {
                 return false;
             }
-            return getOutput() != null ? getOutput().equals(result.getOutput())
+            return getOutput() != null
+                    ? getOutput().equals(result.getOutput())
                     : result.getOutput() == null;
         }
 
@@ -547,20 +597,35 @@ public class Trace {
         @Override
         public String toString() {
             return "Result{"
-                    + "address='" + getAddress() + '\''
-                    + ", code='" + getCode() + '\''
-                    + ", gasUsed='" + getGasUsedRaw() + '\''
-                    + ", output='" + getOutput() + '\''
+                    + "address='"
+                    + getAddress()
+                    + '\''
+                    + ", code='"
+                    + getCode()
+                    + '\''
+                    + ", gasUsed='"
+                    + getGasUsedRaw()
+                    + '\''
+                    + ", output='"
+                    + getOutput()
+                    + '\''
                     + '}';
         }
     }
 
-    public Trace() {
-    }
+    public Trace() {}
 
-    public Trace(Action action, String error, Result result, BigInteger subtraces,
-                 List<BigInteger> traceAddress, String type, String blockHash,
-                 BigInteger blockNumber, String transactionHash, BigInteger transactionPosition) {
+    public Trace(
+            Action action,
+            String error,
+            Result result,
+            BigInteger subtraces,
+            List<BigInteger> traceAddress,
+            String type,
+            String blockHash,
+            BigInteger blockNumber,
+            String transactionHash,
+            BigInteger transactionPosition) {
         this.action = action;
         this.error = error;
         this.result = result;
@@ -664,39 +729,44 @@ public class Trace {
 
         Trace trace = (Trace) o;
 
-        if (getAction() != null ? !getAction().equals(trace.getAction())
+        if (getAction() != null
+                ? !getAction().equals(trace.getAction())
                 : trace.getAction() != null) {
             return false;
         }
-        if (getError() != null ? !getError().equals(trace.getError())
-                : trace.getError() != null) {
+        if (getError() != null ? !getError().equals(trace.getError()) : trace.getError() != null) {
             return false;
         }
-        if (getResult() != null ? !getResult().equals(trace.getResult())
+        if (getResult() != null
+                ? !getResult().equals(trace.getResult())
                 : trace.getResult() != null) {
             return false;
         }
-        if (getSubtraces() != null ? !getSubtraces().equals(trace.getSubtraces())
+        if (getSubtraces() != null
+                ? !getSubtraces().equals(trace.getSubtraces())
                 : trace.getSubtraces() != null) {
             return false;
         }
-        if (getTraceAddress() != null ? !getTraceAddress().equals(trace.getTraceAddress())
+        if (getTraceAddress() != null
+                ? !getTraceAddress().equals(trace.getTraceAddress())
                 : trace.getTraceAddress() != null) {
             return false;
         }
-        if (getType() != null ? !getType().equals(trace.getType())
-                : trace.getType() != null) {
+        if (getType() != null ? !getType().equals(trace.getType()) : trace.getType() != null) {
             return false;
         }
-        if (getBlockHash() != null ? !getBlockHash().equals(trace.getBlockHash())
+        if (getBlockHash() != null
+                ? !getBlockHash().equals(trace.getBlockHash())
                 : trace.getBlockHash() != null) {
             return false;
         }
-        if (getBlockNumber() != null ? !getBlockNumber().equals(trace.getBlockNumber())
+        if (getBlockNumber() != null
+                ? !getBlockNumber().equals(trace.getBlockNumber())
                 : trace.getBlockNumber() != null) {
             return false;
         }
-        if (getTransactionHash() != null ? !getTransactionHash().equals(trace.getTransactionHash())
+        if (getTransactionHash() != null
+                ? !getTransactionHash().equals(trace.getTransactionHash())
                 : trace.getTransactionHash() != null) {
             return false;
         }
@@ -707,42 +777,51 @@ public class Trace {
 
     @Override
     public int hashCode() {
-        int result1 = getAction() != null
-                ? getAction().hashCode() : 0;
-        result1 = 31 * result1 + (getError() != null
-                ? getError().hashCode() : 0);
-        result1 = 31 * result1 + (getResult() != null
-                ? getResult().hashCode() : 0);
-        result1 = 31 * result1 + (getSubtraces() != null
-                ? getSubtraces().hashCode() : 0);
-        result1 = 31 * result1 + (getTraceAddress() != null
-                ? getTraceAddress().hashCode() : 0);
-        result1 = 31 * result1 + (getType() != null
-                ? getType().hashCode() : 0);
-        result1 = 31 * result1 + (getBlockHash() != null
-                ? getBlockHash().hashCode() : 0);
-        result1 = 31 * result1 + (getBlockNumber() != null
-                ? getBlockNumber().hashCode() : 0);
-        result1 = 31 * result1 + (getTransactionHash() != null
-                ? getTransactionHash().hashCode() : 0);
-        result1 = 31 * result1 + (getTransactionPosition() != null
-                ? getTransactionPosition().hashCode() : 0);
+        int result1 = getAction() != null ? getAction().hashCode() : 0;
+        result1 = 31 * result1 + (getError() != null ? getError().hashCode() : 0);
+        result1 = 31 * result1 + (getResult() != null ? getResult().hashCode() : 0);
+        result1 = 31 * result1 + (getSubtraces() != null ? getSubtraces().hashCode() : 0);
+        result1 = 31 * result1 + (getTraceAddress() != null ? getTraceAddress().hashCode() : 0);
+        result1 = 31 * result1 + (getType() != null ? getType().hashCode() : 0);
+        result1 = 31 * result1 + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
+        result1 = 31 * result1 + (getBlockNumber() != null ? getBlockNumber().hashCode() : 0);
+        result1 =
+                31 * result1 + (getTransactionHash() != null ? getTransactionHash().hashCode() : 0);
+        result1 =
+                31 * result1
+                        + (getTransactionPosition() != null
+                                ? getTransactionPosition().hashCode()
+                                : 0);
         return result1;
     }
 
     @Override
     public String toString() {
         return "Trace{"
-                + "action=" + getAction()
-                + ", error='" + getError() + '\''
-                + ", result=" + getResult()
-                + ", subtraces=" + getSubtraces()
-                + ", traceAddress=" + getTraceAddress()
-                + ", type='" + getType() + '\''
-                + ", blockHash='" + getBlockHash() + '\''
-                + ", blockNumber=" + getBlockNumber()
-                + ", transactionHash='" + getTransactionHash() + '\''
-                + ", transactionPosition=" + getTransactionPosition()
+                + "action="
+                + getAction()
+                + ", error='"
+                + getError()
+                + '\''
+                + ", result="
+                + getResult()
+                + ", subtraces="
+                + getSubtraces()
+                + ", traceAddress="
+                + getTraceAddress()
+                + ", type='"
+                + getType()
+                + '\''
+                + ", blockHash='"
+                + getBlockHash()
+                + '\''
+                + ", blockNumber="
+                + getBlockNumber()
+                + ", transactionHash='"
+                + getTransactionHash()
+                + '\''
+                + ", transactionPosition="
+                + getTransactionPosition()
                 + '}';
     }
 
@@ -766,6 +845,5 @@ public class Trace {
 
             return null;
         }
-
     }
 }

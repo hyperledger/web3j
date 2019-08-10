@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,8 +30,7 @@ public class Response<T> {
     private Error error;
     private String rawResponse;
 
-    public Response() {
-    }
+    public Response() {}
 
     public long getId() {
         return id;
@@ -72,8 +83,7 @@ public class Response<T> {
         @JsonDeserialize(using = KeepAsJsonDeserialzier.class)
         private String data;
 
-        public Error() {
-        }
+        public Error() {}
 
         public Error(int code, String message) {
             this.code = code;
@@ -119,7 +129,8 @@ public class Response<T> {
                 return false;
             }
             if (getMessage() != null
-                    ? !getMessage().equals(error.getMessage()) : error.getMessage() != null) {
+                    ? !getMessage().equals(error.getMessage())
+                    : error.getMessage() != null) {
                 return false;
             }
             return getData() != null ? getData().equals(error.getData()) : error.getData() == null;

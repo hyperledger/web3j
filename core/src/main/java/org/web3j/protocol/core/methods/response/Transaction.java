@@ -1,12 +1,22 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
 
 import org.web3j.utils.Numeric;
 
-/**
- * Transaction object used by both {@link EthTransaction} and {@link EthBlock}.
- */
+/** Transaction object used by both {@link EthTransaction} and {@link EthBlock}. */
 public class Transaction {
     private static final int CHAIN_ID_INC = 35;
     private static final int LOWER_REAL_V = 27;
@@ -27,15 +37,28 @@ public class Transaction {
     private String raw;
     private String r;
     private String s;
-    private long v;  // see https://github.com/web3j/web3j/issues/44
+    private long v; // see https://github.com/web3j/web3j/issues/44
 
-    public Transaction() {
-    }
+    public Transaction() {}
 
-    public Transaction(String hash, String nonce, String blockHash, String blockNumber,
-                       String transactionIndex, String from, String to, String value,
-                       String gas, String gasPrice, String input, String creates,
-                       String publicKey, String raw, String r, String s, long v) {
+    public Transaction(
+            String hash,
+            String nonce,
+            String blockHash,
+            String blockNumber,
+            String transactionIndex,
+            String from,
+            String to,
+            String value,
+            String gas,
+            String gasPrice,
+            String input,
+            String creates,
+            String publicKey,
+            String raw,
+            String r,
+            String s,
+            long v) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -254,11 +277,13 @@ public class Transaction {
             return false;
         }
         if (getNonceRaw() != null
-                ? !getNonceRaw().equals(that.getNonceRaw()) : that.getNonceRaw() != null) {
+                ? !getNonceRaw().equals(that.getNonceRaw())
+                : that.getNonceRaw() != null) {
             return false;
         }
         if (getBlockHash() != null
-                ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
+                ? !getBlockHash().equals(that.getBlockHash())
+                : that.getBlockHash() != null) {
             return false;
         }
         if (getBlockNumberRaw() != null
@@ -278,26 +303,31 @@ public class Transaction {
             return false;
         }
         if (getValueRaw() != null
-                ? !getValueRaw().equals(that.getValueRaw()) : that.getValueRaw() != null) {
+                ? !getValueRaw().equals(that.getValueRaw())
+                : that.getValueRaw() != null) {
             return false;
         }
         if (getGasPriceRaw() != null
-                ? !getGasPriceRaw().equals(that.getGasPriceRaw()) : that.getGasPriceRaw() != null) {
+                ? !getGasPriceRaw().equals(that.getGasPriceRaw())
+                : that.getGasPriceRaw() != null) {
             return false;
         }
         if (getGasRaw() != null
-                ? !getGasRaw().equals(that.getGasRaw()) : that.getGasRaw() != null) {
+                ? !getGasRaw().equals(that.getGasRaw())
+                : that.getGasRaw() != null) {
             return false;
         }
         if (getInput() != null ? !getInput().equals(that.getInput()) : that.getInput() != null) {
             return false;
         }
         if (getCreates() != null
-                ? !getCreates().equals(that.getCreates()) : that.getCreates() != null) {
+                ? !getCreates().equals(that.getCreates())
+                : that.getCreates() != null) {
             return false;
         }
         if (getPublicKey() != null
-                ? !getPublicKey().equals(that.getPublicKey()) : that.getPublicKey() != null) {
+                ? !getPublicKey().equals(that.getPublicKey())
+                : that.getPublicKey() != null) {
             return false;
         }
         if (getRaw() != null ? !getRaw().equals(that.getRaw()) : that.getRaw() != null) {
@@ -315,8 +345,11 @@ public class Transaction {
         result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
         result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
         result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
-        result = 31 * result
-                + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
+        result =
+                31 * result
+                        + (getTransactionIndexRaw() != null
+                                ? getTransactionIndexRaw().hashCode()
+                                : 0);
         result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getValueRaw() != null ? getValueRaw().hashCode() : 0);
