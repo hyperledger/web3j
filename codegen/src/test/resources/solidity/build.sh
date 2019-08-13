@@ -8,6 +8,7 @@ greeter/Greeter
 misc/Misc
 shipit/ShipIt
 simplestorage/SimpleStorage
+duplicate/DuplicateFeild
 "
 
 for target in ${targets}; do

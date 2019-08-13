@@ -108,6 +108,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testDuplicateField() throws Exception {
+        testCodeGeneration("duplicate", "DuplicateFeild", JAVA_TYPES_ARG, false);
+        testCodeGeneration("duplicate", "DuplicateFeild", SOLIDITY_TYPES_ARG, false);
+    }
+
+    @Test
     public void testGenerationCommandPrefixes() throws Exception {
         testCodeGeneration(
                 Arrays.asList(COMMAND_SOLIDITY, COMMAND_GENERATE),
