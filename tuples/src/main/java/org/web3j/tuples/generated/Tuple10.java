@@ -44,43 +44,113 @@ public final class Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> implements T
         this.value10 = value10;
     }
 
+    /**
+     * @deprecated use 'component1' method instead */
+    @Deprecated
     public T1 getValue1() {
         return value1;
     }
 
+    public T1 component1() {
+        return value1;
+    }
+
+    /**
+     * @deprecated use 'component2' method instead */
+    @Deprecated
     public T2 getValue2() {
         return value2;
     }
 
+    public T2 component2() {
+        return value2;
+    }
+
+    /**
+     * @deprecated use 'component3' method instead */
+    @Deprecated
     public T3 getValue3() {
         return value3;
     }
 
+    public T3 component3() {
+        return value3;
+    }
+
+    /**
+     * @deprecated use 'component4' method instead */
+    @Deprecated
     public T4 getValue4() {
         return value4;
     }
 
+    public T4 component4() {
+        return value4;
+    }
+
+    /**
+     * @deprecated use 'component5' method instead */
+    @Deprecated
     public T5 getValue5() {
         return value5;
     }
 
+    public T5 component5() {
+        return value5;
+    }
+
+    /**
+     * @deprecated use 'component6' method instead */
+    @Deprecated
     public T6 getValue6() {
         return value6;
     }
 
+    public T6 component6() {
+        return value6;
+    }
+
+    /**
+     * @deprecated use 'component7' method instead */
+    @Deprecated
     public T7 getValue7() {
         return value7;
     }
 
+    public T7 component7() {
+        return value7;
+    }
+
+    /**
+     * @deprecated use 'component8' method instead */
+    @Deprecated
     public T8 getValue8() {
         return value8;
     }
 
+    public T8 component8() {
+        return value8;
+    }
+
+    /**
+     * @deprecated use 'component9' method instead */
+    @Deprecated
     public T9 getValue9() {
         return value9;
     }
 
+    public T9 component9() {
+        return value9;
+    }
+
+    /**
+     * @deprecated use 'component10' method instead */
+    @Deprecated
     public T10 getValue10() {
+        return value10;
+    }
+
+    public T10 component10() {
         return value10;
     }
 

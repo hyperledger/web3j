@@ -20,11 +20,25 @@ public final class Tuple2<T1, T2> implements Tuple {
         this.value2 = value2;
     }
 
+    /**
+     * @deprecated use 'component1' method instead */
+    @Deprecated
     public T1 getValue1() {
         return value1;
     }
 
+    public T1 component1() {
+        return value1;
+    }
+
+    /**
+     * @deprecated use 'component2' method instead */
+    @Deprecated
     public T2 getValue2() {
+        return value2;
+    }
+
+    public T2 component2() {
         return value2;
     }
 
