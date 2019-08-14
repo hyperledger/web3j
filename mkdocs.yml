@@ -53,10 +53,6 @@ extra:
       link: "https://linkedin.com/in/web3labs"
 extra_css:
   - "stylesheets/extra.css"
-# Google Analytics
-google_analytics:
-  - "UA-132980710-2"
-  - "auto"
 
 # Extensions
 markdown_extensions:
