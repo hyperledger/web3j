@@ -121,7 +121,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             final BigInteger gasLimit,
             final String to,
             final String data,
-            final BigInteger value)
+            final BigInteger value,
+            boolean constructor)
             throws IOException {
 
         final BigInteger nonce =
