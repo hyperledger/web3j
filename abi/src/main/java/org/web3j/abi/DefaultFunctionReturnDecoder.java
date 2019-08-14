@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.abi;
 
 import java.util.ArrayList;
@@ -56,12 +68,11 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
         }
     }
 
-    private static List<Type> build(
-            String input, List<TypeReference<Type>> outputParameters) {
+    private static List<Type> build(String input, List<TypeReference<Type>> outputParameters) {
         List<Type> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
-        for (TypeReference<?> typeReference:outputParameters) {
+        for (TypeReference<?> typeReference : outputParameters) {
             try {
                 @SuppressWarnings("unchecked")
                 Class<Type> type = (Class<Type>) typeReference.getClassType();
@@ -70,21 +81,26 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
                 Type result;
                 if (DynamicArray.class.isAssignableFrom(type)) {
-                    result = TypeDecoder.decodeDynamicArray(
-                            input, hexStringDataOffset, typeReference);
+                    result =
+                            TypeDecoder.decodeDynamicArray(
+                                    input, hexStringDataOffset, typeReference);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
                     int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
-                    result = TypeDecoder.decodeStaticArray(
-                            input, hexStringDataOffset, typeReference, length);
+                    result =
+                            TypeDecoder.decodeStaticArray(
+                                    input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else if (StaticArray.class.isAssignableFrom(type)) {
-                    int length = Integer.parseInt(type.getSimpleName()
-                            .substring(StaticArray.class.getSimpleName().length()));
-                    result = TypeDecoder.decodeStaticArray(
-                            input, hexStringDataOffset, typeReference, length);
+                    int length =
+                            Integer.parseInt(
+                                    type.getSimpleName()
+                                            .substring(StaticArray.class.getSimpleName().length()));
+                    result =
+                            TypeDecoder.decodeStaticArray(
+                                    input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else {

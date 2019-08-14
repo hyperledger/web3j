@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.abi;
 
 import java.util.Collections;
@@ -8,9 +20,7 @@ import java.util.ServiceLoader;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionDecoderProvider;
 
-/**
- * Decodes values returned by function or event calls.
- */
+/** Decodes values returned by function or event calls. */
 public abstract class FunctionReturnDecoder {
 
     private static FunctionReturnDecoder DEFAULT_DECODER;
@@ -24,29 +34,28 @@ public abstract class FunctionReturnDecoder {
      * @param rawInput ABI encoded input
      * @param outputParameters list of return types as {@link TypeReference}
      * @return {@link List} of values returned by function, {@link Collections#emptyList()} if
-     *         invalid response
+     *     invalid response
      */
     public static List<Type> decode(String rawInput, List<TypeReference<Type>> outputParameters) {
         return decoder().decodeFunctionResult(rawInput, outputParameters);
     }
 
     /**
-     * <p>Decodes an indexed parameter associated with an event. Indexed parameters are individually
+     * Decodes an indexed parameter associated with an event. Indexed parameters are individually
      * encoded, unlike non-indexed parameters which are encoded as per ABI-encoded function
-     * parameters and return values.</p>
+     * parameters and return values.
      *
      * <p>If any of the following types are indexed, the Keccak-256 hashes of the values are
-     * returned instead. These are returned as a bytes32 value.</p>
+     * returned instead. These are returned as a bytes32 value.
      *
      * <ul>
-     *     <li>Arrays</li>
-     *     <li>Strings</li>
-     *     <li>Bytes</li>
+     *   <li>Arrays
+     *   <li>Strings
+     *   <li>Bytes
      * </ul>
      *
-     * <p>See the
-     * <a href="http://solidity.readthedocs.io/en/latest/contracts.html#events">
-     * Solidity documentation</a> for further information.</p>
+     * <p>See the <a href="http://solidity.readthedocs.io/en/latest/contracts.html#events">Solidity
+     * documentation</a> for further information.
      *
      * @param rawInput ABI encoded input
      * @param typeReference of expected result type
@@ -75,5 +84,4 @@ public abstract class FunctionReturnDecoder {
         }
         return DEFAULT_DECODER;
     }
-
 }

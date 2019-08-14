@@ -78,7 +78,7 @@ public class Hash {
     /**
      * Keccak-256 hash function.
      *
-     * @param input  binary encoded input data
+     * @param input binary encoded input data
      * @param offset of start of data
      * @param length of data
      * @return hash value
