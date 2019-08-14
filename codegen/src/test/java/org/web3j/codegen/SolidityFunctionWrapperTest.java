@@ -44,6 +44,7 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
@@ -495,9 +496,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "    return transferEventFlowable(filter);\n"
                         + "  }\n"
                         + "\n"
-                        + "  public static class TransferEventResponse {\n"
-                        + "    public org.web3j.protocol.core.methods.response.Log log;\n"
-                        + "\n"
+                        + "  public static class TransferEventResponse extends org.web3j.protocol.core.methods.response.BaseEventResponse {\n"
                         + "    public byte[] id;\n"
                         + "\n"
                         + "    public java.lang.String from;\n"
