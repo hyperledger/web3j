@@ -70,6 +70,7 @@ import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.BaseEventResponse;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
@@ -775,7 +776,7 @@ public class SolidityFunctionWrapper extends Generator {
             return TypeName.get(BigInteger.class);
         } else if (simpleName.equals(Utf8String.class.getSimpleName())) {
             return TypeName.get(String.class);
-        } else if (simpleName.endsWith("Bytes")) {
+        } else if (simpleName.startsWith("Bytes") || simpleName.equals("DynamicBytes")) {
             return TypeName.get(byte[].class);
         } else if (simpleName.startsWith("Bool")) {
             return TypeName.get(java.lang.Boolean.class);
@@ -1086,7 +1087,7 @@ public class SolidityFunctionWrapper extends Generator {
         TypeSpec.Builder builder =
                 TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
-        builder.addField(LOG, "log", Modifier.PUBLIC);
+        builder.superclass(BaseEventResponse.class);
         for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType :
                 indexedParameters) {
             TypeName typeName = getIndexedEventWrapperType(namedType.typeName);
