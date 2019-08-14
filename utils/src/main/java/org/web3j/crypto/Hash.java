@@ -47,23 +47,6 @@ public class Hash {
     }
 
     /**
-     * Generates a digest for the given {@code input}.
-     *
-     * @param input The input to digest
-     * @param algorithm The hash algorithm to use
-     * @return The hash value for the given input
-     * @throws RuntimeException If we couldn't find any provider for the given algorithm
-     */
-    public static byte[] hash(byte[] input, String algorithm) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance(algorithm.toUpperCase());
-            return digest.digest(input);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Couldn't find a " + algorithm + " provider", e);
-        }
-    }
-
-    /**
      * Keccak-256 hash function.
      *
      * @param hexInput hex encoded input data with optional 0x prefix
