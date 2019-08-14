@@ -62,8 +62,7 @@ public class StructuredDataEncoder {
     final String identifierRegex = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
     final Pattern identifierPattern = Pattern.compile(identifierRegex);
 
-    public StructuredDataEncoder(String jsonMessageInString)
-            throws IOException, RuntimeException {
+    public StructuredDataEncoder(String jsonMessageInString) throws IOException, RuntimeException {
         // Parse String Message into object and validate
         this.jsonMessageObject = parseJSONMessage(jsonMessageInString);
     }
