@@ -62,8 +62,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void setUp() throws Exception {
         super.setUp();
         generationReporter = mock(GenerationReporter.class);
-        solidityFunctionWrapper = new SolidityFunctionWrapper(
-                true, false, Address.DEFAULT_LENGTH, generationReporter);
+        solidityFunctionWrapper =
+                new SolidityFunctionWrapper(
+                        true, false, Address.DEFAULT_LENGTH, generationReporter);
     }
 
     @Test
@@ -372,14 +373,14 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantInvalid() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(
-                true,
-                Collections.singletonList(
-                        new AbiDefinition.NamedType("param", "uint8")),
-                "functionName",
-                Collections.emptyList(),
-                "type",
-                false);
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Collections.singletonList(new AbiDefinition.NamedType("param", "uint8")),
+                        "functionName",
+                        Collections.emptyList(),
+                        "type",
+                        false);
 
         List<MethodSpec> methodSpecs = solidityFunctionWrapper.buildFunctions(functionDefinition);
         assertTrue(methodSpecs.isEmpty());

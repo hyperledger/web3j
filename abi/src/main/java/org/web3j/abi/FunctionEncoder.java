@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.abi;
 
 import java.util.Iterator;
@@ -12,13 +24,11 @@ import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
 /**
- * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
- * Further details are available
- * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
- * </p>
- * <p>Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI
- * is found, in which case the first implementation found will be used.
- * </p>
+ * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
+ * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
+ *
+ * <p>Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI is
+ * found, in which case the first implementation found will be used.
  *
  * @see DefaultFunctionEncoder
  * @see FunctionEncoderProvider
@@ -48,9 +58,8 @@ public abstract class FunctionEncoder {
         final StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        final String params = parameters.stream()
-                .map(Type::getTypeAsString)
-                .collect(Collectors.joining(","));
+        final String params =
+                parameters.stream().map(Type::getTypeAsString).collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();
