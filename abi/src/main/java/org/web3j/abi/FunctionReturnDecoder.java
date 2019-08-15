@@ -20,7 +20,14 @@ import java.util.ServiceLoader;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionDecoderProvider;
 
-/** Decodes values returned by function or event calls. */
+/** Decodes values returned by function or event calls. 
+ *
+ * <p>Delegates to {@link DefaultFunctionReturnDecoder} unless a {@link FunctionDecoderProvider} SPI is
+ * found, in which case the first implementation found will be used.
+ *
+ * @see DefaultFunctionReturnDecoder
+ * @see FunctionDecoderProvider
+ */
 public abstract class FunctionReturnDecoder {
 
     private static FunctionReturnDecoder DEFAULT_DECODER;
