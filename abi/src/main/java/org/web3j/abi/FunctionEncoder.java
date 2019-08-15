@@ -24,10 +24,7 @@ import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
 /**
- * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
- * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
- *
- * <p>Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI is
+ * Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI is
  * found, in which case the first implementation found will be used.
  *
  * @see DefaultFunctionEncoder

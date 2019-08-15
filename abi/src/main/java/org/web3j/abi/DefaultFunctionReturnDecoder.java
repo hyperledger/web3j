@@ -30,6 +30,10 @@ import org.web3j.utils.Strings;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
+/**
+ * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
+ * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
+ */
 public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
     public List<Type> decodeFunctionResult(
