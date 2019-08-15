@@ -16,7 +16,7 @@ import java.math.BigInteger;
 
 import org.web3j.utils.Numeric;
 
-/** Address type, which is equivalent to uint160. */
+/** Address type, which by default is equivalent to uint160 which follows the Ethereum specification. */
 public class Address implements Type<String> {
 
     public static final String TYPE_NAME = "address";
