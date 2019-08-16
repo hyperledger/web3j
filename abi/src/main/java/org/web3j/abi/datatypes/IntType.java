@@ -21,18 +21,18 @@ public abstract class IntType extends NumericType {
 
     public IntType(String typePrefix, int bitSize, BigInteger value) {
         super(typePrefix + bitSize, value);
-        if (!valid(bitSize, value)) {
-            throw new UnsupportedOperationException(
-                    "Bitsize must be 8 bit aligned, and in range 0 < bitSize <= 256");
-        }
         this.bitSize = bitSize;
+        if (!valid()) {
+            throw new UnsupportedOperationException("Bit size must be 8 bit aligned, " +
+                    "and in range 0 < bitSize <= " + MAX_BIT_LENGTH);
+        }
     }
 
     public int getBitSize() {
         return bitSize;
     }
 
-    boolean valid(int bitSize, BigInteger value) {
+    protected boolean valid() {
         return isValidBitSize(bitSize) && isValidBitCount(bitSize, value);
     }
 
