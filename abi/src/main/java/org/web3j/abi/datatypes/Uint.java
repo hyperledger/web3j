@@ -30,7 +30,7 @@ public class Uint extends IntType {
     }
 
     @Override
-    boolean valid(int bitSize, BigInteger value) {
-        return super.valid(bitSize, value) && value.signum() != -1;
+    protected boolean valid() {
+        return super.valid() && 0 <= value.signum();
     }
 }
