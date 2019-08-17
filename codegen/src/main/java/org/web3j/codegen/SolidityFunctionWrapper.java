@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
@@ -48,14 +47,12 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
@@ -630,8 +627,7 @@ public class SolidityFunctionWrapper extends Generator {
         return toReturn.build();
     }
 
-    String addParameters(
-            MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes)
+    String addParameters(MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes)
             throws ClassNotFoundException {
 
         List<ParameterSpec> inputParameterTypes = buildParameterTypes(namedTypes);

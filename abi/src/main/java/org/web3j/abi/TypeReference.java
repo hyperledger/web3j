@@ -23,7 +23,6 @@ import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.AbiTypes;
 
-
 /**
  * Type wrapper to get around limitations of Java's type erasure. This is so that we can pass around
  * Typed {@link org.web3j.abi.datatypes.Array} types.
@@ -56,13 +55,12 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     }
 
     /**
-     * getSubTypeReference() is used by instantiateType to see what TypeReference
-     * is wrapped by this one. eg calling getSubTypeReference() on a TypeReference
-     * to DynamicArray[StaticArray3[Uint256]] would return a TypeReference to StaticArray3[Uint256]
+     * getSubTypeReference() is used by instantiateType to see what TypeReference is wrapped by this
+     * one. eg calling getSubTypeReference() on a TypeReference to
+     * DynamicArray[StaticArray3[Uint256]] would return a TypeReference to StaticArray3[Uint256]
      *
      * @return the type wrapped by this Array TypeReference, or null if not Array
      */
-
     TypeReference getSubTypeReference() {
         return null;
     }
@@ -80,7 +78,6 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     public boolean isIndexed() {
         return indexed;
     }
-
 
     /**
      * Workaround to ensure type does not come back as T due to erasure, this enables you to create
@@ -104,8 +101,8 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         return create(cls, false);
     }
 
-    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls,
-                   boolean indexed) {
+    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
+            Class<T> cls, boolean indexed) {
         return new TypeReference<T>(indexed) {
             public java.lang.reflect.Type getType() {
                 return cls;
@@ -118,19 +115,21 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      * Array types must be wrapped by a java.lang.reflect.ParamaterizedType
      */
 
-    protected static Class<? extends org.web3j.abi.datatypes.Type>
-            getAtomicTypeClass(String solidityType) throws ClassNotFoundException {
+    protected static Class<? extends org.web3j.abi.datatypes.Type> getAtomicTypeClass(
+            String solidityType) throws ClassNotFoundException {
         Matcher m = ARRAY_SUFFIX.matcher(solidityType);
         if (m.find()) {
-            throw new ClassNotFoundException("getAtomicTypeClass does not work with array types."
-                    + " See makeTypeRefernce()");
+            throw new ClassNotFoundException(
+                    "getAtomicTypeClass does not work with array types."
+                            + " See makeTypeRefernce()");
         }
         switch (solidityType) {
             case "int":
                 return Int.class;
             case "uint":
                 return Uint.class;
-            default: return AbiTypes.getType(solidityType);
+            default:
+                return AbiTypes.getType(solidityType);
         }
     }
 
@@ -149,9 +148,9 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
     }
 
-    public static TypeReference makeTypeReference(String solidityType) throws
-            ClassNotFoundException {
-        return makeTypeReference(solidityType,false);
+    public static TypeReference makeTypeReference(String solidityType)
+            throws ClassNotFoundException {
+        return makeTypeReference(solidityType, false);
     }
 
     public static TypeReference makeTypeReference(String solidityType, final boolean indexed)
@@ -165,90 +164,91 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
         int lastReadStringPosition = nextSquareBrackets.start();
         final Class<? extends org.web3j.abi.datatypes.Type> baseClass =
-                getAtomicTypeClass(solidityType.substring(0,lastReadStringPosition));
-        TypeReference arrayWrappedType = create(baseClass,indexed);
+                getAtomicTypeClass(solidityType.substring(0, lastReadStringPosition));
+        TypeReference arrayWrappedType = create(baseClass, indexed);
         final int len = solidityType.length();
-        //for each [\d*], wrap the previous TypeReference in an array
+        // for each [\d*], wrap the previous TypeReference in an array
         while (lastReadStringPosition < len) {
             String arraySize = nextSquareBrackets.group(1);
             final TypeReference baseTr = arrayWrappedType;
             if (arraySize == null || arraySize.equals("")) {
-                arrayWrappedType = new TypeReference<DynamicArray>(indexed) {
-                    @Override
-                    TypeReference getSubTypeReference() {
-                        return baseTr;
-                    }
-
-                    @Override
-                    public java.lang.reflect.Type getType() {
-                        return new ParameterizedType() {
+                arrayWrappedType =
+                        new TypeReference<DynamicArray>(indexed) {
                             @Override
-                            public java.lang.reflect.Type[] getActualTypeArguments() {
-                                return new java.lang.reflect.Type[]{ baseTr.getType() };
+                            TypeReference getSubTypeReference() {
+                                return baseTr;
                             }
 
                             @Override
-                            public java.lang.reflect.Type getRawType() {
-                                return DynamicArray.class;
-                            }
+                            public java.lang.reflect.Type getType() {
+                                return new ParameterizedType() {
+                                    @Override
+                                    public java.lang.reflect.Type[] getActualTypeArguments() {
+                                        return new java.lang.reflect.Type[] {baseTr.getType()};
+                                    }
 
-                            @Override
-                            public java.lang.reflect.Type getOwnerType() {
-                                return Class.class;
+                                    @Override
+                                    public java.lang.reflect.Type getRawType() {
+                                        return DynamicArray.class;
+                                    }
+
+                                    @Override
+                                    public java.lang.reflect.Type getOwnerType() {
+                                        return Class.class;
+                                    }
+                                };
                             }
                         };
-                    }
-                };
             } else {
                 final Class arrayclass;
                 int arraySizeInt = Integer.parseInt(arraySize);
                 if (arraySizeInt <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY) {
-                    arrayclass = Class.forName("org.web3j.abi.datatypes.generated.StaticArray"
-                            + arraySize);
+                    arrayclass =
+                            Class.forName(
+                                    "org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
                 } else {
                     arrayclass = StaticArray.class;
                 }
-                arrayWrappedType = new TypeReference
-                        .StaticArrayTypeReference<StaticArray>(arraySizeInt) {
+                arrayWrappedType =
+                        new TypeReference.StaticArrayTypeReference<StaticArray>(arraySizeInt) {
 
-                    @Override
-                    TypeReference getSubTypeReference() {
-                        return baseTr;
-                    }
-
-                    @Override
-                    public boolean isIndexed() {
-                        return indexed;
-                    }
-
-                    @Override
-                    public java.lang.reflect.Type getType() {
-                        return new ParameterizedType() {
                             @Override
-                            public java.lang.reflect.Type[] getActualTypeArguments() {
-                                return new java.lang.reflect.Type[]{ baseTr.getType() };
+                            TypeReference getSubTypeReference() {
+                                return baseTr;
                             }
 
                             @Override
-                            public java.lang.reflect.Type getRawType() {
-                                return arrayclass;
+                            public boolean isIndexed() {
+                                return indexed;
                             }
 
                             @Override
-                            public java.lang.reflect.Type getOwnerType() {
-                                return Class.class;
+                            public java.lang.reflect.Type getType() {
+                                return new ParameterizedType() {
+                                    @Override
+                                    public java.lang.reflect.Type[] getActualTypeArguments() {
+                                        return new java.lang.reflect.Type[] {baseTr.getType()};
+                                    }
+
+                                    @Override
+                                    public java.lang.reflect.Type getRawType() {
+                                        return arrayclass;
+                                    }
+
+                                    @Override
+                                    public java.lang.reflect.Type getOwnerType() {
+                                        return Class.class;
+                                    }
+                                };
                             }
                         };
-                    }
-                };
             }
             lastReadStringPosition = nextSquareBrackets.end();
             nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
-            //cant find any more [] and string isn't fully parsed
-            if (!nextSquareBrackets.find(lastReadStringPosition)
-                    && lastReadStringPosition != len) {
-                throw new ClassNotFoundException("Unable to make TypeReference from "
-                        + solidityType);
+            // cant find any more [] and string isn't fully parsed
+            if (!nextSquareBrackets.find(lastReadStringPosition) && lastReadStringPosition != len) {
+                throw new ClassNotFoundException(
+                        "Unable to make TypeReference from " + solidityType);
             }
         }
         return arrayWrappedType;

@@ -44,7 +44,6 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;

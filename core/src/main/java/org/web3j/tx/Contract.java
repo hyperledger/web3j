@@ -688,7 +688,7 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
-        return staticExtractEventParametersWithLog(event,log);
+        return staticExtractEventParametersWithLog(event, log);
     }
 
     protected static EventValuesWithLog staticExtractEventParametersWithLog(Event event, Log log) {
