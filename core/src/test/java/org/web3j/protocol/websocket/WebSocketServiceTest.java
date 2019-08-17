@@ -289,7 +289,6 @@ public class WebSocketServiceTest {
             }
         });
 
-
         sendSubscriptionConfirmation();
         sendWebSocketEvent();
 
