@@ -18,22 +18,22 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.spi.FunctionDecoderProvider;
+import org.web3j.abi.spi.FunctionReturnDecoderProvider;
 
 /** Decodes values returned by function or event calls. 
  *
- * <p>Delegates to {@link DefaultFunctionReturnDecoder} unless a {@link FunctionDecoderProvider} SPI is
+ * <p>Delegates to {@link DefaultFunctionReturnDecoder} unless a {@link FunctionReturnDecoderProvider} SPI is
  * found, in which case the first implementation found will be used.
  *
  * @see DefaultFunctionReturnDecoder
- * @see FunctionDecoderProvider
+ * @see FunctionReturnDecoderProvider
  */
 public abstract class FunctionReturnDecoder {
 
     private static FunctionReturnDecoder DEFAULT_DECODER;
 
-    private static final ServiceLoader<FunctionDecoderProvider> loader =
-            ServiceLoader.load(FunctionDecoderProvider.class);
+    private static final ServiceLoader<FunctionReturnDecoderProvider> loader =
+            ServiceLoader.load(FunctionReturnDecoderProvider.class);
 
     /**
      * Decode ABI encoded return values from smart contract function call.
@@ -81,7 +81,7 @@ public abstract class FunctionReturnDecoder {
             String rawInput, TypeReference<T> typeReference);
 
     private static FunctionReturnDecoder decoder() {
-        final Iterator<FunctionDecoderProvider> iterator = loader.iterator();
+        final Iterator<FunctionReturnDecoderProvider> iterator = loader.iterator();
         return iterator.hasNext() ? iterator.next().get() : defaultDecoder();
     }
 
