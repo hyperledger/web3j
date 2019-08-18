@@ -28,7 +28,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import javax.xml.bind.ValidationException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -63,8 +62,7 @@ public class StructuredDataEncoder {
     final String identifierRegex = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
     final Pattern identifierPattern = Pattern.compile(identifierRegex);
 
-    public StructuredDataEncoder(String jsonMessageInString)
-            throws IOException, ValidationException {
+    public StructuredDataEncoder(String jsonMessageInString) throws IOException, RuntimeException {
         // Parse String Message into object and validate
         this.jsonMessageObject = parseJSONMessage(jsonMessageInString);
     }
@@ -175,7 +173,7 @@ public class StructuredDataEncoder {
         return list;
     }
 
-    public List<Integer> getArrayDimensionsFromData(Object data) throws ValidationException {
+    public List<Integer> getArrayDimensionsFromData(Object data) throws RuntimeException {
         List<Pair> depthsAndDimensions = getDepthsAndDimensions(data, 0);
         // groupedByDepth has key as depth and value as List(pair(Depth, Dimension))
         Map<Object, List<Pair>> groupedByDepth =
@@ -198,7 +196,7 @@ public class StructuredDataEncoder {
         for (Map.Entry<Integer, List<Integer>> entry : depthDimensionsMap.entrySet()) {
             Set<Integer> setOfDimensionsInParticularDepth = new TreeSet<>(entry.getValue());
             if (setOfDimensionsInParticularDepth.size() != 1) {
-                throw new ValidationException(
+                throw new RuntimeException(
                         String.format(
                                 "Depth %d of array data has more than one dimensions",
                                 entry.getKey()));
@@ -229,7 +227,7 @@ public class StructuredDataEncoder {
     }
 
     public byte[] encodeData(String primaryType, HashMap<String, Object> data)
-            throws ValidationException {
+            throws RuntimeException {
         HashMap<String, List<StructuredData.Entry>> types = jsonMessageObject.getTypes();
 
         List<String> encTypes = new ArrayList<>();
@@ -267,7 +265,7 @@ public class StructuredDataEncoder {
 
                 if (expectedDimensions.size() != dataDimensions.size()) {
                     // Ex: Expected a 3d array, but got only a 2d array
-                    throw new ValidationException(
+                    throw new RuntimeException(
                             String.format(
                                     "Array Data %s has dimensions %s, "
                                             + "but expected dimensions are %s",
@@ -281,7 +279,7 @@ public class StructuredDataEncoder {
                         continue;
                     }
                     if (expectedDimensions.get(i) != dataDimensions.get(i)) {
-                        throw new ValidationException(
+                        throw new RuntimeException(
                                 String.format(
                                         "Array Data %s has dimensions %s, "
                                                 + "but expected dimensions are %s",
@@ -339,7 +337,7 @@ public class StructuredDataEncoder {
             }
 
             if (!atleastOneConstructorExistsForGivenParametersType) {
-                throw new ValidationException(
+                throw new RuntimeException(
                         String.format(
                                 "Received an invalid argument for which no constructor"
                                         + " exists for the ABI Class %s",
@@ -352,11 +350,11 @@ public class StructuredDataEncoder {
     }
 
     public byte[] hashMessage(String primaryType, HashMap<String, Object> data)
-            throws ValidationException {
+            throws RuntimeException {
         return sha3(encodeData(primaryType, data));
     }
 
-    public byte[] hashDomain() throws ValidationException {
+    public byte[] hashDomain() throws RuntimeException {
         ObjectMapper oMapper = new ObjectMapper();
         HashMap<String, Object> data =
                 oMapper.convertValue(jsonMessageObject.getDomain(), HashMap.class);
@@ -369,7 +367,7 @@ public class StructuredDataEncoder {
     }
 
     public void validateStructuredData(StructuredData.EIP712Message jsonMessageObject)
-            throws ValidationException {
+            throws RuntimeException {
         Iterator typesIterator = jsonMessageObject.getTypes().keySet().iterator();
         while (typesIterator.hasNext()) {
             String structName = (String) typesIterator.next();
@@ -379,13 +377,13 @@ public class StructuredDataEncoder {
                 StructuredData.Entry entry = fieldsIterator.next();
                 if (!identifierPattern.matcher(entry.getName()).find()) {
                     // raise Error
-                    throw new ValidationException(
+                    throw new RuntimeException(
                             String.format(
                                     "Invalid Identifier %s in %s", entry.getName(), structName));
                 }
                 if (!typePattern.matcher(entry.getType()).find()) {
                     // raise Error
-                    throw new ValidationException(
+                    throw new RuntimeException(
                             String.format("Invalid Type %s in %s", entry.getType(), structName));
                 }
             }
@@ -393,7 +391,7 @@ public class StructuredDataEncoder {
     }
 
     public StructuredData.EIP712Message parseJSONMessage(String jsonMessageInString)
-            throws IOException, ValidationException {
+            throws IOException, RuntimeException {
         ObjectMapper mapper = new ObjectMapper();
 
         // convert JSON string to EIP712Message object
@@ -404,7 +402,7 @@ public class StructuredDataEncoder {
         return tempJSONMessageObject;
     }
 
-    public byte[] hashStructuredData() throws ValidationException {
+    public byte[] hashStructuredData() throws RuntimeException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
