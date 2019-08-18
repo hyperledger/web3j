@@ -58,6 +58,7 @@ import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.BaseEventResponse;
@@ -860,7 +861,7 @@ public class SolidityFunctionWrapper extends Generator {
             } else {
                 nativeReturnTypeName = getWrapperType(typeName);
             }
-            methodBuilder.returns(buildRemoteCall(nativeReturnTypeName));
+            methodBuilder.returns(buildRemoteFunctionCall(nativeReturnTypeName));
 
             methodBuilder.addStatement(
                     "final $T function = "
@@ -917,8 +918,8 @@ public class SolidityFunctionWrapper extends Generator {
                                     .build();
 
                     methodBuilder.addStatement(
-                            "return new $T(\n$L)",
-                            buildRemoteCall(nativeReturnTypeName),
+                            "return new $T(function,\n$L)",
+                            buildRemoteFunctionCall(nativeReturnTypeName),
                             callableType);
                 } else {
                     methodBuilder.addStatement(
@@ -937,7 +938,7 @@ public class SolidityFunctionWrapper extends Generator {
                                     "org.web3j.tuples.generated", "Tuple" + returnTypes.size()),
                             returnTypes.toArray(new TypeName[returnTypes.size()]));
 
-            methodBuilder.returns(buildRemoteCall(parameterizedTupleType));
+            methodBuilder.returns(buildRemoteFunctionCall(parameterizedTupleType));
 
             buildVariableLengthReturnFunctionConstructor(
                     methodBuilder, functionName, inputParams, outputParameterTypes);
@@ -948,6 +949,11 @@ public class SolidityFunctionWrapper extends Generator {
 
     private static ParameterizedTypeName buildRemoteCall(TypeName typeName) {
         return ParameterizedTypeName.get(ClassName.get(RemoteCall.class), typeName);
+    }
+
+    private static ParameterizedTypeName buildRemoteFunctionCall(TypeName typeName) {
+        return ParameterizedTypeName.get(
+                ClassName.get(RemoteFunctionCall.class), typeName);
     }
 
     private void buildTransactionFunction(
@@ -969,7 +975,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         String functionName = functionDefinition.getName();
 
-        methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
+        methodBuilder.returns(buildRemoteFunctionCall(TypeName.get(TransactionReceipt.class)));
 
         methodBuilder.addStatement(
                 "final $T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
@@ -1352,7 +1358,8 @@ public class SolidityFunctionWrapper extends Generator {
                                         .build())
                         .build();
 
-        methodBuilder.addStatement("return new $T(\n$L)", buildRemoteCall(tupleType), callableType);
+        methodBuilder.addStatement(
+                "return new $T(function,\n$L)", buildRemoteFunctionCall(tupleType), callableType);
     }
 
     private static CodeBlock buildVariableLengthEventInitializer(
