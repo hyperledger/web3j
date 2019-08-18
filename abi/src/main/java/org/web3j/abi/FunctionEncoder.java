@@ -12,7 +12,10 @@
  */
 package org.web3j.abi;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,9 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
+
+import static org.web3j.abi.TypeDecoder.instantiateType;
+import static org.web3j.abi.TypeReference.makeTypeReference;
 
 /**
  * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
@@ -45,6 +51,25 @@ public class FunctionEncoder {
 
     public static String encodeConstructor(List<Type> parameters) {
         return encodeParameters(parameters, new StringBuilder());
+    }
+
+    public static Function makeFunction(
+            String fnname,
+            List<String> solidityInputTypes,
+            List<Object> arguments,
+            List<String> solidityOutputTypes)
+            throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
+                    IllegalAccessException, InvocationTargetException {
+        List<Type> encodedInput = new ArrayList<>();
+        Iterator argit = arguments.iterator();
+        for (String st : solidityInputTypes) {
+            encodedInput.add(instantiateType(st, argit.next()));
+        }
+        List<TypeReference<?>> encodedOutput = new ArrayList<>();
+        for (String st : solidityOutputTypes) {
+            encodedOutput.add(makeTypeReference(st));
+        }
+        return new Function(fnname, encodedInput, encodedOutput);
     }
 
     private static String encodeParameters(List<Type> parameters, StringBuilder result) {

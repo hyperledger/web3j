@@ -44,7 +44,6 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
@@ -72,7 +71,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     }
 
     @Test
-    public void testBuildTypeName() {
+    public void testBuildTypeName() throws Exception {
         assertThat(buildTypeName("uint256"), is(ClassName.get(Uint256.class)));
         assertThat(buildTypeName("uint64"), is(ClassName.get(Uint64.class)));
         assertThat(buildTypeName("string"), is(ClassName.get(Utf8String.class)));

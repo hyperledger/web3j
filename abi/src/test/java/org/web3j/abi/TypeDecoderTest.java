@@ -21,7 +21,9 @@ import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Int;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes1;
 import org.web3j.abi.datatypes.generated.Bytes4;
@@ -29,6 +31,7 @@ import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int256;
 import org.web3j.abi.datatypes.generated.Int64;
 import org.web3j.abi.datatypes.generated.StaticArray2;
+import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 
@@ -39,7 +42,7 @@ import static org.junit.Assert.assertThat;
 public class TypeDecoderTest {
 
     @Test
-    public void testBoolDecode() {
+    public void testBoolDecode() throws Exception {
         assertThat(
                 TypeDecoder.decodeBool(
                         "0000000000000000000000000000000000000000000000000000000000000000", 0),
@@ -49,6 +52,14 @@ public class TypeDecoderTest {
                 TypeDecoder.decodeBool(
                         "0000000000000000000000000000000000000000000000000000000000000001", 0),
                 is(new Bool(true)));
+
+        assertThat(TypeDecoder.instantiateType("bool", true), is(new Bool(true)));
+
+        assertThat(TypeDecoder.instantiateType("bool", 1), is(new Bool(true)));
+
+        assertThat(TypeDecoder.instantiateType("bool", false), is(new Bool(false)));
+
+        assertThat(TypeDecoder.instantiateType("bool", 0), is(new Bool(false)));
     }
 
     @Test
@@ -74,8 +85,7 @@ public class TypeDecoderTest {
     }
 
     @Test
-    public void testUintDecode() {
-
+    public void testUintDecode() throws Exception {
         assertThat(
                 TypeDecoder.decodeNumeric(
                         "0000000000000000000000000000000000000000000000000000000000000000",
@@ -93,10 +103,11 @@ public class TypeDecoderTest {
                         "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                         Uint64.class),
                 is(new Uint64(new BigInteger("0ffffffffffffffff", 16))));
+        assertThat(TypeDecoder.instantiateType("uint", 123), is(new Uint(BigInteger.valueOf(123))));
     }
 
     @Test
-    public void testIntDecode() {
+    public void testIntDecode() throws Exception {
         assertThat(
                 TypeDecoder.decodeNumeric(
                         "0000000000000000000000000000000000000000000000000000000000000000",
@@ -126,6 +137,10 @@ public class TypeDecoderTest {
                         "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                         Int256.class),
                 is(new Int256(BigInteger.valueOf(-1))));
+
+        assertThat(TypeDecoder.instantiateType("int", 123), is(new Int(BigInteger.valueOf(123))));
+
+        assertThat(TypeDecoder.instantiateType("int", -123), is(new Int(BigInteger.valueOf(-123))));
     }
 
     /*
@@ -179,8 +194,9 @@ public class TypeDecoderTest {
     */
 
     @Test
-    public void testStaticBytes() {
-        Bytes6 staticBytes = new Bytes6(new byte[] {0, 1, 2, 3, 4, 5});
+    public void testStaticBytes() throws Exception {
+        byte[] testbytes = new byte[] {0, 1, 2, 3, 4, 5};
+        Bytes6 staticBytes = new Bytes6(testbytes);
         assertThat(
                 TypeDecoder.decodeBytes(
                         "0001020304050000000000000000000000000000000000000000000000000000",
@@ -200,11 +216,14 @@ public class TypeDecoderTest {
                         "6461766500000000000000000000000000000000000000000000000000000000",
                         Bytes4.class),
                 is(dave));
+
+        assertThat(TypeDecoder.instantiateType("bytes6", testbytes), is(new Bytes6(testbytes)));
     }
 
     @Test
-    public void testDynamicBytes() {
-        DynamicBytes dynamicBytes = new DynamicBytes(new byte[] {0, 1, 2, 3, 4, 5});
+    public void testDynamicBytes() throws Exception {
+        byte[] testbytes = new byte[] {0, 1, 2, 3, 4, 5};
+        DynamicBytes dynamicBytes = new DynamicBytes(testbytes);
         assertThat(
                 TypeDecoder.decodeDynamicBytes(
                         "0000000000000000000000000000000000000000000000000000000000000006" // length
@@ -221,7 +240,6 @@ public class TypeDecoderTest {
                 is(empty));
 
         DynamicBytes dave = new DynamicBytes("dave".getBytes());
-
         assertThat(
                 TypeDecoder.decodeDynamicBytes(
                         "0000000000000000000000000000000000000000000000000000000000000004"
@@ -259,28 +277,49 @@ public class TypeDecoderTest {
                                 + "74206d6f6c6c697420616e696d20696420657374206c61626f72756d2e000000",
                         0),
                 is(loremIpsum));
+
+        assertThat(
+                TypeDecoder.instantiateType("bytes", testbytes), is(new DynamicBytes(testbytes)));
     }
 
     @Test
-    public void testAddress() {
+    public void testAddress() throws Exception {
         assertThat(
                 TypeDecoder.decodeAddress(
                         "000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"),
                 is(new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338")));
+
+        assertThat(
+                TypeDecoder.decodeAddress(
+                        "000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"),
+                is(new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338")));
+
+        assertThat(
+                TypeDecoder.instantiateType(
+                        "address", "0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338"),
+                is(new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338")));
+
+        assertThat(
+                TypeDecoder.instantiateType("address", BigInteger.ONE),
+                is(new Address("0x0000000000000000000000000000000000000001")));
     }
 
     @Test
-    public void testUtf8String() {
+    public void testUtf8String() throws Exception {
         assertThat(
                 TypeDecoder.decodeUtf8String(
                         "000000000000000000000000000000000000000000000000000000000000000d" // length
                                 + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000",
                         0),
                 is(new Utf8String("Hello, world!")));
+
+        assertThat(
+                TypeDecoder.instantiateType("string", "Hello, world!"),
+                is(new Utf8String("Hello, world!")));
     }
 
     @Test
-    public void testStaticArray() {
+    public void testStaticArray() throws Exception {
         assertThat(
                 TypeDecoder.decodeStaticArray(
                         "000000000000000000000000000000000000000000000000000000000000000a"
@@ -308,6 +347,15 @@ public class TypeDecoderTest {
                                 Utf8String.class,
                                 new Utf8String("Hello, world!"),
                                 new Utf8String("world! Hello,"))));
+
+        StaticArray2 arr =
+                (StaticArray2)
+                        TypeDecoder.instantiateType("uint256[2]", new long[] {10, Long.MAX_VALUE});
+        assert (arr instanceof StaticArray2);
+
+        assertThat(arr.getValue().get(0), is(new Uint256(BigInteger.TEN)));
+
+        assertThat(arr.getValue().get(1), is(new Uint256(BigInteger.valueOf(Long.MAX_VALUE))));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -321,8 +369,13 @@ public class TypeDecoderTest {
                 is("invalid"));
     }
 
+    @Test(expected = ClassNotFoundException.class)
+    public void testEmptyStaticArrayInstantiateType() throws Exception {
+        TypeDecoder.instantiateType("uint256[0]", new long[] {});
+    }
+
     @Test
-    public void testDynamicArray() {
+    public void testDynamicArray() throws Exception {
         assertThat(
                 TypeDecoder.decodeDynamicArray(
                         "0000000000000000000000000000000000000000000000000000000000000000", // length
@@ -357,5 +410,40 @@ public class TypeDecoderTest {
                                 Utf8String.class,
                                 new Utf8String("Hello, world!"),
                                 new Utf8String("world! Hello,"))));
+
+        DynamicArray arr =
+                (DynamicArray)
+                        TypeDecoder.instantiateType(
+                                "string[]", new String[] {"Hello, world!", "world! Hello,"});
+        assert (arr instanceof DynamicArray);
+
+        assertThat(arr.getValue().get(0), is(new Utf8String("Hello, world!")));
+
+        assertThat(arr.getValue().get(1), is(new Utf8String("world! Hello,")));
+    }
+
+    @Test
+    public void multiDimArrays() throws Exception {
+        byte[] bytes1d = new byte[] {1, 2, 3};
+        byte[][] bytes2d = new byte[][] {bytes1d, bytes1d, bytes1d};
+        final byte[][][] bytes3d = new byte[][][] {bytes2d, bytes2d, bytes2d};
+
+        assertThat(TypeDecoder.instantiateType("bytes", bytes1d), is(new DynamicBytes(bytes1d)));
+
+        StaticArray3<DynamicArray<Uint256>> twoDim =
+                (StaticArray3<DynamicArray<Uint256>>)
+                        TypeDecoder.instantiateType("uint256[][3]", bytes2d);
+        assert (twoDim instanceof StaticArray3);
+        DynamicArray<Uint256> row1 = twoDim.getValue().get(1);
+        assert (row1 instanceof DynamicArray);
+        assertThat(row1.getValue().get(2), is(new Uint256(3)));
+
+        StaticArray3<StaticArray3<DynamicArray<Uint256>>> threeDim =
+                (StaticArray3<StaticArray3<DynamicArray<Uint256>>>)
+                        TypeDecoder.instantiateType("uint256[][3][3]", bytes3d);
+        assert (threeDim instanceof StaticArray3);
+        row1 = threeDim.getValue().get(1).getValue().get(1);
+        assert (row1 instanceof DynamicArray);
+        assertThat(row1.getValue().get(1), is(new Uint256(2)));
     }
 }
