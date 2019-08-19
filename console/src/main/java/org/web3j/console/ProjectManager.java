@@ -35,7 +35,7 @@ public class ProjectManager {
     }
 
     String[] createFolderStructure(String path, String projectName) throws Exception {
-        // Create src/main/test
+
         String testStructure =
                 path
                         + File.separator
@@ -49,7 +49,7 @@ public class ProjectManager {
 
         File testDirectory = new File(testStructure);
         testDirectory.mkdirs();
-        // Create src/main/java
+
         String mainStructure =
                 path
                         + File.separator
@@ -75,6 +75,17 @@ public class ProjectManager {
         File solidityDirectory = new File(solidityStructure);
         solidityDirectory.mkdirs();
 
-        return new String[]{mainDirectory.getPath(),testDirectory.getPath(),solidityDirectory.getPath()};
+        String gradleWrapperStructure = path
+                + File.separator
+                + projectName
+                + File.separator
+                + "gradle"
+                + File.separator
+                + "wrapper";
+        File gradleWrapperDirectory = new File(gradleWrapperStructure);
+        gradleWrapperDirectory.mkdirs();
+
+        return new String[]{mainDirectory.getPath(), testDirectory.getPath(), solidityDirectory.getPath(), gradleWrapperDirectory.getPath()};
     }
+
 }
