@@ -2,7 +2,11 @@ package org.web3j.codegen;
 
 import java.lang.reflect.Method;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.squareup.javapoet.ClassName;
