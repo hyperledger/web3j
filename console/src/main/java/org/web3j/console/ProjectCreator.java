@@ -21,23 +21,37 @@ public class ProjectCreator extends ProjectManager {
     final String rawJavaClass =
             "package <package_name>;\n" + "\n" + "public class <class_name>{\n" + "\n" + "}";
     final String rawGradleBuildFile =
-            "plugins {\n"
-                    + "    id 'java'\n"
-                    + "}\n"
-                    + "\n"
-                    + "group '<package_name>'\n"
-                    + "version '1.0-SNAPSHOT'\n"
-                    + "\n"
-                    + "sourceCompatibility = 1.8\n"
-                    + "\n"
-                    + "repositories {\n"
-                    + "    mavenCentral()\n"
-                    + "}\n"
-                    + "\n"
-                    + "dependencies {\n"
-                    + "    compile 'org.web3j:core:4.4.0'\n"
-                    + "    testCompile group: 'junit', name: 'junit', version: '4.12'\n"
-                    + "}\n";
+           "plugins {\n" +
+                   "    id 'java'\n" +
+                   "    id 'org.web3j' version '4.4.0'\n" +
+                   "}\n" +
+                   "\n" +
+                   "group 'org.web3j'\n" +
+                   "version '0.2.0'\n" +
+                   "\n" +
+                   "sourceCompatibility = 1.8\n" +
+                   "\n" +
+                   "repositories {\n" +
+                   "    mavenCentral()\n" +
+                   "}\n" +
+                   "\n" +
+                   "web3j {\n" +
+                   "    generatedPackageName = 'org.web3j.sample.contracts.generated'\n" +
+                   "    excludedContracts = ['Mortal']\n" +
+                   "}\n" +
+                   "\n" +
+                   "ext {\n" +
+                   "    web3jVersion = '4.4.0'\n" +
+                   "    logbackVersion = '1.2.3'\n" +
+                   "    junitVersion = '4.12'\n" +
+                   "}\n" +
+                   "\n" +
+                   "dependencies {\n" +
+                   "    implementation \"org.web3j:core:$web3jVersion\",\n" +
+                   "            \"ch.qos.logback:logback-core:$logbackVersion\",\n" +
+                   "            \"ch.qos.logback:logback-classic:$logbackVersion\"\n" +
+                   "    testImplementation \"junit:junit:$junitVersion\"\n" +
+                   "}\n";
     final String rawGradleSettingsFile = "rootProject.name = '<project_name>'\n";
     final String solidityContract = "pragma solidity ^0.4.25;\n" +
             "\n" +
