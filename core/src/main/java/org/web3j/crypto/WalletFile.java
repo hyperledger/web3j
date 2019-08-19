@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
 import java.io.IOException;
@@ -12,17 +24,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-/**
- * Ethereum wallet file.
- */
+/** Ethereum wallet file. */
 public class WalletFile {
     private String address;
     private Crypto crypto;
     private String id;
     private int version;
 
-    public WalletFile() {
-    }
+    public WalletFile() {}
 
     public String getAddress() {
         return address;
@@ -41,7 +50,7 @@ public class WalletFile {
         this.crypto = crypto;
     }
 
-    @JsonSetter("Crypto")  // older wallet files may have this attribute name
+    @JsonSetter("Crypto") // older wallet files may have this attribute name
     public void setCryptoV1(Crypto crypto) {
         setCrypto(crypto);
     }
@@ -70,26 +79,24 @@ public class WalletFile {
         if (!(o instanceof WalletFile)) {
             return false;
         }
-        
+
         WalletFile that = (WalletFile) o;
-        
-        if (getAddress() != null 
+
+        if (getAddress() != null
                 ? !getAddress().equals(that.getAddress())
                 : that.getAddress() != null) {
             return false;
         }
-        if (getCrypto() != null 
+        if (getCrypto() != null
                 ? !getCrypto().equals(that.getCrypto())
                 : that.getCrypto() != null) {
             return false;
-        } 
-        if (getId() != null 
-                ? !getId().equals(that.getId())
-                : that.getId() != null) {
+        }
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) {
             return false;
         }
         return version == that.version;
-    } 
+    }
 
     @Override
     public int hashCode() {
@@ -98,7 +105,7 @@ public class WalletFile {
         result = 31 * result + (getId() != null ? getId().hashCode() : 0);
         result = 31 * result + version;
         return result;
-    }  
+    }
 
     public static class Crypto {
         private String cipher;
@@ -110,8 +117,7 @@ public class WalletFile {
 
         private String mac;
 
-        public Crypto() {
-        }
+        public Crypto() {}
 
         public String getCipher() {
             return cipher;
@@ -154,8 +160,8 @@ public class WalletFile {
                 include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
                 property = "kdf")
         @JsonSubTypes({
-                @JsonSubTypes.Type(value = Aes128CtrKdfParams.class, name = Wallet.AES_128_CTR),
-                @JsonSubTypes.Type(value = ScryptKdfParams.class, name = Wallet.SCRYPT)
+            @JsonSubTypes.Type(value = Aes128CtrKdfParams.class, name = Wallet.AES_128_CTR),
+            @JsonSubTypes.Type(value = ScryptKdfParams.class, name = Wallet.SCRYPT)
         })
         // To support my Ether Wallet keys uncomment this annotation & comment out the above
         //  @JsonDeserialize(using = KdfParamsDeserialiser.class)
@@ -181,9 +187,9 @@ public class WalletFile {
             if (!(o instanceof Crypto)) {
                 return false;
             }
-            
+
             Crypto that = (Crypto) o;
-            
+
             if (getCipher() != null
                     ? !getCipher().equals(that.getCipher())
                     : that.getCipher() != null) {
@@ -199,9 +205,7 @@ public class WalletFile {
                     : that.getCipherparams() != null) {
                 return false;
             }
-            if (getKdf() != null
-                    ? !getKdf().equals(that.getKdf())
-                    : that.getKdf() != null) {
+            if (getKdf() != null ? !getKdf().equals(that.getKdf()) : that.getKdf() != null) {
                 return false;
             }
             if (getKdfparams() != null
@@ -209,9 +213,8 @@ public class WalletFile {
                     : that.getKdfparams() != null) {
                 return false;
             }
-            return getMac() != null
-                    ? getMac().equals(that.getMac()) : that.getMac() == null;
-        }  
+            return getMac() != null ? getMac().equals(that.getMac()) : that.getMac() == null;
+        }
 
         @Override
         public int hashCode() {
@@ -223,14 +226,12 @@ public class WalletFile {
             result = 31 * result + (getMac() != null ? getMac().hashCode() : 0);
             return result;
         }
-        
     }
 
     public static class CipherParams {
         private String iv;
 
-        public CipherParams() {
-        }
+        public CipherParams() {}
 
         public String getIv() {
             return iv;
@@ -248,19 +249,17 @@ public class WalletFile {
             if (!(o instanceof CipherParams)) {
                 return false;
             }
-            
+
             CipherParams that = (CipherParams) o;
-            
-            return getIv() != null
-                    ? getIv().equals(that.getIv()) : that.getIv() == null;
-        }  
+
+            return getIv() != null ? getIv().equals(that.getIv()) : that.getIv() == null;
+        }
 
         @Override
         public int hashCode() {
             int result = getIv() != null ? getIv().hashCode() : 0;
             return result;
-        }      
-        
+        }
     }
 
     interface KdfParams {
@@ -275,8 +274,7 @@ public class WalletFile {
         private String prf;
         private String salt;
 
-        public Aes128CtrKdfParams() {
-        }
+        public Aes128CtrKdfParams() {}
 
         public int getDklen() {
             return dklen;
@@ -318,22 +316,19 @@ public class WalletFile {
             if (!(o instanceof Aes128CtrKdfParams)) {
                 return false;
             }
-            
+
             Aes128CtrKdfParams that = (Aes128CtrKdfParams) o;
-            
+
             if (dklen != that.dklen) {
                 return false;
             }
             if (c != that.c) {
                 return false;
             }
-            if (getPrf() != null
-                    ? !getPrf().equals(that.getPrf())
-                    : that.getPrf() != null) {
+            if (getPrf() != null ? !getPrf().equals(that.getPrf()) : that.getPrf() != null) {
                 return false;
             }
-            return getSalt() != null
-                ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
+            return getSalt() != null ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
         }
 
         @Override
@@ -343,7 +338,7 @@ public class WalletFile {
             result = 31 * result + (getPrf() != null ? getPrf().hashCode() : 0);
             result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
             return result;
-        }        
+        }
     }
 
     public static class ScryptKdfParams implements KdfParams {
@@ -353,8 +348,7 @@ public class WalletFile {
         private int r;
         private String salt;
 
-        public ScryptKdfParams() {
-        }
+        public ScryptKdfParams() {}
 
         public int getDklen() {
             return dklen;
@@ -404,9 +398,9 @@ public class WalletFile {
             if (!(o instanceof ScryptKdfParams)) {
                 return false;
             }
-            
+
             ScryptKdfParams that = (ScryptKdfParams) o;
-            
+
             if (dklen != that.dklen) {
                 return false;
             }
@@ -419,9 +413,8 @@ public class WalletFile {
             if (r != that.r) {
                 return false;
             }
-            return getSalt() != null
-                ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
-        }  
+            return getSalt() != null ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
+        }
 
         @Override
         public int hashCode() {
@@ -431,7 +424,7 @@ public class WalletFile {
             result = 31 * result + r;
             result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
             return result;
-        }     
+        }
     }
 
     // If we need to work with MyEtherWallet we'll need to use this deserializer, see the

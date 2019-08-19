@@ -16,9 +16,7 @@ buildscript {
     ext.logbackVersion = '1.2.3'
     ext.mockitoVersion = '1.10.19'
 
-    repositories {
-        mavenCentral()
-    }
+    repositories { mavenCentral() }
 
     dependencies {
         classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
@@ -28,6 +26,7 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.8.4"
+    id 'com.diffplug.gradle.spotless' version '3.23.1'
 
     // Required for JFrog Artifactory repository
     id 'jacoco'
@@ -56,11 +55,34 @@ allprojects {
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'checkstyle'
 
-    repositories {
-        mavenCentral()
+    apply plugin: 'com.diffplug.gradle.spotless'
+    spotless {
+        java {
+            // This path needs to be relative to each project
+            target fileTree('.') {
+                include '**/src/*/java/**/*.java'
+                exclude '**/.gradle/**'
+                exclude '**/generated/**'
+            }
+            removeUnusedImports()
+            googleJavaFormat("1.7").aosp()
+            importOrder 'java', '', 'org.web3j', '\\#'
+            trimTrailingWhitespace()
+            endWithNewline()
+            licenseHeaderFile "${rootDir}/gradle/spotless.java.license"
+            paddedCell()
+        }
+        groovyGradle {
+            target '*.gradle'
+            greclipse().configFile(rootProject.file('gradle/formatter.properties'))
+            endWithNewline()
+            indentWithSpaces(4)
+            paddedCell()
+        }
     }
+
+    repositories { mavenCentral() }
 
     // We don't want any compiler warnings
     compileJava {
@@ -70,27 +92,17 @@ allprojects {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 
-    javadoc {
-        options.encoding = 'UTF-8'
-    }
+    javadoc { options.encoding = 'UTF-8' }
 
-    jacoco {
-        toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
+    jacoco { toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
     }
 
     jacocoTestReport {
-        reports {
-            xml.enabled true
-        }
+        reports { xml.enabled true }
     }
 
     tasks.withType(Test) {
         reports.html.destination = file("${reporting.baseDir}/${name}")
-    }
-
-    checkstyle {
-        toolVersion = "7.7"
-        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
     }
 }
 
@@ -127,9 +139,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         from sourceSets.test.output
     }
 
-    artifacts {
-        archives sourcesJar, javadocJar, testJar
-    }
+    artifacts { archives sourcesJar, javadocJar, testJar }
 
     ext {
         ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
@@ -147,17 +157,11 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
             mavenJava(MavenPublication) {
                 from components.java
 
-                artifact sourcesJar {
-                    classifier 'sources'
-                }
+                artifact sourcesJar { classifier 'sources' }
 
-                artifact testJar {
-                    classifier 'tests'
-                }
+                artifact testJar { classifier 'tests' }
 
-                artifact javadocJar {
-                    classifier 'javadoc'
-                }
+                artifact javadocJar { classifier 'javadoc' }
 
                 pom {
                     name = project.name
@@ -201,7 +205,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     authentication(
                             userName: ossrhUsername,
                             password: ossrhPassword
-                    )
+                            )
                 }
 
                 pom.project {
@@ -318,28 +322,22 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
         classDirectories = files(subprojects.sourceSets.main.output)
         executionData = files(subprojects.jacocoTestReport.executionData)
-        reports {
-            xml.enabled = true
-        }
+        reports { xml.enabled = true }
 
-        onlyIf = {
-            true
-        }
+        onlyIf = { true }
 
         doFirst {
-            executionData = files(executionData.findAll {
-                it.exists()
-            })
+            executionData = files(executionData.findAll { it.exists() })
         }
 
         afterEvaluate {
             classDirectories = files(classDirectories.files.collect {
                 fileTree(dir: it,
-                        exclude: [
-                                'org/web3j/abi/datatypes/generated/**',
-                                'org/web3j/tuples/generated/**',
-                                'org/web3j/ens/contracts/generated/**'
-                        ])
+                exclude: [
+                    'org/web3j/abi/datatypes/generated/**',
+                    'org/web3j/tuples/generated/**',
+                    'org/web3j/ens/contracts/generated/**'
+                ])
             })
         }
     }

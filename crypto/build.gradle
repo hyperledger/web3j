@@ -2,15 +2,13 @@
 description 'web3j Ethereum crypto library'
 
 dependencies {
-    compile project(':rlp'),
+    compile project(':abi'),
+            project(':rlp'),
             project(':utils'),
-            "org.slf4j:slf4j-api:$slf4jVersion"
+            "org.slf4j:slf4j-api:$slf4jVersion",
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 }
 
-configurations {
-    testArtifacts.extendsFrom testRuntime
-}
+configurations { testArtifacts.extendsFrom testRuntime }
 
-artifacts {
-    testArtifacts testJar
-}
+artifacts { testArtifacts testJar }

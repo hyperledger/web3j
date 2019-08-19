@@ -1,12 +1,22 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.codegen;
 
 import java.io.File;
 
 import static org.web3j.codegen.Console.exitError;
 
-/**
- * Abstract base class for the concrete function wrapper generators.
- */
+/** Abstract base class for the concrete function wrapper generators. */
 abstract class FunctionWrapperGenerator {
 
     static final String JAVA_TYPES_ARG = "--javaTypes";
@@ -17,9 +27,7 @@ abstract class FunctionWrapperGenerator {
     final boolean useJavaNativeTypes;
 
     FunctionWrapperGenerator(
-            File destinationDirLocation,
-            String basePackageName,
-            boolean useJavaNativeTypes) {
+            File destinationDirLocation, String basePackageName, boolean useJavaNativeTypes) {
 
         this.destinationDirLocation = destinationDirLocation;
         this.basePackageName = basePackageName;
@@ -49,8 +57,7 @@ abstract class FunctionWrapperGenerator {
     static String parseParameterArgument(String[] args, String... parameters) {
         for (String parameter : parameters) {
             for (int i = 0; i < args.length; i++) {
-                if (args[i].equals(parameter)
-                        && i + 1 < args.length) {
+                if (args[i].equals(parameter) && i + 1 < args.length) {
                     String parameterValue = args[i + 1];
                     if (!parameterValue.startsWith("-")) {
                         return parameterValue;
@@ -65,5 +72,4 @@ abstract class FunctionWrapperGenerator {
         String[] splitName = fileName.split("\\.(?=[^.]*$)");
         return splitName[0];
     }
-
 }

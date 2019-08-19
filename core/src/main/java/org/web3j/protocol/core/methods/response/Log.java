@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
@@ -6,11 +18,12 @@ import java.util.List;
 import org.web3j.utils.Numeric;
 
 /**
- * <p>Log object used by {@link EthLog} and {@link EthGetTransactionReceipt}.</p>
- * <p>It's not clear in the
- * <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
- * If only a list of hashes are returned for filters created with eth_newBlockFilter or
- * eth_newPendingTransactionFilter.</p>
+ * Log object used by {@link EthLog} and {@link EthGetTransactionReceipt}.
+ *
+ * <p>It's not clear in the <a
+ * href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a> If only a list of
+ * hashes are returned for filters created with eth_newBlockFilter or
+ * eth_newPendingTransactionFilter.
  */
 public class Log {
     private boolean removed;
@@ -24,12 +37,19 @@ public class Log {
     private String type;
     private List<String> topics;
 
-    public Log() {
-    }
+    public Log() {}
 
-    public Log(boolean removed, String logIndex, String transactionIndex, String transactionHash,
-               String blockHash, String blockNumber, String address, String data, String type,
-               List<String> topics) {
+    public Log(
+            boolean removed,
+            String logIndex,
+            String transactionIndex,
+            String transactionHash,
+            String blockHash,
+            String blockNumber,
+            String address,
+            String data,
+            String type,
+            List<String> topics) {
         this.removed = removed;
         this.logIndex = logIndex;
         this.transactionIndex = transactionIndex;
@@ -157,7 +177,8 @@ public class Log {
             return false;
         }
         if (getLogIndexRaw() != null
-                ? !getLogIndexRaw().equals(log.getLogIndexRaw()) : log.getLogIndexRaw() != null) {
+                ? !getLogIndexRaw().equals(log.getLogIndexRaw())
+                : log.getLogIndexRaw() != null) {
             return false;
         }
         if (getTransactionIndexRaw() != null
@@ -171,7 +192,8 @@ public class Log {
             return false;
         }
         if (getBlockHash() != null
-                ? !getBlockHash().equals(log.getBlockHash()) : log.getBlockHash() != null) {
+                ? !getBlockHash().equals(log.getBlockHash())
+                : log.getBlockHash() != null) {
             return false;
         }
         if (getBlockNumberRaw() != null
@@ -180,7 +202,8 @@ public class Log {
             return false;
         }
         if (getAddress() != null
-                ? !getAddress().equals(log.getAddress()) : log.getAddress() != null) {
+                ? !getAddress().equals(log.getAddress())
+                : log.getAddress() != null) {
             return false;
         }
         if (getData() != null ? !getData().equals(log.getData()) : log.getData() != null) {
@@ -196,8 +219,11 @@ public class Log {
     public int hashCode() {
         int result = (isRemoved() ? 1 : 0);
         result = 31 * result + (getLogIndexRaw() != null ? getLogIndexRaw().hashCode() : 0);
-        result = 31 * result
-                + (getTransactionIndexRaw() != null ? getTransactionIndexRaw().hashCode() : 0);
+        result =
+                31 * result
+                        + (getTransactionIndexRaw() != null
+                                ? getTransactionIndexRaw().hashCode()
+                                : 0);
         result = 31 * result + (getTransactionHash() != null ? getTransactionHash().hashCode() : 0);
         result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
         result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
@@ -211,16 +237,34 @@ public class Log {
     @Override
     public String toString() {
         return "Log{"
-                + "removed=" + removed
-                + ", logIndex='" + logIndex + '\''
-                + ", transactionIndex='" + transactionIndex + '\''
-                + ", transactionHash='" + transactionHash + '\''
-                + ", blockHash='" + blockHash + '\''
-                + ", blockNumber='" + blockNumber + '\''
-                + ", address='" + address + '\''
-                + ", data='" + data + '\''
-                + ", type='" + type + '\''
-                + ", topics=" + topics
+                + "removed="
+                + removed
+                + ", logIndex='"
+                + logIndex
+                + '\''
+                + ", transactionIndex='"
+                + transactionIndex
+                + '\''
+                + ", transactionHash='"
+                + transactionHash
+                + '\''
+                + ", blockHash='"
+                + blockHash
+                + '\''
+                + ", blockNumber='"
+                + blockNumber
+                + '\''
+                + ", address='"
+                + address
+                + '\''
+                + ", data='"
+                + data
+                + '\''
+                + ", type='"
+                + type
+                + '\''
+                + ", topics="
+                + topics
                 + '}';
     }
 }

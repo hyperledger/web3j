@@ -1,17 +1,30 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
 import java.math.BigInteger;
-import java.security.SignatureException;
 
-public class SignedRawTransaction extends RawTransaction {
+public class SignedRawTransaction extends RawTransaction implements SignatureDataOperations {
 
-    private static final int CHAIN_ID_INC = 35;
-    private static final int LOWER_REAL_V = 27;
+    private final Sign.SignatureData signatureData;
 
-    private Sign.SignatureData signatureData;
-
-    public SignedRawTransaction(BigInteger nonce, BigInteger gasPrice,
-            BigInteger gasLimit, String to, BigInteger value, String data,
+    public SignedRawTransaction(
+            BigInteger nonce,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            BigInteger value,
+            String data,
             Sign.SignatureData signatureData) {
         super(nonce, gasPrice, gasLimit, to, value, data);
         this.signatureData = signatureData;
@@ -21,47 +34,12 @@ public class SignedRawTransaction extends RawTransaction {
         return signatureData;
     }
 
-    public String getFrom() throws SignatureException {
-        Integer chainId = getChainId();
-        byte[] encodedTransaction;
+    @Override
+    public byte[] getEncodedTransaction(Long chainId) {
         if (null == chainId) {
-            encodedTransaction = TransactionEncoder.encode(this);
+            return TransactionEncoder.encode(this);
         } else {
-            encodedTransaction = TransactionEncoder.encode(this, chainId.byteValue());
+            return TransactionEncoder.encode(this, chainId);
         }
-        byte v = signatureData.getV();
-        byte[] r = signatureData.getR();
-        byte[] s = signatureData.getS();
-        Sign.SignatureData signatureDataV = new Sign.SignatureData(getRealV(v), r, s);
-        BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureDataV);
-        return "0x" + Keys.getAddress(key);
-    }
-
-    public void verify(String from) throws SignatureException {
-        String actualFrom = getFrom();
-        if (!actualFrom.equals(from)) {
-            throw new SignatureException("from mismatch");
-        }
-    }
-
-    private byte getRealV(byte v) {
-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
-            return v;
-        }
-        byte realV = LOWER_REAL_V;
-        int inc = 0;
-        if ((int) v % 2 == 0) {
-            inc = 1;
-        }
-        return (byte) (realV + inc);
-    }
-
-    public Integer getChainId() {
-        byte v = signatureData.getV();
-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
-            return null;
-        }
-        Integer chainId = (v - CHAIN_ID_INC) / 2;
-        return chainId;
     }
 }

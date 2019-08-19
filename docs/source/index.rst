@@ -31,12 +31,14 @@ Features
 - Support for Parity's
   `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
   `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
-- Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
+- Support for `Infura <https://infura.io/>`_ & `Nodesmith <https://nodesmith.io/>`_, so you don't have to run an Ethereum client yourself
 - Support for ERC20 and ERC721 token standards
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
 - Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
+- Support for `EEA Privacy features as described in EEA documentation <https://entethalliance.org/technical-documents/>`_
+  and implemented in `Pegasys Pantheon <https://docs.pantheon.pegasys.tech/en/stable/Reference/Pantheon-API-Methods/#eea-methods>`_.
 
 
 Dependencies
@@ -93,6 +95,7 @@ Contents:
    command_line.rst
    management_apis.rst
    infura.rst
+   nodesmith.rst
    ens.rst
    contracts.rst
    trouble.rst

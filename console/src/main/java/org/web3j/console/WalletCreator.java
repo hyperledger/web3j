@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.console;
 
 import java.io.File;
@@ -10,13 +22,10 @@ import org.web3j.codegen.Console;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.WalletUtils;
 
-/**
- * Simple class for creating a wallet file.
- */
+/** Simple class for creating a wallet file. */
 public class WalletCreator extends WalletManager {
 
-    public WalletCreator() {
-    }
+    public WalletCreator() {}
 
     public WalletCreator(IODevice console) {
         super(console);
@@ -37,10 +46,17 @@ public class WalletCreator extends WalletManager {
 
         try {
             String walletFileName = WalletUtils.generateFullNewWalletFile(password, destination);
-            console.printf("Wallet file " + walletFileName
-                    + " successfully created in: " + destinationDir + "\n");
-        } catch (CipherException | IOException | InvalidAlgorithmParameterException
-                | NoSuchAlgorithmException | NoSuchProviderException e) {
+            console.printf(
+                    "Wallet file "
+                            + walletFileName
+                            + " successfully created in: "
+                            + destinationDir
+                            + "\n");
+        } catch (CipherException
+                | IOException
+                | InvalidAlgorithmParameterException
+                | NoSuchAlgorithmException
+                | NoSuchProviderException e) {
             Console.exitError(e);
         }
     }

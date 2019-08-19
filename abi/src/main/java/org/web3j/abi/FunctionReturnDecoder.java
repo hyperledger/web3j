@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.abi;
 
 import java.util.ArrayList;
@@ -18,12 +30,10 @@ import org.web3j.utils.Strings;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
-/**
- * Decodes values returned by function or event calls.
- */
+/** Decodes values returned by function or event calls. */
 public class FunctionReturnDecoder {
 
-    private FunctionReturnDecoder() { }
+    private FunctionReturnDecoder() {}
 
     /**
      * Decode ABI encoded return values from smart contract function call.
@@ -31,10 +41,9 @@ public class FunctionReturnDecoder {
      * @param rawInput ABI encoded input
      * @param outputParameters list of return types as {@link TypeReference}
      * @return {@link List} of values returned by function, {@link Collections#emptyList()} if
-     *         invalid response
+     *     invalid response
      */
-    public static List<Type> decode(
-            String rawInput, List<TypeReference<Type>> outputParameters) {
+    public static List<Type> decode(String rawInput, List<TypeReference<Type>> outputParameters) {
         String input = Numeric.cleanHexPrefix(rawInput);
 
         if (Strings.isEmpty(input)) {
@@ -45,22 +54,21 @@ public class FunctionReturnDecoder {
     }
 
     /**
-     * <p>Decodes an indexed parameter associated with an event. Indexed parameters are individually
+     * Decodes an indexed parameter associated with an event. Indexed parameters are individually
      * encoded, unlike non-indexed parameters which are encoded as per ABI-encoded function
-     * parameters and return values.</p>
+     * parameters and return values.
      *
      * <p>If any of the following types are indexed, the Keccak-256 hashes of the values are
-     * returned instead. These are returned as a bytes32 value.</p>
+     * returned instead. These are returned as a bytes32 value.
      *
      * <ul>
-     *     <li>Arrays</li>
-     *     <li>Strings</li>
-     *     <li>Bytes</li>
+     *   <li>Arrays
+     *   <li>Strings
+     *   <li>Bytes
      * </ul>
      *
-     * <p>See the
-     * <a href="http://solidity.readthedocs.io/en/latest/contracts.html#events">
-     * Solidity documentation</a> for further information.</p>
+     * <p>See the <a href="http://solidity.readthedocs.io/en/latest/contracts.html#events">Solidity
+     * documentation</a> for further information.
      *
      * @param rawInput ABI encoded input
      * @param typeReference of expected result type
@@ -89,12 +97,11 @@ public class FunctionReturnDecoder {
         }
     }
 
-    private static List<Type> build(
-            String input, List<TypeReference<Type>> outputParameters) {
+    private static List<Type> build(String input, List<TypeReference<Type>> outputParameters) {
         List<Type> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
-        for (TypeReference<?> typeReference:outputParameters) {
+        for (TypeReference<?> typeReference : outputParameters) {
             try {
                 @SuppressWarnings("unchecked")
                 Class<Type> type = (Class<Type>) typeReference.getClassType();
@@ -103,21 +110,26 @@ public class FunctionReturnDecoder {
 
                 Type result;
                 if (DynamicArray.class.isAssignableFrom(type)) {
-                    result = TypeDecoder.decodeDynamicArray(
-                            input, hexStringDataOffset, typeReference);
+                    result =
+                            TypeDecoder.decodeDynamicArray(
+                                    input, hexStringDataOffset, typeReference);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
                     int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
-                    result = TypeDecoder.decodeStaticArray(
-                            input, hexStringDataOffset, typeReference, length);
+                    result =
+                            TypeDecoder.decodeStaticArray(
+                                    input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else if (StaticArray.class.isAssignableFrom(type)) {
-                    int length = Integer.parseInt(type.getSimpleName()
-                            .substring(StaticArray.class.getSimpleName().length()));
-                    result = TypeDecoder.decodeStaticArray(
-                            input, hexStringDataOffset, typeReference, length);
+                    int length =
+                            Integer.parseInt(
+                                    type.getSimpleName()
+                                            .substring(StaticArray.class.getSimpleName().length()));
+                    result =
+                            TypeDecoder.decodeStaticArray(
+                                    input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else {
