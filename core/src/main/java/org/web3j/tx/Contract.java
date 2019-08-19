@@ -353,26 +353,30 @@ public abstract class Contract extends ManagedTransaction {
         return receipt;
     }
 
-    protected <T extends Type> RemoteFunctionCall<T> executeRemoteCallSingleValueReturn(Function function) {
-        return new RemoteFunctionCall<>(function,() -> executeCallSingleValueReturn(function));
+    protected <T extends Type> RemoteFunctionCall<T> executeRemoteCallSingleValueReturn(
+            Function function) {
+        return new RemoteFunctionCall<>(function, () -> executeCallSingleValueReturn(function));
     }
 
     protected <T> RemoteFunctionCall<T> executeRemoteCallSingleValueReturn(
             Function function, Class<T> returnType) {
-        return new RemoteFunctionCall<>(function,() -> executeCallSingleValueReturn(function, returnType));
+        return new RemoteFunctionCall<>(
+                function, () -> executeCallSingleValueReturn(function, returnType));
     }
 
-    protected RemoteFunctionCall<List<Type>> executeRemoteCallMultipleValueReturn(Function function) {
-        return new RemoteFunctionCall<>(function,() -> executeCallMultipleValueReturn(function));
+    protected RemoteFunctionCall<List<Type>> executeRemoteCallMultipleValueReturn(
+            Function function) {
+        return new RemoteFunctionCall<>(function, () -> executeCallMultipleValueReturn(function));
     }
 
-    protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(Function function) {
-        return new RemoteFunctionCall<>(function,() -> executeTransaction(function));
+    protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(
+            Function function) {
+        return new RemoteFunctionCall<>(function, () -> executeTransaction(function));
     }
 
     protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(
             Function function, BigInteger weiValue) {
-        return new RemoteFunctionCall<>(function,() -> executeTransaction(function, weiValue));
+        return new RemoteFunctionCall<>(function, () -> executeTransaction(function, weiValue));
     }
 
     private static <T extends Contract> T create(
