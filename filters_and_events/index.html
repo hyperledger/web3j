@@ -1,0 +1,864 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Documentation portal for the web3j Blockchain Library">
+      
+      
+        <link rel="canonical" href="https://web3j.io/filters_and_events/">
+      
+      
+        <meta name="author" content="Web3 Labs">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
+    
+    
+      
+        <title>Filters and Events - Web3j</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.0284f74d.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.01803549.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+      <link rel="manifest" href="../manifest.webmanifest">
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#filters-and-events" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://web3j.io/" title="Web3j" class="md-header-nav__button md-logo">
+          
+            <img src="../img/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Web3j
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Filters and Events
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/web3j/web3j/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    web3j/web3j
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+<nav class="md-tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://web3j.io/" title="Web3j" class="md-nav__button md-logo">
+      
+        <img src="../img/logo.png" width="48" height="48">
+      
+    </a>
+    Web3j
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/web3j/web3j/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    web3j/web3j
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../quickstart/" title="Quickstart" class="md-nav__link">
+      Quickstart
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../getting_started/" title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../modules/" title="Modules" class="md-nav__link">
+      Modules
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../transactions/" title="Transactions" class="md-nav__link">
+      Transactions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../smart_contracts/" title="Smart Contracts" class="md-nav__link">
+      Smart Contracts
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../application_binary_interface/" title="Application Binary Interface" class="md-nav__link">
+      Application Binary Interface
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../recursive_length_prefix/" title="Recursive Length Prefix" class="md-nav__link">
+      Recursive Length Prefix
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Filters and Events
+      </label>
+    
+    <a href="./" title="Filters and Events" class="md-nav__link md-nav__link--active">
+      Filters and Events
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#block-and-transaction-filters" title="Block and transaction filters" class="md-nav__link">
+    Block and transaction filters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replay-filters" title="Replay filters" class="md-nav__link">
+    Replay filters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#topic-filters-and-evm-events-filters-and-events" title="Topic filters and EVM events {#filters-and-events}" class="md-nav__link">
+    Topic filters and EVM events {#filters-and-events}
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-functional-composition" title="A note on functional composition" class="md-nav__link">
+    A note on functional composition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-examples" title="Further examples" class="md-nav__link">
+    Further examples
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../command_line_tools/" title="Command Line Tools" class="md-nav__link">
+      Command Line Tools
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../management_apis/" title="Management Apis" class="md-nav__link">
+      Management Apis
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../using_infura_with_web3j/" title="Using Infura with Web3j" class="md-nav__link">
+      Using Infura with Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ethereum_name_service/" title="Ethereum Name Service" class="md-nav__link">
+      Ethereum Name Service
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../contracts_supported_by_web3j/" title="Contracts Supported by Web3j" class="md-nav__link">
+      Contracts Supported by Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../troubleshooting/" title="Troubleshooting" class="md-nav__link">
+      Troubleshooting
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../projects_using_web3j/" title="Projects using Web3j" class="md-nav__link">
+      Projects using Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../companies_using_web3j/" title="Companies using Web3j" class="md-nav__link">
+      Companies using Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../developer_guide/" title="Developer Guide" class="md-nav__link">
+      Developer Guide
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../links_and_useful_resources/" title="Links and Useful Resources" class="md-nav__link">
+      Links and Useful Resources
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../thanks_and_credits/" title="Thanks and Credits" class="md-nav__link">
+      Thanks and Credits
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#block-and-transaction-filters" title="Block and transaction filters" class="md-nav__link">
+    Block and transaction filters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replay-filters" title="Replay filters" class="md-nav__link">
+    Replay filters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#topic-filters-and-evm-events-filters-and-events" title="Topic filters and EVM events {#filters-and-events}" class="md-nav__link">
+    Topic filters and EVM events {#filters-and-events}
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-functional-composition" title="A note on functional composition" class="md-nav__link">
+    A note on functional composition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-examples" title="Further examples" class="md-nav__link">
+    Further examples
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/web3j/web3j/edit/master/docs/filters_and_events.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="filters-and-events">Filters and Events<a class="headerlink" href="#filters-and-events" title="Permanent link">&para;</a></h1>
+<p>Filters provide notifications of certain events taking place in the Ethereum network. There are three classes of filter supported in Ethereum:</p>
+<ol>
+<li>Block filters</li>
+<li>Pending transaction filters</li>
+<li>Topic filters</li>
+</ol>
+<p>Block filters and pending transaction filters provide notification of the creation of new transactions or blocks on the network.</p>
+<p>Topic filters are more flexible. These allow you to create a filter based on specific criteria that you provide.</p>
+<p>Unfortunately, unless you are using a WebSocket connection to Geth, working with filters via the JSON-RPC API is a tedious process, where you need to poll the Ethereum client in order to find out if there are any updates to your filters due to the synchronous nature of HTTP and IPC requests. Additionally the block and transaction filters only provide the transaction or block hash, so a further request is required to obtain the actual transaction or block referred to by the hash.</p>
+<p>web3j's managed <a href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/filters/Filter.java">Filter</a> implementation address these issues, so you have a fully asynchronous event based API for working with filters. It uses <a href="https://github.com/ReactiveX/RxJava">RxJava</a>'s <a href="http://reactivex.io/RxJava/2.x/javadoc/io/reactivex/Flowable.html">Flowables</a> which provides a consistent API for working with events, which facilitates the chaining together of JSON-RPC calls via functional
+composition.</p>
+<p><strong>Note:</strong> filters are not supported on Infura.</p>
+<h2 id="block-and-transaction-filters">Block and transaction filters<a class="headerlink" href="#block-and-transaction-filters" title="Permanent link">&para;</a></h2>
+<p>To receive all new blocks as they are added to the blockchain (the false
+parameter specifies that we only want the blocks, not the embedded
+transactions too):</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">blockFlowable</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>To receive all new transactions as they are added to the blockchain:</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">transactionFlowable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>To receive all pending transactions as they are submitted to the network
+(i.e. before they have been grouped into a block together):</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">pendingTransactionFlowable</span><span class="o">().</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>Subscriptions should always be cancelled when no longer required via
+<em>unsubscribe</em>:</p>
+<div class="codehilite"><pre><span></span><span class="n">subscription</span><span class="o">.</span><span class="na">unsubscribe</span><span class="o">();</span>
+</pre></div>
+
+
+<p>Other callbacks are also provided which provide simply the block or transaction hashes, for details of these refer to the <a href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java">Web3jRx</a> interface.</p>
+<h2 id="replay-filters">Replay filters<a class="headerlink" href="#replay-filters" title="Permanent link">&para;</a></h2>
+<p>web3j also provides filters for replaying block and transaction history.</p>
+<p>To replay a range of blocks from the blockchain:</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">replayBlocksFlowable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">endBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">fullTxObjects</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>To replay the individual transactions contained within a range of blocks:</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">replayTransactionsFlowable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">endBlockNumber</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>You can also get web3j to replay all blocks up to the most current, and provide notification (via the submitted Flowable) once you've caught up:</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">replayPastBlocksFlowable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">fullTxObjects</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">onCompleteFlowable</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>Or, if you'd rather replay all blocks to the most current, then be notified of new subsequent blocks being created:</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">replayPastAndFutureBlocksFlowable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">fullTxObjects</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">block</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>As above, but with transactions contained within blocks:</p>
+<div class="codehilite"><pre><span></span><span class="n">Subscription</span> <span class="n">subscription</span> <span class="o">=</span> <span class="n">web3j</span><span class="o">.</span><span class="na">replayPastAndFutureTransactionsFlowable</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">startBlockNumber</span><span class="o">&gt;)</span>
+        <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>All of the above filters are exported via the <a href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java">Web3jRx</a> interface.</p>
+<h2 id="topic-filters-and-evm-events-filters-and-events">Topic filters and EVM events {#filters-and-events}<a class="headerlink" href="#topic-filters-and-evm-events-filters-and-events" title="Permanent link">&para;</a></h2>
+<p>Topic filters capture details of Ethereum Virtual Machine (EVM) events taking place in the network. These events are created by smart contracts and stored in the transaction log associated with a smart contract.</p>
+<p>The <a href="http://solidity.readthedocs.io/en/develop/contracts.html#events">Solidity documentation</a> provides a good overview of EVM events.</p>
+<p>You use the <a href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/methods/request/EthFilter.java">EthFilter</a> type to specify the topics that you wish to apply to the filter. This can include the address of the smart contract you wish to apply the filter to. You can also provide specific topics to filter on. Where the individual topics represent indexed parameters on the smart contract:</p>
+<div class="codehilite"><pre><span></span><span class="n">EthFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EthFilter</span><span class="o">(</span><span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">EARLIEST</span><span class="o">,</span>
+        <span class="n">DefaultBlockParameterName</span><span class="o">.</span><span class="na">LATEST</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">contract</span><span class="o">-</span><span class="n">address</span><span class="o">&gt;)</span>
+             <span class="o">[.</span><span class="na">addSingleTopic</span><span class="o">(...)</span> <span class="o">|</span> <span class="o">.</span><span class="na">addOptionalTopics</span><span class="o">(...,</span> <span class="o">...)</span> <span class="o">|</span> <span class="o">...];</span>
+</pre></div>
+
+
+<p>This filter can then be created using a similar syntax to the block and transaction filters above:</p>
+<div class="codehilite"><pre><span></span><span class="n">web3j</span><span class="o">.</span><span class="na">ethLogFlowable</span><span class="o">(</span><span class="n">filter</span><span class="o">).</span><span class="na">subscribe</span><span class="o">(</span><span class="n">log</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">});</span>
+</pre></div>
+
+
+<p>The filter topics can only refer to the indexed Solidity event parameters. It is not possible to filter on the non-indexed event parameters. Additionally, for any indexed event parameters that are variable length array types such as string and bytes, the Keccak-256 hash of their value is stored on the EVM log. It is not possible to store or filter using their full value.</p>
+<p>If you create a filter instance with no topics associated with it, all EVM events taking place in the network will be captured by the filter.</p>
+<h2 id="a-note-on-functional-composition">A note on functional composition<a class="headerlink" href="#a-note-on-functional-composition" title="Permanent link">&para;</a></h2>
+<p>In addition to <em>send()</em> and <em>sendAsync</em>, all JSON-RPC method implementations in web3j support the <em>flowable()</em> method to create a Flowable to execute the request asynchronously. This makes it very straight forwards to compose JSON-RPC calls together into new functions.</p>
+<p>For instance, the <a href="https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/JsonRpc2_0Rx.java">blockFlowable</a> is itself composed of a number of separate JSON-RPC calls:</p>
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="n">Flowable</span><span class="o">&lt;</span><span class="n">EthBlock</span><span class="o">&gt;</span> <span class="nf">blockFlowable</span><span class="o">(</span>
+        <span class="kt">boolean</span> <span class="n">fullTransactionObjects</span><span class="o">,</span> <span class="kt">long</span> <span class="n">pollingInterval</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">ethBlockHashFlowable</span><span class="o">(</span><span class="n">pollingInterval</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">flatMap</span><span class="o">(</span><span class="n">blockHash</span> <span class="o">-&gt;</span>
+                    <span class="n">web3j</span><span class="o">.</span><span class="na">ethGetBlockByHash</span><span class="o">(</span><span class="n">blockHash</span><span class="o">,</span> <span class="n">fullTransactionObjects</span><span class="o">).</span><span class="na">flowable</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<p>Here we first create a flowable that provides notifications of the block hash of each newly created block. We then use <em>flatMap</em> to invoke a call to <em>ethGetBlockByHash</em> to obtain the full block details which is what is passed to the subscriber of the flowable.</p>
+<h2 id="further-examples">Further examples<a class="headerlink" href="#further-examples" title="Permanent link">&para;</a></h2>
+<p>Please refer to the integration test <a href="https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/FlowableIT.java">FlowableIT</a> for further examples.</p>
+<p>For a demonstration of using the manual filter API, you can take a look
+at the test <a href="https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/EventFilterIT.java">EventFilterIT</a>.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../recursive_length_prefix/" title="Recursive Length Prefix" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Recursive Length Prefix
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../command_line_tools/" title="Command Line Tools" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Command Line Tools
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2017-2019 Web3 Labs Ltd
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/web3j" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/web3labs" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://linkedin.com/in/web3labs" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.245445c6.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+  </body>
+</html>
