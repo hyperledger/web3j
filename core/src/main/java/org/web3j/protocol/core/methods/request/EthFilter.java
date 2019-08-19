@@ -51,8 +51,11 @@ public class EthFilter extends Filter<EthFilter> {
         return toBlock;
     }
 
-    public List<String> getAddress() {
-        return address;
+    public String getAddress() {
+        if (address != null && address.size() == 1) {
+            return address.get(0);
+        }
+        return address.toString();
     }
 
     @Override
