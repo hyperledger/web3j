@@ -79,4 +79,9 @@ public class ProjectCreatorTest extends TempFileProvider {
         System.out.println(filePath);
         Assert.assertTrue(new File(filePath).exists());
     }
+    @Test
+    public void testCopyWrapperJarFromResources()
+    {
+
+    }
 }

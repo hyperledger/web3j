@@ -4,12 +4,13 @@ public class ProjectTemplates {
     static final String rawJavaClass =
             "package <package_name>;\n" + "\n" + "public class <class_name>{\n" + "\n" + "}";
     static final String rawGradleBuildFile =
+
             "plugins {\n" +
                     "    id 'java'\n" +
                     "    id 'org.web3j' version '4.4.0'\n" +
                     "}\n" +
                     "\n" +
-                    "group '<package_name>>'\n" +
+                    "group '<package_name>'\n" +
                     "version '0.1.0'\n" +
                     "\n" +
                     "sourceCompatibility = 1.8\n" +
@@ -35,7 +36,15 @@ public class ProjectTemplates {
                     "            \"ch.qos.logback:logback-classic:$logbackVersion\"\n" +
                     "    testImplementation \"junit:junit:$junitVersion\"\n" +
                     "}";
-    static final String rawGradleSettingsFile = "rootProject.name = '<project_name>'\n";
+
+
+    static final String rawGradleSettingsFile = "pluginManagement {\n" +
+                    "    repositories {\n" +
+                    "        mavenCentral()\n" +
+                    "        gradlePluginPortal()\n" +
+                    "    }\n" +
+                    "}\n" +
+                    "rootProject.name = '<project_name>'\n";
     static final String solidityContract = "pragma solidity ^0.4.25;\n" +
             "\n" +
             "// Modified Greeter contract. Based on example at https://www.ethereum.org/greeter.\n" +
@@ -77,11 +86,11 @@ public class ProjectTemplates {
             "            string oldGreeting, string newGreeting);\n" +
             "}";
     static final String gradleWrapperProperties =
-            "distributionBase=GRADLE_USER_HOME\n" +
-                    "distributionPath=wrapper/dists\n" +
-                    "zipStoreBase=GRADLE_USER_HOME\n" +
-                    "zipStorePath=wrapper/dists\n" +
-                    "distributionUrl=https\\://services.gradle.org/distributions/gradle-4.10.2-all.zip\n";
+           "distributionBase=GRADLE_USER_HOME\n" +
+                   "distributionPath=wrapper/dists\n" +
+                   "zipStoreBase=GRADLE_USER_HOME\n" +
+                   "zipStorePath=wrapper/dists\n" +
+                   "distributionUrl=https\\://services.gradle.org/distributions/gradle-5.4.1-all.zip";
     static final String gradlew =
             "#!/usr/bin/env sh\n" +
                     "\n" +
