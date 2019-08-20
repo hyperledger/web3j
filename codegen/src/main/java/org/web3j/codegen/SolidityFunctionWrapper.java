@@ -952,8 +952,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private static ParameterizedTypeName buildRemoteFunctionCall(TypeName typeName) {
-        return ParameterizedTypeName.get(
-                ClassName.get(RemoteFunctionCall.class), typeName);
+        return ParameterizedTypeName.get(ClassName.get(RemoteFunctionCall.class), typeName);
     }
 
     private void buildTransactionFunction(
