@@ -75,6 +75,31 @@
     
     
       
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-85710619-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -565,9 +590,9 @@
 focussed on a very specific interaction with the Ethereum network (such as ABI/RLP encoding, transaction signing but not submission, etc).</p>
 <p>All modules are published to both Maven Central and Bintray, with the published artifact names using the names listed above, i.e.:</p>
 <p>For Java:</p>
-<p>org.web3j: &lt;module-name> : &lt;version></p>
+<p><code>org.web3j:&lt;module-name&gt;:&lt;version&gt;</code></p>
 <p>For Android:</p>
-<p>org.web3j: &lt;module-name> : &lt;version>-android</p>
+<p><code>org.web3j:&lt;module-name&gt;:&lt;version&gt;-android</code></p>
                 
                   
                 
