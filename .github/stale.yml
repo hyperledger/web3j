@@ -11,6 +11,7 @@ exemptLabels:
   - needs-review
   - bug
   - awaiting-pr
+  - downstream-issue
   - wip
 # Label to use when marking an issue as stale
 staleLabel: stale
