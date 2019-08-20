@@ -9,8 +9,8 @@ public class ProjectTemplates {
                     "    id 'org.web3j' version '4.4.0'\n" +
                     "}\n" +
                     "\n" +
-                    "group 'org.web3j'\n" +
-                    "version '0.2.0'\n" +
+                    "group '<package_name>>'\n" +
+                    "version '0.1.0'\n" +
                     "\n" +
                     "sourceCompatibility = 1.8\n" +
                     "\n" +
@@ -19,7 +19,7 @@ public class ProjectTemplates {
                     "}\n" +
                     "\n" +
                     "web3j {\n" +
-                    "    generatedPackageName = '<package_name>.contracts.generated'\n" +
+                    "    generatedPackageName = '<package_name>.generated.contracts'\n" +
                     "    excludedContracts = ['Mortal']\n" +
                     "}\n" +
                     "\n" +
@@ -34,7 +34,7 @@ public class ProjectTemplates {
                     "            \"ch.qos.logback:logback-core:$logbackVersion\",\n" +
                     "            \"ch.qos.logback:logback-classic:$logbackVersion\"\n" +
                     "    testImplementation \"junit:junit:$junitVersion\"\n" +
-                    "}\n";
+                    "}";
     static final String rawGradleSettingsFile = "rootProject.name = '<project_name>'\n";
     static final String solidityContract = "pragma solidity ^0.4.25;\n" +
             "\n" +
