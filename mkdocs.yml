@@ -54,6 +54,12 @@ extra:
 extra_css:
   - "stylesheets/extra.css"
 
+# Google Analytics
+google_analytics:
+  - 'UA-85710619-1'
+  - 'auto'
+
+
 # Extensions
 markdown_extensions:
   - admonition
