@@ -1,6 +1,6 @@
 pragma solidity ^0.4.0;
 
-contract DuplicateFeild {
+contract DuplicateField {
 
     string public constant NAME = "A";
 
