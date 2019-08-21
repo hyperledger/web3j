@@ -75,6 +75,31 @@
     
     
       
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-85710619-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -561,14 +586,8 @@
 <li><a href="https://github.com/FasterXML/jackson-core">Jackson Core</a> for fast JSON serialisation/deserialisation</li>
 <li><a href="https://www.bouncycastle.org/">Bouncy Castle</a> (<a href="https://rtyley.github.io/spongycastle/">Spongy Castle</a> on Android) for crypto</li>
 <li><a href="https://github.com/jnr/jnr-unixsocket">Jnr-unixsocket</a> for *nix IPC (not available on Android)</li>
+<li><a href="https://github.com/square/javapoet">Java Poet</a> for generating smart contract wrappers</li>
 </ul>
-<p>It also uses <a href="https://github.com/square/javapoet">JavaPoet</a> for generating smart contract wrappers</p>
-<h1 id="donate">Donate<a class="headerlink" href="#donate" title="Permanent link">&para;</a></h1>
-<p>You can help fund the development of web3j by donating to the following wallet addresses:</p>
-<hr />
-<p>Ethereum   0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420</p>
-<p>Bitcoin    1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G</p>
-<hr />
 <h1 id="commercial-support-and-training">Commercial support and training<a class="headerlink" href="#commercial-support-and-training" title="Permanent link">&para;</a></h1>
 <p>Commercial support and training is available from <a href="https://www.web3labs.com/">web3labs</a>.</p>
                 

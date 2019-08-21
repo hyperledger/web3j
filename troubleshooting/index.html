@@ -75,6 +75,31 @@
     
     
       
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-85710619-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -519,13 +544,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#do-you-have-a-project-donation-address" title="Do you have a project donation address?" class="md-nav__link">
-    Do you have a project donation address?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#where-can-i-get-commercial-support-for-web3j" title="Where can I get commercial support for web3j?" class="md-nav__link">
     Where can I get commercial support for web3j?
   </a>
@@ -680,13 +698,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#do-you-have-a-project-donation-address" title="Do you have a project donation address?" class="md-nav__link">
-    Do you have a project donation address?
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#where-can-i-get-commercial-support-for-web3j" title="Where can I get commercial support for web3j?" class="md-nav__link">
     Where can I get commercial support for web3j?
   </a>
@@ -791,12 +802,6 @@ located in <em>src/main/resources/logback.xml</em>.</p>
 <p>Are you sure that you are connecting to the correct network to perform the lookup?</p>
 <p>If web3j is telling you that the node is not in sync, you may need to change the <em>syncThreshold</em> in the
 <a href="../ethereum_name_service/#web3j-implementation">ENS resolver</a>.</p>
-<h2 id="do-you-have-a-project-donation-address">Do you have a project donation address?<a class="headerlink" href="#do-you-have-a-project-donation-address" title="Permanent link">&para;</a></h2>
-<p>Absolutely, you can contribute Bitcoin or Ether to help fund the development of web3j.</p>
-<hr />
-<p>Ethereum   0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420</p>
-<p>Bitcoin       1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G</p>
-<hr />
 <h2 id="where-can-i-get-commercial-support-for-web3j">Where can I get commercial support for web3j?<a class="headerlink" href="#where-can-i-get-commercial-support-for-web3j" title="Permanent link">&para;</a></h2>
 <p>Commercial support and training is available from <a href="https://www.web3labs.com/">web3labs</a>.</p>
                 
