@@ -63,6 +63,9 @@ public class Runner {
                 case "new":
                     ProjectRunner.run(args);
                     break;
+                case "import":
+                    SolidityProjectRunner.run(args);
+                    break;
                 default:
                     Console.exitError(USAGE);
             }

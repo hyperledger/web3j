@@ -51,7 +51,7 @@ public class ProjectCreator extends ProjectManager {
             generateGradlewFiles(pathToDirectory + File.separator + projectName);
             generateGradleWrapperPropertiesFile(projectMainFolder[3]);
             copyWrapperJarFromResources(projectMainFolder[3]);
-            buildGradleProject(getOS());
+            buildGradleProject(getOS(),pathToDirectory,projectName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -141,7 +141,7 @@ public class ProjectCreator extends ProjectManager {
         }
     }
 
-    void buildGradleProject(String os) {
+    void buildGradleProject(String os,String pathToDirectory,String projectName) {
         if (os.equals("Windows")) {
             runCommand(new File(pathToDirectory + File.separator + projectName), "gradlew.bat build");
         } else {
