@@ -13,6 +13,8 @@
 package org.web3j.console;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static org.web3j.codegen.Console.exitError;
 
@@ -86,6 +88,25 @@ public class ProjectManager {
         gradleWrapperDirectory.mkdirs();
 
         return new String[]{mainDirectory.getPath(), testDirectory.getPath(), solidityDirectory.getPath(), gradleWrapperDirectory.getPath()};
+    }
+    void runCommand(File workingDir, String command) {
+        String[] newCommand = command.split(" ");
+        try {
+            new ProcessBuilder(newCommand)
+                    .directory(workingDir)
+                    .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+                    .redirectError(ProcessBuilder.Redirect.INHERIT)
+                    .start()
+                    .waitFor(60, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    String getOS() {
+        String[] os = System.getProperty("os.name").split(" ");
+        return  os[0];
     }
 
 }

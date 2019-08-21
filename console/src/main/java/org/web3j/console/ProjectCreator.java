@@ -14,10 +14,10 @@ package org.web3j.console;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
+import java.nio.file.StandardCopyOption;
 
 public class ProjectCreator extends ProjectManager {
 
@@ -25,7 +25,7 @@ public class ProjectCreator extends ProjectManager {
     private String projectName;
     private String pathToDirectory;
 
-    public ProjectCreator(String pathToDirectory, String packageName, String projectName) {
+    private ProjectCreator(String pathToDirectory, String packageName, String projectName) {
         this.pathToDirectory = pathToDirectory;
         this.packageName = packageName;
         this.projectName = projectName;
@@ -45,14 +45,13 @@ public class ProjectCreator extends ProjectManager {
             String[] projectMainFolder = createFolderStructure(pathToDirectory, projectName);
             String packagePath = createPackageStructure(projectMainFolder[0], packageName);
             generateJavaClass(packagePath, projectName, packageName);
-            generateGradleBuildFile(pathToDirectory, projectName, packageName);
-            generateGradleSettingsFile(pathToDirectory, projectName);
+            generateGradleBuildFile(pathToDirectory + File.separator + projectName, packageName);
+            generateGradleSettingsFile(pathToDirectory + File.separator + projectName, projectName);
             generateSolidityContract(projectMainFolder[2]);
             generateGradlewFiles(pathToDirectory + File.separator + projectName);
             generateGradleWrapperPropertiesFile(projectMainFolder[3]);
             copyWrapperJarFromResources(projectMainFolder[3]);
-            console.printf("Project created at path : " + "/" + projectName + "\n");
-            getOS(projectName);
+            buildGradleProject(getOS());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,11 +68,12 @@ public class ProjectCreator extends ProjectManager {
         }
     }
 
-    void generateGradleBuildFile(String path, String projectName, String packageName) {
+    void generateGradleBuildFile(String path, String packageName) {
         String temp = ProjectTemplates.rawGradleBuildFile.replaceAll("<package_name>", packageName);
         byte[] buildFile = temp.getBytes();
         try {
-            Files.write(Paths.get(path + File.separator + projectName + File.separator + "build.gradle"), buildFile);
+            System.out.println(path);
+            Files.write(Paths.get(path + File.separator + "build.gradle"), buildFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,7 +83,7 @@ public class ProjectCreator extends ProjectManager {
         String temp = ProjectTemplates.rawGradleSettingsFile.replaceAll("<project_name>", projectName);
         byte[] settingsFile = temp.getBytes();
         try {
-            Files.write(Paths.get(path + File.separator + projectName + File.separator + "settings.gradle"), settingsFile);
+            Files.write(Paths.get(path + File.separator + "settings.gradle"), settingsFile);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -132,46 +132,23 @@ public class ProjectCreator extends ProjectManager {
     }
 
     void copyWrapperJarFromResources(String destination) {
-        File gradleWrapperJar = new File("/Users/alexander/Documents/DEV/web3j/web3j/console/src/main/resources/gradle-wrapper.jar");
+        InputStream resourcePath = getClass().getClassLoader().getResourceAsStream("gradle-wrapper.jar");
         File destinationDirectory = new File(destination + File.separator + "gradle-wrapper.jar");
         try {
-            Files.copy(gradleWrapperJar.toPath(), destinationDirectory.toPath());
+            Files.copy(resourcePath, destinationDirectory.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void getOS(String projectName) {
-        String[] os = System.getProperty("os.name").split("");
-        if (os[0].equals("Windows")) {
-
+    void buildGradleProject(String os) {
+        if (os.equals("Windows")) {
             runCommand(new File(pathToDirectory + File.separator + projectName), "gradlew.bat build");
         } else {
-
             runCommand(new File(pathToDirectory + File.separator + projectName), "chmod 755 gradlew");
             runCommand(new File(pathToDirectory + File.separator + projectName), "./gradlew build");
-
-
         }
     }
 
-    void runCommand(File workingDir, String command) {
-        String[] newCommand = command.split(" ");
-        for (String s : newCommand) {
-            System.out.println(s);
 
-        }
-        try {
-            new ProcessBuilder(newCommand)
-                    .directory(workingDir)
-                    .redirectOutput(ProcessBuilder.Redirect.INHERIT)
-                    .redirectError(ProcessBuilder.Redirect.INHERIT)
-                    .start()
-                    .waitFor(60, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

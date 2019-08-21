@@ -13,6 +13,7 @@
 package org.web3j.console;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class ProjectCreatorTest extends TempFileProvider {
         super.setUp();
         String[] generatedPath = projectCreator.createFolderStructure(tempDirPath, "Test");
         Assert.assertEquals(
-                generatedPath,
+                generatedPath[0],
                 tempDirPath
                         + File.separator
                         + "Test"
@@ -66,22 +67,50 @@ public class ProjectCreatorTest extends TempFileProvider {
     @Test
     public void testGenerateGradleBuildFile() throws Exception {
         super.setUp();
-        projectCreator.generateGradleBuildFile(tempDirPath,"Test","org.com.test");
-        String filePath = tempDirPath + File.separator + "build.gradle";
-        Assert.assertTrue(new File(filePath).exists());
+        projectCreator.generateGradleBuildFile(tempDirPath, "org.com.test");
+        Assert.assertTrue(new File(tempDirPath + File.separator + "build.gradle").exists());
     }
 
     @Test
     public void testGenerateGradleSettingsFile() throws Exception {
         super.setUp();
         projectCreator.generateGradleSettingsFile(tempDirPath, "TestProject");
-        String filePath = tempDirPath + File.separator + "settings.gradle";
-        System.out.println(filePath);
-        Assert.assertTrue(new File(filePath).exists());
+        Assert.assertTrue(new File(tempDirPath + File.separator + "settings.gradle").exists());
     }
+
     @Test
-    public void testCopyWrapperJarFromResources()
-    {
+    public void testGenerateSolidityContract() throws Exception {
+        super.setUp();
+        projectCreator.generateSolidityContract(tempDirPath);
+        Assert.assertTrue(new File(tempDirPath + File.separator + "Greater.sol").exists());
 
     }
+
+    @Test
+    public void testGenerateGradlewFiles() throws Exception {
+        super.setUp();
+        projectCreator.generateGradlewFiles(tempDirPath);
+        if (new File(tempDirPath + File.separator + "gradlew.bat").exists() && new File(tempDirPath + File.separator + "gradlew").exists()) {
+            Assert.assertTrue(true);
+        } else {
+            Assert.assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testGenerateGradlewPropertiesFile() throws Exception {
+        super.setUp();
+        projectCreator.generateGradleWrapperPropertiesFile(tempDirPath);
+        Assert.assertTrue(new File(tempDirPath+File.separator+"gradle-wrapper.properties").exists());
+    }
+
+    @Test
+    public void testCopyWrapperJarFromResources() throws Exception {
+        super.setUp();
+        projectCreator.copyWrapperJarFromResources(tempDirPath);
+        String pathToFile = tempDirPath + File.separator + "gradle-wrapper.jar";
+        Assert.assertTrue(new File(pathToFile).exists());
+
+    }
+
 }
