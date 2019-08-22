@@ -12,6 +12,8 @@
  */
 package org.web3j.abi;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -22,6 +24,9 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionEncoderProvider;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
+
+import static org.web3j.abi.TypeDecoder.instantiateType;
+import static org.web3j.abi.TypeReference.makeTypeReference;
 
 /**
  * Delegates to {@link DefaultFunctionEncoder} unless a {@link FunctionEncoderProvider} SPI is
@@ -44,7 +49,26 @@ public abstract class FunctionEncoder {
     public static String encodeConstructor(final List<Type> parameters) {
         return encoder().encodeParameters(parameters);
     }
-
+    
+    public static Function makeFunction(
+            String fnname,
+            List<String> solidityInputTypes,
+            List<Object> arguments,
+            List<String> solidityOutputTypes)
+            throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
+        List<Type> encodedInput = new ArrayList<>();
+        Iterator argit = arguments.iterator();
+        for (String st : solidityInputTypes) {
+            encodedInput.add(instantiateType(st, argit.next()));
+        }
+        List<TypeReference<?>> encodedOutput = new ArrayList<>();
+        for (String st : solidityOutputTypes) {
+            encodedOutput.add(makeTypeReference(st));
+        }
+        return new Function(fnname, encodedInput, encodedOutput);
+    }
+    
     protected abstract String encodeFunction(Function function);
 
     protected abstract String encodeParameters(List<Type> parameters);
