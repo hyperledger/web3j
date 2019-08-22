@@ -170,7 +170,7 @@ public class RequestTest extends RequestTester {
         // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_createPrivacyGroup\","
-                        + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\"testName\",\"testDesc\"],"
+                        + "\"params\":[{\"addresses\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\"name\":\"testName\",\"description\":\"testDesc\"}],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
     }
