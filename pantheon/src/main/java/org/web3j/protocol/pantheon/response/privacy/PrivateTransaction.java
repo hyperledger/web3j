@@ -43,8 +43,11 @@ public abstract class PrivateTransaction {
             // Select the concrete class based on the existence of a property
             if (node.get("privateFor").isArray()) {
                 return p.getCodec().treeToValue(node, PrivateTransactionLegacy.class);
+            } else if (node.get("privateFor").isValueNode()) {
+                return p.getCodec().treeToValue(node, PrivateTransactionWithPrivacyGroup.class);
             }
-            return p.getCodec().treeToValue(node, PrivateTransactionWithPrivacyGroup.class);
+
+            return null;
         }
     }
 

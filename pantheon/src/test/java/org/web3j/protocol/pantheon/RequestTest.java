@@ -128,7 +128,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testEeaGetTransactionCount() throws Exception {
+    public void testPrivGetTransactionCount() throws Exception {
         web3j.privGetTransactionCount(
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1", MOCK_PRIVACY_GROUP_ID)
                 .send();
@@ -140,7 +140,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testEeaGetPrivateTransaction() throws Exception {
+    public void testPrivGetPrivateTransaction() throws Exception {
         web3j.privGetPrivateTransaction("EnclaveKey").send();
 
         // CHECKSTYLE:OFF
@@ -152,7 +152,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testEeaGetPrivacyPrecompileAddress() throws Exception {
+    public void testPrivGetPrivacyPrecompileAddress() throws Exception {
         web3j.privGetPrivacyPrecompileAddress().send();
 
         // CHECKSTYLE:OFF
@@ -164,19 +164,19 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testEeaCreatePrivacyGroup() throws Exception {
+    public void testPrivCreatePrivacyGroup() throws Exception {
         web3j.privCreatePrivacyGroup(BASE_64_STRINGS, "testName", "testDesc").send();
 
         // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_createPrivacyGroup\","
-                        + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\"testName\",\"testDesc\"],"
+                        + "\"params\":[{\"addresses\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\"name\":\"testName\",\"description\":\"testDesc\"}],"
                         + "\"id\":1}");
         // CHECKSTYLE:ON
     }
 
     @Test
-    public void testEeaFindPrivacyGroup() throws Exception {
+    public void testPrivFindPrivacyGroup() throws Exception {
         web3j.privFindPrivacyGroup(BASE_64_STRINGS).send();
 
         // CHECKSTYLE:OFF
@@ -188,7 +188,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testEeaDeletePrivacyGroup() throws Exception {
+    public void testPrivDeletePrivacyGroup() throws Exception {
         web3j.privDeletePrivacyGroup(MOCK_PRIVACY_GROUP_ID).send();
 
         // CHECKSTYLE:OFF
