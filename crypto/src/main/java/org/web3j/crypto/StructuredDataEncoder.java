@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.abi.TypeEncoder;
+import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.crypto.Hash.sha3;

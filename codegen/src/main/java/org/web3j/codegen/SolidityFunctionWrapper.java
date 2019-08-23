@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.lang.model.SourceVersion;
@@ -48,13 +47,11 @@ import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Double;
@@ -113,7 +110,9 @@ public class SolidityFunctionWrapper extends Generator {
                     + "codegen module</a> to update.\n";
 
     private final boolean useNativeJavaTypes;
+    private final boolean useJavaPrimitiveTypes;
     private final boolean generateSendTxForCalls;
+
     private final int addressLength;
 
     private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
@@ -126,13 +125,22 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     public SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
-        this(useNativeJavaTypes, false, addressLength, new LogGenerationReporter(LOGGER));
+        this(useNativeJavaTypes, false, false, addressLength);
     }
 
     public SolidityFunctionWrapper(
             boolean useNativeJavaTypes, int addressLength, boolean generateSendTxForCalls) {
+        this(useNativeJavaTypes, generateSendTxForCalls, false, addressLength);
+    }
+
+    public SolidityFunctionWrapper(
+            boolean useNativeJavaTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateSendTxForCalls,
+            int addressLength) {
         this(
                 useNativeJavaTypes,
+                useJavaPrimitiveTypes,
                 generateSendTxForCalls,
                 addressLength,
                 new LogGenerationReporter(LOGGER));
@@ -140,10 +148,12 @@ public class SolidityFunctionWrapper extends Generator {
 
     public SolidityFunctionWrapper(
             boolean useNativeJavaTypes,
+            boolean useJavaPrimitiveTypes,
             boolean generateSendTxForCalls,
             int addressLength,
             GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
+        this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
         this.addressLength = addressLength;
         this.reporter = reporter;
         this.generateSendTxForCalls = generateSendTxForCalls;
@@ -664,9 +674,12 @@ public class SolidityFunctionWrapper extends Generator {
     String addParameters(MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes)
             throws ClassNotFoundException {
 
-        List<ParameterSpec> inputParameterTypes = buildParameterTypes(namedTypes);
+        final List<ParameterSpec> inputParameterTypes =
+                buildParameterTypes(namedTypes, useJavaPrimitiveTypes);
 
-        List<ParameterSpec> nativeInputParameterTypes = new ArrayList<>(inputParameterTypes.size());
+        final List<ParameterSpec> nativeInputParameterTypes =
+                new ArrayList<>(inputParameterTypes.size());
+
         for (ParameterSpec parameterSpec : inputParameterTypes) {
             TypeName typeName = getWrapperType(parameterSpec.type);
             nativeInputParameterTypes.add(
@@ -827,8 +840,10 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    static List<ParameterSpec> buildParameterTypes(List<AbiDefinition.NamedType> namedTypes)
+    static List<ParameterSpec> buildParameterTypes(
+            List<AbiDefinition.NamedType> namedTypes, boolean primitives)
             throws ClassNotFoundException {
+
         List<ParameterSpec> result = new ArrayList<>(namedTypes.size());
         for (int i = 0; i < namedTypes.size(); i++) {
             AbiDefinition.NamedType namedType = namedTypes.get(i);
@@ -836,7 +851,7 @@ public class SolidityFunctionWrapper extends Generator {
             String name = createValidParamName(namedType.getName(), i);
             String type = namedTypes.get(i).getType();
 
-            result.add(ParameterSpec.builder(buildTypeName(type), name).build());
+            result.add(ParameterSpec.builder(buildTypeName(type, primitives), name).build());
         }
         return result;
     }
@@ -857,11 +872,13 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    static List<TypeName> buildTypeNames(List<AbiDefinition.NamedType> namedTypes)
+    static List<TypeName> buildTypeNames(
+            List<AbiDefinition.NamedType> namedTypes, boolean primitives)
             throws ClassNotFoundException {
+
         List<TypeName> result = new ArrayList<>(namedTypes.size());
         for (AbiDefinition.NamedType namedType : namedTypes) {
-            result.add(buildTypeName(namedType.getType()));
+            result.add(buildTypeName(namedType.getType(), primitives));
         }
         return result;
     }
@@ -896,8 +913,9 @@ public class SolidityFunctionWrapper extends Generator {
         MethodSpec.Builder methodBuilder =
                 MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
 
-        String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
-        List<TypeName> outputParameterTypes = buildTypeNames(functionDefinition.getOutputs());
+        final String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
+        final List<TypeName> outputParameterTypes =
+                buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
 
         if (functionDefinition.isConstant()) {
             // Avoid generating runtime exception call
@@ -1244,7 +1262,7 @@ public class SolidityFunctionWrapper extends Generator {
             NamedTypeName parameter =
                     new NamedTypeName(
                             namedType.getName(),
-                            buildTypeName(namedType.getType()),
+                            buildTypeName(namedType.getType(), useJavaPrimitiveTypes),
                             namedType.isIndexed());
             if (namedType.isIndexed()) {
                 indexedParameters.add(parameter);
@@ -1312,8 +1330,18 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     static TypeName buildTypeName(String typeDeclaration) throws ClassNotFoundException {
-        String solidityType = trimStorageDeclaration(typeDeclaration);
-        return TypeName.get(TypeReference.makeTypeReference(solidityType).getType());
+        return buildTypeName(typeDeclaration, false);
+    }
+
+    static TypeName buildTypeName(String typeDeclaration, boolean primitives)
+            throws ClassNotFoundException {
+
+        final String solidityType = trimStorageDeclaration(typeDeclaration);
+
+        final TypeReference typeReference =
+                TypeReference.makeTypeReference(solidityType, false, primitives);
+
+        return TypeName.get(typeReference.getType());
     }
 
     private static Class<?> getStaticArrayTypeReferenceClass(String type) {

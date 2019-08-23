@@ -72,6 +72,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String contractName,
             String basePackageName,
             boolean useJavaNativeTypes,
+            boolean useJavaPrimitiveTypes,
             int addressLength) {
 
         this(
@@ -81,6 +82,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 contractName,
                 basePackageName,
                 useJavaNativeTypes,
+                useJavaPrimitiveTypes,
                 false,
                 Contract.class,
                 addressLength);
@@ -93,11 +95,18 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String contractName,
             String basePackageName,
             boolean useJavaNativeTypes,
+            boolean useJavaPrimitiveTypes,
             boolean generateSendTxForCalls,
             Class<? extends Contract> contractClass,
             int addressLength) {
 
-        super(contractClass, destinationDir, basePackageName, useJavaNativeTypes);
+        super(
+                contractClass,
+                destinationDir,
+                basePackageName,
+                useJavaNativeTypes,
+                useJavaPrimitiveTypes);
+
         this.binFile = binFile;
         this.abiFile = abiFile;
         this.contractName = contractName;
@@ -125,7 +134,11 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
-            new SolidityFunctionWrapper(useJavaNativeTypes, addressLength, generateSendTxForCalls)
+            new SolidityFunctionWrapper(
+                            useJavaNativeTypes,
+                            useJavaPrimitiveTypes,
+                            generateSendTxForCalls,
+                            addressLength)
                     .generateJavaFiles(
                             contractClass,
                             contractName,
@@ -197,7 +210,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
         @Option(
                 names = {"-jt", JAVA_TYPES_ARG},
-                description = "use native java types.",
+                description = "use native Java types.",
                 required = false,
                 showDefaultValue = ALWAYS)
         private boolean javaTypes = true;
@@ -207,6 +220,12 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 description = "use solidity types.",
                 required = false)
         private boolean solidityTypes;
+
+        @Option(
+                names = {"-pt", PRIMITIVE_TYPES_ARG},
+                description = "use Java primitive types.",
+                required = false)
+        private boolean primitiveTypes = false;
 
         @Override
         public void run() {
@@ -226,6 +245,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                                 contractName,
                                 packageName,
                                 useJavaTypes,
+                                primitiveTypes,
                                 addressLength)
                         .generate();
             } catch (Exception e) {
