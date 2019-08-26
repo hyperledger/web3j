@@ -15,6 +15,8 @@ package org.web3j.console;
 import org.web3j.codegen.Console;
 import org.web3j.codegen.SolidityFunctionWrapperGenerator;
 import org.web3j.codegen.TruffleJsonFunctionWrapperGenerator;
+import org.web3j.console.project.ProjectCreator;
+import org.web3j.console.project.ProjectRunner;
 import org.web3j.utils.Version;
 
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
@@ -61,11 +63,9 @@ public class Runner {
                                     + Version.getTimestamp());
                     break;
                 case "new":
-                    ProjectRunner.run(args);
+                    ProjectCreator.main(args);
                     break;
-                case "import":
-                    SolidityProjectRunner.run(args);
-                    break;
+
                 default:
                     Console.exitError(USAGE);
             }

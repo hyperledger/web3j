@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.console;
+package org.web3j.console.project;
 
 import org.web3j.codegen.Console;
 
@@ -30,7 +30,7 @@ public class ProjectRunner {
         } else {
             switch (args[0]) {
                 case "new":
-                    ProjectCreator.main(tail(args));
+
                     break;
                 default:
                     Console.exitError(USAGE);
