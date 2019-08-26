@@ -20,25 +20,28 @@ import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
-public class ProjectCreator {
-    private static final String COMMAND_PREFIX = "new";
-    private static final String COMMAND_NEW = "new";
+public class ProjectImporter {
+    private static final String COMMAND_PREFIX = "import";
+    private static final String COMMAND_IMPORT = "import";
 
 
     private final String root;
     private final String packageName;
     private final String projectName;
+    private final String solidityImportPath;
 
-    private ProjectCreator(String root, String packageName, String projectName) {
+    private ProjectImporter(String root, String packageName, String projectName,String solidityImportPath) {
         this.root = root;
         this.packageName = packageName;
         this.projectName = projectName;
+        this.solidityImportPath =solidityImportPath;
     }
 
     public static void main(String[] args) {
-        if (args.length > 0 && args[0].equals(COMMAND_NEW)) {
+        if (args.length > 0 && args[0].equals(COMMAND_IMPORT)) {
             args = tail(args);
         }
+
         CommandLine.run(new PicocliRunner(), args);
 
     }
@@ -62,7 +65,8 @@ public class ProjectCreator {
                 .withProjectStructure(projectStructure)
                 .withTemplateProvider(templateProvider)
                 .withProjectProcessor(projectProcessor)
-                .buildNewProject();
+                .withSolidityImportPath(solidityImportPath)
+                .buildImportProject();
 
     }
 
@@ -80,7 +84,7 @@ public class ProjectCreator {
         private String root = System.getProperty("user.dir");
 
         @CommandLine.Option(
-                names = {"-p", "--package"},
+                names = {"-p", "--package name"},
                 description = "base package name.",
                 required = true)
         private String packageName;
@@ -90,6 +94,11 @@ public class ProjectCreator {
                 description = "use native java types.",
                 required = true)
         private String projectName;
+        @CommandLine.Option(
+                names = {"-sp", "--solidity path"},
+                description = "solidity project path",
+                required = true)
+        private String solidityImportPath;
 
 
 
@@ -97,8 +106,8 @@ public class ProjectCreator {
         public void run() {
             try {
 
-                new ProjectCreator(
-                        root, packageName, projectName)
+                new ProjectImporter(
+                        root, packageName, projectName,solidityImportPath)
                         .generate();
             } catch (Exception e) {
                 exitError(e);

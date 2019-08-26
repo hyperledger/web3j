@@ -16,12 +16,16 @@ public class Project {
         private ProjectStructure projectStructure;
         private TemplateProvider templateProvider;
         private ProjectProcessor projectProcessor;
-
+        private String solidityImportPath;
 
         public Builder() {
 
         }
-
+        public Builder withSolidityImportPath(String solidityImportPath)
+        {
+            this.solidityImportPath = solidityImportPath;
+            return this;
+        }
         public Builder withProjectStructure(ProjectStructure projectStructure) {
             this.projectStructure = projectStructure;
 
@@ -75,17 +79,37 @@ public class Project {
             projectStructure.createDirectoryStructure();
             projectProcessor.process();
             try {
-                projectWriter.writeFile(projectProcessor.getJavaClass(), projectStructure.getProjectName() + ".java", projectStructure.getMainPath());
-                projectWriter.writeFile(projectProcessor.getGradleBuild(), File.separator + "build.gradle", projectStructure.getProjectRoot());
-                projectWriter.writeFile(projectProcessor.getGradleSettings(), File.separator + "settings.gradle", projectStructure.getProjectRoot());
-                projectWriter.writeFile(templateProvider.getSolidityProject(), File.separator + "Greeter.sol", projectStructure.getSolidityPath());
-                projectWriter.writeFile(templateProvider.getGradlewWrapperSettings(), File.separator + "gradle-wrapper.properties", projectStructure.getWrapperPath());
-                projectWriter.writeFile(templateProvider.getGradlewScript(), File.separator + "gradlew", projectStructure.getProjectRoot());
-                projectWriter.writeFile(templateProvider.getGradlewBatScript(), File.separator + "gradlew.bat", projectStructure.getProjectRoot());
-                projectWriter.copyFile(templateProvider.getGradlewJar(), projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar");
+                projectWriter.writeResourceFile(projectProcessor.getJavaClass(), projectStructure.getProjectName() + ".java", projectStructure.getMainPath());
+                projectWriter.writeResourceFile(projectProcessor.getGradleBuild(), File.separator + "build.gradle", projectStructure.getProjectRoot());
+                projectWriter.writeResourceFile(projectProcessor.getGradleSettings(), File.separator + "settings.gradle", projectStructure.getProjectRoot());
+                projectWriter.writeResourceFile(templateProvider.getSolidityProject(), File.separator + "Greeter.sol", projectStructure.getSolidityPath());
+                projectWriter.writeResourceFile(templateProvider.getGradlewWrapperSettings(), File.separator + "gradle-wrapper.properties", projectStructure.getWrapperPath());
+                projectWriter.writeResourceFile(templateProvider.getGradlewScript(), File.separator + "gradlew", projectStructure.getProjectRoot());
+                projectWriter.writeResourceFile(templateProvider.getGradlewBatScript(), File.separator + "gradlew.bat", projectStructure.getProjectRoot());
+                projectWriter.copyResourceFile(templateProvider.getGradlewJar(), projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar");
                 buildGradleProject(getOS(), projectStructure.getProjectRoot());
             } catch (IOException e) {
-                e.getMessage();
+                e.printStackTrace();
+            }
+
+            return new Project(this);
+        }
+        public Project buildImportProject() {
+            ProjectWriter projectWriter = new ProjectWriter();
+            projectStructure.createDirectoryStructure();
+            projectProcessor.process();
+            try {
+                projectWriter.writeResourceFile(projectProcessor.getJavaClass(), projectStructure.getProjectName() + ".java", projectStructure.getMainPath());
+                projectWriter.writeResourceFile(projectProcessor.getGradleBuild(), File.separator + "build.gradle", projectStructure.getProjectRoot());
+                projectWriter.writeResourceFile(projectProcessor.getGradleSettings(), File.separator + "settings.gradle", projectStructure.getProjectRoot());
+                projectWriter.writeSolidityProject(solidityImportPath,projectStructure.getSolidityPath());
+                projectWriter.writeResourceFile(templateProvider.getGradlewWrapperSettings(), File.separator + "gradle-wrapper.properties", projectStructure.getWrapperPath());
+                projectWriter.writeResourceFile(templateProvider.getGradlewScript(), File.separator + "gradlew", projectStructure.getProjectRoot());
+                projectWriter.writeResourceFile(templateProvider.getGradlewBatScript(), File.separator + "gradlew.bat", projectStructure.getProjectRoot());
+                projectWriter.copyResourceFile(templateProvider.getGradlewJar(), projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar");
+                buildGradleProject(getOS(), projectStructure.getProjectRoot());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             return new Project(this);
