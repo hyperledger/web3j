@@ -17,15 +17,12 @@ import org.web3j.codegen.SolidityFunctionWrapperGenerator;
 import org.web3j.codegen.TruffleJsonFunctionWrapperGenerator;
 import org.web3j.console.project.ProjectCreator;
 import org.web3j.console.project.ProjectImporter;
-import org.web3j.console.project.ProjectRunner;
 import org.web3j.utils.Version;
 
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
 import static org.web3j.utils.Collection.tail;
 
-/**
- * Main entry point for running command line utilities.
- */
+/** Main entry point for running command line utilities. */
 public class Runner {
 
     private static String USAGE = "Usage: web3j version|wallet|solidity|new ...";

@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs LTD.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.console.project;
 
 import java.io.BufferedReader;
@@ -15,7 +27,15 @@ public class TemplateProvider {
     private final String gradlewScript;
     private final InputStream gradlewJar;
 
-    private TemplateProvider(final String mainJavaClass, final String gradleBuild, final String gradleSettings, final String solidityProject, final String gradlewWrapperSettings, final String gradlewBatScript, final String gradlewScript, final InputStream gradlewJar) {
+    private TemplateProvider(
+            final String mainJavaClass,
+            final String gradleBuild,
+            final String gradleSettings,
+            final String solidityProject,
+            final String gradlewWrapperSettings,
+            final String gradlewBatScript,
+            final String gradlewScript,
+            final InputStream gradlewJar) {
         this.mainJavaClass = mainJavaClass;
         this.gradleBuild = gradleBuild;
         this.gradleSettings = gradleSettings;
@@ -25,7 +45,6 @@ public class TemplateProvider {
         this.gradlewScript = gradlewScript;
         this.gradlewJar = gradlewJar;
     }
-
 
     public String getMainJavaClass() {
         return mainJavaClass;
@@ -54,10 +73,10 @@ public class TemplateProvider {
     public String getGradlewScript() {
         return gradlewScript;
     }
+
     public InputStream getGradlewJar() {
         return gradlewJar;
     }
-
 
     public static class Builder {
         private String mainJavaClass;
@@ -69,12 +88,10 @@ public class TemplateProvider {
         private String gradlewScript;
         private InputStream gradlewJar;
 
-
         public Builder loadMainJavaClass(String name) throws IOException {
 
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.mainJavaClass = readFile(resourcePath);
-
 
             return this;
         }
@@ -121,9 +138,16 @@ public class TemplateProvider {
             return this;
         }
 
-
         public TemplateProvider build() {
-            return new TemplateProvider(mainJavaClass, gradleBuild, gradleSettings, solidityProject, gradlewWrapperSettings, gradlewBatScript, gradlewScript, gradlewJar);
+            return new TemplateProvider(
+                    mainJavaClass,
+                    gradleBuild,
+                    gradleSettings,
+                    solidityProject,
+                    gradlewWrapperSettings,
+                    gradlewBatScript,
+                    gradlewScript,
+                    gradlewJar);
         }
 
         private String readFile(InputStream file) throws IOException {
@@ -135,6 +159,5 @@ public class TemplateProvider {
             }
             return stringBuilder.toString();
         }
-
     }
 }

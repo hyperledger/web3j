@@ -12,9 +12,9 @@
  */
 package org.web3j.console.project;
 
-import picocli.CommandLine;
-
 import java.io.IOException;
+
+import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
@@ -23,7 +23,6 @@ import static picocli.CommandLine.Help.Visibility.ALWAYS;
 public class ProjectCreator {
     private static final String COMMAND_PREFIX = "new";
     private static final String COMMAND_NEW = "new";
-
 
     private final String root;
     private final String packageName;
@@ -40,30 +39,29 @@ public class ProjectCreator {
             args = tail(args);
         }
         CommandLine.run(new PicocliRunner(), args);
-
     }
 
-
-
     private void generate() throws IOException {
-        ProjectStructure projectStructure = new ProjectStructure(root,packageName,projectName);
-        TemplateProvider templateProvider = new TemplateProvider.Builder()
-                .loadSolidityProject("Greeter.sol")
-                .loadGradlewBatScript("gradlew.bat.template")
-                .loadGradlewScript("gradlew.template")
-                .loadMainJavaClass("Template.java")
-                .loadGradleBuild("build.gradle.template")
-                .loadGradleSettings("settings.gradle.template")
-                .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                .loadGradleJar("gradle-wrapper.jar")
-                .build();
-        ProjectProcessor projectProcessor = new ProjectProcessor(projectStructure,templateProvider);
-        Project project = new Project.Builder()
-                .withProjectStructure(projectStructure)
-                .withTemplateProvider(templateProvider)
-                .withProjectProcessor(projectProcessor)
-                .buildNewProject();
-
+        ProjectStructure projectStructure = new ProjectStructure(root, packageName, projectName);
+        TemplateProvider templateProvider =
+                new TemplateProvider.Builder()
+                        .loadSolidityProject("Greeter.sol")
+                        .loadGradlewBatScript("gradlew.bat.template")
+                        .loadGradlewScript("gradlew.template")
+                        .loadMainJavaClass("Template.java")
+                        .loadGradleBuild("build.gradle.template")
+                        .loadGradleSettings("settings.gradle.template")
+                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
+                        .loadGradleJar("gradle-wrapper.jar")
+                        .build();
+        ProjectProcessor projectProcessor =
+                new ProjectProcessor(projectStructure, templateProvider);
+        Project project =
+                new Project.Builder()
+                        .withProjectStructure(projectStructure)
+                        .withTemplateProvider(templateProvider)
+                        .withProjectProcessor(projectProcessor)
+                        .buildNewProject();
     }
 
     @CommandLine.Command(
@@ -91,20 +89,14 @@ public class ProjectCreator {
                 required = true)
         private String projectName;
 
-
-
         @Override
         public void run() {
             try {
 
-                new ProjectCreator(
-                        root, packageName, projectName)
-                        .generate();
+                new ProjectCreator(root, packageName, projectName).generate();
             } catch (Exception e) {
                 exitError(e);
             }
         }
     }
-
-
 }

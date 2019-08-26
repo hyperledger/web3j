@@ -12,9 +12,9 @@
  */
 package org.web3j.console.project;
 
-import picocli.CommandLine;
-
 import java.io.IOException;
+
+import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
@@ -24,17 +24,17 @@ public class ProjectImporter {
     private static final String COMMAND_PREFIX = "import";
     private static final String COMMAND_IMPORT = "import";
 
-
     private final String root;
     private final String packageName;
     private final String projectName;
     private final String solidityImportPath;
 
-    private ProjectImporter(String root, String packageName, String projectName,String solidityImportPath) {
+    private ProjectImporter(
+            String root, String packageName, String projectName, String solidityImportPath) {
         this.root = root;
         this.packageName = packageName;
         this.projectName = projectName;
-        this.solidityImportPath =solidityImportPath;
+        this.solidityImportPath = solidityImportPath;
     }
 
     public static void main(String[] args) {
@@ -43,31 +43,30 @@ public class ProjectImporter {
         }
 
         CommandLine.run(new PicocliRunner(), args);
-
     }
 
-
-
     private void generate() throws IOException {
-        ProjectStructure projectStructure = new ProjectStructure(root,packageName,projectName);
-        TemplateProvider templateProvider = new TemplateProvider.Builder()
-                .loadSolidityProject("Greeter.sol")
-                .loadGradlewBatScript("gradlew.bat.template")
-                .loadGradlewScript("gradlew.template")
-                .loadMainJavaClass("Template.java")
-                .loadGradleBuild("build.gradle.template")
-                .loadGradleSettings("settings.gradle.template")
-                .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                .loadGradleJar("gradle-wrapper.jar")
-                .build();
-        ProjectProcessor projectProcessor = new ProjectProcessor(projectStructure,templateProvider);
-        Project project = new Project.Builder()
-                .withProjectStructure(projectStructure)
-                .withTemplateProvider(templateProvider)
-                .withProjectProcessor(projectProcessor)
-                .withSolidityImportPath(solidityImportPath)
-                .buildImportProject();
-
+        ProjectStructure projectStructure = new ProjectStructure(root, packageName, projectName);
+        TemplateProvider templateProvider =
+                new TemplateProvider.Builder()
+                        .loadSolidityProject("Greeter.sol")
+                        .loadGradlewBatScript("gradlew.bat.template")
+                        .loadGradlewScript("gradlew.template")
+                        .loadMainJavaClass("Template.java")
+                        .loadGradleBuild("build.gradle.template")
+                        .loadGradleSettings("settings.gradle.template")
+                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
+                        .loadGradleJar("gradle-wrapper.jar")
+                        .build();
+        ProjectProcessor projectProcessor =
+                new ProjectProcessor(projectStructure, templateProvider);
+        Project project =
+                new Project.Builder()
+                        .withProjectStructure(projectStructure)
+                        .withTemplateProvider(templateProvider)
+                        .withProjectProcessor(projectProcessor)
+                        .withSolidityImportPath(solidityImportPath)
+                        .buildImportProject();
     }
 
     @CommandLine.Command(
@@ -94,26 +93,21 @@ public class ProjectImporter {
                 description = "use native java types.",
                 required = true)
         private String projectName;
+
         @CommandLine.Option(
                 names = {"-sp", "--solidity path"},
                 description = "solidity project path",
                 required = true)
         private String solidityImportPath;
 
-
-
         @Override
         public void run() {
             try {
 
-                new ProjectImporter(
-                        root, packageName, projectName,solidityImportPath)
-                        .generate();
+                new ProjectImporter(root, packageName, projectName, solidityImportPath).generate();
             } catch (Exception e) {
                 exitError(e);
             }
         }
     }
-
-
 }

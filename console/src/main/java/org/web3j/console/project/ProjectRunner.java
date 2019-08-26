@@ -14,8 +14,6 @@ package org.web3j.console.project;
 
 import org.web3j.codegen.Console;
 
-import static org.web3j.utils.Collection.tail;
-
 public class ProjectRunner {
 
     private static final String USAGE = "new --package <project-name>";
@@ -30,7 +28,6 @@ public class ProjectRunner {
         } else {
             switch (args[0]) {
                 case "new":
-
                     break;
                 default:
                     Console.exitError(USAGE);
