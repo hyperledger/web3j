@@ -10,22 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.abi.datatypes;
+package org.web3j.abi.spi;
 
-import org.junit.Test;
+import java.util.function.Supplier;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.web3j.abi.FunctionReturnDecoder;
 
-public class AddressTest {
-
-    @Test
-    public void testToString() {
-        assertThat(
-                new Address("52b08330e05d731e38c856c1043288f7d9744").toString(),
-                is("0x00052b08330e05d731e38c856c1043288f7d9744"));
-        assertThat(
-                new Address("0x00052b08330e05d731e38c856c1043288f7d9744").toString(),
-                is("0x00052b08330e05d731e38c856c1043288f7d9744"));
-    }
-}
+/** Function decoding Service Provider Interface. */
+public interface FunctionReturnDecoderProvider extends Supplier<FunctionReturnDecoder> {}

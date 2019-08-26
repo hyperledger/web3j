@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.web3j.abi.datatypes.generated.AbiTypes;
-
 /** Static array type. */
 public abstract class StaticArray<T extends Type> extends Array<T> {
 

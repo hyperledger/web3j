@@ -14,32 +14,38 @@ package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
 
-import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.utils.Numeric;
 
-/** Address type, which is equivalent to uint160. */
+/** Address type, which by default is equivalent to uint160 which follows the Ethereum specification. */
 public class Address implements Type<String> {
 
     public static final String TYPE_NAME = "address";
-    public static final int LENGTH = 160;
-    public static final int LENGTH_IN_HEX = LENGTH >> 2;
+    public static final int DEFAULT_LENGTH = 160;
     public static final Address DEFAULT = new Address(BigInteger.ZERO);
 
-    private final Uint160 value;
+    private final Uint value;
 
-    public Address(Uint160 value) {
+    public Address(Uint value) {
         this.value = value;
     }
 
     public Address(BigInteger value) {
-        this(new Uint160(value));
+        this(DEFAULT_LENGTH, value);
+    }
+
+    public Address(int bitSize, BigInteger value) {
+        this(new Uint(bitSize, value));
     }
 
     public Address(String hexValue) {
-        this(Numeric.toBigInt(hexValue));
+        this(DEFAULT_LENGTH, hexValue);
     }
 
-    public Uint160 toUint160() {
+    public Address(int bitSize, String hexValue) {
+        this(bitSize, Numeric.toBigInt(hexValue));
+    }
+
+    public Uint toUint() {
         return value;
     }
 
@@ -50,7 +56,7 @@ public class Address implements Type<String> {
 
     @Override
     public String toString() {
-        return Numeric.toHexStringWithPrefixZeroPadded(value.getValue(), LENGTH_IN_HEX);
+        return Numeric.toHexStringWithPrefixZeroPadded(value.getValue(), value.getBitSize() >> 2);
     }
 
     @Override
@@ -69,7 +75,7 @@ public class Address implements Type<String> {
 
         Address address = (Address) o;
 
-        return value != null ? value.equals(address.value) : address.value == null;
+        return value != null ? value.value.equals(address.value.value) : address.value == null;
     }
 
     @Override

@@ -44,6 +44,7 @@ import org.web3j.protocol.core.methods.response.AbiDefinition;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
@@ -61,7 +62,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void setUp() throws Exception {
         super.setUp();
         generationReporter = mock(GenerationReporter.class);
-        solidityFunctionWrapper = new SolidityFunctionWrapper(true, generationReporter);
+        solidityFunctionWrapper =
+                new SolidityFunctionWrapper(
+                        true, false, false, Address.DEFAULT_LENGTH, generationReporter);
     }
 
     @Test
@@ -373,20 +376,14 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        Collections.singletonList(new AbiDefinition.NamedType("param", "uint8")),
                         "functionName",
                         Collections.emptyList(),
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
-
-        String expected =
-                "public void functionName(java.math.BigInteger param) {\n"
-                        + "  throw new RuntimeException(\"cannot call constant function with void return type\");\n"
-                        + "}\n";
-
-        assertThat(methodSpec.toString(), is(expected));
+        List<MethodSpec> methodSpecs = solidityFunctionWrapper.buildFunctions(functionDefinition);
+        assertTrue(methodSpecs.isEmpty());
     }
 
     @Test

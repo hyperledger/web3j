@@ -10,27 +10,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.abi.datatypes;
+package org.web3j.abi.datatypes.primitive;
 
-import java.math.BigInteger;
+import org.web3j.abi.datatypes.NumericType;
 
-/** Unsigned integer type. */
-public class Uint extends IntType {
-
-    public static final String TYPE_NAME = "uint";
-    public static final Uint DEFAULT = new Uint(BigInteger.ZERO);
-
-    protected Uint(int bitSize, BigInteger value) {
-        super(TYPE_NAME, bitSize, value);
-    }
-
-    public Uint(BigInteger value) {
-        // "int" values should be declared as int256 in computing function selectors
-        this(MAX_BIT_LENGTH, value);
+public abstract class Number<T extends java.lang.Number & Comparable<T>> extends PrimitiveType<T> {
+    Number(T value) {
+        super(value);
     }
 
     @Override
-    protected boolean valid() {
-        return super.valid() && 0 <= value.signum();
-    }
+    public abstract NumericType toSolidityType();
 }

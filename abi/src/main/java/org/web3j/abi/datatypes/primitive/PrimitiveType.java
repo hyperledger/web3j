@@ -10,19 +10,26 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.abi.datatypes;
+package org.web3j.abi.datatypes.primitive;
 
-import java.math.BigInteger;
+import java.io.Serializable;
+import java.util.Objects;
 
-/** Common numeric type. */
-public abstract class NumericType implements Type<BigInteger> {
+import org.web3j.abi.datatypes.Type;
 
-    private String type;
-    BigInteger value;
+public abstract class PrimitiveType<T extends Serializable & Comparable<T>> implements Type<T> {
 
-    public NumericType(String type, BigInteger value) {
-        this.type = type;
+    private final String type;
+    private final T value;
+
+    PrimitiveType(final T value) {
+        this.type = getClass().getSimpleName().toLowerCase();
         this.value = value;
+    }
+
+    @Override
+    public T getValue() {
+        return value;
     }
 
     @Override
@@ -30,35 +37,22 @@ public abstract class NumericType implements Type<BigInteger> {
         return type;
     }
 
-    @Override
-    public BigInteger getValue() {
-        return value;
-    }
-
-    public abstract int getBitSize();
+    public abstract Type toSolidityType();
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
-        NumericType that = (NumericType) o;
-
-        if (!type.equals(that.type)) {
-            return false;
-        }
-
-        return value != null ? value.equals(that.value) : that.value == null;
+        final PrimitiveType<?> that = (PrimitiveType<?>) o;
+        return type.equals(that.type) && value.equals(that.value);
     }
 
     @Override
     public int hashCode() {
-        int result = type.hashCode();
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
+        return Objects.hash(type, value);
     }
 }

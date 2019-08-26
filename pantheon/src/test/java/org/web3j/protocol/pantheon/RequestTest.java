@@ -143,59 +143,49 @@ public class RequestTest extends RequestTester {
     public void testPrivGetPrivateTransaction() throws Exception {
         web3j.privGetPrivateTransaction("EnclaveKey").send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getPrivateTransaction\","
                         + "\"params\":[\"EnclaveKey\"],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
     public void testPrivGetPrivacyPrecompileAddress() throws Exception {
         web3j.privGetPrivacyPrecompileAddress().send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getPrivacyPrecompileAddress\","
                         + "\"params\":[],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
     public void testPrivCreatePrivacyGroup() throws Exception {
         web3j.privCreatePrivacyGroup(BASE_64_STRINGS, "testName", "testDesc").send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_createPrivacyGroup\","
                         + "\"params\":[{\"addresses\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\"name\":\"testName\",\"description\":\"testDesc\"}],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
     public void testPrivFindPrivacyGroup() throws Exception {
         web3j.privFindPrivacyGroup(BASE_64_STRINGS).send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_findPrivacyGroup\","
                         + "\"params\":[[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"]],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 
     @Test
     public void testPrivDeletePrivacyGroup() throws Exception {
         web3j.privDeletePrivacyGroup(MOCK_PRIVACY_GROUP_ID).send();
 
-        // CHECKSTYLE:OFF
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_deletePrivacyGroup\","
                         + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],"
                         + "\"id\":1}");
-        // CHECKSTYLE:ON
     }
 }

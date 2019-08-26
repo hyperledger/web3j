@@ -10,16 +10,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen;
+package org.web3j.abi.datatypes.primitive;
 
-import org.junit.Test;
+import org.web3j.abi.datatypes.NumericType;
 
-import org.web3j.TempFileProvider;
+public final class Double extends Number<java.lang.Double> {
 
-public class AbiTypesMapperGeneratorTest extends TempFileProvider {
+    public Double(double value) {
+        super(value);
+    }
 
-    @Test
-    public void testGeneration() throws Exception {
-        AbiTypesMapperGenerator.main(new String[] {tempDirPath});
+    @Override
+    public NumericType toSolidityType() {
+        throw new UnsupportedOperationException("Fixed types are not supported");
     }
 }

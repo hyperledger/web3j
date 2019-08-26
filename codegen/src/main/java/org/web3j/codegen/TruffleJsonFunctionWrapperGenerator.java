@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.tx.ChainId;
@@ -116,7 +117,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
     }
 
     @SuppressWarnings("unchecked")
-    private void generate() throws IOException, ClassNotFoundException {
+    public void generate() throws IOException, ClassNotFoundException {
 
         File truffleJsonFile = new File(jsonFileLocation);
         if (!truffleJsonFile.exists() || !truffleJsonFile.canRead()) {
@@ -146,7 +147,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             } else {
                 addresses = Collections.EMPTY_MAP;
             }
-            new SolidityFunctionWrapper(useJavaNativeTypes)
+            new SolidityFunctionWrapper(useJavaNativeTypes, Address.DEFAULT_LENGTH)
                     .generateJavaFiles(
                             contractName,
                             c.getBytecode(),
