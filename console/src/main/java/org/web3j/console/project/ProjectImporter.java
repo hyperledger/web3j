@@ -12,6 +12,7 @@
  */
 package org.web3j.console.project;
 
+import java.io.File;
 import java.io.IOException;
 
 import picocli.CommandLine;
@@ -20,20 +21,15 @@ import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
-public class ProjectImporter {
+public class ProjectImporter extends ProjectCreator {
     private static final String COMMAND_PREFIX = "import";
     private static final String COMMAND_IMPORT = "import";
 
-    private final String root;
-    private final String packageName;
-    private final String projectName;
     private final String solidityImportPath;
 
     private ProjectImporter(
-            String root, String packageName, String projectName, String solidityImportPath) {
-        this.root = root;
-        this.packageName = packageName;
-        this.projectName = projectName;
+            final String root, final String packageName, final String projectName, final String solidityImportPath) throws IOException {
+        super(root, packageName, projectName);
         this.solidityImportPath = solidityImportPath;
     }
 
@@ -45,28 +41,14 @@ public class ProjectImporter {
         CommandLine.run(new PicocliRunner(), args);
     }
 
-    private void generate() throws IOException {
-        ProjectStructure projectStructure = new ProjectStructure(root, packageName, projectName);
-        TemplateProvider templateProvider =
-                new TemplateProvider.Builder()
-                        .loadSolidityProject("Greeter.sol")
-                        .loadGradlewBatScript("gradlew.bat.template")
-                        .loadGradlewScript("gradlew.template")
-                        .loadMainJavaClass("Template.java")
-                        .loadGradleBuild("build.gradle.template")
-                        .loadGradleSettings("settings.gradle.template")
-                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                        .loadGradleJar("gradle-wrapper.jar")
-                        .build();
-        ProjectProcessor projectProcessor =
-                new ProjectProcessor(projectStructure, templateProvider);
+    private void generate() {
+        File solidityFile = new File(solidityImportPath);
         Project project =
                 new Project.Builder()
                         .withProjectStructure(projectStructure)
                         .withTemplateProvider(templateProvider)
-                        .withProjectProcessor(projectProcessor)
-                        .withSolidityImportPath(solidityImportPath)
-                        .buildImportProject();
+                        .withSolidityFile(solidityFile)
+                        .build();
     }
 
     @CommandLine.Command(
@@ -89,21 +71,20 @@ public class ProjectImporter {
         private String packageName;
 
         @CommandLine.Option(
-                names = {"-pn", "--project name"},
-                description = "use native java types.",
+                names = {"-n", "--project name"},
+                description = "project name.",
                 required = true)
         private String projectName;
 
         @CommandLine.Option(
-                names = {"-sp", "--solidity path"},
-                description = "solidity project path",
+                names = {"-s", "--solidity path"},
+                description = "path to solidity file/folder",
                 required = true)
         private String solidityImportPath;
 
         @Override
         public void run() {
             try {
-
                 new ProjectImporter(root, packageName, projectName, solidityImportPath).generate();
             } catch (Exception e) {
                 exitError(e);

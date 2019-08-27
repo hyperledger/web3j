@@ -32,34 +32,14 @@ class ProjectWriter {
         Files.copy(file, Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private void copySolidityFile(String path, String destination) throws IOException {
+    void writeSolidity(File solidityFile, String destination) throws IOException {
 
-        Files.copy(
-                new File(path).toPath(),
-                new File(destination + File.separator + new File(path).getName()).toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
-    }
-
-    private void copySolidityFiles(String path, String destination) throws IOException {
-
-        for (String fileName : new File(path).list()) {
-            if (fileName.endsWith(".sol"))
-                Files.copy(
-                        new File(path + File.separator + fileName).toPath(),
-                        new File(destination + File.separator + fileName).toPath(),
-                        StandardCopyOption.REPLACE_EXISTING);
-        }
-    }
-
-    void writeSolidityProject(String path, String destination) throws IOException {
-
-        File solidityPath = new File(path);
-        if (solidityPath.exists()) {
-            if (solidityPath.isDirectory()) {
-                copySolidityFiles(path, destination);
-            } else {
-                copySolidityFile(path, destination);
-            }
+        Files.walkFileTree()
+        if (solidityFile.exists()) {
+            Files.copy(
+                    solidityFile.toPath(),
+                    new File(destination + File.separator + solidityFile.getName()).toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
         }
     }
 }

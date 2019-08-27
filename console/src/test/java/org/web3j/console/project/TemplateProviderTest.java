@@ -25,7 +25,6 @@ public class TemplateProviderTest {
         try {
             templateProvider =
                     new TemplateProvider.Builder()
-                            .loadSolidityProject("Greeter.sol")
                             .loadGradlewBatScript("gradlew.bat.template")
                             .loadGradlewScript("gradlew.template")
                             .loadMainJavaClass("Template.java")
@@ -33,6 +32,7 @@ public class TemplateProviderTest {
                             .loadGradleSettings("settings.gradle.template")
                             .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
                             .loadGradleJar("gradle-wrapper.jar")
+
                             .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,11 +55,6 @@ public class TemplateProviderTest {
         Assert.assertEquals(templateProvider.getGradleSettings(), TemplatesAsString.gradleSettings);
     }
 
-    @Test
-    public void loadSolidityProjectTest() {
-        Assert.assertEquals(
-                templateProvider.getSolidityProject(), TemplatesAsString.solidityProject);
-    }
 
     @Test
     public void loadGradlewScriptTest() {

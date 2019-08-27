@@ -91,6 +91,7 @@ public class ProjectStructure {
 
     void createDirectoryStructure() {
         try {
+
             createDirectory(mainPath);
             createDirectory(testPath);
             createDirectory(solidityPath);

@@ -12,7 +12,10 @@
  */
 package org.web3j.console.project;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import picocli.CommandLine;
 
@@ -24,14 +27,24 @@ public class ProjectCreator {
     private static final String COMMAND_PREFIX = "new";
     private static final String COMMAND_NEW = "new";
 
-    private final String root;
-    private final String packageName;
-    private final String projectName;
+    final ProjectStructure projectStructure;
+    final TemplateProvider templateProvider;
 
-    private ProjectCreator(String root, String packageName, String projectName) {
-        this.root = root;
-        this.packageName = packageName;
-        this.projectName = projectName;
+    ProjectCreator(String root,  String packageName,  String projectName) throws IOException {
+        this.projectStructure = new ProjectStructure(root, packageName, projectName);
+
+        this.templateProvider =
+                new TemplateProvider.Builder()
+                        .loadGradlewBatScript("gradlew.bat.template")
+                        .loadGradlewScript("gradlew.template")
+                        .loadMainJavaClass("Template.java")
+                        .loadGradleBuild("build.gradle.template")
+                        .loadGradleSettings("settings.gradle.template")
+                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
+                        .loadGradleJar("gradle-wrapper.jar")
+                        .withPackageNameReplacement(s -> s.replaceAll("<package_name>", packageName))
+                        .withProjectNameReplacement(s -> s.replaceAll("<project_name>", projectName))
+                        .build();
     }
 
     public static void main(String[] args) {
@@ -41,27 +54,20 @@ public class ProjectCreator {
         CommandLine.run(new PicocliRunner(), args);
     }
 
-    private void generate() throws IOException {
-        ProjectStructure projectStructure = new ProjectStructure(root, packageName, projectName);
-        TemplateProvider templateProvider =
-                new TemplateProvider.Builder()
-                        .loadSolidityProject("Greeter.sol")
-                        .loadGradlewBatScript("gradlew.bat.template")
-                        .loadGradlewScript("gradlew.template")
-                        .loadMainJavaClass("Template.java")
-                        .loadGradleBuild("build.gradle.template")
-                        .loadGradleSettings("settings.gradle.template")
-                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                        .loadGradleJar("gradle-wrapper.jar")
-                        .build();
-        ProjectProcessor projectProcessor =
-                new ProjectProcessor(projectStructure, templateProvider);
+    private void generate()  {
+        URL solidityUrl = ClassLoader.getSystemResource("Greeter.sol");
+        File templateSolidityFile = null;
+        try {
+            templateSolidityFile = new File(solidityUrl.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         Project project =
                 new Project.Builder()
                         .withProjectStructure(projectStructure)
                         .withTemplateProvider(templateProvider)
-                        .withProjectProcessor(projectProcessor)
-                        .buildNewProject();
+                        .withSolidityFile(templateSolidityFile)
+                        .build();
     }
 
     @CommandLine.Command(
@@ -84,18 +90,17 @@ public class ProjectCreator {
         private String packageName;
 
         @CommandLine.Option(
-                names = {"-pn", "--project name"},
-                description = "use native java types.",
+                names = {"-n", "--project name"},
+                description = "project name.",
                 required = true)
         private String projectName;
 
         @Override
         public void run() {
             try {
-
                 new ProjectCreator(root, packageName, projectName).generate();
             } catch (Exception e) {
-                exitError(e);
+               e.printStackTrace();
             }
         }
     }
