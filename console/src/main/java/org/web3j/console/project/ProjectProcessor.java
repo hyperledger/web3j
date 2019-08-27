@@ -12,26 +12,26 @@
  */
 package org.web3j.console.project;
 
-public class ProjectProcessor {
+class ProjectProcessor {
     private final ProjectStructure projectStructure;
     private final TemplateProvider templateProvider;
     private String javaClass;
     private String gradleBuild;
     private String gradleSettings;
 
-    public String getJavaClass() {
+    String getJavaClass() {
         return javaClass;
     }
 
-    public String getGradleBuild() {
+    String getGradleBuild() {
         return gradleBuild;
     }
 
-    public String getGradleSettings() {
+    String getGradleSettings() {
         return gradleSettings;
     }
 
-    public ProjectProcessor(ProjectStructure projectStructure, TemplateProvider templateProvider) {
+    ProjectProcessor(ProjectStructure projectStructure, TemplateProvider templateProvider) {
         this.projectStructure = projectStructure;
         this.templateProvider = templateProvider;
     }
@@ -68,7 +68,7 @@ public class ProjectProcessor {
         return template.replaceAll(regex, replacement);
     }
 
-    public void process() {
+    void process() {
         mainJavaClass();
         gradleBuild();
         gradleSettings();

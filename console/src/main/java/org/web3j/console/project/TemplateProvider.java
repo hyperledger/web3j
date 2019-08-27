@@ -46,35 +46,35 @@ public class TemplateProvider {
         this.gradlewJar = gradlewJar;
     }
 
-    public String getMainJavaClass() {
+    String getMainJavaClass() {
         return mainJavaClass;
     }
 
-    public String getGradleBuild() {
+    String getGradleBuild() {
         return gradleBuild;
     }
 
-    public String getGradleSettings() {
+    String getGradleSettings() {
         return gradleSettings;
     }
 
-    public String getSolidityProject() {
+    String getSolidityProject() {
         return solidityProject;
     }
 
-    public String getGradlewWrapperSettings() {
+    String getGradlewWrapperSettings() {
         return gradlewWrapperSettings;
     }
 
-    public String getGradlewBatScript() {
+    String getGradlewBatScript() {
         return gradlewBatScript;
     }
 
-    public String getGradlewScript() {
+    String getGradlewScript() {
         return gradlewScript;
     }
 
-    public InputStream getGradlewJar() {
+    InputStream getGradlewJar() {
         return gradlewJar;
     }
 
@@ -88,7 +88,7 @@ public class TemplateProvider {
         private String gradlewScript;
         private InputStream gradlewJar;
 
-        public Builder loadMainJavaClass(String name) throws IOException {
+        Builder loadMainJavaClass(String name) throws IOException {
 
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.mainJavaClass = readFile(resourcePath);
@@ -96,49 +96,48 @@ public class TemplateProvider {
             return this;
         }
 
-        public Builder loadGradleBuild(String name) throws IOException {
+        Builder loadGradleBuild(String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradleBuild = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradleSettings(String name) throws IOException {
+        Builder loadGradleSettings(String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradleSettings = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadSolidityProject(String name) throws IOException {
+        Builder loadSolidityProject(String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.solidityProject = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradlewWrapperSettings(String name) throws IOException {
+        Builder loadGradlewWrapperSettings(String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradlewWrapperSettings = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradlewBatScript(String name) throws IOException {
+        Builder loadGradlewBatScript(String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradlewBatScript = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradlewScript(String name) throws IOException {
+        Builder loadGradlewScript(String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradlewScript = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradleJar(String name) throws IOException {
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.gradlewJar = resourcePath;
+        Builder loadGradleJar(String name) {
+            this.gradlewJar = getClass().getClassLoader().getResourceAsStream(name);
             return this;
         }
 
-        public TemplateProvider build() {
+        TemplateProvider build() {
             return new TemplateProvider(
                     mainJavaClass,
                     gradleBuild,

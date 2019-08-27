@@ -18,7 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Project {
 
-    private Project(Builder builder) {}
+    private Project(Builder builder) {
+    }
 
     public static class Builder {
 
@@ -27,26 +28,27 @@ public class Project {
         private ProjectProcessor projectProcessor;
         private String solidityImportPath;
 
-        public Builder() {}
+        Builder() {
+        }
 
-        public Builder withSolidityImportPath(String solidityImportPath) {
+        Builder withSolidityImportPath(String solidityImportPath) {
             this.solidityImportPath = solidityImportPath;
             return this;
         }
 
-        public Builder withProjectStructure(ProjectStructure projectStructure) {
+        Builder withProjectStructure(ProjectStructure projectStructure) {
             this.projectStructure = projectStructure;
 
             return this;
         }
 
-        public Builder withTemplateProvider(TemplateProvider templateProvider) {
+        Builder withTemplateProvider(TemplateProvider templateProvider) {
             this.templateProvider = templateProvider;
 
             return this;
         }
 
-        public Builder withProjectProcessor(ProjectProcessor projectProcessor) {
+        Builder withProjectProcessor(ProjectProcessor projectProcessor) {
             this.projectProcessor = projectProcessor;
             return this;
         }
@@ -69,14 +71,12 @@ public class Project {
                         .redirectError(ProcessBuilder.Redirect.INHERIT)
                         .start()
                         .waitFor(60, TimeUnit.MINUTES);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
         }
 
-        final String getOS() {
+        private String getOS() {
             String[] os = System.getProperty("os.name").split(" ");
             return os[0];
         }
@@ -125,7 +125,7 @@ public class Project {
             return new Project(this);
         }
 
-        public Project buildImportProject() {
+        Project buildImportProject() {
             ProjectWriter projectWriter = new ProjectWriter();
             projectStructure.createDirectoryStructure();
             projectProcessor.process();
