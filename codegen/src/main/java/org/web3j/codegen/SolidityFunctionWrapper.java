@@ -396,7 +396,10 @@ public class SolidityFunctionWrapper extends Generator {
         Set<String> fieldNames = new HashSet<>();
         fieldNames.add(Contract.FUNC_DEPLOY);
         Set<String> duplicateFunctionNames = getDuplicateFunctionNames(functionDefinitions);
-
+        if (!duplicateFunctionNames.isEmpty()) {
+            System.out.println("\nWarning: Duplicate field(s) found: " + duplicateFunctionNames
+                    + ". Please don't use names which will be the same in uppercase.");
+        }
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals(TYPE_FUNCTION)) {
                 String funcName = functionDefinition.getName();
