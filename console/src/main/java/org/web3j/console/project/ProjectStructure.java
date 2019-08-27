@@ -32,10 +32,12 @@ public class ProjectStructure {
         this.formattedPackageName = formatPackageName(packageName);
         this.projectName = projectName;
         this.projectRoot = root + File.separator + projectName;
-        this.mainPath = generatePath(this.projectRoot,"src", "main", "java", this.formattedPackageName);
-        this.solidityPath = generatePath(this.projectRoot,"src","main", "solidity");
-        this.testPath = generatePath(this.projectRoot,"src", "test", "java", this.formattedPackageName);
-        this.wrapperPath = generatePath(this.projectRoot,"gradle","wrapper");
+        this.mainPath =
+                generatePath(this.projectRoot, "src", "main", "java", this.formattedPackageName);
+        this.solidityPath = generatePath(this.projectRoot, "src", "main", "solidity");
+        this.testPath =
+                generatePath(this.projectRoot, "src", "test", "java", this.formattedPackageName);
+        this.wrapperPath = generatePath(this.projectRoot, "gradle", "wrapper");
     }
 
     String getRoot() {
@@ -73,7 +75,7 @@ public class ProjectStructure {
     private String generatePath(String... a) {
         StringBuilder finalPath = new StringBuilder();
         for (String b : a) {
-            finalPath.append( b + File.separator);
+            finalPath.append(b + File.separator);
         }
         return finalPath.toString();
     }

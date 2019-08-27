@@ -18,8 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Project {
 
-    private Project(Builder builder) {
-    }
+    private Project(Builder builder) {}
 
     public static class Builder {
 
@@ -28,8 +27,7 @@ public class Project {
         private ProjectProcessor projectProcessor;
         private String solidityImportPath;
 
-        Builder() {
-        }
+        Builder() {}
 
         Builder withSolidityImportPath(String solidityImportPath) {
             this.solidityImportPath = solidityImportPath;
