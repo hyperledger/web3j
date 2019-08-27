@@ -12,8 +12,10 @@
  */
 package org.web3j.abi;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Fixed;
@@ -39,6 +42,8 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.utils.Numeric;
 
+import static org.web3j.abi.TypeReference.makeTypeReference;
+
 /**
  * Ethereum Contract Application Binary Interface (ABI) decoding for types. Decoding is not
  * documented, but is the reverse of the encoding details located <a
@@ -48,15 +53,34 @@ public class TypeDecoder {
 
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
-    static <T extends Type> int getSingleElementLength(String input, int offset, Class<T> type) {
-        if (input.length() == offset) {
-            return 0;
-        } else if (DynamicBytes.class.isAssignableFrom(type)
-                || Utf8String.class.isAssignableFrom(type)) {
-            // length field + data value
-            return (decodeUintAsInt(input, offset) / Type.MAX_BYTE_LENGTH) + 2;
+    public static Type instantiateType(String solidityType, Object value)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+                    IllegalAccessException, ClassNotFoundException {
+        return instantiateType(makeTypeReference(solidityType), value);
+    }
+
+    public static Type instantiateType(TypeReference ref, Object value)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+                    InstantiationException, ClassNotFoundException {
+        Class rc = ref.getClassType();
+        if (Array.class.isAssignableFrom(rc)) {
+            return instantiateArrayType(ref, value);
+        }
+        return instantiateAtomicType(rc, value);
+    }
+
+    public static <T extends Array> T decode(
+            String input, int offset, TypeReference<T> typeReference) {
+        Class cls = ((ParameterizedType) typeReference.getType()).getRawType().getClass();
+        if (StaticArray.class.isAssignableFrom(cls)) {
+            return decodeStaticArray(input, offset, typeReference, 1);
+        } else if (DynamicArray.class.isAssignableFrom(cls)) {
+            return decodeDynamicArray(input, offset, typeReference);
         } else {
-            return 1;
+            throw new UnsupportedOperationException(
+                    "Unsupported TypeReference: "
+                            + cls.getName()
+                            + ", only Array types can be passed as TypeReferences");
         }
     }
 
@@ -79,21 +103,6 @@ public class TypeDecoder {
                     "Array types must be wrapped in a TypeReference");
         } else {
             throw new UnsupportedOperationException("Type cannot be encoded: " + type.getClass());
-        }
-    }
-
-    public static <T extends Array> T decode(
-            String input, int offset, TypeReference<T> typeReference) {
-        Class cls = ((ParameterizedType) typeReference.getType()).getRawType().getClass();
-        if (StaticArray.class.isAssignableFrom(cls)) {
-            return decodeStaticArray(input, offset, typeReference, 1);
-        } else if (DynamicArray.class.isAssignableFrom(cls)) {
-            return decodeDynamicArray(input, offset, typeReference);
-        } else {
-            throw new UnsupportedOperationException(
-                    "Unsupported TypeReference: "
-                            + cls.getName()
-                            + ", only Array types can be passed as TypeReferences");
         }
     }
 
@@ -154,6 +163,96 @@ public class TypeDecoder {
             }
         }
         return Type.MAX_BIT_LENGTH;
+    }
+
+    static Type instantiateArrayType(TypeReference ref, Object value)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+                    InstantiationException, ClassNotFoundException {
+        List values;
+        if (value instanceof List) {
+            values = (List) value;
+        } else if (value.getClass().isArray()) {
+            values = arrayToList(value);
+        } else {
+            throw new ClassCastException(
+                    "Arg of type "
+                            + value.getClass()
+                            + " should be a list to instantiate web3j Array");
+        }
+        Constructor listcons;
+        int arraySize =
+                ref instanceof TypeReference.StaticArrayTypeReference
+                        ? ((TypeReference.StaticArrayTypeReference) ref).getSize()
+                        : -1;
+        if (arraySize <= 0) {
+            listcons = DynamicArray.class.getConstructor(new Class[] {Class.class, List.class});
+        } else {
+            Class arrayClass =
+                    Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
+            listcons = arrayClass.getConstructor(new Class[] {Class.class, List.class});
+        }
+        // create a list of arguments coerced to the correct type of sub-TypeReference
+        ArrayList transformedList = new ArrayList(values.size());
+        TypeReference subTypeReference = ref.getSubTypeReference();
+        for (Object o : values) {
+            transformedList.add(instantiateType(subTypeReference, o));
+        }
+        return (Type) listcons.newInstance(ref.getClassType(), transformedList);
+    }
+
+    static Type instantiateAtomicType(Class referenceClass, Object value)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+                    InstantiationException, ClassNotFoundException {
+        Object constructorArg = null;
+        if (NumericType.class.isAssignableFrom(referenceClass)) {
+            constructorArg = asBigInteger(value);
+        } else if (BytesType.class.isAssignableFrom(referenceClass)) {
+            if (value instanceof byte[]) {
+                constructorArg = value;
+            } else if (value instanceof BigInteger) {
+                constructorArg = ((BigInteger) value).toByteArray();
+            } else if (value instanceof String) {
+                constructorArg = Numeric.hexStringToByteArray((String) value);
+            }
+        } else if (Utf8String.class.isAssignableFrom(referenceClass)) {
+            constructorArg = value.toString();
+        } else if (Address.class.isAssignableFrom(referenceClass)) {
+            if (value instanceof BigInteger || value instanceof Uint160) {
+                constructorArg = value;
+            } else {
+                constructorArg = value.toString();
+            }
+        } else if (Bool.class.isAssignableFrom(referenceClass)) {
+            if (value instanceof Boolean) {
+                constructorArg = value;
+            } else {
+                BigInteger bival = asBigInteger(value);
+                constructorArg = bival == null ? null : !bival.equals(BigInteger.ZERO);
+            }
+        }
+        if (constructorArg == null) {
+            throw new InstantiationException(
+                    "Could not create type "
+                            + referenceClass
+                            + " from arg "
+                            + value.toString()
+                            + " of type "
+                            + value.getClass());
+        }
+        Constructor cons = referenceClass.getConstructor(new Class[] {constructorArg.getClass()});
+        return (Type) cons.newInstance(constructorArg);
+    }
+
+    static <T extends Type> int getSingleElementLength(String input, int offset, Class<T> type) {
+        if (input.length() == offset) {
+            return 0;
+        } else if (DynamicBytes.class.isAssignableFrom(type)
+                || Utf8String.class.isAssignableFrom(type)) {
+            // length field + data value
+            return (decodeUintAsInt(input, offset) / Type.MAX_BYTE_LENGTH) + 2;
+        } else {
+            return 1;
+        }
     }
 
     static int decodeUintAsInt(String rawInput, int offset) {
@@ -231,20 +330,6 @@ public class TypeDecoder {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends Type> T instantiateStaticArray(
-            TypeReference<T> typeReference, List<T> elements, int length) {
-        try {
-            Class<? extends StaticArray> arrayClass =
-                    (Class<? extends StaticArray>)
-                            Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + length);
-
-            return (T) arrayClass.getConstructor(List.class).newInstance(elements);
-        } catch (ReflectiveOperationException e) {
-            throw new UnsupportedOperationException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     static <T extends Type> T decodeDynamicArray(
             String input, int offset, TypeReference<T> typeReference) {
 
@@ -262,6 +347,44 @@ public class TypeDecoder {
         int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
         return decodeArrayElements(input, valueOffset, typeReference, length, function);
+    }
+
+    static BigInteger asBigInteger(Object arg) {
+        if (arg instanceof BigInteger) {
+            return (BigInteger) arg;
+        } else if (arg instanceof BigDecimal) {
+            return ((BigDecimal) arg).toBigInteger();
+        } else if (arg instanceof String) {
+            return Numeric.toBigInt((String) arg);
+        } else if (arg instanceof byte[]) {
+            return Numeric.toBigInt((byte[]) arg);
+        } else if (arg instanceof Number) {
+            return BigInteger.valueOf(((Number) arg).longValue());
+        }
+        return null;
+    }
+
+    static List arrayToList(Object array) {
+        int len = java.lang.reflect.Array.getLength(array);
+        ArrayList rslt = new ArrayList(len);
+        for (int i = 0; i < len; i++) {
+            rslt.add(java.lang.reflect.Array.get(array, i));
+        }
+        return rslt;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Type> T instantiateStaticArray(
+            TypeReference<T> typeReference, List<T> elements, int length) {
+        try {
+            Class<? extends StaticArray> arrayClass =
+                    (Class<? extends StaticArray>)
+                            Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + length);
+
+            return (T) arrayClass.getConstructor(List.class).newInstance(elements);
+        } catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     private static <T extends Type> T decodeArrayElements(

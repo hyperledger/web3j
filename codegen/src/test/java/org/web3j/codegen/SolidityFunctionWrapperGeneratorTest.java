@@ -34,6 +34,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
+import static org.web3j.codegen.FunctionWrapperGenerator.PRIMITIVE_TYPES_ARG;
 import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_GENERATE;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
@@ -123,9 +124,20 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 true);
     }
 
+    @Test
+    public void testPrimitiveTypes() throws Exception {
+        testCodeGenerationJvmTypes("primitive", "Primitive", true);
+    }
+
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
             throws Exception {
         testCodeGeneration(contractName, inputFileName, JAVA_TYPES_ARG, true);
+    }
+
+    private void testCodeGenerationJvmTypes(
+            String contractName, String inputFileName, boolean primitive) throws Exception {
+        testCodeGeneration(
+                emptyList(), contractName, inputFileName, JAVA_TYPES_ARG, true, primitive);
     }
 
     private void testCodeGenerationSolidityTypes(String contractName, String inputFileName)
@@ -145,6 +157,17 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             String inputFileName,
             String types,
             boolean useBin)
+            throws Exception {
+        testCodeGeneration(prefixes, contractName, inputFileName, types, useBin, false);
+    }
+
+    private void testCodeGeneration(
+            List<String> prefixes,
+            String contractName,
+            String inputFileName,
+            String types,
+            boolean useBin,
+            boolean primitives)
             throws Exception {
         String packageName = null;
         if (types.equals(JAVA_TYPES_ARG)) {
@@ -182,6 +205,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         options.add(packageName);
         options.add("-o");
         options.add(tempDirPath);
+
+        if (primitives) {
+            options.add(PRIMITIVE_TYPES_ARG);
+        }
 
         SolidityFunctionWrapperGenerator.main(options.toArray(new String[options.size()]));
 

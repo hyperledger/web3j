@@ -75,7 +75,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEeaGetPrivateTransactionLegacy() {
+    public void testPrivGetPrivateTransactionLegacy() {
 
         buildResponse(
                 "{\n"
@@ -117,14 +117,14 @@ public class ResponseTest extends ResponseTester {
                                 "Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs="),
                         "restricted");
 
-        PrivGetPrivateTransaction eeaPrivateTransaction =
+        PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
         assertThat(
-                eeaPrivateTransaction.getPrivateTransaction().get(), equalTo(privateTransaction));
+                privPrivateTransaction.getPrivateTransaction().get(), equalTo(privateTransaction));
     }
 
     @Test
-    public void testEeaGetPrivateTransactionPrivacyGroup() {
+    public void testPrivGetPrivateTransactionPrivacyGroup() {
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -163,23 +163,23 @@ public class ResponseTest extends ResponseTester {
                         Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="),
                         "restricted");
 
-        PrivGetPrivateTransaction eeaPrivateTransaction =
+        PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
         assertThat(
-                eeaPrivateTransaction.getPrivateTransaction().get(), equalTo(privateTransaction));
+                privPrivateTransaction.getPrivateTransaction().get(), equalTo(privateTransaction));
     }
 
     @Test
-    public void testEeaGetPrivateTransactionNull() {
+    public void testPrivGetPrivateTransactionNull() {
         buildResponse("{\n" + "  \"result\": null\n" + "}");
 
-        PrivGetPrivateTransaction eeaPrivateTransaction =
+        PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
-        assertThat(eeaPrivateTransaction.getPrivateTransaction(), is(Optional.empty()));
+        assertThat(privPrivateTransaction.getPrivateTransaction(), is(Optional.empty()));
     }
 
     @Test
-    public void testEeaGetPrivacyPrecompileAddress() {
+    public void testPrivGetPrivacyPrecompileAddress() {
 
         buildResponse(
                 "{\n"
@@ -196,7 +196,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEeaCreatePrivacyGroup() {
+    public void testPrivCreatePrivacyGroup() {
 
         buildResponse(
                 "{\n"
@@ -213,7 +213,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEeaDeletePrivacyGroup() {
+    public void testPrivDeletePrivacyGroup() {
 
         buildResponse(
                 "{\n"
@@ -222,12 +222,12 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"true\"\n"
                         + "}");
 
-        BooleanResponse eeaDeletePrivacyGroup = deserialiseResponse(BooleanResponse.class);
-        assertThat(eeaDeletePrivacyGroup.success(), is(true));
+        BooleanResponse privDeletePrivacyGroup = deserialiseResponse(BooleanResponse.class);
+        assertThat(privDeletePrivacyGroup.success(), is(true));
     }
 
     @Test
-    public void testEeaFindPrivacyGroup() {
+    public void testPrivFindPrivacyGroup() {
 
         buildResponse(
                 "{\n"

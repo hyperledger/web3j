@@ -13,6 +13,9 @@
 package org.web3j.codegen;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.web3j.tx.Contract;
 
 import static org.web3j.codegen.Console.exitError;
 
@@ -21,18 +24,36 @@ abstract class FunctionWrapperGenerator {
 
     static final String JAVA_TYPES_ARG = "--javaTypes";
     static final String SOLIDITY_TYPES_ARG = "--solidityTypes";
+    static final String PRIMITIVE_TYPES_ARG = "--primitiveTypes";
 
     final File destinationDirLocation;
     final String basePackageName;
     final boolean useJavaNativeTypes;
+    final boolean useJavaPrimitiveTypes;
+
+    final Class<? extends Contract> contractClass;
 
     FunctionWrapperGenerator(
             File destinationDirLocation, String basePackageName, boolean useJavaNativeTypes) {
 
+        this(Contract.class, destinationDirLocation, basePackageName, useJavaNativeTypes, false);
+    }
+
+    FunctionWrapperGenerator(
+            Class<? extends Contract> contractClass,
+            File destinationDirLocation,
+            String basePackageName,
+            boolean useJavaNativeTypes,
+            boolean useJavaPrimitiveTypes) {
+
         this.destinationDirLocation = destinationDirLocation;
         this.basePackageName = basePackageName;
         this.useJavaNativeTypes = useJavaNativeTypes;
+        this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
+        this.contractClass = contractClass;
     }
+
+    public abstract void generate() throws IOException, ClassNotFoundException;
 
     static boolean useJavaNativeTypes(String argVal, String usageString) {
         boolean useJavaNativeTypes = true;
