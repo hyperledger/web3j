@@ -80,7 +80,7 @@ public class TemplateProvider {
         private String gradlewBatScript;
         private String gradlewScript;
         private InputStream gradlewJar;
-        private Function<String,String> packageNameReplacement = s -> s;
+        private Function<String, String> packageNameReplacement = s -> s;
         private Function<String, String> projectNameReplacement = s -> s;
 
         public Builder loadMainJavaClass(final String name) throws IOException {
@@ -126,12 +126,14 @@ public class TemplateProvider {
             return this;
         }
 
-        public Builder withPackageNameReplacement(final Function<String,String> packageNameReplacement) {
+        public Builder withPackageNameReplacement(
+                final Function<String, String> packageNameReplacement) {
             this.packageNameReplacement = packageNameReplacement;
             return this;
         }
 
-        public Builder withProjectNameReplacement(final Function<String,String> classNameReplacement) {
+        public Builder withProjectNameReplacement(
+                final Function<String, String> classNameReplacement) {
             this.projectNameReplacement = classNameReplacement;
             return this;
         }

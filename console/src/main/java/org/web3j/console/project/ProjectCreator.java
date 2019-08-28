@@ -19,7 +19,6 @@ import java.net.URL;
 
 import picocli.CommandLine;
 
-import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
@@ -30,7 +29,7 @@ public class ProjectCreator {
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
 
-    ProjectCreator(String root,  String packageName,  String projectName) throws IOException {
+    ProjectCreator(String root, String packageName, String projectName) throws IOException {
         this.projectStructure = new ProjectStructure(root, packageName, projectName);
 
         this.templateProvider =
@@ -42,8 +41,10 @@ public class ProjectCreator {
                         .loadGradleSettings("settings.gradle.template")
                         .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
                         .loadGradleJar("gradle-wrapper.jar")
-                        .withPackageNameReplacement(s -> s.replaceAll("<package_name>", packageName))
-                        .withProjectNameReplacement(s -> s.replaceAll("<project_name>", projectName))
+                        .withPackageNameReplacement(
+                                s -> s.replaceAll("<package_name>", packageName))
+                        .withProjectNameReplacement(
+                                s -> s.replaceAll("<project_name>", projectName))
                         .build();
     }
 
@@ -54,7 +55,7 @@ public class ProjectCreator {
         CommandLine.run(new PicocliRunner(), args);
     }
 
-    private void generate()  {
+    private void generate() {
         URL solidityUrl = ClassLoader.getSystemResource("Greeter.sol");
         File templateSolidityFile = null;
         try {
@@ -100,7 +101,7 @@ public class ProjectCreator {
             try {
                 new ProjectCreator(root, packageName, projectName).generate();
             } catch (Exception e) {
-               e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }

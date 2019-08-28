@@ -28,7 +28,11 @@ public class ProjectImporter extends ProjectCreator {
     private final String solidityImportPath;
 
     private ProjectImporter(
-            final String root, final String packageName, final String projectName, final String solidityImportPath) throws IOException {
+            final String root,
+            final String packageName,
+            final String projectName,
+            final String solidityImportPath)
+            throws IOException {
         super(root, packageName, projectName);
         this.solidityImportPath = solidityImportPath;
     }

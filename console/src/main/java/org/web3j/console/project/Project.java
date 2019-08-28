@@ -90,8 +90,7 @@ public class Project {
                         templateProvider.getGradleSettings(),
                         File.separator + "settings.gradle",
                         projectStructure.getProjectRoot());
-                projectWriter.writeSolidity(
-                        solidityImportPath, projectStructure.getSolidityPath());
+                projectWriter.writeSolidity(solidityImportPath, projectStructure.getSolidityPath());
                 projectWriter.writeResourceFile(
                         templateProvider.getGradlewWrapperSettings(),
                         File.separator + "gradle-wrapper.properties",

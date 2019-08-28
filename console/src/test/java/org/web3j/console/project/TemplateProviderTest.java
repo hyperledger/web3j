@@ -32,7 +32,6 @@ public class TemplateProviderTest {
                             .loadGradleSettings("settings.gradle.template")
                             .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
                             .loadGradleJar("gradle-wrapper.jar")
-
                             .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,7 +53,6 @@ public class TemplateProviderTest {
     public void loadGradleSettingsTest() {
         Assert.assertEquals(templateProvider.getGradleSettings(), TemplatesAsString.gradleSettings);
     }
-
 
     @Test
     public void loadGradlewScriptTest() {
