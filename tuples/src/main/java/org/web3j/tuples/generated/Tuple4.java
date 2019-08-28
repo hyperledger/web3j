@@ -26,19 +26,47 @@ public final class Tuple4<T1, T2, T3, T4> implements Tuple {
         this.value4 = value4;
     }
 
+    /**
+     * @deprecated use 'component1' method instead */
+    @Deprecated
     public T1 getValue1() {
         return value1;
     }
 
+    public T1 component1() {
+        return value1;
+    }
+
+    /**
+     * @deprecated use 'component2' method instead */
+    @Deprecated
     public T2 getValue2() {
         return value2;
     }
 
+    public T2 component2() {
+        return value2;
+    }
+
+    /**
+     * @deprecated use 'component3' method instead */
+    @Deprecated
     public T3 getValue3() {
         return value3;
     }
 
+    public T3 component3() {
+        return value3;
+    }
+
+    /**
+     * @deprecated use 'component4' method instead */
+    @Deprecated
     public T4 getValue4() {
+        return value4;
+    }
+
+    public T4 component4() {
         return value4;
     }
 

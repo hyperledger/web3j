@@ -46,7 +46,7 @@ public class ReadonlyTransactionManagerTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testSendTransaction() {
+    public void testSendTransaction() throws IOException {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
         readonlyTransactionManager.sendTransaction(

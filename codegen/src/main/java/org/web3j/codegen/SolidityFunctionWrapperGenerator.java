@@ -22,6 +22,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.tx.Contract;
@@ -58,49 +59,95 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     private final File binFile;
     private final File abiFile;
 
-    private SolidityFunctionWrapperGenerator(
+    private final String contractName;
+
+    private final int addressLength;
+
+    private final boolean generateSendTxForCalls;
+
+    protected SolidityFunctionWrapperGenerator(
             File binFile,
             File abiFile,
             File destinationDir,
+            String contractName,
             String basePackageName,
-            boolean useJavaNativeTypes) {
+            boolean useJavaNativeTypes,
+            boolean useJavaPrimitiveTypes,
+            int addressLength) {
 
-        super(destinationDir, basePackageName, useJavaNativeTypes);
-        this.binFile = binFile;
-        this.abiFile = abiFile;
+        this(
+                binFile,
+                abiFile,
+                destinationDir,
+                contractName,
+                basePackageName,
+                useJavaNativeTypes,
+                useJavaPrimitiveTypes,
+                false,
+                Contract.class,
+                addressLength);
     }
 
-    static List<AbiDefinition> loadContractDefinition(File absFile) throws IOException {
+    protected SolidityFunctionWrapperGenerator(
+            File binFile,
+            File abiFile,
+            File destinationDir,
+            String contractName,
+            String basePackageName,
+            boolean useJavaNativeTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateSendTxForCalls,
+            Class<? extends Contract> contractClass,
+            int addressLength) {
+
+        super(
+                contractClass,
+                destinationDir,
+                basePackageName,
+                useJavaNativeTypes,
+                useJavaPrimitiveTypes);
+
+        this.binFile = binFile;
+        this.abiFile = abiFile;
+        this.contractName = contractName;
+        this.addressLength = addressLength;
+        this.generateSendTxForCalls = generateSendTxForCalls;
+    }
+
+    protected List<AbiDefinition> loadContractDefinition(File absFile) throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
         return Arrays.asList(abiDefinition);
     }
 
-    private void generate() throws IOException, ClassNotFoundException {
+    public final void generate() throws IOException, ClassNotFoundException {
         String binary = Contract.BIN_NOT_PROVIDED;
         if (binFile != null) {
             byte[] bytes = Files.readBytes(binFile);
             binary = new String(bytes);
         }
-
-        byte[] bytes = Files.readBytes(abiFile);
-        String abi = new String(bytes);
-
         List<AbiDefinition> functionDefinitions = loadContractDefinition(abiFile);
 
         if (functionDefinitions.isEmpty()) {
             exitError("Unable to parse input ABI file");
         } else {
-            String contractName = getFileNameNoExtension(abiFile.getName());
             String className = Strings.capitaliseFirstLetter(contractName);
-            System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            new SolidityFunctionWrapper(useJavaNativeTypes)
+            System.out.print("Generating " + basePackageName + "." + className + " ... ");
+
+            new SolidityFunctionWrapper(
+                            useJavaNativeTypes,
+                            useJavaPrimitiveTypes,
+                            generateSendTxForCalls,
+                            addressLength)
                     .generateJavaFiles(
+                            contractClass,
                             contractName,
                             binary,
-                            abi,
+                            functionDefinitions,
                             destinationDirLocation.toString(),
-                            basePackageName);
+                            basePackageName,
+                            null);
+
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }
     }
@@ -122,7 +169,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             mixinStandardHelpOptions = true,
             version = "4.0",
             sortOptions = false)
-    static class PicocliRunner implements Runnable {
+    private static class PicocliRunner implements Runnable {
         @Option(
                 names = {"-a", "--abiFile"},
                 description = "abi file with contract definition.",
@@ -138,6 +185,12 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         private File binFile;
 
         @Option(
+                names = {"-c", "--contractName"},
+                description = "contract name (defaults to ABI file name).",
+                required = false)
+        private String contractName;
+
+        @Option(
                 names = {"-o", "--outputDir"},
                 description = "destination base directory.",
                 required = true)
@@ -150,8 +203,14 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         private String packageName;
 
         @Option(
+                names = {"-al", "--addressLength"},
+                description = "address length in bytes (defaults to 20).",
+                required = false)
+        private int addressLength = Address.DEFAULT_LENGTH / Byte.SIZE;
+
+        @Option(
                 names = {"-jt", JAVA_TYPES_ARG},
-                description = "use native java types.",
+                description = "use native Java types.",
                 required = false,
                 showDefaultValue = ALWAYS)
         private boolean javaTypes = true;
@@ -162,14 +221,32 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 required = false)
         private boolean solidityTypes;
 
+        @Option(
+                names = {"-pt", PRIMITIVE_TYPES_ARG},
+                description = "use Java primitive types.",
+                required = false)
+        private boolean primitiveTypes = false;
+
         @Override
         public void run() {
             try {
                 // grouping is not implemented in picocli yet(planned for 3.1), therefore
                 // simply check if solidityTypes were requested
                 boolean useJavaTypes = !(solidityTypes);
+
+                if (contractName == null || contractName.isEmpty()) {
+                    contractName = getFileNameNoExtension(abiFile.getName());
+                }
+
                 new SolidityFunctionWrapperGenerator(
-                                binFile, abiFile, destinationFileDir, packageName, useJavaTypes)
+                                binFile,
+                                abiFile,
+                                destinationFileDir,
+                                contractName,
+                                packageName,
+                                useJavaTypes,
+                                primitiveTypes,
+                                addressLength)
                         .generate();
             } catch (Exception e) {
                 exitError(e);

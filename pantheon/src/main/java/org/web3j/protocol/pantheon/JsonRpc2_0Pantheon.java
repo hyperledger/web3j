@@ -25,6 +25,7 @@ import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.JsonRpc2_0Eea;
+import org.web3j.protocol.pantheon.request.CreatePrivacyGroupRequest;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
 import org.web3j.protocol.pantheon.response.PantheonFullDebugTraceResponse;
 import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
@@ -32,6 +33,8 @@ import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
 import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.utils.Base64String;
+
+import static java.util.Objects.requireNonNull;
 
 public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
     public JsonRpc2_0Pantheon(Web3jService web3jService) {
@@ -137,9 +140,11 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
     @Override
     public Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
             final List<Base64String> addresses, final String name, final String description) {
+        requireNonNull(addresses);
         return new Request<>(
                 "priv_createPrivacyGroup",
-                Arrays.asList(addresses, name, description),
+                Collections.singletonList(
+                        new CreatePrivacyGroupRequest(addresses, name, description)),
                 web3jService,
                 PrivCreatePrivacyGroup.class);
     }
