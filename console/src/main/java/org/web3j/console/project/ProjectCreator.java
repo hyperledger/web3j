@@ -23,8 +23,8 @@ import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
 public class ProjectCreator {
-    private static final String COMMAND_PREFIX = "new";
-    private static final String COMMAND_NEW = "new";
+
+    public static final String COMMAND_NEW = "new";
 
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
@@ -72,7 +72,7 @@ public class ProjectCreator {
     }
 
     @CommandLine.Command(
-            name = COMMAND_PREFIX,
+            name = COMMAND_NEW,
             mixinStandardHelpOptions = true,
             version = "4.0",
             sortOptions = false)

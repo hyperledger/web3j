@@ -15,9 +15,9 @@ package org.web3j.console.project;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 class ProjectWriter {
 
@@ -34,44 +34,7 @@ class ProjectWriter {
         Files.copy(file, Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    void writeSolidity(File solidityFile, String destination) throws IOException {
-
-        Files.walkFileTree(solidityFile.toPath(), SolidityProjectVisitor(destination));
-    }
-
-    private FileVisitor<Path> SolidityProjectVisitor(String destination) {
-        return new SimpleFileVisitor<Path>() {
-            String temp = destination;
-
-            @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                    throws IOException {
-                Objects.requireNonNull(dir);
-                Objects.requireNonNull(attrs);
-                temp = getFile(dir);
-                return FileVisitResult.CONTINUE;
-            }
-
-            private String getFile(final Path file) {
-                return createDirectoryFromPath(file).getAbsolutePath();
-            }
-
-            private File createDirectoryFromPath(Path dir) {
-                File directory = new File(temp + File.separator + dir.getFileName());
-                directory.mkdirs();
-                return directory;
-            }
-
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                    throws IOException {
-
-                Files.copy(
-                        file,
-                        new File(temp + File.separator + file.getFileName()).toPath(),
-                        StandardCopyOption.REPLACE_EXISTING);
-                return FileVisitResult.CONTINUE;
-            }
-        };
+    final void importSolidityProject(File file, String destination) throws IOException {
+        Files.walkFileTree(file.toPath(), new ProjectVisitor(destination));
     }
 }

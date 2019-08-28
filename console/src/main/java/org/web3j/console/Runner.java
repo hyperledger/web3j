@@ -20,6 +20,8 @@ import org.web3j.console.project.ProjectImporter;
 import org.web3j.utils.Version;
 
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
+import static org.web3j.console.project.ProjectCreator.COMMAND_NEW;
+import static org.web3j.console.project.ProjectImporter.COMMAND_IMPORT;
 import static org.web3j.utils.Collection.tail;
 
 /** Main entry point for running command line utilities. */
@@ -54,10 +56,10 @@ public class Runner {
                 case "truffle":
                     TruffleJsonFunctionWrapperGenerator.run(tail(args));
                     break;
-                case "new":
+                case COMMAND_NEW:
                     ProjectCreator.main(args);
                     break;
-                case "import":
+                case COMMAND_IMPORT:
                     ProjectImporter.main(args);
                     break;
                 case "version":

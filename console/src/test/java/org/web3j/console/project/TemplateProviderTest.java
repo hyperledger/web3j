@@ -32,6 +32,8 @@ public class TemplateProviderTest {
                             .loadGradleSettings("settings.gradle.template")
                             .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
                             .loadGradleJar("gradle-wrapper.jar")
+                            .withPackageNameReplacement(s -> s.replaceAll("<package_name>", "test"))
+                            .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
                             .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,6 +42,7 @@ public class TemplateProviderTest {
 
     @Test
     public void loadMainJavaClassTest() {
+
         Assert.assertEquals(templateProvider.getMainJavaClass(), TemplatesAsString.javaTemplate);
     }
 

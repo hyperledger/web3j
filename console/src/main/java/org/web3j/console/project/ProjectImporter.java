@@ -22,8 +22,7 @@ import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
 public class ProjectImporter extends ProjectCreator {
-    private static final String COMMAND_PREFIX = "import";
-    private static final String COMMAND_IMPORT = "import";
+    public static final String COMMAND_IMPORT = "import";
 
     private final String solidityImportPath;
 
@@ -56,7 +55,7 @@ public class ProjectImporter extends ProjectCreator {
     }
 
     @CommandLine.Command(
-            name = COMMAND_PREFIX,
+            name = COMMAND_IMPORT,
             mixinStandardHelpOptions = true,
             version = "4.0",
             sortOptions = false)

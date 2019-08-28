@@ -14,8 +14,8 @@ package org.web3j.console.project;
 
 public class TemplatesAsString {
     static final String javaTemplate =
-            "package <package_name>;\n"
-                    + "public class <class_name> {\n"
+            "package test;\n"
+                    + "public class test {\n"
                     + "\n"
                     + "\n"
                     + "public static void main(String[]args) {\n"
@@ -29,7 +29,7 @@ public class TemplatesAsString {
                     + "\n"
                     + "}\n"
                     + "\n"
-                    + "group '<package_name>'\n"
+                    + "group 'test'\n"
                     + "version '0.1.0'\n"
                     + "\n"
                     + "sourceCompatibility = 1.8\n"
@@ -39,7 +39,7 @@ public class TemplatesAsString {
                     + "}\n"
                     + "\n"
                     + "web3j {\n"
-                    + "    generatedPackageName = '<package_name>.generated.contracts'\n"
+                    + "    generatedPackageName = 'test.generated.contracts'\n"
                     + "    excludedContracts = ['Mortal']\n"
                     + "}\n"
                     + "\n"
@@ -62,7 +62,7 @@ public class TemplatesAsString {
                     + "        gradlePluginPortal()\n"
                     + "    }\n"
                     + "}\n"
-                    + "rootProject.name = '<project_name>';\n";
+                    + "rootProject.name = 'test';\n";
     static final String solidityProject =
             "pragma solidity ^0.4.25;\n"
                     + "\n"
