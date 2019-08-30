@@ -28,7 +28,6 @@ snapshot:
     OSSRH_REPO_URL: $SNAPSHOT_OSSRH_REPO_URL
   stage: snapshot
   script:
-  - sed -i 's/^version.*$/&-SNAPSHOT/' gradle.properties 
   - gradle release
   only:
     refs:
@@ -39,7 +38,7 @@ release:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
   script:
-  - gradlew release
+  - gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release
   when: manual
   only:
     refs:
