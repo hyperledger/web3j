@@ -1,10 +1,9 @@
-image: gradle:alpine
+image: gradle:4.10.2
 
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
 
 before_script:
 - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -16,38 +15,30 @@ cache:
 
 stages:
 - build
-- test
-- deploy
+- publish
+- release
 
 build:
   stage: build
   script:
-  - ./gradlew clean build -x test
-
-unit tests:
-  stage: test
-  script:
-  - ./gradlew test
+  - gradle clean check
 
 publish_snapshot:
-  stage: deploy
+  stage: publish
   script:
-  - ./gradlew clean release -x test
-
+  - gradle release
   environment:
     name: publish_snapshot
-  when: manual
   only:
-  - /release/.*$/
+  - master
 
 publish_release:
-  stage: deploy
+  stage: publish
   script:
-  - ./gradlew clean release -x test
+  - gradlew release
 
   environment:
     name: publish_release
   when: manual
   only:
   - /release/.*$/
-  - master
