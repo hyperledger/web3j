@@ -15,7 +15,7 @@ cache:
 
 stages:
 - build
-- publish
+- snapshot
 - release
 
 build:
@@ -23,22 +23,24 @@ build:
   script:
   - gradle clean check
 
-publish_snapshot:
-  stage: publish
+snapshot:
+  variables:
+    OSSRH_REPO_URL: $SNAPSHOT_OSSRH_REPO_URL
+  stage: snapshot
   script:
+  - sed -i 's/^version.*$/&-SNAPSHOT/' gradle.properties 
   - gradle release
-  environment:
-    name: publish_snapshot
   only:
-  - master
+    refs:
+      - master
 
-publish_release:
-  stage: publish
+release:
+  variables:
+    OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
+  stage: release
   script:
   - gradlew release
-
-  environment:
-    name: publish_release
   when: manual
   only:
-  - /release/.*$/
+    refs:
+      - release/(\d).(\d).(\d)
