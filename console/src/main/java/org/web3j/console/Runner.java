@@ -27,7 +27,7 @@ import static org.web3j.utils.Collection.tail;
 /** Main entry point for running command line utilities. */
 public class Runner {
 
-    private static String USAGE = "Usage: web3j version|wallet|solidity|new ...";
+    private static String USAGE = "Usage: web3j version|wallet|solidity|new|import ...";
 
     private static String LOGO =
             "\n" // generated at http://patorjk.com/software/taag

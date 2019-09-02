@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Project {
 
     private Project(Builder builder) {}
@@ -25,6 +28,8 @@ public class Project {
         private ProjectStructure projectStructure;
         private TemplateProvider templateProvider;
         private File solidityImportPath;
+        private String greeterTemplate;
+        private Logger logger = LoggerFactory.getLogger(Builder.class);
 
         Builder() {}
 
@@ -45,39 +50,43 @@ public class Project {
             return this;
         }
 
-        final void buildGradleProject(String os, String pathToDirectory) {
-            if (os.equals("Windows")) {
-                runCommand(new File(pathToDirectory), "gradlew.bat build");
+        private void buildGradleProject(String pathToDirectory)
+                throws IOException, InterruptedException {
+            if (!isWindows()) {
+                setExecutable(pathToDirectory, "gradlew");
+                executeCommand(
+                        new File(pathToDirectory), new String[] {"bash", "-c", "./gradlew build"});
             } else {
-                runCommand(new File(pathToDirectory), "chmod 755 gradlew");
-                runCommand(new File(pathToDirectory), "./gradlew build");
+                setExecutable(pathToDirectory, "gradlew.bat");
+                executeCommand(
+                        new File(pathToDirectory),
+                        new String[] {"cmd.exe", "/c", "gradlew.bat build"});
             }
         }
 
-        final void runCommand(File workingDir, String command) {
-            String[] newCommand = command.split(" ");
-            try {
-                new ProcessBuilder(newCommand)
-                        .directory(workingDir)
-                        .redirectOutput(ProcessBuilder.Redirect.INHERIT)
-                        .redirectError(ProcessBuilder.Redirect.INHERIT)
-                        .start()
-                        .waitFor(60, TimeUnit.MINUTES);
-            } catch (InterruptedException | IOException e) {
-                e.printStackTrace();
-            }
+        private void setExecutable(final String pathToDirectory, final String gradlew) {
+            File f = new File(pathToDirectory + File.separator + gradlew);
+            boolean isExecutable = f.setExecutable(true);
         }
 
-        private String getOS() {
-            String[] os = System.getProperty("os.name").split(" ");
-            return os[0];
+        private boolean isWindows() {
+            return System.getProperty("os.name").toLowerCase().startsWith("windows");
+        }
+
+        private void executeCommand(final File workingDir, final String[] command)
+                throws InterruptedException, IOException {
+            new ProcessBuilder(command)
+                    .directory(workingDir)
+                    .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+                    .redirectError(ProcessBuilder.Redirect.INHERIT)
+                    .start()
+                    .waitFor(10, TimeUnit.SECONDS);
         }
 
         Project build() {
-            projectStructure.createDirectoryStructure();
-            ProjectWriter projectWriter = new ProjectWriter();
-
             try {
+                projectStructure.createDirectoryStructure();
+                ProjectWriter projectWriter = new ProjectWriter();
                 projectWriter.writeResourceFile(
                         templateProvider.getMainJavaClass(),
                         projectStructure.getProjectName() + ".java",
@@ -90,6 +99,11 @@ public class Project {
                         templateProvider.getGradleSettings(),
                         File.separator + "settings.gradle",
                         projectStructure.getProjectRoot());
+                if (solidityImportPath == null)
+                    projectWriter.writeResourceFile(
+                            templateProvider.getSolidityProject(),
+                            "Greeter.sol",
+                            projectStructure.getSolidityPath());
                 projectWriter.importSolidityProject(
                         solidityImportPath, projectStructure.getSolidityPath());
                 projectWriter.writeResourceFile(
@@ -107,9 +121,10 @@ public class Project {
                 projectWriter.copyResourceFile(
                         templateProvider.getGradlewJar(),
                         projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar");
-                buildGradleProject(getOS(), projectStructure.getProjectRoot());
-            } catch (IOException e) {
-                e.printStackTrace();
+                buildGradleProject(projectStructure.getProjectRoot());
+            } catch (Exception e) {
+
+                logger.info(e.getMessage());
             }
 
             return new Project(this);

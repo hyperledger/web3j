@@ -23,59 +23,58 @@ public class ProjectStructure {
     private final String mainPath;
     private final String wrapperPath;
     private final String root;
-    private final String formattedPackageName;
     private final String projectRoot;
 
     ProjectStructure(final String root, final String packageName, final String projectName) {
         this.root = root;
         this.packageName = packageName;
-        this.formattedPackageName = formatPackageName(packageName);
+        final String formattedPackageName = formatPackageName(packageName);
         this.projectName = projectName;
         this.projectRoot = root + File.separator + projectName;
         this.mainPath =
-                generatePath(this.projectRoot, "src", "main", "java", this.formattedPackageName);
+                generatePath(this.projectRoot, "src", "main", "java", formattedPackageName);
         this.solidityPath = generatePath(this.projectRoot, "src", "main", "solidity");
         this.testPath =
-                generatePath(this.projectRoot, "src", "test", "java", this.formattedPackageName);
+                generatePath(this.projectRoot, "src", "test", "java", formattedPackageName);
         this.wrapperPath = generatePath(this.projectRoot, "gradle", "wrapper");
     }
 
-    String getRoot() {
+    final String getRoot() {
         return root;
     }
 
-    String getProjectRoot() {
+    final String getProjectRoot() {
         return projectRoot;
     }
 
-    String getPackageName() {
+    final String getPackageName() {
         return packageName;
     }
 
-    String getProjectName() {
+    final String getProjectName() {
         return projectName;
     }
 
-    String getTestPath() {
+    final String getTestPath() {
         return testPath;
     }
 
-    String getSolidityPath() {
+    final String getSolidityPath() {
         return solidityPath;
     }
 
-    String getMainPath() {
+    final String getMainPath() {
         return mainPath;
     }
 
-    String getWrapperPath() {
+    final String getWrapperPath() {
         return wrapperPath;
     }
 
     private String generatePath(String... a) {
         StringBuilder finalPath = new StringBuilder();
         for (String b : a) {
-            finalPath.append(b + File.separator);
+            finalPath.append(b).append(File.separator);
         }
         return finalPath.toString();
     }
@@ -84,20 +83,16 @@ public class ProjectStructure {
         return packageName.replaceAll("[.]", File.separator);
     }
 
-    private void createDirectory(String path) throws Exception {
+    private void createDirectory(String path) {
         File directory = new File(path);
         directory.mkdirs();
     }
 
-    void createDirectoryStructure() {
-        try {
+    void createDirectoryStructure() throws Exception {
+        createDirectory(mainPath);
+        createDirectory(testPath);
+        createDirectory(solidityPath);
+        createDirectory(wrapperPath);
 
-            createDirectory(mainPath);
-            createDirectory(testPath);
-            createDirectory(solidityPath);
-            createDirectory(wrapperPath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

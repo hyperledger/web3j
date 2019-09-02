@@ -12,11 +12,10 @@
  */
 package org.web3j.console.project;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import static org.web3j.utils.Collection.tail;
@@ -25,13 +24,12 @@ import static picocli.CommandLine.Help.Visibility.ALWAYS;
 public class ProjectCreator {
 
     public static final String COMMAND_NEW = "new";
-
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
+    Logger logger = LoggerFactory.getLogger(ProjectCreator.class);
 
     ProjectCreator(String root, String packageName, String projectName) throws IOException {
         this.projectStructure = new ProjectStructure(root, packageName, projectName);
-
         this.templateProvider =
                 new TemplateProvider.Builder()
                         .loadGradlewBatScript("gradlew.bat.template")
@@ -41,6 +39,7 @@ public class ProjectCreator {
                         .loadGradleSettings("settings.gradle.template")
                         .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
                         .loadGradleJar("gradle-wrapper.jar")
+                        .loadSolidityGreeter("Greeter.sol")
                         .withPackageNameReplacement(
                                 s -> s.replaceAll("<package_name>", packageName))
                         .withProjectNameReplacement(
@@ -56,19 +55,16 @@ public class ProjectCreator {
     }
 
     private void generate() {
-        URL solidityUrl = ClassLoader.getSystemResource("Greeter.sol");
-        File templateSolidityFile = null;
         try {
-            templateSolidityFile = new File(solidityUrl.toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+            Project project =
+                    new Project.Builder()
+                            .withProjectStructure(projectStructure)
+                            .withTemplateProvider(templateProvider)
+                            .build();
+        } catch (Exception e) {
+
+            logger.info(e.getMessage());
         }
-        Project project =
-                new Project.Builder()
-                        .withProjectStructure(projectStructure)
-                        .withTemplateProvider(templateProvider)
-                        .withSolidityFile(templateSolidityFile)
-                        .build();
     }
 
     @CommandLine.Command(
@@ -77,6 +73,8 @@ public class ProjectCreator {
             version = "4.0",
             sortOptions = false)
     static class PicocliRunner implements Runnable {
+        private Logger cliLogger = LoggerFactory.getLogger(PicocliRunner.class);
+
         @CommandLine.Option(
                 names = {"-o", "--outputDir"},
                 description = "destination base directory.",
@@ -100,8 +98,9 @@ public class ProjectCreator {
         public void run() {
             try {
                 new ProjectCreator(root, packageName, projectName).generate();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException e) {
+
+                cliLogger.info(e.getMessage());
             }
         }
     }

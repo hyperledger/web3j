@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.web3j.TempFileProvider;
 
 public class ProjectStructureTest extends TempFileProvider {
-    ProjectStructure projectStructure;
+    private ProjectStructure projectStructure;
 
     private void init() throws Exception {
         setUp();
@@ -31,26 +31,25 @@ public class ProjectStructureTest extends TempFileProvider {
     @Test
     public void getRootTest() throws Exception {
         init();
-        Assert.assertTrue(projectStructure.getRoot().equals(tempDirPath));
+        Assert.assertEquals(projectStructure.getRoot(), tempDirPath);
     }
 
     @Test
     public void getProjectRootTest() throws Exception {
         init();
-        Assert.assertTrue(
-                projectStructure.getProjectRoot().equals(tempDirPath + File.separator + "Test"));
+        Assert.assertEquals(projectStructure.getProjectRoot(), tempDirPath + File.separator + "Test");
     }
 
     @Test
     public void getPackageNameTest() throws Exception {
         init();
-        Assert.assertTrue(projectStructure.getPackageName().equals("test.test"));
+        Assert.assertEquals("test.test", projectStructure.getPackageName());
     }
 
     @Test
     public void getProjectName() throws Exception {
         init();
-        Assert.assertTrue(projectStructure.getProjectName().equals("Test"));
+        Assert.assertEquals("Test", projectStructure.getProjectName());
     }
 
     @Test

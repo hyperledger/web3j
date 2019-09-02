@@ -22,8 +22,8 @@ import org.web3j.TempFileProvider;
 
 public class ProjectWriterTest extends TempFileProvider {
 
-    ProjectWriter projectWriter = new ProjectWriter();
-    TemplateProvider templateProvider =
+    private ProjectWriter projectWriter = new ProjectWriter();
+    private TemplateProvider templateProvider =
             new TemplateProvider.Builder().loadGradleJar("gradle-wrapper.jar").build();
 
     @Test
@@ -61,4 +61,5 @@ public class ProjectWriterTest extends TempFileProvider {
                                         + "Greeter.sol")
                         .exists());
     }
+
 }

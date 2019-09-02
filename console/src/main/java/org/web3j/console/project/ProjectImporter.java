@@ -15,9 +15,10 @@ package org.web3j.console.project;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
-import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
@@ -44,14 +45,18 @@ public class ProjectImporter extends ProjectCreator {
         CommandLine.run(new PicocliRunner(), args);
     }
 
-    private void generate() {
+    public void generate() {
         File solidityFile = new File(solidityImportPath);
-        Project project =
-                new Project.Builder()
-                        .withProjectStructure(projectStructure)
-                        .withTemplateProvider(templateProvider)
-                        .withSolidityFile(solidityFile)
-                        .build();
+        try {
+            Project project =
+                    new Project.Builder()
+                            .withProjectStructure(projectStructure)
+                            .withTemplateProvider(templateProvider)
+                            .withSolidityFile(solidityFile)
+                            .build();
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
     }
 
     @CommandLine.Command(
@@ -60,6 +65,8 @@ public class ProjectImporter extends ProjectCreator {
             version = "4.0",
             sortOptions = false)
     static class PicocliRunner implements Runnable {
+        Logger cliLogger = LoggerFactory.getLogger(PicocliRunner.class);
+
         @CommandLine.Option(
                 names = {"-o", "--outputDir"},
                 description = "destination base directory.",
@@ -90,7 +97,7 @@ public class ProjectImporter extends ProjectCreator {
             try {
                 new ProjectImporter(root, packageName, projectName, solidityImportPath).generate();
             } catch (Exception e) {
-                exitError(e);
+                cliLogger.info(e.getMessage());
             }
         }
     }

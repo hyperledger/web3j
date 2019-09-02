@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 public class TemplateProvider {
     private final String mainJavaClass;
+    private final String solidityProject;
     private final String gradleBuild;
     private final String gradleSettings;
     private final String gradlewWrapperSettings;
@@ -29,19 +30,24 @@ public class TemplateProvider {
 
     private TemplateProvider(
             final String mainJavaClass,
-            final String gradleBuild,
+            final String solidityProject, final String gradleBuild,
             final String gradleSettings,
             final String gradlewWrapperSettings,
             final String gradlewBatScript,
             final String gradlewScript,
             final InputStream gradlewJar) {
         this.mainJavaClass = mainJavaClass;
+        this.solidityProject = solidityProject;
         this.gradleBuild = gradleBuild;
         this.gradleSettings = gradleSettings;
         this.gradlewWrapperSettings = gradlewWrapperSettings;
         this.gradlewBatScript = gradlewBatScript;
         this.gradlewScript = gradlewScript;
         this.gradlewJar = gradlewJar;
+    }
+
+    String getSolidityProject() {
+        return solidityProject;
     }
 
     String getMainJavaClass() {
@@ -79,6 +85,7 @@ public class TemplateProvider {
         private String gradlewWrapperSettings;
         private String gradlewBatScript;
         private String gradlewScript;
+        private String solidityProject;
         private InputStream gradlewJar;
         private Function<String, String> packageNameReplacement = s -> s;
         private Function<String, String> projectNameReplacement = s -> s;
@@ -91,37 +98,43 @@ public class TemplateProvider {
             return this;
         }
 
-        public Builder loadGradleBuild(String name) throws IOException {
+        public Builder loadGradleBuild(final String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradleBuild = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradleSettings(String name) throws IOException {
+        public Builder loadSolidityGreeter(final String name) throws IOException {
+            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
+            this.solidityProject = readFile(resourcePath);
+            return this;
+        }
+
+        public Builder loadGradleSettings(final String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradleSettings = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradlewWrapperSettings(String name) throws IOException {
+        public Builder loadGradlewWrapperSettings(final String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradlewWrapperSettings = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradlewBatScript(String name) throws IOException {
+        public Builder loadGradlewBatScript(final String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradlewBatScript = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradlewScript(String name) throws IOException {
+        public Builder loadGradlewScript(final String name) throws IOException {
             InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
             this.gradlewScript = readFile(resourcePath);
             return this;
         }
 
-        public Builder loadGradleJar(String name) {
+        public Builder loadGradleJar(final String name) {
             this.gradlewJar = getClass().getClassLoader().getResourceAsStream(name);
             return this;
         }
@@ -141,7 +154,7 @@ public class TemplateProvider {
         TemplateProvider build() {
             return new TemplateProvider(
                     projectNameReplacement.apply(packageNameReplacement.apply(mainJavaClass)),
-                    packageNameReplacement.apply(gradleBuild),
+                    solidityProject, packageNameReplacement.apply(gradleBuild),
                     projectNameReplacement.apply(gradleSettings),
                     gradlewWrapperSettings,
                     gradlewBatScript,
@@ -149,13 +162,14 @@ public class TemplateProvider {
                     gradlewJar);
         }
 
-        private String readFile(InputStream file) throws IOException {
+        private String readFile(final InputStream file) throws IOException {
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             String temp;
             StringBuilder stringBuilder = new StringBuilder();
             while ((temp = reader.readLine()) != null) {
                 stringBuilder.append(temp).append("\n");
             }
+            reader.close();
             return stringBuilder.toString();
         }
     }
