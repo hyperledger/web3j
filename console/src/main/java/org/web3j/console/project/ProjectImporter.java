@@ -12,13 +12,12 @@
  */
 package org.web3j.console.project;
 
+import picocli.CommandLine;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import picocli.CommandLine;
-
+import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
@@ -55,7 +54,7 @@ public class ProjectImporter extends ProjectCreator {
                             .withSolidityFile(solidityFile)
                             .build();
         } catch (Exception e) {
-            logger.info(e.getMessage());
+
         }
     }
 
@@ -65,7 +64,7 @@ public class ProjectImporter extends ProjectCreator {
             version = "4.0",
             sortOptions = false)
     static class PicocliRunner implements Runnable {
-        Logger cliLogger = LoggerFactory.getLogger(PicocliRunner.class);
+
 
         @CommandLine.Option(
                 names = {"-o", "--outputDir"},
@@ -97,7 +96,7 @@ public class ProjectImporter extends ProjectCreator {
             try {
                 new ProjectImporter(root, packageName, projectName, solidityImportPath).generate();
             } catch (Exception e) {
-                cliLogger.info(e.getMessage());
+                exitError(e);
             }
         }
     }

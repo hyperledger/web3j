@@ -12,12 +12,11 @@
  */
 package org.web3j.console.project;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
+import java.io.IOException;
+
+import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
 import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
@@ -26,7 +25,6 @@ public class ProjectCreator {
     public static final String COMMAND_NEW = "new";
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
-    Logger logger = LoggerFactory.getLogger(ProjectCreator.class);
 
     ProjectCreator(String root, String packageName, String projectName) throws IOException {
         this.projectStructure = new ProjectStructure(root, packageName, projectName);
@@ -63,7 +61,7 @@ public class ProjectCreator {
                             .build();
         } catch (Exception e) {
 
-            logger.info(e.getMessage());
+            exitError(e);
         }
     }
 
@@ -73,35 +71,38 @@ public class ProjectCreator {
             version = "4.0",
             sortOptions = false)
     static class PicocliRunner implements Runnable {
-        private Logger cliLogger = LoggerFactory.getLogger(PicocliRunner.class);
-
         @CommandLine.Option(
                 names = {"-o", "--outputDir"},
                 description = "destination base directory.",
                 required = false,
                 showDefaultValue = ALWAYS)
-        private String root = System.getProperty("user.dir");
+         String root = System.getProperty("user.dir");
 
         @CommandLine.Option(
                 names = {"-p", "--package"},
                 description = "base package name.",
                 required = true)
-        private String packageName;
+        String packageName;
 
         @CommandLine.Option(
                 names = {"-n", "--project name"},
                 description = "project name.",
                 required = true)
-        private String projectName;
+        String projectName;
 
         @Override
         public void run() {
-            try {
-                new ProjectCreator(root, packageName, projectName).generate();
-            } catch (IOException e) {
 
-                cliLogger.info(e.getMessage());
+            if (!(packageName.isEmpty() && projectName.isEmpty())) {
+                try {
+                    new ProjectCreator(root, packageName, projectName).generate();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
+
+
         }
     }
 }

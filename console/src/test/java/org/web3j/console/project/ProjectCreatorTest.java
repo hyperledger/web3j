@@ -12,37 +12,31 @@
  */
 package org.web3j.console.project;
 
-import java.io.IOException;
-
 import org.junit.Test;
-
 import org.web3j.TempFileProvider;
+import picocli.CommandLine;
 
 public class ProjectCreatorTest extends TempFileProvider {
-    static final String USAGE =
-            "Missing required options [--package=<packageName>, --project name=<projectName>]\n"
-                    + "Usage: new [-hV] -n=<projectName> [-o=<root>] -p=<packageName>\n"
-                    + "  -h, --help               Show this help message and exit.\n"
-                    + "  -V, --version            Print version information and exit.\n"
-                    + "  -o, --outputDir=<root>   destination base directory.\n"
-                    + "                             Default:\n"
-                    + "                             /Users/alexander/Documents/DEV/web3j/web3j/console\n"
-                    + "  -p, --package=<packageName>\n"
-                    + "                           base package name.\n"
-                    + "  -n, --project name=<projectName>\n"
-                    + "                           project name.\n";
-
-    public void setUpProjectCreator() throws IOException {
-        ProjectCreator projectCreator = new ProjectCreator(tempDirPath, "test", "test");
-    }
 
     @Test
-    public void usageTest() throws IOException {
-        ProjectCreator.main("new -p=test -n=test".split(" "));
+    public void goodArgsTest() throws Exception {
+        String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath};
+        ProjectCreator.PicocliRunner picocliRunner = new ProjectCreator.PicocliRunner();
+        new CommandLine(picocliRunner).parseArgs(args);
+        assert picocliRunner.packageName.equals("org.com");
+        assert picocliRunner.projectName.equals("Test");
+
+
     }
 
     @Test
     public void badArgsTest() {
-        ProjectCreator.main("new -t=test -b=test".split(" "));
+        String[] args = {"-p=", "-n=", "-o=" + tempDirPath};
+        ProjectCreator.PicocliRunner picocliRunner = new ProjectCreator.PicocliRunner();
+        new CommandLine(picocliRunner).parseArgs(args);
+        picocliRunner.run();
+
+
     }
+
 }

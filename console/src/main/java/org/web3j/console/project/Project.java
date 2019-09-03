@@ -16,8 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
+import static org.web3j.codegen.Console.exitError;
 
 public class Project {
 
@@ -29,7 +30,7 @@ public class Project {
         private TemplateProvider templateProvider;
         private File solidityImportPath;
         private String greeterTemplate;
-        private Logger logger = LoggerFactory.getLogger(Builder.class);
+
 
         Builder() {}
 
@@ -124,7 +125,7 @@ public class Project {
                 buildGradleProject(projectStructure.getProjectRoot());
             } catch (Exception e) {
 
-                logger.info(e.getMessage());
+                exitError(e);
             }
 
             return new Project(this);
