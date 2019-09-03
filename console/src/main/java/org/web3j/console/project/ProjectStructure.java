@@ -31,11 +31,9 @@ public class ProjectStructure {
         final String formattedPackageName = formatPackageName(packageName);
         this.projectName = projectName;
         this.projectRoot = root + File.separator + projectName;
-        this.mainPath =
-                generatePath(this.projectRoot, "src", "main", "java", formattedPackageName);
+        this.mainPath = generatePath(this.projectRoot, "src", "main", "java", formattedPackageName);
         this.solidityPath = generatePath(this.projectRoot, "src", "main", "solidity");
-        this.testPath =
-                generatePath(this.projectRoot, "src", "test", "java", formattedPackageName);
+        this.testPath = generatePath(this.projectRoot, "src", "test", "java", formattedPackageName);
         this.wrapperPath = generatePath(this.projectRoot, "gradle", "wrapper");
     }
 
@@ -80,7 +78,10 @@ public class ProjectStructure {
     }
 
     private String formatPackageName(String packageName) {
-        return packageName.replaceAll("[.]", File.separator);
+        if (packageName.contains(".")) {
+            return packageName.replaceAll("[.]", File.separator);
+        }
+        return packageName;
     }
 
     private void createDirectory(String path) {
@@ -93,6 +94,5 @@ public class ProjectStructure {
         createDirectory(testPath);
         createDirectory(solidityPath);
         createDirectory(wrapperPath);
-
     }
 }

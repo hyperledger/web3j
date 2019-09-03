@@ -12,9 +12,9 @@
  */
 package org.web3j.console.project;
 
-import picocli.CommandLine;
-
 import java.io.IOException;
+
+import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
@@ -76,7 +76,7 @@ public class ProjectCreator {
                 description = "destination base directory.",
                 required = false,
                 showDefaultValue = ALWAYS)
-         String root = System.getProperty("user.dir");
+        String root = System.getProperty("user.dir");
 
         @CommandLine.Option(
                 names = {"-p", "--package"},
@@ -92,17 +92,11 @@ public class ProjectCreator {
 
         @Override
         public void run() {
-
-            if (!(packageName.isEmpty() && projectName.isEmpty())) {
-                try {
-                    new ProjectCreator(root, packageName, projectName).generate();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+            try {
+                new ProjectCreator(root, packageName, projectName).generate();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-
         }
     }
 }

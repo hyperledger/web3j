@@ -17,12 +17,12 @@ import picocli.CommandLine;
 
 import org.web3j.TempFileProvider;
 
-public class ProjectCreatorTest extends TempFileProvider {
+public class ProjectImporterTest extends TempFileProvider {
 
     @Test
     public void goodArgsTest() {
-        String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath};
-        ProjectCreator.PicocliRunner picocliRunner = new ProjectCreator.PicocliRunner();
+        String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + tempDirPath};
+        ProjectImporter.PicocliRunner picocliRunner = new ProjectImporter.PicocliRunner();
         new CommandLine(picocliRunner).parseArgs(args);
         assert picocliRunner.packageName.equals("org.com");
         assert picocliRunner.projectName.equals("Test");
@@ -30,7 +30,7 @@ public class ProjectCreatorTest extends TempFileProvider {
 
     @Test(expected = CommandLine.MissingParameterException.class)
     public void badArgsTest() {
-        ProjectCreator.PicocliRunner picocliRunner = new ProjectCreator.PicocliRunner();
+        ProjectImporter.PicocliRunner picocliRunner = new ProjectImporter.PicocliRunner();
         String[] args = {"-t=org.org", "-n=test", "-o=" + tempDirPath};
         CommandLine commandLine = new CommandLine(picocliRunner);
         commandLine.parseArgs(args);

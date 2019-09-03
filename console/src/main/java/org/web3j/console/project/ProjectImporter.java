@@ -12,10 +12,10 @@
  */
 package org.web3j.console.project;
 
-import picocli.CommandLine;
-
 import java.io.File;
 import java.io.IOException;
+
+import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.utils.Collection.tail;
@@ -65,6 +65,23 @@ public class ProjectImporter extends ProjectCreator {
             sortOptions = false)
     static class PicocliRunner implements Runnable {
 
+        @CommandLine.Option(
+                names = {"-p", "--package name"},
+                description = "base package name.",
+                required = true)
+        String packageName;
+
+        @CommandLine.Option(
+                names = {"-n", "--project name"},
+                description = "project name.",
+                required = true)
+        String projectName;
+
+        @CommandLine.Option(
+                names = {"-s", "--solidity path"},
+                description = "path to solidity file/folder",
+                required = true)
+        String solidityImportPath;
 
         @CommandLine.Option(
                 names = {"-o", "--outputDir"},
@@ -72,24 +89,6 @@ public class ProjectImporter extends ProjectCreator {
                 required = false,
                 showDefaultValue = ALWAYS)
         private String root = System.getProperty("user.dir");
-
-        @CommandLine.Option(
-                names = {"-p", "--package name"},
-                description = "base package name.",
-                required = true)
-        private String packageName;
-
-        @CommandLine.Option(
-                names = {"-n", "--project name"},
-                description = "project name.",
-                required = true)
-        private String projectName;
-
-        @CommandLine.Option(
-                names = {"-s", "--solidity path"},
-                description = "path to solidity file/folder",
-                required = true)
-        private String solidityImportPath;
 
         @Override
         public void run() {

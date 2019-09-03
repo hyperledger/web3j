@@ -16,8 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-
-
 import static org.web3j.codegen.Console.exitError;
 
 public class Project {
@@ -30,7 +28,6 @@ public class Project {
         private TemplateProvider templateProvider;
         private File solidityImportPath;
         private String greeterTemplate;
-
 
         Builder() {}
 
