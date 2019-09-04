@@ -8,6 +8,7 @@ greeter/Greeter
 misc/Misc
 shipit/ShipIt
 simplestorage/SimpleStorage
+revert/Revert
 "
 
 for target in ${targets}; do
