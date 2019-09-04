@@ -547,7 +547,7 @@ Companies using web3j
 Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
-- `web3labs.io <https://www.web3labs.com/`_
+- `web3labs.com <https://www.web3labs.com/>`_
 - `comitFS <http://www.comitfs.com/>`_
 - `ConsenSys <https://consensys.net/>`_
 - `ING <https://www.ing.com>`_
