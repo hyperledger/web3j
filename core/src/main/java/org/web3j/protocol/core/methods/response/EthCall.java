@@ -37,7 +37,7 @@ public class EthCall extends Response<String> {
         return getResult();
     }
 
-    public boolean reverts() {
+    public boolean isReverted() {
         return hasError() || isErrorInResult();
     }
 

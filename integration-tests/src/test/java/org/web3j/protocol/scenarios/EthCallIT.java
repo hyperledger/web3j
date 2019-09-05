@@ -32,14 +32,14 @@ public class EthCallIT extends Scenario {
     public void testWithoutRevert() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(0L));
 
-        assertFalse(ethCall.reverts());
+        assertFalse(ethCall.isReverted());
     }
 
     @Test
     public void testRevertWithoutMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(1L));
 
-        assertTrue(ethCall.reverts());
+        assertTrue(ethCall.isReverted());
         assertTrue(ethCall.getRevertReason().endsWith("revert"));
     }
 
@@ -47,7 +47,7 @@ public class EthCallIT extends Scenario {
     public void testRevertWithMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
 
-        assertTrue(ethCall.reverts());
+        assertTrue(ethCall.isReverted());
         assertTrue(ethCall.getRevertReason().endsWith("revert The reason for revert"));
     }
 
