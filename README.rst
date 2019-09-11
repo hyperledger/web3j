@@ -23,7 +23,7 @@ web3j: Web3 Java Ethereum Ðapp API
 web3j is a lightweight, highly modular, reactive, type safe Java and Android library for working with
 Smart Contracts and integrating with clients (nodes) on the Ethereum network:
 
-.. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j_network.png
+.. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/img/web3j_network.png
 
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
@@ -90,7 +90,7 @@ You can help fund the development of web3j by donating to the following wallet a
 Commercial support and training
 -------------------------------
 
-Commercial support and training is available from `blk.io <https://blk.io>`_.
+Commercial support and training is available from `web3labs.com <https://www.web3labs.com/>`_.
 
 
 Quickstart
@@ -188,10 +188,10 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
    Web3j web3 = Web3j.build(new HttpService("https://ropsten.infura.io/your-token"));
 
 For further information refer to
-`Using Infura with web3j <https://web3j.github.io/web3j/infura.html>`_
+`Using Infura with web3j <https://docs.web3j.io/using_infura_with_web3j/>`_
 
 Instructions on obtaining Ether to transact on the network can be found in the
-`testnet section of the docs <http://docs.web3j.io/transactions.html#ethereum-testnets>`_.
+`testnet section of the docs <https://docs.web3j.io/transactions/#ethereum-testnets>`_.
 
 
 Start sending requests
@@ -321,7 +321,7 @@ To fine control your gas price:
             ...
             });
 
-For more information refer to `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
+For more information refer to `Smart Contracts <https://docs.web3j.io/smart_contracts/#solidity-smart-contract-wrappers>`_.
 
 
 Filters
@@ -366,7 +366,7 @@ blocks being created:
    });
 
 There are a number of other transaction and block replay Flowables described in the
-`docs <http://docs.web3j.io/filters.html>`_.
+`docs <https://docs.web3j.io/filters_and_events/>`_.
 
 Topic filters are also supported:
 
@@ -387,8 +387,8 @@ Subscriptions should always be cancelled when no longer required:
 
 **Note:** filters are not supported on Infura.
 
-For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_ and the
-`Web3jRx <https://github.com/web3j/web3j/blob/master/src/core/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+For further information refer to `Filters and Events <https://docs.web3j.io/filters_and_events/>`_ and the
+`Web3jRx <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
 interface.
 
 
@@ -463,7 +463,7 @@ tools allow you to use some of the functionality of web3j from the command line:
 - Transfer of funds from one wallet to another
 - Generate Solidity smart contract function wrappers
 
-Please refer to the `documentation <http://docs.web3j.io/command_line.html>`_ for further
+Please refer to the `documentation <https://docs.web3j.io/command_line_tools/>`_ for further
 information.
 
 
@@ -547,7 +547,7 @@ Companies using web3j
 Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
-- `blk.io <https://blk.io>`_
+- `web3labs.com <https://www.web3labs.com/>`_
 - `comitFS <http://www.comitfs.com/>`_
 - `ConsenSys <https://consensys.net/>`_
 - `ING <https://www.ing.com>`_
