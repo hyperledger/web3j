@@ -15,6 +15,7 @@ package org.web3j.console.project;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+
 import org.junit.Test;
 import picocli.CommandLine;
 
@@ -42,30 +43,33 @@ public class ProjectImporterTest extends TempFileProvider {
         System.setErr(output);
         final String[] args = {"", "", ""};
         ProjectImporter.main(args);
-        verify(output).println(startsWith("Missing required options [--package=<packageName>, --project name=<projectName>, --solidity path=<solidityImportPath>]"));
+        verify(output)
+                .println(
+                        startsWith(
+                                "Missing required options [--package=<packageName>, --project name=<projectName>, --solidity path=<solidityImportPath>]"));
     }
-
 
     @Test
     public void runTestWhenArgumentsAreNotEmpty() throws IOException {
-        final String formattedSolidityTestProject = File.separator
-                + "web3j"
-                + File.separator
-                + "console"
-                + File.separator
-                + "src"
-                + File.separator
-                + "test"
-                + File.separator
-                + "resources"
-                + File.separator
-                + "Solidity";
+        final String formattedSolidityTestProject =
+                File.separator
+                        + "web3j"
+                        + File.separator
+                        + "console"
+                        + File.separator
+                        + "src"
+                        + File.separator
+                        + "test"
+                        + File.separator
+                        + "resources"
+                        + File.separator
+                        + "Solidity";
         final PrintStream output = mock(PrintStream.class);
         System.setOut(output);
-        final String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + formattedSolidityTestProject};
+        final String[] args = {
+            "-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + formattedSolidityTestProject
+        };
         ProjectImporter.main(args);
         verify(output).println(startsWith("Project"));
     }
-
-
 }

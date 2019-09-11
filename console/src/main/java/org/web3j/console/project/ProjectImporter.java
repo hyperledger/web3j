@@ -42,13 +42,18 @@ public class ProjectImporter extends ProjectCreator {
             args = tail(args);
             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
                 final InteractiveImporter options = new InteractiveImporter();
-                args = new String[]{
-                        COMMAND_NEW,
-                        "-n", options.getProjectName(),
-                        "-p", options.getPackageName(),
-                        "-s", options.getSolidityProjectPath(),
-                        "-o", options.getProjectDestination()
-                };
+                args =
+                        new String[] {
+                            COMMAND_NEW,
+                            "-n",
+                            options.getProjectName(),
+                            "-p",
+                            options.getPackageName(),
+                            "-s",
+                            options.getSolidityProjectPath(),
+                            "-o",
+                            options.getProjectDestination()
+                        };
             }
         }
 
@@ -63,11 +68,13 @@ public class ProjectImporter extends ProjectCreator {
                     .withTemplateProvider(templateProvider)
                     .withSolidityFile(solidityFile)
                     .build();
-            exitSuccess("Project created with name: " + projectStructure.getProjectName() + " at location: " + projectStructure.getProjectRoot());
+            exitSuccess(
+                    "Project created with name: "
+                            + projectStructure.getProjectName()
+                            + " at location: "
+                            + projectStructure.getProjectRoot());
         } catch (final Exception e) {
             exitError(e);
         }
     }
-
-
 }

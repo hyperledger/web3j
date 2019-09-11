@@ -15,11 +15,13 @@ package org.web3j.console.project;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.web3j.console.WalletTester;
 import picocli.CommandLine;
+
+import org.web3j.console.WalletTester;
 
 import static org.junit.Assert.assertTrue;
 
@@ -40,7 +42,6 @@ public class ProjectCreatorTest extends WalletTester {
         System.setIn(System.in);
     }
 
-
     @Test
     public void testWhenCorrectArgsArePassedProjectStructureCreated() {
         final String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath};
@@ -54,9 +55,12 @@ public class ProjectCreatorTest extends WalletTester {
     public void runTestWhenArgumentsAreEmpty() throws IOException {
         final String[] args = {"", ""};
         ProjectCreator.main(args);
-        assertTrue(outContent.toString().contains("Missing required options [--package=<packageName>, --project name=<projectName>]"));
+        assertTrue(
+                outContent
+                        .toString()
+                        .contains(
+                                "Missing required options [--package=<packageName>, --project name=<projectName>]"));
     }
-
 
     @Test
     public void runTestWhenArgumentsAreNotEmpty() throws IOException {
@@ -64,5 +68,4 @@ public class ProjectCreatorTest extends WalletTester {
         ProjectCreator.main(args);
         assertTrue(outContent.toString().contains("Project created"));
     }
-
 }

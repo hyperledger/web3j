@@ -12,9 +12,9 @@
  */
 package org.web3j.console.project;
 
-import picocli.CommandLine;
-
 import java.io.IOException;
+
+import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.codegen.Console.exitSuccess;
@@ -28,22 +28,24 @@ public class ProjectCreator {
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
 
-    ProjectCreator(final String root, final String packageName, final String projectName) throws IOException {
+    ProjectCreator(final String root, final String packageName, final String projectName)
+            throws IOException {
         this.projectStructure = new ProjectStructure(root, packageName, projectName);
-        this.templateProvider = new TemplateProvider.Builder()
-                .loadGradlewBatScript("gradlew.bat.template")
-                .loadGradlewScript("gradlew.template")
-                .loadMainJavaClass("Template.java")
-                .loadGradleBuild("build.gradle.template")
-                .loadGradleSettings("settings.gradle.template")
-                .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                .loadGradleJar("gradle-wrapper.jar")
-                .loadSolidityGreeter("Greeter.sol")
-                .withPackageNameReplacement(
-                        s -> s.replaceAll("<package_name>", packageName))
-                .withProjectNameReplacement(
-                        s -> s.replaceAll("<project_name>", projectName))
-                .build();
+        this.templateProvider =
+                new TemplateProvider.Builder()
+                        .loadGradlewBatScript("gradlew.bat.template")
+                        .loadGradlewScript("gradlew.template")
+                        .loadMainJavaClass("Template.java")
+                        .loadGradleBuild("build.gradle.template")
+                        .loadGradleSettings("settings.gradle.template")
+                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
+                        .loadGradleJar("gradle-wrapper.jar")
+                        .loadSolidityGreeter("Greeter.sol")
+                        .withPackageNameReplacement(
+                                s -> s.replaceAll("<package_name>", packageName))
+                        .withProjectNameReplacement(
+                                s -> s.replaceAll("<project_name>", projectName))
+                        .build();
     }
 
     public static void main(String[] args) throws IOException {
@@ -51,23 +53,33 @@ public class ProjectCreator {
             args = tail(args);
             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
                 final InteractiveOptions options = new InteractiveOptions(System.in, System.out);
-                args = new String[]{
-                        COMMAND_NEW,
-                        "-n", options.getProjectName(),
-                        "-p", options.getPackageName(),
-                        "-o", options.getProjectDestination()
-                };
+                args =
+                        new String[] {
+                            COMMAND_NEW,
+                            "-n",
+                            options.getProjectName(),
+                            "-p",
+                            options.getPackageName(),
+                            "-o",
+                            options.getProjectDestination()
+                        };
             }
         }
 
         CommandLine.run(new ProjectCreatorCLIRunner(), args);
     }
 
-
     void generate() {
         try {
-            Project.builder().withProjectStructure(projectStructure).withTemplateProvider(templateProvider).build();
-            exitSuccess("Project created with name: " + projectStructure.getProjectName() + " at location: " + projectStructure.getProjectRoot());
+            Project.builder()
+                    .withProjectStructure(projectStructure)
+                    .withTemplateProvider(templateProvider)
+                    .build();
+            exitSuccess(
+                    "Project created with name: "
+                            + projectStructure.getProjectName()
+                            + " at location: "
+                            + projectStructure.getProjectRoot());
 
         } catch (final Exception e) {
 
