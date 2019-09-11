@@ -49,14 +49,14 @@ public abstract class FunctionEncoder {
     public static String encodeConstructor(final List<Type> parameters) {
         return encoder().encodeParameters(parameters);
     }
-    
+
     public static Function makeFunction(
             String fnname,
             List<String> solidityInputTypes,
             List<Object> arguments,
             List<String> solidityOutputTypes)
             throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
-            IllegalAccessException, InvocationTargetException {
+                    IllegalAccessException, InvocationTargetException {
         List<Type> encodedInput = new ArrayList<>();
         Iterator argit = arguments.iterator();
         for (String st : solidityInputTypes) {
@@ -68,7 +68,7 @@ public abstract class FunctionEncoder {
         }
         return new Function(fnname, encodedInput, encodedOutput);
     }
-    
+
     protected abstract String encodeFunction(Function function);
 
     protected abstract String encodeParameters(List<Type> parameters);
