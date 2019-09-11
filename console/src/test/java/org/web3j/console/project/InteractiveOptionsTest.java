@@ -18,10 +18,9 @@ public class InteractiveOptionsTest extends TempFileProvider {
     @Before
     public void init() {
 
-        final String input = "Test\norg.com\n" + tempDirPath + "\n";
+        final String input = "Test\norg.com\n" + "" + "\n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-
     }
 
     @After
@@ -30,12 +29,17 @@ public class InteractiveOptionsTest extends TempFileProvider {
     }
 
     @Test
-    public void runInteractiveModeTest() throws IOException {
+    public void runInteractiveModeTest() {
         final InteractiveOptions options = new InteractiveOptions(inputStream, System.out);
         assertEquals("Test", options.getProjectName());
         assertEquals("org.com", options.getPackageName());
-
         assertEquals(tempDirPath, options.getProjectDestination());
+    }
+
+    @Test
+    public void createNewProjectInteractive() throws IOException {
+        final String[] args = {"new", "interactive"};
+        ProjectCreator.main(args);
     }
 
 

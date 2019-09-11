@@ -1,12 +1,12 @@
 package org.web3j.console.project;
 
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.Optional;
 import java.util.Scanner;
 
 class InteractiveOptions {
@@ -22,25 +22,30 @@ class InteractiveOptions {
 
     InteractiveOptions(final InputStream inputStream, final OutputStream outputStream) {
         this.scanner = new Scanner(inputStream);
-        this.writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+        this.writer = new PrintWriter(outputStream);
     }
 
-    final String getProjectName() throws IOException {
-        writer.append("Please enter the project name: ");
+    final String getProjectName() {
+        print("Please enter the project name: ");
         return getUserInput();
     }
 
-    final String getPackageName() throws IOException {
-        writer.append("Please enter the package name for your project: ");
+    final String getPackageName() {
+        print("Please enter the package name for your project: ");
         return getUserInput();
     }
 
-    final String getProjectDestination() throws IOException {
-        writer.append("Please enter the destination of your project (current by default): ");
-        return getUserInput();
+    final Optional<String> getProjectDestination() {
+        print("Please enter the destination of your project (current by default): ");
+        final String projectDest = getUserInput();
+        return projectDest.isEmpty() ? Optional.empty() : Optional.of(projectDest);
     }
 
     String getUserInput() {
-        return scanner.next();
+        return scanner.nextLine();
+    }
+
+    private void print(final String text) {
+        System.out.println(text);
     }
 }

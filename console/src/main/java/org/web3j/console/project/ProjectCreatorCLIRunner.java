@@ -1,7 +1,5 @@
 package org.web3j.console.project;
 
-import picocli.CommandLine;
-
 import java.io.IOException;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
