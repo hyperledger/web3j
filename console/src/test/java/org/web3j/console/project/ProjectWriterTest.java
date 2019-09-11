@@ -28,7 +28,7 @@ public class ProjectWriterTest extends TempFileProvider {
 
     @Test
     public void writeResourceFileTest() throws Exception {
-        setUp();
+
         projectWriter.writeResourceFile("Greeter.sol", "Greeter.sol", tempDirPath);
         Assert.assertTrue(new File(tempDirPath + File.separator + "Greeter.sol").exists());
     }
@@ -43,7 +43,7 @@ public class ProjectWriterTest extends TempFileProvider {
 
     @Test
     public void importSolidityProjectTest() throws IOException {
-        File file = new File(tempDirPath + File.separator + "tempSolidityDir");
+        final File file = new File(tempDirPath + File.separator + "tempSolidityDir");
         file.mkdirs();
         projectWriter.writeResourceFile(
                 "Greeter.sol", "Greeter.sol", tempDirPath + File.separator + "tempSolidityDir");

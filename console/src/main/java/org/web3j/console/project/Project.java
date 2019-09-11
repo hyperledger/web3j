@@ -20,51 +20,56 @@ import static org.web3j.codegen.Console.exitError;
 
 public class Project {
 
-    private Project(Builder builder) {}
+    private Project(final Builder builder) {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public static class Builder {
 
         private ProjectStructure projectStructure;
         private TemplateProvider templateProvider;
         private File solidityImportPath;
-        private String greeterTemplate;
 
-        Builder() {}
+        Builder() {
+        }
 
-        Builder withSolidityFile(File solidityImportPath) {
+        Builder withSolidityFile(final File solidityImportPath) {
             this.solidityImportPath = solidityImportPath;
             return this;
         }
 
-        Builder withProjectStructure(ProjectStructure projectStructure) {
+        Builder withProjectStructure(final ProjectStructure projectStructure) {
             this.projectStructure = projectStructure;
 
             return this;
         }
 
-        Builder withTemplateProvider(TemplateProvider templateProvider) {
+        Builder withTemplateProvider(final TemplateProvider templateProvider) {
             this.templateProvider = templateProvider;
 
             return this;
         }
 
-        private void buildGradleProject(String pathToDirectory)
+        private void buildGradleProject(final String pathToDirectory)
                 throws IOException, InterruptedException {
             if (!isWindows()) {
                 setExecutable(pathToDirectory, "gradlew");
                 executeCommand(
-                        new File(pathToDirectory), new String[] {"bash", "-c", "./gradlew build"});
+                        new File(pathToDirectory), new String[]{"bash", "-c", "./gradlew build"});
             } else {
                 setExecutable(pathToDirectory, "gradlew.bat");
                 executeCommand(
                         new File(pathToDirectory),
-                        new String[] {"cmd.exe", "/c", "gradlew.bat build"});
+                        new String[]{"cmd.exe", "/c", "gradlew.bat build"});
             }
         }
 
         private void setExecutable(final String pathToDirectory, final String gradlew) {
-            File f = new File(pathToDirectory + File.separator + gradlew);
-            boolean isExecutable = f.setExecutable(true);
+            final File f = new File(pathToDirectory + File.separator + gradlew);
+            final boolean isExecutable = f.setExecutable(true);
         }
 
         private boolean isWindows() {
@@ -84,7 +89,7 @@ public class Project {
         Project build() {
             try {
                 projectStructure.createDirectoryStructure();
-                ProjectWriter projectWriter = new ProjectWriter();
+                final ProjectWriter projectWriter = new ProjectWriter();
                 projectWriter.writeResourceFile(
                         templateProvider.getMainJavaClass(),
                         projectStructure.getProjectName() + ".java",
@@ -97,13 +102,15 @@ public class Project {
                         templateProvider.getGradleSettings(),
                         File.separator + "settings.gradle",
                         projectStructure.getProjectRoot());
-                if (solidityImportPath == null)
+                if (solidityImportPath == null) {
                     projectWriter.writeResourceFile(
                             templateProvider.getSolidityProject(),
                             "Greeter.sol",
                             projectStructure.getSolidityPath());
-                projectWriter.importSolidityProject(
-                        solidityImportPath, projectStructure.getSolidityPath());
+                } else {
+                    projectWriter.importSolidityProject(
+                            solidityImportPath, projectStructure.getSolidityPath());
+                }
                 projectWriter.writeResourceFile(
                         templateProvider.getGradlewWrapperSettings(),
                         File.separator + "gradle-wrapper.properties",
@@ -120,10 +127,10 @@ public class Project {
                         templateProvider.getGradlewJar(),
                         projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar");
                 buildGradleProject(projectStructure.getProjectRoot());
-            } catch (Exception e) {
-
+            } catch (final IOException | InterruptedException e) {
                 exitError(e);
             }
+
 
             return new Project(this);
         }

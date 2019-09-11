@@ -69,27 +69,27 @@ public class ProjectStructure {
         return wrapperPath;
     }
 
-    private String generatePath(String... a) {
-        StringBuilder finalPath = new StringBuilder();
-        for (String b : a) {
+    private String generatePath(final String... a) {
+        final StringBuilder finalPath = new StringBuilder();
+        for (final String b : a) {
             finalPath.append(b).append(File.separator);
         }
         return finalPath.toString();
     }
 
-    private String formatPackageName(String packageName) {
+    private String formatPackageName(final String packageName) {
         if (packageName.contains(".")) {
             return packageName.replaceAll("[.]", File.separator);
         }
         return packageName;
     }
 
-    private void createDirectory(String path) {
-        File directory = new File(path);
+    private void createDirectory(final String path) {
+        final File directory = new File(path);
         directory.mkdirs();
     }
 
-    void createDirectoryStructure() throws Exception {
+    void createDirectoryStructure() {
         createDirectory(mainPath);
         createDirectory(testPath);
         createDirectory(solidityPath);

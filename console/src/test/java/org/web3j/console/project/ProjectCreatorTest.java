@@ -12,27 +12,57 @@
  */
 package org.web3j.console.project;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.web3j.console.WalletTester;
 import picocli.CommandLine;
 
-import org.web3j.TempFileProvider;
+import static org.junit.Assert.assertTrue;
 
-public class ProjectCreatorTest extends TempFileProvider {
+public class ProjectCreatorTest extends WalletTester {
+    private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+
+    @Before
+    public void setUpStreams() {
+
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
+    }
+
+    @After
+    public void reset() {
+        System.setOut(System.out);
+        System.setIn(System.in);
+    }
+
 
     @Test
-    public void goodArgsTest() {
-        String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath};
-        ProjectCreator.PicocliRunner picocliRunner = new ProjectCreator.PicocliRunner();
-        new CommandLine(picocliRunner).parseArgs(args);
-        assert picocliRunner.packageName.equals("org.com");
-        assert picocliRunner.projectName.equals("Test");
+    public void testWhenCorrectArgsArePassedProjectStructureCreated() {
+        final String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath};
+        final ProjectCreatorCLIRunner projectCreatorCLIRunner = new ProjectCreatorCLIRunner();
+        new CommandLine(projectCreatorCLIRunner).parseArgs(args);
+        assert projectCreatorCLIRunner.packageName.equals("org.com");
+        assert projectCreatorCLIRunner.projectName.equals("Test");
     }
 
-    @Test(expected = CommandLine.MissingParameterException.class)
-    public void badArgsTest() {
-        ProjectCreator.PicocliRunner picocliRunner = new ProjectCreator.PicocliRunner();
-        String[] args = {"-t=org.org", "-n=test", "-o=" + tempDirPath};
-        CommandLine commandLine = new CommandLine(picocliRunner);
-        commandLine.parseArgs(args);
+    @Test
+    public void runTestWhenArgumentsAreEmpty() throws IOException {
+        final String[] args = {"", ""};
+        ProjectCreator.main(args);
+        assertTrue(outContent.toString().contains("Missing required options [--package=<packageName>, --project name=<projectName>]"));
     }
+
+
+    @Test
+    public void runTestWhenArgumentsAreNotEmpty() throws IOException {
+        final String[] args = {"new", "-p=org.com", "-n=Test", "-o=" + tempDirPath};
+        ProjectCreator.main(args);
+        assertTrue(outContent.toString().contains("Project created"));
+    }
+
 }

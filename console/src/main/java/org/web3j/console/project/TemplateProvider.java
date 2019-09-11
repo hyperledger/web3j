@@ -91,46 +91,43 @@ public class TemplateProvider {
         private Function<String, String> projectNameReplacement = s -> s;
 
         public Builder loadMainJavaClass(final String name) throws IOException {
-
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.mainJavaClass = readFile(resourcePath);
-
+            this.mainJavaClass = readFile(name);
             return this;
         }
 
         public Builder loadGradleBuild(final String name) throws IOException {
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.gradleBuild = readFile(resourcePath);
+            this.gradleBuild = readFile(name);
             return this;
         }
 
         public Builder loadSolidityGreeter(final String name) throws IOException {
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.solidityProject = readFile(resourcePath);
+
+            this.solidityProject = readFile(name);
+
             return this;
         }
 
         public Builder loadGradleSettings(final String name) throws IOException {
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.gradleSettings = readFile(resourcePath);
+
+            this.gradleSettings = readFile(name);
             return this;
         }
 
         public Builder loadGradlewWrapperSettings(final String name) throws IOException {
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.gradlewWrapperSettings = readFile(resourcePath);
+
+            this.gradlewWrapperSettings = readFile(name);
             return this;
         }
 
         public Builder loadGradlewBatScript(final String name) throws IOException {
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.gradlewBatScript = readFile(resourcePath);
+
+            this.gradlewBatScript = readFile(name);
             return this;
         }
 
         public Builder loadGradlewScript(final String name) throws IOException {
-            InputStream resourcePath = getClass().getClassLoader().getResourceAsStream(name);
-            this.gradlewScript = readFile(resourcePath);
+
+            this.gradlewScript = readFile(name);
             return this;
         }
 
@@ -162,15 +159,31 @@ public class TemplateProvider {
                     gradlewJar);
         }
 
-        private String readFile(final InputStream file) throws IOException {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(file));
-            String temp;
-            StringBuilder stringBuilder = new StringBuilder();
-            while ((temp = reader.readLine()) != null) {
-                stringBuilder.append(temp).append("\n");
+        private String readFile(final String name) throws IOException {
+            try (final InputStream stream = getClass().getClassLoader().getResourceAsStream(name)) {
+                return readStream(stream);
+            } catch (final IOException e) {
+                throw e;
             }
-            reader.close();
-            return stringBuilder.toString();
+        }
+
+        private String readStream(final InputStream stream) throws IOException {
+
+            try (final BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+                String temp;
+                final StringBuilder stringBuilder = new StringBuilder();
+                while ((temp = reader.readLine()) != null) {
+                    stringBuilder.append(temp).append("\n");
+
+                }
+                return stringBuilder.toString();
+
+            } catch (final IOException e) {
+                throw e;
+
+            }
+
+
         }
     }
 }

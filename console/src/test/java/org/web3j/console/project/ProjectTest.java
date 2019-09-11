@@ -15,8 +15,7 @@ package org.web3j.console.project;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 import org.web3j.TempFileProvider;
 
@@ -36,56 +35,57 @@ public class ProjectTest extends TempFileProvider {
                     .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
                     .build();
 
-    public ProjectTest() throws IOException {}
+    public ProjectTest() throws IOException {
+    }
 
-    public void setUpProject() throws Exception {
-
-        Project project =
-                new Project.Builder()
-                        .withTemplateProvider(templateProviderNew)
-                        .withProjectStructure(projectStructure)
-                        .build();
+    @Before
+    public void setUpProject() {
+        new Project.Builder()
+                .withTemplateProvider(templateProviderNew)
+                .withProjectStructure(projectStructure)
+                .build();
     }
 
     @Test
-    public void directoryCreationTest() throws Exception {
-        setUpProject();
-        boolean mainProjectDir = new File(projectStructure.getMainPath()).exists();
-        boolean gradleWrapperDir = new File(projectStructure.getWrapperPath()).exists();
-        boolean testProjectDir = new File(projectStructure.getTestPath()).exists();
-        boolean solidityPath = new File(projectStructure.getSolidityPath()).exists();
+    public void directoryCreationTest() {
+
+        final boolean mainProjectDir = new File(projectStructure.getMainPath()).exists();
+        final boolean gradleWrapperDir = new File(projectStructure.getWrapperPath()).exists();
+        final boolean testProjectDir = new File(projectStructure.getTestPath()).exists();
+        final boolean solidityPath = new File(projectStructure.getSolidityPath()).exists();
 
         Assert.assertTrue(mainProjectDir && gradleWrapperDir && testProjectDir && solidityPath);
     }
 
     @Test
-    public void fileCreationTest() throws Exception {
-        setUpProject();
-        boolean mainJavaClass =
+    public void fileCreationTest() {
+
+        final boolean mainJavaClass =
                 new File(projectStructure.getMainPath() + File.separator + "test.java").exists();
-        boolean greeterContract =
+        final boolean greeterContract =
                 new File(projectStructure.getSolidityPath() + File.separator + "Greeter.sol")
                         .exists();
-        boolean gradleBuild =
+        final boolean gradleBuild =
                 new File(projectStructure.getProjectRoot() + File.separator + "build.gradle")
                         .exists();
-        boolean gradleSettings =
+        final boolean gradleSettings =
                 new File(projectStructure.getProjectRoot() + File.separator + "settings.gradle")
                         .exists();
-        boolean gradleWrapperSettings =
+        final boolean gradleWrapperSettings =
                 new File(
-                                projectStructure.getWrapperPath()
-                                        + File.separator
-                                        + "gradle-wrapper.properties")
+                        projectStructure.getWrapperPath()
+                                + File.separator
+                                + "gradle-wrapper.properties")
                         .exists();
-        boolean gradleWrapperJar =
+        final boolean gradleWrapperJar =
                 new File(projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar")
                         .exists();
-        boolean gradlewBatScript =
+        final boolean gradlewBatScript =
                 new File(projectStructure.getProjectRoot() + File.separator + "gradlew.bat")
                         .exists();
-        boolean gradlewScript =
+        final boolean gradlewScript =
                 new File(projectStructure.getProjectRoot() + File.separator + "gradlew").exists();
+
 
         Assert.assertTrue(
                 mainJavaClass
@@ -97,4 +97,5 @@ public class ProjectTest extends TempFileProvider {
                         && gradlewBatScript
                         && gradlewScript);
     }
+
 }

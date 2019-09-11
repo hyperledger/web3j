@@ -12,27 +12,60 @@
  */
 package org.web3j.console.project;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import org.junit.Test;
 import picocli.CommandLine;
 
 import org.web3j.TempFileProvider;
 
+import static org.mockito.Matchers.startsWith;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 public class ProjectImporterTest extends TempFileProvider {
 
     @Test
-    public void goodArgsTest() {
-        String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + tempDirPath};
-        ProjectImporter.PicocliRunner picocliRunner = new ProjectImporter.PicocliRunner();
-        new CommandLine(picocliRunner).parseArgs(args);
-        assert picocliRunner.packageName.equals("org.com");
-        assert picocliRunner.projectName.equals("Test");
+    public void testWhenCorrectArgsArePassedProjectStructureCreated() {
+        final String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + tempDirPath};
+        final ProjectImporterCLIRunner projectImporterCLIRunner = new ProjectImporterCLIRunner();
+        new CommandLine(projectImporterCLIRunner).parseArgs(args);
+        assert projectImporterCLIRunner.packageName.equals("org.com");
+        assert projectImporterCLIRunner.projectName.equals("Test");
+        assert projectImporterCLIRunner.solidityImportPath.equals(tempDirPath);
     }
 
-    @Test(expected = CommandLine.MissingParameterException.class)
-    public void badArgsTest() {
-        ProjectImporter.PicocliRunner picocliRunner = new ProjectImporter.PicocliRunner();
-        String[] args = {"-t=org.org", "-n=test", "-o=" + tempDirPath};
-        CommandLine commandLine = new CommandLine(picocliRunner);
-        commandLine.parseArgs(args);
+    @Test
+    public void runTestWhenArgumentsAreEmpty() throws IOException {
+        final PrintStream output = mock(PrintStream.class);
+        System.setErr(output);
+        final String[] args = {"", "", ""};
+        ProjectImporter.main(args);
+        verify(output).println(startsWith("Missing required options [--package=<packageName>, --project name=<projectName>, --solidity path=<solidityImportPath>]"));
     }
+
+
+    @Test
+    public void runTestWhenArgumentsAreNotEmpty() throws IOException {
+        final String formattedSolidityTestProject = File.separator
+                + "web3j"
+                + File.separator
+                + "console"
+                + File.separator
+                + "src"
+                + File.separator
+                + "test"
+                + File.separator
+                + "resources"
+                + File.separator
+                + "Solidity";
+        final PrintStream output = mock(PrintStream.class);
+        System.setOut(output);
+        final String[] args = {"-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + formattedSolidityTestProject};
+        ProjectImporter.main(args);
+        verify(output).println(startsWith("Project"));
+    }
+
+
 }

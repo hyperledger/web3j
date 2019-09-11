@@ -18,15 +18,16 @@ import java.io.IOException;
 import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
+import static org.web3j.codegen.Console.exitSuccess;
+import static org.web3j.console.project.InteractiveOptions.COMMAND_INTERACTIVE;
 import static org.web3j.utils.Collection.tail;
-import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
 public class ProjectImporter extends ProjectCreator {
     public static final String COMMAND_IMPORT = "import";
 
     private final String solidityImportPath;
 
-    private ProjectImporter(
+    public ProjectImporter(
             final String root,
             final String packageName,
             final String projectName,
@@ -36,67 +37,37 @@ public class ProjectImporter extends ProjectCreator {
         this.solidityImportPath = solidityImportPath;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length > 0 && args[0].equals(COMMAND_IMPORT)) {
             args = tail(args);
+            if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
+                final InteractiveImporter options = new InteractiveImporter();
+                args = new String[]{
+                        COMMAND_NEW,
+                        "-n", options.getProjectName(),
+                        "-p", options.getPackageName(),
+                        "-s", options.getSolidityProjectPath(),
+                        "-o", options.getProjectDestination()
+                };
+            }
         }
 
-        CommandLine.run(new PicocliRunner(), args);
+        CommandLine.run(new ProjectImporterCLIRunner(), args);
     }
 
     public void generate() {
-        File solidityFile = new File(solidityImportPath);
+        final File solidityFile = new File(solidityImportPath);
         try {
-            Project project =
-                    new Project.Builder()
-                            .withProjectStructure(projectStructure)
-                            .withTemplateProvider(templateProvider)
-                            .withSolidityFile(solidityFile)
-                            .build();
-        } catch (Exception e) {
-
+            Project.builder()
+                    .withProjectStructure(projectStructure)
+                    .withTemplateProvider(templateProvider)
+                    .withSolidityFile(solidityFile)
+                    .build();
+            exitSuccess("Project created with name: " + projectStructure.getProjectName() + " at location: " + projectStructure.getProjectRoot());
+        } catch (final Exception e) {
+            exitError(e);
         }
     }
 
-    @CommandLine.Command(
-            name = COMMAND_IMPORT,
-            mixinStandardHelpOptions = true,
-            version = "4.0",
-            sortOptions = false)
-    static class PicocliRunner implements Runnable {
 
-        @CommandLine.Option(
-                names = {"-p", "--package name"},
-                description = "base package name.",
-                required = true)
-        String packageName;
-
-        @CommandLine.Option(
-                names = {"-n", "--project name"},
-                description = "project name.",
-                required = true)
-        String projectName;
-
-        @CommandLine.Option(
-                names = {"-s", "--solidity path"},
-                description = "path to solidity file/folder",
-                required = true)
-        String solidityImportPath;
-
-        @CommandLine.Option(
-                names = {"-o", "--outputDir"},
-                description = "destination base directory.",
-                required = false,
-                showDefaultValue = ALWAYS)
-        private String root = System.getProperty("user.dir");
-
-        @Override
-        public void run() {
-            try {
-                new ProjectImporter(root, packageName, projectName, solidityImportPath).generate();
-            } catch (Exception e) {
-                exitError(e);
-            }
-        }
-    }
 }

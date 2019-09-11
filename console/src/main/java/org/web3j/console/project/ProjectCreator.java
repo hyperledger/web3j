@@ -12,91 +12,66 @@
  */
 package org.web3j.console.project;
 
-import java.io.IOException;
-
 import picocli.CommandLine;
 
+import java.io.IOException;
+
 import static org.web3j.codegen.Console.exitError;
+import static org.web3j.codegen.Console.exitSuccess;
+import static org.web3j.console.project.InteractiveOptions.COMMAND_INTERACTIVE;
 import static org.web3j.utils.Collection.tail;
-import static picocli.CommandLine.Help.Visibility.ALWAYS;
 
 public class ProjectCreator {
 
     public static final String COMMAND_NEW = "new";
+
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
 
-    ProjectCreator(String root, String packageName, String projectName) throws IOException {
+    ProjectCreator(final String root, final String packageName, final String projectName) throws IOException {
         this.projectStructure = new ProjectStructure(root, packageName, projectName);
-        this.templateProvider =
-                new TemplateProvider.Builder()
-                        .loadGradlewBatScript("gradlew.bat.template")
-                        .loadGradlewScript("gradlew.template")
-                        .loadMainJavaClass("Template.java")
-                        .loadGradleBuild("build.gradle.template")
-                        .loadGradleSettings("settings.gradle.template")
-                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                        .loadGradleJar("gradle-wrapper.jar")
-                        .loadSolidityGreeter("Greeter.sol")
-                        .withPackageNameReplacement(
-                                s -> s.replaceAll("<package_name>", packageName))
-                        .withProjectNameReplacement(
-                                s -> s.replaceAll("<project_name>", projectName))
-                        .build();
+        this.templateProvider = new TemplateProvider.Builder()
+                .loadGradlewBatScript("gradlew.bat.template")
+                .loadGradlewScript("gradlew.template")
+                .loadMainJavaClass("Template.java")
+                .loadGradleBuild("build.gradle.template")
+                .loadGradleSettings("settings.gradle.template")
+                .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
+                .loadGradleJar("gradle-wrapper.jar")
+                .loadSolidityGreeter("Greeter.sol")
+                .withPackageNameReplacement(
+                        s -> s.replaceAll("<package_name>", packageName))
+                .withProjectNameReplacement(
+                        s -> s.replaceAll("<project_name>", projectName))
+                .build();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length > 0 && args[0].equals(COMMAND_NEW)) {
             args = tail(args);
+            if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
+                final InteractiveOptions options = new InteractiveOptions(System.in, System.out);
+                args = new String[]{
+                        COMMAND_NEW,
+                        "-n", options.getProjectName(),
+                        "-p", options.getPackageName(),
+                        "-o", options.getProjectDestination()
+                };
+            }
         }
-        CommandLine.run(new PicocliRunner(), args);
+
+        CommandLine.run(new ProjectCreatorCLIRunner(), args);
     }
 
-    private void generate() {
+
+    void generate() {
         try {
-            Project project =
-                    new Project.Builder()
-                            .withProjectStructure(projectStructure)
-                            .withTemplateProvider(templateProvider)
-                            .build();
-        } catch (Exception e) {
+            Project.builder().withProjectStructure(projectStructure).withTemplateProvider(templateProvider).build();
+            exitSuccess("Project created with name: " + projectStructure.getProjectName() + " at location: " + projectStructure.getProjectRoot());
+
+        } catch (final Exception e) {
 
             exitError(e);
-        }
-    }
-
-    @CommandLine.Command(
-            name = COMMAND_NEW,
-            mixinStandardHelpOptions = true,
-            version = "4.0",
-            sortOptions = false)
-    static class PicocliRunner implements Runnable {
-        @CommandLine.Option(
-                names = {"-o", "--outputDir"},
-                description = "destination base directory.",
-                required = false,
-                showDefaultValue = ALWAYS)
-        String root = System.getProperty("user.dir");
-
-        @CommandLine.Option(
-                names = {"-p", "--package"},
-                description = "base package name.",
-                required = true)
-        String packageName;
-
-        @CommandLine.Option(
-                names = {"-n", "--project name"},
-                description = "project name.",
-                required = true)
-        String projectName;
-
-        @Override
-        public void run() {
-            try {
-                new ProjectCreator(root, packageName, projectName).generate();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

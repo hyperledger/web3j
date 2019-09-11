@@ -35,7 +35,7 @@ class ProjectWriter {
     }
 
     final void importSolidityProject(final File file, final String destination) throws IOException {
-        if (file != null) {
+        if (file != null && file.exists()) {
             Files.walkFileTree(file.toPath(), new ProjectVisitor(destination));
         }
     }

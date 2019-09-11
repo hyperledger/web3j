@@ -14,48 +14,47 @@ package org.web3j.console.project;
 
 import java.io.File;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 import org.web3j.TempFileProvider;
 
 public class ProjectStructureTest extends TempFileProvider {
     private ProjectStructure projectStructure;
-
-    private void init() throws Exception {
-        setUp();
+    @Before
+    public void init() {
         projectStructure = new ProjectStructure(tempDirPath, "test.test", "Test");
         projectStructure.createDirectoryStructure();
     }
 
+
     @Test
-    public void getRootTest() throws Exception {
-        init();
+    public void getRootTest() {
+
         Assert.assertEquals(projectStructure.getRoot(), tempDirPath);
     }
 
     @Test
-    public void getProjectRootTest() throws Exception {
-        init();
+    public void getProjectRootTest() {
+
         Assert.assertEquals(projectStructure.getProjectRoot(), tempDirPath + File.separator + "Test");
     }
 
     @Test
-    public void getPackageNameTest() throws Exception {
-        init();
+    public void getPackageNameTest() {
+
         Assert.assertEquals("test.test", projectStructure.getPackageName());
     }
 
     @Test
-    public void getProjectName() throws Exception {
-        init();
+    public void getProjectName() {
+
         Assert.assertEquals("Test", projectStructure.getProjectName());
     }
 
     @Test
-    public void getTestPathTest() throws Exception {
-        init();
-        String testPath =
+    public void getTestPathTest() {
+
+        final String testPath =
                 tempDirPath
                         + File.separator
                         + "Test"
@@ -75,9 +74,9 @@ public class ProjectStructureTest extends TempFileProvider {
     }
 
     @Test
-    public void getSolidityPathTest() throws Exception {
-        init();
-        String solidityPath =
+    public void getSolidityPathTest() {
+
+        final String solidityPath =
                 tempDirPath
                         + File.separator
                         + "Test"
@@ -92,9 +91,9 @@ public class ProjectStructureTest extends TempFileProvider {
     }
 
     @Test
-    public void getMainPathTest() throws Exception {
-        init();
-        String mainPath =
+    public void getMainPathTest() {
+
+        final String mainPath =
                 tempDirPath
                         + File.separator
                         + "Test"
@@ -114,9 +113,9 @@ public class ProjectStructureTest extends TempFileProvider {
     }
 
     @Test
-    public void getWrapperPathTest() throws Exception {
-        init();
-        String wrapperPath =
+    public void getWrapperPathTest() {
+
+        final String wrapperPath =
                 tempDirPath
                         + File.separator
                         + "Test"

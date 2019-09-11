@@ -24,7 +24,9 @@ import static org.web3j.console.project.ProjectCreator.COMMAND_NEW;
 import static org.web3j.console.project.ProjectImporter.COMMAND_IMPORT;
 import static org.web3j.utils.Collection.tail;
 
-/** Main entry point for running command line utilities. */
+/**
+ * Main entry point for running command line utilities.
+ */
 public class Runner {
 
     private static String USAGE = "Usage: web3j version|wallet|solidity|new|import ...";

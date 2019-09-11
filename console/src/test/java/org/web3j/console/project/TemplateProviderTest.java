@@ -14,64 +14,59 @@ package org.web3j.console.project;
 
 import java.io.IOException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
+import org.web3j.TempFileProvider;
 
-public class TemplateProviderTest {
+public class TemplateProviderTest  extends TempFileProvider {
+    private TemplateProvider templateProvider;
 
-    TemplateProvider templateProvider;
+    @Before
+    public void init() throws IOException {
+        templateProvider =
+                new TemplateProvider.Builder()
+                        .loadGradlewBatScript("gradlew.bat.template")
+                        .loadGradlewScript("gradlew.template")
+                        .loadMainJavaClass("Template.java")
+                        .loadGradleBuild("build.gradle.template")
+                        .loadGradleSettings("settings.gradle.template")
+                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
+                        .loadGradleJar("gradle-wrapper.jar")
+                        .withPackageNameReplacement(s -> s.replaceAll("<package_name>", "test"))
+                        .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
+                        .build();
 
-    {
-        try {
-            templateProvider =
-                    new TemplateProvider.Builder()
-                            .loadGradlewBatScript("gradlew.bat.template")
-                            .loadGradlewScript("gradlew.template")
-                            .loadMainJavaClass("Template.java")
-                            .loadGradleBuild("build.gradle.template")
-                            .loadGradleSettings("settings.gradle.template")
-                            .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                            .loadGradleJar("gradle-wrapper.jar")
-                            .withPackageNameReplacement(s -> s.replaceAll("<package_name>", "test"))
-                            .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
-                            .build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
+
 
     @Test
     public void loadMainJavaClassTest() {
-
-        Assert.assertEquals(templateProvider.getMainJavaClass(), TemplatesAsString.javaTemplate);
+        Assert.assertFalse(templateProvider.getMainJavaClass().isEmpty());
     }
 
     @Test
     public void loadGradleBuildTest() {
-        Assert.assertEquals(
-                templateProvider.getGradleBuild(), TemplatesAsString.gradleBuildTemplate);
+        Assert.assertFalse(templateProvider.getGradleBuild().isEmpty());
     }
 
     @Test
     public void loadGradleSettingsTest() {
-        Assert.assertEquals(templateProvider.getGradleSettings(), TemplatesAsString.gradleSettings);
+        Assert.assertFalse(templateProvider.getGradleSettings().isEmpty());
     }
 
     @Test
     public void loadGradlewScriptTest() {
-        Assert.assertEquals(templateProvider.getGradlewScript(), TemplatesAsString.gradlewScript);
+        Assert.assertFalse(templateProvider.getGradlewScript().isEmpty());
     }
 
     @Test
     public void loadGradlewBatScriptTest() {
-        Assert.assertEquals(
-                templateProvider.getGradlewBatScript(), TemplatesAsString.gradlewBatScript);
+        Assert.assertFalse(templateProvider.getGradlewBatScript().isEmpty());
     }
 
     @Test
     public void loadGradleWrapperTest() {
-        Assert.assertEquals(
-                templateProvider.getGradlewWrapperSettings(),
-                TemplatesAsString.gradleWrapperSettings);
+        Assert.assertFalse(templateProvider.getGradlewWrapperSettings().isEmpty());
     }
+
+
 }

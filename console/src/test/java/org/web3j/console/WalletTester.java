@@ -23,7 +23,7 @@ public abstract class WalletTester extends TempFileProvider {
 
     static final char[] WALLET_PASSWORD = PASSWORD.toCharArray();
 
-    public IODevice console;
+    protected IODevice console;
 
     @Before
     public void setUp() throws Exception {
