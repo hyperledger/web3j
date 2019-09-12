@@ -39,6 +39,7 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteFunctionCall;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -345,9 +346,9 @@ public abstract class Contract extends ManagedTransaction {
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
                     String.format(
-                            "Transaction has failed with status: %s. "
+                            "Transaction %s has failed with status: %s. "
                                     + "Gas used: %d. (not-enough gas?)",
-                            receipt.getStatus(), receipt.getGasUsed()));
+                            receipt.getTransactionHash(), receipt.getStatus(), receipt.getGasUsed()), receipt);
         }
 
         return receipt;
@@ -712,6 +713,51 @@ public abstract class Contract extends ManagedTransaction {
                 .map(log -> staticExtractEventParametersWithLog(event, log))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Sends a transaction and retrieves the error reason if reverted by the EVM.
+     *
+     * @param call the transaction call to be sent
+     * @return the reverted transaction error reason if exists or null otherwise
+     * @throws IOException if the call to the node fails
+     */
+    public TransactionReceipt sendTransactionWithRevertReason(RemoteFunctionCall<TransactionReceipt> call)
+            throws Exception {
+        String data = call.encodeFunctionCall();
+
+        try {
+            return call.send();
+        } catch (TransactionException e) {
+            if (e.getTransactionReceipt().isPresent()) {
+                TransactionReceipt receipt = e.getTransactionReceipt().get();
+                throw new TransactionException(
+                        String.format(
+                                "Transaction %s has been reverted by the EVM with the reason: %s.",
+                                receipt.getTransactionHash(), staticRetrieveRevertReason(receipt, data, web3j)), receipt);
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * Retrieves the error reason of a reverted transaction (if one exists).
+     *
+     * @param transactionReceipt the reverted transaction receipt
+     * @param data               the reverted transaction data
+     * @param web3j              Web3j instance
+     * @return the reverted transaction error reason if exists or null otherwise
+     * @throws IOException if the call to the node fails
+     */
+    public static String staticRetrieveRevertReason(TransactionReceipt transactionReceipt, String data, Web3j web3j)
+            throws IOException {
+
+        return web3j.ethCall(
+                Transaction.createEthCallTransaction(
+                        transactionReceipt.getFrom(), transactionReceipt.getTo(), data
+                ),
+                DefaultBlockParameter.valueOf(transactionReceipt.getBlockNumber())
+        ).send().getRevertReason();
     }
 
     /**

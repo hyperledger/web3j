@@ -40,6 +40,7 @@ import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -50,6 +51,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
@@ -75,6 +77,14 @@ import static org.mockito.Mockito.when;
 public class ContractTest extends ManagedTransactionTester {
 
     private static final String TEST_CONTRACT_BINARY = "12345";
+
+    private static final String OWNER_REVERT_MSG_STR = "Only the contract owner can perform this action";
+
+    private static final String OWNER_REVERT_MSG_HASH = "0x08c379a" +
+            "00000000000000000000000000000000000000000000000000000000000000020" +
+            "000000000000000000000000000000000000000000000000000000000000002f4" +
+            "f6e6c792074686520636f6e7472616374206f776e65722063616e20706572666f" +
+            "726d207468697320616374696f6e0000000000000000000000000000000000";
 
     private TestContract contract;
 
@@ -116,7 +126,9 @@ public class ContractTest extends ManagedTransactionTester {
     public void testContractDeployFails() throws Exception {
         thrown.expect(TransactionException.class);
         thrown.expectMessage(
-                "Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+                String.format(
+                        "Transaction %s has failed with status: 0x0. Gas used: 1. (not-enough gas?)",
+                        TRANSACTION_HASH));
         TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
         deployContract(transactionReceipt);
     }
@@ -232,6 +244,19 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
+    public void testCallSingleValueReverted() throws Exception {
+        thrown.expect(ContractCallException.class);
+        thrown.expectMessage(
+                String.format(
+                        TransactionManager.REVERT_ERR_STR,
+                        OWNER_REVERT_MSG_STR));
+        EthCall ethCall = new EthCall();
+        ethCall.setResult(OWNER_REVERT_MSG_HASH);
+        prepareCall(ethCall);
+        contract.callSingleValue().send();
+    }
+
+    @Test
     public void testCallMultipleValue() throws Exception {
         EthCall ethCall = new EthCall();
         ethCall.setResult(
@@ -261,7 +286,7 @@ public class ContractTest extends ManagedTransactionTester {
         Request<?, EthCall> request = mock(Request.class);
         when(request.send()).thenReturn(ethCall);
 
-        when(web3j.ethCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST)))
+        when(web3j.ethCall(any(Transaction.class), any(DefaultBlockParameterName.class)))
                 .thenReturn((Request) request);
     }
 
@@ -284,7 +309,9 @@ public class ContractTest extends ManagedTransactionTester {
     public void testTransactionFailed() throws Exception {
         thrown.expect(TransactionException.class);
         thrown.expectMessage(
-                "Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+                String.format(
+                        "Transaction %s has failed with status: 0x0. Gas used: 1. (not-enough gas?)",
+                        TRANSACTION_HASH));
 
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
@@ -294,6 +321,28 @@ public class ContractTest extends ManagedTransactionTester {
         prepareTransaction(transactionReceipt);
         contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
                 .send();
+    }
+
+    @Test
+    public void testTransactionFailedWithRevertReason() throws Exception {
+        thrown.expect(TransactionException.class);
+        thrown.expectMessage(
+                String.format(
+                        "Transaction %s has been reverted by the EVM with the reason: %s.",
+                        TRANSACTION_HASH, OWNER_REVERT_MSG_STR));
+
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setStatus("0x0");
+        transactionReceipt.setGasUsed("0x1");
+        transactionReceipt.setBlockNumber("0x2");
+        prepareTransaction(transactionReceipt);
+
+        EthCall ethCall = new EthCall();
+        ethCall.setResult(OWNER_REVERT_MSG_HASH);
+        prepareCall(ethCall);
+
+        contract.sendTransactionWithRevertReason(contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)));
     }
 
     @Test
@@ -563,7 +612,7 @@ public class ContractTest extends ManagedTransactionTester {
             return executeRemoteCallMultipleValueReturn(function);
         }
 
-        public RemoteCall<TransactionReceipt> performTransaction(Address address, Uint256 amount) {
+        public RemoteFunctionCall<TransactionReceipt> performTransaction(Address address, Uint256 amount) {
             Function function =
                     new Function(
                             "approve",
