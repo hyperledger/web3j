@@ -189,6 +189,11 @@ public class SolidityFunctionWrapper extends Generator {
         String className = Strings.capitaliseFirstLetter(contractName);
         TypeSpec.Builder classBuilder = createClassBuilder(contractClass, className, bin);
 
+        classBuilder.addAnnotation(
+                AnnotationSpec.builder(SuppressWarnings.class)
+                        .addMember("value", "\"rawtypes\"")
+                        .build());
+
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, true));
         classBuilder.addMethod(
