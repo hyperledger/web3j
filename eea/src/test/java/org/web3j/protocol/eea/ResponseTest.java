@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
-import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
+import org.web3j.protocol.eea.response.PrivGetTransactionReceipt;
 import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -45,7 +45,7 @@ public class ResponseTest extends ResponseTester {
     }
 
     @Test
-    public void testEeaGetTransactionReceipt() {
+    public void testPrivGetTransactionReceipt() {
 
         buildResponse(
                 "{\n"
@@ -91,10 +91,10 @@ public class ResponseTest extends ResponseTester {
                                         Collections.singletonList(
                                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))));
 
-        EeaGetTransactionReceipt eeaGetTransactionReceipt =
-                deserialiseResponse(EeaGetTransactionReceipt.class);
+        PrivGetTransactionReceipt privGetTransactionReceipt =
+                deserialiseResponse(PrivGetTransactionReceipt.class);
         assertThat(
-                eeaGetTransactionReceipt.getTransactionReceipt().get(),
+                privGetTransactionReceipt.getTransactionReceipt().get(),
                 equalTo(transactionReceipt));
     }
 }

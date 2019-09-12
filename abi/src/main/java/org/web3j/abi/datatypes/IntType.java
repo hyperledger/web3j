@@ -23,8 +23,10 @@ public abstract class IntType extends NumericType {
         super(typePrefix + bitSize, value);
         this.bitSize = bitSize;
         if (!valid()) {
-            throw new UnsupportedOperationException("Bit size must be 8 bit aligned, " +
-                    "and in range 0 < bitSize <= " + MAX_BIT_LENGTH);
+            throw new UnsupportedOperationException(
+                    "Bit size must be 8 bit aligned, "
+                            + "and in range 0 < bitSize <= "
+                            + MAX_BIT_LENGTH);
         }
     }
 

@@ -18,7 +18,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
+import org.web3j.protocol.eea.response.PrivGetTransactionReceipt;
 
 public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     public JsonRpc2_0Eea(Web3jService web3jService) {
@@ -36,12 +36,12 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     }
 
     @Override
-    public Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(
+    public Request<?, PrivGetTransactionReceipt> privGetTransactionReceipt(
             final String transactionHash) {
         return new Request<>(
-                "eea_getTransactionReceipt",
+                "priv_getTransactionReceipt",
                 Collections.singletonList(transactionHash),
                 web3jService,
-                EeaGetTransactionReceipt.class);
+                PrivGetTransactionReceipt.class);
     }
 }

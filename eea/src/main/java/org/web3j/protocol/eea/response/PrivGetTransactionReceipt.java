@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import org.web3j.protocol.core.Response;
 
-public class EeaGetTransactionReceipt extends Response<PrivateTransactionReceipt> {
+public class PrivGetTransactionReceipt extends Response<PrivateTransactionReceipt> {
     public Optional<PrivateTransactionReceipt> getTransactionReceipt() {
         return Optional.ofNullable(getResult());
     }
