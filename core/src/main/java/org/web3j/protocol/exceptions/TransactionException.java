@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.exceptions;
 
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import java.util.Optional;
 
 /**
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class TransactionException extends Exception {
 
     private Optional<String> transactionHash = Optional.empty();
+    private Optional<TransactionReceipt> transactionReceipt = Optional.empty();
 
     public TransactionException(String message) {
         super(message);
@@ -29,6 +31,11 @@ public class TransactionException extends Exception {
     public TransactionException(String message, String transactionHash) {
         super(message);
         this.transactionHash = Optional.ofNullable(transactionHash);
+    }
+
+    public TransactionException(String message, TransactionReceipt transactionReceipt) {
+        super(message);
+        this.transactionReceipt = Optional.ofNullable(transactionReceipt);
     }
 
     public TransactionException(Throwable cause) {
@@ -42,5 +49,14 @@ public class TransactionException extends Exception {
      */
     public Optional<String> getTransactionHash() {
         return transactionHash;
+    }
+
+    /**
+     * Obtain the transaction receipt.
+     *
+     * @return optional transaction receipt.
+     */
+    public Optional<TransactionReceipt> getTransactionReceipt() {
+        return transactionReceipt;
     }
 }
