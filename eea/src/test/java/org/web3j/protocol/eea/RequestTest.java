@@ -35,13 +35,4 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eea_sendRawTransaction\",\"params\":[\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\"],\"id\":1}");
     }
-
-    @Test
-    public void testPrivGetTransactionReceipt() throws Exception {
-        web3j.privGetTransactionReceipt("0x123").send();
-
-        verifyResult(
-                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getTransactionReceipt\","
-                        + "\"params\":[\"0x123\"],\"id\":1}");
-    }
 }

@@ -15,10 +15,10 @@ package org.web3j.tx.response;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.web3j.protocol.eea.response.PrivGetTransactionReceipt;
-import org.web3j.protocol.eea.response.PrivateTransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.pantheon.Pantheon;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetTransactionReceipt;
+import org.web3j.protocol.pantheon.response.privacy.PrivateTransactionReceipt;
 
 public abstract class PrivateTransactionReceiptProcessor extends TransactionReceiptProcessor {
     private Pantheon pantheon;

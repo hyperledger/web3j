@@ -29,6 +29,7 @@ import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
 import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.utils.Base64String;
 
 public interface Pantheon extends Eea {
@@ -81,4 +82,6 @@ public interface Pantheon extends Eea {
     Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(final List<Base64String> addresses);
 
     Request<?, BooleanResponse> privDeletePrivacyGroup(final Base64String privacyGroupId);
+
+    Request<?, PrivGetTransactionReceipt> privGetTransactionReceipt(final String transactionHash);
 }
