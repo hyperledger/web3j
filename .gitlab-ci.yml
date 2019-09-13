@@ -38,8 +38,8 @@ release:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
   script:
-  - gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release
+  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} release
   when: manual
   only:
     refs:
-      - release/(\d).(\d).(\d)
+      - release\/(\d).(\d).(\d)
