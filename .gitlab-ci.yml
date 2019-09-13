@@ -1,17 +1,8 @@
 image: gradle:4.10.2
 
 variables:
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
-before_script:
-- export GRADLE_USER_HOME=`pwd`/.gradle
-
-cache:
-  paths:
-  - .m2/repository/
-  - target/
 
 stages:
 - build
@@ -39,6 +30,33 @@ release:
   stage: release
   script:
   - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} release
+  when: manual
+  only:
+    refs:
+      - /^release\/(\d*).(\d*).(\d*)/
+
+release-console:
+  stage: release
+  script:
+  - gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} console:publishArtifacts
+  when: manual
+  only:
+    refs:
+      - /^release\/(\d*).(\d*).(\d*)/
+
+publish-homebrew:
+  stage: release
+  variables:
+    GIT_STRATEGY: none
+    VERSION: ${CI_COMMIT_REF_NAME//release\/}
+  script:
+    - git clone https://iikirilov:${GITHUB_PERSONAL_ACCESS_TOKEN}@github.com/web3j/homebrew-web3j.git
+    - cd homebrew-web3j
+    - sed -i "5s/.*/  url \"https:\/\/github.com\/web3j\/web3j\/releases\/download\/v${VERSION}\/web3j-${VERSION}.zip\"/" web3j.rb
+    - SHA=$(curl -L https://github.com/web3j/web3j/releases/download/v${VERSION}/web3j-${VERSION}.zip | shasum -a 256 | tr -d ' ' | tr -d '-')
+    - sed -i "7s/.*/  sha256 \"${SHA}\"/" web3j.rb
+    - git commit -am 'Change web3j version to ${VERSION}'
+    - git push
   when: manual
   only:
     refs:
