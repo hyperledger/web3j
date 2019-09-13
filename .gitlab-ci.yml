@@ -42,4 +42,4 @@ release:
   when: manual
   only:
     refs:
-      - release\/(\d).(\d).(\d)
+      - /^release\/(\d*).(\d*).(\d*)/
