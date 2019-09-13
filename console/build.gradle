@@ -1,3 +1,8 @@
+plugins {
+    id "de.undercouch.download" version "4.0.0"
+    id "com.github.breadmoirai.github-release" version "2.2.9"
+}
+
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 
@@ -29,4 +34,37 @@ project.afterEvaluate {
 
     }
 
+}
+
+task publishArtifacts {
+    doFirst {
+        download {
+            src([
+                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar",
+                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar.asc",
+                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip",
+                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip.asc"
+            ])
+            dest "${buildDir}/download"
+        }
+
+        copy {
+            from "${buildDir}/download"
+            into "${buildDir}/release"
+            rename "console-${version}.(.*)", "web3j-${version}.\$1"
+        }
+    }
+    doLast {
+        githubRelease {
+            token project.hasProperty('githubPersonalAccessToken') ? project.property('githubPersonalAccessToken') : System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN')
+            owner "web3j"
+            repo "web3j"
+            tagName "v${version}"
+            body changelog {
+                options(["--format=oneline", "--abbrev-commit", "--max-count=50"])
+            }
+            releaseAssets file("${buildDir}/release").listFiles()
+            overwrite true
+        }
+    }
 }
