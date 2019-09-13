@@ -2,7 +2,7 @@ image: gradle:4.10.2
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
+  VERSION: ${CI_COMMIT_REF_NAME//release\/}
 
 stages:
 - build
@@ -24,32 +24,33 @@ snapshot:
     refs:
       - master
 
-release:
+maven:
   variables:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
   script:
-  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} release
+  - gradle -Pversion=${VERSION} release
   when: manual
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
 
-release-console:
+console:
   stage: release
   script:
-  - gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} console:publishArtifacts
+  - gradle -Pversion=${VERSION} console:publishArtifacts
   when: manual
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
 
-publish-homebrew:
+homebrew:
   stage: release
   variables:
     GIT_STRATEGY: none
-    VERSION: ${CI_COMMIT_REF_NAME//release\/}
   script:
+    - git config --global user.email "hi@web3labs.com"
+    - git config --global user.name "Eve Builder"
     - git clone https://iikirilov:${GITHUB_PERSONAL_ACCESS_TOKEN}@github.com/web3j/homebrew-web3j.git
     - cd homebrew-web3j
     - sed -i "5s/.*/  url \"https:\/\/github.com\/web3j\/web3j\/releases\/download\/v${VERSION}\/web3j-${VERSION}.zip\"/" web3j.rb
