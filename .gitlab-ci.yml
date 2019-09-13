@@ -48,16 +48,15 @@ homebrew:
   stage: downstream
   variables:
     GIT_STRATEGY: none
-    VERSION: ${CI_COMMIT_REF_NAME//release\/}
   script:
     - git config --global user.email "hi@web3labs.com"
     - git config --global user.name "Web3 Labs Team"
     - git clone https://iikirilov:${GITHUB_PERSONAL_ACCESS_TOKEN}@github.com/web3j/homebrew-web3j.git
     - cd homebrew-web3j
-    - sed -i "5s/.*/  url \"https:\/\/github.com\/web3j\/web3j\/releases\/download\/v${VERSION}\/web3j-${VERSION}.zip\"/" web3j.rb
-    - SHA=$(curl -L https://github.com/web3j/web3j/releases/download/v${VERSION}/web3j-${VERSION}.zip | shasum -a 256 | tr -d ' ' | tr -d '-')
+    - sed -i "5s/.*/  url \"https:\/\/github.com\/web3j\/web3j\/releases\/download\/v${CI_COMMIT_REF_NAME//release\/}\/web3j-${CI_COMMIT_REF_NAME//release\/}.zip\"/" web3j.rb
+    - SHA=$(curl -L https://github.com/web3j/web3j/releases/download/v${CI_COMMIT_REF_NAME//release\/}/web3j-${CI_COMMIT_REF_NAME//release\/}.zip | shasum -a 256 | tr -d ' ' | tr -d '-')
     - sed -i "7s/.*/  sha256 \"${SHA}\"/" web3j.rb
-    - git commit -am "Change web3j version to ${VERSION}"
+    - git commit -am "Change web3j version to ${CI_COMMIT_REF_NAME//release\/}"
     - git push
   when: manual
   only:
