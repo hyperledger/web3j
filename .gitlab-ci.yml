@@ -38,7 +38,7 @@ maven:
 console:
   stage: publish
   script:
-  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} console:publishArtifacts
+  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} console:githubRelease
   when: manual
   only:
     refs:

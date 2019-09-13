@@ -37,34 +37,38 @@ project.afterEvaluate {
 }
 
 task publishArtifacts {
-    doFirst {
-        download {
-            src([
-                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar",
-                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar.asc",
-                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip",
-                "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip.asc"
-            ])
-            dest "${buildDir}/download"
-        }
 
-        copy {
-            from "${buildDir}/download"
-            into "${buildDir}/release"
-            rename "console-${version}.(.*)", "web3j-${version}.\$1"
-        }
+    download {
+        src([
+            "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar",
+            "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar.asc",
+            "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip",
+            "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip.asc"
+        ])
+        dest "${buildDir}/download"
     }
-    doLast {
-        githubRelease {
-            token project.hasProperty('githubPersonalAccessToken') ? project.property('githubPersonalAccessToken') : System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN')
-            owner "web3j"
-            repo "web3j"
-            tagName "v${version}"
-            body changelog {
-                options(["--format=oneline", "--abbrev-commit", "--max-count=50"])
-            }
-            releaseAssets file("${buildDir}/release").listFiles()
-            overwrite true
-        }
+
+    copy {
+        from "${buildDir}/download"
+        into "${buildDir}/release"
+        rename "console-${version}.(.*)", "web3j-${version}.\$1"
     }
+}
+
+githubRelease.dependsOn("publishArtifacts")
+
+githubRelease {
+    token project.hasProperty('githubPersonalAccessToken') ? project.property('githubPersonalAccessToken') : System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN')
+    owner "web3j"
+    repo "web3j"
+    tagName "v${version}"
+    body changelog {
+        options([
+            "--format=oneline",
+            "--abbrev-commit",
+            "--max-count=50"
+        ])
+    }
+    releaseAssets file("${buildDir}/release").listFiles()
+    overwrite true
 }
