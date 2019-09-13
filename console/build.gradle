@@ -47,12 +47,13 @@ task downloadArtifacts(type: Download) {
 }
 
 task copyArtifiacts(type: Copy) {
+    dependsOn('downloadArtifacts')
     from "${buildDir}/download"
     into "${buildDir}/release"
     rename "console-${version}.(.*)", "web3j-${version}.\$1"
 }
 
-tasks.githubRelease.dependsOn('downloadArtifacts', 'copyArtifiacts')
+tasks.githubRelease.dependsOn('copyArtifiacts')
 
 githubRelease {
     token System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN') ? System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN') : ""
