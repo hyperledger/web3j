@@ -15,10 +15,11 @@ package org.web3j.console.project;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import org.web3j.TempFileProvider;
+
+import static org.junit.Assert.assertTrue;
 
 public class ProjectWriterTest extends TempFileProvider {
 
@@ -30,7 +31,7 @@ public class ProjectWriterTest extends TempFileProvider {
     public void writeResourceFileTest() throws Exception {
 
         projectWriter.writeResourceFile("Greeter.sol", "Greeter.sol", tempDirPath);
-        Assert.assertTrue(new File(tempDirPath + File.separator + "Greeter.sol").exists());
+        assertTrue(new File(tempDirPath + File.separator + "Greeter.sol").exists());
     }
 
     @Test
@@ -38,7 +39,7 @@ public class ProjectWriterTest extends TempFileProvider {
         projectWriter.copyResourceFile(
                 templateProvider.getGradlewJar(),
                 tempDirPath + File.separator + "gradle-wrapper.jar");
-        Assert.assertTrue(new File(tempDirPath + File.separator + "gradle-wrapper.jar").exists());
+        assertTrue(new File(tempDirPath + File.separator + "gradle-wrapper.jar").exists());
     }
 
     @Test
@@ -50,7 +51,7 @@ public class ProjectWriterTest extends TempFileProvider {
         projectWriter.importSolidityProject(
                 new File(tempDirPath + File.separator + "tempSolidityDir"),
                 tempDirPath + File.separator + "tempSolidityDestination");
-        Assert.assertTrue(
+        assertTrue(
                 new File(
                                 tempDirPath
                                         + File.separator
@@ -61,5 +62,4 @@ public class ProjectWriterTest extends TempFileProvider {
                                         + "Greeter.sol")
                         .exists());
     }
-
 }

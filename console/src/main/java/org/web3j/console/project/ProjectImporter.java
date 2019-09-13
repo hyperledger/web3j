@@ -14,9 +14,9 @@ package org.web3j.console.project;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.Arrays;
 import java.util.List;
+
 import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
@@ -44,18 +44,20 @@ public class ProjectImporter extends ProjectCreator {
             args = tail(args);
             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
                 final InteractiveImporter options = new InteractiveImporter();
-                final List<String> stringOptions = Arrays.asList(
-                        "-n",
-                        options.getProjectName(),
-                        "-p",
-                        options.getPackageName(),
-                        "-s",
-                        options.getSolidityProjectPath()
-                );
-                options.getProjectDestination().ifPresent(projectDest -> {
-                    stringOptions.add("-o");
-                    stringOptions.add(projectDest);
-                });
+                final List<String> stringOptions =
+                        Arrays.asList(
+                                "-n",
+                                options.getProjectName(),
+                                "-p",
+                                options.getPackageName(),
+                                "-s",
+                                options.getSolidityProjectPath());
+                options.getProjectDestination()
+                        .ifPresent(
+                                projectDest -> {
+                                    stringOptions.add("-o");
+                                    stringOptions.add(projectDest);
+                                });
                 args = stringOptions.toArray(new String[0]);
             }
         }

@@ -13,10 +13,9 @@
 package org.web3j.console.project;
 
 import java.io.IOException;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+
 import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
@@ -56,16 +55,15 @@ public class ProjectCreator {
             args = tail(args);
             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
                 final InteractiveOptions options = new InteractiveOptions(System.in, System.out);
-                final List<String> stringOptions = Arrays.asList(
-                        "-n",
-                        options.getProjectName(),
-                        "-p",
-                        options.getPackageName()
-                );
-                options.getProjectDestination().ifPresent(projectDest -> {
-                    stringOptions.add("-o");
-                    stringOptions.add(projectDest);
-                });
+                final List<String> stringOptions =
+                        Arrays.asList(
+                                "-n", options.getProjectName(), "-p", options.getPackageName());
+                options.getProjectDestination()
+                        .ifPresent(
+                                projectDest -> {
+                                    stringOptions.add("-o");
+                                    stringOptions.add(projectDest);
+                                });
                 args = stringOptions.toArray(new String[0]);
             }
         }

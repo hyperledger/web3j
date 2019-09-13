@@ -14,41 +14,44 @@ package org.web3j.console.project;
 
 import java.io.File;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.web3j.TempFileProvider;
 
+import static org.junit.Assert.assertEquals;
+
 public class ProjectStructureTest extends TempFileProvider {
     private ProjectStructure projectStructure;
+
     @Before
     public void init() {
         projectStructure = new ProjectStructure(tempDirPath, "test.test", "Test");
         projectStructure.createDirectoryStructure();
     }
 
-
     @Test
     public void getRootTest() {
 
-        Assert.assertEquals(projectStructure.getRoot(), tempDirPath);
+        assertEquals(projectStructure.getRoot(), tempDirPath);
     }
 
     @Test
     public void getProjectRootTest() {
 
-        Assert.assertEquals(projectStructure.getProjectRoot(), tempDirPath + File.separator + "Test");
+        assertEquals(projectStructure.getProjectRoot(), tempDirPath + File.separator + "Test");
     }
 
     @Test
     public void getPackageNameTest() {
 
-        Assert.assertEquals("test.test", projectStructure.getPackageName());
+        assertEquals("test.test", projectStructure.getPackageName());
     }
 
     @Test
     public void getProjectName() {
 
-        Assert.assertEquals("Test", projectStructure.getProjectName());
+        assertEquals("Test", projectStructure.getProjectName());
     }
 
     @Test
@@ -70,7 +73,7 @@ public class ProjectStructureTest extends TempFileProvider {
                         + "test"
                         + File.separator;
 
-        Assert.assertEquals(testPath, projectStructure.getTestPath());
+        assertEquals(testPath, projectStructure.getTestPath());
     }
 
     @Test
@@ -87,7 +90,7 @@ public class ProjectStructureTest extends TempFileProvider {
                         + File.separator
                         + "solidity"
                         + File.separator;
-        Assert.assertEquals(solidityPath, projectStructure.getSolidityPath());
+        assertEquals(solidityPath, projectStructure.getSolidityPath());
     }
 
     @Test
@@ -109,7 +112,7 @@ public class ProjectStructureTest extends TempFileProvider {
                         + "test"
                         + File.separator;
 
-        Assert.assertEquals(mainPath, projectStructure.getMainPath());
+        assertEquals(mainPath, projectStructure.getMainPath());
     }
 
     @Test
@@ -125,6 +128,6 @@ public class ProjectStructureTest extends TempFileProvider {
                         + "wrapper"
                         + File.separator;
 
-        Assert.assertEquals(wrapperPath, projectStructure.getWrapperPath());
+        assertEquals(wrapperPath, projectStructure.getWrapperPath());
     }
 }

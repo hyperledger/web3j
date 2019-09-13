@@ -15,9 +15,12 @@ package org.web3j.console.project;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.web3j.TempFileProvider;
+
+import static org.junit.Assert.assertTrue;
 
 public class ProjectTest extends TempFileProvider {
     ProjectStructure projectStructure = new ProjectStructure(tempDirPath, "test", "test");
@@ -35,8 +38,7 @@ public class ProjectTest extends TempFileProvider {
                     .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
                     .build();
 
-    public ProjectTest() throws IOException {
-    }
+    public ProjectTest() throws IOException {}
 
     @Before
     public void setUpProject() {
@@ -54,7 +56,7 @@ public class ProjectTest extends TempFileProvider {
         final boolean testProjectDir = new File(projectStructure.getTestPath()).exists();
         final boolean solidityPath = new File(projectStructure.getSolidityPath()).exists();
 
-        Assert.assertTrue(mainProjectDir && gradleWrapperDir && testProjectDir && solidityPath);
+        assertTrue(mainProjectDir && gradleWrapperDir && testProjectDir && solidityPath);
     }
 
     @Test
@@ -73,9 +75,9 @@ public class ProjectTest extends TempFileProvider {
                         .exists();
         final boolean gradleWrapperSettings =
                 new File(
-                        projectStructure.getWrapperPath()
-                                + File.separator
-                                + "gradle-wrapper.properties")
+                                projectStructure.getWrapperPath()
+                                        + File.separator
+                                        + "gradle-wrapper.properties")
                         .exists();
         final boolean gradleWrapperJar =
                 new File(projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar")
@@ -86,8 +88,7 @@ public class ProjectTest extends TempFileProvider {
         final boolean gradlewScript =
                 new File(projectStructure.getProjectRoot() + File.separator + "gradlew").exists();
 
-
-        Assert.assertTrue(
+        assertTrue(
                 mainJavaClass
                         && greeterContract
                         && gradleBuild
@@ -97,5 +98,4 @@ public class ProjectTest extends TempFileProvider {
                         && gradlewBatScript
                         && gradlewScript);
     }
-
 }

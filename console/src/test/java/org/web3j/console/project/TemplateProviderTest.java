@@ -14,10 +14,14 @@ package org.web3j.console.project;
 
 import java.io.IOException;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.web3j.TempFileProvider;
 
-public class TemplateProviderTest  extends TempFileProvider {
+import static org.junit.Assert.assertFalse;
+
+public class TemplateProviderTest extends TempFileProvider {
     private TemplateProvider templateProvider;
 
     @Before
@@ -34,39 +38,35 @@ public class TemplateProviderTest  extends TempFileProvider {
                         .withPackageNameReplacement(s -> s.replaceAll("<package_name>", "test"))
                         .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
                         .build();
-
     }
-
 
     @Test
     public void loadMainJavaClassTest() {
-        Assert.assertFalse(templateProvider.getMainJavaClass().isEmpty());
+        assertFalse(templateProvider.getMainJavaClass().isEmpty());
     }
 
     @Test
     public void loadGradleBuildTest() {
-        Assert.assertFalse(templateProvider.getGradleBuild().isEmpty());
+        assertFalse(templateProvider.getGradleBuild().isEmpty());
     }
 
     @Test
     public void loadGradleSettingsTest() {
-        Assert.assertFalse(templateProvider.getGradleSettings().isEmpty());
+        assertFalse(templateProvider.getGradleSettings().isEmpty());
     }
 
     @Test
     public void loadGradlewScriptTest() {
-        Assert.assertFalse(templateProvider.getGradlewScript().isEmpty());
+        assertFalse(templateProvider.getGradlewScript().isEmpty());
     }
 
     @Test
     public void loadGradlewBatScriptTest() {
-        Assert.assertFalse(templateProvider.getGradlewBatScript().isEmpty());
+        assertFalse(templateProvider.getGradlewBatScript().isEmpty());
     }
 
     @Test
     public void loadGradleWrapperTest() {
-        Assert.assertFalse(templateProvider.getGradlewWrapperSettings().isEmpty());
+        assertFalse(templateProvider.getGradlewWrapperSettings().isEmpty());
     }
-
-
 }
