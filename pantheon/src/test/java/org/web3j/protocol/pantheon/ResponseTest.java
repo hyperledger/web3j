@@ -13,6 +13,7 @@
 package org.web3j.protocol.pantheon;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -20,14 +21,9 @@ import org.junit.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.pantheon.response.PantheonEthAccountsMapResponse;
-import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
-import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
-import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
-import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
-import org.web3j.protocol.pantheon.response.privacy.PrivacyGroup;
-import org.web3j.protocol.pantheon.response.privacy.PrivateTransactionLegacy;
-import org.web3j.protocol.pantheon.response.privacy.PrivateTransactionWithPrivacyGroup;
+import org.web3j.protocol.pantheon.response.privacy.*;
 import org.web3j.utils.Base64String;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -269,5 +265,59 @@ public class ResponseTest extends ResponseTester {
         PrivFindPrivacyGroup privFindPrivacyGroup = deserialiseResponse(PrivFindPrivacyGroup.class);
         assertThat(
                 privFindPrivacyGroup.getGroups(), is(Arrays.asList(privacyGroup1, privacyGroup2)));
+    }
+
+    @Test
+    public void testPrivGetTransactionReceipt() {
+
+        buildResponse(
+                "{\n"
+                        + "    \"id\":1,\n"
+                        + "    \"jsonrpc\":\"2.0\",\n"
+                        + "    \"result\": {\n"
+                        + "        \"contractAddress\": \"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\n"
+                        + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
+                        + "        \"output\":\"myRlpEncodedOutputFromPrivateContract\",\n"
+                        + "        \"logs\": [{\n"
+                        + "            \"removed\": false,\n"
+                        + "            \"logIndex\": \"0x1\",\n"
+                        + "            \"transactionIndex\": \"0x0\",\n"
+                        + "            \"transactionHash\": \"0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf\",\n"
+                        + "            \"blockHash\": \"0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n"
+                        + "            \"blockNumber\":\"0x1b4\",\n"
+                        + "            \"address\": \"0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n"
+                        + "            \"data\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\n"
+                        + "            \"type\":\"mined\",\n"
+                        + "            \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]"
+                        + "        }]\n"
+                        + "    }\n"
+                        + "}");
+
+        PrivateTransactionReceipt transactionReceipt =
+                new PrivateTransactionReceipt(
+                        "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                        "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                        "myRlpEncodedOutputFromPrivateContract",
+                        Collections.singletonList(
+                                new Log(
+                                        false,
+                                        "0x1",
+                                        "0x0",
+                                        "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf",
+                                        "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                                        "0x1b4",
+                                        "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                                        "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                        "mined",
+                                        Collections.singletonList(
+                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))));
+
+        PrivGetTransactionReceipt privGetTransactionReceipt =
+                deserialiseResponse(PrivGetTransactionReceipt.class);
+        assertThat(
+                privGetTransactionReceipt.getTransactionReceipt().get(),
+                equalTo(transactionReceipt));
     }
 }

@@ -32,6 +32,7 @@ import org.web3j.protocol.pantheon.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.pantheon.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivacyPrecompileAddress;
 import org.web3j.protocol.pantheon.response.privacy.PrivGetPrivateTransaction;
+import org.web3j.protocol.pantheon.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.utils.Base64String;
 
 import static java.util.Objects.requireNonNull;
@@ -166,5 +167,15 @@ public class JsonRpc2_0Pantheon extends JsonRpc2_0Eea implements Pantheon {
                 Collections.singletonList(privacyGroupId.toString()),
                 web3jService,
                 BooleanResponse.class);
+    }
+
+    @Override
+    public Request<?, PrivGetTransactionReceipt> privGetTransactionReceipt(
+            final String transactionHash) {
+        return new Request<>(
+                "priv_getTransactionReceipt",
+                Collections.singletonList(transactionHash),
+                web3jService,
+                PrivGetTransactionReceipt.class);
     }
 }

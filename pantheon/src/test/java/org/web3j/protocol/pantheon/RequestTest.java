@@ -188,4 +188,13 @@ public class RequestTest extends RequestTester {
                         + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],"
                         + "\"id\":1}");
     }
+
+    @Test
+    public void testPrivGetTransactionReceipt() throws Exception {
+        web3j.privGetTransactionReceipt("0x123").send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getTransactionReceipt\","
+                        + "\"params\":[\"0x123\"],\"id\":1}");
+    }
 }
