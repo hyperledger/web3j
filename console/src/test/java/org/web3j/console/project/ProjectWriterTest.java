@@ -29,7 +29,6 @@ public class ProjectWriterTest extends TempFileProvider {
 
     @Test
     public void writeResourceFileTest() throws Exception {
-
         projectWriter.writeResourceFile("Greeter.sol", "Greeter.sol", tempDirPath);
         assertTrue(new File(tempDirPath + File.separator + "Greeter.sol").exists());
     }

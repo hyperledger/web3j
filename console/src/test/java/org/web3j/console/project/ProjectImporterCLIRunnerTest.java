@@ -40,7 +40,6 @@ public class ProjectImporterCLIRunnerTest extends TempFileProvider {
     public void requiredArgsAreNotEmptyTest() {
         final ProjectImporterCLIRunner projectImporterCLIRunner = new ProjectImporterCLIRunner();
         Assert.assertFalse(projectImporterCLIRunner.requiredArgsAreEmpty("-p=org.com", "-n=Test" ,"-s=testDir"));
-
     }
 
 

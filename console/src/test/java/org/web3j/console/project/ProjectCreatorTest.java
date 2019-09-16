@@ -30,7 +30,6 @@ public class ProjectCreatorTest extends WalletTester {
 
     @Before
     public void setUpStreams() {
-
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
     }

@@ -182,8 +182,6 @@ public class TemplateProvider {
                 throw e;
 
             }
-
-
         }
     }
 }

@@ -32,31 +32,26 @@ public class ProjectStructureTest extends TempFileProvider {
 
     @Test
     public void getRootTest() {
-
         assertEquals(projectStructure.getRoot(), tempDirPath);
     }
 
     @Test
     public void getProjectRootTest() {
-
         assertEquals(projectStructure.getProjectRoot(), tempDirPath + File.separator + "Test");
     }
 
     @Test
     public void getPackageNameTest() {
-
         assertEquals("test.test", projectStructure.getPackageName());
     }
 
     @Test
     public void getProjectName() {
-
         assertEquals("Test", projectStructure.getProjectName());
     }
 
     @Test
     public void getTestPathTest() {
-
         final String testPath =
                 tempDirPath
                         + File.separator
@@ -78,7 +73,6 @@ public class ProjectStructureTest extends TempFileProvider {
 
     @Test
     public void getSolidityPathTest() {
-
         final String solidityPath =
                 tempDirPath
                         + File.separator
@@ -95,7 +89,6 @@ public class ProjectStructureTest extends TempFileProvider {
 
     @Test
     public void getMainPathTest() {
-
         final String mainPath =
                 tempDirPath
                         + File.separator
@@ -117,7 +110,6 @@ public class ProjectStructureTest extends TempFileProvider {
 
     @Test
     public void getWrapperPathTest() {
-
         final String wrapperPath =
                 tempDirPath
                         + File.separator

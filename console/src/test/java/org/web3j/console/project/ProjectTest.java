@@ -50,7 +50,6 @@ public class ProjectTest extends TempFileProvider {
 
     @Test
     public void directoryCreationTest() {
-
         final boolean mainProjectDir = new File(projectStructure.getMainPath()).exists();
         final boolean gradleWrapperDir = new File(projectStructure.getWrapperPath()).exists();
         final boolean testProjectDir = new File(projectStructure.getTestPath()).exists();
@@ -61,7 +60,6 @@ public class ProjectTest extends TempFileProvider {
 
     @Test
     public void fileCreationTest() {
-
         final boolean mainJavaClass =
                 new File(projectStructure.getMainPath() + File.separator + "test.java").exists();
         final boolean greeterContract =

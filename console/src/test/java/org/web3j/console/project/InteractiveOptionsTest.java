@@ -30,7 +30,6 @@ public class InteractiveOptionsTest extends TempFileProvider {
 
     @Before
     public void init() {
-
         final String input = "Test\norg.com\n" + tempDirPath + "\n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
