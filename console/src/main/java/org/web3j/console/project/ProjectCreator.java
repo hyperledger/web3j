@@ -13,7 +13,7 @@
 package org.web3j.console.project;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import picocli.CommandLine;
@@ -50,14 +50,16 @@ public class ProjectCreator {
                         .build();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         if (args.length > 0 && args[0].equals(COMMAND_NEW)) {
             args = tail(args);
             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
                 final InteractiveOptions options = new InteractiveOptions(System.in, System.out);
-                final List<String> stringOptions =
-                        Arrays.asList(
-                                "-n", options.getProjectName(), "-p", options.getPackageName());
+                final List<String> stringOptions = new ArrayList<>();
+                stringOptions.add("-n");
+                stringOptions.add(options.getProjectName());
+                stringOptions.add("-p");
+                stringOptions.add(options.getPackageName());
                 options.getProjectDestination()
                         .ifPresent(
                                 projectDest -> {

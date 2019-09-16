@@ -39,7 +39,7 @@ public class ProjectImporter extends ProjectCreator {
         this.solidityImportPath = solidityImportPath;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         if (args.length > 0 && args[0].equals(COMMAND_IMPORT)) {
             args = tail(args);
             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {

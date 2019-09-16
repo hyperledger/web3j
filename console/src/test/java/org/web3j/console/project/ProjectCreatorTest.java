@@ -13,7 +13,6 @@
 package org.web3j.console.project;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 
 import org.junit.After;
@@ -49,10 +48,11 @@ public class ProjectCreatorTest extends WalletTester {
         new CommandLine(projectCreatorCLIRunner).parseArgs(args);
         assert projectCreatorCLIRunner.packageName.equals("org.com");
         assert projectCreatorCLIRunner.projectName.equals("Test");
+        assert projectCreatorCLIRunner.root.equals(tempDirPath);
     }
 
     @Test
-    public void runTestWhenArgumentsAreEmpty() throws IOException {
+    public void runTestWhenArgumentsAreEmpty() {
         final String[] args = {"", ""};
         ProjectCreator.main(args);
         assertTrue(
@@ -63,7 +63,7 @@ public class ProjectCreatorTest extends WalletTester {
     }
 
     @Test
-    public void runTestWhenArgumentsAreNotEmpty() throws IOException {
+    public void runTestWhenArgumentsAreNotEmpty() {
         final String[] args = {"new", "-p=org.com", "-n=Test", "-o=" + tempDirPath};
         ProjectCreator.main(args);
         assertTrue(outContent.toString().contains("Project created"));
