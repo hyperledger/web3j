@@ -12,8 +12,8 @@ class InteractiveImporter extends InteractiveOptions {
         super(inputStream, outputStream);
     }
 
-    String getSolidityProjectPath() {
-        System.out.println("Please enter the path to your solidity file/folder");
+    protected String getSolidityProjectPath() {
+        System.out.println("Please enter the path to your solidity file/folder (Required Field): ");
         return getUserInput();
     }
 

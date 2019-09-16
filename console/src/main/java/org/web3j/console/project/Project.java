@@ -20,7 +20,8 @@ import static org.web3j.codegen.Console.exitError;
 
 public class Project {
 
-    private Project(final Builder builder) {}
+    private Project(final Builder builder) {
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -32,20 +33,18 @@ public class Project {
         private TemplateProvider templateProvider;
         private File solidityImportPath;
 
-        Builder() {}
-
-        Builder withSolidityFile(final File solidityImportPath) {
+        public Builder withSolidityFile(final File solidityImportPath) {
             this.solidityImportPath = solidityImportPath;
             return this;
         }
 
-        Builder withProjectStructure(final ProjectStructure projectStructure) {
+        public Builder withProjectStructure(final ProjectStructure projectStructure) {
             this.projectStructure = projectStructure;
 
             return this;
         }
 
-        Builder withTemplateProvider(final TemplateProvider templateProvider) {
+        public Builder withTemplateProvider(final TemplateProvider templateProvider) {
             this.templateProvider = templateProvider;
 
             return this;
@@ -56,12 +55,12 @@ public class Project {
             if (!isWindows()) {
                 setExecutable(pathToDirectory, "gradlew");
                 executeCommand(
-                        new File(pathToDirectory), new String[] {"bash", "-c", "./gradlew build"});
+                        new File(pathToDirectory), new String[]{"bash", "-c", "./gradlew build -q"});
             } else {
                 setExecutable(pathToDirectory, "gradlew.bat");
                 executeCommand(
                         new File(pathToDirectory),
-                        new String[] {"cmd.exe", "/c", "gradlew.bat build"});
+                        new String[]{"cmd.exe", "/c", "gradlew.bat build -q"});
             }
         }
 
@@ -84,7 +83,7 @@ public class Project {
                     .waitFor(10, TimeUnit.SECONDS);
         }
 
-        Project build() {
+        public Project build() {
             try {
                 projectStructure.createDirectoryStructure();
                 final ProjectWriter projectWriter = new ProjectWriter();
@@ -126,9 +125,8 @@ public class Project {
                         projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar");
                 buildGradleProject(projectStructure.getProjectRoot());
             } catch (final IOException | InterruptedException e) {
-                exitError(e);
+                exitError("Looks like an error occurred: " + e.getMessage());
             }
-
             return new Project(this);
         }
     }

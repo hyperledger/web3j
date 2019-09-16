@@ -1,5 +1,6 @@
 package org.web3j.console.project;
 
+import org.web3j.console.project.utills.InputVerifier;
 import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
@@ -18,17 +19,13 @@ public class ProjectImporterCLIRunner extends ProjectCreatorCLIRunner {
 
     @Override
     public void run() {
-        if (requiredArgsAreEmpty(projectName, packageName, solidityImportPath)) {
-            System.out.println(projectName + packageName + solidityImportPath);
-            exitError("Project name, package name and solidity project cannot be empty");
-        }
-        try {
-            new ProjectImporter(root, packageName, projectName, solidityImportPath).generate();
-        } catch (final Exception e) {
-            exitError(e);
+        if (InputVerifier.requiredArgsAreNotEmpty(projectName, packageName, solidityImportPath) && InputVerifier.classNameIsValid(projectName) && InputVerifier.packageNameIsValid(packageName)) {
+            try {
+                new ProjectImporter(root, packageName, projectName, solidityImportPath).generate();
+            } catch (final Exception e) {
+                exitError(e);
+            }
         }
     }
-
-
 }
 

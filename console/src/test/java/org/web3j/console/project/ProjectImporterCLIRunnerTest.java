@@ -1,6 +1,5 @@
 package org.web3j.console.project;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.web3j.TempFileProvider;
 import picocli.CommandLine;
@@ -30,17 +29,6 @@ public class ProjectImporterCLIRunnerTest extends TempFileProvider {
         commandLine.parseArgs(args);
     }
 
-    @Test
-    public void requiredArgsAreEmptyTest() {
-        final ProjectImporterCLIRunner projectImporterCLIRunner = new ProjectImporterCLIRunner();
-        Assert.assertTrue(projectImporterCLIRunner.requiredArgsAreEmpty("", "",""));
-    }
-
-    @Test
-    public void requiredArgsAreNotEmptyTest() {
-        final ProjectImporterCLIRunner projectImporterCLIRunner = new ProjectImporterCLIRunner();
-        Assert.assertFalse(projectImporterCLIRunner.requiredArgsAreEmpty("-p=org.com", "-n=Test" ,"-s=testDir"));
-    }
 
 
 }

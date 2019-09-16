@@ -21,8 +21,6 @@ import java.util.Scanner;
 
 class InteractiveOptions {
 
-    static final String COMMAND_INTERACTIVE = "interactive";
-
     private final Scanner scanner;
     private final Writer writer;
 
@@ -35,23 +33,24 @@ class InteractiveOptions {
         this.writer = new PrintWriter(outputStream);
     }
 
-    final String getProjectName() {
-        print("Please enter the project name: ");
+    protected final String getProjectName() {
+        print("Please enter the project name (Required Field): ");
         return getUserInput();
     }
 
-    final String getPackageName() {
-        print("Please enter the package name for your project: ");
+    protected final String getPackageName() {
+        print("Please enter the package name for your project (Required Field): ");
         return getUserInput();
     }
 
-    final Optional<String> getProjectDestination() {
+    protected final Optional<String> getProjectDestination() {
         print("Please enter the destination of your project (current by default): ");
         final String projectDest = getUserInput();
         return projectDest.isEmpty() ? Optional.empty() : Optional.of(projectDest);
     }
 
     String getUserInput() {
+
         return scanner.nextLine();
     }
 

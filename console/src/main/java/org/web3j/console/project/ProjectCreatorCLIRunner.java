@@ -1,6 +1,7 @@
 package org.web3j.console.project;
 
 import java.io.IOException;
+import org.web3j.console.project.utills.InputVerifier;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -39,24 +40,15 @@ public class ProjectCreatorCLIRunner implements Runnable {
 
     @Override
     public void run() {
-        if (requiredArgsAreEmpty(projectName, packageName)) {
-            exitError("Project name and Package name cannot be empty");
-        }
-        try {
-            new ProjectCreator(root, packageName, projectName).generate();
-        } catch (final IOException e) {
-            exitError(e);
-        }
-
-    }
-
-    boolean requiredArgsAreEmpty(final String... args) {
-        for (final String argument : args) {
-            if (argument.isEmpty()) {
-                return true;
+        if (InputVerifier.requiredArgsAreNotEmpty(projectName, packageName) && InputVerifier.classNameIsValid(projectName) && InputVerifier.packageNameIsValid(packageName)) {
+            try {
+                new ProjectCreator(root, packageName, projectName).generate();
+            } catch (final IOException e) {
+                exitError(e);
             }
         }
-        return false;
     }
+
+
 }
 

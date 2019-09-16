@@ -29,9 +29,9 @@ import static org.web3j.utils.Collection.tail;
  */
 public class Runner {
 
-    private static String USAGE = "Usage: web3j version|wallet|solidity|new|import ...";
+    private static final String USAGE = "Usage: web3j version|wallet|solidity|new|import ...";
 
-    private static String LOGO =
+    private static final String LOGO =
             "\n" // generated at http://patorjk.com/software/taag
                     + "              _      _____ _     _        \n"
                     + "             | |    |____ (_)   (_)       \n"

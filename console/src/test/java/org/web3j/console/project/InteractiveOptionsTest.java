@@ -13,31 +13,29 @@
 package org.web3j.console.project;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
-import org.junit.After;
+import java.io.PrintStream;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.web3j.TempFileProvider;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class InteractiveOptionsTest extends TempFileProvider {
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private InputStream inputStream;
+
 
     @Before
     public void init() {
         final String input = "Test\norg.com\n" + tempDirPath + "\n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-    }
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
 
-    @After
-    public void restore() {
-        System.setIn(System.in);
     }
 
     @Test
@@ -46,12 +44,5 @@ public class InteractiveOptionsTest extends TempFileProvider {
         assertEquals("Test", options.getProjectName());
         assertEquals("org.com", options.getPackageName());
         assertEquals(tempDirPath, options.getProjectDestination().get());
-    }
-
-    @Test
-    public void createNewProjectInteractive() {
-        final String[] args = {"new", "interactive"};
-        ProjectCreator.main(args);
-        assertTrue(new File(tempDirPath + File.separator + "Test").exists());
     }
 }

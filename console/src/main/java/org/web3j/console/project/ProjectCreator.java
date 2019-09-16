@@ -20,12 +20,13 @@ import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
 import static org.web3j.codegen.Console.exitSuccess;
-import static org.web3j.console.project.InteractiveOptions.COMMAND_INTERACTIVE;
 import static org.web3j.utils.Collection.tail;
 
 public class ProjectCreator {
 
     public static final String COMMAND_NEW = "new";
+    static final String COMMAND_INTERACTIVE = "interactive";
+
 
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
@@ -54,7 +55,7 @@ public class ProjectCreator {
         if (args.length > 0 && args[0].equals(COMMAND_NEW)) {
             args = tail(args);
             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
-                final InteractiveOptions options = new InteractiveOptions(System.in, System.out);
+                final InteractiveOptions options = new InteractiveOptions();
                 final List<String> stringOptions = new ArrayList<>();
                 stringOptions.add("-n");
                 stringOptions.add(options.getProjectName());

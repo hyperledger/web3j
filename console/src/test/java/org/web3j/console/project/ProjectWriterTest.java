@@ -23,8 +23,8 @@ import static org.junit.Assert.assertTrue;
 
 public class ProjectWriterTest extends TempFileProvider {
 
-    private ProjectWriter projectWriter = new ProjectWriter();
-    private TemplateProvider templateProvider =
+    private final static ProjectWriter projectWriter = new ProjectWriter();
+    private final static TemplateProvider templateProvider =
             new TemplateProvider.Builder().loadGradleJar("gradle-wrapper.jar").build();
 
     @Test
@@ -52,13 +52,13 @@ public class ProjectWriterTest extends TempFileProvider {
                 tempDirPath + File.separator + "tempSolidityDestination");
         assertTrue(
                 new File(
-                                tempDirPath
-                                        + File.separator
-                                        + "tempSolidityDestination"
-                                        + File.separator
-                                        + "tempSolidityDir"
-                                        + File.separator
-                                        + "Greeter.sol")
+                        tempDirPath
+                                + File.separator
+                                + "tempSolidityDestination"
+                                + File.separator
+                                + "tempSolidityDir"
+                                + File.separator
+                                + "Greeter.sol")
                         .exists());
     }
 }

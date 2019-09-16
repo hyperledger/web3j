@@ -162,8 +162,6 @@ public class TemplateProvider {
         private String readFile(final String name) throws IOException {
             try (final InputStream stream = getClass().getClassLoader().getResourceAsStream(name)) {
                 return readStream(stream);
-            } catch (final IOException e) {
-                throw e;
             }
         }
 
@@ -177,9 +175,6 @@ public class TemplateProvider {
 
                 }
                 return stringBuilder.toString();
-
-            } catch (final IOException e) {
-                throw e;
 
             }
         }

@@ -23,8 +23,8 @@ import org.web3j.TempFileProvider;
 import static org.junit.Assert.assertTrue;
 
 public class ProjectTest extends TempFileProvider {
-    ProjectStructure projectStructure = new ProjectStructure(tempDirPath, "test", "test");
-    TemplateProvider templateProviderNew =
+    private final ProjectStructure projectStructure = new ProjectStructure(tempDirPath, "test", "test");
+    private final TemplateProvider templateProviderNew =
             new TemplateProvider.Builder()
                     .loadGradlewBatScript("gradlew.bat.template")
                     .loadGradlewScript("gradlew.template")
@@ -38,7 +38,8 @@ public class ProjectTest extends TempFileProvider {
                     .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
                     .build();
 
-    public ProjectTest() throws IOException {}
+    public ProjectTest() throws IOException {
+    }
 
     @Before
     public void setUpProject() {
@@ -73,9 +74,9 @@ public class ProjectTest extends TempFileProvider {
                         .exists();
         final boolean gradleWrapperSettings =
                 new File(
-                                projectStructure.getWrapperPath()
-                                        + File.separator
-                                        + "gradle-wrapper.properties")
+                        projectStructure.getWrapperPath()
+                                + File.separator
+                                + "gradle-wrapper.properties")
                         .exists();
         final boolean gradleWrapperJar =
                 new File(projectStructure.getWrapperPath() + File.separator + "gradle-wrapper.jar")
