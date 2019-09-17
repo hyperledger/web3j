@@ -24,7 +24,7 @@ snapshot:
     refs:
       - master
 
-maven:
+release:
   variables:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
