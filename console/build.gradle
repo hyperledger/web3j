@@ -5,7 +5,6 @@ plugins {
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
-
 apply plugin: 'distribution'
 
 description 'web3j command line tools'

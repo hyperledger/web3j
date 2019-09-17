@@ -15,17 +15,23 @@ package org.web3j.console;
 import org.web3j.codegen.Console;
 import org.web3j.codegen.SolidityFunctionWrapperGenerator;
 import org.web3j.codegen.TruffleJsonFunctionWrapperGenerator;
+import org.web3j.console.project.ProjectCreator;
+import org.web3j.console.project.ProjectImporter;
 import org.web3j.utils.Version;
 
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
+import static org.web3j.console.project.ProjectCreator.COMMAND_NEW;
+import static org.web3j.console.project.ProjectImporter.COMMAND_IMPORT;
 import static org.web3j.utils.Collection.tail;
 
-/** Main entry point for running command line utilities. */
+/**
+ * Main entry point for running command line utilities.
+ */
 public class Runner {
 
-    private static String USAGE = "Usage: web3j version|wallet|solidity ...";
+    private static final String USAGE = "Usage: web3j version|wallet|solidity|new|import ...";
 
-    private static String LOGO =
+    private static final String LOGO =
             "\n" // generated at http://patorjk.com/software/taag
                     + "              _      _____ _     _        \n"
                     + "             | |    |____ (_)   (_)       \n"
@@ -52,6 +58,12 @@ public class Runner {
                 case "truffle":
                     TruffleJsonFunctionWrapperGenerator.run(tail(args));
                     break;
+                case COMMAND_NEW:
+                    ProjectCreator.main(args);
+                    break;
+                case COMMAND_IMPORT:
+                    ProjectImporter.main(args);
+                    break;
                 case "version":
                     Console.exitSuccess(
                             "Version: "
@@ -60,6 +72,7 @@ public class Runner {
                                     + "Build timestamp: "
                                     + Version.getTimestamp());
                     break;
+
                 default:
                     Console.exitError(USAGE);
             }
