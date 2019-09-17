@@ -508,6 +508,88 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertThat(builder.build().toString(), is(expected));
     }
 
+
+    @Test
+    public void testBuildEventArrayParameterJavaTypesReturn() throws Exception {
+
+        AbiDefinition.NamedType paramUint8 = new AbiDefinition.NamedType("paramUint8", "uint8[]");
+        AbiDefinition.NamedType paramInt256 = new AbiDefinition.NamedType("paramInt256", "int256[]");
+        AbiDefinition.NamedType indexedArrayParam = new AbiDefinition.NamedType("indexedArrayParam", "uint8[]");
+        indexedArrayParam.setIndexed(true);
+
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        false,
+                        Arrays.asList(paramUint8, paramInt256, indexedArrayParam),
+                        "Transfer",
+                        new ArrayList<>(),
+                        "event",
+                        false);
+        TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
+
+        builder.addMethods(
+                solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
+
+        String expected = "class testClass {\n" +
+                "  public static final org.web3j.abi.datatypes.Event TRANSFER_EVENT = new org.web3j.abi.datatypes.Event(\"Transfer\", \n" +
+                "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint8>>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Int256>>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint8>>(true) {}));\n  ;\n\n" +
+                "  public java.util.List<TransferEventResponse> getTransferEvents(org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n" +
+                "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);\n" +
+                "    java.util.ArrayList<TransferEventResponse> responses = new java.util.ArrayList<TransferEventResponse>(valueList.size());\n" +
+                "    for (org.web3j.tx.Contract.EventValuesWithLog eventValues : valueList) {\n" +
+                "      TransferEventResponse typedResponse = new TransferEventResponse();\n" +
+                "      typedResponse.log = eventValues.getLog();\n" +
+                "      typedResponse.indexedArrayParam = (byte[]) eventValues.getIndexedValues().get(0).getValue();\n" +
+                "      typedResponse.paramUint8 = new ArrayList<>();\n" +
+                "      for (org.web3j.abi.datatypes.generated.Uint8 element : (List<org.web3j.abi.datatypes.generated.Uint8>) eventValues.getNonIndexedValues().get(0).getValue()) {\n" +
+                "        typedResponse.paramUint8.add(element.getValue());\n" +
+                "      }\n" +
+                "      typedResponse.paramInt256 = new ArrayList<>();\n" +
+                "      for (org.web3j.abi.datatypes.generated.Int256 element : (List<org.web3j.abi.datatypes.generated.Int256>) eventValues.getNonIndexedValues().get(1).getValue()) {\n" +
+                "        typedResponse.paramInt256.add(element.getValue());\n" +
+                "      }\n      responses.add(typedResponse);\n" +
+                "    }\n" +
+                "    return responses;\n" +
+                "  }\n" +
+                "\n" +
+                "  public io.reactivex.Flowable<TransferEventResponse> transferEventFlowable(org.web3j.protocol.core.methods.request.EthFilter filter) {\n" +
+                "    return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<org.web3j.protocol.core.methods.response.Log, TransferEventResponse>() {\n" +
+                "      @java.lang.Override\n" +
+                "      public TransferEventResponse apply(org.web3j.protocol.core.methods.response.Log log) {\n" +
+                "        org.web3j.tx.Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);\n" +
+                "        TransferEventResponse typedResponse = new TransferEventResponse();\n" +
+                "        typedResponse.log = log;\n" +
+                "        typedResponse.indexedArrayParam = (byte[]) eventValues.getIndexedValues().get(0).getValue();\n" +
+                "        typedResponse.paramUint8 = new ArrayList<>();\n" +
+                "        for (org.web3j.abi.datatypes.generated.Uint8 element : (List<org.web3j.abi.datatypes.generated.Uint8>) eventValues.getNonIndexedValues().get(0).getValue()) {\n" +
+                "          typedResponse.paramUint8.add(element.getValue());\n" +
+                "        }\n" +
+                "        typedResponse.paramInt256 = new ArrayList<>();\n" +
+                "        for (org.web3j.abi.datatypes.generated.Int256 element : (List<org.web3j.abi.datatypes.generated.Int256>) eventValues.getNonIndexedValues().get(1).getValue()) {\n" +
+                "          typedResponse.paramInt256.add(element.getValue());\n" +
+                "        }\n" +
+                "        return typedResponse;\n" +
+                "      }\n" +
+                "    });\n" +
+                "  }\n" +
+                "\n" +
+                "  public io.reactivex.Flowable<TransferEventResponse> transferEventFlowable(org.web3j.protocol.core.DefaultBlockParameter startBlock, org.web3j.protocol.core.DefaultBlockParameter endBlock) {\n" +
+                "    org.web3j.protocol.core.methods.request.EthFilter filter = new org.web3j.protocol.core.methods.request.EthFilter(startBlock, endBlock, getContractAddress());\n" +
+                "    filter.addSingleTopic(org.web3j.abi.EventEncoder.encode(TRANSFER_EVENT));\n" +
+                "    return transferEventFlowable(filter);\n" +
+                "  }\n" +
+                "\n" +
+                "  public static class TransferEventResponse extends org.web3j.protocol.core.methods.response.BaseEventResponse {\n" +
+                "    public byte[] indexedArrayParam;\n" +
+                "\n" +
+                "    public java.util.List<java.math.BigInteger> paramUint8;\n" +
+                "\n" +
+                "    public java.util.List<java.math.BigInteger> paramInt256;\n" +
+                "  }\n" +
+                "}\n";
+        assertThat(builder.build().toString(), is(expected));
+    }
+
     @Test
     public void testBuildFuncNameConstants() throws Exception {
         AbiDefinition functionDefinition =

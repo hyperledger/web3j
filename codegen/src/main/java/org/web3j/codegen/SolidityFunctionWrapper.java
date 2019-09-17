@@ -47,6 +47,7 @@ import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
