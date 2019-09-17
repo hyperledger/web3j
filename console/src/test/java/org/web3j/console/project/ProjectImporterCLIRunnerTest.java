@@ -29,6 +29,4 @@ public class ProjectImporterCLIRunnerTest extends TempFileProvider {
         commandLine.parseArgs(args);
     }
 
-
-
 }

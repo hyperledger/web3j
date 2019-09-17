@@ -89,7 +89,6 @@ public class ProjectStructure {
         directory.mkdirs();
     }
 
-
     void createDirectoryStructure() {
         createDirectory(mainPath);
         createDirectory(testPath);

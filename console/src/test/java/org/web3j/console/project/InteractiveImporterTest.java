@@ -32,8 +32,6 @@ public class InteractiveImporterTest extends TempFileProvider {
         assertEquals(Optional.of(tempDirPath), options.getProjectDestination());
     }
 
-
-
 }
 
 
