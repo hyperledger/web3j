@@ -3,6 +3,14 @@ image: gradle:4.10.2
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
 stages:
 - build
 - release
@@ -12,14 +20,20 @@ stages:
 build:
   stage: build
   script:
-  - gradle clean check
+  - ./gradlew clean check
+  artifacts:
+    untracked: false
+    expire_in: 30 days
+    paths:
+      - .gradle/**
+      - scripts/**
 
 snapshot:
   variables:
     OSSRH_REPO_URL: $SNAPSHOT_OSSRH_REPO_URL
   stage: release
   script:
-  - gradle release
+  - ./gradlew release
   only:
     refs:
       - master
@@ -29,7 +43,7 @@ release:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
   script:
-  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} release
+  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release
   when: manual
   only:
     refs:
@@ -38,7 +52,7 @@ release:
 console:
   stage: publish
   script:
-  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} console:copyArtifiacts console:githubRelease
+  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} console:githubRelease
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/

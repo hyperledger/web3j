@@ -10,15 +10,17 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # echo an error message before exiting
 trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
-export DEPLOY_ROOT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+export SCRIPTS_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-source "$DEPLOY_ROOT_DIR/common.bash"
+source "$SCRIPTS_DIR/common.bash"
 
 ensure_version
 
-STATUS_CODE=$(wget --server-response --spider --quiet "https://github.com/web3j/web3j/releases/download/v${VERSION}/web3j-${VERSION}.zip" 2>&1 | awk 'NR==1{print $2}')
+STATUS_CODE=`curl --silent --connect-timeout 8 --output /dev/null https://github.com/web3j/web3j/releases/download/v${VERSION}/web3j-${VERSION}.zip -I -w "%{http_code}\n"`
 
-if [[ $STATUS_CODE -ne "200" ]]; then
+echo $STATUS_CODE
+
+if [[ $STATUS_CODE -ne "302" ]]; then
     echo "ERROR: Missing release has the version been released yet?"
     exit 1
 fi
