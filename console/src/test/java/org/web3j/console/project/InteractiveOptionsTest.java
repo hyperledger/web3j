@@ -16,8 +16,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.web3j.TempFileProvider;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +29,6 @@ public class InteractiveOptionsTest extends TempFileProvider {
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private InputStream inputStream;
 
-
     @Before
     public void init() {
         final String input = "Test\norg.com\n" + tempDirPath + "\n";
@@ -35,7 +36,6 @@ public class InteractiveOptionsTest extends TempFileProvider {
         System.setIn(inputStream);
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-
     }
 
     @Test

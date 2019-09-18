@@ -27,7 +27,6 @@ public class ProjectCreator {
     public static final String COMMAND_NEW = "new";
     static final String COMMAND_INTERACTIVE = "interactive";
 
-
     final ProjectStructure projectStructure;
     final TemplateProvider templateProvider;
 

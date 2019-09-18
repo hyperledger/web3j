@@ -30,7 +30,8 @@ public class TemplateProvider {
 
     private TemplateProvider(
             final String mainJavaClass,
-            final String solidityProject, final String gradleBuild,
+            final String solidityProject,
+            final String gradleBuild,
             final String gradleSettings,
             final String gradlewWrapperSettings,
             final String gradlewBatScript,
@@ -151,7 +152,8 @@ public class TemplateProvider {
         TemplateProvider build() {
             return new TemplateProvider(
                     projectNameReplacement.apply(packageNameReplacement.apply(mainJavaClass)),
-                    solidityProject, packageNameReplacement.apply(gradleBuild),
+                    solidityProject,
+                    packageNameReplacement.apply(gradleBuild),
                     projectNameReplacement.apply(gradleSettings),
                     gradlewWrapperSettings,
                     gradlewBatScript,
@@ -172,10 +174,8 @@ public class TemplateProvider {
                 final StringBuilder stringBuilder = new StringBuilder();
                 while ((temp = reader.readLine()) != null) {
                     stringBuilder.append(temp).append("\n");
-
                 }
                 return stringBuilder.toString();
-
             }
         }
     }

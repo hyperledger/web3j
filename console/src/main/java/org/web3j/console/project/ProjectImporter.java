@@ -15,8 +15,8 @@ package org.web3j.console.project;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
 import picocli.CommandLine;
 
 import static org.web3j.codegen.Console.exitError;
@@ -41,22 +41,22 @@ public class ProjectImporter extends ProjectCreator {
     public static void main(String[] args) {
         if (args.length > 0 && args[0].equals(COMMAND_IMPORT)) {
             args = tail(args);
-             if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
-                     final InteractiveImporter options = new InteractiveImporter();
-                     final List<String> stringOptions = new ArrayList<>();
-                     stringOptions.add("-n");
-                     stringOptions.add(options.getProjectName());
-                     stringOptions.add("-p");
-                     stringOptions.add(options.getPackageName());
-                     stringOptions.add("-s");
-                     stringOptions.add(options.getSolidityProjectPath());
-                     options.getProjectDestination()
-                             .ifPresent(
-                                     projectDest -> {
-                                         stringOptions.add("-o");
-                                         stringOptions.add(projectDest);
-                                     });
-                     args = stringOptions.toArray(new String[0]);
+            if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
+                final InteractiveImporter options = new InteractiveImporter();
+                final List<String> stringOptions = new ArrayList<>();
+                stringOptions.add("-n");
+                stringOptions.add(options.getProjectName());
+                stringOptions.add("-p");
+                stringOptions.add(options.getPackageName());
+                stringOptions.add("-s");
+                stringOptions.add(options.getSolidityProjectPath());
+                options.getProjectDestination()
+                        .ifPresent(
+                                projectDest -> {
+                                    stringOptions.add("-o");
+                                    stringOptions.add(projectDest);
+                                });
+                args = stringOptions.toArray(new String[0]);
             }
         }
 
