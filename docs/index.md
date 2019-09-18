@@ -14,7 +14,7 @@ Features
 
 -   Complete implementation of Ethereum's [JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) client API over HTTP and IPC
 -   Ethereum wallet support
--   Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart contracts from native Java code ([Solidity](http://solidity.readthedocs.io/en/latest/using-the-compiler.html#using-the-commandline-compiler) and [Truffle](https://github.com/trufflesuite/truffle-contract-schema) definition formats supported)
+-   Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart contracts from native Java code ([Solidity](http://solidity.readthedocs.io/en/latest/using-the-compiler.html#using-the-commandline-compiler) and [Truffle](https://github.com/trufflesuite/truffle) definition formats supported)
 -   Reactive-functional API for working with filters
 -   [Ethereum Name Service (ENS)](https://ens.domains/) support
 -   Support for Parity's [Personal](https://github.com/paritytech/parity/wiki/JSONRPC-personal-module), and Geth's [Personal](https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal) client APIs
