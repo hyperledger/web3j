@@ -44,7 +44,6 @@ release:
   stage: release
   script:
   - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release
-  when: manual
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
