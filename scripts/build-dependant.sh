@@ -16,9 +16,6 @@ source "$SCRIPTS_DIR/common.bash"
 
 ensure_version
 
-cd /tmp
-rm -Rf $1
-
 configure_github_user
 
 github_clone $1
