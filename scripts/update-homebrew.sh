@@ -33,4 +33,4 @@ sed -i "5s/.*/  url \"https:\/\/github.com\/web3j\/web3j\/releases\/download\/v$
 SHA=$(curl -L https://github.com/web3j/web3j/releases/download/v${VERSION}/web3j-${VERSION}.zip | shasum -a 256 | tr -d ' ' | tr -d '-')
 sed -i "7s/.*/  sha256 \"${SHA}\"/" web3j.rb
 git commit -am "Change web3j version to ${VERSION}"
-git push
+git push --set-upstream origin release/$VERSION

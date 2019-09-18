@@ -21,4 +21,4 @@ configure_github_user
 github_clone $1
 
 git checkout -B release/$VERSION
-git push
+git push --set-upstream origin release/$VERSION
