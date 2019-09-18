@@ -16,10 +16,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.web3j.console.WalletTester;
 import picocli.CommandLine;
+
+import org.web3j.console.WalletTester;
 
 import static org.junit.Assert.assertTrue;
 
@@ -33,7 +35,6 @@ public class ProjectCreatorTest extends WalletTester {
 
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-
     }
 
     @Test
@@ -61,9 +62,12 @@ public class ProjectCreatorTest extends WalletTester {
     public void runTestWhenArgumentsAreNotEmpty() {
         final String[] args = {"new", "-p", "org.com", "-n", "Test", "-o" + tempDirPath};
         ProjectCreator.main(args);
-        assertTrue(outContent.toString().contains("Project created with name: Test at location: /var/folders/6x/vzg_hr7x4nz2z043t2_wtjsc0000gn/T/TempFileProvider3473379777787806210/Test"));
+        assertTrue(
+                outContent
+                        .toString()
+                        .contains(
+                                "Project created with name: Test at location: /var/folders/6x/vzg_hr7x4nz2z043t2_wtjsc0000gn/T/TempFileProvider3473379777787806210/Test"));
     }
-
 
     @Test
     public void createNewProjectInteractive() {
@@ -73,7 +77,6 @@ public class ProjectCreatorTest extends WalletTester {
         final String[] args = {"new", "interactive"};
         ProjectCreator.main(args);
         assertTrue(outContent.toString().contains("Project created with name:"));
-
     }
 
     @Test
@@ -83,6 +86,9 @@ public class ProjectCreatorTest extends WalletTester {
         System.setIn(inputStream);
         final String[] args = {"new", "interactive"};
         ProjectCreator.main(args);
-        assertTrue(outContent.toString().contains("Please make sure the required parameters are not empty."));
+        assertTrue(
+                outContent
+                        .toString()
+                        .contains("Please make sure the required parameters are not empty."));
     }
 }

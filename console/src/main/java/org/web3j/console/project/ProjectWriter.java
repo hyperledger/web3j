@@ -21,7 +21,8 @@ import java.nio.file.StandardCopyOption;
 
 class ProjectWriter {
 
-    final void writeResourceFile(final String file, final String fileName, final String writeLocation)
+    final void writeResourceFile(
+            final String file, final String fileName, final String writeLocation)
             throws IOException {
         Files.write(Paths.get(writeLocation + File.separator + fileName), getBytes(file));
     }
@@ -30,7 +31,8 @@ class ProjectWriter {
         return file.getBytes();
     }
 
-    final void copyResourceFile(final InputStream file, final String destinationPath) throws IOException {
+    final void copyResourceFile(final InputStream file, final String destinationPath)
+            throws IOException {
         Files.copy(file, Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING);
     }
 
@@ -39,5 +41,4 @@ class ProjectWriter {
             Files.walkFileTree(file.toPath(), new ProjectVisitor(destination));
         }
     }
-
 }

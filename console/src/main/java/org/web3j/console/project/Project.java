@@ -20,8 +20,7 @@ import static org.web3j.codegen.Console.exitError;
 
 public class Project {
 
-    private Project(final Builder builder) {
-    }
+    private Project(final Builder builder) {}
 
     public static Builder builder() {
         return new Builder();
@@ -55,12 +54,13 @@ public class Project {
             if (!isWindows()) {
                 setExecutable(pathToDirectory, "gradlew");
                 executeCommand(
-                        new File(pathToDirectory), new String[]{"bash", "-c", "./gradlew build -q"});
+                        new File(pathToDirectory),
+                        new String[] {"bash", "-c", "./gradlew build -q"});
             } else {
                 setExecutable(pathToDirectory, "gradlew.bat");
                 executeCommand(
                         new File(pathToDirectory),
-                        new String[]{"cmd.exe", "/c", "gradlew.bat build -q"});
+                        new String[] {"cmd.exe", "/c", "gradlew.bat build -q"});
             }
         }
 

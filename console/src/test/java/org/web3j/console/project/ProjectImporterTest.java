@@ -17,10 +17,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.web3j.TempFileProvider;
 import picocli.CommandLine;
+
+import org.web3j.TempFileProvider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,7 +37,6 @@ public class ProjectImporterTest extends TempFileProvider {
 
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-
     }
 
     @Test
@@ -55,8 +56,8 @@ public class ProjectImporterTest extends TempFileProvider {
         assertTrue(
                 errContent
                         .toString()
-                        .contains("Missing required options [--solidity path=<solidityImportPath>, --package=<packageName>, --project name=<projectName>]"));
-
+                        .contains(
+                                "Missing required options [--solidity path=<solidityImportPath>, --package=<packageName>, --project name=<projectName>]"));
     }
 
     @Test
@@ -75,9 +76,8 @@ public class ProjectImporterTest extends TempFileProvider {
                         + File.separator
                         + "Solidity";
 
-
         final String[] args = {
-                "-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + formattedSolidityTestProject
+            "-p=org.com", "-n=Test", "-o=" + tempDirPath, "-s=" + formattedSolidityTestProject
         };
         ProjectImporter.main(args);
         assertTrue(outContent.toString().contains("Project created with name:"));
@@ -85,14 +85,14 @@ public class ProjectImporterTest extends TempFileProvider {
 
     @Test
     public void createImportProjectInteractive() {
-        String formattedPath = "/web3j/console/src/test/resources/Solidity".replaceAll("/", File.separator);
+        String formattedPath =
+                "/web3j/console/src/test/resources/Solidity".replaceAll("/", File.separator);
         final String input = "Test\norg.com\n" + formattedPath + "\n" + tempDirPath + "\n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         final String[] args = {"import", "interactive"};
         ProjectImporter.main(args);
         assertTrue(outContent.toString().contains("Project created with name:"));
-
     }
 
     @Test
@@ -102,6 +102,9 @@ public class ProjectImporterTest extends TempFileProvider {
         System.setIn(inputStream);
         final String[] args = {"import", "interactive"};
         ProjectImporter.main(args);
-        assertTrue(outContent.toString().contains("Please make sure the required parameters are not empty."));
+        assertTrue(
+                outContent
+                        .toString()
+                        .contains("Please make sure the required parameters are not empty."));
     }
 }
