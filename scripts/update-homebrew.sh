@@ -21,12 +21,9 @@ STATUS_CODE=`curl --silent --connect-timeout 8 --output /dev/null https://github
 echo $STATUS_CODE
 
 if [[ $STATUS_CODE -ne "302" ]]; then
-    echo "ERROR: Missing release has the version been released yet?"
+    echo "ERROR: Missing release has the version ${VERSION} been released yet?"
     exit 1
 fi
-
-cd /tmp
-rm -Rf homebrew-web3j
 
 configure_github_user
 
