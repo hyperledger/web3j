@@ -61,9 +61,9 @@ githubRelease {
     tagName "v${version}"
     body changelog {
         options([
-                '--format=oneline',
-                '--abbrev-commit',
-                '--max-count=50'
+            '--format=oneline',
+            '--abbrev-commit',
+            '--max-count=50'
         ])
     }
     releaseAssets file("$buildDir/release").listFiles()
