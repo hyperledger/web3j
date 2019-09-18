@@ -16,22 +16,14 @@ source "$DEPLOY_ROOT_DIR/common.bash"
 
 ensure_version
 
-STATUS_CODE=$(wget --server-response --spider --quiet "https://github.com/web3j/web3j/releases/download/v${VERSION}/web3j-${VERSION}.zip" 2>&1 | awk 'NR==1{print $2}')
-
-if [[ $STATUS_CODE -ne "200" ]]; then
-    echo "ERROR: Missing release has the version been released yet?"
-    exit 1
 fi
 
 cd /tmp
-rm -Rf homebrew-web3j
+rm -Rf $1
 
 configure_github_user
 
-github_clone "homebrew-web3j"
+github_clone $1
 
-sed -i "5s/.*/  url \"https:\/\/github.com\/web3j\/web3j\/releases\/download\/v${VERSION}\/web3j-${VERSION}.zip\"/" web3j.rb
-SHA=$(curl -L https://github.com/web3j/web3j/releases/download/v${VERSION}/web3j-${VERSION}.zip | shasum -a 256 | tr -d ' ' | tr -d '-')
-sed -i "7s/.*/  sha256 \"${SHA}\"/" web3j.rb
-git commit -am "Change web3j version to ${VERSION}"
+git checkout -B release/$VERSION
 git push

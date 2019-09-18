@@ -38,7 +38,7 @@ release:
 console:
   stage: publish
   script:
-  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} console:githubRelease
+  - gradle -Pversion=${CI_COMMIT_REF_NAME//release\/} console:copyArtifiacts console:githubRelease
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
@@ -49,6 +49,16 @@ homebrew:
     GIT_STRATEGY: none
   script:
     - ./scripts/update-homebrew.sh
+  only:
+    refs:
+      - /^release\/(\d*).(\d*).(\d*)/
+
+dependants:
+  stage: downstream
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - ./scripts/build-dependant.sh quorum
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
