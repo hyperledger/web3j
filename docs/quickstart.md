@@ -15,7 +15,7 @@ A [web3j sample project](https://github.com/web3j/sample-project-gradle) is avai
 
 To get the latest version on Mac OS or Linux, type the following in your terminal :
 
-`curl -s web3j.io/install | bash`
+`curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash`
 
 The commands available can be found in the [Command line tools](command_line_tools.md) of the documentation.
 
