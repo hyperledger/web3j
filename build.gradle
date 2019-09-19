@@ -272,7 +272,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
     task release {
         dependsOn 'build'
-        dependsOn 'uploadArchives'
 
         doLast {
             // Validates the user inputs before a release can be performed.
