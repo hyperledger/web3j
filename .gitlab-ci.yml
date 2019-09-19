@@ -1,7 +1,7 @@
 image: gradle:4.10.2
 
 variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -9,7 +9,6 @@ before_script:
 cache:
   paths:
     - .gradle/wrapper
-    - .gradle/caches
 
 stages:
 - build
@@ -25,7 +24,6 @@ build:
     untracked: false
     expire_in: 30 days
     paths:
-      - .gradle/**
       - scripts/**
 
 snapshot:
