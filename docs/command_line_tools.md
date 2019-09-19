@@ -18,7 +18,7 @@ brew install web3j
 ```
 or
  ```
- curl -s web3j.io/install | bash
+ curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash
 ```
 To run via the zipfile, simply extract the zipfile and run the binary:
 
