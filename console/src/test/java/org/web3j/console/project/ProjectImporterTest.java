@@ -51,13 +51,10 @@ public class ProjectImporterTest extends TempFileProvider {
 
     @Test
     public void runTestWhenArgumentsAreEmpty() {
-        final String[] args = {"", "", ""};
+        final String[] args = {"-p= ", "-n= ", "-s= "};
         ProjectImporter.main(args);
-        assertTrue(
-                errContent
-                        .toString()
-                        .contains(
-                                "Missing required options [--solidity path=<solidityImportPath>, --package=<packageName>, --project name=<projectName>]"));
+        assertEquals(
+                outContent.toString(), "Please make sure the required parameters are not empty.\n");
     }
 
     @Test
@@ -90,7 +87,7 @@ public class ProjectImporterTest extends TempFileProvider {
         final String input = "Test\norg.com\n" + formattedPath + "\n" + tempDirPath + "\n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        final String[] args = {"import", "interactive"};
+        final String[] args = {"import"};
         ProjectImporter.main(args);
         assertTrue(outContent.toString().contains("Project created with name:"));
     }
@@ -100,7 +97,7 @@ public class ProjectImporterTest extends TempFileProvider {
         final String input = " \n \n \n \n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        final String[] args = {"import", "interactive"};
+        final String[] args = {"import"};
         ProjectImporter.main(args);
         assertTrue(
                 outContent

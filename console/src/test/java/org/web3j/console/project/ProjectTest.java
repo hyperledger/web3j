@@ -13,7 +13,6 @@
 package org.web3j.console.project;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,27 +22,27 @@ import org.web3j.TempFileProvider;
 import static org.junit.Assert.assertTrue;
 
 public class ProjectTest extends TempFileProvider {
-    private final ProjectStructure projectStructure =
-            new ProjectStructure(tempDirPath, "test", "test");
-    private final TemplateProvider templateProviderNew =
-            new TemplateProvider.Builder()
-                    .loadGradlewBatScript("gradlew.bat.template")
-                    .loadGradlewScript("gradlew.template")
-                    .loadMainJavaClass("Template.java")
-                    .loadGradleBuild("build.gradle.template")
-                    .loadGradleSettings("settings.gradle.template")
-                    .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
-                    .loadGradleJar("gradle-wrapper.jar")
-                    .loadSolidityGreeter("Greeter.sol")
-                    .withPackageNameReplacement(s -> s.replaceAll("<package_name>", "test"))
-                    .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
-                    .build();
-
-    public ProjectTest() throws IOException {}
+    private ProjectStructure projectStructure;
+    private TemplateProvider templateProviderNew;
 
     @Before
-    public void setUpProject() {
-        new Project.Builder()
+    public void setUpProject() throws Exception {
+        setUp();
+        projectStructure = new ProjectStructure(tempDirPath, "test", "test");
+        templateProviderNew =
+                new TemplateProvider.Builder()
+                        .loadGradlewBatScript("gradlew.bat.template")
+                        .loadGradlewScript("gradlew.template")
+                        .loadMainJavaClass("Template.java")
+                        .loadGradleBuild("build.gradle.template")
+                        .loadGradleSettings("settings.gradle.template")
+                        .loadGradlewWrapperSettings("gradlew-wrapper.properties.template")
+                        .loadGradleJar("gradle-wrapper.jar")
+                        .loadSolidityGreeter("Greeter.sol")
+                        .withPackageNameReplacement(s -> s.replaceAll("<package_name>", "test"))
+                        .withProjectNameReplacement(s -> s.replaceAll("<project_name>", "test"))
+                        .build();
+        Project.builder()
                 .withTemplateProvider(templateProviderNew)
                 .withProjectStructure(projectStructure)
                 .build();

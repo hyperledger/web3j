@@ -23,6 +23,7 @@ import picocli.CommandLine;
 
 import org.web3j.console.WalletTester;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ProjectCreatorTest extends WalletTester {
@@ -49,24 +50,19 @@ public class ProjectCreatorTest extends WalletTester {
 
     @Test
     public void runTestWhenArgumentsAreEmpty() {
-        final String[] args = {"", ""};
+        final String[] args = {"-n= ", "-p= "};
         ProjectCreator.main(args);
-        assertTrue(
-                errContent
-                        .toString()
-                        .contains(
-                                "Missing required options [--package=<packageName>, --project name=<projectName>]"));
+        assertEquals(
+                outContent.toString(), "Please make sure the required parameters are not empty.\n");
     }
 
     @Test
     public void runTestWhenArgumentsAreNotEmpty() {
         final String[] args = {"new", "-p", "org.com", "-n", "Test", "-o" + tempDirPath};
         ProjectCreator.main(args);
-        assertTrue(
-                outContent
-                        .toString()
-                        .contains(
-                                "Project created with name: Test at location: /var/folders/6x/vzg_hr7x4nz2z043t2_wtjsc0000gn/T/TempFileProvider3473379777787806210/Test"));
+        assertEquals(
+                outContent.toString(),
+                "Project created with name: Test at location: /var/folders/6x/vzg_hr7x4nz2z043t2_wtjsc0000gn/T/TempFileProvider3473379777787806210/Test");
     }
 
     @Test
@@ -74,7 +70,7 @@ public class ProjectCreatorTest extends WalletTester {
         final String input = "Test\norg.com\n" + tempDirPath + "\n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        final String[] args = {"new", "interactive"};
+        final String[] args = {"new"};
         ProjectCreator.main(args);
         assertTrue(outContent.toString().contains("Project created with name:"));
     }
@@ -84,7 +80,7 @@ public class ProjectCreatorTest extends WalletTester {
         final String input = " \n \n \n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        final String[] args = {"new", "interactive"};
+        final String[] args = {"new"};
         ProjectCreator.main(args);
         assertTrue(
                 outContent
