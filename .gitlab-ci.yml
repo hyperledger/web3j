@@ -9,11 +9,13 @@ before_script:
 cache:
   paths:
     - .gradle/wrapper
+    - .gradle/caches
 
 stages:
 - build
 - release
 - publish
+- github
 - downstream
 
 build:
@@ -56,8 +58,8 @@ publish:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
 
-console:
-  stage: publish
+githubRelease:
+  stage: github
   script:
   - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} console:githubRelease
   only:
