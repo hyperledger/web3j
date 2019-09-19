@@ -41,7 +41,17 @@ release:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
   script:
-  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release
+  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release -x bintrayPublish
+  only:
+    refs:
+      - /^release\/(\d*).(\d*).(\d*)/
+
+publish:
+  variables:
+    OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
+  stage: publish
+  script:
+    - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} bintrayPublish
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
