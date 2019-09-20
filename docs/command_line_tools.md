@@ -118,7 +118,7 @@ web3j new -n <Project name> -p <Package name> -o <path>(optional)
 or
 
 ```
-web3j new interactive
+web3j new 
 ``` 
 
 The `-o` option can be omitted if you want to generate the project in the current directory.
@@ -137,7 +137,7 @@ web3j import -n <Project name> -p <Package name> -s <Path to solidity> -o <path>
 or 
 
 ```
-web3j import interactive
+web3j import 
 ```
 
 The `-s` option will work with a single solidity file or a folder containing solidity files.
