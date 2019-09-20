@@ -9,59 +9,59 @@ before_script:
 cache:
   paths:
     - .gradle/wrapper
-    - .gradle/caches
 
 stages:
 - build
 - release
 - publish
-- github
 - downstream
 
-build:
+build-snapshot:
   stage: build
   script:
-  - ./gradlew clean check
+  - ./gradlew spotlessCheck build -x test
   artifacts:
     untracked: false
     expire_in: 30 days
     paths:
       - scripts/**
-
-snapshot:
-  variables:
-    OSSRH_REPO_URL: $SNAPSHOT_OSSRH_REPO_URL
-  stage: release
-  script:
-  - ./gradlew release
+      - build/libs/
   only:
     refs:
       - master
 
-release:
+release-snapshot:
+  variables:
+    OSSRH_REPO_URL: $SNAPSHOT_OSSRH_REPO_URL
+  stage: release
+  script:
+    - ./gradlew uploadArchives
+  only:
+    refs:
+      - master
+
+build-version:
+  stage: build
+  script:
+    - ./gradlew spotlessCheck build -x test
+  only:
+    refs:
+      - /^release\/(\d*).(\d*).(\d*)/
+
+release-version:
   variables:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
   script:
-  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release -x bintrayPublish
+  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} bintrayUpload bintrayPublish -x build
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
 
-publish:
-  variables:
-    OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
+publish-console:
   stage: publish
   script:
-    - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} bintrayPublish
-  only:
-    refs:
-      - /^release\/(\d*).(\d*).(\d*)/
-
-githubRelease:
-  stage: github
-  script:
-  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} console:githubRelease
+    - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} console:githubRelease
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
