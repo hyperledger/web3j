@@ -21,10 +21,8 @@ build-snapshot:
   script:
   - ./gradlew spotlessCheck build -x test
   artifacts:
-    untracked: false
-    expire_in: 30 days
     paths:
-      - scripts/**
+      - scripts/
       - build/libs/
   only:
     refs:
@@ -44,6 +42,10 @@ build-version:
   stage: build
   script:
     - ./gradlew spotlessCheck build -x test
+  artifacts:
+    paths:
+      - scripts/
+      - build/libs/
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
@@ -52,6 +54,7 @@ release-version:
   variables:
     OSSRH_REPO_URL: $RELEASE_OSSRH_REPO_URL
   stage: release
+  allow_failure: true
   script:
   - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} bintrayUpload bintrayPublish -x build
   only:
