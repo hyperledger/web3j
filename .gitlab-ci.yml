@@ -64,7 +64,7 @@ release-version:
 publish-console:
   stage: publish
   script:
-    - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} console:githubRelease
+    - ./scripts/release-github.sh
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/

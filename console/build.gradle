@@ -1,8 +1,3 @@
-plugins {
-    id "de.undercouch.download" version "4.0.0"
-    id "com.github.breadmoirai.github-release" version "2.2.9"
-}
-
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 apply plugin: 'distribution'
@@ -33,39 +28,4 @@ project.afterEvaluate {
 
     }
 
-}
-
-task downloadArtifacts(type: Download) {
-    src([
-        "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar",
-        "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.tar.asc",
-        "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip",
-        "https://dl.bintray.com/web3j/maven/org/web3j/console/${version}/console-${version}.zip.asc"
-    ])
-    dest "${buildDir}/download"
-}
-
-task copyArtifiacts(type: Copy) {
-    dependsOn('downloadArtifacts')
-    from "${buildDir}/download"
-    into "${buildDir}/release"
-    rename "console-${version}.(.*)", "web3j-${version}.\$1"
-}
-
-tasks.githubRelease.dependsOn('copyArtifiacts')
-
-githubRelease {
-    token System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN') ? System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN') : ""
-    owner 'web3j'
-    repo 'web3j'
-    tagName "v${version}"
-    body changelog {
-        options([
-            '--format=oneline',
-            '--abbrev-commit',
-            '--max-count=50'
-        ])
-    }
-    releaseAssets file("$buildDir/release").listFiles()
-    overwrite true
 }
