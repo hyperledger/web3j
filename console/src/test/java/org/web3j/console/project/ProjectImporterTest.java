@@ -50,15 +50,16 @@ public class ProjectImporterTest extends TempFileProvider {
     }
 
     @Test
-    public void runTestWhenArgumentsAreEmpty() {
-        final String[] args = {"-p= ", "-n= ", "-s= "};
+    public void testWithPicoCliWhenArgumentsAreEmpty() {
+        final String[] args = {"import", "-p= ", "-n= ", "-s= "};
         ProjectImporter.main(args);
         assertEquals(
                 outContent.toString(), "Please make sure the required parameters are not empty.\n");
     }
 
     @Test
-    public void runTestWhenArgumentsAreNotEmpty() {
+    public void testWithPicoCliWhenArgumentsAreCorrect() {
+
         final String formattedSolidityTestProject =
                 File.separator
                         + "web3j"
@@ -81,7 +82,7 @@ public class ProjectImporterTest extends TempFileProvider {
     }
 
     @Test
-    public void createImportProjectInteractive() {
+    public void testWhenInteractiveAndArgumentsAreCorrect() {
         String formattedPath =
                 "/web3j/console/src/test/resources/Solidity".replaceAll("/", File.separator);
         final String input = "Test\norg.com\n" + formattedPath + "\n" + tempDirPath + "\n";
@@ -93,7 +94,7 @@ public class ProjectImporterTest extends TempFileProvider {
     }
 
     @Test
-    public void runTestWhenArgumentsAreNewInteractive() {
+    public void testWhenInteractiveAndArgumentsAreEmpty() {
         final String input = " \n \n \n \n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);

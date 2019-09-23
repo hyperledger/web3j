@@ -49,15 +49,15 @@ public class ProjectCreatorTest extends WalletTester {
     }
 
     @Test
-    public void runTestWhenArgumentsAreEmpty() {
-        final String[] args = {"-n= ", "-p= "};
+    public void testWithPicoCliWhenArgumentsAreEmpty() {
+        final String[] args = {"new", "-n= ", "-p= "};
         ProjectCreator.main(args);
         assertEquals(
                 outContent.toString(), "Please make sure the required parameters are not empty.\n");
     }
 
     @Test
-    public void runTestWhenArgumentsAreNotEmpty() {
+    public void testWithPicoCliWhenArgumentsAreCorrect() {
         final String[] args = {"new", "-p", "org.com", "-n", "Test", "-o" + tempDirPath};
         ProjectCreator.main(args);
         assertEquals(
@@ -66,7 +66,7 @@ public class ProjectCreatorTest extends WalletTester {
     }
 
     @Test
-    public void createNewProjectInteractive() {
+    public void testWhenInteractiveAndArgumentsAreCorrect() {
         final String input = "Test\norg.com\n" + tempDirPath + "\n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
@@ -76,7 +76,7 @@ public class ProjectCreatorTest extends WalletTester {
     }
 
     @Test
-    public void createNewProjectInteractiveWhenArgsAreEmpty() {
+    public void testWhenInteractiveAndArgumentsAreEmpty() {
         final String input = " \n \n \n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
