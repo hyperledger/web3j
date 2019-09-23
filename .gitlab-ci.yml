@@ -77,6 +77,16 @@ release-homebrew:
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
+      -
+release-aur:
+  stage: downstream
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - ./scripts/update-aur.sh
+  only:
+    refs:
+      - /^release\/(\d*).(\d*).(\d*)/
 
 release-quorum:
   stage: downstream
