@@ -12,21 +12,26 @@
  */
 package org.web3j.console.project;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
 import picocli.CommandLine;
 
-import org.web3j.console.WalletTester;
+import org.web3j.console.project.utills.ClassExecutor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ProjectCreatorTest extends WalletTester {
+public class ProjectCreatorTest extends ClassExecutor {
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private InputStream inputStream;
@@ -49,6 +54,18 @@ public class ProjectCreatorTest extends WalletTester {
     }
 
     @Test
+    public void testWithPicoCliWhenArgumentsAreCorrect() throws IOException, InterruptedException {
+        final String[] args = {"new", "-p", "org.com", "-n", "Test", "-o" + tempDirPath};
+        int extiCode =
+                executeClassAsSubProcessAndReturnProcess(
+                                ProjectCreator.class, Collections.emptyList(), Arrays.asList(args))
+                        .inheritIO()
+                        .start()
+                        .waitFor();
+        assertEquals(0, extiCode);
+    }
+
+    @Test
     public void testWithPicoCliWhenArgumentsAreEmpty() {
         final String[] args = {"new", "-n= ", "-p= "};
         ProjectCreator.main(args);
@@ -57,22 +74,24 @@ public class ProjectCreatorTest extends WalletTester {
     }
 
     @Test
-    public void testWithPicoCliWhenArgumentsAreCorrect() {
-        final String[] args = {"new", "-p", "org.com", "-n", "Test", "-o" + tempDirPath};
-        ProjectCreator.main(args);
-        assertEquals(
-                outContent.toString(),
-                "Project created with name: Test at location: /var/folders/6x/vzg_hr7x4nz2z043t2_wtjsc0000gn/T/TempFileProvider3473379777787806210/Test");
-    }
-
-    @Test
-    public void testWhenInteractiveAndArgumentsAreCorrect() {
-        final String input = "Test\norg.com\n" + tempDirPath + "\n";
-        inputStream = new ByteArrayInputStream(input.getBytes());
-        System.setIn(inputStream);
+    public void testWhenInteractiveAndArgumentsAreCorrect()
+            throws IOException, InterruptedException {
         final String[] args = {"new"};
-        ProjectCreator.main(args);
-        assertTrue(outContent.toString().contains("Project created with name:"));
+        Process process =
+                executeClassAsSubProcessAndReturnProcess(
+                                ProjectCreator.class, Collections.emptyList(), Arrays.asList(args))
+                        .start();
+        BufferedWriter writer =
+                new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+        writer.write("test", 0, "test".length());
+        writer.newLine();
+        writer.write("org.com", 0, "org.com".length());
+        writer.newLine();
+        writer.write(tempDirPath, 0, tempDirPath.length());
+        writer.newLine();
+        writer.close();
+        process.waitFor();
+        assertEquals(0, process.exitValue());
     }
 
     @Test
@@ -80,6 +99,7 @@ public class ProjectCreatorTest extends WalletTester {
         final String input = " \n \n \n";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
+
         final String[] args = {"new"};
         ProjectCreator.main(args);
         assertTrue(
