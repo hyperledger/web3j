@@ -40,7 +40,7 @@ curl -L -s -o "${SCRIPTS_DIR}/build/web3j-${VERSION}.tar.asc" "https://dl.bintra
 curl -L -s -o "${SCRIPTS_DIR}/build/web3j-${VERSION}.zip" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.zip",
 curl -L -s -o "${SCRIPTS_DIR}/build/web3j-${VERSION}.zip.asc" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.zip.asc"
 
-for FILE in `find ${SCRIPTS_DIR}/build -type f -name "console-*${VERSION}.*"`;
+for FILE in `find ${SCRIPTS_DIR}/build -type f -name "web3j-*${VERSION}.*"`;
 do
   curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s "${UPLOAD_URL:0:-13}?name=$(basename -- $FILE)" -H "Content-Type: $(file -b --mime-type $FILE)" --data-binary @"${FILE}"
 done
