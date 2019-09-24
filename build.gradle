@@ -71,7 +71,6 @@ allprojects {
             trimTrailingWhitespace()
             endWithNewline()
             licenseHeaderFile "$rootDir/gradle/spotless.java.license"
-            paddedCell()
         }
         groovyGradle {
             target '*.gradle'
@@ -81,8 +80,6 @@ allprojects {
             paddedCell()
         }
     }
-
-    buildDir = "$rootDir/build"
 
     repositories { mavenCentral() }
 
