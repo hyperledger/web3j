@@ -158,15 +158,16 @@ public class WalletUtils {
 
     /**
      * Load credentials from JSON wallet string.
+     *
      * @param password - password to decrypt JSON wallet string
      * @param content - JSON wallet content string
      * @return Ethereum credentials
      * @throws CipherException if the underlying cipher is not available
-     * @throws IOException if a low-level I/O problem (unexpected end-of-input,
-     *   network error) occurs
+     * @throws IOException if a low-level I/O problem (unexpected end-of-input, network error)
+     *     occurs
      */
     public static Credentials loadJsonCredentials(String password, String content)
-        throws IOException, CipherException {
+            throws IOException, CipherException {
         WalletFile walletFile = objectMapper.readValue(content, WalletFile.class);
         return Credentials.create(Wallet.decrypt(password, walletFile));
     }

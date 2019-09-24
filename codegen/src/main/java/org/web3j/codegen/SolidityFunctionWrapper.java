@@ -343,7 +343,8 @@ public class SolidityFunctionWrapper extends Generator {
         Set<String> duplicateNames = new HashSet<>();
         Set<String> functionNames = new HashSet<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
-            if (functionDefinition.getName() != null && TYPE_FUNCTION.equals(functionDefinition.getType())) {
+            if (functionDefinition.getName() != null
+                    && TYPE_FUNCTION.equals(functionDefinition.getType())) {
                 String functionName = funcNameToConst(functionDefinition.getName(), true);
                 if (!functionNames.add(functionName)) {
                     duplicateNames.add(functionName);
@@ -444,8 +445,10 @@ public class SolidityFunctionWrapper extends Generator {
         fieldNames.add(Contract.FUNC_DEPLOY);
         Set<String> duplicateFunctionNames = getDuplicateFunctionNames(functionDefinitions);
         if (!duplicateFunctionNames.isEmpty()) {
-            System.out.println("\nWarning: Duplicate field(s) found: " + duplicateFunctionNames
-                    + ". Please don't use names which will be the same in uppercase.");
+            System.out.println(
+                    "\nWarning: Duplicate field(s) found: "
+                            + duplicateFunctionNames
+                            + ". Please don't use names which will be the same in uppercase.");
         }
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals(TYPE_FUNCTION)) {
@@ -917,7 +920,8 @@ public class SolidityFunctionWrapper extends Generator {
         return buildFunction(functionDefinition, true);
     }
 
-    MethodSpec buildFunction(AbiDefinition functionDefinition, boolean useUpperCase) throws ClassNotFoundException {
+    MethodSpec buildFunction(AbiDefinition functionDefinition, boolean useUpperCase)
+            throws ClassNotFoundException {
         return buildFunctions(functionDefinition, useUpperCase).get(0);
     }
 
@@ -960,7 +964,11 @@ public class SolidityFunctionWrapper extends Generator {
             // Avoid generating runtime exception call
             if (functionDefinition.hasOutputs()) {
                 buildConstantFunction(
-                        functionDefinition, methodBuilder, outputParameterTypes, inputParams, useUpperCase);
+                        functionDefinition,
+                        methodBuilder,
+                        outputParameterTypes,
+                        inputParams,
+                        useUpperCase);
 
                 results.add(methodBuilder.build());
             }
@@ -1097,7 +1105,10 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private void buildTransactionFunction(
-            AbiDefinition functionDefinition, MethodSpec.Builder methodBuilder, String inputParams, boolean useUpperCase)
+            AbiDefinition functionDefinition,
+            MethodSpec.Builder methodBuilder,
+            String inputParams,
+            boolean useUpperCase)
             throws ClassNotFoundException {
 
         if (functionDefinition.hasOutputs()) {

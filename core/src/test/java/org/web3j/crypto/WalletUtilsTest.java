@@ -174,11 +174,11 @@ public class WalletUtilsTest {
         Credentials credentials =
                 WalletUtils.loadJsonCredentials(
                         PASSWORD,
-                        convertStreamToString(WalletUtilsTest.class
-                                .getResourceAsStream(
-                                  "/keyfiles/"
-                                        + "UTC--2016-11-03T05-55-06."
-                                        + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")));
+                        convertStreamToString(
+                                WalletUtilsTest.class.getResourceAsStream(
+                                        "/keyfiles/"
+                                                + "UTC--2016-11-03T05-55-06."
+                                                + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")));
 
         assertThat(credentials, equalTo(CREDENTIALS));
     }
