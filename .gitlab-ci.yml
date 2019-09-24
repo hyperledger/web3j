@@ -77,7 +77,7 @@ release-homebrew:
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
-      -
+      
 release-aur:
   stage: downstream
   variables:
