@@ -33,17 +33,14 @@ export RESULT=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -
 
 export UPLOAD_URL=$(echo ${RESULT} | jq -r ".upload_url")
 
-curl -L -s -o "${SCRIPTS_DIR}/../build/libs/web3j-${VERSION}.tar" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.tar",
-curl -L -s -o "${SCRIPTS_DIR}/../build/libs/web3j-${VERSION}.tar.asc" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.tar.asc",
-curl -L -s -o "${SCRIPTS_DIR}/../build/libs/web3j-${VERSION}.zip" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.zip",
-curl -L -s -o "${SCRIPTS_DIR}/../build/libs/web3j-${VERSION}.zip.asc" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.zip.asc"
+mkdir -p "${SCRIPTS_DIR}/build"
 
-for FILE in `find ${SCRIPTS_DIR}/../build/libs -type f -name "console-*${VERSION}.*"`;
-do
-  curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s "${UPLOAD_URL:0:-13}?name=$(basename -- $FILE)" -H "Content-Type: $(file -b --mime-type $FILE)" --data-binary @"${FILE}"
-done
+curl -L -s -o "${SCRIPTS_DIR}/build/web3j-${VERSION}.tar" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.tar",
+curl -L -s -o "${SCRIPTS_DIR}/build/web3j-${VERSION}.tar.asc" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.tar.asc",
+curl -L -s -o "${SCRIPTS_DIR}/build/web3j-${VERSION}.zip" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.zip",
+curl -L -s -o "${SCRIPTS_DIR}/build/web3j-${VERSION}.zip.asc" "https://dl.bintray.com/web3j/maven/org/web3j/console/${VERSION}/console-${VERSION}.zip.asc"
 
-for FILE in `find ${SCRIPTS_DIR}/../build/libs -type f -name "*${VERSION}.jar"`;
+for FILE in `find ${SCRIPTS_DIR}/build -type f -name "console-*${VERSION}.*"`;
 do
   curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s "${UPLOAD_URL:0:-13}?name=$(basename -- $FILE)" -H "Content-Type: $(file -b --mime-type $FILE)" --data-binary @"${FILE}"
 done

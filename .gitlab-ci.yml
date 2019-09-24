@@ -19,11 +19,10 @@ stages:
 build-snapshot:
   stage: build
   script:
-  - ./gradlew spotlessCheck build -x test
+  - ./gradlew check
   artifacts:
     paths:
       - scripts/
-      - build/libs/
   only:
     refs:
       - master
@@ -33,7 +32,7 @@ release-snapshot:
     OSSRH_REPO_URL: $SNAPSHOT_OSSRH_REPO_URL
   stage: release
   script:
-    - ./gradlew uploadArchives
+    - ./gradlew release
   only:
     refs:
       - master
@@ -41,7 +40,7 @@ release-snapshot:
 build-version:
   stage: build
   script:
-    - ./gradlew spotlessCheck build -x test
+    - ./gradlew check
   artifacts:
     paths:
       - scripts/
@@ -56,12 +55,12 @@ release-version:
   stage: release
   allow_failure: true
   script:
-  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} bintrayUpload bintrayPublish -x build
+  - ./gradlew -Pversion=${CI_COMMIT_REF_NAME//release\/} release
   only:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
 
-publish-console:
+release-github:
   stage: publish
   script:
     - ./scripts/release-github.sh
@@ -69,7 +68,7 @@ publish-console:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
 
-homebrew:
+release-homebrew:
   stage: downstream
   variables:
     GIT_STRATEGY: none
@@ -79,7 +78,7 @@ homebrew:
     refs:
       - /^release\/(\d*).(\d*).(\d*)/
 
-dependants:
+release-quorum:
   stage: downstream
   variables:
     GIT_STRATEGY: none
