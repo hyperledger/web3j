@@ -39,6 +39,11 @@ public class WalletUtilsTest {
 
     private File tempDir;
 
+    private String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
     @Before
     public void setUp() throws Exception {
         tempDir = createTempDir();
@@ -162,6 +167,20 @@ public class WalletUtilsTest {
                 equalTo(
                         Credentials.create(
                                 "6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9")));
+    }
+
+    @Test
+    public void testLoadJsonCredentials() throws Exception {
+        Credentials credentials =
+                WalletUtils.loadJsonCredentials(
+                        PASSWORD,
+                        convertStreamToString(WalletUtilsTest.class
+                                .getResourceAsStream(
+                                  "/keyfiles/"
+                                        + "UTC--2016-11-03T05-55-06."
+                                        + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")));
+
+        assertThat(credentials, equalTo(CREDENTIALS));
     }
 
     @Test
