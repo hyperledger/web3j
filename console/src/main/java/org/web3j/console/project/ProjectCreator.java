@@ -53,7 +53,7 @@ public class ProjectCreator {
     public static void main(String[] args) {
         if (args.length > 0 && args[0].equals(COMMAND_NEW)) {
             args = tail(args);
-            if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
+            if (args.length == 0) {
                 final InteractiveOptions options = new InteractiveOptions();
                 final List<String> stringOptions = new ArrayList<>();
                 stringOptions.add("-n");

@@ -41,7 +41,7 @@ public class ProjectImporter extends ProjectCreator {
     public static void main(String[] args) {
         if (args.length > 0 && args[0].equals(COMMAND_IMPORT)) {
             args = tail(args);
-            if (args.length > 0 && args[0].equals(COMMAND_INTERACTIVE)) {
+            if (args.length == 0) {
                 final InteractiveImporter options = new InteractiveImporter();
                 final List<String> stringOptions = new ArrayList<>();
                 stringOptions.add("-n");
