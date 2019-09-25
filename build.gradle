@@ -70,8 +70,7 @@ allprojects {
             importOrder 'java', '', 'org.web3j', '\\#'
             trimTrailingWhitespace()
             endWithNewline()
-            licenseHeaderFile "${rootDir}/gradle/spotless.java.license"
-            paddedCell()
+            licenseHeaderFile "$rootDir/gradle/spotless.java.license"
         }
         groovyGradle {
             target '*.gradle'
@@ -273,7 +272,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
     task release {
         dependsOn 'build'
-        dependsOn 'uploadArchives'
 
         doLast {
             // Validates the user inputs before a release can be performed.

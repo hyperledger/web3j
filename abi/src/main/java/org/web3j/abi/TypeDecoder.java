@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
@@ -185,14 +186,14 @@ public class TypeDecoder {
                         ? ((TypeReference.StaticArrayTypeReference) ref).getSize()
                         : -1;
         if (arraySize <= 0) {
-            listcons = DynamicArray.class.getConstructor(new Class[] {Class.class, List.class});
+            listcons = DynamicArray.class.getConstructor(Class.class, List.class);
         } else {
-            Class arrayClass =
+            Class<?> arrayClass =
                     Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
-            listcons = arrayClass.getConstructor(new Class[] {Class.class, List.class});
+            listcons = arrayClass.getConstructor(Class.class, List.class);
         }
         // create a list of arguments coerced to the correct type of sub-TypeReference
-        ArrayList transformedList = new ArrayList(values.size());
+        ArrayList<Type> transformedList = new ArrayList<Type>(values.size());
         TypeReference subTypeReference = ref.getSubTypeReference();
         for (Object o : values) {
             transformedList.add(instantiateType(subTypeReference, o));
@@ -200,7 +201,7 @@ public class TypeDecoder {
         return (Type) listcons.newInstance(ref.getClassType(), transformedList);
     }
 
-    static Type instantiateAtomicType(Class referenceClass, Object value)
+    static Type instantiateAtomicType(Class<?> referenceClass, Object value)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
                     InstantiationException, ClassNotFoundException {
         Object constructorArg = null;
@@ -239,7 +240,8 @@ public class TypeDecoder {
                             + " of type "
                             + value.getClass());
         }
-        Constructor cons = referenceClass.getConstructor(new Class[] {constructorArg.getClass()});
+        Class<?>[] types = new Class[] {constructorArg.getClass()};
+        Constructor cons = referenceClass.getConstructor(types);
         return (Type) cons.newInstance(constructorArg);
     }
 
@@ -336,13 +338,7 @@ public class TypeDecoder {
         int length = decodeUintAsInt(input, offset);
 
         BiFunction<List<T>, String, T> function =
-                (elements, typeName) -> {
-                    if (elements.isEmpty()) {
-                        return (T) DynamicArray.empty(typeName);
-                    } else {
-                        return (T) new DynamicArray<>(elements);
-                    }
-                };
+                (elements, typeName) -> (T) new DynamicArray(AbiTypes.getType(typeName), elements);
 
         int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
@@ -366,7 +362,7 @@ public class TypeDecoder {
 
     static List arrayToList(Object array) {
         int len = java.lang.reflect.Array.getLength(array);
-        ArrayList rslt = new ArrayList(len);
+        ArrayList<Object> rslt = new ArrayList<Object>(len);
         for (int i = 0; i < len; i++) {
             rslt.add(java.lang.reflect.Array.get(array, i));
         }

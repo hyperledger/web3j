@@ -16,7 +16,10 @@ The command line tools can be obtained as a zipfile/tarball from the [releases](
 brew tap web3j/web3j
 brew install web3j
 ```
-
+or
+ ```
+ curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash
+```
 To run via the zipfile, simply extract the zipfile and run the binary:
 
 ``` console
@@ -37,7 +40,7 @@ __      _____| |__      / /_     _   ___
                          _/ |
                         |__/
 
-Usage: web3j version|wallet|solidity ...
+Usage: web3j version|wallet|solidity|new|import ...
 ```
 
 Wallet tools
@@ -91,6 +94,54 @@ Funds have been successfully transferred from 0x19e03255f667bdfd50a32722df860b1e
 Transaction hash: 0xb00afc5c2bb92a76d03e17bd3a0175b80609e877cb124c02d19000d529390530
 Mined block number: 1849039
 ```
+Web3j new &  import
+-----------------------------------------
+The `web3j new` and `web3j import` commands provide a convenient way to create a new java project using Web3j's Command Line Tools.
+
+These commands provide the following functionality:
+
+- Generate a java project.
+- Generate a Greeter solidity contract or import solidity contracts from a directory.
+- Compiling the solidity files.
+- Build the project using gradle wrapper.
+- Generate java classes for the solidity files.
+- Pre-defined dependencies (web3j), to deploy and interact with the contracts.
+
+### web3j new
+
+To generate a new project:
+
+```
+web3j new -n <Project name> -p <Package name> -o <path>(optional)
+```
+
+or
+
+```
+web3j new 
+``` 
+
+The `-o` option can be omitted if you want to generate the project in the current directory.
+
+The `project name ` and `package name` values must comply with the java standard. The project name is also used as the class name.
+
+### web3j import
+Similarly to `web3j new`, `web3j import` will create a new java project but with user defined smart contracts.
+
+To generate a new project with your own project:
+
+```
+web3j import -n <Project name> -p <Package name> -s <Path to solidity> -o <path>(optional)
+```
+
+or 
+
+```
+web3j import 
+```
+
+The `-s` option will work with a single solidity file or a folder containing solidity files.
+
 
 Solidity smart contract wrapper generator
 -----------------------------------------

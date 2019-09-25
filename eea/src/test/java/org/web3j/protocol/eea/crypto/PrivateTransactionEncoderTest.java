@@ -64,7 +64,7 @@ public class PrivateTransactionEncoderTest {
     }
 
     @Test
-    public void testSignPantheonTransaction() {
+    public void testSignBesuTransaction() {
         final String expected =
                 "0xf8b1808203e8832dc6c094627306090abab3a6e1400e9345bc60c78a8bef578080820fe7a060c70c3f989ef5459021142959f8fc1ad6e5fe8542cf238484c6d6b8c8a6dbcca075727642ce691c4bf5ae945523cdd172d44b451ddfe11ae67c376f1e5c7069eea0035695b4cc4b0941e60551d7a19cf30603db5bfc23e5ac43a56f57f25f75486aa00f200e885ff29e973e2576b6600181d1b0a2b5294e30d9be4a1981ffb33a0b8c8a72657374726963746564";
         final RawPrivateTransaction privateTransactionCreation =

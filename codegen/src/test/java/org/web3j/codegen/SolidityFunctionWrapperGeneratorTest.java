@@ -12,8 +12,7 @@
  */
 package org.web3j.codegen;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,6 +105,20 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     public void testContractsNoBin() throws Exception {
         testCodeGeneration("contracts", "HumanStandardToken", JAVA_TYPES_ARG, false);
         testCodeGeneration("contracts", "HumanStandardToken", SOLIDITY_TYPES_ARG, false);
+    }
+
+    @Test
+    public void testDuplicateField() throws Exception {
+        PrintStream console = System.out;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        testCodeGeneration("duplicate", "DuplicateField", JAVA_TYPES_ARG, false);
+        testCodeGeneration("duplicate", "DuplicateField", SOLIDITY_TYPES_ARG, false);
+
+        System.setOut(console);
+        System.out.println(out.toString());
+        assertTrue(out.toString().contains("Duplicate field(s) found"));
     }
 
     @Test

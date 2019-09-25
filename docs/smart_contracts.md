@@ -47,7 +47,7 @@ The *--bin* and *--abi* compiler arguments are both required to take full advant
 
 *--abi*
 
- Outputs a Solidity [Application Binary Interface](application_binary_interface.md) file which details all of the publicly accessible contract methods and their associated parameters. These details along with the contract address are crucial for interacting with smart contracts. The ABI file is also used for the generation of [Solidit smart contract wrappers](#solidity-smart-contract-wrappers)
+ Outputs a Solidity [Application Binary Interface](application_binary_interface.md) file which details all of the publicly accessible contract methods and their associated parameters. These details along with the contract address are crucial for interacting with smart contracts. The ABI file is also used for the generation of [Solidity smart contract wrappers](#solidity-smart-contract-wrappers)
 
 There is also a *--gas* argument for providing estimates of the [Gas](transactions.md#gas) required to create a contract and transact with its methods.
 
