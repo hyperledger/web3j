@@ -16,7 +16,7 @@ jobs:
   - stage: build master
     script: "./gradlew spotlessCheck check jacocoTestReport"
   - stage: release snapshot
-    script: "./gradlew release --info -PossrhRepoUrl=${SNAPSHOT_OSSRH_REPO_URL}"
+    script: "./gradlew release --info -PossrhRepoUrl=${SNAPSHOT_OSSRH_REPO_URL} -x test"
     if: branch = master
 after_success:
 - bash <(curl -s https://codecov.io/bash)
