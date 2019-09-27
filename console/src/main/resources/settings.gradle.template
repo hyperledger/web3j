@@ -1,7 +1,0 @@
-pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-rootProject.name = '<project_name>';
