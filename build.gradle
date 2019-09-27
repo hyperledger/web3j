@@ -274,28 +274,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     task release {
         dependsOn 'build'
 
-        // Validates the user inputs before a release can be performed.
         if (isSnapshotVersion) {
-            // Only need OSSRH details.
-            logger.info("About to perform {} snapshot release ...", manualRelease ? "a manual" : "an automated")
-
             logger.info(" - ossrhUsername={}", ossrhUsername)
             logger.info(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
             logger.info(" - ossrhRepoUrl={}", ossrhRepoUrl)
-
-            if (!ossrhUsername) {
-                throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername'")
-            }
-
-            if (!ossrhPassword) {
-                throw new InvalidUserDataException("Required parameters missing: 'ossrhPassword'")
-            }
-
-            if (!ossrhRepoUrl) {
-                throw new InvalidUserDataException("Required parameters missing: 'ossrhRepoUrl'")
-            }
-
-
         } else {
             logger.info("About to perform {} full release ...", manualRelease ? "a manual" : "an automated")
             logger.info(" - ossrhUsername={}", ossrhUsername)
@@ -304,15 +286,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
             logger.info(" - bintrayUser={}", bintrayUser)
             logger.info(" - bintrayKey={}", bintrayKey ? "provided" : "not_provided")
             logger.info(" - bintrayGpgPassphrase={}", bintrayGpgPassphrase ? "provided" : "not_provided")
-
-            // Release => Need OSSRH and bintray.
-            if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
-                throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
-            }
-            if (!bintrayUser || !bintrayKey || !bintrayGpgPassphrase) {
-                throw new InvalidUserDataException("Required parameters missing:  'bintrayUser', 'bintrayKey', 'bintrayGpgPassphrase'")
-            }
-
         }
 
         // Snapshots go to nexus, non-snapshots go to bintray.
