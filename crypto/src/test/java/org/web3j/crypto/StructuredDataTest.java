@@ -37,18 +37,14 @@ public class StructuredDataTest {
     public void validSetUp() throws IOException, RuntimeException {
         String validStructuredDataJSONFilePath =
                 "build/resources/test/" + "structured_data_json_files/ValidStructuredData.json";
-        jsonMessageString =
-            getResource(validStructuredDataJSONFilePath);
+        jsonMessageString = getResource(validStructuredDataJSONFilePath);
     }
 
-  private String getResource(String jsonFile) throws IOException {
-    return new String(
-        Files.readAllBytes(
-            Paths.get(jsonFile).toAbsolutePath()),
-        "UTF-8");
-  }
+    private String getResource(String jsonFile) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(jsonFile).toAbsolutePath()), "UTF-8");
+    }
 
-  @Test(expected = RuntimeException.class)
+    @Test(expected = RuntimeException.class)
     public void testInvalidIdentifierMessageCaughtByRegex() throws IOException, RuntimeException {
         String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
@@ -153,10 +149,12 @@ public class StructuredDataTest {
 
     @Test
     public void testBytesAndBytes32Encoding() throws IOException {
-      StructuredDataEncoder dataEncoder = new StructuredDataEncoder(
-          getResource("build/resources/test/"
-              + "structured_data_json_files/ValidStructuredDataWithBytesTypes.json"));
-      dataEncoder.hashStructuredData();
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/ValidStructuredDataWithBytesTypes.json"));
+        dataEncoder.hashStructuredData();
     }
 
     @Test(expected = ClassCastException.class)
@@ -165,7 +163,7 @@ public class StructuredDataTest {
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidMessageValueTypeMismatch.json";
         StructuredDataEncoder dataEncoder =
-            new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         dataEncoder.hashStructuredData();
     }
 
@@ -175,7 +173,7 @@ public class StructuredDataTest {
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidMessageInvalidABIType.json";
         StructuredDataEncoder dataEncoder =
-            new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         dataEncoder.hashStructuredData();
     }
 
@@ -185,7 +183,7 @@ public class StructuredDataTest {
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidMessageValidABITypeInvalidValue.json";
         StructuredDataEncoder dataEncoder =
-            new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         dataEncoder.hashStructuredData();
     }
 
@@ -360,7 +358,7 @@ public class StructuredDataTest {
                         + "structured_data_json_files/"
                         + "InvalidMessageUnequalArrayLengthsBetweenSchemaAndData.json";
         StructuredDataEncoder dataEncoder =
-            new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         dataEncoder.hashStructuredData();
     }
 
@@ -372,7 +370,7 @@ public class StructuredDataTest {
                         + "structured_data_json_files/"
                         + "InvalidMessageDataNotPerfectArrayButDeclaredArrayInSchema.json";
         StructuredDataEncoder dataEncoder =
-            new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         dataEncoder.hashStructuredData();
     }
 }

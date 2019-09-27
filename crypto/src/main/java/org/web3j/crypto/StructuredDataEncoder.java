@@ -256,7 +256,7 @@ public class StructuredDataEncoder {
                 encValues.add(hashedValue);
             } else if (bytesTypePattern.matcher(field.getType()).find()) {
                 encTypes.add(field.getType());
-                encValues.add(Numeric.hexStringToByteArray((String)value));
+                encValues.add(Numeric.hexStringToByteArray((String) value));
             } else if (arrayTypePattern.matcher(field.getType()).find()) {
                 String baseTypeName = field.getType().substring(0, field.getType().indexOf('['));
                 List<Integer> expectedDimensions =
