@@ -17,7 +17,7 @@ jobs:
     - export OSSRH_REPO_URL = ${SNAPSHOT_OSSRH_REPO_URL}
     - "./gradlew spotlessCheck"
     - "./gradlew check jacocoTestReport"
-    - "./gradlew release"
+    - "./gradlew release --info"
     if: branch = master
 after_success:
 - bash <(curl -s https://codecov.io/bash)
