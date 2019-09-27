@@ -15,8 +15,7 @@ jobs:
   include:
   - stage: build master
     script:
-    - export OSSRH_REPO_URL = ${SNAPSHOT_OSSRH_REPO_URL}
-    - "./gradlew spotlessCheck"
+    - "./gradlew spotlessCheck -PossrhRepoUrl=${SNAPSHOT_OSSRH_REPO_URL}"
     - "./gradlew check jacocoTestReport"
     - "./gradlew release --info"
     if: branch = master
