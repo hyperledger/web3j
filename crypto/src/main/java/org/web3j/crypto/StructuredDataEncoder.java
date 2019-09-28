@@ -48,7 +48,7 @@ public class StructuredDataEncoder {
     final String arrayTypeRegex = "^([a-zA-Z_$][a-zA-Z_$0-9]*)((\\[([1-9]\\d*)?\\])+)$";
     final Pattern arrayTypePattern = Pattern.compile(arrayTypeRegex);
 
-    final String bytesTypeRegex = "^bytes[0-9]?[0-9]?$";
+    final String bytesTypeRegex = "^bytes[0-9][0-9]?$";
     final Pattern bytesTypePattern = Pattern.compile(bytesTypeRegex);
 
     // This regex tries to extract the dimensions from the
@@ -248,6 +248,9 @@ public class StructuredDataEncoder {
                 encTypes.add("bytes32");
                 byte[] hashedValue = Numeric.hexStringToByteArray(sha3String((String) value));
                 encValues.add(hashedValue);
+            } else if (field.getType().equals("bytes")) {
+                encTypes.add(("bytes32"));
+                encValues.add(sha3(Numeric.hexStringToByteArray((String)value)));
             } else if (types.containsKey(field.getType())) {
                 // User Defined Type
                 byte[] hashedValue =
