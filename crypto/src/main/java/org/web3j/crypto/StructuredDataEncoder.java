@@ -250,7 +250,7 @@ public class StructuredDataEncoder {
                 encValues.add(hashedValue);
             } else if (field.getType().equals("bytes")) {
                 encTypes.add(("bytes32"));
-                encValues.add(sha3(Numeric.hexStringToByteArray((String)value)));
+                encValues.add(sha3(Numeric.hexStringToByteArray((String) value)));
             } else if (types.containsKey(field.getType())) {
                 // User Defined Type
                 byte[] hashedValue =
