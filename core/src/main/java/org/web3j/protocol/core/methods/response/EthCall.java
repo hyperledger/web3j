@@ -41,6 +41,11 @@ public class EthCall extends Response<String> {
         return hasError() || isErrorInResult();
     }
 
+    @Deprecated
+    public boolean reverts() {
+        return isReverted();
+    }
+
     private boolean isErrorInResult() {
         return getValue() != null && getValue().startsWith(errorMethodId);
     }

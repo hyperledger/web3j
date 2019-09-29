@@ -48,6 +48,7 @@ public class EthCallIT extends Scenario {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
 
         assertTrue(ethCall.isReverted());
+        assertTrue(ethCall.reverts());
         assertTrue(ethCall.getRevertReason().endsWith("revert The reason for revert"));
     }
 
