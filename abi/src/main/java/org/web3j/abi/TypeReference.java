@@ -111,6 +111,9 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     /**
      * This is a helper method that only works for atomic types (uint, bytes, etc). Array types must
      * be wrapped by a {@link java.lang.reflect.ParameterizedType}.
+     *
+     * @param solidityType the solidity as a string eg Address Int
+     * @param primitives is it a primitive type
      */
     protected static Class<? extends org.web3j.abi.datatypes.Type> getAtomicTypeClass(
             String solidityType, boolean primitives) throws ClassNotFoundException {
