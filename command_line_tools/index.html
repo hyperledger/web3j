@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
     
     
       
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.0284f74d.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
       
-        <link rel="stylesheet" href="../assets/stylesheets/application-palette.01803549.css">
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -260,7 +260,7 @@
   </div>
 </nav>
       
-      <main class="md-main">
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -428,14 +428,41 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#wallet-tools" title="Wallet tools" class="md-nav__link">
+  <a href="#wallet-tools" class="md-nav__link">
     Wallet tools
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#solidity-smart-contract-wrapper-generator" title="Solidity smart contract wrapper generator" class="md-nav__link">
+  <a href="#web3j-new-import" class="md-nav__link">
+    Web3j new &amp;  import
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#web3j-new" class="md-nav__link">
+    web3j new
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#web3j-import" class="md-nav__link">
+    web3j import
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solidity-smart-contract-wrapper-generator" class="md-nav__link">
     Solidity smart contract wrapper generator
   </a>
   
@@ -593,14 +620,41 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#wallet-tools" title="Wallet tools" class="md-nav__link">
+  <a href="#wallet-tools" class="md-nav__link">
     Wallet tools
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#solidity-smart-contract-wrapper-generator" title="Solidity smart contract wrapper generator" class="md-nav__link">
+  <a href="#web3j-new-import" class="md-nav__link">
+    Web3j new &amp;  import
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#web3j-new" class="md-nav__link">
+    web3j new
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#web3j-import" class="md-nav__link">
+    web3j import
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solidity-smart-contract-wrapper-generator" class="md-nav__link">
     Solidity smart contract wrapper generator
   </a>
   
@@ -640,25 +694,30 @@ brew install web3j
 </pre></div>
 
 
-<p>To run via the zipfile, simply extract the zipfile and run the binary:</p>
-<div class="codehilite"><pre><span></span><span class="gp">$</span> unzip web3j-&lt;version&gt;.zip
-<span class="go">   creating: web3j-3.0.0/lib/</span>
-<span class="go">  inflating: web3j-3.0.0/lib/core-1.0.2-all.jar</span>
-<span class="go">   creating: web3j-3.0.0/bin/</span>
-<span class="go">  inflating: web3j-3.0.0/bin/web3j</span>
-<span class="go">  inflating: web3j-3.0.0/bin/web3j.bat</span>
-<span class="gp">$</span> ./web3j-&lt;version&gt;/bin/web3j
+<p>or
+ ```
+ curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash</p>
+<div class="codehilite"><pre><span></span>To run via the zipfile, simply extract the zipfile and run the binary:
 
-<span class="go">              _      _____ _     _</span>
-<span class="go">             | |    |____ (_)   (_)</span>
-<span class="go">__      _____| |__      / /_     _   ___</span>
-<span class="go">\ \ /\ / / _ \ &#39;_ \     \ \ |   | | / _ \</span>
-<span class="go"> \ V  V /  __/ |_) |.___/ / | _ | || (_) |</span>
-<span class="go">  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/</span>
-<span class="go">                         _/ |</span>
-<span class="go">                        |__/</span>
+``` console
+$ unzip web3j-&lt;version&gt;.zip
+   creating: web3j-3.0.0/lib/
+  inflating: web3j-3.0.0/lib/core-1.0.2-all.jar
+   creating: web3j-3.0.0/bin/
+  inflating: web3j-3.0.0/bin/web3j
+  inflating: web3j-3.0.0/bin/web3j.bat
+$ ./web3j-&lt;version&gt;/bin/web3j
 
-<span class="go">Usage: web3j version|wallet|solidity ...</span>
+              _      _____ _     _
+             | |    |____ (_)   (_)
+__      _____| |__      / /_     _   ___
+\ \ /\ / / _ \ &#39;_ \     \ \ |   | | / _ \
+ \ V  V /  __/ |_) |.___/ / | _ | || (_) |
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/
+                         _/ |
+                        |__/
+
+Usage: web3j version|wallet|solidity|new|import ...
 </pre></div>
 
 
@@ -707,6 +766,43 @@ brew install web3j
 </pre></div>
 
 
+<h2 id="web3j-new-import">Web3j new &amp;  import<a class="headerlink" href="#web3j-new-import" title="Permanent link">&para;</a></h2>
+<p>The <code>web3j new</code> and <code>web3j import</code> commands provide a convenient way to create a new java project using Web3j's Command Line Tools.</p>
+<p>These commands provide the following functionality:</p>
+<ul>
+<li>Generate a java project.</li>
+<li>Generate a Greeter solidity contract or import solidity contracts from a directory.</li>
+<li>Compiling the solidity files.</li>
+<li>Build the project using gradle wrapper.</li>
+<li>Generate java classes for the solidity files.</li>
+<li>Pre-defined dependencies (web3j), to deploy and interact with the contracts.</li>
+</ul>
+<h3 id="web3j-new">web3j new<a class="headerlink" href="#web3j-new" title="Permanent link">&para;</a></h3>
+<p>To generate a new project:</p>
+<div class="codehilite"><pre><span></span>web3j new -n &lt;Project name&gt; -p &lt;Package name&gt; -o &lt;path&gt;(optional)
+</pre></div>
+
+
+<p>or</p>
+<div class="codehilite"><pre><span></span>web3j new 
+</pre></div>
+
+
+<p>The <code>-o</code> option can be omitted if you want to generate the project in the current directory.</p>
+<p>The <code>project name</code> and <code>package name</code> values must comply with the java standard. The project name is also used as the class name.</p>
+<h3 id="web3j-import">web3j import<a class="headerlink" href="#web3j-import" title="Permanent link">&para;</a></h3>
+<p>Similarly to <code>web3j new</code>, <code>web3j import</code> will create a new java project but with user defined smart contracts.</p>
+<p>To generate a new project with your own project:</p>
+<div class="codehilite"><pre><span></span>web3j import -n &lt;Project name&gt; -p &lt;Package name&gt; -s &lt;Path to solidity&gt; -o &lt;path&gt;(optional)
+</pre></div>
+
+
+<p>or </p>
+<div class="codehilite"><pre><span></span>web3j import 
+</pre></div>
+
+
+<p>The <code>-s</code> option will work with a single solidity file or a folder containing solidity files.</p>
 <h2 id="solidity-smart-contract-wrapper-generator">Solidity smart contract wrapper generator<a class="headerlink" href="#solidity-smart-contract-wrapper-generator" title="Permanent link">&para;</a></h2>
 <p>Please refer to <a href="../smart_contracts/#solidity-smart-contract-wrappers">Solidity smart contract wrappers</a>.</p>
                 
@@ -793,7 +889,7 @@ brew install web3j
       
     </div>
     
-      <script src="../assets/javascripts/application.245445c6.js"></script>
+      <script src="../assets/javascripts/application.c648116f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       
