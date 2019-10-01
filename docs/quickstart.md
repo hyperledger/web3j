@@ -1,6 +1,41 @@
 Quickstart
 ==========
 
+Web3j CLI
+---------
+
+Install the Web3j binary.
+
+To get the latest version on Mac OS or Linux, type the following in your terminal:
+
+```bash
+curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash
+```
+
+Then to create a new project, simply run:
+
+```bash
+web3j new
+```
+
+Or, to import an existing Solidity project into Web3j, run:
+
+```bash
+web3j import
+```
+
+Then to build your project run:
+
+```bash
+./gradle build
+```
+
+For more information on using the Web3j CLI, head to the [CLI section](command_line_tools.md).
+
+
+Sample project
+--------------
+
 A [web3j sample project](https://github.com/web3j/sample-project-gradle) is available that demonstrates a number of core features of Ethereum with web3j, including:
 
 -   Connecting to a node on the Ethereum network
@@ -10,12 +45,3 @@ A [web3j sample project](https://github.com/web3j/sample-project-gradle) is avai
 -   Reading a value from the deployed smart contract
 -   Updating a value in the deployed smart contract
 -   Viewing an event logged by the smart contract
-
-[Web3j's command line tools](command_line_tools.md) can be used to create a new project with a simple Greeter solidity contract or import your solidity files.
-
-To get the latest version on Mac OS or Linux, type the following in your terminal :
-
-`curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash`
-
-The commands available can be found in the [Command line tools](command_line_tools.md) of the documentation.
-
