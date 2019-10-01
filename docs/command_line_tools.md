@@ -1,25 +1,35 @@
-Command Line Tools
-==================
+Web3j CLI
+=========
 
-A web3j fat jar is distributed with each release providing command line tools. The command line allow you to use some of the functionality of web3j from your terminal:
+A web3j binary is distributed with each release providing an interactive command line (CLI). It allows you to use some of the key functionality of web3j from your terminal, including:
 
-These tools provide:
+- New project creation
+- Project creation from with Solidity code
+- Wallet creation
+- Wallet password management
+- Ether transfer from one wallet to another
+- Generation of Solidity smart contract wrappers
 
--   Wallet creation
--   Wallet password management
--   Ether transfer from one wallet to another
--   Generation of Solidity smart contract wrappers
+Installation
+------------
 
-The command line tools can be obtained as a zipfile/tarball from the [releases](https://github.com/web3j/web3j/releases/latest) page of the project repository, under the **Downloads** section, or for OS X users via [Homebrew](https://github.com/web3j/homebrew-web3j), or for Arch linux users via the [AUR](https://aur.archlinux.org/packages/web3j/).
+### Script
+
+The simplest way to install the Web3j CLI is via the following script:
+
+```bash
+curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash
+```
+
+### Manual installation
+
+The command line tools can also be obtained as a zipfile/tarball from the [releases](https://github.com/web3j/web3j/releases/latest) page of the project repository, under the **Downloads** section, or for OS X users via [Homebrew](https://github.com/web3j/homebrew-web3j), or for Arch linux users via the [AUR](https://aur.archlinux.org/packages/web3j/).
 
 ``` bash
 brew tap web3j/web3j
 brew install web3j
 ```
-or
- ```
- curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash
-```
+
 To run via the zipfile, simply extract the zipfile and run the binary:
 
 ``` console
@@ -42,6 +52,56 @@ __      _____| |__      / /_     _   ___
 
 Usage: web3j version|wallet|solidity|new|import ...
 ```
+
+Web3j new &  import
+-----------------------------------------
+The `web3j new` and `web3j import` commands provide a convenient way to create a new java project using Web3j's Command Line Tools.
+
+These commands provide the following functionality:
+
+- Generate a java project.
+- Generate a Greeter solidity contract or import solidity contracts from a directory.
+- Compiling the solidity files.
+- Build the project using gradle wrapper.
+- Generate java classes for the solidity files.
+- Pre-defined dependencies (web3j), to deploy and interact with the contracts.
+
+### web3j new
+
+To generate a new project interactively:
+
+```bash
+web3j new 
+``` 
+
+Or using non-interactive mode:
+
+```bash
+web3j new -n <project name> -p <package name> [-o <path>]
+```
+
+The `-o` option can be omitted if you want to generate the project in the current directory.
+
+The `project name ` and `package name` values must comply with the Java standard. The project name is also used as the class name.
+
+### web3j import
+
+Similarly to `web3j new`, `web3j import` will create a new java project but with user defined smart contracts.
+
+To generate a new project with your own project:
+
+```
+web3j import -n <project name> -p <package name> -s <path to solidity sources> [-o <path>]
+```
+
+or 
+
+```
+web3j import 
+```
+
+The `-s` option will work with a single solidity file or a folder containing solidity files.
+
 
 Wallet tools
 ------------
@@ -94,53 +154,6 @@ Funds have been successfully transferred from 0x19e03255f667bdfd50a32722df860b1e
 Transaction hash: 0xb00afc5c2bb92a76d03e17bd3a0175b80609e877cb124c02d19000d529390530
 Mined block number: 1849039
 ```
-Web3j new &  import
------------------------------------------
-The `web3j new` and `web3j import` commands provide a convenient way to create a new java project using Web3j's Command Line Tools.
-
-These commands provide the following functionality:
-
-- Generate a java project.
-- Generate a Greeter solidity contract or import solidity contracts from a directory.
-- Compiling the solidity files.
-- Build the project using gradle wrapper.
-- Generate java classes for the solidity files.
-- Pre-defined dependencies (web3j), to deploy and interact with the contracts.
-
-### web3j new
-
-To generate a new project:
-
-```
-web3j new -n <Project name> -p <Package name> -o <path>(optional)
-```
-
-or
-
-```
-web3j new 
-``` 
-
-The `-o` option can be omitted if you want to generate the project in the current directory.
-
-The `project name ` and `package name` values must comply with the java standard. The project name is also used as the class name.
-
-### web3j import
-Similarly to `web3j new`, `web3j import` will create a new java project but with user defined smart contracts.
-
-To generate a new project with your own project:
-
-```
-web3j import -n <Project name> -p <Package name> -s <Path to solidity> -o <path>(optional)
-```
-
-or 
-
-```
-web3j import 
-```
-
-The `-s` option will work with a single solidity file or a folder containing solidity files.
 
 
 Solidity smart contract wrapper generator
