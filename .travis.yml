@@ -13,11 +13,23 @@ install: skip
 test: skip
 jobs:
   include:
-  - stage: build master
+  - stage: build pull request
     script: "./gradlew spotlessCheck check jacocoTestReport"
-  - stage: release snapshot
-    script: "./gradlew release --info -PossrhRepoUrl=${SNAPSHOT_OSSRH_REPO_URL} -x test"
+    if: type = pull_request
+  - stage: build master
+    script: "./gradlew spotlessCheck check jacocoTestReport release -PossrhRepoUrl=${SNAPSHOT_OSSRH_REPO_URL}"
     if: branch = master
+  - stage: build release
+    if: branch =~ /release/
+    script: "./gradlew check release -Pversion=${TRAVIS_BRANCH#'release/'} -PossrhRepoUrl=${RELEASE_OSSRH_REPO_URL}"
+  - stage: github release
+    if: branch =~ /release/
+    script: "./gradlew check -Pversion=${TRAVIS_BRANCH#'release/'} && ./scripts/github-release.sh"
+  - stage: release dependants
+    if: branch =~ /release/
+    script:
+    - "./scripts/release-dependant.sh quorum"
+    - "./scripts/release-dependant.sh web3j-cli"
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 env:
@@ -29,3 +41,4 @@ env:
   - secure: rFdjw1jT02QpQS9jc4go7iNNajDebGNHOj+MQyOoEoxOTHaXGLyJ1u+ZI4CZ+rCrXvLJ1vkKC7iF7qOpDJe27EQsAJLyz9aRbdHFd8lCdC3kdkcfR8Y6DACQSTrwLrz/D5BJU1ClDECueiy3CEjo8tOQAtDZ2221PArmQvVn65zmiRlYcPew6jobrtW+rhDl5GLkMRrFHCEyDOYPgANn3XTXTbIhkO1YomPcl4HI88C3ekbHWItUm5TmoDGlg7wRrX7VefaNTjIz87BPfsjc/FMD/xv40st/8osZnYXftaVt4OGNoAbwKw2wCMb4y5pKSaamtH6SIeq9octKEc4V0LzveAjSrvAj2zqBVqEFjPSfl7IMcAb64RMYzLu2NVzUxMgGS53eZ9deTQXRmziVHiUAddNlcC/hTvD5lNzxyPaXOtJU9xcjk+mkGIVqxES8b4mk6wlATuVXnEwwcKPkJlC11jMDZwLFJ6qSh2ADrdNa0vQuXxqrLA1Fe9/kMZdQUeD/UkEj3ToY6XH+q7JkI3t+A/SPs+fLktLFh4gKu9gUHVaMl1OCgdYxBzzoIKosJgabS1n89J6mtykgQLlA8wH7KhBtSz8kQVHI2Flycj5BeBkilfWmFDGiPTZq5CJX04cmnLHPfOJqCFgjhITMACl8PJb61pVjoP/cz81V2oQ=
   - secure: mn9cBlO0HYhwX1N/4fg8LtLF8+7hl6plcDT8mg74gSs92g3baOHp6ztX6ZOYmpPeXQUkQndkX7Y4cNv4NoMVxK6RrXQa1tk6ETVdDg5MvqExUtzb4JALEMd00SXfsElxA1Jfsnr6NcdnMIB+eWlNhvnO4dh/cvDKGJuP6mS4/mqco3PwK6lcGzMSycWPsjLU8IM3YpXvGRYezJX1gJq4InLARUQ0pgGahK0ZuOhMWjuBagxV9zHGjeb/948MsowPmB91/bLmNnARmF9J5c5CEb/Zv2abYFbBmhF+pARruROg812QgR2Y8fi15wDo5ElVI0t0omimnRN1XXI8okUNjdPufKNF2kTB18e1E+BmHnJ1HiUYip7qB4XCoNtbY/pxPqsWgdi/+Zy5eZZdB9tRGV5TL1Qpdxo9TyNwxF36V7cvMKiWWuruy2gwsrZvgwAEuDToqMmFGxwuHCBniqmpsGg5uTLyBOd/ce1KTMgPEIQwJOak0vYWRCL8jZY4pobYkIs6owaDHQCDUlhSCUT050E0iXyffTbOq0r459pNWmvBXLFYiPRSqsf+fN3OKyroWsu+b8sDPsbuKoIzM4JFDorgkWua4SeENuTzGuvxhhy8kCqRfCzOJb5MRl1Hp6KYy755ECO5P3lNZFcD4asrGRXgaoGIn/WyJPS8z42Dxgs=
   - secure: GMMRaYEgyoQK4GYkSudVjQs8WW2d2rKe0h7SbLqDxHU9MD1fAZG+pTw4H77KpOa9YF1xEEnySB3iCe1u/fVTL4EP/fQmw6g2ic1mPGuJFZsRAQ0nQT5GzGjYL3rOuwbKVTeYGCpSaAsYHOOaOrPfW15W1/avCgNF8F/P7g6pyxUPPIxes151si3eSe4FJb8QKuqGixYb91sJoimIu0OU70zURvkq5LVqU31EXtwIn6AopZtLWYyASoaE32YS8bKHjWYfMZIPiAO5uXzRhd61yD/m7ThLu50JklQBo5T15+dcyketT7TivwKp/K1T+MeGw3J7jv2TJqF8CcsykBOuDYEGg3YHQPlBaXaDHSB64wKeBmGrHHjAVAm6fsiqO19kyp1/z8mE4lFH9VgDGpbdMKND+sAn3kVw/47K/9SN//eC1hZCCLnTedSsqn1/28B8RaN+y3rWgkwF80dCg92SLHOr88j8091xS4mqy4D3mxH8p8BjrJwCt7V34fKm1jtaVkncUM9dloNKXgkZAgS07byOLWBO/a/pr+W2FiNh8v8Xs7/ulsvKFo0uwpSWE9npL73s2xQ+lGMTKeRdVuplTAvAPO8EpJ6jdpiXcW0SKXkAFiHfTQ9n3nWvt2sjVnxu12ovzi9lziDi4sTPL9C4wMDgB7svB772RWEhdR0Kx9E=
+  - secure: DjfJTS+Fw9Utrsj2VjUtQ95uwgW/8TaJcL7im27Gn5GBuiZnQbVvTiXindApjia8zQXu9GiJh0hIsuVeP3+Zzl5BkVXJBX4DIzu1oBNkm3JiFRDXMXtoQd7aL3syHLAoCHYvncj4rex8WMhs7/gUk1X9NE969Hyhau1vbpcHj6OG+x3m/e4fDmaiCpQ5yCe8LI6X7M7kvvqpSKW9MyGezU84U35Ukzib2gzA2m/TMwpp7KBwftPFPO0ga+KSopgyLug+i9ALZoTqQc5LQIsoEEGUDB/L23yqyIM76rExq5lg84xDBn2+Esi/R2hgRkEO++oTWzahX7sEbppkxaNZ6tXuwSVGGXBuTuJfJSwAKMspz3OIvD3XK4LZq3jBb9Xv/E8cc+p36ThBA2Dk7qR+eLIj0NOpNYn/i61mD+zMWFxjeQsSiOup9HkqPlkKwyLYv2r6bwIB7TwRsyAJN/wqbv1DRqEHTPShTrMpUov6I5rJR1/VBmLounHrcvlKQJP5Hbnbznhm6s99GfnXLKyU4VvkrYgL1ot4Zt2kaDGJf333uhtdN+BI07OA6bD8qOiXdOkFy14jg5PxE0UeAouad7MloV+bCg8rxK0krZDvTWNSa51YeR6NHYSZoGojd4WMU/z5wop5KHGx9cfRmcj5wha6OQdMUfKxmdDYbwNxXXo=
