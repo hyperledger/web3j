@@ -157,6 +157,18 @@ public class StructuredDataTest {
         dataEncoder.hashStructuredData();
     }
 
+    @Test
+    public void test0xProtocolControlSample() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/0xProtocolControlSample.json"));
+        assertEquals(
+                "0xccb29124860915763e8cd9257da1260abc7df668fde282272587d84b594f37f6",
+                Numeric.toHexString(dataEncoder.hashStructuredData()));
+    }
+
     @Test(expected = ClassCastException.class)
     public void testInvalidMessageValueTypeMismatch() throws RuntimeException, IOException {
         String invalidStructuredDataJSONFilePath =
