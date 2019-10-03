@@ -30,6 +30,7 @@ jobs:
     script:
     - "./scripts/release-dependant.sh quorum"
     - "./scripts/release-dependant.sh web3j-cli"
+    - "./scripts/release-dependant.sh web3j-gradle-plugin"
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 env:
