@@ -144,10 +144,7 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, AdminNodeInfo> adminNodeInfo() {
         return new Request<>(
-                "admin_nodeInfo",
-                Collections.<String>emptyList(),
-                web3jService,
-                AdminNodeInfo.class);
+                "admin_nodeInfo", Collections.emptyList(), web3jService, AdminNodeInfo.class);
     }
 
     @Override
