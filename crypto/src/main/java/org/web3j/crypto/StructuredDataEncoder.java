@@ -363,7 +363,7 @@ public class StructuredDataEncoder {
         ObjectMapper oMapper = new ObjectMapper();
         HashMap<String, Object> data =
                 oMapper.convertValue(jsonMessageObject.getDomain(), HashMap.class);
-
+ 
         if (data.get("chainId") != null) {
             data.put("chainId", ((HashMap<String, Object>) data.get("chainId")).get("value"));
         } else {
