@@ -17,10 +17,16 @@ Installation
 
 The simplest way to install the Web3j CLI is via the following script:
 
+On Mac OS and Linux;
 ```bash
 curl -L https://get.web3j.io | sh
 ```
 
+On Windows:
+
+```bash
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/web3j/web3j-installer/master/installer.ps1'))
+```
 You can veriify the installation was successful by running th web3j command:
 
 ```bash

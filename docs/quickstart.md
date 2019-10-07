@@ -12,6 +12,11 @@ To get the latest version on Mac OS or Linux, type the following in your termina
 curl -L https://get.web3j.io | sh
 ```
 
+To get the latest version on Windows, type the following in PowerShell:
+```
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/web3j/web3j-installer/master/installer.ps1'))
+```
+
 Then to create a new project, simply run:
 
 ```bash
