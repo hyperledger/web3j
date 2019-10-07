@@ -12,7 +12,7 @@ Java 8:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.2.0</version>
+  <version>4.5.5</version>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@ Gradle
 Java 8:
 
 ``` groovy
-compile ('org.web3j:core:4.2.0')
+compile ('org.web3j:core:4.5.5')
 ```
 
 Android:

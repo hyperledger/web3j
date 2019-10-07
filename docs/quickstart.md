@@ -9,7 +9,7 @@ Install the Web3j binary.
 To get the latest version on Mac OS or Linux, type the following in your terminal:
 
 ```bash
-curl -s https://raw.githubusercontent.com/web3j/web3j-installer/master/web3j.sh | bash
+curl -L https://get.web3j.io | sh
 ```
 
 Then to create a new project, simply run:
