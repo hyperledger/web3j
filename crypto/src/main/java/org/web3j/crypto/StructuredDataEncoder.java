@@ -369,7 +369,7 @@ public class StructuredDataEncoder {
         } else {
             data.remove("chainId");
         }
-        
+
         data.put(
                 "verifyingContract",
                 ((HashMap<String, Object>) data.get("verifyingContract")).get("value"));
