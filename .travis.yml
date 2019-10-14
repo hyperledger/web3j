@@ -18,7 +18,7 @@ jobs:
     if: type = pull_request
   - stage: build master
     script: "./gradlew spotlessCheck check jacocoTestReport release -PossrhRepoUrl=${SNAPSHOT_OSSRH_REPO_URL}"
-    if: branch = master
+    if: branch = master AND NOT type = pull_request
   - stage: build release
     if: branch =~ /release/
     script: "./gradlew check release -Pversion=${TRAVIS_BRANCH#'release/'} -PossrhRepoUrl=${RELEASE_OSSRH_REPO_URL}"
