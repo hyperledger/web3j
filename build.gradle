@@ -93,8 +93,7 @@ allprojects {
 
     javadoc { options.encoding = 'UTF-8' }
 
-    jacoco {
-        toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
+    jacoco { toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
     }
 
     jacocoTestReport {
@@ -205,7 +204,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     authentication(
                             userName: ossrhUsername,
                             password: ossrhPassword
-                    )
+                            )
                 }
 
                 pom.project {
@@ -315,11 +314,11 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         afterEvaluate {
             classDirectories = files(classDirectories.files.collect {
                 fileTree(dir: it,
-                        exclude: [
-                                'org/web3j/abi/datatypes/generated/**',
-                                'org/web3j/tuples/generated/**',
-                                'org/web3j/ens/contracts/generated/**'
-                        ])
+                exclude: [
+                    'org/web3j/abi/datatypes/generated/**',
+                    'org/web3j/tuples/generated/**',
+                    'org/web3j/ens/contracts/generated/**'
+                ])
             })
         }
     }
