@@ -17,11 +17,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
-import io.reactivex.Flowable;
-
 import org.web3j.protocol.Web3jService;
 
-public class Request<S, T extends Response> {
+public class Request<S, T extends Response> implements RemoteCall<T> {
     private static AtomicLong nextId = new AtomicLong(0);
 
     private String jsonrpc = "2.0";
@@ -77,15 +75,13 @@ public class Request<S, T extends Response> {
         this.id = id;
     }
 
+    @Override
     public T send() throws IOException {
         return web3jService.send(this, responseType);
     }
 
+    @Override
     public CompletableFuture<T> sendAsync() {
         return web3jService.sendAsync(this, responseType);
-    }
-
-    public Flowable<T> flowable() {
-        return new RemoteCall<>(this::send).flowable();
     }
 }

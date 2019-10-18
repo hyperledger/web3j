@@ -21,6 +21,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.exceptions.EthCallException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -36,7 +37,7 @@ public class ReadonlyTransactionManagerTest {
     EthCall response = mock(EthCall.class);
 
     @Test
-    public void sendCallTest() throws IOException {
+    public void sendCallTest() throws IOException, EthCallException {
         when(response.getValue()).thenReturn("test");
         when(service.send(any(), any())).thenReturn(response);
         ReadonlyTransactionManager readonlyTransactionManager =

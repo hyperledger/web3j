@@ -30,6 +30,7 @@ import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.interactions.EthTransactionInteraction;
 
 /**
  * <p>Auto generated code.
@@ -118,7 +119,7 @@ public class PublicResolver extends Contract {
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
-    public RemoteCall<TransactionReceipt> setText(byte[] node, String key, String value) {
+    public EthTransactionInteraction setText(byte[] node, String key, String value) {
         final Function function = new Function(
                 FUNC_SETTEXT, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -133,7 +134,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.generated.Uint256(contentTypes)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<DynamicBytes>() {}));
-        return new RemoteCall<Tuple2<BigInteger, byte[]>>(
+        return RemoteCall.fromCallable(
                 new Callable<Tuple2<BigInteger, byte[]>>() {
                     @Override
                     public Tuple2<BigInteger, byte[]> call() throws Exception {
@@ -145,7 +146,7 @@ public class PublicResolver extends Contract {
                 });
     }
 
-    public RemoteCall<TransactionReceipt> setPubkey(byte[] node, byte[] x, byte[] y) {
+    public EthTransactionInteraction setPubkey(byte[] node, byte[] x, byte[] y) {
         final Function function = new Function(
                 FUNC_SETPUBKEY, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -177,7 +178,7 @@ public class PublicResolver extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<TransactionReceipt> setABI(byte[] node, BigInteger contentType, byte[] data) {
+    public EthTransactionInteraction setABI(byte[] node, BigInteger contentType, byte[] data) {
         final Function function = new Function(
                 FUNC_SETABI, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -194,7 +195,7 @@ public class PublicResolver extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<TransactionReceipt> setName(byte[] node, String name) {
+    public EthTransactionInteraction setName(byte[] node, String name) {
         final Function function = new Function(
                 FUNC_SETNAME, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -203,7 +204,7 @@ public class PublicResolver extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> setContent(byte[] node, byte[] hash) {
+    public EthTransactionInteraction setContent(byte[] node, byte[] hash) {
         final Function function = new Function(
                 FUNC_SETCONTENT, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -216,7 +217,7 @@ public class PublicResolver extends Contract {
         final Function function = new Function(FUNC_PUBKEY, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
-        return new RemoteCall<Tuple2<byte[], byte[]>>(
+        return RemoteCall.fromCallable(
                 new Callable<Tuple2<byte[], byte[]>>() {
                     @Override
                     public Tuple2<byte[], byte[]> call() throws Exception {
@@ -228,7 +229,7 @@ public class PublicResolver extends Contract {
                 });
     }
 
-    public RemoteCall<TransactionReceipt> setAddr(byte[] node, String addr) {
+    public EthTransactionInteraction setAddr(byte[] node, String addr) {
         final Function function = new Function(
                 FUNC_SETADDR, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 

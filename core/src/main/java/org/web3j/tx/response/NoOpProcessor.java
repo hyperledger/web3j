@@ -13,8 +13,11 @@
 package org.web3j.tx.response;
 
 import java.io.IOException;
+import java.util.Optional;
 
+import org.web3j.crypto.Pair;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 
@@ -26,6 +29,12 @@ public class NoOpProcessor extends TransactionReceiptProcessor {
 
     public NoOpProcessor(Web3j web3j) {
         super(web3j);
+    }
+
+    @Override
+    public Pair<TransactionReceipt, Optional<Response.Error>> waitForTransactionReceiptResponse(
+            String transactionHash) {
+        return new Pair<>(new EmptyTransactionReceipt(transactionHash), Optional.empty());
     }
 
     @Override

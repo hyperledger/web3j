@@ -13,12 +13,13 @@
 package org.web3j.protocol.exceptions;
 
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Transaction timeout exception indicates that we have breached some threshold waiting for a
  * transaction to execute.
  */
-public class TransactionException extends Exception {
+public class TransactionException extends TimeoutException {
 
     private Optional<String> transactionHash = Optional.empty();
 
@@ -32,7 +33,7 @@ public class TransactionException extends Exception {
     }
 
     public TransactionException(Throwable cause) {
-        super(cause);
+        super();
     }
 
     /**

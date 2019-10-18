@@ -27,6 +27,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
+import org.web3j.protocol.exceptions.EthCallException;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
@@ -99,7 +100,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     @Override
     protected TransactionReceipt executeTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
-            throws IOException, TransactionException {
+            throws IOException, TransactionException, EthCallException {
 
         EthSendTransaction ethSendTransaction =
                 sendTransaction(gasPrice, gasLimit, to, data, value);
@@ -121,14 +122,17 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             final BigInteger gasLimit,
             final String to,
             final String data,
+            BigInteger nonce,
             final BigInteger value,
             boolean constructor)
             throws IOException {
 
-        final BigInteger nonce =
-                besu.privGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
-                        .send()
-                        .getTransactionCount();
+        if (nonce == null) {
+            nonce =
+                    besu.privGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
+                            .send()
+                            .getTransactionCount();
+        }
 
         final Object privacyGroupIdOrPrivateFor = privacyGroupIdOrPrivateFor();
 
@@ -167,7 +171,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     @Override
     public String sendCall(
             final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
-            throws IOException {
+            throws IOException, EthCallException {
         try {
             EthSendTransaction est =
                     sendTransaction(
@@ -185,15 +189,19 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     }
 
     private TransactionReceipt processResponse(final EthSendTransaction transactionResponse)
-            throws IOException, TransactionException {
+            throws IOException, TransactionException, EthCallException {
         if (transactionResponse.hasError()) {
-            throw new RuntimeException(
-                    "Error processing transaction request: "
-                            + transactionResponse.getError().getMessage());
+            throw new EthCallException(transactionResponse.getError(), null);
         }
 
         final String transactionHash = transactionResponse.getTransactionHash();
 
-        return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
+        try {
+            return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new TransactionException(
+                    "Thread was Interrupted while waiting for transaciton Receipt");
+        }
     }
 }

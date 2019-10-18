@@ -10,22 +10,14 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.crypto;
+package org.web3j.protocol.core.methods.response;
 
-public class Pair<TFirst, TSecond> {
-    private final TFirst first;
-    private final TSecond second;
+import java.util.Optional;
 
-    public TFirst getFirst() {
-        return first;
-    }
+import org.web3j.protocol.core.Response;
 
-    public TSecond getSecond() {
-        return second;
-    }
-
-    public Pair(TFirst first, TSecond second) {
-        this.first = first;
-        this.second = second;
-    }
+/** eth_getTransactionReceipt. */
+public abstract class TransactionReceiptContainer<T extends TransactionReceipt>
+        extends Response<T> {
+    public abstract Optional<T> getTransactionReceipt();
 }

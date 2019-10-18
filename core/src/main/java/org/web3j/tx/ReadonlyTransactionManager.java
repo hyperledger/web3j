@@ -18,7 +18,9 @@ import java.math.BigInteger;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.exceptions.EthCallException;
 
 /** Transaction manager implementation for read-only operations on smart contracts. */
 public class ReadonlyTransactionManager extends TransactionManager {
@@ -37,6 +39,7 @@ public class ReadonlyTransactionManager extends TransactionManager {
             BigInteger gasLimit,
             String to,
             String data,
+            BigInteger nonce,
             BigInteger value,
             boolean constructor)
             throws IOException {
@@ -46,11 +49,15 @@ public class ReadonlyTransactionManager extends TransactionManager {
 
     @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
-            throws IOException {
-        return web3j.ethCall(
-                        Transaction.createEthCallTransaction(fromAddress, to, data),
-                        defaultBlockParameter)
-                .send()
-                .getValue();
+            throws IOException, EthCallException {
+        EthCall send =
+                web3j.ethCall(
+                                Transaction.createEthCallTransaction(fromAddress, to, data),
+                                defaultBlockParameter)
+                        .send();
+        if (send.hasError() || send.reverts()) {
+            throw new EthCallException(send.getError(), send.getRevertReason());
+        }
+        return send.getValue();
     }
 }

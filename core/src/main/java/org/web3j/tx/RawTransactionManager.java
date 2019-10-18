@@ -23,8 +23,10 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.exceptions.EthCallException;
 import org.web3j.tx.exceptions.TxHashMismatchException;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Numeric;
@@ -111,26 +113,29 @@ public class RawTransactionManager extends TransactionManager {
             BigInteger gasLimit,
             String to,
             String data,
+            BigInteger nonce,
             BigInteger value,
             boolean constructor)
             throws IOException {
-
-        BigInteger nonce = getNonce();
-
         RawTransaction rawTransaction =
-                RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
+                RawTransaction.createTransaction(
+                        nonce == null ? getNonce() : nonce, gasPrice, gasLimit, to, value, data);
 
         return signAndSend(rawTransaction);
     }
 
     @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
-            throws IOException {
-        return web3j.ethCall(
-                        Transaction.createEthCallTransaction(getFromAddress(), to, data),
-                        defaultBlockParameter)
-                .send()
-                .getValue();
+            throws IOException, EthCallException {
+        EthCall send =
+                web3j.ethCall(
+                                Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                                defaultBlockParameter)
+                        .send();
+        if (send.reverts() || send.hasError()) {
+            throw new EthCallException(send.getError(), send.getRevertReason());
+        }
+        return send.getValue();
     }
 
     /*

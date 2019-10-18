@@ -24,13 +24,7 @@ import org.web3j.utils.Async;
  *
  * @param <T> Our return type.
  */
-public class RemoteCall<T> {
-
-    private Callable<T> callable;
-
-    public RemoteCall(Callable<T> callable) {
-        this.callable = callable;
-    }
+public interface RemoteCall<T> {
 
     /**
      * Perform request synchronously.
@@ -38,16 +32,14 @@ public class RemoteCall<T> {
      * @return result of enclosed function
      * @throws Exception if the function throws an exception
      */
-    public T send() throws Exception {
-        return callable.call();
-    }
+    T send() throws Exception;
 
     /**
      * Perform request asynchronously with a future.
      *
      * @return a future containing our function
      */
-    public CompletableFuture<T> sendAsync() {
+    default CompletableFuture<T> sendAsync() {
         return Async.run(this::send);
     }
 
@@ -56,7 +48,11 @@ public class RemoteCall<T> {
      *
      * @return an flowable
      */
-    public Flowable<T> flowable() {
+    default Flowable<T> flowable() {
         return Flowable.fromCallable(this::send);
+    }
+
+    static <T> RemoteCall<T> fromCallable(Callable<T> callable) {
+        return callable::call;
     }
 }

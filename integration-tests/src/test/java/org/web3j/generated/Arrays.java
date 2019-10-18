@@ -64,30 +64,21 @@ public class Arrays extends Contract {
                         org.web3j.abi.Utils.typeMap(input, org.web3j.abi.datatypes.generated.StaticArray2.class,
                 org.web3j.abi.datatypes.generated.Uint256.class))), 
                 java.util.Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Uint256>>() {}));
-        return new RemoteCall<List>(
-                new Callable<List>() {
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public List call() throws Exception {
+        return ()-> {
                         List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
                         return convertToNative(result);
-                    }
-                });
+                    };
     }
 
     public RemoteCall<List> returnArray() {
-        final Function function = new Function(FUNC_RETURNARRAY, 
-                java.util.Arrays.<Type>asList(), 
-                java.util.Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Address>>() {}));
-        return new RemoteCall<List>(
-                new Callable<List>() {
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public List call() throws Exception {
-                        List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
-                        return convertToNative(result);
-                    }
-                });
+        final Function function = new Function(FUNC_RETURNARRAY,
+                java.util.Arrays.<Type>asList(),
+                java.util.Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Address>>() {
+                }));
+        return () -> {
+            List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
+            return convertToNative(result);
+        };
     }
 
     public RemoteCall<List> multiFixed(List<List<BigInteger>> input) {
@@ -97,15 +88,10 @@ public class Arrays extends Contract {
                         org.web3j.abi.Utils.typeMap(input, org.web3j.abi.datatypes.generated.StaticArray2.class,
                 org.web3j.abi.datatypes.generated.Uint256.class))), 
                 java.util.Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Uint256>>() {}));
-        return new RemoteCall<List>(
-                new Callable<List>() {
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public List call() throws Exception {
+        return () -> {
                         List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
                         return convertToNative(result);
-                    }
-                });
+                    };
     }
 
     public RemoteCall<List> fixedReverse(List<BigInteger> input) {
@@ -114,15 +100,10 @@ public class Arrays extends Contract {
                         org.web3j.abi.datatypes.generated.Uint256.class,
                         org.web3j.abi.Utils.typeMap(input, org.web3j.abi.datatypes.generated.Uint256.class))), 
                 java.util.Arrays.<TypeReference<?>>asList(new TypeReference<StaticArray10<Uint256>>() {}));
-        return new RemoteCall<List>(
-                new Callable<List>() {
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public List call() throws Exception {
+        return () -> {
                         List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
                         return convertToNative(result);
-                    }
-                });
+                    };
     }
 
     public RemoteCall<List> dynamicReverse(List<BigInteger> input) {
@@ -131,15 +112,10 @@ public class Arrays extends Contract {
                         org.web3j.abi.datatypes.generated.Uint256.class,
                         org.web3j.abi.Utils.typeMap(input, org.web3j.abi.datatypes.generated.Uint256.class))), 
                 java.util.Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Uint256>>() {}));
-        return new RemoteCall<List>(
-                new Callable<List>() {
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public List call() throws Exception {
+        return () -> {
                         List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
                         return convertToNative(result);
-                    }
-                });
+                    };
     }
 
     public static RemoteCall<Arrays> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {

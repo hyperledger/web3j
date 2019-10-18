@@ -24,6 +24,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.interactions.EthTransactionInteraction;
 
 /**
  * <p>Auto generated code.
@@ -99,7 +100,7 @@ public class ENS extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<TransactionReceipt> setSubnodeOwner(byte[] node, byte[] label, String owner) {
+    public EthTransactionInteraction setSubnodeOwner(byte[] node, byte[] label, String owner) {
         final Function function = new Function(
                 FUNC_SETSUBNODEOWNER, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -109,7 +110,7 @@ public class ENS extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> setTTL(byte[] node, BigInteger ttl) {
+    public EthTransactionInteraction setTTL(byte[] node, BigInteger ttl) {
         final Function function = new Function(
                 FUNC_SETTTL, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -125,7 +126,7 @@ public class ENS extends Contract {
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public RemoteCall<TransactionReceipt> setResolver(byte[] node, String resolver) {
+    public EthTransactionInteraction setResolver(byte[] node, String resolver) {
         final Function function = new Function(
                 FUNC_SETRESOLVER, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -134,7 +135,7 @@ public class ENS extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> setOwner(byte[] node, String owner) {
+    public EthTransactionInteraction setOwner(byte[] node, String owner) {
         final Function function = new Function(
                 FUNC_SETOWNER, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 

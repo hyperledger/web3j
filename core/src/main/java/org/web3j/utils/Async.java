@@ -12,12 +12,7 @@
  */
 package org.web3j.utils;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /** Async task facilitation. */
 public class Async {
@@ -42,6 +37,10 @@ public class Async {
                 },
                 executor);
         return result;
+    }
+
+    public static void submit(Runnable r) {
+        executor.submit(r);
     }
 
     private static int getCpuCount() {

@@ -14,10 +14,13 @@ package org.web3j.tx.response;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
+import org.web3j.crypto.Pair;
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
+import org.web3j.protocol.core.Response;
 import org.web3j.protocol.exceptions.TransactionException;
 
 public abstract class PrivateTransactionReceiptProcessor extends TransactionReceiptProcessor {
@@ -26,6 +29,29 @@ public abstract class PrivateTransactionReceiptProcessor extends TransactionRece
     public PrivateTransactionReceiptProcessor(Besu besu) {
         super(besu);
         this.besu = besu;
+    }
+
+    @Override
+    public Pair<? extends PrivateTransactionReceipt, Optional<Response.Error>>
+            waitForTransactionReceiptResponse(String transactionHash)
+                    throws IOException, TimeoutException, InterruptedException {
+        PrivGetTransactionReceipt transactionReceipt =
+                besu.privGetTransactionReceipt(transactionHash).send();
+        // if transaction receipt is present
+        if (transactionReceipt.getTransactionReceipt().isPresent()) {
+            PrivateTransactionReceipt privateTransactionReceipt =
+                    transactionReceipt.getTransactionReceipt().get();
+            return new Pair<>(
+                    privateTransactionReceipt, Optional.ofNullable(transactionReceipt.getError()));
+        } else if (transactionReceipt.hasError()) {
+            throw new IOException(
+                    "Unexpected error response for Transaction Receipt :"
+                            + transactionReceipt.getError().getMessage());
+        } else {
+            throw new IOException(
+                    "Unknown error fetchcing response for Transaction Receipt of "
+                            + transactionHash);
+        }
     }
 
     @Override

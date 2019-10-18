@@ -56,10 +56,7 @@ public class ShipIt extends Contract {
         final Function function = new Function(FUNC_SHIPMENTS, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(param0)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint8>() {}, new TypeReference<Uint256>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Bytes32>() {}));
-        return new RemoteCall<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>>(
-                new Callable<Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>>() {
-                    @Override
-                    public Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]> call() throws Exception {
+        return () ->{
                         List<Type> results = executeCallMultipleValueReturn(function);
                         return new Tuple8<String, String, BigInteger, BigInteger, BigInteger, BigInteger, String, byte[]>(
                                 (String) results.get(0).getValue(), 
@@ -70,8 +67,8 @@ public class ShipIt extends Contract {
                                 (BigInteger) results.get(5).getValue(), 
                                 (String) results.get(6).getValue(), 
                                 (byte[]) results.get(7).getValue());
-                    }
-                });
+                    };
+
     }
 
     public static RemoteCall<ShipIt> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {

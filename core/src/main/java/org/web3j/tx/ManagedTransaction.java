@@ -20,7 +20,11 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.EthCallException;
+import org.web3j.protocol.exceptions.RpcErrorResponseException;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.interactions.EthTransactionInteraction;
+import org.web3j.tx.interactions.EthTransactionReceiptInteraction;
 
 /** Generic transaction manager. */
 public abstract class ManagedTransaction {
@@ -95,11 +99,10 @@ public abstract class ManagedTransaction {
         return ethGasPrice.getGasPrice();
     }
 
-    protected TransactionReceipt send(
+    protected EthTransactionReceiptInteraction send(
             String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit)
-            throws IOException, TransactionException {
-
-        return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
+            throws IOException, RpcErrorResponseException {
+        return transactionManager.submitTransaction(gasPrice, gasLimit, to, data, value);
     }
 
     protected TransactionReceipt send(
@@ -109,15 +112,25 @@ public abstract class ManagedTransaction {
             BigInteger gasPrice,
             BigInteger gasLimit,
             boolean constructor)
-            throws IOException, TransactionException {
+            throws IOException, TransactionException, InterruptedException {
 
         return transactionManager.executeTransaction(
                 gasPrice, gasLimit, to, data, value, constructor);
     }
 
     protected String call(String to, String data, DefaultBlockParameter defaultBlockParameter)
-            throws IOException {
+            throws IOException, EthCallException {
 
         return transactionManager.sendCall(to, data, defaultBlockParameter);
+    }
+
+    /**
+     * Submit a transaction to network. This method returns RemoteCall that can be sent to
+     * immediately get transactionHash
+     */
+    EthTransactionInteraction submitTransaction(
+            String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit) {
+        return new EthTransactionInteraction(
+                transactionManager, gasPrice, gasLimit, to, data, value);
     }
 }

@@ -18,7 +18,9 @@ import java.math.BigInteger;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.exceptions.EthCallException;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 
 /**
@@ -55,6 +57,7 @@ public class ClientTransactionManager extends TransactionManager {
             BigInteger gasLimit,
             String to,
             String data,
+            BigInteger nonce,
             BigInteger value,
             boolean constructor)
             throws IOException {
@@ -67,11 +70,15 @@ public class ClientTransactionManager extends TransactionManager {
 
     @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
-            throws IOException {
-        return web3j.ethCall(
-                        Transaction.createEthCallTransaction(getFromAddress(), to, data),
-                        defaultBlockParameter)
-                .send()
-                .getValue();
+            throws IOException, EthCallException {
+        EthCall send =
+                web3j.ethCall(
+                                Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                                defaultBlockParameter)
+                        .send();
+        if (send.hasError() || send.reverts()) {
+            throw new EthCallException(send.getError(), send.getRevertReason());
+        }
+        return send.getValue();
     }
 }

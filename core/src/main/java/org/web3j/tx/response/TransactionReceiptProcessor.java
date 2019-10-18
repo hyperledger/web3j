@@ -14,10 +14,14 @@ package org.web3j.tx.response;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
+import org.web3j.crypto.Pair;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.core.methods.response.TransactionReceiptContainer;
 import org.web3j.protocol.exceptions.TransactionException;
 
 /** Abstraction for managing how we wait for transaction receipts to be generated on the network. */
@@ -29,9 +33,32 @@ public abstract class TransactionReceiptProcessor {
         this.web3j = web3j;
     }
 
-    public abstract TransactionReceipt waitForTransactionReceipt(String transactionHash)
-            throws IOException, TransactionException;
+    public abstract Pair<? extends TransactionReceipt, Optional<Response.Error>>
+            waitForTransactionReceiptResponse(String transactionHash)
+                    throws IOException, TimeoutException, InterruptedException;
 
+    @Deprecated
+    public abstract TransactionReceipt waitForTransactionReceipt(String transactionHash)
+            throws IOException, TransactionException, InterruptedException;
+
+    Pair<? extends Optional<? extends TransactionReceipt>, Optional<Response.Error>>
+            sendTransactionReceiptAcceptError(String transactionHash) throws IOException {
+        EthGetTransactionReceipt transactionReceipt =
+                web3j.ethGetTransactionReceipt(transactionHash).send();
+        return processTransactionReceipt(transactionReceipt);
+    }
+
+    protected <T extends TransactionReceiptContainer<? extends TransactionReceipt>>
+            Pair<? extends Optional<? extends TransactionReceipt>, Optional<Response.Error>>
+                    processTransactionReceipt(T receiptResponse) {
+        // we don't process the transaction status code here, we test on the codeblock where we know
+        // the gas we provided for the transaction
+        return new Pair<>(
+                receiptResponse.getTransactionReceipt(),
+                Optional.ofNullable(receiptResponse.getError()));
+    }
+
+    @Deprecated
     Optional<? extends TransactionReceipt> sendTransactionReceiptRequest(String transactionHash)
             throws IOException, TransactionException {
         EthGetTransactionReceipt transactionReceipt =
@@ -40,7 +67,6 @@ public abstract class TransactionReceiptProcessor {
             throw new TransactionException(
                     "Error processing request: " + transactionReceipt.getError().getMessage());
         }
-
         return transactionReceipt.getTransactionReceipt();
     }
 }

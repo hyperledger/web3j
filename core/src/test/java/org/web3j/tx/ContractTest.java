@@ -50,9 +50,11 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.exceptions.FailedReceiptException;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
+import org.web3j.tx.interactions.EthTransactionInteraction;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
 
@@ -284,9 +286,8 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testTransactionFailed() throws Exception {
-        thrown.expect(TransactionException.class);
-        thrown.expectMessage(
-                "Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+        thrown.expect(FailedReceiptException.class);
+        thrown.expectMessage("Transaction has failed with status: 0x0. Gas used: 1");
 
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
@@ -382,7 +383,8 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
-    public void testStaticGasProvider() throws IOException, TransactionException {
+    public void testStaticGasProvider()
+            throws IOException, TransactionException, InterruptedException {
         StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.TEN, BigInteger.ONE);
         TransactionManager txManager = mock(TransactionManager.class);
 
@@ -473,14 +475,8 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     void testErrorScenario() throws Throwable {
-        try {
-            contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
-                    .send();
-        } catch (InterruptedException e) {
-            throw e;
-        } catch (ExecutionException e) {
-            throw e.getCause();
-        }
+        contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
+                .send();
     }
 
     private TransactionReceipt createTransactionReceipt() {
@@ -578,7 +574,7 @@ public class ContractTest extends ManagedTransactionTester {
             return executeRemoteCallMultipleValueReturn(function);
         }
 
-        public RemoteCall<TransactionReceipt> performTransaction(Address address, Uint256 amount) {
+        public EthTransactionInteraction performTransaction(Address address, Uint256 amount) {
             Function function =
                     new Function(
                             "approve",

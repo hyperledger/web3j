@@ -191,7 +191,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         String expected =
-                "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param) {\n"
+                "public org.web3j.tx.interactions.EthTransactionInteraction functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
@@ -235,7 +235,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         String expected =
-                "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param, java.math.BigInteger weiValue) {\n"
+                "public org.web3j.tx.interactions.EthTransactionInteraction functionName(java.math.BigInteger param, java.math.BigInteger weiValue) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
@@ -260,7 +260,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         String expected =
-                "public org.web3j.protocol.core.RemoteFunctionCall<java.math.BigInteger> functionName(java.math.BigInteger param) {\n"
+                "public org.web3j.tx.interactions.EthCallInteraction<java.math.BigInteger> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n"
@@ -284,19 +284,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         String expected =
-                "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.math.BigInteger param) {\n"
+                "public org.web3j.tx.interactions.EthCallInteraction<java.util.List> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
-                        + "  return new org.web3j.protocol.core.RemoteFunctionCall<java.util.List>(function,\n"
-                        + "      new java.util.concurrent.Callable<java.util.List>() {\n"
-                        + "        @java.lang.Override\n"
-                        + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
-                        + "        public java.util.List call() throws java.lang.Exception {\n"
-                        + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
-                        + "          return convertToNative(result);\n"
-                        + "        }\n"
-                        + "      });\n"
+                        + "  return executeInteractiveCallSingleValueReturn(function,java.util.List.class, (rawResponse)-> convertToNative((List<Type>)rawResponse));\n"
                         + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
@@ -316,21 +308,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         String expected =
-                "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.util.List<java.math.BigInteger> param) {\n"
+                "public org.web3j.tx.interactions.EthCallInteraction<java.util.List> functionName(java.util.List<java.math.BigInteger> param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint8>(\n"
                         + "              org.web3j.abi.datatypes.generated.Uint8.class,\n"
                         + "              org.web3j.abi.Utils.typeMap(param, org.web3j.abi.datatypes.generated.Uint8.class))), \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
-                        + "  return new org.web3j.protocol.core.RemoteFunctionCall<java.util.List>(function,\n"
-                        + "      new java.util.concurrent.Callable<java.util.List>() {\n"
-                        + "        @java.lang.Override\n"
-                        + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
-                        + "        public java.util.List call() throws java.lang.Exception {\n"
-                        + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
-                        + "          return convertToNative(result);\n"
-                        + "        }\n"
-                        + "      });\n"
+                        + "  return executeInteractiveCallSingleValueReturn(function,java.util.List.class, (rawResponse)-> convertToNative((List<Type>)rawResponse));\n"
                         + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
@@ -350,22 +334,14 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         String expected =
-                "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n"
+                "public org.web3j.tx.interactions.EthCallInteraction<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.DynamicArray>(\n"
                         + "              org.web3j.abi.datatypes.DynamicArray.class,\n"
                         + "              org.web3j.abi.Utils.typeMap(param, org.web3j.abi.datatypes.DynamicArray.class,\n"
                         + "      org.web3j.abi.datatypes.generated.Uint8.class))), \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>>() {}));\n"
-                        + "  return new org.web3j.protocol.core.RemoteFunctionCall<java.util.List>(function,\n"
-                        + "      new java.util.concurrent.Callable<java.util.List>() {\n"
-                        + "        @java.lang.Override\n"
-                        + "        @java.lang.SuppressWarnings(\"unchecked\")\n"
-                        + "        public java.util.List call() throws java.lang.Exception {\n"
-                        + "          java.util.List<org.web3j.abi.datatypes.Type> result = (java.util.List<org.web3j.abi.datatypes.Type>) executeCallSingleValueReturn(function, java.util.List.class);\n"
-                        + "          return convertToNative(result);\n"
-                        + "        }\n"
-                        + "      });\n"
+                        + "  return executeInteractiveCallSingleValueReturn(function,java.util.List.class, (rawResponse)-> convertToNative((List<Type>)rawResponse));\n"
                         + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
@@ -405,21 +381,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
         String expected =
-                "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
+                "public org.web3j.tx.interactions.EthCallInteraction<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param1), \n"
                         + "      new org.web3j.abi.datatypes.generated.Uint32(param2)), \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int32>() {}));\n"
-                        + "  return new org.web3j.protocol.core.RemoteFunctionCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>(function,\n"
-                        + "      new java.util.concurrent.Callable<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>>() {\n"
-                        + "        @java.lang.Override\n"
-                        + "        public org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger> call() throws java.lang.Exception {\n"
-                        + "          java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);\n"
-                        + "          return new org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>(\n"
-                        + "              (java.math.BigInteger) results.get(0).getValue(), \n"
-                        + "              (java.math.BigInteger) results.get(1).getValue());\n"
-                        + "        }\n"
-                        + "      });\n"
+                        + "  return executeInteractiveCallMultipleValueReturn(function, (results) ->\n"
+                        + "      new org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>(\n"
+                        + "          (java.math.BigInteger) results.get(0).getValue(), \n"
+                        + "          (java.math.BigInteger) results.get(1).getValue()));\n"
                         + "}\n";
 
         assertThat(methodSpec.toString(), is(expected));
