@@ -51,7 +51,7 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.Result> {
                 JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException {
             TreeNode treeNode = jsonParser.readValueAsTree();
-            return new Result(treeNode.at("/name").toString());
+            return new Result(treeNode.at("/name").toString().replaceAll("^\"|\"$", ""));
         }
     }
 }
