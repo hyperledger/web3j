@@ -31,7 +31,6 @@ additional overhead of having to write your own integration code for the platfor
 The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
 overview of blockchain, Ethereum and web3j.
 
-
 Features
 --------
 
@@ -96,7 +95,16 @@ Commercial support and training is available from `web3labs.com <https://www.web
 Quickstart
 ----------
 
-A `web3j sample project <https://github.com/web3j/sample-project-gradle>`_ is available that
+Install the Web3j binary.
+
+To get the latest version on Mac OS or Linux, type the following in your terminal:
+
+.. code-block:: bash
+   curl -L https://get.web3j.io | sh
+
+Then follow the on-screen instructions or head `here <https://docs.web3j.io/command_line_tools/>`_. 
+
+Alternatively, a `web3j sample project <https://github.com/web3j/sample-project-gradle>`_ is available that
 demonstrates a number of core features of Ethereum with web3j, including:
 
 - Connecting to a node on the Ethereum network
@@ -126,7 +134,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.2.0</version>
+     <version>4.5.5</version>
    </dependency>
 
 Android:
@@ -147,7 +155,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.2.0')
+   compile ('org.web3j:core:4.5.5')
 
 Android:
 
