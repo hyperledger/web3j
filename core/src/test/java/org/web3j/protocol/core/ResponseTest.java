@@ -79,6 +79,7 @@ import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.management.AdminNodeInfo;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -196,6 +197,57 @@ public class ResponseTest extends ResponseTester {
 
         NetPeerCount netPeerCount = deserialiseResponse(NetPeerCount.class);
         assertThat(netPeerCount.getQuantity(), equalTo(BigInteger.valueOf(2L)));
+    }
+
+    @Test
+    public void testAdminNodeInfo() throws Exception {
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\": \"2.0\",\n"
+                        + "    \"id\": 1,\n"
+                        + "    \"result\": {\n"
+                        + "        \"id\": \"8ae75d6795f3541f897bcbfd3b4551aaf78b932cd0e91bf75a273940375c12a3\",\n"
+                        + "        \"name\": \"Geth/v1.9.6-stable-bd059680/linux-amd64/go1.13.1\",\n"
+                        + "        \"enode\": \"enode://1672a190f8c67669590db4b094c87573cbbc9b12f63d7137f505cfaa2cd2d35bea61abe1f8c898db4eab01d6c901270d7fff601b97a78f79ccefd83016b315cc@127.0.0.1:30303\",\n"
+                        + "        \"enr\": \"enr:-Jq4QCKylmBZEJ1xizokiKyEST7FUrrOESva-sFWTkbBY6J0Xco6eUOkoc7lGOHy6yyCnjWhBEd35dr-c1FRxE3ozUEEg2V0aMrJhMs6ZLuDD8wlgmlkgnY0gmlwhH8AAAGJc2VjcDI1NmsxoQIWcqGQ-MZ2aVkNtLCUyHVzy7ybEvY9cTf1Bc-qLNLTW4N0Y3CCdl-DdWRwgnZf\",\n"
+                        + "        \"ip\": \"127.0.0.1\",\n"
+                        + "        \"ports\": {\n"
+                        + "            \"discovery\": 30303,\n"
+                        + "            \"listener\": 30303\n"
+                        + "        },\n"
+                        + "        \"listenAddr\": \"[::]:30303\",\n"
+                        + "        \"protocols\": {\n"
+                        + "            \"eth\": {\n"
+                        + "                \"network\": 4,\n"
+                        + "                \"difficulty\": 1,\n"
+                        + "                \"genesis\": \"0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177\",\n"
+                        + "                \"config\": {\n"
+                        + "                    \"chainId\": 4,\n"
+                        + "                    \"homesteadBlock\": 1,\n"
+                        + "                    \"daoForkSupport\": true,\n"
+                        + "                    \"eip150Block\": 2,\n"
+                        + "                    \"eip150Hash\": \"0x9b095b36c15eaf13044373aef8ee0bd3a382a5abb92e402afa44b8249c3a90e9\",\n"
+                        + "                    \"eip155Block\": 3,\n"
+                        + "                    \"eip158Block\": 3,\n"
+                        + "                    \"byzantiumBlock\": 1035301,\n"
+                        + "                    \"constantinopleBlock\": 3660663,\n"
+                        + "                    \"petersburgBlock\": 4321234,\n"
+                        + "                    \"istanbulBlock\": 5435345,\n"
+                        + "                    \"clique\": {\n"
+                        + "                        \"period\": 15,\n"
+                        + "                        \"epoch\": 30000\n"
+                        + "                    }\n"
+                        + "                },\n"
+                        + "                \"head\": \"0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177\"\n"
+                        + "            }\n"
+                        + "        }\n"
+                        + "    }\n"
+                        + "}");
+
+        AdminNodeInfo adminNodeInfo = deserialiseResponse(AdminNodeInfo.class);
+        assertThat(
+                adminNodeInfo.getResult().getName(),
+                equalTo("Geth/v1.9.6-stable-bd059680/linux-amd64/go1.13.1"));
     }
 
     @Test

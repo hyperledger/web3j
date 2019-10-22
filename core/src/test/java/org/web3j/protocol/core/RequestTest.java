@@ -74,6 +74,13 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testAdminNodeInfo() throws Exception {
+        web3j.adminNodeInfo().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"admin_nodeInfo\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
     public void testEthProtocolVersion() throws Exception {
         web3j.ethProtocolVersion().send();
 
