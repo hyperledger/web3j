@@ -28,6 +28,8 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
     private final String to;
     private final String output;
     private final List<Log> logs;
+    private final String status;
+    private final String revertReason;
 
     @JsonCreator
     public PrivateTransactionReceipt(
@@ -35,12 +37,16 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
             @JsonProperty(value = "from") final String from,
             @JsonProperty(value = "to") final String to,
             @JsonProperty(value = "output") final String output,
-            @JsonProperty(value = "logs") final List<Log> logs) {
+            @JsonProperty(value = "logs") final List<Log> logs,
+            @JsonProperty(value = "status") final String status,
+            @JsonProperty(value = "revertReason") final String revertReason) {
         this.contractAddress = contractAddress;
         this.from = from;
         this.to = to;
         this.output = output;
         this.logs = logs;
+        this.status = status;
+        this.revertReason = revertReason;
     }
 
     @Override
@@ -65,6 +71,15 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
     @Override
     public List<Log> getLogs() {
         return logs;
+    }
+
+    public String getRevertReason() {
+        return revertReason;
+    }
+
+    @Override
+    public String getStatus() {
+        return status;
     }
 
     @Override

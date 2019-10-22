@@ -279,6 +279,7 @@ public class ResponseTest extends ResponseTester {
                         + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"output\":\"myRlpEncodedOutputFromPrivateContract\",\n"
+                        + "        \"status\":\"0x1\",\n"
                         + "        \"logs\": [{\n"
                         + "            \"removed\": false,\n"
                         + "            \"logIndex\": \"0x1\",\n"
@@ -312,7 +313,9 @@ public class ResponseTest extends ResponseTester {
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                                         "mined",
                                         Collections.singletonList(
-                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))));
+                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))),
+                        "0x1",
+                        null);
 
         PrivGetTransactionReceipt privGetTransactionReceipt =
                 deserialiseResponse(PrivGetTransactionReceipt.class);

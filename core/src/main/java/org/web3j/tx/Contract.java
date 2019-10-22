@@ -372,9 +372,11 @@ public abstract class Contract extends ManagedTransaction {
                     String.format(
                             "Transaction has failed with status: %s. "
                                     + "Gas used: %d. (not-enough gas?)",
-                            receipt.getStatus(), receipt.getGasUsed()));
+                            receipt.getStatus(),
+                            receipt.getGasUsedRaw() != null
+                                    ? receipt.getGasUsed()
+                                    : BigInteger.valueOf(0)));
         }
-
         return receipt;
     }
 
