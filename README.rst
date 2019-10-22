@@ -100,6 +100,7 @@ Install the Web3j binary.
 To get the latest version on Mac OS or Linux, type the following in your terminal:
 
 .. code-block:: bash
+
    curl -L https://get.web3j.io | sh
 
 Then follow the on-screen instructions or head `here <https://docs.web3j.io/command_line_tools/>`_. 
