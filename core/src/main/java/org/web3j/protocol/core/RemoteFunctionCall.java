@@ -47,7 +47,7 @@ public class RemoteFunctionCall<T> extends RemoteCall<T> {
      * decode a method response
      *
      * @param response
-     * @return
+     * @return list of abi types
      */
     public List<Type> decodeFunctionResponse(String response) {
         return FunctionReturnDecoder.decode(response, function.getOutputParameters());

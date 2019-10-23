@@ -78,6 +78,7 @@ import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.management.AdminNodeInfo;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
 import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
@@ -138,6 +139,12 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, NetPeerCount> netPeerCount() {
         return new Request<>(
                 "net_peerCount", Collections.<String>emptyList(), web3jService, NetPeerCount.class);
+    }
+
+    @Override
+    public Request<?, AdminNodeInfo> adminNodeInfo() {
+        return new Request<>(
+                "admin_nodeInfo", Collections.emptyList(), web3jService, AdminNodeInfo.class);
     }
 
     @Override
