@@ -49,8 +49,7 @@ import static org.web3j.utils.Restriction.RESTRICTED;
  */
 @Ignore
 public class BesuPrivacyQuickstartIntegrationTest {
-    private static final String CLIENT_VERSION =
-            "pantheon/v1.2.1-dev-ad2d34cd/linux-x86_64/oracle_openjdk-java-11";
+    private static final String CLIENT_VERSION = "besu/v1.3.0/linux-x86_64/oracle_openjdk-java-11";
 
     // FIXME: This should be made public in the contract wrapper
     private static final String HUMAN_STANDARD_TOKEN_BINARY =

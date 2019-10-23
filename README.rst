@@ -100,6 +100,7 @@ Install the Web3j binary.
 To get the latest version on Mac OS or Linux, type the following in your terminal:
 
 .. code-block:: bash
+
    curl -L https://get.web3j.io | sh
 
 Then follow the on-screen instructions or head `here <https://docs.web3j.io/command_line_tools/>`_. 
@@ -531,6 +532,7 @@ Projects using web3j
 
 Please submit a pull request if you wish to include your project on the list:
 
+- `AlphaWallet Android Wallet <https://github.com/AlphaWallet/alpha-wallet-android.git>`_
 - `ERC-20 RESTful Service <https://github.com/blk-io/erc20-rest-service>`_
 - `Ether Wallet <https://play.google.com/store/apps/details?id=org.vikulin.etherwallet>`_ by
   `@vikulin <https://github.com/vikulin>`_
@@ -564,6 +566,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `TrustWallet <http://trustwalletapp.com>`_
 - `Impetus <http://www.impetus.com/>`_
 - `Argent Labs <http://www.argent.im/>`_
+- `AlphaWallet <https://www.alphawallet.com/>`_
 
 
 Build instructions

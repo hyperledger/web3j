@@ -140,22 +140,13 @@ public class EnsResolver {
         String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
         ENS ensRegistry =
-                ENS.load(
-                        registryContract,
-                        web3j,
-                        transactionManager,
-                        DefaultGasProvider.GAS_PRICE,
-                        DefaultGasProvider.GAS_LIMIT);
+                ENS.load(registryContract, web3j, transactionManager, new DefaultGasProvider());
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
         String resolverAddress = ensRegistry.resolver(nameHash).send();
 
         return PublicResolver.load(
-                resolverAddress,
-                web3j,
-                transactionManager,
-                DefaultGasProvider.GAS_PRICE,
-                DefaultGasProvider.GAS_LIMIT);
+                resolverAddress, web3j, transactionManager, new DefaultGasProvider());
     }
 
     boolean isSynced() throws Exception {
