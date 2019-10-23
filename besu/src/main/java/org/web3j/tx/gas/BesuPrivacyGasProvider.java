@@ -16,7 +16,7 @@ import java.math.BigInteger;
 
 public class BesuPrivacyGasProvider extends StaticGasProvider {
     public BesuPrivacyGasProvider(BigInteger gasPrice) {
-        super(gasPrice, BigInteger.valueOf(23176));
+        super(gasPrice, BigInteger.valueOf(3000000));
     }
 
     public BesuPrivacyGasProvider(BigInteger gasPrice, BigInteger gasLimit) {
