@@ -127,7 +127,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
                 nodeAlice.eeaSendRawTransaction(signedTransactionData).send().getTransactionHash();
 
         final PollingPrivateTransactionReceiptProcessor receiptProcessor =
-                new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1 * 1000, 30);
+                new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1 * 1000, 120);
         final PrivateTransactionReceipt receipt =
                 receiptProcessor.waitForTransactionReceipt(transactionHash);
 
@@ -135,6 +135,10 @@ public class BesuPrivacyQuickstartIntegrationTest {
         assertThat(receipt.getLogs().size(), is(0));
         assertNull(receipt.getTo());
         assertNotNull(receipt.getContractAddress());
+
+        assertNotNull(receipt.getStatus());
+
+        assertNull(receipt.getRevertReason());
 
         final PrivateTransactionWithPrivacyGroup privateTransaction =
                 (PrivateTransactionWithPrivacyGroup)
