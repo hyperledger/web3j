@@ -13,7 +13,6 @@
 package org.web3j.protocol.http;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -163,9 +162,7 @@ public class HttpService extends Service {
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
             if (responseBody != null) {
-                String body = responseBody.string();
-                System.out.println(body);
-                return new ByteArrayInputStream(body.getBytes());
+                return buildInputStream(responseBody);
             } else {
                 return null;
             }
