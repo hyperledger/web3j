@@ -48,6 +48,9 @@ public class StructuredDataEncoder {
     final String arrayTypeRegex = "^([a-zA-Z_$][a-zA-Z_$0-9]*)((\\[([1-9]\\d*)?\\])+)$";
     final Pattern arrayTypePattern = Pattern.compile(arrayTypeRegex);
 
+    final String bytesTypeRegex = "^bytes[0-9][0-9]?$";
+    final Pattern bytesTypePattern = Pattern.compile(bytesTypeRegex);
+
     // This regex tries to extract the dimensions from the
     // square brackets of an array declaration using the ``Regex Groups``.
     // Eg- It extracts ``5, 6, 7`` from ``[5][6][7]``
@@ -246,15 +249,17 @@ public class StructuredDataEncoder {
                 byte[] hashedValue = Numeric.hexStringToByteArray(sha3String((String) value));
                 encValues.add(hashedValue);
             } else if (field.getType().equals("bytes")) {
-                encTypes.add("bytes32");
-                byte[] hashedValue = sha3((byte[]) value);
-                encValues.add(hashedValue);
+                encTypes.add(("bytes32"));
+                encValues.add(sha3(Numeric.hexStringToByteArray((String) value)));
             } else if (types.containsKey(field.getType())) {
                 // User Defined Type
                 byte[] hashedValue =
                         sha3(encodeData(field.getType(), (HashMap<String, Object>) value));
                 encTypes.add("bytes32");
                 encValues.add(hashedValue);
+            } else if (bytesTypePattern.matcher(field.getType()).find()) {
+                encTypes.add(field.getType());
+                encValues.add(Numeric.hexStringToByteArray((String) value));
             } else if (arrayTypePattern.matcher(field.getType()).find()) {
                 String baseTypeName = field.getType().substring(0, field.getType().indexOf('['));
                 List<Integer> expectedDimensions =
@@ -359,7 +364,12 @@ public class StructuredDataEncoder {
         HashMap<String, Object> data =
                 oMapper.convertValue(jsonMessageObject.getDomain(), HashMap.class);
 
-        data.put("chainId", ((HashMap<String, Object>) data.get("chainId")).get("value"));
+        if (data.get("chainId") != null) {
+            data.put("chainId", ((HashMap<String, Object>) data.get("chainId")).get("value"));
+        } else {
+            data.remove("chainId");
+        }
+
         data.put(
                 "verifyingContract",
                 ((HashMap<String, Object>) data.get("verifyingContract")).get("value"));
