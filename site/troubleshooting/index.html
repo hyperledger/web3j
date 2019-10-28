@@ -1,0 +1,917 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Documentation portal for the web3j Blockchain Library">
+      
+      
+        <link rel="canonical" href="https://web3j.io/troubleshooting/">
+      
+      
+        <meta name="author" content="Web3 Labs">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>Troubleshooting - Web3j</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+      <link rel="manifest" href="../manifest.webmanifest">
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-85710619-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#troubleshooting" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://web3j.io/" title="Web3j" class="md-header-nav__button md-logo">
+          
+            <img src="../img/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Web3j
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Troubleshooting
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/web3j/web3j/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    web3j/web3j
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+<nav class="md-tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://web3j.io/" title="Web3j" class="md-nav__button md-logo">
+      
+        <img src="../img/logo.png" width="48" height="48">
+      
+    </a>
+    Web3j
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/web3j/web3j/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    web3j/web3j
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../quickstart/" title="Quickstart" class="md-nav__link">
+      Quickstart
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../getting_started/" title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../modules/" title="Modules" class="md-nav__link">
+      Modules
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../transactions/" title="Transactions" class="md-nav__link">
+      Transactions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../smart_contracts/" title="Smart Contracts" class="md-nav__link">
+      Smart Contracts
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../application_binary_interface/" title="Application Binary Interface" class="md-nav__link">
+      Application Binary Interface
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../recursive_length_prefix/" title="Recursive Length Prefix" class="md-nav__link">
+      Recursive Length Prefix
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../filters_and_events/" title="Filters and Events" class="md-nav__link">
+      Filters and Events
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../command_line_tools/" title="Command Line Tools" class="md-nav__link">
+      Command Line Tools
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../management_apis/" title="Management Apis" class="md-nav__link">
+      Management Apis
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../using_infura_with_web3j/" title="Using Infura with Web3j" class="md-nav__link">
+      Using Infura with Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ethereum_name_service/" title="Ethereum Name Service" class="md-nav__link">
+      Ethereum Name Service
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../contracts_supported_by_web3j/" title="Contracts Supported by Web3j" class="md-nav__link">
+      Contracts Supported by Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Troubleshooting
+      </label>
+    
+    <a href="./" title="Troubleshooting" class="md-nav__link md-nav__link--active">
+      Troubleshooting
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#do-you-have-a-sample-web3j-project" class="md-nav__link">
+    Do you have a sample web3j project
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#im-submitting-a-transaction-but-its-not-being-mined" class="md-nav__link">
+    I'm submitting a transaction, but it's not being mined
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#i-want-to-see-details-of-the-json-rpc-requests-and-responses" class="md-nav__link">
+    I want to see details of the JSON-RPC requests and responses
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#i-want-to-obtain-some-ether-on-testnet-but-dont-want-to-have-to-mine-it-myself" class="md-nav__link">
+    I want to obtain some Ether on Testnet, but don't want to have to mine it myself
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction" class="md-nav__link">
+    How do I obtain the return value from a smart contract method invoked by a transaction?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-it-possible-to-send-arbitrary-text-with-transactions" class="md-nav__link">
+    Is it possible to send arbitrary text with transactions?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ive-generated-my-smart-contract-wrapper-but-the-binary-for-the-smart-contract-is-empty" class="md-nav__link">
+    I've generated my smart contract wrapper, but the binary for the smart contract is empty?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#my-ens-lookups-are-failing" class="md-nav__link">
+    My ENS lookups are failing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#do-you-have-a-project-donation-address" class="md-nav__link">
+    Do you have a project donation address?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-can-i-get-commercial-support-for-web3j" class="md-nav__link">
+    Where can I get commercial support for web3j?
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../projects_using_web3j/" title="Projects using Web3j" class="md-nav__link">
+      Projects using Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../companies_using_web3j/" title="Companies using Web3j" class="md-nav__link">
+      Companies using Web3j
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../developer_guide/" title="Developer Guide" class="md-nav__link">
+      Developer Guide
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../links_and_useful_resources/" title="Links and Useful Resources" class="md-nav__link">
+      Links and Useful Resources
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../thanks_and_credits/" title="Thanks and Credits" class="md-nav__link">
+      Thanks and Credits
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#do-you-have-a-sample-web3j-project" class="md-nav__link">
+    Do you have a sample web3j project
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#im-submitting-a-transaction-but-its-not-being-mined" class="md-nav__link">
+    I'm submitting a transaction, but it's not being mined
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#i-want-to-see-details-of-the-json-rpc-requests-and-responses" class="md-nav__link">
+    I want to see details of the JSON-RPC requests and responses
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#i-want-to-obtain-some-ether-on-testnet-but-dont-want-to-have-to-mine-it-myself" class="md-nav__link">
+    I want to obtain some Ether on Testnet, but don't want to have to mine it myself
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction" class="md-nav__link">
+    How do I obtain the return value from a smart contract method invoked by a transaction?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-it-possible-to-send-arbitrary-text-with-transactions" class="md-nav__link">
+    Is it possible to send arbitrary text with transactions?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ive-generated-my-smart-contract-wrapper-but-the-binary-for-the-smart-contract-is-empty" class="md-nav__link">
+    I've generated my smart contract wrapper, but the binary for the smart contract is empty?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#my-ens-lookups-are-failing" class="md-nav__link">
+    My ENS lookups are failing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#do-you-have-a-project-donation-address" class="md-nav__link">
+    Do you have a project donation address?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-can-i-get-commercial-support-for-web3j" class="md-nav__link">
+    Where can I get commercial support for web3j?
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/web3j/web3j/edit/master/docs/troubleshooting.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h1>
+<h2 id="do-you-have-a-sample-web3j-project">Do you have a sample web3j project<a class="headerlink" href="#do-you-have-a-sample-web3j-project" title="Permanent link">&para;</a></h2>
+<p>Yes, refer to the web3j sample project outlined in the <a href="../quickstart/">Quickstart</a>.</p>
+<h2 id="im-submitting-a-transaction-but-its-not-being-mined">I'm submitting a transaction, but it's not being mined<a class="headerlink" href="#im-submitting-a-transaction-but-its-not-being-mined" title="Permanent link">&para;</a></h2>
+<p>After creating and sending a transaction, you receive a transaction hash, however calling <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">eth_getTransactionReceipt</a> always returns a blank value, indicating the transaction has not been
+mined:</p>
+<div class="codehilite"><pre><span></span><span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">sendTransaction</span><span class="o">(...);</span>
+
+<span class="c1">// you loop through the following expecting to eventually get a receipt once the transaction</span>
+<span class="c1">// is mined</span>
+<span class="n">EthGetTransactionReceipt</span><span class="o">.</span><span class="na">TransactionReceipt</span> <span class="n">transactionReceipt</span> <span class="o">=</span>
+        <span class="n">web3j</span><span class="o">.</span><span class="na">ethGetTransactionReceipt</span><span class="o">(</span><span class="n">transactionHash</span><span class="o">).</span><span class="na">sendAsync</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+
+<span class="k">if</span> <span class="o">(!</span><span class="n">transactionReceipt</span><span class="o">.</span><span class="na">isPresent</span><span class="o">())</span> <span class="o">{</span>
+    <span class="c1">// try again, ad infinitum</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<p>However, you never receive a transaction receipt. Unfortunately there may not be a an error in your Ethereum client indicating any issues with the transaction:</p>
+<div class="codehilite"><pre><span></span><span class="n">I1025</span> <span class="mi">18</span><span class="o">:</span><span class="mi">13</span><span class="o">:</span><span class="mf">32.817691</span> <span class="n">eth</span><span class="o">/</span><span class="n">api</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mi">1185</span><span class="o">]</span> <span class="n">Tx</span><span class="o">(</span><span class="mh">0xeaac9aab7f9aeab189acd8714c5a60c7424f86820884b815c4448cfcd4d9fc79</span><span class="o">)</span> <span class="n">to</span><span class="o">:</span> <span class="mh">0x9c98e381edc5fe1ac514935f3cc3edaa764cf004</span>
+</pre></div>
+
+
+<p>The easiest way to see if the submission is waiting to mined is to refer to Etherscan and search for the address the transaction was sent using <a href="https://testnet.etherscan.io/address/0x">https://testnet.etherscan.io/address/0x</a>... If the submission has been successful it should be visible in Etherscan within seconds of you performing the transaction submission. The wait is for the mining to take place.</p>
+<p><img alt="image" src="../img/pending_transaction.png" /></p>
+<p>If there is no sign of it then the transaction has vanished into the ether (sorry). The likely cause of this is likely to be to do with the transaction's nonce either not being set, or being too low. Please refer to the section <a href="../transactions/#the-transaction-nonce">Transaction nonce</a> for more information.</p>
+<h2 id="i-want-to-see-details-of-the-json-rpc-requests-and-responses">I want to see details of the JSON-RPC requests and responses<a class="headerlink" href="#i-want-to-see-details-of-the-json-rpc-requests-and-responses" title="Permanent link">&para;</a></h2>
+<p>web3j uses the <a href="https://www.slf4j.org/">SLF4J</a> logging facade, which you can easily integrate with your preferred logging framework. One lightweight approach is to use <a href="https://logback.qos.ch/">LOGBack</a>, which is already configured in the integration-tests module.</p>
+<p>Include the LOGBack dependencies listed in <a href="https://github.com/web3j/web3j/blob/master/integration-tests/build.gradle#L7">integration-tests/build.gradle</a> and associated log configuration as per <a href="https://github.com/web3j/web3j/blob/master/integration-tests/src/test/resources/logback-test.xml">integration-tests/src/test/resources/logback-test.xml</a>.</p>
+<p><strong>Note:</strong> if you are configuring logging for an application (not tests), you will need to ensure that the Logback dependencies are configured as <em>compile</em> dependencies, and that the configuration file is named and
+located in <em>src/main/resources/logback.xml</em>.</p>
+<h2 id="i-want-to-obtain-some-ether-on-testnet-but-dont-want-to-have-to-mine-it-myself">I want to obtain some Ether on Testnet, but don't want to have to mine it myself<a class="headerlink" href="#i-want-to-obtain-some-ether-on-testnet-but-dont-want-to-have-to-mine-it-myself" title="Permanent link">&para;</a></h2>
+<p>Please refer to the <a href="../transactions/#ethereum-testnets">Ethereum testnets</a> for how to obtain some Ether.</p>
+<h2 id="how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction">How do I obtain the return value from a smart contract method invoked by a transaction?<a class="headerlink" href="#how-do-i-obtain-the-return-value-from-a-smart-contract-method-invoked-by-a-transaction" title="Permanent link">&para;</a></h2>
+<p>You can't. It is not possible to return values from methods on smart contracts that are called as part of a transaction. If you wish to read a value during a transaction, you must use <a href="http://solidity.readthedocs.io/en/develop/contracts.html#events">Events</a>. To query values from smart contracts you must use a call, which is separate to a transaction. These methods should be marked as <a href="http://solidity.readthedocs.io/en/develop/contracts.html?highlight=constant#constant-functions">constant</a> functions. <a href="../smart_contracts/#solidity-smart-contract-wrappers">Solidity smart contract wrappers</a> created by web3j handle these differences for you.</p>
+<p>The following StackExchange <a href="http://ethereum.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call">post</a> is useful for background.</p>
+<h2 id="is-it-possible-to-send-arbitrary-text-with-transactions">Is it possible to send arbitrary text with transactions?<a class="headerlink" href="#is-it-possible-to-send-arbitrary-text-with-transactions" title="Permanent link">&para;</a></h2>
+<p>Yes it is. Text should be ASCII encoded and provided as a hexadecimal String in the data field of the transaction. This is demonstrated below:</p>
+<div class="codehilite"><pre><span></span><span class="n">RawTransaction</span><span class="o">.</span><span class="na">createTransaction</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">nonce</span><span class="o">&gt;,</span> <span class="n">GAS_PRICE</span><span class="o">,</span> <span class="n">GAS_LIMIT</span><span class="o">,</span> <span class="s">&quot;0x&lt;address&gt;&quot;</span><span class="o">,</span> <span class="o">&lt;</span><span class="n">amount</span><span class="o">&gt;,</span> <span class="s">&quot;0x&lt;hex encoded text&gt;&quot;</span><span class="o">);</span>
+
+<span class="kt">byte</span><span class="o">[]</span> <span class="n">signedMessage</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="o">.</span><span class="na">signMessage</span><span class="o">(</span><span class="n">rawTransaction</span><span class="o">,</span> <span class="n">ALICE</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">hexValue</span> <span class="o">=</span> <span class="n">Numeric</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">signedMessage</span><span class="o">);</span>
+
+<span class="n">EthSendTransaction</span> <span class="n">ethSendTransaction</span> <span class="o">=</span>
+        <span class="n">web3j</span><span class="o">.</span><span class="na">ethSendRawTransaction</span><span class="o">(</span><span class="n">hexValue</span><span class="o">).</span><span class="na">send</span><span class="o">();</span>
+<span class="n">String</span> <span class="n">transactionHash</span> <span class="o">=</span> <span class="n">ethSendTransaction</span><span class="o">.</span><span class="na">getTransactionHash</span><span class="o">();</span>
+<span class="o">...</span>
+</pre></div>
+
+
+<p><em>Note</em>: Please ensure you increase the gas limit on the transaction to allow for the storage of text.</p>
+<p>The following StackExchange <a href="http://ethereum.stackexchange.com/questions/2466/how-do-i-send-an-arbitary-message-to-an-ethereum-address">post</a> is useful for background.</p>
+<h2 id="ive-generated-my-smart-contract-wrapper-but-the-binary-for-the-smart-contract-is-empty">I've generated my smart contract wrapper, but the binary for the smart contract is empty?<a class="headerlink" href="#ive-generated-my-smart-contract-wrapper-but-the-binary-for-the-smart-contract-is-empty" title="Permanent link">&para;</a></h2>
+<p>If you have defined an interface in Solidity, but one of your method implementations doesn't match the original interface definitions, the produced binary will be blank.</p>
+<p>In the following example:</p>
+<div class="codehilite"><pre><span></span><span class="n">contract</span> <span class="n">Web3jToken</span> <span class="n">is</span> <span class="n">ERC20Basic</span><span class="o">,</span> <span class="n">Ownable</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="n">function</span> <span class="nf">transfer</span><span class="o">(</span><span class="n">address</span> <span class="n">_from</span><span class="o">,</span> <span class="n">address</span> <span class="n">_to</span><span class="o">,</span> <span class="n">uint256</span> <span class="n">_value</span><span class="o">)</span> <span class="n">onlyOwner</span> <span class="nf">returns</span> <span class="o">(</span><span class="n">bool</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<p>We forgot to define the <em>from</em> parameter in one of the inherited contracts:</p>
+<div class="codehilite"><pre><span></span><span class="nx">contract</span> <span class="nx">ERC20Basic</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="kd">function</span> <span class="nx">transfer</span><span class="p">(</span><span class="nx">address</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">uint256</span> <span class="nx">value</span><span class="p">)</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">bool</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>The Solidity compiler will not complain about this, however, the produced binary file for the Web3jToken will be blank.</p>
+<h2 id="my-ens-lookups-are-failing">My ENS lookups are failing<a class="headerlink" href="#my-ens-lookups-are-failing" title="Permanent link">&para;</a></h2>
+<p>Are you sure that you are connecting to the correct network to perform the lookup?</p>
+<p>If web3j is telling you that the node is not in sync, you may need to change the <em>syncThreshold</em> in the
+<a href="../ethereum_name_service/#web3j-implementation">ENS resolver</a>.</p>
+<h2 id="do-you-have-a-project-donation-address">Do you have a project donation address?<a class="headerlink" href="#do-you-have-a-project-donation-address" title="Permanent link">&para;</a></h2>
+<p>Absolutely, you can contribute Bitcoin or Ether to help fund the development of web3j.</p>
+<hr />
+<p>Ethereum   0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420</p>
+<p>Bitcoin       1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G</p>
+<hr />
+<h2 id="where-can-i-get-commercial-support-for-web3j">Where can I get commercial support for web3j?<a class="headerlink" href="#where-can-i-get-commercial-support-for-web3j" title="Permanent link">&para;</a></h2>
+<p>Commercial support and training is available from <a href="https://www.web3labs.com/">web3labs</a>.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../contracts_supported_by_web3j/" title="Contracts Supported by Web3j" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Contracts Supported by Web3j
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../projects_using_web3j/" title="Projects using Web3j" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Projects using Web3j
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2017-2019 Web3 Labs Ltd
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/web3j" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/web3labs" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://linkedin.com/in/web3labs" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+  </body>
+</html>
