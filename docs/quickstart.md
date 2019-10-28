@@ -27,7 +27,7 @@ web3j import
 Then to build your project run:
 
 ```bash
-./gradle build
+./gradlew build
 ```
 
 For more information on using the Web3j CLI, head to the [CLI section](command_line_tools.md).
