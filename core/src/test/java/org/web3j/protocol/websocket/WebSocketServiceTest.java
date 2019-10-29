@@ -56,6 +56,7 @@ public class WebSocketServiceTest {
     private static final int REQUEST_ID = 1;
 
     private WebSocketClient webSocketClient = mock(WebSocketClient.class);
+    private WebSocketListener listener;
     private ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
 
     private WebSocketService service = new WebSocketService(webSocketClient, executorService, true);
@@ -104,6 +105,37 @@ public class WebSocketServiceTest {
         thrown.expectMessage("Failed to connect to WebSocket");
         when(webSocketClient.connectBlocking()).thenReturn(false);
         service.connect();
+    }
+
+    @Test
+    public void testAddedWebSocketListener() throws Exception {
+        doAnswer(
+                        invocation -> {
+                            listener = invocation.getArgumentAt(0, WebSocketListener.class);
+                            return null;
+                        })
+                .when(webSocketClient)
+                .setListener(any());
+
+        final CountDownLatch onMessageCountDownLatch = new CountDownLatch(1);
+        final CountDownLatch onCloseCountDownLatch = new CountDownLatch(1);
+        final CountDownLatch onErrorCountDownLatch = new CountDownLatch(1);
+
+        service.connect(
+                message -> onMessageCountDownLatch.countDown(),
+                throwable -> onErrorCountDownLatch.countDown(),
+                onCloseCountDownLatch::countDown);
+
+        service.sendAsync(request, Web3ClientVersion.class);
+        listener.onMessage(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[],\"id\":1}");
+        assertTrue(onMessageCountDownLatch.await(2L, TimeUnit.SECONDS));
+
+        listener.onError(new Exception());
+        assertTrue(onErrorCountDownLatch.await(2L, TimeUnit.SECONDS));
+
+        listener.onClose();
+        assertTrue(onCloseCountDownLatch.await(2L, TimeUnit.SECONDS));
     }
 
     @Test
