@@ -41,9 +41,11 @@ public abstract class PrivateTransaction {
             final TreeNode node = p.readValueAsTree();
 
             // Select the concrete class based on the existence of a property
-            if (node.get("privateFor").isArray()) {
+            if (node.get("privateFor") != null && node.get("privateFor").isArray()) {
                 return p.getCodec().treeToValue(node, PrivateTransactionLegacy.class);
-            } else if (node.get("privateFor").isValueNode()) {
+            } else if ((node.get("privateFor") != null && node.get("privateFor").isValueNode())
+                    || (node.get("privacyGroupId") != null
+                            && node.get("privacyGroupId").isValueNode())) {
                 return p.getCodec().treeToValue(node, PrivateTransactionWithPrivacyGroup.class);
             }
 

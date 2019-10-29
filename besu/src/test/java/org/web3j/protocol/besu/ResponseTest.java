@@ -279,6 +279,11 @@ public class ResponseTest extends ResponseTester {
                         + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"output\":\"myRlpEncodedOutputFromPrivateContract\",\n"
+                        + "        \"status\":\"0x1\",\n"
+                        + "        \"privacyGroupId\":\"Qlv2Jhn3C3/2KrPU7Jeu/9F6rElio9LNBSieb0Xk/Ro=\",\n"
+                        + "        \"publicHash\": \"0x75aaac4be865057a576872587c9672197f1bab25e64b588c81f483c5869e0fa7\",\n"
+                        + "        \"privateHash\": \"0x5504d87dc6c6ab8ea4f5c988bcf1c41d40e6b594b80849d4444c432099ee6c34\",\n"
+                        + "        \"privateFrom\": \"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
                         + "        \"logs\": [{\n"
                         + "            \"removed\": false,\n"
                         + "            \"logIndex\": \"0x1\",\n"
@@ -311,11 +316,19 @@ public class ResponseTest extends ResponseTester {
                                         "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                                         "mined",
-                                        Collections.singletonList(
-                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))));
+                                        Arrays.asList(
+                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))),
+                        "0x75aaac4be865057a576872587c9672197f1bab25e64b588c81f483c5869e0fa7",
+                        "0x5504d87dc6c6ab8ea4f5c988bcf1c41d40e6b594b80849d4444c432099ee6c34",
+                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                        null,
+                        "Qlv2Jhn3C3/2KrPU7Jeu/9F6rElio9LNBSieb0Xk/Ro=",
+                        "0x1",
+                        null);
 
         PrivGetTransactionReceipt privGetTransactionReceipt =
                 deserialiseResponse(PrivGetTransactionReceipt.class);
+
         assertThat(
                 privGetTransactionReceipt.getTransactionReceipt().get(),
                 equalTo(transactionReceipt));

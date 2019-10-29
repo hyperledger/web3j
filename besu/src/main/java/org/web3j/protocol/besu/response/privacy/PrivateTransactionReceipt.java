@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.besu.response.privacy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +29,13 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
     private final String to;
     private final String output;
     private final List<Log> logs;
+    private final String publicHash;
+    private final String privateHash;
+    private final String privateFrom;
+    private final ArrayList<String> privateFor;
+    private final String privacyGroupId;
+    private final String status;
+    private final String revertReason;
 
     @JsonCreator
     public PrivateTransactionReceipt(
@@ -35,12 +43,26 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
             @JsonProperty(value = "from") final String from,
             @JsonProperty(value = "to") final String to,
             @JsonProperty(value = "output") final String output,
-            @JsonProperty(value = "logs") final List<Log> logs) {
+            @JsonProperty(value = "logs") final List<Log> logs,
+            @JsonProperty(value = "publicHash") final String publicHash,
+            @JsonProperty(value = "privateHash") final String privateHash,
+            @JsonProperty(value = "privateFrom") final String privateFrom,
+            @JsonProperty(value = "privateFor") final ArrayList<String> privateFor,
+            @JsonProperty(value = "privacyGroupId") final String privacyGroupId,
+            @JsonProperty(value = "status") final String status,
+            @JsonProperty(value = "revertReason") final String revertReason) {
         this.contractAddress = contractAddress;
         this.from = from;
         this.to = to;
         this.output = output;
         this.logs = logs;
+        this.publicHash = publicHash;
+        this.privateHash = privateHash;
+        this.privateFrom = privateFrom;
+        this.privateFor = privateFor;
+        this.privacyGroupId = privacyGroupId;
+        this.status = status;
+        this.revertReason = revertReason;
     }
 
     @Override
@@ -67,28 +89,70 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
         return logs;
     }
 
+    public String getRevertReason() {
+        return revertReason;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
-        return Objects.equals(getContractAddress(), that.getContractAddress())
-                && getFrom().equals(that.getFrom())
-                && Objects.equals(getTo(), that.getTo())
-                && getOutput().equals(that.getOutput())
-                && getLogs().equals(that.getLogs());
+    public String getStatus() {
+        return status;
+    }
+
+    public String getPublicHash() {
+        return publicHash;
+    }
+
+    public String getPrivateHash() {
+        return privateHash;
+    }
+
+    public String getPrivateFrom() {
+        return privateFrom;
+    }
+
+    public ArrayList<String> getPrivateFor() {
+        return privateFor;
+    }
+
+    public String getPrivacyGroupId() {
+        return privacyGroupId;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        final PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
+        return Objects.equals(contractAddress, that.contractAddress)
+                && Objects.equals(from, that.from)
+                && Objects.equals(to, that.to)
+                && Objects.equals(output, that.output)
+                && Objects.equals(logs, that.logs)
+                && Objects.equals(publicHash, that.publicHash)
+                && Objects.equals(privateHash, that.privateHash)
+                && Objects.equals(privateFrom, that.privateFrom)
+                && Objects.equals(privateFor, that.privateFor)
+                && Objects.equals(privacyGroupId, that.privacyGroupId)
+                && Objects.equals(status, that.status)
+                && Objects.equals(revertReason, that.revertReason);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                super.hashCode(), getContractAddress(), getFrom(), getTo(), getOutput(), getLogs());
+                super.hashCode(),
+                contractAddress,
+                from,
+                to,
+                output,
+                logs,
+                publicHash,
+                privateHash,
+                privateFrom,
+                privateFor,
+                privacyGroupId,
+                status,
+                revertReason);
     }
 }
