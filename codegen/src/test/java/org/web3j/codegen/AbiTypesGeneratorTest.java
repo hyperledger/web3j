@@ -12,12 +12,12 @@
  */
 package org.web3j.codegen;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 public class AbiTypesGeneratorTest extends TempFileProvider {
 

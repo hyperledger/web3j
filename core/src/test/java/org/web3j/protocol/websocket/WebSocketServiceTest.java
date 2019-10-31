@@ -26,10 +26,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -39,9 +37,10 @@ import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -68,10 +67,9 @@ public class WebSocketServiceTest {
                     service,
                     Web3ClientVersion.class);
 
-    @Rule public ExpectedException thrown = ExpectedException.none();
     private Request<Object, EthSubscribe> subscribeRequest;
 
-    @Before
+    @BeforeEach
     public void before() throws InterruptedException {
         when(webSocketClient.connectBlocking()).thenReturn(true);
         request.setId(1);
@@ -79,9 +77,8 @@ public class WebSocketServiceTest {
 
     @Test
     public void testThrowExceptionIfServerUrlIsInvalid() {
-        thrown.expect(RuntimeException.class);
-        thrown.expectMessage("Failed to parse URL: 'invalid\\url'");
-        new WebSocketService("invalid\\url", true);
+
+        assertThrows(RuntimeException.class, () -> new WebSocketService("invalid\\url", true));
     }
 
     @Test
@@ -96,22 +93,24 @@ public class WebSocketServiceTest {
         when(webSocketClient.connectBlocking()).thenThrow(new InterruptedException());
         service.connect();
 
-        assertTrue("Interrupted flag was not set properly", Thread.currentThread().isInterrupted());
+        assertTrue(Thread.currentThread().isInterrupted());
     }
 
     @Test
     public void testThrowExceptionIfConnectionFailed() throws Exception {
-        thrown.expect(ConnectException.class);
-        thrown.expectMessage("Failed to connect to WebSocket");
-        when(webSocketClient.connectBlocking()).thenReturn(false);
-        service.connect();
+        assertThrows(
+                ConnectException.class,
+                () -> {
+                    when(webSocketClient.connectBlocking()).thenReturn(false);
+                    service.connect();
+                });
     }
 
     @Test
     public void testAddedWebSocketListener() throws Exception {
         doAnswer(
                         invocation -> {
-                            listener = invocation.getArgumentAt(0, WebSocketListener.class);
+                            listener = invocation.getArgument(0, WebSocketListener.class);
                             return null;
                         })
                 .when(webSocketClient)
@@ -168,36 +167,48 @@ public class WebSocketServiceTest {
     }
 
     @Test
-    public void testIgnoreInvalidReplies() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("Failed to parse incoming WebSocket message");
-        service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage("{");
+    public void testIgnoreInvalidReplies() {
+
+        assertThrows(
+                IOException.class,
+                () -> {
+                    service.sendAsync(request, Web3ClientVersion.class);
+                    service.onWebSocketMessage("{");
+                });
     }
 
     @Test
-    public void testThrowExceptionIfIdHasInvalidType() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("'id' expected to be long, but it is: 'true'");
-        service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage("{\"id\":true}");
+    public void testThrowExceptionIfIdHasInvalidType() {
+
+        assertThrows(
+                IOException.class,
+                () -> {
+                    service.sendAsync(request, Web3ClientVersion.class);
+                    service.onWebSocketMessage("{\"id\":true}");
+                });
     }
 
     @Test
-    public void testThrowExceptionIfIdIsMissing() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("Unknown message type");
-        service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage("{}");
+    public void testThrowExceptionIfIdIsMissing() {
+
+        assertThrows(
+                IOException.class,
+                () -> {
+                    service.sendAsync(request, Web3ClientVersion.class);
+                    service.onWebSocketMessage("{}");
+                });
     }
 
     @Test
-    public void testThrowExceptionIfUnexpectedIdIsReceived() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("Received reply for unexpected request id: 12345");
-        service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage(
-                "{\"jsonrpc\":\"2.0\",\"id\":12345,\"result\":\"geth-version\"}");
+    public void testThrowExceptionIfUnexpectedIdIsReceived() {
+
+        assertThrows(
+                IOException.class,
+                () -> {
+                    service.sendAsync(request, Web3ClientVersion.class);
+                    service.onWebSocketMessage(
+                            "{\"jsonrpc\":\"2.0\",\"id\":12345,\"result\":\"geth-version\"}");
+                });
     }
 
     @Test
@@ -223,34 +234,44 @@ public class WebSocketServiceTest {
     }
 
     @Test
-    public void testCloseRequestWhenConnectionIsClosed() throws Exception {
-        thrown.expect(ExecutionException.class);
-        CompletableFuture<Web3ClientVersion> reply =
-                service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketClose();
+    public void testCloseRequestWhenConnectionIsClosed() {
 
-        assertTrue(reply.isDone());
-        reply.get();
+        assertThrows(
+                ExecutionException.class,
+                () -> {
+                    CompletableFuture<Web3ClientVersion> reply =
+                            service.sendAsync(request, Web3ClientVersion.class);
+                    service.onWebSocketClose();
+
+                    assertTrue(reply.isDone());
+                    reply.get();
+                });
     }
 
-    @Test(expected = ExecutionException.class)
-    public void testCancelRequestAfterTimeout() throws Exception {
-        when(executorService.schedule(
-                        any(Runnable.class),
-                        eq(WebSocketService.REQUEST_TIMEOUT),
-                        eq(TimeUnit.SECONDS)))
-                .then(
-                        invocation -> {
-                            Runnable runnable = invocation.getArgumentAt(0, Runnable.class);
-                            runnable.run();
-                            return null;
-                        });
+    @Test
+    public void testCancelRequestAfterTimeout() {
 
-        CompletableFuture<Web3ClientVersion> reply =
-                service.sendAsync(request, Web3ClientVersion.class);
+        assertThrows(
+                ExecutionException.class,
+                () -> {
+                    when(executorService.schedule(
+                                    any(Runnable.class),
+                                    eq(WebSocketService.REQUEST_TIMEOUT),
+                                    eq(TimeUnit.SECONDS)))
+                            .then(
+                                    invocation -> {
+                                        Runnable runnable =
+                                                invocation.getArgument(0, Runnable.class);
+                                        runnable.run();
+                                        return null;
+                                    });
 
-        assertTrue(reply.isDone());
-        reply.get();
+                    CompletableFuture<Web3ClientVersion> reply =
+                            service.sendAsync(request, Web3ClientVersion.class);
+
+                    assertTrue(reply.isDone());
+                    reply.get();
+                });
     }
 
     @Test

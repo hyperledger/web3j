@@ -12,13 +12,13 @@
  */
 package org.web3j.ens;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EnsIT {
 

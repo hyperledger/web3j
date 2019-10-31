@@ -12,7 +12,10 @@
  */
 package org.web3j.codegen;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,15 +26,15 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
 import org.web3j.utils.Strings;
 
 import static java.util.Collections.emptyList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
 import static org.web3j.codegen.FunctionWrapperGenerator.PRIMITIVE_TYPES_ARG;
 import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
@@ -247,7 +250,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             boolean result = task.call();
 
             System.out.println(diagnostics.getDiagnostics());
-            assertTrue("Generated contract contains compile time error", result);
+            assertTrue(result);
         }
     }
 }

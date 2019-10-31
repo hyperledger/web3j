@@ -20,12 +20,13 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class FlowablesTests {
 
@@ -85,13 +86,19 @@ public class FlowablesTests {
         assertTrue(subscription.isDisposed());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testRangeFlowableIllegalLowerBound() throws InterruptedException {
-        Flowables.range(BigInteger.valueOf(-1), BigInteger.ONE);
+    @Test
+    public void testRangeFlowableIllegalLowerBound() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Flowables.range(BigInteger.valueOf(-1), BigInteger.ONE));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testRangeFlowableIllegalBounds() throws InterruptedException {
-        Flowables.range(BigInteger.TEN, BigInteger.ONE);
+    @Test
+    public void testRangeFlowableIllegalBounds() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Flowables.range(BigInteger.TEN, BigInteger.ONE));
     }
 }

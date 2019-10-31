@@ -16,19 +16,27 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
-import org.web3j.protocol.besu.response.privacy.*;
+import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
+import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
+import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
+import org.web3j.protocol.besu.response.privacy.PrivGetPrivateTransaction;
+import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
+import org.web3j.protocol.besu.response.privacy.PrivacyGroup;
+import org.web3j.protocol.besu.response.privacy.PrivateTransactionLegacy;
+import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
+import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.utils.Base64String;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ResponseTest extends ResponseTester {
 

@@ -14,7 +14,7 @@ package org.web3j.abi;
 
 import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
@@ -39,7 +39,8 @@ import org.web3j.abi.datatypes.primitive.Short;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.web3j.abi.TypeEncoder.encode;
 
 public class TypeEncoderTest {
@@ -85,17 +86,22 @@ public class TypeEncoderTest {
                 is("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testInvalidUintEncode() {
-        new Uint64(BigInteger.valueOf(-1));
+        assertThrows(UnsupportedOperationException.class, () -> new Uint64(BigInteger.valueOf(-1)));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testTooLargeUintEncode() {
         // 1 more than "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-        new Uint(
-                new BigInteger(
-                        "10000000000000000000000000000000000000000000000000000000000000000", 16));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    new Uint(
+                            new BigInteger(
+                                    "10000000000000000000000000000000000000000000000000000000000000000",
+                                    16));
+                });
     }
 
     @Test
@@ -247,12 +253,19 @@ public class TypeEncoderTest {
                 is("000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testInvalidAddress() {
-        Address address =
-                new Address("0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
-        assertThat(address.getTypeAsString(), is("address"));
-        TypeEncoder.encodeAddress(address);
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    Address address =
+                            new Address(
+                                    "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
+                    assertThat(address.getTypeAsString(), is("address"));
+
+                    TypeEncoder.encodeAddress(address);
+                });
     }
 
     @Test
@@ -514,17 +527,25 @@ public class TypeEncoderTest {
                 is("0000000000000000000000000000000000000000000000007fffffffffffffff"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testPrimitiveFloat() {
-        assertThat(
-                encode(new org.web3j.abi.datatypes.primitive.Float(0)),
-                is("0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    assertThat(
+                            encode(new org.web3j.abi.datatypes.primitive.Float(0)),
+                            is("0000000000000000000000000000000000000000000000000000000000000000"));
+                });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testPrimitiveDouble() {
-        assertThat(
-                encode(new org.web3j.abi.datatypes.primitive.Double(0)),
-                is("0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    assertThat(
+                            encode(new org.web3j.abi.datatypes.primitive.Double(0)),
+                            is("0000000000000000000000000000000000000000000000000000000000000000"));
+                });
     }
 }

@@ -16,7 +16,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
@@ -28,11 +28,11 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import static junit.framework.TestCase.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Integration test demonstrating integration with Greeter contract taken from the <a
@@ -57,9 +57,7 @@ public class GreeterContractIT extends Scenario {
 
         assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
 
-        assertFalse(
-                "Contract execution ran out of gas",
-                createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertFalse(createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
         String contractAddress = createTransactionReceipt.getContractAddress();
 

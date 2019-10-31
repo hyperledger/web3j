@@ -15,18 +15,18 @@ package org.web3j.crypto;
 import java.io.File;
 import java.nio.file.Files;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.SampleKeys.CREDENTIALS;
 import static org.web3j.crypto.SampleKeys.KEY_PAIR;
@@ -44,12 +44,12 @@ public class WalletUtilsTest {
         return s.hasNext() ? s.next() : "";
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         tempDir = createTempDir();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         for (File file : tempDir.listFiles()) {
             file.delete();

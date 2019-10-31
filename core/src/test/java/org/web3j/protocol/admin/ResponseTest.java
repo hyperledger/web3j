@@ -14,7 +14,7 @@ package org.web3j.protocol.admin;
 
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
@@ -25,8 +25,8 @@ import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Parity/Geth Shared Protocol Response tests. */
 public class ResponseTest extends ResponseTester {

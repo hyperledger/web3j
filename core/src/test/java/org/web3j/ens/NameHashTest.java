@@ -12,11 +12,11 @@
  */
 package org.web3j.ens;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.web3j.ens.NameHash.nameHash;
 import static org.web3j.ens.NameHash.normalise;
 

@@ -14,10 +14,10 @@ package org.web3j.utils;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Version.DEFAULT;
 import static org.web3j.utils.Version.getTimestamp;
 import static org.web3j.utils.Version.getVersion;

@@ -12,7 +12,7 @@
  */
 package org.web3j.protocol.core;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -20,7 +20,7 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /** Raw Response tests. */
 public class RawResponseTest extends ResponseTester {

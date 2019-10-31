@@ -23,7 +23,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
 import org.web3j.abi.datatypes.Address;
@@ -41,10 +41,11 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
@@ -156,9 +157,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                                 ClassName.get(List.class), TypeName.get(String.class))));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testGetNativeTypeInvalid() {
-        getNativeType(TypeName.get(BigInteger.class));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> getNativeType(TypeName.get(BigInteger.class)));
     }
 
     @Test

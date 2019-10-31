@@ -16,13 +16,14 @@ import java.math.BigInteger;
 import java.security.SignatureException;
 
 import org.bouncycastle.math.ec.ECPoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SignTest {
 
@@ -58,10 +59,15 @@ public class SignTest {
                 Sign.publicKeyFromPrivate(SampleKeys.PRIVATE_KEY), equalTo(SampleKeys.PUBLIC_KEY));
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testInvalidSignature() throws SignatureException {
-        Sign.signedMessageToKey(
-                TEST_MESSAGE, new Sign.SignatureData((byte) 27, new byte[] {1}, new byte[] {0}));
+    @Test
+    public void testInvalidSignature() {
+
+        assertThrows(
+                RuntimeException.class,
+                () ->
+                        Sign.signedMessageToKey(
+                                TEST_MESSAGE,
+                                new Sign.SignatureData((byte) 27, new byte[] {1}, new byte[] {0})));
     }
 
     @Test

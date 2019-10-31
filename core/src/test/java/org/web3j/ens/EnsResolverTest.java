@@ -15,8 +15,8 @@ package org.web3j.ens;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.TypeEncoder;
 import org.web3j.abi.datatypes.Utf8String;
@@ -31,9 +31,9 @@ import org.web3j.tx.ChainIdLong;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -47,7 +47,7 @@ public class EnsResolverTest {
     private Web3jService web3jService;
     private EnsResolver ensResolver;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         web3jService = mock(Web3jService.class);
         web3j = Web3j.build(web3jService);

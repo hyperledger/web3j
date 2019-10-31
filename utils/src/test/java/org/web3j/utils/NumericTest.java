@@ -15,17 +15,17 @@ package org.web3j.utils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.exceptions.MessageDecodingException;
-import org.web3j.exceptions.MessageEncodingException;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.utils.Numeric.asByte;
 
 public class NumericTest {
@@ -79,19 +79,22 @@ public class NumericTest {
     // If TestRpc resolves the following issue, we can reinstate this code
     // https://github.com/ethereumjs/testrpc/issues/220
     @Ignore
-    @Test(expected = MessageDecodingException.class)
+    @Test
     public void testQuantityDecodeLeadingZeroException() {
-        Numeric.decodeQuantity("0x0400");
+
+        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x0400"));
     }
 
-    @Test(expected = MessageDecodingException.class)
+    @Test
     public void testQuantityDecodeMissingPrefix() {
-        Numeric.decodeQuantity("ff");
+
+        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("ff"));
     }
 
-    @Test(expected = MessageDecodingException.class)
+    @Test
     public void testQuantityDecodeMissingValue() {
-        Numeric.decodeQuantity("0x");
+
+        assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x"));
     }
 
     @Test
@@ -107,9 +110,12 @@ public class NumericTest {
                 is("0x99dc848b94efc27edfad28def049810f"));
     }
 
-    @Test(expected = MessageEncodingException.class)
+    @Test
     public void testQuantityEncodeNegative() {
-        Numeric.encodeQuantity(BigInteger.valueOf(-1));
+
+        assertThrows(
+                MessageDecodingException.class,
+                () -> Numeric.encodeQuantity(BigInteger.valueOf(-1)));
     }
 
     @Test
@@ -151,9 +157,12 @@ public class NumericTest {
                 is(new byte[] {0x7f, (byte) 0xff, (byte) 0xff, (byte) 0xff}));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testToBytesPaddedInvalid() {
-        Numeric.toBytesPadded(BigInteger.valueOf(Long.MAX_VALUE), 7);
+
+        assertThrows(
+                RuntimeException.class,
+                () -> Numeric.toBytesPadded(BigInteger.valueOf(Long.MAX_VALUE), 7));
     }
 
     @Test
@@ -203,14 +212,20 @@ public class NumericTest {
                 is("0x01c52b08330e05d731e38c856c1043288f7d9744"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testToHexStringZeroPaddedNegative() {
-        Numeric.toHexStringNoPrefixZeroPadded(BigInteger.valueOf(-1), 20);
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> Numeric.toHexStringNoPrefixZeroPadded(BigInteger.valueOf(-1), 20));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testToHexStringZeroPaddedTooLargs() {
-        Numeric.toHexStringNoPrefixZeroPadded(BigInteger.valueOf(-1), 5);
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> Numeric.toHexStringNoPrefixZeroPadded(BigInteger.valueOf(-1), 5));
     }
 
     @Test

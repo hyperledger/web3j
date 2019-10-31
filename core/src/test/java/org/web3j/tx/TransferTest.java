@@ -14,8 +14,8 @@ package org.web3j.tx;
 
 import java.math.BigDecimal;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
@@ -23,13 +23,14 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TransferTest extends ManagedTransactionTester {
 
     protected TransactionReceipt transactionReceipt;
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -43,9 +44,17 @@ public class TransferTest extends ManagedTransactionTester {
                 is(transactionReceipt));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testTransferInvalidValue() throws Exception {
-        sendFunds(SampleKeys.CREDENTIALS, ADDRESS, new BigDecimal(0.1), Convert.Unit.WEI);
+    @Test
+    public void testTransferInvalidValue() {
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        sendFunds(
+                                SampleKeys.CREDENTIALS,
+                                ADDRESS,
+                                new BigDecimal(0.1),
+                                Convert.Unit.WEI));
     }
 
     protected TransactionReceipt sendFunds(

@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
@@ -38,16 +38,16 @@ import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.web3j.utils.Restriction.RESTRICTED;
 
 /**
  * Test designed to run with pantheon-quickstart https://github.com/PegaSysEng/pantheon-quickstart
  * Using orion 1.3.2
  */
-@Ignore
+@Disabled
 public class BesuPrivacyQuickstartIntegrationTest {
     private static final String CLIENT_VERSION = "besu/v1.3.0/linux-x86_64/oracle_openjdk-java-11";
 
@@ -76,7 +76,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
     private static Besu nodeBob;
     private static Besu nodeCharlie;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpOnce() {
         nodeAlice = Besu.build(new HttpService("http://localhost:20000"));
         nodeBob = Besu.build(new HttpService("http://localhost:20002"));

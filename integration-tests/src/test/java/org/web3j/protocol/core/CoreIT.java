@@ -15,9 +15,9 @@ package org.web3j.protocol.core;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthAccounts;
@@ -61,12 +61,12 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.http.HttpService;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** JSON-RPC 2.0 Integration Tests. */
 public class CoreIT {
@@ -77,7 +77,7 @@ public class CoreIT {
 
     public CoreIT() {}
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.web3j = Web3j.build(new HttpService());
     }
@@ -240,13 +240,13 @@ public class CoreIT {
         assertThat(ethGetCode.getCode(), is(config.validContractCode()));
     }
 
-    @Ignore // TODO: Once account unlock functionality is available
+    @Disabled // TODO: Once account unlock functionality is available
     @Test
     public void testEthSign() throws Exception {
         // EthSign ethSign = web3j.ethSign();
     }
 
-    @Ignore // TODO: Once account unlock functionality is available
+    @Disabled // TODO: Once account unlock functionality is available
     @Test
     public void testEthSendTransaction() throws Exception {
         EthSendTransaction ethSendTransaction =
@@ -254,7 +254,7 @@ public class CoreIT {
         assertFalse(ethSendTransaction.getTransactionHash().isEmpty());
     }
 
-    @Ignore // TODO: Once account unlock functionality is available
+    @Disabled // TODO: Once account unlock functionality is available
     @Test
     public void testEthSendRawTransaction() throws Exception {}
 
@@ -394,7 +394,7 @@ public class CoreIT {
         assertNotNull(ethGetCompilers.getCompilers());
     }
 
-    @Ignore // The method eth_compileLLL does not exist/is not available
+    @Disabled // The method eth_compileLLL does not exist/is not available
     @Test
     public void testEthCompileLLL() throws Exception {
         EthCompileLLL ethCompileLLL = web3j.ethCompileLLL("(returnlll (suicide (caller)))").send();
@@ -416,7 +416,7 @@ public class CoreIT {
                 is(sourceCode));
     }
 
-    @Ignore // The method eth_compileSerpent does not exist/is not available
+    @Disabled // The method eth_compileSerpent does not exist/is not available
     @Test
     public void testEthCompileSerpent() throws Exception {
         EthCompileSerpent ethCompileSerpent = web3j.ethCompileSerpent("/* some serpent */").send();
@@ -506,14 +506,14 @@ public class CoreIT {
     @Test
     public void testShhPost() throws Exception {}
 
-    @Ignore // The method shh_version does not exist/is not available
+    @Disabled // The method shh_version does not exist/is not available
     @Test
     public void testShhVersion() throws Exception {
         ShhVersion shhVersion = web3j.shhVersion().send();
         assertNotNull(shhVersion.getVersion());
     }
 
-    @Ignore // The method shh_newIdentity does not exist/is not available
+    @Disabled // The method shh_newIdentity does not exist/is not available
     @Test
     public void testShhNewIdentity() throws Exception {
         ShhNewIdentity shhNewIdentity = web3j.shhNewIdentity().send();
@@ -523,14 +523,14 @@ public class CoreIT {
     @Test
     public void testShhHasIdentity() throws Exception {}
 
-    @Ignore // The method shh_newIdentity does not exist/is not available
+    @Disabled // The method shh_newIdentity does not exist/is not available
     @Test
     public void testShhNewGroup() throws Exception {
         ShhNewGroup shhNewGroup = web3j.shhNewGroup().send();
         assertNotNull(shhNewGroup.getAddress());
     }
 
-    @Ignore // The method shh_addToGroup does not exist/is not available
+    @Disabled // The method shh_addToGroup does not exist/is not available
     @Test
     public void testShhAddToGroup() throws Exception {}
 

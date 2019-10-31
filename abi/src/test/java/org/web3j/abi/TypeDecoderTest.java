@@ -14,7 +14,7 @@ package org.web3j.abi;
 
 import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
@@ -36,8 +36,9 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TypeDecoderTest {
 
@@ -358,20 +359,29 @@ public class TypeDecoderTest {
         assertThat(arr.getValue().get(1), is(new Uint256(BigInteger.valueOf(Long.MAX_VALUE))));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testEmptyStaticArray() {
-        assertThat(
-                TypeDecoder.decodeStaticArray(
-                        "0000000000000000000000000000000000000000000000000000000000000000",
-                        0,
-                        new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(0) {},
-                        0),
-                is("invalid"));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    assertThat(
+                            TypeDecoder.decodeStaticArray(
+                                    "0000000000000000000000000000000000000000000000000000000000000000",
+                                    0,
+                                    new TypeReference.StaticArrayTypeReference<
+                                            StaticArray<Uint256>>(0) {},
+                                    0),
+                            is("invalid"));
+                });
     }
 
-    @Test(expected = ClassNotFoundException.class)
+    @Test
     public void testEmptyStaticArrayInstantiateType() throws Exception {
-        TypeDecoder.instantiateType("uint256[0]", new long[] {});
+        assertThrows(
+                ClassNotFoundException.class,
+                () -> {
+                    TypeDecoder.instantiateType("uint256[0]", new long[] {});
+                });
     }
 
     @Test

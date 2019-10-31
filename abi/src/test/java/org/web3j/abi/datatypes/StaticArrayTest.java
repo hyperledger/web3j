@@ -14,7 +14,7 @@ package org.web3j.abi.datatypes;
 
 import java.util.stream.IntStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.StaticArray32;
@@ -22,7 +22,7 @@ import org.web3j.abi.datatypes.generated.Uint8;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class StaticArrayTest {
 

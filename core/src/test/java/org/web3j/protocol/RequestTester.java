@@ -20,13 +20,13 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okio.Buffer;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.web3j.protocol.http.HttpService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class RequestTester {
 
@@ -35,7 +35,7 @@ public abstract class RequestTester {
 
     private RequestInterceptor requestInterceptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         requestInterceptor = new RequestInterceptor();
         httpClient = new OkHttpClient.Builder().addInterceptor(requestInterceptor).build();

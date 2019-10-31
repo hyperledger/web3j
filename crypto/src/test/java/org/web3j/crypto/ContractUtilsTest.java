@@ -14,10 +14,10 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.web3j.crypto.ContractUtils.generateContractAddress;
 
 public class ContractUtilsTest {

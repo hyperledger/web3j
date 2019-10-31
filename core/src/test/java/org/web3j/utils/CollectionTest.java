@@ -15,10 +15,10 @@ package org.web3j.utils;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Collection.EMPTY_STRING_ARRAY;
 import static org.web3j.utils.Collection.Function;
 import static org.web3j.utils.Collection.create;

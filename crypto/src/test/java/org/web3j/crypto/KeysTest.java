@@ -18,15 +18,16 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KeysTest {
 
@@ -152,8 +153,8 @@ public class KeysTest {
         assertThat(Keys.deserialize(ENCODED), is(SampleKeys.KEY_PAIR));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDeserializeInvalidKey() {
-        Keys.deserialize(new byte[0]);
+        assertThrows(RuntimeException.class, () -> Keys.deserialize(new byte[0]));
     }
 }

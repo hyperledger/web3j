@@ -16,7 +16,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
@@ -35,10 +35,10 @@ import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Filter scenario integration tests. */
 public class EventFilterIT extends Scenario {
@@ -58,9 +58,7 @@ public class EventFilterIT extends Scenario {
 
         TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertFalse(
-                "Transaction execution ran out of gas",
-                gas.equals(transactionReceipt.getGasUsed()));
+        assertFalse(gas.equals(transactionReceipt.getGasUsed()));
 
         List<Log> logs = transactionReceipt.getLogs();
         assertFalse(logs.isEmpty());

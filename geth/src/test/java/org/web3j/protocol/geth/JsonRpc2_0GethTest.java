@@ -16,8 +16,8 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.websocket.WebSocketClient;
@@ -44,13 +44,13 @@ public class JsonRpc2_0GethTest {
 
     private WebSocketListener listener;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         when(webSocketClient.connectBlocking()).thenReturn(true);
 
         doAnswer(
                         invocation -> {
-                            listener = invocation.getArgumentAt(0, WebSocketListener.class);
+                            listener = invocation.getArgument(0, WebSocketListener.class);
                             return null;
                         })
                 .when(webSocketClient)
@@ -58,7 +58,7 @@ public class JsonRpc2_0GethTest {
 
         doAnswer(
                         invocation -> {
-                            String message = invocation.getArgumentAt(0, String.class);
+                            String message = invocation.getArgument(0, String.class);
                             int requestId = getRequestId(message);
 
                             sendSubscriptionConfirmation(requestId);

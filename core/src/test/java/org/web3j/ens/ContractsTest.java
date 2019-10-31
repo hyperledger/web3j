@@ -12,12 +12,13 @@
  */
 package org.web3j.ens;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.tx.ChainId;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.web3j.ens.Contracts.MAINNET;
 import static org.web3j.ens.Contracts.RINKEBY;
 import static org.web3j.ens.Contracts.ROPSTEN;
@@ -32,8 +33,9 @@ public class ContractsTest {
         assertThat(resolveRegistryContract(ChainId.RINKEBY + ""), is(RINKEBY));
     }
 
-    @Test(expected = EnsResolutionException.class)
+    @Test
     public void testResolveRegistryContractInvalid() {
-        resolveRegistryContract(ChainId.NONE + "");
+        assertThrows(
+                EnsResolutionException.class, () -> resolveRegistryContract(ChainId.NONE + ""));
     }
 }

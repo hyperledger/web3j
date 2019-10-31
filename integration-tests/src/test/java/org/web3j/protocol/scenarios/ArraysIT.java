@@ -18,23 +18,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.generated.Arrays;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import static java.math.BigInteger.valueOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
 
 /** Simple integration test to demonstrate arrays usage in web3j. */
 public class ArraysIT extends Scenario {
 
     private Arrays contract;
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -81,7 +81,7 @@ public class ArraysIT extends Scenario {
     }
 
     @Test
-    @Ignore("VM Exception while processing transaction: revert")
+    @Disabled("VM Exception while processing transaction: revert")
     public void testMultiDynamic() throws Exception {
 
         final List<BigInteger> array1 = java.util.Arrays.asList(valueOf(1), valueOf(2));
@@ -96,7 +96,7 @@ public class ArraysIT extends Scenario {
     }
 
     @Test
-    @Ignore("VM Exception while processing transaction: revert")
+    @Disabled("VM Exception while processing transaction: revert")
     public void testMultiFixed() throws Exception {
 
         final List<BigInteger> array1 = java.util.Arrays.asList(valueOf(1), valueOf(2));
