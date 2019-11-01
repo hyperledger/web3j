@@ -17,8 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ResponseTest extends ResponseTester {
 
@@ -33,8 +32,8 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
-        assertThat(
+        assertEquals(
                 ethSendTransaction.getTransactionHash(),
-                is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
+                ("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 }

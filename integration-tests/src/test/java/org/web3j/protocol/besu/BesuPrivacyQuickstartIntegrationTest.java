@@ -37,8 +37,7 @@ import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.web3j.utils.Restriction.RESTRICTED;
@@ -85,10 +84,10 @@ public class BesuPrivacyQuickstartIntegrationTest {
 
     @Test
     public void testConnection() throws IOException {
-        assertThat(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
-        assertThat(nodeBob.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
-        assertThat(
-                nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion(), is(CLIENT_VERSION));
+        assertEquals(nodeAlice.web3ClientVersion().send().getWeb3ClientVersion(), (CLIENT_VERSION));
+        assertEquals(nodeBob.web3ClientVersion().send().getWeb3ClientVersion(), (CLIENT_VERSION));
+        assertEquals(
+                nodeCharlie.web3ClientVersion().send().getWeb3ClientVersion(), (CLIENT_VERSION));
     }
 
     @Test
@@ -131,8 +130,8 @@ public class BesuPrivacyQuickstartIntegrationTest {
         final PrivateTransactionReceipt receipt =
                 receiptProcessor.waitForTransactionReceipt(transactionHash);
 
-        assertThat(receipt.getFrom(), is(ALICE.getAddress()));
-        assertThat(receipt.getLogs().size(), is(0));
+        assertEquals(receipt.getFrom(), (ALICE.getAddress()));
+        assertEquals(receipt.getLogs().size(), (0));
         assertNull(receipt.getTo());
         assertNotNull(receipt.getContractAddress());
 
@@ -148,10 +147,10 @@ public class BesuPrivacyQuickstartIntegrationTest {
                                 .getPrivateTransaction()
                                 .get();
 
-        assertThat(privateTransaction.getFrom(), is(ALICE.getAddress()));
-        assertThat(privateTransaction.getGas(), is(ZERO_GAS_PROVIDER.getGasLimit()));
-        assertThat(privateTransaction.getGasPrice(), is(ZERO_GAS_PROVIDER.getGasPrice()));
-        assertThat(privateTransaction.getNonce(), is(nonce));
+        assertEquals(privateTransaction.getFrom(), (ALICE.getAddress()));
+        assertEquals(privateTransaction.getGas(), (ZERO_GAS_PROVIDER.getGasLimit()));
+        assertEquals(privateTransaction.getGasPrice(), (ZERO_GAS_PROVIDER.getGasPrice()));
+        assertEquals(privateTransaction.getNonce(), (nonce));
 
         final byte[] encodedTransaction =
                 PrivateTransactionEncoder.encode(rawPrivateTransaction, 2018);
@@ -159,19 +158,19 @@ public class BesuPrivacyQuickstartIntegrationTest {
                 Sign.signMessage(encodedTransaction, ALICE.getEcKeyPair());
         final Sign.SignatureData eip155SignatureData =
                 TransactionEncoder.createEip155SignatureData(signatureData, 2018);
-        assertThat(
+        assertEquals(
                 Numeric.toBytesPadded(BigInteger.valueOf(privateTransaction.getV()), 2),
-                is(eip155SignatureData.getV()));
-        assertThat(
+                (eip155SignatureData.getV()));
+        assertEquals(
                 Numeric.hexStringToByteArray(privateTransaction.getR()),
-                is(eip155SignatureData.getR()));
-        assertThat(
+                (eip155SignatureData.getR()));
+        assertEquals(
                 Numeric.hexStringToByteArray(privateTransaction.getS()),
-                is(eip155SignatureData.getS()));
+                (eip155SignatureData.getS()));
 
-        assertThat(privateTransaction.getPrivateFrom(), is(ENCLAVE_KEY_ALICE));
-        assertThat(privateTransaction.getPrivacyGroupId(), is(privacyGroupId));
-        assertThat(privateTransaction.getRestriction(), is(RESTRICTED));
+        assertEquals(privateTransaction.getPrivateFrom(), (ENCLAVE_KEY_ALICE));
+        assertEquals(privateTransaction.getPrivacyGroupId(), (privacyGroupId));
+        assertEquals(privateTransaction.getRestriction(), (RESTRICTED));
         assertNull(privateTransaction.getTo());
     }
 
@@ -285,9 +284,9 @@ public class BesuPrivacyQuickstartIntegrationTest {
         final BigInteger bobAlice = tokenBob.balanceOf(ALICE.getAddress()).send();
         final BigInteger bobBob = tokenBob.balanceOf(BOB.getAddress()).send();
 
-        assertThat(aliceAlice, is(aliceBalance));
-        assertThat(aliceBob, is(bobBalance));
-        assertThat(bobAlice, is(aliceBalance));
-        assertThat(bobBob, is(bobBalance));
+        assertEquals(aliceAlice, (aliceBalance));
+        assertEquals(aliceBob, (bobBalance));
+        assertEquals(bobAlice, (aliceBalance));
+        assertEquals(bobBob, (bobBalance));
     }
 }

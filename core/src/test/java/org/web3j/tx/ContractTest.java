@@ -56,9 +56,6 @@ import org.web3j.utils.Numeric;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -93,7 +90,7 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testGetContractAddress() {
-        assertThat(contract.getContractAddress(), is(ADDRESS));
+        assertEquals(contract.getContractAddress(), (ADDRESS));
     }
 
     @Test
@@ -106,9 +103,9 @@ public class ContractTest extends ManagedTransactionTester {
         TransactionReceipt transactionReceipt = createTransactionReceipt();
         Contract deployedContract = deployContract(transactionReceipt);
 
-        assertThat(deployedContract.getContractAddress(), is(ADDRESS));
+        assertEquals(deployedContract.getContractAddress(), (ADDRESS));
         assertTrue(deployedContract.getTransactionReceipt().isPresent());
-        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
+        assertEquals(deployedContract.getTransactionReceipt().get(), (transactionReceipt));
     }
 
     @Test
@@ -127,9 +124,9 @@ public class ContractTest extends ManagedTransactionTester {
         TransactionReceipt transactionReceipt = createTransactionReceiptWithStatus(null);
         Contract deployedContract = deployContract(transactionReceipt);
 
-        assertThat(deployedContract.getContractAddress(), is(ADDRESS));
+        assertEquals(deployedContract.getContractAddress(), (ADDRESS));
         assertTrue(deployedContract.getTransactionReceipt().isPresent());
-        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
+        assertEquals(deployedContract.getTransactionReceipt().get(), (transactionReceipt));
     }
 
     @Test
@@ -229,7 +226,7 @@ public class ContractTest extends ManagedTransactionTester {
                         + "0000000000000000000000000000000000000000000000000000000000000000");
         prepareCall(ethCall);
 
-        assertThat(contract.callSingleValue().send(), equalTo(new Utf8String("")));
+        assertEquals(contract.callSingleValue().send(), (new Utf8String("")));
     }
 
     @Test
@@ -251,12 +248,10 @@ public class ContractTest extends ManagedTransactionTester {
                         + "0000000000000000000000000000000000000000000000000000000000000007");
         prepareCall(ethCall);
 
-        assertThat(
+        assertEquals(
                 contract.callMultipleValue().send(),
-                equalTo(
-                        Arrays.asList(
-                                new Uint256(BigInteger.valueOf(55)),
-                                new Uint256(BigInteger.valueOf(7)))));
+                (Arrays.asList(
+                        new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.valueOf(7)))));
     }
 
     @Test
@@ -265,7 +260,7 @@ public class ContractTest extends ManagedTransactionTester {
         ethCall.setResult("0x");
         prepareCall(ethCall);
 
-        assertThat(contract.callMultipleValue().send(), equalTo(emptyList()));
+        assertEquals(contract.callMultipleValue().send(), (emptyList()));
     }
 
     @SuppressWarnings("unchecked")
@@ -285,11 +280,11 @@ public class ContractTest extends ManagedTransactionTester {
 
         prepareTransaction(transactionReceipt);
 
-        assertThat(
+        assertEquals(
                 contract.performTransaction(
                                 new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
                         .send(),
-                is(transactionReceipt));
+                (transactionReceipt));
     }
 
     @Test
@@ -325,12 +320,11 @@ public class ContractTest extends ManagedTransactionTester {
 
         EventValues eventValues = contract.processEvent(transactionReceipt).get(0);
 
-        assertThat(
+        assertEquals(
                 eventValues.getIndexedValues(),
-                equalTo(singletonList(new Address("0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a"))));
-        assertThat(
-                eventValues.getNonIndexedValues(),
-                equalTo(singletonList(new Uint256(BigInteger.ONE))));
+                (singletonList(new Address("0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a"))));
+        assertEquals(
+                eventValues.getNonIndexedValues(), (singletonList(new Uint256(BigInteger.ONE))));
     }
 
     @Test

@@ -16,8 +16,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.utils.Version.DEFAULT;
 import static org.web3j.utils.Version.getTimestamp;
 import static org.web3j.utils.Version.getVersion;
@@ -26,11 +25,11 @@ public class VersionTest {
 
     @Test
     public void testGetVersion() throws IOException {
-        assertThat(getVersion(), is(DEFAULT));
+        assertEquals(getVersion(), (DEFAULT));
     }
 
     @Test
     public void testGetTimestamp() throws IOException {
-        assertThat(getTimestamp(), is("2017-01-31 01:21:09.843 UTC"));
+        assertEquals(getTimestamp(), ("2017-01-31 01:21:09.843 UTC"));
     }
 }

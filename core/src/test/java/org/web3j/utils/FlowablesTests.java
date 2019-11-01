@@ -22,8 +22,7 @@ import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -78,7 +77,7 @@ public class FlowablesTests {
                         () -> completedLatch.countDown());
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(expected));
+        assertEquals(results, (expected));
 
         subscription.dispose();
 

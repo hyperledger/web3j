@@ -40,8 +40,7 @@ import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Matchers.any;
@@ -94,7 +93,7 @@ public class JsonRpc2_0RxTest {
                         () -> completedLatch.countDown());
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(ethBlocks));
+        assertEquals(results, (ethBlocks));
 
         subscription.dispose();
 
@@ -134,7 +133,7 @@ public class JsonRpc2_0RxTest {
                         () -> completedLatch.countDown());
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(ethBlocks));
+        assertEquals(results, (ethBlocks));
 
         subscription.dispose();
 
@@ -210,7 +209,7 @@ public class JsonRpc2_0RxTest {
                         () -> completedLatch.countDown());
 
         transactionLatch.await(1250, TimeUnit.MILLISECONDS);
-        assertThat(results, equalTo(expected));
+        assertEquals(results, (expected));
 
         subscription.dispose();
 
@@ -289,7 +288,7 @@ public class JsonRpc2_0RxTest {
                         () -> completedLatch.countDown());
 
         transactionLatch.await(1250, TimeUnit.MILLISECONDS);
-        assertThat(results, equalTo(expected));
+        assertEquals(results, (expected));
 
         subscription.dispose();
 
@@ -350,7 +349,7 @@ public class JsonRpc2_0RxTest {
                         () -> completedLatch.countDown());
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(expectedTransactions));
+        assertEquals(results, (expectedTransactions));
 
         subscription.dispose();
 

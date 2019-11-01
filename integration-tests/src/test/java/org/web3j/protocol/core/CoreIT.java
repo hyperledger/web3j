@@ -61,9 +61,7 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.http.HttpService;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -93,9 +91,9 @@ public class CoreIT {
     @Test
     public void testWeb3Sha3() throws Exception {
         Web3Sha3 web3Sha3 = web3j.web3Sha3("0x68656c6c6f20776f726c64").send();
-        assertThat(
+        assertEquals(
                 web3Sha3.getResult(),
-                is("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
+                ("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
     }
 
     @Test
@@ -143,7 +141,7 @@ public class CoreIT {
     @Test
     public void testEthHashrate() throws Exception {
         EthHashrate ethHashrate = web3j.ethHashrate().send();
-        assertThat(ethHashrate.getHashrate(), is(BigInteger.ZERO));
+        assertEquals(ethHashrate.getHashrate(), (BigInteger.ZERO));
     }
 
     @Test
@@ -180,7 +178,7 @@ public class CoreIT {
                                 BigInteger.valueOf(0),
                                 DefaultBlockParameter.valueOf("latest"))
                         .send();
-        assertThat(ethGetStorageAt.getData(), is(config.validContractAddressPositionZero()));
+        assertEquals(ethGetStorageAt.getData(), (config.validContractAddressPositionZero()));
     }
 
     @Test
@@ -196,9 +194,9 @@ public class CoreIT {
     public void testEthGetBlockTransactionCountByHash() throws Exception {
         EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash =
                 web3j.ethGetBlockTransactionCountByHash(config.validBlockHash()).send();
-        assertThat(
+        assertEquals(
                 ethGetBlockTransactionCountByHash.getTransactionCount(),
-                equalTo(config.validBlockTransactionCount()));
+                (config.validBlockTransactionCount()));
     }
 
     @Test
@@ -207,27 +205,24 @@ public class CoreIT {
                 web3j.ethGetBlockTransactionCountByNumber(
                                 DefaultBlockParameter.valueOf(config.validBlock()))
                         .send();
-        assertThat(
+        assertEquals(
                 ethGetBlockTransactionCountByNumber.getTransactionCount(),
-                equalTo(config.validBlockTransactionCount()));
+                (config.validBlockTransactionCount()));
     }
 
     @Test
     public void testEthGetUncleCountByBlockHash() throws Exception {
         EthGetUncleCountByBlockHash ethGetUncleCountByBlockHash =
                 web3j.ethGetUncleCountByBlockHash(config.validBlockHash()).send();
-        assertThat(
-                ethGetUncleCountByBlockHash.getUncleCount(),
-                equalTo(config.validBlockUncleCount()));
+        assertEquals(ethGetUncleCountByBlockHash.getUncleCount(), (config.validBlockUncleCount()));
     }
 
     @Test
     public void testEthGetUncleCountByBlockNumber() throws Exception {
         EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber =
                 web3j.ethGetUncleCountByBlockNumber(DefaultBlockParameter.valueOf("latest")).send();
-        assertThat(
-                ethGetUncleCountByBlockNumber.getUncleCount(),
-                equalTo(config.validBlockUncleCount()));
+        assertEquals(
+                ethGetUncleCountByBlockNumber.getUncleCount(), (config.validBlockUncleCount()));
     }
 
     @Test
@@ -237,7 +232,7 @@ public class CoreIT {
                                 config.validContractAddress(),
                                 DefaultBlockParameter.valueOf(config.validBlock()))
                         .send();
-        assertThat(ethGetCode.getCode(), is(config.validContractCode()));
+        assertEquals(ethGetCode.getCode(), (config.validContractCode()));
     }
 
     @Disabled // TODO: Once account unlock functionality is available
@@ -264,8 +259,8 @@ public class CoreIT {
                 web3j.ethCall(config.buildTransaction(), DefaultBlockParameter.valueOf("latest"))
                         .send();
 
-        assertThat(DefaultBlockParameterName.LATEST.getValue(), is("latest"));
-        assertThat(ethCall.getValue(), is("0x"));
+        assertEquals(DefaultBlockParameterName.LATEST.getValue(), ("latest"));
+        assertEquals(ethCall.getValue(), ("0x"));
     }
 
     @Test
@@ -280,9 +275,9 @@ public class CoreIT {
 
         EthBlock.Block block = ethBlock.getBlock();
         assertNotNull(ethBlock.getBlock());
-        assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(
-                block.getTransactions().size(), is(config.validBlockTransactionCount().intValue()));
+        assertEquals(block.getNumber(), (config.validBlock()));
+        assertEquals(
+                block.getTransactions().size(), (config.validBlockTransactionCount().intValue()));
     }
 
     @Test
@@ -291,10 +286,9 @@ public class CoreIT {
 
         EthBlock.Block block = ethBlock.getBlock();
         assertNotNull(ethBlock.getBlock());
-        assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(
-                block.getTransactions().size(),
-                equalTo(config.validBlockTransactionCount().intValue()));
+        assertEquals(block.getNumber(), (config.validBlock()));
+        assertEquals(
+                block.getTransactions().size(), (config.validBlockTransactionCount().intValue()));
     }
 
     @Test
@@ -305,10 +299,9 @@ public class CoreIT {
 
         EthBlock.Block block = ethBlock.getBlock();
         assertNotNull(ethBlock.getBlock());
-        assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(
-                block.getTransactions().size(),
-                equalTo(config.validBlockTransactionCount().intValue()));
+        assertEquals(block.getNumber(), (config.validBlock()));
+        assertEquals(
+                block.getTransactions().size(), (config.validBlockTransactionCount().intValue()));
     }
 
     @Test
@@ -319,10 +312,9 @@ public class CoreIT {
 
         EthBlock.Block block = ethBlock.getBlock();
         assertNotNull(ethBlock.getBlock());
-        assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(
-                block.getTransactions().size(),
-                equalTo(config.validBlockTransactionCount().intValue()));
+        assertEquals(block.getNumber(), (config.validBlock()));
+        assertEquals(
+                block.getTransactions().size(), (config.validBlockTransactionCount().intValue()));
     }
 
     @Test
@@ -331,7 +323,7 @@ public class CoreIT {
                 web3j.ethGetTransactionByHash(config.validTransactionHash()).send();
         assertTrue(ethTransaction.getTransaction().isPresent());
         Transaction transaction = ethTransaction.getTransaction().get();
-        assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
+        assertEquals(transaction.getBlockHash(), (config.validBlockHash()));
     }
 
     @Test
@@ -342,8 +334,8 @@ public class CoreIT {
                 web3j.ethGetTransactionByBlockHashAndIndex(config.validBlockHash(), index).send();
         assertTrue(ethTransaction.getTransaction().isPresent());
         Transaction transaction = ethTransaction.getTransaction().get();
-        assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
-        assertThat(transaction.getTransactionIndex(), equalTo(index));
+        assertEquals(transaction.getBlockHash(), (config.validBlockHash()));
+        assertEquals(transaction.getTransactionIndex(), (index));
     }
 
     @Test
@@ -356,8 +348,8 @@ public class CoreIT {
                         .send();
         assertTrue(ethTransaction.getTransaction().isPresent());
         Transaction transaction = ethTransaction.getTransaction().get();
-        assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
-        assertThat(transaction.getTransactionIndex(), equalTo(index));
+        assertEquals(transaction.getBlockHash(), (config.validBlockHash()));
+        assertEquals(transaction.getTransactionIndex(), (index));
     }
 
     @Test
@@ -367,7 +359,7 @@ public class CoreIT {
         assertTrue(ethGetTransactionReceipt.getTransactionReceipt().isPresent());
         TransactionReceipt transactionReceipt =
                 ethGetTransactionReceipt.getTransactionReceipt().get();
-        assertThat(transactionReceipt.getTransactionHash(), is(config.validTransactionHash()));
+        assertEquals(transactionReceipt.getTransactionHash(), (config.validTransactionHash()));
     }
 
     @Test
@@ -411,9 +403,9 @@ public class CoreIT {
                         + "   return a * 7;   } }";
         EthCompileSolidity ethCompileSolidity = web3j.ethCompileSolidity(sourceCode).send();
         assertNotNull(ethCompileSolidity.getCompiledSolidity());
-        assertThat(
+        assertEquals(
                 ethCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
-                is(sourceCode));
+                (sourceCode));
     }
 
     @Disabled // The method eth_compileSerpent does not exist/is not available

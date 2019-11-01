@@ -26,8 +26,7 @@ import org.web3j.generated.Arrays;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import static java.math.BigInteger.valueOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Simple integration test to demonstrate arrays usage in web3j. */
 public class ArraysIT extends Scenario {
@@ -60,7 +59,7 @@ public class ArraysIT extends Scenario {
         final List result = contract.fixedReverse(array).send();
         array.sort(Comparator.comparing(BigInteger::intValue));
 
-        assertThat(result, equalTo(array));
+        assertEquals(result, (array));
     }
 
     @Test
@@ -71,13 +70,13 @@ public class ArraysIT extends Scenario {
         final List result = contract.dynamicReverse(array).send();
         array.sort(Comparator.comparing(BigInteger::intValue));
 
-        assertThat(result, equalTo(array));
+        assertEquals(result, (array));
     }
 
     @Test
     public void testEmptyDynamicReverse() throws Exception {
         final List result = contract.dynamicReverse(new ArrayList<>()).send();
-        assertThat(result, equalTo(Collections.emptyList()));
+        assertEquals(result, (Collections.emptyList()));
     }
 
     @Test
@@ -90,9 +89,8 @@ public class ArraysIT extends Scenario {
 
         final List result = contract.multiDynamic(java.util.Arrays.asList(array1, array2)).send();
 
-        assertThat(
-                result,
-                equalTo(java.util.Arrays.asList(valueOf(1), valueOf(2), valueOf(3), valueOf(4))));
+        assertEquals(
+                result, (java.util.Arrays.asList(valueOf(1), valueOf(2), valueOf(3), valueOf(4))));
     }
 
     @Test
@@ -116,21 +114,20 @@ public class ArraysIT extends Scenario {
 
         final List result = contract.multiFixed(input).send();
 
-        assertThat(
+        assertEquals(
                 result,
-                equalTo(
-                        java.util.Arrays.asList(
-                                valueOf(1),
-                                valueOf(2),
-                                valueOf(3),
-                                valueOf(4),
-                                valueOf(5),
-                                valueOf(6),
-                                valueOf(7),
-                                valueOf(8),
-                                valueOf(9),
-                                valueOf(10),
-                                valueOf(11),
-                                valueOf(12))));
+                (java.util.Arrays.asList(
+                        valueOf(1),
+                        valueOf(2),
+                        valueOf(3),
+                        valueOf(4),
+                        valueOf(5),
+                        valueOf(6),
+                        valueOf(7),
+                        valueOf(8),
+                        valueOf(9),
+                        valueOf(10),
+                        valueOf(11),
+                        valueOf(12))));
     }
 }

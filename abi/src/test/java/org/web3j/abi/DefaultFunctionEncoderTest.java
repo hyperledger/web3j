@@ -27,56 +27,53 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes10;
 import org.web3j.abi.datatypes.generated.Uint32;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DefaultFunctionEncoderTest {
 
     @Test
     public void testBuildMethodId() {
-        assertThat(DefaultFunctionEncoder.buildMethodId("baz(uint32,bool)"), is("0xcdcd77c0"));
+        assertEquals(DefaultFunctionEncoder.buildMethodId("baz(uint32,bool)"), ("0xcdcd77c0"));
     }
 
     @Test
     public void testBuildMessageSignature() {
-        assertThat(
+        assertEquals(
                 DefaultFunctionEncoder.buildMethodSignature(
                         "baz", Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true))),
-                is("baz(uint32,bool)"));
+                ("baz(uint32,bool)"));
     }
 
     @Test
     public void testBuildEmptyMethodSignature() {
-        assertThat(
+        assertEquals(
                 DefaultFunctionEncoder.buildMethodSignature("empty", Collections.emptyList()),
-                is("empty()"));
+                ("empty()"));
     }
 
     @Test
     public void testEncodeConstructorEmpty() {
-        assertThat(FunctionEncoder.encodeConstructor(Collections.emptyList()), is(""));
+        assertEquals(FunctionEncoder.encodeConstructor(Collections.emptyList()), (""));
     }
 
     @Test
     public void testEncodeConstructorString() {
-        assertThat(
+        assertEquals(
                 FunctionEncoder.encodeConstructor(
                         Collections.singletonList(new Utf8String("Greetings!"))),
-                is(
-                        "0000000000000000000000000000000000000000000000000000000000000020"
-                                + "000000000000000000000000000000000000000000000000000000000000000a"
-                                + "4772656574696e67732100000000000000000000000000000000000000000000"));
+                ("0000000000000000000000000000000000000000000000000000000000000020"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "4772656574696e67732100000000000000000000000000000000000000000000"));
     }
 
     @Test
     public void testEncodeConstructorUint() {
-        assertThat(
+        assertEquals(
                 FunctionEncoder.encodeConstructor(
                         Arrays.asList(
                                 new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(0x20)))),
-                is(
-                        "0000000000000000000000000000000000000000000000000000000000000001"
-                                + "0000000000000000000000000000000000000000000000000000000000000020"));
+                ("0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000020"));
     }
 
     @Test
@@ -87,12 +84,11 @@ public class DefaultFunctionEncoderTest {
                         Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),
                         Collections.emptyList());
 
-        assertThat(
+        assertEquals(
                 FunctionEncoder.encode(function),
-                is(
-                        "0xcdcd77c0"
-                                + "0000000000000000000000000000000000000000000000000000000000000045"
-                                + "0000000000000000000000000000000000000000000000000000000000000001"));
+                ("0xcdcd77c0"
+                        + "0000000000000000000000000000000000000000000000000000000000000045"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"));
     }
 
     @Test
@@ -109,19 +105,18 @@ public class DefaultFunctionEncoderTest {
                                         new Uint(BigInteger.valueOf(3)))),
                         Collections.emptyList());
 
-        assertThat(
+        assertEquals(
                 FunctionEncoder.encode(function),
-                is(
-                        "0xa5643bf2"
-                                + "0000000000000000000000000000000000000000000000000000000000000060"
-                                + "0000000000000000000000000000000000000000000000000000000000000001"
-                                + "00000000000000000000000000000000000000000000000000000000000000a0"
-                                + "0000000000000000000000000000000000000000000000000000000000000004"
-                                + "6461766500000000000000000000000000000000000000000000000000000000"
-                                + "0000000000000000000000000000000000000000000000000000000000000003"
-                                + "0000000000000000000000000000000000000000000000000000000000000001"
-                                + "0000000000000000000000000000000000000000000000000000000000000002"
-                                + "0000000000000000000000000000000000000000000000000000000000000003"));
+                ("0xa5643bf2"
+                        + "0000000000000000000000000000000000000000000000000000000000000060"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "00000000000000000000000000000000000000000000000000000000000000a0"
+                        + "0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6461766500000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000003"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000003"));
     }
 
     @Test
@@ -138,18 +133,17 @@ public class DefaultFunctionEncoderTest {
                                 new DynamicBytes("Hello, world!".getBytes())),
                         Collections.emptyList());
 
-        assertThat(
+        assertEquals(
                 FunctionEncoder.encode(function),
-                is(
-                        "0x8be65246"
-                                + "0000000000000000000000000000000000000000000000000000000000000123"
-                                + "0000000000000000000000000000000000000000000000000000000000000080"
-                                + "3132333435363738393000000000000000000000000000000000000000000000"
-                                + "00000000000000000000000000000000000000000000000000000000000000e0"
-                                + "0000000000000000000000000000000000000000000000000000000000000002"
-                                + "0000000000000000000000000000000000000000000000000000000000000456"
-                                + "0000000000000000000000000000000000000000000000000000000000000789"
-                                + "000000000000000000000000000000000000000000000000000000000000000d"
-                                + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"));
+                ("0x8be65246"
+                        + "0000000000000000000000000000000000000000000000000000000000000123"
+                        + "0000000000000000000000000000000000000000000000000000000000000080"
+                        + "3132333435363738393000000000000000000000000000000000000000000000"
+                        + "00000000000000000000000000000000000000000000000000000000000000e0"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000456"
+                        + "0000000000000000000000000000000000000000000000000000000000000789"
+                        + "000000000000000000000000000000000000000000000000000000000000000d"
+                        + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"));
     }
 }

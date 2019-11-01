@@ -35,8 +35,7 @@ import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Matchers.any;
@@ -105,7 +104,7 @@ public abstract class FilterTester {
                         () -> completedLatch.countDown());
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(new HashSet<>(expected)));
+        assertEquals(results, (new HashSet<>(expected)));
 
         subscription.dispose();
 

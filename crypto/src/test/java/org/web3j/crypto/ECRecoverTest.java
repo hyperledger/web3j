@@ -20,8 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.crypto.Sign.SignatureData;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ECRecoverTest {
@@ -74,7 +73,7 @@ public class ECRecoverTest {
             }
         }
 
-        assertThat(addressRecovered, is(address));
+        assertEquals(addressRecovered, (address));
         assertTrue(match);
     }
 }

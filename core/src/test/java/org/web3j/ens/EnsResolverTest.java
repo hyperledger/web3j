@@ -30,8 +30,7 @@ import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.tx.ChainIdLong;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.any;
@@ -79,8 +78,8 @@ public class EnsResolverTest {
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(contractAddressResponse);
 
-        assertThat(
-                ensResolver.resolve("web3j.eth"), is("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
+        assertEquals(
+                ensResolver.resolve("web3j.eth"), ("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
     }
 
     @Test
@@ -110,9 +109,9 @@ public class EnsResolverTest {
         when(web3jService.send(any(Request.class), eq(EthCall.class)))
                 .thenReturn(contractNameResponse);
 
-        assertThat(
+        assertEquals(
                 ensResolver.reverseResolve("0x19e03255f667bdfd50a32722df860b1eeaf4d635"),
-                is("web3j.eth"));
+                ("web3j.eth"));
     }
 
     @Test

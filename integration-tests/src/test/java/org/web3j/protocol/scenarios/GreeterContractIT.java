@@ -28,8 +28,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -55,7 +54,7 @@ public class GreeterContractIT extends Scenario {
         TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
-        assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
+        assertEquals(createTransactionReceipt.getTransactionHash(), (createTransactionHash));
 
         assertFalse(createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
@@ -70,8 +69,8 @@ public class GreeterContractIT extends Scenario {
 
         List<Type> response =
                 FunctionReturnDecoder.decode(responseValue, getFunction.getOutputParameters());
-        assertThat(response.size(), is(1));
-        assertThat(response.get(0).getValue(), is(VALUE));
+        assertEquals(response.size(), (1));
+        assertEquals(response.get(0).getValue(), (VALUE));
     }
 
     private String sendCreateContractTransaction() throws Exception {

@@ -22,8 +22,7 @@ import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TransferTest extends ManagedTransactionTester {
@@ -39,9 +38,9 @@ public class TransferTest extends ManagedTransactionTester {
 
     @Test
     public void testSendFunds() throws Exception {
-        assertThat(
+        assertEquals(
                 sendFunds(SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.ETHER),
-                is(transactionReceipt));
+                (transactionReceipt));
     }
 
     @Test

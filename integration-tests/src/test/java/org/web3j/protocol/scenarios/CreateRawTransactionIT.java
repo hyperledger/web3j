@@ -25,8 +25,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Create, sign and send a raw transaction. */
@@ -48,7 +47,7 @@ public class CreateRawTransactionIT extends Scenario {
 
         TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
+        assertEquals(transactionReceipt.getTransactionHash(), (transactionHash));
     }
 
     @Test
@@ -67,7 +66,7 @@ public class CreateRawTransactionIT extends Scenario {
 
         TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
+        assertEquals(transactionReceipt.getTransactionHash(), (transactionHash));
 
         assertFalse(rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
     }

@@ -25,9 +25,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,7 +43,7 @@ public class DeployContractIT extends Scenario {
 
         TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
+        assertEquals(transactionReceipt.getTransactionHash(), (transactionHash));
 
         assertFalse(transactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
@@ -60,8 +58,8 @@ public class DeployContractIT extends Scenario {
 
         List<Type> uint =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
-        assertThat(uint.size(), is(1));
-        assertThat(uint.get(0).getValue(), equalTo(BigInteger.valueOf(13)));
+        assertEquals(uint.size(), (1));
+        assertEquals(uint.get(0).getValue(), (BigInteger.valueOf(13)));
     }
 
     private String sendTransaction() throws Exception {

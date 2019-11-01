@@ -22,8 +22,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -43,7 +42,7 @@ public class ReadonlyTransactionManagerTest {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
         String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
-        assertThat(value, is("test"));
+        assertEquals(value, ("test"));
     }
 
     @Test

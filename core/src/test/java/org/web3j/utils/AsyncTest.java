@@ -16,15 +16,14 @@ import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AsyncTest {
 
     @Test
     public void testRun() throws Exception {
-        assertThat(Async.run(() -> "").get(), is(""));
+        assertEquals(Async.run(() -> "").get(), (""));
     }
 
     @Test

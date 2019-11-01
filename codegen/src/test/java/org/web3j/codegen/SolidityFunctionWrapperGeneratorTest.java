@@ -32,8 +32,7 @@ import org.web3j.TempFileProvider;
 import org.web3j.utils.Strings;
 
 import static java.util.Collections.emptyList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
 import static org.web3j.codegen.FunctionWrapperGenerator.PRIMITIVE_TYPES_ARG;
@@ -56,10 +55,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGetFileNoExtension() {
-        assertThat(getFileNameNoExtension(""), is(""));
-        assertThat(getFileNameNoExtension("file"), is("file"));
-        assertThat(getFileNameNoExtension("file."), is("file"));
-        assertThat(getFileNameNoExtension("file.txt"), is("file"));
+        assertEquals(getFileNameNoExtension(""), (""));
+        assertEquals(getFileNameNoExtension("file"), ("file"));
+        assertEquals(getFileNameNoExtension("file."), ("file"));
+        assertEquals(getFileNameNoExtension("file.txt"), ("file"));
     }
 
     @Test

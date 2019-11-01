@@ -34,9 +34,7 @@ import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.utils.Base64String;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ResponseTest extends ResponseTester {
 
@@ -52,12 +50,11 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         EthAccounts ethAccounts = deserialiseResponse(EthAccounts.class);
-        assertThat(
+        assertEquals(
                 ethAccounts.getAccounts().toString(),
-                is(
-                        "[0x42eb768f2244c8811c63729a21a3569731535f06, "
-                                + "0x7ffc57839b00206d1ad20c69a1981b489f772031, "
-                                + "0xb279182d99e65703f0076e4812653aab85fca0f0]"));
+                ("[0x42eb768f2244c8811c63729a21a3569731535f06, "
+                        + "0x7ffc57839b00206d1ad20c69a1981b489f772031, "
+                        + "0xb279182d99e65703f0076e4812653aab85fca0f0]"));
     }
 
     @Test
@@ -71,11 +68,10 @@ public class ResponseTest extends ResponseTester {
 
         BesuEthAccountsMapResponse mapResponse =
                 deserialiseResponse(BesuEthAccountsMapResponse.class);
-        assertThat(
+        assertEquals(
                 mapResponse.getAccounts().toString(),
-                is(
-                        "{0x42eb768f2244c8811c63729a21a3569731535f07=false, "
-                                + "0x12eb759f2222d7711c63729a45c3585731521d01=true}"));
+                ("{0x42eb768f2244c8811c63729a21a3569731535f07=false, "
+                        + "0x12eb759f2222d7711c63729a45c3585731521d01=true}"));
     }
 
     @Test
@@ -123,8 +119,7 @@ public class ResponseTest extends ResponseTester {
 
         PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
-        assertThat(
-                privPrivateTransaction.getPrivateTransaction().get(), equalTo(privateTransaction));
+        assertEquals(privPrivateTransaction.getPrivateTransaction().get(), (privateTransaction));
     }
 
     @Test
@@ -169,8 +164,7 @@ public class ResponseTest extends ResponseTester {
 
         PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
-        assertThat(
-                privPrivateTransaction.getPrivateTransaction().get(), equalTo(privateTransaction));
+        assertEquals(privPrivateTransaction.getPrivateTransaction().get(), (privateTransaction));
     }
 
     @Test
@@ -179,7 +173,7 @@ public class ResponseTest extends ResponseTester {
 
         PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
-        assertThat(privPrivateTransaction.getPrivateTransaction(), is(Optional.empty()));
+        assertEquals(privPrivateTransaction.getPrivateTransaction(), (Optional.empty()));
     }
 
     @Test
@@ -194,9 +188,9 @@ public class ResponseTest extends ResponseTester {
 
         PrivGetPrivacyPrecompileAddress privGetPrivacyPrecompileAddress =
                 deserialiseResponse(PrivGetPrivacyPrecompileAddress.class);
-        assertThat(
+        assertEquals(
                 privGetPrivacyPrecompileAddress.getAddress(),
-                is("0xb60e8dd61c5d32be8058bb8eb970870f07233155"));
+                ("0xb60e8dd61c5d32be8058bb8eb970870f07233155"));
     }
 
     @Test
@@ -211,9 +205,9 @@ public class ResponseTest extends ResponseTester {
 
         PrivCreatePrivacyGroup privCreatePrivacyGroup =
                 deserialiseResponse(PrivCreatePrivacyGroup.class);
-        assertThat(
+        assertEquals(
                 privCreatePrivacyGroup.getPrivacyGroupId().toString(),
-                is("DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w="));
+                ("DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w="));
     }
 
     @Test
@@ -227,7 +221,7 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         BooleanResponse privDeletePrivacyGroup = deserialiseResponse(BooleanResponse.class);
-        assertThat(privDeletePrivacyGroup.success(), is(true));
+        assertEquals(privDeletePrivacyGroup.success(), (true));
     }
 
     @Test
@@ -271,8 +265,8 @@ public class ResponseTest extends ResponseTester {
                         Base64String.wrapList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
 
         PrivFindPrivacyGroup privFindPrivacyGroup = deserialiseResponse(PrivFindPrivacyGroup.class);
-        assertThat(
-                privFindPrivacyGroup.getGroups(), is(Arrays.asList(privacyGroup1, privacyGroup2)));
+        assertEquals(
+                privFindPrivacyGroup.getGroups(), (Arrays.asList(privacyGroup1, privacyGroup2)));
     }
 
     @Test
@@ -337,8 +331,7 @@ public class ResponseTest extends ResponseTester {
         PrivGetTransactionReceipt privGetTransactionReceipt =
                 deserialiseResponse(PrivGetTransactionReceipt.class);
 
-        assertThat(
-                privGetTransactionReceipt.getTransactionReceipt().get(),
-                equalTo(transactionReceipt));
+        assertEquals(privGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
+
     }
 }

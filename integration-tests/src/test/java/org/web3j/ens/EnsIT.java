@@ -17,8 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EnsIT {
 
@@ -28,8 +27,7 @@ public class EnsIT {
         Web3j web3j = Web3j.build(new HttpService());
         EnsResolver ensResolver = new EnsResolver(web3j);
 
-        assertThat(
-                ensResolver.resolve("web3j.test"),
-                is("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
+        assertEquals(
+                ensResolver.resolve("web3j.test"), ("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
     }
 }

@@ -41,9 +41,7 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -62,7 +60,7 @@ public class HumanStandardTokenIT extends Scenario {
 
         String contractAddress = createContract(ALICE, aliceQty);
 
-        assertThat(getTotalSupply(contractAddress), is(aliceQty));
+        assertEquals(getTotalSupply(contractAddress), (aliceQty));
 
         confirmBalance(ALICE.getAddress(), contractAddress, aliceQty);
 
@@ -107,7 +105,7 @@ public class HumanStandardTokenIT extends Scenario {
         List<Type> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
 
-        assertThat(response.size(), is(1));
+        assertEquals(response.size(), (1));
         return (BigInteger) response.get(0).getValue();
     }
 
@@ -118,8 +116,8 @@ public class HumanStandardTokenIT extends Scenario {
 
         List<Type> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
-        assertThat(response.size(), is(1));
-        assertThat(response.get(0), equalTo(new Uint256(expected)));
+        assertEquals(response.size(), (1));
+        assertEquals(response.get(0), (new Uint256(expected)));
     }
 
     private void confirmAllowance(
@@ -131,8 +129,8 @@ public class HumanStandardTokenIT extends Scenario {
         List<Type> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
 
-        assertThat(response.size(), is(function.getOutputParameters().size()));
-        assertThat(response.get(0), equalTo(new Uint256(expected)));
+        assertEquals(response.size(), (function.getOutputParameters().size()));
+        assertEquals(response.get(0), (new Uint256(expected)));
     }
 
     private String createContract(Credentials credentials, BigInteger initialSupply)
@@ -143,7 +141,7 @@ public class HumanStandardTokenIT extends Scenario {
         TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
-        assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
+        assertEquals(createTransactionReceipt.getTransactionHash(), (createTransactionHash));
 
         assertFalse(createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
@@ -190,7 +188,7 @@ public class HumanStandardTokenIT extends Scenario {
         String functionHash = execute(credentials, function, contractAddress);
 
         TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
-        assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
+        assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
 
         List<Log> logs = transferTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
@@ -198,22 +196,22 @@ public class HumanStandardTokenIT extends Scenario {
 
         // verify the event was called with the function parameters
         List<String> topics = log.getTopics();
-        assertThat(topics.size(), is(3));
+        assertEquals(topics.size(), (3));
 
         Event transferEvent = transferEvent();
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
         String encodedEventSignature = EventEncoder.encode(transferEvent);
-        assertThat(topics.get(0), is(encodedEventSignature));
-        assertThat(new Address(topics.get(1)), is(new Address(credentials.getAddress())));
-        assertThat(new Address(topics.get(2)), is(new Address(to)));
+        assertEquals(topics.get(0), (encodedEventSignature));
+        assertEquals(new Address(topics.get(1)), (new Address(credentials.getAddress())));
+        assertEquals(new Address(topics.get(2)), (new Address(to)));
 
         // verify qty transferred
         List<Type> results =
                 FunctionReturnDecoder.decode(
                         log.getData(), transferEvent.getNonIndexedParameters());
-        assertThat(results, equalTo(Collections.singletonList(new Uint256(qty))));
+        assertEquals(results, (Collections.singletonList(new Uint256(qty))));
     }
 
     private void sendApproveTransaction(
@@ -223,7 +221,7 @@ public class HumanStandardTokenIT extends Scenario {
         String functionHash = execute(credentials, function, contractAddress);
 
         TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
-        assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
+        assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
 
         List<Log> logs = transferTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
@@ -231,7 +229,7 @@ public class HumanStandardTokenIT extends Scenario {
 
         // verify the event was called with the function parameters
         List<String> topics = log.getTopics();
-        assertThat(topics.size(), is(3));
+        assertEquals(topics.size(), (3));
 
         // event Transfer(address indexed _from, address indexed _to, uint256 _value);
         Event event = approvalEvent();
@@ -239,14 +237,14 @@ public class HumanStandardTokenIT extends Scenario {
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
         String encodedEventSignature = EventEncoder.encode(event);
-        assertThat(topics.get(0), is(encodedEventSignature));
-        assertThat(new Address(topics.get(1)), is(new Address(credentials.getAddress())));
-        assertThat(new Address(topics.get(2)), is(new Address(spender)));
+        assertEquals(topics.get(0), (encodedEventSignature));
+        assertEquals(new Address(topics.get(1)), (new Address(credentials.getAddress())));
+        assertEquals(new Address(topics.get(2)), (new Address(spender)));
 
         // verify our two event parameters
         List<Type> results =
                 FunctionReturnDecoder.decode(log.getData(), event.getNonIndexedParameters());
-        assertThat(results, equalTo(Collections.singletonList(new Uint256(value))));
+        assertEquals(results, (Collections.singletonList(new Uint256(value))));
     }
 
     public void sendTransferFromTransaction(
@@ -261,7 +259,7 @@ public class HumanStandardTokenIT extends Scenario {
         String functionHash = execute(credentials, function, contractAddress);
 
         TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
-        assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
+        assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
 
         List<Log> logs = transferTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
@@ -273,15 +271,15 @@ public class HumanStandardTokenIT extends Scenario {
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
         String encodedEventSignature = EventEncoder.encode(transferEvent);
-        assertThat(topics.get(0), is(encodedEventSignature));
-        assertThat(new Address(topics.get(1)), is(new Address(from)));
-        assertThat(new Address(topics.get(2)), is(new Address(to)));
+        assertEquals(topics.get(0), (encodedEventSignature));
+        assertEquals(new Address(topics.get(1)), (new Address(from)));
+        assertEquals(new Address(topics.get(2)), (new Address(to)));
 
         // verify qty transferred
         List<Type> results =
                 FunctionReturnDecoder.decode(
                         log.getData(), transferEvent.getNonIndexedParameters());
-        assertThat(results, equalTo(Collections.singletonList(new Uint256(value))));
+        assertEquals(results, (Collections.singletonList(new Uint256(value))));
     }
 
     private String execute(Credentials credentials, Function function, String contractAddress)
