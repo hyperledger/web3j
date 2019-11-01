@@ -72,8 +72,8 @@ public class ContractJsonParseTest {
         assertEquals(1, mc.abi.size());
         AbiDefinition abi = mc.abi.get(0);
         assertEquals("Unexpected function name", "convert", abi.getName());
-        assertTrue(abi.isConstant());
-        assertFalse(abi.isPayable());
+        assertTrue(abi.isConstant(), "Expected function to be 'constant");
+        assertFalse(abi.isPayable(), "Expected function to not be 'payable'");
         assertEquals("Expected abi to represent a function", "function", abi.getType());
         assertEquals(
                 "Expected the 'pure' for the state mutability setting",

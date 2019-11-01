@@ -337,7 +337,7 @@ public class ContractTest extends ManagedTransactionTester {
         transactionReceipt.setLogs(Arrays.asList(log));
 
         final List<EventValues> eventValues = contract.processEvent(transactionReceipt);
-        assertTrue(eventValues.isEmpty());
+        assertTrue(eventValues.isEmpty(), "No events expected");
     }
 
     @Test

@@ -50,7 +50,7 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
                             Collections.singletonList(sourceFile));
             JavaCompiler.CompilationTask task =
                     compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
-            assertTrue(task.call());
+            assertTrue(task.call(), "Generated contract contains compile time error");
         }
     }
 

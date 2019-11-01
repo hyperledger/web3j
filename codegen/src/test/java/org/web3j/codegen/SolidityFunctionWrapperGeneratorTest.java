@@ -249,7 +249,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             boolean result = task.call();
 
             System.out.println(diagnostics.getDiagnostics());
-            assertTrue(result);
+            assertTrue(result, "Generated contract contains compile time error");
         }
     }
 }

@@ -93,7 +93,7 @@ public class WebSocketServiceTest {
         when(webSocketClient.connectBlocking()).thenThrow(new InterruptedException());
         service.connect();
 
-        assertTrue(Thread.currentThread().isInterrupted());
+        assertTrue(Thread.currentThread().isInterrupted(), "Interrupted flag was not set properly");
     }
 
     @Test

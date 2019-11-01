@@ -68,7 +68,9 @@ public class CreateRawTransactionIT extends Scenario {
 
         assertEquals(transactionReceipt.getTransactionHash(), (transactionHash));
 
-        assertFalse(rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
+        assertFalse(
+                rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()),
+                "Contract execution ran out of gas");
     }
 
     private static RawTransaction createEtherTransaction(BigInteger nonce, String toAddress) {

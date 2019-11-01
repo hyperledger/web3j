@@ -59,7 +59,7 @@ public class TupleGeneratorTest extends TempFileProvider {
                     fileManager.getJavaFileObjectsFromStrings(sourceFiles);
             JavaCompiler.CompilationTask task =
                     compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
-            assertTrue(task.call());
+            assertTrue(task.call(), "Generated code contains compile time error");
         }
     }
 }
