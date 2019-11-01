@@ -10,7 +10,7 @@ buildscript {
     ext.picocliVersion = '3.0.0'
 
     // test dependencies
-    ext.equalsverifierVersion = '2.1.7'
+    ext.equalsverifierVersion = '3.1.10'
     ext.junitVersion = '4.11'
     ext.junitBenchmarkVersion = '0.7.2'
     ext.logbackVersion = '1.2.3'
@@ -93,7 +93,7 @@ allprojects {
 
     javadoc { options.encoding = 'UTF-8' }
 
-    jacoco { toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
+    jacoco { toolVersion = '0.8.4' // See http://www.eclemma.org/jacoco/.
     }
 
     jacocoTestReport {
@@ -299,10 +299,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
     task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
         dependsOn = subprojects.test
-        additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-        sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-        classDirectories = files(subprojects.sourceSets.main.output)
-        executionData = files(subprojects.jacocoTestReport.executionData)
+        getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
+        getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
+        getClassDirectories().from(subprojects.sourceSets.main.output)
+        getExecutionData().from(subprojects.jacocoTestReport.executionData)
         reports { xml.enabled = true }
 
         onlyIf = { true }
@@ -312,14 +312,14 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         }
 
         afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
+            getClassDirectories().from(files(classDirectories.files.collect {
                 fileTree(dir: it,
-                exclude: [
-                    'org/web3j/abi/datatypes/generated/**',
-                    'org/web3j/tuples/generated/**',
-                    'org/web3j/ens/contracts/generated/**'
-                ])
-            })
+                        exclude: [
+                                'org/web3j/abi/datatypes/generated/**',
+                                'org/web3j/tuples/generated/**',
+                                'org/web3j/ens/contracts/generated/**'
+                        ])
+            }))
         }
     }
 }
