@@ -332,6 +332,5 @@ public class ResponseTest extends ResponseTester {
                 deserialiseResponse(PrivGetTransactionReceipt.class);
 
         assertEquals(privGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
-
     }
 }
