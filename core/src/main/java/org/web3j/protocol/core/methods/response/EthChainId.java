@@ -17,7 +17,7 @@ import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
 
-/** eth_gasPrice. */
+/** eth_chainId. */
 public class EthChainId extends Response<String> {
     public BigInteger getChainId() {
         return Numeric.decodeQuantity(getResult());
