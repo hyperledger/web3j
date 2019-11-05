@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -13,6 +13,7 @@
 package org.web3j.protocol.core.methods.response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -45,6 +46,17 @@ public class AbiDefinition {
     private String stateMutability;
 
     public AbiDefinition() {}
+
+    public AbiDefinition(AbiDefinition from) {
+        this(
+                from.constant,
+                clone(from.inputs),
+                from.name,
+                clone(from.outputs),
+                from.type,
+                from.payable,
+                from.stateMutability);
+    }
 
     public AbiDefinition(
             boolean constant,
@@ -190,6 +202,10 @@ public class AbiDefinition {
 
         public NamedType() {}
 
+        public NamedType(NamedType from) {
+            this(from.name, from.type, from.indexed);
+        }
+
         public NamedType(String name, String type) {
             this.name = name;
             this.type = type;
@@ -257,5 +273,9 @@ public class AbiDefinition {
             result = 31 * result + (isIndexed() ? 1 : 0);
             return result;
         }
+    }
+
+    private static List<NamedType> clone(final List<NamedType> from) {
+        return from.stream().map(NamedType::new).collect(Collectors.toList());
     }
 }

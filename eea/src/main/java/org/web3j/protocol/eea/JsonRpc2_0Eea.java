@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -18,7 +18,6 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.eea.response.EeaGetTransactionReceipt;
 
 public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     public JsonRpc2_0Eea(Web3jService web3jService) {
@@ -33,15 +32,5 @@ public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
                 Collections.singletonList(signedTransactionData),
                 web3jService,
                 EthSendTransaction.class);
-    }
-
-    @Override
-    public Request<?, EeaGetTransactionReceipt> eeaGetTransactionReceipt(
-            final String transactionHash) {
-        return new Request<>(
-                "eea_getTransactionReceipt",
-                Collections.singletonList(transactionHash),
-                web3jService,
-                EeaGetTransactionReceipt.class);
     }
 }

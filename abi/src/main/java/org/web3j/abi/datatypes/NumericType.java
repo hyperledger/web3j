@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -34,6 +34,8 @@ public abstract class NumericType implements Type<BigInteger> {
     public BigInteger getValue() {
         return value;
     }
+
+    public abstract int getBitSize();
 
     @Override
     public boolean equals(Object o) {

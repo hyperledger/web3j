@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,8 +12,7 @@
  */
 package org.web3j.codegen;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +33,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
+import static org.web3j.codegen.FunctionWrapperGenerator.PRIMITIVE_TYPES_ARG;
 import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_GENERATE;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
@@ -108,6 +108,20 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testDuplicateField() throws Exception {
+        PrintStream console = System.out;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        testCodeGeneration("duplicate", "DuplicateField", JAVA_TYPES_ARG, false);
+        testCodeGeneration("duplicate", "DuplicateField", SOLIDITY_TYPES_ARG, false);
+
+        System.setOut(console);
+        System.out.println(out.toString());
+        assertTrue(out.toString().contains("Duplicate field(s) found"));
+    }
+
+    @Test
     public void testGenerationCommandPrefixes() throws Exception {
         testCodeGeneration(
                 Arrays.asList(COMMAND_SOLIDITY, COMMAND_GENERATE),
@@ -123,9 +137,20 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
                 true);
     }
 
+    @Test
+    public void testPrimitiveTypes() throws Exception {
+        testCodeGenerationJvmTypes("primitive", "Primitive", true);
+    }
+
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
             throws Exception {
         testCodeGeneration(contractName, inputFileName, JAVA_TYPES_ARG, true);
+    }
+
+    private void testCodeGenerationJvmTypes(
+            String contractName, String inputFileName, boolean primitive) throws Exception {
+        testCodeGeneration(
+                emptyList(), contractName, inputFileName, JAVA_TYPES_ARG, true, primitive);
     }
 
     private void testCodeGenerationSolidityTypes(String contractName, String inputFileName)
@@ -145,6 +170,17 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             String inputFileName,
             String types,
             boolean useBin)
+            throws Exception {
+        testCodeGeneration(prefixes, contractName, inputFileName, types, useBin, false);
+    }
+
+    private void testCodeGeneration(
+            List<String> prefixes,
+            String contractName,
+            String inputFileName,
+            String types,
+            boolean useBin,
+            boolean primitives)
             throws Exception {
         String packageName = null;
         if (types.equals(JAVA_TYPES_ARG)) {
@@ -182,6 +218,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         options.add(packageName);
         options.add("-o");
         options.add(tempDirPath);
+
+        if (primitives) {
+            options.add(PRIMITIVE_TYPES_ARG);
+        }
 
         SolidityFunctionWrapperGenerator.main(options.toArray(new String[options.size()]));
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -98,9 +99,14 @@ public class WebSocketService implements Web3jService {
      * @throws ConnectException thrown if failed to connect to the server via WebSocket protocol
      */
     public void connect() throws ConnectException {
+        connect(s -> {}, t -> {}, () -> {});
+    }
+
+    public void connect(Consumer<String> onMessage, Consumer<Throwable> onError, Runnable onClose)
+            throws ConnectException {
         try {
             connectToWebSocket();
-            setWebSocketListener();
+            setWebSocketListener(onMessage, onError, onClose);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.warn("Interrupted while connecting via WebSocket protocol");
@@ -114,22 +120,26 @@ public class WebSocketService implements Web3jService {
         }
     }
 
-    private void setWebSocketListener() {
+    private void setWebSocketListener(
+            Consumer<String> onMessage, Consumer<Throwable> onError, Runnable onClose) {
         webSocketClient.setListener(
                 new WebSocketListener() {
                     @Override
                     public void onMessage(String message) throws IOException {
                         onWebSocketMessage(message);
+                        onMessage.accept(message);
                     }
 
                     @Override
                     public void onError(Exception e) {
                         log.error("Received error from a WebSocket connection", e);
+                        onError.accept(e);
                     }
 
                     @Override
                     public void onClose() {
                         onWebSocketClose();
+                        onClose.run();
                     }
                 });
     }

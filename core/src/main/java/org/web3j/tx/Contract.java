@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -17,7 +17,6 @@ import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,6 +33,7 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
+import org.web3j.ens.EnsResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -78,10 +78,26 @@ public abstract class Contract extends ManagedTransaction {
             Web3j web3j,
             TransactionManager transactionManager,
             ContractGasProvider gasProvider) {
-        super(web3j, transactionManager);
 
-        this.contractAddress = ensResolver.resolve(contractAddress);
+        this(
+                new EnsResolver(web3j),
+                contractBinary,
+                contractAddress,
+                web3j,
+                transactionManager,
+                gasProvider);
+    }
 
+    protected Contract(
+            EnsResolver ensResolver,
+            String contractBinary,
+            String contractAddress,
+            Web3j web3j,
+            TransactionManager transactionManager,
+            ContractGasProvider gasProvider) {
+
+        super(ensResolver, web3j, transactionManager);
+        this.contractAddress = resolveContractAddress(contractAddress);
         this.contractBinary = contractBinary;
         this.gasProvider = gasProvider;
     }
@@ -92,8 +108,8 @@ public abstract class Contract extends ManagedTransaction {
             Web3j web3j,
             Credentials credentials,
             ContractGasProvider gasProvider) {
-
         this(
+                new EnsResolver(web3j),
                 contractBinary,
                 contractAddress,
                 web3j,
@@ -110,6 +126,7 @@ public abstract class Contract extends ManagedTransaction {
             BigInteger gasPrice,
             BigInteger gasLimit) {
         this(
+                new EnsResolver(web3j),
                 contractBinary,
                 contractAddress,
                 web3j,
@@ -323,6 +340,12 @@ public abstract class Contract extends ManagedTransaction {
         return executeTransaction(FunctionEncoder.encode(function), weiValue, function.getName());
     }
 
+    TransactionReceipt executeTransaction(String data, BigInteger weiValue, String funcName)
+            throws TransactionException, IOException {
+
+        return executeTransaction(data, weiValue, funcName, false);
+    }
+
     /**
      * Given the duration required to execute a transaction.
      *
@@ -332,7 +355,8 @@ public abstract class Contract extends ManagedTransaction {
      * @throws IOException if the call to the node fails
      * @throws TransactionException if the transaction was not mined while waiting
      */
-    TransactionReceipt executeTransaction(String data, BigInteger weiValue, String funcName)
+    TransactionReceipt executeTransaction(
+            String data, BigInteger weiValue, String funcName, boolean constructor)
             throws TransactionException, IOException {
 
         TransactionReceipt receipt =
@@ -341,16 +365,20 @@ public abstract class Contract extends ManagedTransaction {
                         data,
                         weiValue,
                         gasProvider.getGasPrice(funcName),
-                        gasProvider.getGasLimit(funcName));
+                        gasProvider.getGasLimit(funcName),
+                        constructor);
 
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
                     String.format(
                             "Transaction %s has failed with status: %s. "
-                                    + "Gas used: %d. (not-enough gas?)",
-                            receipt.getTransactionHash(), receipt.getStatus(), receipt.getGasUsed()), receipt);
+                                    + "Gas used: %s. (not-enough gas?)",
+                            receipt.getTransactionHash(),
+                            receipt.getStatus(),
+                            receipt.getGasUsedRaw() != null
+                                    ? receipt.getGasUsed().toString()
+                                    : "unknown"), receipt);
         }
-
         return receipt;
     }
 
@@ -384,7 +412,7 @@ public abstract class Contract extends ManagedTransaction {
             T contract, String binary, String encodedConstructor, BigInteger value)
             throws IOException, TransactionException {
         TransactionReceipt transactionReceipt =
-                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY);
+                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY, true);
 
         String contractAddress = transactionReceipt.getContractAddress();
         if (contractAddress == null) {
@@ -681,6 +709,10 @@ public abstract class Contract extends ManagedTransaction {
         return new EventValues(indexedValues, nonIndexedValues);
     }
 
+    protected String resolveContractAddress(String contractAddress) {
+        return ensResolver.resolve(contractAddress);
+    }
+
     protected EventValues extractEventParameters(Event event, Log log) {
         return staticExtractEventParameters(event, log);
     }
@@ -704,13 +736,8 @@ public abstract class Contract extends ManagedTransaction {
 
     protected List<EventValuesWithLog> extractEventParametersWithLog(
             Event event, TransactionReceipt transactionReceipt) {
-        return staticExtractEventParametersWithLog(event, transactionReceipt);
-    }
-
-    protected static List<EventValuesWithLog> staticExtractEventParametersWithLog(
-            Event event, TransactionReceipt transactionReceipt) {
         return transactionReceipt.getLogs().stream()
-                .map(log -> staticExtractEventParametersWithLog(event, log))
+                .map(log -> extractEventParametersWithLog(event, log))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
@@ -811,9 +838,9 @@ public abstract class Contract extends ManagedTransaction {
 
     @SuppressWarnings("unchecked")
     protected static <S extends Type, T> List<T> convertToNative(List<S> arr) {
-        List<T> out = new ArrayList<T>();
-        for (Iterator<S> it = arr.iterator(); it.hasNext(); ) {
-            out.add((T) it.next().getValue());
+        List<T> out = new ArrayList<>();
+        for (final S s : arr) {
+            out.add((T) s.getValue());
         }
         return out;
     }

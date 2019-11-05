@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -17,11 +17,9 @@ import java.lang.reflect.Type;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.Int;
 import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.generated.AbiTypes;
 
 /**
  * Type wrapper to get around limitations of Java's type erasure. This is so that we can pass around
@@ -110,26 +108,22 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         };
     }
 
-    /*
-     * This is a helper method that only works for atomic types (uint, bytes, etc).
-     * Array types must be wrapped by a java.lang.reflect.ParamaterizedType
+    /**
+     * This is a helper method that only works for atomic types (uint, bytes, etc). Array types must
+     * be wrapped by a {@link java.lang.reflect.ParameterizedType}.
+     *
+     * @param solidityType the solidity as a string eg Address Int
+     * @param primitives is it a primitive type
      */
-
     protected static Class<? extends org.web3j.abi.datatypes.Type> getAtomicTypeClass(
-            String solidityType) throws ClassNotFoundException {
-        Matcher m = ARRAY_SUFFIX.matcher(solidityType);
-        if (m.find()) {
+            String solidityType, boolean primitives) throws ClassNotFoundException {
+
+        if (ARRAY_SUFFIX.matcher(solidityType).find()) {
             throw new ClassNotFoundException(
                     "getAtomicTypeClass does not work with array types."
-                            + " See makeTypeRefernce()");
-        }
-        switch (solidityType) {
-            case "int":
-                return Int.class;
-            case "uint":
-                return Uint.class;
-            default:
-                return AbiTypes.getType(solidityType);
+                            + " See makeTypeReference()");
+        } else {
+            return AbiTypes.getType(solidityType, primitives);
         }
     }
 
@@ -139,7 +133,6 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         private final int size;
 
         protected StaticArrayTypeReference(int size) {
-            super();
             this.size = size;
         }
 
@@ -150,23 +143,28 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
     public static TypeReference makeTypeReference(String solidityType)
             throws ClassNotFoundException {
-        return makeTypeReference(solidityType, false);
+        return makeTypeReference(solidityType, false, false);
     }
 
-    public static TypeReference makeTypeReference(String solidityType, final boolean indexed)
+    public static TypeReference makeTypeReference(
+            String solidityType, final boolean indexed, final boolean primitives)
             throws ClassNotFoundException {
+
         Matcher nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
         if (!nextSquareBrackets.find()) {
             final Class<? extends org.web3j.abi.datatypes.Type> typeClass =
-                    getAtomicTypeClass(solidityType);
+                    getAtomicTypeClass(solidityType, primitives);
             return create(typeClass, indexed);
         }
 
         int lastReadStringPosition = nextSquareBrackets.start();
+
         final Class<? extends org.web3j.abi.datatypes.Type> baseClass =
-                getAtomicTypeClass(solidityType.substring(0, lastReadStringPosition));
+                getAtomicTypeClass(solidityType.substring(0, lastReadStringPosition), primitives);
+
         TypeReference arrayWrappedType = create(baseClass, indexed);
         final int len = solidityType.length();
+
         // for each [\d*], wrap the previous TypeReference in an array
         while (lastReadStringPosition < len) {
             String arraySize = nextSquareBrackets.group(1);

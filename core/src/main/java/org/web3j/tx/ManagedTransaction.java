@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -38,13 +38,18 @@ public abstract class ManagedTransaction {
     protected EnsResolver ensResolver;
 
     protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
+        this(new EnsResolver(web3j), web3j, transactionManager);
+    }
+
+    protected ManagedTransaction(
+            EnsResolver ensResolver, Web3j web3j, TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
+        this.ensResolver = ensResolver;
         this.web3j = web3j;
-        this.ensResolver = new EnsResolver(web3j);
     }
 
     /**
-     * This should only be used in case you need to get the {@link EnsResolver#syncThreshold}
+     * This should only be used in case you need to get the {@link EnsResolver#getSyncThreshold()}
      * parameter, which dictates the threshold in milliseconds since the last processed block
      * timestamp should be to considered in sync the blockchain.
      *
@@ -58,7 +63,7 @@ public abstract class ManagedTransaction {
     }
 
     /**
-     * This should only be used in case you need to modify the {@link EnsResolver#syncThreshold}
+     * This should only be used in case you need to modify the {@link EnsResolver#getSyncThreshold}
      * parameter, which dictates the threshold in milliseconds since the last processed block
      * timestamp should be to considered in sync the blockchain.
      *
@@ -95,6 +100,19 @@ public abstract class ManagedTransaction {
             throws IOException, TransactionException {
 
         return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
+    }
+
+    protected TransactionReceipt send(
+            String to,
+            String data,
+            BigInteger value,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            boolean constructor)
+            throws IOException, TransactionException {
+
+        return transactionManager.executeTransaction(
+                gasPrice, gasLimit, to, data, value, constructor);
     }
 
     protected String call(String to, String data, DefaultBlockParameter defaultBlockParameter)

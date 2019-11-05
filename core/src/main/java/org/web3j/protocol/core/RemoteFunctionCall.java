@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -47,7 +47,7 @@ public class RemoteFunctionCall<T> extends RemoteCall<T> {
      * decode a method response
      *
      * @param response
-     * @return
+     * @return list of abi types
      */
     public List<Type> decodeFunctionResponse(String response) {
         return FunctionReturnDecoder.decode(response, function.getOutputParameters());

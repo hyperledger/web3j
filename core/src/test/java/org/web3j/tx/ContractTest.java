@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -69,6 +69,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -432,7 +434,14 @@ public class ContractTest extends ManagedTransactionTester {
     public void testStaticGasProvider() throws IOException, TransactionException {
         StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.TEN, BigInteger.ONE);
         TransactionManager txManager = mock(TransactionManager.class);
-        when(txManager.executeTransaction(any(), any(), any(), any(), any()))
+
+        when(txManager.executeTransaction(
+                        any(BigInteger.class),
+                        any(BigInteger.class),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean()))
                 .thenReturn(new TransactionReceipt());
 
         contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
@@ -443,7 +452,13 @@ public class ContractTest extends ManagedTransactionTester {
         contract.executeTransaction(func);
 
         verify(txManager)
-                .executeTransaction(eq(BigInteger.TEN), eq(BigInteger.ONE), any(), any(), any());
+                .executeTransaction(
+                        eq(BigInteger.TEN),
+                        eq(BigInteger.ONE),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean());
     }
 
     @Test(expected = RuntimeException.class)

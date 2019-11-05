@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -68,7 +68,7 @@ public class ReadonlyTransactionManagerTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testSendTransaction() {
+    public void testSendTransaction() throws IOException {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
         readonlyTransactionManager.sendTransaction(

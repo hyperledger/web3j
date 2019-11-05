@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -71,6 +71,13 @@ public class RequestTest extends RequestTester {
         web3j.netPeerCount().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"net_peerCount\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testAdminNodeInfo() throws Exception {
+        web3j.adminNodeInfo().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"admin_nodeInfo\",\"params\":[],\"id\":1}");
     }
 
     @Test

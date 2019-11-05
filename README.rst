@@ -23,14 +23,13 @@ web3j: Web3 Java Ethereum Ðapp API
 web3j is a lightweight, highly modular, reactive, type safe Java and Android library for working with
 Smart Contracts and integrating with clients (nodes) on the Ethereum network:
 
-.. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/source/images/web3j_network.png
+.. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/img/web3j_network.png
 
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
 
 The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
 overview of blockchain, Ethereum and web3j.
-
 
 Features
 --------
@@ -54,7 +53,7 @@ Features
 - Android compatible
 - Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
 - Support for `EEA Privacy features as described in EEA documentation <https://entethalliance.org/technical-documents/>`_
-  and implemented in `Pegasys Pantheon <https://docs.pantheon.pegasys.tech/en/stable/Reference/Pantheon-API-Methods/#eea-methods>`_.
+  and implemented in `Pegasys Pantheon <https://docs.besu.pegasys.tech/en/stable/Reference/Pantheon-API-Methods/#eea-methods>`_.
 
 
 It has five runtime dependencies:
@@ -90,13 +89,23 @@ You can help fund the development of web3j by donating to the following wallet a
 Commercial support and training
 -------------------------------
 
-Commercial support and training is available from `blk.io <https://blk.io>`_.
+Commercial support and training is available from `web3labs.com <https://www.web3labs.com/>`_.
 
 
 Quickstart
 ----------
 
-A `web3j sample project <https://github.com/web3j/sample-project-gradle>`_ is available that
+Install the Web3j binary.
+
+To get the latest version on Mac OS or Linux, type the following in your terminal:
+
+.. code-block:: bash
+
+   curl -L https://get.web3j.io | sh
+
+Then follow the on-screen instructions or head `here <https://docs.web3j.io/command_line_tools/>`_. 
+
+Alternatively, a `web3j sample project <https://github.com/web3j/sample-project-gradle>`_ is available that
 demonstrates a number of core features of Ethereum with web3j, including:
 
 - Connecting to a node on the Ethereum network
@@ -126,7 +135,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.2.0</version>
+     <version>4.5.5</version>
    </dependency>
 
 Android:
@@ -147,7 +156,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.2.0')
+   compile ('org.web3j:core:4.5.5')
 
 Android:
 
@@ -188,10 +197,10 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
    Web3j web3 = Web3j.build(new HttpService("https://ropsten.infura.io/your-token"));
 
 For further information refer to
-`Using Infura with web3j <https://web3j.github.io/web3j/infura.html>`_
+`Using Infura with web3j <https://docs.web3j.io/using_infura_with_web3j/>`_
 
 Instructions on obtaining Ether to transact on the network can be found in the
-`testnet section of the docs <http://docs.web3j.io/transactions.html#ethereum-testnets>`_.
+`testnet section of the docs <https://docs.web3j.io/transactions/#ethereum-testnets>`_.
 
 
 Start sending requests
@@ -321,7 +330,7 @@ To fine control your gas price:
             ...
             });
 
-For more information refer to `Smart Contracts <http://docs.web3j.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
+For more information refer to `Smart Contracts <https://docs.web3j.io/smart_contracts/#solidity-smart-contract-wrappers>`_.
 
 
 Filters
@@ -366,7 +375,7 @@ blocks being created:
    });
 
 There are a number of other transaction and block replay Flowables described in the
-`docs <http://docs.web3j.io/filters.html>`_.
+`docs <https://docs.web3j.io/filters_and_events/>`_.
 
 Topic filters are also supported:
 
@@ -387,8 +396,8 @@ Subscriptions should always be cancelled when no longer required:
 
 **Note:** filters are not supported on Infura.
 
-For further information refer to `Filters and Events <http://docs.web3j.io/filters.html>`_ and the
-`Web3jRx <https://github.com/web3j/web3j/blob/master/src/core/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+For further information refer to `Filters and Events <https://docs.web3j.io/filters_and_events/>`_ and the
+`Web3jRx <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
 interface.
 
 
@@ -463,7 +472,7 @@ tools allow you to use some of the functionality of web3j from the command line:
 - Transfer of funds from one wallet to another
 - Generate Solidity smart contract function wrappers
 
-Please refer to the `documentation <http://docs.web3j.io/command_line.html>`_ for further
+Please refer to the `documentation <https://docs.web3j.io/command_line_tools/>`_ for further
 information.
 
 
@@ -523,6 +532,7 @@ Projects using web3j
 
 Please submit a pull request if you wish to include your project on the list:
 
+- `AlphaWallet Android Wallet <https://github.com/AlphaWallet/alpha-wallet-android.git>`_
 - `ERC-20 RESTful Service <https://github.com/blk-io/erc20-rest-service>`_
 - `Ether Wallet <https://play.google.com/store/apps/details?id=org.vikulin.etherwallet>`_ by
   `@vikulin <https://github.com/vikulin>`_
@@ -538,6 +548,7 @@ Please submit a pull request if you wish to include your project on the list:
 - `Ethereum Java EE JCA Resource Adapter <https://github.com/e-Contract/ethereum-resource-adapter>`_ provides integration of Ethereum within Java EE 6+.
 - `Apache Camel Ethereum Component <https://github.com/apache/camel/blob/master/components/camel-web3j/src/main/docs/web3j-component.adoc>`_ by `@bibryam <https://github.com/bibryam/>`_.
 - `Etherlinker for UE4 <https://bitbucket.org/kelheor/etherlinker-for-ue4>`_ - interact with Ethereum blockchain from Unreal Engine 4.
+- `Ethereum ingest utility <https://ethereum-ingest.com/>`_ - Import and stream blocks/transactions into Hazelcast, Elasticsearch and MongoDB.
 
 
 
@@ -547,7 +558,7 @@ Companies using web3j
 Please submit a pull request if you wish to include your company on the list:
 
 - `Amberdata <https://www.amberdata.io/>`_
-- `blk.io <https://blk.io>`_
+- `web3labs.com <https://www.web3labs.com/>`_
 - `comitFS <http://www.comitfs.com/>`_
 - `ConsenSys <https://consensys.net/>`_
 - `ING <https://www.ing.com>`_
@@ -556,6 +567,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `TrustWallet <http://trustwalletapp.com>`_
 - `Impetus <http://www.impetus.com/>`_
 - `Argent Labs <http://www.argent.im/>`_
+- `AlphaWallet <https://www.alphawallet.com/>`_
 
 
 Build instructions

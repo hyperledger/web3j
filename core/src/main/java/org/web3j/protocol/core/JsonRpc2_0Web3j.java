@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -78,6 +78,7 @@ import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.management.AdminNodeInfo;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
 import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
@@ -138,6 +139,12 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, NetPeerCount> netPeerCount() {
         return new Request<>(
                 "net_peerCount", Collections.<String>emptyList(), web3jService, NetPeerCount.class);
+    }
+
+    @Override
+    public Request<?, AdminNodeInfo> adminNodeInfo() {
+        return new Request<>(
+                "admin_nodeInfo", Collections.emptyList(), web3jService, AdminNodeInfo.class);
     }
 
     @Override

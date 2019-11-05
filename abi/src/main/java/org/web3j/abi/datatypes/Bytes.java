@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -19,14 +19,14 @@ public class Bytes extends BytesType {
 
     protected Bytes(int byteSize, byte[] value) {
         super(value, TYPE_NAME + value.length);
-        if (!isValid(byteSize, value)) {
+        if (!isValid(byteSize)) {
             throw new UnsupportedOperationException(
                     "Input byte array must be in range 0 < M <= 32 and length must match type");
         }
     }
 
-    private boolean isValid(int byteSize, byte[] value) {
-        int length = value.length;
+    private boolean isValid(int byteSize) {
+        int length = getValue().length;
         return length > 0 && length <= 32 && length == byteSize;
     }
 }

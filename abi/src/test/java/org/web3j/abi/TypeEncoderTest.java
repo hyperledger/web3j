@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -32,10 +32,15 @@ import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int64;
 import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.Uint64;
+import org.web3j.abi.datatypes.primitive.Byte;
+import org.web3j.abi.datatypes.primitive.Char;
+import org.web3j.abi.datatypes.primitive.Long;
+import org.web3j.abi.datatypes.primitive.Short;
 import org.web3j.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.web3j.abi.TypeEncoder.encode;
 
 public class TypeEncoderTest {
 
@@ -56,7 +61,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(zero),
                 is("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Uint maxLong = new Uint64(BigInteger.valueOf(Long.MAX_VALUE));
+        Uint maxLong = new Uint64(BigInteger.valueOf(java.lang.Long.MAX_VALUE));
         assertThat(
                 TypeEncoder.encodeNumeric(maxLong),
                 is("0000000000000000000000000000000000000000000000007fffffffffffffff"));
@@ -100,12 +105,12 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(zero),
                 is("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int maxLong = new Int64(BigInteger.valueOf(Long.MAX_VALUE));
+        Int maxLong = new Int64(BigInteger.valueOf(java.lang.Long.MAX_VALUE));
         assertThat(
                 TypeEncoder.encodeNumeric(maxLong),
                 is("0000000000000000000000000000000000000000000000007fffffffffffffff"));
 
-        Int minLong = new Int64(BigInteger.valueOf(Long.MIN_VALUE));
+        Int minLong = new Int64(BigInteger.valueOf(java.lang.Long.MIN_VALUE));
         assertThat(
                 TypeEncoder.encodeNumeric(minLong),
                 is("ffffffffffffffffffffffffffffffffffffffffffffffff8000000000000000"));
@@ -168,6 +173,11 @@ public class TypeEncoderTest {
         assertThat(
                 TypeEncoder.encodeBytes(empty),
                 is("0000000000000000000000000000000000000000000000000000000000000000"));
+
+        Bytes ones = new Bytes1(new byte[] {127});
+        assertThat(
+                TypeEncoder.encodeBytes(ones),
+                is("7f00000000000000000000000000000000000000000000000000000000000000"));
 
         Bytes dave = new Bytes4("dave".getBytes());
         assertThat(
@@ -235,6 +245,23 @@ public class TypeEncoderTest {
         assertThat(
                 TypeEncoder.encodeAddress(address),
                 is("000000000000000000000000be5422d15f39373eb0a97ff8c10fbd0e40e29338"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testInvalidAddress() {
+        Address address =
+                new Address("0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
+        assertThat(address.getTypeAsString(), is("address"));
+        TypeEncoder.encodeAddress(address);
+    }
+
+    @Test
+    public void testLongAddress() {
+        Address address =
+                new Address(
+                        256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
+        assertThat(address.getTypeAsString(), is("address"));
+        TypeEncoder.encodeAddress(address);
     }
 
     @Test
@@ -416,5 +443,88 @@ public class TypeEncoderTest {
                                 + "0000000000000000000000000000000000000000000000000000000000000000"
                                 // length second string
                                 + "0000000000000000000000000000000000000000000000000000000000000000"));
+    }
+
+    @Test
+    public void testPrimitiveByte() {
+        assertThat(
+                encode(new Byte((byte) 0)),
+                is("0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(
+                encode(new Byte((byte) 127)),
+                is("7f00000000000000000000000000000000000000000000000000000000000000"));
+    }
+
+    @Test
+    public void testPrimitiveChar() {
+        assertThat(
+                encode(new Char('a')),
+                is(
+                        "0000000000000000000000000000000000000000000000000000000000000001"
+                                + "6100000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(
+                encode(new Char(' ')),
+                is(
+                        "0000000000000000000000000000000000000000000000000000000000000001"
+                                + "2000000000000000000000000000000000000000000000000000000000000000"));
+    }
+
+    @Test
+    public void testPrimitiveInt() {
+        assertThat(
+                encode(new org.web3j.abi.datatypes.primitive.Int(0)),
+                is("0000000000000000000000000000000000000000000000000000000000000000"));
+
+        assertThat(
+                encode(new org.web3j.abi.datatypes.primitive.Int(Integer.MIN_VALUE)),
+                is("ffffffffffffffffffffffffffffffffffffffffffffffffffffffff80000000"));
+
+        assertThat(
+                encode(new org.web3j.abi.datatypes.primitive.Int(Integer.MAX_VALUE)),
+                is("000000000000000000000000000000000000000000000000000000007fffffff"));
+    }
+
+    @Test
+    public void testPrimitiveShort() {
+        assertThat(
+                encode(new Short((short) 0)),
+                is("0000000000000000000000000000000000000000000000000000000000000000"));
+
+        assertThat(
+                encode(new Short(java.lang.Short.MIN_VALUE)),
+                is("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8000"));
+
+        assertThat(
+                encode(new Short(java.lang.Short.MAX_VALUE)),
+                is("0000000000000000000000000000000000000000000000000000000000007fff"));
+    }
+
+    @Test
+    public void testPrimitiveLong() {
+        assertThat(
+                encode(new Long(0)),
+                is("0000000000000000000000000000000000000000000000000000000000000000"));
+
+        assertThat(
+                encode(new Long(java.lang.Long.MIN_VALUE)),
+                is("ffffffffffffffffffffffffffffffffffffffffffffffff8000000000000000"));
+
+        assertThat(
+                encode(new Long(java.lang.Long.MAX_VALUE)),
+                is("0000000000000000000000000000000000000000000000007fffffffffffffff"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPrimitiveFloat() {
+        assertThat(
+                encode(new org.web3j.abi.datatypes.primitive.Float(0)),
+                is("0000000000000000000000000000000000000000000000000000000000000000"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPrimitiveDouble() {
+        assertThat(
+                encode(new org.web3j.abi.datatypes.primitive.Double(0)),
+                is("0000000000000000000000000000000000000000000000000000000000000000"));
     }
 }

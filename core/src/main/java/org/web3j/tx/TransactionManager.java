@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -62,13 +62,36 @@ public abstract class TransactionManager {
             BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
             throws IOException, TransactionException {
 
+        return executeTransaction(gasPrice, gasLimit, to, data, value, false);
+    }
+
+    protected TransactionReceipt executeTransaction(
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor)
+            throws IOException, TransactionException {
+
         EthSendTransaction ethSendTransaction =
-                sendTransaction(gasPrice, gasLimit, to, data, value);
+                sendTransaction(gasPrice, gasLimit, to, data, value, constructor);
         return processResponse(ethSendTransaction);
     }
 
-    public abstract EthSendTransaction sendTransaction(
+    public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            throws IOException {
+        return sendTransaction(gasPrice, gasLimit, to, data, value, false);
+    }
+
+    public abstract EthSendTransaction sendTransaction(
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor)
             throws IOException;
 
     public abstract String sendCall(

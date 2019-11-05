@@ -1,44 +1,231 @@
-Command Line Tools
-==================
+Web3j CLI
+=========
 
-A web3j fat jar is distributed with each release providing command line tools. The command line allow you to use some of the functionality of web3j from your terminal:
+A web3j binary is distributed with each release providing an interactive command line (CLI). It allows you to use some of the key functionality of web3j from your terminal, including:
 
-These tools provide:
+- New project creation
+- Project creation from existing Solidity code
+- Wallet creation
+- Wallet password management
+- Ether transfer from one wallet to another
+- Generation of Solidity smart contract wrappers
 
--   Wallet creation
--   Wallet password management
--   Ether transfer from one wallet to another
--   Generation of Solidity smart contract wrappers
+Installation
+------------
 
-The command line tools can be obtained as a zipfile/tarball from the [releases](https://github.com/web3j/web3j/releases/latest) page of the project repository, under the **Downloads** section, or for OS X users via [Homebrew](https://github.com/web3j/homebrew-web3j), or for Arch linux users via the [AUR](https://aur.archlinux.org/packages/web3j/).
+### Script
 
-``` bash
-brew tap web3j/web3j
-brew install web3j
+The simplest way to install the Web3j CLI is via the following script:
+
+```bash
+curl -L https://get.web3j.io | sh
 ```
 
-To run via the zipfile, simply extract the zipfile and run the binary:
+You can veriify the installation was successful by running th web3j command:
 
-``` console
-$ unzip web3j-<version>.zip
-   creating: web3j-3.0.0/lib/
-  inflating: web3j-3.0.0/lib/core-1.0.2-all.jar
-   creating: web3j-3.0.0/bin/
-  inflating: web3j-3.0.0/bin/web3j
-  inflating: web3j-3.0.0/bin/web3j.bat
-$ ./web3j-<version>/bin/web3j
+```bash
+web3j version
 
-              _      _____ _     _
-             | |    |____ (_)   (_)
-__      _____| |__      / /_     _   ___
-\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \
+              _      _____ _     _        
+             | |    |____ (_)   (_)       
+__      _____| |__      / /_     _   ___  
+\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \ 
  \ V  V /  __/ |_) |.___/ / | _ | || (_) |
-  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/
-                         _/ |
-                        |__/
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/ 
+                         _/ |             
+                        |__/              
 
-Usage: web3j version|wallet|solidity ...
+Version: 4.5.5
+Build timestamp: 2019-09-24 16:00:04.332 UTC
 ```
+
+If you encounter problems with the installation, please refer to the manual installation instructions [below](#manual-installation).
+
+
+Web3j new & import
+-----------------------------------------
+The `web3j new` and `web3j import` commands provide a convenient way to create a new Java project using Web3j's Command Line Tools.
+
+These commands provide the following functionality:
+
+- Creation of a new Java project.
+- Generation of a simple *Hello World* Solidity contract (named the `Greeter`) or import an exisiting Solidity project from a file or directory.
+- Compilation of the Solidity files.
+- Configure the project to use the Gradle build tool.
+- Generate Java smart contract wrappers for all provided Solidity files.
+- Add the required web3j dependencies, to deploy and interact with the contracts.
+
+### web3j new
+
+To generate a new project interactively:
+
+```bash
+web3j new 
+``` 
+
+You will be prompted to answer a series of questions to create your project:
+
+```bash
+$ web3j new
+
+              _      _____ _     _        
+             | |    |____ (_)   (_)       
+__      _____| |__      / /_     _   ___  
+\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \ 
+ \ V  V /  __/ |_) |.___/ / | _ | || (_) |
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/ 
+                         _/ |             
+                        |__/              
+
+Please enter the project name (required): 
+MyProject
+Please enter the package name for your project (required): 
+com.web3labs.eth
+Please enter the destination of your project (default .): 
+myproject
+Downloading https://services.gradle.org/distributions/gradle-5.0-bin.zip
+...................................................................
+Done
+Project MyProject created at location: myproject
+..............
+
+Welcome to Gradle 5.0!
+
+Here are the highlights of this release:
+ - Kotlin DSL 1.0
+ - Task timeouts
+ - Dependency alignment aka BOM support
+ - Interactive `gradle init`
+
+For more details see https://docs.gradle.org/5.0/release-notes.html
+
+$
+```
+
+Details of the created project structure are [below](#generated-project-structure).
+
+
+Or using non-interactive mode:
+
+```bash
+web3j new -n <project name> -p <package name> [-o <path>]
+```
+
+The `-o` option can be omitted if you want to generate the project in the current directory.
+
+The `project name ` and `package name` values must comply with the Java standard. The project name is also used as the class name.
+
+
+
+### web3j import
+
+Similarly to `web3j new`, `web3j import` will create a new java project but with user defined smart contracts.
+
+Again, to generate a new project interactively:
+
+```bash
+web3j new 
+``` 
+
+You will be prompted to answer a series of questions to create your project:
+
+```bash
+$ web3j import
+
+              _      _____ _     _        
+             | |    |____ (_)   (_)       
+__      _____| |__      / /_     _   ___  
+\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \ 
+ \ V  V /  __/ |_) |.___/ / | _ | || (_) |
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/ 
+                         _/ |             
+                        |__/              
+
+Please enter the project name (Required Field): 
+MyImportedProject
+Please enter the package name for your project (Required Field): 
+com.web3labs.eth
+Please enter the path to your solidity file/folder (Required Field): 
+/path/to/solidity
+Please enter the destination of your project (current by default): 
+.
+Project created with name: myimportedproject at location: .
+$
+```
+
+This command can also be used non-interactively
+
+```
+web3j import -n <project name> -p <package name> -s <path to solidity sources> [-o <path>]
+```
+
+or 
+
+```
+web3j import 
+```
+
+The `-s` option will work with a single solidity file or a folder containing solidity files.
+
+
+Generated project structure
+---------------------------
+
+Your application code and tests will be located in the following project directories:
+
+- `./src/main/java` - Generated Java appliciation code stub
+- `./src/test/java` - Generated Java test code stub
+- `./src/main/solidity` - Solidity source code
+
+If you need to edit the build file, it is located in the project root directory:
+
+- `./build.gradle` - Gradle build configuration file
+
+Additionally there are the following Gradle artifacts which you can ignore.
+
+- `/gradle` - local Gradle installation
+- `/.gradle` - local Gradle cache
+- `/build` - compiled classes including smart contract bindings
+
+If you need to view any of the generated Solidity or contract artifacts, they are available in the following locations.
+
+Solidity `bin` and `abi` files are located at:
+
+- `./build/resources/main/solidity/`
+
+The source code for the generated smart contract bindings can be found at:
+
+- `./build/generated/source/web3j/main/java/<your-package>/generated/contracts`
+
+The compiled code for the generated smart contracts bindings is available at the below location. These are the artifacts that you use to deploy, transact and query your smart contracts.
+
+- `./build/classes/java/main/<your-package>/generated/contracts/`
+
+
+Build commands
+--------------
+
+Web3j projects use the Gradle build tool under the covers. Gradle is a build DSL  for JVM projects used widely in Java, Kotlin and Android projects. You shouldn't need to be too concerned with the semantics of Gradle beyond the following build commands:
+
+To build the project run:
+
+```bash
+./gradlew build
+```
+
+To update the just the smart contract bindings following changes to the Solidity code run:
+
+```bash
+./gradlew generateContractWrappers
+```
+
+To delete all project build artifacts, creating a clean environment, run:
+
+```bash
+./gradlew clean
+```
+
+
 
 Wallet tools
 ------------
@@ -92,7 +279,43 @@ Transaction hash: 0xb00afc5c2bb92a76d03e17bd3a0175b80609e877cb124c02d19000d52939
 Mined block number: 1849039
 ```
 
+
 Solidity smart contract wrapper generator
 -----------------------------------------
 
 Please refer to [Solidity smart contract wrappers](smart_contracts.md#solidity-smart-contract-wrappers).
+
+
+Manual installation
+-------------------
+Manual installation
+
+The command line tools can also be obtained as a zipfile/tarball from the [releases](https://github.com/web3j/web3j/releases/latest) page of the project repository, under the **Downloads** section, or for OS X users via [Homebrew](https://github.com/web3j/homebrew-web3j), or for Arch linux users via the [AUR](https://aur.archlinux.org/packages/web3j/).
+
+``` bash
+brew tap web3j/web3j
+brew install web3j
+```
+
+To run via the zipfile, simply extract the zipfile and run the binary:
+
+``` console
+$ unzip web3j-<version>.zip
+   creating: web3j-3.0.0/lib/
+  inflating: web3j-3.0.0/lib/core-1.0.2-all.jar
+   creating: web3j-3.0.0/bin/
+  inflating: web3j-3.0.0/bin/web3j
+  inflating: web3j-3.0.0/bin/web3j.bat
+$ ./web3j-<version>/bin/web3j
+
+              _      _____ _     _
+             | |    |____ (_)   (_)
+__      _____| |__      / /_     _   ___
+\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \
+ \ V  V /  __/ |_) |.___/ / | _ | || (_) |
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/
+                         _/ |
+                        |__/
+
+Usage: web3j version|wallet|solidity|new|import ...
+```

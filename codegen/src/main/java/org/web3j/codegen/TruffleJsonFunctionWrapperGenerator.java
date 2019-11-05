@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.tx.ChainId;
@@ -116,7 +117,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
     }
 
     @SuppressWarnings("unchecked")
-    private void generate() throws IOException, ClassNotFoundException {
+    public void generate() throws IOException, ClassNotFoundException {
 
         File truffleJsonFile = new File(jsonFileLocation);
         if (!truffleJsonFile.exists() || !truffleJsonFile.canRead()) {
@@ -146,7 +147,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             } else {
                 addresses = Collections.EMPTY_MAP;
             }
-            new SolidityFunctionWrapper(useJavaNativeTypes)
+            new SolidityFunctionWrapper(useJavaNativeTypes, Address.DEFAULT_LENGTH)
                     .generateJavaFiles(
                             contractName,
                             c.getBytecode(),

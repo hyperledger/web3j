@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -20,13 +20,8 @@ public class Uint extends IntType {
     public static final String TYPE_NAME = "uint";
     public static final Uint DEFAULT = new Uint(BigInteger.ZERO);
 
-    /** This constructor is required by the {@link Address} type. */
-    Uint(String typePrefix, int bitSize, BigInteger value) {
-        super(typePrefix, bitSize, value);
-    }
-
     protected Uint(int bitSize, BigInteger value) {
-        this(TYPE_NAME, bitSize, value);
+        super(TYPE_NAME, bitSize, value);
     }
 
     public Uint(BigInteger value) {
@@ -35,7 +30,7 @@ public class Uint extends IntType {
     }
 
     @Override
-    boolean valid(int bitSize, BigInteger value) {
-        return super.valid(bitSize, value) && value.signum() != -1;
+    protected boolean valid() {
+        return super.valid() && 0 <= value.signum();
     }
 }

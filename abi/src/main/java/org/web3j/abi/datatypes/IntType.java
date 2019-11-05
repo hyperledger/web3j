@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -17,19 +17,28 @@ import java.math.BigInteger;
 /** Common integer properties. */
 public abstract class IntType extends NumericType {
 
+    private final int bitSize;
+
     public IntType(String typePrefix, int bitSize, BigInteger value) {
         super(typePrefix + bitSize, value);
-        if (!valid(bitSize, value)) {
+        this.bitSize = bitSize;
+        if (!valid()) {
             throw new UnsupportedOperationException(
-                    "Bitsize must be 8 bit aligned, and in range 0 < bitSize <= 256");
+                    "Bit size must be 8 bit aligned, "
+                            + "and in range 0 < bitSize <= "
+                            + MAX_BIT_LENGTH);
         }
     }
 
-    boolean valid(int bitSize, BigInteger value) {
+    public int getBitSize() {
+        return bitSize;
+    }
+
+    protected boolean valid() {
         return isValidBitSize(bitSize) && isValidBitCount(bitSize, value);
     }
 
-    static boolean isValidBitSize(int bitSize) {
+    private static boolean isValidBitSize(int bitSize) {
         return bitSize % 8 == 0 && bitSize > 0 && bitSize <= MAX_BIT_LENGTH;
     }
 

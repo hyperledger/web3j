@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs LTD.
+ * Copyright 2019 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -63,6 +63,7 @@ import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.management.AdminNodeInfo;
 
 /** Core Ethereum JSON-RPC API. */
 public interface Ethereum {
@@ -75,6 +76,8 @@ public interface Ethereum {
     Request<?, NetListening> netListening();
 
     Request<?, NetPeerCount> netPeerCount();
+
+    Request<?, AdminNodeInfo> adminNodeInfo();
 
     Request<?, EthProtocolVersion> ethProtocolVersion();
 
