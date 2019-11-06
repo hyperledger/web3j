@@ -95,12 +95,11 @@ public class TypeEncoderTest {
         // 1 more than "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> {
-                    new Uint(
-                            new BigInteger(
-                                    "10000000000000000000000000000000000000000000000000000000000000000",
-                                    16));
-                });
+                () ->
+                        new Uint(
+                                new BigInteger(
+                                        "10000000000000000000000000000000000000000000000000000000000000000",
+                                        16)));
     }
 
     @Test
@@ -250,17 +249,10 @@ public class TypeEncoderTest {
 
     @Test
     public void testInvalidAddress() {
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> {
-                    Address address =
-                            new Address(
-                                    "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
-                    assertEquals(address.getTypeAsString(), ("address"));
-
-                    TypeEncoder.encodeAddress(address);
-                });
+        Address address =
+                new Address("0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
+        assertEquals(address.getTypeAsString(), ("address"));
+        assertThrows(UnsupportedOperationException.class, () -> TypeEncoder.encodeAddress(address));
     }
 
     @Test
@@ -517,21 +509,13 @@ public class TypeEncoderTest {
     public void testPrimitiveFloat() {
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> {
-                    assertEquals(
-                            encode(new org.web3j.abi.datatypes.primitive.Float(0)),
-                            ("0000000000000000000000000000000000000000000000000000000000000000"));
-                });
+                () -> encode(new org.web3j.abi.datatypes.primitive.Float(0)));
     }
 
     @Test
     public void testPrimitiveDouble() {
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> {
-                    assertEquals(
-                            encode(new org.web3j.abi.datatypes.primitive.Double(0)),
-                            ("0000000000000000000000000000000000000000000000000000000000000000"));
-                });
+                () -> encode(new org.web3j.abi.datatypes.primitive.Double(0)));
     }
 }

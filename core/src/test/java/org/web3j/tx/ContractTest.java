@@ -110,13 +110,8 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testContractDeployFails() {
-
-        assertThrows(
-                TransactionException.class,
-                () -> {
-                    TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
-                    deployContract(transactionReceipt);
-                });
+        TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
+        assertThrows(TransactionException.class, () -> deployContract(transactionReceipt));
     }
 
     @Test
@@ -166,38 +161,29 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testIsValidNoBinThrows() throws Exception {
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> {
-                    TransactionManager txManager = mock(TransactionManager.class);
-                    TestContract contract =
-                            new TestContract(
-                                    Contract.BIN_NOT_PROVIDED,
-                                    ADDRESS,
-                                    web3j,
-                                    txManager,
-                                    new DefaultGasProvider());
-                    contract.isValid();
-                });
+        TransactionManager txManager = mock(TransactionManager.class);
+        TestContract contract =
+                new TestContract(
+                        Contract.BIN_NOT_PROVIDED,
+                        ADDRESS,
+                        web3j,
+                        txManager,
+                        new DefaultGasProvider());
+        assertThrows(UnsupportedOperationException.class, () -> contract.isValid());
     }
 
     @Test
     public void testDeployInvalidContractAddress() throws Throwable {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
 
+        prepareTransaction(transactionReceipt);
+
+        String encodedConstructor =
+                FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
         assertThrows(
                 RuntimeException.class,
-                () -> {
-                    TransactionReceipt transactionReceipt = new TransactionReceipt();
-                    transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-
-                    prepareTransaction(transactionReceipt);
-
-                    String encodedConstructor =
-                            FunctionEncoder.encodeConstructor(
-                                    Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
-
-                    try {
+                () ->
                         TestContract.deployRemoteCall(
                                         TestContract.class,
                                         web3j,
@@ -207,13 +193,7 @@ public class ContractTest extends ManagedTransactionTester {
                                         "0xcafed00d",
                                         encodedConstructor,
                                         BigInteger.ZERO)
-                                .send();
-                    } catch (InterruptedException e) {
-                        throw e;
-                    } catch (ExecutionException e) {
-                        throw e.getCause();
-                    }
-                });
+                                .send());
     }
 
     @Test
@@ -289,14 +269,15 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testTransactionFailed() {
+        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        transactionReceipt.setStatus("0x0");
+        transactionReceipt.setGasUsed("0x1");
         assertThrows(
                 TransactionException.class,
                 () -> {
-                    TransactionReceipt transactionReceipt = new TransactionReceipt();
-                    transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-                    transactionReceipt.setStatus("0x0");
-                    transactionReceipt.setGasUsed("0x1");
                     prepareTransaction(transactionReceipt);
+
                     contract.performTransaction(
                                     new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
                             .send();
@@ -341,42 +322,35 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
-    public void testTimeout() {
+    public void testTimeout() throws IOException {
+        prepareTransaction(null);
 
+        TransactionManager transactionManager =
+                getVerifiedTransactionManager(SampleKeys.CREDENTIALS, 1, 1);
+
+        contract = new TestContract(ADDRESS, web3j, transactionManager, new DefaultGasProvider());
         assertThrows(
                 TransactionException.class,
                 () -> {
-                    prepareTransaction(null);
-
-                    TransactionManager transactionManager =
-                            getVerifiedTransactionManager(SampleKeys.CREDENTIALS, 1, 1);
-
-                    contract =
-                            new TestContract(
-                                    ADDRESS, web3j, transactionManager, new DefaultGasProvider());
-
                     testErrorScenario();
                 });
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testInvalidTransactionResponse() {
+    public void testInvalidTransactionResponse() throws IOException {
+        prepareNonceRequest();
 
+        EthSendTransaction ethSendTransaction = new EthSendTransaction();
+        ethSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
+
+        Request<?, EthSendTransaction> rawTransactionRequest = mock(Request.class);
+        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
+        when(web3j.ethSendRawTransaction(any(String.class)))
+                .thenReturn((Request) rawTransactionRequest);
         assertThrows(
                 RuntimeException.class,
                 () -> {
-                    prepareNonceRequest();
-
-                    EthSendTransaction ethSendTransaction = new EthSendTransaction();
-                    ethSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
-
-                    Request<?, EthSendTransaction> rawTransactionRequest = mock(Request.class);
-                    when(rawTransactionRequest.sendAsync())
-                            .thenReturn(Async.run(() -> ethSendTransaction));
-                    when(web3j.ethSendRawTransaction(any(String.class)))
-                            .thenReturn((Request) rawTransactionRequest);
-
                     testErrorScenario();
                 });
     }
@@ -432,27 +406,18 @@ public class ContractTest extends ManagedTransactionTester {
     @Test
     @SuppressWarnings("unchecked")
     public void testInvalidTransactionReceipt() throws Throwable {
+        prepareNonceRequest();
+        prepareTransactionRequest();
 
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    prepareNonceRequest();
-                    prepareTransactionRequest();
+        EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
+        ethGetTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
 
-                    EthGetTransactionReceipt ethGetTransactionReceipt =
-                            new EthGetTransactionReceipt();
-                    ethGetTransactionReceipt.setError(
-                            new Response.Error(1, "Invalid transaction receipt"));
-
-                    Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest =
-                            mock(Request.class);
-                    when(getTransactionReceiptRequest.sendAsync())
-                            .thenReturn(Async.run(() -> ethGetTransactionReceipt));
-                    when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
-                            .thenReturn((Request) getTransactionReceiptRequest);
-
-                    testErrorScenario();
-                });
+        Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
+        when(getTransactionReceiptRequest.sendAsync())
+                .thenReturn(Async.run(() -> ethGetTransactionReceipt));
+        when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
+                .thenReturn((Request) getTransactionReceiptRequest);
+        assertThrows(RuntimeException.class, () -> testErrorScenario());
     }
 
     @Test

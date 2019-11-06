@@ -47,14 +47,12 @@ public class ReadonlyTransactionManagerTest {
 
     @Test
     public void testSendTransaction() {
-
+        ReadonlyTransactionManager readonlyTransactionManager =
+                new ReadonlyTransactionManager(web3j, "");
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> {
-                    ReadonlyTransactionManager readonlyTransactionManager =
-                            new ReadonlyTransactionManager(web3j, "");
-                    readonlyTransactionManager.sendTransaction(
-                            BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO);
-                });
+                () ->
+                        readonlyTransactionManager.sendTransaction(
+                                BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO));
     }
 }

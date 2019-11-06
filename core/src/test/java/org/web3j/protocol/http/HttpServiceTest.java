@@ -109,19 +109,16 @@ public class HttpServiceTest {
 
     @Test
     public void subscriptionNotSupported() {
-
+        Request<Object, EthSubscribe> subscribeRequest =
+                new Request<>(
+                        "eth_subscribe",
+                        Arrays.asList("newHeads", Collections.emptyMap()),
+                        httpService,
+                        EthSubscribe.class);
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> {
-                    Request<Object, EthSubscribe> subscribeRequest =
-                            new Request<>(
-                                    "eth_subscribe",
-                                    Arrays.asList("newHeads", Collections.emptyMap()),
-                                    httpService,
-                                    EthSubscribe.class);
-
-                    httpService.subscribe(
-                            subscribeRequest, "eth_unsubscribe", NewHeadsNotification.class);
-                });
+                () ->
+                        httpService.subscribe(
+                                subscribeRequest, "eth_unsubscribe", NewHeadsNotification.class));
     }
 }

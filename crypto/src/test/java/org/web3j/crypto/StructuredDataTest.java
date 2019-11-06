@@ -47,28 +47,22 @@ public class StructuredDataTest {
 
     @Test
     public void testInvalidIdentifierMessageCaughtByRegex() throws IOException, RuntimeException {
+        String invalidStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/InvalidIdentifierStructuredData.json";
         assertThrows(
                 RuntimeException.class,
-                () -> {
-                    String invalidStructuredDataJSONFilePath =
-                            "build/resources/test/"
-                                    + "structured_data_json_files/InvalidIdentifierStructuredData.json";
-
-                    new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
-                });
+                () -> new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath)));
     }
 
     @Test
     public void testInvalidTypeMessageCaughtByRegex() throws IOException, RuntimeException {
+        String invalidStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/InvalidTypeStructuredData.json";
         assertThrows(
                 RuntimeException.class,
-                () -> {
-                    String invalidStructuredDataJSONFilePath =
-                            "build/resources/test/"
-                                    + "structured_data_json_files/InvalidTypeStructuredData.json";
-
-                    new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
-                });
+                () -> new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath)));
     }
 
     @Test
@@ -182,50 +176,32 @@ public class StructuredDataTest {
 
     @Test
     public void testInvalidMessageValueTypeMismatch() throws RuntimeException, IOException {
-
-        assertThrows(
-                ClassCastException.class,
-                () -> {
-                    String invalidStructuredDataJSONFilePath =
-                            "build/resources/test/"
-                                    + "structured_data_json_files/InvalidMessageValueTypeMismatch.json";
-                    StructuredDataEncoder dataEncoder =
-                            new StructuredDataEncoder(
-                                    getResource(invalidStructuredDataJSONFilePath));
-                    dataEncoder.hashStructuredData();
-                });
+        String invalidStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/InvalidMessageValueTypeMismatch.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+        assertThrows(ClassCastException.class, () -> dataEncoder.hashStructuredData());
     }
 
     @Test
     public void testInvalidMessageInvalidABIType() throws RuntimeException, IOException {
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> {
-                    String invalidStructuredDataJSONFilePath =
-                            "build/resources/test/"
-                                    + "structured_data_json_files/InvalidMessageInvalidABIType.json";
-                    StructuredDataEncoder dataEncoder =
-                            new StructuredDataEncoder(
-                                    getResource(invalidStructuredDataJSONFilePath));
-                    dataEncoder.hashStructuredData();
-                });
+        String invalidStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/InvalidMessageInvalidABIType.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+        assertThrows(UnsupportedOperationException.class, () -> dataEncoder.hashStructuredData());
     }
 
     @Test
     public void testInvalidMessageValidABITypeInvalidValue() throws RuntimeException, IOException {
-
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    String invalidStructuredDataJSONFilePath =
-                            "build/resources/test/"
-                                    + "structured_data_json_files/InvalidMessageValidABITypeInvalidValue.json";
-                    StructuredDataEncoder dataEncoder =
-                            new StructuredDataEncoder(
-                                    getResource(invalidStructuredDataJSONFilePath));
-                    dataEncoder.hashStructuredData();
-                });
+        String invalidStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/InvalidMessageValidABITypeInvalidValue.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+        assertThrows(RuntimeException.class, () -> dataEncoder.hashStructuredData());
     }
 
     @Test
@@ -393,36 +369,25 @@ public class StructuredDataTest {
     }
 
     @Test
-    public void testUnequalArrayLengthsBetweenSchemaAndData() throws RuntimeException {
-
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    String invalidStructuredDataJSONFilePath =
-                            "build/resources/test/"
-                                    + "structured_data_json_files/"
-                                    + "InvalidMessageUnequalArrayLengthsBetweenSchemaAndData.json";
-                    StructuredDataEncoder dataEncoder =
-                            new StructuredDataEncoder(
-                                    getResource(invalidStructuredDataJSONFilePath));
-                    dataEncoder.hashStructuredData();
-                });
+    public void testUnequalArrayLengthsBetweenSchemaAndData() throws RuntimeException, IOException {
+        String invalidStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/"
+                        + "InvalidMessageUnequalArrayLengthsBetweenSchemaAndData.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+        assertThrows(RuntimeException.class, () -> dataEncoder.hashStructuredData());
     }
 
     @Test
-    public void testDataNotPerfectArrayButDeclaredArrayInSchema() throws RuntimeException {
-
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    String invalidStructuredDataJSONFilePath =
-                            "build/resources/test/"
-                                    + "structured_data_json_files/"
-                                    + "InvalidMessageDataNotPerfectArrayButDeclaredArrayInSchema.json";
-                    StructuredDataEncoder dataEncoder =
-                            new StructuredDataEncoder(
-                                    getResource(invalidStructuredDataJSONFilePath));
-                    dataEncoder.hashStructuredData();
-                });
+    public void testDataNotPerfectArrayButDeclaredArrayInSchema()
+            throws RuntimeException, IOException {
+        String invalidStructuredDataJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/"
+                        + "InvalidMessageDataNotPerfectArrayButDeclaredArrayInSchema.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
+        assertThrows(RuntimeException.class, () -> dataEncoder.hashStructuredData());
     }
 }

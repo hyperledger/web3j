@@ -27,7 +27,7 @@ public class AsyncTest {
     }
 
     @Test
-    public void testRunException() throws Exception {
+    public void testRunException() {
 
         assertThrows(
                 ExecutionException.class,

@@ -359,25 +359,20 @@ public class TypeDecoderTest {
     public void testEmptyStaticArray() {
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> {
-                    assertEquals(
-                            TypeDecoder.decodeStaticArray(
-                                    "0000000000000000000000000000000000000000000000000000000000000000",
-                                    0,
-                                    new TypeReference.StaticArrayTypeReference<
-                                            StaticArray<Uint256>>(0) {},
-                                    0),
-                            ("invalid"));
-                });
+                () ->
+                        TypeDecoder.decodeStaticArray(
+                                "0000000000000000000000000000000000000000000000000000000000000000",
+                                0,
+                                new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(
+                                        0) {},
+                                0));
     }
 
     @Test
     public void testEmptyStaticArrayInstantiateType() throws Exception {
         assertThrows(
                 ClassNotFoundException.class,
-                () -> {
-                    TypeDecoder.instantiateType("uint256[0]", new long[] {});
-                });
+                () -> TypeDecoder.instantiateType("uint256[0]", new long[] {}));
     }
 
     @Test

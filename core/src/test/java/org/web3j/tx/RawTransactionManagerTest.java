@@ -12,6 +12,7 @@
  */
 package org.web3j.tx;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
@@ -26,18 +27,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class RawTransactionManagerTest extends ManagedTransactionTester {
 
     @Test
-    public void testTxHashMismatch() {
+    public void testTxHashMismatch() throws IOException {
+        TransactionReceipt transactionReceipt = prepareTransfer();
+        prepareTransaction(transactionReceipt);
 
+        TransactionManager transactionManager =
+                new RawTransactionManager(web3j, SampleKeys.CREDENTIALS);
+        Transfer transfer = new Transfer(web3j, transactionManager);
         assertThrows(
                 TxHashMismatchException.class,
-                () -> {
-                    TransactionReceipt transactionReceipt = prepareTransfer();
-                    prepareTransaction(transactionReceipt);
-
-                    TransactionManager transactionManager =
-                            new RawTransactionManager(web3j, SampleKeys.CREDENTIALS);
-                    Transfer transfer = new Transfer(web3j, transactionManager);
-                    transfer.sendFunds(ADDRESS, BigDecimal.ONE, Convert.Unit.ETHER).send();
-                });
+                () -> transfer.sendFunds(ADDRESS, BigDecimal.ONE, Convert.Unit.ETHER).send());
     }
 }
