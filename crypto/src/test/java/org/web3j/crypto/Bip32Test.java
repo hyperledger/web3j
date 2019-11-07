@@ -14,12 +14,12 @@ package org.web3j.crypto;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.web3j.crypto.Bip32ECKeyPair.HARDENED_BIT;
 import static org.web3j.crypto.Hash.sha256;
 

@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -34,9 +34,7 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FunctionReturnDecoderTest {
 
@@ -48,11 +46,11 @@ public class FunctionReturnDecoderTest {
                         Collections.<Type>emptyList(),
                         Collections.singletonList(new TypeReference<Uint>() {}));
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decode(
                         "0x0000000000000000000000000000000000000000000000000000000000000037",
                         function.getOutputParameters()),
-                equalTo(Collections.singletonList(new Uint(BigInteger.valueOf(55)))));
+                (Collections.singletonList(new Uint(BigInteger.valueOf(55)))));
     }
 
     @Test
@@ -70,7 +68,7 @@ public class FunctionReturnDecoderTest {
                                 + "6f6e65206d6f72652074696d6500000000000000000000000000000000000000",
                         function.getOutputParameters());
 
-        assertThat(utf8Strings.get(0).getValue(), is("one more time"));
+        assertEquals(utf8Strings.get(0).getValue(), ("one more time"));
     }
 
     @Test
@@ -87,7 +85,7 @@ public class FunctionReturnDecoderTest {
                                 + "0000000000000000000000000000000000000000000000000000000000000000",
                         function.getOutputParameters());
 
-        assertThat(utf8Strings.get(0).getValue(), is(""));
+        assertEquals(utf8Strings.get(0).getValue(), (""));
     }
 
     @Test
@@ -98,15 +96,12 @@ public class FunctionReturnDecoderTest {
                         Collections.<Type>emptyList(),
                         Arrays.asList(new TypeReference<Uint>() {}, new TypeReference<Uint>() {}));
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decode(
                         "0x0000000000000000000000000000000000000000000000000000000000000037"
                                 + "0000000000000000000000000000000000000000000000000000000000000007",
                         function.getOutputParameters()),
-                equalTo(
-                        Arrays.asList(
-                                new Uint(BigInteger.valueOf(55)),
-                                new Uint(BigInteger.valueOf(7)))));
+                (Arrays.asList(new Uint(BigInteger.valueOf(55)), new Uint(BigInteger.valueOf(7)))));
     }
 
     @Test
@@ -121,7 +116,7 @@ public class FunctionReturnDecoderTest {
                                 new TypeReference<Utf8String>() {},
                                         new TypeReference<Utf8String>() {}));
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decode(
                         "0x0000000000000000000000000000000000000000000000000000000000000080"
                                 + "00000000000000000000000000000000000000000000000000000000000000c0"
@@ -136,10 +131,9 @@ public class FunctionReturnDecoderTest {
                                 + "0000000000000000000000000000000000000000000000000000000000000004"
                                 + "6d6e6f3200000000000000000000000000000000000000000000000000000000",
                         function.getOutputParameters()),
-                equalTo(
-                        Arrays.asList(
-                                new Utf8String("def1"), new Utf8String("ghi1"),
-                                new Utf8String("jkl1"), new Utf8String("mno2"))));
+                (Arrays.asList(
+                        new Utf8String("def1"), new Utf8String("ghi1"),
+                        new Utf8String("jkl1"), new Utf8String("mno2"))));
     }
 
     @Test
@@ -163,16 +157,16 @@ public class FunctionReturnDecoderTest {
                         new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE));
 
         List<Type> expected = Arrays.asList(uint256StaticArray2, new Uint256(BigInteger.TEN));
-        assertThat(decoded, equalTo(expected));
+        assertEquals(decoded, (expected));
     }
 
     @Test
     public void testVoidResultFunctionDecode() {
         Function function = new Function("test", Collections.emptyList(), Collections.emptyList());
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
-                is(Collections.emptyList()));
+                (Collections.emptyList()));
     }
 
     @Test
@@ -183,9 +177,9 @@ public class FunctionReturnDecoderTest {
                         Collections.emptyList(),
                         Collections.singletonList(new TypeReference<Uint>() {}));
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
-                is(Collections.emptyList()));
+                (Collections.emptyList()));
     }
 
     @Test
@@ -193,9 +187,9 @@ public class FunctionReturnDecoderTest {
         Uint256 value = new Uint256(BigInteger.TEN);
         String encoded = TypeEncoder.encodeNumeric(value);
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(encoded, new TypeReference<Uint256>() {}),
-                equalTo(value));
+                (value));
     }
 
     @Test
@@ -204,9 +198,9 @@ public class FunctionReturnDecoderTest {
         String encoded = TypeEncoder.encodeString(string);
         String hash = Hash.sha3(encoded);
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(hash, new TypeReference<Utf8String>() {}),
-                equalTo(new Bytes32(Numeric.hexStringToByteArray(hash))));
+                (new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 
     @Test
@@ -214,9 +208,9 @@ public class FunctionReturnDecoderTest {
         String rawInput = "0x1234567890123456789012345678901234567890123456789012345678901234";
         byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput);
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes32>() {}),
-                equalTo(new Bytes32(rawInputBytes)));
+                (new Bytes32(rawInputBytes)));
     }
 
     @Test
@@ -224,9 +218,9 @@ public class FunctionReturnDecoderTest {
         String rawInput = "0x1234567890123456789012345678901200000000000000000000000000000000";
         byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput.substring(0, 34));
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes16>() {}),
-                equalTo(new Bytes16(rawInputBytes)));
+                (new Bytes16(rawInputBytes)));
     }
 
     @Test
@@ -235,10 +229,10 @@ public class FunctionReturnDecoderTest {
         String encoded = TypeEncoder.encodeDynamicBytes(bytes);
         String hash = Hash.sha3(encoded);
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(
                         hash, new TypeReference<DynamicBytes>() {}),
-                equalTo(new Bytes32(Numeric.hexStringToByteArray(hash))));
+                (new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 
     @Test
@@ -249,9 +243,9 @@ public class FunctionReturnDecoderTest {
         String encoded = TypeEncoder.encodeDynamicArray(array);
         String hash = Hash.sha3(encoded);
 
-        assertThat(
+        assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(
                         hash, new TypeReference<DynamicArray>() {}),
-                equalTo(new Bytes32(Numeric.hexStringToByteArray(hash))));
+                (new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 }

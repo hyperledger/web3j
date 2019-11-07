@@ -20,13 +20,12 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okio.Buffer;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.web3j.protocol.http.HttpService;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class RequestTester {
 
@@ -35,7 +34,7 @@ public abstract class RequestTester {
 
     private RequestInterceptor requestInterceptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         requestInterceptor = new RequestInterceptor();
         httpClient = new OkHttpClient.Builder().addInterceptor(requestInterceptor).build();
@@ -48,11 +47,11 @@ public abstract class RequestTester {
     protected void verifyResult(String expected) throws Exception {
         RequestBody requestBody = requestInterceptor.getRequestBody();
         assertNotNull(requestBody);
-        assertThat(requestBody.contentType(), is(HttpService.JSON_MEDIA_TYPE));
+        assertEquals(requestBody.contentType(), (HttpService.JSON_MEDIA_TYPE));
 
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
-        assertThat(replaceRequestId(buffer.readUtf8()), is(replaceRequestId(expected)));
+        assertEquals(replaceRequestId(buffer.readUtf8()), (replaceRequestId(expected)));
     }
 
     private String replaceRequestId(String json) {

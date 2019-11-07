@@ -12,10 +12,13 @@
  */
 package org.web3j.crypto;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /** "Unparameterized" tests of {@link MnemonicUtils}. */
 public class StaticMnemonicUtilsTest {
@@ -80,7 +83,7 @@ public class StaticMnemonicUtilsTest {
                 "clinic excuse minimum until indoor flower fun concert inquiry letter audit patrol";
         final String actual =
                 MnemonicUtils.generateMnemonic(MnemonicUtils.generateEntropy(expected));
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -88,12 +91,13 @@ public class StaticMnemonicUtilsTest {
         final byte[] expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
         final byte[] actual =
                 MnemonicUtils.generateEntropy(MnemonicUtils.generateMnemonic(expected));
-        Assert.assertArrayEquals(expected, actual);
+        assertArrayEquals(expected, actual);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testShouldThrowOnEmptyMnemonic() {
-        MnemonicUtils.generateEntropy("");
+
+        assertThrows(IllegalArgumentException.class, () -> MnemonicUtils.generateEntropy(""));
     }
 
     private void assertCorrectEntropy(String expected, String mnemonic) {
@@ -101,7 +105,7 @@ public class StaticMnemonicUtilsTest {
     }
 
     private void assertCorrectEntropy(String expected, String mnemonic, int size) {
-        Assert.assertEquals(
+        assertEquals(
                 expected,
                 Numeric.toHexStringNoPrefixZeroPadded(
                         Numeric.toBigInt(MnemonicUtils.generateEntropy(mnemonic)), size));

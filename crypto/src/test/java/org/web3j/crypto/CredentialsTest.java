@@ -12,10 +12,9 @@
  */
 package org.web3j.crypto;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CredentialsTest {
 
@@ -33,7 +32,7 @@ public class CredentialsTest {
     }
 
     private void verify(Credentials credentials) {
-        assertThat(credentials.getAddress(), is(SampleKeys.ADDRESS));
-        assertThat(credentials.getEcKeyPair(), is(SampleKeys.KEY_PAIR));
+        assertEquals(credentials.getAddress(), (SampleKeys.ADDRESS));
+        assertEquals(credentials.getEcKeyPair(), (SampleKeys.KEY_PAIR));
     }
 }

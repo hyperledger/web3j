@@ -14,24 +14,29 @@ package org.web3j.utils;
 
 import java.util.concurrent.ExecutionException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AsyncTest {
 
     @Test
     public void testRun() throws Exception {
-        assertThat(Async.run(() -> "").get(), is(""));
+        assertEquals("", Async.run(() -> "").get());
     }
 
-    @Test(expected = ExecutionException.class)
-    public void testRunException() throws Exception {
-        Async.run(
-                        () -> {
-                            throw new RuntimeException("");
-                        })
-                .get();
+    @Test
+    public void testRunException() {
+
+        assertThrows(
+                ExecutionException.class,
+                () -> {
+                    Async.run(
+                                    () -> {
+                                        throw new RuntimeException("");
+                                    })
+                            .get();
+                });
     }
 }

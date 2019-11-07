@@ -15,8 +15,8 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.Function;
@@ -27,14 +27,14 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.tx.gas.DefaultGasProvider;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EthCallIT extends Scenario {
 
     private Revert contract;
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -61,7 +61,6 @@ public class EthCallIT extends Scenario {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
 
         assertTrue(ethCall.isReverted());
-        assertTrue(ethCall.reverts());
         assertTrue(ethCall.getRevertReason().endsWith("revert The reason for revert"));
     }
 

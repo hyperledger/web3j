@@ -15,14 +15,13 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Sign.SignatureData;
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ECRecoverTest {
 
@@ -74,7 +73,7 @@ public class ECRecoverTest {
             }
         }
 
-        assertThat(addressRecovered, is(address));
+        assertEquals(addressRecovered, (address));
         assertTrue(match);
     }
 }

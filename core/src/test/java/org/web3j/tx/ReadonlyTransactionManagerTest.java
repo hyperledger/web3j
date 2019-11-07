@@ -15,15 +15,15 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -42,14 +42,17 @@ public class ReadonlyTransactionManagerTest {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
         String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
-        assertThat(value, is("test"));
+        assertEquals("test", value);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testSendTransaction() throws IOException {
+    @Test
+    public void testSendTransaction() {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
-        readonlyTransactionManager.sendTransaction(
-                BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO);
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        readonlyTransactionManager.sendTransaction(
+                                BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO));
     }
 }

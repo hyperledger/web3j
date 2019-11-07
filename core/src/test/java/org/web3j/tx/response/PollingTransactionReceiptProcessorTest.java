@@ -14,8 +14,8 @@ package org.web3j.tx.response;
 
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.Request;
@@ -24,11 +24,9 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,7 +38,7 @@ public class PollingTransactionReceiptProcessorTest {
     private int attempts;
     private PollingTransactionReceiptProcessor processor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         web3j = mock(Web3j.class);
         sleepDuration = 100;
@@ -57,7 +55,7 @@ public class PollingTransactionReceiptProcessorTest {
 
         TransactionReceipt receipt = processor.waitForTransactionReceipt(TRANSACTION_HASH);
 
-        assertThat(receipt, sameInstance(transactionReceipt));
+        assertEquals(receipt, (transactionReceipt));
     }
 
     @Test

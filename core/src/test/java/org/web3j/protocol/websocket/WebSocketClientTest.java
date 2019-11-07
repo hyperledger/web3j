@@ -15,8 +15,8 @@ package org.web3j.protocol.websocket;
 import java.io.IOException;
 import java.net.URI;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -28,7 +28,7 @@ public class WebSocketClientTest {
 
     private WebSocketClient client;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         client = new WebSocketClient(new URI("ws://localhost/"));
         client.setListener(listener);

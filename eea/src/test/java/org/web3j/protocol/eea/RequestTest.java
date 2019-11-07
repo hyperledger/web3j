@@ -12,7 +12,7 @@
  */
 package org.web3j.protocol.eea;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.http.HttpService;

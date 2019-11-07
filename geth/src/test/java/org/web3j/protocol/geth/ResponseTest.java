@@ -12,14 +12,13 @@
  */
 package org.web3j.protocol.geth;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.geth.response.PersonalEcRecover;
 import org.web3j.protocol.geth.response.PersonalImportRawKey;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ResponseTest extends ResponseTester {
 
@@ -33,9 +32,9 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         PersonalEcRecover personalEcRecover = deserialiseResponse(PersonalEcRecover.class);
-        assertThat(
+        assertEquals(
                 personalEcRecover.getRecoverAccountId(),
-                is("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
+                ("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
     }
 
     @Test
@@ -48,8 +47,8 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         PersonalImportRawKey personalImportRawKey = deserialiseResponse(PersonalImportRawKey.class);
-        assertThat(
+        assertEquals(
                 personalImportRawKey.getAccountId(),
-                is("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
+                ("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
     }
 }

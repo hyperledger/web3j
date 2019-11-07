@@ -12,23 +12,22 @@
  */
 package org.web3j.codegen;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbiTypesGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGetPackageName() {
-        assertThat(AbiTypesGenerator.getPackageName(String.class), is("java.lang"));
+        assertEquals(AbiTypesGenerator.getPackageName(String.class), ("java.lang"));
     }
 
     @Test
     public void testCreatePackageName() {
-        assertThat(AbiTypesGenerator.createPackageName(String.class), is("java.lang.generated"));
+        assertEquals(AbiTypesGenerator.createPackageName(String.class), ("java.lang.generated"));
     }
 
     @Test

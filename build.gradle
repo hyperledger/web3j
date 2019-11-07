@@ -11,10 +11,11 @@ buildscript {
 
     // test dependencies
     ext.equalsverifierVersion = '3.1.10'
-    ext.junitVersion = '4.11'
+    ext.junitVersion = '5.+'
     ext.junitBenchmarkVersion = '0.7.2'
     ext.logbackVersion = '1.2.3'
-    ext.mockitoVersion = '1.10.19'
+    ext.mockitoVersion = '3.1.0'
+    ext.mockitoJunitVersion = "3.1.0"
 
     repositories { mavenCentral() }
 
@@ -109,8 +110,8 @@ subprojects {
     apply plugin: 'java'
 
     dependencies {
-        testCompile "junit:junit:$junitVersion",
-                "org.mockito:mockito-core:$mockitoVersion"
+        testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
+        testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
     }
 }
 

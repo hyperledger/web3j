@@ -14,13 +14,12 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.generated.SimpleStorage;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class SimpleStorageContractIT extends Scenario {
 
@@ -30,6 +29,6 @@ public class SimpleStorageContractIT extends Scenario {
         SimpleStorage simpleStorage =
                 SimpleStorage.deploy(web3j, ALICE, GAS_PRICE, GAS_LIMIT).send();
         assertNotNull(simpleStorage.set(value).send());
-        assertThat(simpleStorage.get().send(), is(value));
+        assertEquals(simpleStorage.get().send(), (value));
     }
 }

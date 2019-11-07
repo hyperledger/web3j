@@ -12,8 +12,9 @@
  */
 package org.web3j.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.web3j.utils.Assertions.verifyPrecondition;
 
 public class AssertionsTest {
@@ -23,8 +24,9 @@ public class AssertionsTest {
         verifyPrecondition(true, "");
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testVerifyPreconditionFailure() {
-        verifyPrecondition(false, "");
+
+        assertThrows(RuntimeException.class, () -> verifyPrecondition(false, ""));
     }
 }

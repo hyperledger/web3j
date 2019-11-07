@@ -12,10 +12,9 @@
  */
 package org.web3j.crypto;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.utils.Numeric.asByte;
 
 public class HashTest {
@@ -74,36 +73,36 @@ public class HashTest {
                 };
 
         byte[] result = Hash.sha3(input);
-        assertThat(result, is(expected));
+        assertEquals(result, (expected));
     }
 
     @Test
     public void testSha3HashHex() {
-        assertThat(
+        assertEquals(
                 Hash.sha3(""),
-                is("0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
+                ("0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
 
-        assertThat(
+        assertEquals(
                 Hash.sha3("68656c6c6f20776f726c64"),
-                is("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
+                ("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
     }
 
     @Test
     public void testSha3String() {
-        assertThat(
+        assertEquals(
                 Hash.sha3String(""),
-                is("0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
+                ("0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
 
-        assertThat(
+        assertEquals(
                 Hash.sha3String("EVWithdraw(address,uint256,bytes32)"),
-                is("0x953d0c27f84a9649b0e121099ffa9aeb7ed83e65eaed41d3627f895790c72d41"));
+                ("0x953d0c27f84a9649b0e121099ffa9aeb7ed83e65eaed41d3627f895790c72d41"));
     }
 
     @Test
     public void testByte() {
-        assertThat(asByte(0x0, 0x0), is((byte) 0x0));
-        assertThat(asByte(0x1, 0x0), is((byte) 0x10));
-        assertThat(asByte(0xf, 0xf), is((byte) 0xff));
-        assertThat(asByte(0xc, 0x5), is((byte) 0xc5));
+        assertEquals(asByte(0x0, 0x0), ((byte) 0x0));
+        assertEquals(asByte(0x1, 0x0), ((byte) 0x10));
+        assertEquals(asByte(0xf, 0xf), ((byte) 0xff));
+        assertEquals(asByte(0xc, 0x5), ((byte) 0xc5));
     }
 }

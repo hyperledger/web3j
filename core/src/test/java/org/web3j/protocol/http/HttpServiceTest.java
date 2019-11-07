@@ -22,8 +22,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.web3j.protocol.core.Request;
@@ -32,7 +31,10 @@ import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.exceptions.ClientConnectionException;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class HttpServiceTest {
 
@@ -96,16 +98,16 @@ public class HttpServiceTest {
         try {
             mockedHttpService.send(request, EthBlockNumber.class);
         } catch (ClientConnectionException e) {
-            Assert.assertEquals(
+            assertEquals(
                     e.getMessage(),
                     "Invalid response received: " + response.code() + "; " + content);
             return;
         }
 
-        Assert.fail("No exception");
+        fail("No exception");
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void subscriptionNotSupported() {
         Request<Object, EthSubscribe> subscribeRequest =
                 new Request<>(
@@ -113,7 +115,10 @@ public class HttpServiceTest {
                         Arrays.asList("newHeads", Collections.emptyMap()),
                         httpService,
                         EthSubscribe.class);
-
-        httpService.subscribe(subscribeRequest, "eth_unsubscribe", NewHeadsNotification.class);
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        httpService.subscribe(
+                                subscribeRequest, "eth_unsubscribe", NewHeadsNotification.class));
     }
 }

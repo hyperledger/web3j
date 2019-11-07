@@ -14,8 +14,8 @@ package org.web3j.protocol.ipc;
 
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
@@ -29,7 +29,7 @@ public class IpcServiceTest {
     private IpcService ipcService;
     private IOFacade ioFacade;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ioFacade = mock(IOFacade.class);
         ipcService =

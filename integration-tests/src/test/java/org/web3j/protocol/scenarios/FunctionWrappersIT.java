@@ -14,7 +14,7 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.generated.Fibonacci;
@@ -22,8 +22,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test Fibonacci contract generated wrappers.
@@ -44,7 +43,7 @@ public class FunctionWrappersIT extends Scenario {
                         STATIC_GAS_PROVIDER);
 
         BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).send();
-        assertThat(result, equalTo(BigInteger.valueOf(55)));
+        assertEquals(result, (BigInteger.valueOf(55)));
     }
 
     @Test
@@ -61,8 +60,8 @@ public class FunctionWrappersIT extends Scenario {
 
         Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
-        assertThat(result.input, equalTo(new Uint256(BigInteger.valueOf(15))));
+        assertEquals(result.input, (new Uint256(BigInteger.valueOf(15))));
 
-        assertThat(result.result, equalTo(new Uint256(BigInteger.valueOf(610))));
+        assertEquals(result.result, (new Uint256(BigInteger.valueOf(610))));
     }
 }
