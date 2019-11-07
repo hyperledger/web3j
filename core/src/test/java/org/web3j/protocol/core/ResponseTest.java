@@ -545,7 +545,7 @@ public class ResponseTest extends ResponseTester {
 
         EthCall ethCall = deserialiseResponse(EthCall.class);
         assertEquals(ethCall.getValue(), ("0x"));
-        assertFalse(ethCall.reverts());
+        assertFalse(ethCall.isReverted());
         assertNull(ethCall.getRevertReason());
     }
 
@@ -569,7 +569,7 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         EthCall ethCall = deserialiseResponse(EthCall.class);
-        assertTrue(ethCall.reverts());
+        assertTrue(ethCall.isReverted());
         assertEquals(
                 ethCall.getRevertReason(),
                 ("Solidity uses state-reverting exceptions to "
