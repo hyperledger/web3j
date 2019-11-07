@@ -1,9 +1,17 @@
 
 description 'web3j project code generators'
-
+repositories {
+    maven { url 'http://dl.bintray.com/web3j/maven' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url "https://dl.bintray.com/ethereum/maven" }
+}
 dependencies {
     compile project(':core'),
             "com.squareup:javapoet:$javapoetVersion",
             "info.picocli:picocli:$picocliVersion"
+    implementation("org.web3j:web3j-unit:4.6.0-SNAPSHOT")
     testCompile project(path: ':core', configuration: 'testArtifacts')
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.6.0-SNAPSHOT")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0-SNAPSHOT")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.6.0-SNAPSHOT")
 }
