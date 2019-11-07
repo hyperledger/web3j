@@ -8,6 +8,7 @@ greeter/Greeter
 misc/Misc
 shipit/ShipIt
 simplestorage/SimpleStorage
+revert/Revert
 duplicate/DuplicateField
 "
 

@@ -552,7 +552,7 @@ public class ResponseTest extends ResponseTester {
 
         EthCall ethCall = deserialiseResponse(EthCall.class);
         assertThat(ethCall.getValue(), is("0x"));
-        assertFalse(ethCall.reverts());
+        assertFalse(ethCall.isReverted());
         assertNull(ethCall.getRevertReason());
     }
 
@@ -576,7 +576,7 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         EthCall ethCall = deserialiseResponse(EthCall.class);
-        assertTrue(ethCall.reverts());
+        assertTrue(ethCall.isReverted());
         assertThat(
                 ethCall.getRevertReason(),
                 is(

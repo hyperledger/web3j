@@ -37,16 +37,27 @@ public class EthCall extends Response<String> {
         return getResult();
     }
 
+    public boolean isReverted() {
+        return hasError() || isErrorInResult();
+    }
+
+    @Deprecated
     public boolean reverts() {
+        return isReverted();
+    }
+
+    private boolean isErrorInResult() {
         return getValue() != null && getValue().startsWith(errorMethodId);
     }
 
     public String getRevertReason() {
-        if (reverts()) {
+        if (isErrorInResult()) {
             String hexRevertReason = getValue().substring(errorMethodId.length());
             List<Type> decoded = FunctionReturnDecoder.decode(hexRevertReason, revertReasonType);
             Utf8String decodedRevertReason = (Utf8String) decoded.get(0);
             return decodedRevertReason.getValue();
+        } else if (hasError()) {
+            return getError().getMessage();
         }
         return null;
     }
