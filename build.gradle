@@ -314,11 +314,11 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         afterEvaluate {
             getClassDirectories().from(files(classDirectories.files.collect {
                 fileTree(dir: it,
-                        exclude: [
-                                'org/web3j/abi/datatypes/generated/**',
-                                'org/web3j/tuples/generated/**',
-                                'org/web3j/ens/contracts/generated/**'
-                        ])
+                exclude: [
+                    'org/web3j/abi/datatypes/generated/**',
+                    'org/web3j/tuples/generated/**',
+                    'org/web3j/ens/contracts/generated/**'
+                ])
             }))
         }
     }

@@ -44,8 +44,8 @@ import static org.junit.Assert.assertThat;
 import static org.web3j.utils.Restriction.RESTRICTED;
 
 /**
- * Test designed to run with besu-quickstart https://github.com/PegaSysEng/besu-quickstart
- * Using orion 1.3.2
+ * Test designed to run with besu-quickstart https://github.com/PegaSysEng/besu-quickstart Using
+ * orion 1.3.2
  */
 @Ignore
 public class BesuPrivacyQuickstartIntegrationTest {
