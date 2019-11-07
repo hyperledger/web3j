@@ -33,9 +33,9 @@ public class UnitMethodGeneratorTest extends Setup {
                             + separator
                             + "src"
                             + separator
-                            + "test"
+                            + "integrationTest"
                             + separator
-                            + "solidity"
+                            + "java"
                             + separator
                             + "org"
                             + separator
