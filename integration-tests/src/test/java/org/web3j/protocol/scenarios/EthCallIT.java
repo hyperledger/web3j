@@ -14,8 +14,10 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 import java.util.Collections;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.generated.Uint256;
