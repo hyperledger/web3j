@@ -13,7 +13,6 @@
 package org.web3j.codegen.unit.gen;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -27,27 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnitClassGeneratorTest extends Setup {
     private static String classAsString;
-    private static File classAsFile =
-            new File(
-                    temp
-                            + separator
-                            + "test"
-                            + separator
-                            + "src"
-                            + separator
-                            + "integrationTest"
-                            + separator
-                            + "java"
-                            + separator
-                            + "org"
-                            + separator
-                            + "com"
-                            + separator
-                            + "generated"
-                            + separator
-                            + "contracts"
-                            + separator
-                            + "GreeterTest.java");
 
     @BeforeAll
     public static void init() throws IOException {
@@ -55,6 +33,7 @@ public class UnitClassGeneratorTest extends Setup {
                 new BufferedReader(new FileReader(classAsFile))
                         .lines()
                         .collect(Collectors.joining("\n"));
+
     }
 
     @Test

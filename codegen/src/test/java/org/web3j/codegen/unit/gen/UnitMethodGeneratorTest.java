@@ -13,7 +13,6 @@
 package org.web3j.codegen.unit.gen;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.stream.Collectors;
@@ -21,32 +20,9 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static java.io.File.separator;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnitMethodGeneratorTest extends Setup {
-    private static File classAsFile =
-            new File(
-                    temp
-                            + separator
-                            + "test"
-                            + separator
-                            + "src"
-                            + separator
-                            + "integrationTest"
-                            + separator
-                            + "java"
-                            + separator
-                            + "org"
-                            + separator
-                            + "com"
-                            + separator
-                            + "generated"
-                            + separator
-                            + "contracts"
-                            + separator
-                            + "GreeterTest.java");
-
     private static String classAsString;
 
     @BeforeAll
