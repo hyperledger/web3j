@@ -94,9 +94,9 @@ public class UnitClassGenerator {
                                 + separator
                                 + "src"
                                 + separator
-                                + "test"
+                                + "integrationTest"
                                 + separator
-                                + "solidity"));
+                                + "java"));
     }
 
     private boolean isSupported(final Method method) {
