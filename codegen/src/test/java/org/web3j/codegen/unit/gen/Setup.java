@@ -18,8 +18,24 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.shaded.com.google.common.io.Files;
 
+import static java.io.File.separator;
+
 public class Setup {
     static File temp = Files.createTempDir();
+    static File classAsFile =
+            new File(
+                    String.join(
+                            separator,
+                            temp.getAbsolutePath(),
+                            "test",
+                            "src",
+                            "integrationTest",
+                            "java",
+                            "org",
+                            "com",
+                            "generated",
+                            "contracts",
+                            "GreeterTest.java"));
 
     @BeforeAll
     public static void setUp() throws IOException, ClassNotFoundException {
