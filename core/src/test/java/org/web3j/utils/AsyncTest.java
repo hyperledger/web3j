@@ -23,7 +23,7 @@ public class AsyncTest {
 
     @Test
     public void testRun() throws Exception {
-        assertEquals(Async.run(() -> "").get(), (""));
+        assertEquals("", Async.run(() -> "").get());
     }
 
     @Test

@@ -42,7 +42,7 @@ public class ReadonlyTransactionManagerTest {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
         String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
-        assertEquals(value, ("test"));
+        assertEquals("test", value);
     }
 
     @Test

@@ -33,47 +33,47 @@ public class DefaultFunctionEncoderTest {
 
     @Test
     public void testBuildMethodId() {
-        assertEquals(DefaultFunctionEncoder.buildMethodId("baz(uint32,bool)"), ("0xcdcd77c0"));
+        assertEquals("0xcdcd77c0", DefaultFunctionEncoder.buildMethodId("baz(uint32,bool)"));
     }
 
     @Test
     public void testBuildMessageSignature() {
         assertEquals(
+                "baz(uint32,bool)",
                 DefaultFunctionEncoder.buildMethodSignature(
-                        "baz", Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true))),
-                ("baz(uint32,bool)"));
+                        "baz", Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true))));
     }
 
     @Test
     public void testBuildEmptyMethodSignature() {
         assertEquals(
-                DefaultFunctionEncoder.buildMethodSignature("empty", Collections.emptyList()),
-                ("empty()"));
+                "empty()",
+                DefaultFunctionEncoder.buildMethodSignature("empty", Collections.emptyList()));
     }
 
     @Test
     public void testEncodeConstructorEmpty() {
-        assertEquals(FunctionEncoder.encodeConstructor(Collections.emptyList()), (""));
+        assertEquals("", FunctionEncoder.encodeConstructor(Collections.emptyList()));
     }
 
     @Test
     public void testEncodeConstructorString() {
         assertEquals(
-                FunctionEncoder.encodeConstructor(
-                        Collections.singletonList(new Utf8String("Greetings!"))),
-                ("0000000000000000000000000000000000000000000000000000000000000020"
+                "0000000000000000000000000000000000000000000000000000000000000020"
                         + "000000000000000000000000000000000000000000000000000000000000000a"
-                        + "4772656574696e67732100000000000000000000000000000000000000000000"));
+                        + "4772656574696e67732100000000000000000000000000000000000000000000",
+                FunctionEncoder.encodeConstructor(
+                        Collections.singletonList(new Utf8String("Greetings!"))));
     }
 
     @Test
     public void testEncodeConstructorUint() {
         assertEquals(
+                "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000020",
                 FunctionEncoder.encodeConstructor(
                         Arrays.asList(
-                                new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(0x20)))),
-                ("0000000000000000000000000000000000000000000000000000000000000001"
-                        + "0000000000000000000000000000000000000000000000000000000000000020"));
+                                new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(0x20)))));
     }
 
     @Test
@@ -85,10 +85,10 @@ public class DefaultFunctionEncoderTest {
                         Collections.emptyList());
 
         assertEquals(
-                FunctionEncoder.encode(function),
-                ("0xcdcd77c0"
+                "0xcdcd77c0"
                         + "0000000000000000000000000000000000000000000000000000000000000045"
-                        + "0000000000000000000000000000000000000000000000000000000000000001"));
+                        + "0000000000000000000000000000000000000000000000000000000000000001",
+                FunctionEncoder.encode(function));
     }
 
     @Test
@@ -106,8 +106,7 @@ public class DefaultFunctionEncoderTest {
                         Collections.emptyList());
 
         assertEquals(
-                FunctionEncoder.encode(function),
-                ("0xa5643bf2"
+                "0xa5643bf2"
                         + "0000000000000000000000000000000000000000000000000000000000000060"
                         + "0000000000000000000000000000000000000000000000000000000000000001"
                         + "00000000000000000000000000000000000000000000000000000000000000a0"
@@ -116,7 +115,8 @@ public class DefaultFunctionEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000003"
                         + "0000000000000000000000000000000000000000000000000000000000000001"
                         + "0000000000000000000000000000000000000000000000000000000000000002"
-                        + "0000000000000000000000000000000000000000000000000000000000000003"));
+                        + "0000000000000000000000000000000000000000000000000000000000000003",
+                FunctionEncoder.encode(function));
     }
 
     @Test
@@ -134,8 +134,7 @@ public class DefaultFunctionEncoderTest {
                         Collections.emptyList());
 
         assertEquals(
-                FunctionEncoder.encode(function),
-                ("0x8be65246"
+                "0x8be65246"
                         + "0000000000000000000000000000000000000000000000000000000000000123"
                         + "0000000000000000000000000000000000000000000000000000000000000080"
                         + "3132333435363738393000000000000000000000000000000000000000000000"
@@ -144,6 +143,7 @@ public class DefaultFunctionEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000456"
                         + "0000000000000000000000000000000000000000000000000000000000000789"
                         + "000000000000000000000000000000000000000000000000000000000000000d"
-                        + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"));
+                        + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000",
+                FunctionEncoder.encode(function));
     }
 }

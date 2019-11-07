@@ -55,10 +55,10 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGetFileNoExtension() {
-        assertEquals(getFileNameNoExtension(""), (""));
-        assertEquals(getFileNameNoExtension("file"), ("file"));
-        assertEquals(getFileNameNoExtension("file."), ("file"));
-        assertEquals(getFileNameNoExtension("file.txt"), ("file"));
+        assertEquals("", getFileNameNoExtension(""));
+        assertEquals("file", getFileNameNoExtension("file"));
+        assertEquals("file", getFileNameNoExtension("file."));
+        assertEquals("file", getFileNameNoExtension("file.txt"));
     }
 
     @Test
