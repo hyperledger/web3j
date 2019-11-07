@@ -43,3 +43,9 @@ docs/build
 
 # OS X
 .DS_Store
+
+# VScode
+**/.classpath
+**/.project
+**/.settings
+**/bin
