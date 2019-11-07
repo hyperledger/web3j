@@ -33,7 +33,6 @@ public class UnitClassGeneratorTest extends Setup {
                 new BufferedReader(new FileReader(classAsFile))
                         .lines()
                         .collect(Collectors.joining("\n"));
-
     }
 
     @Test
