@@ -22,7 +22,7 @@ jobs:
   - stage: build and stage release
     if: branch =~ /release/
     script: "./gradlew check uploadArchives -Pversion=${TRAVIS_BRANCH#'release/'}"
-  - stage: build and stage release
+  - stage: release
     if: branch =~ /release/
     script: "./gradlew closeAndReleaseRepository"
   - stage: github release
