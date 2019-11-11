@@ -46,4 +46,4 @@ before_install:
   - |
       if [[ "$TRAVIS_PULL_REQUEST" = "false" ]]; then
        openssl aes-256-cbc -K $encrypted_661235106ac6_key -iv $encrypted_661235106ac6_iv -in web3j.asc.enc -out web3j.asc -d
-    fi
+      fi
