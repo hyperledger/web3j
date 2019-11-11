@@ -73,8 +73,8 @@ public class PollingTransactionReceiptProcessorTest {
         }
     }
 
-    private static <T extends Response<?>> Request<String, T> requestReturning(T response) {
-        Request<String, T> request = mock(Request.class);
+    private static <T extends Response<?>> Request requestReturning(T response) {
+        Request request = mock(Request.class);
         try {
             when(request.send()).thenReturn(response);
         } catch (IOException e) {

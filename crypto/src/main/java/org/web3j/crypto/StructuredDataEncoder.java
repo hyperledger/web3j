@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 
 import org.web3j.abi.TypeEncoder;
 import org.web3j.abi.datatypes.AbiTypes;
@@ -160,8 +161,9 @@ public class StructuredDataEncoder {
         return dimensions;
     }
 
+    @Ignore
     public List<Pair> getDepthsAndDimensions(Object data, int depth) {
-        if (!List.class.isInstance(data)) {
+        if (!(data instanceof List)) {
             // Nothing more to recurse, since the data is no more an array
             return new ArrayList<>();
         }

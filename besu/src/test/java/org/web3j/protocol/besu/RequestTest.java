@@ -59,7 +59,7 @@ public class RequestTest extends RequestTester {
     @Test
     public void testClicqueDiscard() throws Exception {
         final String accountId = "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
-        web3j.clicqueDiscard(accountId).send();
+        web3j.cliqueDiscard(accountId).send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"clique_discard\","
@@ -69,7 +69,7 @@ public class RequestTest extends RequestTester {
     @Test
     public void testClicqueGetSigners() throws Exception {
         final DefaultBlockParameter blockParameter = DefaultBlockParameter.valueOf("latest");
-        web3j.clicqueGetSigners(blockParameter).send();
+        web3j.cliqueGetSigners(blockParameter).send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"clique_getSigners\","
@@ -80,7 +80,7 @@ public class RequestTest extends RequestTester {
     public void testClicqueGetSignersAtHash() throws Exception {
         final String blockHash =
                 "0x98b2ddb5106b03649d2d337d42154702796438b3c74fd25a5782940e84237a48";
-        web3j.clicqueGetSignersAtHash(blockHash).send();
+        web3j.cliqueGetSignersAtHash(blockHash).send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"clique_getSignersAtHash\",\"params\":"

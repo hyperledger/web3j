@@ -15,6 +15,8 @@ package org.web3j.protocol.core;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
+
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.datatypes.Function;
@@ -39,6 +41,7 @@ public class RemoteFunctionCall<T> extends RemoteCall<T> {
      *
      * @return the function call, encoded.
      */
+    @Ignore
     public String encodeFunctionCall() {
         return FunctionEncoder.encode(function);
     }
@@ -46,7 +49,7 @@ public class RemoteFunctionCall<T> extends RemoteCall<T> {
     /**
      * decode a method response
      *
-     * @param response
+     * @param response the response
      * @return list of abi types
      */
     public List<Type> decodeFunctionResponse(String response) {

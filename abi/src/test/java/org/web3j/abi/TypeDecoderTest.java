@@ -348,7 +348,7 @@ public class TypeDecoderTest {
         StaticArray2 arr =
                 (StaticArray2)
                         TypeDecoder.instantiateType("uint256[2]", new long[] {10, Long.MAX_VALUE});
-        assert (arr instanceof StaticArray2);
+        assert (arr != null);
 
         assertEquals(arr.getValue().get(0), (new Uint256(BigInteger.TEN)));
 
@@ -414,7 +414,7 @@ public class TypeDecoderTest {
                 (DynamicArray)
                         TypeDecoder.instantiateType(
                                 "string[]", new String[] {"Hello, world!", "world! Hello,"});
-        assert (arr instanceof DynamicArray);
+        assert (arr != null);
 
         assertEquals(arr.getValue().get(0), (new Utf8String("Hello, world!")));
 
@@ -432,17 +432,17 @@ public class TypeDecoderTest {
         StaticArray3<DynamicArray<Uint256>> twoDim =
                 (StaticArray3<DynamicArray<Uint256>>)
                         TypeDecoder.instantiateType("uint256[][3]", bytes2d);
-        assert (twoDim instanceof StaticArray3);
+        assert (twoDim != null);
         DynamicArray<Uint256> row1 = twoDim.getValue().get(1);
-        assert (row1 instanceof DynamicArray);
+        assert (row1 != null);
         assertEquals(row1.getValue().get(2), (new Uint256(3)));
 
         StaticArray3<StaticArray3<DynamicArray<Uint256>>> threeDim =
                 (StaticArray3<StaticArray3<DynamicArray<Uint256>>>)
                         TypeDecoder.instantiateType("uint256[][3][3]", bytes3d);
-        assert (threeDim instanceof StaticArray3);
+        assert (threeDim != null);
         row1 = threeDim.getValue().get(1).getValue().get(1);
-        assert (row1 instanceof DynamicArray);
+        assert (row1 != null);
         assertEquals(row1.getValue().get(1), (new Uint256(2)));
     }
 }

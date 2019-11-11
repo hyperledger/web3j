@@ -30,7 +30,9 @@ public final class Tuple5<T1, T2, T3, T4, T5> implements Tuple {
     }
 
     /**
-     * @deprecated use 'component1' method instead */
+     * @deprecated use 'component1' method instead
+     * @return the return value
+     * */
     @Deprecated
     public T1 getValue1() {
         return value1;
@@ -41,7 +43,9 @@ public final class Tuple5<T1, T2, T3, T4, T5> implements Tuple {
     }
 
     /**
-     * @deprecated use 'component2' method instead */
+     * @deprecated use 'component2' method instead
+     * @return the return value
+     * */
     @Deprecated
     public T2 getValue2() {
         return value2;
@@ -52,7 +56,9 @@ public final class Tuple5<T1, T2, T3, T4, T5> implements Tuple {
     }
 
     /**
-     * @deprecated use 'component3' method instead */
+     * @deprecated use 'component3' method instead
+     * @return the return value
+     * */
     @Deprecated
     public T3 getValue3() {
         return value3;
@@ -63,7 +69,9 @@ public final class Tuple5<T1, T2, T3, T4, T5> implements Tuple {
     }
 
     /**
-     * @deprecated use 'component4' method instead */
+     * @deprecated use 'component4' method instead
+     * @return the return value
+     * */
     @Deprecated
     public T4 getValue4() {
         return value4;
@@ -74,7 +82,9 @@ public final class Tuple5<T1, T2, T3, T4, T5> implements Tuple {
     }
 
     /**
-     * @deprecated use 'component5' method instead */
+     * @deprecated use 'component5' method instead
+     * @return the return value
+     * */
     @Deprecated
     public T5 getValue5() {
         return value5;

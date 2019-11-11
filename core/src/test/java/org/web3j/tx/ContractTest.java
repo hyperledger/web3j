@@ -62,10 +62,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -178,7 +178,7 @@ public class ContractTest extends ManagedTransactionTester {
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
 
         prepareTransaction(transactionReceipt);
-
+        ContractGasProvider contractGasProvider = new DefaultGasProvider();
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
         assertThrows(
@@ -188,8 +188,7 @@ public class ContractTest extends ManagedTransactionTester {
                                         TestContract.class,
                                         web3j,
                                         SampleKeys.CREDENTIALS,
-                                        ManagedTransaction.GAS_PRICE,
-                                        Contract.GAS_LIMIT,
+                                        contractGasProvider,
                                         "0xcafed00d",
                                         encodedConstructor,
                                         BigInteger.ZERO)
@@ -495,13 +494,12 @@ public class ContractTest extends ManagedTransactionTester {
 
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
-
+        ContractGasProvider contractGasProvider = new DefaultGasProvider();
         return TestContract.deployRemoteCall(
                         TestContract.class,
                         web3j,
                         getVerifiedTransactionManager(SampleKeys.CREDENTIALS),
-                        ManagedTransaction.GAS_PRICE,
-                        Contract.GAS_LIMIT,
+                        contractGasProvider,
                         "0xcafed00d",
                         encodedConstructor,
                         BigInteger.ZERO)
@@ -524,9 +522,8 @@ public class ContractTest extends ManagedTransactionTester {
                 String contractAddress,
                 Web3j web3j,
                 Credentials credentials,
-                BigInteger gasPrice,
-                BigInteger gasLimit) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+                ContractGasProvider contractGasProvider) {
+            super(TEST_CONTRACT_BINARY, contractAddress, web3j, credentials, contractGasProvider);
         }
 
         public TestContract(

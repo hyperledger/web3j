@@ -114,6 +114,8 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      *
      * @param solidityType the solidity as a string eg Address Int
      * @param primitives is it a primitive type
+     * @return returns
+     * @throws ClassNotFoundException when the class cannot be found.
      */
     protected static Class<? extends org.web3j.abi.datatypes.Type> getAtomicTypeClass(
             String solidityType, boolean primitives) throws ClassNotFoundException {
