@@ -11,53 +11,35 @@ buildscript {
 
     // test dependencies
     ext.equalsverifierVersion = '3.1.10'
-    ext.junitVersion = '5.+'
+    ext.junitVersion = '5.5.2'
     ext.junitBenchmarkVersion = '0.7.2'
     ext.logbackVersion = '1.2.3'
-    ext.mockitoVersion = '3.1.0'
     ext.mockitoJunitVersion = "3.1.0"
 
     repositories { mavenCentral() }
-
-    dependencies {
-        classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-    }
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.8.4"
-    id 'com.diffplug.gradle.spotless' version '3.23.1'
-
-    // Required for JFrog Artifactory repository
-    id 'jacoco'
-    id 'maven-publish'
-
-    // Required for Maven Nexus repository
-    id 'maven'
-    id 'signing'
+    id 'java'
     id 'idea'
+    id 'jacoco'
+    id "com.diffplug.gradle.spotless" version "3.25.0"
+    id 'io.codearte.nexus-staging' version '0.21.1'
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-// should only be applied to the root project, see
-// https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
-apply plugin: 'io.codearte.nexus-staging'
-apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
 
 description 'web3j base project'
 
 allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.diffplug.gradle.spotless'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    apply plugin: 'java'
-    apply plugin: 'jacoco'
 
-    apply plugin: 'com.diffplug.gradle.spotless'
     spotless {
         java {
             // This path needs to be relative to each project
@@ -84,7 +66,6 @@ allprojects {
 
     repositories { mavenCentral() }
 
-    // We don't want any compiler warnings
     compileJava {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
@@ -92,9 +73,8 @@ allprojects {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 
-    javadoc { options.encoding = 'UTF-8' }
-
-    jacoco { toolVersion = '0.8.4' // See http://www.eclemma.org/jacoco/.
+    jacoco {
+        toolVersion = '0.8.4' // See http://www.eclemma.org/jacoco/.
     }
 
     jacocoTestReport {
@@ -104,10 +84,6 @@ allprojects {
     tasks.withType(Test) {
         reports.html.destination = file("${reporting.baseDir}/${name}")
     }
-}
-
-subprojects {
-    apply plugin: 'java'
 
     dependencies {
         testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
@@ -116,96 +92,55 @@ subprojects {
 }
 
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
-    // Required for Maven Nexus repository
     apply plugin: 'maven'
     apply plugin: 'signing'
-
-    // Required for JFrog Artifactory repository
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
-
-    task javadocJar(type: Jar) {
-        classifier = 'javadoc'
-        from javadoc
-    }
-
-    task sourcesJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    task testJar(type: Jar) {
-        classifier = 'tests'
-        from sourceSets.test.output
-    }
-
-    artifacts { archives sourcesJar, javadocJar, testJar }
 
     ext {
         ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
         ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
-        ossrhRepoUrl = project.hasProperty('ossrhRepoUrl') ? project.property('ossrhRepoUrl') : System.getenv('OSSRH_REPO_URL')
-        bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-        bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-        bintrayGpgPassphrase = project.hasProperty('bintrayGpgPassphrase') ? project.property('bintrayGpgPassphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
-        isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
-        manualRelease = project.hasProperty('manualRelease') ? project.property('manualRelease').toBoolean() : false
+        signingKey = project.hasProperty('signingKey') ? project.property('signingKey') : new File("$rootDir/web3j.asc").getText('UTF-8')
+        signingPassword = project.hasProperty('signingPassword') ? project.property('signingPassword') : System.getenv('GPG_PASSPHRASE')
     }
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-
-                artifact sourcesJar { classifier 'sources' }
-
-                artifact testJar { classifier 'tests' }
-
-                artifact javadocJar { classifier 'javadoc' }
-
-                pom {
-                    name = project.name
-                    description = project.description
-                    url = "https://github.com/web3j/web3j"
-                    licenses {
-                        license {
-                            name = "The Apache License, Version 2.0"
-                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                            distribution = "repo"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = "conor10"
-                            name = "Conor Svensson"
-                            email = "conor10@gmail.com"
-                        }
-                    }
-                    scm {
-                        connection = "scm:git:https://github.com/web3j/web3j.git"
-                        developerConnection = "scm:git://github.com/web3j/web3j.git"
-                        url = "https://github.com/web3j/web3j.git"
-                    }
-                }
-            }
-        }
+    task javadocJar(type: Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc
     }
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task testJar(type: Jar) {
+        archiveClassifier = 'tests'
+        from sourceSets.test.output
+    }
+
+    javadoc { options.encoding = 'UTF-8' }
+
+    artifacts { archives sourcesJar, javadocJar, testJar }
+
+    signing {
+        sign configurations.archives
+        def signingKey = findProperty("signingKey")
+        def signingPassword = findProperty("signingPassword")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
+
+    archivesBaseName = project.name
 
     uploadArchives {
         repositories {
             mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                onlyIf {
-                    // Only run if this is a manual release triggered by a user, or an automated release for snapshots.
-                    // We don't need to run this for automated releases.
-                    isSnapshotVersion && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
 
-                repository(url: ossrhRepoUrl) {
-                    authentication(
-                            userName: ossrhUsername,
-                            password: ossrhPassword
-                            )
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
 
                 pom.project {
@@ -224,7 +159,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                         license {
                             name 'The Apache License, Version 2.0'
                             url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution 'repo'
                         }
                     }
 
@@ -240,64 +174,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         }
     }
 
-    bintray {
-        user = bintrayUser
-        key = bintrayKey
-        publications = ['mavenJava']
-        publish = true
-        pkg {
-            repo = 'maven'
-            name = 'org.web3j'
-            desc = project.description
-            userOrg = 'web3j'
-            licenses = ['Apache-2.0']
-            issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
-            vcsUrl = 'https://github.com/web3j/web3j.git'
-            websiteUrl = 'https://web3j.io'
-            publicDownloadNumbers = true
-
-            version {
-                gpg {
-                    sign = true
-                    passphrase = bintrayGpgPassphrase
-                }
-                mavenCentralSync {
-                    sync = true
-                    user = ossrhUsername
-                    password = ossrhPassword
-                    close = '1'
-                }
-            }
-        }
-    }
-
-    task release {
-        dependsOn 'build'
-
-        if (isSnapshotVersion) {
-            logger.info(" - ossrhUsername={}", ossrhUsername)
-            logger.info(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-            logger.info(" - ossrhRepoUrl={}", ossrhRepoUrl)
-        } else {
-            logger.info("About to perform {} full release ...", manualRelease ? "a manual" : "an automated")
-            logger.info(" - ossrhUsername={}", ossrhUsername)
-            logger.info(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-            logger.info(" - ossrhRepoUrl={}", ossrhRepoUrl)
-            logger.info(" - bintrayUser={}", bintrayUser)
-            logger.info(" - bintrayKey={}", bintrayKey ? "provided" : "not_provided")
-            logger.info(" - bintrayGpgPassphrase={}", bintrayGpgPassphrase ? "provided" : "not_provided")
-        }
-
-        // Snapshots go to nexus, non-snapshots go to bintray.
-        if (isSnapshotVersion) {
-            dependsOn 'uploadArchives'
-            tasks.findByName('uploadArchives').mustRunAfter 'build'
-        } else {
-            dependsOn 'bintrayUpload'
-            tasks.findByName('bintrayUpload').mustRunAfter 'build'
-        }
-    }
-
     task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
         dependsOn = subprojects.test
         getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
@@ -305,8 +181,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         getClassDirectories().from(subprojects.sourceSets.main.output)
         getExecutionData().from(subprojects.jacocoTestReport.executionData)
         reports { xml.enabled = true }
-
-        onlyIf = { true }
 
         doFirst {
             executionData = files(executionData.findAll { it.exists() })

@@ -49,3 +49,5 @@ docs/build
 **/.project
 **/.settings
 **/bin
+
+web3j.asc
