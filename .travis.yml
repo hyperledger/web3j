@@ -17,7 +17,7 @@ jobs:
     script: "./gradlew spotlessCheck check jacocoTestReport"
     if: type = pull_request
   - stage: build master
-    script: "./gradlew spotlessCheck check jacocoTestReport release"
+    script: "./gradlew spotlessCheck check jacocoTestReport uploadArchives"
     if: branch = master AND NOT type = pull_request
   - stage: build and stage release
     if: branch =~ /release/
