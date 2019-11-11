@@ -369,7 +369,7 @@ public class TypeDecoderTest {
     }
 
     @Test
-    public void testEmptyStaticArrayInstantiateType() throws Exception {
+    public void testEmptyStaticArrayInstantiateType() {
         assertThrows(
                 ClassNotFoundException.class,
                 () -> TypeDecoder.instantiateType("uint256[0]", new long[] {}));
@@ -421,6 +421,7 @@ public class TypeDecoderTest {
         assertEquals(arr.getValue().get(1), (new Utf8String("world! Hello,")));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void multiDimArrays() throws Exception {
         byte[] bytes1d = new byte[] {1, 2, 3};

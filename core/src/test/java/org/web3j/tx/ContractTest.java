@@ -160,7 +160,7 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
-    public void testIsValidNoBinThrows() throws Exception {
+    public void testIsValidNoBinThrows() {
         TransactionManager txManager = mock(TransactionManager.class);
         TestContract contract =
                 new TestContract(
@@ -169,7 +169,7 @@ public class ContractTest extends ManagedTransactionTester {
                         web3j,
                         txManager,
                         new DefaultGasProvider());
-        assertThrows(UnsupportedOperationException.class, () -> contract.isValid());
+        assertThrows(UnsupportedOperationException.class, contract::isValid);
     }
 
     @Test
@@ -180,7 +180,8 @@ public class ContractTest extends ManagedTransactionTester {
         prepareTransaction(transactionReceipt);
         ContractGasProvider contractGasProvider = new DefaultGasProvider();
         String encodedConstructor =
-                FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
+                FunctionEncoder.encodeConstructor(
+                        Collections.<Type>singletonList(new Uint256(BigInteger.TEN)));
         assertThrows(
                 RuntimeException.class,
                 () ->
@@ -296,7 +297,7 @@ public class ContractTest extends ManagedTransactionTester {
         // non-indexed value
         log.setData("0000000000000000000000000000000000000000000000000000000000000001");
 
-        transactionReceipt.setLogs(Arrays.asList(log));
+        transactionReceipt.setLogs(singletonList(log));
 
         EventValues eventValues = contract.processEvent(transactionReceipt).get(0);
 
@@ -313,7 +314,7 @@ public class ContractTest extends ManagedTransactionTester {
         log.setTopics(Collections.emptyList());
         // non-indexed value
         log.setData("0000000000000000000000000000000000000000000000000000000000000001");
-        transactionReceipt.setLogs(Arrays.asList(log));
+        transactionReceipt.setLogs(singletonList(log));
 
         final List<EventValues> eventValues = contract.processEvent(transactionReceipt);
         assertTrue(eventValues.isEmpty(), "No events expected");
@@ -327,11 +328,7 @@ public class ContractTest extends ManagedTransactionTester {
                 getVerifiedTransactionManager(SampleKeys.CREDENTIALS, 1, 1);
 
         contract = new TestContract(ADDRESS, web3j, transactionManager, new DefaultGasProvider());
-        assertThrows(
-                TransactionException.class,
-                () -> {
-                    testErrorScenario();
-                });
+        assertThrows(TransactionException.class, this::testErrorScenario);
     }
 
     @Test
@@ -346,11 +343,7 @@ public class ContractTest extends ManagedTransactionTester {
         when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
         when(web3j.ethSendRawTransaction(any(String.class)))
                 .thenReturn((Request) rawTransactionRequest);
-        assertThrows(
-                RuntimeException.class,
-                () -> {
-                    testErrorScenario();
-                });
+        assertThrows(RuntimeException.class, this::testErrorScenario);
     }
 
     @Test
@@ -364,7 +357,7 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testSetGetGasPrice() {
-        assertEquals(ManagedTransaction.GAS_PRICE, contract.getGasPrice());
+        assertEquals(DefaultGasProvider.GAS_PRICE, contract.getGasPrice());
         BigInteger newPrice = ManagedTransaction.GAS_PRICE.multiply(BigInteger.valueOf(2));
         contract.setGasPrice(newPrice);
         assertEquals(newPrice, contract.getGasPrice());
@@ -388,7 +381,9 @@ public class ContractTest extends ManagedTransactionTester {
 
         Function func =
                 new Function(
-                        "test", Arrays.<Type>asList(), Collections.<TypeReference<?>>emptyList());
+                        "test",
+                        Collections.<Type>emptyList(),
+                        Collections.<TypeReference<?>>emptyList());
         contract.executeTransaction(func);
 
         verify(txManager)
@@ -415,7 +410,7 @@ public class ContractTest extends ManagedTransactionTester {
                 .thenReturn(Async.run(() -> ethGetTransactionReceipt));
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn((Request) getTransactionReceiptRequest);
-        assertThrows(RuntimeException.class, () -> testErrorScenario());
+        assertThrows(RuntimeException.class, this::testErrorScenario);
     }
 
     @Test
@@ -464,8 +459,6 @@ public class ContractTest extends ManagedTransactionTester {
         try {
             contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
                     .send();
-        } catch (InterruptedException e) {
-            throw e;
         } catch (ExecutionException e) {
             throw e.getCause();
         }
@@ -493,7 +486,8 @@ public class ContractTest extends ManagedTransactionTester {
         prepareTransaction(transactionReceipt);
 
         String encodedConstructor =
-                FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
+                FunctionEncoder.encodeConstructor(
+                        Collections.<Type>singletonList(new Uint256(BigInteger.TEN)));
         ContractGasProvider contractGasProvider = new DefaultGasProvider();
         return TestContract.deployRemoteCall(
                         TestContract.class,
@@ -547,18 +541,18 @@ public class ContractTest extends ManagedTransactionTester {
             Function function =
                     new Function(
                             "call",
-                            Arrays.<Type>asList(),
-                            Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
+                            Collections.<Type>emptyList(),
+                            Collections.<TypeReference<?>>singletonList(
+                                    new TypeReference<Utf8String>() {}));
             return executeRemoteCallSingleValueReturn(function);
         }
 
-        public RemoteCall<List<Type>> callMultipleValue()
-                throws ExecutionException, InterruptedException {
+        public RemoteCall<List<Type>> callMultipleValue() {
             Function function =
                     new Function(
                             "call",
-                            Arrays.<Type>asList(),
-                            Arrays.<TypeReference<?>>asList(
+                            Collections.emptyList(),
+                            Arrays.asList(
                                     new TypeReference<Uint256>() {},
                                     new TypeReference<Uint256>() {}));
             return executeRemoteCallMultipleValueReturn(function);
@@ -567,9 +561,7 @@ public class ContractTest extends ManagedTransactionTester {
         public RemoteCall<TransactionReceipt> performTransaction(Address address, Uint256 amount) {
             Function function =
                     new Function(
-                            "approve",
-                            Arrays.<Type>asList(address, amount),
-                            Collections.<TypeReference<?>>emptyList());
+                            "approve", Arrays.asList(address, amount), Collections.emptyList());
             return executeRemoteCallTransaction(function);
         }
 
@@ -577,7 +569,7 @@ public class ContractTest extends ManagedTransactionTester {
             Event event =
                     new Event(
                             "Event",
-                            Arrays.<TypeReference<?>>asList(
+                            Arrays.asList(
                                     new TypeReference<Address>(true) {},
                                     new TypeReference<Uint256>() {}));
             return extractEventParameters(event, transactionReceipt);
