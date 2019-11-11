@@ -125,6 +125,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         sign configurations.archives
         def signingKey = findProperty("signingKey")
         def signingPassword = findProperty("signingPassword")
+        println(signingPassword.md5())
         useInMemoryPgpKeys(signingKey, signingPassword)
     }
 
