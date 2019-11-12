@@ -28,6 +28,12 @@ plugins {
     id "de.marcphilipp.nexus-publish" version "0.4.0"
 }
 
+nexusStaging {
+    username System.getenv('OSSRH_USERNAME')
+    password System.getenv('OSSRH_PASSWORD')
+}
+
+
 description 'web3j base project'
 
 allprojects {
@@ -127,11 +133,11 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         afterEvaluate {
             getClassDirectories().from(files(classDirectories.files.collect {
                 fileTree(dir: it,
-                exclude: [
-                    'org/web3j/abi/datatypes/generated/**',
-                    'org/web3j/tuples/generated/**',
-                    'org/web3j/ens/contracts/generated/**'
-                ])
+                        exclude: [
+                                'org/web3j/abi/datatypes/generated/**',
+                                'org/web3j/tuples/generated/**',
+                                'org/web3j/ens/contracts/generated/**'
+                        ])
             }))
         }
     }
