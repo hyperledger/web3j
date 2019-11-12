@@ -1,0 +1,60 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply plugin: "de.marcphilipp.nexus-publish"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            pom {
+                name = 'web3j'
+                description project.description
+                url = 'https://web3j.io'
+
+                scm {
+                    connection = 'scm:git:https://github.com/web3j/web3j.git'
+                    url = 'https://github.com/web3j/web3j.git'
+                    developerConnection = 'scm:git://github.com/web3j/web3j.git'
+                }
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'conor10'
+                        name = 'Conor Svensson'
+                        email = 'conor10@gmail.com'
+                    }
+                    developer {
+                        id = 'antonydenyer'
+                        name = 'Antony Denyer'
+                        email = 'antony@web3labs.com'
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = System.getenv('OSSRH_USERNAME')
+            password = System.getenv('OSSRH_PASSWORD')
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.maven
+    if(!version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish")) {
+        def signingKey = new File("$rootDir/web3j.asc").getText('UTF-8')
+        def signingPassword = System.getenv('GPG_PASSPHRASE')
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
+}

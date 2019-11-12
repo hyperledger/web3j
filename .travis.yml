@@ -21,7 +21,7 @@ jobs:
     if: branch = master AND NOT type = pull_request
   - stage: build and stage release
     if: branch =~ /release/
-    script: "./gradlew check uploadArchives -Dorg.gradle.parallel=false -Pversion=${TRAVIS_BRANCH#'release/'}"
+    script: "./gradlew check publish -Pversion=${TRAVIS_BRANCH#'release/'}"
   - stage: release
     if: branch =~ /release/
     script: "./gradlew closeAndReleaseRepository"

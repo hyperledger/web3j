@@ -14,7 +14,7 @@ github_clone() {
 
 ensure_version() {
     if [[ -z "$VERSION" ]]; then
-        VERSION="${CI_COMMIT_REF_NAME//release\/}"
+        VERSION="${TRAVIS_BRANCH//release\/}"
     fi
 
     if [[ "$VERSION" = "" ]]; then

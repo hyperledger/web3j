@@ -25,8 +25,8 @@ plugins {
     id 'jacoco'
     id "com.diffplug.gradle.spotless" version "3.25.0"
     id 'io.codearte.nexus-staging' version '0.21.1'
+    id "de.marcphilipp.nexus-publish" version "0.4.0"
 }
-
 
 description 'web3j base project'
 
@@ -38,7 +38,6 @@ allprojects {
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
-
 
     spotless {
         java {
@@ -92,15 +91,7 @@ allprojects {
 }
 
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
-    apply plugin: 'maven'
-    apply plugin: 'signing'
-
-    ext {
-        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
-        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
-        signingKey = project.hasProperty('signingKey') ? project.property('signingKey') : new File("$rootDir/web3j.asc").getText('UTF-8')
-        signingPassword = project.hasProperty('signingPassword') ? project.property('signingPassword') : System.getenv('GPG_PASSPHRASE')
-    }
+    apply from: "$rootDir/gradle/publish.gradle"
 
     task javadocJar(type: Jar) {
         archiveClassifier = 'javadoc'
@@ -120,64 +111,6 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     javadoc { options.encoding = 'UTF-8' }
 
     artifacts { archives sourcesJar, javadocJar, testJar }
-
-    signing {
-        sign configurations.archives
-        def signingKey = findProperty("signingKey")
-        def signingPassword = findProperty("signingPassword")
-        useInMemoryPgpKeys(signingKey, signingPassword)
-    }
-
-    archivesBaseName = project.name
-
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-
-                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-
-                pom.project {
-                    name 'web3j'
-                    packaging 'jar'
-                    description project.description
-                    url 'https://web3j.io'
-
-                    scm {
-                        connection 'scm:git:https://github.com/web3j/web3j.git'
-                        url 'https://github.com/web3j/web3j.git'
-                        developerConnection 'scm:git://github.com/web3j/web3j.git'
-                    }
-
-                    licenses {
-                        license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id 'conor10'
-                            name 'Conor Svensson'
-                            email 'conor10@gmail.com'
-                        }
-                        developer {
-                            id 'antonydenyer'
-                            name 'Antony Denyer'
-                            email 'antony@web3labs.com'
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
         dependsOn = subprojects.test
