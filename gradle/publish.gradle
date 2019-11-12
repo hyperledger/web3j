@@ -52,7 +52,7 @@ nexusPublishing {
 
 signing {
     sign publishing.publications.maven
-    if(!version.endsWith('SNAPSHOT') && gradle.taskGraph.hasTask("publish")) {
+    if(!version.endsWith('SNAPSHOT')) {
         def signingKey = new File("$rootDir/web3j.asc").getText('UTF-8')
         def signingPassword = System.getenv('GPG_PASSPHRASE')
         useInMemoryPgpKeys(signingKey, signingPassword)
