@@ -7,7 +7,9 @@ publishing {
         maven(MavenPublication) {
             pom {
                 name = 'web3j'
-                description project.description
+                afterEvaluate {
+                    description = project.description
+                }
                 url = 'https://web3j.io'
 
                 scm {
