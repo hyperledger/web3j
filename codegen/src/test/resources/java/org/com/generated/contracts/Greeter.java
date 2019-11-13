@@ -28,7 +28,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 4.4.0.
@@ -42,8 +42,12 @@ public class Greeter extends Contract {
 
     public static final String FUNC_GREET = "greet";
 
-    public static final Event MODIFIED_EVENT = new Event("Modified", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}, new TypeReference<Utf8String>() {}));
+    public static final Event MODIFIED_EVENT = new Event("Modified",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>(true) {
+            }, new TypeReference<Utf8String>(true) {
+            }, new TypeReference<Utf8String>() {
+            }, new TypeReference<Utf8String>() {
+            }));
     ;
 
     @Deprecated
@@ -66,24 +70,25 @@ public class Greeter extends Contract {
 
     public RemoteCall<TransactionReceipt> kill() {
         final Function function = new Function(
-                FUNC_KILL, 
-                Arrays.<Type>asList(), 
+                FUNC_KILL,
+                Arrays.<Type>asList(),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> newGreeting(String _greeting) {
         final Function function = new Function(
-                FUNC_NEWGREETING, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(_greeting)), 
+                FUNC_NEWGREETING,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(_greeting)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<String> greet() {
-        final Function function = new Function(FUNC_GREET, 
-                Arrays.<Type>asList(), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
+        final Function function = new Function(FUNC_GREET,
+                Arrays.<Type>asList(),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
+                }));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 

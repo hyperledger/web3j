@@ -43,7 +43,7 @@ public class ClassProvider {
     }
 
     private List<Class> loadClassesToList(final CompilerClassLoader compilerClassLoader)
-            throws ClassNotFoundException, IOException {
+            throws IOException {
         return getFormattedClassPath().stream()
                 .map(
                         cp -> {
