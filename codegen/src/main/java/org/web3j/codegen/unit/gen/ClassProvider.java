@@ -44,15 +44,17 @@ public class ClassProvider {
 
     private List<Class> loadClassesToList(final CompilerClassLoader compilerClassLoader)
             throws ClassNotFoundException, IOException {
-        List<String> formattedClassPath = new ArrayList<>();
-        List<Class> classList = new ArrayList<>();
-        getFormattedClassPath()
-                .forEach(s -> formattedClassPath.add(s.replace(File.separator, ".")));
-        for (String s : formattedClassPath) {
-
-            classList.add(compilerClassLoader.loadClass(s.replace(File.separator, ".")));
-        }
-        return classList;
+        return getFormattedClassPath().stream()
+                .map(
+                        cp -> {
+                            try {
+                                return compilerClassLoader.loadClass(
+                                        cp.replace(File.separator, "."));
+                            } catch (ClassNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                .collect(Collectors.toList());
     }
 
     private List<String> getFormattedClassPath() throws IOException {
