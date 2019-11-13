@@ -12,38 +12,31 @@
  */
 package org.web3j.codegen.unit.gen;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.squareup.javapoet.MethodSpec;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodParserTest extends Setup {
-    private static String classAsString;
     private static Class greeterContract;
     private static List<Method> filteredMethods;
 
-    @BeforeAll
-    public static void classToString() throws IOException, ClassNotFoundException {
-        classAsString =
-                new BufferedReader(new FileReader(classAsFile))
-                        .lines()
-                        .collect(Collectors.joining("\n"));
-        greeterContract =
-                new ClassProvider(
-                                new File(
-                                        "/home/alexander/Documents/dev/web3j/web3j/web3j/codegen/src/test/resources/java/"))
-                        .getClasses()
-                        .get(0);
+    @BeforeEach
+    public void classToString() throws IOException, ClassNotFoundException {
+        String urlAsString =
+                this.getClass()
+                        .getClassLoader()
+                        .getResource("java/org/com/generated/contracts/Greeter.java")
+                        .getPath();
+        File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
+        greeterContract = new ClassProvider(greeter).getClasses().get(0);
         filteredMethods = MethodFilter.extractValidMethods(greeterContract);
     }
 
@@ -55,32 +48,41 @@ public class MethodParserTest extends Setup {
         MethodSpec deployMethodSpec =
                 new MethodParser(deployMethod.get(), greeterContract).getMethodSpec();
         assertEquals(
-                deployMethodSpec.code.toString(),
-                "greeter=org.com.generated.contracts.Greeter.deploy(web3j,transactionManager,contractGasProvider,\"REPLACE_ME\").send();\n");
+                deployMethodSpec.toString(),
+                "@org.junit.jupiter.api.Test\n"
+                        + "public void deploy(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
+                        + "  greeter=org.com.generated.contracts.Greeter.deploy(web3j,transactionManager,contractGasProvider,\"REPLACE_ME\").send();\n"
+                        + "}\n");
     }
 
     @Test
     public void testThatLoadMethodWasGenerated() {
 
-        Optional<Method> deployMethod =
+        Optional<Method> loadMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("load")).findAny();
-        MethodSpec deployMethodSpec =
-                new MethodParser(deployMethod.get(), greeterContract).getMethodSpec();
+        MethodSpec loadMethodSpec =
+                new MethodParser(loadMethod.get(), greeterContract).getMethodSpec();
         assertEquals(
-                deployMethodSpec.code.toString(),
-                "greeter=org.com.generated.contracts.Greeter.load(\"REPLACE_ME\",web3j,transactionManager,contractGasProvider).send();\n");
+                loadMethodSpec.toString(),
+                "@org.junit.jupiter.api.Test\n"
+                        + "public void load(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
+                        + "  greeter=org.com.generated.contracts.Greeter.load(\"REPLACE_ME\",web3j,transactionManager,contractGasProvider).send();\n"
+                        + "}\n");
     }
 
     @Test
     public void testThatKillMethodWasGenerated() {
 
-        Optional<Method> deployMethod =
+        Optional<Method> killMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("kill")).findAny();
-        MethodSpec deployMethodSpec =
-                new MethodParser(deployMethod.get(), greeterContract).getMethodSpec();
+        MethodSpec killMethodSpec =
+                new MethodParser(killMethod.get(), greeterContract).getMethodSpec();
         assertEquals(
-                deployMethodSpec.code.toString(),
-                "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar=greeter.kill().send();\n");
+                killMethodSpec.toString(),
+                "@org.junit.jupiter.api.Test\n"
+                        + "public void kill() throws java.lang.Exception {\n"
+                        + "  org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar=greeter.kill().send();\n"
+                        + "}\n");
     }
 
     @Test
