@@ -15,7 +15,7 @@ package org.web3j.codegen.unit.gen;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +69,7 @@ public class MethodParser {
     private Map<String, Object[]> generateStatementBody() {
         String genericStatement = ArgumentResolver.generateJavaPoetStringTypes(method, theContract);
         Object[] genericParameters = ArgumentResolver.getPlaceholderValues(method, theContract);
-        Map<String, Object[]> methodBodySpecification = new HashMap<>();
+        Map<String, Object[]> methodBodySpecification = new LinkedHashMap<>();
         methodBodySpecification.put(genericStatement, genericParameters);
         return methodBodySpecification;
     }

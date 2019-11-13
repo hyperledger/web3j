@@ -12,13 +12,60 @@
  */
 package org.web3j.codegen.unit.gen;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.lang.model.element.Modifier;
+
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import org.web3j.protocol.Web3j;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodSpecGeneratorTest {
 
+    private static Class greeterContract;
+
+    @BeforeEach
+    public void classToString() throws IOException, ClassNotFoundException {
+        String urlAsString =
+                this.getClass()
+                        .getClassLoader()
+                        .getResource("java/org/com/generated/contracts/Greeter.java")
+                        .getPath();
+        File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
+        greeterContract = new ClassProvider(greeter).getClasses().get(0);
+    }
+
     @Test
-    public void test() {
-        // GenericTemplate genericTemplate = new GenericTemplate("Test");
-        //  String methodSpec= genericTemplate.generate().toString();
+    public void testGenerate() {
+        List<ParameterSpec> parameterSpec =
+                Collections.singletonList(
+                        ParameterSpec.builder(Web3j.class, "web3j", Modifier.FINAL).build());
+        String javaPoetStringFormat1 = "$T $L = $S";
+        Object[] replacementValues1 = new Object[] {String.class, "hello ", "Hello how are you"};
+        String javaPoetStringFormat2 = "$T $L = $T.build()";
+        Object[] replacementValues2 = new Object[] {Web3j.class, "web3j", Web3j.class};
+        Map<String, Object[]> statementBody = new LinkedHashMap<>();
+        statementBody.put(javaPoetStringFormat1, replacementValues1);
+        statementBody.put(javaPoetStringFormat2, replacementValues2);
+        MethodSpecGenerator methodSpecGenerator =
+                new MethodSpecGenerator(
+                        "unitTest", Test.class, Modifier.PUBLIC, parameterSpec, statementBody);
+        MethodSpec generatedMethodSpec = methodSpecGenerator.generate();
+        assertEquals(
+                "@org.junit.jupiter.api.Test\n"
+                        + "public void unitTest(final org.web3j.protocol.Web3j web3j) throws java.lang.Exception {\n"
+                        + "  java.lang.String hello  = \"Hello how are you\";\n"
+                        + "  org.web3j.protocol.Web3j web3j = org.web3j.protocol.Web3j.build();\n"
+                        + "}\n",
+                generatedMethodSpec.toString());
     }
 }
