@@ -31,7 +31,7 @@ public class ClassProvider {
         this.pathToJavaFiles = pathToJavaFiles;
     }
 
-    public final List<Class> getClasses() throws IOException, ClassNotFoundException {
+    public final List<Class> getClasses() throws IOException {
         return loadClassesToList(compileClasses());
     }
 

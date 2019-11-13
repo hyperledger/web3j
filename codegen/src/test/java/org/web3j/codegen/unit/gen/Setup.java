@@ -12,8 +12,13 @@
  */
 package org.web3j.codegen.unit.gen;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.shaded.com.google.common.io.Files;
@@ -21,6 +26,8 @@ import org.testcontainers.shaded.com.google.common.io.Files;
 import static java.io.File.separator;
 
 public class Setup {
+    static Class greeterContract;
+    static List<Method> filteredMethods;
     static File temp = Files.createTempDir();
     static File classAsFile =
             new File(
@@ -36,16 +43,26 @@ public class Setup {
                             "generated",
                             "contracts",
                             "GreeterTest.java"));
+    static String classAsString;
 
     @BeforeAll
-    public static void setUp() throws IOException, ClassNotFoundException {
-        File greeterJavaWrapper =
-                new File(
-                        "/home/alexander/Documents/dev/web3j/web3j/web3j/codegen/src/test/resources/java");
-        ClassProvider classProvider = new ClassProvider(greeterJavaWrapper);
+    public static void setUp() throws IOException {
+        String urlAsString =
+                Setup.class
+                        .getClassLoader()
+                        .getResource("java/org/com/generated/contracts/Greeter.java")
+                        .getPath();
+        File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
+        greeterContract = new ClassProvider(greeter).getClasses().get(0);
+        filteredMethods = MethodFilter.extractValidMethods(greeterContract);
+        ClassProvider classProvider = new ClassProvider(new File(urlAsString));
         Class aClass = classProvider.getClasses().get(0);
         new UnitClassGenerator(
                         aClass, "org.com.generated.contracts", temp + File.separator + "test")
                 .writeClass();
+        classAsString =
+                new BufferedReader(new FileReader(classAsFile))
+                        .lines()
+                        .collect(Collectors.joining("\n"));
     }
 }
