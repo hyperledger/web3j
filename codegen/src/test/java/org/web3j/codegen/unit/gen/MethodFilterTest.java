@@ -12,14 +12,11 @@
  */
 package org.web3j.codegen.unit.gen;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.Web3j;
@@ -29,19 +26,7 @@ import org.web3j.tx.gas.ContractGasProvider;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MethodFilterTest {
-    private static Class greeterContract;
-
-    @BeforeEach
-    public void classToString() throws IOException, ClassNotFoundException {
-        String urlAsString =
-                this.getClass()
-                        .getClassLoader()
-                        .getResource("java/org/com/generated/contracts/Greeter.java")
-                        .getPath();
-        File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
-        greeterContract = new ClassProvider(greeter).getClasses().get(0);
-    }
+public class MethodFilterTest extends Setup {
 
     @Test
     public void testExtractValidMethods() {

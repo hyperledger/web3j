@@ -12,12 +12,6 @@
  */
 package org.web3j.codegen.unit.gen;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static java.io.File.separator;
@@ -25,16 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnitClassGeneratorTest extends Setup {
-    private static String classAsString;
-
-    @BeforeAll
-    public static void init() throws IOException {
-        classAsString =
-                new BufferedReader(new FileReader(classAsFile))
-                        .lines()
-                        .collect(Collectors.joining("\n"));
-    }
-
     @Test
     public void testThatTheClassWasSuccessfullyWritten() {
         assertTrue(classAsFile.exists());

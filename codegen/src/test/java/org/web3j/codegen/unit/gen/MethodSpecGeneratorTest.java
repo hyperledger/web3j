@@ -12,8 +12,6 @@
  */
 package org.web3j.codegen.unit.gen;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,7 +20,6 @@ import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.Web3j;
@@ -30,19 +27,6 @@ import org.web3j.protocol.Web3j;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodSpecGeneratorTest {
-
-    private static Class greeterContract;
-
-    @BeforeEach
-    public void classToString() throws IOException, ClassNotFoundException {
-        String urlAsString =
-                this.getClass()
-                        .getClassLoader()
-                        .getResource("java/org/com/generated/contracts/Greeter.java")
-                        .getPath();
-        File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
-        greeterContract = new ClassProvider(greeter).getClasses().get(0);
-    }
 
     @Test
     public void testGenerate() {
