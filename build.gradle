@@ -37,53 +37,15 @@ nexusStaging {
 description 'web3j base project'
 
 allprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'jacoco'
-    apply plugin: 'com.diffplug.gradle.spotless'
-
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
-    spotless {
-        java {
-            // This path needs to be relative to each project
-            target fileTree('.') {
-                include '**/src/*/java/**/*.java'
-                exclude '**/.gradle/**'
-                exclude '**/generated/**'
-            }
-            removeUnusedImports()
-            googleJavaFormat("1.7").aosp()
-            importOrder 'java', '', 'org.web3j', '\\#'
-            trimTrailingWhitespace()
-            endWithNewline()
-            licenseHeaderFile "$rootDir/gradle/spotless.java.license"
+    apply {
+        [
+            'java',
+            'javadoc',
+            'repositories',
+            'spotless'
+        ].each {
+            from("$rootDir/gradle/$it/build.gradle")
         }
-        groovyGradle {
-            target '*.gradle'
-            greclipse().configFile(rootProject.file('gradle/formatter.properties'))
-            endWithNewline()
-            indentWithSpaces(4)
-            paddedCell()
-        }
-    }
-
-    repositories { mavenCentral() }
-
-    compileJava {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    }
-    compileTestJava {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    }
-
-    jacoco {
-        toolVersion = '0.8.4' // See http://www.eclemma.org/jacoco/.
-    }
-
-    jacocoTestReport {
-        reports { xml.enabled true }
     }
 
     tasks.withType(Test) {
@@ -95,36 +57,10 @@ allprojects {
         testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
     }
 
-    if(project.name != 'integration-tests') {
-        apply from: "$rootDir/gradle/publish.gradle"
-
-
+    if (project.name != 'integration-tests') {
+        apply from: "$rootDir/gradle/publish/build.gradle"
     }
 }
-
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
-
-    task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-        dependsOn = subprojects.test
-        getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
-        getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
-        getClassDirectories().from(subprojects.sourceSets.main.output)
-        getExecutionData().from(subprojects.jacocoTestReport.executionData)
-        reports { xml.enabled = true }
-
-        doFirst {
-            getExecutionData().from(executionData.findAll { it.exists() })
-        }
-
-        afterEvaluate {
-            getClassDirectories().from(files(classDirectories.files.collect {
-                fileTree(dir: it,
-                exclude: [
-                    'org/web3j/abi/datatypes/generated/**',
-                    'org/web3j/tuples/generated/**',
-                    'org/web3j/ens/contracts/generated/**'
-                ])
-            }))
-        }
-    }
+    apply from: "$rootDir/gradle/jacoco/build.gradle"
 }

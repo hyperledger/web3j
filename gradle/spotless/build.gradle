@@ -1,0 +1,28 @@
+
+apply plugin: 'com.diffplug.gradle.spotless'
+
+spotless {
+    java {
+        // This path needs to be relative to each project
+        target fileTree('.') {
+            include '**/src/*/java/**/*.java'
+            exclude '**/.gradle/**'
+            exclude '**/generated/**'
+        }
+        removeUnusedImports()
+        googleJavaFormat("1.7").aosp()
+        importOrder 'java', '', 'org.web3j', '\\#'
+        trimTrailingWhitespace()
+        endWithNewline()
+        licenseHeaderFile "$rootDir/gradle/spotless/java.license"
+    }
+    groovyGradle {
+        target '*.gradle'
+        greclipse().configFile("$rootDir/gradle/spotless/formatter.properties")
+        endWithNewline()
+        indentWithSpaces(4)
+        paddedCell()
+    }
+}
+
+assemble.dependsOn('downloadJavaLicense', 'downloadFormatterProperties')

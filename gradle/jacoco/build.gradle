@@ -1,0 +1,30 @@
+apply plugin: 'jacoco'
+
+task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    dependsOn = subprojects.test
+    getSourceDirectories().from(subprojects.sourceSets.main.allSource.srcDirs)
+    getAdditionalSourceDirs().from(subprojects.sourceSets.main.allSource.srcDirs)
+    getClassDirectories().from(subprojects.sourceSets.main.output)
+    getExecutionData().from(subprojects.jacocoTestReport.executionData)
+    reports { xml.enabled = true }
+
+    doFirst {
+        getExecutionData().from(executionData.findAll { it.exists() })
+    }
+
+    afterEvaluate {
+        getClassDirectories().from(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            'org/web3j/abi/datatypes/generated/**',
+                            'org/web3j/tuples/generated/**',
+                            'org/web3j/ens/contracts/generated/**'
+                    ])
+        }))
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+}
+
