@@ -94,29 +94,32 @@ allprojects {
         testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
         testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
     }
+
+    if(project.name != 'integration-tests') {
+        apply from: "$rootDir/gradle/publish.gradle"
+
+        task javadocJar(type: Jar) {
+            archiveClassifier = 'javadoc'
+            from javadoc
+        }
+
+        task sourcesJar(type: Jar) {
+            archiveClassifier = 'sources'
+            from sourceSets.main.allSource
+        }
+
+        task testJar(type: Jar) {
+            archiveClassifier = 'tests'
+            from sourceSets.test.output
+        }
+
+        javadoc { options.encoding = 'UTF-8' }
+
+        artifacts { archives sourcesJar, javadocJar, testJar }
+    }
 }
 
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
-    apply from: "$rootDir/gradle/publish.gradle"
-
-    task javadocJar(type: Jar) {
-        archiveClassifier = 'javadoc'
-        from javadoc
-    }
-
-    task sourcesJar(type: Jar) {
-        archiveClassifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    task testJar(type: Jar) {
-        archiveClassifier = 'tests'
-        from sourceSets.test.output
-    }
-
-    javadoc { options.encoding = 'UTF-8' }
-
-    artifacts { archives sourcesJar, javadocJar, testJar }
 
     task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
         dependsOn = subprojects.test
@@ -127,7 +130,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         reports { xml.enabled = true }
 
         doFirst {
-            executionData = files(executionData.findAll { it.exists() })
+            getExecutionData().from(executionData.findAll { it.exists() })
         }
 
         afterEvaluate {

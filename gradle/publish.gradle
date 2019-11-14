@@ -7,11 +7,8 @@ publishing {
         maven(MavenPublication) {
             pom {
                 name = 'web3j'
-                afterEvaluate {
-                    description = project.description
-                }
+                description.set( project.provider( { project.description } ) )
                 url = 'https://web3j.io'
-
                 scm {
                     connection = 'scm:git:https://github.com/web3j/web3j.git'
                     url = 'https://github.com/web3j/web3j.git'
