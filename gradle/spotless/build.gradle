@@ -16,6 +16,17 @@ spotless {
         endWithNewline()
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
     }
+    kotlin {
+        // This path needs to be relative to each project
+        target fileTree('.') {
+            include '**/*.kt'
+            exclude '**/.gradle/**'
+        }
+        ktlint(ktlintVersion)
+        trimTrailingWhitespace()
+        endWithNewline()
+        licenseHeaderFile "$rootDir/gradle/spotless.java.license"
+    }
     groovyGradle {
         target '*.gradle'
         greclipse().configFile("$rootDir/gradle/spotless/formatter.properties")
@@ -24,5 +35,3 @@ spotless {
         paddedCell()
     }
 }
-
-assemble.dependsOn('downloadJavaLicense', 'downloadFormatterProperties')
