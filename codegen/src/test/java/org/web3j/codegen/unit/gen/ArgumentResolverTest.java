@@ -46,33 +46,33 @@ public class ArgumentResolverTest extends Setup {
 
     @Test
     public void testGenerateJavaPoetStringTypesWhenReturnTypeIsContract() {
-        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContract);
+        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         Method deploy =
                 listOfFilteredMethods.stream()
                         .filter(m -> m.getName().equals("deploy"))
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                ArgumentResolver.generateJavaPoetStringTypes(deploy, greeterContract),
+                ArgumentResolver.generateJavaPoetStringTypes(deploy, greeterContractClass),
                 "$L=$T.deploy($L,$L,$L,$S).send()");
     }
 
     @Test
     public void testGenerateJavaPoetStringTypesWhenReturnTypeIsNotContract() {
-        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContract);
+        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         Method newGreeting =
                 listOfFilteredMethods.stream()
                         .filter(m -> m.getName().equals("newGreeting"))
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                ArgumentResolver.generateJavaPoetStringTypes(newGreeting, greeterContract),
+                ArgumentResolver.generateJavaPoetStringTypes(newGreeting, greeterContractClass),
                 "$T $L=$L.newGreeting($S).send()");
     }
 
     @Test
     public void testGetMethodReturnType() {
-        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContract);
+        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         Method newGreeting =
                 listOfFilteredMethods.stream()
                         .filter(m -> m.getName().equals("newGreeting"))

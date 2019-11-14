@@ -27,7 +27,7 @@ public class MethodParserTest extends Setup {
         Optional<Method> deployMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("deploy")).findAny();
         MethodSpec deployMethodSpec =
-                new MethodParser(deployMethod.get(), greeterContract).getMethodSpec();
+                new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 deployMethodSpec.toString(),
                 "@org.junit.jupiter.api.Test\n"
@@ -42,7 +42,7 @@ public class MethodParserTest extends Setup {
         Optional<Method> loadMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("load")).findAny();
         MethodSpec loadMethodSpec =
-                new MethodParser(loadMethod.get(), greeterContract).getMethodSpec();
+                new MethodParser(loadMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 loadMethodSpec.toString(),
                 "@org.junit.jupiter.api.Test\n"
@@ -57,7 +57,7 @@ public class MethodParserTest extends Setup {
         Optional<Method> killMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("kill")).findAny();
         MethodSpec killMethodSpec =
-                new MethodParser(killMethod.get(), greeterContract).getMethodSpec();
+                new MethodParser(killMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 killMethodSpec.toString(),
                 "@org.junit.jupiter.api.Test\n"
@@ -72,7 +72,7 @@ public class MethodParserTest extends Setup {
         Optional<Method> deployMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("newGreeting")).findAny();
         MethodSpec deployMethodSpec =
-                new MethodParser(deployMethod.get(), greeterContract).getMethodSpec();
+                new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 deployMethodSpec.code.toString(),
                 "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar=greeter.newGreeting(\"REPLACE_ME\").send();\n");

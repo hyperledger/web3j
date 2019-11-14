@@ -18,51 +18,40 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.testcontainers.shaded.com.google.common.io.Files;
-
-import static java.io.File.separator;
+import org.junit.jupiter.api.io.TempDir;
 
 public class Setup {
-    static Class greeterContract;
+    @TempDir static File temp;
+    static File classAsFile;
+    static Class greeterContractClass;
     static List<Method> filteredMethods;
-    static File temp = Files.createTempDir();
-    static File classAsFile =
-            new File(
-                    String.join(
-                            separator,
-                            temp.getAbsolutePath(),
-                            "test",
-                            "src",
-                            "integrationTest",
-                            "java",
-                            "org",
-                            "com",
-                            "generated",
-                            "contracts",
-                            "GreeterTest.java"));
     static String classAsString;
 
     @BeforeAll
     public static void setUp() throws IOException {
         String urlAsString =
-                Setup.class
-                        .getClassLoader()
-                        .getResource("java/org/com/generated/contracts/Greeter.java")
+                Objects.requireNonNull(
+                                Setup.class
+                                        .getClassLoader()
+                                        .getResource(
+                                                "java/org/com/generated/contracts/Greeter.java"))
                         .getPath();
+        classAsFile = new File(urlAsString);
         File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
-        greeterContract = new ClassProvider(greeter).getClasses().get(0);
-        filteredMethods = MethodFilter.extractValidMethods(greeterContract);
-        ClassProvider classProvider = new ClassProvider(new File(urlAsString));
-        Class aClass = classProvider.getClasses().get(0);
-        new UnitClassGenerator(
-                        aClass, "org.com.generated.contracts", temp + File.separator + "test")
-                .writeClass();
+        greeterContractClass = new ClassProvider(greeter).getClasses().get(0);
+        filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         classAsString =
                 new BufferedReader(new FileReader(classAsFile))
                         .lines()
                         .collect(Collectors.joining("\n"));
+        new UnitClassGenerator(
+                        greeterContractClass,
+                        "org.com.generated.contracts",
+                        temp + File.separator + "test")
+                .writeClass();
     }
 }

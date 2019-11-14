@@ -30,13 +30,13 @@ public class MethodFilterTest extends Setup {
 
     @Test
     public void testExtractValidMethods() {
-        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContract);
+        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         filteredMethods.forEach(m -> assertFalse(m.getName().toLowerCase().contains("event")));
     }
 
     @Test
     public void testThatTheCorrectDeployMethodWasExtracted() {
-        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContract);
+        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         List<Method> deployMethod =
                 filteredMethods.stream()
                         .filter(m -> m.getName().equals("deploy"))
@@ -51,7 +51,7 @@ public class MethodFilterTest extends Setup {
 
     @Test
     public void testThatTheCorrectLoadMethodWasExtracted() {
-        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContract);
+        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         List<Method> deployMethod =
                 filteredMethods.stream()
                         .filter(m -> m.getName().equals("load"))
