@@ -51,9 +51,8 @@ nexusPublishing {
 
 signing {
     sign publishing.publications.maven
-    if(!version.endsWith('SNAPSHOT')) {
-        def signingKey = new File("$rootDir/web3j.asc").getText('UTF-8')
-        def signingPassword = System.getenv('GPG_PASSPHRASE')
-        useInMemoryPgpKeys(signingKey, signingPassword)
+    def signingKey = new File("$rootDir/web3j.asc")
+    if(signingKey.exists()) {
+        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
     }
 }
