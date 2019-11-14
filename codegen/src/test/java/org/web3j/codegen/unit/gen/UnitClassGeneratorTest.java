@@ -32,8 +32,7 @@ public class UnitClassGeneratorTest extends Setup {
     }
 
     @Test
-    public void testThatClassWasGeneratedWithCorrectFields() {
-
+    public void testThatClassWasGeneratedWithCorrectFields() throws NoSuchFieldException {
         assertTrue(
                 classAsString.contains(
                         "static String myAddress = \"0xfe3b557e8fb62b89f4916b721be55ceb828dbd73\";\n"));
