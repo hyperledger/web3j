@@ -2,9 +2,32 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: "de.marcphilipp.nexus-publish"
 
+task javadocJar(type: Jar) {
+    archiveClassifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task testJar(type: Jar) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+}
+
+javadoc { options.encoding = 'UTF-8' }
+
+artifacts { archives sourcesJar, javadocJar, testJar }
+
 publishing {
     publications {
         maven(MavenPublication) {
+            artifact sourcesJar
+            artifact javadocJar
+            artifact testJar
+
             pom {
                 name = 'web3j'
                 description.set( project.provider( { project.description } ) )

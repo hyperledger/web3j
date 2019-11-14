@@ -98,24 +98,7 @@ allprojects {
     if(project.name != 'integration-tests') {
         apply from: "$rootDir/gradle/publish.gradle"
 
-        task javadocJar(type: Jar) {
-            archiveClassifier = 'javadoc'
-            from javadoc
-        }
 
-        task sourcesJar(type: Jar) {
-            archiveClassifier = 'sources'
-            from sourceSets.main.allSource
-        }
-
-        task testJar(type: Jar) {
-            archiveClassifier = 'tests'
-            from sourceSets.test.output
-        }
-
-        javadoc { options.encoding = 'UTF-8' }
-
-        artifacts { archives sourcesJar, javadocJar, testJar }
     }
 }
 
