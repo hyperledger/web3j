@@ -313,6 +313,7 @@ public class TypeEncoderTest {
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
     }
 
+    @SuppressWarnings(value = {"unchecked"})
     @Test
     public void testArrayOfBytes() {
         DynamicArray<DynamicBytes> array =
@@ -376,6 +377,7 @@ public class TypeEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000000"));
     }
 
+    @SuppressWarnings(value = {"unchecked"})
     @Test
     public void testArrayOfStrings() {
         DynamicArray<Utf8String> array =
