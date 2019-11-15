@@ -23,6 +23,7 @@ import static org.web3j.ens.Contracts.RINKEBY;
 import static org.web3j.ens.Contracts.ROPSTEN;
 import static org.web3j.ens.Contracts.resolveRegistryContract;
 
+@SuppressWarnings("deprecation")
 public class ContractsTest {
 
     @Test

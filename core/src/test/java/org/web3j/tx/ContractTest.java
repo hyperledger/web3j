@@ -70,6 +70,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("deprecation")
 public class ContractTest extends ManagedTransactionTester {
 
     private static final String TEST_CONTRACT_BINARY = "12345";
