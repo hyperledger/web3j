@@ -2,7 +2,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: "de.marcphilipp.nexus-publish"
 
-task javadocJar(type: Jar) {
+task javadocsJar(type: Jar) {
     archiveClassifier = 'javadoc'
     from javadoc
 }
@@ -12,14 +12,14 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-task testJar(type: Jar) {
+task testsJar(type: Jar) {
     archiveClassifier = 'tests'
     from sourceSets.test.output
 }
 
 javadoc { options.encoding = 'UTF-8' }
 
-artifacts { archives sourcesJar, javadocJar, testJar }
+artifacts { archives sourcesJar, javadocsJar, testsJar }
 
 publishing {
     publications {
@@ -27,18 +27,13 @@ publishing {
             from components.java
 
             artifact sourcesJar
-            artifact javadocJar
-            artifact testJar
+            artifact javadocsJar
+            artifact testsJar
 
             pom {
                 name = 'web3j'
                 description.set( project.provider( { project.description } ) )
                 url = 'https://web3j.io'
-                scm {
-                    connection = 'scm:git:https://github.com/web3j/web3j.git'
-                    url = 'https://github.com/web3j/web3j.git'
-                    developerConnection = 'scm:git://github.com/web3j/web3j.git'
-                }
 
                 licenses {
                     license {

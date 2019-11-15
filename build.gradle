@@ -5,6 +5,7 @@ plugins {
     id "com.diffplug.gradle.spotless" version "3.25.0"
     id 'io.codearte.nexus-staging' version '0.21.1'
     id "de.marcphilipp.nexus-publish" version "0.4.0"
+    id "de.undercouch.download" version "4.0.0"
 }
 
 ext {
@@ -28,13 +29,13 @@ ext {
     ktlintVersion = '0.31.0'
 }
 
+
+description 'web3j base project'
+
 nexusStaging {
     username System.getenv('OSSRH_USERNAME')
     password System.getenv('OSSRH_PASSWORD')
 }
-
-
-description 'web3j base project'
 
 allprojects {
     apply {
@@ -43,8 +44,15 @@ allprojects {
             'javadoc',
             'repositories',
             'spotless'
-        ].each {
-            from("$rootDir/gradle/$it/build.gradle")
+        ].each { buildScript ->
+            download {
+                src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
+                dest "$rootDir/gradle/$buildScript/build.gradle"
+                overwrite true
+                quiet true
+                onlyIfModified true
+            }
+            from("$rootDir/gradle/$buildScript/build.gradle")
         }
     }
 
@@ -60,7 +68,16 @@ allprojects {
     }
 
     if (project.name != 'integration-tests') {
-        apply from: "$rootDir/gradle/publish/build.gradle"
+        apply {
+            download {
+                src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/publish/build.gradle"
+                dest "$rootDir/gradle/publish/build.gradle"
+                overwrite true
+                quiet true
+                onlyIfModified true
+            }
+            from("$rootDir/gradle/publish/build.gradle")
+        }
     }
 }
 configure(subprojects.findAll { it.name != 'integration-tests' }) {

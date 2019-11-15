@@ -41,4 +41,4 @@ classes { dependsOn createProperties }
 
 configurations { testArtifacts.extendsFrom testRuntime }
 
-artifacts { testArtifacts testJar }
+artifacts { testArtifacts testsJar }
