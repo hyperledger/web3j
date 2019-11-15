@@ -784,6 +784,7 @@
 <li>Wallet password management</li>
 <li>Ether transfer from one wallet to another</li>
 <li>Generation of Solidity smart contract wrappers</li>
+<li>Smart contract auditing</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <h3 id="script">Script<a class="headerlink" href="#script" title="Permanent link">&para;</a></h3>
@@ -1009,12 +1010,34 @@ $
 
 
 <h2 id="auditing-tools">Auditing Tools:<a class="headerlink" href="#auditing-tools" title="Permanent link">&para;</a></h2>
-<p>Web3j is able to audit smart contracts for common issues and vulnerabilities. This functionality uses static code analysis to find flaws. </p>
+<p>Smart contracts written in Solidity often include logic bugs and other issues which might compromise their security. These are not always obvious to programmers. Issues can include <a href="https://github.com/smartdec/classification#arithmetic">integer precision problems</a>, <a href="https://github.com/smartdec/classification#contract">re-entrancy attacks</a>, and many other flaws. As Ethereum smart contracts are immutable once they have been deployed, it is important that they are bug-free at this point. Web3j is able to audit smart contracts for certain common issues and vulnerabilities using static code analysis. </p>
 <p>To audit a smart contract:</p>
 <div class="codehilite"><pre><span></span>$ web3j audit &lt;path to contract file&gt;
 </pre></div>
 
 
+<p>An example of the output from this command is as follows:</p>
+<div class="codehilite"><pre><span></span>              _      _____ _     _        
+             <span class="p">|</span> <span class="p">|</span>    <span class="p">|</span>____ <span class="o">(</span>_<span class="o">)</span>   <span class="o">(</span>_<span class="o">)</span>       
+__      _____<span class="p">|</span> <span class="p">|</span>__      / /_     _   ___  
+<span class="se">\ \ </span>/<span class="se">\ </span>/ / _ <span class="se">\ </span><span class="err">&#39;</span>_ <span class="se">\ </span>    <span class="se">\ \ </span><span class="p">|</span>   <span class="p">|</span> <span class="p">|</span> / _ <span class="se">\ </span>
+ <span class="se">\ </span>V  V /  __/ <span class="p">|</span>_<span class="o">)</span> <span class="p">|</span>.___/ / <span class="p">|</span> _ <span class="p">|</span> <span class="o">||</span> <span class="o">(</span>_<span class="o">)</span> <span class="p">|</span>
+  <span class="se">\_</span>/<span class="se">\_</span>/ <span class="se">\_</span>__<span class="p">|</span>_.__/ <span class="se">\_</span>___/<span class="p">|</span> <span class="p">|</span><span class="o">(</span>_<span class="o">)</span><span class="p">|</span>_<span class="p">|</span> <span class="se">\_</span>__/ 
+                         _/ <span class="p">|</span>             
+                        <span class="p">|</span>__/              
+
+./Campaign.sol
+   <span class="m">131</span>:58   severity:2   Multiplication after division                  SOLIDITY_DIV_MUL_09hhh1                              
+   <span class="m">91</span>:8     severity:1   Revert inside the <span class="k">if</span>-operator                  SOLIDITY_REVERT_REQUIRE_c56b12                       
+   <span class="m">5</span>:4      severity:1   Use of SafeMath                                SOLIDITY_SAFEMATH_837cac                             
+   <span class="m">148</span>:4    severity:1   Replace multiple <span class="k">return</span> values with a struct   SOLIDITY_SHOULD_RETURN_STRUCT_83hf3l                 
+   <span class="m">125</span>:4    severity:1   Prefer external to public visibility level     SOLIDITY_UNUSED_FUNCTION_SHOULD_BE_EXTERNAL_73ufc1   
+
+✖ <span class="m">5</span> problems <span class="o">(</span><span class="m">5</span> errors<span class="o">)</span>
+</pre></div>
+
+
+<p>The output is in the form of a list of issues/errors detected by the static analysis tool. The first column of output shows the line and the character at which the issue was encountered. The second column shows the severity; this ranges from 1 to 3, with 3 being the most severe. The next column contains a description of the issue found, and the final column provides a reference to the rule used to find the issue.</p>
 <p>This functionality is provided by <a href="https://github.com/smartdec/smartcheck">SmartCheck</a>.</p>
 <h2 id="solidity-smart-contract-wrapper-generator">Solidity smart contract wrapper generator<a class="headerlink" href="#solidity-smart-contract-wrapper-generator" title="Permanent link">&para;</a></h2>
 <p>Please refer to <a href="../smart_contracts/#solidity-smart-contract-wrappers">Solidity smart contract wrappers</a>.</p>
