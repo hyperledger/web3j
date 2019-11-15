@@ -14,7 +14,6 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.generated.SimpleStorage;
@@ -27,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class SimpleStorageContractIT extends Scenario {
 
     @Test
-    @Ignore
     public void testSimpleStorageContract() throws Exception {
         BigInteger value = BigInteger.valueOf(1000L);
         ContractGasProvider contractGasProvider = new DefaultGasProvider();

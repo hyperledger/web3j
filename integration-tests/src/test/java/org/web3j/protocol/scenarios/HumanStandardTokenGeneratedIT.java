@@ -17,7 +17,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.Disposable;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.generated.HumanStandardToken;
@@ -36,7 +35,6 @@ import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 public class HumanStandardTokenGeneratedIT extends Scenario {
 
     @Test
-    @Ignore
     public void testContract() throws Exception {
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
         final String aliceAddress = ALICE.getAddress();

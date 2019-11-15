@@ -51,6 +51,12 @@ public class TransactionEncoder {
         return encode(rawTransaction, eip155SignatureData);
     }
 
+    @Deprecated
+    public static byte[] signMessage(
+            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+        return signMessage(rawTransaction, (long) chainId, credentials);
+    }
+
     public static Sign.SignatureData createEip155SignatureData(
             Sign.SignatureData signatureData, long chainId) {
         BigInteger v = Numeric.toBigInt(signatureData.getV());
