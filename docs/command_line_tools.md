@@ -9,6 +9,7 @@ A web3j binary is distributed with each release providing an interactive command
 - Wallet password management
 - Ether transfer from one wallet to another
 - Generation of Solidity smart contract wrappers
+- Smart contract auditing
 
 Installation
 ------------
@@ -278,6 +279,44 @@ Funds have been successfully transferred from 0x19e03255f667bdfd50a32722df860b1e
 Transaction hash: 0xb00afc5c2bb92a76d03e17bd3a0175b80609e877cb124c02d19000d529390530
 Mined block number: 1849039
 ```
+
+Auditing Tools
+------------
+
+Smart contracts written in Solidity often include logic bugs and other issues which might compromise their security. These are not always obvious to programmers. Issues can include [integer precision problems](https://github.com/smartdec/classification#arithmetic), [re-entrancy attacks](https://github.com/smartdec/classification#contract-interaction), and many other flaws. As Ethereum smart contracts are immutable once they have been deployed, it is important that they are bug-free at this point. Web3j is able to audit smart contracts for certain common issues and vulnerabilities using static code analysis. 
+
+To audit a smart contract (in this instance, Campaign.sol):
+
+``` bash
+$ web3j audit Campaign.sol
+```
+
+An example of the output from this command is as follows:
+``` bash
+              _      _____ _     _        
+             | |    |____ (_)   (_)       
+__      _____| |__      / /_     _   ___  
+\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \ 
+ \ V  V /  __/ |_) |.___/ / | _ | || (_) |
+  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/ 
+                         _/ |             
+                        |__/              
+
+./Campaign.sol
+   131:58   severity:2   Multiplication after division                  SOLIDITY_DIV_MUL_09hhh1                              
+   91:8     severity:1   Revert inside the if-operator                  SOLIDITY_REVERT_REQUIRE_c56b12                       
+   5:4      severity:1   Use of SafeMath                                SOLIDITY_SAFEMATH_837cac                             
+   148:4    severity:1   Replace multiple return values with a struct   SOLIDITY_SHOULD_RETURN_STRUCT_83hf3l                 
+   125:4    severity:1   Prefer external to public visibility level     SOLIDITY_UNUSED_FUNCTION_SHOULD_BE_EXTERNAL_73ufc1   
+
+✖ 5 problems (5 errors)
+
+```
+
+The output is in the form of a list of issues/errors detected by the static analysis tool. The first column of output shows the line and the character at which the issue was encountered. The second column shows the severity; this ranges from 1 to 3, with 3 being the most severe. The next column contains a description of the issue found, and the final column provides a reference to the rule used to find the issue.
+
+
+This functionality is provided by [SmartCheck](https://github.com/smartdec/smartcheck).
 
 
 Solidity smart contract wrapper generator
