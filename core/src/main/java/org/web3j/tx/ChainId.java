@@ -16,7 +16,6 @@ package org.web3j.tx;
  * Ethereum chain ids as per <a
  * href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md">EIP-155</a>.
  */
-@SuppressWarnings("deprecation")
 @Deprecated
 public class ChainId {
     public static final byte NONE = -1;

@@ -304,16 +304,16 @@ public class TypeEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000003"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testEmptyArray() {
-        @SuppressWarnings("unchecked")
         DynamicArray<Uint> array = new DynamicArray(Uint.class);
         assertEquals(
                 TypeEncoder.encodeDynamicArray(array),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
     }
 
-    @SuppressWarnings(value = {"unchecked"})
+    @SuppressWarnings("unchecked")
     @Test
     public void testArrayOfBytes() {
         DynamicArray<DynamicBytes> array =
@@ -377,7 +377,7 @@ public class TypeEncoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000000"));
     }
 
-    @SuppressWarnings(value = {"unchecked"})
+    @SuppressWarnings("unchecked")
     @Test
     public void testArrayOfStrings() {
         DynamicArray<Utf8String> array =
