@@ -29,8 +29,8 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
     private final String to;
     private final String output;
     private final List<Log> logs;
-    private final String publicHash;
-    private final String privateHash;
+    private final String commitmentHash;
+    private final String transactionHash;
     private final String privateFrom;
     private final ArrayList<String> privateFor;
     private final String privacyGroupId;
@@ -44,8 +44,8 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
             @JsonProperty(value = "to") final String to,
             @JsonProperty(value = "output") final String output,
             @JsonProperty(value = "logs") final List<Log> logs,
-            @JsonProperty(value = "publicHash") final String publicHash,
-            @JsonProperty(value = "privateHash") final String privateHash,
+            @JsonProperty(value = "commitmentHash") final String commitmentHash,
+            @JsonProperty(value = "transactionHash") final String transactionHash,
             @JsonProperty(value = "privateFrom") final String privateFrom,
             @JsonProperty(value = "privateFor") final ArrayList<String> privateFor,
             @JsonProperty(value = "privacyGroupId") final String privacyGroupId,
@@ -56,8 +56,8 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
         this.to = to;
         this.output = output;
         this.logs = logs;
-        this.publicHash = publicHash;
-        this.privateHash = privateHash;
+        this.commitmentHash = commitmentHash;
+        this.transactionHash = transactionHash;
         this.privateFrom = privateFrom;
         this.privateFor = privateFor;
         this.privacyGroupId = privacyGroupId;
@@ -98,12 +98,12 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
         return status;
     }
 
-    public String getPublicHash() {
-        return publicHash;
+    public String getcommitmentHash() {
+        return commitmentHash;
     }
 
-    public String getPrivateHash() {
-        return privateHash;
+    public String gettransactionHash() {
+        return transactionHash;
     }
 
     public String getPrivateFrom() {
@@ -129,8 +129,8 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
                 && Objects.equals(to, that.to)
                 && Objects.equals(output, that.output)
                 && Objects.equals(logs, that.logs)
-                && Objects.equals(publicHash, that.publicHash)
-                && Objects.equals(privateHash, that.privateHash)
+                && Objects.equals(commitmentHash, that.commitmentHash)
+                && Objects.equals(transactionHash, that.transactionHash)
                 && Objects.equals(privateFrom, that.privateFrom)
                 && Objects.equals(privateFor, that.privateFor)
                 && Objects.equals(privacyGroupId, that.privacyGroupId)
@@ -147,8 +147,8 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
                 to,
                 output,
                 logs,
-                publicHash,
-                privateHash,
+                commitmentHash,
+                transactionHash,
                 privateFrom,
                 privateFor,
                 privacyGroupId,
