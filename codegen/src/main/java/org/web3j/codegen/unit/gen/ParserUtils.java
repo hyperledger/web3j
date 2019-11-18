@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.testcontainers.shaded.org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import org.web3j.tuples.Tuple;
 
@@ -28,7 +28,7 @@ import static org.web3j.codegen.unit.gen.utills.NameUtils.returnTypeAsLiteral;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
 /*
-       Class that provides parsing utility for JavaPoet.
+       Class that provides parsing utility between Unit Generation and  JavaPoet.
 */
 
 public class ParserUtils {

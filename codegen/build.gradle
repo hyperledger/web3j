@@ -10,7 +10,7 @@ dependencies {
             "info.picocli:picocli:$picocliVersion"
     implementation("org.web3j:web3j-unit:4.6.0-SNAPSHOT")
     testCompile project(path: ':core', configuration: 'testArtifacts')
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.6.0-SNAPSHOT")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0-SNAPSHOT")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.6.0-SNAPSHOT")
+    implementation("org.junit.platform:junit-platform-launcher:1.6.0-SNAPSHOT")
+    implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    implementation("org.junit.vintage:junit-vintage-engine:$junitVersion")
 }
