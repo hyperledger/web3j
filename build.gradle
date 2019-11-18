@@ -67,6 +67,20 @@ allprojects {
         testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
     }
 
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                pom {
+                    scm {
+                        url = "https://github.com/web3j/web3j"
+                        connection = "scm:https://github.com/web3j/web3j.git"
+                        developerConnection = "scm:git://github.com/web3j/web3j.git"
+                    }
+                }
+            }
+        }
+    }
+
     if (project.name != 'integration-tests') {
         apply {
             download {
