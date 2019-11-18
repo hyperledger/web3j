@@ -27,7 +27,11 @@ import org.web3j.tuples.Tuple;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.returnTypeAsLiteral;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
-public class ArgumentResolver {
+/*
+       Class that provides parsing utility for JavaPoet.
+*/
+
+public class ParserUtils {
 
     public static String getJavaPoetStringFormatFromTypes(List<Class> types) {
         List<String> generated = new ArrayList<>();
@@ -77,7 +81,7 @@ public class ArgumentResolver {
 
     private static Object[] dynamicArguments(Method method) {
         return Arrays.stream(method.getParameterTypes())
-                .map(ArgumentResolver::getDefaultValueForType)
+                .map(ParserUtils::getDefaultValueForType)
                 .toArray();
     }
 
@@ -103,7 +107,7 @@ public class ArgumentResolver {
 
     static String generateJavaPoetStringTypes(Method method, Class theContract) {
         StringBuilder symbolBuilder = new StringBuilder();
-        if (ArgumentResolver.getMethodReturnType(method).equals(theContract)) {
+        if (ParserUtils.getMethodReturnType(method).equals(theContract)) {
             symbolBuilder.append("$L");
         } else {
             symbolBuilder.append("$T");
@@ -111,7 +115,7 @@ public class ArgumentResolver {
             symbolBuilder.append("$L");
         }
         symbolBuilder.append("=");
-        if (ArgumentResolver.getMethodReturnType(method).equals(theContract)) {
+        if (ParserUtils.getMethodReturnType(method).equals(theContract)) {
             symbolBuilder.append("$T.");
         } else {
             symbolBuilder.append("$L.");
@@ -119,7 +123,7 @@ public class ArgumentResolver {
         symbolBuilder.append(method.getName());
         symbolBuilder.append("(");
         symbolBuilder.append(
-                ArgumentResolver.getJavaPoetStringFormatFromTypes(
+                ParserUtils.getJavaPoetStringFormatFromTypes(
                         Arrays.asList(method.getParameterTypes())));
         symbolBuilder.append(").send()");
         return symbolBuilder.toString();

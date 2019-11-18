@@ -26,7 +26,7 @@ import org.web3j.tuples.Tuple;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ArgumentResolverTest extends Setup {
+public class ParserUtilsTest extends Setup {
 
     @Test
     public void testGetJavaPoetStringFormatFromTypes() {
@@ -38,9 +38,9 @@ public class ArgumentResolverTest extends Setup {
                         List.class,
                         Tuple.class,
                         byte[].class);
-        ArgumentResolver.getJavaPoetStringFormatFromTypes(listOfClasses);
+        ParserUtils.getJavaPoetStringFormatFromTypes(listOfClasses);
         assertEquals(
-                ArgumentResolver.getJavaPoetStringFormatFromTypes(listOfClasses),
+                ParserUtils.getJavaPoetStringFormatFromTypes(listOfClasses),
                 "$L,$S,$T.ONE,new $T<>(),new $T<>(),new $T{}");
     }
 
@@ -53,7 +53,7 @@ public class ArgumentResolverTest extends Setup {
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                ArgumentResolver.generateJavaPoetStringTypes(deploy, greeterContractClass),
+                ParserUtils.generateJavaPoetStringTypes(deploy, greeterContractClass),
                 "$L=$T.deploy($L,$L,$L,$S).send()");
     }
 
@@ -66,7 +66,7 @@ public class ArgumentResolverTest extends Setup {
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                ArgumentResolver.generateJavaPoetStringTypes(newGreeting, greeterContractClass),
+                ParserUtils.generateJavaPoetStringTypes(newGreeting, greeterContractClass),
                 "$T $L=$L.newGreeting($S).send()");
     }
 
@@ -78,6 +78,6 @@ public class ArgumentResolverTest extends Setup {
                         .filter(m -> m.getName().equals("newGreeting"))
                         .collect(Collectors.toList())
                         .get(0);
-        assertEquals(ArgumentResolver.getMethodReturnType(newGreeting), TransactionReceipt.class);
+        assertEquals(ParserUtils.getMethodReturnType(newGreeting), TransactionReceipt.class);
     }
 }

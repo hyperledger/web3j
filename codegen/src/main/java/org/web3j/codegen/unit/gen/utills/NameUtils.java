@@ -31,8 +31,4 @@ public class NameUtils {
     public static String toCamelCase(String aString) {
         return Character.toLowerCase(aString.charAt(0)) + aString.substring(1);
     }
-
-    public static String capitalizeFirstLetter(String aString) {
-        return aString.substring(0, 1).toUpperCase() + aString.substring(1);
-    }
 }
