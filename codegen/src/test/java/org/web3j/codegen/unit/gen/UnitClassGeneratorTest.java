@@ -12,9 +12,11 @@
  */
 package org.web3j.codegen.unit.gen;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
-import static java.io.File.separator;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,20 +27,16 @@ public class UnitClassGeneratorTest extends Setup {
     }
 
     @Test
-    public void testThatExceptionIsThrownWhenAClassIsNotWritten() {
-        UnitClassGenerator unitClassGenerator =
-                new UnitClassGenerator(null, "org.com", temp + separator + "test");
-        assertThrows(NullPointerException.class, unitClassGenerator::writeClass);
+    public void testThatExceptionIsThrownWhenAClassIsNotWritten() throws IOException {
+        assertThrows(
+                NullPointerException.class,
+                () -> {
+                    new UnitClassGenerator(null, "org.com").writeClass(Optional.of(temp));
+                });
     }
 
     @Test
-    public void testThatClassWasGeneratedWithCorrectFields() throws NoSuchFieldException {
-        assertTrue(
-                classAsString.contains(
-                        "static String myAddress = \"0xfe3b557e8fb62b89f4916b721be55ceb828dbd73\";\n"));
-        assertTrue(
-                classAsString.contains(
-                        "static String addressToTestAgainst = \"0x42699a7612a82f1d9c36148af9c77354759b210b\";\n"));
+    public void testThatClassWasGeneratedWithCorrectFields() {
         assertTrue(classAsString.contains("private Greeter greeter;"));
     }
 }
