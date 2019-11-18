@@ -19,7 +19,7 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
     @Deprecated
     @SafeVarargs
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked"})
     public DynamicArray(T... values) {
         super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
     }

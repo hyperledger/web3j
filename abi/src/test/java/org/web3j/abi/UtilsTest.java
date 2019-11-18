@@ -39,7 +39,7 @@ import static org.web3j.abi.Utils.typeMap;
 public class UtilsTest {
 
     @Test
-    public void testGetTypeName() throws ClassNotFoundException {
+    public void testGetTypeName() {
         assertEquals(Utils.getTypeName(new TypeReference<Uint>() {}), ("uint256"));
         assertEquals(Utils.getTypeName(new TypeReference<Int>() {}), ("int256"));
         assertEquals(Utils.getTypeName(new TypeReference<Ufixed>() {}), ("ufixed256"));
@@ -71,6 +71,7 @@ public class UtilsTest {
                         new Uint256(BigInteger.TEN))));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testTypeMapNested() {
         List<BigInteger> innerList1 = Arrays.asList(BigInteger.valueOf(1), BigInteger.valueOf(2));

@@ -51,7 +51,7 @@ import org.web3j.utils.Numeric;
 /**
  * Solidity contract type abstraction for interacting with smart contracts via native Java types.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "deprecation"})
 public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/

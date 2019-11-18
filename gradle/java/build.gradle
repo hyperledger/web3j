@@ -4,9 +4,9 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 compileJava {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    options.compilerArgs << "-Xlint:unchecked"
 }
 
 compileTestJava {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    options.compilerArgs << "-Xlint:unchecked"
 }

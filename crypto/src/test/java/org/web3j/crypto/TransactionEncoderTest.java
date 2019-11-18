@@ -23,6 +23,7 @@ import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("deprecation")
 public class TransactionEncoderTest {
 
     @Test

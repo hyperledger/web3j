@@ -14,6 +14,7 @@ package org.web3j.tx.gas;
 
 import java.math.BigInteger;
 
+@SuppressWarnings("deprecation")
 public class StaticGasProvider implements ContractGasProvider {
     private BigInteger gasPrice;
     private BigInteger gasLimit;

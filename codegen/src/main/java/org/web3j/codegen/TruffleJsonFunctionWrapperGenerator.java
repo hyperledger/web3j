@@ -47,6 +47,7 @@ import static org.web3j.utils.Collection.tail;
  * contains information about deployment addresses. This should make integration with Truffle
  * easier.
  */
+@SuppressWarnings("deprecation")
 public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
     private static final String USAGE =

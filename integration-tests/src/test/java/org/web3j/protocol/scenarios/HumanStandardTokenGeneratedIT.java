@@ -22,12 +22,13 @@ import org.junit.jupiter.api.Test;
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.gas.DefaultGasProvider;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.generated.HumanStandardToken.ApprovalEventResponse;
 import static org.web3j.generated.HumanStandardToken.TransferEventResponse;
-import static org.web3j.generated.HumanStandardToken.deploy;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 
 /** Generated HumanStandardToken integration test for all supported scenarios. */
@@ -38,13 +39,12 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
         final String aliceAddress = ALICE.getAddress();
         final String bobAddress = BOB.getAddress();
-
+        ContractGasProvider contractGasProvider = new DefaultGasProvider();
         HumanStandardToken contract =
-                deploy(
+                HumanStandardToken.deploy(
                                 web3j,
                                 ALICE,
-                                GAS_PRICE,
-                                GAS_LIMIT,
+                                contractGasProvider,
                                 aliceQty,
                                 "web3j tokens",
                                 BigInteger.valueOf(18),
