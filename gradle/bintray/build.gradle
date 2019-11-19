@@ -1,0 +1,18 @@
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    def slug = project.name
+    if(project.hasProperty('scmSlug')) {
+        slug = project.scmSlug
+    }
+    publications = ['maven']
+    publish = true
+    override = true
+    pkg {
+        repo = 'maven'
+        name = slug
+        userOrg = 'web3j'
+        licenses = ['Apache-2.0']
+        publicDownloadNumbers = true
+    }
+}

@@ -6,6 +6,7 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.21.1'
     id "de.marcphilipp.nexus-publish" version "0.4.0"
     id "de.undercouch.download" version "4.0.0"
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
 ext {
@@ -25,16 +26,27 @@ ext {
     junitBenchmarkVersion = '0.7.2'
     logbackVersion = '1.2.3'
     mockitoJunitVersion = "3.1.0"
-
-    ktlintVersion = '0.31.0'
 }
 
 
 description 'web3j base project'
 
-nexusStaging {
-    username System.getenv('OSSRH_USERNAME')
-    password System.getenv('OSSRH_PASSWORD')
+[
+    'bintray',
+    'jacoco',
+    'java',
+    'javadoc',
+    'publish',
+    'repositories',
+    'spotless'
+].each { buildScript ->
+    download {
+        src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
+        dest "$rootDir/gradle/$buildScript/build.gradle"
+        overwrite true
+        quiet true
+        onlyIfModified true
+    }
 }
 
 allprojects {
@@ -45,13 +57,6 @@ allprojects {
             'repositories',
             'spotless'
         ].each { buildScript ->
-            download {
-                src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
-                dest "$rootDir/gradle/$buildScript/build.gradle"
-                overwrite true
-                quiet true
-                onlyIfModified true
-            }
             from("$rootDir/gradle/$buildScript/build.gradle")
         }
     }
@@ -61,8 +66,6 @@ allprojects {
     }
 
     dependencies {
-        implementation("com.github.shyiko:ktlint:${ktlintVersion}") { exclude group: 'org.slf4j' }
-
         testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
         testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
     }
@@ -82,16 +85,8 @@ allprojects {
     }
 
     if (project.name != 'integration-tests') {
-        apply {
-            download {
-                src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/publish/build.gradle"
-                dest "$rootDir/gradle/publish/build.gradle"
-                overwrite true
-                quiet true
-                onlyIfModified true
-            }
-            from("$rootDir/gradle/publish/build.gradle")
-        }
+        apply from: "$rootDir/gradle/publish/build.gradle"
+        apply from: "$rootDir/gradle/bintray/build.gradle"
     }
 }
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
