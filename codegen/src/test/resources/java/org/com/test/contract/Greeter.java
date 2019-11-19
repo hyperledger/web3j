@@ -1,11 +1,13 @@
-package org.com.generated.contracts;
+package org.com.test.contract;
 
 import io.reactivex.Flowable;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;

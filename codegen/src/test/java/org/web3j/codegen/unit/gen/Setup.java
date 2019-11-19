@@ -38,8 +38,7 @@ public class Setup {
                 Objects.requireNonNull(
                                 Setup.class
                                         .getClassLoader()
-                                        .getResource(
-                                                "java/org/com/generated/contracts/Greeter.java"))
+                                        .getResource("java/org/com/test/contract/Greeter.java"))
                         .getPath();
         classAsFile = new File(urlAsString);
         File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
