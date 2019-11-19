@@ -115,6 +115,7 @@ public abstract class Filter<T> {
                 ethLog = new EthLog();
                 ethLog.setResult(Collections.emptyList());
             }
+
             process(ethLog.getLogs());
 
         } catch (IOException e) {

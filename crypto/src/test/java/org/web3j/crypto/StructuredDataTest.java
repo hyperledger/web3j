@@ -13,6 +13,7 @@
 package org.web3j.crypto;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -42,11 +43,12 @@ public class StructuredDataTest {
     }
 
     private String getResource(String jsonFile) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(jsonFile).toAbsolutePath()), "UTF-8");
+        return new String(
+                Files.readAllBytes(Paths.get(jsonFile).toAbsolutePath()), StandardCharsets.UTF_8);
     }
 
     @Test
-    public void testInvalidIdentifierMessageCaughtByRegex() throws IOException, RuntimeException {
+    public void testInvalidIdentifierMessageCaughtByRegex() throws RuntimeException {
         String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidIdentifierStructuredData.json";
@@ -56,7 +58,7 @@ public class StructuredDataTest {
     }
 
     @Test
-    public void testInvalidTypeMessageCaughtByRegex() throws IOException, RuntimeException {
+    public void testInvalidTypeMessageCaughtByRegex() throws RuntimeException {
         String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidTypeStructuredData.json";
@@ -102,6 +104,7 @@ public class StructuredDataTest {
                 expectedTypeHashHex);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testEncodeData() throws RuntimeException, IOException {
         StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
@@ -119,6 +122,7 @@ public class StructuredDataTest {
         assertEquals(Numeric.toHexString(encodedData), expectedDataEncodingHex);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testHashData() throws RuntimeException, IOException {
         StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
@@ -181,7 +185,7 @@ public class StructuredDataTest {
                         + "structured_data_json_files/InvalidMessageValueTypeMismatch.json";
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
-        assertThrows(ClassCastException.class, () -> dataEncoder.hashStructuredData());
+        assertThrows(ClassCastException.class, dataEncoder::hashStructuredData);
     }
 
     @Test
@@ -191,7 +195,7 @@ public class StructuredDataTest {
                         + "structured_data_json_files/InvalidMessageInvalidABIType.json";
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
-        assertThrows(UnsupportedOperationException.class, () -> dataEncoder.hashStructuredData());
+        assertThrows(UnsupportedOperationException.class, dataEncoder::hashStructuredData);
     }
 
     @Test
@@ -201,7 +205,7 @@ public class StructuredDataTest {
                         + "structured_data_json_files/InvalidMessageValidABITypeInvalidValue.json";
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
-        assertThrows(RuntimeException.class, () -> dataEncoder.hashStructuredData());
+        assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }
 
     @Test
@@ -376,7 +380,7 @@ public class StructuredDataTest {
                         + "InvalidMessageUnequalArrayLengthsBetweenSchemaAndData.json";
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
-        assertThrows(RuntimeException.class, () -> dataEncoder.hashStructuredData());
+        assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }
 
     @Test
@@ -388,6 +392,6 @@ public class StructuredDataTest {
                         + "InvalidMessageDataNotPerfectArrayButDeclaredArrayInSchema.json";
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
-        assertThrows(RuntimeException.class, () -> dataEncoder.hashStructuredData());
+        assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }
 }
