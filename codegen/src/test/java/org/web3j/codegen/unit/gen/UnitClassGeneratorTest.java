@@ -12,6 +12,7 @@
  */
 package org.web3j.codegen.unit.gen;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class UnitClassGeneratorTest extends Setup {
         assertThrows(
                 NullPointerException.class,
                 () -> {
-                    new UnitClassGenerator(null, "org.com").writeClass(Optional.of(temp));
+                    new UnitClassGenerator(null, "org.com", temp.toString()).writeClass();
                 });
     }
 

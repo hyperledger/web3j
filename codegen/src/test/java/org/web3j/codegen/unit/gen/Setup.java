@@ -48,7 +48,6 @@ public class Setup {
                 new BufferedReader(new FileReader(classAsFile))
                         .lines()
                         .collect(Collectors.joining("\n"));
-        new UnitClassGenerator(greeterContractClass, "org.com.generated.contracts")
-                .writeClass(Optional.of(new File(temp + File.separator + "test")));
+        new UnitClassGenerator(greeterContractClass, "org.com.generated.contracts",temp + File.separator + "test").writeClass();
     }
 }

@@ -38,28 +38,24 @@ import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 public class UnitClassGenerator {
     private final Class theContract;
     private final String packageName;
+    private final String writePath;
 
-    public UnitClassGenerator(final Class theContract, final String packageName) {
+    public UnitClassGenerator(final Class theContract, final String packageName, String writePath) {
         this.theContract = theContract;
         this.packageName = packageName;
+        this.writePath = writePath;
     }
 
-    public void writeClass(Optional<File> customWritePath) throws IOException {
-        File defaultWritePath =
-                new File(String.join(separator, "src", "test", "java", "contracts"));
+    public void writeClass() throws IOException {
         TypeSpec testClass =
                 TypeSpec.classBuilder(theContract.getSimpleName() + "Test")
                         .addMethods(generateMethodSpecsForEachTest())
                         .addAnnotation(EVMTest.class)
                         .addField(theContract, toCamelCase(theContract), Modifier.PRIVATE)
                         .build();
-
         JavaFile javaFile = JavaFile.builder(packageName, testClass).build();
-        if (customWritePath.isPresent()) {
-            javaFile.writeTo(customWritePath.get());
-        } else {
-            javaFile.writeTo(defaultWritePath);
-        }
+        javaFile.writeTo(new File(writePath));
+
     }
 
     private List<MethodSpec> generateMethodSpecsForEachTest() {
