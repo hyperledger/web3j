@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import org.web3j.tuples.Tuple;
 
 import static org.web3j.codegen.unit.gen.utills.NameUtils.returnTypeAsLiteral;
@@ -88,21 +86,27 @@ public class ParserUtils {
     static Object[] getPlaceholderValues(Method method, Class contract) {
         Type returnType = getMethodReturnType(method);
         if (returnType.equals(contract)) {
-            return ArrayUtils.addAll(
-                    new Object[] {
-                        toCamelCase(returnTypeAsLiteral(returnType, false)), returnType,
-                    },
-                    dynamicArguments(method));
-
+            Object[] source1 =
+                    new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+            Object[] source2 = dynamicArguments(method);
+            return mergePlaceholderValues(source1, source2);
         } else {
-            return ArrayUtils.addAll(
+            Object[] source1 =
                     new Object[] {
                         returnType,
                         toCamelCase(returnTypeAsLiteral(returnType, true)),
                         toCamelCase(contract)
-                    },
-                    dynamicArguments(method));
+                    };
+            Object[] source2 = dynamicArguments(method);
+            return mergePlaceholderValues(source1, source2);
         }
+    }
+
+    private static Object[] mergePlaceholderValues(Object[] source1, Object[] source2) {
+        Object[] destination = new Object[source1.length + source2.length];
+        System.arraycopy(source1, 0, destination, 0, source1.length);
+        System.arraycopy(source2, 0, destination, source1.length, source2.length);
+        return destination;
     }
 
     static String generateJavaPoetStringTypes(Method method, Class theContract) {
@@ -125,7 +129,12 @@ public class ParserUtils {
         symbolBuilder.append(
                 ParserUtils.getJavaPoetStringFormatFromTypes(
                         Arrays.asList(method.getParameterTypes())));
-        symbolBuilder.append(").send()");
+        if (method.getName().equals("load")) {
+            symbolBuilder.append(")");
+
+        } else {
+            symbolBuilder.append(").send()");
+        }
         return symbolBuilder.toString();
     }
 }
