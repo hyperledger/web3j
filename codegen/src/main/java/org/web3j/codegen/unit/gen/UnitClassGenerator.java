@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.JavaFile;
@@ -25,7 +24,6 @@ import com.squareup.javapoet.TypeSpec;
 
 import org.web3j.EVMTest;
 
-import static java.io.File.separator;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
 /*
@@ -55,7 +53,6 @@ public class UnitClassGenerator {
                         .build();
         JavaFile javaFile = JavaFile.builder(packageName, testClass).build();
         javaFile.writeTo(new File(writePath));
-
     }
 
     private List<MethodSpec> generateMethodSpecsForEachTest() {

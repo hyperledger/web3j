@@ -12,9 +12,7 @@
  */
 package org.web3j.codegen.unit.gen;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 

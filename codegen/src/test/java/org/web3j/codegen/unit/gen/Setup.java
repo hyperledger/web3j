@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -48,6 +47,10 @@ public class Setup {
                 new BufferedReader(new FileReader(classAsFile))
                         .lines()
                         .collect(Collectors.joining("\n"));
-        new UnitClassGenerator(greeterContractClass, "org.com.generated.contracts",temp + File.separator + "test").writeClass();
+        new UnitClassGenerator(
+                        greeterContractClass,
+                        "org.com.generated.contracts",
+                        temp + File.separator + "test")
+                .writeClass();
     }
 }
