@@ -15,40 +15,128 @@ package org.web3j.codegen.unit.gen;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.web3j.tuples.Tuple;
+import org.junit.jupiter.api.Assertions;
+
+import org.web3j.codegen.unit.gen.utills.MappingHelper;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static org.web3j.codegen.unit.gen.utills.NameUtils.returnTypeAsLiteral;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
-/*
-       Class that provides parsing utility between Unit Generation and  JavaPoet.
-*/
-
+/** Class that provides parsing utility between Unit Generation and JavaPoet. */
 public class ParserUtils {
+    private static MappingHelper mappingHelper = new MappingHelper();
 
-    public static String getJavaPoetStringFormatFromTypes(List<Class> types) {
+    public static String getJavaPoetFormatSpecifier(Method method) {
         List<String> generated = new ArrayList<>();
-        for (Class type : types) {
-            if (type.equals(String.class)) {
-                generated.add("$S");
-            } else if (type.equals(BigInteger.class)) {
-                generated.add("$T.ONE");
-            } else if (type.equals(List.class)) {
-                generated.add("new $T<>()");
-            } else if (type.equals(Tuple.class)) {
-                generated.add("new $T<>()");
-            } else if (type.equals(byte[].class)) {
-                generated.add("new $T{}");
-            } else {
-                generated.add("$L");
-            }
-        }
+        Arrays.asList(method.getParameterTypes())
+                .forEach(
+                        type ->
+                                generated.add(
+                                        mappingHelper
+                                                .getJavaPoetFormat()
+                                                .getOrDefault(type, "$L")));
         return String.join(",", generated);
+    }
+
+    static Object[] generatePlaceholderValues(Method method, Class contract) {
+        Type returnType = getMethodReturnType(method);
+        Object[] source1;
+        Object[] source2 = replaceTypeWithDefaultValue(method);
+        if (returnType.equals(contract)) {
+            source1 =
+                    new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+        } else {
+            source1 =
+                    new Object[] {
+                        returnType,
+                        toCamelCase(returnTypeAsLiteral(returnType, true)),
+                        toCamelCase(contract)
+                    };
+        }
+        return mergePlaceholderValues(source1, source2);
+    }
+
+    private static Object[] replaceTypeWithDefaultValue(Method method) {
+        return Arrays.stream(method.getParameterTypes())
+                .map(ParserUtils::getDefaultValueForType)
+                .toArray();
+    }
+
+    private static Object getDefaultValueForType(Class type) {
+        if (mappingHelper.getDefaultValueMap().containsKey(type)) {
+            return mappingHelper.getDefaultValueMap().get(type);
+        } else {
+            return toCamelCase(type);
+        }
+    }
+
+    static String generateJavaPoetStringTypes(Method method, Class theContract) {
+        StringBuilder symbolBuilder = new StringBuilder();
+        if (getMethodReturnType(method).equals(theContract)) {
+            symbolBuilder.append("$L = $T.");
+        } else {
+            symbolBuilder.append("$T $L = $L.");
+        }
+        symbolBuilder
+                .append(method.getName())
+                .append("(")
+                .append(getJavaPoetFormatSpecifier(method))
+                .append(").send()");
+
+        return symbolBuilder.toString();
+    }
+
+    static String generateAssertionJavaPoetStringTypes(Method method, Class theContract) {
+        Type returnType = getMethodReturnType(method);
+        Object[] body = generatePlaceholderValues(method, theContract);
+        StringBuilder symbolBuilder = new StringBuilder();
+        symbolBuilder.append("$T.");
+        if (body[0].equals(TransactionReceipt.class)) {
+            symbolBuilder.append("assertTrue($L.isStatusOK())");
+        } else {
+            symbolBuilder.append("assertEquals(");
+            if (returnType.getTypeName().contains("Tuple")) {
+                symbolBuilder.append("new $T(");
+                for (Type t : getTypeArray(returnType)) {
+                    symbolBuilder.append(mappingHelper.getJavaPoetFormat().get(t)).append(",");
+                }
+                symbolBuilder.deleteCharAt(symbolBuilder.lastIndexOf(","));
+                symbolBuilder.append(")");
+            } else {
+                symbolBuilder.append(mappingHelper.getJavaPoetFormat().get(body[0]));
+            }
+            symbolBuilder.append(",");
+            symbolBuilder.append("$L");
+            symbolBuilder.append(")");
+        }
+
+        return symbolBuilder.toString();
+    }
+
+    static Object[] generateAssertionPlaceholderValues(Method method, Class contract) {
+        Type returnType = getMethodReturnType(method);
+        Object[] body = generatePlaceholderValues(method, contract);
+        List<Object> placeHolder = new ArrayList<>();
+        placeHolder.add(Assertions.class);
+        if (body[0].equals(TransactionReceipt.class)) {
+            placeHolder.add(toCamelCase(returnTypeAsLiteral(returnType, true)));
+        } else {
+            if (returnType.getTypeName().contains("Tuple")) {
+                placeHolder.add(body[0]);
+                for (Type t : getTypeArray(returnType)) {
+                    placeHolder.add(mappingHelper.getDefaultValueMap().get(t));
+                }
+            } else {
+                placeHolder.add(mappingHelper.getDefaultValueMap().get(body[0]));
+            }
+            placeHolder.add(toCamelCase(returnTypeAsLiteral(returnType, true)));
+        }
+        return placeHolder.toArray();
     }
 
     static Type getMethodReturnType(Method method) {
@@ -61,45 +149,9 @@ public class ParserUtils {
         }
     }
 
-    private static Object getDefaultValueForType(Class type) {
-        if (type.equals(String.class)) {
-            return "REPLACE_ME";
-        } else if (type.equals(BigInteger.class)) {
-            return BigInteger.class;
-        } else if (type.equals(List.class)) {
-            return ArrayList.class;
-        } else if (type.equals(Tuple.class)) {
-            return Tuple.class;
-        } else if (type.equals(byte[].class)) {
-            return byte[].class;
-        } else {
-            return toCamelCase(type);
-        }
-    }
-
-    private static Object[] dynamicArguments(Method method) {
-        return Arrays.stream(method.getParameterTypes())
-                .map(ParserUtils::getDefaultValueForType)
-                .toArray();
-    }
-
-    static Object[] getPlaceholderValues(Method method, Class contract) {
-        Type returnType = getMethodReturnType(method);
-        if (returnType.equals(contract)) {
-            Object[] source1 =
-                    new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
-            Object[] source2 = dynamicArguments(method);
-            return mergePlaceholderValues(source1, source2);
-        } else {
-            Object[] source1 =
-                    new Object[] {
-                        returnType,
-                        toCamelCase(returnTypeAsLiteral(returnType, true)),
-                        toCamelCase(contract)
-                    };
-            Object[] source2 = dynamicArguments(method);
-            return mergePlaceholderValues(source1, source2);
-        }
+    static Type[] getTypeArray(Type type) {
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        return parameterizedType.getActualTypeArguments();
     }
 
     private static Object[] mergePlaceholderValues(Object[] source1, Object[] source2) {
@@ -107,34 +159,5 @@ public class ParserUtils {
         System.arraycopy(source1, 0, destination, 0, source1.length);
         System.arraycopy(source2, 0, destination, source1.length, source2.length);
         return destination;
-    }
-
-    static String generateJavaPoetStringTypes(Method method, Class theContract) {
-        StringBuilder symbolBuilder = new StringBuilder();
-        if (ParserUtils.getMethodReturnType(method).equals(theContract)) {
-            symbolBuilder.append("$L");
-        } else {
-            symbolBuilder.append("$T");
-            symbolBuilder.append(" ");
-            symbolBuilder.append("$L");
-        }
-        symbolBuilder.append("=");
-        if (ParserUtils.getMethodReturnType(method).equals(theContract)) {
-            symbolBuilder.append("$T.");
-        } else {
-            symbolBuilder.append("$L.");
-        }
-        symbolBuilder.append(method.getName());
-        symbolBuilder.append("(");
-        symbolBuilder.append(
-                ParserUtils.getJavaPoetStringFormatFromTypes(
-                        Arrays.asList(method.getParameterTypes())));
-        if (method.getName().equals("load")) {
-            symbolBuilder.append(")");
-
-        } else {
-            symbolBuilder.append(").send()");
-        }
-        return symbolBuilder.toString();
     }
 }

@@ -13,36 +13,16 @@
 package org.web3j.codegen.unit.gen;
 
 import java.lang.reflect.Method;
-import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.tuples.Tuple;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParserUtilsTest extends Setup {
-
-    @Test
-    public void testGetJavaPoetStringFormatFromTypes() {
-        List<Class> listOfClasses =
-                Arrays.asList(
-                        Web3j.class,
-                        String.class,
-                        BigInteger.class,
-                        List.class,
-                        Tuple.class,
-                        byte[].class);
-        ParserUtils.getJavaPoetStringFormatFromTypes(listOfClasses);
-        assertEquals(
-                ParserUtils.getJavaPoetStringFormatFromTypes(listOfClasses),
-                "$L,$S,$T.ONE,new $T<>(),new $T<>(),new $T{}");
-    }
 
     @Test
     public void testGenerateJavaPoetStringTypesWhenReturnTypeIsContract() {
@@ -53,8 +33,8 @@ public class ParserUtilsTest extends Setup {
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                ParserUtils.generateJavaPoetStringTypes(deploy, greeterContractClass),
-                "$L=$T.deploy($L,$L,$L,$S).send()");
+                "$L = $T.deploy($L,$L,$L,$S ).send()",
+                ParserUtils.generateJavaPoetStringTypes(deploy, greeterContractClass));
     }
 
     @Test
@@ -66,8 +46,8 @@ public class ParserUtilsTest extends Setup {
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                ParserUtils.generateJavaPoetStringTypes(newGreeting, greeterContractClass),
-                "$T $L=$L.newGreeting($S).send()");
+                "$T $L = $L.newGreeting($S ).send()",
+                ParserUtils.generateJavaPoetStringTypes(newGreeting, greeterContractClass));
     }
 
     @Test
@@ -78,6 +58,6 @@ public class ParserUtilsTest extends Setup {
                         .filter(m -> m.getName().equals("newGreeting"))
                         .collect(Collectors.toList())
                         .get(0);
-        assertEquals(ParserUtils.getMethodReturnType(newGreeting), TransactionReceipt.class);
+        assertEquals(TransactionReceipt.class, ParserUtils.getMethodReturnType(newGreeting));
     }
 }

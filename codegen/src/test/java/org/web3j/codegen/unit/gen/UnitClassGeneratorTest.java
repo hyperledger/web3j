@@ -12,7 +12,7 @@
  */
 package org.web3j.codegen.unit.gen;
 
-import java.io.IOException;
+import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,20 +22,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UnitClassGeneratorTest extends Setup {
     @Test
     public void testThatTheClassWasSuccessfullyWritten() {
-        assertTrue(classAsFile.exists());
+        assertTrue(new File(pathToTest).exists());
     }
 
     @Test
-    public void testThatExceptionIsThrownWhenAClassIsNotWritten() throws IOException {
+    public void testThatExceptionIsThrownWhenAClassIsNotWritten() {
         assertThrows(
                 NullPointerException.class,
-                () -> {
-                    new UnitClassGenerator(null, "org.com", temp.toString()).writeClass();
-                });
+                () -> new UnitClassGenerator(null, "org.com", temp.toString()).writeClass());
     }
 
     @Test
     public void testThatClassWasGeneratedWithCorrectFields() {
-        assertTrue(classAsString.contains("private Greeter greeter;"));
+        assertTrue(classAsString.contains("private static Greeter greeter;"));
     }
 }

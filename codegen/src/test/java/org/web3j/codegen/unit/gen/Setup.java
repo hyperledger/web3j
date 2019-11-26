@@ -30,6 +30,7 @@ public class Setup {
     static Class greeterContractClass;
     static List<Method> filteredMethods;
     static String classAsString;
+    static String pathToTest;
 
     @BeforeAll
     public static void setUp() throws IOException {
@@ -39,18 +40,28 @@ public class Setup {
                                         .getClassLoader()
                                         .getResource("java/org/com/test/contract/Greeter.java"))
                         .getPath();
+        pathToTest =
+                String.join(
+                        File.separator,
+                        temp.getPath(),
+                        "test",
+                        "org",
+                        "com",
+                        "generated",
+                        "contracts",
+                        "GreeterTest.java");
         classAsFile = new File(urlAsString);
         File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
         greeterContractClass = new ClassProvider(greeter).getClasses().get(0);
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        classAsString =
-                new BufferedReader(new FileReader(classAsFile))
-                        .lines()
-                        .collect(Collectors.joining("\n"));
         new UnitClassGenerator(
                         greeterContractClass,
                         "org.com.generated.contracts",
                         temp + File.separator + "test")
                 .writeClass();
+        classAsString =
+                new BufferedReader(new FileReader(new File(pathToTest)))
+                        .lines()
+                        .collect(Collectors.joining("\n"));
     }
 }

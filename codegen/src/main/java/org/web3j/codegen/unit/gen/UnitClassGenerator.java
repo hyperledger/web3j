@@ -26,13 +26,10 @@ import org.web3j.EVMTest;
 
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
-/*
-    Class that generates the unit tests classes for the contracts.
-    The class writes to src/test/java/contracts and each file is named
-    after the contract + "Test" e.g GreeterTest
-
-*/
-
+/**
+ * Class that generates the unit tests classes for the contracts. The class writes to
+ * src/test/java/contracts and each file is named after the contract + "Test" e.g GreeterTest
+ */
 public class UnitClassGenerator {
     private final Class theContract;
     private final String packageName;
@@ -49,7 +46,11 @@ public class UnitClassGenerator {
                 TypeSpec.classBuilder(theContract.getSimpleName() + "Test")
                         .addMethods(generateMethodSpecsForEachTest())
                         .addAnnotation(EVMTest.class)
-                        .addField(theContract, toCamelCase(theContract), Modifier.PRIVATE)
+                        .addField(
+                                theContract,
+                                toCamelCase(theContract),
+                                Modifier.PRIVATE,
+                                Modifier.STATIC)
                         .build();
         JavaFile javaFile = JavaFile.builder(packageName, testClass).build();
         javaFile.writeTo(new File(writePath));
@@ -59,10 +60,9 @@ public class UnitClassGenerator {
         List<MethodSpec> listOfMethodSpecs = new ArrayList<>();
         MethodFilter.extractValidMethods(theContract)
                 .forEach(
-                        method -> {
-                            listOfMethodSpecs.add(
-                                    new MethodParser(method, theContract).getMethodSpec());
-                        });
+                        method ->
+                                listOfMethodSpecs.add(
+                                        new MethodParser(method, theContract).getMethodSpec()));
         return listOfMethodSpecs;
     }
 }
