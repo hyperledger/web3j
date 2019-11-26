@@ -3,9 +3,9 @@ apply plugin: 'com.jfrog.bintray'
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
-    def slug = project.name
-    if(project.hasProperty('scmSlug')) {
-        slug = project.scmSlug
+    def slug = rootProject.name
+    if (project.hasProperty('rootProjectOverride')) {
+        slug = project.rootProjectOverride
     }
     publications = ['maven']
     publish = true

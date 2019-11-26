@@ -27,7 +27,6 @@ ext {
     logbackVersion = '1.2.3'
     mockitoJunitVersion = "3.1.0"
 
-    scmSlug = 'web3j'
 }
 
 
