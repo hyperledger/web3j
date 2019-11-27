@@ -30,12 +30,12 @@ public class MappingHelper {
         defaultValueMap.put(byte[].class, byte[].class);
         defaultValueMap.put(Boolean.class, true);
         javaPoetFormat.put(Boolean.class, "$L");
-        javaPoetFormat.put(String.class, "$S ");
-        javaPoetFormat.put(BigInteger.class, "$N ");
-        javaPoetFormat.put(List.class, "new $T<>() ");
-        javaPoetFormat.put(Tuple.class, "new $T<>() ");
-        javaPoetFormat.put(Tuple2.class, "new $T<>() ");
-        javaPoetFormat.put(byte[].class, "new $T{} ");
+        javaPoetFormat.put(String.class, "$S");
+        javaPoetFormat.put(BigInteger.class, "$N");
+        javaPoetFormat.put(List.class, "new $T<>()");
+        javaPoetFormat.put(Tuple.class, "new $T<>()");
+        javaPoetFormat.put(Tuple2.class, "new $T<>()");
+        javaPoetFormat.put(byte[].class, "new $T{}");
     }
 
     public Map<Class, Object> getDefaultValueMap() {

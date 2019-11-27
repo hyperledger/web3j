@@ -31,7 +31,7 @@ import org.web3j.tx.gas.ContractGasProvider;
 
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
-/** Class that when given a method provides a JavaPoet method spec. */
+/*Class that when given a method provides a JavaPoet method spec. */
 public class MethodParser {
     private final Method method;
     private final Class theContract;

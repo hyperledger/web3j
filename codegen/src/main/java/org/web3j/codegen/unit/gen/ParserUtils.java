@@ -27,21 +27,11 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.returnTypeAsLiteral;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
-/** Class that provides parsing utility between Unit Generation and JavaPoet. */
+/*
+ * Class that provides parsing utility between Unit Generation and JavaPoet.
+ */
 public class ParserUtils {
     private static MappingHelper mappingHelper = new MappingHelper();
-
-    public static String getJavaPoetFormatSpecifier(Method method) {
-        List<String> generated = new ArrayList<>();
-        Arrays.asList(method.getParameterTypes())
-                .forEach(
-                        type ->
-                                generated.add(
-                                        mappingHelper
-                                                .getJavaPoetFormat()
-                                                .getOrDefault(type, "$L")));
-        return String.join(",", generated);
-    }
 
     static Object[] generatePlaceholderValues(Method method, Class contract) {
         Type returnType = getMethodReturnType(method);
@@ -91,6 +81,18 @@ public class ParserUtils {
         return symbolBuilder.toString();
     }
 
+    private static String getJavaPoetFormatSpecifier(Method method) {
+        List<String> generated = new ArrayList<>();
+        Arrays.asList(method.getParameterTypes())
+                .forEach(
+                        type ->
+                                generated.add(
+                                        mappingHelper
+                                                .getJavaPoetFormat()
+                                                .getOrDefault(type, "$L")));
+        return String.join(", ", generated);
+    }
+
     static String generateAssertionJavaPoetStringTypes(Method method, Class theContract) {
         Type returnType = getMethodReturnType(method);
         Object[] body = generatePlaceholderValues(method, theContract);
@@ -103,14 +105,14 @@ public class ParserUtils {
             if (returnType.getTypeName().contains("Tuple")) {
                 symbolBuilder.append("new $T(");
                 for (Type t : getTypeArray(returnType)) {
-                    symbolBuilder.append(mappingHelper.getJavaPoetFormat().get(t)).append(",");
+                    symbolBuilder.append(mappingHelper.getJavaPoetFormat().get(t)).append(", ");
                 }
-                symbolBuilder.deleteCharAt(symbolBuilder.lastIndexOf(","));
+                symbolBuilder.deleteCharAt(symbolBuilder.lastIndexOf(", "));
                 symbolBuilder.append(")");
             } else {
                 symbolBuilder.append(mappingHelper.getJavaPoetFormat().get(body[0]));
             }
-            symbolBuilder.append(",");
+            symbolBuilder.append(", ");
             symbolBuilder.append("$L");
             symbolBuilder.append(")");
         }
