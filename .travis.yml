@@ -27,7 +27,7 @@ jobs:
     script: "./gradlew closeAndReleaseRepository"
   - stage: github release
     if: branch =~ /release/
-    script: "./gradlew check -Pversion=${TRAVIS_BRANCH#'release/'} && ./scripts/github-release.sh"
+    script: "./scripts/github-release.sh"
   - stage: release dependants
     if: branch =~ /release/
     script:
