@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -31,6 +30,7 @@ public class Setup {
     static Class greeterContractClass;
     static List<Method> filteredMethods;
     static String classAsString;
+    static String pathToTest;
 
     @BeforeAll
     public static void setUp() throws IOException {
@@ -38,18 +38,30 @@ public class Setup {
                 Objects.requireNonNull(
                                 Setup.class
                                         .getClassLoader()
-                                        .getResource(
-                                                "java/org/com/generated/contracts/Greeter.java"))
+                                        .getResource("java/org/com/test/contract/Greeter.java"))
                         .getPath();
+        pathToTest =
+                String.join(
+                        File.separator,
+                        temp.getPath(),
+                        "test",
+                        "org",
+                        "com",
+                        "generated",
+                        "contracts",
+                        "GreeterTest.java");
         classAsFile = new File(urlAsString);
         File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
         greeterContractClass = new ClassProvider(greeter).getClasses().get(0);
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
+        new UnitClassGenerator(
+                        greeterContractClass,
+                        "org.com.generated.contracts",
+                        temp + File.separator + "test")
+                .writeClass();
         classAsString =
-                new BufferedReader(new FileReader(classAsFile))
+                new BufferedReader(new FileReader(new File(pathToTest)))
                         .lines()
                         .collect(Collectors.joining("\n"));
-        new UnitClassGenerator(greeterContractClass, "org.com.generated.contracts")
-                .writeClass(Optional.of(new File(temp + File.separator + "test")));
     }
 }

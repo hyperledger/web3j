@@ -30,39 +30,9 @@ public class MethodParserTest extends Setup {
                 new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 deployMethodSpec.toString(),
-                "@org.junit.jupiter.api.Test\n"
-                        + "public void deploy(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
-                        + "  greeter=org.com.generated.contracts.Greeter.deploy(web3j,transactionManager,contractGasProvider,\"REPLACE_ME\").send();\n"
-                        + "}\n");
-    }
-
-    @Test
-    public void testThatLoadMethodWasGenerated() {
-
-        Optional<Method> loadMethod =
-                filteredMethods.stream().filter(m -> m.getName().equals("load")).findAny();
-        MethodSpec loadMethodSpec =
-                new MethodParser(loadMethod.get(), greeterContractClass).getMethodSpec();
-        assertEquals(
-                loadMethodSpec.toString(),
-                "@org.junit.jupiter.api.Test\n"
-                        + "public void load(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
-                        + "  greeter=org.com.generated.contracts.Greeter.load(\"REPLACE_ME\",web3j,transactionManager,contractGasProvider).send();\n"
-                        + "}\n");
-    }
-
-    @Test
-    public void testThatKillMethodWasGenerated() {
-
-        Optional<Method> killMethod =
-                filteredMethods.stream().filter(m -> m.getName().equals("kill")).findAny();
-        MethodSpec killMethodSpec =
-                new MethodParser(killMethod.get(), greeterContractClass).getMethodSpec();
-        assertEquals(
-                killMethodSpec.toString(),
-                "@org.junit.jupiter.api.Test\n"
-                        + "public void kill() throws java.lang.Exception {\n"
-                        + "  org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar=greeter.kill().send();\n"
+                "@org.junit.jupiter.api.BeforeAll\n"
+                        + "static void deploy(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
+                        + "  greeter = org.com.test.contract.Greeter.deploy(web3j,transactionManager,contractGasProvider,\"REPLACE_ME\" ).send();\n"
                         + "}\n");
     }
 
@@ -75,6 +45,7 @@ public class MethodParserTest extends Setup {
                 new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 deployMethodSpec.code.toString(),
-                "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar=greeter.newGreeting(\"REPLACE_ME\").send();\n");
+                "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar = greeter.newGreeting(\"REPLACE_ME\" ).send();\n"
+                        + "org.junit.jupiter.api.Assertions.assertTrue(transactionReceiptVar.isStatusOK());\n");
     }
 }

@@ -23,13 +23,15 @@ import org.web3j.tx.gas.ContractGasProvider;
 
 public class MethodFilter {
 
-    public static List<Method> extractValidMethods(Class theContract) {
-        return Arrays.stream(theContract.getDeclaredMethods())
+    public static List<Method> extractValidMethods(Class contract) {
+        return Arrays.stream(contract.getDeclaredMethods())
                 .filter(
                         m ->
                                 !m.isSynthetic()
                                         && parametersAreMatching(m)
-                                        && !m.getName().toLowerCase().contains("event"))
+                                        && !m.getName().toLowerCase().contains("event")
+                                        && !m.getName().equals("load")
+                                        && !m.getName().equals("kill"))
                 .collect(Collectors.toList());
     }
 

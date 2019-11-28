@@ -37,7 +37,7 @@ spotless {
             include '**/*.kt'
             exclude '**/.gradle/**'
         }
-        ktlint(ktlintVersion)
+        ktlint('0.31.0')
         trimTrailingWhitespace()
         endWithNewline()
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
@@ -51,4 +51,4 @@ spotless {
     }
 }
 
- spotlessCheck.dependsOn('downloadJavaLicense', 'downloadFormatterProperties')
+spotlessCheck.dependsOn('downloadJavaLicense', 'downloadFormatterProperties')

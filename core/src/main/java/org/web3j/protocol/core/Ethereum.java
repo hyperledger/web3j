@@ -22,6 +22,7 @@ import org.web3j.protocol.core.methods.response.DbPutString;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
+import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.EthCoinbase;
 import org.web3j.protocol.core.methods.response.EthCompileLLL;
 import org.web3j.protocol.core.methods.response.EthCompileSerpent;
@@ -80,6 +81,8 @@ public interface Ethereum {
     Request<?, AdminNodeInfo> adminNodeInfo();
 
     Request<?, EthProtocolVersion> ethProtocolVersion();
+
+    Request<?, EthChainId> ethChainId();
 
     Request<?, EthCoinbase> ethCoinbase();
 

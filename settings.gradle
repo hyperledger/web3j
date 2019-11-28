@@ -1,4 +1,4 @@
-rootProject.name = 'base'
+rootProject.name = 'web3j'
 
 include 'abi'
 include 'besu'

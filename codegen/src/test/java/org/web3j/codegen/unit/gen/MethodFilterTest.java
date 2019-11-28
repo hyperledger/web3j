@@ -48,19 +48,4 @@ public class MethodFilterTest extends Setup {
                         Arrays.asList(
                                 Web3j.class, TransactionManager.class, ContractGasProvider.class)));
     }
-
-    @Test
-    public void testThatTheCorrectLoadMethodWasExtracted() {
-        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        List<Method> deployMethod =
-                filteredMethods.stream()
-                        .filter(m -> m.getName().equals("load"))
-                        .collect(Collectors.toList());
-        List<Class<?>> deployMethodParameterTypes =
-                Arrays.asList(deployMethod.get(0).getParameterTypes());
-        assertTrue(
-                deployMethodParameterTypes.containsAll(
-                        Arrays.asList(
-                                Web3j.class, TransactionManager.class, ContractGasProvider.class)));
-    }
 }
