@@ -62,6 +62,7 @@ public class WebSocketService implements Web3jService {
 
     // WebSocket client
     private final WebSocketClient webSocketClient;
+    private boolean shouldReConnect;
     // Executor to schedule request timeouts
     private final ScheduledExecutorService executor;
     // Object mapper to map incoming JSON objects
@@ -114,10 +115,16 @@ public class WebSocketService implements Web3jService {
     }
 
     private void connectToWebSocket() throws InterruptedException, ConnectException {
-        boolean connected = webSocketClient.connectBlocking();
+        boolean connected =
+                shouldReConnect
+                        ? webSocketClient.reconnectBlocking()
+                        : webSocketClient.connectBlocking();
+
         if (!connected) {
             throw new ConnectException("Failed to connect to WebSocket");
         }
+
+        shouldReConnect = true;
     }
 
     private void setWebSocketListener(

@@ -45,6 +45,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -72,6 +73,7 @@ public class WebSocketServiceTest {
     @BeforeEach
     public void before() throws InterruptedException {
         when(webSocketClient.connectBlocking()).thenReturn(true);
+        when(webSocketClient.reconnectBlocking()).thenReturn(true);
         request.setId(1);
     }
 
@@ -86,6 +88,16 @@ public class WebSocketServiceTest {
         service.connect();
 
         verify(webSocketClient).connectBlocking();
+    }
+
+    @Test
+    public void testReConnectAfterConnected() throws Exception {
+        service.connect();
+        service.close();
+        service.connect();
+
+        verify(webSocketClient, atMostOnce()).connectBlocking();
+        verify(webSocketClient, atMostOnce()).reconnectBlocking();
     }
 
     @Test
@@ -285,9 +297,10 @@ public class WebSocketServiceTest {
 
     @Test
     public void testSendSubscriptionReply() throws Exception {
-        subscribeToEvents();
+        runAsync(() -> subscribeToEvents());
+        sendSubscriptionConfirmation();
 
-        verifyStartedSubscriptionHadnshake();
+        verifyStartedSubscriptionHandshake();
     }
 
     @Test
@@ -487,7 +500,7 @@ public class WebSocketServiceTest {
                         + "}");
     }
 
-    private void verifyStartedSubscriptionHadnshake() {
+    private void verifyStartedSubscriptionHandshake() {
         verify(webSocketClient)
                 .send(
                         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","
