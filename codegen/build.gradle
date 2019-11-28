@@ -8,7 +8,7 @@ dependencies {
     compile project(':core'),
             "com.squareup:javapoet:$javapoetVersion",
             "info.picocli:picocli:$picocliVersion"
-    implementation("org.web3j:web3j-unit:4.6.0-SNAPSHOT")
+    implementation("org.web3j:web3j-unit:4.5.8")
     testCompile project(path: ':core', configuration: 'testArtifacts')
     implementation("org.junit.platform:junit-platform-launcher:1.6.0-SNAPSHOT")
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
