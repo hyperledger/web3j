@@ -354,6 +354,8 @@ public class TypeDecoder {
             return Numeric.toBigInt((String) arg);
         } else if (arg instanceof byte[]) {
             return Numeric.toBigInt((byte[]) arg);
+        } else if (arg instanceof Double || arg instanceof Float) {
+            return BigDecimal.valueOf(((Number) arg).doubleValue()).toBigInteger();
         } else if (arg instanceof Number) {
             return BigInteger.valueOf(((Number) arg).longValue());
         }
