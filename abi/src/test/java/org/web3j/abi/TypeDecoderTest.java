@@ -105,6 +105,8 @@ public class TypeDecoderTest {
                         Uint64.class),
                 (new Uint64(new BigInteger("0ffffffffffffffff", 16))));
         assertEquals(TypeDecoder.instantiateType("uint", 123), (new Uint(BigInteger.valueOf(123))));
+        assertEquals(
+                TypeDecoder.instantiateType("uint", 1.0e20), (new Uint(BigInteger.TEN.pow(20))));
     }
 
     @Test
