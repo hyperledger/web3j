@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.lang.model.element.Modifier;
 
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-
-import org.web3j.EVMTest;
 
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
@@ -42,10 +42,12 @@ public class UnitClassGenerator {
     }
 
     public void writeClass() throws IOException {
+        ClassName EVM_ANNOTATION = ClassName.get("org.web3j", "EVMTest");
+
         TypeSpec testClass =
                 TypeSpec.classBuilder(theContract.getSimpleName() + "Test")
                         .addMethods(generateMethodSpecsForEachTest())
-                        .addAnnotation(EVMTest.class)
+                        .addAnnotation(AnnotationSpec.builder(EVM_ANNOTATION).build())
                         .addField(
                                 theContract,
                                 toCamelCase(theContract),
