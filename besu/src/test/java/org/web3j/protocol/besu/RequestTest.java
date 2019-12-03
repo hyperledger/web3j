@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Base64String;
 
@@ -196,5 +197,17 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getTransactionReceipt\","
                         + "\"params\":[\"0x123\"],\"id\":1}");
+    }
+
+    @Test
+    public void testPrivGetCode() throws Exception {
+        web3j.privGetCode(
+                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                        DefaultBlockParameterName.LATEST)
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getCode\","
+                        + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"latest\"],\"id\":1}");
     }
 }
