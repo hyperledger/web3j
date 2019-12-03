@@ -27,6 +27,7 @@ import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.Eea;
@@ -69,4 +70,6 @@ public interface Besu extends Eea {
     Request<?, BooleanResponse> privDeletePrivacyGroup(final Base64String privacyGroupId);
 
     Request<?, PrivGetTransactionReceipt> privGetTransactionReceipt(final String transactionHash);
+
+    Request<?, EthGetCode> privGetCode(String address, DefaultBlockParameter defaultBlockParameter);
 }

@@ -30,6 +30,7 @@ import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.JsonRpc2_0Eea;
@@ -177,5 +178,15 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 Collections.singletonList(transactionHash),
                 web3jService,
                 PrivGetTransactionReceipt.class);
+    }
+
+    @Override
+    public Request<?, EthGetCode> privGetCode(
+            String address, DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>(
+                "priv_getCode",
+                Arrays.asList(address, defaultBlockParameter.getValue()),
+                web3jService,
+                EthGetCode.class);
     }
 }
