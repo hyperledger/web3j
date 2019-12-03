@@ -14,11 +14,11 @@ package org.web3j.crypto;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.crypto.Bip32Test.addChecksum;
 import static org.web3j.crypto.Bip32Test.serializePrivate;
 import static org.web3j.crypto.Bip32Test.serializePublic;
@@ -29,12 +29,12 @@ public class Bip44WalletUtilsTest {
 
     private File tempDir;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         tempDir = createTempDir();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         for (File file : tempDir.listFiles()) {
             file.delete();

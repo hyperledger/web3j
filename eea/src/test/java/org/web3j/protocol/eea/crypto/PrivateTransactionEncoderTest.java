@@ -16,13 +16,13 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.utils.Restriction.RESTRICTED;
 
 public class PrivateTransactionEncoderTest {

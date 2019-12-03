@@ -1,0 +1,54 @@
+
+apply plugin: 'com.diffplug.gradle.spotless'
+apply plugin: "de.undercouch.download"
+
+task downloadJavaLicense(type: Download) {
+    src 'https://raw.githubusercontent.com/web3j/build-tools/master/gradle/spotless/java.license'
+    dest new File("$rootDir/gradle/spotless",'java.license')
+    quiet true
+    onlyIfModified true
+}
+
+task downloadFormatterProperties(type: Download) {
+    src 'https://raw.githubusercontent.com/web3j/build-tools/master/gradle/spotless/formatter.properties'
+    dest new File("$rootDir/gradle/spotless",'formatter.properties')
+    quiet true
+    onlyIfModified true
+}
+
+spotless {
+    java {
+        // This path needs to be relative to each project
+        target fileTree('.') {
+            include '**/src/*/java/**/*.java'
+            exclude '**/.gradle/**'
+            exclude '**/generated/**'
+        }
+        removeUnusedImports()
+        googleJavaFormat("1.7").aosp()
+        importOrder 'java', '', 'org.web3j', '\\#'
+        trimTrailingWhitespace()
+        endWithNewline()
+        licenseHeaderFile "$rootDir/gradle/spotless/java.license"
+    }
+    kotlin {
+        // This path needs to be relative to each project
+        target fileTree('.') {
+            include '**/*.kt'
+            exclude '**/.gradle/**'
+        }
+        ktlint('0.31.0')
+        trimTrailingWhitespace()
+        endWithNewline()
+        licenseHeaderFile "$rootDir/gradle/spotless/java.license"
+    }
+    groovyGradle {
+        target '*.gradle'
+        greclipse().configFile("$rootDir/gradle/spotless/formatter.properties")
+        endWithNewline()
+        indentWithSpaces(4)
+        paddedCell()
+    }
+}
+
+spotlessCheck.dependsOn('downloadJavaLicense', 'downloadFormatterProperties')

@@ -14,71 +14,67 @@ package org.web3j.utils;
 
 import java.math.BigDecimal;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConvertTest {
 
     @Test
     public void testFromWei() {
-        assertThat(
+        assertEquals(
                 Convert.fromWei("21000000000000", Convert.Unit.WEI),
-                is(new BigDecimal("21000000000000")));
-        assertThat(
+                (new BigDecimal("21000000000000")));
+        assertEquals(
                 Convert.fromWei("21000000000000", Convert.Unit.KWEI),
-                is(new BigDecimal("21000000000")));
-        assertThat(
-                Convert.fromWei("21000000000000", Convert.Unit.MWEI),
-                is(new BigDecimal("21000000")));
-        assertThat(
-                Convert.fromWei("21000000000000", Convert.Unit.GWEI), is(new BigDecimal("21000")));
-        assertThat(Convert.fromWei("21000000000000", Convert.Unit.SZABO), is(new BigDecimal("21")));
-        assertThat(
-                Convert.fromWei("21000000000000", Convert.Unit.FINNEY),
-                is(new BigDecimal("0.021")));
-        assertThat(
+                (new BigDecimal("21000000000")));
+        assertEquals(
+                Convert.fromWei("21000000000000", Convert.Unit.MWEI), (new BigDecimal("21000000")));
+        assertEquals(
+                Convert.fromWei("21000000000000", Convert.Unit.GWEI), (new BigDecimal("21000")));
+        assertEquals(Convert.fromWei("21000000000000", Convert.Unit.SZABO), (new BigDecimal("21")));
+        assertEquals(
+                Convert.fromWei("21000000000000", Convert.Unit.FINNEY), (new BigDecimal("0.021")));
+        assertEquals(
                 Convert.fromWei("21000000000000", Convert.Unit.ETHER),
-                is(new BigDecimal("0.000021")));
-        assertThat(
+                (new BigDecimal("0.000021")));
+        assertEquals(
                 Convert.fromWei("21000000000000", Convert.Unit.KETHER),
-                is(new BigDecimal("0.000000021")));
-        assertThat(
+                (new BigDecimal("0.000000021")));
+        assertEquals(
                 Convert.fromWei("21000000000000", Convert.Unit.METHER),
-                is(new BigDecimal("0.000000000021")));
-        assertThat(
+                (new BigDecimal("0.000000000021")));
+        assertEquals(
                 Convert.fromWei("21000000000000", Convert.Unit.GETHER),
-                is(new BigDecimal("0.000000000000021")));
+                (new BigDecimal("0.000000000000021")));
     }
 
     @Test
     public void testToWei() {
-        assertThat(Convert.toWei("21", Convert.Unit.WEI), is(new BigDecimal("21")));
-        assertThat(Convert.toWei("21", Convert.Unit.KWEI), is(new BigDecimal("21000")));
-        assertThat(Convert.toWei("21", Convert.Unit.MWEI), is(new BigDecimal("21000000")));
-        assertThat(Convert.toWei("21", Convert.Unit.GWEI), is(new BigDecimal("21000000000")));
-        assertThat(Convert.toWei("21", Convert.Unit.SZABO), is(new BigDecimal("21000000000000")));
-        assertThat(
-                Convert.toWei("21", Convert.Unit.FINNEY), is(new BigDecimal("21000000000000000")));
-        assertThat(
-                Convert.toWei("21", Convert.Unit.ETHER),
-                is(new BigDecimal("21000000000000000000")));
-        assertThat(
+        assertEquals(Convert.toWei("21", Convert.Unit.WEI), (new BigDecimal("21")));
+        assertEquals(Convert.toWei("21", Convert.Unit.KWEI), (new BigDecimal("21000")));
+        assertEquals(Convert.toWei("21", Convert.Unit.MWEI), (new BigDecimal("21000000")));
+        assertEquals(Convert.toWei("21", Convert.Unit.GWEI), (new BigDecimal("21000000000")));
+        assertEquals(Convert.toWei("21", Convert.Unit.SZABO), (new BigDecimal("21000000000000")));
+        assertEquals(
+                Convert.toWei("21", Convert.Unit.FINNEY), (new BigDecimal("21000000000000000")));
+        assertEquals(
+                Convert.toWei("21", Convert.Unit.ETHER), (new BigDecimal("21000000000000000000")));
+        assertEquals(
                 Convert.toWei("21", Convert.Unit.KETHER),
-                is(new BigDecimal("21000000000000000000000")));
-        assertThat(
+                (new BigDecimal("21000000000000000000000")));
+        assertEquals(
                 Convert.toWei("21", Convert.Unit.METHER),
-                is(new BigDecimal("21000000000000000000000000")));
-        assertThat(
+                (new BigDecimal("21000000000000000000000000")));
+        assertEquals(
                 Convert.toWei("21", Convert.Unit.GETHER),
-                is(new BigDecimal("21000000000000000000000000000")));
+                (new BigDecimal("21000000000000000000000000000")));
     }
 
     @Test
     public void testUnit() {
-        assertThat(Convert.Unit.fromString("ether"), is(Convert.Unit.ETHER));
-        assertThat(Convert.Unit.fromString("ETHER"), is(Convert.Unit.ETHER));
-        assertThat(Convert.Unit.fromString("wei"), is(Convert.Unit.WEI));
+        assertEquals(Convert.Unit.fromString("ether"), (Convert.Unit.ETHER));
+        assertEquals(Convert.Unit.fromString("ETHER"), (Convert.Unit.ETHER));
+        assertEquals(Convert.Unit.fromString("wei"), (Convert.Unit.WEI));
     }
 }

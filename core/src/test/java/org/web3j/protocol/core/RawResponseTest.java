@@ -12,15 +12,13 @@
  */
 package org.web3j.protocol.core;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Raw Response tests. */
 public class RawResponseTest extends ResponseTester {
@@ -39,7 +37,7 @@ public class RawResponseTest extends ResponseTester {
     public void testRawResponseEnabled() {
         configureWeb3Service(true);
         final Web3ClientVersion web3ClientVersion = deserialiseWeb3ClientVersionResponse();
-        assertThat(web3ClientVersion.getRawResponse(), is(RAW_RESPONSE));
+        assertEquals(web3ClientVersion.getRawResponse(), (RAW_RESPONSE));
     }
 
     @Test
@@ -50,14 +48,14 @@ public class RawResponseTest extends ResponseTester {
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
 
-        assertThat(ethBlock.getRawResponse(), is(LARGE_RAW_RESPONSE));
+        assertEquals(ethBlock.getRawResponse(), (LARGE_RAW_RESPONSE));
     }
 
     @Test
     public void testRawResponseDisabled() {
         configureWeb3Service(false);
         final Web3ClientVersion web3ClientVersion = deserialiseWeb3ClientVersionResponse();
-        assertThat(web3ClientVersion.getRawResponse(), nullValue());
+        assertEquals(web3ClientVersion.getRawResponse(), null);
     }
 
     private Web3ClientVersion deserialiseWeb3ClientVersionResponse() {

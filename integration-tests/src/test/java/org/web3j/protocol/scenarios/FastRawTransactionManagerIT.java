@@ -22,10 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -36,16 +34,15 @@ import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.QueuingTransactionReceiptProcessor;
 import org.web3j.utils.Convert;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
 
+@BenchmarkOptions(concurrency = 1, warmupRounds = 0, benchmarkRounds = 1)
 public class FastRawTransactionManagerIT extends Scenario {
 
     private static final int COUNT = 10; // don't set too high if using a real Ethereum network
     private static final long POLLING_FREQUENCY = 15000;
-
-    @Rule public TestRule benchmarkRun = new BenchmarkRule();
 
     @Test
     public void testTransactionPolling() throws Exception {

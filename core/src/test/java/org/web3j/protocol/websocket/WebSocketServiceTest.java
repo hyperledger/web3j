@@ -26,10 +26,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -39,13 +37,15 @@ import org.web3j.protocol.core.methods.response.EthSubscribe;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.startsWith;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -68,20 +68,19 @@ public class WebSocketServiceTest {
                     service,
                     Web3ClientVersion.class);
 
-    @Rule public ExpectedException thrown = ExpectedException.none();
     private Request<Object, EthSubscribe> subscribeRequest;
 
-    @Before
+    @BeforeEach
     public void before() throws InterruptedException {
         when(webSocketClient.connectBlocking()).thenReturn(true);
+        when(webSocketClient.reconnectBlocking()).thenReturn(true);
         request.setId(1);
     }
 
     @Test
     public void testThrowExceptionIfServerUrlIsInvalid() {
-        thrown.expect(RuntimeException.class);
-        thrown.expectMessage("Failed to parse URL: 'invalid\\url'");
-        new WebSocketService("invalid\\url", true);
+
+        assertThrows(RuntimeException.class, () -> new WebSocketService("invalid\\url", true));
     }
 
     @Test
@@ -92,26 +91,38 @@ public class WebSocketServiceTest {
     }
 
     @Test
+    public void testReConnectAfterConnected() throws Exception {
+        service.connect();
+        service.close();
+        service.connect();
+
+        verify(webSocketClient, atMostOnce()).connectBlocking();
+        verify(webSocketClient, atMostOnce()).reconnectBlocking();
+    }
+
+    @Test
     public void testInterruptCurrentThreadIfConnectionIsInterrupted() throws Exception {
         when(webSocketClient.connectBlocking()).thenThrow(new InterruptedException());
         service.connect();
 
-        assertTrue("Interrupted flag was not set properly", Thread.currentThread().isInterrupted());
+        assertTrue(Thread.currentThread().isInterrupted(), "Interrupted flag was not set properly");
     }
 
     @Test
     public void testThrowExceptionIfConnectionFailed() throws Exception {
-        thrown.expect(ConnectException.class);
-        thrown.expectMessage("Failed to connect to WebSocket");
         when(webSocketClient.connectBlocking()).thenReturn(false);
-        service.connect();
+        assertThrows(
+                ConnectException.class,
+                () -> {
+                    service.connect();
+                });
     }
 
     @Test
     public void testAddedWebSocketListener() throws Exception {
         doAnswer(
                         invocation -> {
-                            listener = invocation.getArgumentAt(0, WebSocketListener.class);
+                            listener = invocation.getArgument(0, WebSocketListener.class);
                             return null;
                         })
                 .when(webSocketClient)
@@ -168,36 +179,31 @@ public class WebSocketServiceTest {
     }
 
     @Test
-    public void testIgnoreInvalidReplies() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("Failed to parse incoming WebSocket message");
+    public void testIgnoreInvalidReplies() {
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage("{");
+        assertThrows(IOException.class, () -> service.onWebSocketMessage("{"));
     }
 
     @Test
-    public void testThrowExceptionIfIdHasInvalidType() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("'id' expected to be long, but it is: 'true'");
+    public void testThrowExceptionIfIdHasInvalidType() {
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage("{\"id\":true}");
+        assertThrows(IOException.class, () -> service.onWebSocketMessage("{\"id\":true}"));
     }
 
     @Test
-    public void testThrowExceptionIfIdIsMissing() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("Unknown message type");
+    public void testThrowExceptionIfIdIsMissing() {
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage("{}");
+        assertThrows(IOException.class, () -> service.onWebSocketMessage("{}"));
     }
 
     @Test
-    public void testThrowExceptionIfUnexpectedIdIsReceived() throws Exception {
-        thrown.expect(IOException.class);
-        thrown.expectMessage("Received reply for unexpected request id: 12345");
+    public void testThrowExceptionIfUnexpectedIdIsReceived() {
         service.sendAsync(request, Web3ClientVersion.class);
-        service.onWebSocketMessage(
-                "{\"jsonrpc\":\"2.0\",\"id\":12345,\"result\":\"geth-version\"}");
+        assertThrows(
+                IOException.class,
+                () ->
+                        service.onWebSocketMessage(
+                                "{\"jsonrpc\":\"2.0\",\"id\":12345,\"result\":\"geth-version\"}"));
     }
 
     @Test
@@ -223,25 +229,24 @@ public class WebSocketServiceTest {
     }
 
     @Test
-    public void testCloseRequestWhenConnectionIsClosed() throws Exception {
-        thrown.expect(ExecutionException.class);
+    public void testCloseRequestWhenConnectionIsClosed() {
         CompletableFuture<Web3ClientVersion> reply =
                 service.sendAsync(request, Web3ClientVersion.class);
         service.onWebSocketClose();
 
         assertTrue(reply.isDone());
-        reply.get();
+        assertThrows(ExecutionException.class, () -> reply.get());
     }
 
-    @Test(expected = ExecutionException.class)
-    public void testCancelRequestAfterTimeout() throws Exception {
+    @Test
+    public void testCancelRequestAfterTimeout() {
         when(executorService.schedule(
                         any(Runnable.class),
                         eq(WebSocketService.REQUEST_TIMEOUT),
                         eq(TimeUnit.SECONDS)))
                 .then(
                         invocation -> {
-                            Runnable runnable = invocation.getArgumentAt(0, Runnable.class);
+                            Runnable runnable = invocation.getArgument(0, Runnable.class);
                             runnable.run();
                             return null;
                         });
@@ -250,7 +255,7 @@ public class WebSocketServiceTest {
                 service.sendAsync(request, Web3ClientVersion.class);
 
         assertTrue(reply.isDone());
-        reply.get();
+        assertThrows(ExecutionException.class, () -> reply.get());
     }
 
     @Test
@@ -292,9 +297,10 @@ public class WebSocketServiceTest {
 
     @Test
     public void testSendSubscriptionReply() throws Exception {
-        subscribeToEvents();
+        runAsync(() -> subscribeToEvents());
+        sendSubscriptionConfirmation();
 
-        verifyStartedSubscriptionHadnshake();
+        verifyStartedSubscriptionHandshake();
     }
 
     @Test
@@ -494,7 +500,7 @@ public class WebSocketServiceTest {
                         + "}");
     }
 
-    private void verifyStartedSubscriptionHadnshake() {
+    private void verifyStartedSubscriptionHandshake() {
         verify(webSocketClient)
                 .send(
                         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_subscribe\","

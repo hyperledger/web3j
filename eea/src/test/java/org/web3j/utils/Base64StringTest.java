@@ -15,10 +15,11 @@ package org.web3j.utils;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Base64StringTest {
 
@@ -87,38 +88,49 @@ public class Base64StringTest {
         assertArrayEquals(BASE64_BYTES_3, base64String3.raw());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testEmptyStringThrows() {
-        Base64String.wrap("");
+
+        assertThrows(RuntimeException.class, () -> Base64String.wrap(""));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testTooShortStringThrows() {
-        Base64String.wrap(BASE64_1.substring(0, 43));
+
+        assertThrows(RuntimeException.class, () -> Base64String.wrap(BASE64_1.substring(0, 43)));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testTooLongStringThrows() {
-        Base64String.wrap(BASE64_1 + "m");
+
+        assertThrows(RuntimeException.class, () -> Base64String.wrap(BASE64_1 + "m"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testNonValidBase64StringThrows() {
-        Base64String.wrap("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr");
+
+        assertThrows(
+                RuntimeException.class,
+                () -> Base64String.wrap("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testEmptyByteArrayThrows() {
-        Base64String.wrap(new byte[] {});
+
+        assertThrows(RuntimeException.class, () -> Base64String.wrap(new byte[] {}));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testTooShortByteArrayThrows() {
-        Base64String.wrap(Arrays.copyOf(BASE64_BYTES_1, 31));
+
+        assertThrows(
+                RuntimeException.class, () -> Base64String.wrap(Arrays.copyOf(BASE64_BYTES_1, 31)));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testTooLongByteArrayThrows() {
-        Base64String.wrap(Arrays.copyOf(BASE64_BYTES_1, 33));
+
+        assertThrows(
+                RuntimeException.class, () -> Base64String.wrap(Arrays.copyOf(BASE64_BYTES_1, 33)));
     }
 }

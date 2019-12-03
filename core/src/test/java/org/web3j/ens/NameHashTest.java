@@ -12,11 +12,10 @@
  */
 package org.web3j.ens;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.web3j.ens.NameHash.nameHash;
 import static org.web3j.ens.NameHash.normalise;
 
@@ -24,25 +23,25 @@ public class NameHashTest {
 
     @Test
     public void testNameHash() {
-        assertThat(
+        assertEquals(
                 nameHash(""),
-                is("0x0000000000000000000000000000000000000000000000000000000000000000"));
+                ("0x0000000000000000000000000000000000000000000000000000000000000000"));
 
-        assertThat(
+        assertEquals(
                 nameHash("eth"),
-                is("0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae"));
+                ("0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae"));
 
-        assertThat(
+        assertEquals(
                 nameHash("foo.eth"),
-                is("0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f"));
+                ("0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f"));
     }
 
     @Test
     public void testNormalise() {
-        assertThat(normalise("foo"), is("foo"));
-        assertThat(normalise("foo.bar.baz.eth"), is("foo.bar.baz.eth"));
-        assertThat(normalise("fOo.eth"), is("foo.eth"));
-        assertThat(normalise("foo-bar.eth"), is("foo-bar.eth"));
+        assertEquals(normalise("foo"), ("foo"));
+        assertEquals(normalise("foo.bar.baz.eth"), ("foo.bar.baz.eth"));
+        assertEquals(normalise("fOo.eth"), ("foo.eth"));
+        assertEquals(normalise("foo-bar.eth"), ("foo-bar.eth"));
     }
 
     @Test

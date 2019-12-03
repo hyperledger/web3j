@@ -62,6 +62,7 @@ public class WebSocketService implements Web3jService {
 
     // WebSocket client
     private final WebSocketClient webSocketClient;
+    private boolean shouldReConnect;
     // Executor to schedule request timeouts
     private final ScheduledExecutorService executor;
     // Object mapper to map incoming JSON objects
@@ -114,10 +115,16 @@ public class WebSocketService implements Web3jService {
     }
 
     private void connectToWebSocket() throws InterruptedException, ConnectException {
-        boolean connected = webSocketClient.connectBlocking();
+        boolean connected =
+                shouldReConnect
+                        ? webSocketClient.reconnectBlocking()
+                        : webSocketClient.connectBlocking();
+
         if (!connected) {
             throw new ConnectException("Failed to connect to WebSocket");
         }
+
+        shouldReConnect = true;
     }
 
     private void setWebSocketListener(
@@ -212,6 +219,7 @@ public class WebSocketService implements Web3jService {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void processRequestReply(String replyStr, JsonNode replyJson) throws IOException {
         long replyId = getReplyId(replyJson);
         WebSocketRequest request = getAndRemoveRequest(replyId);
@@ -229,6 +237,7 @@ public class WebSocketService implements Web3jService {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void processSubscriptionResponse(long replyId, EthSubscribe reply) throws IOException {
         WebSocketSubscription subscription = subscriptionRequestForId.get(replyId);
         processSubscriptionResponse(
@@ -236,8 +245,7 @@ public class WebSocketService implements Web3jService {
     }
 
     private <T extends Notification<?>> void processSubscriptionResponse(
-            EthSubscribe subscriptionReply, BehaviorSubject<T> subject, Class<T> responseType)
-            throws IOException {
+            EthSubscribe subscriptionReply, BehaviorSubject<T> subject, Class<T> responseType) {
         if (!subscriptionReply.hasError()) {
             establishSubscription(subject, responseType, subscriptionReply);
         } else {
@@ -271,6 +279,7 @@ public class WebSocketService implements Web3jService {
                                 "Subscription request failed with error: %s", error.getMessage())));
     }
 
+    @SuppressWarnings("unchecked")
     private void sendReplyToListener(WebSocketRequest request, Object reply) {
         request.getOnReply().complete(reply);
     }
@@ -302,6 +311,7 @@ public class WebSocketService implements Web3jService {
         return replyJson.get("params").get("subscription").asText();
     }
 
+    @SuppressWarnings("unchecked")
     private void sendEventToSubscriber(JsonNode replyJson, WebSocketSubscription subscription) {
         Object event = objectMapper.convertValue(replyJson, subscription.getResponseType());
         subscription.getSubject().onNext(event);
@@ -400,11 +410,10 @@ public class WebSocketService implements Web3jService {
     private void unsubscribeFromEventsStream(String subscriptionId, String unsubscribeMethod) {
         sendAsync(unsubscribeRequest(subscriptionId, unsubscribeMethod), EthUnsubscribe.class)
                 .thenAccept(
-                        ethUnsubscribe -> {
-                            log.debug(
-                                    "Successfully unsubscribed from subscription with id {}",
-                                    subscriptionId);
-                        })
+                        ethUnsubscribe ->
+                                log.debug(
+                                        "Successfully unsubscribed from subscription with id {}",
+                                        subscriptionId))
                 .exceptionally(
                         throwable -> {
                             log.error(
@@ -438,22 +447,20 @@ public class WebSocketService implements Web3jService {
         requestForId
                 .values()
                 .forEach(
-                        request -> {
-                            request.getOnReply()
-                                    .completeExceptionally(
-                                            new IOException("Connection was closed"));
-                        });
+                        request ->
+                                request.getOnReply()
+                                        .completeExceptionally(
+                                                new IOException("Connection was closed")));
     }
 
     private void closeOutstandingSubscriptions() {
         subscriptionForId
                 .values()
                 .forEach(
-                        subscription -> {
-                            subscription
-                                    .getSubject()
-                                    .onError(new IOException("Connection was closed"));
-                        });
+                        subscription ->
+                                subscription
+                                        .getSubject()
+                                        .onError(new IOException("Connection was closed")));
     }
 
     // Method visible for unit-tests

@@ -15,8 +15,8 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Rule;
+import org.junit.jupiter.api.Test;
 
 import org.junit.rules.ExpectedException;
 import org.web3j.protocol.Web3j;
@@ -25,9 +25,9 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.tx.exceptions.ContractCallException;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.web3j.tx.TransactionManager.REVERT_ERR_STR;
@@ -51,7 +51,7 @@ public class ReadonlyTransactionManagerTest {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
         String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
-        assertThat(value, is("test"));
+        assertEquals("test", value);
     }
 
     @Test
@@ -67,11 +67,14 @@ public class ReadonlyTransactionManagerTest {
         readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testSendTransaction() throws IOException {
+    @Test
+    public void testSendTransaction() {
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
-        readonlyTransactionManager.sendTransaction(
-                BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO);
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        readonlyTransactionManager.sendTransaction(
+                                BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO));
     }
 }

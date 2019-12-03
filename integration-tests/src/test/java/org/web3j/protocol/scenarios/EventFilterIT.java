@@ -16,7 +16,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
@@ -35,10 +35,8 @@ import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Filter scenario integration tests. */
 public class EventFilterIT extends Scenario {
@@ -58,9 +56,7 @@ public class EventFilterIT extends Scenario {
 
         TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertFalse(
-                "Transaction execution ran out of gas",
-                gas.equals(transactionReceipt.getGasUsed()));
+        assertFalse(gas.equals(transactionReceipt.getGasUsed()));
 
         List<Log> logs = transactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
@@ -68,7 +64,7 @@ public class EventFilterIT extends Scenario {
         Log log = logs.get(0);
 
         List<String> topics = log.getTopics();
-        assertThat(topics.size(), is(1));
+        assertEquals(topics.size(), (1));
 
         Event event =
                 new Event(
@@ -79,17 +75,15 @@ public class EventFilterIT extends Scenario {
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
         String encodedEventSignature = EventEncoder.encode(event);
-        assertThat(topics.get(0), is(encodedEventSignature));
+        assertEquals(topics.get(0), (encodedEventSignature));
 
         // verify our two event parameters
         List<Type> results =
                 FunctionReturnDecoder.decode(log.getData(), event.getNonIndexedParameters());
-        assertThat(
+        assertEquals(
                 results,
-                equalTo(
-                        Arrays.asList(
-                                new Uint256(BigInteger.valueOf(7)),
-                                new Uint256(BigInteger.valueOf(13)))));
+                (Arrays.asList(
+                        new Uint256(BigInteger.valueOf(7)), new Uint256(BigInteger.valueOf(13)))));
 
         // finally check it shows up in the event filter
         List<EthLog.LogResult> filterLogs =

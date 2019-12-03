@@ -18,13 +18,13 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.ResponseBody;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.http.HttpService;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.web3j.protocol.http.HttpService.JSON_MEDIA_TYPE;
 
 /** Protocol Response tests. */
@@ -34,7 +34,7 @@ public abstract class ResponseTester {
     private OkHttpClient okHttpClient;
     private ResponseInterceptor responseInterceptor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         responseInterceptor = new ResponseInterceptor();
         okHttpClient = new OkHttpClient.Builder().addInterceptor(responseInterceptor).build();

@@ -12,16 +12,15 @@
  */
 package org.web3j.abi.datatypes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Utf8StringTest {
 
     @Test
     public void testToString() {
-        assertThat(new Utf8String("").toString(), is(""));
-        assertThat(new Utf8String("string").toString(), is("string"));
+        assertEquals(new Utf8String("").toString(), (""));
+        assertEquals(new Utf8String("string").toString(), ("string"));
     }
 }

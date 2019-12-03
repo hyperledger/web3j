@@ -1,4 +1,3 @@
-
 description 'web3j project code generators'
 
 dependencies {
@@ -6,4 +5,7 @@ dependencies {
             "com.squareup:javapoet:$javapoetVersion",
             "info.picocli:picocli:$picocliVersion"
     testCompile project(path: ':core', configuration: 'testArtifacts')
+    implementation("org.junit.platform:junit-platform-launcher:1.6.0-SNAPSHOT")
+    implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    implementation("org.junit.vintage:junit-vintage-engine:$junitVersion")
 }

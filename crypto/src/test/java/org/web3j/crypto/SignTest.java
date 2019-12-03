@@ -16,13 +16,12 @@ import java.math.BigInteger;
 import java.security.SignatureException;
 
 import org.bouncycastle.math.ec.ECPoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SignTest {
 
@@ -41,7 +40,7 @@ public class SignTest {
                         Numeric.hexStringToByteArray(
                                 "0x06624da478b3f862582e85b31c6a21c6cae2eee2bd50f55c93c4faad9d9c8d7f"));
 
-        assertThat(signatureData, is(expected));
+        assertEquals(signatureData, (expected));
     }
 
     @Test
@@ -49,24 +48,28 @@ public class SignTest {
         Sign.SignatureData signatureData =
                 Sign.signPrefixedMessage(TEST_MESSAGE, SampleKeys.KEY_PAIR);
         BigInteger key = Sign.signedPrefixedMessageToKey(TEST_MESSAGE, signatureData);
-        assertThat(key, equalTo(SampleKeys.PUBLIC_KEY));
+        assertEquals(key, (SampleKeys.PUBLIC_KEY));
     }
 
     @Test
     public void testPublicKeyFromPrivateKey() {
-        assertThat(
-                Sign.publicKeyFromPrivate(SampleKeys.PRIVATE_KEY), equalTo(SampleKeys.PUBLIC_KEY));
+        assertEquals(Sign.publicKeyFromPrivate(SampleKeys.PRIVATE_KEY), (SampleKeys.PUBLIC_KEY));
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testInvalidSignature() throws SignatureException {
-        Sign.signedMessageToKey(
-                TEST_MESSAGE, new Sign.SignatureData((byte) 27, new byte[] {1}, new byte[] {0}));
+    @Test
+    public void testInvalidSignature() {
+
+        assertThrows(
+                RuntimeException.class,
+                () ->
+                        Sign.signedMessageToKey(
+                                TEST_MESSAGE,
+                                new Sign.SignatureData((byte) 27, new byte[] {1}, new byte[] {0})));
     }
 
     @Test
     public void testPublicKeyFromPrivatePoint() {
         ECPoint point = Sign.publicPointFromPrivate(SampleKeys.PRIVATE_KEY);
-        assertThat(Sign.publicFromPoint(point.getEncoded(false)), equalTo(SampleKeys.PUBLIC_KEY));
+        assertEquals(Sign.publicFromPoint(point.getEncoded(false)), (SampleKeys.PUBLIC_KEY));
     }
 }

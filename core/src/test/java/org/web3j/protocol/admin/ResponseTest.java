@@ -14,7 +14,7 @@ package org.web3j.protocol.admin;
 
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
@@ -23,10 +23,8 @@ import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Parity/Geth Shared Protocol Response tests. */
 public class ResponseTest extends ResponseTester {
@@ -54,9 +52,9 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         NewAccountIdentifier newAccountIdentifier = deserialiseResponse(NewAccountIdentifier.class);
-        assertThat(
+        assertEquals(
                 newAccountIdentifier.getAccountId(),
-                is("0x8f0227d45853a50eefd48dd4fec25d5b3fd2295e"));
+                ("0x8f0227d45853a50eefd48dd4fec25d5b3fd2295e"));
     }
 
     @Test
@@ -72,12 +70,11 @@ public class ResponseTest extends ResponseTester {
                         + "}\n");
 
         PersonalListAccounts personalListAccounts = deserialiseResponse(PersonalListAccounts.class);
-        assertThat(
+        assertEquals(
                 personalListAccounts.getAccountIds(),
-                equalTo(
-                        Arrays.asList(
-                                "0x7bf87721a96849d168de02fd6ea5986a3a147383",
-                                "0xca807a90fd64deed760fb98bf0869b475c469348")));
+                (Arrays.asList(
+                        "0x7bf87721a96849d168de02fd6ea5986a3a147383",
+                        "0xca807a90fd64deed760fb98bf0869b475c469348")));
     }
 
     @Test
@@ -92,10 +89,9 @@ public class ResponseTest extends ResponseTester {
 
         PersonalSign personalSign = deserialiseResponse(PersonalSign.class);
 
-        assertThat(
+        assertEquals(
                 personalSign.getSignedMessage(),
-                is(
-                        "0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c"));
+                ("0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c"));
     }
 
     @Test

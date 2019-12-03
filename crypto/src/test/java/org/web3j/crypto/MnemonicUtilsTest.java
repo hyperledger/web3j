@@ -21,16 +21,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bouncycastle.util.encoders.Hex;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.runners.Parameterized.Parameters;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Unit tests for {@link MnemonicUtils} utility class. */
-@RunWith(Parameterized.class)
 public class MnemonicUtilsTest {
 
     /**
@@ -50,7 +47,7 @@ public class MnemonicUtilsTest {
      *     entropy, expected mnemonic and expected seed.
      * @throws IOException Shouldn't happen!
      */
-    @Parameters
+    @MethodSource
     public static Collection<Object[]> data() throws IOException {
         String data = Files.lines(Paths.get(SAMPLE_FILE)).collect(Collectors.joining("\n"));
         String[] each = data.split("###");

@@ -15,18 +15,16 @@ package org.web3j.crypto;
 import java.io.File;
 import java.nio.file.Files;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.SampleKeys.CREDENTIALS;
 import static org.web3j.crypto.SampleKeys.KEY_PAIR;
@@ -44,12 +42,12 @@ public class WalletUtilsTest {
         return s.hasNext() ? s.next() : "";
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         tempDir = createTempDir();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         for (File file : tempDir.listFiles()) {
             file.delete();
@@ -114,7 +112,7 @@ public class WalletUtilsTest {
         Credentials credentials =
                 WalletUtils.loadCredentials(PASSWORD, new File(tempDir, fileName));
 
-        assertThat(credentials, equalTo(CREDENTIALS));
+        assertEquals(credentials, (CREDENTIALS));
     }
 
     @Test
@@ -130,7 +128,7 @@ public class WalletUtilsTest {
                                                         + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")
                                         .getFile()));
 
-        assertThat(credentials, equalTo(CREDENTIALS));
+        assertEquals(credentials, (CREDENTIALS));
     }
 
     @Test
@@ -145,10 +143,10 @@ public class WalletUtilsTest {
                                                 + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")
                                 .getFile());
 
-        assertThat(credentials, equalTo(CREDENTIALS));
+        assertEquals(credentials, (CREDENTIALS));
     }
 
-    @Ignore // enable if users need to work with MyEtherWallet
+    @Disabled // enable if users need to work with MyEtherWallet
     @Test
     public void testLoadCredentialsMyEtherWallet() throws Exception {
         Credentials credentials =
@@ -162,11 +160,10 @@ public class WalletUtilsTest {
                                                         + "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818")
                                         .getFile()));
 
-        assertThat(
+        assertEquals(
                 credentials,
-                equalTo(
-                        Credentials.create(
-                                "6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9")));
+                (Credentials.create(
+                        "6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9")));
     }
 
     @Test
@@ -180,7 +177,7 @@ public class WalletUtilsTest {
                                                 + "UTC--2016-11-03T05-55-06."
                                                 + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")));
 
-        assertThat(credentials, equalTo(CREDENTIALS));
+        assertEquals(credentials, (CREDENTIALS));
     }
 
     @Test

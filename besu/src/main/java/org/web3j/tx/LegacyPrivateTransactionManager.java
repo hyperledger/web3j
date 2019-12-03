@@ -20,7 +20,7 @@ import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.PrivacyGroupUtils;
 
-/** PrivateTransactionManager implementation for using a Pantheon node to transact. */
+/** PrivateTransactionManager implementation for using a Besu node to transact. */
 public class LegacyPrivateTransactionManager extends PrivateTransactionManager {
 
     private final List<Base64String> privateFor;

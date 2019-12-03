@@ -1,5 +1,5 @@
 
-description 'Pantheon JSON-RPC API'
+description 'Besu JSON-RPC API'
 
 dependencies {
     compile project(':eea')

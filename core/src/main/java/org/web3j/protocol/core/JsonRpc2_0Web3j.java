@@ -35,6 +35,7 @@ import org.web3j.protocol.core.methods.response.DbPutString;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
+import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.EthCoinbase;
 import org.web3j.protocol.core.methods.response.EthCompileLLL;
 import org.web3j.protocol.core.methods.response.EthCompileSerpent;
@@ -154,6 +155,12 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Collections.<String>emptyList(),
                 web3jService,
                 EthProtocolVersion.class);
+    }
+
+    @Override
+    public Request<?, EthChainId> ethChainId() {
+        return new Request<>(
+                "eth_chainId", Collections.<String>emptyList(), web3jService, EthChainId.class);
     }
 
     @Override

@@ -42,8 +42,8 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
             String transactionHash, long sleepDuration, int attempts)
             throws IOException, TransactionException {
 
-        Optional<TransactionReceipt> receiptOptional =
-                (Optional<TransactionReceipt>) sendTransactionReceiptRequest(transactionHash);
+        Optional<? extends TransactionReceipt> receiptOptional =
+                sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
                 try {
@@ -51,9 +51,8 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
                 } catch (InterruptedException e) {
                     throw new TransactionException(e);
                 }
-                receiptOptional =
-                        (Optional<TransactionReceipt>)
-                                sendTransactionReceiptRequest(transactionHash);
+
+                receiptOptional = sendTransactionReceiptRequest(transactionHash);
             } else {
                 return receiptOptional.get();
             }

@@ -1,325 +1,99 @@
-buildscript {
-    ext.bouncycastleVersion = '1.61'
-    ext.jacksonVersion = '2.8.5'
-    ext.javapoetVersion = '1.7.0'
-    ext.jnr_unixsocketVersion = '0.21'
-    ext.okhttpVersion = '3.8.1'
-    ext.rxjavaVersion = '2.2.2'
-    ext.slf4jVersion = '1.7.25'
-    ext.javaWebSocketVersion = '1.3.8'
-    ext.picocliVersion = '3.0.0'
-
-    // test dependencies
-    ext.equalsverifierVersion = '2.1.7'
-    ext.junitVersion = '4.11'
-    ext.junitBenchmarkVersion = '0.7.2'
-    ext.logbackVersion = '1.2.3'
-    ext.mockitoVersion = '1.10.19'
-
-    repositories { mavenCentral() }
-
-    dependencies {
-        classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-    }
-}
-
 plugins {
-    id "com.jfrog.bintray" version "1.8.4"
-    id 'com.diffplug.gradle.spotless' version '3.23.1'
-
-    // Required for JFrog Artifactory repository
-    id 'jacoco'
-    id 'maven-publish'
-
-    // Required for Maven Nexus repository
-    id 'maven'
-    id 'signing'
+    id 'java'
     id 'idea'
+    id 'jacoco'
+    id "com.diffplug.gradle.spotless" version "3.25.0"
+    id 'io.codearte.nexus-staging' version '0.21.1'
+    id "de.marcphilipp.nexus-publish" version "0.4.0"
+    id "de.undercouch.download" version "4.0.0"
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-// should only be applied to the root project, see
-// https://github.com/Codearte/gradle-nexus-staging-plugin#multi-project-build
-apply plugin: 'io.codearte.nexus-staging'
-apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
+ext {
+    bouncycastleVersion = '1.61'
+    jacksonVersion = '2.8.5'
+    javapoetVersion = '1.7.0'
+    jnr_unixsocketVersion = '0.21'
+    okhttpVersion = '3.8.1'
+    rxjavaVersion = '2.2.2'
+    slf4jVersion = '1.7.25'
+    javaWebSocketVersion = '1.3.8'
+    picocliVersion = '3.0.0'
+    web3jUnitVersion = version
+    // test dependencies
+    equalsverifierVersion = '3.1.10'
+    junitVersion = '5.5.2'
+    junitBenchmarkVersion = '0.7.2'
+    logbackVersion = '1.2.3'
+    mockitoJunitVersion = "3.1.0"
+
+}
+
 
 description 'web3j base project'
 
+[
+    'bintray',
+    'jacoco',
+    'java',
+    'javadoc',
+    'publish',
+    'repositories',
+    'spotless'
+].each { buildScript ->
+    download {
+        src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
+        dest "$rootDir/gradle/$buildScript/build.gradle"
+        overwrite true
+        quiet true
+        onlyIfModified true
+    }
+}
+
 allprojects {
-
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
-    apply plugin: 'java'
-    apply plugin: 'jacoco'
-
-    apply plugin: 'com.diffplug.gradle.spotless'
-    spotless {
-        java {
-            // This path needs to be relative to each project
-            target fileTree('.') {
-                include '**/src/*/java/**/*.java'
-                exclude '**/.gradle/**'
-                exclude '**/generated/**'
-            }
-            removeUnusedImports()
-            googleJavaFormat("1.7").aosp()
-            importOrder 'java', '', 'org.web3j', '\\#'
-            trimTrailingWhitespace()
-            endWithNewline()
-            licenseHeaderFile "$rootDir/gradle/spotless.java.license"
+    apply {
+        [
+            'java',
+            'javadoc',
+            'repositories',
+            'spotless'
+        ].each { buildScript ->
+            from("$rootDir/gradle/$buildScript/build.gradle")
         }
-        groovyGradle {
-            target '*.gradle'
-            greclipse().configFile(rootProject.file('gradle/formatter.properties'))
-            endWithNewline()
-            indentWithSpaces(4)
-            paddedCell()
-        }
-    }
-
-    repositories { mavenCentral() }
-
-    // We don't want any compiler warnings
-    compileJava {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    }
-    compileTestJava {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    }
-
-    javadoc { options.encoding = 'UTF-8' }
-
-    jacoco { toolVersion = '0.7.7.201606060606' // See http://www.eclemma.org/jacoco/.
-    }
-
-    jacocoTestReport {
-        reports { xml.enabled true }
     }
 
     tasks.withType(Test) {
         reports.html.destination = file("${reporting.baseDir}/${name}")
     }
-}
-
-subprojects {
-    apply plugin: 'java'
 
     dependencies {
-        testCompile "junit:junit:$junitVersion",
-                "org.mockito:mockito-core:$mockitoVersion"
-    }
-}
-
-configure(subprojects.findAll { it.name != 'integration-tests' }) {
-    // Required for Maven Nexus repository
-    apply plugin: 'maven'
-    apply plugin: 'signing'
-
-    // Required for JFrog Artifactory repository
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
-
-    task javadocJar(type: Jar) {
-        classifier = 'javadoc'
-        from javadoc
-    }
-
-    task sourcesJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    task testJar(type: Jar) {
-        classifier = 'tests'
-        from sourceSets.test.output
-    }
-
-    artifacts { archives sourcesJar, javadocJar, testJar }
-
-    ext {
-        ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
-        ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
-        ossrhRepoUrl = project.hasProperty('ossrhRepoUrl') ? project.property('ossrhRepoUrl') : System.getenv('OSSRH_REPO_URL')
-        bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-        bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-        bintrayGpgPassphrase = project.hasProperty('bintrayGpgPassphrase') ? project.property('bintrayGpgPassphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
-        isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
-        manualRelease = project.hasProperty('manualRelease') ? project.property('manualRelease').toBoolean() : false
+        testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
+        testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
     }
 
     publishing {
         publications {
-            mavenJava(MavenPublication) {
-                from components.java
-
-                artifact sourcesJar { classifier 'sources' }
-
-                artifact testJar { classifier 'tests' }
-
-                artifact javadocJar { classifier 'javadoc' }
-
+            maven(MavenPublication) {
                 pom {
-                    name = project.name
-                    description = project.description
-                    url = "https://github.com/web3j/web3j"
-                    licenses {
-                        license {
-                            name = "The Apache License, Version 2.0"
-                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                            distribution = "repo"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = "conor10"
-                            name = "Conor Svensson"
-                            email = "conor10@gmail.com"
-                        }
-                    }
                     scm {
-                        connection = "scm:git:https://github.com/web3j/web3j.git"
+                        url = "https://github.com/web3j/web3j"
+                        connection = "scm:https://github.com/web3j/web3j.git"
                         developerConnection = "scm:git://github.com/web3j/web3j.git"
-                        url = "https://github.com/web3j/web3j.git"
                     }
                 }
             }
         }
     }
 
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-
-                onlyIf {
-                    // Only run if this is a manual release triggered by a user, or an automated release for snapshots.
-                    // We don't need to run this for automated releases.
-                    isSnapshotVersion && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
-                }
-
-                repository(url: ossrhRepoUrl) {
-                    authentication(
-                            userName: ossrhUsername,
-                            password: ossrhPassword
-                            )
-                }
-
-                pom.project {
-                    name 'web3j'
-                    packaging 'jar'
-                    description project.description
-                    url 'https://web3j.io'
-
-                    scm {
-                        connection 'scm:git:https://github.com/web3j/web3j.git'
-                        url 'https://github.com/web3j/web3j.git'
-                        developerConnection 'scm:git://github.com/web3j/web3j.git'
-                    }
-
-                    licenses {
-                        license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution 'repo'
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id 'conor10'
-                            name 'Conor Svensson'
-                            email 'conor10@gmail.com'
-                        }
-                    }
-                }
-            }
-        }
+    if (project.name != 'integration-tests' && project.name != 'web3j') {
+        apply from: "$rootDir/gradle/publish/build.gradle"
+        apply from: "$rootDir/gradle/bintray/build.gradle"
     }
+}
+configure(subprojects.findAll { it.name != 'integration-tests' }) {
+    apply from: "$rootDir/gradle/jacoco/build.gradle"
+}
 
-    bintray {
-        user = bintrayUser
-        key = bintrayKey
-        publications = ['mavenJava']
-        publish = true
-        pkg {
-            repo = 'maven'
-            name = 'org.web3j'
-            desc = project.description
-            userOrg = 'web3j'
-            licenses = ['Apache-2.0']
-            issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
-            vcsUrl = 'https://github.com/web3j/web3j.git'
-            websiteUrl = 'https://web3j.io'
-            publicDownloadNumbers = true
-
-            version {
-                gpg {
-                    sign = true
-                    passphrase = bintrayGpgPassphrase
-                }
-                mavenCentralSync {
-                    sync = true
-                    user = ossrhUsername
-                    password = ossrhPassword
-                    close = '1'
-                }
-            }
-        }
-    }
-
-    task release {
-        dependsOn 'build'
-
-        if (isSnapshotVersion) {
-            logger.info(" - ossrhUsername={}", ossrhUsername)
-            logger.info(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-            logger.info(" - ossrhRepoUrl={}", ossrhRepoUrl)
-        } else {
-            logger.info("About to perform {} full release ...", manualRelease ? "a manual" : "an automated")
-            logger.info(" - ossrhUsername={}", ossrhUsername)
-            logger.info(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-            logger.info(" - ossrhRepoUrl={}", ossrhRepoUrl)
-            logger.info(" - bintrayUser={}", bintrayUser)
-            logger.info(" - bintrayKey={}", bintrayKey ? "provided" : "not_provided")
-            logger.info(" - bintrayGpgPassphrase={}", bintrayGpgPassphrase ? "provided" : "not_provided")
-        }
-
-        // Snapshots go to nexus, non-snapshots go to bintray.
-        if (isSnapshotVersion) {
-            dependsOn 'uploadArchives'
-            tasks.findByName('uploadArchives').mustRunAfter 'build'
-        } else {
-            dependsOn 'bintrayUpload'
-            tasks.findByName('bintrayUpload').mustRunAfter 'build'
-        }
-    }
-
-    task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-        dependsOn = subprojects.test
-        additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-        sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-        classDirectories = files(subprojects.sourceSets.main.output)
-        executionData = files(subprojects.jacocoTestReport.executionData)
-        reports { xml.enabled = true }
-
-        onlyIf = { true }
-
-        doFirst {
-            executionData = files(executionData.findAll { it.exists() })
-        }
-
-        afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it,
-                exclude: [
-                    'org/web3j/abi/datatypes/generated/**',
-                    'org/web3j/tuples/generated/**',
-                    'org/web3j/ens/contracts/generated/**'
-                ])
-            })
-        }
-    }
+bintrayUpload {
+    enabled = false
 }

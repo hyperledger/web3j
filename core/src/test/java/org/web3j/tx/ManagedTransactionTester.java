@@ -14,7 +14,7 @@ package org.web3j.tx;
 
 import java.io.IOException;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
@@ -28,7 +28,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.TxHashVerifier;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,7 +39,7 @@ public abstract class ManagedTransactionTester {
     protected Web3j web3j;
     protected TxHashVerifier txHashVerifier;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         web3j = mock(Web3j.class);
         txHashVerifier = mock(TxHashVerifier.class);

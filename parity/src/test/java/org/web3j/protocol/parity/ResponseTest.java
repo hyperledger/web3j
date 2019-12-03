@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.ResponseTester;
@@ -38,11 +38,9 @@ import org.web3j.protocol.parity.methods.response.StateDiff;
 import org.web3j.protocol.parity.methods.response.Trace;
 import org.web3j.protocol.parity.methods.response.VMTrace;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Parity Protocol Response tests. */
 public class ResponseTest extends ResponseTester {
@@ -58,9 +56,9 @@ public class ResponseTest extends ResponseTester {
 
         ParityAddressesResponse parityAddressesResponse =
                 deserialiseResponse(ParityAddressesResponse.class);
-        assertThat(
+        assertEquals(
                 parityAddressesResponse.getAddresses(),
-                equalTo(Arrays.asList("0x407d73d8a49eeb85d32cf465507dd71d507100c1")));
+                (Arrays.asList("0x407d73d8a49eeb85d32cf465507dd71d507100c1")));
     }
 
     @Test
@@ -88,7 +86,7 @@ public class ResponseTest extends ResponseTester {
 
         ParityAllAccountsInfo parityAllAccountsInfo =
                 deserialiseResponse(ParityAllAccountsInfo.class);
-        assertThat(parityAllAccountsInfo.getAccountsInfo(), equalTo(accountsInfoMap));
+        assertEquals(parityAllAccountsInfo.getAccountsInfo(), (accountsInfoMap));
     }
 
     @Test
@@ -102,9 +100,9 @@ public class ResponseTest extends ResponseTester {
 
         ParityDefaultAddressResponse parityDefaultAddressesResponse =
                 deserialiseResponse(ParityDefaultAddressResponse.class);
-        assertThat(
+        assertEquals(
                 parityDefaultAddressesResponse.getAddress(),
-                is("0x407d73d8a49eeb85d32cf465507dd71d507100c1"));
+                ("0x407d73d8a49eeb85d32cf465507dd71d507100c1"));
     }
 
     @Test
@@ -117,8 +115,8 @@ public class ResponseTest extends ResponseTester {
                         + "}");
 
         ParityDeriveAddress parityDeriveAddress = deserialiseResponse(ParityDeriveAddress.class);
-        assertThat(
-                parityDeriveAddress.getAddress(), is("0x407d73d8a49eeb85d32cf465507dd71d507100c1"));
+        assertEquals(
+                parityDeriveAddress.getAddress(), ("0x407d73d8a49eeb85d32cf465507dd71d507100c1"));
     }
 
     @Test
@@ -180,7 +178,7 @@ public class ResponseTest extends ResponseTester {
         walletFile.setVersion(3);
 
         ParityExportAccount parityExportAccount = deserialiseResponse(ParityExportAccount.class);
-        assertThat(parityExportAccount.getWallet(), equalTo(walletFile));
+        assertEquals(parityExportAccount.getWallet(), (walletFile));
     }
 
     @Test
@@ -194,7 +192,7 @@ public class ResponseTest extends ResponseTester {
 
         ParityListRecentDapps parityListRecentDapps =
                 deserialiseResponse(ParityListRecentDapps.class);
-        assertThat(parityListRecentDapps.getDappsIds(), equalTo(Arrays.asList("web")));
+        assertEquals(parityListRecentDapps.getDappsIds(), (Arrays.asList("web")));
     }
 
     @Test
@@ -302,7 +300,7 @@ public class ResponseTest extends ResponseTester {
                                                 "0x00000000000000000000000014772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a")))));
 
         FullTraceInfo info = new FullTraceInfo("0x", stateDiffMap, null, null);
-        assertThat(response.getFullTraceInfo(), equalTo(info));
+        assertEquals(response.getFullTraceInfo(), (info));
     }
 
     @Test
@@ -464,7 +462,7 @@ public class ResponseTest extends ResponseTester {
         traces.add(trace3);
         traces.add(trace4);
         FullTraceInfo info = new FullTraceInfo("0x", null, traces, null);
-        assertThat(response.getFullTraceInfo(), equalTo(info));
+        assertEquals(response.getFullTraceInfo(), (info));
     }
 
     @Test
@@ -575,6 +573,6 @@ public class ResponseTest extends ResponseTester {
                         "0x6060604052361561004a576000357c01",
                         Arrays.asList(operation1, operation2));
         FullTraceInfo info = new FullTraceInfo("0x", null, null, trace);
-        assertThat(response.getFullTraceInfo(), equalTo(info));
+        assertEquals(response.getFullTraceInfo(), (info));
     }
 }

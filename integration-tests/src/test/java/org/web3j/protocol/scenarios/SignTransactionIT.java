@@ -14,7 +14,7 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.RawTransaction;
@@ -23,9 +23,9 @@ import org.web3j.protocol.core.methods.response.EthSign;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Sign transaction using Ethereum node. */
 public class SignTransactionIT extends Scenario {

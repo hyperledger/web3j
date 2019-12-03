@@ -22,11 +22,11 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.codegen.TupleGenerator.CLASS_NAME;
 import static org.web3j.codegen.TupleGenerator.LIMIT;
 
@@ -59,7 +59,7 @@ public class TupleGeneratorTest extends TempFileProvider {
                     fileManager.getJavaFileObjectsFromStrings(sourceFiles);
             JavaCompiler.CompilationTask task =
                     compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
-            assertTrue("Generated code contains compile time error", task.call());
+            assertTrue(task.call(), "Generated code contains compile time error");
         }
     }
 }

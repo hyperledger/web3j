@@ -15,13 +15,11 @@ package org.web3j.crypto;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WalletTest {
 
@@ -36,7 +34,7 @@ public class WalletTest {
     }
 
     private void testCreate(WalletFile walletFile) throws Exception {
-        assertThat(walletFile.getAddress(), is(SampleKeys.ADDRESS_NO_PREFIX));
+        assertEquals(walletFile.getAddress(), (SampleKeys.ADDRESS_NO_PREFIX));
     }
 
     @Test
@@ -50,27 +48,27 @@ public class WalletTest {
     }
 
     private void testEncryptDecrypt(WalletFile walletFile) throws Exception {
-        assertThat(Wallet.decrypt(SampleKeys.PASSWORD, walletFile), equalTo(SampleKeys.KEY_PAIR));
+        assertEquals(Wallet.decrypt(SampleKeys.PASSWORD, walletFile), (SampleKeys.KEY_PAIR));
     }
 
     @Test
     public void testDecryptAes128Ctr() throws Exception {
         WalletFile walletFile = load(AES_128_CTR);
         ECKeyPair ecKeyPair = Wallet.decrypt(PASSWORD, walletFile);
-        assertThat(Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey()), is(SECRET));
+        assertEquals(Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey()), (SECRET));
     }
 
     @Test
     public void testDecryptScrypt() throws Exception {
         WalletFile walletFile = load(SCRYPT);
         ECKeyPair ecKeyPair = Wallet.decrypt(PASSWORD, walletFile);
-        assertThat(Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey()), is(SECRET));
+        assertEquals(Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey()), (SECRET));
     }
 
     @Test
     public void testGenerateRandomBytes() {
-        assertThat(Wallet.generateRandomBytes(0), is(new byte[] {}));
-        assertThat(Wallet.generateRandomBytes(10).length, is(10));
+        assertEquals(Wallet.generateRandomBytes(0), (new byte[] {}));
+        assertEquals(Wallet.generateRandomBytes(10).length, (10));
     }
 
     private WalletFile load(String source) throws IOException {

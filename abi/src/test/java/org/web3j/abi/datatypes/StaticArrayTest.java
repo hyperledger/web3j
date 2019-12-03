@@ -14,15 +14,14 @@ package org.web3j.abi.datatypes;
 
 import java.util.stream.IntStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.StaticArray32;
 import org.web3j.abi.datatypes.generated.Uint8;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class StaticArrayTest {
 
@@ -30,14 +29,14 @@ public class StaticArrayTest {
     public void canBeInstantiatedWithLessThan32Elements() {
         final StaticArray<Uint> array = new StaticArray32<>(arrayOfUints(32));
 
-        assertThat(array.getValue().size(), equalTo(32));
+        assertEquals(array.getValue().size(), (32));
     }
 
     @Test
     public void canBeInstantiatedWithSizeMatchingType() {
         final StaticArray<Uint> array = new StaticArray3<>(arrayOfUints(3));
 
-        assertThat(array.getValue().size(), equalTo(3));
+        assertEquals(array.getValue().size(), (3));
     }
 
     @Test
@@ -46,9 +45,9 @@ public class StaticArrayTest {
             new StaticArray3<>(arrayOfUints(4));
             fail();
         } catch (UnsupportedOperationException e) {
-            assertThat(
+            assertEquals(
                     e.getMessage(),
-                    equalTo("Expected array of type [StaticArray3] to have [3] elements."));
+                    ("Expected array of type [StaticArray3] to have [3] elements."));
         }
     }
 
@@ -58,9 +57,9 @@ public class StaticArrayTest {
             new StaticArray32<>(arrayOfUints(33));
             fail();
         } catch (UnsupportedOperationException e) {
-            assertThat(
+            assertEquals(
                     e.getMessage(),
-                    equalTo("Static arrays with a length greater than 32 are not supported."));
+                    ("Static arrays with a length greater than 32 are not supported."));
         }
     }
 

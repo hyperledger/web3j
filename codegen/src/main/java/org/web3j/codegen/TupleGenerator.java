@@ -54,7 +54,7 @@ public class TupleGenerator extends Generator {
     }
 
     private TypeSpec createTuple(int size) {
-        String javadoc = "@deprecated use 'component$L' method instead";
+        String javadoc = "@deprecated use 'component$L' method instead \n @return returns a value";
         String className = CLASS_NAME + size;
         TypeSpec.Builder typeSpecBuilder =
                 TypeSpec.classBuilder(className)
