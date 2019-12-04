@@ -13,10 +13,9 @@
 package org.web3j.protocol.besu.response.privacy;
 
 import org.web3j.protocol.core.Response;
-import org.web3j.utils.Base64String;
 
-public class PrivCreatePrivacyGroup extends Response<Base64String> {
-    public Base64String getPrivacyGroupId() {
+public class PrivCreatePrivacyGroup extends Response<CreatePrivacyGroupResponse> {
+    public CreatePrivacyGroupResponse getCreatePrivacyGroupResponse() {
         return getResult();
     }
 }

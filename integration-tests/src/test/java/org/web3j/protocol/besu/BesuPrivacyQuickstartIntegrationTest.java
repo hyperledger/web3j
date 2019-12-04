@@ -101,6 +101,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
                                 "AliceBobCharlie",
                                 "AliceBobCharlie group")
                         .send()
+                        .getCreatePrivacyGroupResponse()
                         .getPrivacyGroupId();
 
         final BigInteger nonce =
@@ -222,6 +223,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
                                 "AliceBob",
                                 "AliceBob group")
                         .send()
+                        .getCreatePrivacyGroupResponse()
                         .getPrivacyGroupId();
 
         // Find the privacy group that was built by Alice from Bob's node

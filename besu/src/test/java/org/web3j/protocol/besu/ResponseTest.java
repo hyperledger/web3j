@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
+import org.web3j.protocol.besu.response.privacy.CreatePrivacyGroupResponse;
 import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
@@ -200,14 +201,18 @@ public class ResponseTest extends ResponseTester {
                 "{\n"
                         + "    \"jsonrpc\": \"2.0\",\n"
                         + "    \"id\": 1,\n"
-                        + "    \"result\": \"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"\n"
+                        + "    \"result\": {"
+                        + "                 \"privacyGroupId\": \"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",\n"
+                        + "                 \"transactionHash\": \"txHash\"\n"
+                        + "     }\n"
                         + "}");
 
         PrivCreatePrivacyGroup privCreatePrivacyGroup =
                 deserialiseResponse(PrivCreatePrivacyGroup.class);
         assertEquals(
-                privCreatePrivacyGroup.getPrivacyGroupId().toString(),
-                ("DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w="));
+                privCreatePrivacyGroup.getCreatePrivacyGroupResponse(),
+                new CreatePrivacyGroupResponse(
+                        "DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=", "txHash"));
     }
 
     @Test
