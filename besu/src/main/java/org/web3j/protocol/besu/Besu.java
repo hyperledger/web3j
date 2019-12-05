@@ -73,4 +73,9 @@ public interface Besu extends Eea {
 
     Request<?, EthGetCode> privGetCode(
             String address, DefaultBlockParameter defaultBlockParameter, String privacyGroupId);
+
+    Request<?, org.web3j.protocol.core.methods.response.EthCall> privCall(
+            org.web3j.protocol.core.methods.request.Transaction transaction,
+            DefaultBlockParameter defaultBlockParameter,
+            String privacyGroupId);
 }
