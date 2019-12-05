@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.besu;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,10 @@ import org.web3j.protocol.besu.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.JsonRpc2_0Eea;
@@ -177,5 +181,28 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 Collections.singletonList(transactionHash),
                 web3jService,
                 PrivGetTransactionReceipt.class);
+    }
+
+    @Override
+    public Request<?, EthGetCode> privGetCode(
+            final String address,
+            final DefaultBlockParameter defaultBlockParameter,
+            final String privacyGroupId) {
+        ArrayList<String> result =
+                new ArrayList<>(Arrays.asList(address, defaultBlockParameter.getValue()));
+        if (privacyGroupId != null) result.add(privacyGroupId);
+        return new Request<>("priv_getCode", result, web3jService, EthGetCode.class);
+    }
+
+    @Override
+    public Request<?, EthCall> privCall(
+            final Transaction transaction,
+            final DefaultBlockParameter defaultBlockParameter,
+            String privacyGroupId) {
+        return new Request<>(
+                "priv_call",
+                Arrays.asList(transaction, defaultBlockParameter, privacyGroupId),
+                web3jService,
+                org.web3j.protocol.core.methods.response.EthCall.class);
     }
 }

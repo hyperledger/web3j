@@ -242,7 +242,7 @@ public abstract class Contract extends ManagedTransaction {
         }
 
         EthGetCode ethGetCode =
-                web3j.ethGetCode(contractAddress, DefaultBlockParameterName.LATEST).send();
+                transactionManager.getCode(contractAddress, DefaultBlockParameterName.LATEST);
         if (ethGetCode.hasError()) {
             return false;
         }
