@@ -71,5 +71,6 @@ public interface Besu extends Eea {
 
     Request<?, PrivGetTransactionReceipt> privGetTransactionReceipt(final String transactionHash);
 
-    Request<?, EthGetCode> privGetCode(String address, DefaultBlockParameter defaultBlockParameter);
+    Request<?, EthGetCode> privGetCode(
+            String address, DefaultBlockParameter defaultBlockParameter, String privacyGroupId);
 }

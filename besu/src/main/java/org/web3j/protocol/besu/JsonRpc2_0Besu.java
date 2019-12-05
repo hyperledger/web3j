@@ -182,11 +182,11 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
 
     @Override
     public Request<?, EthGetCode> privGetCode(
-            String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>(
-                "priv_getCode",
-                Arrays.asList(address, defaultBlockParameter.getValue()),
-                web3jService,
-                EthGetCode.class);
+            final String address,
+            final DefaultBlockParameter defaultBlockParameter,
+            final String privacyGroupId) {
+        List<String> result = Arrays.asList(address, defaultBlockParameter.getValue());
+        if (privacyGroupId != null) result.add(privacyGroupId);
+        return new Request<>("priv_getCode", result, web3jService, EthGetCode.class);
     }
 }

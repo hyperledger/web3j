@@ -203,7 +203,8 @@ public class RequestTest extends RequestTester {
     public void testPrivGetCode() throws Exception {
         web3j.privGetCode(
                         "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                        DefaultBlockParameterName.LATEST)
+                        DefaultBlockParameterName.LATEST,
+                        null)
                 .send();
 
         verifyResult(
