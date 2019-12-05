@@ -54,7 +54,7 @@ class CompilerClassLoader extends ClassLoader {
 
     private Optional<File> compileClass(final String name) {
 
-        final String path = name.replaceAll("\\.", File.separator);
+        final String path = name.replace(".", File.separator);
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         File sourceFile = null;
