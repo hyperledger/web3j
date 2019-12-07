@@ -24,6 +24,8 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
+import org.web3j.commons.JavaVersion;
+
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
 /**
@@ -42,12 +44,17 @@ public class UnitClassGenerator {
     }
 
     public void writeClass() throws IOException {
-        ClassName EVM_ANNOTATION = ClassName.get("org.web3j", "EVMTest");
 
+        ClassName EVM_ANNOTATION = ClassName.get("org.web3j", "EVMTest");
+        AnnotationSpec.Builder annotationSpec = AnnotationSpec.builder(EVM_ANNOTATION);
+        if (JavaVersion.getJavaVersionAsDouble() < 11) {
+            ClassName GethContainer = ClassName.get("org.web3j", "NodeType");
+            annotationSpec.addMember("value", "type = $T.GETH", GethContainer);
+        }
         TypeSpec testClass =
                 TypeSpec.classBuilder(theContract.getSimpleName() + "Test")
                         .addMethods(generateMethodSpecsForEachTest())
-                        .addAnnotation(AnnotationSpec.builder(EVM_ANNOTATION).build())
+                        .addAnnotation((annotationSpec).build())
                         .addField(
                                 theContract,
                                 toCamelCase(theContract),
