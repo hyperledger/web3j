@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Base64String;
 
@@ -196,5 +198,36 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getTransactionReceipt\","
                         + "\"params\":[\"0x123\"],\"id\":1}");
+    }
+
+    @Test
+    public void testPrivGetCode() throws Exception {
+        web3j.privGetCode(
+                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                        DefaultBlockParameterName.LATEST,
+                        MOCK_PRIVACY_GROUP_ID.toString())
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getCode\","
+                        + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"latest\",\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],\"id\":1}");
+    }
+
+    @Test
+    public void testEthCall() throws Exception {
+        web3j.privCall(
+                        Transaction.createEthCallTransaction(
+                                "0xa70e8dd61c5d32be8058bb8eb970870f07233155",
+                                "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+                                "0x0"),
+                        DefaultBlockParameter.valueOf("latest"),
+                        MOCK_PRIVACY_GROUP_ID.toString())
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_call\","
+                        + "\"params\":[{\"from\":\"0xa70e8dd61c5d32be8058bb8eb970870f07233155\","
+                        + "\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"data\":\"0x0\"},"
+                        + "\"latest\",\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],\"id\":1}");
     }
 }

@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
@@ -97,6 +98,9 @@ public abstract class TransactionManager {
     public abstract String sendCall(
             String to, String data, DefaultBlockParameter defaultBlockParameter) throws IOException;
 
+    public abstract EthGetCode getCode(
+            String contractAddress, DefaultBlockParameter defaultBlockParameter) throws IOException;
+
     public String getFromAddress() {
         return fromAddress;
     }
@@ -115,7 +119,7 @@ public abstract class TransactionManager {
     }
 
     static void assertCallNotReverted(EthCall ethCall) {
-        if (ethCall.reverts()) {
+        if (ethCall.isReverted()) {
             throw new ContractCallException(String.format(REVERT_ERR_STR, ethCall.getRevertReason()));
         }
     }

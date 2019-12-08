@@ -23,6 +23,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
@@ -195,5 +196,15 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         final String transactionHash = transactionResponse.getTransactionHash();
 
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
+    }
+
+    @Override
+    public EthGetCode getCode(
+            final String contractAddress, final DefaultBlockParameter defaultBlockParameter)
+            throws IOException {
+        return this.besu
+                .privGetCode(
+                        contractAddress, defaultBlockParameter, this.getPrivacyGroupId().toString())
+                .send();
     }
 }

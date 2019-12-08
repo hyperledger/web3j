@@ -15,7 +15,6 @@ package org.web3j.codegen.unit.gen;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -55,7 +54,7 @@ class CompilerClassLoader extends ClassLoader {
 
     private Optional<File> compileClass(final String name) {
 
-        final String path = name.replaceAll("\\.", File.separator);
+        final String path = name.replace(".", File.separator);
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         File sourceFile = null;
@@ -93,8 +92,7 @@ class CompilerClassLoader extends ClassLoader {
     }
 
     private String buildClassPath() {
-        final URL[] systemUrls = ((URLClassLoader) getClass().getClassLoader()).getURLs();
-        return buildClassPath(urls) + ':' + buildClassPath(systemUrls);
+        return buildClassPath(urls) + ':' + System.getProperty("java.class.path");
     }
 
     private String buildClassPath(final URL... urls) {
