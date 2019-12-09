@@ -25,7 +25,7 @@ ensure_version() {
 
 ensure_product() {
     if [[ -z "$PRODUCT" ]]; then
-        PRODUCT="${TRAVIS_REPO_SLUG//release\/}"
+        PRODUCT="${TRAVIS_REPO_SLUG//web3j\/}"
     fi
 
     if [[ "$PRODUCT" = "" ]]; then
