@@ -28,13 +28,6 @@ jobs:
   - stage: github release
     if: branch =~ /release/
     script: "./scripts/github-release.sh"
-  - stage: release dependants
-    if: branch =~ /release/
-    script:
-    - "./scripts/release-dependant.sh web3j-quorum"
-    - "./scripts/release-dependant.sh web3j-cli"
-    - "./scripts/release-dependant.sh web3j-gradle-plugin"
-    - "./scripts/release-dependant.sh web3j-aion"
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 before_install:
