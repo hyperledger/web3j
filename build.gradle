@@ -26,7 +26,7 @@ ext {
     junitBenchmarkVersion = '0.7.2'
     logbackVersion = '1.2.3'
     mockitoJunitVersion = "3.1.0"
-
+    junitPlatformLauncherVersion = "1.5.2"
 }
 
 

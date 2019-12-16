@@ -298,7 +298,7 @@ public class SolidityFunctionWrapper extends Generator {
 
     private FieldSpec createBinaryDefinition(String binary) {
         return FieldSpec.builder(String.class, BINARY)
-                .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                 .initializer("$S", binary)
                 .build();
     }
