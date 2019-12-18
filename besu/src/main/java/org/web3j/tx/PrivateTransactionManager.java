@@ -29,6 +29,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.PrivateTransactionReceiptProcessor;
@@ -36,6 +37,7 @@ import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.utils.Restriction.RESTRICTED;
+import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
 
 public abstract class PrivateTransactionManager extends TransactionManager {
     private static final Logger log = LoggerFactory.getLogger(PrivateTransactionManager.class);
@@ -178,6 +180,11 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             data,
                             BigInteger.ZERO);
             final TransactionReceipt ptr = processResponse(est);
+
+            if (!ptr.isStatusOK()) {
+                throw new ContractCallException(
+                        String.format(REVERT_ERR_STR, extractRevertReason(ptr, data, besu, true)));
+            }
             return ((PrivateTransactionReceipt) ptr).getOutput();
         } catch (TransactionException e) {
             log.error("Failed to execute call", e);

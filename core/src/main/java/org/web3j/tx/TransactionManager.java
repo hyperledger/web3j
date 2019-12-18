@@ -36,7 +36,7 @@ public abstract class TransactionManager {
 
     public static final int DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH = 40;
     public static final long DEFAULT_POLLING_FREQUENCY = DEFAULT_BLOCK_TIME;
-    public static final String REVERT_ERR_STR = "Contract Call has been reverted by the EVM with the reason: '%s.'";
+    public static final String REVERT_ERR_STR = "Contract Call has been reverted by the EVM with the reason: '%s'.";
 
     private final TransactionReceiptProcessor transactionReceiptProcessor;
     private final String fromAddress;
