@@ -45,8 +45,11 @@ public class RevertReasonExtractor {
         if (transactionReceipt.getRevertReason() != null) {
             return transactionReceipt.getRevertReason();
         } else if (revertReasonEnabled) {
-            return Optional.ofNullable(retrieveRevertReason(transactionReceipt, data, web3j))
-                    .orElse(MISSING_REASON);
+            String revertReason = retrieveRevertReason(transactionReceipt, data, web3j);
+            if (revertReason != null) {
+                transactionReceipt.setRevertReason(revertReason);
+                return revertReason;
+            }
         }
         return MISSING_REASON;
     }
