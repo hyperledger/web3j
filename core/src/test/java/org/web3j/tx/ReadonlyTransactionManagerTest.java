@@ -15,10 +15,8 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import org.junit.jupiter.api.Rule;
 import org.junit.jupiter.api.Test;
 
-import org.junit.rules.ExpectedException;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -41,9 +39,6 @@ public class ReadonlyTransactionManagerTest {
     DefaultBlockParameter defaultBlockParameter = mock(DefaultBlockParameter.class);
     EthCall response = mock(EthCall.class);
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void sendCallTest() throws IOException {
         when(response.getValue()).thenReturn("test");
@@ -56,15 +51,19 @@ public class ReadonlyTransactionManagerTest {
 
     @Test
     public void sendCallRevertedTest() throws IOException {
-        when(response.reverts()).thenReturn(true);
+        when(response.isReverted()).thenReturn(true);
         when(response.getRevertReason()).thenReturn(OWNER_REVERT_MSG_STR);
         when(service.send(any(), any())).thenReturn(response);
-        thrown.expect(ContractCallException.class);
-        thrown.expectMessage(String.format(REVERT_ERR_STR, OWNER_REVERT_MSG_STR));
 
         ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
-        readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
+
+        ContractCallException thrown =
+                assertThrows(
+                        ContractCallException.class,
+                        () -> readonlyTransactionManager.sendCall("", "", defaultBlockParameter));
+
+        assertEquals(String.format(REVERT_ERR_STR, OWNER_REVERT_MSG_STR), thrown.getMessage());
     }
 
     @Test
