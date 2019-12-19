@@ -65,6 +65,7 @@ import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
+import org.web3j.protocol.core.methods.response.admin.AdminPeers;
 
 /** Core Ethereum JSON-RPC API. */
 public interface Ethereum {
@@ -79,6 +80,8 @@ public interface Ethereum {
     Request<?, NetPeerCount> netPeerCount();
 
     Request<?, AdminNodeInfo> adminNodeInfo();
+
+    Request<?, AdminPeers> adminPeers();
 
     Request<?, EthProtocolVersion> ethProtocolVersion();
 

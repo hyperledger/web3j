@@ -13,10 +13,12 @@
 package org.web3j.protocol.core.methods.response.admin;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -25,63 +27,72 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.Response;
 
-/** admin_nodeInfo. */
-public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
+/** admin_peers. */
+public class AdminPeers extends Response<List<AdminPeers.Peer>> {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @Override
-    @JsonDeserialize(using = AdminNodeInfo.ResponseDeserialiser.class)
-    public void setResult(NodeInfo result) {
+    @JsonDeserialize(using = AdminPeers.ResponseDeserialiser.class)
+    public void setResult(List<Peer> result) {
         super.setResult(result);
     }
 
-    public static class NodeInfo {
-        private String enode;
-        private String id;
-        private String ip;
-        private String lisstenAddr;
-        private String name;
+    public static class Peer {
+        public Peer() {}
 
-        public NodeInfo() {}
-
-        public NodeInfo(String enode, String id, String ip, String lisstenAddr, String name) {
-            this.enode = enode;
+        public Peer(String id, String name, PeerNetwork network) {
             this.id = id;
-            this.ip = ip;
-            this.lisstenAddr = lisstenAddr;
             this.name = name;
-        }
-
-        public String getEnode() {
-            return enode;
+            this.network = network;
         }
 
         public String getId() {
             return id;
         }
 
-        public String getIp() {
-            return ip;
-        }
-
-        public String getLisstenAddr() {
-            return lisstenAddr;
-        }
-
         public String getName() {
             return name;
         }
+
+        private String id;
+        private String name;
+        private PeerNetwork network;
+
+        public PeerNetwork getNetwork() {
+            return network;
+        }
     }
 
-    public static class ResponseDeserialiser extends JsonDeserializer<NodeInfo> {
+    public static class PeerNetwork {
+
+        public PeerNetwork() {}
+
+        private String localAddress;
+        private String remoteAddress;
+
+        public PeerNetwork(String localAddress, String remoteAddress) {
+            this.localAddress = localAddress;
+            this.remoteAddress = remoteAddress;
+        }
+
+        public String getLocalAddress() {
+            return localAddress;
+        }
+
+        public String getRemoteAddress() {
+            return remoteAddress;
+        }
+    }
+
+    public static class ResponseDeserialiser extends JsonDeserializer<List<Peer>> {
 
         private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
-        public NodeInfo deserialize(
+        public List<Peer> deserialize(
                 JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
-                return objectReader.readValue(jsonParser, NodeInfo.class);
+                return objectReader.readValue(jsonParser, new TypeReference<List<Peer>>() {});
             } else {
                 return null; // null is wrapped by Optional in above getter
             }
