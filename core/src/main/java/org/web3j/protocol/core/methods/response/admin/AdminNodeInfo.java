@@ -38,16 +38,16 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
         private String enode;
         private String id;
         private String ip;
-        private String lisstenAddr;
+        private String listenAddr;
         private String name;
 
         public NodeInfo() {}
 
-        public NodeInfo(String enode, String id, String ip, String lisstenAddr, String name) {
+        public NodeInfo(String enode, String id, String ip, String listenAddr, String name) {
             this.enode = enode;
             this.id = id;
             this.ip = ip;
-            this.lisstenAddr = lisstenAddr;
+            this.listenAddr = listenAddr;
             this.name = name;
         }
 
@@ -63,8 +63,8 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
             return ip;
         }
 
-        public String getLisstenAddr() {
-            return lisstenAddr;
+        public String getListenAddr() {
+            return listenAddr;
         }
 
         public String getName() {
