@@ -183,7 +183,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
 
             if (!ptr.isStatusOK()) {
                 throw new ContractCallException(
-                        String.format(REVERT_ERR_STR, extractRevertReason(ptr, data, besu, true)));
+                        String.format(REVERT_ERR_STR, extractRevertReason(ptr, data, besu, false)));
             }
             return ((PrivateTransactionReceipt) ptr).getOutput();
         } catch (TransactionException e) {
