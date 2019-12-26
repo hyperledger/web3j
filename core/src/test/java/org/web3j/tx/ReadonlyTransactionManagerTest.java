@@ -32,7 +32,8 @@ import static org.web3j.tx.TransactionManager.REVERT_ERR_STR;
 
 public class ReadonlyTransactionManagerTest {
 
-    private static final String OWNER_REVERT_MSG_STR = "Only the contract owner can perform this action";
+    private static final String OWNER_REVERT_MSG_STR =
+            "Only the contract owner can perform this action";
 
     Web3jService service = mock(Web3jService.class);
     Web3j web3j = Web3j.build(service);

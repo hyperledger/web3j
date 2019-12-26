@@ -12,8 +12,9 @@
  */
 package org.web3j.protocol.exceptions;
 
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import java.util.Optional;
+
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 /**
  * Transaction timeout exception indicates that we have breached some threshold waiting for a

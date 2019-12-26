@@ -49,10 +49,11 @@ public class ReadonlyTransactionManager extends TransactionManager {
     @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        EthCall ethCall = web3j.ethCall(
-                Transaction.createEthCallTransaction(fromAddress, to, data),
-                defaultBlockParameter)
-                .send();
+        EthCall ethCall =
+                web3j.ethCall(
+                                Transaction.createEthCallTransaction(fromAddress, to, data),
+                                defaultBlockParameter)
+                        .send();
 
         assertCallNotReverted(ethCall);
         return ethCall.getValue();

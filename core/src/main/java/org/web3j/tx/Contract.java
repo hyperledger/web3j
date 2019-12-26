@@ -357,10 +357,7 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionException if the transaction was not mined while waiting
      */
     TransactionReceipt executeTransaction(
-            String data,
-            BigInteger weiValue,
-            String funcName,
-            boolean constructor)
+            String data, BigInteger weiValue, String funcName, boolean constructor)
             throws TransactionException, IOException {
 
         TransactionReceipt receipt =
@@ -419,8 +416,7 @@ public abstract class Contract extends ManagedTransaction {
             T contract, String binary, String encodedConstructor, BigInteger value)
             throws IOException, TransactionException {
         TransactionReceipt transactionReceipt =
-                contract.executeTransaction(
-                        binary + encodedConstructor, value, FUNC_DEPLOY, true);
+                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY, true);
 
         String contractAddress = transactionReceipt.getContractAddress();
         if (contractAddress == null) {

@@ -51,7 +51,6 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
-import org.web3j.utils.RevertReasonExtractor;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -303,8 +302,7 @@ public class ContractTest extends ManagedTransactionTester {
                     prepareTransaction(transactionReceipt);
 
                     contract.performTransaction(
-                                    new Address(BigInteger.TEN),
-                                    new Uint256(BigInteger.ONE))
+                                    new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
                             .send();
                 });
     }
