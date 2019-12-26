@@ -344,7 +344,7 @@ public abstract class Contract extends ManagedTransaction {
     TransactionReceipt executeTransaction(String data, BigInteger weiValue, String funcName)
             throws TransactionException, IOException {
 
-        return executeTransaction(data, weiValue, funcName, false, true);
+        return executeTransaction(data, weiValue, funcName, false);
     }
 
     /**
@@ -357,7 +357,10 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionException if the transaction was not mined while waiting
      */
     TransactionReceipt executeTransaction(
-            String data, BigInteger weiValue, String funcName, boolean constructor, boolean revertReasonEnabled)
+            String data,
+            BigInteger weiValue,
+            String funcName,
+            boolean constructor)
             throws TransactionException, IOException {
 
         TransactionReceipt receipt =
@@ -380,7 +383,7 @@ public abstract class Contract extends ManagedTransaction {
                             receipt.getGasUsedRaw() != null
                                     ? receipt.getGasUsed().toString()
                                     : "unknown",
-                            extractRevertReason(receipt, data, web3j, revertReasonEnabled)),
+                            extractRevertReason(receipt, data, web3j, true)),
                     receipt);
         }
         return receipt;
@@ -416,7 +419,8 @@ public abstract class Contract extends ManagedTransaction {
             T contract, String binary, String encodedConstructor, BigInteger value)
             throws IOException, TransactionException {
         TransactionReceipt transactionReceipt =
-                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY, true, true);
+                contract.executeTransaction(
+                        binary + encodedConstructor, value, FUNC_DEPLOY, true);
 
         String contractAddress = transactionReceipt.getContractAddress();
         if (contractAddress == null) {

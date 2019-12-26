@@ -13,7 +13,6 @@
 package org.web3j.utils;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -31,7 +30,7 @@ public class RevertReasonExtractor {
      * @param transactionReceipt the reverted transaction receipt
      * @param data the reverted transaction data
      * @param web3j Web3j instance
-     * @param revertReasonEnabled flag of reason retrieval via additional call
+     * @param revertReasonCallEnabled flag of reason retrieval via additional call
      * @return the reverted transaction error reason if exists or null otherwise
      * @throws IOException if the call to the node fails
      */
@@ -39,12 +38,12 @@ public class RevertReasonExtractor {
             TransactionReceipt transactionReceipt,
             String data,
             Web3j web3j,
-            Boolean revertReasonEnabled)
+            Boolean revertReasonCallEnabled)
             throws IOException {
 
         if (transactionReceipt.getRevertReason() != null) {
             return transactionReceipt.getRevertReason();
-        } else if (revertReasonEnabled) {
+        } else if (revertReasonCallEnabled) {
             String revertReason = retrieveRevertReason(transactionReceipt, data, web3j);
             if (revertReason != null) {
                 transactionReceipt.setRevertReason(revertReason);
@@ -66,6 +65,9 @@ public class RevertReasonExtractor {
     public static String retrieveRevertReason(
             TransactionReceipt transactionReceipt, String data, Web3j web3j) throws IOException {
 
+        if (transactionReceipt.getBlockNumber() == null) {
+            return null;
+        }
         return web3j.ethCall(
                         Transaction.createEthCallTransaction(
                                 transactionReceipt.getFrom(), transactionReceipt.getTo(), data),
