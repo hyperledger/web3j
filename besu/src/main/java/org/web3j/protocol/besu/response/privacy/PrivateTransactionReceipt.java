@@ -24,86 +24,61 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 public class PrivateTransactionReceipt extends TransactionReceipt {
 
-    private final String contractAddress;
-    private final String from;
-    private final String to;
     private final String output;
-    private final List<Log> logs;
     private final String commitmentHash;
-    private final String transactionHash;
     private final String privateFrom;
     private final ArrayList<String> privateFor;
     private final String privacyGroupId;
-    private final String status;
-    private final String revertReason;
 
     @JsonCreator
     public PrivateTransactionReceipt(
+            @JsonProperty(value = "transactionHash") final String transactionHash,
+            @JsonProperty(value = "transactionIndex") final String transactionIndex,
+            @JsonProperty(value = "blockHash") final String blockHash,
+            @JsonProperty(value = "blockNumber") final String blockNumber,
+            @JsonProperty(value = "cumulativeGasUsed") final String cumulativeGasUsed,
+            @JsonProperty(value = "gasUsed") final String gasUsed,
             @JsonProperty(value = "contractAddress") final String contractAddress,
+            @JsonProperty(value = "root") final String root,
+            @JsonProperty(value = "status") final String status,
             @JsonProperty(value = "from") final String from,
             @JsonProperty(value = "to") final String to,
-            @JsonProperty(value = "output") final String output,
             @JsonProperty(value = "logs") final List<Log> logs,
+            @JsonProperty(value = "logsBloom") final String logsBloom,
+            @JsonProperty(value = "revertReason") final String revertReason,
+            @JsonProperty(value = "output") final String output,
             @JsonProperty(value = "commitmentHash") final String commitmentHash,
-            @JsonProperty(value = "transactionHash") final String transactionHash,
             @JsonProperty(value = "privateFrom") final String privateFrom,
             @JsonProperty(value = "privateFor") final ArrayList<String> privateFor,
-            @JsonProperty(value = "privacyGroupId") final String privacyGroupId,
-            @JsonProperty(value = "status") final String status,
-            @JsonProperty(value = "revertReason") final String revertReason) {
-        this.contractAddress = contractAddress;
-        this.from = from;
-        this.to = to;
+            @JsonProperty(value = "privacyGroupId") final String privacyGroupId) {
+        super(
+                transactionHash,
+                transactionIndex,
+                blockHash,
+                blockNumber,
+                cumulativeGasUsed,
+                gasUsed,
+                contractAddress,
+                root,
+                status,
+                from,
+                to,
+                logs,
+                logsBloom,
+                revertReason);
         this.output = output;
-        this.logs = logs;
         this.commitmentHash = commitmentHash;
-        this.transactionHash = transactionHash;
         this.privateFrom = privateFrom;
         this.privateFor = privateFor;
         this.privacyGroupId = privacyGroupId;
-        this.status = status;
-        this.revertReason = revertReason;
-    }
-
-    @Override
-    public String getContractAddress() {
-        return contractAddress;
-    }
-
-    @Override
-    public String getFrom() {
-        return from;
-    }
-
-    @Override
-    public String getTo() {
-        return to;
     }
 
     public String getOutput() {
         return output;
     }
 
-    @Override
-    public List<Log> getLogs() {
-        return logs;
-    }
-
-    public String getRevertReason() {
-        return revertReason;
-    }
-
-    @Override
-    public String getStatus() {
-        return status;
-    }
-
     public String getcommitmentHash() {
         return commitmentHash;
-    }
-
-    public String gettransactionHash() {
-        return transactionHash;
     }
 
     public String getPrivateFrom() {
@@ -124,35 +99,16 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         final PrivateTransactionReceipt that = (PrivateTransactionReceipt) o;
-        return Objects.equals(contractAddress, that.contractAddress)
-                && Objects.equals(from, that.from)
-                && Objects.equals(to, that.to)
-                && Objects.equals(output, that.output)
-                && Objects.equals(logs, that.logs)
+        return Objects.equals(output, that.output)
                 && Objects.equals(commitmentHash, that.commitmentHash)
-                && Objects.equals(transactionHash, that.transactionHash)
                 && Objects.equals(privateFrom, that.privateFrom)
                 && Objects.equals(privateFor, that.privateFor)
-                && Objects.equals(privacyGroupId, that.privacyGroupId)
-                && Objects.equals(status, that.status)
-                && Objects.equals(revertReason, that.revertReason);
+                && Objects.equals(privacyGroupId, that.privacyGroupId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                super.hashCode(),
-                contractAddress,
-                from,
-                to,
-                output,
-                logs,
-                commitmentHash,
-                transactionHash,
-                privateFrom,
-                privateFor,
-                privacyGroupId,
-                status,
-                revertReason);
+                super.hashCode(), output, commitmentHash, privateFrom, privateFor, privacyGroupId);
     }
 }
