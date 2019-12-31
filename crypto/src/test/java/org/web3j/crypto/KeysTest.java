@@ -23,9 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class KeysTest {
 
@@ -143,7 +141,7 @@ public class KeysTest {
 
     @Test
     public void testSerializeECKey() {
-        assertEquals(Keys.serialize(SampleKeys.KEY_PAIR), (ENCODED));
+        assertArrayEquals(Keys.serialize(SampleKeys.KEY_PAIR), (ENCODED));
     }
 
     @Test
