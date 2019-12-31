@@ -23,6 +23,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
@@ -58,6 +59,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     private GenerationReporter generationReporter;
 
     @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         generationReporter = mock(GenerationReporter.class);

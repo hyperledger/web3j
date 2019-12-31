@@ -33,7 +33,7 @@ public class ParserUtilsTest extends Setup {
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                "$L = $T.deploy($L,$L,$L,$S ).send()",
+                "$L = $T.deploy($L, $L, $L, $S).send()",
                 ParserUtils.generateJavaPoetStringTypes(deploy, greeterContractClass));
     }
 
@@ -46,7 +46,7 @@ public class ParserUtilsTest extends Setup {
                         .collect(Collectors.toList())
                         .get(0);
         assertEquals(
-                "$T $L = $L.newGreeting($S ).send()",
+                "$T $L = $L.newGreeting($S).send()",
                 ParserUtils.generateJavaPoetStringTypes(newGreeting, greeterContractClass));
     }
 

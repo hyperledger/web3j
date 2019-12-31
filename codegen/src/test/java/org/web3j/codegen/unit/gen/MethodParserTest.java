@@ -29,11 +29,11 @@ public class MethodParserTest extends Setup {
         MethodSpec deployMethodSpec =
                 new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
-                deployMethodSpec.toString(),
                 "@org.junit.jupiter.api.BeforeAll\n"
                         + "static void deploy(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
-                        + "  greeter = org.com.test.contract.Greeter.deploy(web3j,transactionManager,contractGasProvider,\"REPLACE_ME\" ).send();\n"
-                        + "}\n");
+                        + "  greeter = org.com.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send();\n"
+                        + "}\n",
+                deployMethodSpec.toString());
     }
 
     @Test
@@ -44,8 +44,8 @@ public class MethodParserTest extends Setup {
         MethodSpec deployMethodSpec =
                 new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
-                deployMethodSpec.code.toString(),
-                "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar = greeter.newGreeting(\"REPLACE_ME\" ).send();\n"
-                        + "org.junit.jupiter.api.Assertions.assertTrue(transactionReceiptVar.isStatusOK());\n");
+                "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar = greeter.newGreeting(\"REPLACE_ME\").send();\n"
+                        + "org.junit.jupiter.api.Assertions.assertTrue(transactionReceiptVar.isStatusOK());\n",
+                deployMethodSpec.code.toString());
     }
 }
