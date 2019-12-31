@@ -64,6 +64,7 @@ allprojects {
 
     tasks.withType(Test) {
         reports.html.destination = file("${reporting.baseDir}/${name}")
+        useJUnitPlatform()
     }
 
     dependencies {
