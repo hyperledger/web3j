@@ -14,6 +14,7 @@ package org.web3j.crypto;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.utils.Numeric.asByte;
 
@@ -73,7 +74,7 @@ public class HashTest {
                 };
 
         byte[] result = Hash.sha3(input);
-        assertEquals(result, (expected));
+        assertArrayEquals(result, (expected));
     }
 
     @Test
