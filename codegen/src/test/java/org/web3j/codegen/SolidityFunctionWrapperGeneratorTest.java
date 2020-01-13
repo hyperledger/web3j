@@ -26,6 +26,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
@@ -46,6 +47,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     private String solidityBaseDir;
 
     @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 

@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class RlpEncoderTest {
 
@@ -28,30 +28,30 @@ public class RlpEncoderTest {
      */
     @Test
     public void testEncode() {
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(RlpString.create("dog")),
                 (new byte[] {(byte) 0x83, 'd', 'o', 'g'}));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(new RlpList(RlpString.create("cat"), RlpString.create("dog"))),
                 (new byte[] {(byte) 0xc8, (byte) 0x83, 'c', 'a', 't', (byte) 0x83, 'd', 'o', 'g'}));
 
-        assertEquals(RlpEncoder.encode(RlpString.create("")), (new byte[] {(byte) 0x80}));
+        assertArrayEquals(RlpEncoder.encode(RlpString.create("")), (new byte[] {(byte) 0x80}));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(RlpString.create(new byte[] {})), (new byte[] {(byte) 0x80}));
 
-        assertEquals(RlpEncoder.encode(new RlpList()), (new byte[] {(byte) 0xc0}));
+        assertArrayEquals(RlpEncoder.encode(new RlpList()), (new byte[] {(byte) 0xc0}));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(RlpString.create(BigInteger.valueOf(0x0f))),
                 (new byte[] {(byte) 0x0f}));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(RlpString.create(BigInteger.valueOf(0x0400))),
                 (new byte[] {(byte) 0x82, (byte) 0x04, (byte) 0x00}));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(
                         new RlpList(
                                 new RlpList(),
@@ -68,7 +68,7 @@ public class RlpEncoderTest {
                     (byte) 0xc0
                 }));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(
                         RlpString.create(
                                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit")),
@@ -133,14 +133,14 @@ public class RlpEncoderTest {
                     't'
                 }));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(RlpString.create(BigInteger.ZERO)), (new byte[] {(byte) 0x80}));
 
         // https://github.com/paritytech/parity-common/blob/master/rlp/tests/tests.rs#L237
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(RlpString.create(new byte[] {0})), (new byte[] {(byte) 0x00}));
 
-        assertEquals(
+        assertArrayEquals(
                 RlpEncoder.encode(
                         new RlpList(
                                 RlpString.create("zw"),
@@ -162,6 +162,6 @@ public class RlpEncoderTest {
         byte[] expectedEncoding = new byte[56];
         expectedEncoding[0] = (byte) 0xb7;
         System.arraycopy(encodeMe, 0, expectedEncoding, 1, encodeMe.length);
-        assertEquals(RlpEncoder.encode(RlpString.create(encodeMe)), (expectedEncoding));
+        assertArrayEquals(RlpEncoder.encode(RlpString.create(encodeMe)), (expectedEncoding));
     }
 }

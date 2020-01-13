@@ -19,11 +19,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.exceptions.MessageDecodingException;
+import org.web3j.exceptions.MessageEncodingException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.web3j.utils.Numeric.asByte;
 
 public class NumericTest {
@@ -111,7 +109,7 @@ public class NumericTest {
     public void testQuantityEncodeNegative() {
 
         assertThrows(
-                MessageDecodingException.class,
+                MessageEncodingException.class,
                 () -> Numeric.encodeQuantity(BigInteger.valueOf(-1)));
     }
 
@@ -143,12 +141,12 @@ public class NumericTest {
 
     @Test
     public void testToBytesPadded() {
-        assertEquals(Numeric.toBytesPadded(BigInteger.TEN, 1), (new byte[] {0xa}));
+        assertArrayEquals(Numeric.toBytesPadded(BigInteger.TEN, 1), (new byte[] {0xa}));
 
-        assertEquals(
+        assertArrayEquals(
                 Numeric.toBytesPadded(BigInteger.TEN, 8), (new byte[] {0, 0, 0, 0, 0, 0, 0, 0xa}));
 
-        assertEquals(
+        assertArrayEquals(
                 Numeric.toBytesPadded(BigInteger.valueOf(Integer.MAX_VALUE), 4),
                 (new byte[] {0x7f, (byte) 0xff, (byte) 0xff, (byte) 0xff}));
     }
@@ -163,12 +161,12 @@ public class NumericTest {
 
     @Test
     public void testHexStringToByteArray() {
-        assertEquals(Numeric.hexStringToByteArray(""), (new byte[] {}));
-        assertEquals(Numeric.hexStringToByteArray("0"), (new byte[] {0}));
-        assertEquals(Numeric.hexStringToByteArray("1"), (new byte[] {0x1}));
-        assertEquals(Numeric.hexStringToByteArray(HEX_RANGE_STRING), (HEX_RANGE_ARRAY));
+        assertArrayEquals(Numeric.hexStringToByteArray(""), (new byte[] {}));
+        assertArrayEquals(Numeric.hexStringToByteArray("0"), (new byte[] {0}));
+        assertArrayEquals(Numeric.hexStringToByteArray("1"), (new byte[] {0x1}));
+        assertArrayEquals(Numeric.hexStringToByteArray(HEX_RANGE_STRING), (HEX_RANGE_ARRAY));
 
-        assertEquals(Numeric.hexStringToByteArray("0x123"), (new byte[] {0x1, 0x23}));
+        assertArrayEquals(Numeric.hexStringToByteArray("0x123"), (new byte[] {0x1, 0x23}));
     }
 
     @Test
