@@ -25,11 +25,13 @@ import java.util.function.BiFunction;
 import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
+import org.web3j.abi.datatypes.BasicStruct;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Fixed;
 import org.web3j.abi.datatypes.FixedPointType;
 import org.web3j.abi.datatypes.Int;
@@ -99,11 +101,101 @@ public class TypeDecoder {
             return (T) decodeDynamicBytes(input, offset);
         } else if (Utf8String.class.isAssignableFrom(type)) {
             return (T) decodeUtf8String(input, offset);
+        } else if (DynamicStruct.class.isAssignableFrom(type)) {
+            return (T) decodeDynamicStruct(input, offset, 0, (Class<DynamicStruct>) type);
         } else if (Array.class.isAssignableFrom(type)) {
             throw new UnsupportedOperationException(
                     "Array types must be wrapped in a TypeReference");
         } else {
             throw new UnsupportedOperationException("Type cannot be encoded: " + type.getClass());
+        }
+    }
+
+    private static <T extends DynamicStruct> T decodeDynamicStruct(String input, int offset, int priorBlockOffset,
+                                                                           Class<DynamicStruct> structType) {
+        final int multiplier = 2;
+        final int BYTES_TO_READ = multiplier * 32; // these are hex encoded as a string, so double the size :/
+
+        final boolean isTopLevelStruct = priorBlockOffset == 0;
+        final List<TypeReference> structComponentTypes = getStructComponentTypes(structType);
+        final Constructor<DynamicStruct> structConstructor = findStructConstructor(structComponentTypes, structType);
+
+        int currentOffset = offset;
+        // 0x0...20
+        final int structOffset = isTopLevelStruct ? Numeric.toBigInt(input.substring(currentOffset, BYTES_TO_READ)).intValue() : offset;
+        currentOffset = structOffset * multiplier; // 0 + 32*2 = 64
+
+        int currentBlockStartOffset = currentOffset; // 64
+
+        // Parse each item according to the type.
+        final List<Object> structConstructorArgs = new ArrayList<>();
+        try {
+            for (TypeReference structComponentType : structComponentTypes) {
+                final boolean isDynamicComponentType = TypeEncoder.isDynamic(structComponentType.getClass());
+
+                if (isDynamicComponentType) {
+                    final int dynamicDataOffset = decodeUintAsInt(input, currentOffset);
+                    final int actualDynamicDataIndex = dynamicDataOffset * multiplier + currentBlockStartOffset;
+
+                    if (DynamicStruct.class.isAssignableFrom((Class) structComponentType.getType())) {
+                        // Nested struct.
+                        final Type oneComponent = decodeDynamicStruct(input, actualDynamicDataIndex / multiplier, currentBlockStartOffset, (Class) structComponentType.getType());
+                        structConstructorArgs.add(oneComponent);
+                        currentOffset += BYTES_TO_READ;
+                    } else {
+                        final Type oneComponent = decode(input, actualDynamicDataIndex, structComponentType.getClassType());
+                        structConstructorArgs.add(oneComponent);
+                        currentOffset += BYTES_TO_READ;
+                    }
+
+                } else {
+                    final Type oneComponent = decode(input, currentOffset, structComponentType.getClassType());
+                    structConstructorArgs.add(oneComponent);
+                    currentOffset += BYTES_TO_READ;
+                }
+            }
+            return (T) structConstructor.newInstance(structConstructorArgs.toArray());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException("The struct (" + structType.getName() + ") does not implement: " + DynamicStruct.GET_TYPES_METHOD);
+        }
+    }
+
+    private static List<TypeReference> getStructComponentTypes(Class<? extends BasicStruct> type) {
+        try {
+            // There should be a static function named: getTypes().
+            final Object typesObject = type.getMethod(DynamicStruct.GET_TYPES_METHOD).invoke(null);
+
+            if (typesObject == null) {
+                throw new IllegalArgumentException("The struct (" + type.getName() + ") " + DynamicStruct.GET_TYPES_METHOD +
+                        " method returned null");
+            }
+            // we expect a list of type references.
+            if (!(typesObject instanceof List)) {
+                throw new IllegalArgumentException("Not a list");
+            }
+
+            return (List<TypeReference>) typesObject;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException("The struct (" + type.getName() + ") does not implement: " + DynamicStruct.GET_TYPES_METHOD);
+        }
+    }
+
+    private static <STRUCT extends BasicStruct> Constructor<STRUCT> findStructConstructor(List<TypeReference> structComponentTypes, Class<STRUCT> structType) {
+        final List<Class> types = new ArrayList<>(structComponentTypes.size());
+        try {
+            for (TypeReference structComponentType : structComponentTypes) {
+                if (structComponentType instanceof TypeReference.StaticArrayTypeReference) {
+                    types.add(StaticArray.class);
+                } else {
+                    types.add(structComponentType.getClassType()); // ((TypeReference.StaticArrayTypeReference) structComponentType).getSize()
+                }
+
+            }
+            return structType.getConstructor(types.toArray(new Class[types.size()]));
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Cannot extract type from the struct component");
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("Cannot find constructor with the given component types as arguments");
         }
     }
 

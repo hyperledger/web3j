@@ -20,8 +20,10 @@ import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
+import org.web3j.abi.datatypes.CompositeDataHolder;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.NumericType;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
@@ -43,9 +45,11 @@ public class TypeEncoder {
     private TypeEncoder() {}
 
     static boolean isDynamic(Type parameter) {
+
         return parameter instanceof DynamicBytes
                 || parameter instanceof Utf8String
-                || parameter instanceof DynamicArray;
+                || parameter instanceof DynamicArray
+                || parameter instanceof DynamicStruct;
     }
 
     @SuppressWarnings("unchecked")
@@ -58,6 +62,12 @@ public class TypeEncoder {
             return encodeBool((Bool) parameter);
         } else if (parameter instanceof Bytes) {
             return encodeBytes((Bytes) parameter);
+        } else if (parameter instanceof DynamicStruct) {
+            if (parameter instanceof CompositeDataHolder) {
+                return encodeCompositeDataHolder((CompositeDataHolder) parameter);
+            } else {
+                return encodeDynamicStruct((DynamicStruct) parameter);
+            }
         } else if (parameter instanceof DynamicBytes) {
             return encodeDynamicBytes((DynamicBytes) parameter);
         } else if (parameter instanceof Utf8String) {
@@ -72,6 +82,71 @@ public class TypeEncoder {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
         }
+    }
+
+    private static String encodeCompositeDataHolder(CompositeDataHolder value) {
+        return encodeDynamicStruct(value, false);
+    }
+
+    private static String encodeDynamicStruct(DynamicStruct value) {
+        return encodeDynamicStruct(value, true);
+    }
+
+    /**
+     * A struct is encoded by writing a preamble (0x20), followed by offsets for dynamic data or
+     * in-place encoding for static data.
+     *
+     * @param value the struct value.
+     * @param isTopLevelStruct wheter this is a top-level (not a nested/embedded).
+     * @return the encoding of the struct.
+     */
+    private static String encodeDynamicStruct(DynamicStruct value, boolean isTopLevelStruct) {
+        final StringBuilder structOffsetsAndStaticData = new StringBuilder();
+        if (isTopLevelStruct) {
+            // 0000000000000000000000000000000000000000000000000000000000000020
+            structOffsetsAndStaticData.append(
+                    encode(new Uint(BigInteger.valueOf(MAX_BYTE_LENGTH))));
+        }
+
+        // Struct args.
+        final int numStructArgs = value.getValue().size();
+
+        // The first block is offset by 32 bytes to allow for the preamble.
+        final int currentBlockOffset = isTopLevelStruct ? MAX_BYTE_LENGTH : 0;
+        int dynamicDataOffset = numStructArgs * MAX_BYTE_LENGTH + currentBlockOffset;
+
+        final StringBuilder structDynamicData = new StringBuilder();
+        // We want to encode the data in a BFS-manner, encoding the current struct meta-data
+        // (offsets for dynamic values,
+        // and in-place encoding for static values), and then follow it with the encoded data
+        // segment for the dynamic values.
+        for (Type structFieldType : value.getValue())
+            if (isDynamic(structFieldType)) {
+                String encodedData = "";
+                if (DynamicStruct.class.isAssignableFrom(structFieldType.getClass())) {
+                    // Embedded struct.
+                    encodedData = encodeDynamicStruct((DynamicStruct) structFieldType, false);
+                } else {
+                    encodedData = encode(structFieldType);
+                }
+
+                structOffsetsAndStaticData.append(
+                        encode(
+                                new Uint(
+                                        BigInteger.valueOf(
+                                                dynamicDataOffset
+                                                        - currentBlockOffset)))); // The offset.
+                structDynamicData.append(
+                        encodedData); // Add the dynamic data to another stringbuilder for appending
+                // later on.
+                dynamicDataOffset += encodedData.length() / 2;
+
+            } else {
+                // Static type - encode and append in-place.
+                structOffsetsAndStaticData.append(encode(structFieldType));
+            }
+        // Finally
+        return structOffsetsAndStaticData.toString() + structDynamicData.toString();
     }
 
     static String encodeAddress(Address address) {

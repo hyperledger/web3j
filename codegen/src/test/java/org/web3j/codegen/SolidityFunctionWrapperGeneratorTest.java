@@ -26,6 +26,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
@@ -45,10 +46,9 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     private String solidityBaseDir;
 
-    @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
-
         URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/solidity");
         solidityBaseDir = url.getPath();
     }
@@ -107,6 +107,13 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     public void testContractsNoBin() throws Exception {
         testCodeGeneration("contracts", "HumanStandardToken", JAVA_TYPES_ARG, false);
         testCodeGeneration("contracts", "HumanStandardToken", SOLIDITY_TYPES_ARG, false);
+    }
+
+    @Test
+    public void testComplexStorage() throws Exception {
+        //        testCodeGenerationJvmTypes("complexstorage", "ComplexStorage");
+        testCodeGenerationSolidityTypes("complexstorage", "ComplexStorage");
+        System.out.println("meme");
     }
 
     @Test

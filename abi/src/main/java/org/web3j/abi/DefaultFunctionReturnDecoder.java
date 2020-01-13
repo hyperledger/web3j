@@ -21,6 +21,7 @@ import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
@@ -84,7 +85,10 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                 int hexStringDataOffset = getDataOffset(input, offset, type);
 
                 Type result;
-                if (DynamicArray.class.isAssignableFrom(type)) {
+                if (DynamicStruct.class.isAssignableFrom(type)) {
+                    result = TypeDecoder.decode(input, type);
+                    offset += TypeEncoder.encode(result).length();
+                } else if (DynamicArray.class.isAssignableFrom(type)) {
                     result =
                             TypeDecoder.decodeDynamicArray(
                                     input, hexStringDataOffset, typeReference);

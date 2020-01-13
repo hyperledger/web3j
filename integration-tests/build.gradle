@@ -7,7 +7,10 @@ dependencies {
             project(':parity')
     testCompile "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion",
-            "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion"
+            "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion",
+            'org.junit.jupiter:junit-jupiter-api:5.0.3',
+            "org.web3j:web3j-unit:4.5.10"
+
 }
 
 // we don't want integration tests to run by default

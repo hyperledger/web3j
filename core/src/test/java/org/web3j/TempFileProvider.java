@@ -14,6 +14,7 @@ package org.web3j;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Objects;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,9 +32,11 @@ public class TempFileProvider {
 
     @AfterEach
     public void tearDown() throws Exception {
-        for (File file : tempDir.listFiles()) {
-            file.delete();
+        if (tempDir != null) {
+            for (File file : Objects.requireNonNull(tempDir.listFiles())) {
+                file.delete();
+            }
+            tempDir.delete();
         }
-        tempDir.delete();
     }
 }
