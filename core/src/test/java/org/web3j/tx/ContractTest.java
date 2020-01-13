@@ -36,10 +36,7 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.Response;
+import org.web3j.protocol.core.*;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
@@ -48,6 +45,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
@@ -74,6 +72,24 @@ import static org.mockito.Mockito.when;
 public class ContractTest extends ManagedTransactionTester {
 
     private static final String TEST_CONTRACT_BINARY = "12345";
+
+    private static final String TXN_SUCCESS_STATUS = "0x1";
+
+    private static final String TXN_FAIL_STATUS = "0x0";
+
+    private static final String TXN_GAS_USED = "0x1";
+
+    private static final String TXN_BLOCK_NUM = "0x2";
+
+    private static final String OWNER_REVERT_MSG_STR =
+            "Only the contract owner can perform this action";
+
+    private static final String OWNER_REVERT_MSG_HASH =
+            "0x08c379a"
+                    + "00000000000000000000000000000000000000000000000000000000000000020"
+                    + "000000000000000000000000000000000000000000000000000000000000002f4"
+                    + "f6e6c792074686520636f6e7472616374206f776e65722063616e20706572666f"
+                    + "726d207468697320616374696f6e0000000000000000000000000000000000";
 
     private TestContract contract;
 
@@ -110,8 +126,9 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
-    public void testContractDeployFails() {
+    public void testContractDeployFails() throws IOException {
         TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
+        prepareCall(null);
         assertThrows(TransactionException.class, () -> deployContract(transactionReceipt));
     }
 
@@ -201,11 +218,9 @@ public class ContractTest extends ManagedTransactionTester {
     public void testCallSingleValue() throws Exception {
         // Example taken from FunctionReturnDecoderTest
 
-        EthCall ethCall = new EthCall();
-        ethCall.setResult(
+        prepareCall(
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
                         + "0000000000000000000000000000000000000000000000000000000000000000");
-        prepareCall(ethCall);
 
         assertEquals(new Utf8String(""), contract.callSingleValue().send());
     }
@@ -214,20 +229,27 @@ public class ContractTest extends ManagedTransactionTester {
     public void testCallSingleValueEmpty() throws Exception {
         // Example taken from FunctionReturnDecoderTest
 
-        EthCall ethCall = new EthCall();
-        ethCall.setResult("0x");
-        prepareCall(ethCall);
+        prepareCall("0x");
 
         assertNull(contract.callSingleValue().send());
     }
 
     @Test
+    public void testCallSingleValueReverted() throws Exception {
+        prepareCall(OWNER_REVERT_MSG_HASH);
+        ContractCallException thrown =
+                assertThrows(ContractCallException.class, () -> contract.callSingleValue().send());
+
+        assertEquals(
+                String.format(TransactionManager.REVERT_ERR_STR, OWNER_REVERT_MSG_STR),
+                thrown.getMessage());
+    }
+
+    @Test
     public void testCallMultipleValue() throws Exception {
-        EthCall ethCall = new EthCall();
-        ethCall.setResult(
+        prepareCall(
                 "0x0000000000000000000000000000000000000000000000000000000000000037"
                         + "0000000000000000000000000000000000000000000000000000000000000007");
-        prepareCall(ethCall);
 
         assertEquals(
                 Arrays.asList(
@@ -237,19 +259,20 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testCallMultipleValueEmpty() throws Exception {
-        EthCall ethCall = new EthCall();
-        ethCall.setResult("0x");
-        prepareCall(ethCall);
+        prepareCall("0x");
 
         assertEquals(emptyList(), contract.callMultipleValue().send());
     }
 
     @SuppressWarnings("unchecked")
-    private void prepareCall(EthCall ethCall) throws IOException {
+    private void prepareCall(String result) throws IOException {
+        EthCall ethCall = new EthCall();
+        ethCall.setResult(result);
+
         Request<?, EthCall> request = mock(Request.class);
         when(request.send()).thenReturn(ethCall);
 
-        when(web3j.ethCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST)))
+        when(web3j.ethCall(any(Transaction.class), any(DefaultBlockParameter.class)))
                 .thenReturn((Request) request);
     }
 
@@ -257,7 +280,7 @@ public class ContractTest extends ManagedTransactionTester {
     public void testTransaction() throws Exception {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setStatus("0x1");
+        transactionReceipt.setStatus(TXN_SUCCESS_STATUS);
 
         prepareTransaction(transactionReceipt);
 
@@ -269,11 +292,10 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     @Test
-    public void testTransactionFailed() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setStatus("0x0");
-        transactionReceipt.setGasUsed("0x1");
+    public void testTransactionFailed() throws IOException {
+        TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
+        prepareCall(null);
+
         assertThrows(
                 TransactionException.class,
                 () -> {
@@ -283,6 +305,31 @@ public class ContractTest extends ManagedTransactionTester {
                                     new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
                             .send();
                 });
+    }
+
+    @Test
+    public void testTransactionFailedWithRevertReason() throws Exception {
+        TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
+        prepareCall(OWNER_REVERT_MSG_HASH);
+
+        TransactionException thrown =
+                assertThrows(
+                        TransactionException.class,
+                        () -> {
+                            prepareTransaction(transactionReceipt);
+
+                            contract.performTransaction(
+                                            new Address(BigInteger.TEN),
+                                            new Uint256(BigInteger.ONE))
+                                    .send();
+                        });
+
+        assertEquals(
+                String.format(
+                        "Transaction %s has failed with status: %s. Gas used: 1. Revert reason: '%s'.",
+                        TRANSACTION_HASH, TXN_FAIL_STATUS, OWNER_REVERT_MSG_STR),
+                thrown.getMessage());
+        assertEquals(transactionReceipt, thrown.getTransactionReceipt().get());
     }
 
     @Test
@@ -466,11 +513,11 @@ public class ContractTest extends ManagedTransactionTester {
     }
 
     private TransactionReceipt createTransactionReceipt() {
-        return createTransactionReceiptWithStatus("0x1");
+        return createTransactionReceiptWithStatus(TXN_SUCCESS_STATUS);
     }
 
     private TransactionReceipt createFailedTransactionReceipt() {
-        return createTransactionReceiptWithStatus("0x0");
+        return createTransactionReceiptWithStatus(TXN_FAIL_STATUS);
     }
 
     private TransactionReceipt createTransactionReceiptWithStatus(String status) {
@@ -478,7 +525,8 @@ public class ContractTest extends ManagedTransactionTester {
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
         transactionReceipt.setContractAddress(ADDRESS);
         transactionReceipt.setStatus(status);
-        transactionReceipt.setGasUsed("0x1");
+        transactionReceipt.setGasUsed(TXN_GAS_USED);
+        transactionReceipt.setBlockNumber(TXN_BLOCK_NUM);
         return transactionReceipt;
     }
 
