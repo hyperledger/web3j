@@ -187,9 +187,9 @@ public final class AbiTypes {
             case "int32":
                 return primitives ? Int.class : Int32.class;
             case "uint40":
-                return primitives ? Long.class : Int40.class;
-            case "int40":
                 return primitives ? Long.class : Uint40.class;
+            case "int40":
+                return primitives ? Long.class : Int40.class;
             case "uint48":
                 return primitives ? Long.class : Uint48.class;
             case "int48":
