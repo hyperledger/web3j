@@ -73,7 +73,7 @@ public class HttpServiceTest {
                 new Response.Builder()
                         .code(400)
                         .message("")
-                        .body(ResponseBody.create(null, content))
+                        .body(ResponseBody.create(content, null))
                         .request(new okhttp3.Request.Builder().url(HttpService.DEFAULT_URL).build())
                         .protocol(Protocol.HTTP_1_1)
                         .build();
