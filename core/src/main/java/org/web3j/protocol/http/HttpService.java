@@ -151,7 +151,7 @@ public class HttpService extends Service {
     @Override
     protected InputStream performIO(String request) throws IOException {
 
-        RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, request);
+        RequestBody requestBody = RequestBody.create(request, JSON_MEDIA_TYPE);
         Headers headers = buildHeaders();
 
         okhttp3.Request httpRequest =
