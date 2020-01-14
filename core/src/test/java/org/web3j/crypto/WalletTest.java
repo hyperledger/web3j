@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.utils.Numeric;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WalletTest {
@@ -67,7 +68,7 @@ public class WalletTest {
 
     @Test
     public void testGenerateRandomBytes() {
-        assertEquals(Wallet.generateRandomBytes(0), (new byte[] {}));
+        assertArrayEquals(Wallet.generateRandomBytes(0), (new byte[] {}));
         assertEquals(Wallet.generateRandomBytes(10).length, (10));
     }
 

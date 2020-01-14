@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.utils.Collection.EMPTY_STRING_ARRAY;
 import static org.web3j.utils.Collection.Function;
@@ -28,16 +29,16 @@ public class CollectionTest {
 
     @Test
     public void testTail() {
-        assertEquals(tail(EMPTY_STRING_ARRAY), (EMPTY_STRING_ARRAY));
-        assertEquals(tail(create("a", "b", "c")), (create("b", "c")));
-        assertEquals(tail(create("a")), (EMPTY_STRING_ARRAY));
+        assertArrayEquals(tail(EMPTY_STRING_ARRAY), (EMPTY_STRING_ARRAY));
+        assertArrayEquals(tail(create("a", "b", "c")), (create("b", "c")));
+        assertArrayEquals(tail(create("a")), (EMPTY_STRING_ARRAY));
     }
 
     @Test
     public void testCreate() {
-        assertEquals(create("a"), (new String[] {"a"}));
-        assertEquals(create(""), (new String[] {""}));
-        assertEquals(create("a", "b"), (new String[] {"a", "b"}));
+        assertArrayEquals(create("a"), (new String[] {"a"}));
+        assertArrayEquals(create(""), (new String[] {""}));
+        assertArrayEquals(create("a", "b"), (new String[] {"a", "b"}));
     }
 
     @Test

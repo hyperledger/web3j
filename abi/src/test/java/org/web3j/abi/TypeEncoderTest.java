@@ -249,10 +249,11 @@ public class TypeEncoderTest {
 
     @Test
     public void testInvalidAddress() {
-        Address address =
-                new Address("0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
-        assertEquals(address.getTypeAsString(), ("address"));
-        assertThrows(UnsupportedOperationException.class, () -> TypeEncoder.encodeAddress(address));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        new Address(
+                                "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f"));
     }
 
     @Test
