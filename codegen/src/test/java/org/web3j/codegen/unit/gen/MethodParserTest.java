@@ -12,6 +12,8 @@
  */
 package org.web3j.codegen.unit.gen;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -47,5 +49,14 @@ public class MethodParserTest extends Setup {
                 "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar = greeter.newGreeting(\"REPLACE_ME\").send();\n"
                         + "org.junit.jupiter.api.Assertions.assertTrue(transactionReceiptVar.isStatusOK());\n",
                 deployMethodSpec.code.toString());
+    }
+
+    @Test
+    public void testKotlinGenerate() throws Exception {
+        new KotlinClassGenerator(
+                greeterContractClass,
+                "",
+                temp + File.separator + "test")
+                .writeClass();
     }
 }

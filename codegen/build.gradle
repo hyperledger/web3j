@@ -2,7 +2,8 @@ description 'web3j project code generators'
 
 dependencies {
     compile project(':core'),
-            "com.squareup:javapoet:$javapoetVersion",
+            "com.squareup:kotlinpoet:$kotlinPoetVersion",
+            "com.squareup:javapoet:$javaPoetVersion",
             "info.picocli:picocli:$picocliVersion"
     testCompile project(path: ':core', configuration: 'testArtifacts')
     implementation("org.junit.platform:junit-platform-launcher:$junitPlatformLauncherVersion")

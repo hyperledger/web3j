@@ -54,7 +54,7 @@ public class Setup {
         File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
         greeterContractClass = new ClassProvider(greeter).getClasses().get(0);
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        new UnitClassGenerator(
+        new JavaClassGenerator(
                         greeterContractClass,
                         "org.com.generated.contracts",
                         temp + File.separator + "test")

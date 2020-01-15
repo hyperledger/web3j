@@ -34,9 +34,9 @@ public class MethodSpecGeneratorTest {
                 Collections.singletonList(
                         ParameterSpec.builder(Web3j.class, "web3j", Modifier.FINAL).build());
         String javaPoetStringFormat1 = "$T $L = $S";
-        Object[] replacementValues1 = new Object[] {String.class, "hello ", "Hello how are you"};
+        Object[] replacementValues1 = new Object[]{String.class, "hello ", "Hello how are you"};
         String javaPoetStringFormat2 = "$T $L = $T.build()";
-        Object[] replacementValues2 = new Object[] {Web3j.class, "web3j", Web3j.class};
+        Object[] replacementValues2 = new Object[]{Web3j.class, "web3j", Web3j.class};
         Map<String, Object[]> statementBody = new LinkedHashMap<>();
         statementBody.put(javaPoetStringFormat1, replacementValues1);
         statementBody.put(javaPoetStringFormat2, replacementValues2);
@@ -52,4 +52,6 @@ public class MethodSpecGeneratorTest {
                         + "}\n",
                 generatedMethodSpec.toString());
     }
+
+
 }

@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UnitClassGeneratorTest extends Setup {
+public class JavaClassGeneratorTest extends Setup {
     @Test
     public void testThatTheClassWasSuccessfullyWritten() {
         assertTrue(new File(pathToTest).exists());
@@ -29,11 +29,12 @@ public class UnitClassGeneratorTest extends Setup {
     public void testThatExceptionIsThrownWhenAClassIsNotWritten() {
         assertThrows(
                 NullPointerException.class,
-                () -> new UnitClassGenerator(null, "org.com", temp.toString()).writeClass());
+                () -> new JavaClassGenerator(null, "org.com", temp.toString()).writeClass());
     }
 
     @Test
     public void testThatClassWasGeneratedWithCorrectFields() {
         assertTrue(classAsString.contains("private static Greeter greeter;"));
     }
+
 }
