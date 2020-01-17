@@ -78,12 +78,15 @@ public class FunParser {
         Object[] genericParameters =
                 KotlinParserUtils.generatePlaceholderValues(method, theContract);
         methodBodySpecification.put(kotlinPoetStringTypes, genericParameters);
-        /**
-         * if (methodNeedsAssertion()) { String assertionKotlinPoet =
-         * KotlinParserUtils.generateAssertionKotlinPoetStringTypes(method, theContract); Object[]
-         * assertionParams = KotlinParserUtils.generateAssertionPlaceholderValues(method,
-         * theContract); methodBodySpecification.put(assertionKotlinPoet, assertionParams); }
-         */
+
+        if (methodNeedsAssertion()) {
+            String assertionKotlinPoet =
+                    KotlinParserUtils.generateAssertionKotlinPoetStringTypes(method, theContract);
+            Object[] assertionParams =
+                    KotlinParserUtils.generateAssertionPlaceholderValues(method, theContract);
+            methodBodySpecification.put(assertionKotlinPoet, assertionParams);
+        }
+
         return methodBodySpecification;
     }
 

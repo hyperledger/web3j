@@ -46,6 +46,24 @@ public class KotlinParserUtils {
         return mergePlaceholderValues(source1, source2);
     }
 
+    static Object[] generatePlaceholderAssertionValues(Method method, Class contract) {
+        Type returnType = getMethodReturnType(method);
+        Object[] source1;
+        Object[] source2 = replaceTypeWithDefaultValue(method);
+        if (returnType.equals(contract)) {
+            source1 =
+                    new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+        } else {
+            source1 =
+                    new Object[] {
+                        returnType,
+                        toCamelCase(returnTypeAsLiteral(returnType, true)),
+                        toCamelCase(contract)
+                    };
+        }
+        return mergePlaceholderValues(source1, source2);
+    }
+
     private static Object[] replaceTypeWithDefaultValue(Method method) {
         return Arrays.stream(method.getParameterTypes())
                 .map(KotlinParserUtils::getDefaultValueForType)
@@ -91,10 +109,10 @@ public class KotlinParserUtils {
 
     static String generateAssertionKotlinPoetStringTypes(Method method, Class theContract) {
         Type returnType = getMethodReturnType(method);
-        Object[] body = generatePlaceholderValues(method, theContract);
+        Object[] body = generatePlaceholderAssertionValues(method, theContract);
         StringBuilder symbolBuilder = new StringBuilder();
         symbolBuilder.append("%T.");
-        if (body[0].equals(TransactionReceipt.class)) {
+        if (returnType == TransactionReceipt.class) {
             symbolBuilder.append("assertTrue(%L.isStatusOK())");
         } else {
             symbolBuilder.append("assertEquals(");
@@ -118,10 +136,10 @@ public class KotlinParserUtils {
 
     static Object[] generateAssertionPlaceholderValues(Method method, Class contract) {
         Type returnType = getMethodReturnType(method);
-        Object[] body = generatePlaceholderValues(method, contract);
+        Object[] body = generatePlaceholderAssertionValues(method, contract);
         List<Object> placeHolder = new ArrayList<>();
         placeHolder.add(Assertions.class);
-        if (body[0].equals(TransactionReceipt.class)) {
+        if (returnType == TransactionReceipt.class) {
             placeHolder.add(toCamelCase(returnTypeAsLiteral(returnType, true)));
         } else {
             if (returnType.getTypeName().contains("Tuple")) {
@@ -130,7 +148,7 @@ public class KotlinParserUtils {
                     placeHolder.add(mappingHelper.getDefaultValueMapKotlin().get(t));
                 }
             } else {
-                placeHolder.add(mappingHelper.getDefaultValueMapKotlin().get(body[0]));
+                placeHolder.add(mappingHelper.getDefaultValueMapKotlin().get(returnType));
             }
             placeHolder.add(toCamelCase(returnTypeAsLiteral(returnType, true)));
         }

@@ -63,7 +63,7 @@ public class MappingHelper {
     }
 
     public Map<Class, Object> getDefaultValueMapKotlin() {
-        return defaultValueMap;
+        return defaultValueMapKotlin;
     }
 
     public Map<Class, String> getKotlinPoetFormat() {

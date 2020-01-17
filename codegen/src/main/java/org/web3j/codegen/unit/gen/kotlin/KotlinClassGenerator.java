@@ -12,8 +12,6 @@
  */
 package org.web3j.codegen.unit.gen.kotlin;
 
-import java.io.File;
-
 import com.squareup.kotlinpoet.FileSpec;
 import com.squareup.kotlinpoet.KModifier;
 import com.squareup.kotlinpoet.PropertySpec;
@@ -61,7 +59,7 @@ public class KotlinClassGenerator implements UnitClassGenerator {
                         .addProperty(contractInit)
                         .build();
         FileSpec kotlinFile = FileSpec.builder(packageName, "Test").addType(testClass).build();
-        kotlinFile.writeTo(new File(writePath));
-        // kotlinFile.writeTo(System.out);
+        // kotlinFile.writeTo(new File(writePath));
+        kotlinFile.writeTo(System.out);
     }
 }
