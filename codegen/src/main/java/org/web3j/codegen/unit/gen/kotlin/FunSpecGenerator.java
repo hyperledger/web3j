@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -10,40 +10,38 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen;
+package org.web3j.codegen.unit.gen.kotlin;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.lang.model.element.Modifier;
 
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeName;
+import com.squareup.kotlinpoet.CodeBlock;
+import com.squareup.kotlinpoet.FunSpec;
+import com.squareup.kotlinpoet.ParameterSpec;
 import org.junit.jupiter.api.Test;
 
-public class MethodSpecGenerator {
+public class FunSpecGenerator {
     private final String testMethodName;
     private final Map<String, Object[]> statementBody;
     private final List<ParameterSpec> testMethodParameters;
     private final Class testMethodAnnotation;
     private final Modifier testMethodModifier;
 
-    public MethodSpecGenerator(
+    public FunSpecGenerator(
             String testMethodName,
             Class testMethodAnnotation,
-            Modifier testMethodModifier,
             List<ParameterSpec> testMethodParameters,
             Map<String, Object[]> statementBody) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = testMethodAnnotation;
-        this.testMethodModifier = testMethodModifier;
+        this.testMethodModifier = Modifier.PUBLIC;
         this.testMethodParameters = testMethodParameters;
     }
 
-    public MethodSpecGenerator(String testMethodName, Map<String, Object[]> statementBody) {
+    public FunSpecGenerator(String testMethodName, Map<String, Object[]> statementBody) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = Test.class;
@@ -51,7 +49,7 @@ public class MethodSpecGenerator {
         this.testMethodParameters = Collections.emptyList();
     }
 
-    public MethodSpecGenerator(
+    public FunSpecGenerator(
             String testMethodName,
             Map<String, Object[]> statementBody,
             List<ParameterSpec> testMethodParameters) {
@@ -62,13 +60,10 @@ public class MethodSpecGenerator {
         this.testMethodParameters = testMethodParameters;
     }
 
-    public MethodSpec generate() {
-        return MethodSpec.methodBuilder(testMethodName)
+    public FunSpec generate() {
+        return FunSpec.builder(testMethodName)
                 .addAnnotation(testMethodAnnotation)
-                .addModifiers(testMethodModifier)
                 .addParameters(testMethodParameters)
-                .addException(Exception.class)
-                .returns(TypeName.VOID)
                 .addCode(setMethodBody())
                 .build();
     }

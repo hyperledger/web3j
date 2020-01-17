@@ -39,19 +39,19 @@ public class MappingHelper {
         javaPoetFormat.put(Tuple2.class, "new $T<>()");
         javaPoetFormat.put(byte[].class, "new $T{}");
 
-        defaultValueMap.put(String.class, "REPLACE_ME");
-        defaultValueMap.put(BigInteger.class, "BigInteger.ONE");
-        defaultValueMap.put(List.class, ArrayList.class);
-        defaultValueMap.put(Tuple.class, Tuple.class);
-        defaultValueMap.put(byte[].class, byte[].class);
-        defaultValueMap.put(Boolean.class, true);
-        javaPoetFormat.put(Boolean.class, "%L");
-        javaPoetFormat.put(String.class, "%S");
-        javaPoetFormat.put(BigInteger.class, "%N");
-        javaPoetFormat.put(List.class, "new %T<>()");
-        javaPoetFormat.put(Tuple.class, "new %T<>()");
-        javaPoetFormat.put(Tuple2.class, "new %T<>()");
-        javaPoetFormat.put(byte[].class, "new %T{}");
+        defaultValueMapKotlin.put(String.class, "REPLACE_ME");
+        defaultValueMapKotlin.put(BigInteger.class, "BigInteger.ONE");
+        defaultValueMapKotlin.put(List.class, ArrayList.class);
+        defaultValueMapKotlin.put(Tuple.class, Tuple.class);
+        defaultValueMapKotlin.put(byte[].class, byte[].class);
+        defaultValueMapKotlin.put(Boolean.class, true);
+        kotlinPoetFormat.put(Boolean.class, "%L");
+        kotlinPoetFormat.put(String.class, "%S");
+        kotlinPoetFormat.put(BigInteger.class, "%N");
+        kotlinPoetFormat.put(List.class, "new %T<>()");
+        kotlinPoetFormat.put(Tuple.class, "new %T<>()");
+        kotlinPoetFormat.put(Tuple2.class, "new %T<>()");
+        kotlinPoetFormat.put(byte[].class, "new %T{}");
     }
 
     public Map<Class, Object> getDefaultValueMap() {
@@ -67,6 +67,6 @@ public class MappingHelper {
     }
 
     public Map<Class, String> getKotlinPoetFormat() {
-        return javaPoetFormat;
+        return kotlinPoetFormat;
     }
 }

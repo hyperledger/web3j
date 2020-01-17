@@ -16,6 +16,8 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.codegen.unit.gen.java.JavaClassGenerator;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,5 +38,4 @@ public class JavaClassGeneratorTest extends Setup {
     public void testThatClassWasGeneratedWithCorrectFields() {
         assertTrue(classAsString.contains("private static Greeter greeter;"));
     }
-
 }

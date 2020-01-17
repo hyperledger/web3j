@@ -13,12 +13,14 @@
 package org.web3j.codegen.unit.gen;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
 import com.squareup.javapoet.MethodSpec;
 import org.junit.jupiter.api.Test;
+
+import org.web3j.codegen.unit.gen.java.MethodParser;
+import org.web3j.codegen.unit.gen.kotlin.KotlinClassGenerator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -53,10 +55,7 @@ public class MethodParserTest extends Setup {
 
     @Test
     public void testKotlinGenerate() throws Exception {
-        new KotlinClassGenerator(
-                greeterContractClass,
-                "",
-                temp + File.separator + "test")
+        new KotlinClassGenerator(greeterContractClass, "", temp + File.separator + "test")
                 .writeClass();
     }
 }

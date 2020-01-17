@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 
+import org.web3j.codegen.unit.gen.java.JavaClassGenerator;
+import org.web3j.codegen.unit.gen.java.MethodFilter;
+
 public class Setup {
     @TempDir static File temp;
     static File classAsFile;

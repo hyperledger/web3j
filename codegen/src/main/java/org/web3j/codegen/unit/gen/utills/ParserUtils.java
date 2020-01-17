@@ -1,8 +1,16 @@
-package org.web3j.codegen.unit.gen;
-
-import org.junit.jupiter.api.Assertions;
-import org.web3j.codegen.unit.gen.utills.MappingHelper;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
+/*
+ * Copyright 2019 Web3 Labs Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+package org.web3j.codegen.unit.gen.utills;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -11,25 +19,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
+
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+
 import static org.web3j.codegen.unit.gen.utills.NameUtils.returnTypeAsLiteral;
 import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
 
-public class KotlinParserUtils {
+/*
+ * Class that provides parsing utility between Unit Generation and JavaPoet.
+ */
+public class ParserUtils {
     private static MappingHelper mappingHelper = new MappingHelper();
 
-    static Object[] generatePlaceholderValues(Method method, Class contract) {
+    public static Object[] generatePlaceholderValues(Method method, Class contract) {
         Type returnType = getMethodReturnType(method);
         Object[] source1;
         Object[] source2 = replaceTypeWithDefaultValue(method);
         if (returnType.equals(contract)) {
             source1 =
-                    new Object[]{toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+                    new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
         } else {
             source1 =
-                    new Object[]{
-                            returnType,
-                            toCamelCase(returnTypeAsLiteral(returnType, true)),
-                            toCamelCase(contract)
+                    new Object[] {
+                        returnType,
+                        toCamelCase(returnTypeAsLiteral(returnType, true)),
+                        toCamelCase(contract)
                     };
         }
         return mergePlaceholderValues(source1, source2);
@@ -37,24 +52,24 @@ public class KotlinParserUtils {
 
     private static Object[] replaceTypeWithDefaultValue(Method method) {
         return Arrays.stream(method.getParameterTypes())
-                .map(KotlinParserUtils::getDefaultValueForType)
+                .map(ParserUtils::getDefaultValueForType)
                 .toArray();
     }
 
     private static Object getDefaultValueForType(Class type) {
-        if (mappingHelper.getDefaultValueMapKotlin().containsKey(type)) {
-            return mappingHelper.getDefaultValueMapKotlin().get(type);
+        if (mappingHelper.getDefaultValueMap().containsKey(type)) {
+            return mappingHelper.getDefaultValueMap().get(type);
         } else {
             return toCamelCase(type);
         }
     }
 
-    static String generateKotlinPoetStringTypes(Method method, Class theContract) {
+    public static String generateJavaPoetStringTypes(Method method, Class theContract) {
         StringBuilder symbolBuilder = new StringBuilder();
         if (getMethodReturnType(method).equals(theContract)) {
-            symbolBuilder.append("%L : %T.");
+            symbolBuilder.append("$L = $T.");
         } else {
-            symbolBuilder.append("%L : %T.");
+            symbolBuilder.append("$T $L = $L.");
         }
         symbolBuilder
                 .append(method.getName())
@@ -72,39 +87,39 @@ public class KotlinParserUtils {
                         type ->
                                 generated.add(
                                         mappingHelper
-                                                .getKotlinPoetFormat()
-                                                .getOrDefault(type, "%L")));
+                                                .getJavaPoetFormat()
+                                                .getOrDefault(type, "$L")));
         return String.join(", ", generated);
     }
 
-    static String generateAssertionKotlinPoetStringTypes(Method method, Class theContract) {
+    public static String generateAssertionJavaPoetStringTypes(Method method, Class theContract) {
         Type returnType = getMethodReturnType(method);
         Object[] body = generatePlaceholderValues(method, theContract);
         StringBuilder symbolBuilder = new StringBuilder();
-        symbolBuilder.append("%T.");
+        symbolBuilder.append("$T.");
         if (body[0].equals(TransactionReceipt.class)) {
-            symbolBuilder.append("assertTrue(%L.isStatusOK())");
+            symbolBuilder.append("assertTrue($L.isStatusOK())");
         } else {
             symbolBuilder.append("assertEquals(");
             if (returnType.getTypeName().contains("Tuple")) {
-                symbolBuilder.append("new %T(");
+                symbolBuilder.append("new $T(");
                 for (Type t : getTypeArray(returnType)) {
-                    symbolBuilder.append(mappingHelper.getKotlinPoetFormat().get(t)).append(", ");
+                    symbolBuilder.append(mappingHelper.getJavaPoetFormat().get(t)).append(", ");
                 }
                 symbolBuilder.deleteCharAt(symbolBuilder.lastIndexOf(", "));
                 symbolBuilder.append(")");
             } else {
-                symbolBuilder.append(mappingHelper.getKotlinPoetFormat().get(body[0]));
+                symbolBuilder.append(mappingHelper.getJavaPoetFormat().get(body[0]));
             }
             symbolBuilder.append(", ");
-            symbolBuilder.append("%L");
+            symbolBuilder.append("$L");
             symbolBuilder.append(")");
         }
 
         return symbolBuilder.toString();
     }
 
-    static Object[] generateAssertionPlaceholderValues(Method method, Class contract) {
+    public static Object[] generateAssertionPlaceholderValues(Method method, Class contract) {
         Type returnType = getMethodReturnType(method);
         Object[] body = generatePlaceholderValues(method, contract);
         List<Object> placeHolder = new ArrayList<>();
@@ -115,17 +130,17 @@ public class KotlinParserUtils {
             if (returnType.getTypeName().contains("Tuple")) {
                 placeHolder.add(body[0]);
                 for (Type t : getTypeArray(returnType)) {
-                    placeHolder.add(mappingHelper.getDefaultValueMapKotlin().get(t));
+                    placeHolder.add(mappingHelper.getDefaultValueMap().get(t));
                 }
             } else {
-                placeHolder.add(mappingHelper.getDefaultValueMapKotlin().get(body[0]));
+                placeHolder.add(mappingHelper.getDefaultValueMap().get(body[0]));
             }
             placeHolder.add(toCamelCase(returnTypeAsLiteral(returnType, true)));
         }
         return placeHolder.toArray();
     }
 
-    static Type getMethodReturnType(Method method) {
+    public static Type getMethodReturnType(Method method) {
         Type genericType = method.getGenericReturnType();
         if (genericType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) genericType;

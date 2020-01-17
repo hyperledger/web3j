@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.codegen.unit.gen.java.MethodFilter;
+import org.web3j.codegen.unit.gen.utills.ParserUtils;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

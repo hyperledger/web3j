@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen;
+package org.web3j.codegen.unit.gen.java;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -25,6 +25,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import org.junit.jupiter.api.BeforeAll;
 
+import org.web3j.codegen.unit.gen.utills.ParserUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -36,12 +37,12 @@ public class MethodParser {
     private final Method method;
     private final Class theContract;
 
-    MethodParser(final Method method, final Class theContract) {
+    public MethodParser(final Method method, final Class theContract) {
         this.method = method;
         this.theContract = theContract;
     }
 
-    MethodSpec getMethodSpec() {
+    public MethodSpec getMethodSpec() {
         return methodNeedsInjection()
                 ? new MethodSpecGenerator(
                                 method.getName(),
