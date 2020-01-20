@@ -12,9 +12,6 @@
  */
 package org.web3j.protocol.besu;
 
-import java.util.List;
-import java.util.Map;
-
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
@@ -24,6 +21,8 @@ import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
+import org.web3j.protocol.besu.response.privacy.onchain.PrivAddToPrivacyGroup;
+import org.web3j.protocol.besu.response.privacy.onchain.PrivRemoveFromPrivacyGroup;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
@@ -32,6 +31,9 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.Eea;
 import org.web3j.utils.Base64String;
+
+import java.util.List;
+import java.util.Map;
 
 public interface Besu extends Eea {
     static Besu build(Web3jService web3jService) {
@@ -64,6 +66,15 @@ public interface Besu extends Eea {
 
     Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
             final List<Base64String> addresses, final String name, final String description);
+
+    Request<?, PrivCreatePrivacyGroup> privXCreatePrivacyGroup(
+            final List<Base64String> addresses, final String name, final String description);
+
+    Request<?, PrivAddToPrivacyGroup> privAddToPrivacyGroup(
+            final Base64String enclaveKey, final List<Base64String> addresses);
+
+    Request<?, PrivRemoveFromPrivacyGroup> privRemoveFromPrivacyGroup(
+            final Base64String enclaveKey, final Base64String address);
 
     Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(final List<Base64String> addresses);
 

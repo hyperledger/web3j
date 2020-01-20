@@ -28,6 +28,8 @@ import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
+import org.web3j.protocol.besu.response.privacy.onchain.PrivAddToPrivacyGroup;
+import org.web3j.protocol.besu.response.privacy.onchain.PrivRemoveFromPrivacyGroup;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -152,6 +154,36 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                         new CreatePrivacyGroupRequest(addresses, name, description)),
                 web3jService,
                 PrivCreatePrivacyGroup.class);
+    }
+
+    @Override
+    public Request<?, PrivCreatePrivacyGroup> privXCreatePrivacyGroup(
+            final List<Base64String> addresses, final String name, final String description) {
+        requireNonNull(addresses);
+        return new Request<>(
+                "privx_createPrivacyGroup",
+                Collections.singletonList(
+                        new CreatePrivacyGroupRequest(addresses, name, description)),
+                web3jService,
+                PrivCreatePrivacyGroup.class);
+    }
+
+    @Override
+    public Request<?, PrivAddToPrivacyGroup> privAddToPrivacyGroup(final Base64String enclaveKey, final List<Base64String> addresses) {
+        return new Request<>(
+                "privx_addToPrivacyGroup",
+                Arrays.asList(enclaveKey, addresses),
+                web3jService,
+                PrivAddToPrivacyGroup.class);
+    }
+
+    @Override
+    public Request<?, PrivRemoveFromPrivacyGroup> privRemoveFromPrivacyGroup(final Base64String enclaveKey, final Base64String address) {
+        return new Request<>(
+                "privx_addToPrivacyGroup",
+                Arrays.asList(enclaveKey, address),
+                web3jService,
+                PrivRemoveFromPrivacyGroup.class);
     }
 
     @Override

@@ -172,6 +172,16 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testPrivXCreatePrivacyGroup() throws Exception {
+        web3j.privXCreatePrivacyGroup(BASE_64_STRINGS, "testName", "testDesc").send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"privx_createPrivacyGroup\","
+                        + "\"params\":[{\"addresses\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\"name\":\"testName\",\"description\":\"testDesc\"}],"
+                        + "\"id\":1}");
+    }
+
+    @Test
     public void testPrivFindPrivacyGroup() throws Exception {
         web3j.privFindPrivacyGroup(BASE_64_STRINGS).send();
 
