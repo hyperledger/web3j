@@ -304,11 +304,11 @@ public class ResponseTest extends ResponseTester {
         PrivateTransactionReceipt transactionReceipt =
                 new PrivateTransactionReceipt(
                         "0x5504d87dc6c6ab8ea4f5c988bcf1c41d40e6b594b80849d4444c432099ee6c34",
-                        "0x1",
-                        "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
-                        "0xb",
-                        "0x33bc",
-                        "0x4dc",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
                         "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
                         null,
                         "0x1",
@@ -327,7 +327,7 @@ public class ResponseTest extends ResponseTester {
                                         "mined",
                                         Arrays.asList(
                                                 "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))),
-                        "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        null,
                         null,
                         "myRlpEncodedOutputFromPrivateContract",
                         "0x75aaac4be865057a576872587c9672197f1bab25e64b588c81f483c5869e0fa7",
@@ -338,6 +338,6 @@ public class ResponseTest extends ResponseTester {
         PrivGetTransactionReceipt privGetTransactionReceipt =
                 deserialiseResponse(PrivGetTransactionReceipt.class);
 
-        assertEquals(privGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
+        assertEquals(transactionReceipt, privGetTransactionReceipt.getTransactionReceipt().get());
     }
 }
