@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen.java;
+package org.web3j.codegen.unit.gen;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.kotlinpoet.FunSpec;
 
+import org.web3j.codegen.unit.gen.java.MethodParser;
 import org.web3j.codegen.unit.gen.kotlin.FunParser;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.TransactionManager;

@@ -24,11 +24,12 @@ import com.squareup.kotlinpoet.FunSpec;
 import com.squareup.kotlinpoet.ParameterSpec;
 import org.junit.jupiter.api.BeforeAll;
 
+import org.web3j.codegen.unit.gen.utils.KotlinMappingHelper;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
-import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
+import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
 public class FunParser {
     private final Method method;
@@ -73,20 +74,15 @@ public class FunParser {
 
     private Map<String, Object[]> generateStatementBody() {
         Map<String, Object[]> methodBodySpecification = new LinkedHashMap<>();
-        String kotlinPoetStringTypes =
-                KotlinParserUtils.generateKotlinPoetStringTypes(method, theContract);
-        Object[] genericParameters =
-                KotlinParserUtils.generatePlaceholderValues(method, theContract);
+        KotlinParser parser = new KotlinParser(theContract, method, new KotlinMappingHelper());
+        String kotlinPoetStringTypes = parser.generatePoetStringTypes();
+        Object[] genericParameters = parser.adjustPlaceholderValues();
         methodBodySpecification.put(kotlinPoetStringTypes, genericParameters);
-
         if (methodNeedsAssertion()) {
-            String assertionKotlinPoet =
-                    KotlinParserUtils.generateAssertionKotlinPoetStringTypes(method, theContract);
-            Object[] assertionParams =
-                    KotlinParserUtils.generateAssertionPlaceholderValues(method, theContract);
+            String assertionKotlinPoet = parser.generateAssertionKotlinPoetStringTypes();
+            Object[] assertionParams = parser.generateAssertionPlaceholderValues();
             methodBodySpecification.put(assertionKotlinPoet, assertionParams);
         }
-
         return methodBodySpecification;
     }
 

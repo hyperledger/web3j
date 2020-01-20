@@ -21,10 +21,11 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 
+import org.web3j.codegen.unit.gen.MethodFilter;
 import org.web3j.codegen.unit.gen.UnitClassGenerator;
 import org.web3j.commons.JavaVersion;
 
-import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
+import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
 /**
  * Class that generates the unit tests classes for the contracts. The class writes to

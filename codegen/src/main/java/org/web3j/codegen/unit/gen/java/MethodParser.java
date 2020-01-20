@@ -25,12 +25,12 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import org.junit.jupiter.api.BeforeAll;
 
-import org.web3j.codegen.unit.gen.utills.ParserUtils;
+import org.web3j.codegen.unit.gen.utils.JavaMappingHelper;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
-import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
+import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
 /*Class that when given a method provides a JavaPoet method spec. */
 public class MethodParser {
@@ -77,14 +77,13 @@ public class MethodParser {
 
     private Map<String, Object[]> generateStatementBody() {
         Map<String, Object[]> methodBodySpecification = new LinkedHashMap<>();
-        String javaPoetStringTypes = ParserUtils.generateJavaPoetStringTypes(method, theContract);
-        Object[] genericParameters = ParserUtils.generatePlaceholderValues(method, theContract);
+        JavaParser parser = new JavaParser(theContract, method, new JavaMappingHelper());
+        String javaPoetStringTypes = parser.generatePoetStringTypes();
+        Object[] genericParameters = parser.generatePlaceholderValues();
         methodBodySpecification.put(javaPoetStringTypes, genericParameters);
         if (methodNeedsAssertion()) {
-            String assertionJavaPoet =
-                    ParserUtils.generateAssertionJavaPoetStringTypes(method, theContract);
-            Object[] assertionParams =
-                    ParserUtils.generateAssertionPlaceholderValues(method, theContract);
+            String assertionJavaPoet = parser.generateAssertionJavaPoetStringTypes();
+            Object[] assertionParams = parser.generateAssertionPlaceholderValues();
             methodBodySpecification.put(assertionJavaPoet, assertionParams);
         }
         return methodBodySpecification;

@@ -17,11 +17,11 @@ import com.squareup.kotlinpoet.KModifier;
 import com.squareup.kotlinpoet.PropertySpec;
 import com.squareup.kotlinpoet.TypeSpec;
 
+import org.web3j.codegen.unit.gen.MethodFilter;
 import org.web3j.codegen.unit.gen.UnitClassGenerator;
-import org.web3j.codegen.unit.gen.java.MethodFilter;
 import org.web3j.commons.JavaVersion;
 
-import static org.web3j.codegen.unit.gen.utills.NameUtils.toCamelCase;
+import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
 public class KotlinClassGenerator implements UnitClassGenerator {
 
