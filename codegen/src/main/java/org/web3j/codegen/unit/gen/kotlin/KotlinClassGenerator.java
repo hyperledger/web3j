@@ -60,7 +60,10 @@ public class KotlinClassGenerator implements UnitClassGenerator {
                         .addAnnotation((annotationSpec).build())
                         .addProperty(contractInit)
                         .build();
-        FileSpec kotlinFile = FileSpec.builder(packageName, "Test").addType(testClass).build();
+        FileSpec kotlinFile =
+                FileSpec.builder(packageName, theContract.getSimpleName() + "Test")
+                        .addType(testClass)
+                        .build();
         kotlinFile.writeTo(new File(writePath));
     }
 }

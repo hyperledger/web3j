@@ -10,12 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen;
+package org.web3j.codegen.unit.gen.kotlin;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +23,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 
-import org.web3j.codegen.unit.gen.java.JavaClassGenerator;
+import org.web3j.codegen.unit.gen.ClassProvider;
+import org.web3j.codegen.unit.gen.MethodFilter;
 
 public class Setup {
     @TempDir static File temp;
@@ -35,7 +35,7 @@ public class Setup {
     static String pathToTest;
 
     @BeforeAll
-    public static void setUp() throws IOException, ClassNotFoundException {
+    public static void setUp() throws Exception {
         String urlAsString =
                 Objects.requireNonNull(
                                 Setup.class
@@ -51,7 +51,7 @@ public class Setup {
                         "com",
                         "generated",
                         "contracts",
-                        "GreeterTest.java");
+                        "GreeterTest.kt");
         classAsFile = new File(urlAsString);
         File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
         greeterContractClass =
@@ -62,7 +62,7 @@ public class Setup {
                                 .orElse(null);
 
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        new JavaClassGenerator(
+        new KotlinClassGenerator(
                         greeterContractClass,
                         "org.com.generated.contracts",
                         temp + File.separator + "test")

@@ -52,7 +52,7 @@ public abstract class Parser {
                 .toArray();
     }
 
-    protected final Type getMethodReturnType() {
+    public final Type getMethodReturnType() {
         Type genericType = method.getGenericReturnType();
         if (genericType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) genericType;
