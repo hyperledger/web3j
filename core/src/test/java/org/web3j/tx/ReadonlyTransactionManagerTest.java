@@ -21,14 +21,19 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.tx.exceptions.ContractCallException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.web3j.tx.TransactionManager.REVERT_ERR_STR;
 
 public class ReadonlyTransactionManagerTest {
+
+    private static final String OWNER_REVERT_MSG_STR =
+            "Only the contract owner can perform this action";
 
     Web3jService service = mock(Web3jService.class);
     Web3j web3j = Web3j.build(service);
@@ -43,6 +48,23 @@ public class ReadonlyTransactionManagerTest {
                 new ReadonlyTransactionManager(web3j, "");
         String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
         assertEquals("test", value);
+    }
+
+    @Test
+    public void sendCallRevertedTest() throws IOException {
+        when(response.isReverted()).thenReturn(true);
+        when(response.getRevertReason()).thenReturn(OWNER_REVERT_MSG_STR);
+        when(service.send(any(), any())).thenReturn(response);
+
+        ReadonlyTransactionManager readonlyTransactionManager =
+                new ReadonlyTransactionManager(web3j, "");
+
+        ContractCallException thrown =
+                assertThrows(
+                        ContractCallException.class,
+                        () -> readonlyTransactionManager.sendCall("", "", defaultBlockParameter));
+
+        assertEquals(String.format(REVERT_ERR_STR, OWNER_REVERT_MSG_STR), thrown.getMessage());
     }
 
     @Test

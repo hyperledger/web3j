@@ -34,6 +34,7 @@ public class TransactionReceipt {
     private String to;
     private List<Log> logs;
     private String logsBloom;
+    private String revertReason;
 
     public TransactionReceipt() {}
 
@@ -50,7 +51,8 @@ public class TransactionReceipt {
             String from,
             String to,
             List<Log> logs,
-            String logsBloom) {
+            String logsBloom,
+            String revertReason) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -64,6 +66,7 @@ public class TransactionReceipt {
         this.to = to;
         this.logs = logs;
         this.logsBloom = logsBloom;
+        this.revertReason = revertReason;
     }
 
     public String getTransactionHash() {
@@ -194,6 +197,14 @@ public class TransactionReceipt {
         this.logsBloom = logsBloom;
     }
 
+    public String getRevertReason() {
+        return revertReason;
+    }
+
+    public void setRevertReason(String revertReason) {
+        this.revertReason = revertReason;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -255,9 +266,14 @@ public class TransactionReceipt {
         if (getLogs() != null ? !getLogs().equals(that.getLogs()) : that.getLogs() != null) {
             return false;
         }
-        return getLogsBloom() != null
-                ? getLogsBloom().equals(that.getLogsBloom())
-                : that.getLogsBloom() == null;
+        if (getLogsBloom() != null
+                ? !getLogsBloom().equals(that.getLogsBloom())
+                : that.getLogsBloom() != null) {
+            return false;
+        }
+        return getRevertReason() != null
+                ? getRevertReason().equals(that.getRevertReason())
+                : that.getRevertReason() == null;
     }
 
     @Override
@@ -275,6 +291,7 @@ public class TransactionReceipt {
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getLogs() != null ? getLogs().hashCode() : 0);
         result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
+        result = 31 * result + (getRevertReason() != null ? getRevertReason().hashCode() : 0);
         return result;
     }
 
@@ -318,6 +335,9 @@ public class TransactionReceipt {
                 + logs
                 + ", logsBloom='"
                 + logsBloom
+                + '\''
+                + ", revertReason='"
+                + revertReason
                 + '\''
                 + '}';
     }
