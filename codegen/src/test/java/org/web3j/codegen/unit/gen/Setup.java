@@ -35,7 +35,7 @@ public class Setup {
     static String pathToTest;
 
     @BeforeAll
-    public static void setUp() throws IOException {
+    public static void setUp() throws IOException, ClassNotFoundException {
         String urlAsString =
                 Objects.requireNonNull(
                                 Setup.class
@@ -54,7 +54,13 @@ public class Setup {
                         "GreeterTest.java");
         classAsFile = new File(urlAsString);
         File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
-        greeterContractClass = new ClassProvider(greeter).getClasses().get(0);
+        greeterContractClass =
+                new ClassProvider(greeter)
+                        .getClasses().stream()
+                                .filter(className -> className.getSimpleName().equals("Greeter"))
+                                .findAny()
+                                .orElse(null);
+
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         new JavaClassGenerator(
                         greeterContractClass,

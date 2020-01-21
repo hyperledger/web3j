@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import org.web3j.codegen.unit.gen.utils.MappingHelper;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -73,7 +74,7 @@ public abstract class Parser {
         placeHolder.add(Assertions.class);
         if (!body[0].equals(TransactionReceipt.class)) {
             if (returnType.getTypeName().contains("Tuple")) {
-                placeHolder.add(body[0]);
+                placeHolder.add(((ParameterizedTypeImpl) returnType).getRawType());
                 for (Type t : getTypeArray(returnType)) {
                     placeHolder.add(mappingHelper.getDefaultValueMap().get(t));
                 }

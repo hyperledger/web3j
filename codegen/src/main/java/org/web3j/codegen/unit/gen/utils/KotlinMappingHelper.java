@@ -13,7 +13,6 @@
 package org.web3j.codegen.unit.gen.utils;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,17 +28,17 @@ public class KotlinMappingHelper implements MappingHelper {
 
         defaultValueMapKotlin.put(String.class, "REPLACE_ME");
         defaultValueMapKotlin.put(BigInteger.class, "BigInteger.ONE");
-        defaultValueMapKotlin.put(List.class, ArrayList.class);
+        defaultValueMapKotlin.put(List.class, "arrayListOf()");
         defaultValueMapKotlin.put(Tuple.class, Tuple.class);
-        defaultValueMapKotlin.put(byte[].class, byte[].class);
+        defaultValueMapKotlin.put(byte[].class, "byteArrayOf()");
         defaultValueMapKotlin.put(Boolean.class, true);
         kotlinPoetFormat.put(Boolean.class, "%L");
         kotlinPoetFormat.put(String.class, "%S");
-        kotlinPoetFormat.put(BigInteger.class, "%N");
-        kotlinPoetFormat.put(List.class, " %T<>()");
-        kotlinPoetFormat.put(Tuple.class, "%T<>()");
-        kotlinPoetFormat.put(Tuple2.class, " %T<>()");
-        kotlinPoetFormat.put(byte[].class, " %T{}");
+        kotlinPoetFormat.put(BigInteger.class, "%L");
+        kotlinPoetFormat.put(List.class, " %L");
+        kotlinPoetFormat.put(Tuple.class, "%T()");
+        kotlinPoetFormat.put(Tuple2.class, " %T()");
+        kotlinPoetFormat.put(byte[].class, " %L");
     }
 
     public Map<Class, Object> getDefaultValueMap() {
