@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen.Java;
+package org.web3j.codegen.unit.gen.java;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.codegen.unit.gen.MethodFilter;
 import org.web3j.codegen.unit.gen.Parser;
-import org.web3j.codegen.unit.gen.java.JavaParser;
 import org.web3j.codegen.unit.gen.utils.JavaMappingHelper;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 

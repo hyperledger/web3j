@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen.Java;
+package org.web3j.codegen.unit.gen.java;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +26,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 import org.web3j.codegen.unit.gen.ClassProvider;
 import org.web3j.codegen.unit.gen.MethodFilter;
-import org.web3j.codegen.unit.gen.java.JavaClassGenerator;
 
 public class Setup {
     @TempDir static File temp;
