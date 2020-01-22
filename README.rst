@@ -16,8 +16,8 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://codecov.io/gh/web3j/web3j
    :alt: codecov
 
-.. image:: https://badges.gitter.im/web3j/web3j.svg
-   :target: https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. image:: https://img.shields.io/discourse/users?server=https%3A%2F%2Fcommunity.web3labs.com
+   :target: https://community.web3labs.com
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
 web3j is a lightweight, highly modular, reactive, type safe Java and Android library for working with

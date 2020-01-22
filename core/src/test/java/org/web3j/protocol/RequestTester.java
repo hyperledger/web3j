@@ -15,10 +15,12 @@ package org.web3j.protocol;
 import java.io.IOException;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -31,7 +33,8 @@ public abstract class RequestTester {
 
     private OkHttpClient httpClient;
     private HttpService httpService;
-
+    public static final MediaType JSON_MEDIA_TYPE =
+            MediaType.parse("application/json; charset=utf-8");
     private RequestInterceptor requestInterceptor;
 
     @BeforeEach
@@ -67,12 +70,16 @@ public abstract class RequestTester {
 
             Request request = chain.request();
             this.requestBody = request.body();
-
             okhttp3.Response response =
                     new okhttp3.Response.Builder()
                             .request(chain.request())
                             .protocol(Protocol.HTTP_2)
                             .code(200)
+                            .body(
+                                    ResponseBody.create(
+                                            "{\"jsonrpc\":\"2.0\",\"method\":\"\","
+                                                    + "\"params\":[],\"id\":1}",
+                                            JSON_MEDIA_TYPE))
                             .message("")
                             .build();
 
