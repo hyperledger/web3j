@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import org.web3j.codegen.unit.gen.utils.MappingHelper;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -74,7 +73,7 @@ public abstract class Parser {
         placeHolder.add(Assertions.class);
         if (!body[0].equals(TransactionReceipt.class)) {
             if (returnType.getTypeName().contains("Tuple")) {
-                placeHolder.add(((ParameterizedTypeImpl) returnType).getRawType());
+                placeHolder.add(((ParameterizedType) returnType).getRawType());
                 for (Type t : getTypeArray(returnType)) {
                     placeHolder.add(mappingHelper.getDefaultValueMap().get(t));
                 }
@@ -100,12 +99,12 @@ public abstract class Parser {
     protected final Object[] concludeMethodReturnType() {
         Type returnType = getMethodReturnType();
         if (returnType.equals(theContract)) {
-            return new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+            return new Object[]{toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
         } else {
-            return new Object[] {
-                returnType,
-                toCamelCase(returnTypeAsLiteral(returnType, true)),
-                toCamelCase(theContract)
+            return new Object[]{
+                    returnType,
+                    toCamelCase(returnTypeAsLiteral(returnType, true)),
+                    toCamelCase(theContract)
             };
         }
     }
