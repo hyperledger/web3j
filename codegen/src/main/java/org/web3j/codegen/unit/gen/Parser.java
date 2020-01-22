@@ -99,12 +99,12 @@ public abstract class Parser {
     protected final Object[] concludeMethodReturnType() {
         Type returnType = getMethodReturnType();
         if (returnType.equals(theContract)) {
-            return new Object[]{toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+            return new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
         } else {
-            return new Object[]{
-                    returnType,
-                    toCamelCase(returnTypeAsLiteral(returnType, true)),
-                    toCamelCase(theContract)
+            return new Object[] {
+                returnType,
+                toCamelCase(returnTypeAsLiteral(returnType, true)),
+                toCamelCase(theContract)
             };
         }
     }
