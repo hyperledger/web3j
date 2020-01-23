@@ -14,11 +14,17 @@ package org.web3j.protocol;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.Flowable;
 
+import org.web3j.protocol.core.BatchRequest;
+import org.web3j.protocol.core.BatchResponse;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.websocket.events.Notification;
@@ -52,6 +58,38 @@ public abstract class Service implements Web3jService {
     public <T extends Response> CompletableFuture<T> sendAsync(
             Request jsonRpc20Request, Class<T> responseType) {
         return Async.run(() -> send(jsonRpc20Request, responseType));
+    }
+
+    @Override
+    public BatchResponse sendBatch(BatchRequest batchRequest) throws IOException {
+        if (batchRequest.getRequests().isEmpty()) {
+            return new BatchResponse(Collections.emptyList(), Collections.emptyList());
+        }
+
+        String payload = objectMapper.writeValueAsString(batchRequest.getRequests());
+
+        try (InputStream result = performIO(payload)) {
+            if (result != null) {
+                ArrayNode nodes = (ArrayNode) objectMapper.readTree(result);
+                List<Response<?>> responses = new ArrayList<>(nodes.size());
+
+                for (int i = 0; i < nodes.size(); i++) {
+                    Request<?, ? extends Response<?>> request = batchRequest.getRequests().get(i);
+                    Response<?> response =
+                            objectMapper.treeToValue(nodes.get(i), request.getResponseType());
+                    responses.add(response);
+                }
+
+                return new BatchResponse(batchRequest.getRequests(), responses);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    @Override
+    public CompletableFuture<BatchResponse> sendBatchAsync(BatchRequest batchRequest) {
+        return Async.run(() -> sendBatch(batchRequest));
     }
 
     @Override
