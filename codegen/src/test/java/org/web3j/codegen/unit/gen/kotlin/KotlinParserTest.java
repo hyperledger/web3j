@@ -37,7 +37,7 @@ public class KotlinParserTest extends Setup {
                         .get(0);
         KotlinParser parser =
                 new KotlinParser(greeterContractClass, deploy, new KotlinMappingHelper());
-        assertEquals("val %L = %T.deploy(%L, %L, %L, %S).send()", parser.generatePoetStringTypes());
+        assertEquals(" %L = %T.deploy(%L, %L, %L, %S).send()", parser.generatePoetStringTypes());
     }
 
     @Test

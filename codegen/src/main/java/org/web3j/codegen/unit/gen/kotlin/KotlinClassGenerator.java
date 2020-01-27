@@ -42,13 +42,25 @@ public class KotlinClassGenerator implements UnitClassGenerator {
     public void writeClass() throws Exception {
         com.squareup.kotlinpoet.ClassName EVM_ANNOTATION =
                 new com.squareup.kotlinpoet.ClassName("org.web3j", "EVMTest");
+
         com.squareup.kotlinpoet.AnnotationSpec.Builder annotationSpec =
                 com.squareup.kotlinpoet.AnnotationSpec.builder(EVM_ANNOTATION);
+
         if (JavaVersion.getJavaVersionAsDouble() < 11) {
             com.squareup.kotlinpoet.ClassName gethContainer =
                     new com.squareup.kotlinpoet.ClassName("org.web3j", "NodeType");
             annotationSpec.addMember("%T.GETH", gethContainer);
         }
+        com.squareup.kotlinpoet.ClassName TEST_INSTANCE_ANNOTATION =
+                new com.squareup.kotlinpoet.ClassName("org.junit.jupiter.api", "TestInstance");
+
+        com.squareup.kotlinpoet.AnnotationSpec.Builder testAnnotationSpec =
+                com.squareup.kotlinpoet.AnnotationSpec.builder(TEST_INSTANCE_ANNOTATION);
+
+        com.squareup.kotlinpoet.ClassName lifeCycle =
+                new com.squareup.kotlinpoet.ClassName("", "TestInstance");
+        testAnnotationSpec.addMember("%T.Lifecycle.PER_CLASS", lifeCycle);
+
         PropertySpec contractInit =
                 PropertySpec.builder(toCamelCase(theContract), theContract)
                         .addModifiers(KModifier.LATEINIT, KModifier.PRIVATE)
@@ -58,6 +70,7 @@ public class KotlinClassGenerator implements UnitClassGenerator {
                 TypeSpec.classBuilder(theContract.getSimpleName() + "Test")
                         .addFunctions(MethodFilter.generateFunctionSpecsForEachTest(theContract))
                         .addAnnotation((annotationSpec).build())
+                        .addAnnotation(testAnnotationSpec.build())
                         .addProperty(contractInit)
                         .build();
         FileSpec kotlinFile =

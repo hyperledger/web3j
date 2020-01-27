@@ -34,7 +34,7 @@ public class FunParserTest extends Setup {
                         + "  transactionManager: org.web3j.tx.TransactionManager,\n"
                         + "  contractGasProvider: org.web3j.tx.gas.ContractGasProvider\n"
                         + ") {\n"
-                        + "  val greeter = org.com.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send()\n"
+                        + "   greeter = org.com.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send()\n"
                         + "}\n");
     }
 

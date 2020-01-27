@@ -71,7 +71,7 @@ public class KotlinParser extends Parser {
     protected String generatePoetStringTypes() {
         StringBuilder symbolBuilder = new StringBuilder();
         if (getMethodReturnType().equals(theContract)) {
-            symbolBuilder.append("val %L = %T.");
+            symbolBuilder.append(" %L = %T.");
         } else {
             symbolBuilder.append("val %L = %L.");
         }
