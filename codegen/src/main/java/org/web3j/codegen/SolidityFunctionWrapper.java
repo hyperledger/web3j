@@ -936,9 +936,13 @@ public class SolidityFunctionWrapper extends Generator {
         List<MethodSpec> results = new ArrayList<>(2);
         String functionName = functionDefinition.getName();
 
+        String stateMutability = functionDefinition.getStateMutability();
+        boolean pureOrView = "pure".equals(stateMutability) || "view".equals(stateMutability);
+        boolean isFunctionDefinitionConstant = functionDefinition.isConstant() || pureOrView;
+
         if (generateSendTxForCalls) {
             final String funcNamePrefix;
-            if (functionDefinition.isConstant()) {
+            if (isFunctionDefinitionConstant) {
                 funcNamePrefix = "call";
             } else {
                 funcNamePrefix = "send";
@@ -960,7 +964,7 @@ public class SolidityFunctionWrapper extends Generator {
         final List<TypeName> outputParameterTypes =
                 buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
 
-        if (functionDefinition.isConstant()) {
+        if (isFunctionDefinitionConstant) {
             // Avoid generating runtime exception call
             if (functionDefinition.hasOutputs()) {
                 buildConstantFunction(
@@ -979,7 +983,7 @@ public class SolidityFunctionWrapper extends Generator {
             }
         }
 
-        if (!functionDefinition.isConstant()) {
+        if (!isFunctionDefinitionConstant) {
             buildTransactionFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
             results.add(methodBuilder.build());
         }
