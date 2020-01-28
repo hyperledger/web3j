@@ -27,14 +27,14 @@ public class KotlinMappingHelper implements MappingHelper {
     public KotlinMappingHelper() {
 
         defaultValueMapKotlin.put(String.class, "REPLACE_ME");
-        defaultValueMapKotlin.put(BigInteger.class, "BigInteger.ONE");
+        defaultValueMapKotlin.put(BigInteger.class, BigInteger.class);
         defaultValueMapKotlin.put(List.class, "arrayListOf()");
         defaultValueMapKotlin.put(Tuple.class, Tuple.class);
         defaultValueMapKotlin.put(byte[].class, "byteArrayOf()");
         defaultValueMapKotlin.put(Boolean.class, true);
         kotlinPoetFormat.put(Boolean.class, "%L");
         kotlinPoetFormat.put(String.class, "%S");
-        kotlinPoetFormat.put(BigInteger.class, "%L");
+        kotlinPoetFormat.put(BigInteger.class, "%T.ONE");
         kotlinPoetFormat.put(List.class, " %L");
         kotlinPoetFormat.put(Tuple.class, "%T()");
         kotlinPoetFormat.put(Tuple2.class, " %T()");
