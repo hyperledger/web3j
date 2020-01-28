@@ -10,16 +10,18 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen;
+package org.web3j.codegen.unit.gen.kotlin;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.codegen.unit.gen.java.JavaClassGenerator;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UnitClassGeneratorTest extends Setup {
+public class KotlinClassGeneratorTest extends Setup {
     @Test
     public void testThatTheClassWasSuccessfullyWritten() {
         assertTrue(new File(pathToTest).exists());
@@ -29,11 +31,11 @@ public class UnitClassGeneratorTest extends Setup {
     public void testThatExceptionIsThrownWhenAClassIsNotWritten() {
         assertThrows(
                 NullPointerException.class,
-                () -> new UnitClassGenerator(null, "org.com", temp.toString()).writeClass());
+                () -> new JavaClassGenerator(null, "org.com", temp.toString()).writeClass());
     }
 
     @Test
     public void testThatClassWasGeneratedWithCorrectFields() {
-        assertTrue(classAsString.contains("private static Greeter greeter;"));
+        assertTrue(classAsString.contains("private lateinit var greeter: Greeter"));
     }
 }
