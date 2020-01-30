@@ -14,7 +14,7 @@ public class LocalWeb3jAccount {
     private static final Path web3jConfigPath =
             Paths.get(System.getProperty("user.home"), ".web3j", ".config");
 
-    static String SERVICES_ENDPOINT = "http://localhost/api/geth/%s/%s/";
+    static String SERVICES_ENDPOINT = "http://localhost/api/rpc/%s/%s/";
 
     public static HttpService getOnlineServicesHttpService(final Network network) throws Exception {
         if (web3jConfigPath.toFile().exists()) {
