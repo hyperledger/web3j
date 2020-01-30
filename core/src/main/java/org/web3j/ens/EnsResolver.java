@@ -109,7 +109,7 @@ public class EnsResolver {
      * Reverse name resolution as documented in the <a
      * href="https://docs.ens.domains/contract-api-reference/reverseregistrar">specification</a>.
      *
-     * @param address an ethereum address, example: "0x314159265dd8dbb310642f98f50c066173c1259b"
+     * @param address an ethereum address, example: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"
      * @return a EnsName registered for provided address
      */
     public String reverseResolve(String address) {
