@@ -47,6 +47,7 @@ apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 description 'web3j base project'
 
@@ -348,6 +349,13 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
             })
         }
     }
+
+    signing {
+        sign publishing.publications.mavenJava
+        def signingKey = new File("$rootDir/web3j.asc")
+
+        useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
+    }
 }
 
 // Makes a submodule to be compiled against a reduced JDK, currently an Android JDK.
@@ -366,3 +374,5 @@ ext.useReducedJdk = { Project project ->
                 "$rootDir/compat/libs/android.jar")
     }
 }
+
+
