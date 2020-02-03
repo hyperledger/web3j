@@ -12,6 +12,11 @@
  */
 package org.web3j.protocol.besu;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
@@ -21,19 +26,16 @@ import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
-import org.web3j.protocol.besu.response.privacy.onchain.PrivAddToPrivacyGroup;
-import org.web3j.protocol.besu.response.privacy.onchain.PrivRemoveFromPrivacyGroup;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.Eea;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Base64String;
-
-import java.util.List;
-import java.util.Map;
 
 public interface Besu extends Eea {
     static Besu build(Web3jService web3jService) {
@@ -67,14 +69,36 @@ public interface Besu extends Eea {
     Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
             final List<Base64String> addresses, final String name, final String description);
 
-    Request<?, PrivCreatePrivacyGroup> privXCreatePrivacyGroup(
-            final List<Base64String> addresses, final String name, final String description);
+    Request<?, EthSendTransaction> privOnChainSetGroupLockState(
+            final Base64String privacyGroupId,
+            final Credentials credentials,
+            final Base64String enclaveKey,
+            final Boolean lock)
+            throws IOException;
 
-    Request<?, PrivAddToPrivacyGroup> privAddToPrivacyGroup(
-            final Base64String enclaveKey, final List<Base64String> addresses);
+    Request<?, EthSendTransaction> privOnChainAddToPrivacyGroup(
+            Base64String privacyGroupId,
+            Credentials credentials,
+            Base64String enclaveKey,
+            List<Base64String> participants)
+            throws IOException, TransactionException;
 
-    Request<?, PrivRemoveFromPrivacyGroup> privRemoveFromPrivacyGroup(
-            final Base64String enclaveKey, final Base64String address);
+    Request<?, EthSendTransaction> privOnChainCreatePrivacyGroup(
+            Base64String privacyGroupId,
+            Credentials credentials,
+            Base64String enclaveKey,
+            List<Base64String> participants)
+            throws IOException;
+
+    Request<?, EthSendTransaction> privOnChainRemoveFromPrivacyGroup(
+            final Base64String privacyGroupId,
+            final Credentials credentials,
+            final Base64String enclaveKey,
+            final Base64String participant)
+            throws IOException;
+
+    Request<?, PrivFindPrivacyGroup> privOnChainFindPrivacyGroup(
+            final List<Base64String> addresses);
 
     Request<?, PrivFindPrivacyGroup> privFindPrivacyGroup(final List<Base64String> addresses);
 

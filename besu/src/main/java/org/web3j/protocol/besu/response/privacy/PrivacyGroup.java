@@ -29,7 +29,8 @@ public class PrivacyGroup {
 
     public enum Type {
         LEGACY,
-        PANTHEON
+        PANTHEON,
+        ONCHAIN
     }
 
     @JsonCreator
