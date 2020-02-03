@@ -119,18 +119,22 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply plugin: 'com.jfrog.bintray'
 
     task javadocJar(type: Jar) {
-        classifier = 'javadoc'
+        archiveClassifier = 'javadoc'
         from javadoc
     }
 
     task sourcesJar(type: Jar) {
-        classifier = 'sources'
+        archiveClassifier = 'sources'
         from sourceSets.main.allSource
     }
 
     task testJar(type: Jar) {
-        classifier = 'tests'
+        archiveClassifier = 'tests'
         from sourceSets.test.output
+    }
+
+    configurations {
+        pom
     }
 
     artifacts {
@@ -153,17 +157,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
             mavenJava(MavenPublication) {
                 from components.java
 
-                artifact sourcesJar {
-                    classifier 'sources'
-                }
 
-                artifact testJar {
-                    classifier 'tests'
-                }
-
-                artifact javadocJar {
-                    classifier 'javadoc'
-                }
+                artifact sourcesJar
+                artifact javadocJar
+                artifact testJar
 
                 pom {
                     name = project.name
@@ -196,13 +193,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     uploadArchives {
         repositories {
             mavenDeployer {
-
-                onlyIf {
-                    // Only run if this is a manual release triggered by a user, or an automated release for snapshots.
-                    // We don't need to run this for automated releases.
-                    isSnapshotVersion && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
-                }
-
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
                 repository(url: ossrhRepoUrl) {
                     authentication(
                             userName: ossrhUsername,
@@ -351,10 +342,17 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     }
 
     signing {
-        sign publishing.publications.mavenJava
+        sign configurations.archives
+
         def signingKey = new File("$rootDir/web3j.asc")
 
         useInMemoryPgpKeys(signingKey.getText('UTF-8'), System.getenv('GPG_PASSPHRASE'))
+    }
+
+    nexusStaging {
+        username System.getenv('OSSRH_USERNAME')
+        password System.getenv('OSSRH_PASSWORD')
+        packageGroup = "org.web3j"
     }
 }
 
