@@ -26,6 +26,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.besu.response.privacy.PrivacyGroup;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.BesuPrivateTransactionManager;
 import org.web3j.tx.PrivateTransactionManager;
@@ -33,9 +34,7 @@ import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled
 public class BesuOnChainPrivacyIntegrationTest {
@@ -195,17 +194,13 @@ public class BesuOnChainPrivacyIntegrationTest {
         TransactionReceipt lockReceipt = processor.waitForTransactionReceipt(lockTxHash);
         assertTrue(lockReceipt.isStatusOK());
 
-        final String addTxHash =
-                nodeBob.privOnChainAddToPrivacyGroup(
-                                privacyGroupId,
-                                BOB,
-                                ENCLAVE_KEY_BOB,
-                                Collections.singletonList(ENCLAVE_KEY_CHARLIE))
-                        .send()
-                        .getTransactionHash();
+        assertThrows(TransactionException.class, () -> nodeBob.privOnChainAddToPrivacyGroup(
+                privacyGroupId,
+                BOB,
+                ENCLAVE_KEY_BOB,
+                Collections.singletonList(ENCLAVE_KEY_CHARLIE))
+                .send());
 
-        TransactionReceipt addReceipt = processor.waitForTransactionReceipt(addTxHash);
-        assertFalse(addReceipt.isStatusOK());
     }
 
     @Test
@@ -270,6 +265,50 @@ public class BesuOnChainPrivacyIntegrationTest {
         tokenAlice.transfer(BOB.getAddress(), BigInteger.TEN).send();
         testBalances(tokenAlice, tokenBob, BigInteger.ZERO, BigInteger.TEN);
     }
+
+    @Test
+    public void testCannotAddDuplicateMemberToPrivacyGroup() throws Exception {
+        Base64String privacyGroupId = Base64String.wrap(generateRandomBytes(32));
+        final String txHash =
+                nodeAlice
+                        .privOnChainCreatePrivacyGroup(
+                                privacyGroupId,
+                                ALICE,
+                                ENCLAVE_KEY_ALICE,
+                                Collections.singletonList(ENCLAVE_KEY_BOB))
+                        .send()
+                        .getTransactionHash();
+
+        TransactionReceipt receipt = processor.waitForTransactionReceipt(txHash);
+        assertTrue(receipt.isStatusOK());
+
+        final String addTxHash =
+                nodeAlice
+                        .privOnChainAddToPrivacyGroup(
+                                privacyGroupId,
+                                ALICE,
+                                ENCLAVE_KEY_ALICE,
+                                Collections.singletonList(ENCLAVE_KEY_CHARLIE))
+                        .send()
+                        .getTransactionHash();
+
+        TransactionReceipt addReceipt = processor.waitForTransactionReceipt(addTxHash);
+        assertTrue(addReceipt.isStatusOK());
+
+        final String secondAddTxHash =
+                nodeAlice
+                        .privOnChainAddToPrivacyGroup(
+                                privacyGroupId,
+                                ALICE,
+                                ENCLAVE_KEY_ALICE,
+                                Collections.singletonList(ENCLAVE_KEY_CHARLIE))
+                        .send()
+                        .getTransactionHash();
+
+        TransactionReceipt secondAddTxReceipt = processor.waitForTransactionReceipt(secondAddTxHash);
+        assertFalse(secondAddTxReceipt.isStatusOK());
+    }
+
 
     private void testBalances(
             final HumanStandardToken tokenAlice,

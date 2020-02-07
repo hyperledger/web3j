@@ -225,7 +225,7 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
             return privOnChainCreatePrivacyGroup(
                     privacyGroupId, credentials, enclaveKey, participants);
         } else {
-            throw new RuntimeException("Lock transaction failed - the group may already be locked");
+            throw new TransactionException("Lock transaction failed - the group may already be locked", receipt);
         }
     }
 
