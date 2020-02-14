@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -31,9 +31,12 @@ import org.junit.jupiter.api.Test;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import org.web3j.protocol.core.BatchRequest;
+import org.web3j.protocol.core.BatchResponse;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
+import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
@@ -176,6 +179,48 @@ public class WebSocketServiceTest {
         verify(webSocketClient)
                 .send(
                         "{\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testBatchRequestReply() throws Exception {
+        BatchRequest request = new BatchRequest(service);
+        request.add(
+                        new Request<>(
+                                "web3_clientVersion",
+                                Collections.<String>emptyList(),
+                                service,
+                                Web3ClientVersion.class))
+                .add(
+                        new Request<>(
+                                "net_version",
+                                Collections.<String>emptyList(),
+                                service,
+                                NetVersion.class));
+        request.getRequests().get(0).setId(1L);
+        request.getRequests().get(1).setId(1L);
+
+        CompletableFuture<BatchResponse> reply = service.sendBatchAsync(request);
+
+        verify(webSocketClient)
+                .send(
+                        "["
+                                + "{\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[],\"id\":0},"
+                                + "{\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[],\"id\":1}"
+                                + "]");
+
+        sendClientNetVersionReply();
+
+        assertTrue(reply.isDone());
+        BatchResponse response = reply.get();
+        assertEquals(response.getResponses().size(), 2);
+
+        assertTrue(response.getResponses().get(0) instanceof Web3ClientVersion);
+        Web3ClientVersion web3ClientVersion = (Web3ClientVersion) response.getResponses().get(0);
+        assertEquals(web3ClientVersion.getWeb3ClientVersion(), "Mist/v0.9.3/darwin/go1.4.1");
+
+        assertTrue(response.getResponses().get(1) instanceof NetVersion);
+        NetVersion netVersion = (NetVersion) response.getResponses().get(1);
+        assertEquals(netVersion.getNetVersion(), "59");
     }
 
     @Test
@@ -498,6 +543,22 @@ public class WebSocketServiceTest {
                         + "  \"id\":1,"
                         + "  \"result\":\"geth-version\""
                         + "}");
+    }
+
+    private void sendClientNetVersionReply() throws IOException {
+        service.onWebSocketMessage(
+                "["
+                        + "{\n"
+                        + "  \"id\":0,\n"
+                        + "  \"jsonrpc\":\"2.0\",\n"
+                        + "  \"result\": \"Mist/v0.9.3/darwin/go1.4.1\"\n"
+                        + "},"
+                        + "{\n"
+                        + "  \"id\":1,\n"
+                        + "  \"jsonrpc\": \"2.0\",\n"
+                        + "  \"result\": \"59\"\n"
+                        + "}"
+                        + "]");
     }
 
     private void verifyStartedSubscriptionHandshake() {

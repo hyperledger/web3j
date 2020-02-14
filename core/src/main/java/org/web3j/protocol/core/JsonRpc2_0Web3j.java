@@ -791,4 +791,9 @@ public class JsonRpc2_0Web3j implements Web3j {
             throw new RuntimeException("Failed to close web3j service", e);
         }
     }
+
+    @Override
+    public BatchRequest newBatch() {
+        return new BatchRequest(web3jService);
+    }
 }
