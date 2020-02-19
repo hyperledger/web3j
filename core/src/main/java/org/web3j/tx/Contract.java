@@ -48,6 +48,8 @@ import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Numeric;
 
+import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
+
 /**
  * Solidity contract type abstraction for interacting with smart contracts via native Java types.
  */
@@ -370,12 +372,16 @@ public abstract class Contract extends ManagedTransaction {
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
                     String.format(
-                            "Transaction has failed with status: %s. "
-                                    + "Gas used: %s. (not-enough gas?)",
+                            "Transaction %s has failed with status: %s. "
+                                    + "Gas used: %s. "
+                                    + "Revert reason: '%s'.",
+                            receipt.getTransactionHash(),
                             receipt.getStatus(),
                             receipt.getGasUsedRaw() != null
                                     ? receipt.getGasUsed().toString()
-                                    : "unknown"));
+                                    : "unknown",
+                            extractRevertReason(receipt, data, web3j, true)),
+                    receipt);
         }
         return receipt;
     }

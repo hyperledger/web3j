@@ -13,10 +13,16 @@
 package org.web3j.codegen.unit.gen;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.kotlinpoet.FunSpec;
+
+import org.web3j.codegen.unit.gen.java.MethodParser;
+import org.web3j.codegen.unit.gen.kotlin.FunParser;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -43,5 +49,25 @@ public class MethodFilter {
                             .contains(ContractGasProvider.class);
         }
         return true;
+    }
+
+    public static List<MethodSpec> generateMethodSpecsForEachTest(Class theContract) {
+        List<MethodSpec> listOfMethodSpecs = new ArrayList<>();
+        extractValidMethods(theContract)
+                .forEach(
+                        method ->
+                                listOfMethodSpecs.add(
+                                        new MethodParser(method, theContract).getMethodSpec()));
+        return listOfMethodSpecs;
+    }
+
+    public static List<FunSpec> generateFunctionSpecsForEachTest(Class theContract) {
+        List<FunSpec> listOfMethodSpecs = new ArrayList<>();
+        extractValidMethods(theContract)
+                .forEach(
+                        method ->
+                                listOfMethodSpecs.add(
+                                        new FunParser(method, theContract).getFunSpec()));
+        return listOfMethodSpecs;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.reactivex.Flowable;
 
 import org.web3j.protocol.Web3jService;
@@ -75,6 +76,11 @@ public class Request<S, T extends Response> {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @JsonIgnore
+    public Class<T> getResponseType() {
+        return responseType;
     }
 
     public T send() throws IOException {

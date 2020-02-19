@@ -16,14 +16,14 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://codecov.io/gh/web3j/web3j
    :alt: codecov
 
-.. image:: https://badges.gitter.im/web3j/web3j.svg
-   :target: https://gitter.im/web3j/web3j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. image:: https://img.shields.io/discourse/users?server=https%3A%2F%2Fcommunity.web3labs.com
+   :target: https://community.web3labs.com
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
 web3j is a lightweight, highly modular, reactive, type safe Java and Android library for working with
 Smart Contracts and integrating with clients (nodes) on the Ethereum network:
 
-.. image:: https://raw.githubusercontent.com/web3j/web3j/master/docs/img/web3j_network.png
+.. image:: https://github.com/web3j/web3j-docs/blob/master/docs/img/web3j_network.png
 
 This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
@@ -135,7 +135,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.5.5</version>
+     <version>4.5.12</version>
    </dependency>
 
 Android:
@@ -156,7 +156,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.5.5')
+   compile ('org.web3j:core:4.5.12')
 
 Android:
 

@@ -46,6 +46,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     private String solidityBaseDir;
 
+    @Override
     @BeforeEach
     public void setUp() throws Exception {
         super.setUp();

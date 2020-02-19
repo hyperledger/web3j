@@ -21,6 +21,7 @@ import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("deprecation")
@@ -59,7 +60,7 @@ public class TransactionEncoderTest {
 
     @Test
     public void testEip155Encode() {
-        assertEquals(
+        assertArrayEquals(
                 TransactionEncoder.encode(createEip155RawTransaction(), (byte) 1),
                 (Numeric.hexStringToByteArray(
                         "0xec098504a817c800825208943535353535353535353535353535353535353535880de0"
@@ -73,7 +74,7 @@ public class TransactionEncoderTest {
                 Credentials.create(
                         "0x4646464646464646464646464646464646464646464646464646464646464646");
 
-        assertEquals(
+        assertArrayEquals(
                 TransactionEncoder.signMessage(createEip155RawTransaction(), (byte) 1, credentials),
                 (Numeric.hexStringToByteArray(
                         "0xf86c098504a817c800825208943535353535353535353535353535353535353535880"
