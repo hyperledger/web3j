@@ -203,14 +203,14 @@ public class RequestTest extends RequestTester {
     @Test
     public void testPrivGetCode() throws Exception {
         web3j.privGetCode(
+                        MOCK_PRIVACY_GROUP_ID.toString(),
                         "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
-                        DefaultBlockParameterName.LATEST,
-                        MOCK_PRIVACY_GROUP_ID.toString())
+                        DefaultBlockParameterName.LATEST)
                 .send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getCode\","
-                        + "\"params\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"latest\",\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],\"id\":1}");
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"latest\"],\"id\":1}");
     }
 
     @Test
