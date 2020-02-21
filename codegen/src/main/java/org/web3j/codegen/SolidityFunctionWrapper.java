@@ -203,6 +203,7 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addMethod(
                 buildConstructor(TransactionManager.class, TRANSACTION_MANAGER, true));
         classBuilder.addFields(buildFuncNameConstants(abi));
+
         classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, abi));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(

@@ -145,8 +145,6 @@ public final class AbiTypes {
      */
     public static Class<? extends Type> getType(String type, boolean primitives) {
         switch (type) {
-            case "tuple":
-                return DynamicStruct.class;
             case "address":
                 return Address.class;
             case "bool":

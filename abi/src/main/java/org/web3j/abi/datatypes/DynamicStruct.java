@@ -12,6 +12,8 @@
  */
 package org.web3j.abi.datatypes;
 
+import org.web3j.abi.TypeReference;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

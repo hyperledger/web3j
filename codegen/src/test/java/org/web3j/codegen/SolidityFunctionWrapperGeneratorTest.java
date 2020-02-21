@@ -112,9 +112,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testComplexStorage() throws Exception {
-        //        testCodeGenerationJvmTypes("complexstorage", "ComplexStorage");
         testCodeGenerationSolidityTypes("complexstorage", "ComplexStorage");
-        System.out.println("meme");
     }
 
     @Test

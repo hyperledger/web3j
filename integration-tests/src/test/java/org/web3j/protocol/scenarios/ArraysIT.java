@@ -12,20 +12,21 @@
  */
 package org.web3j.protocol.scenarios;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.web3j.EVMTest;
-import org.web3j.generated.Arrays;
-import org.web3j.protocol.Web3j;
-import org.web3j.tx.TransactionManager;
-import org.web3j.tx.gas.ContractGasProvider;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import org.web3j.EVMTest;
+import org.web3j.generated.Arrays;
+import org.web3j.protocol.Web3j;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.gas.ContractGasProvider;
 
 import static java.math.BigInteger.valueOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +38,9 @@ public class ArraysIT {
     private Arrays contract;
 
     @BeforeEach
-    public void setUp(Web3j web3j, TransactionManager transactionManager, ContractGasProvider gasProvider) throws Exception {
+    public void setUp(
+            Web3j web3j, TransactionManager transactionManager, ContractGasProvider gasProvider)
+            throws Exception {
         this.contract = Arrays.deploy(web3j, transactionManager, gasProvider).send();
     }
 

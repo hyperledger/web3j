@@ -36,7 +36,6 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         implements Comparable<TypeReference<T>> {
     protected static Pattern ARRAY_SUFFIX = Pattern.compile("\\[(\\d*)]");
 
-    private final org.web3j.abi.datatypes.Type abiType;
     private final Type type;
     private final boolean indexed;
 
@@ -51,7 +50,6 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
         this.type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
         this.indexed = indexed;
-        this.abiType = getType();
     }
 
     /**

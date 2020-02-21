@@ -15,21 +15,7 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.Bytes;
-import org.web3j.abi.datatypes.BytesType;
-import org.web3j.abi.datatypes.CompositeDataHolder;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.DynamicStruct;
-import org.web3j.abi.datatypes.NumericType;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.primitive.PrimitiveType;
 import org.web3j.utils.Numeric;
 
@@ -50,6 +36,29 @@ public class TypeEncoder {
                 || parameter instanceof Utf8String
                 || parameter instanceof DynamicArray
                 || parameter instanceof DynamicStruct;
+    }
+
+    // May not be the best place for this, but we'll move things around later.
+    public static boolean isDynamic(TypeReference typeReference) {
+        final Class typeClass = ((Class) typeReference.getType());
+
+        // TODO: do static struct first.
+        if (typeClass.isAssignableFrom(StaticStruct.class)) {
+            // A static struct with at least one dynamic member is deemed dynamic.
+            //            final StaticStructType t = (StaticStructType) parameter;
+            //            for (Type type : t.getValue()) {
+            //                if (isDynamic(type)) {
+            //                    return true;
+            //                }
+            //            }
+            //            return false;
+            throw new UnsupportedOperationException("TODO: add support for static structs!");
+        }
+
+        return typeClass.isAssignableFrom(DynamicBytes.class)
+                || typeClass.isAssignableFrom(Utf8String.class)
+                || typeClass.isAssignableFrom(DynamicArray.class)
+                || DynamicStruct.class.isAssignableFrom(typeClass);
     }
 
     @SuppressWarnings("unchecked")

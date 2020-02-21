@@ -50,4 +50,4 @@ docs/build
 **/.settings
 **/bin
 
-web3j.asc
+web3j.asc*.hprof
