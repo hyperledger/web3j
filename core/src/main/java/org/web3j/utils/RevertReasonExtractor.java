@@ -65,7 +65,7 @@ public class RevertReasonExtractor {
     public static String retrieveRevertReason(
             TransactionReceipt transactionReceipt, String data, Web3j web3j) throws IOException {
 
-        if (transactionReceipt.getBlockNumber() == null) {
+        if (transactionReceipt.getBlockNumberRaw() == null) {
             return null;
         }
         return web3j.ethCall(
