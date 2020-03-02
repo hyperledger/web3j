@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -17,6 +17,8 @@ import java.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
 
+import org.web3j.protocol.core.BatchRequest;
+import org.web3j.protocol.core.BatchResponse;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.websocket.events.Notification;
@@ -45,6 +47,24 @@ public interface Web3jService {
      *     has failed
      */
     <T extends Response> CompletableFuture<T> sendAsync(Request request, Class<T> responseType);
+
+    /**
+     * Perform a synchronous JSON-RPC batch requests.
+     *
+     * @param batchRequest requests to perform
+     * @return deserialized JSON-RPC responses
+     * @throws IOException thrown if failed to perform a batch request
+     */
+    BatchResponse sendBatch(BatchRequest batchRequest) throws IOException;
+
+    /**
+     * Performs an asynchronous JSON-RPC batch requests.
+     *
+     * @param batchRequest batch request to perform
+     * @return CompletableFuture that will be completed when a result is returned or if a request
+     *     has failed
+     */
+    CompletableFuture<BatchResponse> sendBatchAsync(BatchRequest batchRequest);
 
     /**
      * Subscribe to a stream of notifications. A stream of notifications is opened by by performing

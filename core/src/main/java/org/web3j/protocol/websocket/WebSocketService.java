@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,11 +26,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -37,6 +42,8 @@ import org.slf4j.LoggerFactory;
 
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.BatchRequest;
+import org.web3j.protocol.core.BatchResponse;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
@@ -54,11 +61,12 @@ import org.web3j.protocol.websocket.events.Notification;
  * <p>To unsubscribe from a stream of notifications it should send another JSON-RPC request.
  */
 public class WebSocketService implements Web3jService {
-
     private static final Logger log = LoggerFactory.getLogger(WebSocketService.class);
 
     // Timeout for JSON-RPC requests
     static final long REQUEST_TIMEOUT = 60;
+    // replaced batch's next id
+    static final AtomicLong nextBatchId = new AtomicLong(0);
 
     // WebSocket client
     private final WebSocketClient webSocketClient;
@@ -183,9 +191,55 @@ public class WebSocketService implements Web3jService {
         return result;
     }
 
+    @Override
+    public BatchResponse sendBatch(BatchRequest requests) throws IOException {
+        try {
+            return sendBatchAsync(requests).get();
+        } catch (InterruptedException e) {
+            Thread.interrupted();
+            throw new IOException("Interrupted WebSocket batch requests", e);
+        } catch (ExecutionException e) {
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            }
+
+            throw new RuntimeException("Unexpected exception", e.getCause());
+        }
+    }
+
+    @Override
+    public CompletableFuture<BatchResponse> sendBatchAsync(BatchRequest requests) {
+        CompletableFuture<BatchResponse> result = new CompletableFuture<>();
+
+        // replace first batch elements's id to handle response
+        long requestId = nextBatchId.getAndIncrement();
+        Request<?, ? extends Response<?>> firstRequest = requests.getRequests().get(0);
+        long originId = firstRequest.getId();
+        requests.getRequests().get(0).setId(requestId);
+
+        requestForId.put(
+                requestId, new WebSocketRequests(result, requests.getRequests(), originId));
+
+        try {
+            sendBatchRequest(requests, requestId);
+        } catch (IOException e) {
+            closeRequest(requestId, e);
+        }
+
+        return result;
+    }
+
     private void sendRequest(Request request, long requestId) throws JsonProcessingException {
         String payload = objectMapper.writeValueAsString(request);
         log.debug("Sending request: {}", payload);
+        webSocketClient.send(payload);
+        setRequestTimeout(requestId);
+    }
+
+    private void sendBatchRequest(BatchRequest request, long requestId)
+            throws JsonProcessingException {
+        String payload = objectMapper.writeValueAsString(request.getRequests());
+        log.debug("Sending batch request: {}", payload);
         webSocketClient.send(payload);
         setRequestTimeout(requestId);
     }
@@ -212,6 +266,8 @@ public class WebSocketService implements Web3jService {
 
         if (isReply(replyJson)) {
             processRequestReply(messageStr, replyJson);
+        } else if (isBatchReply(replyJson)) {
+            processBatchRequestReply(messageStr, (ArrayNode) replyJson);
         } else if (isSubscriptionEvent(replyJson)) {
             processSubscriptionEvent(messageStr, replyJson);
         } else {
@@ -234,6 +290,29 @@ public class WebSocketService implements Web3jService {
             sendReplyToListener(request, reply);
         } catch (IllegalArgumentException e) {
             sendExceptionToListener(replyStr, request, e);
+        }
+    }
+
+    private void processBatchRequestReply(String replyStr, ArrayNode replyJson) throws IOException {
+        long replyId = getReplyId(replyJson.get(0));
+        WebSocketRequests webSocketRequests = (WebSocketRequests) getAndRemoveRequest(replyId);
+        try {
+            // rollback request id of first batch elt
+            ((ObjectNode) replyJson.get(0)).put("id", webSocketRequests.getOriginId());
+
+            List<Request<?, ? extends Response<?>>> requests = webSocketRequests.getRequests();
+            List<Response<?>> responses = new ArrayList<>(replyJson.size());
+
+            for (int i = 0; i < replyJson.size(); i++) {
+                Response<?> response =
+                        objectMapper.treeToValue(
+                                replyJson.get(i), requests.get(i).getResponseType());
+                responses.add(response);
+            }
+
+            sendReplyToListener(webSocketRequests, new BatchResponse(requests, responses));
+        } catch (IllegalArgumentException e) {
+            sendExceptionToListener(replyStr, webSocketRequests, e);
         }
     }
 
@@ -319,6 +398,10 @@ public class WebSocketService implements Web3jService {
 
     private boolean isReply(JsonNode replyJson) {
         return replyJson.has("id");
+    }
+
+    private boolean isBatchReply(JsonNode replyJson) {
+        return replyJson.isArray();
     }
 
     private boolean isSubscriptionEvent(JsonNode replyJson) {

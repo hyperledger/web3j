@@ -211,7 +211,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             throws IOException {
         return this.besu
                 .privGetCode(
-                        contractAddress, defaultBlockParameter, this.getPrivacyGroupId().toString())
+                        this.getPrivacyGroupId().toString(), contractAddress, defaultBlockParameter)
                 .send();
     }
 }

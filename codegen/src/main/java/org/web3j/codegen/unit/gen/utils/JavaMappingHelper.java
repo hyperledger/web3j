@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -10,19 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.gen.utills;
+package org.web3j.codegen.unit.gen.utils;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.web3j.tuples.Tuple;
 import org.web3j.tuples.generated.Tuple2;
 
-public class MappingHelper {
+public class JavaMappingHelper implements MappingHelper {
     private Map<Class, Object> defaultValueMap = new HashMap<>();
     private Map<Class, String> javaPoetFormat = new HashMap<>();
 
-    public MappingHelper() {
+    public JavaMappingHelper() {
         defaultValueMap.put(String.class, "REPLACE_ME");
         defaultValueMap.put(BigInteger.class, "BigInteger.ONE");
         defaultValueMap.put(List.class, ArrayList.class);
@@ -42,7 +45,7 @@ public class MappingHelper {
         return defaultValueMap;
     }
 
-    public Map<Class, String> getJavaPoetFormat() {
+    public Map<Class, String> getPoetFormat() {
         return javaPoetFormat;
     }
 }
