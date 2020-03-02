@@ -194,13 +194,15 @@ public class BesuOnChainPrivacyIntegrationTest {
         TransactionReceipt lockReceipt = processor.waitForTransactionReceipt(lockTxHash);
         assertTrue(lockReceipt.isStatusOK());
 
-        assertThrows(TransactionException.class, () -> nodeBob.privOnChainAddToPrivacyGroup(
-                privacyGroupId,
-                BOB,
-                ENCLAVE_KEY_BOB,
-                Collections.singletonList(ENCLAVE_KEY_CHARLIE))
-                .send());
-
+        assertThrows(
+                TransactionException.class,
+                () ->
+                        nodeBob.privOnChainAddToPrivacyGroup(
+                                        privacyGroupId,
+                                        BOB,
+                                        ENCLAVE_KEY_BOB,
+                                        Collections.singletonList(ENCLAVE_KEY_CHARLIE))
+                                .send());
     }
 
     @Test
@@ -305,10 +307,10 @@ public class BesuOnChainPrivacyIntegrationTest {
                         .send()
                         .getTransactionHash();
 
-        TransactionReceipt secondAddTxReceipt = processor.waitForTransactionReceipt(secondAddTxHash);
+        TransactionReceipt secondAddTxReceipt =
+                processor.waitForTransactionReceipt(secondAddTxHash);
         assertFalse(secondAddTxReceipt.isStatusOK());
     }
-
 
     private void testBalances(
             final HumanStandardToken tokenAlice,
