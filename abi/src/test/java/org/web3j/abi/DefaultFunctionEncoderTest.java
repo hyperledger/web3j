@@ -12,19 +12,15 @@
  */
 package org.web3j.abi;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Bytes10;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -145,5 +141,37 @@ public class DefaultFunctionEncoderTest {
                         + "000000000000000000000000000000000000000000000000000000000000000d"
                         + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000",
                 FunctionEncoder.encode(function));
+    }
+
+    @Test
+    public void testMakeFunction()
+            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+                    InstantiationException, IllegalAccessException {
+
+        Function expectedFunction =
+                new Function(
+                        "function",
+                        Arrays.asList(new Bool(true)),
+                        Arrays.asList(new TypeReference<Uint256>() {}));
+
+        Function actualFunction =
+                FunctionEncoder.makeFunction(
+                        "function",
+                        Arrays.asList("bool"),
+                        Arrays.asList(true),
+                        Arrays.asList("uint256"));
+
+        assertEquals(actualFunction.getName(), expectedFunction.getName());
+
+        Iterator<Type> expectedInput = expectedFunction.getInputParameters().iterator();
+        for (Type actualInput : actualFunction.getInputParameters()) {
+            assertEquals(actualInput.getValue(), expectedInput.next().getValue());
+        }
+
+        Iterator<TypeReference<Type>> expectedOutput =
+                expectedFunction.getOutputParameters().iterator();
+        for (TypeReference<Type> actualOutput : actualFunction.getOutputParameters()) {
+            assertEquals(actualOutput.getType(), expectedOutput.next().getType());
+        }
     }
 }
