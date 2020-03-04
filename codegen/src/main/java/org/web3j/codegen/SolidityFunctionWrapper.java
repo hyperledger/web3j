@@ -264,10 +264,8 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-
     private static TypeSpec.Builder createComponentClassBuilder(String className) {
-        return TypeSpec.classBuilder(className)
-                .addModifiers(Modifier.PUBLIC);
+        return TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC);
     }
 
     private TypeSpec.Builder createClassBuilder(
@@ -872,16 +870,13 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    private static String buildClassNameForTupleComponents
-            (List<AbiDefinition.NamedTypeComponent> components) {
-        final int numComponents = components == null ? 0 : components.size();
-        final List<String> functionArgsAsStrings = new ArrayList<>();
-        IntStream.range(0, numComponents).mapToObj(Objects.requireNonNull(components)::get).forEach(component -> {
-            final String fieldName = component.getName(); // e.g. id, data
-            final String abiType = component.getType(); // e.g. uint256, string
-            functionArgsAsStrings.add(fieldName + ":" + abiType);
-        });
-        final String functionArgsId = String.join(",", functionArgsAsStrings);
+    private static String buildClassNameForTupleComponents(
+            List<AbiDefinition.NamedTypeComponent> components) {
+        final String functionArgsId =
+                IntStream.range(0, components.size())
+                        .mapToObj(Objects.requireNonNull(components)::get)
+                        .map(comp -> comp.getName() + ":" + comp.getType())
+                        .collect(Collectors.joining(","));
         final Integer tupleClassNum = tempInnerClassMap.get(functionArgsId);
         return "TupleClass" + tupleClassNum;
     }
@@ -896,9 +891,12 @@ public class SolidityFunctionWrapper extends Generator {
 
             String name = createValidParamName(namedType.getName(), i);
             String type = namedTypes.get(i).getType();
-            final List<AbiDefinition.NamedTypeComponent> components = namedTypes.get(i).getComponents();
+            final List<AbiDefinition.NamedTypeComponent> components =
+                    namedTypes.get(i).getComponents();
 
-            result.add(ParameterSpec.builder(buildTypeName(type, components, primitives), name).build());
+            result.add(
+                    ParameterSpec.builder(buildTypeName(type, components, primitives), name)
+                            .build());
         }
         return result;
     }
@@ -1331,7 +1329,10 @@ public class SolidityFunctionWrapper extends Generator {
             NamedTypeName parameter =
                     new NamedTypeName(
                             namedType.getName(),
-                            buildTypeName(namedType.getType(), namedType.getComponents(), useJavaPrimitiveTypes),
+                            buildTypeName(
+                                    namedType.getType(),
+                                    namedType.getComponents(),
+                                    useJavaPrimitiveTypes),
                             namedType.isIndexed());
             if (namedType.isIndexed()) {
                 indexedParameters.add(parameter);
@@ -1360,85 +1361,74 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private Iterable<TypeSpec> buildTupleDefinitions(List<AbiDefinition> abi) {
-        final List<TypeSpec> tupleClasses = new ArrayList<>();
-
-        for (AbiDefinition abiDef : abi) {
-            for (AbiDefinition.NamedType input : abiDef.getInputs()) {
-                if ("tuple".equals(input.getType())) {
-                    final TypeSpec.Builder tupleClassDef = determineInnerClassNumberForTuple(input.getComponents());
-                    if (tupleClassDef != null) {
-                        tupleClassDef.addModifiers(Modifier.STATIC);
-                        tupleClasses.add(tupleClassDef.build());
-                    }
-                }
-            }
-        }
-        return tupleClasses;
+        return abi.stream()
+                .filter(d -> d != null && d.getInputs() != null)
+                .flatMap(d -> d.getInputs().stream().filter(t -> t.getType().equals("tuple")))
+                .map(input -> determineInnerClassNumberForTuple(input.getComponents()))
+                .filter(Objects::nonNull)
+                .map(
+                        i -> {
+                            i.addModifiers(Modifier.STATIC);
+                            return i.build();
+                        })
+                .collect(Collectors.toList());
     }
 
     private static int tempInnerClassNumber = 1;
     private static Map<String, Integer> tempInnerClassMap = new HashMap<>();
 
-    private static TypeSpec.Builder determineInnerClassNumberForTuple(List<AbiDefinition.NamedTypeComponent> components) {
-        final int numComponents = components == null ? 0 : components.size();
-        if (numComponents <= 0) {
+    private static TypeSpec.Builder determineInnerClassNumberForTuple(
+            List<AbiDefinition.NamedTypeComponent> components) {
+        if (components == null || components.size() <= 0) {
             return null;
         }
 
         boolean isDynamicStruct = false;
-
         final List<Tuple2<String, TypeName>> members = new ArrayList<>();
-
         final List<String> functionArgsAsStrings = new ArrayList<>();
         try {
-            for (int i = 0; i < numComponents; i++) {
-            final AbiDefinition.NamedTypeComponent component = components.get(i);
-            final String fieldName = component.getName(); // e.g. id, data
-            final String abiType = component.getType(); // e.g. uint256, string
+            for (final AbiDefinition.NamedTypeComponent component : components) {
+                final String fieldName = component.getName(); // e.g. id, data
+                final String abiType = component.getType(); // e.g. uint256, string
 
-            // Store for later.
-            final TypeName mappedType; // Utf8String
-                mappedType = buildTypeName(abiType);
+                // Store for later.
+                final TypeName mappedType = buildTypeName(abiType);
 
-            final TypeName javaType = getNativeType(mappedType); // java.lang.String
-            members.add(new Tuple2(fieldName, javaType));
+                final TypeName javaType = getNativeType(mappedType); // java.lang.String
+                members.add(new Tuple2(fieldName, javaType));
 
+                // TODO[Sam]: need to check here if the type is static or not?
+                // TypeEncoder.isDynamic(Class.forName(((ClassName) mappedType).canonicalName))
+                // TODO: for now, treat everything as dynamic structs. We'll figure it out.
+                // TypeEncoder.isDynamic(Class.forName(mappedType.get));
 
-            // TODO[Sam]: need to check here if the type is static or not?
-            // TypeEncoder.isDynamic(Class.forName(((ClassName) mappedType).canonicalName))
-            // TODO: for now, treat everything as dynamic structs. We'll figure it out.
-
-//            TypeEncoder.isDynamic(Class.forName(mappedType.get));
-
-            functionArgsAsStrings.add(fieldName + ":" + abiType);
-        }
+                functionArgsAsStrings.add(fieldName + ":" + abiType);
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         final String functionArgsId = String.join(",", functionArgsAsStrings);
-        Integer internalClassNumber = tempInnerClassMap.get(functionArgsId);
-        if (internalClassNumber != null) {
+        if (tempInnerClassMap.get(functionArgsId) != null) {
             // We have encountered this before!
             return null;
         }
 
         // New class!
-        internalClassNumber = Integer.valueOf(tempInnerClassNumber++);
-        tempInnerClassMap.putIfAbsent(functionArgsId, internalClassNumber);
-        final TypeSpec.Builder innerClassBuilder = createComponentClassBuilder("TupleClass" + internalClassNumber)
-                .superclass(isDynamicStruct ? DynamicStruct.class : StaticStruct.class);
+        tempInnerClassMap.putIfAbsent(functionArgsId, ++tempInnerClassNumber);
+        final TypeSpec.Builder innerClassBuilder =
+                createComponentClassBuilder("TupleClass" + tempInnerClassNumber)
+                        .superclass(isDynamicStruct ? DynamicStruct.class : StaticStruct.class);
 
         // Add in the types.
         for (Tuple2<String, TypeName> pair : members) {
-            final FieldSpec addressesStaticField = FieldSpec
-                    .builder(pair.getValue2(), pair.getValue1(), Modifier.PUBLIC)
-                    .build();
+            final FieldSpec addressesStaticField =
+                    FieldSpec.builder(pair.component2(), pair.component1(), Modifier.PUBLIC)
+                            .build();
             innerClassBuilder.addField(addressesStaticField);
         }
 
         return innerClassBuilder;
     }
-
 
     CodeBlock buildTypedResponse(
             String objectName,
@@ -1480,14 +1470,19 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     static TypeName buildTypeName(String typeDeclaration) throws ClassNotFoundException {
-        return buildTypeName(typeDeclaration, null,false);
+        return buildTypeName(typeDeclaration, null, false);
     }
 
-    static TypeName buildTypeName(String typeDeclaration, List<AbiDefinition.NamedTypeComponent> components) throws ClassNotFoundException {
-        return buildTypeName(typeDeclaration, components,false);
+    static TypeName buildTypeName(
+            String typeDeclaration, List<AbiDefinition.NamedTypeComponent> components)
+            throws ClassNotFoundException {
+        return buildTypeName(typeDeclaration, components, false);
     }
 
-    static TypeName buildTypeName(String typeDeclaration, List<AbiDefinition.NamedTypeComponent> components,  boolean primitives)
+    static TypeName buildTypeName(
+            String typeDeclaration,
+            List<AbiDefinition.NamedTypeComponent> components,
+            boolean primitives)
             throws ClassNotFoundException {
         if ("tuple".equals(typeDeclaration)) {
             // There must be a components argument!

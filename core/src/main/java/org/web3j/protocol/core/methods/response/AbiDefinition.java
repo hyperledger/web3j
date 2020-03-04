@@ -289,7 +289,6 @@ public class AbiDefinition {
             this.components = components;
         }
 
-
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -310,6 +309,11 @@ public class AbiDefinition {
                     : namedType.getName() != null) {
                 return false;
             }
+            if (getComponents() != null
+                    ? !getComponents().equals(namedType.getComponents())
+                    : namedType.getComponents() != null) {
+                return false;
+            }
             return getType() != null
                     ? getType().equals(namedType.getType())
                     : namedType.getType() == null;
@@ -319,6 +323,7 @@ public class AbiDefinition {
         public int hashCode() {
             int result = getName() != null ? getName().hashCode() : 0;
             result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+            result = 31 * result + (getComponents() != null ? getComponents().hashCode() : 0);
             result = 31 * result + (isIndexed() ? 1 : 0);
             return result;
         }

@@ -18,8 +18,11 @@ import java.util.List;
 
 public class CompositeDataHolder extends DynamicStruct {
 
-    // TODO: make this private and expose some accessors or wahtever?
-    protected final List<Class<Type>> itemTypes = new ArrayList<>();
+    public List<Class<Type>> getItemTypes() {
+        return itemTypes;
+    }
+
+    private final List<Class<Type>> itemTypes = new ArrayList<>();
 
     public CompositeDataHolder(List<Type> values) {
         super(Type.class, values);

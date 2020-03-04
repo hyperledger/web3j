@@ -12,8 +12,6 @@
  */
 package org.web3j.abi.datatypes;
 
-import org.web3j.abi.TypeReference;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,15 +19,17 @@ import java.util.stream.Collectors;
 
 public class DynamicStruct extends DynamicArray<Type> implements BasicStruct {
 
-    // TODO: make this private and expose some accessors or wahtever?
-    protected final List<Class<Type>> itemTypes = new ArrayList<>();
+    public List<Class<Type>> getItemTypes() {
+        return itemTypes;
+    }
+
+    private final List<Class<Type>> itemTypes = new ArrayList<>();
 
     public DynamicStruct(List<Type> values) {
         this(Type.class, values);
     }
 
-    // TODO: remove this constructor!
-    public DynamicStruct(Class<Type> type, List<Type> values) {
+    private DynamicStruct(Class<Type> type, List<Type> values) {
         super(type, values);
         for (Type value : values) {
             itemTypes.add((Class<Type>) value.getClass());

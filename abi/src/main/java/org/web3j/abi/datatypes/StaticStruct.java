@@ -20,8 +20,11 @@ import java.util.stream.Collectors;
 // TODO: provide a base interface called "StructType"
 public class StaticStruct extends StaticArray<Type> implements BasicStruct {
 
-    // TODO: make this private and expose some accessors or wahtever?
-    protected final List<Class<Type>> itemTypes = new ArrayList<>();
+    public List<Class<Type>> getItemTypes() {
+        return itemTypes;
+    }
+
+    private final List<Class<Type>> itemTypes = new ArrayList<>();
 
     public StaticStruct(List<Type> values) {
         super(Type.class, values.size(), values);
