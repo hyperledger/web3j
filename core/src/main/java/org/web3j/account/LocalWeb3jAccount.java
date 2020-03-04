@@ -25,7 +25,7 @@ import org.web3j.protocol.http.HttpService;
 
 public class LocalWeb3jAccount {
 
-    private final static Path WEB3J_CONFIG_PATH =
+    private static final Path WEB3J_CONFIG_PATH =
             Paths.get(System.getProperty("user.home"), ".web3j", ".config");
 
     private static String SERVICES_ENDPOINT = "https://%s-eth.epirus.io/%s";
@@ -63,5 +63,4 @@ public class LocalWeb3jAccount {
                         readConfigAsJson().get("loginToken").asText());
         return new HttpService(httpEndpoint);
     }
-
 }
