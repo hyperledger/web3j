@@ -12,6 +12,7 @@
  */
 package org.web3j.account;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,25 +25,43 @@ import org.web3j.protocol.http.HttpService;
 
 public class LocalWeb3jAccount {
 
-    private static final Path web3jConfigPath =
+    private final static Path WEB3J_CONFIG_PATH =
             Paths.get(System.getProperty("user.home"), ".web3j", ".config");
 
-    static String SERVICES_ENDPOINT = "http://localhost/api/rpc/%s/%s/";
+    private static String SERVICES_ENDPOINT = "https://%s-eth.epirus.io/%s";
 
     public static HttpService getOnlineServicesHttpService(final Network network) throws Exception {
-        if (web3jConfigPath.toFile().exists()) {
-            String configContents = new String(Files.readAllBytes(web3jConfigPath));
-            final ObjectNode node = new ObjectMapper().readValue(configContents, ObjectNode.class);
-            if (node.has("loginToken")) {
-                String httpEndpoint =
-                        String.format(
-                                SERVICES_ENDPOINT,
-                                network.getNetworkName(),
-                                node.get("loginToken").asText());
-                return new HttpService(httpEndpoint);
+        if (configExists()) {
+
+            final ObjectNode node = readConfigAsJson();
+            if (loginTokenExists(node)) {
+                return createHttpServiceWithToken(network);
             }
         }
         throw new IllegalStateException(
                 "Config file does not exist or could not be read. In order to use Web3j without a specified endpoint, you must use the CLI and log in to Web3j Cloud");
     }
+
+    public static boolean configExists() {
+        return WEB3J_CONFIG_PATH.toFile().exists();
+    }
+
+    public static ObjectNode readConfigAsJson() throws IOException {
+        String configContents = new String(Files.readAllBytes(WEB3J_CONFIG_PATH));
+        return new ObjectMapper().readValue(configContents, ObjectNode.class);
+    }
+
+    public static boolean loginTokenExists(ObjectNode node) {
+        return node.has("loginToken");
+    }
+
+    public static HttpService createHttpServiceWithToken(Network network) throws IOException {
+        String httpEndpoint =
+                String.format(
+                        SERVICES_ENDPOINT,
+                        network.getNetworkName(),
+                        readConfigAsJson().get("loginToken").asText());
+        return new HttpService(httpEndpoint);
+    }
+
 }

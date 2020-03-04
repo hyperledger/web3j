@@ -12,7 +12,9 @@
  */
 package org.web3j.codegen;
 
-/** Command line utility classes. */
+/**
+ * Command line utility classes.
+ */
 public class Console {
     public static void exitError(String message) {
         System.err.println(message);
@@ -25,6 +27,10 @@ public class Console {
 
     public static void exitSuccess(String message) {
         System.out.println(message);
+        System.exit(0);
+    }
+
+    public static void exitSuccess() {
         System.exit(0);
     }
 }
