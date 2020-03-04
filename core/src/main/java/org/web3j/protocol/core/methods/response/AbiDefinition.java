@@ -183,6 +183,45 @@ public class AbiDefinition {
         return getType() != null ? getType().equals(that.getType()) : that.getType() == null;
     }
 
+    public static class NamedTypeComponent {
+        private String name;
+        private String type;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            NamedTypeComponent that = (NamedTypeComponent) o;
+
+            if (name != null ? !name.equals(that.name) : that.name != null) return false;
+            return type != null ? type.equals(that.type) : that.type == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = name != null ? name.hashCode() : 0;
+            result = 31 * result + (type != null ? type.hashCode() : 0);
+            return result;
+        }
+    }
+
     @Override
     public int hashCode() {
         int result = (isConstant() ? 1 : 0);
@@ -199,6 +238,7 @@ public class AbiDefinition {
         private String name;
         private String type;
         private boolean indexed;
+        private List<NamedTypeComponent> components;
 
         public NamedType() {}
 
@@ -240,6 +280,15 @@ public class AbiDefinition {
         public void setIndexed(boolean indexed) {
             this.indexed = indexed;
         }
+
+        public List<NamedTypeComponent> getComponents() {
+            return components;
+        }
+
+        public void setComponents(List<NamedTypeComponent> components) {
+            this.components = components;
+        }
+
 
         @Override
         public boolean equals(Object o) {
