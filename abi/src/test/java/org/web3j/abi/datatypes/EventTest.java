@@ -13,6 +13,8 @@
 package org.web3j.abi.datatypes;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,15 +27,23 @@ public class EventTest {
 
     @Test
     public void testCreation() {
-        Event event =
-                new Event(
-                        "testName",
-                        Arrays.<TypeReference<?>>asList(
-                                new TypeReference<Address>() {}, new TypeReference<Uint256>() {}));
+
+        List<TypeReference<?>> parameters =
+                Arrays.<TypeReference<?>>asList(
+                        new TypeReference<Address>() {}, new TypeReference<Uint256>() {});
+        Event event = new Event("testName", parameters);
 
         assertEquals(event.getName(), "testName");
-        assertEquals(event.getParameters().size(), 2);
-        assertEquals(event.getIndexedParameters().size(), 0);
-        assertEquals(event.getNonIndexedParameters().size(), 2);
+
+        Iterator<TypeReference<?>> expectedParameter = parameters.iterator();
+        for (TypeReference<?> actualParameter : event.getParameters()) {
+            assertEquals(expectedParameter.next(), actualParameter);
+        }
+
+        assertEquals(0, event.getIndexedParameters().size());
+
+        for (TypeReference<?> nonIndexedParameter : event.getNonIndexedParameters()) {
+            assertEquals(false, nonIndexedParameter.isIndexed());
+        }
     }
 }
