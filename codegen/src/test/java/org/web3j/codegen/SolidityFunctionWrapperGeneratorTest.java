@@ -195,10 +195,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             packageName = "org.web3j.unittests.java";
         } else if (types.equals(SOLIDITY_TYPES_ARG)) {
             packageName = "org.web3j.unittests.solidity";
+        } else {
+            throw new RuntimeException(
+                    "Code generation test must be called with either --javaTypes or --solidityTypes");
         }
 
-        List<String> options = new ArrayList<>();
-        options.addAll(prefixes);
+        List<String> options = new ArrayList<>(prefixes);
         options.add(types);
         if (useBin) {
             options.add("-b");
@@ -231,7 +233,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             options.add(PRIMITIVE_TYPES_ARG);
         }
 
-        SolidityFunctionWrapperGenerator.main(options.toArray(new String[options.size()]));
+        SolidityFunctionWrapperGenerator.main(options.toArray(new String[0]));
 
         verifyGeneratedCode(
                 tempDirPath

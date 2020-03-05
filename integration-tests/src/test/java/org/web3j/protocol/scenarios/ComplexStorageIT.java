@@ -18,13 +18,13 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
-import org.web3j.abi.datatypes.DynamicStruct;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.generated.ComplexStorage;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EVMTest(type = NodeType.BESU)
 public class ComplexStorageIT {
@@ -34,16 +34,19 @@ public class ComplexStorageIT {
             Web3j web3j, TransactionManager transactionManager, ContractGasProvider gasProvider)
             throws Exception {
 
-        DynamicStruct foo =
-                new DynamicStruct(new Utf8String("some_id"), new Utf8String("some_name"));
-        DynamicStruct bar = new DynamicStruct(new Utf8String("other"), new Uint(BigInteger.TEN));
+        final ComplexStorage.TupleClass1 foo = new ComplexStorage.TupleClass1("Sam", "Na");
+        final ComplexStorage.TupleClass2 bar =
+                new ComplexStorage.TupleClass2("First", BigInteger.valueOf(100L));
 
-        ComplexStorage storage =
+        final ComplexStorage complexStorage =
                 ComplexStorage.deploy(web3j, transactionManager, gasProvider).send();
-        storage.setFoo(foo).send();
 
-        DynamicStruct result = storage.getFoo().send();
-        System.out.println(result);
+        final TransactionReceipt deployTransactionReceipt = complexStorage.setFoo(foo).send();
+        assertNotNull(deployTransactionReceipt);
+
+        // Now test the decoder.
+        final TransactionReceipt send = complexStorage.getFooBar().send();
+
         //        Assertions.assertEquals("Hello EVM", greeting);
     }
 }

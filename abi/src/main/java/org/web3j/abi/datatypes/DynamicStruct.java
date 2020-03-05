@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class DynamicStruct extends DynamicArray<Type> implements BasicStruct {
 
-    public List<Class<Type>> getItemTypes() {
+    public List<Class<Type>> getTypes() {
         return itemTypes;
     }
 

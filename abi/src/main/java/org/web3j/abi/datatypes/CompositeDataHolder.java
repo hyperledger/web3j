@@ -18,14 +18,14 @@ import java.util.List;
 
 public class CompositeDataHolder extends DynamicStruct {
 
-    public List<Class<Type>> getItemTypes() {
+    public List<Class<Type>> getTypes() {
         return itemTypes;
     }
 
     private final List<Class<Type>> itemTypes = new ArrayList<>();
 
     public CompositeDataHolder(List<Type> values) {
-        super(Type.class, values);
+        super(values);
         for (Type value : values) {
             itemTypes.add((Class<Type>) value.getClass());
         }
