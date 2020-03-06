@@ -25,10 +25,10 @@ import org.web3j.protocol.http.HttpService;
 
 public class LocalWeb3jAccount {
 
-    private static final Path WEB3J_CONFIG_PATH =
-            Paths.get(System.getProperty("user.home"), ".web3j", ".config");
+    private static final Path EPIRUS_CONFIG_PATh =
+            Paths.get(System.getProperty("user.home"), ".epirus", ".config");
 
-    private static String SERVICES_ENDPOINT = "https://%s-eth.epirus.io/%s";
+    private static String NODE_RPC_ENDPOINT = "https://%s-eth.epirus.io/%s";
 
     public static HttpService getOnlineServicesHttpService(final Network network) throws Exception {
         if (configExists()) {
@@ -43,11 +43,11 @@ public class LocalWeb3jAccount {
     }
 
     public static boolean configExists() {
-        return WEB3J_CONFIG_PATH.toFile().exists();
+        return EPIRUS_CONFIG_PATh.toFile().exists();
     }
 
     public static ObjectNode readConfigAsJson() throws IOException {
-        String configContents = new String(Files.readAllBytes(WEB3J_CONFIG_PATH));
+        String configContents = new String(Files.readAllBytes(EPIRUS_CONFIG_PATh));
         return new ObjectMapper().readValue(configContents, ObjectNode.class);
     }
 
@@ -58,7 +58,7 @@ public class LocalWeb3jAccount {
     public static HttpService createHttpServiceWithToken(Network network) throws IOException {
         String httpEndpoint =
                 String.format(
-                        SERVICES_ENDPOINT,
+                        NODE_RPC_ENDPOINT,
                         network.getNetworkName(),
                         readConfigAsJson().get("loginToken").asText());
         return new HttpService(httpEndpoint);
