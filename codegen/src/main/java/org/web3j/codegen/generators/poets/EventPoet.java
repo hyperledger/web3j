@@ -39,12 +39,10 @@ import org.web3j.utils.Strings;
 import static org.web3j.codegen.generators.SolidityConstants.*;
 import static org.web3j.codegen.generators.SolidityWrapperGenerator.getNativeType;
 
-public class EventPoet {
-
-    private final SolidityWrapperGeneratorConfig config;
+public class EventPoet extends BasicPoet {
 
     public EventPoet(SolidityWrapperGeneratorConfig config) {
-        this.config = config;
+        super(config);
     }
 
     public List<MethodSpec> buildEventFunctions(

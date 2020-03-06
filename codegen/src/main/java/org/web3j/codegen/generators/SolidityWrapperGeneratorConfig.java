@@ -12,20 +12,25 @@
  */
 package org.web3j.codegen.generators;
 
+import org.web3j.codegen.GenerationReporter;
+
 public class SolidityWrapperGeneratorConfig {
     public final boolean generateSendTxForCalls;
     public final boolean useNativeJavaTypes;
     public final boolean useJavaPrimitiveTypes;
     public final int addressLength;
+    public final GenerationReporter reporter;
 
     public SolidityWrapperGeneratorConfig(
             boolean generateSendTxForCalls,
             boolean useNativeJavaTypes,
             boolean useJavaPrimitiveTypes,
-            int addressLength) {
+            int addressLength,
+            GenerationReporter reporter) {
         this.generateSendTxForCalls = generateSendTxForCalls;
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
         this.addressLength = addressLength;
+        this.reporter = reporter;
     }
 }

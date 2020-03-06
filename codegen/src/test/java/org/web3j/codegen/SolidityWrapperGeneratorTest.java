@@ -70,7 +70,7 @@ public class SolidityWrapperGeneratorTest extends TempFileProvider {
         generationReporter = mock(GenerationReporter.class);
         solidityWrapperGenerator =
                 new SolidityWrapperGenerator(true, false, false, Address.DEFAULT_LENGTH);
-        functionPoet = new FunctionPoet(solidityWrapperGenerator.getConfig(), generationReporter);
+        functionPoet = new FunctionPoet(solidityWrapperGenerator.getConfig());
     }
 
     @Test

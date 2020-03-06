@@ -24,8 +24,6 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.codegen.GenerationReporter;
-import org.web3j.codegen.LogGenerationReporter;
 import org.web3j.codegen.generators.SolidityWrapperGenerator;
 import org.web3j.codegen.generators.SolidityWrapperGeneratorConfig;
 import org.web3j.protocol.core.RemoteFunctionCall;
@@ -35,17 +33,10 @@ import org.web3j.utils.Collection;
 
 import static org.web3j.codegen.generators.SolidityConstants.*;
 
-public class FunctionPoet {
-    private final GenerationReporter reporter;
-    private final SolidityWrapperGeneratorConfig config;
+public class FunctionPoet extends BasicPoet {
 
     public FunctionPoet(SolidityWrapperGeneratorConfig config) {
-        this(config, new LogGenerationReporter(LOGGER));
-    }
-
-    public FunctionPoet(SolidityWrapperGeneratorConfig config, GenerationReporter reporter) {
-        this.config = config;
-        this.reporter = reporter;
+        super(config);
     }
 
     public List<MethodSpec> buildFunctionDefinitions(
@@ -277,11 +268,10 @@ public class FunctionPoet {
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             String inputParams,
-            boolean useUpperCase)
-            throws ClassNotFoundException {
+            boolean useUpperCase) {
 
         if (functionDefinition.hasOutputs()) {
-            reporter.report(
+            config.reporter.report(
                     String.format(
                             "Definition of the function %s returns a value but is not defined as a view function. "
                                     + "Please ensure it contains the view modifier if you want to read the return value",

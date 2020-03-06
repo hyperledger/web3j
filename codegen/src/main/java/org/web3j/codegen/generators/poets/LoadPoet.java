@@ -16,24 +16,28 @@ import java.math.BigInteger;
 import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeVariableName;
 
+import org.web3j.abi.datatypes.Type;
 import org.web3j.codegen.generators.SolidityWrapperGeneratorConfig;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.gas.ContractGasProvider;
 
 import static org.web3j.codegen.generators.SolidityConstants.*;
+import static org.web3j.codegen.generators.SolidityConstants.GAS_LIMIT;
 
-public class ConstructorPoet extends BasicPoet {
+public class LoadPoet extends BasicPoet {
 
-    public ConstructorPoet(SolidityWrapperGeneratorConfig config) {
+    public LoadPoet(SolidityWrapperGeneratorConfig config) {
         super(config);
     }
 
-    public static MethodSpec buildConstructor(
-            Class authType, String authName, boolean withGasProvider) {
+    public static MethodSpec buildLoad(
+            String className, Class authType, String authName, boolean withGasProvider) {
         MethodSpec.Builder toReturn =
-                MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PROTECTED)
+                MethodSpec.methodBuilder("load")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .returns(TypeVariableName.get(className, Type.class))
                         .addParameter(String.class, CONTRACT_ADDRESS)
                         .addParameter(Web3j.class, WEB3J)
                         .addParameter(authType, authName);
@@ -41,8 +45,8 @@ public class ConstructorPoet extends BasicPoet {
         if (withGasProvider) {
             toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
                     .addStatement(
-                            "super($N, $N, $N, $N, $N)",
-                            BINARY,
+                            "return new $L($L, $L, $L, $L)",
+                            className,
                             CONTRACT_ADDRESS,
                             WEB3J,
                             authName,
@@ -51,8 +55,8 @@ public class ConstructorPoet extends BasicPoet {
             toReturn.addParameter(BigInteger.class, GAS_PRICE)
                     .addParameter(BigInteger.class, GAS_LIMIT)
                     .addStatement(
-                            "super($N, $N, $N, $N, $N, $N)",
-                            BINARY,
+                            "return new $L($L, $L, $L, $L, $L)",
+                            className,
                             CONTRACT_ADDRESS,
                             WEB3J,
                             authName,

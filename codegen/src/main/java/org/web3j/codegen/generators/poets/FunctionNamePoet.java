@@ -19,12 +19,17 @@ import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.FieldSpec;
 
+import org.web3j.codegen.generators.SolidityWrapperGeneratorConfig;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.web3j.tx.Contract.FUNC_DEPLOY;
 import static org.web3j.utils.Lambdas.distinctBy;
 
-public class FunctionNamePoet {
+public class FunctionNamePoet extends BasicPoet {
+
+    public FunctionNamePoet(SolidityWrapperGeneratorConfig config) {
+        super(config);
+    }
 
     public static Iterable<FieldSpec> buildFunctionNameConstants(
             List<AbiDefinition> abiDefinitions) {

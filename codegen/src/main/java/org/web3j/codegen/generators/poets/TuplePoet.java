@@ -24,14 +24,19 @@ import com.squareup.javapoet.*;
 
 import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.StaticStruct;
+import org.web3j.codegen.generators.SolidityWrapperGeneratorConfig;
 import org.web3j.codegen.generators.poets.data.TupleMember;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.web3j.utils.Lambdas.throwAtRuntime;
 
-public class TuplePoet {
+public class TuplePoet extends BasicPoet {
     private static int tupleInnerClassNumber = 1;
     private static Map<String, Integer> tupleInnerClassMap = new HashMap<>();
+
+    public TuplePoet(SolidityWrapperGeneratorConfig config) {
+        super(config);
+    }
 
     public static Iterable<TypeSpec> buildTupleDefinitions(List<AbiDefinition> abi) {
         return abi.stream()

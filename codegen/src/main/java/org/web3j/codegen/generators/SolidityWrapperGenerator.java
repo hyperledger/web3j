@@ -27,9 +27,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeVariableName;
 
-import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.primitive.Byte;
@@ -39,17 +37,16 @@ import org.web3j.abi.datatypes.primitive.Float;
 import org.web3j.abi.datatypes.primitive.Int;
 import org.web3j.abi.datatypes.primitive.Long;
 import org.web3j.abi.datatypes.primitive.Short;
+import org.web3j.codegen.GenerationReporter;
+import org.web3j.codegen.LogGenerationReporter;
 import org.web3j.codegen.SolidityFunctionWrapperGenerator;
 import org.web3j.codegen.generators.poets.*;
 import org.web3j.codegen.generators.poets.TuplePoet;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
-import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
 
@@ -68,12 +65,6 @@ public class SolidityWrapperGenerator extends Generator {
                     + " in the \n"
                     + "<a href=\"https://github.com/web3j/web3j/tree/master/codegen\">"
                     + "codegen module</a> to update.\n";
-
-    private final boolean useNativeJavaTypes;
-    private final boolean useJavaPrimitiveTypes;
-    private final boolean generateSendTxForCalls;
-
-    private final int addressLength;
 
     private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
     private static final Pattern pattern = Pattern.compile(regex);
@@ -102,16 +93,28 @@ public class SolidityWrapperGenerator extends Generator {
             boolean useJavaPrimitiveTypes,
             boolean generateSendTxForCalls,
             int addressLength) {
-        this.useNativeJavaTypes = useNativeJavaTypes;
-        this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
-        this.addressLength = addressLength;
-        this.generateSendTxForCalls = generateSendTxForCalls;
+        this(
+                useNativeJavaTypes,
+                useJavaPrimitiveTypes,
+                generateSendTxForCalls,
+                addressLength,
+                new LogGenerationReporter(LOGGER));
+    }
+
+    public SolidityWrapperGenerator(
+            boolean useNativeJavaTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateSendTxForCalls,
+            int addressLength,
+            GenerationReporter reporter) {
+
         this.config =
                 new SolidityWrapperGeneratorConfig(
                         generateSendTxForCalls,
                         useNativeJavaTypes,
                         useJavaPrimitiveTypes,
-                        addressLength);
+                        addressLength,
+                        reporter);
     }
 
     public void generateJavaFiles(
@@ -169,14 +172,17 @@ public class SolidityWrapperGenerator extends Generator {
                 new FunctionPoet(config).buildFunctionDefinitions(className, classBuilder, abi));
         classBuilder.addMethods(new EventPoet(config).buildEventFunctions(classBuilder, abi));
 
-        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(
-                buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, false));
-        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, true));
+                LoadPoet.buildLoad(className, Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(
-                buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, true));
+                LoadPoet.buildLoad(
+                        className, TransactionManager.class, TRANSACTION_MANAGER, false));
+        classBuilder.addMethod(LoadPoet.buildLoad(className, Credentials.class, CREDENTIALS, true));
+        classBuilder.addMethod(
+                LoadPoet.buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, true));
+
         if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
-            classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
+            classBuilder.addMethods(new DeployPoet(config).buildDeployMethods(className, abi));
         }
 
         addAddressesSupport(classBuilder, addresses);
@@ -266,291 +272,6 @@ public class SolidityWrapperGenerator extends Generator {
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                 .initializer("$S", binary)
                 .build();
-    }
-
-    List<MethodSpec> buildDeployMethods(
-            String className,
-            TypeSpec.Builder classBuilder,
-            List<AbiDefinition> functionDefinitions)
-            throws ClassNotFoundException {
-        boolean constructor = false;
-        List<MethodSpec> methodSpecs = new ArrayList<>();
-        for (AbiDefinition functionDefinition : functionDefinitions) {
-            if (functionDefinition.getType().equals("constructor")) {
-                constructor = true;
-                methodSpecs.add(
-                        buildDeploy(
-                                className,
-                                functionDefinition,
-                                Credentials.class,
-                                CREDENTIALS,
-                                true));
-                methodSpecs.add(
-                        buildDeploy(
-                                className,
-                                functionDefinition,
-                                TransactionManager.class,
-                                TRANSACTION_MANAGER,
-                                true));
-                methodSpecs.add(
-                        buildDeploy(
-                                className,
-                                functionDefinition,
-                                Credentials.class,
-                                CREDENTIALS,
-                                false));
-                methodSpecs.add(
-                        buildDeploy(
-                                className,
-                                functionDefinition,
-                                TransactionManager.class,
-                                TRANSACTION_MANAGER,
-                                false));
-            }
-        }
-
-        // constructor will not be specified in ABI file if its empty
-        if (!constructor) {
-            MethodSpec.Builder credentialsMethodBuilder =
-                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS, false, true);
-            methodSpecs.add(
-                    buildDeployNoParams(
-                            credentialsMethodBuilder, className, CREDENTIALS, false, true));
-
-            MethodSpec.Builder credentialsMethodBuilderNoGasProvider =
-                    getDeployMethodSpec(className, Credentials.class, CREDENTIALS, false, false);
-            methodSpecs.add(
-                    buildDeployNoParams(
-                            credentialsMethodBuilderNoGasProvider,
-                            className,
-                            CREDENTIALS,
-                            false,
-                            false));
-
-            MethodSpec.Builder transactionManagerMethodBuilder =
-                    getDeployMethodSpec(
-                            className, TransactionManager.class, TRANSACTION_MANAGER, false, true);
-            methodSpecs.add(
-                    buildDeployNoParams(
-                            transactionManagerMethodBuilder,
-                            className,
-                            TRANSACTION_MANAGER,
-                            false,
-                            true));
-
-            MethodSpec.Builder transactionManagerMethodBuilderNoGasProvider =
-                    getDeployMethodSpec(
-                            className, TransactionManager.class, TRANSACTION_MANAGER, false, false);
-            methodSpecs.add(
-                    buildDeployNoParams(
-                            transactionManagerMethodBuilderNoGasProvider,
-                            className,
-                            TRANSACTION_MANAGER,
-                            false,
-                            false));
-        }
-
-        return methodSpecs;
-    }
-
-    private MethodSpec buildDeploy(
-            String className,
-            AbiDefinition functionDefinition,
-            Class authType,
-            String authName,
-            boolean withGasProvider)
-            throws ClassNotFoundException {
-
-        boolean isPayable = functionDefinition.isPayable();
-
-        MethodSpec.Builder methodBuilder =
-                getDeployMethodSpec(className, authType, authName, isPayable, withGasProvider);
-        String inputParams =
-                FunctionPoet.addParameters(methodBuilder, functionDefinition.getInputs(), config);
-
-        if (!inputParams.isEmpty()) {
-            return buildDeployWithParams(
-                    methodBuilder, className, inputParams, authName, isPayable, withGasProvider);
-        } else {
-            return buildDeployNoParams(
-                    methodBuilder, className, authName, isPayable, withGasProvider);
-        }
-    }
-
-    private static MethodSpec buildDeployWithParams(
-            MethodSpec.Builder methodBuilder,
-            String className,
-            String inputParams,
-            String authName,
-            boolean isPayable,
-            boolean withGasProvider) {
-
-        methodBuilder.addStatement(
-                "$T encodedConstructor = $T.encodeConstructor(" + "$T.<$T>asList($L)" + ")",
-                String.class,
-                FunctionEncoder.class,
-                Arrays.class,
-                Type.class,
-                inputParams);
-        if (isPayable && !withGasProvider) {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall("
-                            + "$L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
-                    className,
-                    WEB3J,
-                    authName,
-                    GAS_PRICE,
-                    GAS_LIMIT,
-                    BINARY,
-                    INITIAL_VALUE);
-            methodBuilder.addAnnotation(Deprecated.class);
-        } else if (isPayable && withGasProvider) {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall("
-                            + "$L.class, $L, $L, $L, $L, encodedConstructor, $L)",
-                    className,
-                    WEB3J,
-                    authName,
-                    CONTRACT_GAS_PROVIDER,
-                    BINARY,
-                    INITIAL_VALUE);
-        } else if (!isPayable && !withGasProvider) {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor)",
-                    className,
-                    WEB3J,
-                    authName,
-                    GAS_PRICE,
-                    GAS_LIMIT,
-                    BINARY);
-            methodBuilder.addAnnotation(Deprecated.class);
-        } else {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, encodedConstructor)",
-                    className,
-                    WEB3J,
-                    authName,
-                    CONTRACT_GAS_PROVIDER,
-                    BINARY);
-        }
-
-        return methodBuilder.build();
-    }
-
-    private static MethodSpec buildDeployNoParams(
-            MethodSpec.Builder methodBuilder,
-            String className,
-            String authName,
-            boolean isPayable,
-            boolean withGasPRovider) {
-        if (isPayable && !withGasPRovider) {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\", $L)",
-                    className,
-                    WEB3J,
-                    authName,
-                    GAS_PRICE,
-                    GAS_LIMIT,
-                    BINARY,
-                    INITIAL_VALUE);
-            methodBuilder.addAnnotation(Deprecated.class);
-        } else if (isPayable && withGasPRovider) {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, \"\", $L)",
-                    className,
-                    WEB3J,
-                    authName,
-                    CONTRACT_GAS_PROVIDER,
-                    BINARY,
-                    INITIAL_VALUE);
-        } else if (!isPayable && !withGasPRovider) {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\")",
-                    className,
-                    WEB3J,
-                    authName,
-                    GAS_PRICE,
-                    GAS_LIMIT,
-                    BINARY);
-            methodBuilder.addAnnotation(Deprecated.class);
-        } else {
-            methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, \"\")",
-                    className,
-                    WEB3J,
-                    authName,
-                    CONTRACT_GAS_PROVIDER,
-                    BINARY);
-        }
-
-        return methodBuilder.build();
-    }
-
-    private static MethodSpec.Builder getDeployMethodSpec(
-            String className,
-            Class authType,
-            String authName,
-            boolean isPayable,
-            boolean withGasProvider) {
-        MethodSpec.Builder builder =
-                MethodSpec.methodBuilder("deploy")
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .returns(buildRemoteCall(TypeVariableName.get(className, Type.class)))
-                        .addParameter(Web3j.class, WEB3J)
-                        .addParameter(authType, authName);
-        if (isPayable && !withGasProvider) {
-            return builder.addParameter(BigInteger.class, GAS_PRICE)
-                    .addParameter(BigInteger.class, GAS_LIMIT)
-                    .addParameter(BigInteger.class, INITIAL_VALUE);
-        } else if (isPayable && withGasProvider) {
-            return builder.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
-                    .addParameter(BigInteger.class, INITIAL_VALUE);
-        } else if (!isPayable && withGasProvider) {
-            return builder.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER);
-        } else {
-            return builder.addParameter(BigInteger.class, GAS_PRICE)
-                    .addParameter(BigInteger.class, GAS_LIMIT);
-        }
-    }
-
-    private static ParameterizedTypeName buildRemoteCall(TypeName typeName) {
-        return ParameterizedTypeName.get(ClassName.get(RemoteCall.class), typeName);
-    }
-
-    private static MethodSpec buildLoad(
-            String className, Class authType, String authName, boolean withGasProvider) {
-        MethodSpec.Builder toReturn =
-                MethodSpec.methodBuilder("load")
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .returns(TypeVariableName.get(className, Type.class))
-                        .addParameter(String.class, CONTRACT_ADDRESS)
-                        .addParameter(Web3j.class, WEB3J)
-                        .addParameter(authType, authName);
-
-        if (withGasProvider) {
-            toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
-                    .addStatement(
-                            "return new $L($L, $L, $L, $L)",
-                            className,
-                            CONTRACT_ADDRESS,
-                            WEB3J,
-                            authName,
-                            CONTRACT_GAS_PROVIDER);
-        } else {
-            toReturn.addParameter(BigInteger.class, GAS_PRICE)
-                    .addParameter(BigInteger.class, GAS_LIMIT)
-                    .addStatement(
-                            "return new $L($L, $L, $L, $L, $L)",
-                            className,
-                            CONTRACT_ADDRESS,
-                            WEB3J,
-                            authName,
-                            GAS_PRICE,
-                            GAS_LIMIT)
-                    .addAnnotation(Deprecated.class);
-        }
-
-        return toReturn.build();
     }
 
     public static TypeName getNativeType(TypeName typeName) {
