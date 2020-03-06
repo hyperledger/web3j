@@ -23,6 +23,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import org.web3j.abi.datatypes.Address;
+import org.web3j.codegen.generators.SolidityWrapperGenerator;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.tx.Contract;
@@ -134,7 +135,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
-            new SolidityFunctionWrapper(
+            new SolidityWrapperGenerator(
                             useJavaNativeTypes,
                             useJavaPrimitiveTypes,
                             generateSendTxForCalls,

@@ -10,9 +10,12 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper;
+package org.web3j.codegen.generators;
 
-public class Constants {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class SolidityConstants {
 
     public static final String BINARY = "BINARY";
     public static final String WEB3J = "web3j";
@@ -30,4 +33,6 @@ public class Constants {
     public static final String FUNC_NAME_PREFIX = "FUNC_";
     public static final String TYPE_FUNCTION = "function";
     public static final String TYPE_EVENT = "event";
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(SolidityWrapperGenerator.class);
 }

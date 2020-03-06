@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper.generators;
+package org.web3j.codegen.generators.poets;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,26 +24,12 @@ import com.squareup.javapoet.*;
 
 import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.StaticStruct;
-import org.web3j.codegen.SolidityFunctionWrapper;
+import org.web3j.codegen.generators.poets.data.TupleMember;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.web3j.utils.Lambdas.throwAtRuntime;
 
-class TupleMember {
-    public String name;
-    public String type;
-    public TypeName solidityType;
-    public TypeName nativeType;
-
-    public TupleMember(String name, String type) throws ClassNotFoundException {
-        this.name = name;
-        this.type = type;
-        this.solidityType = SolidityFunctionWrapper.buildTypeName(type);
-        this.nativeType = SolidityFunctionWrapper.getNativeType(solidityType);
-    }
-}
-
-public class TupleGenerator {
+public class TuplePoet {
     private static int tupleInnerClassNumber = 1;
     private static Map<String, Integer> tupleInnerClassMap = new HashMap<>();
 

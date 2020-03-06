@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper.generators;
+package org.web3j.codegen.generators.poets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,8 +25,8 @@ import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.codegen.SolidityFunctionWrapper;
-import org.web3j.codegen.unit.wrapper.WrapperConfig;
+import org.web3j.codegen.generators.SolidityWrapperGenerator;
+import org.web3j.codegen.generators.SolidityWrapperGeneratorConfig;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
@@ -36,14 +36,14 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
 import org.web3j.utils.Strings;
 
-import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
-import static org.web3j.codegen.unit.wrapper.Constants.*;
+import static org.web3j.codegen.generators.SolidityConstants.*;
+import static org.web3j.codegen.generators.SolidityWrapperGenerator.getNativeType;
 
-public class EventGenerator {
+public class EventPoet {
 
-    private final WrapperConfig config;
+    private final SolidityWrapperGeneratorConfig config;
 
-    public EventGenerator(WrapperConfig config) {
+    public EventPoet(SolidityWrapperGeneratorConfig config) {
         this.config = config;
     }
 
@@ -59,22 +59,22 @@ public class EventGenerator {
         return methodSpecs;
     }
 
-    List<MethodSpec> buildEventFunctions(
+    public List<MethodSpec> buildEventFunctions(
             AbiDefinition functionDefinition, TypeSpec.Builder classBuilder)
             throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
         List<AbiDefinition.NamedType> inputs = functionDefinition.getInputs();
         String responseClassName = Strings.capitaliseFirstLetter(functionName) + "EventResponse";
 
-        List<SolidityFunctionWrapper.NamedTypeName> parameters = new ArrayList<>();
-        List<SolidityFunctionWrapper.NamedTypeName> indexedParameters = new ArrayList<>();
-        List<SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters = new ArrayList<>();
+        List<SolidityWrapperGenerator.NamedTypeName> parameters = new ArrayList<>();
+        List<SolidityWrapperGenerator.NamedTypeName> indexedParameters = new ArrayList<>();
+        List<SolidityWrapperGenerator.NamedTypeName> nonIndexedParameters = new ArrayList<>();
 
         for (AbiDefinition.NamedType namedType : inputs) {
-            SolidityFunctionWrapper.NamedTypeName parameter =
-                    new SolidityFunctionWrapper.NamedTypeName(
+            SolidityWrapperGenerator.NamedTypeName parameter =
+                    new SolidityWrapperGenerator.NamedTypeName(
                             namedType.getName(),
-                            SolidityFunctionWrapper.buildTypeName(
+                            SolidityWrapperGenerator.buildTypeName(
                                     namedType.getType(),
                                     namedType.getComponents(),
                                     config.useJavaPrimitiveTypes),
@@ -107,7 +107,7 @@ public class EventGenerator {
     }
 
     private FieldSpec createEventDefinition(
-            String name, List<SolidityFunctionWrapper.NamedTypeName> parameters) {
+            String name, List<SolidityWrapperGenerator.NamedTypeName> parameters) {
 
         CodeBlock initializer = buildVariableLengthEventInitializer(name, parameters);
 
@@ -118,7 +118,7 @@ public class EventGenerator {
     }
 
     private static CodeBlock buildVariableLengthEventInitializer(
-            String eventName, List<SolidityFunctionWrapper.NamedTypeName> parameterTypes) {
+            String eventName, List<SolidityWrapperGenerator.NamedTypeName> parameterTypes) {
 
         List<Object> objects = new ArrayList<>();
         objects.add(Event.class);
@@ -126,7 +126,7 @@ public class EventGenerator {
 
         objects.add(Arrays.class);
         objects.add(TypeReference.class);
-        for (SolidityFunctionWrapper.NamedTypeName parameterType : parameterTypes) {
+        for (SolidityWrapperGenerator.NamedTypeName parameterType : parameterTypes) {
             objects.add(TypeReference.class);
             objects.add(parameterType.getTypeName());
         }
@@ -156,26 +156,24 @@ public class EventGenerator {
 
     TypeSpec buildEventResponseObject(
             String className,
-            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
-            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters) {
+            List<SolidityWrapperGenerator.NamedTypeName> indexedParameters,
+            List<SolidityWrapperGenerator.NamedTypeName> nonIndexedParameters) {
 
         TypeSpec.Builder builder =
                 TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
         builder.superclass(BaseEventResponse.class);
-        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType :
-                indexedParameters) {
+        for (SolidityWrapperGenerator.NamedTypeName namedType : indexedParameters) {
             TypeName typeName = getIndexedEventWrapperType(namedType.typeName);
             builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
         }
 
-        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType :
-                nonIndexedParameters) {
+        for (SolidityWrapperGenerator.NamedTypeName namedType : nonIndexedParameters) {
             if (((ClassName) namedType.typeName).simpleName().contains("TupleClass")) {
                 builder.addField(namedType.typeName, namedType.getName(), Modifier.PUBLIC);
             } else {
                 TypeName typeName =
-                        SolidityFunctionWrapper.getWrapperType(
+                        SolidityWrapperGenerator.getWrapperType(
                                 namedType.typeName, null, config.useNativeJavaTypes);
                 builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
             }
@@ -187,8 +185,8 @@ public class EventGenerator {
     MethodSpec buildEventFlowableFunction(
             String responseClassName,
             String functionName,
-            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
-            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters)
+            List<SolidityWrapperGenerator.NamedTypeName> indexedParameters,
+            List<SolidityWrapperGenerator.NamedTypeName> nonIndexedParameters)
             throws ClassNotFoundException {
 
         String generatedFunctionName = Strings.lowercaseFirstLetter(functionName) + "EventFlowable";
@@ -272,8 +270,8 @@ public class EventGenerator {
     MethodSpec buildEventTransactionReceiptFunction(
             String responseClassName,
             String functionName,
-            List<SolidityFunctionWrapper.NamedTypeName> indexedParameters,
-            List<SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters) {
+            List<SolidityWrapperGenerator.NamedTypeName> indexedParameters,
+            List<SolidityWrapperGenerator.NamedTypeName> nonIndexedParameters) {
 
         ParameterizedTypeName parameterizedTypeName =
                 ParameterizedTypeName.get(
@@ -320,7 +318,7 @@ public class EventGenerator {
         }
     }
 
-    static TypeName getEventNativeType(TypeName typeName) {
+    public static TypeName getEventNativeType(TypeName typeName) {
         if (typeName instanceof ParameterizedTypeName) {
             return TypeName.get(byte[].class);
         }
@@ -335,8 +333,8 @@ public class EventGenerator {
 
     public CodeBlock buildTypedResponse(
             String objectName,
-            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> indexedParameters,
-            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> nonIndexedParameters,
+            List<SolidityWrapperGenerator.NamedTypeName> indexedParameters,
+            List<SolidityWrapperGenerator.NamedTypeName> nonIndexedParameters,
             boolean flowable) {
         String nativeConversion;
 
@@ -366,7 +364,7 @@ public class EventGenerator {
                     "$L.$L = ($T) eventValues.getNonIndexedValues().get($L)" + nativeConversion,
                     objectName,
                     nonIndexedParameters.get(i).getName(),
-                    SolidityFunctionWrapper.getWrapperType(
+                    SolidityWrapperGenerator.getWrapperType(
                             nonIndexedParameters.get(i).getTypeName(),
                             nonIndexedParameters.get(i).getComponents(),
                             config.useNativeJavaTypes),

@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper.generators;
+package org.web3j.codegen.generators.poets;
 
 import java.math.BigInteger;
 import javax.lang.model.element.Modifier;
@@ -20,9 +20,9 @@ import com.squareup.javapoet.MethodSpec;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.gas.ContractGasProvider;
 
-import static org.web3j.codegen.unit.wrapper.Constants.*;
+import static org.web3j.codegen.generators.SolidityConstants.*;
 
-public class ConstructorGenerator {
+public class ConstructorPoet {
 
     public static MethodSpec buildConstructor(
             Class authType, String authName, boolean withGasProvider) {

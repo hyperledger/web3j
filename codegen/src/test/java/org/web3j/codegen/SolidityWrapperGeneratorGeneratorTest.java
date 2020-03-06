@@ -42,7 +42,7 @@ import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_GENERAT
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
 
-public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
+public class SolidityWrapperGeneratorGeneratorTest extends TempFileProvider {
 
     private String solidityBaseDir;
 
@@ -50,7 +50,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
-        URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/solidity");
+        URL url = SolidityWrapperGeneratorGeneratorTest.class.getResource("/solidity");
         solidityBaseDir = url.getPath();
     }
 

@@ -53,7 +53,7 @@ public class ContractJsonParseTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/truffle");
+        URL url = SolidityWrapperGeneratorGeneratorTest.class.getResource("/truffle");
         contractBaseDir = url.getPath();
     }
 

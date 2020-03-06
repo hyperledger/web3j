@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper.generators;
+package org.web3j.codegen.generators.poets;
 
 import java.util.List;
 import java.util.Set;
@@ -19,17 +19,16 @@ import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.FieldSpec;
 
-import org.web3j.codegen.unit.wrapper.Utils;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.web3j.tx.Contract.FUNC_DEPLOY;
 import static org.web3j.utils.Lambdas.distinctBy;
 
-public class FunctionNameGenerator {
+public class FunctionNamePoet {
 
     public static Iterable<FieldSpec> buildFunctionNameConstants(
             List<AbiDefinition> abiDefinitions) {
-        Set<String> dupeNames = Utils.getDupeFuncNames(abiDefinitions);
+        Set<String> dupeNames = PoetUtils.getDupeFuncNames(abiDefinitions);
         if (!dupeNames.isEmpty()) {
             System.out.println(
                     "\nWarning: Duplicate field(s) found: "
@@ -44,10 +43,11 @@ public class FunctionNameGenerator {
                         d -> {
                             String funcName = d.getName();
                             boolean useUpperCase =
-                                    !dupeNames.contains(Utils.funcNameToConstant(funcName, true));
+                                    !dupeNames.contains(
+                                            PoetUtils.funcNameToConstant(funcName, true));
                             return FieldSpec.builder(
                                             String.class,
-                                            Utils.funcNameToConstant(funcName, useUpperCase),
+                                            PoetUtils.funcNameToConstant(funcName, useUpperCase),
                                             Modifier.PUBLIC,
                                             Modifier.STATIC,
                                             Modifier.FINAL)

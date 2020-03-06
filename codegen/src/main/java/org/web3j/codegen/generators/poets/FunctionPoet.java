@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper.generators;
+package org.web3j.codegen.generators.poets;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -25,23 +25,27 @@ import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.codegen.GenerationReporter;
-import org.web3j.codegen.SolidityFunctionWrapper;
-import org.web3j.codegen.unit.wrapper.Utils;
-import org.web3j.codegen.unit.wrapper.WrapperConfig;
+import org.web3j.codegen.LogGenerationReporter;
+import org.web3j.codegen.generators.SolidityWrapperGenerator;
+import org.web3j.codegen.generators.SolidityWrapperGeneratorConfig;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Collection;
 
-import static org.web3j.codegen.unit.wrapper.Constants.*;
+import static org.web3j.codegen.generators.SolidityConstants.*;
 
-public class FunctionGenerator {
+public class FunctionPoet {
     private final GenerationReporter reporter;
-    private final WrapperConfig config;
+    private final SolidityWrapperGeneratorConfig config;
 
-    public FunctionGenerator(GenerationReporter reporter, WrapperConfig config) {
-        this.reporter = reporter;
+    public FunctionPoet(SolidityWrapperGeneratorConfig config) {
+        this(config, new LogGenerationReporter(LOGGER));
+    }
+
+    public FunctionPoet(SolidityWrapperGeneratorConfig config, GenerationReporter reporter) {
         this.config = config;
+        this.reporter = reporter;
     }
 
     public List<MethodSpec> buildFunctionDefinitions(
@@ -50,11 +54,12 @@ public class FunctionGenerator {
             List<AbiDefinition> functionDefinitions)
             throws ClassNotFoundException {
 
-        Set<String> duplicateFunctionNames = Utils.getDupeFuncNames(functionDefinitions);
+        Set<String> duplicateFunctionNames = PoetUtils.getDupeFuncNames(functionDefinitions);
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (AbiDefinition functionDefinition : functionDefinitions) {
             if (functionDefinition.getType().equals(TYPE_FUNCTION)) {
-                String functionName = Utils.funcNameToConstant(functionDefinition.getName(), true);
+                String functionName =
+                        PoetUtils.funcNameToConstant(functionDefinition.getName(), true);
                 boolean useUpperCase = !duplicateFunctionNames.contains(functionName);
                 methodSpecs.addAll(buildFunctions(functionDefinition, useUpperCase));
             }
@@ -63,7 +68,8 @@ public class FunctionGenerator {
         return methodSpecs;
     }
 
-    MethodSpec buildFunction(AbiDefinition functionDefinition) throws ClassNotFoundException {
+    public MethodSpec buildFunction(AbiDefinition functionDefinition)
+            throws ClassNotFoundException {
         return buildFunction(functionDefinition, true);
     }
 
@@ -72,7 +78,7 @@ public class FunctionGenerator {
         return buildFunctions(functionDefinition, useUpperCase).get(0);
     }
 
-    List<MethodSpec> buildFunctions(AbiDefinition functionDefinition)
+    public List<MethodSpec> buildFunctions(AbiDefinition functionDefinition)
             throws ClassNotFoundException {
         return buildFunctions(functionDefinition, true);
     }
@@ -110,7 +116,7 @@ public class FunctionGenerator {
         final String inputParams =
                 addParameters(methodBuilder, functionDefinition.getInputs(), config);
         final List<TypeName> outputParameterTypes =
-                SolidityFunctionWrapper.buildTypeNames(
+                SolidityWrapperGenerator.buildTypeNames(
                         functionDefinition.getOutputs(), config.useJavaPrimitiveTypes);
 
         if (isFunctionDefinitionConstant) {
@@ -171,7 +177,7 @@ public class FunctionGenerator {
                             + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
                     Function.class,
                     Function.class,
-                    Utils.funcNameToConstant(functionName, useUpperCase),
+                    PoetUtils.funcNameToConstant(functionName, useUpperCase),
                     Arrays.class,
                     Type.class,
                     inputParams,
@@ -257,7 +263,7 @@ public class FunctionGenerator {
             TypeName typeName = outputParameterTypes.get(i);
             final AbiDefinition.NamedType abiNamedType = outputNamedTypes.get(i); // tuple (foo)
             result.add(
-                    SolidityFunctionWrapper.getWrapperType(
+                    SolidityWrapperGenerator.getWrapperType(
                             typeName, abiNamedType.getComponents(), config.useNativeJavaTypes));
         }
         return result;
@@ -295,7 +301,7 @@ public class FunctionGenerator {
                         + ".<$T<?>>emptyList())",
                 Function.class,
                 Function.class,
-                Utils.funcNameToConstant(functionName, useUpperCase),
+                PoetUtils.funcNameToConstant(functionName, useUpperCase),
                 Arrays.class,
                 Type.class,
                 inputParams,
@@ -312,7 +318,7 @@ public class FunctionGenerator {
     public static String addParameters(
             MethodSpec.Builder methodBuilder,
             List<AbiDefinition.NamedType> namedTypes,
-            WrapperConfig config)
+            SolidityWrapperGeneratorConfig config)
             throws ClassNotFoundException {
 
         /*        final List<ParameterSpec> inputParameterTypes =
@@ -340,7 +346,7 @@ public class FunctionGenerator {
             //            final TypeName typeName = getWrapperType(parameterSpec,
             // namedTypes.get(i).getComponents());
             TypeName typeName =
-                    SolidityFunctionWrapper.getWrapperType(
+                    SolidityWrapperGenerator.getWrapperType(
                             parameterSpec.type,
                             namedTypes.get(i).getComponents(),
                             config.useNativeJavaTypes);
@@ -352,8 +358,7 @@ public class FunctionGenerator {
                 // TODO: sort out package name as parameter.
                 final String todoPkgName = "";
                 final String tupleClassName =
-                        TupleGenerator.buildClassNameForTupleComponents(
-                                inputNamedType.getComponents());
+                        TuplePoet.buildClassNameForTupleComponents(inputNamedType.getComponents());
                 typeName = ClassName.get(todoPkgName, "ComplexStorage." + tupleClassName);
             } else {
                 System.out.println("HERE");
@@ -378,7 +383,7 @@ public class FunctionGenerator {
     }
 
     private static String createMappedParameterTypes(
-            ParameterSpec parameterSpec, WrapperConfig config) {
+            ParameterSpec parameterSpec, SolidityWrapperGeneratorConfig config) {
         if (parameterSpec.type instanceof ParameterizedTypeName) {
             List<TypeName> typeNames = ((ParameterizedTypeName) parameterSpec.type).typeArguments;
             if (typeNames.size() != 1) {
@@ -505,7 +510,7 @@ public class FunctionGenerator {
         List<Object> objects = new ArrayList<>();
         objects.add(Function.class);
         objects.add(Function.class);
-        objects.add(Utils.funcNameToConstant(functionName, useUpperCase));
+        objects.add(PoetUtils.funcNameToConstant(functionName, useUpperCase));
 
         objects.add(Arrays.class);
         objects.add(Type.class);
@@ -544,7 +549,7 @@ public class FunctionGenerator {
 
             result.add(
                     ParameterSpec.builder(
-                                    SolidityFunctionWrapper.buildTypeName(
+                                    SolidityWrapperGenerator.buildTypeName(
                                             type, components, primitives),
                                     name)
                             .build());
@@ -572,7 +577,7 @@ public class FunctionGenerator {
         // TODO: re-instate this!
 
         if (config.useNativeJavaTypes) {
-            return SolidityFunctionWrapper.getNativeType(typeName);
+            return SolidityWrapperGenerator.getNativeType(typeName);
         } else {
             return typeName;
         }
@@ -583,7 +588,7 @@ public class FunctionGenerator {
             if (typeName instanceof ParameterizedTypeName) {
                 return ClassName.get(List.class);
             }
-            return SolidityFunctionWrapper.getNativeType(typeName);
+            return SolidityWrapperGenerator.getNativeType(typeName);
         } else {
             return typeName;
         }

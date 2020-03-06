@@ -10,15 +10,15 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper;
+package org.web3j.codegen.generators;
 
-public class WrapperConfig {
+public class SolidityWrapperGeneratorConfig {
     public final boolean generateSendTxForCalls;
     public final boolean useNativeJavaTypes;
     public final boolean useJavaPrimitiveTypes;
     public final int addressLength;
 
-    public WrapperConfig(
+    public SolidityWrapperGeneratorConfig(
             boolean generateSendTxForCalls,
             boolean useNativeJavaTypes,
             boolean useJavaPrimitiveTypes,

@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen.unit.wrapper;
+package org.web3j.codegen.generators.poets;
 
 import java.util.List;
 import java.util.Set;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
-import static org.web3j.codegen.unit.wrapper.Constants.FUNC_NAME_PREFIX;
-import static org.web3j.codegen.unit.wrapper.Constants.TYPE_FUNCTION;
+import static org.web3j.codegen.generators.SolidityConstants.FUNC_NAME_PREFIX;
+import static org.web3j.codegen.generators.SolidityConstants.TYPE_FUNCTION;
 import static org.web3j.utils.Lambdas.duplicatesBy;
 
-public class Utils {
+public class PoetUtils {
 
     public static String funcNameToConstant(String funcName, boolean useUpperCase) {
         if (useUpperCase) {

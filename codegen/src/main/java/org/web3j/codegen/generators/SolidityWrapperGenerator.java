@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen;
+package org.web3j.codegen.generators;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -28,8 +28,6 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -41,43 +39,24 @@ import org.web3j.abi.datatypes.primitive.Float;
 import org.web3j.abi.datatypes.primitive.Int;
 import org.web3j.abi.datatypes.primitive.Long;
 import org.web3j.abi.datatypes.primitive.Short;
-import org.web3j.codegen.unit.wrapper.WrapperConfig;
-import org.web3j.codegen.unit.wrapper.generators.*;
-import org.web3j.codegen.unit.wrapper.generators.TupleGenerator;
+import org.web3j.codegen.SolidityFunctionWrapperGenerator;
+import org.web3j.codegen.generators.poets.*;
+import org.web3j.codegen.generators.poets.TuplePoet;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
 
+import static org.web3j.codegen.generators.SolidityConstants.*;
+
 /** Generate Java Classes based on generated Solidity bin and abi files. */
-public class SolidityFunctionWrapper extends Generator {
-
-    private static final String BINARY = "BINARY";
-    private static final String WEB3J = "web3j";
-    private static final String CREDENTIALS = "credentials";
-    private static final String CONTRACT_GAS_PROVIDER = "contractGasProvider";
-    private static final String TRANSACTION_MANAGER = "transactionManager";
-    private static final String INITIAL_VALUE = "initialWeiValue";
-    private static final String CONTRACT_ADDRESS = "contractAddress";
-    private static final String GAS_PRICE = "gasPrice";
-    private static final String GAS_LIMIT = "gasLimit";
-    private static final String FILTER = "filter";
-    private static final String START_BLOCK = "startBlock";
-    private static final String END_BLOCK = "endBlock";
-    private static final String WEI_VALUE = "weiValue";
-    private static final String FUNC_NAME_PREFIX = "FUNC_";
-    private static final String TYPE_FUNCTION = "function";
-    private static final String TYPE_EVENT = "event";
-
-    private static final ClassName LOG = ClassName.get(Log.class);
-    private static final Logger LOGGER = LoggerFactory.getLogger(SolidityFunctionWrapper.class);
+public class SolidityWrapperGenerator extends Generator {
 
     private static final String CODEGEN_WARNING =
             "<p>Auto generated code.\n"
@@ -99,53 +78,36 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
     private static final Pattern pattern = Pattern.compile(regex);
 
-    private final GenerationReporter reporter;
+    private final SolidityWrapperGeneratorConfig config;
 
-    private final WrapperConfig config;
-
-    public WrapperConfig getConfig() {
+    public SolidityWrapperGeneratorConfig getConfig() {
         return config;
     }
 
-    public SolidityFunctionWrapper(boolean useNativeJavaTypes) {
+    public SolidityWrapperGenerator(boolean useNativeJavaTypes) {
         this(useNativeJavaTypes, Address.DEFAULT_LENGTH);
     }
 
-    public SolidityFunctionWrapper(boolean useNativeJavaTypes, int addressLength) {
+    public SolidityWrapperGenerator(boolean useNativeJavaTypes, int addressLength) {
         this(useNativeJavaTypes, false, false, addressLength);
     }
 
-    public SolidityFunctionWrapper(
+    public SolidityWrapperGenerator(
             boolean useNativeJavaTypes, int addressLength, boolean generateSendTxForCalls) {
         this(useNativeJavaTypes, generateSendTxForCalls, false, addressLength);
     }
 
-    public SolidityFunctionWrapper(
+    public SolidityWrapperGenerator(
             boolean useNativeJavaTypes,
             boolean useJavaPrimitiveTypes,
             boolean generateSendTxForCalls,
             int addressLength) {
-        this(
-                useNativeJavaTypes,
-                useJavaPrimitiveTypes,
-                generateSendTxForCalls,
-                addressLength,
-                new LogGenerationReporter(LOGGER));
-    }
-
-    public SolidityFunctionWrapper(
-            boolean useNativeJavaTypes,
-            boolean useJavaPrimitiveTypes,
-            boolean generateSendTxForCalls,
-            int addressLength,
-            GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
         this.addressLength = addressLength;
-        this.reporter = reporter;
         this.generateSendTxForCalls = generateSendTxForCalls;
         this.config =
-                new WrapperConfig(
+                new SolidityWrapperGeneratorConfig(
                         generateSendTxForCalls,
                         useNativeJavaTypes,
                         useJavaPrimitiveTypes,
@@ -188,25 +150,24 @@ public class SolidityFunctionWrapper extends Generator {
                         .build());
 
         classBuilder.addMethod(
-                ConstructorGenerator.buildConstructor(Credentials.class, CREDENTIALS, false));
+                ConstructorPoet.buildConstructor(Credentials.class, CREDENTIALS, false));
 
         classBuilder.addMethod(
-                ConstructorGenerator.buildConstructor(Credentials.class, CREDENTIALS, true));
+                ConstructorPoet.buildConstructor(Credentials.class, CREDENTIALS, true));
         classBuilder.addMethod(
-                ConstructorGenerator.buildConstructor(
+                ConstructorPoet.buildConstructor(
                         TransactionManager.class, TRANSACTION_MANAGER, false));
         classBuilder.addMethod(
-                ConstructorGenerator.buildConstructor(
+                ConstructorPoet.buildConstructor(
                         TransactionManager.class, TRANSACTION_MANAGER, true));
 
-        classBuilder.addFields(FunctionNameGenerator.buildFunctionNameConstants(abi));
+        classBuilder.addFields(FunctionNamePoet.buildFunctionNameConstants(abi));
 
-        classBuilder.addTypes(TupleGenerator.buildTupleDefinitions(abi));
+        classBuilder.addTypes(TuplePoet.buildTupleDefinitions(abi));
 
         classBuilder.addMethods(
-                new FunctionGenerator(reporter, config)
-                        .buildFunctionDefinitions(className, classBuilder, abi));
-        classBuilder.addMethods(new EventGenerator(config).buildEventFunctions(classBuilder, abi));
+                new FunctionPoet(config).buildFunctionDefinitions(className, classBuilder, abi));
+        classBuilder.addMethods(new EventPoet(config).buildEventFunctions(classBuilder, abi));
 
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(
@@ -405,8 +366,7 @@ public class SolidityFunctionWrapper extends Generator {
         MethodSpec.Builder methodBuilder =
                 getDeployMethodSpec(className, authType, authName, isPayable, withGasProvider);
         String inputParams =
-                FunctionGenerator.addParameters(
-                        methodBuilder, functionDefinition.getInputs(), config);
+                FunctionPoet.addParameters(methodBuilder, functionDefinition.getInputs(), config);
 
         if (!inputParams.isEmpty()) {
             return buildDeployWithParams(
@@ -678,8 +638,7 @@ public class SolidityFunctionWrapper extends Generator {
             }
 
             // TODO[Sam]: sort out package name as parameter.
-            final String tupleClassName =
-                    TupleGenerator.buildClassNameForTupleComponents(components);
+            final String tupleClassName = TuplePoet.buildClassNameForTupleComponents(components);
 
             // TODO: determine if static or dynamic struct?
             return ClassName.get("", "ComplexStorage." + tupleClassName);
@@ -722,8 +681,7 @@ public class SolidityFunctionWrapper extends Generator {
             if (components == null || components.size() == 0) {
                 throw new IllegalArgumentException("Components must be provided for tuples");
             }
-            final String tupleClassName =
-                    TupleGenerator.buildClassNameForTupleComponents(components);
+            final String tupleClassName = TuplePoet.buildClassNameForTupleComponents(components);
             return ClassName.get("", "ComplexStorage." + tupleClassName);
         } else {
             if (useNativeJavaTypes) {

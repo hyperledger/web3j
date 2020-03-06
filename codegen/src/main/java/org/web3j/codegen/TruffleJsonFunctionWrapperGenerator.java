@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.web3j.abi.datatypes.Address;
+import org.web3j.codegen.generators.SolidityWrapperGenerator;
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.tx.ChainId;
@@ -148,7 +149,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             } else {
                 addresses = Collections.EMPTY_MAP;
             }
-            new SolidityFunctionWrapper(useJavaNativeTypes, Address.DEFAULT_LENGTH)
+            new SolidityWrapperGenerator(useJavaNativeTypes, Address.DEFAULT_LENGTH)
                     .generateJavaFiles(
                             contractName,
                             c.getBytecode(),

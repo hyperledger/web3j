@@ -40,7 +40,10 @@ import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
-import org.web3j.codegen.unit.wrapper.generators.FunctionNameGenerator;
+import org.web3j.codegen.generators.SolidityWrapperGenerator;
+import org.web3j.codegen.generators.poets.EventPoet;
+import org.web3j.codegen.generators.poets.FunctionNamePoet;
+import org.web3j.codegen.generators.poets.FunctionPoet;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,26 +51,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
-import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
-import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
-import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
-import static org.web3j.codegen.unit.wrapper.generators.FunctionGenerator.createValidParamName;
+import static org.web3j.codegen.generators.SolidityWrapperGenerator.buildTypeName;
+import static org.web3j.codegen.generators.SolidityWrapperGenerator.getNativeType;
+import static org.web3j.codegen.generators.poets.EventPoet.getEventNativeType;
+import static org.web3j.codegen.generators.poets.FunctionPoet.createValidParamName;
 
-public class SolidityFunctionWrapperTest extends TempFileProvider {
+public class SolidityWrapperGeneratorTest extends TempFileProvider {
 
-    private SolidityFunctionWrapper solidityFunctionWrapper;
+    private SolidityWrapperGenerator solidityWrapperGenerator;
 
     private GenerationReporter generationReporter;
+    private FunctionPoet functionPoet;
 
     @Override
     @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         generationReporter = mock(GenerationReporter.class);
-        solidityFunctionWrapper =
-                new SolidityFunctionWrapper(
-                        true, false, false, Address.DEFAULT_LENGTH, generationReporter);
+        solidityWrapperGenerator =
+                new SolidityWrapperGenerator(true, false, false, Address.DEFAULT_LENGTH);
+        functionPoet = new FunctionPoet(solidityWrapperGenerator.getConfig(), generationReporter);
     }
 
     @Test
@@ -180,7 +183,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = functionPoet.buildFunction(functionDefinition);
 
         String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param) {\n"
@@ -205,7 +208,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        solidityFunctionWrapper.buildFunction(functionDefinition);
+        functionPoet.buildFunction(functionDefinition);
 
         verify(generationReporter)
                 .report(
@@ -224,7 +227,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         true);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = functionPoet.buildFunction(functionDefinition);
 
         String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param, java.math.BigInteger weiValue) {\n"
@@ -249,7 +252,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = functionPoet.buildFunction(functionDefinition);
 
         String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.math.BigInteger> functionName(java.math.BigInteger param) {\n"
@@ -273,7 +276,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = functionPoet.buildFunction(functionDefinition);
 
         String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.math.BigInteger param) {\n"
@@ -305,7 +308,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = functionPoet.buildFunction(functionDefinition);
 
         String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.util.List<java.math.BigInteger> param) {\n"
@@ -339,7 +342,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = functionPoet.buildFunction(functionDefinition);
 
         String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n"
@@ -374,7 +377,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        List<MethodSpec> methodSpecs = solidityFunctionWrapper.buildFunctions(functionDefinition);
+        List<MethodSpec> methodSpecs = functionPoet.buildFunctions(functionDefinition);
         assertTrue(methodSpecs.isEmpty());
     }
 
@@ -394,7 +397,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        MethodSpec methodSpec = functionPoet.buildFunction(functionDefinition);
 
         String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
@@ -439,7 +442,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addMethods(
-                solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
+                new EventPoet(solidityWrapperGenerator.getConfig())
+                        .buildEventFunctions(functionDefinition, builder));
 
         String expected =
                 "class testClass {\n"
@@ -513,7 +517,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addFields(
-                FunctionNameGenerator.buildFunctionNameConstants(
+                FunctionNamePoet.buildFunctionNameConstants(
                         Collections.singletonList(functionDefinition)));
 
         String expected =
