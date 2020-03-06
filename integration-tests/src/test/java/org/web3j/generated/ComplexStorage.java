@@ -11,11 +11,7 @@ import java.util.List;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.DynamicStruct;
-import org.web3j.abi.datatypes.Event;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.*;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -51,7 +47,10 @@ public class ComplexStorage extends Contract {
     public static final String FUNC_GETFOOBAR = "getFooBar";
 
     public static final Event ACCESS_EVENT = new Event("Access",
-            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<ComplexStorage.TupleClass1>() {}, new TypeReference<ComplexStorage.TupleClass2>() {}));
+            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {
+            }, new TypeReference<ComplexStorage.TupleClass1>() {
+            }, new TypeReference<ComplexStorage.TupleClass2>() {
+            }));
     ;
 
     @Deprecated
@@ -75,7 +74,8 @@ public class ComplexStorage extends Contract {
     public RemoteFunctionCall<ComplexStorage.TupleClass1> getFoo() {
         final Function function = new Function(FUNC_GETFOO,
                 Arrays.<Type>asList(),
-                Arrays.<TypeReference<?>>asList(new TypeReference<ComplexStorage.TupleClass1>() {}));
+                Arrays.<TypeReference<?>>asList(new TypeReference<ComplexStorage.TupleClass1>() {
+                }));
         return executeRemoteCallSingleValueReturn(function);
     }
 

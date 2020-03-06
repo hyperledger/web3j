@@ -45,8 +45,9 @@ public class ComplexStorageIT {
         assertNotNull(deployTransactionReceipt);
 
         // Now test the decoder.
-        final TransactionReceipt send = complexStorage.getFooBar().send();
+        final ComplexStorage.TupleClass1 send = complexStorage.getFoo().send();
 
-        //        Assertions.assertEquals("Hello EVM", greeting);
+        System.out.println(send.id);
+        System.out.println(send.name);
     }
 }

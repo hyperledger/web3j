@@ -13,6 +13,7 @@
 package org.web3j.protocol.core.methods.response;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -210,8 +211,8 @@ public class AbiDefinition {
 
             NamedTypeComponent that = (NamedTypeComponent) o;
 
-            if (name != null ? !name.equals(that.name) : that.name != null) return false;
-            return type != null ? type.equals(that.type) : that.type == null;
+            if (!Objects.equals(name, that.name)) return false;
+            return Objects.equals(type, that.type);
         }
 
         @Override

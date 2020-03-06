@@ -12,7 +12,10 @@
  */
 package org.web3j.utils;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Lambdas {
 
@@ -27,6 +30,21 @@ public class Lambdas {
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
+        };
+    }
+
+    public static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), true) == null;
+    }
+
+    public static <T> Predicate<T> duplicatesBy(Function<? super T, ?> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> {
+            Object boxed = keyExtractor.apply(t);
+            boolean retVal = seen.containsKey(boxed);
+            seen.put(boxed, true);
+            return retVal;
         };
     }
 }

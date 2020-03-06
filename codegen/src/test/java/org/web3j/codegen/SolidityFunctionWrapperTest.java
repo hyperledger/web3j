@@ -40,6 +40,7 @@ import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
+import org.web3j.codegen.unit.wrapper.generators.FunctionNameGenerator;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,6 +52,7 @@ import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
 import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
 import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
 import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
+import static org.web3j.codegen.unit.wrapper.generators.FunctionGenerator.createValidParamName;
 
 public class SolidityFunctionWrapperTest extends TempFileProvider {
 
@@ -511,7 +513,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addFields(
-                solidityFunctionWrapper.buildFuncNameConstants(
+                FunctionNameGenerator.buildFunctionNameConstants(
                         Collections.singletonList(functionDefinition)));
 
         String expected =
