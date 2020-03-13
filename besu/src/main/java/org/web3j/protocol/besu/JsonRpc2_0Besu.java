@@ -288,7 +288,7 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
     public Request<?, PrivFindPrivacyGroup> privOnChainFindPrivacyGroup(
             final List<Base64String> addresses) {
         return new Request<>(
-                "privx_findPrivacyGroup",
+                "privx_findOnChainPrivacyGroup",
                 Collections.singletonList(addresses),
                 web3jService,
                 PrivFindPrivacyGroup.class);

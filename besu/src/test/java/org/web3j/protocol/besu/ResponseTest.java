@@ -245,7 +245,7 @@ public class ResponseTest extends ResponseTester {
                         + "            \"description\":\"PrivacyGroupDescription\",\n"
                         + "            \"type\":\"PANTHEON\",\n"
                         + "            \"members\": [\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]\n"
-                        + "         }\n"
+                        + "         },\n"
                         + "         {\n"
                         + "            \"privacyGroupId\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
                         + "            \"type\":\"ONCHAIN\",\n"
@@ -272,8 +272,8 @@ public class ResponseTest extends ResponseTester {
                 new PrivacyGroup(
                         "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
                         PrivacyGroup.Type.ONCHAIN,
-                        "",
-                        "",
+                        null,
+                        null,
                         Base64String.wrapList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
 
         PrivFindPrivacyGroup privFindPrivacyGroup = deserialiseResponse(PrivFindPrivacyGroup.class);
