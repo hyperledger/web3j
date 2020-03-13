@@ -12,9 +12,16 @@
  */
 package org.web3j.abi;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
+import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.datatypes.generated.Uint256;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.web3j.abi.Utils.convert;
 
 public class EventEncoderTest {
 
@@ -27,5 +34,29 @@ public class EventEncoderTest {
         assertEquals(
                 EventEncoder.buildEventSignature("Notify(uint256,uint256)"),
                 ("0x71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed"));
+    }
+
+    @Test
+    public void testEncode() {
+        Event event =
+                new Event(
+                        "Notify",
+                        Arrays.<TypeReference<?>>asList(
+                                new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+
+        assertEquals(
+                EventEncoder.encode(event),
+                "0x71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed");
+    }
+
+    @Test
+    public void testBuildMethodSignature() {
+        List<TypeReference<?>> parameters =
+                Arrays.<TypeReference<?>>asList(
+                        new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {});
+
+        assertEquals(
+                EventEncoder.buildMethodSignature("Notify", convert(parameters)),
+                "Notify(uint256,uint256)");
     }
 }
