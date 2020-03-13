@@ -92,6 +92,11 @@ public class NumericTest {
     }
 
     @Test
+    public void testQuantityDecodeLong() {
+        assertEquals(Numeric.decodeQuantity("1234"), BigInteger.valueOf(1234));
+    }
+
+    @Test
     public void testQuantityDecodeMissingValue() {
 
         assertThrows(MessageDecodingException.class, () -> Numeric.decodeQuantity("0x"));
