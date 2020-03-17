@@ -158,10 +158,10 @@ public class TransactionReceipt {
     }
 
     public boolean isStatusOK() {
-        if (null == status) {
+        if (null == getStatus()) {
             return true;
         }
-        BigInteger statusQuantity = Numeric.decodeQuantity(status);
+        BigInteger statusQuantity = Numeric.decodeQuantity(getStatus());
         return BigInteger.ONE.equals(statusQuantity);
     }
 
