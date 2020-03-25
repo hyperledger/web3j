@@ -61,6 +61,6 @@ public class TransferTest extends ManagedTransactionTester {
             throws Exception {
         return new Transfer(web3j, getVerifiedTransactionManager(credentials))
                 .sendFunds(toAddress, value, unit)
-                .send();
+                .call();
     }
 }

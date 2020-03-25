@@ -22,8 +22,8 @@ import org.web3j.tuples.Tuple;
 import org.web3j.tuples.generated.Tuple2;
 
 public class JavaMappingHelper implements MappingHelper {
-    private Map<Class, Object> defaultValueMap = new HashMap<>();
-    private Map<Class, String> javaPoetFormat = new HashMap<>();
+    private final Map<Class<?>, Object> defaultValueMap = new HashMap<>();
+    private final Map<Class<?>, String> javaPoetFormat = new HashMap<>();
 
     public JavaMappingHelper() {
         defaultValueMap.put(String.class, "REPLACE_ME");
@@ -41,11 +41,11 @@ public class JavaMappingHelper implements MappingHelper {
         javaPoetFormat.put(byte[].class, "new $T{}");
     }
 
-    public Map<Class, Object> getDefaultValueMap() {
+    public Map<Class<?>, Object> getDefaultValueMap() {
         return defaultValueMap;
     }
 
-    public Map<Class, String> getPoetFormat() {
+    public Map<Class<?>, String> getPoetFormat() {
         return javaPoetFormat;
     }
 }

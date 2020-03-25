@@ -16,7 +16,7 @@ import java.util.Map;
 
 public interface MappingHelper {
 
-    Map<Class, Object> getDefaultValueMap();
+    Map<Class<?>, Object> getDefaultValueMap();
 
-    Map<Class, String> getPoetFormat();
+    Map<Class<?>, String> getPoetFormat();
 }

@@ -1,0 +1,30 @@
+package org.web3j.protocol.core.generated;
+
+import java.util.List;
+
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.RemoteFunctionCall;
+import org.web3j.tuples.generated.Tuple2;
+import org.web3j.tx.TransactionManager;
+
+public class RemoteFunctionCall2<T1, T2> extends RemoteFunctionCall<Tuple2<T1, T2>> {
+
+    public RemoteFunctionCall2(
+            final Function function,
+            final String contractAddress,
+            final TransactionManager transactionManager,
+            final DefaultBlockParameter defaultBlockParameter) {
+        super(function, contractAddress, transactionManager, defaultBlockParameter);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Tuple2<T1, T2> cast(final List<Type<?>> values) {
+        return new Tuple2<>(
+                (T1) values.get(0).getValue(),
+                (T2) values.get(1).getValue()
+        );
+    }
+}

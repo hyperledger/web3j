@@ -32,11 +32,11 @@ import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
  * src/test/java/contracts and each file is named after the contract + "Test" e.g GreeterTest
  */
 public class JavaClassGenerator implements UnitClassGenerator {
-    private final Class theContract;
+    private final Class<?> theContract;
     private final String packageName;
     private final String writePath;
 
-    public JavaClassGenerator(final Class theContract, final String packageName, String writePath) {
+    public JavaClassGenerator(final Class<?> theContract, final String packageName, String writePath) {
         this.theContract = theContract;
         this.packageName = packageName;
         this.writePath = writePath;
@@ -44,13 +44,13 @@ public class JavaClassGenerator implements UnitClassGenerator {
 
     @Override
     public void writeClass() throws IOException {
-        ClassName EVM_ANNOTATION = ClassName.get("org.web3j", "EVMTest");
-        AnnotationSpec.Builder annotationSpec = AnnotationSpec.builder(EVM_ANNOTATION);
+        final ClassName EVM_ANNOTATION = ClassName.get("org.web3j", "EVMTest");
+        final AnnotationSpec.Builder annotationSpec = AnnotationSpec.builder(EVM_ANNOTATION);
         if (JavaVersion.getJavaVersionAsDouble() < 11) {
             ClassName GethContainer = ClassName.get("org.web3j", "NodeType");
             annotationSpec.addMember("value", "type = $T.GETH", GethContainer);
         }
-        TypeSpec testClass =
+        final TypeSpec testClass =
                 TypeSpec.classBuilder(theContract.getSimpleName() + "Test")
                         .addMethods(MethodFilter.generateMethodSpecsForEachTest(theContract))
                         .addAnnotation((annotationSpec).build())
@@ -60,7 +60,7 @@ public class JavaClassGenerator implements UnitClassGenerator {
                                 Modifier.PRIVATE,
                                 Modifier.STATIC)
                         .build();
-        JavaFile javaFile = JavaFile.builder(packageName, testClass).build();
+        final JavaFile javaFile = JavaFile.builder(packageName, testClass).build();
         javaFile.writeTo(new File(writePath));
     }
 }

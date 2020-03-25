@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.web3j.codegen.unit.gen.Parser;
 import org.web3j.codegen.unit.gen.utils.MappingHelper;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.core.RemoteTransaction;
 
 import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
@@ -34,11 +34,11 @@ public class JavaParser extends Parser {
     }
 
     public String generateAssertionJavaPoetStringTypes() {
-        Type returnType = getMethodReturnType();
-        Object[] body = generatePlaceholderValues();
-        StringBuilder symbolBuilder = new StringBuilder();
+        final Type returnType = getMethodReturnType();
+        final Object[] body = generatePlaceholderValues();
+        final StringBuilder symbolBuilder = new StringBuilder();
         symbolBuilder.append("$T.");
-        if (returnType.equals(TransactionReceipt.class)) {
+        if (returnType.equals(RemoteTransaction.class)) {
             symbolBuilder.append("assertTrue($L.isStatusOK())");
         } else {
             symbolBuilder.append("assertEquals(");
@@ -62,7 +62,7 @@ public class JavaParser extends Parser {
 
     @Override
     public String generatePoetStringTypes() {
-        StringBuilder symbolBuilder = new StringBuilder();
+        final StringBuilder symbolBuilder = new StringBuilder();
         if (getMethodReturnType().equals(theContract)) {
             symbolBuilder.append("$L = $T.");
         } else {
@@ -88,7 +88,7 @@ public class JavaParser extends Parser {
 
     @Override
     protected String getPoetFormatSpecifier() {
-        List<String> generated = new ArrayList<>();
+        final List<String> generated = new ArrayList<>();
         Arrays.asList(method.getParameterTypes())
                 .forEach(
                         type ->

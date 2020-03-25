@@ -100,8 +100,8 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Type> Class<T> getParameterizedTypeFromArray(TypeReference typeReference)
-            throws ClassNotFoundException {
+    static <T extends Type<?>> Class<T> getParameterizedTypeFromArray(
+            TypeReference<?> typeReference) throws ClassNotFoundException {
 
         java.lang.reflect.Type type = typeReference.getType();
         java.lang.reflect.Type[] typeArguments =
@@ -112,11 +112,11 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
-        List<TypeReference<Type>> result = new ArrayList<>(input.size());
+    public static List<TypeReference<Type<?>>> convert(List<TypeReference<?>> input) {
+        List<TypeReference<Type<?>>> result = new ArrayList<>(input.size());
         result.addAll(
                 input.stream()
-                        .map(typeReference -> (TypeReference<Type>) typeReference)
+                        .map(typeReference -> (TypeReference<Type<?>>) typeReference)
                         .collect(Collectors.toList()));
         return result;
     }

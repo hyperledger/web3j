@@ -204,7 +204,7 @@ public class TypeDecoder {
             listcons = arrayClass.getConstructor(Class.class, List.class);
         }
         // create a list of arguments coerced to the correct type of sub-TypeReference
-        ArrayList<Type> transformedList = new ArrayList<Type>(values.size());
+        ArrayList<Type<?>> transformedList = new ArrayList<Type<?>>(values.size());
         TypeReference subTypeReference = ref.getSubTypeReference();
         for (Object o : values) {
             transformedList.add(instantiateType(subTypeReference, o));

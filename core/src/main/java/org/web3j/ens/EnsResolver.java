@@ -88,9 +88,9 @@ public class EnsResolver {
             PublicResolver resolver = obtainPublicResolver(contractId);
 
             byte[] nameHash = NameHash.nameHashAsBytes(contractId);
-            String contractAddress = null;
+            String contractAddress;
             try {
-                contractAddress = resolver.addr(nameHash).send();
+                contractAddress = resolver.addr(nameHash).call();
             } catch (Exception e) {
                 throw new RuntimeException("Unable to execute Ethereum request", e);
             }
@@ -120,7 +120,7 @@ public class EnsResolver {
             byte[] nameHash = NameHash.nameHashAsBytes(reverseName);
             String name;
             try {
-                name = resolver.name(nameHash).send();
+                name = resolver.name(nameHash).call();
             } catch (Exception e) {
                 throw new RuntimeException("Unable to execute Ethereum request", e);
             }
@@ -143,7 +143,7 @@ public class EnsResolver {
                 ENS.load(registryContract, web3j, transactionManager, new DefaultGasProvider());
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-        String resolverAddress = ensRegistry.resolver(nameHash).send();
+        String resolverAddress = ensRegistry.resolver(nameHash).call();
 
         return PublicResolver.load(
                 resolverAddress, web3j, transactionManager, new DefaultGasProvider());

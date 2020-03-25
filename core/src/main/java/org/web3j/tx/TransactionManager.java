@@ -67,7 +67,7 @@ public abstract class TransactionManager {
         return executeTransaction(gasPrice, gasLimit, to, data, value, false);
     }
 
-    protected TransactionReceipt executeTransaction(
+    public TransactionReceipt executeTransaction(
             BigInteger gasPrice,
             BigInteger gasLimit,
             String to,

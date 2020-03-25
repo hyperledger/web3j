@@ -81,7 +81,7 @@ public class GreeterContractIT extends Scenario {
         String responseValue = callSmartContractFunction(getFunction, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type> response =
+        List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, getFunction.getOutputParameters());
         assertEquals(response.size(), (1));
         assertEquals(response.get(0).getValue(), (VALUE));

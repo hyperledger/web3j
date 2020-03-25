@@ -57,13 +57,13 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                                 "web3j tokens",
                                 BigInteger.valueOf(18),
                                 "w3j$")
-                        .send();
+                        .call();
 
         assertTrue(contract.isValid());
 
-        assertEquals(contract.totalSupply().send(), (aliceQty));
+        assertEquals(contract.totalSupply().call(), (aliceQty));
 
-        assertEquals(contract.balanceOf(ALICE.getAddress()).send(), (aliceQty));
+        assertEquals(contract.balanceOf(ALICE.getAddress()).call(), (aliceQty));
 
         CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
         Disposable transferEventSubscription =
@@ -99,11 +99,11 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         BigInteger bobQty = BigInteger.ZERO;
         bobQty = bobQty.add(transferQuantity);
 
-        assertEquals(contract.balanceOf(ALICE.getAddress()).send(), (aliceQty));
-        assertEquals(contract.balanceOf(BOB.getAddress()).send(), (bobQty));
+        assertEquals(contract.balanceOf(ALICE.getAddress()).call(), (aliceQty));
+        assertEquals(contract.balanceOf(BOB.getAddress()).call(), (bobQty));
 
         // set an allowance
-        assertEquals(contract.allowance(aliceAddress, bobAddress).send(), (BigInteger.ZERO));
+        assertEquals(contract.allowance(aliceAddress, bobAddress).call(), (BigInteger.ZERO));
 
         transferQuantity = BigInteger.valueOf(50);
         TransactionReceipt approveReceipt =
@@ -116,7 +116,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         assertEquals(approvalEventValues._spender, (bobAddress));
         assertEquals(approvalEventValues._value, (transferQuantity));
 
-        assertEquals(contract.allowance(aliceAddress, bobAddress).send(), (transferQuantity));
+        assertEquals(contract.allowance(aliceAddress, bobAddress).call(), (transferQuantity));
 
         // perform a transfer as Bob
         transferQuantity = BigInteger.valueOf(25);
@@ -138,8 +138,8 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         aliceQty = aliceQty.subtract(transferQuantity);
         bobQty = bobQty.add(transferQuantity);
 
-        assertEquals(contract.balanceOf(aliceAddress).send(), (aliceQty));
-        assertEquals(contract.balanceOf(bobAddress).send(), (bobQty));
+        assertEquals(contract.balanceOf(aliceAddress).call(), (aliceQty));
+        assertEquals(contract.balanceOf(bobAddress).call(), (bobQty));
 
         transferEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);
         approvalEventCountDownLatch.await(DEFAULT_POLLING_FREQUENCY, TimeUnit.MILLISECONDS);

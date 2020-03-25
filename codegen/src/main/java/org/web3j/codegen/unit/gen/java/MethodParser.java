@@ -35,9 +35,9 @@ import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 /*Class that when given a method provides a JavaPoet method spec. */
 public class MethodParser {
     private final Method method;
-    private final Class theContract;
+    private final Class<?> theContract;
 
-    public MethodParser(final Method method, final Class theContract) {
+    public MethodParser(final Method method, final Class<?> theContract) {
         this.method = method;
         this.theContract = theContract;
     }
@@ -76,14 +76,14 @@ public class MethodParser {
     }
 
     private Map<String, Object[]> generateStatementBody() {
-        Map<String, Object[]> methodBodySpecification = new LinkedHashMap<>();
-        JavaParser parser = new JavaParser(theContract, method, new JavaMappingHelper());
-        String javaPoetStringTypes = parser.generatePoetStringTypes();
-        Object[] genericParameters = parser.generatePlaceholderValues();
+        final Map<String, Object[]> methodBodySpecification = new LinkedHashMap<>();
+        final JavaParser parser = new JavaParser(theContract, method, new JavaMappingHelper());
+        final String javaPoetStringTypes = parser.generatePoetStringTypes();
+        final Object[] genericParameters = parser.generatePlaceholderValues();
         methodBodySpecification.put(javaPoetStringTypes, genericParameters);
         if (methodNeedsAssertion()) {
-            String assertionJavaPoet = parser.generateAssertionJavaPoetStringTypes();
-            Object[] assertionParams = parser.generateAssertionPlaceholderValues();
+            final String assertionJavaPoet = parser.generateAssertionJavaPoetStringTypes();
+            final Object[] assertionParams = parser.generateAssertionPlaceholderValues();
             methodBodySpecification.put(assertionJavaPoet, assertionParams);
         }
         return methodBodySpecification;

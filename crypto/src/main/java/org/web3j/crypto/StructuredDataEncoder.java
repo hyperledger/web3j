@@ -354,7 +354,7 @@ public class StructuredDataEncoder {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < encTypes.size(); i++) {
-            Class<Type> typeClazz = (Class<Type>) AbiTypes.getType(encTypes.get(i));
+            Class<Type<?>> typeClazz = (Class<Type<?>>) AbiTypes.getType(encTypes.get(i));
 
             boolean atleastOneConstructorExistsForGivenParametersType = false;
             // Using the Reflection API to get the types of the parameters

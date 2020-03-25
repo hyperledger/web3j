@@ -67,9 +67,9 @@ public abstract class Parser {
     }
 
     public final Object[] generateAssertionPlaceholderValues() {
-        Type returnType = getMethodReturnType();
-        Object[] body = generatePlaceholderValues();
-        List<Object> placeHolder = new ArrayList<>();
+        final Type returnType = getMethodReturnType();
+        final Object[] body = generatePlaceholderValues();
+        final List<Object> placeHolder = new ArrayList<>();
         placeHolder.add(Assertions.class);
         if (!body[0].equals(TransactionReceipt.class)) {
             if (returnType.getTypeName().contains("Tuple")) {
@@ -90,14 +90,14 @@ public abstract class Parser {
     }
 
     protected final Object[] mergePlaceholderValues(Object[] source1, Object[] source2) {
-        Object[] destination = new Object[source1.length + source2.length];
+        final Object[] destination = new Object[source1.length + source2.length];
         System.arraycopy(source1, 0, destination, 0, source1.length);
         System.arraycopy(source2, 0, destination, source1.length, source2.length);
         return destination;
     }
 
     protected final Object[] concludeMethodReturnType() {
-        Type returnType = getMethodReturnType();
+        final Type returnType = getMethodReturnType();
         if (returnType.equals(theContract)) {
             return new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
         } else {

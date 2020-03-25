@@ -27,12 +27,12 @@ public class MethodSpecGenerator {
     private final String testMethodName;
     private final Map<String, Object[]> statementBody;
     private final List<ParameterSpec> testMethodParameters;
-    private final Class testMethodAnnotation;
+    private final Class<?> testMethodAnnotation;
     private final Modifier testMethodModifier;
 
     public MethodSpecGenerator(
             String testMethodName,
-            Class testMethodAnnotation,
+            Class<?> testMethodAnnotation,
             Modifier testMethodModifier,
             List<ParameterSpec> testMethodParameters,
             Map<String, Object[]> statementBody) {
@@ -74,7 +74,7 @@ public class MethodSpecGenerator {
     }
 
     private CodeBlock setMethodBody() {
-        CodeBlock.Builder methodBody = CodeBlock.builder();
+        final CodeBlock.Builder methodBody = CodeBlock.builder();
         statementBody.forEach(methodBody::addStatement);
         return methodBody.build();
     }

@@ -15,11 +15,11 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -37,61 +37,18 @@ public class Transfer extends ManagedTransaction {
         super(web3j, transactionManager);
     }
 
-    /**
-     * Given the duration required to execute a transaction, asyncronous execution is strongly
-     * recommended via {@link Transfer#sendFunds(String, BigDecimal, Convert.Unit)}.
-     *
-     * @param toAddress destination address
-     * @param value amount to send
-     * @param unit of specified send
-     * @return {@link Optional} containing our transaction receipt
-     * @throws ExecutionException if the computation threw an exception
-     * @throws InterruptedException if the current thread was interrupted while waiting
-     * @throws TransactionException if the transaction was not mined while waiting
-     */
-    private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit)
-            throws IOException, InterruptedException, TransactionException {
-
-        BigInteger gasPrice = requestCurrentGasPrice();
-        return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
-    }
-
-    private TransactionReceipt send(
-            String toAddress,
-            BigDecimal value,
-            Convert.Unit unit,
-            BigInteger gasPrice,
-            BigInteger gasLimit)
-            throws IOException, InterruptedException, TransactionException {
-
-        BigDecimal weiValue = Convert.toWei(value, unit);
-        if (!Numeric.isIntegerValue(weiValue)) {
-            throw new UnsupportedOperationException(
-                    "Non decimal Wei value provided: "
-                            + value
-                            + " "
-                            + unit.toString()
-                            + " = "
-                            + weiValue
-                            + " Wei");
-        }
-
-        String resolvedAddress = ensResolver.resolve(toAddress);
-        return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
-    }
-
     public static RemoteCall<TransactionReceipt> sendFunds(
-            Web3j web3j,
-            Credentials credentials,
-            String toAddress,
-            BigDecimal value,
-            Convert.Unit unit)
-            throws InterruptedException, IOException, TransactionException {
+            final Web3j web3j,
+            final Credentials credentials,
+            final String toAddress,
+            final BigDecimal value,
+            final Convert.Unit unit)
+            throws IOException {
 
-        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        final TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        final Transfer transfer = new Transfer(web3j, transactionManager);
 
-        return new RemoteCall<>(
-                () -> new Transfer(web3j, transactionManager).send(toAddress, value, unit));
+        return transfer.sendFunds(toAddress, value, unit);
     }
 
     /**
@@ -101,20 +58,86 @@ public class Transfer extends ManagedTransaction {
      * @param toAddress destination address
      * @param value amount to send
      * @param unit of specified send
-     * @return {@link RemoteCall} containing executing transaction
+     * @return {@link RemoteTransaction} containing executing transaction
      */
     public RemoteCall<TransactionReceipt> sendFunds(
-            String toAddress, BigDecimal value, Convert.Unit unit) {
-        return new RemoteCall<>(() -> send(toAddress, value, unit));
+            final String toAddress, final BigDecimal value, final Convert.Unit unit) {
+        return sendFunds(toAddress, value, unit, null, null);
     }
 
+    /**
+     * Given the duration required to execute a transaction, asynchronous execution is strongly
+     * recommended via {@link Transfer#sendFunds(String, BigDecimal, Convert.Unit)}.
+     *
+     * @param toAddress destination address
+     * @param value amount to send
+     * @param unit of specified send
+     * @param gasPrice transaction gas price
+     * @param gasLimit transaction gas limit
+     * @return {@link RemoteTransaction} containing executing transaction
+     */
     public RemoteCall<TransactionReceipt> sendFunds(
-            String toAddress,
-            BigDecimal value,
-            Convert.Unit unit,
-            BigInteger gasPrice,
-            BigInteger gasLimit) {
-        return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, gasLimit));
+            final String toAddress,
+            final BigDecimal value,
+            final Convert.Unit unit,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit) {
+
+        Objects.requireNonNull(toAddress);
+        Objects.requireNonNull(value);
+        Objects.requireNonNull(unit);
+
+        return new TransferCall(toAddress, value, unit, gasPrice, gasLimit);
+    }
+
+    private class TransferCall implements RemoteCall<TransactionReceipt> {
+
+        private String toAddress;
+        private BigDecimal value;
+        private Convert.Unit unit;
+        private BigInteger gasPrice;
+        private BigInteger gasLimit;
+
+        private TransferCall(
+                final String toAddress,
+                final BigDecimal value,
+                final Convert.Unit unit,
+                final BigInteger gasPrice,
+                final BigInteger gasLimit) {
+            this.toAddress = toAddress;
+            this.value = value;
+            this.unit = unit;
+            this.gasPrice = gasPrice;
+            this.gasLimit = gasLimit;
+        }
+
+        @Override
+        public TransactionReceipt call(DefaultBlockParameter blockParameter) throws IOException {
+            final BigDecimal weiValue = Convert.toWei(value, unit);
+            if (!Numeric.isIntegerValue(weiValue)) {
+                throw new UnsupportedOperationException(
+                        "Non decimal Wei value provided: "
+                                + value
+                                + " "
+                                + unit.toString()
+                                + " = "
+                                + weiValue
+                                + " Wei");
+            }
+            final String resolvedAddress = ensResolver.resolve(toAddress);
+            if (gasPrice == null) {
+                gasPrice = requestCurrentGasPrice();
+            }
+            if (gasLimit == null) {
+                gasLimit = GAS_LIMIT;
+            }
+            try {
+                return Transfer.this.send(
+                        resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
+            } catch (TransactionException e) {
+                throw new IOException(e);
+            }
+        }
     }
 
     public static RemoteCall<TransactionReceipt> sendFundsEIP1559(

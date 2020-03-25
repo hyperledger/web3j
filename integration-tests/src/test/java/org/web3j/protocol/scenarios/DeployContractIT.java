@@ -67,7 +67,7 @@ public class DeployContractIT extends Scenario {
         String responseValue = callSmartContractFunction(function, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type> uint =
+        List<Type<?>> uint =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
         assertEquals(uint.size(), (1));
         assertEquals(uint.get(0).getValue(), (BigInteger.valueOf(13)));

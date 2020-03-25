@@ -36,6 +36,6 @@ public class RawTransactionManagerTest extends ManagedTransactionTester {
         Transfer transfer = new Transfer(web3j, transactionManager);
         assertThrows(
                 TxHashMismatchException.class,
-                () -> transfer.sendFunds(ADDRESS, BigDecimal.ONE, Convert.Unit.ETHER).send());
+                () -> transfer.sendFunds(ADDRESS, BigDecimal.ONE, Convert.Unit.ETHER).call());
     }
 }

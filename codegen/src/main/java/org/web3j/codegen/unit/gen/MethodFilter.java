@@ -29,7 +29,7 @@ import org.web3j.tx.gas.ContractGasProvider;
 
 public class MethodFilter {
 
-    public static List<Method> extractValidMethods(Class contract) {
+    public static List<Method> extractValidMethods(Class<?> contract) {
         return Arrays.stream(contract.getDeclaredMethods())
                 .filter(
                         m ->
@@ -51,7 +51,7 @@ public class MethodFilter {
         return true;
     }
 
-    public static List<MethodSpec> generateMethodSpecsForEachTest(Class theContract) {
+    public static List<MethodSpec> generateMethodSpecsForEachTest(Class<?> theContract) {
         List<MethodSpec> listOfMethodSpecs = new ArrayList<>();
         extractValidMethods(theContract)
                 .forEach(
@@ -61,7 +61,7 @@ public class MethodFilter {
         return listOfMethodSpecs;
     }
 
-    public static List<FunSpec> generateFunctionSpecsForEachTest(Class theContract) {
+    public static List<FunSpec> generateFunctionSpecsForEachTest(Class<?> theContract) {
         List<FunSpec> listOfMethodSpecs = new ArrayList<>();
         extractValidMethods(theContract)
                 .forEach(

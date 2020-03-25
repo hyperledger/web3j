@@ -46,7 +46,7 @@ public abstract class FunctionEncoder {
         return encoder().encodeFunction(function);
     }
 
-    public static String encodeConstructor(final List<Type> parameters) {
+    public static String encodeConstructor(final List<Type<?>> parameters) {
         return encoder().encodeParameters(parameters);
     }
 
@@ -57,8 +57,8 @@ public abstract class FunctionEncoder {
             List<String> solidityOutputTypes)
             throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
                     IllegalAccessException, InvocationTargetException {
-        List<Type> encodedInput = new ArrayList<>();
-        Iterator argit = arguments.iterator();
+        List<Type<?>> encodedInput = new ArrayList<>();
+        Iterator<?> argit = arguments.iterator();
         for (String st : solidityInputTypes) {
             encodedInput.add(instantiateType(st, argit.next()));
         }
@@ -71,10 +71,10 @@ public abstract class FunctionEncoder {
 
     protected abstract String encodeFunction(Function function);
 
-    protected abstract String encodeParameters(List<Type> parameters);
+    protected abstract String encodeParameters(List<Type<?>> parameters);
 
     protected static String buildMethodSignature(
-            final String methodName, final List<Type> parameters) {
+            final String methodName, final List<Type<?>> parameters) {
 
         final StringBuilder result = new StringBuilder();
         result.append(methodName);

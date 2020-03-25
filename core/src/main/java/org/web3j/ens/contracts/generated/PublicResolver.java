@@ -1,12 +1,12 @@
 package org.web3j.ens.contracts.generated;
 
-import io.reactivex.Flowable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
+
+import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -23,6 +23,10 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.RemoteTransaction;
+import org.web3j.protocol.core.generated.RemoteFunctionCall1;
+import org.web3j.protocol.core.generated.RemoteFunctionCall2;
+import org.web3j.protocol.core.generated.RemoteTransaction0;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -35,7 +39,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 4.0.0.
@@ -69,197 +73,195 @@ public class PublicResolver extends Contract {
 
     public static final String FUNC_SETADDR = "setAddr";
 
-    public static final Event ADDRCHANGED_EVENT = new Event("AddrChanged", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Address>() {}));
-    ;
+    public static final Event ADDRCHANGED_EVENT = new Event("AddrChanged",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {
+            }, new TypeReference<Address>() {
+            }));
 
-    public static final Event CONTENTCHANGED_EVENT = new Event("ContentChanged", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}));
-    ;
+    public static final Event CONTENTCHANGED_EVENT = new Event("ContentChanged",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {
+            }, new TypeReference<Bytes32>() {
+            }));
 
-    public static final Event NAMECHANGED_EVENT = new Event("NameChanged", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>() {}));
-    ;
+    public static final Event NAMECHANGED_EVENT = new Event("NameChanged",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {
+            }, new TypeReference<Utf8String>() {
+            }));
 
-    public static final Event ABICHANGED_EVENT = new Event("ABIChanged", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint256>(true) {}));
-    ;
+    public static final Event ABICHANGED_EVENT = new Event("ABIChanged",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {
+            }, new TypeReference<Uint256>(true) {
+            }));
 
-    public static final Event PUBKEYCHANGED_EVENT = new Event("PubkeyChanged", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
-    ;
+    public static final Event PUBKEYCHANGED_EVENT = new Event("PubkeyChanged",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {
+            }, new TypeReference<Bytes32>() {
+            }, new TypeReference<Bytes32>() {
+            }));
 
-    public static final Event TEXTCHANGED_EVENT = new Event("TextChanged", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}));
-    ;
+    public static final Event TEXTCHANGED_EVENT = new Event("TextChanged",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {
+            }, new TypeReference<Utf8String>(true) {
+            }, new TypeReference<Utf8String>() {
+            }));
 
-    @Deprecated
-    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
-    }
-
-    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected PublicResolver(
+            String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    @Deprecated
-    protected PublicResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
-    }
-
-    protected PublicResolver(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected PublicResolver(
+            String contractAddress, Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public RemoteCall<Boolean> supportsInterface(byte[] interfaceID) {
-        final Function function = new Function(FUNC_SUPPORTSINTERFACE, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}));
-        return executeRemoteCallSingleValueReturn(function, Boolean.class);
+        final Function function = new Function(FUNC_SUPPORTSINTERFACE,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {
+                }));
+        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<TransactionReceipt> setText(byte[] node, String key, String value) {
+    public RemoteTransaction<Void> setText(byte[] node, String key, String value) {
         final Function function = new Function(
-                FUNC_SETTEXT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.Utf8String(key), 
-                new org.web3j.abi.datatypes.Utf8String(value)), 
+                FUNC_SETTEXT,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.Utf8String(key),
+                        new org.web3j.abi.datatypes.Utf8String(value)),
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
+        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+                defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
+                false, gasProvider);
     }
 
     public RemoteCall<Tuple2<BigInteger, byte[]>> ABI(byte[] node, BigInteger contentTypes) {
-        final Function function = new Function(FUNC_ABI, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.generated.Uint256(contentTypes)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<DynamicBytes>() {}));
-        return new RemoteCall<Tuple2<BigInteger, byte[]>>(
-                new Callable<Tuple2<BigInteger, byte[]>>() {
-                    @Override
-                    public Tuple2<BigInteger, byte[]> call() throws Exception {
-                        List<Type> results = executeCallMultipleValueReturn(function);
-                        return new Tuple2<BigInteger, byte[]>(
-                                (BigInteger) results.get(0).getValue(), 
-                                (byte[]) results.get(1).getValue());
-                    }
-                });
+        final Function function = new Function(FUNC_ABI,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.generated.Uint256(contentTypes)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
+                }, new TypeReference<DynamicBytes>() {
+                }));
+        return new RemoteFunctionCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<TransactionReceipt> setPubkey(byte[] node, byte[] x, byte[] y) {
+    public RemoteTransaction<Void> setPubkey(byte[] node, byte[] x, byte[] y) {
         final Function function = new Function(
-                FUNC_SETPUBKEY, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.generated.Bytes32(x), 
-                new org.web3j.abi.datatypes.generated.Bytes32(y)), 
+                FUNC_SETPUBKEY,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.generated.Bytes32(x),
+                        new org.web3j.abi.datatypes.generated.Bytes32(y)),
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
+        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+                defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
+                false, gasProvider);
     }
 
     public RemoteCall<byte[]> content(byte[] node) {
-        final Function function = new Function(FUNC_CONTENT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
-        return executeRemoteCallSingleValueReturn(function, byte[].class);
+        final Function function = new Function(FUNC_CONTENT,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
+                }));
+        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> addr(byte[] node) {
-        final Function function = new Function(FUNC_ADDR, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        return executeRemoteCallSingleValueReturn(function, String.class);
+        final Function function = new Function(FUNC_ADDR,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
+                }));
+        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> text(byte[] node, String key) {
-        final Function function = new Function(FUNC_TEXT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.Utf8String(key)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        return executeRemoteCallSingleValueReturn(function, String.class);
+        final Function function = new Function(FUNC_TEXT,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.Utf8String(key)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
+                }));
+        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<TransactionReceipt> setABI(byte[] node, BigInteger contentType, byte[] data) {
+    public RemoteTransaction<Void> setABI(byte[] node, BigInteger contentType, byte[] data) {
         final Function function = new Function(
-                FUNC_SETABI, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.generated.Uint256(contentType), 
-                new org.web3j.abi.datatypes.DynamicBytes(data)), 
+                FUNC_SETABI,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.generated.Uint256(contentType),
+                        new org.web3j.abi.datatypes.DynamicBytes(data)),
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
+        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+                defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
+                false, gasProvider);
     }
 
     public RemoteCall<String> name(byte[] node) {
-        final Function function = new Function(FUNC_NAME, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
-        return executeRemoteCallSingleValueReturn(function, String.class);
+        final Function function = new Function(FUNC_NAME,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
+                }));
+        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<TransactionReceipt> setName(byte[] node, String name) {
+    public RemoteTransaction<Void> setName(byte[] node, String name) {
         final Function function = new Function(
-                FUNC_SETNAME, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.Utf8String(name)), 
+                FUNC_SETNAME,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.Utf8String(name)),
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
+        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+                defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
+                false, gasProvider);
     }
 
-    public RemoteCall<TransactionReceipt> setContent(byte[] node, byte[] hash) {
+    public RemoteTransaction<Void> setContent(byte[] node, byte[] hash) {
         final Function function = new Function(
-                FUNC_SETCONTENT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.generated.Bytes32(hash)), 
+                FUNC_SETCONTENT,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.generated.Bytes32(hash)),
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
+        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+                defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
+                false, gasProvider);
     }
 
     public RemoteCall<Tuple2<byte[], byte[]>> pubkey(byte[] node) {
-        final Function function = new Function(FUNC_PUBKEY, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
-        return new RemoteCall<Tuple2<byte[], byte[]>>(
-                new Callable<Tuple2<byte[], byte[]>>() {
-                    @Override
-                    public Tuple2<byte[], byte[]> call() throws Exception {
-                        List<Type> results = executeCallMultipleValueReturn(function);
-                        return new Tuple2<byte[], byte[]>(
-                                (byte[]) results.get(0).getValue(), 
-                                (byte[]) results.get(1).getValue());
-                    }
-                });
+        final Function function = new Function(FUNC_PUBKEY,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
+                }, new TypeReference<Bytes32>() {
+                }));
+        return new RemoteFunctionCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<TransactionReceipt> setAddr(byte[] node, String addr) {
+    public RemoteTransaction<Void> setAddr(byte[] node, String addr) {
         final Function function = new Function(
-                FUNC_SETADDR, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
-                new org.web3j.abi.datatypes.Address(addr)), 
+                FUNC_SETADDR,
+                Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
+                        new org.web3j.abi.datatypes.Address(addr)),
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
+        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+                defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
+                false, gasProvider);
     }
 
-    public static RemoteCall<PublicResolver> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider, String ensAddr) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
+    public static RemoteCall<PublicResolver> deploy(
+            Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider,
+            String ensAddr) {
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
         return deployRemoteCall(PublicResolver.class, web3j, credentials, contractGasProvider, BINARY, encodedConstructor);
     }
 
-    public static RemoteCall<PublicResolver> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider, String ensAddr) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
+    public static RemoteCall<PublicResolver> deploy(
+            Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider, String ensAddr) {
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
         return deployRemoteCall(PublicResolver.class, web3j, transactionManager, contractGasProvider, BINARY, encodedConstructor);
     }
 
-    @Deprecated
-    public static RemoteCall<PublicResolver> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String ensAddr) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
-        return deployRemoteCall(PublicResolver.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor);
-    }
-
-    @Deprecated
-    public static RemoteCall<PublicResolver> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, String ensAddr) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
-        return deployRemoteCall(PublicResolver.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor);
-    }
-
-    public List<AddrChangedEventResponse> getAddrChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<AddrChangedEventResponse> getAddrChangedEvents(
+            TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(ADDRCHANGED_EVENT, transactionReceipt);
         ArrayList<AddrChangedEventResponse> responses = new ArrayList<AddrChangedEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
@@ -286,13 +288,15 @@ public class PublicResolver extends Contract {
         });
     }
 
-    public Flowable<AddrChangedEventResponse> addrChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<AddrChangedEventResponse> addrChangedEventFlowable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(ADDRCHANGED_EVENT));
         return addrChangedEventFlowable(filter);
     }
 
-    public List<ContentChangedEventResponse> getContentChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<ContentChangedEventResponse> getContentChangedEvents(
+            TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(CONTENTCHANGED_EVENT, transactionReceipt);
         ArrayList<ContentChangedEventResponse> responses = new ArrayList<ContentChangedEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
@@ -319,13 +323,15 @@ public class PublicResolver extends Contract {
         });
     }
 
-    public Flowable<ContentChangedEventResponse> contentChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ContentChangedEventResponse> contentChangedEventFlowable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(CONTENTCHANGED_EVENT));
         return contentChangedEventFlowable(filter);
     }
 
-    public List<NameChangedEventResponse> getNameChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<NameChangedEventResponse> getNameChangedEvents(
+            TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NAMECHANGED_EVENT, transactionReceipt);
         ArrayList<NameChangedEventResponse> responses = new ArrayList<NameChangedEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
@@ -352,13 +358,15 @@ public class PublicResolver extends Contract {
         });
     }
 
-    public Flowable<NameChangedEventResponse> nameChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<NameChangedEventResponse> nameChangedEventFlowable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NAMECHANGED_EVENT));
         return nameChangedEventFlowable(filter);
     }
 
-    public List<ABIChangedEventResponse> getABIChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<ABIChangedEventResponse> getABIChangedEvents(
+            TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(ABICHANGED_EVENT, transactionReceipt);
         ArrayList<ABIChangedEventResponse> responses = new ArrayList<ABIChangedEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
@@ -385,13 +393,15 @@ public class PublicResolver extends Contract {
         });
     }
 
-    public Flowable<ABIChangedEventResponse> aBIChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<ABIChangedEventResponse> aBIChangedEventFlowable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(ABICHANGED_EVENT));
         return aBIChangedEventFlowable(filter);
     }
 
-    public List<PubkeyChangedEventResponse> getPubkeyChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<PubkeyChangedEventResponse> getPubkeyChangedEvents(
+            TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(PUBKEYCHANGED_EVENT, transactionReceipt);
         ArrayList<PubkeyChangedEventResponse> responses = new ArrayList<PubkeyChangedEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
@@ -420,13 +430,15 @@ public class PublicResolver extends Contract {
         });
     }
 
-    public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventFlowable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(PUBKEYCHANGED_EVENT));
         return pubkeyChangedEventFlowable(filter);
     }
 
-    public List<TextChangedEventResponse> getTextChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<TextChangedEventResponse> getTextChangedEvents(
+            TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TEXTCHANGED_EVENT, transactionReceipt);
         ArrayList<TextChangedEventResponse> responses = new ArrayList<TextChangedEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
@@ -455,27 +467,22 @@ public class PublicResolver extends Contract {
         });
     }
 
-    public Flowable<TextChangedEventResponse> textChangedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TextChangedEventResponse> textChangedEventFlowable(
+            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TEXTCHANGED_EVENT));
         return textChangedEventFlowable(filter);
     }
 
-    @Deprecated
-    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return new PublicResolver(contractAddress, web3j, credentials, gasPrice, gasLimit);
-    }
-
-    @Deprecated
-    public static PublicResolver load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        return new PublicResolver(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
-    }
-
-    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    public static PublicResolver load(
+            String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         return new PublicResolver(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static PublicResolver load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    public static PublicResolver load(
+            String contractAddress, Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider) {
         return new PublicResolver(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 

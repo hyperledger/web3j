@@ -731,14 +731,14 @@ public class DefaultFunctionEncoderTest {
 
         assertEquals(actualFunction.getName(), expectedFunction.getName());
 
-        Iterator<Type> expectedInput = expectedFunction.getInputParameters().iterator();
-        for (Type actualInput : actualFunction.getInputParameters()) {
+        Iterator<Type<?>> expectedInput = expectedFunction.getInputParameters().iterator();
+        for (Type<?> actualInput : actualFunction.getInputParameters()) {
             assertEquals(actualInput.getValue(), expectedInput.next().getValue());
         }
 
-        Iterator<TypeReference<Type>> expectedOutput =
+        Iterator<TypeReference<Type<?>>> expectedOutput =
                 expectedFunction.getOutputParameters().iterator();
-        for (TypeReference<Type> actualOutput : actualFunction.getOutputParameters()) {
+        for (TypeReference<Type<?>> actualOutput : actualFunction.getOutputParameters()) {
             assertEquals(actualOutput.getType(), expectedOutput.next().getType());
         }
     }

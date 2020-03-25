@@ -21,8 +21,8 @@ import org.web3j.tuples.Tuple;
 import org.web3j.tuples.generated.Tuple2;
 
 public class KotlinMappingHelper implements MappingHelper {
-    private Map<Class, Object> defaultValueMapKotlin = new HashMap<>();
-    private Map<Class, String> kotlinPoetFormat = new HashMap<>();
+    private Map<Class<?>, Object> defaultValueMapKotlin = new HashMap<>();
+    private Map<Class<?>, String> kotlinPoetFormat = new HashMap<>();
 
     public KotlinMappingHelper() {
 
@@ -41,11 +41,11 @@ public class KotlinMappingHelper implements MappingHelper {
         kotlinPoetFormat.put(byte[].class, " %L");
     }
 
-    public Map<Class, Object> getDefaultValueMap() {
+    public Map<Class<?>, Object> getDefaultValueMap() {
         return defaultValueMapKotlin;
     }
 
-    public Map<Class, String> getPoetFormat() {
+    public Map<Class<?>, String> getPoetFormat() {
         return kotlinPoetFormat;
     }
 }

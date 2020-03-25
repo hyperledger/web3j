@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.reactivex.Flowable;
 
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.generated.RemoteFunctionCall1;
 
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
@@ -92,6 +93,7 @@ public class Request<S, T extends Response> {
     }
 
     public Flowable<T> flowable() {
-        return new RemoteCall<>(this::send).flowable();
+        // FIXME
+        return new RemoteFunctionCall1<T>(null, null, null, null).flowable();
     }
 }

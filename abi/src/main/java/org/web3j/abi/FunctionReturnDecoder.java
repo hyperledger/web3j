@@ -45,7 +45,8 @@ public abstract class FunctionReturnDecoder {
      * @return {@link List} of values returned by function, {@link Collections#emptyList()} if
      *     invalid response
      */
-    public static List<Type> decode(String rawInput, List<TypeReference<Type>> outputParameters) {
+    public static List<Type<?>> decode(
+            String rawInput, List<TypeReference<Type<?>>> outputParameters) {
         return decoder().decodeFunctionResult(rawInput, outputParameters);
     }
 
@@ -71,15 +72,15 @@ public abstract class FunctionReturnDecoder {
      * @param <T> type of TypeReference
      * @return the decode value
      */
-    public static <T extends Type> Type decodeIndexedValue(
+    public static <T extends Type<?>> Type<?> decodeIndexedValue(
             String rawInput, TypeReference<T> typeReference) {
         return decoder().decodeEventParameter(rawInput, typeReference);
     }
 
-    protected abstract List<Type> decodeFunctionResult(
-            String rawInput, List<TypeReference<Type>> outputParameters);
+    protected abstract List<Type<?>> decodeFunctionResult(
+            String rawInput, List<TypeReference<Type<?>>> outputParameters);
 
-    protected abstract <T extends Type> Type decodeEventParameter(
+    protected abstract <T extends Type<?>> Type<?> decodeEventParameter(
             String rawInput, TypeReference<T> typeReference);
 
     private static FunctionReturnDecoder decoder() {

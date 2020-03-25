@@ -111,7 +111,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = totalSupply();
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Type> response =
+        List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
 
         assertEquals(1, response.size());
@@ -123,7 +123,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = balanceOf(address);
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Type> response =
+        List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
         assertEquals(response.size(), (1));
         assertEquals(response.get(0), (new Uint256(expected)));
@@ -135,7 +135,7 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = allowance(owner, spender);
         String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Type> response =
+        List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
 
         assertEquals(response.size(), (function.getOutputParameters().size()));
@@ -214,7 +214,7 @@ public class HumanStandardTokenIT extends Scenario {
         assertEquals(new Address(topics.get(2)), (new Address(to)));
 
         // verify qty transferred
-        List<Type> results =
+        List<Type<?>> results =
                 FunctionReturnDecoder.decode(
                         log.getData(), transferEvent.getNonIndexedParameters());
         assertEquals(results, (Collections.singletonList(new Uint256(qty))));
@@ -247,7 +247,7 @@ public class HumanStandardTokenIT extends Scenario {
         assertEquals(new Address(topics.get(2)), (new Address(spender)));
 
         // verify our two event parameters
-        List<Type> results =
+        List<Type<?>> results =
                 FunctionReturnDecoder.decode(log.getData(), event.getNonIndexedParameters());
         assertEquals(results, (Collections.singletonList(new Uint256(value))));
     }
@@ -281,7 +281,7 @@ public class HumanStandardTokenIT extends Scenario {
         assertEquals(new Address(topics.get(2)), (new Address(to)));
 
         // verify qty transferred
-        List<Type> results =
+        List<Type<?>> results =
                 FunctionReturnDecoder.decode(
                         log.getData(), transferEvent.getNonIndexedParameters());
         assertEquals(results, (Collections.singletonList(new Uint256(value))));

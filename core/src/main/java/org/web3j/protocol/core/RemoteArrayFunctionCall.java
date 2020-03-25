@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,22 +12,16 @@
  */
 package org.web3j.protocol.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.tx.TransactionManager;
 
-/**
- * A wrapper for a callable function. Can also return the raw encoded function
- *
- * @param <T> Our return type.
- */
-public abstract class RemoteFunctionCall<T> extends AbstractRemoteCall<T> {
+public class RemoteArrayFunctionCall<T> extends AbstractRemoteCall<List<T>> {
 
-    public RemoteFunctionCall(
+    public RemoteArrayFunctionCall(
             final Function function,
             final String address,
             final TransactionManager transactionManager,
@@ -35,22 +29,13 @@ public abstract class RemoteFunctionCall<T> extends AbstractRemoteCall<T> {
         super(function, address, transactionManager, defaultBlockParameter);
     }
 
-    /**
-     * Return an encoded function, so it can be manually signed and transmitted.
-     *
-     * @return the function call, encoded.
-     */
-    public String encodeFunctionCall() {
-        return FunctionEncoder.encode(function);
-    }
-
-    /**
-     * Decode a method response.
-     *
-     * @param response the encoded response
-     * @return list of abi types
-     */
-    public List<Type<?>> decodeFunctionResponse(String response) {
-        return FunctionReturnDecoder.decode(response, function.getOutputParameters());
+    @Override
+    @SuppressWarnings("unchecked")
+    protected List<T> cast(final List<Type<?>> values) {
+        List<T> out = new ArrayList<>();
+        for (final Type<?> type : values) {
+            out.add((T) type.getValue());
+        }
+        return out;
     }
 }

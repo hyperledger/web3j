@@ -56,7 +56,7 @@ public class FunctionWrappersIT extends Scenario {
                         ALICE,
                         STATIC_GAS_PROVIDER);
 
-        BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).send();
+        BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).call();
         assertEquals(result, (BigInteger.valueOf(55)));
     }
 
