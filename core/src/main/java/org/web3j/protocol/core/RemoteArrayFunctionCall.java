@@ -32,7 +32,7 @@ public class RemoteArrayFunctionCall<T> extends AbstractRemoteCall<List<T>> {
     @Override
     @SuppressWarnings("unchecked")
     protected List<T> convert(final List<Type<?>> values) {
-        List<T> out = new ArrayList<>();
+        final List<T> out = new ArrayList<>();
         for (final Type<?> type : values) {
             out.add((T) type.getValue());
         }
