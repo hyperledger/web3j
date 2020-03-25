@@ -35,7 +35,7 @@ public interface Web3jService {
      * @return deserialized JSON-RPC response
      * @throws IOException thrown if failed to perform a request
      */
-    <T extends Response> T send(Request request, Class<T> responseType) throws IOException;
+    <T extends Response<?>> T send(Request<?, T> request, Class<T> responseType) throws IOException;
 
     /**
      * Performs an asynchronous JSON-RPC request.
@@ -46,7 +46,7 @@ public interface Web3jService {
      * @return CompletableFuture that will be completed when a result is returned or if a request
      *     has failed
      */
-    <T extends Response> CompletableFuture<T> sendAsync(Request request, Class<T> responseType);
+    <T extends Response<?>> CompletableFuture<T> sendAsync(Request<?, T> request, Class<T> responseType);
 
     /**
      * Perform a synchronous JSON-RPC batch requests.

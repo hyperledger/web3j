@@ -160,7 +160,7 @@ public class WebSocketService implements Web3jService {
     }
 
     @Override
-    public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
+    public <T extends Response<?>> T send(Request<?, T> request, Class<T> responseType) throws IOException {
         try {
             return sendAsync(request, responseType).get();
         } catch (InterruptedException e) {
@@ -176,8 +176,8 @@ public class WebSocketService implements Web3jService {
     }
 
     @Override
-    public <T extends Response> CompletableFuture<T> sendAsync(
-            Request request, Class<T> responseType) {
+    public <T extends Response<?>> CompletableFuture<T> sendAsync(
+            Request<?, T> request, Class<T> responseType) {
 
         CompletableFuture<T> result = new CompletableFuture<>();
         long requestId = request.getId();

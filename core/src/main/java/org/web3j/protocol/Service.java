@@ -42,7 +42,7 @@ public abstract class Service implements Web3jService {
     protected abstract InputStream performIO(String payload) throws IOException;
 
     @Override
-    public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
+    public <T extends Response<?>> T send(Request<?, T> request, Class<T> responseType) throws IOException {
         String payload = objectMapper.writeValueAsString(request);
 
         try (InputStream result = performIO(payload)) {
@@ -55,8 +55,8 @@ public abstract class Service implements Web3jService {
     }
 
     @Override
-    public <T extends Response> CompletableFuture<T> sendAsync(
-            Request jsonRpc20Request, Class<T> responseType) {
+    public <T extends Response<?>> CompletableFuture<T> sendAsync(
+            Request<?, T> jsonRpc20Request, Class<T> responseType) {
         return Async.run(() -> send(jsonRpc20Request, responseType));
     }
 

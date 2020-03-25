@@ -23,7 +23,7 @@ import io.reactivex.Flowable;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.generated.RemoteFunctionCall1;
 
-public class Request<S, T extends Response> {
+public class Request<S, T extends Response<?>> {
     private static AtomicLong nextId = new AtomicLong(0);
 
     private String jsonrpc = "2.0";
