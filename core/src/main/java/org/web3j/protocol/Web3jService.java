@@ -46,7 +46,8 @@ public interface Web3jService {
      * @return CompletableFuture that will be completed when a result is returned or if a request
      *     has failed
      */
-    <T extends Response<?>> CompletableFuture<T> sendAsync(Request<?, T> request, Class<T> responseType);
+    <T extends Response<?>> CompletableFuture<T> sendAsync(
+            Request<?, T> request, Class<T> responseType);
 
     /**
      * Perform a synchronous JSON-RPC batch requests.

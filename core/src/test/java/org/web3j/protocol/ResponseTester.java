@@ -49,10 +49,10 @@ public abstract class ResponseTester {
         web3jService = new HttpService(okHttpClient, includeRawResponses);
     }
 
-    protected <T extends Response> T deserialiseResponse(Class<T> type) {
+    protected <T extends Response<?>> T deserialiseResponse(Class<T> type) {
         T response = null;
         try {
-            response = web3jService.send(new Request(), type);
+            response = web3jService.send(new Request<>(), type);
         } catch (IOException e) {
             fail(e.getMessage());
         }
