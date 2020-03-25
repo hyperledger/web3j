@@ -40,7 +40,7 @@ public class RemoteTransaction0 extends AbstractRemoteTransaction<Void> {
     }
 
     @Override
-    protected Void cast(final List<Type<?>> values) {
+    protected Void convert(final List<Type<?>> values) {
         return null;
     }
 }

@@ -42,7 +42,7 @@ public class RemoteTransaction1<T> extends AbstractRemoteTransaction<T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected T cast(final List<Type<?>> values) {
-        return (T) values.get(0);
+    protected T convert(final List<Type<?>> values) {
+        return (T) values.get(0).getValue();
     }
 }

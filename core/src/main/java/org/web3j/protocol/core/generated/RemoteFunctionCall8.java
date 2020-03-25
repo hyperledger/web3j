@@ -22,7 +22,7 @@ public class RemoteFunctionCall8<T1, T2, T3, T4, T5, T6, T7, T8>
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Tuple8<T1, T2, T3, T4, T5, T6, T7, T8> cast(final List<Type<?>> values) {
+    protected Tuple8<T1, T2, T3, T4, T5, T6, T7, T8> convert(final List<Type<?>> values) {
         return new Tuple8<>(
                 (T1) values.get(0).getValue(),
                 (T2) values.get(1).getValue(),

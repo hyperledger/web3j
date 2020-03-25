@@ -69,14 +69,14 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
         final List<Type<?>> values =
                 FunctionReturnDecoder.decode(value, function.getOutputParameters());
 
-        return cast(values);
+        return convert(values);
     }
 
     /**
-     * Cast return values to the function-specific types.
+     * Convert return values to the function-specific types.
      *
      * @param values Untyped function return values
      * @return Statically typed return values
      */
-    protected abstract T cast(List<Type<?>> values);
+    protected abstract T convert(List<Type<?>> values);
 }

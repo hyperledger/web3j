@@ -21,7 +21,7 @@ public class RemoteFunctionCall4<T1, T2, T3, T4> extends RemoteFunctionCall<Tupl
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Tuple4<T1, T2, T3, T4> cast(final List<Type<?>> values) {
+    protected Tuple4<T1, T2, T3, T4> convert(final List<Type<?>> values) {
         return new Tuple4<>(
                 (T1) values.get(0).getValue(),
                 (T2) values.get(1).getValue(),
