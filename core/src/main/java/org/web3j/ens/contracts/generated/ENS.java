@@ -1,11 +1,12 @@
 package org.web3j.ens.contracts.generated;
 
-import io.reactivex.Flowable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import io.reactivex.Flowable;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -22,7 +23,6 @@ import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.protocol.core.generated.RemoteFunctionCall1;
 import org.web3j.protocol.core.generated.RemoteTransaction0;
-import org.web3j.protocol.core.generated.RemoteTransaction1;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
