@@ -79,7 +79,7 @@ public class EnsResolverTest {
                 .thenReturn(contractAddressResponse);
 
         assertEquals(
-                ensResolver.resolve("web3j.eth"), ("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
+                ensResolver.resolve("web3j.eth"), "0x19e03255f667bdfd50a32722df860b1eeaf4d635");
     }
 
     @Test
