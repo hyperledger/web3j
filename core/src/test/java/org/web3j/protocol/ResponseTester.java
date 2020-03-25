@@ -59,7 +59,7 @@ public abstract class ResponseTester {
         return response;
     }
 
-    private class ResponseInterceptor implements Interceptor {
+    private static class ResponseInterceptor implements Interceptor {
 
         private String jsonResponse;
 
@@ -68,22 +68,19 @@ public abstract class ResponseTester {
         }
 
         @Override
-        public okhttp3.Response intercept(Chain chain) throws IOException {
+        public okhttp3.Response intercept(Chain chain) {
 
             if (jsonResponse == null) {
                 throw new UnsupportedOperationException("Response has not been configured");
             }
 
-            okhttp3.Response response =
-                    new okhttp3.Response.Builder()
-                            .body(ResponseBody.create(jsonResponse, JSON_MEDIA_TYPE))
-                            .request(chain.request())
-                            .protocol(Protocol.HTTP_2)
-                            .code(200)
-                            .message("")
-                            .build();
-
-            return response;
+            return new okhttp3.Response.Builder()
+                    .body(ResponseBody.create(jsonResponse, JSON_MEDIA_TYPE))
+                    .request(chain.request())
+                    .protocol(Protocol.HTTP_2)
+                    .code(200)
+                    .message("")
+                    .build();
         }
     }
 }
