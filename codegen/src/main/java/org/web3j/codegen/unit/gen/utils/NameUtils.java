@@ -15,20 +15,20 @@ package org.web3j.codegen.unit.gen.utils;
 import java.lang.reflect.Type;
 
 public class NameUtils {
-    public static String toCamelCase(Class aClass) {
+    public static String toCamelCase(final Class aClass) {
         return Character.toLowerCase(aClass.getSimpleName().charAt(0))
                 + aClass.getSimpleName().substring(1);
     }
 
-    public static String returnTypeAsLiteral(Type type, boolean extend) {
-        String formattedString =
+    public static String returnTypeAsLiteral(final Type type, final boolean extend) {
+        final String formattedString =
                 type.getTypeName().substring(type.getTypeName().lastIndexOf(".") + 1);
         return extend
                 ? formattedString.replaceAll("[^a-zA-Z0-9]", "") + "Var"
                 : formattedString.replaceAll("[^a-zA-Z0-9]", "");
     }
 
-    public static String toCamelCase(String aString) {
+    public static String toCamelCase(final String aString) {
         return Character.toLowerCase(aString.charAt(0)) + aString.substring(1);
     }
 }

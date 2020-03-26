@@ -16,17 +16,19 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import com.squareup.javapoet.MethodSpec;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 public class MethodParserTest extends JavaTestSetup {
     @Test
     public void testThatDeployMethodWasGenerated() {
 
-        Optional<Method> deployMethod =
+        final Optional<Method> deployMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("deploy")).findAny();
-        MethodSpec deployMethodSpec =
+        final MethodSpec deployMethodSpec =
                 new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 "@org.junit.jupiter.api.BeforeAll\n"
@@ -39,9 +41,9 @@ public class MethodParserTest extends JavaTestSetup {
     @Test
     public void testThatNewGreetingMethodWasGenerated() {
 
-        Optional<Method> deployMethod =
+        final Optional<Method> deployMethod =
                 filteredMethods.stream().filter(m -> m.getName().equals("newGreeting")).findAny();
-        MethodSpec deployMethodSpec =
+        final MethodSpec deployMethodSpec =
                 new MethodParser(deployMethod.get(), greeterContractClass).getMethodSpec();
         assertEquals(
                 "org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceiptVar = greeter.newGreeting(\"REPLACE_ME\").send();\n"

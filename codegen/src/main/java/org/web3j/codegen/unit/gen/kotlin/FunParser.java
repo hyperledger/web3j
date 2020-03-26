@@ -73,14 +73,15 @@ public class FunParser {
     }
 
     private Map<String, Object[]> generateStatementBody() {
-        Map<String, Object[]> methodBodySpecification = new LinkedHashMap<>();
-        KotlinParser parser = new KotlinParser(theContract, method, new KotlinMappingHelper());
-        String kotlinPoetStringTypes = parser.generatePoetStringTypes();
-        Object[] genericParameters = parser.adjustPlaceholderValues();
+        final Map<String, Object[]> methodBodySpecification = new LinkedHashMap<>();
+        final KotlinParser parser =
+                new KotlinParser(theContract, method, new KotlinMappingHelper());
+        final String kotlinPoetStringTypes = parser.generatePoetStringTypes();
+        final Object[] genericParameters = parser.adjustPlaceholderValues();
         methodBodySpecification.put(kotlinPoetStringTypes, genericParameters);
         if (methodNeedsAssertion()) {
-            String assertionKotlinPoet = parser.generateAssertionKotlinPoetStringTypes();
-            Object[] assertionParams = parser.generateAssertionPlaceholderValues();
+            final String assertionKotlinPoet = parser.generateAssertionKotlinPoetStringTypes();
+            final Object[] assertionParams = parser.generateAssertionPlaceholderValues();
             methodBodySpecification.put(assertionKotlinPoet, assertionParams);
         }
         return methodBodySpecification;

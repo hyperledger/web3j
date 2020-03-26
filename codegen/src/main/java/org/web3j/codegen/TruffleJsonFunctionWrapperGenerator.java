@@ -57,19 +57,19 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
                     + "-p|--package <base package name> "
                     + "-o|--outputDir <destination base directory>";
 
-    private String jsonFileLocation;
+    private final String jsonFileLocation;
 
     public TruffleJsonFunctionWrapperGenerator(
-            String jsonFileLocation,
-            String destinationDirLocation,
-            String basePackageName,
-            boolean useJavaNativeTypes) {
+            final String jsonFileLocation,
+            final String destinationDirLocation,
+            final String basePackageName,
+            final boolean useJavaNativeTypes) {
 
         super(new File(destinationDirLocation), basePackageName, useJavaNativeTypes);
         this.jsonFileLocation = jsonFileLocation;
     }
 
-    public static void run(String[] args) throws Exception {
+    public static void run(final String[] args) throws Exception {
         if (args.length < 1 || !"generate".equals(args[0])) {
             exitError(USAGE);
         } else {
@@ -77,9 +77,9 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
-        String[] fullArgs;
+        final String[] fullArgs;
         if (args.length == 5) {
             fullArgs = new String[args.length + 1];
             fullArgs[0] = JAVA_TYPES_ARG;
@@ -92,11 +92,11 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             exitError(USAGE);
         }
 
-        boolean useJavaNativeTypes = useJavaNativeTypes(fullArgs[0], USAGE);
+        final boolean useJavaNativeTypes = useJavaNativeTypes(fullArgs[0], USAGE);
 
-        String jsonFileLocation = parsePositionalArg(fullArgs, 1);
-        String destinationDirLocation = parseParameterArgument(fullArgs, "-o", "--outputDir");
-        String basePackageName = parseParameterArgument(fullArgs, "-p", "--package");
+        final String jsonFileLocation = parsePositionalArg(fullArgs, 1);
+        final String destinationDirLocation = parseParameterArgument(fullArgs, "-o", "--outputDir");
+        final String basePackageName = parseParameterArgument(fullArgs, "-p", "--package");
 
         if (Strings.isEmpty(jsonFileLocation)
                 || Strings.isEmpty(destinationDirLocation)
@@ -112,29 +112,29 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
                 .generate();
     }
 
-    static Contract loadContractDefinition(File jsonFile) throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+    static Contract loadContractDefinition(final File jsonFile) throws IOException {
+        final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         return objectMapper.readValue(jsonFile, Contract.class);
     }
 
     @SuppressWarnings("unchecked")
     public void generate() throws IOException, ClassNotFoundException {
 
-        File truffleJsonFile = new File(jsonFileLocation);
+        final File truffleJsonFile = new File(jsonFileLocation);
         if (!truffleJsonFile.exists() || !truffleJsonFile.canRead()) {
             exitError("Invalid input json file specified: " + jsonFileLocation);
         }
 
-        String fileName = truffleJsonFile.getName();
-        String contractName = getFileNameNoExtension(fileName);
+        final String fileName = truffleJsonFile.getName();
+        final String contractName = getFileNameNoExtension(fileName);
 
-        Contract c = loadContractDefinition(truffleJsonFile);
+        final Contract c = loadContractDefinition(truffleJsonFile);
         if (c == null) {
             exitError("Unable to parse input json file");
         } else {
-            String className = Strings.capitaliseFirstLetter(contractName);
+            final String className = Strings.capitaliseFirstLetter(contractName);
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            Map<String, String> addresses;
+            final Map<String, String> addresses;
             if (c.networks != null && !c.networks.isEmpty()) {
                 addresses =
                         c.networks.entrySet().stream()
@@ -238,19 +238,19 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public Contract() {}
 
         public Contract(
-                String contractName,
-                List<AbiDefinition> abi,
-                String bytecode,
-                String deployedBytecode,
-                String sourceMap,
-                String deployedSourceMap,
-                String source,
-                String sourcePath,
-                JsonNode ast,
-                Compiler compiler,
-                Map<String, NetworkInfo> networks,
-                String schemaVersion,
-                Date updatedAt) {
+                final String contractName,
+                final List<AbiDefinition> abi,
+                final String bytecode,
+                final String deployedBytecode,
+                final String sourceMap,
+                final String deployedSourceMap,
+                final String source,
+                final String sourcePath,
+                final JsonNode ast,
+                final Compiler compiler,
+                final Map<String, NetworkInfo> networks,
+                final String schemaVersion,
+                final Date updatedAt) {
             super();
             this.contractName = contractName;
             this.abi = abi;
@@ -279,12 +279,12 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             return bytecode;
         }
 
-        public NetworkInfo getNetwork(String networkId) {
+        public NetworkInfo getNetwork(final String networkId) {
             return networks == null ? null : networks.get(networkId);
         }
 
-        public String getAddress(String networkId) {
-            NetworkInfo network = getNetwork(networkId);
+        public String getAddress(final String networkId) {
+            final NetworkInfo network = getNetwork(networkId);
             return network == null ? null : network.getAddress();
         }
 
@@ -294,7 +294,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
          * @param network the contract's address on this Ethereum network
          * @return the contract's address or <code>null</code> if there isn't one known.
          */
-        public String getAddress(Network network) {
+        public String getAddress(final Network network) {
             return getAddress(Long.toString(network.id));
         }
 
@@ -313,7 +313,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
 
             public final long id;
 
-            Network(long id) {
+            Network(final long id) {
                 this.id = id;
             }
         }
@@ -330,11 +330,11 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public String version;
 
         @JsonIgnore
-        private Map<String, JsonNode> additionalProperties = new HashMap<String, JsonNode>();
+        private final Map<String, JsonNode> additionalProperties = new HashMap<String, JsonNode>();
 
         public Compiler() {}
 
-        public Compiler(String name, String version) {
+        public Compiler(final String name, final String version) {
             super();
             this.name = name;
             this.version = version;
@@ -346,11 +346,11 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         }
 
         @JsonAnySetter
-        public void setAdditionalProperty(String name, JsonNode value) {
+        public void setAdditionalProperty(final String name, final JsonNode value) {
             this.additionalProperties.put(name, value);
         }
 
-        public Compiler withAdditionalProperty(String name, JsonNode value) {
+        public Compiler withAdditionalProperty(final String name, final JsonNode value) {
             this.additionalProperties.put(name, value);
             return this;
         }
@@ -374,7 +374,9 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public NetworkInfo() {}
 
         public NetworkInfo(
-                Map<String, JsonNode> events, Map<String, JsonNode> links, String address) {
+                final Map<String, JsonNode> events,
+                final Map<String, JsonNode> links,
+                final String address) {
             super();
             this.events = events;
             this.links = links;
@@ -385,7 +387,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             return address;
         }
 
-        public void setAddress(String address) {
+        public void setAddress(final String address) {
             this.address = address;
         }
     }

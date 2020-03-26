@@ -36,28 +36,28 @@ public class TupleGeneratorTest extends TempFileProvider {
     public void testTuplesGeneration() throws IOException {
         TupleGenerator.main(new String[] {tempDirPath});
 
-        String baseDir =
+        final String baseDir =
                 tempDirPath
                         + File.separatorChar
                         + TupleGenerator.PACKAGE_NAME.replace('.', File.separatorChar);
 
-        String fileNameBase = baseDir + File.separator + CLASS_NAME;
-        List<String> fileNames = new ArrayList<>(LIMIT);
+        final String fileNameBase = baseDir + File.separator + CLASS_NAME;
+        final List<String> fileNames = new ArrayList<>(LIMIT);
         for (int i = 1; i <= LIMIT; i++) {
             fileNames.add(fileNameBase + i + ".java");
         }
         verifyGeneratedCode(fileNames);
     }
 
-    private void verifyGeneratedCode(List<String> sourceFiles) throws IOException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+    private void verifyGeneratedCode(final List<String> sourceFiles) throws IOException {
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
-        try (StandardJavaFileManager fileManager =
+        try (final StandardJavaFileManager fileManager =
                 compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits =
+            final Iterable<? extends JavaFileObject> compilationUnits =
                     fileManager.getJavaFileObjectsFromStrings(sourceFiles);
-            JavaCompiler.CompilationTask task =
+            final JavaCompiler.CompilationTask task =
                     compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
             assertTrue(task.call(), "Generated code contains compile time error");
         }

@@ -48,7 +48,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     public void setUp() throws Exception {
         super.setUp();
 
-        URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/solidity");
+        final URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/solidity");
         solidityBaseDir = url.getPath();
     }
 
@@ -154,8 +154,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testDuplicateField() throws Exception {
-        PrintStream console = System.out;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final PrintStream console = System.out;
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
         testCodeGeneration("duplicate", "DuplicateField", JAVA_TYPES_ARG, false);
@@ -187,45 +187,49 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         testCodeGenerationJvmTypes("primitive", "Primitive", true);
     }
 
-    private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
+    private void testCodeGenerationJvmTypes(final String contractName, final String inputFileName)
             throws Exception {
         testCodeGeneration(contractName, inputFileName, JAVA_TYPES_ARG, true);
     }
 
     private void testCodeGenerationJvmTypes(
-            String contractName, String inputFileName, boolean primitive) throws Exception {
+            final String contractName, final String inputFileName, final boolean primitive)
+            throws Exception {
         testCodeGeneration(
                 emptyList(), contractName, inputFileName, JAVA_TYPES_ARG, true, primitive);
     }
 
-    private void testCodeGenerationSolidityTypes(String contractName, String inputFileName)
-            throws Exception {
+    private void testCodeGenerationSolidityTypes(
+            final String contractName, final String inputFileName) throws Exception {
         testCodeGeneration(contractName, inputFileName, SOLIDITY_TYPES_ARG, true);
     }
 
     private void testCodeGeneration(
-            String contractName, String inputFileName, String types, boolean useBin)
+            final String contractName,
+            final String inputFileName,
+            final String types,
+            final boolean useBin)
             throws Exception {
         testCodeGeneration(emptyList(), contractName, inputFileName, types, useBin);
     }
 
     private void testCodeGeneration(
-            List<String> prefixes,
-            String contractName,
-            String inputFileName,
-            String types,
-            boolean useBin)
+            final List<String> prefixes,
+            final String contractName,
+            final String inputFileName,
+            final String types,
+            final boolean useBin)
             throws Exception {
         testCodeGeneration(prefixes, contractName, inputFileName, types, useBin, false);
     }
 
     private void testCodeGeneration(
-            List<String> prefixes,
-            String contractName,
-            String inputFileName,
-            String types,
-            boolean useBin,
-            boolean primitives)
+            final List<String> prefixes,
+            final String contractName,
+            final String inputFileName,
+            final String types,
+            final boolean useBin,
+            final boolean primitives)
             throws Exception {
 
         String packagePath =
@@ -253,8 +257,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             packageName = "org.web3j.unittests.solidity";
         }
 
-        List<String> options = new ArrayList<>();
-        options.addAll(prefixes);
+        final List<String> options = new ArrayList<>(prefixes);
         options.add(types);
         if (useBin) {
             options.add("-b");
@@ -291,17 +294,17 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         return packageName.replace('.', File.separatorChar);
     }
 
-    private void verifyGeneratedCode(String sourceFile) throws IOException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+    private void verifyGeneratedCode(final String sourceFile) throws IOException {
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
-        try (StandardJavaFileManager fileManager =
+        try (final StandardJavaFileManager fileManager =
                 compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits =
+            final Iterable<? extends JavaFileObject> compilationUnits =
                     fileManager.getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
-            JavaCompiler.CompilationTask task =
+            final JavaCompiler.CompilationTask task =
                     compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
-            boolean result = task.call();
+            final boolean result = task.call();
 
             System.out.println(diagnostics.getDiagnostics());
             assertTrue(result, "Generated contract contains compile time error");

@@ -21,8 +21,8 @@ import org.web3j.tuples.Tuple;
 import org.web3j.tuples.generated.Tuple2;
 
 public class KotlinMappingHelper implements MappingHelper {
-    private Map<Class<?>, Object> defaultValueMapKotlin = new HashMap<>();
-    private Map<Class<?>, String> kotlinPoetFormat = new HashMap<>();
+    private final Map<Class<?>, Object> defaultValueMapKotlin = new HashMap<>();
+    private final Map<Class<?>, String> kotlinPoetFormat = new HashMap<>();
 
     public KotlinMappingHelper() {
 

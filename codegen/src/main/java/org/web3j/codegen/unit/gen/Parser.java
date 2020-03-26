@@ -33,7 +33,8 @@ public abstract class Parser {
     protected final Class<?> theContract;
     protected final Method method;
 
-    public Parser(Class<?> theContract, Method method, MappingHelper mappingHelper) {
+    public Parser(
+            final Class<?> theContract, final Method method, final MappingHelper mappingHelper) {
         this.theContract = theContract;
         this.method = method;
         this.mappingHelper = mappingHelper;
@@ -52,17 +53,17 @@ public abstract class Parser {
     }
 
     public final Type getMethodReturnType() {
-        Type genericType = method.getGenericReturnType();
+        final Type genericType = method.getGenericReturnType();
         if (genericType instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            final ParameterizedType parameterizedType = (ParameterizedType) genericType;
             return parameterizedType.getActualTypeArguments()[0];
         } else {
             return genericType;
         }
     }
 
-    protected final Type[] getTypeArray(Type type) {
-        ParameterizedType parameterizedType = (ParameterizedType) type;
+    protected final Type[] getTypeArray(final Type type) {
+        final ParameterizedType parameterizedType = (ParameterizedType) type;
         return parameterizedType.getActualTypeArguments();
     }
 
@@ -74,7 +75,7 @@ public abstract class Parser {
         if (!body[0].equals(TransactionReceipt.class)) {
             if (returnType.getTypeName().contains("Tuple")) {
                 placeHolder.add(((ParameterizedType) returnType).getRawType());
-                for (Type t : getTypeArray(returnType)) {
+                for (final Type t : getTypeArray(returnType)) {
                     placeHolder.add(mappingHelper.getDefaultValueMap().get(t));
                 }
             } else {
@@ -89,7 +90,8 @@ public abstract class Parser {
         return mergePlaceholderValues(concludeMethodReturnType(), replaceTypeWithDefaultValue());
     }
 
-    protected final Object[] mergePlaceholderValues(Object[] source1, Object[] source2) {
+    protected final Object[] mergePlaceholderValues(
+            final Object[] source1, final Object[] source2) {
         final Object[] destination = new Object[source1.length + source2.length];
         System.arraycopy(source1, 0, destination, 0, source1.length);
         System.arraycopy(source2, 0, destination, source1.length, source2.length);

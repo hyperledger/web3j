@@ -32,7 +32,8 @@ public class ContractJsonParseTest {
     static final String BUILD_CONTRACTS = "build" + File.separator + "contracts";
     private String contractBaseDir;
 
-    static String jsonFileLocation(String baseDir, String contractName, String inputFileName) {
+    static String jsonFileLocation(
+            final String baseDir, final String contractName, final String inputFileName) {
         return baseDir
                 + File.separator
                 + contractName
@@ -44,33 +45,34 @@ public class ContractJsonParseTest {
     }
 
     @SuppressWarnings("SameParameterValue")
-    static Contract parseContractJson(String baseDir, String contractName, String inputFileName)
+    static Contract parseContractJson(
+            final String baseDir, final String contractName, final String inputFileName)
             throws Exception {
 
-        String fileLocation = jsonFileLocation(baseDir, contractName, inputFileName);
+        final String fileLocation = jsonFileLocation(baseDir, contractName, inputFileName);
         return loadContractDefinition(new File(fileLocation));
     }
 
     @BeforeEach
     public void setUp() throws Exception {
-        URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/truffle");
+        final URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/truffle");
         contractBaseDir = url.getPath();
     }
 
     @Test
     public void testParseMetaCoin() throws Exception {
-        Contract mc = parseContractJson(contractBaseDir, "MetaCoin", "MetaCoin");
+        final Contract mc = parseContractJson(contractBaseDir, "MetaCoin", "MetaCoin");
 
         assertEquals("MetaCoin", mc.getContractName(), "Unexpected contract name");
     }
 
     @Test
     public void testParseConvertLib() throws Exception {
-        Contract mc = parseContractJson(contractBaseDir, "MetaCoin", "ConvertLib");
+        final Contract mc = parseContractJson(contractBaseDir, "MetaCoin", "ConvertLib");
 
         assertEquals("ConvertLib", mc.getContractName(), "Unexpected contract name");
         assertEquals(1, mc.abi.size());
-        AbiDefinition abi = mc.abi.get(0);
+        final AbiDefinition abi = mc.abi.get(0);
         assertEquals("convert", abi.getName(), "Unexpected function name");
         assertTrue(abi.isConstant(), "Expected function to be 'constant");
         assertFalse(abi.isPayable(), "Expected function to not be 'payable'");

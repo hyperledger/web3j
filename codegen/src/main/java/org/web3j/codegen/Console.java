@@ -14,16 +14,16 @@ package org.web3j.codegen;
 
 /** Command line utility classes. */
 public class Console {
-    public static void exitError(String message) {
+    public static void exitError(final String message) {
         System.err.println(message);
         System.exit(1);
     }
 
-    public static void exitError(Throwable throwable) {
+    public static void exitError(final Throwable throwable) {
         exitError(throwable.getMessage());
     }
 
-    public static void exitSuccess(String message) {
+    public static void exitSuccess(final String message) {
         System.out.println(message);
         System.exit(0);
     }

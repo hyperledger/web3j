@@ -125,7 +125,7 @@ public class CompilerClassLoader extends ClassLoader {
     private Optional<byte[]> readBytes(final File file) {
         try {
             return Optional.of(Files.readAllBytes(Paths.get(file.toURI())));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return Optional.empty();
         }
     }

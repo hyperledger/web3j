@@ -27,15 +27,15 @@ public class FunSpecGeneratorTest {
     @Test
     public void testGenerate() {
 
-        String javaPoetStringFormat1 = "val %L =  %S";
-        Object[] replacementValues1 = new Object[] {"hello ", "Hello how are you"};
-        String javaPoetStringFormat2 = "val %L = %T.build()";
-        Object[] replacementValues2 = new Object[] {"web3j", Web3j.class};
-        Map<String, Object[]> statementBody = new LinkedHashMap<>();
+        final String javaPoetStringFormat1 = "val %L =  %S";
+        final Object[] replacementValues1 = new Object[] {"hello ", "Hello how are you"};
+        final String javaPoetStringFormat2 = "val %L = %T.build()";
+        final Object[] replacementValues2 = new Object[] {"web3j", Web3j.class};
+        final Map<String, Object[]> statementBody = new LinkedHashMap<>();
         statementBody.put(javaPoetStringFormat1, replacementValues1);
         statementBody.put(javaPoetStringFormat2, replacementValues2);
-        FunSpecGenerator funSpecGenerator = new FunSpecGenerator("test", statementBody);
-        FunSpec generatedFunSpec = funSpecGenerator.generate();
+        final FunSpecGenerator funSpecGenerator = new FunSpecGenerator("test", statementBody);
+        final FunSpec generatedFunSpec = funSpecGenerator.generate();
         assertEquals(
                 generatedFunSpec.toString(),
                 "@org.junit.jupiter.api.Test\n"

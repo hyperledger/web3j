@@ -46,18 +46,18 @@ public class MethodFilterTest {
 
     @Test
     public void testExtractValidMethods() {
-        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
+        final List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         filteredMethods.forEach(m -> assertFalse(m.getName().toLowerCase().contains("event")));
     }
 
     @Test
     public void testThatTheCorrectDeployMethodWasExtracted() {
-        List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        List<Method> deployMethod =
+        final List<Method> filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
+        final List<Method> deployMethod =
                 filteredMethods.stream()
                         .filter(m -> m.getName().equals("deploy"))
                         .collect(Collectors.toList());
-        List<Class<?>> deployMethodParameterTypes =
+        final List<Class<?>> deployMethodParameterTypes =
                 Arrays.asList(deployMethod.get(0).getParameterTypes());
         assertTrue(
                 deployMethodParameterTypes.containsAll(

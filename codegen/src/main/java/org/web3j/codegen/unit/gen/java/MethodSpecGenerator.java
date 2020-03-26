@@ -31,11 +31,11 @@ public class MethodSpecGenerator {
     private final Modifier testMethodModifier;
 
     public MethodSpecGenerator(
-            String testMethodName,
-            Class<?> testMethodAnnotation,
-            Modifier testMethodModifier,
-            List<ParameterSpec> testMethodParameters,
-            Map<String, Object[]> statementBody) {
+            final String testMethodName,
+            final Class<?> testMethodAnnotation,
+            final Modifier testMethodModifier,
+            final List<ParameterSpec> testMethodParameters,
+            final Map<String, Object[]> statementBody) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = testMethodAnnotation;
@@ -43,7 +43,8 @@ public class MethodSpecGenerator {
         this.testMethodParameters = testMethodParameters;
     }
 
-    public MethodSpecGenerator(String testMethodName, Map<String, Object[]> statementBody) {
+    public MethodSpecGenerator(
+            final String testMethodName, final Map<String, Object[]> statementBody) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = Test.class;
@@ -52,9 +53,9 @@ public class MethodSpecGenerator {
     }
 
     public MethodSpecGenerator(
-            String testMethodName,
-            Map<String, Object[]> statementBody,
-            List<ParameterSpec> testMethodParameters) {
+            final String testMethodName,
+            final Map<String, Object[]> statementBody,
+            final List<ParameterSpec> testMethodParameters) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = Test.class;

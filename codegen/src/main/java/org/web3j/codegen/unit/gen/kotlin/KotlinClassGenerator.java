@@ -32,7 +32,7 @@ public class KotlinClassGenerator implements UnitClassGenerator {
     private final String writePath;
 
     public KotlinClassGenerator(
-            final Class theContract, final String packageName, String writePath) {
+            final Class theContract, final String packageName, final String writePath) {
         this.theContract = theContract;
         this.packageName = packageName;
         this.writePath = writePath;
@@ -40,40 +40,40 @@ public class KotlinClassGenerator implements UnitClassGenerator {
 
     @Override
     public void writeClass() throws Exception {
-        com.squareup.kotlinpoet.ClassName EVM_ANNOTATION =
+        final com.squareup.kotlinpoet.ClassName EVM_ANNOTATION =
                 new com.squareup.kotlinpoet.ClassName("org.web3j", "EVMTest");
 
-        com.squareup.kotlinpoet.AnnotationSpec.Builder annotationSpec =
+        final com.squareup.kotlinpoet.AnnotationSpec.Builder annotationSpec =
                 com.squareup.kotlinpoet.AnnotationSpec.builder(EVM_ANNOTATION);
 
         if (JavaVersion.getJavaVersionAsDouble() < 11) {
-            com.squareup.kotlinpoet.ClassName gethContainer =
+            final com.squareup.kotlinpoet.ClassName gethContainer =
                     new com.squareup.kotlinpoet.ClassName("org.web3j", "NodeType");
             annotationSpec.addMember("%T.GETH", gethContainer);
         }
-        com.squareup.kotlinpoet.ClassName TEST_INSTANCE_ANNOTATION =
+        final com.squareup.kotlinpoet.ClassName TEST_INSTANCE_ANNOTATION =
                 new com.squareup.kotlinpoet.ClassName("org.junit.jupiter.api", "TestInstance");
 
-        com.squareup.kotlinpoet.AnnotationSpec.Builder testAnnotationSpec =
+        final com.squareup.kotlinpoet.AnnotationSpec.Builder testAnnotationSpec =
                 com.squareup.kotlinpoet.AnnotationSpec.builder(TEST_INSTANCE_ANNOTATION);
 
-        com.squareup.kotlinpoet.ClassName lifeCycle =
+        final com.squareup.kotlinpoet.ClassName lifeCycle =
                 new com.squareup.kotlinpoet.ClassName("", "TestInstance");
         testAnnotationSpec.addMember("%T.Lifecycle.PER_CLASS", lifeCycle);
 
-        PropertySpec contractInit =
+        final PropertySpec contractInit =
                 PropertySpec.builder(toCamelCase(theContract), theContract)
                         .addModifiers(KModifier.LATEINIT, KModifier.PRIVATE)
                         .mutable(true)
                         .build();
-        TypeSpec testClass =
+        final TypeSpec testClass =
                 TypeSpec.classBuilder(theContract.getSimpleName() + "Test")
                         .addFunctions(MethodFilter.generateFunctionSpecsForEachTest(theContract))
                         .addAnnotation((annotationSpec).build())
                         .addAnnotation(testAnnotationSpec.build())
                         .addProperty(contractInit)
                         .build();
-        FileSpec kotlinFile =
+        final FileSpec kotlinFile =
                 FileSpec.builder(packageName, theContract.getSimpleName() + "Test")
                         .addType(testClass)
                         .build();

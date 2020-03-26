@@ -30,20 +30,21 @@ public class MethodSpecGeneratorTest {
 
     @Test
     public void testGenerate() {
-        List<ParameterSpec> parameterSpec =
+        final List<ParameterSpec> parameterSpec =
                 Collections.singletonList(
                         ParameterSpec.builder(Web3j.class, "web3j", Modifier.FINAL).build());
-        String javaPoetStringFormat1 = "$T $L = $S";
-        Object[] replacementValues1 = new Object[] {String.class, "hello ", "Hello how are you"};
-        String javaPoetStringFormat2 = "$T $L = $T.build()";
-        Object[] replacementValues2 = new Object[] {Web3j.class, "web3j", Web3j.class};
-        Map<String, Object[]> statementBody = new LinkedHashMap<>();
+        final String javaPoetStringFormat1 = "$T $L = $S";
+        final Object[] replacementValues1 =
+                new Object[] {String.class, "hello ", "Hello how are you"};
+        final String javaPoetStringFormat2 = "$T $L = $T.build()";
+        final Object[] replacementValues2 = new Object[] {Web3j.class, "web3j", Web3j.class};
+        final Map<String, Object[]> statementBody = new LinkedHashMap<>();
         statementBody.put(javaPoetStringFormat1, replacementValues1);
         statementBody.put(javaPoetStringFormat2, replacementValues2);
-        MethodSpecGenerator methodSpecGenerator =
+        final MethodSpecGenerator methodSpecGenerator =
                 new MethodSpecGenerator(
                         "unitTest", Test.class, Modifier.PUBLIC, parameterSpec, statementBody);
-        MethodSpec generatedMethodSpec = methodSpecGenerator.generate();
+        final MethodSpec generatedMethodSpec = methodSpecGenerator.generate();
         assertEquals(
                 "@org.junit.jupiter.api.Test\n"
                         + "public void unitTest(final org.web3j.protocol.Web3j web3j) throws java.lang.Exception {\n"

@@ -30,10 +30,10 @@ public class FunSpecGenerator {
     private final Modifier testMethodModifier;
 
     public FunSpecGenerator(
-            String testMethodName,
-            Class testMethodAnnotation,
-            List<ParameterSpec> testMethodParameters,
-            Map<String, Object[]> statementBody) {
+            final String testMethodName,
+            final Class testMethodAnnotation,
+            final List<ParameterSpec> testMethodParameters,
+            final Map<String, Object[]> statementBody) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = testMethodAnnotation;
@@ -41,7 +41,8 @@ public class FunSpecGenerator {
         this.testMethodParameters = testMethodParameters;
     }
 
-    public FunSpecGenerator(String testMethodName, Map<String, Object[]> statementBody) {
+    public FunSpecGenerator(
+            final String testMethodName, final Map<String, Object[]> statementBody) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = Test.class;
@@ -50,9 +51,9 @@ public class FunSpecGenerator {
     }
 
     public FunSpecGenerator(
-            String testMethodName,
-            Map<String, Object[]> statementBody,
-            List<ParameterSpec> testMethodParameters) {
+            final String testMethodName,
+            final Map<String, Object[]> statementBody,
+            final List<ParameterSpec> testMethodParameters) {
         this.statementBody = statementBody;
         this.testMethodName = testMethodName;
         this.testMethodAnnotation = Test.class;
@@ -69,7 +70,7 @@ public class FunSpecGenerator {
     }
 
     private CodeBlock setMethodBody() {
-        CodeBlock.Builder methodBody = CodeBlock.builder();
+        final CodeBlock.Builder methodBody = CodeBlock.builder();
         statementBody.forEach(methodBody::addStatement);
         return methodBody.build();
     }

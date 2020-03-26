@@ -39,8 +39,8 @@ public class AbiTypesGenerator extends Generator {
 
     private static final String DEFAULT = "DEFAULT";
 
-    public static void main(String[] args) throws Exception {
-        AbiTypesGenerator abiTypesGenerator = new AbiTypesGenerator();
+    public static void main(final String[] args) throws Exception {
+        final AbiTypesGenerator abiTypesGenerator = new AbiTypesGenerator();
         if (args.length == 1) {
             abiTypesGenerator.generate(args[0]);
         } else {
@@ -48,7 +48,7 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private void generate(String destinationDir) throws IOException {
+    private void generate(final String destinationDir) throws IOException {
         generateIntTypes(Int.class, destinationDir);
         generateIntTypes(Uint.class, destinationDir);
 
@@ -61,29 +61,29 @@ public class AbiTypesGenerator extends Generator {
         generateStaticArrayTypes(destinationDir);
     }
 
-    private <T extends Type> void generateIntTypes(Class<T> superclass, String path)
+    private <T extends Type> void generateIntTypes(final Class<T> superclass, final String path)
             throws IOException {
-        String packageName = createPackageName(superclass);
+        final String packageName = createPackageName(superclass);
         ClassName className;
 
         for (int bitSize = 8; bitSize <= Type.MAX_BIT_LENGTH; bitSize += 8) {
             className = ClassName.get(packageName, superclass.getSimpleName() + bitSize);
 
-            MethodSpec constructorSpec =
+            final MethodSpec constructorSpec =
                     MethodSpec.constructorBuilder()
                             .addModifiers(Modifier.PUBLIC)
                             .addParameter(BigInteger.class, "value")
                             .addStatement("super($L, $N)", bitSize, "value")
                             .build();
 
-            MethodSpec overideConstructorSpec =
+            final MethodSpec overideConstructorSpec =
                     MethodSpec.constructorBuilder()
                             .addModifiers(Modifier.PUBLIC)
                             .addParameter(long.class, "value")
                             .addStatement("this(BigInteger.valueOf(value))")
                             .build();
 
-            FieldSpec defaultFieldSpec =
+            final FieldSpec defaultFieldSpec =
                     FieldSpec.builder(
                                     className,
                                     DEFAULT,
@@ -93,7 +93,7 @@ public class AbiTypesGenerator extends Generator {
                             .initializer("new $T(BigInteger.ZERO)", className)
                             .build();
 
-            TypeSpec intType =
+            final TypeSpec intType =
                     TypeSpec.classBuilder(className.simpleName())
                             .addJavadoc(CODEGEN_WARNING)
                             .superclass(superclass)
@@ -106,9 +106,9 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private <T extends Type> void generateFixedTypes(Class<T> superclass, String path)
+    private <T extends Type> void generateFixedTypes(final Class<T> superclass, final String path)
             throws IOException {
-        String packageName = createPackageName(superclass);
+        final String packageName = createPackageName(superclass);
         ClassName className;
 
         for (int mBitSize = 8; mBitSize < Type.MAX_BIT_LENGTH; mBitSize += 8) {
@@ -119,14 +119,14 @@ public class AbiTypesGenerator extends Generator {
                     break inner;
                 }
 
-                MethodSpec constructorSpec1 =
+                final MethodSpec constructorSpec1 =
                         MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PUBLIC)
                                 .addParameter(BigInteger.class, "value")
                                 .addStatement("super($L, $L, $N)", mBitSize, nBitSize, "value")
                                 .build();
 
-                MethodSpec constructorSpec2 =
+                final MethodSpec constructorSpec2 =
                         MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PUBLIC)
                                 .addParameter(int.class, "mBitSize")
@@ -141,7 +141,7 @@ public class AbiTypesGenerator extends Generator {
                                 packageName,
                                 superclass.getSimpleName() + mBitSize + "x" + nBitSize);
 
-                FieldSpec defaultFieldSpec =
+                final FieldSpec defaultFieldSpec =
                         FieldSpec.builder(
                                         className,
                                         DEFAULT,
@@ -151,7 +151,7 @@ public class AbiTypesGenerator extends Generator {
                                 .initializer("new $T(BigInteger.ZERO)", className)
                                 .build();
 
-                TypeSpec fixedType =
+                final TypeSpec fixedType =
                         TypeSpec.classBuilder(className.simpleName())
                                 .addJavadoc(CODEGEN_WARNING)
                                 .superclass(superclass)
@@ -166,13 +166,13 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private <T extends Type> void generateBytesTypes(String path) throws IOException {
-        String packageName = createPackageName(Bytes.class);
+    private <T extends Type> void generateBytesTypes(final String path) throws IOException {
+        final String packageName = createPackageName(Bytes.class);
         ClassName className;
 
         for (int byteSize = 1; byteSize <= 32; byteSize++) {
 
-            MethodSpec constructorSpec =
+            final MethodSpec constructorSpec =
                     MethodSpec.constructorBuilder()
                             .addModifiers(Modifier.PUBLIC)
                             .addParameter(byte[].class, "value")
@@ -181,7 +181,7 @@ public class AbiTypesGenerator extends Generator {
 
             className = ClassName.get(packageName, Bytes.class.getSimpleName() + byteSize);
 
-            FieldSpec defaultFieldSpec =
+            final FieldSpec defaultFieldSpec =
                     FieldSpec.builder(
                                     className,
                                     DEFAULT,
@@ -191,7 +191,7 @@ public class AbiTypesGenerator extends Generator {
                             .initializer("new $T(new byte[$L])", className, byteSize)
                             .build();
 
-            TypeSpec bytesType =
+            final TypeSpec bytesType =
                     TypeSpec.classBuilder(className.simpleName())
                             .addJavadoc(CODEGEN_WARNING)
                             .superclass(Bytes.class)
@@ -204,15 +204,16 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private <T extends Type> void generateStaticArrayTypes(String path) throws IOException {
-        String packageName = createPackageName(StaticArray.class);
+    private <T extends Type> void generateStaticArrayTypes(final String path) throws IOException {
+        final String packageName = createPackageName(StaticArray.class);
         ClassName className;
 
         for (int length = 1; length <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY; length++) {
 
-            TypeVariableName typeVariableName = TypeVariableName.get("T").withBounds(Type.class);
+            final TypeVariableName typeVariableName =
+                    TypeVariableName.get("T").withBounds(Type.class);
 
-            MethodSpec oldConstructorSpec =
+            final MethodSpec oldConstructorSpec =
                     MethodSpec.constructorBuilder()
                             .addAnnotation(Deprecated.class)
                             .addModifiers(Modifier.PUBLIC)
@@ -223,7 +224,7 @@ public class AbiTypesGenerator extends Generator {
                             .addStatement("super($L, $N)", length, "values")
                             .build();
 
-            MethodSpec oldArrayOverloadConstructorSpec =
+            final MethodSpec oldArrayOverloadConstructorSpec =
                     MethodSpec.constructorBuilder()
                             .addAnnotation(Deprecated.class)
                             .addAnnotation(SafeVarargs.class)
@@ -233,7 +234,7 @@ public class AbiTypesGenerator extends Generator {
                             .addStatement("super($L, $N)", length, "values")
                             .build();
 
-            MethodSpec constructorSpec =
+            final MethodSpec constructorSpec =
                     MethodSpec.constructorBuilder()
                             .addModifiers(Modifier.PUBLIC)
                             .addParameter(
@@ -247,7 +248,7 @@ public class AbiTypesGenerator extends Generator {
                             .addStatement("super(type, $L, values)", length)
                             .build();
 
-            MethodSpec arrayOverloadConstructorSpec =
+            final MethodSpec arrayOverloadConstructorSpec =
                     MethodSpec.constructorBuilder()
                             .addAnnotation(SafeVarargs.class)
                             .addModifiers(Modifier.PUBLIC)
@@ -262,7 +263,7 @@ public class AbiTypesGenerator extends Generator {
 
             className = ClassName.get(packageName, StaticArray.class.getSimpleName() + length);
 
-            TypeSpec bytesType =
+            final TypeSpec bytesType =
                     TypeSpec.classBuilder(className.simpleName())
                             .addTypeVariable(typeVariableName)
                             .addJavadoc(CODEGEN_WARNING)
@@ -281,11 +282,11 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    static String createPackageName(Class<?> cls) {
+    static String createPackageName(final Class<?> cls) {
         return getPackageName(cls) + ".generated";
     }
 
-    static String getPackageName(Class<?> cls) {
+    static String getPackageName(final Class<?> cls) {
         return cls.getPackage().getName();
     }
 }

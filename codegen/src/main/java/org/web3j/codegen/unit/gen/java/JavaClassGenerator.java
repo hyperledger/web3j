@@ -36,7 +36,8 @@ public class JavaClassGenerator implements UnitClassGenerator {
     private final String packageName;
     private final String writePath;
 
-    public JavaClassGenerator(final Class<?> theContract, final String packageName, String writePath) {
+    public JavaClassGenerator(
+            final Class<?> theContract, final String packageName, final String writePath) {
         this.theContract = theContract;
         this.packageName = packageName;
         this.writePath = writePath;
@@ -47,7 +48,7 @@ public class JavaClassGenerator implements UnitClassGenerator {
         final ClassName EVM_ANNOTATION = ClassName.get("org.web3j", "EVMTest");
         final AnnotationSpec.Builder annotationSpec = AnnotationSpec.builder(EVM_ANNOTATION);
         if (JavaVersion.getJavaVersionAsDouble() < 11) {
-            ClassName GethContainer = ClassName.get("org.web3j", "NodeType");
+            final ClassName GethContainer = ClassName.get("org.web3j", "NodeType");
             annotationSpec.addMember("value", "type = $T.GETH", GethContainer);
         }
         final TypeSpec testClass =

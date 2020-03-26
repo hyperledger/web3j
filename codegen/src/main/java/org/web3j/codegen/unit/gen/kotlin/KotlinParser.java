@@ -26,14 +26,15 @@ import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
 public class KotlinParser extends Parser {
 
-    public KotlinParser(Class<?> theContract, Method method, MappingHelper mappingHelper) {
+    public KotlinParser(
+            final Class<?> theContract, final Method method, final MappingHelper mappingHelper) {
         super(theContract, method, mappingHelper);
     }
 
     public String generateAssertionKotlinPoetStringTypes() {
-        Type returnType = getMethodReturnType();
-        Object[] body = generatePlaceholderValues();
-        StringBuilder symbolBuilder = new StringBuilder();
+        final Type returnType = getMethodReturnType();
+        final Object[] body = generatePlaceholderValues();
+        final StringBuilder symbolBuilder = new StringBuilder();
         symbolBuilder.append("%T.");
         if (returnType == TransactionReceipt.class) {
             symbolBuilder.append("assertTrue(%L.isStatusOK())");
@@ -41,7 +42,7 @@ public class KotlinParser extends Parser {
             symbolBuilder.append("assertEquals(");
             if (returnType.getTypeName().contains("Tuple")) {
                 symbolBuilder.append(" %T(");
-                for (Type t : getTypeArray(returnType)) {
+                for (final Type t : getTypeArray(returnType)) {
                     symbolBuilder.append(mappingHelper.getPoetFormat().get(t)).append(", ");
                 }
                 symbolBuilder.deleteCharAt(symbolBuilder.lastIndexOf(", "));
@@ -69,7 +70,7 @@ public class KotlinParser extends Parser {
 
     @Override
     protected String generatePoetStringTypes() {
-        StringBuilder symbolBuilder = new StringBuilder();
+        final StringBuilder symbolBuilder = new StringBuilder();
         if (getMethodReturnType().equals(theContract)) {
             symbolBuilder.append(" %L = %T.");
         } else {
@@ -86,7 +87,7 @@ public class KotlinParser extends Parser {
 
     @Override
     protected String getPoetFormatSpecifier() {
-        List<String> generated = new ArrayList<>();
+        final List<String> generated = new ArrayList<>();
         Arrays.asList(method.getParameterTypes())
                 .forEach(
                         type ->
@@ -96,7 +97,7 @@ public class KotlinParser extends Parser {
     }
 
     @Override
-    protected Object getDefaultValueForType(Class<?> type) {
+    protected Object getDefaultValueForType(final Class<?> type) {
         if (mappingHelper.getDefaultValueMap().containsKey(type)) {
             return mappingHelper.getDefaultValueMap().get(type);
         } else {

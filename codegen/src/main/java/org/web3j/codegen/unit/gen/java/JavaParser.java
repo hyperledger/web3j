@@ -29,7 +29,8 @@ import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
  */
 public class JavaParser extends Parser {
 
-    public JavaParser(Class<?> theContract, Method method, MappingHelper mappingHelper) {
+    public JavaParser(
+            final Class<?> theContract, final Method method, final MappingHelper mappingHelper) {
         super(theContract, method, mappingHelper);
     }
 
@@ -44,7 +45,7 @@ public class JavaParser extends Parser {
             symbolBuilder.append("assertEquals(");
             if (returnType.getTypeName().contains("Tuple")) {
                 symbolBuilder.append("new $T(");
-                for (Type t : getTypeArray(returnType)) {
+                for (final Type t : getTypeArray(returnType)) {
                     symbolBuilder.append(mappingHelper.getPoetFormat().get(t)).append(", ");
                 }
                 symbolBuilder.deleteCharAt(symbolBuilder.lastIndexOf(", "));
@@ -78,7 +79,7 @@ public class JavaParser extends Parser {
     }
 
     @Override
-    protected Object getDefaultValueForType(Class<?> type) {
+    protected Object getDefaultValueForType(final Class<?> type) {
         if (mappingHelper.getDefaultValueMap().containsKey(type)) {
             return mappingHelper.getDefaultValueMap().get(type);
         } else {

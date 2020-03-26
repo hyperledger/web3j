@@ -34,17 +34,19 @@ abstract class FunctionWrapperGenerator {
     final Class<? extends Contract> contractClass;
 
     FunctionWrapperGenerator(
-            File destinationDirLocation, String basePackageName, boolean useJavaNativeTypes) {
+            final File destinationDirLocation,
+            final String basePackageName,
+            final boolean useJavaNativeTypes) {
 
         this(Contract.class, destinationDirLocation, basePackageName, useJavaNativeTypes, false);
     }
 
     FunctionWrapperGenerator(
-            Class<? extends Contract> contractClass,
-            File destinationDirLocation,
-            String basePackageName,
-            boolean useJavaNativeTypes,
-            boolean useJavaPrimitiveTypes) {
+            final Class<? extends Contract> contractClass,
+            final File destinationDirLocation,
+            final String basePackageName,
+            final boolean useJavaNativeTypes,
+            final boolean useJavaPrimitiveTypes) {
 
         this.destinationDirLocation = destinationDirLocation;
         this.basePackageName = basePackageName;
@@ -55,7 +57,7 @@ abstract class FunctionWrapperGenerator {
 
     public abstract void generate() throws IOException, ClassNotFoundException;
 
-    static boolean useJavaNativeTypes(String argVal, String usageString) {
+    static boolean useJavaNativeTypes(final String argVal, final String usageString) {
         boolean useJavaNativeTypes = true;
         if (SOLIDITY_TYPES_ARG.equals(argVal)) {
             useJavaNativeTypes = false;
@@ -67,7 +69,7 @@ abstract class FunctionWrapperGenerator {
         return useJavaNativeTypes;
     }
 
-    static String parsePositionalArg(String[] args, int idx) {
+    static String parsePositionalArg(final String[] args, final int idx) {
         if (args != null && args.length > idx) {
             return args[idx];
         } else {
@@ -75,11 +77,11 @@ abstract class FunctionWrapperGenerator {
         }
     }
 
-    static String parseParameterArgument(String[] args, String... parameters) {
-        for (String parameter : parameters) {
+    static String parseParameterArgument(final String[] args, final String... parameters) {
+        for (final String parameter : parameters) {
             for (int i = 0; i < args.length; i++) {
                 if (args[i].equals(parameter) && i + 1 < args.length) {
-                    String parameterValue = args[i + 1];
+                    final String parameterValue = args[i + 1];
                     if (!parameterValue.startsWith("-")) {
                         return parameterValue;
                     }
@@ -89,8 +91,8 @@ abstract class FunctionWrapperGenerator {
         return "";
     }
 
-    static String getFileNameNoExtension(String fileName) {
-        String[] splitName = fileName.split("\\.(?=[^.]*$)");
+    static String getFileNameNoExtension(final String fileName) {
+        final String[] splitName = fileName.split("\\.(?=[^.]*$)");
         return splitName[0];
     }
 }

@@ -39,16 +39,16 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
 
     private String contractBaseDir;
 
-    private static void verifyGeneratedCode(String sourceFile) throws IOException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+    private static void verifyGeneratedCode(final String sourceFile) throws IOException {
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
-        try (StandardJavaFileManager fileManager =
+        try (final StandardJavaFileManager fileManager =
                 compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits =
+            final Iterable<? extends JavaFileObject> compilationUnits =
                     fileManager.getJavaFileObjectsFromStrings(
                             Collections.singletonList(sourceFile));
-            JavaCompiler.CompilationTask task =
+            final JavaCompiler.CompilationTask task =
                     compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
             assertTrue(task.call(), "Generated contract contains compile time error");
         }
@@ -58,7 +58,7 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     public void setUp() throws Exception {
         super.setUp();
 
-        URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/truffle");
+        final URL url = SolidityFunctionWrapperGeneratorTest.class.getResource("/truffle");
         contractBaseDir = url.getPath();
     }
 
@@ -75,21 +75,24 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
+    private void testCodeGenerationJvmTypes(final String contractName, final String inputFileName)
             throws Exception {
 
         testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG);
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void testCodeGenerationSolidtyTypes(String contractName, String inputFileName)
-            throws Exception {
+    private void testCodeGenerationSolidtyTypes(
+            final String contractName, final String inputFileName) throws Exception {
 
         testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG);
     }
 
     private void testCodeGeneration(
-            String contractName, String inputFileName, String packageName, String types)
+            final String contractName,
+            final String inputFileName,
+            final String packageName,
+            final String types)
             throws Exception {
 
         TruffleJsonFunctionWrapperGenerator.main(

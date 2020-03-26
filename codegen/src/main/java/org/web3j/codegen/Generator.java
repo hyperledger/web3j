@@ -20,8 +20,9 @@ import com.squareup.javapoet.TypeSpec;
 
 /** Common code generator methods. */
 class Generator {
-    void write(String packageName, TypeSpec typeSpec, String destinationDir) throws IOException {
-        JavaFile javaFile =
+    void write(final String packageName, final TypeSpec typeSpec, final String destinationDir)
+            throws IOException {
+        final JavaFile javaFile =
                 JavaFile.builder(packageName, typeSpec)
                         .indent("    ")
                         .skipJavaLangImports(true)
@@ -30,7 +31,7 @@ class Generator {
         javaFile.writeTo(new File(destinationDir));
     }
 
-    static String buildWarning(Class cls) {
+    static String buildWarning(final Class cls) {
         return "Auto generated code.\n"
                 + "<p><strong>Do not modifiy!</strong>\n"
                 + "<p>Please use "

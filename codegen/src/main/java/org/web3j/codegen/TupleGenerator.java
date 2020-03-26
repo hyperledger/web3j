@@ -36,8 +36,8 @@ public class TupleGenerator extends Generator {
     private static final String RESULT = "result";
     private static final String VALUE = "value";
 
-    public static void main(String[] args) throws IOException {
-        TupleGenerator tupleGenerator = new TupleGenerator();
+    public static void main(final String[] args) throws IOException {
+        final TupleGenerator tupleGenerator = new TupleGenerator();
         if (args.length == 1) {
             tupleGenerator.generate(args[0]);
         } else {
@@ -45,18 +45,19 @@ public class TupleGenerator extends Generator {
         }
     }
 
-    private void generate(String destinationDir) throws IOException {
+    private void generate(final String destinationDir) throws IOException {
         for (int i = 1; i <= LIMIT; i++) {
-            TypeSpec typeSpec = createTuple(i);
+            final TypeSpec typeSpec = createTuple(i);
 
             write(PACKAGE_NAME, typeSpec, destinationDir);
         }
     }
 
-    private TypeSpec createTuple(int size) {
-        String javadoc = "@deprecated use 'component$L' method instead \n @return returns a value";
-        String className = CLASS_NAME + size;
-        TypeSpec.Builder typeSpecBuilder =
+    private TypeSpec createTuple(final int size) {
+        final String javadoc =
+                "@deprecated use 'component$L' method instead \n @return returns a value";
+        final String className = CLASS_NAME + size;
+        final TypeSpec.Builder typeSpecBuilder =
                 TypeSpec.classBuilder(className)
                         .addSuperinterface(Tuple.class)
                         .addField(
@@ -66,14 +67,14 @@ public class TupleGenerator extends Generator {
                                         .initializer("$L", size)
                                         .build());
 
-        MethodSpec.Builder constructorBuilder =
+        final MethodSpec.Builder constructorBuilder =
                 MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
 
-        List<MethodSpec> methodSpecs = new ArrayList<>(size);
+        final List<MethodSpec> methodSpecs = new ArrayList<>(size);
 
         for (int i = 1; i <= size; i++) {
-            String value = VALUE + i;
-            TypeVariableName typeVariableName = TypeVariableName.get("T" + i);
+            final String value = VALUE + i;
+            final TypeVariableName typeVariableName = TypeVariableName.get("T" + i);
 
             typeSpecBuilder
                     .addTypeVariable(typeVariableName)
@@ -83,7 +84,7 @@ public class TupleGenerator extends Generator {
                     .addParameter(typeVariableName, value)
                     .addStatement("this.$N = $N", value, value);
 
-            MethodSpec getterSpec =
+            final MethodSpec getterSpec =
                     MethodSpec.methodBuilder("get" + Strings.capitaliseFirstLetter(value))
                             .addAnnotation(Deprecated.class)
                             .addJavadoc(javadoc, i)
@@ -93,7 +94,7 @@ public class TupleGenerator extends Generator {
                             .build();
             methodSpecs.add(getterSpec);
 
-            MethodSpec getterSpec2 =
+            final MethodSpec getterSpec2 =
                     MethodSpec.methodBuilder("component" + i)
                             .addModifiers(Modifier.PUBLIC)
                             .returns(typeVariableName)
@@ -102,11 +103,11 @@ public class TupleGenerator extends Generator {
             methodSpecs.add(getterSpec2);
         }
 
-        MethodSpec constructorSpec = constructorBuilder.build();
-        MethodSpec sizeSpec = generateSizeSpec();
-        MethodSpec equalsSpec = generateEqualsSpec(className, size);
-        MethodSpec hashCodeSpec = generateHashCodeSpec(size);
-        MethodSpec toStringSpec = generateToStringSpec(size);
+        final MethodSpec constructorSpec = constructorBuilder.build();
+        final MethodSpec sizeSpec = generateSizeSpec();
+        final MethodSpec equalsSpec = generateEqualsSpec(className, size);
+        final MethodSpec hashCodeSpec = generateHashCodeSpec(size);
+        final MethodSpec toStringSpec = generateToStringSpec(size);
 
         return typeSpecBuilder
                 .addJavadoc(buildWarning(TupleGenerator.class))
@@ -129,8 +130,8 @@ public class TupleGenerator extends Generator {
                 .build();
     }
 
-    private MethodSpec generateEqualsSpec(String className, int size) {
-        MethodSpec.Builder equalsSpecBuilder =
+    private MethodSpec generateEqualsSpec(final String className, final int size) {
+        final MethodSpec.Builder equalsSpecBuilder =
                 MethodSpec.methodBuilder("equals")
                         .addAnnotation(Override.class)
                         .addModifiers(Modifier.PUBLIC)
@@ -145,14 +146,14 @@ public class TupleGenerator extends Generator {
 
         String typeParams = Strings.repeat('?', size).replaceAll("\\?", "?, ");
         typeParams = typeParams.substring(0, typeParams.length() - 2);
-        String wildcardClassName = className + "<" + typeParams + ">";
+        final String wildcardClassName = className + "<" + typeParams + ">";
 
-        String name = "tuple" + size;
+        final String name = "tuple" + size;
         equalsSpecBuilder.addStatement(
                 "$L $L = ($L) o", wildcardClassName, name, wildcardClassName);
 
         for (int i = 1; i < size; i++) {
-            String value = VALUE + i;
+            final String value = VALUE + i;
 
             equalsSpecBuilder
                     .beginControlFlow(
@@ -167,7 +168,7 @@ public class TupleGenerator extends Generator {
                     .endControlFlow();
         }
 
-        String lastValue = VALUE + size;
+        final String lastValue = VALUE + size;
         equalsSpecBuilder.addStatement(
                 "return $L != null ? $L.equals($L.$L) : $L.$L == null",
                 lastValue,
@@ -180,8 +181,8 @@ public class TupleGenerator extends Generator {
         return equalsSpecBuilder.build();
     }
 
-    private MethodSpec generateHashCodeSpec(int size) {
-        MethodSpec.Builder hashCodeSpec =
+    private MethodSpec generateHashCodeSpec(final int size) {
+        final MethodSpec.Builder hashCodeSpec =
                 MethodSpec.methodBuilder("hashCode")
                         .addAnnotation(Override.class)
                         .addModifiers(Modifier.PUBLIC)
@@ -189,7 +190,7 @@ public class TupleGenerator extends Generator {
                         .addStatement("int $L = $L.hashCode()", RESULT, VALUE + 1);
 
         for (int i = 2; i <= size; i++) {
-            String value = "value" + i;
+            final String value = "value" + i;
             hashCodeSpec.addStatement(
                     "$L = 31 * $L + ($L != null ? $L.hashCode() : 0)",
                     RESULT,
@@ -203,13 +204,13 @@ public class TupleGenerator extends Generator {
         return hashCodeSpec.build();
     }
 
-    private MethodSpec generateToStringSpec(int size) {
+    private MethodSpec generateToStringSpec(final int size) {
         String toString = "return \"" + CLASS_NAME + size + "{\" +\n";
-        String firstValue = VALUE + 1;
+        final String firstValue = VALUE + 1;
         toString += "\"" + firstValue + "=\"" + " + " + firstValue + " +\n";
 
         for (int i = 2; i <= size; i++) {
-            String value = VALUE + i;
+            final String value = VALUE + i;
             toString += "\", " + value + "=\"" + " + " + value + " +\n";
         }
 

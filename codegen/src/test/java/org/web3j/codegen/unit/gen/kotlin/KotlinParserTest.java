@@ -29,13 +29,14 @@ public class KotlinParserTest extends KotlinTestSetup {
 
     @Test
     public void testGenerateJavaPoetStringTypesWhenReturnTypeIsContract() {
-        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        Method deploy =
+        final List<Method> listOfFilteredMethods =
+                MethodFilter.extractValidMethods(greeterContractClass);
+        final Method deploy =
                 listOfFilteredMethods.stream()
                         .filter(m -> m.getName().equals("deploy"))
                         .collect(Collectors.toList())
                         .get(0);
-        KotlinParser parser =
+        final KotlinParser parser =
                 new KotlinParser(greeterContractClass, deploy, new KotlinMappingHelper());
         assertEquals(" %L = %T.deploy(%L, %L, %L, %S).send()", parser.generatePoetStringTypes());
     }
@@ -43,26 +44,28 @@ public class KotlinParserTest extends KotlinTestSetup {
     @Test
     public void testGenerateJavaPoetStringTypesWhenReturnTypeIsNotContract() {
 
-        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        Method newGreeting =
+        final List<Method> listOfFilteredMethods =
+                MethodFilter.extractValidMethods(greeterContractClass);
+        final Method newGreeting =
                 listOfFilteredMethods.stream()
                         .filter(m -> m.getName().equals("newGreeting"))
                         .collect(Collectors.toList())
                         .get(0);
-        KotlinParser parser =
+        final KotlinParser parser =
                 new KotlinParser(greeterContractClass, newGreeting, new KotlinMappingHelper());
         assertEquals("val %L = %L.newGreeting(%S).send()", parser.generatePoetStringTypes());
     }
 
     @Test
     public void testGetMethodReturnType() {
-        List<Method> listOfFilteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
-        Method newGreeting =
+        final List<Method> listOfFilteredMethods =
+                MethodFilter.extractValidMethods(greeterContractClass);
+        final Method newGreeting =
                 listOfFilteredMethods.stream()
                         .filter(m -> m.getName().equals("newGreeting"))
                         .collect(Collectors.toList())
                         .get(0);
-        Parser parser =
+        final Parser parser =
                 new KotlinParser(greeterContractClass, newGreeting, new KotlinMappingHelper());
 
         assertEquals(TransactionReceipt.class, parser.getMethodReturnType());

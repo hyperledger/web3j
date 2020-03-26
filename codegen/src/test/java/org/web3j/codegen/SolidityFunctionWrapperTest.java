@@ -170,7 +170,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionTransaction() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
                         Arrays.asList(new NamedType("param", "uint8")),
@@ -179,9 +179,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        final MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        String expected =
+        final String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      FUNC_FUNCTIONNAME, \n"
@@ -195,7 +195,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildingFunctionTransactionThatReturnsValueReportsWarning() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
                         Arrays.asList(new NamedType("param", "uint8")),
@@ -214,7 +214,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildPayableFunctionTransaction() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
                         Arrays.asList(new NamedType("param", "uint8")),
@@ -223,9 +223,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         true);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        final MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        String expected =
+        final String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> functionName(java.math.BigInteger param, java.math.BigInteger weiValue) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
                         + "      FUNC_FUNCTIONNAME, \n"
@@ -239,7 +239,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantSingleValueReturn() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
                         Arrays.asList(new NamedType("param", "uint8")),
@@ -248,9 +248,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        final MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        String expected =
+        final String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.math.BigInteger> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
@@ -263,7 +263,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantSingleValueRawListReturn() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
                         Arrays.asList(new NamedType("param", "uint8")),
@@ -272,9 +272,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        final MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        String expected =
+        final String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.math.BigInteger param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
@@ -295,7 +295,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantDynamicArrayRawListReturn() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
                         Arrays.asList(new NamedType("param", "uint8[]")),
@@ -304,9 +304,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        final MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        String expected =
+        final String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.util.List<java.math.BigInteger> param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint8>(\n"
@@ -329,7 +329,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantMultiDynamicArrayRawListReturn() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
                         Arrays.asList(new NamedType("param", "uint8[][]")),
@@ -338,9 +338,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        final MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        String expected =
+        final String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.util.List> functionName(java.util.List<java.util.List<java.math.BigInteger>> param) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.DynamicArray>(\n"
@@ -595,7 +595,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantInvalid() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
                         Collections.singletonList(new NamedType("param", "uint8")),
@@ -604,14 +604,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        List<MethodSpec> methodSpecs = solidityFunctionWrapper.buildFunctions(functionDefinition);
+        final List<MethodSpec> methodSpecs =
+                solidityFunctionWrapper.buildFunctions(functionDefinition);
         assertTrue(methodSpecs.isEmpty());
     }
 
     @Test
     public void testBuildFunctionConstantMultipleValueReturn() throws Exception {
 
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
                         Arrays.asList(
@@ -624,9 +625,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+        final MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
-        String expected =
+        final String expected =
                 "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.tuples.generated.Tuple2<java.math.BigInteger, java.math.BigInteger>> functionName(java.math.BigInteger param1, java.math.BigInteger param2) {\n"
                         + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
                         + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param1), \n"
@@ -650,15 +651,15 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     @Test
     public void testBuildEventConstantMultipleValueReturn() throws Exception {
 
-        NamedType id = new NamedType("id", "string", true);
-        NamedType fromAddress = new NamedType("from", "address");
-        NamedType toAddress = new NamedType("to", "address");
-        NamedType value = new NamedType("value", "uint256");
-        NamedType message = new NamedType("message", "string");
+        final NamedType id = new NamedType("id", "string", true);
+        final NamedType fromAddress = new NamedType("from", "address");
+        final NamedType toAddress = new NamedType("to", "address");
+        final NamedType value = new NamedType("value", "uint256");
+        final NamedType message = new NamedType("message", "string");
         fromAddress.setIndexed(true);
         toAddress.setIndexed(true);
 
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
                         Arrays.asList(id, fromAddress, toAddress, value, message),
@@ -666,12 +667,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         new ArrayList<>(),
                         "event",
                         false);
-        TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
+        final TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addMethods(
                 solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder));
 
-        String expected =
+        final String expected =
                 "class testClass {\n"
                         + "  public static final org.web3j.abi.datatypes.Event TRANSFER_EVENT = new org.web3j.abi.datatypes.Event(\"Transfer\", \n"
                         + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n  ;\n\n"
@@ -732,7 +733,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFuncNameConstants() throws Exception {
-        AbiDefinition functionDefinition =
+        final AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
                         Arrays.asList(new NamedType("param", "uint8")),
@@ -740,13 +741,13 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         Collections.emptyList(),
                         "function",
                         true);
-        TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
+        final TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         builder.addFields(
                 solidityFunctionWrapper.buildFuncNameConstants(
                         Collections.singletonList(functionDefinition)));
 
-        String expected =
+        final String expected =
                 "class testClass {\n"
                         + "  public static final java.lang.String FUNC_FUNCTIONNAME = \"functionName\";\n"
                         + "}\n";

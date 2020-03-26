@@ -66,14 +66,14 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     private final boolean generateSendTxForCalls;
 
     public SolidityFunctionWrapperGenerator(
-            File binFile,
-            File abiFile,
-            File destinationDir,
-            String contractName,
-            String basePackageName,
-            boolean useJavaNativeTypes,
-            boolean useJavaPrimitiveTypes,
-            int addressLength) {
+            final File binFile,
+            final File abiFile,
+            final File destinationDir,
+            final String contractName,
+            final String basePackageName,
+            final boolean useJavaNativeTypes,
+            final boolean useJavaPrimitiveTypes,
+            final int addressLength) {
 
         this(
                 binFile,
@@ -89,16 +89,16 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     }
 
     protected SolidityFunctionWrapperGenerator(
-            File binFile,
-            File abiFile,
-            File destinationDir,
-            String contractName,
-            String basePackageName,
-            boolean useJavaNativeTypes,
-            boolean useJavaPrimitiveTypes,
-            boolean generateSendTxForCalls,
-            Class<? extends Contract> contractClass,
-            int addressLength) {
+            final File binFile,
+            final File abiFile,
+            final File destinationDir,
+            final String contractName,
+            final String basePackageName,
+            final boolean useJavaNativeTypes,
+            final boolean useJavaPrimitiveTypes,
+            final boolean generateSendTxForCalls,
+            final Class<? extends Contract> contractClass,
+            final int addressLength) {
 
         super(
                 contractClass,
@@ -114,23 +114,24 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         this.generateSendTxForCalls = generateSendTxForCalls;
     }
 
-    protected List<AbiDefinition> loadContractDefinition(File absFile) throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-        AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
+    protected List<AbiDefinition> loadContractDefinition(final File absFile) throws IOException {
+        final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+        final AbiDefinition[] abiDefinition =
+                objectMapper.readValue(absFile, AbiDefinition[].class);
         return Arrays.asList(abiDefinition);
     }
 
     public final void generate() throws IOException, ClassNotFoundException {
         String binary = Contract.BIN_NOT_PROVIDED;
         if (binFile != null) {
-            byte[] bytes = Files.readBytes(binFile);
+            final byte[] bytes = Files.readBytes(binFile);
             binary = new String(bytes);
         }
-        List<AbiDefinition> functionDefinitions = loadContractDefinition(abiFile);
+        final List<AbiDefinition> functionDefinitions = loadContractDefinition(abiFile);
 
         if (!functionDefinitions.isEmpty()) {
 
-            String className = Strings.capitaliseFirstLetter(contractName);
+            final String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
             new SolidityFunctionWrapper(
@@ -204,17 +205,11 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         private String packageName;
 
         @Option(
-                names = {"-al", "--addressLength"},
-                description = "address length in bytes (defaults to 20).",
-                required = false)
-        private int addressLength = Address.DEFAULT_LENGTH / Byte.SIZE;
-
-        @Option(
                 names = {"-jt", JAVA_TYPES_ARG},
                 description = "use native Java types.",
                 required = false,
                 showDefaultValue = ALWAYS)
-        private boolean javaTypes = true;
+        private final boolean javaTypes = true;
 
         @Option(
                 names = {"-st", SOLIDITY_TYPES_ARG},
@@ -222,23 +217,19 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 required = false)
         private boolean solidityTypes;
 
-        @Option(
-                names = {"-pt", PRIMITIVE_TYPES_ARG},
-                description = "use Java primitive types.",
-                required = false)
-        private boolean primitiveTypes = false;
-
         @Override
         public void run() {
             try {
                 // grouping is not implemented in picocli yet(planned for 3.1), therefore
                 // simply check if solidityTypes were requested
-                boolean useJavaTypes = !(solidityTypes);
+                final boolean useJavaTypes = !(solidityTypes);
 
                 if (contractName == null || contractName.isEmpty()) {
                     contractName = getFileNameNoExtension(abiFile.getName());
                 }
 
+                final boolean primitiveTypes = false;
+                final int addressLength = Address.DEFAULT_LENGTH / Byte.SIZE;
                 new SolidityFunctionWrapperGenerator(
                                 binFile,
                                 abiFile,
@@ -246,10 +237,10 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                                 contractName,
                                 packageName,
                                 useJavaTypes,
-                                primitiveTypes,
-                                addressLength)
+                        primitiveTypes,
+                        addressLength)
                         .generate();
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 exitError(e);
             }
         }

@@ -19,12 +19,12 @@ class LogGenerationReporter implements GenerationReporter {
 
     private final Logger logger;
 
-    public LogGenerationReporter(Logger logger) {
+    public LogGenerationReporter(final Logger logger) {
         this.logger = logger;
     }
 
     @Override
-    public void report(String msg) {
+    public void report(final String msg) {
         logger.warn(msg);
     }
 }
