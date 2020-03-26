@@ -19,7 +19,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.tx.TransactionManager;
 
-public class RemoteArrayFunctionCall<T> extends AbstractRemoteCall<List<T>> {
+public class RemoteArrayFunctionCall<T> extends RemoteFunctionCall<List<T>> {
 
     public RemoteArrayFunctionCall(
             final Function function,
@@ -34,7 +34,7 @@ public class RemoteArrayFunctionCall<T> extends AbstractRemoteCall<List<T>> {
     protected List<T> convert(final List<Type<?>> values) {
         final List<T> out = new ArrayList<>();
         for (final Type<?> type : values) {
-            out.add((T) type.getValue());
+            out.add((T) type);
         }
         return out;
     }
