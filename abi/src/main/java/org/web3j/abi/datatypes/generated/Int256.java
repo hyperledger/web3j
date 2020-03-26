@@ -12,11 +12,11 @@ import org.web3j.abi.datatypes.Int;
 public class Int256 extends Int {
     public static final Int256 DEFAULT = new Int256(BigInteger.ZERO);
 
-    public Int256(BigInteger value) {
+    public Int256(final BigInteger value) {
         super(256, value);
     }
 
-    public Int256(long value) {
+    public Int256(final long value) {
         this(BigInteger.valueOf(value));
     }
 }

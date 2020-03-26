@@ -44,9 +44,9 @@ public class ReadonlyTransactionManagerTest {
     public void sendCallTest() throws IOException {
         when(response.getValue()).thenReturn("test");
         when(service.send(any(), any())).thenReturn(response);
-        ReadonlyTransactionManager readonlyTransactionManager =
+        final ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
-        String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
+        final String value = readonlyTransactionManager.sendCall("", "", defaultBlockParameter);
         assertEquals("test", value);
     }
 
@@ -56,10 +56,10 @@ public class ReadonlyTransactionManagerTest {
         when(response.getRevertReason()).thenReturn(OWNER_REVERT_MSG_STR);
         when(service.send(any(), any())).thenReturn(response);
 
-        ReadonlyTransactionManager readonlyTransactionManager =
+        final ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
 
-        ContractCallException thrown =
+        final ContractCallException thrown =
                 assertThrows(
                         ContractCallException.class,
                         () -> readonlyTransactionManager.sendCall("", "", defaultBlockParameter));
@@ -69,7 +69,7 @@ public class ReadonlyTransactionManagerTest {
 
     @Test
     public void testSendTransaction() {
-        ReadonlyTransactionManager readonlyTransactionManager =
+        final ReadonlyTransactionManager readonlyTransactionManager =
                 new ReadonlyTransactionManager(web3j, "");
         assertThrows(
                 UnsupportedOperationException.class,

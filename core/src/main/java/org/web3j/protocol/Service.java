@@ -35,18 +35,18 @@ public abstract class Service implements Web3jService {
 
     protected final ObjectMapper objectMapper;
 
-    public Service(boolean includeRawResponses) {
+    public Service(final boolean includeRawResponses) {
         objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
     }
 
     protected abstract InputStream performIO(String payload) throws IOException;
 
     @Override
-    public <T extends Response<?>> T send(Request<?, T> request, Class<T> responseType)
+    public <T extends Response<?>> T send(final Request<?, T> request, final Class<T> responseType)
             throws IOException {
-        String payload = objectMapper.writeValueAsString(request);
+        final String payload = objectMapper.writeValueAsString(request);
 
-        try (InputStream result = performIO(payload)) {
+        try (final InputStream result = performIO(payload)) {
             if (result != null) {
                 return objectMapper.readValue(result, responseType);
             } else {
@@ -57,26 +57,27 @@ public abstract class Service implements Web3jService {
 
     @Override
     public <T extends Response<?>> CompletableFuture<T> sendAsync(
-            Request<?, T> jsonRpc20Request, Class<T> responseType) {
+            final Request<?, T> jsonRpc20Request, final Class<T> responseType) {
         return Async.run(() -> send(jsonRpc20Request, responseType));
     }
 
     @Override
-    public BatchResponse sendBatch(BatchRequest batchRequest) throws IOException {
+    public BatchResponse sendBatch(final BatchRequest batchRequest) throws IOException {
         if (batchRequest.getRequests().isEmpty()) {
             return new BatchResponse(Collections.emptyList(), Collections.emptyList());
         }
 
-        String payload = objectMapper.writeValueAsString(batchRequest.getRequests());
+        final String payload = objectMapper.writeValueAsString(batchRequest.getRequests());
 
-        try (InputStream result = performIO(payload)) {
+        try (final InputStream result = performIO(payload)) {
             if (result != null) {
-                ArrayNode nodes = (ArrayNode) objectMapper.readTree(result);
-                List<Response<?>> responses = new ArrayList<>(nodes.size());
+                final ArrayNode nodes = (ArrayNode) objectMapper.readTree(result);
+                final List<Response<?>> responses = new ArrayList<>(nodes.size());
 
                 for (int i = 0; i < nodes.size(); i++) {
-                    Request<?, ? extends Response<?>> request = batchRequest.getRequests().get(i);
-                    Response<?> response =
+                    final Request<?, ? extends Response<?>> request =
+                            batchRequest.getRequests().get(i);
+                    final Response<?> response =
                             objectMapper.treeToValue(nodes.get(i), request.getResponseType());
                     responses.add(response);
                 }
@@ -89,13 +90,13 @@ public abstract class Service implements Web3jService {
     }
 
     @Override
-    public CompletableFuture<BatchResponse> sendBatchAsync(BatchRequest batchRequest) {
+    public CompletableFuture<BatchResponse> sendBatchAsync(final BatchRequest batchRequest) {
         return Async.run(() -> sendBatch(batchRequest));
     }
 
     @Override
     public <T extends Notification<?>> Flowable<T> subscribe(
-            Request request, String unsubscribeMethod, Class<T> responseType) {
+            final Request request, final String unsubscribeMethod, final Class<T> responseType) {
         throw new UnsupportedOperationException(
                 String.format(
                         "Service %s does not support subscriptions",

@@ -16,16 +16,16 @@ import java.math.BigInteger;
 
 @SuppressWarnings("deprecation")
 public class StaticGasProvider implements ContractGasProvider {
-    private BigInteger gasPrice;
-    private BigInteger gasLimit;
+    private final BigInteger gasPrice;
+    private final BigInteger gasLimit;
 
-    public StaticGasProvider(BigInteger gasPrice, BigInteger gasLimit) {
+    public StaticGasProvider(final BigInteger gasPrice, final BigInteger gasLimit) {
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
     }
 
     @Override
-    public BigInteger getGasPrice(String contractFunc) {
+    public BigInteger getGasPrice(final String contractFunc) {
         return gasPrice;
     }
 
@@ -35,7 +35,7 @@ public class StaticGasProvider implements ContractGasProvider {
     }
 
     @Override
-    public BigInteger getGasLimit(String contractFunc) {
+    public BigInteger getGasLimit(final String contractFunc) {
         return gasLimit;
     }
 

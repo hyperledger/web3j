@@ -22,16 +22,16 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TraceFilter {
 
-    private DefaultBlockParameter fromBlock;
-    private DefaultBlockParameter toBlock;
-    private List<String> fromAddress;
-    private List<String> toAddress;
+    private final DefaultBlockParameter fromBlock;
+    private final DefaultBlockParameter toBlock;
+    private final List<String> fromAddress;
+    private final List<String> toAddress;
 
     public TraceFilter(
-            DefaultBlockParameter fromBlock,
-            DefaultBlockParameter toBlock,
-            List<String> fromAddress,
-            List<String> toAddress) {
+            final DefaultBlockParameter fromBlock,
+            final DefaultBlockParameter toBlock,
+            final List<String> fromAddress,
+            final List<String> toAddress) {
         this.fromBlock = fromBlock;
         this.toBlock = toBlock;
         this.fromAddress = fromAddress;

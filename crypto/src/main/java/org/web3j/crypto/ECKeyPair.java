@@ -30,7 +30,7 @@ public class ECKeyPair {
     private final BigInteger privateKey;
     private final BigInteger publicKey;
 
-    public ECKeyPair(BigInteger privateKey, BigInteger publicKey) {
+    public ECKeyPair(final BigInteger privateKey, final BigInteger publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
     }
@@ -49,42 +49,42 @@ public class ECKeyPair {
      * @param transactionHash the hash to sign
      * @return An {@link ECDSASignature} of the hash
      */
-    public ECDSASignature sign(byte[] transactionHash) {
-        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
+    public ECDSASignature sign(final byte[] transactionHash) {
+        final ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
-        ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(privateKey, Sign.CURVE);
+        final ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(privateKey, Sign.CURVE);
         signer.init(true, privKey);
-        BigInteger[] components = signer.generateSignature(transactionHash);
+        final BigInteger[] components = signer.generateSignature(transactionHash);
 
         return new ECDSASignature(components[0], components[1]).toCanonicalised();
     }
 
-    public static ECKeyPair create(KeyPair keyPair) {
-        BCECPrivateKey privateKey = (BCECPrivateKey) keyPair.getPrivate();
-        BCECPublicKey publicKey = (BCECPublicKey) keyPair.getPublic();
+    public static ECKeyPair create(final KeyPair keyPair) {
+        final BCECPrivateKey privateKey = (BCECPrivateKey) keyPair.getPrivate();
+        final BCECPublicKey publicKey = (BCECPublicKey) keyPair.getPublic();
 
-        BigInteger privateKeyValue = privateKey.getD();
+        final BigInteger privateKeyValue = privateKey.getD();
 
         // Ethereum does not use encoded public keys like bitcoin - see
         // https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm for details
         // Additionally, as the first bit is a constant prefix (0x04) we ignore this value
-        byte[] publicKeyBytes = publicKey.getQ().getEncoded(false);
-        BigInteger publicKeyValue =
+        final byte[] publicKeyBytes = publicKey.getQ().getEncoded(false);
+        final BigInteger publicKeyValue =
                 new BigInteger(1, Arrays.copyOfRange(publicKeyBytes, 1, publicKeyBytes.length));
 
         return new ECKeyPair(privateKeyValue, publicKeyValue);
     }
 
-    public static ECKeyPair create(BigInteger privateKey) {
+    public static ECKeyPair create(final BigInteger privateKey) {
         return new ECKeyPair(privateKey, Sign.publicKeyFromPrivate(privateKey));
     }
 
-    public static ECKeyPair create(byte[] privateKey) {
+    public static ECKeyPair create(final byte[] privateKey) {
         return create(Numeric.toBigInt(privateKey));
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -92,7 +92,7 @@ public class ECKeyPair {
             return false;
         }
 
-        ECKeyPair ecKeyPair = (ECKeyPair) o;
+        final ECKeyPair ecKeyPair = (ECKeyPair) o;
 
         if (privateKey != null
                 ? !privateKey.equals(ecKeyPair.privateKey)

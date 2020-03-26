@@ -15,10 +15,10 @@ package org.web3j.tx.exceptions;
 import java.io.IOException;
 
 public class TxHashMismatchException extends IOException {
-    private String txHashLocal;
-    private String txHashRemote;
+    private final String txHashLocal;
+    private final String txHashRemote;
 
-    public TxHashMismatchException(String txHashLocal, String txHashRemote) {
+    public TxHashMismatchException(final String txHashLocal, final String txHashRemote) {
         this.txHashLocal = txHashLocal;
         this.txHashRemote = txHashRemote;
     }

@@ -34,7 +34,7 @@ public class WalletTest {
         testCreate(Wallet.createLight(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR));
     }
 
-    private void testCreate(WalletFile walletFile) throws Exception {
+    private void testCreate(final WalletFile walletFile) throws Exception {
         assertEquals(walletFile.getAddress(), (SampleKeys.ADDRESS_NO_PREFIX));
     }
 
@@ -48,21 +48,21 @@ public class WalletTest {
         testEncryptDecrypt(Wallet.createLight(SampleKeys.PASSWORD, SampleKeys.KEY_PAIR));
     }
 
-    private void testEncryptDecrypt(WalletFile walletFile) throws Exception {
+    private void testEncryptDecrypt(final WalletFile walletFile) throws Exception {
         assertEquals(Wallet.decrypt(SampleKeys.PASSWORD, walletFile), (SampleKeys.KEY_PAIR));
     }
 
     @Test
     public void testDecryptAes128Ctr() throws Exception {
-        WalletFile walletFile = load(AES_128_CTR);
-        ECKeyPair ecKeyPair = Wallet.decrypt(PASSWORD, walletFile);
+        final WalletFile walletFile = load(AES_128_CTR);
+        final ECKeyPair ecKeyPair = Wallet.decrypt(PASSWORD, walletFile);
         assertEquals(Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey()), (SECRET));
     }
 
     @Test
     public void testDecryptScrypt() throws Exception {
-        WalletFile walletFile = load(SCRYPT);
-        ECKeyPair ecKeyPair = Wallet.decrypt(PASSWORD, walletFile);
+        final WalletFile walletFile = load(SCRYPT);
+        final ECKeyPair ecKeyPair = Wallet.decrypt(PASSWORD, walletFile);
         assertEquals(Numeric.toHexStringNoPrefix(ecKeyPair.getPrivateKey()), (SECRET));
     }
 
@@ -72,8 +72,8 @@ public class WalletTest {
         assertEquals(Wallet.generateRandomBytes(10).length, (10));
     }
 
-    private WalletFile load(String source) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+    private WalletFile load(final String source) throws IOException {
+        final ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(source, WalletFile.class);
     }
 

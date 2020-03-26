@@ -31,7 +31,7 @@ public final class Numeric {
 
     private Numeric() {}
 
-    public static String encodeQuantity(BigInteger value) {
+    public static String encodeQuantity(final BigInteger value) {
         if (value.signum() != -1) {
             return HEX_PREFIX + value.toString(16);
         } else {
@@ -39,7 +39,7 @@ public final class Numeric {
         }
     }
 
-    public static BigInteger decodeQuantity(String value) {
+    public static BigInteger decodeQuantity(final String value) {
         if (isLongValue(value)) {
             return BigInteger.valueOf(Long.parseLong(value));
         }
@@ -49,21 +49,21 @@ public final class Numeric {
         }
         try {
             return new BigInteger(value.substring(2), 16);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new MessageDecodingException("Negative ", e);
         }
     }
 
-    private static boolean isLongValue(String value) {
+    private static boolean isLongValue(final String value) {
         try {
             Long.parseLong(value);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             return false;
         }
     }
 
-    private static boolean isValidHexQuantity(String value) {
+    private static boolean isValidHexQuantity(final String value) {
         if (value == null) {
             return false;
         }
@@ -85,7 +85,7 @@ public final class Numeric {
         return true;
     }
 
-    public static String cleanHexPrefix(String input) {
+    public static String cleanHexPrefix(final String input) {
         if (containsHexPrefix(input)) {
             return input.substring(2);
         } else {
@@ -93,7 +93,7 @@ public final class Numeric {
         }
     }
 
-    public static String prependHexPrefix(String input) {
+    public static String prependHexPrefix(final String input) {
         if (!containsHexPrefix(input)) {
             return HEX_PREFIX + input;
         } else {
@@ -101,47 +101,47 @@ public final class Numeric {
         }
     }
 
-    public static boolean containsHexPrefix(String input) {
+    public static boolean containsHexPrefix(final String input) {
         return !Strings.isEmpty(input)
                 && input.length() > 1
                 && input.charAt(0) == '0'
                 && input.charAt(1) == 'x';
     }
 
-    public static BigInteger toBigInt(byte[] value, int offset, int length) {
+    public static BigInteger toBigInt(final byte[] value, final int offset, final int length) {
         return toBigInt((Arrays.copyOfRange(value, offset, offset + length)));
     }
 
-    public static BigInteger toBigInt(byte[] value) {
+    public static BigInteger toBigInt(final byte[] value) {
         return new BigInteger(1, value);
     }
 
-    public static BigInteger toBigInt(String hexValue) {
-        String cleanValue = cleanHexPrefix(hexValue);
+    public static BigInteger toBigInt(final String hexValue) {
+        final String cleanValue = cleanHexPrefix(hexValue);
         return toBigIntNoPrefix(cleanValue);
     }
 
-    public static BigInteger toBigIntNoPrefix(String hexValue) {
+    public static BigInteger toBigIntNoPrefix(final String hexValue) {
         return new BigInteger(hexValue, 16);
     }
 
-    public static String toHexStringWithPrefix(BigInteger value) {
+    public static String toHexStringWithPrefix(final BigInteger value) {
         return HEX_PREFIX + value.toString(16);
     }
 
-    public static String toHexStringNoPrefix(BigInteger value) {
+    public static String toHexStringNoPrefix(final BigInteger value) {
         return value.toString(16);
     }
 
-    public static String toHexStringNoPrefix(byte[] input) {
+    public static String toHexStringNoPrefix(final byte[] input) {
         return toHexString(input, 0, input.length, false);
     }
 
-    public static String toHexStringWithPrefixZeroPadded(BigInteger value, int size) {
+    public static String toHexStringWithPrefixZeroPadded(final BigInteger value, final int size) {
         return toHexStringZeroPadded(value, size, true);
     }
 
-    public static String toHexStringWithPrefixSafe(BigInteger value) {
+    public static String toHexStringWithPrefixSafe(final BigInteger value) {
         String result = toHexStringNoPrefix(value);
         if (result.length() < 2) {
             result = Strings.zeros(1) + result;
@@ -149,14 +149,15 @@ public final class Numeric {
         return HEX_PREFIX + result;
     }
 
-    public static String toHexStringNoPrefixZeroPadded(BigInteger value, int size) {
+    public static String toHexStringNoPrefixZeroPadded(final BigInteger value, final int size) {
         return toHexStringZeroPadded(value, size, false);
     }
 
-    private static String toHexStringZeroPadded(BigInteger value, int size, boolean withPrefix) {
+    private static String toHexStringZeroPadded(
+            final BigInteger value, final int size, final boolean withPrefix) {
         String result = toHexStringNoPrefix(value);
 
-        int length = result.length();
+        final int length = result.length();
         if (length > size) {
             throw new UnsupportedOperationException(
                     "Value " + result + "is larger then length " + size);
@@ -175,12 +176,12 @@ public final class Numeric {
         }
     }
 
-    public static byte[] toBytesPadded(BigInteger value, int length) {
-        byte[] result = new byte[length];
-        byte[] bytes = value.toByteArray();
+    public static byte[] toBytesPadded(final BigInteger value, final int length) {
+        final byte[] result = new byte[length];
+        final byte[] bytes = value.toByteArray();
 
-        int bytesLength;
-        int srcOffset;
+        final int bytesLength;
+        final int srcOffset;
         if (bytes[0] == 0) {
             bytesLength = bytes.length - 1;
             srcOffset = 1;
@@ -193,22 +194,22 @@ public final class Numeric {
             throw new RuntimeException("Input is too large to put in byte array of size " + length);
         }
 
-        int destOffset = length - bytesLength;
+        final int destOffset = length - bytesLength;
         System.arraycopy(bytes, srcOffset, result, destOffset, bytesLength);
         return result;
     }
 
-    public static byte[] hexStringToByteArray(String input) {
-        String cleanInput = cleanHexPrefix(input);
+    public static byte[] hexStringToByteArray(final String input) {
+        final String cleanInput = cleanHexPrefix(input);
 
-        int len = cleanInput.length();
+        final int len = cleanInput.length();
 
         if (len == 0) {
             return new byte[] {};
         }
 
-        byte[] data;
-        int startIdx;
+        final byte[] data;
+        final int startIdx;
         if (len % 2 != 0) {
             data = new byte[(len / 2) + 1];
             data[0] = (byte) Character.digit(cleanInput.charAt(0), 16);
@@ -242,15 +243,15 @@ public final class Numeric {
         return output;
     }
 
-    public static String toHexString(byte[] input) {
+    public static String toHexString(final byte[] input) {
         return toHexString(input, 0, input.length, true);
     }
 
-    public static byte asByte(int m, int n) {
+    public static byte asByte(final int m, final int n) {
         return (byte) ((m << 4) | n);
     }
 
-    public static boolean isIntegerValue(BigDecimal value) {
+    public static boolean isIntegerValue(final BigDecimal value) {
         return value.signum() == 0 || value.scale() <= 0 || value.stripTrailingZeros().scale() <= 0;
     }
 }

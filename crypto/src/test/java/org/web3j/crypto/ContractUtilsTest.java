@@ -23,7 +23,7 @@ public class ContractUtilsTest {
 
     @Test
     public void testCreateContractAddress() {
-        String address = "0x19e03255f667bdfd50a32722df860b1eeaf4d635";
+        final String address = "0x19e03255f667bdfd50a32722df860b1eeaf4d635";
 
         assertEquals(
                 generateContractAddress(address, BigInteger.valueOf(209)),

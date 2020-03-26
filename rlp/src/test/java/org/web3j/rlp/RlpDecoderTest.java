@@ -33,7 +33,7 @@ public class RlpDecoderTest {
 
         // big positive number should stay positive after encoding-decoding
         // https://github.com/web3j/web3j/issues/562
-        long value = 3000000000L;
+        final long value = 3000000000L;
         assertEquals(
                 RlpString.create(BigInteger.valueOf(value)).asPositiveBigInteger().longValue(),
                 (value));
@@ -298,13 +298,13 @@ public class RlpDecoderTest {
                 ((RlpList) rlpList.getValues().get(0)).getValues().get(2), (RlpString.create(1)));
 
         // payload more than 55 bytes
-        String data =
+        final String data =
                 "F86E12F86B80881BC16D674EC8000094CD2A3D9F938E13CD947EC05ABC7FE734D"
                         + "F8DD8268609184E72A00064801BA0C52C114D4F5A3BA904A9B3036E5E118FE0DBB987"
                         + "FE3955DA20F2CD8F6C21AB9CA06BA4C2874299A55AD947DBC98A25EE895AABF6B625C"
                         + "26C435E84BFD70EDF2F69";
 
-        byte[] payload = Numeric.hexStringToByteArray(data);
+        final byte[] payload = Numeric.hexStringToByteArray(data);
         rlpList = RlpDecoder.decode(payload);
 
         assertEquals(((RlpList) rlpList.getValues().get(0)).getValues().size(), (2));

@@ -31,11 +31,11 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
 
         public Code() {}
 
-        public Code(String code) {
+        public Code(final String code) {
             this.code = code;
         }
 
-        public Code(String code, SolidityInfo info) {
+        public Code(final String code, final SolidityInfo info) {
             this.code = code;
             this.info = info;
         }
@@ -44,7 +44,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return code;
         }
 
-        public void setCode(String code) {
+        public void setCode(final String code) {
             this.code = code;
         }
 
@@ -52,12 +52,12 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return info;
         }
 
-        public void setInfo(SolidityInfo info) {
+        public void setInfo(final SolidityInfo info) {
             this.info = info;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -65,7 +65,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
                 return false;
             }
 
-            Code code1 = (Code) o;
+            final Code code1 = (Code) o;
 
             if (getCode() != null ? !getCode().equals(code1.getCode()) : code1.getCode() != null) {
                 return false;
@@ -94,14 +94,14 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
         public SolidityInfo() {}
 
         public SolidityInfo(
-                String source,
-                String language,
-                String languageVersion,
-                String compilerVersion,
-                String compilerOptions,
-                List<AbiDefinition> abiDefinition,
-                Documentation userDoc,
-                Documentation developerDoc) {
+                final String source,
+                final String language,
+                final String languageVersion,
+                final String compilerVersion,
+                final String compilerOptions,
+                final List<AbiDefinition> abiDefinition,
+                final Documentation userDoc,
+                final Documentation developerDoc) {
             this.source = source;
             this.language = language;
             this.languageVersion = languageVersion;
@@ -116,7 +116,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return source;
         }
 
-        public void setSource(String source) {
+        public void setSource(final String source) {
             this.source = source;
         }
 
@@ -124,7 +124,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return language;
         }
 
-        public void setLanguage(String language) {
+        public void setLanguage(final String language) {
             this.language = language;
         }
 
@@ -132,7 +132,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return languageVersion;
         }
 
-        public void setLanguageVersion(String languageVersion) {
+        public void setLanguageVersion(final String languageVersion) {
             this.languageVersion = languageVersion;
         }
 
@@ -140,7 +140,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return compilerVersion;
         }
 
-        public void setCompilerVersion(String compilerVersion) {
+        public void setCompilerVersion(final String compilerVersion) {
             this.compilerVersion = compilerVersion;
         }
 
@@ -148,7 +148,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return compilerOptions;
         }
 
-        public void setCompilerOptions(String compilerOptions) {
+        public void setCompilerOptions(final String compilerOptions) {
             this.compilerOptions = compilerOptions;
         }
 
@@ -156,7 +156,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return abiDefinition;
         }
 
-        public void setAbiDefinition(List<AbiDefinition> abiDefinition) {
+        public void setAbiDefinition(final List<AbiDefinition> abiDefinition) {
             this.abiDefinition = abiDefinition;
         }
 
@@ -164,7 +164,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return userDoc;
         }
 
-        public void setUserDoc(Documentation userDoc) {
+        public void setUserDoc(final Documentation userDoc) {
             this.userDoc = userDoc;
         }
 
@@ -172,12 +172,12 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return developerDoc;
         }
 
-        public void setDeveloperDoc(Documentation developerDoc) {
+        public void setDeveloperDoc(final Documentation developerDoc) {
             this.developerDoc = developerDoc;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -185,7 +185,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
                 return false;
             }
 
-            SolidityInfo that = (SolidityInfo) o;
+            final SolidityInfo that = (SolidityInfo) o;
 
             if (getSource() != null
                     ? !getSource().equals(that.getSource())
@@ -260,12 +260,12 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
             return methods;
         }
 
-        public void setMethods(Map<String, String> methods) {
+        public void setMethods(final Map<String, String> methods) {
             this.methods = methods;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -273,7 +273,7 @@ public class EthCompileSolidity extends Response<Map<String, EthCompileSolidity.
                 return false;
             }
 
-            Documentation that = (Documentation) o;
+            final Documentation that = (Documentation) o;
 
             return getMethods() != null
                     ? getMethods().equals(that.getMethods())

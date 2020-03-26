@@ -42,9 +42,9 @@ import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
 public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
     public List<Type<?>> decodeFunctionResult(
-            String rawInput, List<TypeReference<Type<?>>> outputParameters) {
+            final String rawInput, final List<TypeReference<Type<?>>> outputParameters) {
 
-        String input = Numeric.cleanHexPrefix(rawInput);
+        final String input = Numeric.cleanHexPrefix(rawInput);
 
         if (Strings.isEmpty(input)) {
             return Collections.emptyList();
@@ -55,15 +55,15 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
     @SuppressWarnings("unchecked")
     public <T extends Type<?>> Type<?> decodeEventParameter(
-            String rawInput, TypeReference<T> typeReference) {
+            final String rawInput, final TypeReference<T> typeReference) {
 
-        String input = Numeric.cleanHexPrefix(rawInput);
+        final String input = Numeric.cleanHexPrefix(rawInput);
 
         try {
-            Class<T> type = typeReference.getClassType();
+            final Class<T> type = typeReference.getClassType();
 
             if (Bytes.class.isAssignableFrom(type)) {
-                Class<Bytes> bytesClass = (Class<Bytes>) Class.forName(type.getName());
+                final Class<Bytes> bytesClass = (Class<Bytes>) Class.forName(type.getName());
                 return TypeDecoder.decodeBytes(input, bytesClass);
             } else if (Array.class.isAssignableFrom(type)
                     || BytesType.class.isAssignableFrom(type)
@@ -72,24 +72,24 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
             } else {
                 return TypeDecoder.decode(input, type);
             }
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid class reference provided", e);
         }
     }
 
     private static List<Type<?>> build(
-            String input, List<TypeReference<Type<?>>> outputParameters) {
-        List<Type<?>> results = new ArrayList<>(outputParameters.size());
+            final String input, final List<TypeReference<Type<?>>> outputParameters) {
+        final List<Type<?>> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
-        for (TypeReference<?> typeReference : outputParameters) {
+        for (final TypeReference<?> typeReference : outputParameters) {
             try {
                 int hexStringDataOffset = getDataOffset(input, offset, typeReference);
 
                 @SuppressWarnings("unchecked")
                 Class<Type<?>> classType = (Class<Type<?>>) typeReference.getClassType();
 
-                Type result;
+                final Type result;
                 if (DynamicStruct.class.isAssignableFrom(classType)) {
                     result =
                             TypeDecoder.decodeDynamicStruct(
@@ -103,7 +103,8 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
-                    int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
+                    final int length =
+                            ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
                     result =
                             TypeDecoder.decodeStaticArray(
                                     input, hexStringDataOffset, typeReference, length);
@@ -117,7 +118,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                             staticStructNestedPublicFieldsFlatList(classType).size()
                                     * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 } else if (StaticArray.class.isAssignableFrom(classType)) {
-                    int length =
+                    final int length =
                             Integer.parseInt(
                                     classType
                                             .getSimpleName()
@@ -146,7 +147,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                 }
                 results.add(result);
 
-            } catch (ClassNotFoundException e) {
+            } catch (final ClassNotFoundException e) {
                 throw new UnsupportedOperationException("Invalid class reference provided", e);
             }
         }

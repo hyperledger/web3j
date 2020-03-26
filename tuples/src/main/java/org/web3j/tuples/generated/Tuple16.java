@@ -43,7 +43,7 @@ public final class Tuple16<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
 
     private final T16 value16;
 
-    public Tuple16(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9, T10 value10, T11 value11, T12 value12, T13 value13, T14 value14, T15 value15, T16 value16) {
+    public Tuple16(final T1 value1, final T2 value2, final T3 value3, final T4 value4, final T5 value5, final T6 value6, final T7 value7, final T8 value8, final T9 value9, final T10 value10, final T11 value11, final T12 value12, final T13 value13, final T14 value14, final T15 value15, final T16 value16) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -260,14 +260,14 @@ public final class Tuple16<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple16 = (Tuple16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
+        final Tuple16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> tuple16 = (Tuple16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
         if (value1 != null ? !value1.equals(tuple16.value1) : tuple16.value1 != null) {
             return false;
         }

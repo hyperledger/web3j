@@ -25,7 +25,7 @@ public class RequestTest extends RequestTester {
     private Admin web3j;
 
     @Override
-    protected void initWeb3Client(HttpService httpService) {
+    protected void initWeb3Client(final HttpService httpService) {
         web3j = Admin.build(httpService);
     }
 

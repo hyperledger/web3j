@@ -18,13 +18,13 @@ public class Bool implements Type<Boolean> {
     public static final String TYPE_NAME = "bool";
     public static final Bool DEFAULT = new Bool(false);
 
-    private boolean value;
+    private final boolean value;
 
-    public Bool(boolean value) {
+    public Bool(final boolean value) {
         this.value = value;
     }
 
-    public Bool(Boolean value) {
+    public Bool(final Boolean value) {
         this.value = value;
     }
 
@@ -39,7 +39,7 @@ public class Bool implements Type<Boolean> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -47,7 +47,7 @@ public class Bool implements Type<Boolean> {
             return false;
         }
 
-        Bool bool = (Bool) o;
+        final Bool bool = (Bool) o;
 
         return value == bool.value;
     }

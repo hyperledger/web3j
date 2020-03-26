@@ -32,12 +32,13 @@ import org.web3j.protocol.websocket.events.SyncingNotfication;
 /** JSON-RPC 2.0 factory implementation for Geth. */
 public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
-    public JsonRpc2_0Geth(Web3jService web3jService) {
+    public JsonRpc2_0Geth(final Web3jService web3jService) {
         super(web3jService);
     }
 
     @Override
-    public Request<?, PersonalImportRawKey> personalImportRawKey(String keydata, String password) {
+    public Request<?, PersonalImportRawKey> personalImportRawKey(
+            final String keydata, final String password) {
         return new Request<>(
                 "personal_importRawKey",
                 Arrays.asList(keydata, password),
@@ -46,7 +47,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     }
 
     @Override
-    public Request<?, BooleanResponse> personalLockAccount(String accountId) {
+    public Request<?, BooleanResponse> personalLockAccount(final String accountId) {
         return new Request<>(
                 "personal_lockAccount",
                 Arrays.asList(accountId),
@@ -56,7 +57,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Request<?, PersonalSign> personalSign(
-            String message, String accountId, String password) {
+            final String message, final String accountId, final String password) {
         return new Request<>(
                 "personal_sign",
                 Arrays.asList(message, accountId, password),
@@ -66,7 +67,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
 
     @Override
     public Request<?, PersonalEcRecover> personalEcRecover(
-            String hexMessage, String signedMessage) {
+            final String hexMessage, final String signedMessage) {
         return new Request<>(
                 "personal_ecRecover",
                 Arrays.asList(hexMessage, signedMessage),
@@ -75,7 +76,7 @@ public class JsonRpc2_0Geth extends JsonRpc2_0Admin implements Geth {
     }
 
     @Override
-    public Request<?, MinerStartResponse> minerStart(int threadCount) {
+    public Request<?, MinerStartResponse> minerStart(final int threadCount) {
         return new Request<>(
                 "miner_start", Arrays.asList(threadCount), web3jService, MinerStartResponse.class);
     }

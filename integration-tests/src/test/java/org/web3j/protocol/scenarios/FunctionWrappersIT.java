@@ -48,31 +48,31 @@ public class FunctionWrappersIT extends Scenario {
 
     @Test
     public void testFibonacci() throws Exception {
-
-        Fibonacci fibonacci =
+        final Fibonacci fibonacci =
                 Fibonacci.load(
                         fib.getContractAddress(),
                         Web3j.build(new HttpService()),
                         ALICE,
                         STATIC_GAS_PROVIDER);
 
-        BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).call();
+        final BigInteger result = fibonacci.fibonacci(BigInteger.valueOf(10)).call();
         assertEquals(result, (BigInteger.valueOf(55)));
     }
 
     @Test
     public void testFibonacciNotify() throws Exception {
-        Fibonacci fibonacci =
+        final Fibonacci fibonacci =
                 Fibonacci.load(
                         fib.getContractAddress(),
                         Web3j.build(new HttpService()),
                         ALICE,
                         STATIC_GAS_PROVIDER);
 
-        TransactionReceipt transactionReceipt =
+        final TransactionReceipt transactionReceipt =
                 fibonacci.fibonacciNotify(BigInteger.valueOf(15)).send();
 
-        Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
+        final Fibonacci.NotifyEventResponse result =
+                fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
         assertEquals(BigInteger.valueOf(15), result.input);
 

@@ -32,14 +32,15 @@ public class RawResponseDeserializer extends StdDeserializer<Response>
 
     private final JsonDeserializer<?> defaultDeserializer;
 
-    public RawResponseDeserializer(JsonDeserializer<?> defaultDeserializer) {
+    public RawResponseDeserializer(final JsonDeserializer<?> defaultDeserializer) {
         super(Response.class);
         this.defaultDeserializer = defaultDeserializer;
     }
 
     @Override
-    public Response deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        Response deserializedResponse = (Response) defaultDeserializer.deserialize(jp, ctxt);
+    public Response deserialize(final JsonParser jp, final DeserializationContext ctxt)
+            throws IOException {
+        final Response deserializedResponse = (Response) defaultDeserializer.deserialize(jp, ctxt);
 
         deserializedResponse.setRawResponse(getRawResponse(jp));
         return deserializedResponse;
@@ -48,11 +49,11 @@ public class RawResponseDeserializer extends StdDeserializer<Response>
     // Must implement ResolvableDeserializer when modifying BeanDeserializer
     // otherwise deserializing throws JsonMappingException
     @Override
-    public void resolve(DeserializationContext ctxt) throws JsonMappingException {
+    public void resolve(final DeserializationContext ctxt) throws JsonMappingException {
         ((ResolvableDeserializer) defaultDeserializer).resolve(ctxt);
     }
 
-    private String getRawResponse(JsonParser jp) throws IOException {
+    private String getRawResponse(final JsonParser jp) throws IOException {
         final InputStream inputSource = (InputStream) jp.getInputSource();
 
         if (inputSource == null) {
@@ -64,7 +65,7 @@ public class RawResponseDeserializer extends StdDeserializer<Response>
         return streamToString(inputSource);
     }
 
-    private String streamToString(InputStream input) throws IOException {
+    private String streamToString(final InputStream input) throws IOException {
         try (Scanner scanner =
                 new Scanner(input, StandardCharsets.UTF_8.name()).useDelimiter("\\Z")) {
             return scanner.next();

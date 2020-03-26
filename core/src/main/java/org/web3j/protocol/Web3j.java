@@ -28,7 +28,7 @@ public interface Web3j extends Ethereum, Web3jRx, Batcher {
      * @param web3jService web3j service instance - i.e. HTTP or IPC
      * @return new Web3j instance
      */
-    static Web3j build(Web3jService web3jService) {
+    static Web3j build(final Web3jService web3jService) {
         return new JsonRpc2_0Web3j(web3jService);
     }
 
@@ -42,9 +42,9 @@ public interface Web3j extends Ethereum, Web3jRx, Batcher {
      * @return new Web3j instance
      */
     static Web3j build(
-            Web3jService web3jService,
-            long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService) {
+            final Web3jService web3jService,
+            final long pollingInterval,
+            final ScheduledExecutorService scheduledExecutorService) {
         return new JsonRpc2_0Web3j(web3jService, pollingInterval, scheduledExecutorService);
     }
 

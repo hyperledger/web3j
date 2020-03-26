@@ -28,12 +28,12 @@ public class RawTransactionManagerTest extends ManagedTransactionTester {
 
     @Test
     public void testTxHashMismatch() throws IOException {
-        TransactionReceipt transactionReceipt = prepareTransfer();
+        final TransactionReceipt transactionReceipt = prepareTransfer();
         prepareTransaction(transactionReceipt);
 
-        TransactionManager transactionManager =
+        final TransactionManager transactionManager =
                 new RawTransactionManager(web3j, SampleKeys.CREDENTIALS);
-        Transfer transfer = new Transfer(web3j, transactionManager);
+        final Transfer transfer = new Transfer(web3j, transactionManager);
         assertThrows(
                 TxHashMismatchException.class,
                 () -> transfer.sendFunds(ADDRESS, BigDecimal.ONE, Convert.Unit.ETHER).call());

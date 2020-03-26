@@ -68,29 +68,29 @@ public class ENS extends Contract {
     public static final Event NEWTTL_EVENT = new Event("NewTTL", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint64>() {}));
 
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected ENS(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    protected ENS(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected ENS(final String contractAddress, final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public RemoteCall<String> resolver(byte[] node) {
+    public RemoteCall<String> resolver(final byte[] node) {
         final Function function = new Function(FUNC_RESOLVER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<String> owner(byte[] node) {
+    public RemoteCall<String> owner(final byte[] node) {
         final Function function = new Function(FUNC_OWNER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setSubnodeOwner(byte[] node, byte[] label, String owner) {
+    public RemoteTransaction<Void> setSubnodeOwner(final byte[] node, final byte[] label, final String owner) {
         final Function function = new Function(
                 FUNC_SETSUBNODEOWNER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -102,7 +102,7 @@ public class ENS extends Contract {
                 false, gasProvider);
     }
 
-    public RemoteTransaction<Void> setTTL(byte[] node, BigInteger ttl) {
+    public RemoteTransaction<Void> setTTL(final byte[] node, final BigInteger ttl) {
         final Function function = new Function(
                 FUNC_SETTTL, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -112,14 +112,14 @@ public class ENS extends Contract {
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
-    public RemoteCall<BigInteger> ttl(byte[] node) {
+    public RemoteCall<BigInteger> ttl(final byte[] node) {
         final Function function = new Function(FUNC_TTL, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setResolver(byte[] node, String resolver) {
+    public RemoteTransaction<Void> setResolver(final byte[] node, final String resolver) {
         final Function function = new Function(
                 FUNC_SETRESOLVER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -129,7 +129,7 @@ public class ENS extends Contract {
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
-    public RemoteTransaction<Void> setOwner(byte[] node, String owner) {
+    public RemoteTransaction<Void> setOwner(final byte[] node, final String owner) {
         final Function function = new Function(
                 FUNC_SETOWNER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
@@ -139,19 +139,19 @@ public class ENS extends Contract {
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
-    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    public static RemoteCall<ENS> deploy(final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {
         return deployRemoteCall(ENS.class, web3j, credentials, contractGasProvider, BINARY, "");
     }
 
-    public static RemoteCall<ENS> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    public static RemoteCall<ENS> deploy(final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider) {
         return deployRemoteCall(ENS.class, web3j, transactionManager, contractGasProvider, BINARY, "");
     }
 
-    public List<NewOwnerEventResponse> getNewOwnerEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NEWOWNER_EVENT, transactionReceipt);
-        ArrayList<NewOwnerEventResponse> responses = new ArrayList<NewOwnerEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
+    public List<NewOwnerEventResponse> getNewOwnerEvents(final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NEWOWNER_EVENT, transactionReceipt);
+        final ArrayList<NewOwnerEventResponse> responses = new ArrayList<NewOwnerEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.label = (byte[]) eventValues.getIndexedValues().get(1).getValue();
@@ -161,12 +161,12 @@ public class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<NewOwnerEventResponse> newOwnerEventFlowable(EthFilter filter) {
+    public Flowable<NewOwnerEventResponse> newOwnerEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, NewOwnerEventResponse>() {
             @Override
-            public NewOwnerEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NEWOWNER_EVENT, log);
-                NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
+            public NewOwnerEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NEWOWNER_EVENT, log);
+                final NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.label = (byte[]) eventValues.getIndexedValues().get(1).getValue();
@@ -176,17 +176,17 @@ public class ENS extends Contract {
         });
     }
 
-    public Flowable<NewOwnerEventResponse> newOwnerEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+    public Flowable<NewOwnerEventResponse> newOwnerEventFlowable(final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NEWOWNER_EVENT));
         return newOwnerEventFlowable(filter);
     }
 
-    public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
-        ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            TransferEventResponse typedResponse = new TransferEventResponse();
+    public List<TransferEventResponse> getTransferEvents(final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
+        final ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final TransferEventResponse typedResponse = new TransferEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -195,12 +195,12 @@ public class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<TransferEventResponse> transferEventFlowable(EthFilter filter) {
+    public Flowable<TransferEventResponse> transferEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, TransferEventResponse>() {
             @Override
-            public TransferEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
-                TransferEventResponse typedResponse = new TransferEventResponse();
+            public TransferEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
+                final TransferEventResponse typedResponse = new TransferEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -209,17 +209,17 @@ public class ENS extends Contract {
         });
     }
 
-    public Flowable<TransferEventResponse> transferEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+    public Flowable<TransferEventResponse> transferEventFlowable(final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
         return transferEventFlowable(filter);
     }
 
-    public List<NewResolverEventResponse> getNewResolverEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NEWRESOLVER_EVENT, transactionReceipt);
-        ArrayList<NewResolverEventResponse> responses = new ArrayList<NewResolverEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            NewResolverEventResponse typedResponse = new NewResolverEventResponse();
+    public List<NewResolverEventResponse> getNewResolverEvents(final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NEWRESOLVER_EVENT, transactionReceipt);
+        final ArrayList<NewResolverEventResponse> responses = new ArrayList<NewResolverEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final NewResolverEventResponse typedResponse = new NewResolverEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.resolver = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -228,12 +228,12 @@ public class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<NewResolverEventResponse> newResolverEventFlowable(EthFilter filter) {
+    public Flowable<NewResolverEventResponse> newResolverEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, NewResolverEventResponse>() {
             @Override
-            public NewResolverEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NEWRESOLVER_EVENT, log);
-                NewResolverEventResponse typedResponse = new NewResolverEventResponse();
+            public NewResolverEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NEWRESOLVER_EVENT, log);
+                final NewResolverEventResponse typedResponse = new NewResolverEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.resolver = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -242,17 +242,17 @@ public class ENS extends Contract {
         });
     }
 
-    public Flowable<NewResolverEventResponse> newResolverEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+    public Flowable<NewResolverEventResponse> newResolverEventFlowable(final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NEWRESOLVER_EVENT));
         return newResolverEventFlowable(filter);
     }
 
-    public List<NewTTLEventResponse> getNewTTLEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NEWTTL_EVENT, transactionReceipt);
-        ArrayList<NewTTLEventResponse> responses = new ArrayList<NewTTLEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            NewTTLEventResponse typedResponse = new NewTTLEventResponse();
+    public List<NewTTLEventResponse> getNewTTLEvents(final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NEWTTL_EVENT, transactionReceipt);
+        final ArrayList<NewTTLEventResponse> responses = new ArrayList<NewTTLEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final NewTTLEventResponse typedResponse = new NewTTLEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.ttl = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
@@ -261,12 +261,12 @@ public class ENS extends Contract {
         return responses;
     }
 
-    public Flowable<NewTTLEventResponse> newTTLEventFlowable(EthFilter filter) {
+    public Flowable<NewTTLEventResponse> newTTLEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, NewTTLEventResponse>() {
             @Override
-            public NewTTLEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NEWTTL_EVENT, log);
-                NewTTLEventResponse typedResponse = new NewTTLEventResponse();
+            public NewTTLEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NEWTTL_EVENT, log);
+                final NewTTLEventResponse typedResponse = new NewTTLEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.ttl = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
@@ -275,17 +275,17 @@ public class ENS extends Contract {
         });
     }
 
-    public Flowable<NewTTLEventResponse> newTTLEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+    public Flowable<NewTTLEventResponse> newTTLEventFlowable(final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NEWTTL_EVENT));
         return newTTLEventFlowable(filter);
     }
     
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    public static ENS load(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {
         return new ENS(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static ENS load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    public static ENS load(final String contractAddress, final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider) {
         return new ENS(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 

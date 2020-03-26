@@ -19,11 +19,11 @@ import java.util.List;
 public class RlpList implements RlpType {
     private final List<RlpType> values;
 
-    public RlpList(RlpType... values) {
+    public RlpList(final RlpType... values) {
         this.values = Arrays.asList(values);
     }
 
-    public RlpList(List<RlpType> values) {
+    public RlpList(final List<RlpType> values) {
         this.values = values;
     }
 

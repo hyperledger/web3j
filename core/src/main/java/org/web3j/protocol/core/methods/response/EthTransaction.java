@@ -46,11 +46,11 @@ public class EthTransaction extends Response<Transaction> {
 
     public static class ResponseDeserialiser extends JsonDeserializer<Transaction> {
 
-        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
+        private final ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public Transaction deserialize(
-                JsonParser jsonParser, DeserializationContext deserializationContext)
+                final JsonParser jsonParser, final DeserializationContext deserializationContext)
                 throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
                 return objectReader.readValue(jsonParser, Transaction.class);

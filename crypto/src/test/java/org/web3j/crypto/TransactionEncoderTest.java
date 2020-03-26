@@ -29,9 +29,9 @@ public class TransactionEncoderTest {
 
     @Test
     public void testSignMessage() {
-        byte[] signedMessage =
+        final byte[] signedMessage =
                 TransactionEncoder.signMessage(createEtherTransaction(), SampleKeys.CREDENTIALS);
-        String hexMessage = Numeric.toHexString(signedMessage);
+        final String hexMessage = Numeric.toHexString(signedMessage);
         assertEquals(
                 hexMessage,
                 ("0xf85580010a840add5355887fffffffffffffff80"
@@ -42,7 +42,7 @@ public class TransactionEncoderTest {
 
     @Test
     public void testEtherTransactionAsRlpValues() {
-        List<RlpType> rlpStrings =
+        final List<RlpType> rlpStrings =
                 TransactionEncoder.asRlpValues(
                         createEtherTransaction(),
                         new Sign.SignatureData((byte) 0, new byte[32], new byte[32]));
@@ -52,7 +52,7 @@ public class TransactionEncoderTest {
 
     @Test
     public void testContractAsRlpValues() {
-        List<RlpType> rlpStrings =
+        final List<RlpType> rlpStrings =
                 TransactionEncoder.asRlpValues(createContractTransaction(), null);
         assertEquals(rlpStrings.size(), (6));
         assertEquals(rlpStrings.get(3), (RlpString.create("")));
@@ -70,7 +70,7 @@ public class TransactionEncoderTest {
     @Test
     public void testEip155Transaction() {
         // https://github.com/ethereum/EIPs/issues/155
-        Credentials credentials =
+        final Credentials credentials =
                 Credentials.create(
                         "0x4646464646464646464646464646464646464646464646464646464646464646");
 

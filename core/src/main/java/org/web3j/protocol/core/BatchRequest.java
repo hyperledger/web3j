@@ -21,14 +21,14 @@ import org.web3j.protocol.Web3jService;
 
 public class BatchRequest {
 
-    private Web3jService web3jService;
-    private List<Request<?, ? extends Response<?>>> requests = new ArrayList<>();
+    private final Web3jService web3jService;
+    private final List<Request<?, ? extends Response<?>>> requests = new ArrayList<>();
 
-    public BatchRequest(Web3jService web3jService) {
+    public BatchRequest(final Web3jService web3jService) {
         this.web3jService = web3jService;
     }
 
-    public BatchRequest add(Request<?, ? extends Response<?>> request) {
+    public BatchRequest add(final Request<?, ? extends Response<?>> request) {
         requests.add(request);
         return this;
     }

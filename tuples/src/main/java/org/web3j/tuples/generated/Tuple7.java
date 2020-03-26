@@ -25,7 +25,7 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
 
     private final T7 value7;
 
-    public Tuple7(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7) {
+    public Tuple7(final T1 value1, final T2 value2, final T3 value3, final T4 value4, final T5 value5, final T6 value6, final T7 value7) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -125,14 +125,14 @@ public final class Tuple7<T1, T2, T3, T4, T5, T6, T7> implements Tuple {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple7<?, ?, ?, ?, ?, ?, ?> tuple7 = (Tuple7<?, ?, ?, ?, ?, ?, ?>) o;
+        final Tuple7<?, ?, ?, ?, ?, ?, ?> tuple7 = (Tuple7<?, ?, ?, ?, ?, ?, ?>) o;
         if (value1 != null ? !value1.equals(tuple7.value1) : tuple7.value1 != null) {
             return false;
         }

@@ -15,11 +15,11 @@ package org.web3j.tx.gas;
 import java.math.BigInteger;
 
 public class BesuPrivacyGasProvider extends StaticGasProvider {
-    public BesuPrivacyGasProvider(BigInteger gasPrice) {
+    public BesuPrivacyGasProvider(final BigInteger gasPrice) {
         super(gasPrice, BigInteger.valueOf(3000000));
     }
 
-    public BesuPrivacyGasProvider(BigInteger gasPrice, BigInteger gasLimit) {
+    public BesuPrivacyGasProvider(final BigInteger gasPrice, final BigInteger gasLimit) {
         super(gasPrice, gasLimit);
     }
 }

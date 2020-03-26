@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class RequestTester {
 
-    private OkHttpClient httpClient;
-    private HttpService httpService;
     public static final MediaType JSON_MEDIA_TYPE =
             MediaType.parse("application/json; charset=utf-8");
     private RequestInterceptor requestInterceptor;
@@ -40,24 +38,24 @@ public abstract class RequestTester {
     @BeforeEach
     public void setUp() {
         requestInterceptor = new RequestInterceptor();
-        httpClient = new OkHttpClient.Builder().addInterceptor(requestInterceptor).build();
-        httpService = new HttpService(httpClient);
+        final OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(requestInterceptor).build();
+        final HttpService httpService = new HttpService(httpClient);
         initWeb3Client(httpService);
     }
 
     protected abstract void initWeb3Client(HttpService httpService);
 
-    protected void verifyResult(String expected) throws Exception {
-        RequestBody requestBody = requestInterceptor.getRequestBody();
+    protected void verifyResult(final String expected) throws Exception {
+        final RequestBody requestBody = requestInterceptor.getRequestBody();
         assertNotNull(requestBody);
         assertEquals(requestBody.contentType(), (HttpService.JSON_MEDIA_TYPE));
 
-        Buffer buffer = new Buffer();
+        final Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
         assertEquals((replaceRequestId(expected)), replaceRequestId(buffer.readUtf8()));
     }
 
-    private String replaceRequestId(String json) {
+    private String replaceRequestId(final String json) {
         return json.replaceAll("\"id\":\\d*}$", "\"id\":<generatedValue>}");
     }
 
@@ -66,11 +64,11 @@ public abstract class RequestTester {
         private RequestBody requestBody;
 
         @Override
-        public okhttp3.Response intercept(Chain chain) throws IOException {
+        public okhttp3.Response intercept(final Chain chain) throws IOException {
 
-            Request request = chain.request();
+            final Request request = chain.request();
             this.requestBody = request.body();
-            okhttp3.Response response =
+            final okhttp3.Response response =
                     new okhttp3.Response.Builder()
                             .request(chain.request())
                             .protocol(Protocol.HTTP_2)

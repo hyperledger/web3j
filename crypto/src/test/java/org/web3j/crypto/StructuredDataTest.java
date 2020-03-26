@@ -37,19 +37,19 @@ public class StructuredDataTest {
 
     @BeforeEach
     public void validSetUp() throws IOException, RuntimeException {
-        String validStructuredDataJSONFilePath =
+        final String validStructuredDataJSONFilePath =
                 "build/resources/test/" + "structured_data_json_files/ValidStructuredData.json";
         jsonMessageString = getResource(validStructuredDataJSONFilePath);
     }
 
-    private String getResource(String jsonFile) throws IOException {
+    private String getResource(final String jsonFile) throws IOException {
         return new String(
                 Files.readAllBytes(Paths.get(jsonFile).toAbsolutePath()), StandardCharsets.UTF_8);
     }
 
     @Test
     public void testInvalidIdentifierMessageCaughtByRegex() throws RuntimeException {
-        String invalidStructuredDataJSONFilePath =
+        final String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidIdentifierStructuredData.json";
         assertThrows(
@@ -59,7 +59,7 @@ public class StructuredDataTest {
 
     @Test
     public void testInvalidTypeMessageCaughtByRegex() throws RuntimeException {
-        String invalidStructuredDataJSONFilePath =
+        final String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidTypeStructuredData.json";
         assertThrows(
@@ -69,11 +69,11 @@ public class StructuredDataTest {
 
     @Test
     public void testGetDependencies() throws IOException, RuntimeException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
-        Set<String> deps =
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final Set<String> deps =
                 dataEncoder.getDependencies(dataEncoder.jsonMessageObject.getPrimaryType());
 
-        Set<String> depsExpected = new HashSet<>();
+        final Set<String> depsExpected = new HashSet<>();
         depsExpected.add("Mail");
         depsExpected.add("Person");
 
@@ -82,8 +82,8 @@ public class StructuredDataTest {
 
     @Test
     public void testEncodeType() throws IOException, RuntimeException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
-        String expectedTypeEncoding =
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final String expectedTypeEncoding =
                 "Mail(Person from,Person to,string contents)"
                         + "Person(string name,address wallet)";
 
@@ -94,8 +94,8 @@ public class StructuredDataTest {
 
     @Test
     public void testTypeHash() throws IOException, RuntimeException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
-        String expectedTypeHashHex =
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final String expectedTypeHashHex =
                 "0xa0cedeb2dc280ba39b857546d74f5549c" + "3a1d7bdc2dd96bf881f76108e23dac2";
 
         assertEquals(
@@ -107,12 +107,12 @@ public class StructuredDataTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testEncodeData() throws RuntimeException, IOException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
-        byte[] encodedData =
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final byte[] encodedData =
                 dataEncoder.encodeData(
                         dataEncoder.jsonMessageObject.getPrimaryType(),
                         (HashMap<String, Object>) dataEncoder.jsonMessageObject.getMessage());
-        String expectedDataEncodingHex =
+        final String expectedDataEncodingHex =
                 "0xa0cedeb2dc280ba39b857546d74f5549c3a1d7bd"
                         + "c2dd96bf881f76108e23dac2fc71e5fa27ff56c350aa531bc129ebdf613b772b6"
                         + "604664f5d8dbe21b85eb0c8cd54f074a4af31b4411ff6a60c9719dbd559c221c8"
@@ -125,12 +125,12 @@ public class StructuredDataTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testHashData() throws RuntimeException, IOException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
-        byte[] dataHash =
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final byte[] dataHash =
                 dataEncoder.hashMessage(
                         dataEncoder.jsonMessageObject.getPrimaryType(),
                         (HashMap<String, Object>) dataEncoder.jsonMessageObject.getMessage());
-        String expectedMessageStructHash =
+        final String expectedMessageStructHash =
                 "0xc52c0ee5d84264471806290a3f2c4cecf" + "c5490626bf912d01f240d7a274b371e";
 
         assertEquals(Numeric.toHexString(dataHash), expectedMessageStructHash);
@@ -138,9 +138,9 @@ public class StructuredDataTest {
 
     @Test
     public void testHashDomain() throws RuntimeException, IOException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
-        byte[] structHashDomain = dataEncoder.hashDomain();
-        String expectedDomainStructHash =
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final byte[] structHashDomain = dataEncoder.hashDomain();
+        final String expectedDomainStructHash =
                 "0xf2cee375fa42b42143804025fc449deafd" + "50cc031ca257e0b194a650a912090f";
 
         assertEquals(Numeric.toHexString(structHashDomain), expectedDomainStructHash);
@@ -148,9 +148,9 @@ public class StructuredDataTest {
 
     @Test
     public void testHashStructuredMessage() throws RuntimeException, IOException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
-        byte[] hashStructuredMessage = dataEncoder.hashStructuredData();
-        String expectedDomainStructHash =
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final byte[] hashStructuredMessage = dataEncoder.hashStructuredData();
+        final String expectedDomainStructHash =
                 "0xbe609aee343fb3c4b28e1df9e632fca64fcfaede20" + "f02e86244efddf30957bd2";
 
         assertEquals(Numeric.toHexString(hashStructuredMessage), expectedDomainStructHash);
@@ -158,7 +158,7 @@ public class StructuredDataTest {
 
     @Test
     public void testBytesAndBytes32Encoding() throws IOException {
-        StructuredDataEncoder dataEncoder =
+        final StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(
                         getResource(
                                 "build/resources/test/"
@@ -168,7 +168,7 @@ public class StructuredDataTest {
 
     @Test
     public void test0xProtocolControlSample() throws IOException {
-        StructuredDataEncoder dataEncoder =
+        final StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(
                         getResource(
                                 "build/resources/test/"
@@ -180,30 +180,30 @@ public class StructuredDataTest {
 
     @Test
     public void testInvalidMessageValueTypeMismatch() throws RuntimeException, IOException {
-        String invalidStructuredDataJSONFilePath =
+        final String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidMessageValueTypeMismatch.json";
-        StructuredDataEncoder dataEncoder =
+        final StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(ClassCastException.class, dataEncoder::hashStructuredData);
     }
 
     @Test
     public void testInvalidMessageInvalidABIType() throws RuntimeException, IOException {
-        String invalidStructuredDataJSONFilePath =
+        final String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidMessageInvalidABIType.json";
-        StructuredDataEncoder dataEncoder =
+        final StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(UnsupportedOperationException.class, dataEncoder::hashStructuredData);
     }
 
     @Test
     public void testInvalidMessageValidABITypeInvalidValue() throws RuntimeException, IOException {
-        String invalidStructuredDataJSONFilePath =
+        final String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/InvalidMessageValidABITypeInvalidValue.json";
-        StructuredDataEncoder dataEncoder =
+        final StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }
@@ -252,12 +252,12 @@ public class StructuredDataTest {
 
     @Test
     public void testGetArrayDimensionsFromData() throws RuntimeException, IOException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
         // [[1, 2, 3], [4, 5, 6]]
-        List<Object> testArrayData1 = new ArrayList<>();
+        final List<Object> testArrayData1 = new ArrayList<>();
         testArrayData1.add(new ArrayList<>(Arrays.asList("1", "2", "3")));
         testArrayData1.add(new ArrayList<>(Arrays.asList("4", "5", "6")));
-        List<Integer> expectedDimensions1 =
+        final List<Integer> expectedDimensions1 =
                 new ArrayList<Integer>() {
                     {
                         add(2);
@@ -267,9 +267,9 @@ public class StructuredDataTest {
         assertEquals(dataEncoder.getArrayDimensionsFromData(testArrayData1), expectedDimensions1);
 
         // [[1, 2, 3]]
-        List<Object> testArrayData2 = new ArrayList<>();
+        final List<Object> testArrayData2 = new ArrayList<>();
         testArrayData2.add(new ArrayList<>(Arrays.asList("1", "2", "3")));
-        List<Integer> expectedDimensions2 =
+        final List<Integer> expectedDimensions2 =
                 new ArrayList<Integer>() {
                     {
                         add(1);
@@ -279,7 +279,7 @@ public class StructuredDataTest {
         assertEquals(dataEncoder.getArrayDimensionsFromData(testArrayData2), expectedDimensions2);
 
         // [1, 2, 3]
-        List<Object> testArrayData3 =
+        final List<Object> testArrayData3 =
                 new ArrayList<Object>() {
                     {
                         add("1");
@@ -287,7 +287,7 @@ public class StructuredDataTest {
                         add("3");
                     }
                 };
-        List<Integer> expectedDimensions3 =
+        final List<Integer> expectedDimensions3 =
                 new ArrayList<Integer>() {
                     {
                         add(3);
@@ -296,7 +296,7 @@ public class StructuredDataTest {
         assertEquals(dataEncoder.getArrayDimensionsFromData(testArrayData3), expectedDimensions3);
 
         // [[[1, 2], [3, 4], [5, 6]], [[7, 8], [9, 10], [11, 12]]]
-        List<Object> testArrayData4 = new ArrayList<>();
+        final List<Object> testArrayData4 = new ArrayList<>();
         testArrayData4.add(
                 new ArrayList<Object>() {
                     {
@@ -313,7 +313,7 @@ public class StructuredDataTest {
                         add(new ArrayList<>(Arrays.asList("11", "12")));
                     }
                 });
-        List<Integer> expectedDimensions4 =
+        final List<Integer> expectedDimensions4 =
                 new ArrayList<Integer>() {
                     {
                         add(2);
@@ -326,12 +326,12 @@ public class StructuredDataTest {
 
     @Test
     public void testFlattenMultidimensionalArray() throws IOException, RuntimeException {
-        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
+        final StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
         // [[1, 2, 3], [4, 5, 6]]
-        List<Object> testArrayData1 = new ArrayList<>();
+        final List<Object> testArrayData1 = new ArrayList<>();
         testArrayData1.add(new ArrayList<>(Arrays.asList(1, 2, 3)));
         testArrayData1.add(new ArrayList<>(Arrays.asList(4, 5, 6)));
-        List<Integer> expectedFlatArray1 =
+        final List<Integer> expectedFlatArray1 =
                 new ArrayList<Integer>() {
                     {
                         add(1);
@@ -345,9 +345,9 @@ public class StructuredDataTest {
         assertEquals(dataEncoder.flattenMultidimensionalArray(testArrayData1), expectedFlatArray1);
 
         // [[1, 2, 3]]
-        List<Object> testArrayData2 = new ArrayList<>();
+        final List<Object> testArrayData2 = new ArrayList<>();
         testArrayData2.add(new ArrayList<>(Arrays.asList(1, 2, 3)));
-        List<Integer> expectedFlatArray2 =
+        final List<Integer> expectedFlatArray2 =
                 new ArrayList<Integer>() {
                     {
                         add(1);
@@ -358,7 +358,7 @@ public class StructuredDataTest {
         assertEquals(dataEncoder.flattenMultidimensionalArray(testArrayData2), expectedFlatArray2);
 
         // [1, 2, 3]
-        List<Object> testArrayData3 =
+        final List<Object> testArrayData3 =
                 new ArrayList<Object>() {
                     {
                         add(1);
@@ -366,7 +366,7 @@ public class StructuredDataTest {
                         add(3);
                     }
                 };
-        List<Integer> expectedFlatArray3 =
+        final List<Integer> expectedFlatArray3 =
                 new ArrayList<Integer>() {
                     {
                         add(1);
@@ -377,7 +377,7 @@ public class StructuredDataTest {
         assertEquals(dataEncoder.flattenMultidimensionalArray(testArrayData3), expectedFlatArray3);
 
         // [[[1, 2], [3, 4], [5, 6]], [[7, 8], [9, 10], [11, 12]]]
-        List<Object> testArrayData4 = new ArrayList<>();
+        final List<Object> testArrayData4 = new ArrayList<>();
         testArrayData4.add(
                 new ArrayList<Object>() {
                     {
@@ -394,7 +394,7 @@ public class StructuredDataTest {
                         add(new ArrayList<>(Arrays.asList(11, 12)));
                     }
                 });
-        List<Integer> expectedFlatArray4 =
+        final List<Integer> expectedFlatArray4 =
                 new ArrayList<Integer>() {
                     {
                         add(1);
@@ -416,11 +416,11 @@ public class StructuredDataTest {
 
     @Test
     public void testUnequalArrayLengthsBetweenSchemaAndData() throws RuntimeException, IOException {
-        String invalidStructuredDataJSONFilePath =
+        final String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/"
                         + "InvalidMessageUnequalArrayLengthsBetweenSchemaAndData.json";
-        StructuredDataEncoder dataEncoder =
+        final StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }
@@ -428,11 +428,11 @@ public class StructuredDataTest {
     @Test
     public void testDataNotPerfectArrayButDeclaredArrayInSchema()
             throws RuntimeException, IOException {
-        String invalidStructuredDataJSONFilePath =
+        final String invalidStructuredDataJSONFilePath =
                 "build/resources/test/"
                         + "structured_data_json_files/"
                         + "InvalidMessageDataNotPerfectArrayButDeclaredArrayInSchema.json";
-        StructuredDataEncoder dataEncoder =
+        final StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }

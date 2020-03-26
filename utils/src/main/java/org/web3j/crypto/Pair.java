@@ -24,7 +24,7 @@ public class Pair {
         return second;
     }
 
-    public Pair(Object first, Object second) {
+    public Pair(final Object first, final Object second) {
         this.first = first;
         this.second = second;
     }

@@ -20,11 +20,11 @@ public class Uint extends IntType {
     public static final String TYPE_NAME = "uint";
     public static final Uint DEFAULT = new Uint(BigInteger.ZERO);
 
-    protected Uint(int bitSize, BigInteger value) {
+    protected Uint(final int bitSize, final BigInteger value) {
         super(TYPE_NAME, bitSize, value);
     }
 
-    public Uint(BigInteger value) {
+    public Uint(final BigInteger value) {
         // "int" values should be declared as int256 in computing function selectors
         this(MAX_BIT_LENGTH, value);
     }

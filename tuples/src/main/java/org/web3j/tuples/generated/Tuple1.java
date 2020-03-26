@@ -13,7 +13,7 @@ public final class Tuple1<T1> implements Tuple {
 
     private final T1 value1;
 
-    public Tuple1(T1 value1) {
+    public Tuple1(final T1 value1) {
         this.value1 = value1;
     }
 
@@ -36,20 +36,20 @@ public final class Tuple1<T1> implements Tuple {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple1<?> tuple1 = (Tuple1<?>) o;
+        final Tuple1<?> tuple1 = (Tuple1<?>) o;
         return value1 != null ? value1.equals(tuple1.value1) : tuple1.value1 == null;
     }
 
     @Override
     public int hashCode() {
-        int result = value1.hashCode();
+        final int result = value1.hashCode();
         return result;
     }
 

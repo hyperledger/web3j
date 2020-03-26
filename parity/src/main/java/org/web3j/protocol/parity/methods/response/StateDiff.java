@@ -49,16 +49,16 @@ public class StateDiff {
 
         public ChangedState() {}
 
-        public ChangedState(String from, String to) {
+        public ChangedState(final String from, final String to) {
             this.from = from;
             this.to = to;
         }
 
-        public void setFrom(String from) {
+        public void setFrom(final String from) {
             this.from = from;
         }
 
-        public void setTo(String to) {
+        public void setTo(final String to) {
             this.to = to;
         }
 
@@ -78,7 +78,7 @@ public class StateDiff {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -86,7 +86,7 @@ public class StateDiff {
                 return false;
             }
 
-            ChangedState that = (ChangedState) o;
+            final ChangedState that = (ChangedState) o;
 
             if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
                 return false;
@@ -109,7 +109,7 @@ public class StateDiff {
 
     public static class UnchangedState implements State {
 
-        public UnchangedState(String jsonString) {}
+        public UnchangedState(final String jsonString) {}
 
         public UnchangedState() {}
 
@@ -129,7 +129,7 @@ public class StateDiff {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             return o != null && (this == o || (o instanceof UnchangedState));
         }
 
@@ -145,11 +145,11 @@ public class StateDiff {
 
         public AddedState() {}
 
-        public AddedState(String value) {
+        public AddedState(final String value) {
             this.value = value;
         }
 
-        public void setValue(String value) {
+        public void setValue(final String value) {
             this.value = value;
         }
 
@@ -169,7 +169,7 @@ public class StateDiff {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -177,7 +177,7 @@ public class StateDiff {
                 return false;
             }
 
-            AddedState that = (AddedState) o;
+            final AddedState that = (AddedState) o;
 
             return value != null ? value.equals(that.value) : that.value == null;
         }
@@ -195,7 +195,11 @@ public class StateDiff {
 
     public StateDiff() {}
 
-    public StateDiff(State balance, State code, State nonce, Map<String, State> storage) {
+    public StateDiff(
+            final State balance,
+            final State code,
+            final State nonce,
+            final Map<String, State> storage) {
         this.balance = balance;
         this.code = code;
         this.nonce = nonce;
@@ -206,7 +210,7 @@ public class StateDiff {
         return balance;
     }
 
-    public void setBalance(JsonNode balance) {
+    public void setBalance(final JsonNode balance) {
         this.balance = deserializeState(balance);
     }
 
@@ -214,7 +218,7 @@ public class StateDiff {
         return code;
     }
 
-    public void setCode(JsonNode code) {
+    public void setCode(final JsonNode code) {
         this.code = deserializeState(code);
     }
 
@@ -222,7 +226,7 @@ public class StateDiff {
         return nonce;
     }
 
-    public void setNonce(JsonNode nonce) {
+    public void setNonce(final JsonNode nonce) {
         this.nonce = deserializeState(nonce);
     }
 
@@ -230,7 +234,7 @@ public class StateDiff {
         return storage;
     }
 
-    public void setStorage(Map<String, JsonNode> storage) {
+    public void setStorage(final Map<String, JsonNode> storage) {
         this.storage =
                 storage.entrySet().stream()
                         .collect(
@@ -240,7 +244,7 @@ public class StateDiff {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -248,7 +252,7 @@ public class StateDiff {
             return false;
         }
 
-        StateDiff that = (StateDiff) o;
+        final StateDiff that = (StateDiff) o;
 
         if (getBalance() != null
                 ? !getBalance().equals(that.getBalance())
@@ -275,17 +279,17 @@ public class StateDiff {
         return result;
     }
 
-    private State deserializeState(JsonNode node) {
+    private State deserializeState(final JsonNode node) {
         State state = null;
         if (node.isTextual() && node.asText().equals("=")) {
             state = new UnchangedState();
         } else if (node.isObject() && node.has("*")) {
-            JsonNode subNode = node.get("*");
+            final JsonNode subNode = node.get("*");
             if (subNode.isObject() && subNode.has("from") && subNode.has("to")) {
                 state = new ChangedState(subNode.get("from").asText(), subNode.get("to").asText());
             }
         } else if (node.isObject() && node.has("+")) {
-            JsonNode subNode = node.get("+");
+            final JsonNode subNode = node.get("+");
             if (subNode.isTextual()) {
                 state = new AddedState(subNode.asText());
             }

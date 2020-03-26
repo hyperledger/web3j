@@ -16,7 +16,7 @@ import org.web3j.abi.datatypes.NumericType;
 
 public final class Double extends Number<java.lang.Double> {
 
-    public Double(double value) {
+    public Double(final double value) {
         super(value);
     }
 

@@ -46,7 +46,7 @@ public class RawResponseTest extends ResponseTester {
 
         buildResponse(LARGE_RAW_RESPONSE);
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        final EthBlock ethBlock = deserialiseResponse(EthBlock.class);
 
         assertEquals(ethBlock.getRawResponse(), (LARGE_RAW_RESPONSE));
     }

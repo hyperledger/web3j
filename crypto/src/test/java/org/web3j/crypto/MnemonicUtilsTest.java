@@ -49,11 +49,11 @@ public class MnemonicUtilsTest {
      * @throws IOException Shouldn't happen!
      */
     public static Stream<Arguments> data() throws IOException {
-        String data = Files.lines(Paths.get(SAMPLE_FILE)).collect(Collectors.joining("\n"));
-        String[] each = data.split("###");
+        final String data = Files.lines(Paths.get(SAMPLE_FILE)).collect(Collectors.joining("\n"));
+        final String[] each = data.split("###");
 
-        List<Arguments> parameters = new ArrayList<>();
-        for (String part : each) {
+        final List<Arguments> parameters = new ArrayList<>();
+        for (final String part : each) {
             parameters.add(Arguments.of((Object[]) part.trim().split("\n")));
         }
 
@@ -63,8 +63,8 @@ public class MnemonicUtilsTest {
     @ParameterizedTest
     @MethodSource("data")
     public void generateMnemonicShouldGenerateExpectedMnemonicWords(
-            String initialEntropy, String mnemonic) {
-        String actualMnemonic = MnemonicUtils.generateMnemonic(Hex.decode(initialEntropy));
+            final String initialEntropy, final String mnemonic) {
+        final String actualMnemonic = MnemonicUtils.generateMnemonic(Hex.decode(initialEntropy));
 
         assertEquals(mnemonic, actualMnemonic);
     }
@@ -72,8 +72,8 @@ public class MnemonicUtilsTest {
     @ParameterizedTest
     @MethodSource("data")
     public void generateSeedShouldGenerateExpectedSeeds(
-            String initialEntropy, String mnemonic, String seed) {
-        byte[] actualSeed = MnemonicUtils.generateSeed(mnemonic, "TREZOR");
+            final String initialEntropy, final String mnemonic, final String seed) {
+        final byte[] actualSeed = MnemonicUtils.generateSeed(mnemonic, "TREZOR");
 
         assertArrayEquals(Hex.decode(seed), actualSeed);
     }
@@ -81,8 +81,8 @@ public class MnemonicUtilsTest {
     @ParameterizedTest
     @MethodSource("data")
     public void generateEntropyShouldGenerateExpectedEntropy(
-            String initialEntropy, String mnemonic) {
-        byte[] actualEntropy = MnemonicUtils.generateEntropy(mnemonic);
+            final String initialEntropy, final String mnemonic) {
+        final byte[] actualEntropy = MnemonicUtils.generateEntropy(mnemonic);
 
         assertArrayEquals(Hex.decode(initialEntropy), actualEntropy);
     }

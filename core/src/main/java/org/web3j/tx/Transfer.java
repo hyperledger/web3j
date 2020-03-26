@@ -33,7 +33,7 @@ public class Transfer extends ManagedTransaction {
     // This is the cost to send Ether between parties
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(21000);
 
-    public Transfer(Web3j web3j, TransactionManager transactionManager) {
+    public Transfer(final Web3j web3j, final TransactionManager transactionManager) {
         super(web3j, transactionManager);
     }
 
@@ -92,9 +92,9 @@ public class Transfer extends ManagedTransaction {
 
     private class TransferCall implements RemoteCall<TransactionReceipt> {
 
-        private String toAddress;
-        private BigDecimal value;
-        private Convert.Unit unit;
+        private final String toAddress;
+        private final BigDecimal value;
+        private final Convert.Unit unit;
         private BigInteger gasPrice;
         private BigInteger gasLimit;
 
@@ -112,7 +112,8 @@ public class Transfer extends ManagedTransaction {
         }
 
         @Override
-        public TransactionReceipt call(DefaultBlockParameter blockParameter) throws IOException {
+        public TransactionReceipt call(final DefaultBlockParameter blockParameter)
+                throws IOException {
             final BigDecimal weiValue = Convert.toWei(value, unit);
             if (!Numeric.isIntegerValue(weiValue)) {
                 throw new UnsupportedOperationException(
@@ -134,7 +135,7 @@ public class Transfer extends ManagedTransaction {
             try {
                 return Transfer.this.send(
                         resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
-            } catch (TransactionException e) {
+            } catch (final TransactionException e) {
                 throw new IOException(e);
             }
         }

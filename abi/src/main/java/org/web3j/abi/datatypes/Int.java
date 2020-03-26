@@ -20,12 +20,12 @@ public class Int extends IntType {
     public static final String TYPE_NAME = "int";
     public static final Int DEFAULT = new Int(BigInteger.ZERO);
 
-    public Int(BigInteger value) {
+    public Int(final BigInteger value) {
         // "int" values should be declared as int256 in computing function selectors
         this(MAX_BIT_LENGTH, value);
     }
 
-    protected Int(int bitSize, BigInteger value) {
+    protected Int(final int bitSize, final BigInteger value) {
         super(TYPE_NAME, bitSize, value);
     }
 }

@@ -34,20 +34,20 @@ public class ContractUtils {
      * @param nonce of transaction
      * @return the generated smart contract address
      */
-    public static byte[] generateContractAddress(byte[] address, BigInteger nonce) {
-        List<RlpType> values = new ArrayList<>();
+    public static byte[] generateContractAddress(final byte[] address, final BigInteger nonce) {
+        final List<RlpType> values = new ArrayList<>();
 
         values.add(RlpString.create(address));
         values.add(RlpString.create(nonce));
-        RlpList rlpList = new RlpList(values);
+        final RlpList rlpList = new RlpList(values);
 
-        byte[] encoded = RlpEncoder.encode(rlpList);
-        byte[] hashed = Hash.sha3(encoded);
+        final byte[] encoded = RlpEncoder.encode(rlpList);
+        final byte[] hashed = Hash.sha3(encoded);
         return Arrays.copyOfRange(hashed, 12, hashed.length);
     }
 
-    public static String generateContractAddress(String address, BigInteger nonce) {
-        byte[] result = generateContractAddress(Numeric.hexStringToByteArray(address), nonce);
+    public static String generateContractAddress(final String address, final BigInteger nonce) {
+        final byte[] result = generateContractAddress(Numeric.hexStringToByteArray(address), nonce);
         return Numeric.toHexString(result);
     }
 }

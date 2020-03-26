@@ -37,8 +37,8 @@ public class WalletUtilsTest {
 
     private File tempDir;
 
-    private String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+    private String convertStreamToString(final java.io.InputStream is) {
+        final java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
 
@@ -49,7 +49,7 @@ public class WalletUtilsTest {
 
     @AfterEach
     public void tearDown() throws Exception {
-        for (File file : tempDir.listFiles()) {
+        for (final File file : tempDir.listFiles()) {
             file.delete();
         }
         tempDir.delete();
@@ -57,59 +57,59 @@ public class WalletUtilsTest {
 
     @Test
     public void testGenerateBip39Wallets() throws Exception {
-        Bip39Wallet wallet = WalletUtils.generateBip39Wallet(PASSWORD, tempDir);
-        byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
-        Credentials credentials = Credentials.create(ECKeyPair.create(sha256(seed)));
+        final Bip39Wallet wallet = WalletUtils.generateBip39Wallet(PASSWORD, tempDir);
+        final byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
+        final Credentials credentials = Credentials.create(ECKeyPair.create(sha256(seed)));
 
         assertEquals(credentials, WalletUtils.loadBip39Credentials(PASSWORD, wallet.getMnemonic()));
     }
 
     @Test
     public void testGenerateBip39WalletFromMnemonic() throws Exception {
-        Bip39Wallet wallet =
+        final Bip39Wallet wallet =
                 WalletUtils.generateBip39WalletFromMnemonic(PASSWORD, MNEMONIC, tempDir);
-        byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
-        Credentials credentials = Credentials.create(ECKeyPair.create(sha256(seed)));
+        final byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
+        final Credentials credentials = Credentials.create(ECKeyPair.create(sha256(seed)));
 
         assertEquals(credentials, WalletUtils.loadBip39Credentials(PASSWORD, wallet.getMnemonic()));
     }
 
     @Test
     public void testGenerateFullNewWalletFile() throws Exception {
-        String fileName = WalletUtils.generateFullNewWalletFile(PASSWORD, tempDir);
+        final String fileName = WalletUtils.generateFullNewWalletFile(PASSWORD, tempDir);
         testGeneratedNewWalletFile(fileName);
     }
 
     @Test
     public void testGenerateNewWalletFile() throws Exception {
-        String fileName = WalletUtils.generateNewWalletFile(PASSWORD, tempDir);
+        final String fileName = WalletUtils.generateNewWalletFile(PASSWORD, tempDir);
         testGeneratedNewWalletFile(fileName);
     }
 
     @Test
     public void testGenerateLightNewWalletFile() throws Exception {
-        String fileName = WalletUtils.generateLightNewWalletFile(PASSWORD, tempDir);
+        final String fileName = WalletUtils.generateLightNewWalletFile(PASSWORD, tempDir);
         testGeneratedNewWalletFile(fileName);
     }
 
-    private void testGeneratedNewWalletFile(String fileName) throws Exception {
+    private void testGeneratedNewWalletFile(final String fileName) throws Exception {
         WalletUtils.loadCredentials(PASSWORD, new File(tempDir, fileName));
     }
 
     @Test
     public void testGenerateFullWalletFile() throws Exception {
-        String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, true);
+        final String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, true);
         testGenerateWalletFile(fileName);
     }
 
     @Test
     public void testGenerateLightWalletFile() throws Exception {
-        String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, false);
+        final String fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, false);
         testGenerateWalletFile(fileName);
     }
 
-    private void testGenerateWalletFile(String fileName) throws Exception {
-        Credentials credentials =
+    private void testGenerateWalletFile(final String fileName) throws Exception {
+        final Credentials credentials =
                 WalletUtils.loadCredentials(PASSWORD, new File(tempDir, fileName));
 
         assertEquals(credentials, (CREDENTIALS));
@@ -117,7 +117,7 @@ public class WalletUtilsTest {
 
     @Test
     public void testLoadCredentialsFromFile() throws Exception {
-        Credentials credentials =
+        final Credentials credentials =
                 WalletUtils.loadCredentials(
                         PASSWORD,
                         new File(
@@ -133,7 +133,7 @@ public class WalletUtilsTest {
 
     @Test
     public void testLoadCredentialsFromString() throws Exception {
-        Credentials credentials =
+        final Credentials credentials =
                 WalletUtils.loadCredentials(
                         PASSWORD,
                         WalletUtilsTest.class
@@ -149,7 +149,7 @@ public class WalletUtilsTest {
     @Disabled // enable if users need to work with MyEtherWallet
     @Test
     public void testLoadCredentialsMyEtherWallet() throws Exception {
-        Credentials credentials =
+        final Credentials credentials =
                 WalletUtils.loadCredentials(
                         PASSWORD,
                         new File(
@@ -168,7 +168,7 @@ public class WalletUtilsTest {
 
     @Test
     public void testLoadJsonCredentials() throws Exception {
-        Credentials credentials =
+        final Credentials credentials =
                 WalletUtils.loadJsonCredentials(
                         PASSWORD,
                         convertStreamToString(

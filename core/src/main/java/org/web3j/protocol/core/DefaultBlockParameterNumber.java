@@ -21,13 +21,13 @@ import org.web3j.utils.Numeric;
 /** DefaultBlockParameter implementation that takes a numeric value. */
 public class DefaultBlockParameterNumber implements DefaultBlockParameter {
 
-    private BigInteger blockNumber;
+    private final BigInteger blockNumber;
 
-    public DefaultBlockParameterNumber(BigInteger blockNumber) {
+    public DefaultBlockParameterNumber(final BigInteger blockNumber) {
         this.blockNumber = blockNumber;
     }
 
-    public DefaultBlockParameterNumber(long blockNumber) {
+    public DefaultBlockParameterNumber(final long blockNumber) {
         this(BigInteger.valueOf(blockNumber));
     }
 

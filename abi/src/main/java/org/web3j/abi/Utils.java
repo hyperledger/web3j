@@ -40,11 +40,11 @@ import org.web3j.abi.datatypes.Utf8String;
 public class Utils {
     private Utils() {}
 
-    static <T extends Type> String getTypeName(TypeReference<T> typeReference) {
+    static <T extends Type> String getTypeName(final TypeReference<T> typeReference) {
         try {
-            java.lang.reflect.Type reflectedType = typeReference.getType();
+            final java.lang.reflect.Type reflectedType = typeReference.getType();
 
-            Class<?> type;
+            final Class<?> type;
             if (reflectedType instanceof ParameterizedType) {
                 type = (Class<?>) ((ParameterizedType) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
@@ -52,13 +52,13 @@ public class Utils {
                 type = Class.forName(reflectedType.getTypeName());
                 return getSimpleTypeName(type);
             }
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid class reference provided", e);
         }
     }
 
-    static String getSimpleTypeName(Class<?> type) {
-        String simpleName = type.getSimpleName().toLowerCase();
+    static String getSimpleTypeName(final Class<?> type) {
+        final String simpleName = type.getSimpleName().toLowerCase();
 
         if (type.equals(Uint.class)
                 || type.equals(Int.class)
@@ -77,16 +77,16 @@ public class Utils {
     }
 
     static <T extends Type, U extends Type> String getParameterizedTypeName(
-            TypeReference<T> typeReference, Class<?> type) {
+            final TypeReference<T> typeReference, final Class<?> type) {
 
         try {
             if (type.equals(DynamicArray.class)) {
-                Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
-                String parameterizedTypeName = getSimpleTypeName(parameterizedType);
+                final Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
+                final String parameterizedTypeName = getSimpleTypeName(parameterizedType);
                 return parameterizedTypeName + "[]";
             } else if (type.equals(StaticArray.class)) {
-                Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
-                String parameterizedTypeName = getSimpleTypeName(parameterizedType);
+                final Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
+                final String parameterizedTypeName = getSimpleTypeName(parameterizedType);
                 return parameterizedTypeName
                         + "["
                         + ((TypeReference.StaticArrayTypeReference) typeReference).getSize()
@@ -94,26 +94,26 @@ public class Utils {
             } else {
                 throw new UnsupportedOperationException("Invalid type provided " + type.getName());
             }
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid class reference provided", e);
         }
     }
 
     @SuppressWarnings("unchecked")
     static <T extends Type<?>> Class<T> getParameterizedTypeFromArray(
-            TypeReference<?> typeReference) throws ClassNotFoundException {
+            final TypeReference<?> typeReference) throws ClassNotFoundException {
 
-        java.lang.reflect.Type type = typeReference.getType();
-        java.lang.reflect.Type[] typeArguments =
+        final java.lang.reflect.Type type = typeReference.getType();
+        final java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();
 
-        String parameterizedTypeName = typeArguments[0].getTypeName();
+        final String parameterizedTypeName = typeArguments[0].getTypeName();
         return (Class<T>) Class.forName(parameterizedTypeName);
     }
 
     @SuppressWarnings("unchecked")
-    public static List<TypeReference<Type<?>>> convert(List<TypeReference<?>> input) {
-        List<TypeReference<Type<?>>> result = new ArrayList<>(input.size());
+    public static List<TypeReference<Type<?>>> convert(final List<TypeReference<?>> input) {
+        final List<TypeReference<Type<?>>> result = new ArrayList<>(input.size());
         result.addAll(
                 input.stream()
                         .map(typeReference -> (TypeReference<Type<?>>) typeReference)
@@ -122,16 +122,16 @@ public class Utils {
     }
 
     public static <T, R extends Type<T>, E extends Type<T>> List<E> typeMap(
-            List<List<T>> input, Class<E> outerDestType, Class<R> innerType) {
-        List<E> result = new ArrayList<>();
+            final List<List<T>> input, final Class<E> outerDestType, final Class<R> innerType) {
+        final List<E> result = new ArrayList<>();
         try {
-            Constructor<E> constructor =
+            final Constructor<E> constructor =
                     outerDestType.getDeclaredConstructor(Class.class, List.class);
-            for (List<T> ts : input) {
-                E e = constructor.newInstance(innerType, typeMap(ts, innerType));
+            for (final List<T> ts : input) {
+                final E e = constructor.newInstance(innerType, typeMap(ts, innerType));
                 result.add(e);
             }
-        } catch (NoSuchMethodException
+        } catch (final NoSuchMethodException
                 | IllegalAccessException
                 | InstantiationException
                 | InvocationTargetException e) {
@@ -140,19 +140,19 @@ public class Utils {
         return result;
     }
 
-    public static <T, R extends Type<T>> List<R> typeMap(List<T> input, Class<R> destType)
-            throws TypeMappingException {
+    public static <T, R extends Type<T>> List<R> typeMap(
+            final List<T> input, final Class<R> destType) throws TypeMappingException {
 
-        List<R> result = new ArrayList<>(input.size());
+        final List<R> result = new ArrayList<>(input.size());
 
         if (!input.isEmpty()) {
             try {
-                Constructor<R> constructor =
+                final Constructor<R> constructor =
                         destType.getDeclaredConstructor(input.get(0).getClass());
-                for (T value : input) {
+                for (final T value : input) {
                     result.add(constructor.newInstance(value));
                 }
-            } catch (NoSuchMethodException
+            } catch (final NoSuchMethodException
                     | IllegalAccessException
                     | InvocationTargetException
                     | InstantiationException e) {

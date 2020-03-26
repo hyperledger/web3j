@@ -24,7 +24,7 @@ import org.web3j.utils.Base64String;
 @JsonDeserialize(using = JsonDeserializer.None.class)
 public class PrivateTransactionWithPrivacyGroup extends PrivateTransaction {
 
-    private Base64String privacyGroupId;
+    private final Base64String privacyGroupId;
 
     @JsonCreator
     public PrivateTransactionWithPrivacyGroup(
@@ -66,7 +66,7 @@ public class PrivateTransactionWithPrivacyGroup extends PrivateTransaction {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -76,7 +76,7 @@ public class PrivateTransactionWithPrivacyGroup extends PrivateTransaction {
         if (!super.equals(o)) {
             return false;
         }
-        PrivateTransactionWithPrivacyGroup that = (PrivateTransactionWithPrivacyGroup) o;
+        final PrivateTransactionWithPrivacyGroup that = (PrivateTransactionWithPrivacyGroup) o;
         return getPrivacyGroupId().equals(that.getPrivacyGroupId());
     }
 

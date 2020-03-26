@@ -26,7 +26,7 @@ import org.web3j.protocol.core.methods.response.EthLog;
 /** Handler hashes for working with transaction filter requests. */
 public class PendingTransactionsFilter extends Filter<List<String>> {
 
-    public PendingTransactionsFilter(Web3j web3j, Callback<List<String>> callback) {
+    public PendingTransactionsFilter(final Web3j web3j, final Callback<List<String>> callback) {
         super(web3j, callback);
     }
 
@@ -36,10 +36,10 @@ public class PendingTransactionsFilter extends Filter<List<String>> {
     }
 
     @Override
-    protected void process(List<EthLog.LogResult> logResults) {
-        List<String> logs = new ArrayList<>(logResults.size());
+    protected void process(final List<EthLog.LogResult> logResults) {
+        final List<String> logs = new ArrayList<>(logResults.size());
 
-        for (EthLog.LogResult logResult : logResults) {
+        for (final EthLog.LogResult logResult : logResults) {
             if (!(logResult instanceof EthLog.Hash)) {
                 throw new FilterException(
                         "Unexpected result type: " + logResult.get() + ", required Hash");
@@ -59,7 +59,7 @@ public class PendingTransactionsFilter extends Filter<List<String>> {
      * @return Optional.empty()
      */
     @Override
-    protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
+    protected Optional<Request<?, EthLog>> getFilterLogs(final BigInteger filterId) {
         return Optional.empty();
     }
 }

@@ -26,7 +26,7 @@ public class EthBlockTest {
 
     @Test
     public void testEthBlockNullSize() {
-        EthBlock.Block ethBlock =
+        final EthBlock.Block ethBlock =
                 new EthBlock.Block(
                         null, null, null, null, null, null, null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null, null, null, null);
@@ -36,7 +36,7 @@ public class EthBlockTest {
 
     @Test
     public void testEthBlockNotNullSize() {
-        EthBlock.Block ethBlock =
+        final EthBlock.Block ethBlock =
                 new EthBlock.Block(
                         null, null, null, null, null, null, null, null, null, null, null, null,
                         null, null, null, "0x3e8", null, null, null, null, null, null, null);

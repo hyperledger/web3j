@@ -17,7 +17,7 @@ import org.web3j.abi.datatypes.generated.Int64;
 
 public final class Long extends Number<java.lang.Long> {
 
-    public Long(long value) {
+    public Long(final long value) {
         super(value);
     }
 

@@ -28,7 +28,7 @@ public interface DefaultBlockParameter {
         return new DefaultBlockParameterNumber(blockNumber);
     }
 
-    static DefaultBlockParameter valueOf(String blockName) {
+    static DefaultBlockParameter valueOf(final String blockName) {
         return DefaultBlockParameterName.fromString(blockName);
     }
 

@@ -17,7 +17,7 @@ import org.web3j.abi.datatypes.generated.Int32;
 
 public final class Int extends Number<java.lang.Integer> {
 
-    public Int(int value) {
+    public Int(final int value) {
         super(value);
     }
 

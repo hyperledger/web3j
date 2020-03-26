@@ -52,31 +52,31 @@ public class EthCallIT extends Scenario {
 
     @Test
     public void testWithoutRevert() throws Exception {
-        EthCall ethCall = ethCall(BigInteger.valueOf(0L));
+        final EthCall ethCall = ethCall(BigInteger.valueOf(0L));
 
         assertFalse(ethCall.isReverted());
     }
 
     @Test
     public void testRevertWithoutMessage() throws Exception {
-        EthCall ethCall = ethCall(BigInteger.valueOf(1L));
+        final EthCall ethCall = ethCall(BigInteger.valueOf(1L));
         assertTrue(ethCall.isReverted());
     }
 
     @Test
     public void testRevertWithMessage() throws Exception {
-        EthCall ethCall = ethCall(BigInteger.valueOf(2L));
+        final EthCall ethCall = ethCall(BigInteger.valueOf(2L));
         assertTrue(ethCall.isReverted());
         assertTrue(ethCall.getRevertReason().endsWith("VM execution error."));
     }
 
-    private EthCall ethCall(BigInteger value) throws java.io.IOException {
+    private EthCall ethCall(final BigInteger value) throws java.io.IOException {
         final Function function =
                 new Function(
                         Revert.FUNC_SET,
                         Collections.singletonList(new Uint256(value)),
                         Collections.emptyList());
-        String encodedFunction = FunctionEncoder.encode(function);
+        final String encodedFunction = FunctionEncoder.encode(function);
 
         return web3j.ethCall(
                         Transaction.createEthCallTransaction(

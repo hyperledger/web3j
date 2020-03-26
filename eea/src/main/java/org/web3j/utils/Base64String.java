@@ -37,7 +37,7 @@ public class Base64String {
     public static class Serializer extends JsonSerializer {
         @Override
         public void serialize(
-                final Object value, JsonGenerator gen, final SerializerProvider serializers)
+                final Object value, final JsonGenerator gen, final SerializerProvider serializers)
                 throws IOException {
             gen.writeString(value.toString());
         }
@@ -105,7 +105,7 @@ public class Base64String {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Base64String that = (Base64String) o;
+        final Base64String that = (Base64String) o;
         return Arrays.equals(enclaveB64Value, that.enclaveB64Value);
     }
 

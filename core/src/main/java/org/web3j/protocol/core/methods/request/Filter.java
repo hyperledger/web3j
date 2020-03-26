@@ -25,15 +25,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class Filter<T extends Filter> {
 
-    private T thisObj;
-    private List<FilterTopic> topics;
+    private final List<FilterTopic> topics;
 
     Filter() {
-        thisObj = getThis();
+        final T thisObj = getThis();
         topics = new ArrayList<>();
     }
 
-    public T addSingleTopic(String topic) {
+    public T addSingleTopic(final String topic) {
         topics.add(new SingleTopic(topic));
         return getThis();
     }
@@ -44,7 +43,7 @@ public abstract class Filter<T extends Filter> {
     }
 
     // how to pass in null topic?
-    public T addOptionalTopics(String... optionalTopics) {
+    public T addOptionalTopics(final String... optionalTopics) {
         topics.add(new ListTopic(optionalTopics));
         return getThis();
     }
@@ -62,13 +61,13 @@ public abstract class Filter<T extends Filter> {
 
     public static class SingleTopic implements FilterTopic<String> {
 
-        private String topic;
+        private final String topic;
 
         public SingleTopic() {
             this.topic = null; // null topic
         }
 
-        public SingleTopic(String topic) {
+        public SingleTopic(final String topic) {
             this.topic = topic;
         }
 
@@ -79,11 +78,11 @@ public abstract class Filter<T extends Filter> {
     }
 
     public static class ListTopic implements FilterTopic<List<SingleTopic>> {
-        private List<SingleTopic> topics;
+        private final List<SingleTopic> topics;
 
-        public ListTopic(String... optionalTopics) {
+        public ListTopic(final String... optionalTopics) {
             topics = new ArrayList<>();
-            for (String topic : optionalTopics) {
+            for (final String topic : optionalTopics) {
                 if (topic != null) {
                     topics.add(new SingleTopic(topic));
                 } else {

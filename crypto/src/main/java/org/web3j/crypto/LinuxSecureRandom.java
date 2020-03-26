@@ -52,25 +52,25 @@ public class LinuxSecureRandom extends SecureRandomSpi {
 
     static {
         try {
-            File file = new File("/dev/urandom");
+            final File file = new File("/dev/urandom");
             // This stream is deliberately leaked.
             urandom = new FileInputStream(file);
             if (urandom.read() == -1) {
                 throw new RuntimeException("/dev/urandom not readable?");
             }
             // Now override the default SecureRandom implementation with this one.
-            int position = Security.insertProviderAt(new LinuxSecureRandomProvider(), 1);
+            final int position = Security.insertProviderAt(new LinuxSecureRandomProvider(), 1);
 
             if (position != -1) {
                 log.info("Secure randomness will be read from {} only.", file);
             } else {
                 log.info("Randomness is already secure.");
             }
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             // Should never happen.
             log.error("/dev/urandom does not appear to exist or is not openable");
             throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.error("/dev/urandom does not appear to be readable");
             throw new RuntimeException(e);
         }
@@ -84,22 +84,22 @@ public class LinuxSecureRandom extends SecureRandomSpi {
     }
 
     @Override
-    protected void engineSetSeed(byte[] bytes) {
+    protected void engineSetSeed(final byte[] bytes) {
         // Ignore.
     }
 
     @Override
-    protected void engineNextBytes(byte[] bytes) {
+    protected void engineNextBytes(final byte[] bytes) {
         try {
             dis.readFully(bytes); // This will block until all the bytes can be read.
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e); // Fatal error. Do not attempt to recover from this.
         }
     }
 
     @Override
-    protected byte[] engineGenerateSeed(int i) {
-        byte[] bits = new byte[i];
+    protected byte[] engineGenerateSeed(final int i) {
+        final byte[] bits = new byte[i];
         engineNextBytes(bits);
         return bits;
     }

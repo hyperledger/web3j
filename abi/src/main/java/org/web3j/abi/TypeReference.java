@@ -43,8 +43,8 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         this(false);
     }
 
-    protected TypeReference(boolean indexed) {
-        Type superclass = getClass().getGenericSuperclass();
+    protected TypeReference(final boolean indexed) {
+        final Type superclass = getClass().getGenericSuperclass();
         if (superclass instanceof Class) {
             throw new RuntimeException("Missing type parameter.");
         }
@@ -63,7 +63,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         return null;
     }
 
-    public int compareTo(TypeReference<T> o) {
+    public int compareTo(final TypeReference<T> o) {
         // taken from the blog post comments - this results in an errror if the
         // type parameter is left out.
         return 0;
@@ -86,7 +86,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      */
     @SuppressWarnings("unchecked")
     public Class<T> getClassType() throws ClassNotFoundException {
-        Type clsType = getType();
+        final Type clsType = getType();
 
         if (getType() instanceof ParameterizedType) {
             return (Class<T>) ((ParameterizedType) clsType).getRawType();
@@ -95,12 +95,13 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
     }
 
-    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls) {
+    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
+            final Class<T> cls) {
         return create(cls, false);
     }
 
     public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
-            Class<T> cls, boolean indexed) {
+            final Class<T> cls, final boolean indexed) {
         return new TypeReference<T>(indexed) {
             public java.lang.reflect.Type getType() {
                 return cls;
@@ -118,7 +119,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      * @throws ClassNotFoundException when the class cannot be found.
      */
     protected static Class<? extends org.web3j.abi.datatypes.Type> getAtomicTypeClass(
-            String solidityType, boolean primitives) throws ClassNotFoundException {
+            final String solidityType, final boolean primitives) throws ClassNotFoundException {
 
         if (ARRAY_SUFFIX.matcher(solidityType).find()) {
             throw new ClassNotFoundException(
@@ -134,7 +135,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
         private final int size;
 
-        protected StaticArrayTypeReference(int size) {
+        protected StaticArrayTypeReference(final int size) {
             this.size = size;
         }
 
@@ -143,13 +144,13 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
     }
 
-    public static TypeReference makeTypeReference(String solidityType)
+    public static TypeReference makeTypeReference(final String solidityType)
             throws ClassNotFoundException {
         return makeTypeReference(solidityType, false, false);
     }
 
     public static TypeReference makeTypeReference(
-            String solidityType, final boolean indexed, final boolean primitives)
+            final String solidityType, final boolean indexed, final boolean primitives)
             throws ClassNotFoundException {
 
         Matcher nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
@@ -169,7 +170,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
         // for each [\d*], wrap the previous TypeReference in an array
         while (lastReadStringPosition < len) {
-            String arraySize = nextSquareBrackets.group(1);
+            final String arraySize = nextSquareBrackets.group(1);
             final TypeReference baseTr = arrayWrappedType;
             if (arraySize == null || arraySize.equals("")) {
                 arrayWrappedType =
@@ -201,7 +202,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                         };
             } else {
                 final Class arrayclass;
-                int arraySizeInt = Integer.parseInt(arraySize);
+                final int arraySizeInt = Integer.parseInt(arraySize);
                 if (arraySizeInt <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY) {
                     arrayclass =
                             Class.forName(

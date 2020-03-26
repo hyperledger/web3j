@@ -100,11 +100,12 @@ public class StaticMnemonicUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> MnemonicUtils.generateEntropy(""));
     }
 
-    private void assertCorrectEntropy(String expected, String mnemonic) {
+    private void assertCorrectEntropy(final String expected, final String mnemonic) {
         assertCorrectEntropy(expected, mnemonic, 32);
     }
 
-    private void assertCorrectEntropy(String expected, String mnemonic, int size) {
+    private void assertCorrectEntropy(
+            final String expected, final String mnemonic, final int size) {
         assertEquals(
                 expected,
                 Numeric.toHexStringNoPrefixZeroPadded(

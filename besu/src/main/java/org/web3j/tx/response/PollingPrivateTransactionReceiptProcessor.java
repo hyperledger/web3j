@@ -23,21 +23,22 @@ public class PollingPrivateTransactionReceiptProcessor extends PrivateTransactio
     private final long sleepDuration;
     private final int attempts;
 
-    public PollingPrivateTransactionReceiptProcessor(Besu besu, long sleepDuration, int attempts) {
+    public PollingPrivateTransactionReceiptProcessor(
+            final Besu besu, final long sleepDuration, final int attempts) {
         super(besu);
         this.sleepDuration = sleepDuration;
         this.attempts = attempts;
     }
 
     @Override
-    public PrivateTransactionReceipt waitForTransactionReceipt(String transactionHash)
+    public PrivateTransactionReceipt waitForTransactionReceipt(final String transactionHash)
             throws IOException, TransactionException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
     private PrivateTransactionReceipt getTransactionReceipt(
-            String transactionHash, long sleepDuration, int attempts)
+            final String transactionHash, final long sleepDuration, final int attempts)
             throws IOException, TransactionException {
 
         Optional<PrivateTransactionReceipt> receiptOptional =
@@ -46,7 +47,7 @@ public class PollingPrivateTransactionReceiptProcessor extends PrivateTransactio
             if (!receiptOptional.isPresent()) {
                 try {
                     Thread.sleep(sleepDuration);
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     throw new TransactionException(e);
                 }
                 receiptOptional = sendTransactionReceiptRequest(transactionHash);

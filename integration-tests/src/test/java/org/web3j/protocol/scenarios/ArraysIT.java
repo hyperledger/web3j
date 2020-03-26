@@ -122,7 +122,7 @@ public class ArraysIT extends Scenario {
 
         final List<BigInteger> array6 = java.util.Arrays.asList(valueOf(11), valueOf(12));
 
-        List<List<BigInteger>> input =
+        final List<List<BigInteger>> input =
                 java.util.Arrays.asList(array1, array2, array3, array4, array5, array6);
 
         final List<?> result = contract.multiFixed(input).call();

@@ -82,7 +82,7 @@ public class DefaultFunctionEncoderTest {
 
     @Test
     public void testFunctionSimpleEncode() {
-        Function function =
+        final Function function =
                 new Function(
                         "baz",
                         Arrays.asList(new Uint32(BigInteger.valueOf(69)), new Bool(true)),
@@ -97,7 +97,7 @@ public class DefaultFunctionEncoderTest {
 
     @Test
     public void testFunctionMDynamicArrayEncode1() {
-        Function function =
+        final Function function =
                 new Function(
                         "sam",
                         Arrays.asList(
@@ -125,7 +125,7 @@ public class DefaultFunctionEncoderTest {
 
     @Test
     public void testFunctionMDynamicArrayEncode2() {
-        Function function =
+        final Function function =
                 new Function(
                         "f",
                         Arrays.asList(
@@ -716,13 +716,13 @@ public class DefaultFunctionEncoderTest {
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
                     InstantiationException, IllegalAccessException {
 
-        Function expectedFunction =
+        final Function expectedFunction =
                 new Function(
                         "function",
                         Arrays.asList(new Bool(true)),
                         Arrays.asList(new TypeReference<Uint256>() {}));
 
-        Function actualFunction =
+        final Function actualFunction =
                 FunctionEncoder.makeFunction(
                         "function",
                         Arrays.asList("bool"),
@@ -731,14 +731,14 @@ public class DefaultFunctionEncoderTest {
 
         assertEquals(actualFunction.getName(), expectedFunction.getName());
 
-        Iterator<Type<?>> expectedInput = expectedFunction.getInputParameters().iterator();
-        for (Type<?> actualInput : actualFunction.getInputParameters()) {
+        final Iterator<Type<?>> expectedInput = expectedFunction.getInputParameters().iterator();
+        for (final Type<?> actualInput : actualFunction.getInputParameters()) {
             assertEquals(actualInput.getValue(), expectedInput.next().getValue());
         }
 
-        Iterator<TypeReference<Type<?>>> expectedOutput =
+        final Iterator<TypeReference<Type<?>>> expectedOutput =
                 expectedFunction.getOutputParameters().iterator();
-        for (TypeReference<Type<?>> actualOutput : actualFunction.getOutputParameters()) {
+        for (final TypeReference<Type<?>> actualOutput : actualFunction.getOutputParameters()) {
             assertEquals(actualOutput.getType(), expectedOutput.next().getType());
         }
     }

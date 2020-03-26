@@ -50,7 +50,7 @@ public abstract class RemoteFunctionCall<T> extends AbstractRemoteCall<T> {
      * @param response the encoded response
      * @return list of abi types
      */
-    public List<Type<?>> decodeFunctionResponse(String response) {
+    public List<Type<?>> decodeFunctionResponse(final String response) {
         return FunctionReturnDecoder.decode(response, function.getOutputParameters());
     }
 }

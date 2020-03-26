@@ -37,22 +37,22 @@ public class EnsResolver {
     private final TransactionManager transactionManager;
     private long syncThreshold; // non-final in case this value needs to be tweaked
 
-    public EnsResolver(Web3j web3j, long syncThreshold, int addressLength) {
+    public EnsResolver(final Web3j web3j, final long syncThreshold, final int addressLength) {
         this.web3j = web3j;
         transactionManager = new ClientTransactionManager(web3j, null); // don't use empty string
         this.syncThreshold = syncThreshold;
         this.addressLength = addressLength;
     }
 
-    public EnsResolver(Web3j web3j, long syncThreshold) {
+    public EnsResolver(final Web3j web3j, final long syncThreshold) {
         this(web3j, syncThreshold, Keys.ADDRESS_LENGTH_IN_HEX);
     }
 
-    public EnsResolver(Web3j web3j) {
+    public EnsResolver(final Web3j web3j) {
         this(web3j, DEFAULT_SYNC_THRESHOLD);
     }
 
-    public void setSyncThreshold(long syncThreshold) {
+    public void setSyncThreshold(final long syncThreshold) {
         this.syncThreshold = syncThreshold;
     }
 
@@ -66,7 +66,7 @@ public class EnsResolver {
      * @param ensName our user input ENS name
      * @return PublicResolver
      */
-    protected PublicResolver obtainPublicResolver(String ensName) {
+    protected PublicResolver obtainPublicResolver(final String ensName) {
         if (isValidEnsName(ensName, addressLength)) {
             try {
                 if (!isSynced()) {
@@ -74,7 +74,7 @@ public class EnsResolver {
                 } else {
                     return lookupResolver(ensName);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new EnsResolutionException("Unable to determine sync status of node", e);
             }
 
@@ -83,15 +83,15 @@ public class EnsResolver {
         }
     }
 
-    public String resolve(String contractId) {
+    public String resolve(final String contractId) {
         if (isValidEnsName(contractId, addressLength)) {
-            PublicResolver resolver = obtainPublicResolver(contractId);
+            final PublicResolver resolver = obtainPublicResolver(contractId);
 
-            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
-            String contractAddress;
+            final byte[] nameHash = NameHash.nameHashAsBytes(contractId);
+            final String contractAddress;
             try {
                 contractAddress = resolver.addr(nameHash).call();
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException("Unable to execute Ethereum request", e);
             }
 
@@ -112,16 +112,16 @@ public class EnsResolver {
      * @param address an ethereum address, example: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"
      * @return a EnsName registered for provided address
      */
-    public String reverseResolve(String address) {
+    public String reverseResolve(final String address) {
         if (WalletUtils.isValidAddress(address, addressLength)) {
-            String reverseName = Numeric.cleanHexPrefix(address) + REVERSE_NAME_SUFFIX;
-            PublicResolver resolver = obtainPublicResolver(reverseName);
+            final String reverseName = Numeric.cleanHexPrefix(address) + REVERSE_NAME_SUFFIX;
+            final PublicResolver resolver = obtainPublicResolver(reverseName);
 
-            byte[] nameHash = NameHash.nameHashAsBytes(reverseName);
-            String name;
+            final byte[] nameHash = NameHash.nameHashAsBytes(reverseName);
+            final String name;
             try {
                 name = resolver.name(nameHash).call();
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException("Unable to execute Ethereum request", e);
             }
 
@@ -135,38 +135,39 @@ public class EnsResolver {
         }
     }
 
-    private PublicResolver lookupResolver(String ensName) throws Exception {
-        NetVersion netVersion = web3j.netVersion().send();
-        String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
+    private PublicResolver lookupResolver(final String ensName) throws Exception {
+        final NetVersion netVersion = web3j.netVersion().send();
+        final String registryContract =
+                Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
-        ENS ensRegistry =
+        final ENS ensRegistry =
                 ENS.load(registryContract, web3j, transactionManager, new DefaultGasProvider());
 
-        byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-        String resolverAddress = ensRegistry.resolver(nameHash).call();
+        final byte[] nameHash = NameHash.nameHashAsBytes(ensName);
+        final String resolverAddress = ensRegistry.resolver(nameHash).call();
 
         return PublicResolver.load(
                 resolverAddress, web3j, transactionManager, new DefaultGasProvider());
     }
 
     boolean isSynced() throws Exception {
-        EthSyncing ethSyncing = web3j.ethSyncing().send();
+        final EthSyncing ethSyncing = web3j.ethSyncing().send();
         if (ethSyncing.isSyncing()) {
             return false;
         } else {
-            EthBlock ethBlock =
+            final EthBlock ethBlock =
                     web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
-            long timestamp = ethBlock.getBlock().getTimestamp().longValueExact() * 1000;
+            final long timestamp = ethBlock.getBlock().getTimestamp().longValueExact() * 1000;
 
             return System.currentTimeMillis() - syncThreshold < timestamp;
         }
     }
 
-    public static boolean isValidEnsName(String input) {
+    public static boolean isValidEnsName(final String input) {
         return isValidEnsName(input, Keys.ADDRESS_LENGTH_IN_HEX);
     }
 
-    public static boolean isValidEnsName(String input, int addressLength) {
+    public static boolean isValidEnsName(final String input, final int addressLength) {
         return input != null // will be set to null on new Contract creation
                 && (input.contains(".") || !WalletUtils.isValidAddress(input, addressLength));
     }

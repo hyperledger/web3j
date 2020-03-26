@@ -17,7 +17,7 @@ import org.web3j.abi.datatypes.generated.Bytes1;
 
 public final class Byte extends PrimitiveType<java.lang.Byte> {
 
-    public Byte(byte value) {
+    public Byte(final byte value) {
         super(value);
     }
 

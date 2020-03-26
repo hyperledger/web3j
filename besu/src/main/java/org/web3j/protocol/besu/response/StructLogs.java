@@ -28,14 +28,14 @@ public class StructLogs {
     private Map<BigInteger, String> storage;
 
     public StructLogs(
-            int pc,
-            String op,
-            int gas,
-            int gasCost,
-            int depth,
-            List<String> stack,
-            List<String> memory,
-            Map<BigInteger, String> storage) {
+            final int pc,
+            final String op,
+            final int gas,
+            final int gasCost,
+            final int depth,
+            final List<String> stack,
+            final List<String> memory,
+            final Map<BigInteger, String> storage) {
         this.pc = pc;
         this.op = op;
         this.gas = gas;
@@ -46,35 +46,35 @@ public class StructLogs {
         this.storage = storage;
     }
 
-    public void setPc(int pc) {
+    public void setPc(final int pc) {
         this.pc = pc;
     }
 
-    public void setOp(String op) {
+    public void setOp(final String op) {
         this.op = op;
     }
 
-    public void setGas(int gas) {
+    public void setGas(final int gas) {
         this.gas = gas;
     }
 
-    public void setGasCost(int gasCost) {
+    public void setGasCost(final int gasCost) {
         this.gasCost = gasCost;
     }
 
-    public void setDepth(int depth) {
+    public void setDepth(final int depth) {
         this.depth = depth;
     }
 
-    public void setStack(List<String> stack) {
+    public void setStack(final List<String> stack) {
         this.stack = stack;
     }
 
-    public void setMemory(List<String> memory) {
+    public void setMemory(final List<String> memory) {
         this.memory = memory;
     }
 
-    public void setStorage(Map<BigInteger, String> storage) {
+    public void setStorage(final Map<BigInteger, String> storage) {
         this.storage = storage;
     }
 

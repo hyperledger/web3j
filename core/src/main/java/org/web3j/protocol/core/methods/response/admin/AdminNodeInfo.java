@@ -32,7 +32,7 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @Override
     @JsonDeserialize(using = AdminNodeInfo.ResponseDeserialiser.class)
-    public void setResult(NodeInfo result) {
+    public void setResult(final NodeInfo result) {
         super.setResult(result);
     }
 
@@ -62,11 +62,11 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
         public NodeInfo() {}
 
         public NodeInfo(
-                String enode,
-                String id,
-                String ip,
-                String listenAddr,
-                String name,
+                final String enode,
+                final String id,
+                final String ip,
+                final String listenAddr,
+                final String name,
                 String consensus) {
             this.enode = enode;
             this.id = id;
@@ -103,11 +103,11 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
 
     public static class ResponseDeserialiser extends JsonDeserializer<NodeInfo> {
 
-        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
+        private final ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public NodeInfo deserialize(
-                JsonParser jsonParser, DeserializationContext deserializationContext)
+                final JsonParser jsonParser, final DeserializationContext deserializationContext)
                 throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
                 return objectReader.readValue(jsonParser, NodeInfo.class);

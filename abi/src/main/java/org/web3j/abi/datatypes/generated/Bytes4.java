@@ -11,7 +11,7 @@ import org.web3j.abi.datatypes.Bytes;
 public class Bytes4 extends Bytes {
     public static final Bytes4 DEFAULT = new Bytes4(new byte[4]);
 
-    public Bytes4(byte[] value) {
+    public Bytes4(final byte[] value) {
         super(4, value);
     }
 }

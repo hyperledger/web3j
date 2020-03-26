@@ -31,12 +31,12 @@ public class FlowablesTests {
 
     @Test
     public void testRangeFlowable() throws InterruptedException {
-        int count = 10;
+        final int count = 10;
 
-        Flowable<BigInteger> flowable =
+        final Flowable<BigInteger> flowable =
                 Flowables.range(BigInteger.ZERO, BigInteger.valueOf(count - 1));
 
-        List<BigInteger> expected = new ArrayList<>(count);
+        final List<BigInteger> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             expected.add(BigInteger.valueOf(i));
         }
@@ -46,12 +46,12 @@ public class FlowablesTests {
 
     @Test
     public void testRangeDescendingFlowable() throws InterruptedException {
-        int count = 10;
+        final int count = 10;
 
-        Flowable<BigInteger> flowable =
+        final Flowable<BigInteger> flowable =
                 Flowables.range(BigInteger.ZERO, BigInteger.valueOf(count - 1), false);
 
-        List<BigInteger> expected = new ArrayList<>(count);
+        final List<BigInteger> expected = new ArrayList<>(count);
         for (int i = count - 1; i >= 0; i--) {
             expected.add(BigInteger.valueOf(i));
         }
@@ -59,15 +59,15 @@ public class FlowablesTests {
         runRangeTest(flowable, expected);
     }
 
-    private void runRangeTest(Flowable<BigInteger> flowable, List<BigInteger> expected)
+    private void runRangeTest(final Flowable<BigInteger> flowable, final List<BigInteger> expected)
             throws InterruptedException {
 
-        CountDownLatch transactionLatch = new CountDownLatch(expected.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<BigInteger> results = new ArrayList<>(expected.size());
+        final List<BigInteger> results = new ArrayList<>(expected.size());
 
-        Disposable subscription =
+        final Disposable subscription =
                 flowable.subscribe(
                         result -> {
                             results.add(result);

@@ -12,11 +12,11 @@ import org.web3j.abi.datatypes.Uint;
 public class Uint152 extends Uint {
     public static final Uint152 DEFAULT = new Uint152(BigInteger.ZERO);
 
-    public Uint152(BigInteger value) {
+    public Uint152(final BigInteger value) {
         super(152, value);
     }
 
-    public Uint152(long value) {
+    public Uint152(final long value) {
         this(BigInteger.valueOf(value));
     }
 }

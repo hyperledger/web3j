@@ -21,17 +21,17 @@ import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 
 public abstract class PrivateTransactionReceiptProcessor extends TransactionReceiptProcessor {
-    private Besu besu;
+    private final Besu besu;
 
-    public PrivateTransactionReceiptProcessor(Besu besu) {
+    public PrivateTransactionReceiptProcessor(final Besu besu) {
         super(besu);
         this.besu = besu;
     }
 
     @Override
-    Optional<PrivateTransactionReceipt> sendTransactionReceiptRequest(String transactionHash)
+    Optional<PrivateTransactionReceipt> sendTransactionReceiptRequest(final String transactionHash)
             throws IOException, TransactionException {
-        PrivGetTransactionReceipt transactionReceipt =
+        final PrivGetTransactionReceipt transactionReceipt =
                 besu.privGetTransactionReceipt(transactionHash).send();
         if (transactionReceipt.hasError()) {
             throw new TransactionException(

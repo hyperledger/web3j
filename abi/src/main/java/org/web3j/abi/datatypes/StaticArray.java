@@ -27,24 +27,24 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
 
     @Deprecated
     @SafeVarargs
-    public StaticArray(T... values) {
+    public StaticArray(final T... values) {
         this(values.length, values);
     }
 
     @Deprecated
     @SafeVarargs
-    public StaticArray(int expectedSize, T... values) {
+    public StaticArray(final int expectedSize, final T... values) {
         this(expectedSize, Arrays.asList(values));
     }
 
     @Deprecated
-    public StaticArray(List<T> values) {
+    public StaticArray(final List<T> values) {
         this(values.size(), values);
     }
 
     @Deprecated
     @SuppressWarnings("unchecked")
-    public StaticArray(int expectedSize, List<T> values) {
+    public StaticArray(final int expectedSize, final List<T> values) {
         super(
                 StructType.class.isAssignableFrom(values.get(0).getClass())
                         ? (Class<T>) values.get(0).getClass()
@@ -54,20 +54,20 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
     }
 
     @SafeVarargs
-    public StaticArray(Class<T> type, T... values) {
+    public StaticArray(final Class<T> type, final T... values) {
         this(type, Arrays.asList(values));
     }
 
     @SafeVarargs
-    public StaticArray(Class<T> type, int expectedSize, T... values) {
+    public StaticArray(final Class<T> type, final int expectedSize, final T... values) {
         this(type, expectedSize, Arrays.asList(values));
     }
 
-    public StaticArray(Class<T> type, List<T> values) {
+    public StaticArray(final Class<T> type, final List<T> values) {
         this(type, values == null ? 0 : values.size(), values);
     }
 
-    public StaticArray(Class<T> type, int expectedSize, List<T> values) {
+    public StaticArray(final Class<T> type, final int expectedSize, final List<T> values) {
         super(type, values);
         checkValid(expectedSize);
     }
@@ -89,7 +89,7 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
         return type + "[" + value.size() + "]";
     }
 
-    private void checkValid(int expectedSize) {
+    private void checkValid(final int expectedSize) {
         if (value.size() > MAX_SIZE_OF_STATIC_ARRAY) {
             throw new UnsupportedOperationException(
                     "Static arrays with a length greater than "

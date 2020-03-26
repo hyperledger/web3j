@@ -20,16 +20,16 @@ public class WindowsNamedPipe implements IOFacade {
 
     private final RandomAccessFile pipe;
 
-    public WindowsNamedPipe(String ipcSocketPath) {
+    public WindowsNamedPipe(final String ipcSocketPath) {
         try {
             pipe = new RandomAccessFile(ipcSocketPath, "rw");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Provided file pipe cannot be opened: " + ipcSocketPath, e);
         }
     }
 
     @Override
-    public void write(String payload) throws IOException {
+    public void write(final String payload) throws IOException {
         pipe.write(payload.getBytes());
     }
 

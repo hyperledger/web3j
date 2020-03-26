@@ -31,9 +31,9 @@ public class LogsFilter extends Filter<List<Log>> {
     private final org.web3j.protocol.core.methods.request.EthFilter ethFilter;
 
     public LogsFilter(
-            Web3j web3j,
-            Callback<List<Log>> callback,
-            org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+            final Web3j web3j,
+            final Callback<List<Log>> callback,
+            final org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
         super(web3j, callback);
         this.ethFilter = ethFilter;
     }
@@ -44,10 +44,10 @@ public class LogsFilter extends Filter<List<Log>> {
     }
 
     @Override
-    protected void process(List<LogResult> logResults) {
-        List<Log> logs = new ArrayList<>(logResults.size());
+    protected void process(final List<LogResult> logResults) {
+        final List<Log> logs = new ArrayList<>(logResults.size());
 
-        for (EthLog.LogResult logResult : logResults) {
+        for (final EthLog.LogResult logResult : logResults) {
             if (!(logResult instanceof EthLog.LogObject)) {
                 throw new FilterException(
                         "Unexpected result type: " + logResult.get() + " required LogObject");
@@ -60,7 +60,7 @@ public class LogsFilter extends Filter<List<Log>> {
     }
 
     @Override
-    protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
+    protected Optional<Request<?, EthLog>> getFilterLogs(final BigInteger filterId) {
         return Optional.of(web3j.ethGetFilterLogs(filterId));
     }
 }

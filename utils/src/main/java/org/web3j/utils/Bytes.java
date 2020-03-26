@@ -19,7 +19,7 @@ public class Bytes {
 
     private Bytes() {}
 
-    public static byte[] trimLeadingBytes(byte[] bytes, byte b) {
+    public static byte[] trimLeadingBytes(final byte[] bytes, final byte b) {
         int offset = 0;
         for (; offset < bytes.length - 1; offset++) {
             if (bytes[offset] != b) {
@@ -29,7 +29,7 @@ public class Bytes {
         return Arrays.copyOfRange(bytes, offset, bytes.length);
     }
 
-    public static byte[] trimLeadingZeroes(byte[] bytes) {
+    public static byte[] trimLeadingZeroes(final byte[] bytes) {
         return trimLeadingBytes(bytes, (byte) 0);
     }
 }

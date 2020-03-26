@@ -62,34 +62,35 @@ public class GreeterContractIT extends Scenario {
     public void testGreeterContract() throws Exception {
 
         // create our smart contract
-        String createTransactionHash = sendCreateContractTransaction();
+        final String createTransactionHash = sendCreateContractTransaction();
         assertFalse(createTransactionHash.isEmpty());
 
-        TransactionReceipt createTransactionReceipt =
+        final TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
         assertEquals(createTransactionReceipt.getTransactionHash(), (createTransactionHash));
 
         assertFalse(createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        String contractAddress = createTransactionReceipt.getContractAddress();
+        final String contractAddress = createTransactionReceipt.getContractAddress();
 
         assertNotNull(contractAddress);
 
         // call our getter
-        Function getFunction = createGreetFunction();
-        String responseValue = callSmartContractFunction(getFunction, contractAddress);
+        final Function getFunction = createGreetFunction();
+        final String responseValue = callSmartContractFunction(getFunction, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type<?>> response =
+        final List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, getFunction.getOutputParameters());
         assertEquals(response.size(), (1));
         assertEquals(response.get(0).getValue(), (VALUE));
     }
 
     private String sendCreateContractTransaction() throws Exception {
-        BigInteger nonce = getNonce(ALICE.getAddress());
-        String encodedConstructor =
+        final BigInteger nonce = getNonce(ALICE.getAddress());
+
+        final String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
         RawTransaction transaction =
                 RawTransaction.createContractTransaction(
@@ -99,7 +100,7 @@ public class GreeterContractIT extends Scenario {
                         BigInteger.ZERO,
                         getGreeterSolidityBinary() + encodedConstructor);
 
-        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
+        final org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
                 web3j.ethSendRawTransaction(
                                 Numeric.toHexString(
                                         TransactionEncoder.signMessage(transaction, ALICE)))
@@ -109,12 +110,12 @@ public class GreeterContractIT extends Scenario {
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(Function function, String contractAddress)
+    private String callSmartContractFunction(final Function function, final String contractAddress)
             throws Exception {
 
-        String encodedFunction = FunctionEncoder.encode(function);
+        final String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response =
+        final org.web3j.protocol.core.methods.response.EthCall response =
                 web3j.ethCall(
                                 Transaction.createEthCallTransaction(
                                         ALICE.getAddress(), contractAddress, encodedFunction),

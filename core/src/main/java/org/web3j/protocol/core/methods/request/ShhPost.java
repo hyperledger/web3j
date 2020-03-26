@@ -24,12 +24,16 @@ import org.web3j.utils.Numeric;
 public class ShhPost {
     private String from;
     private String to;
-    private List<String> topics;
-    private String payload;
-    private BigInteger priority;
-    private BigInteger ttl;
+    private final List<String> topics;
+    private final String payload;
+    private final BigInteger priority;
+    private final BigInteger ttl;
 
-    public ShhPost(List<String> topics, String payload, BigInteger priority, BigInteger ttl) {
+    public ShhPost(
+            final List<String> topics,
+            final String payload,
+            final BigInteger priority,
+            final BigInteger ttl) {
         this.topics = topics;
         this.payload = payload;
         this.priority = priority;
@@ -37,12 +41,12 @@ public class ShhPost {
     }
 
     public ShhPost(
-            String from,
-            String to,
-            List<String> topics,
-            String payload,
-            BigInteger priority,
-            BigInteger ttl) {
+            final String from,
+            final String to,
+            final List<String> topics,
+            final String payload,
+            final BigInteger priority,
+            final BigInteger ttl) {
         this.from = from;
         this.to = to;
         this.topics = topics;
@@ -75,7 +79,7 @@ public class ShhPost {
         return convert(ttl);
     }
 
-    private String convert(BigInteger value) {
+    private String convert(final BigInteger value) {
         if (value != null) {
             return Numeric.encodeQuantity(value);
         } else {

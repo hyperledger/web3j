@@ -75,20 +75,20 @@ public class FlowableIT {
 
     @Test
     public void testReplayPastAndFutureBlocksFlowable() throws Exception {
-        EthBlock ethBlock =
+        final EthBlock ethBlock =
                 web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
-        BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
+        final BigInteger latestBlockNumber = ethBlock.getBlock().getNumber();
         run(
                 web3j.replayPastAndFutureBlocksFlowable(
                         new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
                         false));
     }
 
-    private <T> void run(Flowable<T> flowable) throws Exception {
-        CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
-        CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
+    private <T> void run(final Flowable<T> flowable) throws Exception {
+        final CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
+        final CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
 
-        Disposable subscription =
+        final Disposable subscription =
                 flowable.subscribe(
                         x -> countDownLatch.countDown(),
                         Throwable::printStackTrace,

@@ -91,42 +91,43 @@ public class HttpService extends Service {
 
     private static final Logger log = LoggerFactory.getLogger(HttpService.class);
 
-    private OkHttpClient httpClient;
+    private final OkHttpClient httpClient;
 
     private final String url;
 
     private final boolean includeRawResponse;
 
-    private HashMap<String, String> headers = new HashMap<>();
+    private final HashMap<String, String> headers = new HashMap<>();
 
-    public HttpService(String url, OkHttpClient httpClient, boolean includeRawResponses) {
+    public HttpService(
+            final String url, final OkHttpClient httpClient, final boolean includeRawResponses) {
         super(includeRawResponses);
         this.url = url;
         this.httpClient = httpClient;
         this.includeRawResponse = includeRawResponses;
     }
 
-    public HttpService(OkHttpClient httpClient, boolean includeRawResponses) {
+    public HttpService(final OkHttpClient httpClient, final boolean includeRawResponses) {
         this(DEFAULT_URL, httpClient, includeRawResponses);
     }
 
-    public HttpService(String url, OkHttpClient httpClient) {
+    public HttpService(final String url, final OkHttpClient httpClient) {
         this(url, httpClient, false);
     }
 
-    public HttpService(String url) {
+    public HttpService(final String url) {
         this(url, createOkHttpClient());
     }
 
-    public HttpService(String url, boolean includeRawResponse) {
+    public HttpService(final String url, final boolean includeRawResponse) {
         this(url, createOkHttpClient(), includeRawResponse);
     }
 
-    public HttpService(OkHttpClient httpClient) {
+    public HttpService(final OkHttpClient httpClient) {
         this(DEFAULT_URL, httpClient);
     }
 
-    public HttpService(boolean includeRawResponse) {
+    public HttpService(final boolean includeRawResponse) {
         this(DEFAULT_URL, includeRawResponse);
     }
 
@@ -145,21 +146,21 @@ public class HttpService extends Service {
         return getOkHttpClientBuilder().build();
     }
 
-    private static void configureLogging(OkHttpClient.Builder builder) {
+    private static void configureLogging(final OkHttpClient.Builder builder) {
         if (log.isDebugEnabled()) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(log::debug);
+            final HttpLoggingInterceptor logging = new HttpLoggingInterceptor(log::debug);
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(logging);
         }
     }
 
     @Override
-    protected InputStream performIO(String request) throws IOException {
+    protected InputStream performIO(final String request) throws IOException {
 
-        RequestBody requestBody = RequestBody.create(request, JSON_MEDIA_TYPE);
-        Headers headers = buildHeaders();
+        final RequestBody requestBody = RequestBody.create(request, JSON_MEDIA_TYPE);
+        final Headers headers = buildHeaders();
 
-        okhttp3.Request httpRequest =
+        final okhttp3.Request httpRequest =
                 new okhttp3.Request.Builder().url(url).headers(headers).post(requestBody).build();
 
         try (okhttp3.Response response = httpClient.newCall(httpRequest).execute()) {
@@ -181,7 +182,7 @@ public class HttpService extends Service {
         }
     }
 
-    protected void processHeaders(Headers headers) {
+    protected void processHeaders(final Headers headers) {
         // Default implementation is empty
     }
 
@@ -190,11 +191,11 @@ public class HttpService extends Service {
             // we have to buffer the entire input payload, so that after processing
             // it can be re-read and used to populate the rawResponse field.
 
-            BufferedSource source = responseBody.source();
+            final BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // Buffer the entire body
-            Buffer buffer = source.getBuffer();
+            final Buffer buffer = source.getBuffer();
 
-            long size = buffer.size();
+            final long size = buffer.size();
             if (size > Integer.MAX_VALUE) {
                 throw new UnsupportedOperationException(
                         "Non-integer input buffer size specified: " + size);
@@ -218,11 +219,11 @@ public class HttpService extends Service {
         return Headers.of(headers);
     }
 
-    public void addHeader(String key, String value) {
+    public void addHeader(final String key, final String value) {
         headers.put(key, value);
     }
 
-    public void addHeaders(Map<String, String> headersToAdd) {
+    public void addHeaders(final Map<String, String> headersToAdd) {
         headers.putAll(headersToAdd);
     }
 

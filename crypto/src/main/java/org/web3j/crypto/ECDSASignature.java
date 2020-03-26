@@ -19,7 +19,7 @@ public class ECDSASignature {
     public final BigInteger r;
     public final BigInteger s;
 
-    public ECDSASignature(BigInteger r, BigInteger s) {
+    public ECDSASignature(final BigInteger r, final BigInteger s) {
         this.r = r;
         this.s = s;
     }

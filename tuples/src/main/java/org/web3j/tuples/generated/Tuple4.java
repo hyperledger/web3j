@@ -19,7 +19,7 @@ public final class Tuple4<T1, T2, T3, T4> implements Tuple {
 
     private final T4 value4;
 
-    public Tuple4(T1 value1, T2 value2, T3 value3, T4 value4) {
+    public Tuple4(final T1 value1, final T2 value2, final T3 value3, final T4 value4) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -80,14 +80,14 @@ public final class Tuple4<T1, T2, T3, T4> implements Tuple {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple4<?, ?, ?, ?> tuple4 = (Tuple4<?, ?, ?, ?>) o;
+        final Tuple4<?, ?, ?, ?> tuple4 = (Tuple4<?, ?, ?, ?>) o;
         if (value1 != null ? !value1.equals(tuple4.value1) : tuple4.value1 != null) {
             return false;
         }

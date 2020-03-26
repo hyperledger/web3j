@@ -46,7 +46,7 @@ public class TypeEncoder {
 
     private TypeEncoder() {}
 
-    static boolean isDynamic(Type parameter) {
+    static boolean isDynamic(final Type parameter) {
         return parameter instanceof DynamicBytes
                 || parameter instanceof Utf8String
                 || parameter instanceof DynamicArray
@@ -56,7 +56,7 @@ public class TypeEncoder {
     }
 
     @SuppressWarnings("unchecked")
-    public static String encode(Type parameter) {
+    public static String encode(final Type parameter) {
         if (parameter instanceof NumericType) {
             return encodeNumeric(((NumericType) parameter));
         } else if (parameter instanceof Address) {
@@ -108,14 +108,14 @@ public class TypeEncoder {
         return result.toString();
     }
 
-    static String encodeAddress(Address address) {
+    static String encodeAddress(final Address address) {
         return encodeNumeric(address.toUint());
     }
 
-    static String encodeNumeric(NumericType numericType) {
-        byte[] rawValue = toByteArray(numericType);
-        byte paddingValue = getPaddingValue(numericType);
-        byte[] paddedRawValue = new byte[MAX_BYTE_LENGTH];
+    static String encodeNumeric(final NumericType numericType) {
+        final byte[] rawValue = toByteArray(numericType);
+        final byte paddingValue = getPaddingValue(numericType);
+        final byte[] paddedRawValue = new byte[MAX_BYTE_LENGTH];
         if (paddingValue != 0) {
             for (int i = 0; i < paddedRawValue.length; i++) {
                 paddedRawValue[i] = paddingValue;
@@ -127,7 +127,7 @@ public class TypeEncoder {
         return Numeric.toHexStringNoPrefix(paddedRawValue);
     }
 
-    private static byte getPaddingValue(NumericType numericType) {
+    private static byte getPaddingValue(final NumericType numericType) {
         if (numericType.getValue().signum() == -1) {
             return (byte) 0xff;
         } else {
@@ -135,14 +135,14 @@ public class TypeEncoder {
         }
     }
 
-    private static byte[] toByteArray(NumericType numericType) {
-        BigInteger value = numericType.getValue();
+    private static byte[] toByteArray(final NumericType numericType) {
+        final BigInteger value = numericType.getValue();
         if (numericType instanceof Ufixed || numericType instanceof Uint) {
             if (value.bitLength() == MAX_BIT_LENGTH) {
                 // As BigInteger is signed, if we have a 256 bit value, the resultant byte array
                 // will contain a sign byte in it's MSB, which we should ignore for this unsigned
                 // integer type.
-                byte[] byteArray = new byte[MAX_BYTE_LENGTH];
+                final byte[] byteArray = new byte[MAX_BYTE_LENGTH];
                 System.arraycopy(value.toByteArray(), 1, byteArray, 0, MAX_BYTE_LENGTH);
                 return byteArray;
             }
@@ -150,22 +150,22 @@ public class TypeEncoder {
         return value.toByteArray();
     }
 
-    static String encodeBool(Bool value) {
-        byte[] rawValue = new byte[MAX_BYTE_LENGTH];
+    static String encodeBool(final Bool value) {
+        final byte[] rawValue = new byte[MAX_BYTE_LENGTH];
         if (value.getValue()) {
             rawValue[rawValue.length - 1] = 1;
         }
         return Numeric.toHexStringNoPrefix(rawValue);
     }
 
-    static String encodeBytes(BytesType bytesType) {
-        byte[] value = bytesType.getValue();
-        int length = value.length;
-        int mod = length % MAX_BYTE_LENGTH;
+    static String encodeBytes(final BytesType bytesType) {
+        final byte[] value = bytesType.getValue();
+        final int length = value.length;
+        final int mod = length % MAX_BYTE_LENGTH;
 
-        byte[] dest;
+        final byte[] dest;
         if (mod != 0) {
-            int padding = MAX_BYTE_LENGTH - mod;
+            final int padding = MAX_BYTE_LENGTH - mod;
             dest = new byte[length + padding];
             System.arraycopy(value, 0, dest, 0, length);
         } else {
@@ -174,25 +174,25 @@ public class TypeEncoder {
         return Numeric.toHexStringNoPrefix(dest);
     }
 
-    static String encodeDynamicBytes(DynamicBytes dynamicBytes) {
-        int size = dynamicBytes.getValue().length;
-        String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
-        String encodedValue = encodeBytes(dynamicBytes);
+    static String encodeDynamicBytes(final DynamicBytes dynamicBytes) {
+        final int size = dynamicBytes.getValue().length;
+        final String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
+        final String encodedValue = encodeBytes(dynamicBytes);
 
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         result.append(encodedLength);
         result.append(encodedValue);
         return result.toString();
     }
 
-    static String encodeString(Utf8String string) {
-        byte[] utfEncoded = string.getValue().getBytes(StandardCharsets.UTF_8);
+    static String encodeString(final Utf8String string) {
+        final byte[] utfEncoded = string.getValue().getBytes(StandardCharsets.UTF_8);
         return encodeDynamicBytes(new DynamicBytes(utfEncoded));
     }
 
-    static <T extends Type> String encodeArrayValues(Array<T> value) {
-        StringBuilder result = new StringBuilder();
-        for (Type type : value.getValue()) {
+    static <T extends Type> String encodeArrayValues(final Array<T> value) {
+        final StringBuilder result = new StringBuilder();
+        for (final Type type : value.getValue()) {
             result.append(encode(type));
         }
         return result.toString();
@@ -240,13 +240,13 @@ public class TypeEncoder {
         return String.join("", data);
     }
 
-    static <T extends Type> String encodeDynamicArray(DynamicArray<T> value) {
-        int size = value.getValue().size();
-        String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
-        String valuesOffsets = encodeArrayValuesOffsets(value);
-        String encodedValues = encodeArrayValues(value);
+    static <T extends Type> String encodeDynamicArray(final DynamicArray<T> value) {
+        final int size = value.getValue().size();
+        final String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
+        final String valuesOffsets = encodeArrayValuesOffsets(value);
+        final String encodedValues = encodeArrayValues(value);
 
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         result.append(encodedLength);
         result.append(valuesOffsets);
         result.append(encodedValues);
@@ -268,11 +268,11 @@ public class TypeEncoder {
      *     enc(64), because the heads are 256bits - head(struct2) = enc(len( head(struct1)
      *     head(struct2) tail(struct1)))
      */
-    private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
-        StringBuilder result = new StringBuilder();
-        boolean arrayOfBytes =
+    private static <T extends Type> String encodeArrayValuesOffsets(final DynamicArray<T> value) {
+        final StringBuilder result = new StringBuilder();
+        final boolean arrayOfBytes =
                 !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicBytes;
-        boolean arrayOfString =
+        final boolean arrayOfString =
                 !value.getValue().isEmpty() && value.getValue().get(0) instanceof Utf8String;
         boolean arrayOfDynamicStructs =
                 !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicStruct;
@@ -282,12 +282,12 @@ public class TypeEncoder {
                 if (i == 0) {
                     offset = value.getValue().size() * MAX_BYTE_LENGTH;
                 } else {
-                    int bytesLength =
+                    final int bytesLength =
                             arrayOfBytes
                                     ? ((byte[]) value.getValue().get(i - 1).getValue()).length
                                     : ((String) value.getValue().get(i - 1).getValue()).length();
-                    int numberOfWords = (bytesLength + MAX_BYTE_LENGTH - 1) / MAX_BYTE_LENGTH;
-                    int totalBytesLength = numberOfWords * MAX_BYTE_LENGTH;
+                    final int numberOfWords = (bytesLength + MAX_BYTE_LENGTH - 1) / MAX_BYTE_LENGTH;
+                    final int totalBytesLength = numberOfWords * MAX_BYTE_LENGTH;
                     offset += totalBytesLength + MAX_BYTE_LENGTH;
                 }
                 result.append(

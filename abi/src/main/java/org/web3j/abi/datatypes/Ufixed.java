@@ -20,24 +20,25 @@ public class Ufixed extends FixedPointType {
     public static final String TYPE_NAME = "ufixed";
     public static final Ufixed DEFAULT = new Ufixed(BigInteger.ZERO);
 
-    protected Ufixed(int mBitSize, int nBitSize, BigInteger value) {
+    protected Ufixed(final int mBitSize, final int nBitSize, final BigInteger value) {
         super(TYPE_NAME, mBitSize, nBitSize, value);
     }
 
-    public Ufixed(BigInteger value) {
+    public Ufixed(final BigInteger value) {
         this(DEFAULT_BIT_LENGTH, DEFAULT_BIT_LENGTH, value);
     }
 
-    public Ufixed(BigInteger m, BigInteger n) {
+    public Ufixed(final BigInteger m, final BigInteger n) {
         this(convert(m, n));
     }
 
-    protected Ufixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+    protected Ufixed(
+            final int mBitSize, final int nBitSize, final BigInteger m, final BigInteger n) {
         this(convert(mBitSize, nBitSize, m, n));
     }
 
     @Override
-    boolean valid(int mBitSize, int nBitSize, BigInteger value) {
+    boolean valid(final int mBitSize, final int nBitSize, final BigInteger value) {
         return super.valid(mBitSize, nBitSize, value) && value.signum() != -1;
     }
 }

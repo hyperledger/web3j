@@ -57,7 +57,10 @@ public class TransferTest extends ManagedTransactionTester {
     }
 
     protected TransactionReceipt sendFunds(
-            Credentials credentials, String toAddress, BigDecimal value, Convert.Unit unit)
+            final Credentials credentials,
+            final String toAddress,
+            final BigDecimal value,
+            final Convert.Unit unit)
             throws Exception {
         return new Transfer(web3j, getVerifiedTransactionManager(credentials))
                 .sendFunds(toAddress, value, unit)

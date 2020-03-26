@@ -16,12 +16,12 @@ package org.web3j.protocol.ipc;
 public class UnixIpcService extends IpcService {
     private final String ipcSocketPath;
 
-    public UnixIpcService(String ipcSocketPath) {
+    public UnixIpcService(final String ipcSocketPath) {
         super();
         this.ipcSocketPath = ipcSocketPath;
     }
 
-    public UnixIpcService(String ipcSocketPath, boolean includeRawResponse) {
+    public UnixIpcService(final String ipcSocketPath, final boolean includeRawResponse) {
         super(includeRawResponse);
         this.ipcSocketPath = ipcSocketPath;
     }

@@ -42,14 +42,13 @@ import static org.web3j.ens.EnsResolver.isValidEnsName;
 
 public class EnsResolverTest {
 
-    private Web3j web3j;
     private Web3jService web3jService;
     private EnsResolver ensResolver;
 
     @BeforeEach
     public void setUp() {
         web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService);
+        final Web3j web3j = Web3j.build(web3jService);
         ensResolver = new EnsResolver(web3j);
     }
 
@@ -58,18 +57,18 @@ public class EnsResolverTest {
         configureSyncing(false);
         configureLatestBlock(System.currentTimeMillis() / 1000); // block timestamp is in seconds
 
-        NetVersion netVersion = new NetVersion();
+        final NetVersion netVersion = new NetVersion();
         netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
 
-        String resolverAddress =
+        final String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
-        String contractAddress =
+        final String contractAddress =
                 "0x00000000000000000000000019e03255f667bdfd50a32722df860b1eeaf4d635";
 
-        EthCall resolverAddressResponse = new EthCall();
+        final EthCall resolverAddressResponse = new EthCall();
         resolverAddressResponse.setResult(resolverAddress);
 
-        EthCall contractAddressResponse = new EthCall();
+        final EthCall contractAddressResponse = new EthCall();
         contractAddressResponse.setResult(contractAddress);
 
         when(web3jService.send(any(Request.class), eq(NetVersion.class))).thenReturn(netVersion);
@@ -87,20 +86,20 @@ public class EnsResolverTest {
         configureSyncing(false);
         configureLatestBlock(System.currentTimeMillis() / 1000); // block timestamp is in seconds
 
-        NetVersion netVersion = new NetVersion();
+        final NetVersion netVersion = new NetVersion();
         netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
 
-        String resolverAddress =
+        final String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
-        String contractName =
+        final String contractName =
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
                         + TypeEncoder.encode(new Utf8String("web3j.eth"));
         System.err.println(contractName);
 
-        EthCall resolverAddressResponse = new EthCall();
+        final EthCall resolverAddressResponse = new EthCall();
         resolverAddressResponse.setResult(resolverAddress);
 
-        EthCall contractNameResponse = new EthCall();
+        final EthCall contractNameResponse = new EthCall();
         contractNameResponse.setResult(contractName);
 
         when(web3jService.send(any(Request.class), eq(NetVersion.class))).thenReturn(netVersion);
@@ -137,19 +136,19 @@ public class EnsResolverTest {
         assertFalse(ensResolver.isSynced());
     }
 
-    private void configureSyncing(boolean isSyncing) throws IOException {
-        EthSyncing ethSyncing = new EthSyncing();
-        EthSyncing.Result result = new EthSyncing.Result();
+    private void configureSyncing(final boolean isSyncing) throws IOException {
+        final EthSyncing ethSyncing = new EthSyncing();
+        final EthSyncing.Result result = new EthSyncing.Result();
         result.setSyncing(isSyncing);
         ethSyncing.setResult(result);
 
         when(web3jService.send(any(Request.class), eq(EthSyncing.class))).thenReturn(ethSyncing);
     }
 
-    private void configureLatestBlock(long timestamp) throws IOException {
-        EthBlock.Block block = new EthBlock.Block();
+    private void configureLatestBlock(final long timestamp) throws IOException {
+        final EthBlock.Block block = new EthBlock.Block();
         block.setTimestamp(Numeric.encodeQuantity(BigInteger.valueOf(timestamp)));
-        EthBlock ethBlock = new EthBlock();
+        final EthBlock ethBlock = new EthBlock();
         ethBlock.setResult(block);
 
         when(web3jService.send(any(Request.class), eq(EthBlock.class))).thenReturn(ethBlock);

@@ -107,35 +107,39 @@ public class HumanStandardTokenIT extends Scenario {
         confirmBalance(BOB.getAddress(), contractAddress, bobQty);
     }
 
-    private BigInteger getTotalSupply(String contractAddress) throws Exception {
-        Function function = totalSupply();
-        String responseValue = callSmartContractFunction(function, contractAddress);
+    private BigInteger getTotalSupply(final String contractAddress) throws Exception {
+        final Function function = totalSupply();
+        final String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Type<?>> response =
+        final List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
 
         assertEquals(1, response.size());
         return (BigInteger) response.get(0).getValue();
     }
 
-    private void confirmBalance(String address, String contractAddress, BigInteger expected)
+    private void confirmBalance(
+            final String address, final String contractAddress, final BigInteger expected)
             throws Exception {
-        Function function = balanceOf(address);
-        String responseValue = callSmartContractFunction(function, contractAddress);
+        final Function function = balanceOf(address);
+        final String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Type<?>> response =
+        final List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
         assertEquals(response.size(), (1));
         assertEquals(response.get(0), (new Uint256(expected)));
     }
 
     private void confirmAllowance(
-            String owner, String spender, String contractAddress, BigInteger expected)
+            final String owner,
+            final String spender,
+            final String contractAddress,
+            final BigInteger expected)
             throws Exception {
-        Function function = allowance(owner, spender);
-        String responseValue = callSmartContractFunction(function, contractAddress);
+        final Function function = allowance(owner, spender);
+        final String responseValue = callSmartContractFunction(function, contractAddress);
 
-        List<Type<?>> response =
+        final List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
 
         assertEquals(response.size(), (function.getOutputParameters().size()));
@@ -146,14 +150,14 @@ public class HumanStandardTokenIT extends Scenario {
         String createTransactionHash = sendCreateContractTransaction(initialSupply);
         assertFalse(createTransactionHash.isEmpty());
 
-        TransactionReceipt createTransactionReceipt =
+        final TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
         assertEquals(createTransactionReceipt.getTransactionHash(), (createTransactionHash));
 
         assertFalse(createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        String contractAddress = createTransactionReceipt.getContractAddress();
+        final String contractAddress = createTransactionReceipt.getContractAddress();
 
         assertNotNull(contractAddress);
         return contractAddress;
@@ -162,7 +166,7 @@ public class HumanStandardTokenIT extends Scenario {
     private String sendCreateContractTransaction(BigInteger initialSupply) throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
 
-        String encodedConstructor =
+        final String encodedConstructor =
                 FunctionEncoder.encodeConstructor(
                         Arrays.asList(
                                 new Uint256(initialSupply),
@@ -170,7 +174,7 @@ public class HumanStandardTokenIT extends Scenario {
                                 new Uint8(BigInteger.TEN),
                                 new Utf8String("w3j$")));
 
-        RawTransaction rawTransaction =
+        final RawTransaction rawTransaction =
                 RawTransaction.createContractTransaction(
                         nonce,
                         GAS_PRICE,
@@ -178,10 +182,10 @@ public class HumanStandardTokenIT extends Scenario {
                         BigInteger.ZERO,
                         getHumanStandardTokenBinary() + encodedConstructor);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
-        String hexValue = Numeric.toHexString(signedMessage);
+        final byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        final String hexValue = Numeric.toHexString(signedMessage);
 
-        EthSendTransaction transactionResponse =
+        final EthSendTransaction transactionResponse =
                 web3j.ethSendRawTransaction(hexValue).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
@@ -190,31 +194,32 @@ public class HumanStandardTokenIT extends Scenario {
     private void sendTransferTokensTransaction(String to, String contractAddress, BigInteger qty)
             throws Exception {
 
-        Function function = transfer(to, qty);
-        String functionHash = execute(Scenario.ALICE, function, contractAddress);
+        final Function function = transfer(to, qty);
+        final String functionHash = execute(Scenario.ALICE, function, contractAddress);
 
-        TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
+        final TransactionReceipt transferTransactionReceipt =
+                waitForTransactionReceipt(functionHash);
         assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
 
-        List<Log> logs = transferTransactionReceipt.getLogs();
+        final List<Log> logs = transferTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
-        Log log = logs.get(0);
+        final Log log = logs.get(0);
 
         // verify the event was called with the function parameters
-        List<String> topics = log.getTopics();
+        final List<String> topics = log.getTopics();
         assertEquals(topics.size(), (3));
 
-        Event transferEvent = transferEvent();
+        final Event transferEvent = transferEvent();
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
-        String encodedEventSignature = EventEncoder.encode(transferEvent);
+        final String encodedEventSignature = EventEncoder.encode(transferEvent);
         assertEquals(topics.get(0), (encodedEventSignature));
         assertEquals(new Address(topics.get(1)), (new Address(Scenario.ALICE.getAddress())));
         assertEquals(new Address(topics.get(2)), (new Address(to)));
 
         // verify qty transferred
-        List<Type<?>> results =
+        final List<Type<?>> results =
                 FunctionReturnDecoder.decode(
                         log.getData(), transferEvent.getNonIndexedParameters());
         assertEquals(results, (Collections.singletonList(new Uint256(qty))));
@@ -222,95 +227,98 @@ public class HumanStandardTokenIT extends Scenario {
 
     private void sendApproveTransaction(String spender, BigInteger value, String contractAddress)
             throws Exception {
-        Function function = approve(spender, value);
-        String functionHash = execute(Scenario.ALICE, function, contractAddress);
+        final Function function = approve(spender, value);
+        final String functionHash = execute(Scenario.ALICE, function, contractAddress);
 
-        TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
+        final TransactionReceipt transferTransactionReceipt =
+                waitForTransactionReceipt(functionHash);
         assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
 
-        List<Log> logs = transferTransactionReceipt.getLogs();
+        final List<Log> logs = transferTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
-        Log log = logs.get(0);
+        final Log log = logs.get(0);
 
         // verify the event was called with the function parameters
-        List<String> topics = log.getTopics();
+        final List<String> topics = log.getTopics();
         assertEquals(topics.size(), (3));
 
         // event Transfer(address indexed _from, address indexed _to, uint256 _value);
-        Event event = approvalEvent();
+        final Event event = approvalEvent();
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
-        String encodedEventSignature = EventEncoder.encode(event);
+        final String encodedEventSignature = EventEncoder.encode(event);
         assertEquals(topics.get(0), (encodedEventSignature));
         assertEquals(new Address(topics.get(1)), (new Address(Scenario.ALICE.getAddress())));
         assertEquals(new Address(topics.get(2)), (new Address(spender)));
 
         // verify our two event parameters
-        List<Type<?>> results =
+        final List<Type<?>> results =
                 FunctionReturnDecoder.decode(log.getData(), event.getNonIndexedParameters());
         assertEquals(results, (Collections.singletonList(new Uint256(value))));
     }
 
     public void sendTransferFromTransaction(
-            Credentials credentials,
-            String from,
-            String to,
-            BigInteger value,
-            String contractAddress)
+            final Credentials credentials,
+            final String from,
+            final String to,
+            final BigInteger value,
+            final String contractAddress)
             throws Exception {
 
-        Function function = transferFrom(from, to, value);
-        String functionHash = execute(credentials, function, contractAddress);
+        final Function function = transferFrom(from, to, value);
+        final String functionHash = execute(credentials, function, contractAddress);
 
-        TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
+        final TransactionReceipt transferTransactionReceipt =
+                waitForTransactionReceipt(functionHash);
         assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
 
-        List<Log> logs = transferTransactionReceipt.getLogs();
+        final List<Log> logs = transferTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
-        Log log = logs.get(0);
+        final Log log = logs.get(0);
 
-        Event transferEvent = transferEvent();
-        List<String> topics = log.getTopics();
+        final Event transferEvent = transferEvent();
+        final List<String> topics = log.getTopics();
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
-        String encodedEventSignature = EventEncoder.encode(transferEvent);
+        final String encodedEventSignature = EventEncoder.encode(transferEvent);
         assertEquals(topics.get(0), (encodedEventSignature));
         assertEquals(new Address(topics.get(1)), (new Address(from)));
         assertEquals(new Address(topics.get(2)), (new Address(to)));
 
         // verify qty transferred
-        List<Type<?>> results =
+        final List<Type<?>> results =
                 FunctionReturnDecoder.decode(
                         log.getData(), transferEvent.getNonIndexedParameters());
         assertEquals(results, (Collections.singletonList(new Uint256(value))));
     }
 
-    private String execute(Credentials credentials, Function function, String contractAddress)
+    private String execute(
+            final Credentials credentials, final Function function, final String contractAddress)
             throws Exception {
-        BigInteger nonce = getNonce(credentials.getAddress());
+        final BigInteger nonce = getNonce(credentials.getAddress());
 
-        String encodedFunction = FunctionEncoder.encode(function);
+        final String encodedFunction = FunctionEncoder.encode(function);
 
-        RawTransaction rawTransaction =
+        final RawTransaction rawTransaction =
                 RawTransaction.createTransaction(
                         nonce, GAS_PRICE, GAS_LIMIT, contractAddress, encodedFunction);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-        String hexValue = Numeric.toHexString(signedMessage);
+        final byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        final String hexValue = Numeric.toHexString(signedMessage);
 
-        EthSendTransaction transactionResponse =
+        final EthSendTransaction transactionResponse =
                 web3j.ethSendRawTransaction(hexValue).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(Function function, String contractAddress)
+    private String callSmartContractFunction(final Function function, final String contractAddress)
             throws Exception {
-        String encodedFunction = FunctionEncoder.encode(function);
+        final String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response =
+        final org.web3j.protocol.core.methods.response.EthCall response =
                 web3j.ethCall(
                                 Transaction.createEthCallTransaction(
                                         ALICE.getAddress(), contractAddress, encodedFunction),
@@ -328,35 +336,35 @@ public class HumanStandardTokenIT extends Scenario {
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
-    private Function balanceOf(String owner) {
+    private Function balanceOf(final String owner) {
         return new Function(
                 "balanceOf",
                 Collections.singletonList(new Address(owner)),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
-    private Function transfer(String to, BigInteger value) {
+    private Function transfer(final String to, final BigInteger value) {
         return new Function(
                 "transfer",
                 Arrays.asList(new Address(to), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
-    private Function allowance(String owner, String spender) {
+    private Function allowance(final String owner, final String spender) {
         return new Function(
                 "allowance",
                 Arrays.asList(new Address(owner), new Address(spender)),
                 Collections.singletonList(new TypeReference<Uint256>() {}));
     }
 
-    private Function approve(String spender, BigInteger value) {
+    private Function approve(final String spender, final BigInteger value) {
         return new Function(
                 "approve",
                 Arrays.asList(new Address(spender), new Uint256(value)),
                 Collections.singletonList(new TypeReference<Bool>() {}));
     }
 
-    private Function transferFrom(String from, String to, BigInteger value) {
+    private Function transferFrom(final String from, final String to, final BigInteger value) {
         return new Function(
                 "transferFrom",
                 Arrays.asList(new Address(from), new Address(to), new Uint256(value)),

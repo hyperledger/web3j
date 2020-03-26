@@ -57,10 +57,12 @@ public class EventFilterIT extends Scenario {
         TransactionReceipt transactionReceipt = fib.fibonacciNotify(BigInteger.ONE).send();
         List<Log> logs = transactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
-        Log log = logs.get(0);
-        List<String> topics = log.getTopics();
+
+        final Log log = logs.get(0);
+        final List<String> topics = log.getTopics();
         assertEquals(topics.size(), (1));
-        Event event =
+
+        final Event event =
                 new Event(
                         "Notify",
                         Arrays.asList(
@@ -68,11 +70,11 @@ public class EventFilterIT extends Scenario {
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
-        String encodedEventSignature = EventEncoder.encode(event);
+        final String encodedEventSignature = EventEncoder.encode(event);
         assertEquals(topics.get(0), (encodedEventSignature));
 
         // verify our two event parameters
-        List<Type<?>> results =
+        final List<Type<?>> results =
                 FunctionReturnDecoder.decode(log.getData(), event.getNonIndexedParameters());
         results.forEach(it -> assertEquals(it.getValue(), BigInteger.valueOf(1)));
         assertEquals(
@@ -81,7 +83,7 @@ public class EventFilterIT extends Scenario {
                         new Uint256(BigInteger.valueOf(1)), new Uint256(BigInteger.valueOf(1)))));
 
         // finally check it shows up in the event filter
-        List<EthLog.LogResult> filterLogs = createFilterForEvent(encodedEventSignature);
+        final List<EthLog.LogResult> filterLogs = createFilterForEvent(encodedEventSignature);
         assertFalse(filterLogs.isEmpty());
     }
 
@@ -94,7 +96,8 @@ public class EventFilterIT extends Scenario {
                         EventFilterIT.fib.getContractAddress());
 
         ethFilter.addSingleTopic(encodedEventSignature);
-        EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
+
+        final EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
         return ethLog.getLogs();
     }
 }

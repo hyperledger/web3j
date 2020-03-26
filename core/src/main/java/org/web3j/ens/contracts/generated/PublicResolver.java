@@ -106,18 +106,18 @@ public class PublicResolver extends Contract {
             }));
 
     protected PublicResolver(
-            String contractAddress, Web3j web3j, Credentials credentials,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final Credentials credentials,
+            final ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     protected PublicResolver(
-            String contractAddress, Web3j web3j, TransactionManager transactionManager,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final TransactionManager transactionManager,
+            final ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public RemoteCall<Boolean> supportsInterface(byte[] interfaceID) {
+    public RemoteCall<Boolean> supportsInterface(final byte[] interfaceID) {
         final Function function = new Function(FUNC_SUPPORTSINTERFACE,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {
@@ -125,7 +125,7 @@ public class PublicResolver extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setText(byte[] node, String key, String value) {
+    public RemoteTransaction<Void> setText(final byte[] node, final String key, final String value) {
         final Function function = new Function(
                 FUNC_SETTEXT,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
@@ -137,7 +137,7 @@ public class PublicResolver extends Contract {
                 false, gasProvider);
     }
 
-    public RemoteCall<Tuple2<BigInteger, byte[]>> ABI(byte[] node, BigInteger contentTypes) {
+    public RemoteCall<Tuple2<BigInteger, byte[]>> ABI(final byte[] node, final BigInteger contentTypes) {
         final Function function = new Function(FUNC_ABI,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
                         new org.web3j.abi.datatypes.generated.Uint256(contentTypes)),
@@ -147,7 +147,7 @@ public class PublicResolver extends Contract {
         return new RemoteFunctionCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setPubkey(byte[] node, byte[] x, byte[] y) {
+    public RemoteTransaction<Void> setPubkey(final byte[] node, final byte[] x, final byte[] y) {
         final Function function = new Function(
                 FUNC_SETPUBKEY,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
@@ -159,7 +159,7 @@ public class PublicResolver extends Contract {
                 false, gasProvider);
     }
 
-    public RemoteCall<byte[]> content(byte[] node) {
+    public RemoteCall<byte[]> content(final byte[] node) {
         final Function function = new Function(FUNC_CONTENT,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
@@ -167,7 +167,7 @@ public class PublicResolver extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<String> addr(byte[] node) {
+    public RemoteCall<String> addr(final byte[] node) {
         final Function function = new Function(FUNC_ADDR,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
@@ -175,7 +175,7 @@ public class PublicResolver extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<String> text(byte[] node, String key) {
+    public RemoteCall<String> text(final byte[] node, final String key) {
         final Function function = new Function(FUNC_TEXT,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
                         new org.web3j.abi.datatypes.Utf8String(key)),
@@ -184,7 +184,7 @@ public class PublicResolver extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setABI(byte[] node, BigInteger contentType, byte[] data) {
+    public RemoteTransaction<Void> setABI(final byte[] node, final BigInteger contentType, final byte[] data) {
         final Function function = new Function(
                 FUNC_SETABI,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
@@ -196,7 +196,7 @@ public class PublicResolver extends Contract {
                 false, gasProvider);
     }
 
-    public RemoteCall<String> name(byte[] node) {
+    public RemoteCall<String> name(final byte[] node) {
         final Function function = new Function(FUNC_NAME,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
@@ -204,7 +204,7 @@ public class PublicResolver extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setName(byte[] node, String name) {
+    public RemoteTransaction<Void> setName(final byte[] node, final String name) {
         final Function function = new Function(
                 FUNC_SETNAME,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
@@ -215,7 +215,7 @@ public class PublicResolver extends Contract {
                 false, gasProvider);
     }
 
-    public RemoteTransaction<Void> setContent(byte[] node, byte[] hash) {
+    public RemoteTransaction<Void> setContent(final byte[] node, final byte[] hash) {
         final Function function = new Function(
                 FUNC_SETCONTENT,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
@@ -226,7 +226,7 @@ public class PublicResolver extends Contract {
                 false, gasProvider);
     }
 
-    public RemoteCall<Tuple2<byte[], byte[]>> pubkey(byte[] node) {
+    public RemoteCall<Tuple2<byte[], byte[]>> pubkey(final byte[] node) {
         final Function function = new Function(FUNC_PUBKEY,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
@@ -235,7 +235,7 @@ public class PublicResolver extends Contract {
         return new RemoteFunctionCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setAddr(byte[] node, String addr) {
+    public RemoteTransaction<Void> setAddr(final byte[] node, final String addr) {
         final Function function = new Function(
                 FUNC_SETADDR,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
@@ -247,25 +247,25 @@ public class PublicResolver extends Contract {
     }
 
     public static RemoteCall<PublicResolver> deploy(
-            Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider,
-            String ensAddr) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
+            final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider,
+            final String ensAddr) {
+        final String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
         return deployRemoteCall(PublicResolver.class, web3j, credentials, contractGasProvider, BINARY, encodedConstructor);
     }
 
     public static RemoteCall<PublicResolver> deploy(
-            Web3j web3j, TransactionManager transactionManager,
-            ContractGasProvider contractGasProvider, String ensAddr) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
+            final Web3j web3j, final TransactionManager transactionManager,
+            final ContractGasProvider contractGasProvider, final String ensAddr) {
+        final String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
         return deployRemoteCall(PublicResolver.class, web3j, transactionManager, contractGasProvider, BINARY, encodedConstructor);
     }
 
     public List<AddrChangedEventResponse> getAddrChangedEvents(
-            TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(ADDRCHANGED_EVENT, transactionReceipt);
-        ArrayList<AddrChangedEventResponse> responses = new ArrayList<AddrChangedEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
+            final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(ADDRCHANGED_EVENT, transactionReceipt);
+        final ArrayList<AddrChangedEventResponse> responses = new ArrayList<AddrChangedEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.a = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -274,12 +274,12 @@ public class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<AddrChangedEventResponse> addrChangedEventFlowable(EthFilter filter) {
+    public Flowable<AddrChangedEventResponse> addrChangedEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, AddrChangedEventResponse>() {
             @Override
-            public AddrChangedEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(ADDRCHANGED_EVENT, log);
-                AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
+            public AddrChangedEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(ADDRCHANGED_EVENT, log);
+                final AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.a = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -289,18 +289,18 @@ public class PublicResolver extends Contract {
     }
 
     public Flowable<AddrChangedEventResponse> addrChangedEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(ADDRCHANGED_EVENT));
         return addrChangedEventFlowable(filter);
     }
 
     public List<ContentChangedEventResponse> getContentChangedEvents(
-            TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(CONTENTCHANGED_EVENT, transactionReceipt);
-        ArrayList<ContentChangedEventResponse> responses = new ArrayList<ContentChangedEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
+            final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(CONTENTCHANGED_EVENT, transactionReceipt);
+        final ArrayList<ContentChangedEventResponse> responses = new ArrayList<ContentChangedEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.hash = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
@@ -309,12 +309,12 @@ public class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<ContentChangedEventResponse> contentChangedEventFlowable(EthFilter filter) {
+    public Flowable<ContentChangedEventResponse> contentChangedEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, ContentChangedEventResponse>() {
             @Override
-            public ContentChangedEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(CONTENTCHANGED_EVENT, log);
-                ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
+            public ContentChangedEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(CONTENTCHANGED_EVENT, log);
+                final ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.hash = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
@@ -324,18 +324,18 @@ public class PublicResolver extends Contract {
     }
 
     public Flowable<ContentChangedEventResponse> contentChangedEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(CONTENTCHANGED_EVENT));
         return contentChangedEventFlowable(filter);
     }
 
     public List<NameChangedEventResponse> getNameChangedEvents(
-            TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NAMECHANGED_EVENT, transactionReceipt);
-        ArrayList<NameChangedEventResponse> responses = new ArrayList<NameChangedEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            NameChangedEventResponse typedResponse = new NameChangedEventResponse();
+            final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NAMECHANGED_EVENT, transactionReceipt);
+        final ArrayList<NameChangedEventResponse> responses = new ArrayList<NameChangedEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final NameChangedEventResponse typedResponse = new NameChangedEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.name = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -344,12 +344,12 @@ public class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<NameChangedEventResponse> nameChangedEventFlowable(EthFilter filter) {
+    public Flowable<NameChangedEventResponse> nameChangedEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, NameChangedEventResponse>() {
             @Override
-            public NameChangedEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NAMECHANGED_EVENT, log);
-                NameChangedEventResponse typedResponse = new NameChangedEventResponse();
+            public NameChangedEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(NAMECHANGED_EVENT, log);
+                final NameChangedEventResponse typedResponse = new NameChangedEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.name = (String) eventValues.getNonIndexedValues().get(0).getValue();
@@ -359,18 +359,18 @@ public class PublicResolver extends Contract {
     }
 
     public Flowable<NameChangedEventResponse> nameChangedEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NAMECHANGED_EVENT));
         return nameChangedEventFlowable(filter);
     }
 
     public List<ABIChangedEventResponse> getABIChangedEvents(
-            TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(ABICHANGED_EVENT, transactionReceipt);
-        ArrayList<ABIChangedEventResponse> responses = new ArrayList<ABIChangedEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
+            final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(ABICHANGED_EVENT, transactionReceipt);
+        final ArrayList<ABIChangedEventResponse> responses = new ArrayList<ABIChangedEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.contentType = (BigInteger) eventValues.getIndexedValues().get(1).getValue();
@@ -379,12 +379,12 @@ public class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<ABIChangedEventResponse> aBIChangedEventFlowable(EthFilter filter) {
+    public Flowable<ABIChangedEventResponse> aBIChangedEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, ABIChangedEventResponse>() {
             @Override
-            public ABIChangedEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(ABICHANGED_EVENT, log);
-                ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
+            public ABIChangedEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(ABICHANGED_EVENT, log);
+                final ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.contentType = (BigInteger) eventValues.getIndexedValues().get(1).getValue();
@@ -394,18 +394,18 @@ public class PublicResolver extends Contract {
     }
 
     public Flowable<ABIChangedEventResponse> aBIChangedEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(ABICHANGED_EVENT));
         return aBIChangedEventFlowable(filter);
     }
 
     public List<PubkeyChangedEventResponse> getPubkeyChangedEvents(
-            TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(PUBKEYCHANGED_EVENT, transactionReceipt);
-        ArrayList<PubkeyChangedEventResponse> responses = new ArrayList<PubkeyChangedEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
+            final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(PUBKEYCHANGED_EVENT, transactionReceipt);
+        final ArrayList<PubkeyChangedEventResponse> responses = new ArrayList<PubkeyChangedEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.x = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
@@ -415,12 +415,12 @@ public class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventFlowable(EthFilter filter) {
+    public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, PubkeyChangedEventResponse>() {
             @Override
-            public PubkeyChangedEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(PUBKEYCHANGED_EVENT, log);
-                PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
+            public PubkeyChangedEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(PUBKEYCHANGED_EVENT, log);
+                final PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.x = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
@@ -431,18 +431,18 @@ public class PublicResolver extends Contract {
     }
 
     public Flowable<PubkeyChangedEventResponse> pubkeyChangedEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(PUBKEYCHANGED_EVENT));
         return pubkeyChangedEventFlowable(filter);
     }
 
     public List<TextChangedEventResponse> getTextChangedEvents(
-            TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TEXTCHANGED_EVENT, transactionReceipt);
-        ArrayList<TextChangedEventResponse> responses = new ArrayList<TextChangedEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            TextChangedEventResponse typedResponse = new TextChangedEventResponse();
+            final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TEXTCHANGED_EVENT, transactionReceipt);
+        final ArrayList<TextChangedEventResponse> responses = new ArrayList<TextChangedEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final TextChangedEventResponse typedResponse = new TextChangedEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.indexedKey = (byte[]) eventValues.getIndexedValues().get(1).getValue();
@@ -452,12 +452,12 @@ public class PublicResolver extends Contract {
         return responses;
     }
 
-    public Flowable<TextChangedEventResponse> textChangedEventFlowable(EthFilter filter) {
+    public Flowable<TextChangedEventResponse> textChangedEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, TextChangedEventResponse>() {
             @Override
-            public TextChangedEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TEXTCHANGED_EVENT, log);
-                TextChangedEventResponse typedResponse = new TextChangedEventResponse();
+            public TextChangedEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TEXTCHANGED_EVENT, log);
+                final TextChangedEventResponse typedResponse = new TextChangedEventResponse();
                 typedResponse.log = log;
                 typedResponse.node = (byte[]) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.indexedKey = (byte[]) eventValues.getIndexedValues().get(1).getValue();
@@ -468,21 +468,21 @@ public class PublicResolver extends Contract {
     }
 
     public Flowable<TextChangedEventResponse> textChangedEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TEXTCHANGED_EVENT));
         return textChangedEventFlowable(filter);
     }
 
     public static PublicResolver load(
-            String contractAddress, Web3j web3j, Credentials credentials,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final Credentials credentials,
+            final ContractGasProvider contractGasProvider) {
         return new PublicResolver(contractAddress, web3j, credentials, contractGasProvider);
     }
 
     public static PublicResolver load(
-            String contractAddress, Web3j web3j, TransactionManager transactionManager,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final TransactionManager transactionManager,
+            final ContractGasProvider contractGasProvider) {
         return new PublicResolver(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 

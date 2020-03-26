@@ -12,11 +12,11 @@ import org.web3j.abi.datatypes.Uint;
 public class Uint184 extends Uint {
     public static final Uint184 DEFAULT = new Uint184(BigInteger.ZERO);
 
-    public Uint184(BigInteger value) {
+    public Uint184(final BigInteger value) {
         super(184, value);
     }
 
-    public Uint184(long value) {
+    public Uint184(final long value) {
         this(BigInteger.valueOf(value));
     }
 }

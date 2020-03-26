@@ -31,7 +31,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54\"\n"
                         + "}");
 
-        PersonalEcRecover personalEcRecover = deserialiseResponse(PersonalEcRecover.class);
+        final PersonalEcRecover personalEcRecover = deserialiseResponse(PersonalEcRecover.class);
         assertEquals(
                 personalEcRecover.getRecoverAccountId(),
                 ("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));
@@ -46,7 +46,8 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54\"\n"
                         + "}");
 
-        PersonalImportRawKey personalImportRawKey = deserialiseResponse(PersonalImportRawKey.class);
+        final PersonalImportRawKey personalImportRawKey =
+                deserialiseResponse(PersonalImportRawKey.class);
         assertEquals(
                 personalImportRawKey.getAccountId(),
                 ("0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54"));

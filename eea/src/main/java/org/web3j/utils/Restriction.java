@@ -16,7 +16,7 @@ public enum Restriction {
     RESTRICTED("restricted"),
     UNRESTRICTED("unrestricted");
 
-    private String restriction;
+    private final String restriction;
 
     Restriction(final String restriction) {
 

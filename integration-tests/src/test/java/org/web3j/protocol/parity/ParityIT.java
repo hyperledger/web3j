@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @EVMTest(type = NodeType.OPEN_ETHEREUM)
 public class ParityIT {
 
-    private static String PASSWORD = "1n5ecur3P@55w0rd";
+    private static final String PASSWORD = "1n5ecur3P@55w0rd";
     private Parity parity;
 
     @BeforeEach
@@ -46,30 +46,30 @@ public class ParityIT {
     public void testPersonalListAccounts(Web3j web3j) throws Exception {
         web3j.web3ClientVersion().send();
 
-        PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
+        final PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
     }
 
     @Test
     public void testPersonalNewAccount() throws Exception {
-        NewAccountIdentifier newAccountIdentifier = createAccount();
+        final NewAccountIdentifier newAccountIdentifier = createAccount();
         assertFalse(newAccountIdentifier.getAccountId().isEmpty());
     }
 
     @Test
     public void testPersonalUnlockAccount() throws Exception {
-        NewAccountIdentifier newAccountIdentifier = createAccount();
-        PersonalUnlockAccount personalUnlockAccount =
+        final NewAccountIdentifier newAccountIdentifier = createAccount();
+        final PersonalUnlockAccount personalUnlockAccount =
                 parity.personalUnlockAccount(newAccountIdentifier.getAccountId(), PASSWORD).send();
         assertTrue(personalUnlockAccount.accountUnlocked());
     }
 
     @Test
     public void testPersonalSign() throws Exception {
-        PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
+        final PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
 
-        PersonalSign personalSign =
+        final PersonalSign personalSign =
                 parity.paritySignMessage(
                                 "0xdeadbeaf", personalListAccounts.getAccountIds().get(0), "123")
                         .send();

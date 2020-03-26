@@ -20,12 +20,12 @@ package org.web3j.protocol.ipc;
 public class WindowsIpcService extends IpcService {
     private final String ipcSocketPath;
 
-    public WindowsIpcService(String ipcSocketPath) {
+    public WindowsIpcService(final String ipcSocketPath) {
         super();
         this.ipcSocketPath = ipcSocketPath;
     }
 
-    public WindowsIpcService(String ipcSocketPath, boolean includeRawResponse) {
+    public WindowsIpcService(final String ipcSocketPath, final boolean includeRawResponse) {
         super(includeRawResponse);
         this.ipcSocketPath = ipcSocketPath;
     }

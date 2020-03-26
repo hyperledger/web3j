@@ -54,7 +54,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": [\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]\n"
                         + "}");
 
-        ParityAddressesResponse parityAddressesResponse =
+        final ParityAddressesResponse parityAddressesResponse =
                 deserialiseResponse(ParityAddressesResponse.class);
         assertEquals(
                 parityAddressesResponse.getAddresses(),
@@ -76,7 +76,7 @@ public class ResponseTest extends ResponseTester {
                         + "    }\n"
                         + "}");
 
-        Map<String, ParityAllAccountsInfo.AccountsInfo> accountsInfoMap = new HashMap<>(1);
+        final Map<String, ParityAllAccountsInfo.AccountsInfo> accountsInfoMap = new HashMap<>(1);
         accountsInfoMap.put(
                 "0x00a289b43e1e4825dbedf2a78ba60a640634dc40",
                 new ParityAllAccountsInfo.AccountsInfo(
@@ -84,7 +84,7 @@ public class ResponseTest extends ResponseTester {
                         "Savings",
                         "7fee0393-7571-2b4f-8672-862fea01a4a0"));
 
-        ParityAllAccountsInfo parityAllAccountsInfo =
+        final ParityAllAccountsInfo parityAllAccountsInfo =
                 deserialiseResponse(ParityAllAccountsInfo.class);
         assertEquals(parityAllAccountsInfo.getAccountsInfo(), (accountsInfoMap));
     }
@@ -98,7 +98,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"\n"
                         + "}");
 
-        ParityDefaultAddressResponse parityDefaultAddressesResponse =
+        final ParityDefaultAddressResponse parityDefaultAddressesResponse =
                 deserialiseResponse(ParityDefaultAddressResponse.class);
         assertEquals(
                 parityDefaultAddressesResponse.getAddress(),
@@ -114,7 +114,8 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"\n"
                         + "}");
 
-        ParityDeriveAddress parityDeriveAddress = deserialiseResponse(ParityDeriveAddress.class);
+        final ParityDeriveAddress parityDeriveAddress =
+                deserialiseResponse(ParityDeriveAddress.class);
         assertEquals(
                 parityDeriveAddress.getAddress(), ("0x407d73d8a49eeb85d32cf465507dd71d507100c1"));
     }
@@ -150,22 +151,22 @@ public class ResponseTest extends ResponseTester {
                         + "    }\n"
                         + "}");
 
-        WalletFile walletFile = new WalletFile();
+        final WalletFile walletFile = new WalletFile();
         walletFile.setAddress("0042e5d2a662eeaca8a7e828c174f98f35d8925b");
 
-        WalletFile.Crypto crypto = new WalletFile.Crypto();
+        final WalletFile.Crypto crypto = new WalletFile.Crypto();
         crypto.setCipher("aes-128-ctr");
 
         crypto.setCiphertext("df27e3db64aa18d984b6439443f73660643c2d119a6f0fa2fa9a6456fc802d75");
 
         walletFile.setCrypto(crypto);
 
-        WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();
+        final WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();
         cipherParams.setIv("a1c6ff99070f8032ca1c4e8add006373");
         crypto.setCipherparams(cipherParams);
 
         crypto.setKdf("pbkdf2");
-        WalletFile.Aes128CtrKdfParams kdfParams = new WalletFile.Aes128CtrKdfParams();
+        final WalletFile.Aes128CtrKdfParams kdfParams = new WalletFile.Aes128CtrKdfParams();
         kdfParams.setC(10240);
         kdfParams.setPrf("hmac-sha256");
         kdfParams.setDklen(32);
@@ -177,7 +178,8 @@ public class ResponseTest extends ResponseTester {
         walletFile.setId("6a186c80-7797-cff2-bc2e-7c1d6a6cc76e");
         walletFile.setVersion(3);
 
-        ParityExportAccount parityExportAccount = deserialiseResponse(ParityExportAccount.class);
+        final ParityExportAccount parityExportAccount =
+                deserialiseResponse(ParityExportAccount.class);
         assertEquals(parityExportAccount.getWallet(), (walletFile));
     }
 
@@ -190,7 +192,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": [\"web\"]\n"
                         + "}");
 
-        ParityListRecentDapps parityListRecentDapps =
+        final ParityListRecentDapps parityListRecentDapps =
                 deserialiseResponse(ParityListRecentDapps.class);
         assertEquals(parityListRecentDapps.getDappsIds(), (Arrays.asList("web")));
     }
@@ -204,7 +206,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\":null\n"
                         + "}");
 
-        VoidResponse voidResponse = deserialiseResponse(VoidResponse.class);
+        final VoidResponse voidResponse = deserialiseResponse(VoidResponse.class);
         assertTrue(voidResponse.isValid());
     }
 
@@ -266,10 +268,10 @@ public class ResponseTest extends ResponseTester {
                         + "    \"id\": 1\n"
                         + "}");
 
-        ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
+        final ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
         assertNotNull(response);
 
-        Map<String, StateDiff> stateDiffMap = new LinkedHashMap<>();
+        final Map<String, StateDiff> stateDiffMap = new LinkedHashMap<>();
         stateDiffMap.put(
                 "0x00a0a24b9f0e5ec7aa4c7389b8302fd0123194de",
                 new StateDiff(
@@ -299,7 +301,7 @@ public class ResponseTest extends ResponseTester {
                                         new StateDiff.AddedState(
                                                 "0x00000000000000000000000014772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a")))));
 
-        FullTraceInfo info = new FullTraceInfo("0x", stateDiffMap, null, null);
+        final FullTraceInfo info = new FullTraceInfo("0x", stateDiffMap, null, null);
         assertEquals(response.getFullTraceInfo(), (info));
     }
 
@@ -385,12 +387,12 @@ public class ResponseTest extends ResponseTester {
                         + "    \"id\": 1\n"
                         + "}");
 
-        ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
+        final ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
         assertNotNull(response);
 
-        org.web3j.protocol.parity.methods.response.Trace trace1 =
+        final org.web3j.protocol.parity.methods.response.Trace trace1 =
                 new org.web3j.protocol.parity.methods.response.Trace();
-        Trace.CreateAction action1 = new Trace.CreateAction();
+        final Trace.CreateAction action1 = new Trace.CreateAction();
         action1.setFrom("0x6c24f4387b31251fd7b6d7a1269d880b2108bf3a");
         action1.setGas("0x4bc1f5");
         action1.setInit(
@@ -412,9 +414,9 @@ public class ResponseTest extends ResponseTester {
         trace1.setTransactionPosition(BigInteger.ONE);
         trace1.setType("create");
 
-        org.web3j.protocol.parity.methods.response.Trace trace2 =
+        final org.web3j.protocol.parity.methods.response.Trace trace2 =
                 new org.web3j.protocol.parity.methods.response.Trace();
-        Trace.CallAction action2 = new Trace.CallAction();
+        final Trace.CallAction action2 = new Trace.CallAction();
         action2.setCallType("call");
         action2.setFrom("0x14772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a");
         action2.setTo("0x781ab1a38837e351bfe1e318c6587766848abffa");
@@ -427,9 +429,9 @@ public class ResponseTest extends ResponseTester {
         trace2.setTraceAddress(Collections.emptyList());
         trace2.setType("call");
 
-        org.web3j.protocol.parity.methods.response.Trace trace3 =
+        final org.web3j.protocol.parity.methods.response.Trace trace3 =
                 new org.web3j.protocol.parity.methods.response.Trace();
-        Trace.SuicideAction action3 = new Trace.SuicideAction();
+        final Trace.SuicideAction action3 = new Trace.SuicideAction();
         action3.setAddress("0xb8d2ac822f3d0445f5b83d32b0b176c2cb3d0e60");
         action3.setBalance("0x0");
         action3.setRefundAddress("0x14772e4f805b4dd2e69bd6d3f9b5edf0dfa5385a");
@@ -443,9 +445,9 @@ public class ResponseTest extends ResponseTester {
         trace3.setTransactionPosition(BigInteger.valueOf(2));
         trace3.setType("suicide");
 
-        org.web3j.protocol.parity.methods.response.Trace trace4 =
+        final org.web3j.protocol.parity.methods.response.Trace trace4 =
                 new org.web3j.protocol.parity.methods.response.Trace();
-        Trace.RewardAction action4 = new Trace.RewardAction();
+        final Trace.RewardAction action4 = new Trace.RewardAction();
         action4.setAuthor("0xb8d2ac822f3d0445f5b83d32b0b176c2cb3d0e60");
         action4.setValue("0x0");
         action4.setRewardType("reward");
@@ -456,12 +458,12 @@ public class ResponseTest extends ResponseTester {
         trace4.setTraceAddress(Collections.singletonList(BigInteger.ZERO));
         trace4.setType("reward");
 
-        List<org.web3j.protocol.parity.methods.response.Trace> traces = new ArrayList<>();
+        final List<org.web3j.protocol.parity.methods.response.Trace> traces = new ArrayList<>();
         traces.add(trace1);
         traces.add(trace2);
         traces.add(trace3);
         traces.add(trace4);
-        FullTraceInfo info = new FullTraceInfo("0x", null, traces, null);
+        final FullTraceInfo info = new FullTraceInfo("0x", null, traces, null);
         assertEquals(response.getFullTraceInfo(), (info));
     }
 
@@ -529,10 +531,10 @@ public class ResponseTest extends ResponseTester {
                         + "    \"id\": 1\n"
                         + "}");
 
-        ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
+        final ParityFullTraceResponse response = deserialiseResponse(ParityFullTraceResponse.class);
         assertNotNull(response);
 
-        VMTrace.VMOperation operation1 =
+        final VMTrace.VMOperation operation1 =
                 new VMTrace.VMOperation(
                         null,
                         BigInteger.valueOf(20000),
@@ -544,7 +546,7 @@ public class ResponseTest extends ResponseTester {
                                 BigInteger.valueOf(241835)),
                         BigInteger.valueOf(79));
 
-        VMTrace.VMOperation subOperation =
+        final VMTrace.VMOperation subOperation =
                 new VMTrace.VMOperation(
                         null,
                         BigInteger.valueOf(3),
@@ -555,7 +557,7 @@ public class ResponseTest extends ResponseTester {
                                 BigInteger.valueOf(5753235)),
                         BigInteger.ZERO);
 
-        VMTrace.VMOperation operation2 =
+        final VMTrace.VMOperation operation2 =
                 new VMTrace.VMOperation(
                         new VMTrace(
                                 "0x606060405236156100b75763ffffffff",
@@ -568,11 +570,11 @@ public class ResponseTest extends ResponseTester {
                                 BigInteger.valueOf(317494)),
                         BigInteger.valueOf(337));
 
-        VMTrace trace =
+        final VMTrace trace =
                 new VMTrace(
                         "0x6060604052361561004a576000357c01",
                         Arrays.asList(operation1, operation2));
-        FullTraceInfo info = new FullTraceInfo("0x", null, null, trace);
+        final FullTraceInfo info = new FullTraceInfo("0x", null, null, trace);
         assertEquals(response.getFullTraceInfo(), (info));
     }
 }

@@ -27,11 +27,11 @@ import static org.mockito.Mockito.verify;
 
 public class JsonRpc2_0Web3jTest {
 
-    private ScheduledExecutorService scheduledExecutorService =
+    private final ScheduledExecutorService scheduledExecutorService =
             mock(ScheduledExecutorService.class);
-    private Web3jService service = mock(Web3jService.class);
+    private final Web3jService service = mock(Web3jService.class);
 
-    private Web3j web3j = Web3j.build(service, 10, scheduledExecutorService);
+    private final Web3j web3j = Web3j.build(service, 10, scheduledExecutorService);
 
     @Test
     public void testStopExecutorOnShutdown() throws Exception {

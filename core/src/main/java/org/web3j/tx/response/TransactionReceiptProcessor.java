@@ -25,16 +25,16 @@ public abstract class TransactionReceiptProcessor {
 
     private final Web3j web3j;
 
-    public TransactionReceiptProcessor(Web3j web3j) {
+    public TransactionReceiptProcessor(final Web3j web3j) {
         this.web3j = web3j;
     }
 
     public abstract TransactionReceipt waitForTransactionReceipt(String transactionHash)
             throws IOException, TransactionException;
 
-    Optional<? extends TransactionReceipt> sendTransactionReceiptRequest(String transactionHash)
-            throws IOException, TransactionException {
-        EthGetTransactionReceipt transactionReceipt =
+    Optional<? extends TransactionReceipt> sendTransactionReceiptRequest(
+            final String transactionHash) throws IOException, TransactionException {
+        final EthGetTransactionReceipt transactionReceipt =
                 web3j.ethGetTransactionReceipt(transactionHash).send();
         if (transactionReceipt.hasError()) {
             throw new TransactionException(

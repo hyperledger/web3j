@@ -106,7 +106,7 @@ public class ResponseTest extends ResponseTester {
                         + "  }"
                         + "}");
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        final EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         assertTrue(ethBlock.hasError());
         assertEquals(
                 ethBlock.getError(),
@@ -126,7 +126,7 @@ public class ResponseTest extends ResponseTester {
                         + "  }"
                         + "}");
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        final EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         assertTrue(ethBlock.hasError());
         assertEquals(ethBlock.getError().getData(), ("{\"foo\":\"bar\"}"));
     }
@@ -140,7 +140,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"Mist/v0.9.3/darwin/go1.4.1\"\n"
                         + "}");
 
-        Web3ClientVersion web3ClientVersion = deserialiseResponse(Web3ClientVersion.class);
+        final Web3ClientVersion web3ClientVersion = deserialiseResponse(Web3ClientVersion.class);
         assertEquals(web3ClientVersion.getWeb3ClientVersion(), ("Mist/v0.9.3/darwin/go1.4.1"));
     }
 
@@ -154,7 +154,7 @@ public class ResponseTest extends ResponseTester {
                         + "\"0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad\"\n"
                         + "}");
 
-        Web3Sha3 web3Sha3 = deserialiseResponse(Web3Sha3.class);
+        final Web3Sha3 web3Sha3 = deserialiseResponse(Web3Sha3.class);
         assertEquals(
                 web3Sha3.getResult(),
                 ("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
@@ -169,7 +169,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"59\"\n"
                         + "}");
 
-        NetVersion netVersion = deserialiseResponse(NetVersion.class);
+        final NetVersion netVersion = deserialiseResponse(NetVersion.class);
         assertEquals(netVersion.getNetVersion(), ("59"));
     }
 
@@ -182,7 +182,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\":true\n"
                         + "}");
 
-        NetListening netListening = deserialiseResponse(NetListening.class);
+        final NetListening netListening = deserialiseResponse(NetListening.class);
         assertEquals(netListening.isListening(), (true));
     }
 
@@ -195,7 +195,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x2\"\n"
                         + "}");
 
-        NetPeerCount netPeerCount = deserialiseResponse(NetPeerCount.class);
+        final NetPeerCount netPeerCount = deserialiseResponse(NetPeerCount.class);
         assertEquals(netPeerCount.getQuantity(), (BigInteger.valueOf(2L)));
     }
 
@@ -245,7 +245,7 @@ public class ResponseTest extends ResponseTester {
                         + "    }\n"
                         + "}");
 
-        AdminNodeInfo adminNodeInfo = deserialiseResponse(AdminNodeInfo.class);
+        final AdminNodeInfo adminNodeInfo = deserialiseResponse(AdminNodeInfo.class);
         assertEquals(
                 adminNodeInfo.getResult().getName(),
                 ("Geth/v1.9.6-stable-bd059680/linux-amd64/go1.13.1"));
@@ -260,7 +260,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"54\"\n"
                         + "}");
 
-        EthProtocolVersion ethProtocolVersion = deserialiseResponse(EthProtocolVersion.class);
+        final EthProtocolVersion ethProtocolVersion = deserialiseResponse(EthProtocolVersion.class);
         assertEquals(ethProtocolVersion.getProtocolVersion(), ("54"));
     }
 
@@ -282,7 +282,7 @@ public class ResponseTest extends ResponseTester {
         // \"highestBlock\":\"0x21dab4\",\"knownStates\":\"0x0\",\"pulledStates\":\"0x0\",
         // \"startingBlock\":\"0xa51\"}}"
 
-        EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
+        final EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
 
         assertEquals(
                 ethSyncing.getResult(),
@@ -298,7 +298,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": false\n"
                         + "}");
 
-        EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
+        final EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
         assertEquals(ethSyncing.isSyncing(), (false));
     }
 
@@ -311,7 +311,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        EthMining ethMining = deserialiseResponse(EthMining.class);
+        final EthMining ethMining = deserialiseResponse(EthMining.class);
         assertEquals(ethMining.isMining(), (true));
     }
 
@@ -324,7 +324,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x38a\"\n"
                         + "}");
 
-        EthHashrate ethHashrate = deserialiseResponse(EthHashrate.class);
+        final EthHashrate ethHashrate = deserialiseResponse(EthHashrate.class);
         assertEquals(ethHashrate.getHashrate(), (BigInteger.valueOf(906L)));
     }
 
@@ -337,7 +337,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x9184e72a000\"\n"
                         + "}");
 
-        EthGasPrice ethGasPrice = deserialiseResponse(EthGasPrice.class);
+        final EthGasPrice ethGasPrice = deserialiseResponse(EthGasPrice.class);
         assertEquals(ethGasPrice.getGasPrice(), (BigInteger.valueOf(10000000000000L)));
     }
 
@@ -350,7 +350,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": [\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]\n"
                         + "}");
 
-        EthAccounts ethAccounts = deserialiseResponse(EthAccounts.class);
+        final EthAccounts ethAccounts = deserialiseResponse(EthAccounts.class);
         assertEquals(
                 ethAccounts.getAccounts(),
                 (Arrays.asList("0x407d73d8a49eeb85d32cf465507dd71d507100c1")));
@@ -365,7 +365,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x4b7\"\n"
                         + "}");
 
-        EthBlockNumber ethBlockNumber = deserialiseResponse(EthBlockNumber.class);
+        final EthBlockNumber ethBlockNumber = deserialiseResponse(EthBlockNumber.class);
         assertEquals(ethBlockNumber.getBlockNumber(), (BigInteger.valueOf(1207L)));
     }
 
@@ -378,7 +378,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x234c8a3397aab58\"\n"
                         + "}");
 
-        EthGetBalance ethGetBalance = deserialiseResponse(EthGetBalance.class);
+        final EthGetBalance ethGetBalance = deserialiseResponse(EthGetBalance.class);
         assertEquals(ethGetBalance.getBalance(), (BigInteger.valueOf(158972490234375000L)));
     }
 
@@ -392,7 +392,7 @@ public class ResponseTest extends ResponseTester {
                         + "\"0x000000000000000000000000000000000000000000000000000000000000162e\""
                         + "}");
 
-        EthGetStorageAt ethGetStorageAt = deserialiseResponse(EthGetStorageAt.class);
+        final EthGetStorageAt ethGetStorageAt = deserialiseResponse(EthGetStorageAt.class);
         assertEquals(
                 ethGetStorageAt.getResult(),
                 ("0x000000000000000000000000000000000000000000000000000000000000162e"));
@@ -407,7 +407,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x1\"\n"
                         + "}");
 
-        EthGetTransactionCount ethGetTransactionCount =
+        final EthGetTransactionCount ethGetTransactionCount =
                 deserialiseResponse((EthGetTransactionCount.class));
         assertEquals(ethGetTransactionCount.getTransactionCount(), (BigInteger.valueOf(1L)));
     }
@@ -421,7 +421,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0xb\"\n"
                         + "}");
 
-        EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash =
+        final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash =
                 deserialiseResponse(EthGetBlockTransactionCountByHash.class);
         assertEquals(
                 ethGetBlockTransactionCountByHash.getTransactionCount(), (BigInteger.valueOf(11)));
@@ -436,7 +436,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0xa\"\n"
                         + "}");
 
-        EthGetBlockTransactionCountByNumber ethGetBlockTransactionCountByNumber =
+        final EthGetBlockTransactionCountByNumber ethGetBlockTransactionCountByNumber =
                 deserialiseResponse(EthGetBlockTransactionCountByNumber.class);
         assertEquals(
                 ethGetBlockTransactionCountByNumber.getTransactionCount(),
@@ -452,7 +452,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x1\"\n"
                         + "}");
 
-        EthGetUncleCountByBlockHash ethGetUncleCountByBlockHash =
+        final EthGetUncleCountByBlockHash ethGetUncleCountByBlockHash =
                 deserialiseResponse(EthGetUncleCountByBlockHash.class);
         assertEquals(ethGetUncleCountByBlockHash.getUncleCount(), (BigInteger.valueOf(1)));
     }
@@ -466,7 +466,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x1\"\n"
                         + "}");
 
-        EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber =
+        final EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber =
                 deserialiseResponse(EthGetUncleCountByBlockNumber.class);
         assertEquals(ethGetUncleCountByBlockNumber.getUncleCount(), (BigInteger.valueOf(1)));
     }
@@ -481,7 +481,7 @@ public class ResponseTest extends ResponseTester {
                         + "65b8060005260206000f25b600060078202905091905056\"\n"
                         + "}");
 
-        EthGetCode ethGetCode = deserialiseResponse(EthGetCode.class);
+        final EthGetCode ethGetCode = deserialiseResponse(EthGetCode.class);
         assertEquals(
                 ethGetCode.getCode(),
                 ("0x600160008035811a818181146012578301005b601b60013560255"
@@ -499,7 +499,7 @@ public class ResponseTest extends ResponseTester {
                         + "7ea4871e996cdc8cae7690408b4e800f60ddac49d2ad34180e68f1da0aaf001\"\n"
                         + "}");
 
-        EthSign ethSign = deserialiseResponse(EthSign.class);
+        final EthSign ethSign = deserialiseResponse(EthSign.class);
         assertEquals(
                 ethSign.getSignature(),
                 ("0xbd685c98ec39490f50d15c67ba2a8e9b5b1d6d7601fca80b295e7d717446bd8b7127ea4871e9"
@@ -516,7 +516,7 @@ public class ResponseTest extends ResponseTester {
                         + "\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
                         + "}");
 
-        EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
+        final EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
         assertEquals(
                 ethSendTransaction.getTransactionHash(),
                 ("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
@@ -532,7 +532,7 @@ public class ResponseTest extends ResponseTester {
                         + "\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
                         + "}");
 
-        EthSendRawTransaction ethSendRawTransaction =
+        final EthSendRawTransaction ethSendRawTransaction =
                 deserialiseResponse(EthSendRawTransaction.class);
         assertEquals(
                 ethSendRawTransaction.getTransactionHash(),
@@ -548,7 +548,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x\"\n"
                         + "}");
 
-        EthCall ethCall = deserialiseResponse(EthCall.class);
+        final EthCall ethCall = deserialiseResponse(EthCall.class);
         assertEquals(ethCall.getValue(), ("0x"));
         assertFalse(ethCall.isReverted());
         assertNull(ethCall.getRevertReason());
@@ -573,7 +573,7 @@ public class ResponseTest extends ResponseTester {
                         + "6e616c20636f6e7472616374732e000000000000000000000000000000000000\"\n"
                         + "}");
 
-        EthCall ethCall = deserialiseResponse(EthCall.class);
+        final EthCall ethCall = deserialiseResponse(EthCall.class);
         assertTrue(ethCall.isReverted());
         assertEquals(
                 ethCall.getRevertReason(),
@@ -594,7 +594,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x5208\"\n"
                         + "}");
 
-        EthEstimateGas ethEstimateGas = deserialiseResponse(EthEstimateGas.class);
+        final EthEstimateGas ethEstimateGas = deserialiseResponse(EthEstimateGas.class);
         assertEquals(ethEstimateGas.getAmountUsed(), (BigInteger.valueOf(21000)));
     }
 
@@ -641,8 +641,8 @@ public class ResponseTest extends ResponseTester {
                         + "  }\n"
                         + "}");
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        EthBlock.Block block =
+        final EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        final EthBlock.Block block =
                 new EthBlock.Block(
                         "0x1b4",
                         "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
@@ -747,8 +747,8 @@ public class ResponseTest extends ResponseTester {
                         + "  }\n"
                         + "}");
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        EthBlock.Block block =
+        final EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        final EthBlock.Block block =
                 new EthBlock.Block(
                         "0x1b4",
                         "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
@@ -877,8 +877,8 @@ public class ResponseTest extends ResponseTester {
                         + "  }\n"
                         + "}");
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        EthBlock.Block block =
+        final EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        final EthBlock.Block block =
                 new EthBlock.Block(
                         "0x1b4",
                         "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
@@ -942,7 +942,7 @@ public class ResponseTest extends ResponseTester {
     public void testEthBlockNull() {
         buildResponse("{\n" + "  \"result\": null\n" + "}");
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        final EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         assertNull(ethBlock.getBlock());
     }
     //
@@ -983,7 +983,7 @@ public class ResponseTest extends ResponseTester {
                         + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
                         + "  }\n"
                         + "}");
-        Transaction transaction =
+        final Transaction transaction =
                 new Transaction(
                         "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
                         "0x",
@@ -1012,20 +1012,20 @@ public class ResponseTest extends ResponseTester {
                                                 "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
                                                 "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))));
 
-        EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
+        final EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
         assertEquals(ethTransaction.getTransaction().get(), (transaction));
     }
 
     @Test
     public void testTransactionChainId() {
-        Transaction transaction = new Transaction();
+        final Transaction transaction = new Transaction();
         transaction.setV(0x25);
         assertEquals(transaction.getChainId(), (1L));
     }
 
     @Test
     public void testTransactionLongChainId() {
-        Transaction transaction = new Transaction();
+        final Transaction transaction = new Transaction();
         transaction.setV(0x4A817C823L);
         assertEquals(transaction.getChainId(), (10000000000L));
     }
@@ -1034,7 +1034,7 @@ public class ResponseTest extends ResponseTester {
     public void testEthTransactionNull() {
         buildResponse("{\n" + "  \"result\": null\n" + "}");
 
-        EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
+        final EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
         assertEquals(ethTransaction.getTransaction(), (Optional.empty()));
     }
 
@@ -1074,7 +1074,7 @@ public class ResponseTest extends ResponseTester {
                         + "  }\n"
                         + "}");
 
-        TransactionReceipt transactionReceipt =
+        final TransactionReceipt transactionReceipt =
                 new TransactionReceipt(
                         "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238",
                         "0x1",
@@ -1105,7 +1105,7 @@ public class ResponseTest extends ResponseTester {
                         null,
                         null);
 
-        EthGetTransactionReceipt ethGetTransactionReceipt =
+        final EthGetTransactionReceipt ethGetTransactionReceipt =
                 deserialiseResponse(EthGetTransactionReceipt.class);
         assertEquals(ethGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
     }
@@ -1146,7 +1146,7 @@ public class ResponseTest extends ResponseTester {
                         + "  }\n"
                         + "}");
 
-        TransactionReceipt transactionReceipt =
+        final TransactionReceipt transactionReceipt =
                 new TransactionReceipt(
                         "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238",
                         "0x1",
@@ -1177,21 +1177,21 @@ public class ResponseTest extends ResponseTester {
                         null,
                         null);
 
-        EthGetTransactionReceipt ethGetTransactionReceipt =
+        final EthGetTransactionReceipt ethGetTransactionReceipt =
                 deserialiseResponse(EthGetTransactionReceipt.class);
         assertEquals(ethGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
     }
 
     @Test
     public void testTransactionReceiptIsStatusOK() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        final TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setStatus("0x1");
         assertEquals(transactionReceipt.isStatusOK(), (true));
 
-        TransactionReceipt transactionReceiptNoStatus = new TransactionReceipt();
+        final TransactionReceipt transactionReceiptNoStatus = new TransactionReceipt();
         assertEquals(transactionReceiptNoStatus.isStatusOK(), (true));
 
-        TransactionReceipt transactionReceiptZeroStatus = new TransactionReceipt();
+        final TransactionReceipt transactionReceiptZeroStatus = new TransactionReceipt();
         transactionReceiptZeroStatus.setStatus("0x0");
         assertEquals(transactionReceiptZeroStatus.isStatusOK(), (false));
     }
@@ -1205,7 +1205,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": [\"solidity\", \"lll\", \"serpent\"]\n"
                         + "}");
 
-        EthGetCompilers ethGetCompilers = deserialiseResponse(EthGetCompilers.class);
+        final EthGetCompilers ethGetCompilers = deserialiseResponse(EthGetCompilers.class);
         assertEquals(ethGetCompilers.getCompilers(), (Arrays.asList("solidity", "lll", "serpent")));
     }
 
@@ -1257,7 +1257,7 @@ public class ResponseTest extends ResponseTester {
                         + "  }\n"
                         + "}");
 
-        Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<>(1);
+        final Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<>(1);
         compiledSolidity.put(
                 "test",
                 new EthCompileSolidity.Code(
@@ -1285,7 +1285,7 @@ public class ResponseTest extends ResponseTester {
                                 new EthCompileSolidity.Documentation(),
                                 new EthCompileSolidity.Documentation())));
 
-        EthCompileSolidity ethCompileSolidity = deserialiseResponse(EthCompileSolidity.class);
+        final EthCompileSolidity ethCompileSolidity = deserialiseResponse(EthCompileSolidity.class);
         assertEquals(ethCompileSolidity.getCompiledSolidity(), (compiledSolidity));
     }
 
@@ -1300,7 +1300,7 @@ public class ResponseTest extends ResponseTester {
                         + "905091905056\"\n"
                         + "}");
 
-        EthCompileLLL ethCompileLLL = deserialiseResponse(EthCompileLLL.class);
+        final EthCompileLLL ethCompileLLL = deserialiseResponse(EthCompileLLL.class);
         assertEquals(
                 ethCompileLLL.getCompiledSourceCode(),
                 ("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b60"
@@ -1318,7 +1318,7 @@ public class ResponseTest extends ResponseTester {
                         + "905091905056\"\n"
                         + "}");
 
-        EthCompileSerpent ethCompileSerpent = deserialiseResponse(EthCompileSerpent.class);
+        final EthCompileSerpent ethCompileSerpent = deserialiseResponse(EthCompileSerpent.class);
         assertEquals(
                 ethCompileSerpent.getCompiledSourceCode(),
                 ("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b60"
@@ -1334,7 +1334,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x1\"\n"
                         + "}");
 
-        EthFilter ethFilter = deserialiseResponse(EthFilter.class);
+        final EthFilter ethFilter = deserialiseResponse(EthFilter.class);
         assertEquals(ethFilter.getFilterId(), (BigInteger.valueOf(1)));
     }
 
@@ -1347,7 +1347,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        EthUninstallFilter ethUninstallFilter = deserialiseResponse(EthUninstallFilter.class);
+        final EthUninstallFilter ethUninstallFilter = deserialiseResponse(EthUninstallFilter.class);
         assertEquals(ethUninstallFilter.isUninstalled(), (true));
     }
 
@@ -1372,7 +1372,7 @@ public class ResponseTest extends ResponseTester {
                         + "    }]"
                         + "}");
 
-        List<Log> logs =
+        final List<Log> logs =
                 Collections.singletonList(
                         new EthLog.LogObject(
                                 false,
@@ -1387,7 +1387,7 @@ public class ResponseTest extends ResponseTester {
                                 Collections.singletonList(
                                         "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5")));
 
-        EthLog ethLog = deserialiseResponse(EthLog.class);
+        final EthLog ethLog = deserialiseResponse(EthLog.class);
         assertEquals(ethLog.getLogs(), (logs));
     }
 
@@ -1405,7 +1405,7 @@ public class ResponseTest extends ResponseTester {
                         + "    ]\n"
                         + "}");
 
-        EthGetWork ethGetWork = deserialiseResponse(EthGetWork.class);
+        final EthGetWork ethGetWork = deserialiseResponse(EthGetWork.class);
         assertEquals(
                 ethGetWork.getCurrentBlockHeaderPowHash(),
                 ("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"));
@@ -1426,7 +1426,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        EthSubmitWork ethSubmitWork = deserialiseResponse(EthSubmitWork.class);
+        final EthSubmitWork ethSubmitWork = deserialiseResponse(EthSubmitWork.class);
         assertEquals(ethSubmitWork.solutionValid(), (true));
     }
 
@@ -1439,7 +1439,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        EthSubmitHashrate ethSubmitHashrate = deserialiseResponse(EthSubmitHashrate.class);
+        final EthSubmitHashrate ethSubmitHashrate = deserialiseResponse(EthSubmitHashrate.class);
         assertEquals(ethSubmitHashrate.submissionSuccessful(), (true));
     }
 
@@ -1452,7 +1452,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        DbPutString dbPutString = deserialiseResponse(DbPutString.class);
+        final DbPutString dbPutString = deserialiseResponse(DbPutString.class);
         assertEquals(dbPutString.valueStored(), (true));
     }
 
@@ -1465,7 +1465,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"myString\"\n"
                         + "}");
 
-        DbGetString dbGetString = deserialiseResponse(DbGetString.class);
+        final DbGetString dbGetString = deserialiseResponse(DbGetString.class);
         assertEquals(dbGetString.getStoredValue(), ("myString"));
     }
 
@@ -1478,7 +1478,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        DbPutHex dbPutHex = deserialiseResponse(DbPutHex.class);
+        final DbPutHex dbPutHex = deserialiseResponse(DbPutHex.class);
         assertEquals(dbPutHex.valueStored(), (true));
     }
 
@@ -1491,7 +1491,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x68656c6c6f20776f726c64\"\n"
                         + "}");
 
-        DbGetHex dbGetHex = deserialiseResponse(DbGetHex.class);
+        final DbGetHex dbGetHex = deserialiseResponse(DbGetHex.class);
         assertEquals(dbGetHex.getStoredValue(), ("0x68656c6c6f20776f726c64"));
     }
 
@@ -1504,7 +1504,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"2\"\n"
                         + "}");
 
-        ShhVersion shhVersion = deserialiseResponse(ShhVersion.class);
+        final ShhVersion shhVersion = deserialiseResponse(ShhVersion.class);
         assertEquals(shhVersion.getVersion(), ("2"));
     }
 
@@ -1517,7 +1517,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        ShhPost shhPost = deserialiseResponse(ShhPost.class);
+        final ShhPost shhPost = deserialiseResponse(ShhPost.class);
         assertEquals(shhPost.messageSent(), (true));
     }
 
@@ -1532,7 +1532,7 @@ public class ResponseTest extends ResponseTester {
                         + "5d1d6ca9007d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf\"\n"
                         + "}");
 
-        ShhNewIdentity shhNewIdentity = deserialiseResponse(ShhNewIdentity.class);
+        final ShhNewIdentity shhNewIdentity = deserialiseResponse(ShhNewIdentity.class);
         assertEquals(
                 shhNewIdentity.getAddress(),
                 ("0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca9"
@@ -1548,7 +1548,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        ShhHasIdentity shhHasIdentity = deserialiseResponse(ShhHasIdentity.class);
+        final ShhHasIdentity shhHasIdentity = deserialiseResponse(ShhHasIdentity.class);
         assertEquals(shhHasIdentity.hasPrivateKeyForIdentity(), (true));
     }
 
@@ -1563,7 +1563,7 @@ public class ResponseTest extends ResponseTester {
                         + "23478ba2407d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf\"\n"
                         + "}");
 
-        ShhNewGroup shhNewGroup = deserialiseResponse(ShhNewGroup.class);
+        final ShhNewGroup shhNewGroup = deserialiseResponse(ShhNewGroup.class);
         assertEquals(
                 shhNewGroup.getAddress(),
                 ("0xc65f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca90931d93e97ab07fe42d923478ba24"
@@ -1579,7 +1579,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        ShhAddToGroup shhAddToGroup = deserialiseResponse(ShhAddToGroup.class);
+        final ShhAddToGroup shhAddToGroup = deserialiseResponse(ShhAddToGroup.class);
         assertEquals(shhAddToGroup.addedToGroup(), (true));
     }
 
@@ -1592,7 +1592,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x7\"\n"
                         + "}");
 
-        ShhNewFilter shhNewFilter = deserialiseResponse(ShhNewFilter.class);
+        final ShhNewFilter shhNewFilter = deserialiseResponse(ShhNewFilter.class);
         assertEquals(shhNewFilter.getFilterId(), (BigInteger.valueOf(7)));
     }
 
@@ -1605,7 +1605,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": true\n"
                         + "}");
 
-        ShhUninstallFilter shhUninstallFilter = deserialiseResponse(ShhUninstallFilter.class);
+        final ShhUninstallFilter shhUninstallFilter = deserialiseResponse(ShhUninstallFilter.class);
         assertEquals(shhUninstallFilter.isUninstalled(), (true));
     }
 
@@ -1629,7 +1629,7 @@ public class ResponseTest extends ResponseTester {
                         + "    }]\n"
                         + "}");
 
-        List<ShhMessages.SshMessage> messages =
+        final List<ShhMessages.SshMessage> messages =
                 Arrays.asList(
                         new ShhMessages.SshMessage(
                                 "0x33eb2da77bf3527e28f8bf493650b1879b08c4f2a362beae4ba2f71bafcd91f9",
@@ -1642,7 +1642,7 @@ public class ResponseTest extends ResponseTester {
                                 "0x7b2274797065223a226d657373616765222c2263686...",
                                 "0x0"));
 
-        ShhMessages shhMessages = deserialiseResponse(ShhMessages.class);
+        final ShhMessages shhMessages = deserialiseResponse(ShhMessages.class);
         assertEquals(shhMessages.getMessages(), (messages));
     }
 

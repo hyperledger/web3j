@@ -47,23 +47,23 @@ public class Transaction {
     public Transaction() {}
 
     public Transaction(
-            String hash,
-            String nonce,
-            String blockHash,
-            String blockNumber,
-            String transactionIndex,
-            String from,
-            String to,
-            String value,
-            String gas,
-            String gasPrice,
-            String input,
-            String creates,
-            String publicKey,
-            String raw,
-            String r,
-            String s,
-            long v,
+            final String hash,
+            final String nonce,
+            final String blockHash,
+            final String blockNumber,
+            final String transactionIndex,
+            final String from,
+            final String to,
+            final String value,
+            final String gas,
+            final String gasPrice,
+            final String input,
+            final String creates,
+            final String publicKey,
+            final String raw,
+            final String r,
+            final String s,
+            final long v,
             String type,
             String maxFeePerGas,
             String maxPriorityFeePerGas,
@@ -95,7 +95,7 @@ public class Transaction {
         return hash;
     }
 
-    public void setHash(String hash) {
+    public void setHash(final String hash) {
         this.hash = hash;
     }
 
@@ -103,7 +103,7 @@ public class Transaction {
         return Numeric.decodeQuantity(nonce);
     }
 
-    public void setNonce(String nonce) {
+    public void setNonce(final String nonce) {
         this.nonce = nonce;
     }
 
@@ -115,7 +115,7 @@ public class Transaction {
         return blockHash;
     }
 
-    public void setBlockHash(String blockHash) {
+    public void setBlockHash(final String blockHash) {
         this.blockHash = blockHash;
     }
 
@@ -123,7 +123,7 @@ public class Transaction {
         return Numeric.decodeQuantity(blockNumber);
     }
 
-    public void setBlockNumber(String blockNumber) {
+    public void setBlockNumber(final String blockNumber) {
         this.blockNumber = blockNumber;
     }
 
@@ -135,7 +135,7 @@ public class Transaction {
         return Numeric.decodeQuantity(transactionIndex);
     }
 
-    public void setTransactionIndex(String transactionIndex) {
+    public void setTransactionIndex(final String transactionIndex) {
         this.transactionIndex = transactionIndex;
     }
 
@@ -147,7 +147,7 @@ public class Transaction {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(final String from) {
         this.from = from;
     }
 
@@ -155,7 +155,7 @@ public class Transaction {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(final String to) {
         this.to = to;
     }
 
@@ -163,7 +163,7 @@ public class Transaction {
         return Numeric.decodeQuantity(value);
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 
@@ -199,7 +199,7 @@ public class Transaction {
         return input;
     }
 
-    public void setInput(String input) {
+    public void setInput(final String input) {
         this.input = input;
     }
 
@@ -207,7 +207,7 @@ public class Transaction {
         return creates;
     }
 
-    public void setCreates(String creates) {
+    public void setCreates(final String creates) {
         this.creates = creates;
     }
 
@@ -215,7 +215,7 @@ public class Transaction {
         return publicKey;
     }
 
-    public void setPublicKey(String publicKey) {
+    public void setPublicKey(final String publicKey) {
         this.publicKey = publicKey;
     }
 
@@ -223,7 +223,7 @@ public class Transaction {
         return raw;
     }
 
-    public void setRaw(String raw) {
+    public void setRaw(final String raw) {
         this.raw = raw;
     }
 
@@ -231,7 +231,7 @@ public class Transaction {
         return r;
     }
 
-    public void setR(String r) {
+    public void setR(final String r) {
         this.r = r;
     }
 
@@ -239,7 +239,7 @@ public class Transaction {
         return s;
     }
 
-    public void setS(String s) {
+    public void setS(final String s) {
         this.s = s;
     }
 
@@ -250,7 +250,7 @@ public class Transaction {
     // Workaround until Geth & Parity return consistent values. At present
     // Parity returns a byte value, Geth returns a hex-encoded string
     // https://github.com/ethereum/go-ethereum/issues/3339
-    public void setV(Object v) {
+    public void setV(final Object v) {
         if (v instanceof String) {
             this.v = Numeric.toBigInt((String) v).longValueExact();
         } else if (v instanceof Integer) {
@@ -305,7 +305,7 @@ public class Transaction {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -313,7 +313,7 @@ public class Transaction {
             return false;
         }
 
-        Transaction that = (Transaction) o;
+        final Transaction that = (Transaction) o;
 
         if (getV() != that.getV()) {
             return false;

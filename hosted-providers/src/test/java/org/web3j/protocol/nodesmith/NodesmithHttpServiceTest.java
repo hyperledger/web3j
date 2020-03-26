@@ -26,7 +26,7 @@ public class NodesmithHttpServiceTest {
 
     @Test
     public void testParseHeaders() {
-        Optional<RateLimitInfo> info =
+        final Optional<RateLimitInfo> info =
                 NodesmithHttpService.createRateLimitFromHeaders(
                         Headers.of(
                                 NodesmithHttpService.NS_RATELIMIT_LIMIT, "500",

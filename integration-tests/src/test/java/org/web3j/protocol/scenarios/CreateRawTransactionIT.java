@@ -44,38 +44,38 @@ public class CreateRawTransactionIT extends Scenario {
 
     @Test
     public void testTransferEther() throws Exception {
-        BigInteger nonce = getNonce(ALICE.getAddress());
-        RawTransaction rawTransaction = createEtherTransaction(nonce, BOB.getAddress());
+        final BigInteger nonce = getNonce(ALICE.getAddress());
+        final RawTransaction rawTransaction = createEtherTransaction(nonce, BOB.getAddress());
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
-        String hexValue = Numeric.toHexString(signedMessage);
+        final byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        final String hexValue = Numeric.toHexString(signedMessage);
 
-        EthSendTransaction ethSendTransaction =
+        final EthSendTransaction ethSendTransaction =
                 web3j.ethSendRawTransaction(hexValue).sendAsync().get();
-        String transactionHash = ethSendTransaction.getTransactionHash();
+        final String transactionHash = ethSendTransaction.getTransactionHash();
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
+        final TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertEquals(transactionHash, transactionReceipt.getTransactionHash());
     }
 
     @Test
     public void testDeploySmartContract() throws Exception {
-        BigInteger nonce = getNonce(ALICE.getAddress());
-        RawTransaction rawTransaction = createSmartContractTransaction(nonce);
+        final BigInteger nonce = getNonce(ALICE.getAddress());
+        final RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
-        String hexValue = Numeric.toHexString(signedMessage);
+        final byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        final String hexValue = Numeric.toHexString(signedMessage);
 
-        EthSendTransaction ethSendTransaction =
+        final EthSendTransaction ethSendTransaction =
                 web3j.ethSendRawTransaction(hexValue).sendAsync().get();
-        String transactionHash = ethSendTransaction.getTransactionHash();
+        final String transactionHash = ethSendTransaction.getTransactionHash();
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
+        final TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertEquals(transactionHash, transactionReceipt.getTransactionHash());
 
@@ -84,20 +84,21 @@ public class CreateRawTransactionIT extends Scenario {
                 "Contract execution ran out of gas");
     }
 
-    private static RawTransaction createEtherTransaction(BigInteger nonce, String toAddress) {
-        BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
+    private static RawTransaction createEtherTransaction(
+            final BigInteger nonce, final String toAddress) {
+        final BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
         return RawTransaction.createEtherTransaction(nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
     }
 
-    private static RawTransaction createSmartContractTransaction(BigInteger nonce)
+    private static RawTransaction createSmartContractTransaction(final BigInteger nonce)
             throws Exception {
         return RawTransaction.createContractTransaction(
                 nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, Fibonacci.BINARY);
     }
 
-    BigInteger getNonce(String address) throws Exception {
-        EthGetTransactionCount ethGetTransactionCount =
+    BigInteger getNonce(final String address) throws Exception {
+        final EthGetTransactionCount ethGetTransactionCount =
                 web3j.ethGetTransactionCount(address, DefaultBlockParameterName.LATEST)
                         .sendAsync()
                         .get();

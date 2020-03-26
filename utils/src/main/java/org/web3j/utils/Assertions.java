@@ -21,7 +21,8 @@ public class Assertions {
      * @param assertionResult assertion value
      * @param errorMessage error message if precondition failure
      */
-    public static void verifyPrecondition(boolean assertionResult, String errorMessage) {
+    public static void verifyPrecondition(
+            final boolean assertionResult, final String errorMessage) {
         if (!assertionResult) {
             throw new RuntimeException(errorMessage);
         }

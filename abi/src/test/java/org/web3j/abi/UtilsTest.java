@@ -74,18 +74,20 @@ public class UtilsTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testTypeMapNested() {
-        List<BigInteger> innerList1 = Arrays.asList(BigInteger.valueOf(1), BigInteger.valueOf(2));
-        List<BigInteger> innerList2 = Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(4));
+        final List<BigInteger> innerList1 =
+                Arrays.asList(BigInteger.valueOf(1), BigInteger.valueOf(2));
+        final List<BigInteger> innerList2 =
+                Arrays.asList(BigInteger.valueOf(3), BigInteger.valueOf(4));
 
         final List<List<BigInteger>> input = Arrays.asList(innerList1, innerList2);
 
-        StaticArray2<Uint256> staticArray1 =
+        final StaticArray2<Uint256> staticArray1 =
                 new StaticArray2<>(Uint256.class, new Uint256(1), new Uint256(2));
 
-        StaticArray2<Uint256> staticArray2 =
+        final StaticArray2<Uint256> staticArray2 =
                 new StaticArray2<>(Uint256.class, new Uint256(3), new Uint256(4));
 
-        List<StaticArray2> actual = typeMap(input, StaticArray2.class, Uint256.class);
+        final List<StaticArray2> actual = typeMap(input, StaticArray2.class, Uint256.class);
 
         assertEquals(actual.get(0), (staticArray1));
         assertEquals(actual.get(1), (staticArray2));

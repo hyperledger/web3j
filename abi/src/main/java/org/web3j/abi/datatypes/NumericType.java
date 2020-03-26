@@ -17,10 +17,10 @@ import java.math.BigInteger;
 /** Common numeric type. */
 public abstract class NumericType implements Type<BigInteger> {
 
-    private String type;
+    private final String type;
     BigInteger value;
 
-    public NumericType(String type, BigInteger value) {
+    public NumericType(final String type, final BigInteger value) {
         this.type = type;
         this.value = value;
     }
@@ -38,7 +38,7 @@ public abstract class NumericType implements Type<BigInteger> {
     public abstract int getBitSize();
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -46,7 +46,7 @@ public abstract class NumericType implements Type<BigInteger> {
             return false;
         }
 
-        NumericType that = (NumericType) o;
+        final NumericType that = (NumericType) o;
 
         if (!type.equals(that.type)) {
             return false;

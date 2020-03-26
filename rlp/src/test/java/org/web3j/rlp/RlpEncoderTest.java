@@ -157,9 +157,9 @@ public class RlpEncoderTest {
                 }));
 
         // 55 bytes. See https://github.com/web3j/web3j/issues/519
-        byte[] encodeMe = new byte[55];
+        final byte[] encodeMe = new byte[55];
         Arrays.fill(encodeMe, (byte) 0);
-        byte[] expectedEncoding = new byte[56];
+        final byte[] expectedEncoding = new byte[56];
         expectedEncoding[0] = (byte) 0xb7;
         System.arraycopy(encodeMe, 0, expectedEncoding, 1, encodeMe.length);
         assertArrayEquals(RlpEncoder.encode(RlpString.create(encodeMe)), (expectedEncoding));

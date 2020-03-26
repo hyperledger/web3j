@@ -20,7 +20,7 @@ public class DynamicArray<T extends Type> extends Array<T> {
     @Deprecated
     @SafeVarargs
     @SuppressWarnings({"unchecked"})
-    public DynamicArray(T... values) {
+    public DynamicArray(final T... values) {
         super(
                 StructType.class.isAssignableFrom(values[0].getClass())
                         ? (Class<T>) values[0].getClass()
@@ -30,7 +30,7 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
     @Deprecated
     @SuppressWarnings("unchecked")
-    public DynamicArray(List<T> values) {
+    public DynamicArray(final List<T> values) {
         super(
                 StructType.class.isAssignableFrom(values.get(0).getClass())
                         ? (Class<T>) values.get(0).getClass()
@@ -40,16 +40,16 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
     @Deprecated
     @SuppressWarnings("unchecked")
-    private DynamicArray(String type) {
+    private DynamicArray(final String type) {
         super((Class<T>) AbiTypes.getType(type));
     }
 
     @Deprecated
-    public static DynamicArray empty(String type) {
+    public static DynamicArray empty(final String type) {
         return new DynamicArray(type);
     }
 
-    public DynamicArray(Class<T> type, List<T> values) {
+    public DynamicArray(final Class<T> type, final List<T> values) {
         super(type, values);
     }
 
@@ -59,7 +59,7 @@ public class DynamicArray<T extends Type> extends Array<T> {
     }
 
     @SafeVarargs
-    public DynamicArray(Class<T> type, T... values) {
+    public DynamicArray(final Class<T> type, final T... values) {
         super(type, values);
     }
 

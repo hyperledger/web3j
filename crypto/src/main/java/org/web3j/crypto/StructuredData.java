@@ -29,8 +29,8 @@ public class StructuredData {
 
         @JsonCreator
         public Entry(
-                @JsonProperty(value = "name") String name,
-                @JsonProperty(value = "type") String type) {
+                @JsonProperty(value = "name") final String name,
+                @JsonProperty(value = "type") final String type) {
             this.name = name;
             this.type = type;
         }
@@ -94,10 +94,10 @@ public class StructuredData {
 
         @JsonCreator
         public EIP712Message(
-                @JsonProperty(value = "types") HashMap<String, List<Entry>> types,
-                @JsonProperty(value = "primaryType") String primaryType,
-                @JsonProperty(value = "message") Object message,
-                @JsonProperty(value = "domain") EIP712Domain domain) {
+                @JsonProperty(value = "types") final HashMap<String, List<Entry>> types,
+                @JsonProperty(value = "primaryType") final String primaryType,
+                @JsonProperty(value = "message") final Object message,
+                @JsonProperty(value = "domain") final EIP712Domain domain) {
             this.types = types;
             this.primaryType = primaryType;
             this.message = message;

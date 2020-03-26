@@ -43,7 +43,7 @@ public interface Parity extends Admin, Trace {
      * @param web3jService web3j service instance - i.e. HTTP or IPC
      * @return new Parity instance
      */
-    static Parity build(Web3jService web3jService) {
+    static Parity build(final Web3jService web3jService) {
         return new JsonRpc2_0Parity(web3jService);
     }
 
@@ -57,9 +57,9 @@ public interface Parity extends Admin, Trace {
      * @return new Parity instance
      */
     static Parity build(
-            Web3jService web3jService,
-            long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService) {
+            final Web3jService web3jService,
+            final long pollingInterval,
+            final ScheduledExecutorService scheduledExecutorService) {
         return new JsonRpc2_0Parity(web3jService, pollingInterval, scheduledExecutorService);
     }
 

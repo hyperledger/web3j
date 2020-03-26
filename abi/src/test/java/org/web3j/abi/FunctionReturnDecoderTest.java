@@ -41,7 +41,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testSimpleFunctionDecode() {
-        Function function =
+        final Function function =
                 new Function(
                         "test",
                         Collections.<Type<?>>emptyList(),
@@ -56,13 +56,13 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testSimpleFunctionStringResultDecode() {
-        Function function =
+        final Function function =
                 new Function(
                         "simple",
                         Arrays.asList(),
                         Collections.singletonList(new TypeReference<Utf8String>() {}));
 
-        List<Type<?>> utf8Strings =
+        final List<Type<?>> utf8Strings =
                 FunctionReturnDecoder.decode(
                         "0x0000000000000000000000000000000000000000000000000000000000000020"
                                 + "000000000000000000000000000000000000000000000000000000000000000d"
@@ -74,13 +74,13 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testFunctionEmptyStringResultDecode() {
-        Function function =
+        final Function function =
                 new Function(
                         "test",
                         Collections.emptyList(),
                         Collections.singletonList(new TypeReference<Utf8String>() {}));
 
-        List<Type<?>> utf8Strings =
+        final List<Type<?>> utf8Strings =
                 FunctionReturnDecoder.decode(
                         "0x0000000000000000000000000000000000000000000000000000000000000020"
                                 + "0000000000000000000000000000000000000000000000000000000000000000",
@@ -91,7 +91,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testMultipleResultFunctionDecode() {
-        Function function =
+        final Function function =
                 new Function(
                         "test",
                         Collections.<Type<?>>emptyList(),
@@ -107,7 +107,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeMultipleStringValues() {
-        Function function =
+        final Function function =
                 new Function(
                         "function",
                         Collections.<Type<?>>emptyList(),
@@ -140,30 +140,32 @@ public class FunctionReturnDecoderTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testDecodeStaticArrayValue() {
-        List<TypeReference<Type<?>>> outputParameters = new ArrayList<>(1);
+        final List<TypeReference<Type<?>>> outputParameters = new ArrayList<>(1);
         outputParameters.add(
                 (TypeReference)
                         new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {});
         outputParameters.add((TypeReference) new TypeReference<Uint256>() {});
 
-        List<Type<?>> decoded =
+        final List<Type<?>> decoded =
                 FunctionReturnDecoder.decode(
                         "0x0000000000000000000000000000000000000000000000000000000000000037"
                                 + "0000000000000000000000000000000000000000000000000000000000000001"
                                 + "000000000000000000000000000000000000000000000000000000000000000a",
                         outputParameters);
 
-        StaticArray2<Uint256> uint256StaticArray2 =
+        final StaticArray2<Uint256> uint256StaticArray2 =
                 new StaticArray2<>(
                         new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE));
 
-        List<Type<?>> expected = Arrays.asList(uint256StaticArray2, new Uint256(BigInteger.TEN));
+        final List<Type<?>> expected =
+                Arrays.asList(uint256StaticArray2, new Uint256(BigInteger.TEN));
         assertEquals(decoded, (expected));
     }
 
     @Test
     public void testVoidResultFunctionDecode() {
-        Function function = new Function("test", Collections.emptyList(), Collections.emptyList());
+        final Function function =
+                new Function("test", Collections.emptyList(), Collections.emptyList());
 
         assertEquals(
                 FunctionReturnDecoder.decode("0x", function.getOutputParameters()),
@@ -172,7 +174,7 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testEmptyResultFunctionDecode() {
-        Function function =
+        final Function function =
                 new Function(
                         "test",
                         Collections.emptyList(),
@@ -185,8 +187,8 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedUint256Value() {
-        Uint256 value = new Uint256(BigInteger.TEN);
-        String encoded = TypeEncoder.encodeNumeric(value);
+        final Uint256 value = new Uint256(BigInteger.TEN);
+        final String encoded = TypeEncoder.encodeNumeric(value);
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(encoded, new TypeReference<Uint256>() {}),
@@ -195,9 +197,9 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedStringValue() {
-        Utf8String string = new Utf8String("some text");
-        String encoded = TypeEncoder.encodeString(string);
-        String hash = Hash.sha3(encoded);
+        final Utf8String string = new Utf8String("some text");
+        final String encoded = TypeEncoder.encodeString(string);
+        final String hash = Hash.sha3(encoded);
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(hash, new TypeReference<Utf8String>() {}),
@@ -206,8 +208,9 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedBytes32Value() {
-        String rawInput = "0x1234567890123456789012345678901234567890123456789012345678901234";
-        byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput);
+        final String rawInput =
+                "0x1234567890123456789012345678901234567890123456789012345678901234";
+        final byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput);
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes32>() {}),
@@ -216,8 +219,9 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedBytes16Value() {
-        String rawInput = "0x1234567890123456789012345678901200000000000000000000000000000000";
-        byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput.substring(0, 34));
+        final String rawInput =
+                "0x1234567890123456789012345678901200000000000000000000000000000000";
+        final byte[] rawInputBytes = Numeric.hexStringToByteArray(rawInput.substring(0, 34));
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(rawInput, new TypeReference<Bytes16>() {}),
@@ -226,9 +230,9 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedDynamicBytesValue() {
-        DynamicBytes bytes = new DynamicBytes(new byte[] {1, 2, 3, 4, 5});
-        String encoded = TypeEncoder.encodeDynamicBytes(bytes);
-        String hash = Hash.sha3(encoded);
+        final DynamicBytes bytes = new DynamicBytes(new byte[] {1, 2, 3, 4, 5});
+        final String encoded = TypeEncoder.encodeDynamicBytes(bytes);
+        final String hash = Hash.sha3(encoded);
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(
@@ -238,11 +242,11 @@ public class FunctionReturnDecoderTest {
 
     @Test
     public void testDecodeIndexedDynamicArrayValue() {
-        DynamicArray<Uint256> array =
+        final DynamicArray<Uint256> array =
                 new DynamicArray<>(Uint256.class, new Uint256(BigInteger.TEN));
 
-        String encoded = TypeEncoder.encodeDynamicArray(array);
-        String hash = Hash.sha3(encoded);
+        final String encoded = TypeEncoder.encodeDynamicArray(array);
+        final String hash = Hash.sha3(encoded);
 
         assertEquals(
                 FunctionReturnDecoder.decodeIndexedValue(

@@ -46,14 +46,14 @@ import org.web3j.utils.Numeric;
 /** JSON-RPC 2.0 factory implementation for Parity. */
 public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
-    public JsonRpc2_0Parity(Web3jService web3jService) {
+    public JsonRpc2_0Parity(final Web3jService web3jService) {
         super(web3jService);
     }
 
     public JsonRpc2_0Parity(
-            Web3jService web3jService,
-            long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService) {
+            final Web3jService web3jService,
+            final long pollingInterval,
+            final ScheduledExecutorService scheduledExecutorService) {
         super(web3jService, pollingInterval, scheduledExecutorService);
     }
 
@@ -68,7 +68,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, BooleanResponse> parityChangePassword(
-            String accountId, String oldPassword, String newPassword) {
+            final String accountId, final String oldPassword, final String newPassword) {
         return new Request<>(
                 "parity_changePassword",
                 Arrays.asList(accountId, oldPassword, newPassword),
@@ -78,7 +78,10 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityDeriveAddress> parityDeriveAddressHash(
-            String accountId, String password, Derivation hashType, boolean toSave) {
+            final String accountId,
+            final String password,
+            final Derivation hashType,
+            final boolean toSave) {
         return new Request<>(
                 "parity_deriveAddressHash",
                 Arrays.asList(accountId, password, hashType, toSave),
@@ -88,7 +91,10 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityDeriveAddress> parityDeriveAddressIndex(
-            String accountId, String password, List<Derivation> indicesType, boolean toSave) {
+            final String accountId,
+            final String password,
+            final List<Derivation> indicesType,
+            final boolean toSave) {
         return new Request<>(
                 "parity_deriveAddressIndex",
                 Arrays.asList(accountId, password, indicesType, toSave),
@@ -97,7 +103,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityExportAccount> parityExportAccount(String accountId, String password) {
+    public Request<?, ParityExportAccount> parityExportAccount(
+            final String accountId, final String password) {
         return new Request<>(
                 "parity_exportAccount",
                 Arrays.asList(accountId, password),
@@ -106,7 +113,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityAddressesResponse> parityGetDappAddresses(String dAppId) {
+    public Request<?, ParityAddressesResponse> parityGetDappAddresses(final String dAppId) {
         return new Request<>(
                 "parity_getDappAddresses",
                 Arrays.asList(dAppId),
@@ -115,7 +122,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityDefaultAddressResponse> parityGetDappDefaultAddress(String dAppId) {
+    public Request<?, ParityDefaultAddressResponse> parityGetDappDefaultAddress(
+            final String dAppId) {
         return new Request<>(
                 "parity_getDappDefaultAddress",
                 Arrays.asList(dAppId),
@@ -143,7 +151,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityAddressesResponse> parityImportGethAccounts(
-            ArrayList<String> gethAddresses) {
+            final ArrayList<String> gethAddresses) {
         return new Request<>(
                 "parity_importGethAccounts",
                 gethAddresses,
@@ -152,7 +160,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, BooleanResponse> parityKillAccount(String accountId, String password) {
+    public Request<?, BooleanResponse> parityKillAccount(
+            final String accountId, final String password) {
         return new Request<>(
                 "parity_killAccount",
                 Arrays.asList(accountId, password),
@@ -162,7 +171,9 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityAddressesResponse> parityListAccounts(
-            BigInteger quantity, String accountId, DefaultBlockParameter blockParameter) {
+            final BigInteger quantity,
+            final String accountId,
+            final DefaultBlockParameter blockParameter) {
         if (blockParameter == null) {
             return new Request<>(
                     "parity_listAccounts",
@@ -198,7 +209,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, NewAccountIdentifier> parityNewAccountFromPhrase(
-            String phrase, String password) {
+            final String phrase, final String password) {
         return new Request<>(
                 "parity_newAccountFromPhrase",
                 Arrays.asList(phrase, password),
@@ -208,7 +219,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, NewAccountIdentifier> parityNewAccountFromSecret(
-            String secret, String password) {
+            final String secret, final String password) {
         return new Request<>(
                 "parity_newAccountFromSecret",
                 Arrays.asList(secret, password),
@@ -218,7 +229,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, NewAccountIdentifier> parityNewAccountFromWallet(
-            WalletFile walletFile, String password) {
+            final WalletFile walletFile, final String password) {
         return new Request<>(
                 "parity_newAccountFromWallet",
                 Arrays.asList(walletFile, password),
@@ -227,7 +238,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, BooleanResponse> parityRemoveAddress(String accountId) {
+    public Request<?, BooleanResponse> parityRemoveAddress(final String accountId) {
         return new Request<>(
                 "parity_RemoveAddress",
                 Arrays.asList(accountId),
@@ -237,7 +248,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, BooleanResponse> paritySetAccountMeta(
-            String accountId, Map<String, Object> metadata) {
+            final String accountId, final Map<String, Object> metadata) {
         return new Request<>(
                 "parity_setAccountMeta",
                 Arrays.asList(accountId, metadata),
@@ -246,7 +257,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, BooleanResponse> paritySetAccountName(String address, String name) {
+    public Request<?, BooleanResponse> paritySetAccountName(
+            final String address, final String name) {
         return new Request<>(
                 "parity_setAccountName",
                 Arrays.asList(address, name),
@@ -256,7 +268,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, BooleanResponse> paritySetDappAddresses(
-            String dAppId, ArrayList<String> availableAccountIds) {
+            final String dAppId, final ArrayList<String> availableAccountIds) {
         return new Request<>(
                 "parity_setDappAddresses",
                 Arrays.asList(dAppId, availableAccountIds),
@@ -266,7 +278,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, BooleanResponse> paritySetDappDefaultAddress(
-            String dAppId, String defaultAddress) {
+            final String dAppId, final String defaultAddress) {
         return new Request<>(
                 "parity_setDappDefaultAddress",
                 Arrays.asList(dAppId, defaultAddress),
@@ -276,7 +288,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, BooleanResponse> paritySetNewDappsAddresses(
-            ArrayList<String> availableAccountIds) {
+            final ArrayList<String> availableAccountIds) {
         return new Request<>(
                 "parity_setNewDappsAddresses",
                 Arrays.asList(availableAccountIds),
@@ -285,7 +297,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, BooleanResponse> paritySetNewDappsDefaultAddress(String defaultAddress) {
+    public Request<?, BooleanResponse> paritySetNewDappsDefaultAddress(
+            final String defaultAddress) {
         return new Request<>(
                 "parity_setNewDappsDefaultAddress",
                 Arrays.asList(defaultAddress),
@@ -294,7 +307,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, BooleanResponse> parityTestPassword(String accountId, String password) {
+    public Request<?, BooleanResponse> parityTestPassword(
+            final String accountId, final String password) {
         return new Request<>(
                 "parity_testPassword",
                 Arrays.asList(accountId, password),
@@ -304,7 +318,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, PersonalSign> paritySignMessage(
-            String accountId, String password, String hexMessage) {
+            final String accountId, final String password, final String hexMessage) {
         return new Request<>(
                 "parity_signMessage",
                 Arrays.asList(accountId, password, hexMessage),
@@ -316,7 +330,9 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityFullTraceResponse> traceCall(
-            Transaction transaction, List<String> traces, DefaultBlockParameter blockParameter) {
+            final Transaction transaction,
+            final List<String> traces,
+            final DefaultBlockParameter blockParameter) {
         return new Request<>(
                 "trace_call",
                 Arrays.asList(transaction, traces, blockParameter),
@@ -326,7 +342,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityFullTraceResponse> traceRawTransaction(
-            String data, List<String> traceTypes) {
+            final String data, final List<String> traceTypes) {
         return new Request<>(
                 "trace_rawTransaction",
                 Arrays.asList(data, traceTypes),
@@ -336,7 +352,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
 
     @Override
     public Request<?, ParityFullTraceResponse> traceReplayTransaction(
-            String hash, List<String> traceTypes) {
+            final String hash, final List<String> traceTypes) {
         return new Request<>(
                 "trace_replayTransaction",
                 Arrays.asList(hash, traceTypes),
@@ -345,7 +361,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityTracesResponse> traceBlock(DefaultBlockParameter blockParameter) {
+    public Request<?, ParityTracesResponse> traceBlock(final DefaultBlockParameter blockParameter) {
         return new Request<>(
                 "trace_block",
                 Arrays.asList(blockParameter),
@@ -354,7 +370,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityTracesResponse> traceFilter(TraceFilter traceFilter) {
+    public Request<?, ParityTracesResponse> traceFilter(final TraceFilter traceFilter) {
         return new Request<>(
                 "trace_filter",
                 Arrays.asList(traceFilter),
@@ -363,8 +379,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityTraceGet> traceGet(String hash, List<BigInteger> indices) {
-        List<String> encodedIndices =
+    public Request<?, ParityTraceGet> traceGet(final String hash, final List<BigInteger> indices) {
+        final List<String> encodedIndices =
                 indices.stream().map(Numeric::encodeQuantity).collect(Collectors.toList());
         return new Request<>(
                 "trace_get",
@@ -374,7 +390,7 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     @Override
-    public Request<?, ParityTracesResponse> traceTransaction(String hash) {
+    public Request<?, ParityTracesResponse> traceTransaction(final String hash) {
         return new Request<>(
                 "trace_transaction", Arrays.asList(hash), web3jService, ParityTracesResponse.class);
     }

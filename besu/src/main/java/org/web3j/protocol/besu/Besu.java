@@ -51,7 +51,7 @@ public interface Besu extends Eea, BesuRx {
      * @param web3jService web3j service instance - i.e. HTTP
      * @return new Besu instance
      */
-    static Besu build(Web3jService web3jService) {
+    static Besu build(final Web3jService web3jService) {
         return new JsonRpc2_0Besu(web3jService);
     }
 

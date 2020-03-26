@@ -163,7 +163,7 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String encodedEvent() {
-        Event event =
+        final Event event =
                 new Event(
                         "Notify",
                         Arrays.asList(

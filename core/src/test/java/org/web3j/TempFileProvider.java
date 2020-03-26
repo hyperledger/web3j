@@ -31,7 +31,7 @@ public class TempFileProvider {
 
     @AfterEach
     public void tearDown() throws Exception {
-        for (File file : tempDir.listFiles()) {
+        for (final File file : tempDir.listFiles()) {
             file.delete();
         }
         tempDir.delete();

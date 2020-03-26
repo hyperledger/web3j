@@ -20,8 +20,8 @@ import io.reactivex.subjects.BehaviorSubject;
  * @param <T> type of a data item that should be returned by a WebSocket subscription.
  */
 public class WebSocketSubscription<T> {
-    private BehaviorSubject<T> subject;
-    private Class<T> responseType;
+    private final BehaviorSubject<T> subject;
+    private final Class<T> responseType;
 
     /**
      * Creates WebSocketSubscription.
@@ -29,7 +29,7 @@ public class WebSocketSubscription<T> {
      * @param subject used to send new data items to listeners
      * @param responseType type of a data item returned by a WebSocket subscription
      */
-    public WebSocketSubscription(BehaviorSubject<T> subject, Class<T> responseType) {
+    public WebSocketSubscription(final BehaviorSubject<T> subject, final Class<T> responseType) {
         this.subject = subject;
         this.responseType = responseType;
     }

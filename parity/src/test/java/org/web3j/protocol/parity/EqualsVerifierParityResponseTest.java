@@ -37,8 +37,8 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testFullTraceInfo() {
-        VMTrace vmTrace1 = new VMTrace("one", new ArrayList<>());
-        VMTrace vmTrace2 = new VMTrace("two", new ArrayList<>());
+        final VMTrace vmTrace1 = new VMTrace("one", new ArrayList<>());
+        final VMTrace vmTrace2 = new VMTrace("two", new ArrayList<>());
 
         EqualsVerifier.forClass(FullTraceInfo.class)
                 .withPrefabValues(VMTrace.class, vmTrace1, vmTrace2)
@@ -81,8 +81,8 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testVMTrace() {
-        VMTrace.VMOperation op1 = new VMTrace.VMOperation(null, BigInteger.ZERO, null, null);
-        VMTrace.VMOperation op2 = new VMTrace.VMOperation(null, BigInteger.ONE, null, null);
+        final VMTrace.VMOperation op1 = new VMTrace.VMOperation(null, BigInteger.ZERO, null, null);
+        final VMTrace.VMOperation op2 = new VMTrace.VMOperation(null, BigInteger.ONE, null, null);
 
         EqualsVerifier.forClass(VMTrace.class)
                 .withPrefabValues(VMTrace.VMOperation.class, op1, op2)
@@ -93,8 +93,8 @@ public class EqualsVerifierParityResponseTest {
 
     @Test
     public void testVMTraceVMOperation() {
-        VMTrace vmTrace1 = new VMTrace("one", new ArrayList<>());
-        VMTrace vmTrace2 = new VMTrace("two", new ArrayList<>());
+        final VMTrace vmTrace1 = new VMTrace("one", new ArrayList<>());
+        final VMTrace vmTrace2 = new VMTrace("two", new ArrayList<>());
 
         EqualsVerifier.forClass(VMTrace.VMOperation.class)
                 .withPrefabValues(VMTrace.class, vmTrace1, vmTrace2)

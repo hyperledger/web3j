@@ -24,12 +24,12 @@ import org.web3j.protocol.exceptions.TransactionException;
  */
 public class NoOpProcessor extends TransactionReceiptProcessor {
 
-    public NoOpProcessor(Web3j web3j) {
+    public NoOpProcessor(final Web3j web3j) {
         super(web3j);
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(String transactionHash)
+    public TransactionReceipt waitForTransactionReceipt(final String transactionHash)
             throws IOException, TransactionException {
         return new EmptyTransactionReceipt(transactionHash);
     }

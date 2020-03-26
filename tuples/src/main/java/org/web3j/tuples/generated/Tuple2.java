@@ -15,7 +15,7 @@ public final class Tuple2<T1, T2> implements Tuple {
 
     private final T2 value2;
 
-    public Tuple2(T1 value1, T2 value2) {
+    public Tuple2(final T1 value1, final T2 value2) {
         this.value1 = value1;
         this.value2 = value2;
     }
@@ -52,14 +52,14 @@ public final class Tuple2<T1, T2> implements Tuple {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple2<?, ?> tuple2 = (Tuple2<?, ?>) o;
+        final Tuple2<?, ?> tuple2 = (Tuple2<?, ?>) o;
         if (value1 != null ? !value1.equals(tuple2.value1) : tuple2.value1 != null) {
             return false;
         }

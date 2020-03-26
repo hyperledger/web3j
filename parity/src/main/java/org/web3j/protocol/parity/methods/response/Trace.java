@@ -62,7 +62,8 @@ public class Trace {
 
         public SuicideAction() {}
 
-        public SuicideAction(String address, String balance, String refundAddress) {
+        public SuicideAction(
+                final String address, final String balance, final String refundAddress) {
             this.address = address;
             this.balance = balance;
             this.refundAddress = refundAddress;
@@ -72,7 +73,7 @@ public class Trace {
             return address;
         }
 
-        public void setAddress(String address) {
+        public void setAddress(final String address) {
             this.address = address;
         }
 
@@ -84,7 +85,7 @@ public class Trace {
             return balance;
         }
 
-        public void setBalance(String balance) {
+        public void setBalance(final String balance) {
             this.balance = balance;
         }
 
@@ -92,12 +93,12 @@ public class Trace {
             return refundAddress;
         }
 
-        public void setRefundAddress(String refundAddress) {
+        public void setRefundAddress(final String refundAddress) {
             this.refundAddress = refundAddress;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -105,7 +106,7 @@ public class Trace {
                 return false;
             }
 
-            SuicideAction that = (SuicideAction) o;
+            final SuicideAction that = (SuicideAction) o;
 
             if (getAddress() != null
                     ? !getAddress().equals(that.getAddress())
@@ -159,7 +160,12 @@ public class Trace {
         public CallAction() {}
 
         public CallAction(
-                String callType, String from, String to, String gas, String input, String value) {
+                final String callType,
+                final String from,
+                final String to,
+                final String gas,
+                final String input,
+                final String value) {
             this.callType = callType;
             this.from = from;
             this.to = to;
@@ -172,7 +178,7 @@ public class Trace {
             return callType;
         }
 
-        public void setCallType(String callType) {
+        public void setCallType(final String callType) {
             this.callType = callType;
         }
 
@@ -180,7 +186,7 @@ public class Trace {
             return from;
         }
 
-        public void setFrom(String from) {
+        public void setFrom(final String from) {
             this.from = from;
         }
 
@@ -188,7 +194,7 @@ public class Trace {
             return to;
         }
 
-        public void setTo(String to) {
+        public void setTo(final String to) {
             this.to = to;
         }
 
@@ -200,7 +206,7 @@ public class Trace {
             return gas;
         }
 
-        public void setGas(String gas) {
+        public void setGas(final String gas) {
             this.gas = gas;
         }
 
@@ -208,7 +214,7 @@ public class Trace {
             return input;
         }
 
-        public void setInput(String input) {
+        public void setInput(final String input) {
             this.input = input;
         }
 
@@ -220,12 +226,12 @@ public class Trace {
             return value;
         }
 
-        public void setValue(String value) {
+        public void setValue(final String value) {
             this.value = value;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -233,7 +239,7 @@ public class Trace {
                 return false;
             }
 
-            CallAction that = (CallAction) o;
+            final CallAction that = (CallAction) o;
 
             if (getCallType() != null
                     ? !getCallType().equals(that.getCallType())
@@ -307,7 +313,8 @@ public class Trace {
 
         public CreateAction() {}
 
-        public CreateAction(String from, String gas, String value, String init) {
+        public CreateAction(
+                final String from, final String gas, final String value, final String init) {
             this.from = from;
             this.gas = gas;
             this.value = value;
@@ -322,7 +329,7 @@ public class Trace {
             return value;
         }
 
-        public void setValue(String value) {
+        public void setValue(final String value) {
             this.value = value;
         }
 
@@ -334,7 +341,7 @@ public class Trace {
             return gas;
         }
 
-        public void setGas(String gas) {
+        public void setGas(final String gas) {
             this.gas = gas;
         }
 
@@ -342,7 +349,7 @@ public class Trace {
             return from;
         }
 
-        public void setFrom(String from) {
+        public void setFrom(final String from) {
             this.from = from;
         }
 
@@ -350,12 +357,12 @@ public class Trace {
             return init;
         }
 
-        public void setInit(String init) {
+        public void setInit(final String init) {
             this.init = init;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -363,7 +370,7 @@ public class Trace {
                 return false;
             }
 
-            CreateAction that = (CreateAction) o;
+            final CreateAction that = (CreateAction) o;
 
             if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
                 return false;
@@ -418,7 +425,7 @@ public class Trace {
 
         public RewardAction() {}
 
-        public RewardAction(String author, String value, String rewardType) {
+        public RewardAction(final String author, final String value, final String rewardType) {
             this.author = author;
             this.value = value;
             this.rewardType = rewardType;
@@ -432,7 +439,7 @@ public class Trace {
             return value;
         }
 
-        public void setValue(String value) {
+        public void setValue(final String value) {
             this.value = value;
         }
 
@@ -440,7 +447,7 @@ public class Trace {
             return author;
         }
 
-        public void setAuthor(String author) {
+        public void setAuthor(final String author) {
             this.author = author;
         }
 
@@ -448,12 +455,12 @@ public class Trace {
             return rewardType;
         }
 
-        public void setRewardType(String rewardType) {
+        public void setRewardType(final String rewardType) {
             this.rewardType = rewardType;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -461,7 +468,7 @@ public class Trace {
                 return false;
             }
 
-            RewardAction that = (RewardAction) o;
+            final RewardAction that = (RewardAction) o;
 
             if (getAuthor() != null
                     ? !getAuthor().equals(that.getAuthor())
@@ -511,7 +518,11 @@ public class Trace {
 
         public Result() {}
 
-        public Result(String address, String code, String gasUsed, String output) {
+        public Result(
+                final String address,
+                final String code,
+                final String gasUsed,
+                final String output) {
             this.address = address;
             this.code = code;
             this.gasUsed = gasUsed;
@@ -522,7 +533,7 @@ public class Trace {
             return address;
         }
 
-        public void setAddress(String address) {
+        public void setAddress(final String address) {
             this.address = address;
         }
 
@@ -530,7 +541,7 @@ public class Trace {
             return code;
         }
 
-        public void setCode(String code) {
+        public void setCode(final String code) {
             this.code = code;
         }
 
@@ -542,7 +553,7 @@ public class Trace {
             return gasUsed;
         }
 
-        public void setGasUsed(String gasUsed) {
+        public void setGasUsed(final String gasUsed) {
             this.gasUsed = gasUsed;
         }
 
@@ -550,12 +561,12 @@ public class Trace {
             return output;
         }
 
-        public void setOutput(String output) {
+        public void setOutput(final String output) {
             this.output = output;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -563,7 +574,7 @@ public class Trace {
                 return false;
             }
 
-            Result result = (Result) o;
+            final Result result = (Result) o;
 
             if (getAddress() != null
                     ? !getAddress().equals(result.getAddress())
@@ -616,16 +627,16 @@ public class Trace {
     public Trace() {}
 
     public Trace(
-            Action action,
-            String error,
-            Result result,
-            BigInteger subtraces,
-            List<BigInteger> traceAddress,
-            String type,
-            String blockHash,
-            BigInteger blockNumber,
-            String transactionHash,
-            BigInteger transactionPosition) {
+            final Action action,
+            final String error,
+            final Result result,
+            final BigInteger subtraces,
+            final List<BigInteger> traceAddress,
+            final String type,
+            final String blockHash,
+            final BigInteger blockNumber,
+            final String transactionHash,
+            final BigInteger transactionPosition) {
         this.action = action;
         this.error = error;
         this.result = result;
@@ -642,7 +653,7 @@ public class Trace {
         return action;
     }
 
-    public void setAction(Action action) {
+    public void setAction(final Action action) {
         this.action = action;
     }
 
@@ -650,7 +661,7 @@ public class Trace {
         return error;
     }
 
-    public void setError(String error) {
+    public void setError(final String error) {
         this.error = error;
     }
 
@@ -658,7 +669,7 @@ public class Trace {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(final Result result) {
         this.result = result;
     }
 
@@ -666,7 +677,7 @@ public class Trace {
         return subtraces;
     }
 
-    public void setSubtraces(BigInteger subtraces) {
+    public void setSubtraces(final BigInteger subtraces) {
         this.subtraces = subtraces;
     }
 
@@ -674,7 +685,7 @@ public class Trace {
         return traceAddress;
     }
 
-    public void setTraceAddress(List<BigInteger> traceAddress) {
+    public void setTraceAddress(final List<BigInteger> traceAddress) {
         this.traceAddress = traceAddress;
     }
 
@@ -682,7 +693,7 @@ public class Trace {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -690,7 +701,7 @@ public class Trace {
         return blockHash;
     }
 
-    public void setBlockHash(String blockHash) {
+    public void setBlockHash(final String blockHash) {
         this.blockHash = blockHash;
     }
 
@@ -698,7 +709,7 @@ public class Trace {
         return blockNumber;
     }
 
-    public void setBlockNumber(BigInteger blockNumber) {
+    public void setBlockNumber(final BigInteger blockNumber) {
         this.blockNumber = blockNumber;
     }
 
@@ -706,7 +717,7 @@ public class Trace {
         return transactionHash;
     }
 
-    public void setTransactionHash(String transactionHash) {
+    public void setTransactionHash(final String transactionHash) {
         this.transactionHash = transactionHash;
     }
 
@@ -714,12 +725,12 @@ public class Trace {
         return transactionPosition;
     }
 
-    public void setTransactionPosition(BigInteger transactionPosition) {
+    public void setTransactionPosition(final BigInteger transactionPosition) {
         this.transactionPosition = transactionPosition;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -727,7 +738,7 @@ public class Trace {
             return false;
         }
 
-        Trace trace = (Trace) o;
+        final Trace trace = (Trace) o;
 
         if (getAction() != null
                 ? !getAction().equals(trace.getAction())
@@ -828,10 +839,10 @@ public class Trace {
     public static class ActionDeserializer extends JsonDeserializer<Action> {
 
         @Override
-        public Action deserialize(JsonParser jsonParser, DeserializationContext context)
+        public Action deserialize(final JsonParser jsonParser, final DeserializationContext context)
                 throws IOException {
-            ObjectMapper objectMapper = (ObjectMapper) jsonParser.getCodec();
-            ObjectNode root = objectMapper.readTree(jsonParser);
+            final ObjectMapper objectMapper = (ObjectMapper) jsonParser.getCodec();
+            final ObjectNode root = objectMapper.readTree(jsonParser);
 
             if (root.has("callType")) {
                 return objectMapper.convertValue(root, CallAction.class);

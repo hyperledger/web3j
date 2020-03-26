@@ -28,49 +28,52 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketClient.class);
 
-    private Optional<WebSocketListener> listenerOpt = Optional.empty();
+    private WebSocketListener listener = null;
 
-    public WebSocketClient(URI serverUri) {
+    public WebSocketClient(final URI serverUri) {
         super(serverUri);
     }
 
-    public WebSocketClient(URI serverUri, Map<String, String> httpHeaders) {
+    public WebSocketClient(final URI serverUri, final Map<String, String> httpHeaders) {
         super(serverUri, httpHeaders);
     }
 
     @Override
-    public void onOpen(ServerHandshake serverHandshake) {
+    public void onOpen(final ServerHandshake serverHandshake) {
         log.debug("Opened WebSocket connection to {}", uri);
     }
 
     @Override
-    public void onMessage(String s) {
+    public void onMessage(final String s) {
         log.debug("Received message {} from server {}", s, uri);
-        listenerOpt.ifPresent(
-                listener -> {
-                    try {
-                        listener.onMessage(s);
-                    } catch (Exception e) {
-                        log.error("Failed to process message '{}' from server {}", s, uri, e);
-                    }
-                });
+        if (listener != null) {
+            try {
+                listener.onMessage(s);
+            } catch (final Exception e) {
+                log.error("Failed to process message '{}' from server {}", s, uri, e);
+            }
+        }
     }
 
     @Override
-    public void onClose(int code, String reason, boolean remote) {
+    public void onClose(final int code, final String reason, final boolean remote) {
         log.debug(
                 "Closed WebSocket connection to {}, because of reason: '{}'."
                         + "Connection closed remotely: {}",
                 uri,
                 reason,
                 remote);
-        listenerOpt.ifPresent(WebSocketListener::onClose);
+        if (listener != null) {
+            listener.onClose();   
+        }
     }
 
     @Override
-    public void onError(Exception e) {
+    public void onError(final Exception e) {
         log.error("WebSocket connection to {} failed with error", uri, e);
-        listenerOpt.ifPresent(listener -> listener.onError(e));
+        if (listener != null) {
+            listener.onError(e);
+        }
     }
 
     /**
@@ -78,7 +81,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
      *
      * @param listener WebSocket listener
      */
-    public void setListener(WebSocketListener listener) {
-        this.listenerOpt = Optional.ofNullable(listener);
+    public void setListener(final WebSocketListener listener) {
+        this.listener = listener;
     }
 }

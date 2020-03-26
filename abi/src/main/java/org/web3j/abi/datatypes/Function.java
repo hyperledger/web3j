@@ -20,12 +20,14 @@ import static org.web3j.abi.Utils.convert;
 
 /** Function type. */
 public class Function {
-    private String name;
-    private List<Type<?>> inputParameters;
-    private List<TypeReference<Type<?>>> outputParameters;
+    private final String name;
+    private final List<Type<?>> inputParameters;
+    private final List<TypeReference<Type<?>>> outputParameters;
 
     public Function(
-            String name, List<Type<?>> inputParameters, List<TypeReference<?>> outputParameters) {
+            final String name,
+            final List<Type<?>> inputParameters,
+            final List<TypeReference<?>> outputParameters) {
         this.name = name;
         this.inputParameters = inputParameters;
         this.outputParameters = convert(outputParameters);

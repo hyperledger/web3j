@@ -21,7 +21,7 @@ public class RequestTest extends RequestTester {
     private Eea web3j;
 
     @Override
-    protected void initWeb3Client(HttpService httpService) {
+    protected void initWeb3Client(final HttpService httpService) {
         web3j = Eea.build(httpService);
     }
 

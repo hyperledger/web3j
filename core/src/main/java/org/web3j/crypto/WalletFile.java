@@ -37,7 +37,7 @@ public class WalletFile {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(final String address) {
         this.address = address;
     }
 
@@ -46,12 +46,12 @@ public class WalletFile {
     }
 
     @JsonSetter("crypto")
-    public void setCrypto(Crypto crypto) {
+    public void setCrypto(final Crypto crypto) {
         this.crypto = crypto;
     }
 
     @JsonSetter("Crypto") // older wallet files may have this attribute name
-    public void setCryptoV1(Crypto crypto) {
+    public void setCryptoV1(final Crypto crypto) {
         setCrypto(crypto);
     }
 
@@ -59,7 +59,7 @@ public class WalletFile {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -67,12 +67,12 @@ public class WalletFile {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(final int version) {
         this.version = version;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -80,7 +80,7 @@ public class WalletFile {
             return false;
         }
 
-        WalletFile that = (WalletFile) o;
+        final WalletFile that = (WalletFile) o;
 
         if (getAddress() != null
                 ? !getAddress().equals(that.getAddress())
@@ -123,7 +123,7 @@ public class WalletFile {
             return cipher;
         }
 
-        public void setCipher(String cipher) {
+        public void setCipher(final String cipher) {
             this.cipher = cipher;
         }
 
@@ -131,7 +131,7 @@ public class WalletFile {
             return ciphertext;
         }
 
-        public void setCiphertext(String ciphertext) {
+        public void setCiphertext(final String ciphertext) {
             this.ciphertext = ciphertext;
         }
 
@@ -139,7 +139,7 @@ public class WalletFile {
             return cipherparams;
         }
 
-        public void setCipherparams(CipherParams cipherparams) {
+        public void setCipherparams(final CipherParams cipherparams) {
             this.cipherparams = cipherparams;
         }
 
@@ -147,7 +147,7 @@ public class WalletFile {
             return kdf;
         }
 
-        public void setKdf(String kdf) {
+        public void setKdf(final String kdf) {
             this.kdf = kdf;
         }
 
@@ -167,7 +167,7 @@ public class WalletFile {
         //  @JsonDeserialize(using = KdfParamsDeserialiser.class)
         // Also add the following to the ObjectMapperFactory
         // objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-        public void setKdfparams(KdfParams kdfparams) {
+        public void setKdfparams(final KdfParams kdfparams) {
             this.kdfparams = kdfparams;
         }
 
@@ -175,12 +175,12 @@ public class WalletFile {
             return mac;
         }
 
-        public void setMac(String mac) {
+        public void setMac(final String mac) {
             this.mac = mac;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -188,7 +188,7 @@ public class WalletFile {
                 return false;
             }
 
-            Crypto that = (Crypto) o;
+            final Crypto that = (Crypto) o;
 
             if (getCipher() != null
                     ? !getCipher().equals(that.getCipher())
@@ -237,12 +237,12 @@ public class WalletFile {
             return iv;
         }
 
-        public void setIv(String iv) {
+        public void setIv(final String iv) {
             this.iv = iv;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -250,14 +250,14 @@ public class WalletFile {
                 return false;
             }
 
-            CipherParams that = (CipherParams) o;
+            final CipherParams that = (CipherParams) o;
 
             return getIv() != null ? getIv().equals(that.getIv()) : that.getIv() == null;
         }
 
         @Override
         public int hashCode() {
-            int result = getIv() != null ? getIv().hashCode() : 0;
+            final int result = getIv() != null ? getIv().hashCode() : 0;
             return result;
         }
     }
@@ -280,7 +280,7 @@ public class WalletFile {
             return dklen;
         }
 
-        public void setDklen(int dklen) {
+        public void setDklen(final int dklen) {
             this.dklen = dklen;
         }
 
@@ -288,7 +288,7 @@ public class WalletFile {
             return c;
         }
 
-        public void setC(int c) {
+        public void setC(final int c) {
             this.c = c;
         }
 
@@ -296,7 +296,7 @@ public class WalletFile {
             return prf;
         }
 
-        public void setPrf(String prf) {
+        public void setPrf(final String prf) {
             this.prf = prf;
         }
 
@@ -304,12 +304,12 @@ public class WalletFile {
             return salt;
         }
 
-        public void setSalt(String salt) {
+        public void setSalt(final String salt) {
             this.salt = salt;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -317,7 +317,7 @@ public class WalletFile {
                 return false;
             }
 
-            Aes128CtrKdfParams that = (Aes128CtrKdfParams) o;
+            final Aes128CtrKdfParams that = (Aes128CtrKdfParams) o;
 
             if (dklen != that.dklen) {
                 return false;
@@ -354,7 +354,7 @@ public class WalletFile {
             return dklen;
         }
 
-        public void setDklen(int dklen) {
+        public void setDklen(final int dklen) {
             this.dklen = dklen;
         }
 
@@ -362,7 +362,7 @@ public class WalletFile {
             return n;
         }
 
-        public void setN(int n) {
+        public void setN(final int n) {
             this.n = n;
         }
 
@@ -370,7 +370,7 @@ public class WalletFile {
             return p;
         }
 
-        public void setP(int p) {
+        public void setP(final int p) {
             this.p = p;
         }
 
@@ -378,7 +378,7 @@ public class WalletFile {
             return r;
         }
 
-        public void setR(int r) {
+        public void setR(final int r) {
             this.r = r;
         }
 
@@ -386,12 +386,12 @@ public class WalletFile {
             return salt;
         }
 
-        public void setSalt(String salt) {
+        public void setSalt(final String salt) {
             this.salt = salt;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -399,7 +399,7 @@ public class WalletFile {
                 return false;
             }
 
-            ScryptKdfParams that = (ScryptKdfParams) o;
+            final ScryptKdfParams that = (ScryptKdfParams) o;
 
             if (dklen != that.dklen) {
                 return false;
@@ -433,16 +433,16 @@ public class WalletFile {
 
         @Override
         public KdfParams deserialize(
-                JsonParser jsonParser, DeserializationContext deserializationContext)
+                final JsonParser jsonParser, final DeserializationContext deserializationContext)
                 throws IOException {
 
-            ObjectMapper objectMapper = (ObjectMapper) jsonParser.getCodec();
-            ObjectNode root = objectMapper.readTree(jsonParser);
-            KdfParams kdfParams;
+            final ObjectMapper objectMapper = (ObjectMapper) jsonParser.getCodec();
+            final ObjectNode root = objectMapper.readTree(jsonParser);
+            final KdfParams kdfParams;
 
             // it would be preferable to detect the class to use based on the kdf parameter in the
             // container object instance
-            JsonNode n = root.get("n");
+            final JsonNode n = root.get("n");
             if (n == null) {
                 kdfParams = objectMapper.convertValue(root, Aes128CtrKdfParams.class);
             } else {

@@ -28,21 +28,21 @@ public class EventTest {
     @Test
     public void testCreation() {
 
-        List<TypeReference<?>> parameters =
+        final List<TypeReference<?>> parameters =
                 Arrays.<TypeReference<?>>asList(
                         new TypeReference<Address>() {}, new TypeReference<Uint256>() {});
-        Event event = new Event("testName", parameters);
+        final Event event = new Event("testName", parameters);
 
         assertEquals(event.getName(), "testName");
 
-        Iterator<TypeReference<?>> expectedParameter = parameters.iterator();
-        for (TypeReference<?> actualParameter : event.getParameters()) {
+        final Iterator<TypeReference<?>> expectedParameter = parameters.iterator();
+        for (final TypeReference<?> actualParameter : event.getParameters()) {
             assertEquals(expectedParameter.next(), actualParameter);
         }
 
         assertEquals(0, event.getIndexedParameters().size());
 
-        for (TypeReference<?> nonIndexedParameter : event.getNonIndexedParameters()) {
+        for (final TypeReference<?> nonIndexedParameter : event.getNonIndexedParameters()) {
             assertEquals(false, nonIndexedParameter.isIndexed());
         }
     }

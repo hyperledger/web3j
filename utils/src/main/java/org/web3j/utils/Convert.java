@@ -18,19 +18,19 @@ import java.math.BigDecimal;
 public final class Convert {
     private Convert() {}
 
-    public static BigDecimal fromWei(String number, Unit unit) {
+    public static BigDecimal fromWei(final String number, final Unit unit) {
         return fromWei(new BigDecimal(number), unit);
     }
 
-    public static BigDecimal fromWei(BigDecimal number, Unit unit) {
+    public static BigDecimal fromWei(final BigDecimal number, final Unit unit) {
         return number.divide(unit.getWeiFactor());
     }
 
-    public static BigDecimal toWei(String number, Unit unit) {
+    public static BigDecimal toWei(final String number, final Unit unit) {
         return toWei(new BigDecimal(number), unit);
     }
 
-    public static BigDecimal toWei(BigDecimal number, Unit unit) {
+    public static BigDecimal toWei(final BigDecimal number, final Unit unit) {
         return number.multiply(unit.getWeiFactor());
     }
 
@@ -46,10 +46,10 @@ public final class Convert {
         METHER("mether", 24),
         GETHER("gether", 27);
 
-        private String name;
-        private BigDecimal weiFactor;
+        private final String name;
+        private final BigDecimal weiFactor;
 
-        Unit(String name, int factor) {
+        Unit(final String name, final int factor) {
             this.name = name;
             this.weiFactor = BigDecimal.TEN.pow(factor);
         }
@@ -63,9 +63,9 @@ public final class Convert {
             return name;
         }
 
-        public static Unit fromString(String name) {
+        public static Unit fromString(final String name) {
             if (name != null) {
-                for (Unit unit : Unit.values()) {
+                for (final Unit unit : Unit.values()) {
                     if (name.equalsIgnoreCase(unit.name)) {
                         return unit;
                     }

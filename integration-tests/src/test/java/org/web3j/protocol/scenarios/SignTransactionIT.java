@@ -58,12 +58,12 @@ public class SignTransactionIT extends Scenario {
         byte[] encoded = TransactionEncoder.encode(rawTransaction);
         byte[] hashed = Hash.sha3(encoded);
 
-        EthSign ethSign =
+        final EthSign ethSign =
                 web3j.ethSign(Scenario.UNLOCKED_ACCOUNT, Numeric.toHexString(hashed))
                         .sendAsync()
                         .get();
 
-        String signature = ethSign.getSignature();
+        final String signature = ethSign.getSignature();
         assertNotNull(signature);
         assertFalse(signature.isEmpty());
     }

@@ -43,7 +43,7 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
 
     @Override
     @JsonDeserialize(using = LogResultDeserialiser.class)
-    public void setResult(List<LogResult> result) {
+    public void setResult(final List<LogResult> result) {
         super.setResult(result);
     }
 
@@ -60,16 +60,16 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
         public LogObject() {}
 
         public LogObject(
-                boolean removed,
-                String logIndex,
-                String transactionIndex,
-                String transactionHash,
-                String blockHash,
-                String blockNumber,
-                String address,
-                String data,
-                String type,
-                List<String> topics) {
+                final boolean removed,
+                final String logIndex,
+                final String transactionIndex,
+                final String transactionHash,
+                final String blockHash,
+                final String blockNumber,
+                final String address,
+                final String data,
+                final String type,
+                final List<String> topics) {
             super(
                     removed,
                     logIndex,
@@ -94,7 +94,7 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
 
         public Hash() {}
 
-        public Hash(String value) {
+        public Hash(final String value) {
             this.value = value;
         }
 
@@ -103,12 +103,12 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
             return value;
         }
 
-        public void setValue(String value) {
+        public void setValue(final String value) {
             this.value = value;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -116,7 +116,7 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
                 return false;
             }
 
-            Hash hash = (Hash) o;
+            final Hash hash = (Hash) o;
 
             return value != null ? value.equals(hash.value) : hash.value == null;
         }
@@ -129,18 +129,18 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
 
     public static class LogResultDeserialiser extends JsonDeserializer<List<LogResult>> {
 
-        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
+        private final ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public List<LogResult> deserialize(
-                JsonParser jsonParser, DeserializationContext deserializationContext)
+                final JsonParser jsonParser, final DeserializationContext deserializationContext)
                 throws IOException {
 
-            List<LogResult> logResults = new ArrayList<>();
-            JsonToken nextToken = jsonParser.nextToken();
+            final List<LogResult> logResults = new ArrayList<>();
+            final JsonToken nextToken = jsonParser.nextToken();
 
             if (nextToken == JsonToken.START_OBJECT) {
-                Iterator<LogObject> logObjectIterator =
+                final Iterator<LogObject> logObjectIterator =
                         objectReader.readValues(jsonParser, LogObject.class);
                 while (logObjectIterator.hasNext()) {
                     logResults.add(logObjectIterator.next());
@@ -148,7 +148,7 @@ public class EthLog extends Response<List<EthLog.LogResult>> {
             } else if (nextToken == JsonToken.VALUE_STRING) {
                 jsonParser.getValueAsString();
 
-                Iterator<Hash> transactionHashIterator =
+                final Iterator<Hash> transactionHashIterator =
                         objectReader.readValues(jsonParser, Hash.class);
                 while (transactionHashIterator.hasNext()) {
                     logResults.add(transactionHashIterator.next());

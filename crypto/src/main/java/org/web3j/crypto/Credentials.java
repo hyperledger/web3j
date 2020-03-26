@@ -20,7 +20,7 @@ public class Credentials {
     private final ECKeyPair ecKeyPair;
     private final String address;
 
-    private Credentials(ECKeyPair ecKeyPair, String address) {
+    private Credentials(final ECKeyPair ecKeyPair, final String address) {
         this.ecKeyPair = ecKeyPair;
         this.address = address;
     }
@@ -33,21 +33,21 @@ public class Credentials {
         return address;
     }
 
-    public static Credentials create(ECKeyPair ecKeyPair) {
-        String address = Numeric.prependHexPrefix(Keys.getAddress(ecKeyPair));
+    public static Credentials create(final ECKeyPair ecKeyPair) {
+        final String address = Numeric.prependHexPrefix(Keys.getAddress(ecKeyPair));
         return new Credentials(ecKeyPair, address);
     }
 
-    public static Credentials create(String privateKey, String publicKey) {
+    public static Credentials create(final String privateKey, final String publicKey) {
         return create(new ECKeyPair(Numeric.toBigInt(privateKey), Numeric.toBigInt(publicKey)));
     }
 
-    public static Credentials create(String privateKey) {
+    public static Credentials create(final String privateKey) {
         return create(ECKeyPair.create(Numeric.toBigInt(privateKey)));
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -55,7 +55,7 @@ public class Credentials {
             return false;
         }
 
-        Credentials that = (Credentials) o;
+        final Credentials that = (Credentials) o;
 
         if (ecKeyPair != null ? !ecKeyPair.equals(that.ecKeyPair) : that.ecKeyPair != null) {
             return false;

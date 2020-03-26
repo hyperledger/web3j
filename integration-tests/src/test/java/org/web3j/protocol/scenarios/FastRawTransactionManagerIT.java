@@ -57,20 +57,20 @@ public class FastRawTransactionManagerIT extends Scenario {
     @Test
     public void testTransactionPolling() throws Exception {
 
-        List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
-        FastRawTransactionManager transactionManager =
+        final List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
+        final FastRawTransactionManager transactionManager =
                 new FastRawTransactionManager(
                         web3j,
                         ALICE,
                         new PollingTransactionReceiptProcessor(
                                 web3j, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
 
-        Transfer transfer = new Transfer(web3j, transactionManager);
-        BigInteger gasPrice = transfer.requestCurrentGasPrice();
+        final Transfer transfer = new Transfer(web3j, transactionManager);
+        final BigInteger gasPrice = transfer.requestCurrentGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
 
-            Future<TransactionReceipt> transactionReceiptFuture =
+            final Future<TransactionReceipt> transactionReceiptFuture =
                     sendFunds(transfer, gasPrice).callAsync();
             transactionReceipts.add(transactionReceiptFuture);
         }
@@ -79,12 +79,13 @@ public class FastRawTransactionManagerIT extends Scenario {
                 i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !transactionReceipts.isEmpty();
                 i++) {
 
-            for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator();
+            for (final Iterator<Future<TransactionReceipt>> iterator =
+                            transactionReceipts.iterator();
                     iterator.hasNext(); ) {
-                Future<TransactionReceipt> transactionReceiptFuture = iterator.next();
+                final Future<TransactionReceipt> transactionReceiptFuture = iterator.next();
 
                 if (transactionReceiptFuture.isDone()) {
-                    TransactionReceipt transactionReceipt = transactionReceiptFuture.get();
+                    final TransactionReceipt transactionReceipt = transactionReceiptFuture.get();
                     assertFalse(transactionReceipt.getBlockHash().isEmpty());
                     iterator.remove();
                 }
@@ -99,11 +100,11 @@ public class FastRawTransactionManagerIT extends Scenario {
     @Test
     public void testTransactionQueuing() throws Exception {
 
-        Map<String, Object> pendingTransactions = new ConcurrentHashMap<>();
-        ConcurrentLinkedQueue<TransactionReceipt> transactionReceipts =
+        final Map<String, Object> pendingTransactions = new ConcurrentHashMap<>();
+        final ConcurrentLinkedQueue<TransactionReceipt> transactionReceipts =
                 new ConcurrentLinkedQueue<>();
 
-        FastRawTransactionManager transactionManager =
+        final FastRawTransactionManager transactionManager =
                 new FastRawTransactionManager(
                         web3j,
                         ALICE,
@@ -111,29 +112,30 @@ public class FastRawTransactionManagerIT extends Scenario {
                                 web3j,
                                 new Callback() {
                                     @Override
-                                    public void accept(TransactionReceipt transactionReceipt) {
+                                    public void accept(
+                                            final TransactionReceipt transactionReceipt) {
                                         transactionReceipts.add(transactionReceipt);
                                     }
 
                                     @Override
-                                    public void exception(Exception exception) {}
+                                    public void exception(final Exception exception) {}
                                 },
                                 DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH,
                                 POLLING_FREQUENCY));
 
-        Transfer transfer = new Transfer(web3j, transactionManager);
+        final Transfer transfer = new Transfer(web3j, transactionManager);
 
-        BigInteger gasPrice = transfer.requestCurrentGasPrice();
+        final BigInteger gasPrice = transfer.requestCurrentGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
-            TransactionReceipt transactionReceipt = sendFunds(transfer, gasPrice).call();
+            final TransactionReceipt transactionReceipt = sendFunds(transfer, gasPrice).call();
             pendingTransactions.put(transactionReceipt.getTransactionHash(), new Object());
         }
 
         for (int i = 0;
                 i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !pendingTransactions.isEmpty();
                 i++) {
-            for (TransactionReceipt transactionReceipt : transactionReceipts) {
+            for (final TransactionReceipt transactionReceipt : transactionReceipts) {
                 assertFalse(transactionReceipt.getBlockHash().isEmpty());
                 pendingTransactions.remove(transactionReceipt.getTransactionHash());
                 transactionReceipts.remove(transactionReceipt);
@@ -145,7 +147,8 @@ public class FastRawTransactionManagerIT extends Scenario {
         assertTrue(transactionReceipts.isEmpty());
     }
 
-    private RemoteCall<TransactionReceipt> sendFunds(Transfer transfer, BigInteger gasPrice) {
+    private RemoteCall<TransactionReceipt> sendFunds(
+            final Transfer transfer, final BigInteger gasPrice) {
         return transfer.sendFunds(
                 BOB.getAddress(),
                 BigDecimal.valueOf(1.0),

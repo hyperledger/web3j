@@ -52,11 +52,11 @@ public class NameHashTest {
         testInvalidName("foo_bar.eth");
     }
 
-    private void testInvalidName(String ensName) {
+    private void testInvalidName(final String ensName) {
         try {
             normalise(ensName);
             fail("Name should not be valid");
-        } catch (EnsResolutionException e) {
+        } catch (final EnsResolutionException e) {
             // expected
         }
     }

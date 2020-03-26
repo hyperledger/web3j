@@ -49,15 +49,15 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         public SshMessage() {}
 
         public SshMessage(
-                String hash,
-                String from,
-                String to,
-                String expiry,
-                String ttl,
-                String sent,
-                List<String> topics,
-                String payload,
-                String workProved) {
+                final String hash,
+                final String from,
+                final String to,
+                final String expiry,
+                final String ttl,
+                final String sent,
+                final List<String> topics,
+                final String payload,
+                final String workProved) {
             this.hash = hash;
             this.from = from;
             this.to = to;
@@ -73,7 +73,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return hash;
         }
 
-        public void setHash(String hash) {
+        public void setHash(final String hash) {
             this.hash = hash;
         }
 
@@ -81,7 +81,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return from;
         }
 
-        public void setFrom(String from) {
+        public void setFrom(final String from) {
             this.from = from;
         }
 
@@ -89,7 +89,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return to;
         }
 
-        public void setTo(String to) {
+        public void setTo(final String to) {
             this.to = to;
         }
 
@@ -101,7 +101,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return expiry;
         }
 
-        public void setExpiry(String expiry) {
+        public void setExpiry(final String expiry) {
             this.expiry = expiry;
         }
 
@@ -113,7 +113,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return ttl;
         }
 
-        public void setTtl(String ttl) {
+        public void setTtl(final String ttl) {
             this.ttl = ttl;
         }
 
@@ -125,7 +125,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return sent;
         }
 
-        public void setSent(String sent) {
+        public void setSent(final String sent) {
             this.sent = sent;
         }
 
@@ -133,7 +133,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return topics;
         }
 
-        public void setTopics(List<String> topics) {
+        public void setTopics(final List<String> topics) {
             this.topics = topics;
         }
 
@@ -141,7 +141,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return payload;
         }
 
-        public void setPayload(String payload) {
+        public void setPayload(final String payload) {
             this.payload = payload;
         }
 
@@ -153,12 +153,12 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             return workProved;
         }
 
-        public void setWorkProved(String workProved) {
+        public void setWorkProved(final String workProved) {
             this.workProved = workProved;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -166,7 +166,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
                 return false;
             }
 
-            SshMessage that = (SshMessage) o;
+            final SshMessage that = (SshMessage) o;
 
             if (getHash() != null ? !getHash().equals(that.getHash()) : that.getHash() != null) {
                 return false;

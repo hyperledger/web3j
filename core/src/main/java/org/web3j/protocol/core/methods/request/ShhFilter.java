@@ -17,9 +17,9 @@ package org.web3j.protocol.core.methods.request;
  * href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter">docs</a>
  */
 public class ShhFilter extends Filter<ShhFilter> {
-    private String to;
+    private final String to;
 
-    public ShhFilter(String to) {
+    public ShhFilter(final String to) {
         super();
         this.to = to;
     }

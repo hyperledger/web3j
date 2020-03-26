@@ -62,7 +62,7 @@ public class CollectionTest {
     private final class FakeSpec {
         private final String name;
 
-        private FakeSpec(String name) {
+        private FakeSpec(final String name) {
             this.name = name;
         }
 

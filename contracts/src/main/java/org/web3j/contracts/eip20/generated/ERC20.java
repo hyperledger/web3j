@@ -74,14 +74,14 @@ public class ERC20 extends Contract {
             }));
 
     protected ERC20(
-            String contractAddress, Web3j web3j, Credentials credentials,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final Credentials credentials,
+            final ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     protected ERC20(
-            String contractAddress, Web3j web3j, TransactionManager transactionManager,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final TransactionManager transactionManager,
+            final ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
@@ -93,7 +93,7 @@ public class ERC20 extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Boolean> approve(String _spender, BigInteger _value) {
+    public RemoteTransaction<Boolean> approve(final String _spender, final BigInteger _value) {
         final Function function = new Function(
                 FUNC_APPROVE,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_spender),
@@ -111,7 +111,7 @@ public class ERC20 extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Boolean> transferFrom(String _from, String _to, BigInteger _value) {
+    public RemoteTransaction<Boolean> transferFrom(final String _from, final String _to, final BigInteger _value) {
         final Function function = new Function(
                 FUNC_TRANSFERFROM,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_from),
@@ -130,7 +130,7 @@ public class ERC20 extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteCall<BigInteger> balanceOf(String _owner) {
+    public RemoteCall<BigInteger> balanceOf(final String _owner) {
         final Function function = new Function(FUNC_BALANCEOF,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_owner)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
@@ -146,7 +146,7 @@ public class ERC20 extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Boolean> transfer(String _to, BigInteger _value) {
+    public RemoteTransaction<Boolean> transfer(final String _to, final BigInteger _value) {
         final Function function = new Function(
                 FUNC_TRANSFER,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_to),
@@ -156,7 +156,7 @@ public class ERC20 extends Contract {
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
-    public RemoteCall<BigInteger> allowance(String _owner, String _spender) {
+    public RemoteCall<BigInteger> allowance(final String _owner, final String _spender) {
         final Function function = new Function(FUNC_ALLOWANCE,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_owner),
                         new org.web3j.abi.datatypes.Address(_spender)),
@@ -165,11 +165,11 @@ public class ERC20 extends Contract {
         return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
-        ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            TransferEventResponse typedResponse = new TransferEventResponse();
+    public List<TransferEventResponse> getTransferEvents(final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
+        final ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final TransferEventResponse typedResponse = new TransferEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
             typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
@@ -179,12 +179,12 @@ public class ERC20 extends Contract {
         return responses;
     }
 
-    public Flowable<TransferEventResponse> transferEventFlowable(EthFilter filter) {
+    public Flowable<TransferEventResponse> transferEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, TransferEventResponse>() {
             @Override
-            public TransferEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
-                TransferEventResponse typedResponse = new TransferEventResponse();
+            public TransferEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
+                final TransferEventResponse typedResponse = new TransferEventResponse();
                 typedResponse.log = log;
                 typedResponse._from = (String) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse._to = (String) eventValues.getIndexedValues().get(1).getValue();
@@ -195,17 +195,17 @@ public class ERC20 extends Contract {
     }
 
     public Flowable<TransferEventResponse> transferEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
         return transferEventFlowable(filter);
     }
 
-    public List<ApprovalEventResponse> getApprovalEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(APPROVAL_EVENT, transactionReceipt);
-        ArrayList<ApprovalEventResponse> responses = new ArrayList<ApprovalEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            ApprovalEventResponse typedResponse = new ApprovalEventResponse();
+    public List<ApprovalEventResponse> getApprovalEvents(final TransactionReceipt transactionReceipt) {
+        final List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(APPROVAL_EVENT, transactionReceipt);
+        final ArrayList<ApprovalEventResponse> responses = new ArrayList<ApprovalEventResponse>(valueList.size());
+        for (final Contract.EventValuesWithLog eventValues : valueList) {
+            final ApprovalEventResponse typedResponse = new ApprovalEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse._owner = (String) eventValues.getIndexedValues().get(0).getValue();
             typedResponse._spender = (String) eventValues.getIndexedValues().get(1).getValue();
@@ -215,12 +215,12 @@ public class ERC20 extends Contract {
         return responses;
     }
 
-    public Flowable<ApprovalEventResponse> approvalEventFlowable(EthFilter filter) {
+    public Flowable<ApprovalEventResponse> approvalEventFlowable(final EthFilter filter) {
         return web3j.ethLogFlowable(filter).map(new io.reactivex.functions.Function<Log, ApprovalEventResponse>() {
             @Override
-            public ApprovalEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVAL_EVENT, log);
-                ApprovalEventResponse typedResponse = new ApprovalEventResponse();
+            public ApprovalEventResponse apply(final Log log) {
+                final Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVAL_EVENT, log);
+                final ApprovalEventResponse typedResponse = new ApprovalEventResponse();
                 typedResponse.log = log;
                 typedResponse._owner = (String) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse._spender = (String) eventValues.getIndexedValues().get(1).getValue();
@@ -231,21 +231,21 @@ public class ERC20 extends Contract {
     }
 
     public Flowable<ApprovalEventResponse> approvalEventFlowable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+            final DefaultBlockParameter startBlock, final DefaultBlockParameter endBlock) {
+        final EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(APPROVAL_EVENT));
         return approvalEventFlowable(filter);
     }
 
     public static ERC20 load(
-            String contractAddress, Web3j web3j, Credentials credentials,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final Credentials credentials,
+            final ContractGasProvider contractGasProvider) {
         return new ERC20(contractAddress, web3j, credentials, contractGasProvider);
     }
 
     public static ERC20 load(
-            String contractAddress, Web3j web3j, TransactionManager transactionManager,
-            ContractGasProvider contractGasProvider) {
+            final String contractAddress, final Web3j web3j, final TransactionManager transactionManager,
+            final ContractGasProvider contractGasProvider) {
         return new ERC20(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 

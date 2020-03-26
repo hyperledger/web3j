@@ -43,48 +43,54 @@ public class WalletUtils {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public static String generateFullNewWalletFile(String password, File destinationDirectory)
+    public static String generateFullNewWalletFile(
+            final String password, final File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
                     InvalidAlgorithmParameterException, CipherException, IOException {
 
         return generateNewWalletFile(password, destinationDirectory, true);
     }
 
-    public static String generateLightNewWalletFile(String password, File destinationDirectory)
+    public static String generateLightNewWalletFile(
+            final String password, final File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
                     InvalidAlgorithmParameterException, CipherException, IOException {
 
         return generateNewWalletFile(password, destinationDirectory, false);
     }
 
-    public static String generateNewWalletFile(String password, File destinationDirectory)
+    public static String generateNewWalletFile(
+            final String password, final File destinationDirectory)
             throws CipherException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
                     NoSuchProviderException, IOException {
         return generateFullNewWalletFile(password, destinationDirectory);
     }
 
     public static String generateNewWalletFile(
-            String password, File destinationDirectory, boolean useFullScrypt)
+            final String password, final File destinationDirectory, final boolean useFullScrypt)
             throws CipherException, IOException, InvalidAlgorithmParameterException,
                     NoSuchAlgorithmException, NoSuchProviderException {
 
-        ECKeyPair ecKeyPair = Keys.createEcKeyPair();
+        final ECKeyPair ecKeyPair = Keys.createEcKeyPair();
         return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
     }
 
     public static String generateWalletFile(
-            String password, ECKeyPair ecKeyPair, File destinationDirectory, boolean useFullScrypt)
+            final String password,
+            final ECKeyPair ecKeyPair,
+            final File destinationDirectory,
+            final boolean useFullScrypt)
             throws CipherException, IOException {
 
-        WalletFile walletFile;
+        final WalletFile walletFile;
         if (useFullScrypt) {
             walletFile = Wallet.createStandard(password, ecKeyPair);
         } else {
             walletFile = Wallet.createLight(password, ecKeyPair);
         }
 
-        String fileName = getWalletFileName(walletFile);
-        File destination = new File(destinationDirectory, fileName);
+        final String fileName = getWalletFileName(walletFile);
+        final File destination = new File(destinationDirectory, fileName);
 
         objectMapper.writeValue(destination, walletFile);
 
@@ -105,16 +111,18 @@ public class WalletUtils {
      * @throws CipherException if the underlying cipher is not available
      * @throws IOException if the destination cannot be written to
      */
-    public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory)
+    public static Bip39Wallet generateBip39Wallet(
+            final String password, final File destinationDirectory)
             throws CipherException, IOException {
-        byte[] initialEntropy = new byte[16];
+        final byte[] initialEntropy = new byte[16];
         secureRandom.nextBytes(initialEntropy);
 
-        String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
-        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
-        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
+        final String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
+        final byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        final ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
 
-        String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
+        final String walletFile =
+                generateWalletFile(password, privateKey, destinationDirectory, false);
 
         return new Bip39Wallet(walletFile, mnemonic);
     }
@@ -130,29 +138,30 @@ public class WalletUtils {
      * @throws IOException if the destination cannot be written to
      */
     public static Bip39Wallet generateBip39WalletFromMnemonic(
-            String password, String mnemonic, File destinationDirectory)
+            final String password, final String mnemonic, final File destinationDirectory)
             throws CipherException, IOException {
-        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
-        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
+        final byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        final ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
 
-        String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
+        final String walletFile =
+                generateWalletFile(password, privateKey, destinationDirectory, false);
 
         return new Bip39Wallet(walletFile, mnemonic);
     }
 
-    public static Credentials loadCredentials(String password, String source)
+    public static Credentials loadCredentials(final String password, final String source)
             throws IOException, CipherException {
         return loadCredentials(password, new File(source));
     }
 
-    public static Credentials loadCredentials(String password, File source)
+    public static Credentials loadCredentials(final String password, final File source)
             throws IOException, CipherException {
-        WalletFile walletFile = objectMapper.readValue(source, WalletFile.class);
+        final WalletFile walletFile = objectMapper.readValue(source, WalletFile.class);
         return Credentials.create(Wallet.decrypt(password, walletFile));
     }
 
-    public static Credentials loadBip39Credentials(String password, String mnemonic) {
-        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+    public static Credentials loadBip39Credentials(final String password, final String mnemonic) {
+        final byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         return Credentials.create(ECKeyPair.create(sha256(seed)));
     }
 
@@ -166,16 +175,16 @@ public class WalletUtils {
      * @throws IOException if a low-level I/O problem (unexpected end-of-input, network error)
      *     occurs
      */
-    public static Credentials loadJsonCredentials(String password, String content)
+    public static Credentials loadJsonCredentials(final String password, final String content)
             throws IOException, CipherException {
-        WalletFile walletFile = objectMapper.readValue(content, WalletFile.class);
+        final WalletFile walletFile = objectMapper.readValue(content, WalletFile.class);
         return Credentials.create(Wallet.decrypt(password, walletFile));
     }
 
-    private static String getWalletFileName(WalletFile walletFile) {
-        DateTimeFormatter format =
+    private static String getWalletFileName(final WalletFile walletFile) {
+        final DateTimeFormatter format =
                 DateTimeFormatter.ofPattern("'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
 
         return now.format(format) + walletFile.getAddress() + ".json";
     }
@@ -184,8 +193,8 @@ public class WalletUtils {
         return getDefaultKeyDirectory(System.getProperty("os.name"));
     }
 
-    static String getDefaultKeyDirectory(String osName1) {
-        String osName = osName1.toLowerCase();
+    static String getDefaultKeyDirectory(final String osName1) {
+        final String osName = osName1.toLowerCase();
 
         if (osName.startsWith("mac")) {
             return String.format(
@@ -217,21 +226,21 @@ public class WalletUtils {
                 "%s%srinkeby%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
     }
 
-    public static boolean isValidPrivateKey(String privateKey) {
-        String cleanPrivateKey = Numeric.cleanHexPrefix(privateKey);
+    public static boolean isValidPrivateKey(final String privateKey) {
+        final String cleanPrivateKey = Numeric.cleanHexPrefix(privateKey);
         return cleanPrivateKey.length() == PRIVATE_KEY_LENGTH_IN_HEX;
     }
 
-    public static boolean isValidAddress(String input) {
+    public static boolean isValidAddress(final String input) {
         return isValidAddress(input, ADDRESS_LENGTH_IN_HEX);
     }
 
-    public static boolean isValidAddress(String input, int addressLength) {
-        String cleanInput = Numeric.cleanHexPrefix(input);
+    public static boolean isValidAddress(final String input, final int addressLength) {
+        final String cleanInput = Numeric.cleanHexPrefix(input);
 
         try {
             Numeric.toBigIntNoPrefix(cleanInput);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             return false;
         }
 

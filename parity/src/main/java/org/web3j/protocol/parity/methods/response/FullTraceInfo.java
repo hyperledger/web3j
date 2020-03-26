@@ -34,7 +34,10 @@ public class FullTraceInfo {
     public FullTraceInfo() {}
 
     public FullTraceInfo(
-            String output, Map<String, StateDiff> stateDiff, List<Trace> trace, VMTrace vmTrace) {
+            final String output,
+            final Map<String, StateDiff> stateDiff,
+            final List<Trace> trace,
+            final VMTrace vmTrace) {
         this.output = output;
         this.stateDiff = stateDiff;
         this.trace = trace;
@@ -45,7 +48,7 @@ public class FullTraceInfo {
         return output;
     }
 
-    public void setOutput(String output) {
+    public void setOutput(final String output) {
         this.output = output;
     }
 
@@ -53,7 +56,7 @@ public class FullTraceInfo {
         return stateDiff;
     }
 
-    public void setStateDiff(Map<String, StateDiff> stateDiff) {
+    public void setStateDiff(final Map<String, StateDiff> stateDiff) {
         this.stateDiff = stateDiff;
     }
 
@@ -61,7 +64,7 @@ public class FullTraceInfo {
         return trace;
     }
 
-    public void setTrace(List<Trace> trace) {
+    public void setTrace(final List<Trace> trace) {
         this.trace = trace;
     }
 
@@ -69,12 +72,12 @@ public class FullTraceInfo {
         return vmTrace;
     }
 
-    public void setVmTrace(VMTrace vmTrace) {
+    public void setVmTrace(final VMTrace vmTrace) {
         this.vmTrace = vmTrace;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -82,7 +85,7 @@ public class FullTraceInfo {
             return false;
         }
 
-        FullTraceInfo that = (FullTraceInfo) o;
+        final FullTraceInfo that = (FullTraceInfo) o;
 
         if (getOutput() != null
                 ? !getOutput().equals(that.getOutput())

@@ -22,13 +22,13 @@ import org.web3j.protocol.core.Response;
 /** */
 public class WebSocketRequests extends WebSocketRequest<BatchResponse> {
 
-    private List<Request<?, ? extends Response<?>>> requests;
-    private long originId;
+    private final List<Request<?, ? extends Response<?>>> requests;
+    private final long originId;
 
     public WebSocketRequests(
-            CompletableFuture<BatchResponse> onReply,
-            List<Request<?, ? extends Response<?>>> requests,
-            Long originId) {
+            final CompletableFuture<BatchResponse> onReply,
+            final List<Request<?, ? extends Response<?>>> requests,
+            final Long originId) {
 
         super(onReply, BatchResponse.class);
         this.requests = requests;

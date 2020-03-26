@@ -29,10 +29,10 @@ public class SignTest {
 
     @Test
     public void testSignMessage() {
-        Sign.SignatureData signatureData =
+        final Sign.SignatureData signatureData =
                 Sign.signPrefixedMessage(TEST_MESSAGE, SampleKeys.KEY_PAIR);
 
-        Sign.SignatureData expected =
+        final Sign.SignatureData expected =
                 new Sign.SignatureData(
                         (byte) 28,
                         Numeric.hexStringToByteArray(
@@ -45,9 +45,9 @@ public class SignTest {
 
     @Test
     public void testSignedMessageToKey() throws SignatureException {
-        Sign.SignatureData signatureData =
+        final Sign.SignatureData signatureData =
                 Sign.signPrefixedMessage(TEST_MESSAGE, SampleKeys.KEY_PAIR);
-        BigInteger key = Sign.signedPrefixedMessageToKey(TEST_MESSAGE, signatureData);
+        final BigInteger key = Sign.signedPrefixedMessageToKey(TEST_MESSAGE, signatureData);
         assertEquals(key, (SampleKeys.PUBLIC_KEY));
     }
 
@@ -69,7 +69,7 @@ public class SignTest {
 
     @Test
     public void testPublicKeyFromPrivatePoint() {
-        ECPoint point = Sign.publicPointFromPrivate(SampleKeys.PRIVATE_KEY);
+        final ECPoint point = Sign.publicPointFromPrivate(SampleKeys.PRIVATE_KEY);
         assertEquals(Sign.publicFromPoint(point.getEncoded(false)), (SampleKeys.PUBLIC_KEY));
     }
 }

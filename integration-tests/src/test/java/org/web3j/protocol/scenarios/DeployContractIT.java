@@ -49,32 +49,32 @@ public class DeployContractIT extends Scenario {
     @Test
     public void testContractCreation() throws Exception {
 
-        String transactionHash = sendTransaction();
+        final String transactionHash = sendTransaction();
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
+        final TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertEquals(transactionReceipt.getTransactionHash(), (transactionHash));
 
         assertFalse(transactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        String contractAddress = transactionReceipt.getContractAddress();
+        final String contractAddress = transactionReceipt.getContractAddress();
 
         assertNotNull(contractAddress);
 
-        Function function = createFibonacciFunction();
+        final Function function = createFibonacciFunction();
 
-        String responseValue = callSmartContractFunction(function, contractAddress);
+        final String responseValue = callSmartContractFunction(function, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type<?>> uint =
+        final List<Type<?>> uint =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
         assertEquals(uint.size(), (1));
         assertEquals(uint.get(0).getValue(), (BigInteger.valueOf(13)));
     }
 
     private String sendTransaction() throws Exception {
-        BigInteger nonce = getNonce(ALICE.getAddress());
+        final BigInteger nonce = getNonce(ALICE.getAddress());
 
         RawTransaction transaction =
                 RawTransaction.createContractTransaction(
@@ -90,12 +90,12 @@ public class DeployContractIT extends Scenario {
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(Function function, String contractAddress)
+    private String callSmartContractFunction(final Function function, final String contractAddress)
             throws Exception {
 
-        String encodedFunction = FunctionEncoder.encode(function);
+        final String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response =
+        final org.web3j.protocol.core.methods.response.EthCall response =
                 web3j.ethCall(
                                 Transaction.createEthCallTransaction(
                                         ALICE.getAddress(), contractAddress, encodedFunction),

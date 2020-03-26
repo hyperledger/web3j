@@ -44,7 +44,7 @@ public class StaticArrayTest {
         try {
             new StaticArray3<>(arrayOfUints(4));
             fail();
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             assertEquals(
                     e.getMessage(),
                     ("Expected array of type [StaticArray3] to have [3] elements."));
@@ -56,14 +56,14 @@ public class StaticArrayTest {
         try {
             new StaticArray32<>(arrayOfUints(33));
             fail();
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             assertEquals(
                     e.getMessage(),
                     ("Static arrays with a length greater than 32 are not supported."));
         }
     }
 
-    private Uint[] arrayOfUints(int length) {
+    private Uint[] arrayOfUints(final int length) {
         return IntStream.rangeClosed(1, length).mapToObj(Uint8::new).toArray(Uint[]::new);
     }
 }

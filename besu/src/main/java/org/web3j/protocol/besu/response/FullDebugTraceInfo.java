@@ -22,7 +22,10 @@ public class FullDebugTraceInfo {
     private List<StructLogs> structLogs;
 
     public FullDebugTraceInfo(
-            int gas, boolean failed, String returnValue, List<StructLogs> structLogs) {
+            final int gas,
+            final boolean failed,
+            final String returnValue,
+            final List<StructLogs> structLogs) {
         this.gas = gas;
         this.failed = failed;
         this.returnValue = returnValue;

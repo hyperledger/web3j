@@ -38,7 +38,7 @@ public class EventEncoderTest {
 
     @Test
     public void testEncode() {
-        Event event =
+        final Event event =
                 new Event(
                         "Notify",
                         Arrays.<TypeReference<?>>asList(
@@ -51,7 +51,7 @@ public class EventEncoderTest {
 
     @Test
     public void testBuildMethodSignature() {
-        List<TypeReference<?>> parameters =
+        final List<TypeReference<?>> parameters =
                 Arrays.<TypeReference<?>>asList(
                         new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {});
 

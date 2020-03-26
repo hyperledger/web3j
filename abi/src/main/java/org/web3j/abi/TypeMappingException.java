@@ -14,15 +14,15 @@ package org.web3j.abi;
 
 public class TypeMappingException extends RuntimeException {
 
-    public TypeMappingException(Exception e) {
+    public TypeMappingException(final Exception e) {
         super(e);
     }
 
-    public TypeMappingException(String message) {
+    public TypeMappingException(final String message) {
         super(message);
     }
 
-    public TypeMappingException(String message, Exception e) {
+    public TypeMappingException(final String message, final Exception e) {
         super(message, e);
     }
 }

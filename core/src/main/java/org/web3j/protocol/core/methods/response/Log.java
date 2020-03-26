@@ -40,16 +40,16 @@ public class Log {
     public Log() {}
 
     public Log(
-            boolean removed,
-            String logIndex,
-            String transactionIndex,
-            String transactionHash,
-            String blockHash,
-            String blockNumber,
-            String address,
-            String data,
-            String type,
-            List<String> topics) {
+            final boolean removed,
+            final String logIndex,
+            final String transactionIndex,
+            final String transactionHash,
+            final String blockHash,
+            final String blockNumber,
+            final String address,
+            final String data,
+            final String type,
+            final List<String> topics) {
         this.removed = removed;
         this.logIndex = logIndex;
         this.transactionIndex = transactionIndex;
@@ -66,7 +66,7 @@ public class Log {
         return removed;
     }
 
-    public void setRemoved(boolean removed) {
+    public void setRemoved(final boolean removed) {
         this.removed = removed;
     }
 
@@ -78,7 +78,7 @@ public class Log {
         return logIndex;
     }
 
-    public void setLogIndex(String logIndex) {
+    public void setLogIndex(final String logIndex) {
         this.logIndex = logIndex;
     }
 
@@ -90,7 +90,7 @@ public class Log {
         return transactionIndex;
     }
 
-    public void setTransactionIndex(String transactionIndex) {
+    public void setTransactionIndex(final String transactionIndex) {
         this.transactionIndex = transactionIndex;
     }
 
@@ -98,7 +98,7 @@ public class Log {
         return transactionHash;
     }
 
-    public void setTransactionHash(String transactionHash) {
+    public void setTransactionHash(final String transactionHash) {
         this.transactionHash = transactionHash;
     }
 
@@ -106,7 +106,7 @@ public class Log {
         return blockHash;
     }
 
-    public void setBlockHash(String blockHash) {
+    public void setBlockHash(final String blockHash) {
         this.blockHash = blockHash;
     }
 
@@ -118,7 +118,7 @@ public class Log {
         return blockNumber;
     }
 
-    public void setBlockNumber(String blockNumber) {
+    public void setBlockNumber(final String blockNumber) {
         this.blockNumber = blockNumber;
     }
 
@@ -126,7 +126,7 @@ public class Log {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(final String address) {
         this.address = address;
     }
 
@@ -134,7 +134,7 @@ public class Log {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(final String data) {
         this.data = data;
     }
 
@@ -142,7 +142,7 @@ public class Log {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -150,11 +150,11 @@ public class Log {
         return topics;
     }
 
-    public void setTopics(List<String> topics) {
+    public void setTopics(final List<String> topics) {
         this.topics = topics;
     }
 
-    private BigInteger convert(String value) {
+    private BigInteger convert(final String value) {
         if (value != null) {
             return Numeric.decodeQuantity(value);
         } else {
@@ -163,7 +163,7 @@ public class Log {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -171,7 +171,7 @@ public class Log {
             return false;
         }
 
-        Log log = (Log) o;
+        final Log log = (Log) o;
 
         if (isRemoved() != log.isRemoved()) {
             return false;

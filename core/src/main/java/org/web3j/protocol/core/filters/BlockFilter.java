@@ -25,7 +25,7 @@ import org.web3j.protocol.core.methods.response.EthLog;
 /** Handler for working with block filter requests. */
 public class BlockFilter extends Filter<String> {
 
-    public BlockFilter(Web3j web3j, Callback<String> callback) {
+    public BlockFilter(final Web3j web3j, final Callback<String> callback) {
         super(web3j, callback);
     }
 
@@ -35,10 +35,10 @@ public class BlockFilter extends Filter<String> {
     }
 
     @Override
-    protected void process(List<EthLog.LogResult> logResults) {
-        for (EthLog.LogResult logResult : logResults) {
+    protected void process(final List<EthLog.LogResult> logResults) {
+        for (final EthLog.LogResult logResult : logResults) {
             if (logResult instanceof EthLog.Hash) {
-                String blockHash = ((EthLog.Hash) logResult).get();
+                final String blockHash = ((EthLog.Hash) logResult).get();
                 callback.onEvent(blockHash);
             } else {
                 throw new FilterException(
@@ -55,7 +55,7 @@ public class BlockFilter extends Filter<String> {
      * @return Optional.empty()
      */
     @Override
-    protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
+    protected Optional<Request<?, EthLog>> getFilterLogs(final BigInteger filterId) {
         return Optional.empty();
     }
 }

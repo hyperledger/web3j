@@ -50,7 +50,7 @@ public class VMTrace {
 
                 public Mem() {}
 
-                public Mem(String data, BigInteger off) {
+                public Mem(final String data, final BigInteger off) {
                     this.data = data;
                     this.off = off;
                 }
@@ -59,7 +59,7 @@ public class VMTrace {
                     return data;
                 }
 
-                public void setData(String data) {
+                public void setData(final String data) {
                     this.data = data;
                 }
 
@@ -67,12 +67,12 @@ public class VMTrace {
                     return off;
                 }
 
-                public void setOff(BigInteger off) {
+                public void setOff(final BigInteger off) {
                     this.off = off;
                 }
 
                 @Override
-                public boolean equals(Object o) {
+                public boolean equals(final Object o) {
                     if (this == o) {
                         return true;
                     }
@@ -80,7 +80,7 @@ public class VMTrace {
                         return false;
                     }
 
-                    Mem mem = (Mem) o;
+                    final Mem mem = (Mem) o;
 
                     if (getData() != null
                             ? !getData().equals(mem.getData())
@@ -110,7 +110,7 @@ public class VMTrace {
 
                 public Store() {}
 
-                public Store(String key, String val) {
+                public Store(final String key, final String val) {
                     this.key = key;
                     this.val = val;
                 }
@@ -119,7 +119,7 @@ public class VMTrace {
                     return key;
                 }
 
-                public void setKey(String key) {
+                public void setKey(final String key) {
                     this.key = key;
                 }
 
@@ -127,12 +127,12 @@ public class VMTrace {
                     return val;
                 }
 
-                public void setVal(String val) {
+                public void setVal(final String val) {
                     this.val = val;
                 }
 
                 @Override
-                public boolean equals(Object o) {
+                public boolean equals(final Object o) {
                     if (this == o) {
                         return true;
                     }
@@ -140,7 +140,7 @@ public class VMTrace {
                         return false;
                     }
 
-                    Store store = (Store) o;
+                    final Store store = (Store) o;
 
                     if (getKey() != null
                             ? !getKey().equals(store.getKey())
@@ -167,7 +167,11 @@ public class VMTrace {
 
             public Ex() {}
 
-            public Ex(Mem mem, List<String> push, Store store, BigInteger used) {
+            public Ex(
+                    final Mem mem,
+                    final List<String> push,
+                    final Store store,
+                    final BigInteger used) {
                 this.mem = mem;
                 this.push = push;
                 this.store = store;
@@ -178,7 +182,7 @@ public class VMTrace {
                 return mem;
             }
 
-            public void setMem(Mem mem) {
+            public void setMem(final Mem mem) {
                 this.mem = mem;
             }
 
@@ -186,7 +190,7 @@ public class VMTrace {
                 return push;
             }
 
-            public void setPush(List<String> push) {
+            public void setPush(final List<String> push) {
                 this.push = push;
             }
 
@@ -194,7 +198,7 @@ public class VMTrace {
                 return store;
             }
 
-            public void setStore(Store store) {
+            public void setStore(final Store store) {
                 this.store = store;
             }
 
@@ -202,12 +206,12 @@ public class VMTrace {
                 return used;
             }
 
-            public void setUsed(BigInteger used) {
+            public void setUsed(final BigInteger used) {
                 this.used = used;
             }
 
             @Override
-            public boolean equals(Object o) {
+            public boolean equals(final Object o) {
                 if (this == o) {
                     return true;
                 }
@@ -215,7 +219,7 @@ public class VMTrace {
                     return false;
                 }
 
-                Ex ex = (Ex) o;
+                final Ex ex = (Ex) o;
 
                 if (getMem() != null ? !getMem().equals(ex.getMem()) : ex.getMem() != null) {
                     return false;
@@ -257,7 +261,8 @@ public class VMTrace {
 
         public VMOperation() {}
 
-        public VMOperation(VMTrace sub, BigInteger cost, Ex ex, BigInteger pc) {
+        public VMOperation(
+                final VMTrace sub, final BigInteger cost, final Ex ex, final BigInteger pc) {
             this.sub = sub;
             this.cost = cost;
             this.ex = ex;
@@ -268,7 +273,7 @@ public class VMTrace {
             return sub;
         }
 
-        public void setSub(VMTrace sub) {
+        public void setSub(final VMTrace sub) {
             this.sub = sub;
         }
 
@@ -276,7 +281,7 @@ public class VMTrace {
             return cost;
         }
 
-        public void setCost(BigInteger cost) {
+        public void setCost(final BigInteger cost) {
             this.cost = cost;
         }
 
@@ -284,7 +289,7 @@ public class VMTrace {
             return ex;
         }
 
-        public void setEx(Ex ex) {
+        public void setEx(final Ex ex) {
             this.ex = ex;
         }
 
@@ -292,12 +297,12 @@ public class VMTrace {
             return pc;
         }
 
-        public void setPc(BigInteger pc) {
+        public void setPc(final BigInteger pc) {
             this.pc = pc;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -305,7 +310,7 @@ public class VMTrace {
                 return false;
             }
 
-            VMOperation that = (VMOperation) o;
+            final VMOperation that = (VMOperation) o;
 
             if (getSub() != null ? !getSub().equals(that.getSub()) : that.getSub() != null) {
                 return false;
@@ -345,7 +350,7 @@ public class VMTrace {
 
     public VMTrace() {}
 
-    public VMTrace(String code, List<VMOperation> ops) {
+    public VMTrace(final String code, final List<VMOperation> ops) {
         this.code = code;
         this.ops = ops;
     }
@@ -354,7 +359,7 @@ public class VMTrace {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -362,12 +367,12 @@ public class VMTrace {
         return ops;
     }
 
-    public void setOps(List<VMOperation> ops) {
+    public void setOps(final List<VMOperation> ops) {
         this.ops = ops;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -375,7 +380,7 @@ public class VMTrace {
             return false;
         }
 
-        VMTrace vmTrace = (VMTrace) o;
+        final VMTrace vmTrace = (VMTrace) o;
 
         if (getCode() != null ? !getCode().equals(vmTrace.getCode()) : vmTrace.getCode() != null) {
             return false;

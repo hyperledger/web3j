@@ -12,11 +12,11 @@ import org.web3j.abi.datatypes.Int;
 public class Int64 extends Int {
     public static final Int64 DEFAULT = new Int64(BigInteger.ZERO);
 
-    public Int64(BigInteger value) {
+    public Int64(final BigInteger value) {
         super(64, value);
     }
 
-    public Int64(long value) {
+    public Int64(final long value) {
         this(BigInteger.valueOf(value));
     }
 }

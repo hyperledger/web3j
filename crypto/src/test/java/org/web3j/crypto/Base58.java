@@ -36,7 +36,7 @@ public class Base58 {
         }
         // Convert base-256 digits to base-58 digits (plus conversion to ASCII characters)
         input = Arrays.copyOf(input, input.length); // since we modify it in-place
-        char[] encoded = new char[input.length * 2]; // upper bound
+        final char[] encoded = new char[input.length * 2]; // upper bound
         int outputStart = encoded.length;
         for (int inputStart = zeros; inputStart < input.length; ) {
             encoded[--outputStart] = ALPHABET[divmod(input, inputStart, 256, 58)];
@@ -56,12 +56,13 @@ public class Base58 {
         return new String(encoded, outputStart, encoded.length - outputStart);
     }
 
-    private static byte divmod(byte[] number, int firstDigit, int base, int divisor) {
+    private static byte divmod(
+            final byte[] number, final int firstDigit, final int base, final int divisor) {
         // this is just long division which accounts for the base of the input digits
         int remainder = 0;
         for (int i = firstDigit; i < number.length; i++) {
-            int digit = (int) number[i] & 0xFF;
-            int temp = remainder * base + digit;
+            final int digit = (int) number[i] & 0xFF;
+            final int temp = remainder * base + digit;
             number[i] = (byte) (temp / divisor);
             remainder = temp % divisor;
         }

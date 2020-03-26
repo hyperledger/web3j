@@ -16,12 +16,12 @@ import java.util.List;
 
 public class BatchResponse {
 
-    private List<Request<?, ? extends Response<?>>> requests;
-    private List<? extends Response<?>> responses;
+    private final List<Request<?, ? extends Response<?>>> requests;
+    private final List<? extends Response<?>> responses;
 
     public BatchResponse(
-            List<Request<?, ? extends Response<?>>> requests,
-            List<? extends Response<?>> responses) {
+            final List<Request<?, ? extends Response<?>>> requests,
+            final List<? extends Response<?>> responses) {
 
         this.requests = requests;
         this.responses = responses;

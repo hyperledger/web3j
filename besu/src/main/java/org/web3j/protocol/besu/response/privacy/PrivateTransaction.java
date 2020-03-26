@@ -36,7 +36,7 @@ public abstract class PrivateTransaction {
         }
 
         @Override
-        public PrivateTransaction deserialize(JsonParser p, DeserializationContext ctxt)
+        public PrivateTransaction deserialize(final JsonParser p, final DeserializationContext ctxt)
                 throws IOException {
             final TreeNode node = p.readValueAsTree();
 
@@ -53,19 +53,19 @@ public abstract class PrivateTransaction {
         }
     }
 
-    private String hash;
-    private BigInteger nonce;
-    private String from;
-    private String to;
-    private BigInteger value;
-    private BigInteger gasPrice;
-    private BigInteger gas;
-    private String input;
-    private String r;
-    private String s;
-    private long v;
-    private Base64String privateFrom;
-    private Restriction restriction;
+    private final String hash;
+    private final BigInteger nonce;
+    private final String from;
+    private final String to;
+    private final BigInteger value;
+    private final BigInteger gasPrice;
+    private final BigInteger gas;
+    private final String input;
+    private final String r;
+    private final String s;
+    private final long v;
+    private final Base64String privateFrom;
+    private final Restriction restriction;
 
     public PrivateTransaction(
             final String hash,
@@ -150,14 +150,14 @@ public abstract class PrivateTransaction {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        PrivateTransaction that = (PrivateTransaction) o;
+        final PrivateTransaction that = (PrivateTransaction) o;
         return getV() == that.getV()
                 && getHash().equals(that.getHash())
                 && getNonce().equals(that.getNonce())

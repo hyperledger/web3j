@@ -18,7 +18,7 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 
 public interface Eea extends Web3j {
-    static Eea build(Web3jService web3jService) {
+    static Eea build(final Web3jService web3jService) {
         return new JsonRpc2_0Eea(web3jService);
     }
 

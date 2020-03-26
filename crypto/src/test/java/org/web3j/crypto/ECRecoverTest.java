@@ -30,22 +30,22 @@ public class ECRecoverTest {
     @Test
     public void testRecoverAddressFromSignature() {
 
-        String signature =
+        final String signature =
                 "0x2c6401216c9031b9a6fb8cbfccab4fcec6c951cdf40e2320108d1856eb532250576865fbcd452bcdc4c57321b619ed7a9cfd38bd973c3e1e0243ac2777fe9d5b1b";
 
-        String address = "0x31b26e43651e9371c88af3d36c14cfd938baf4fd";
-        String message = "v0G9u7huK4mJb2K1";
+        final String address = "0x31b26e43651e9371c88af3d36c14cfd938baf4fd";
+        final String message = "v0G9u7huK4mJb2K1";
 
-        String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
-        byte[] msgHash = Hash.sha3((prefix + message).getBytes());
+        final String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
+        final byte[] msgHash = Hash.sha3((prefix + message).getBytes());
 
-        byte[] signatureBytes = Numeric.hexStringToByteArray(signature);
+        final byte[] signatureBytes = Numeric.hexStringToByteArray(signature);
         byte v = signatureBytes[64];
         if (v < 27) {
             v += 27;
         }
 
-        SignatureData sd =
+        final SignatureData sd =
                 new SignatureData(
                         v,
                         (byte[]) Arrays.copyOfRange(signatureBytes, 0, 32),
@@ -56,7 +56,7 @@ public class ECRecoverTest {
 
         // Iterate for each possible key to recover
         for (int i = 0; i < 4; i++) {
-            BigInteger publicKey =
+            final BigInteger publicKey =
                     Sign.recoverFromSignature(
                             (byte) i,
                             new ECDSASignature(

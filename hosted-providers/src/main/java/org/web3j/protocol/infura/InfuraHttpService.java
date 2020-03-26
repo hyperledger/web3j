@@ -23,23 +23,22 @@ public class InfuraHttpService extends HttpService {
     private static final String INFURA_ETHEREUM_PREFERRED_CLIENT =
             "Infura-Ethereum-Preferred-Client";
 
-    private final Map<String, String> clientVersionHeader;
-
-    public InfuraHttpService(String url, String clientVersion, boolean required) {
+    public InfuraHttpService(final String url, final String clientVersion, final boolean required) {
         super(url);
-        clientVersionHeader = buildClientVersionHeader(clientVersion, required);
+        final Map<String, String> clientVersionHeader = buildClientVersionHeader(clientVersion, required);
         addHeaders(clientVersionHeader);
     }
 
-    public InfuraHttpService(String url, String clientVersion) {
+    public InfuraHttpService(final String url, final String clientVersion) {
         this(url, clientVersion, true);
     }
 
-    public InfuraHttpService(String url) {
+    public InfuraHttpService(final String url) {
         this(url, "", false);
     }
 
-    static Map<String, String> buildClientVersionHeader(String clientVersion, boolean required) {
+    static Map<String, String> buildClientVersionHeader(
+            final String clientVersion, final boolean required) {
         if (clientVersion == null || clientVersion.equals("")) {
             return Collections.emptyMap();
         }

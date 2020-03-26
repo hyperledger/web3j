@@ -15,11 +15,11 @@ package org.web3j.protocol.core.filters;
 /** Filter exception wrapper. */
 public class FilterException extends RuntimeException {
 
-    public FilterException(String message) {
+    public FilterException(final String message) {
         super(message);
     }
 
-    public FilterException(String message, Throwable cause) {
+    public FilterException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

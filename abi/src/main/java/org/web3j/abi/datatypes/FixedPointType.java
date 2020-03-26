@@ -21,7 +21,11 @@ public abstract class FixedPointType extends NumericType {
 
     private final int bitSize;
 
-    public FixedPointType(String typePrefix, int mBitSize, int nBitSize, BigInteger value) {
+    public FixedPointType(
+            final String typePrefix,
+            final int mBitSize,
+            final int nBitSize,
+            final BigInteger value) {
         super(typePrefix + mBitSize + "x" + nBitSize, value);
         this.bitSize = mBitSize + nBitSize;
         if (!valid(mBitSize, nBitSize, value)) {
@@ -35,28 +39,30 @@ public abstract class FixedPointType extends NumericType {
         return bitSize;
     }
 
-    boolean valid(int mBitSize, int nBitSize, BigInteger value) {
+    boolean valid(final int mBitSize, final int nBitSize, final BigInteger value) {
         return isValidBitSize(mBitSize, nBitSize) && isValidBitCount(mBitSize, nBitSize, value);
     }
 
-    private boolean isValidBitSize(int mBitSize, int nBitSize) {
+    private boolean isValidBitSize(final int mBitSize, final int nBitSize) {
         return mBitSize % 8 == 0 && nBitSize % 8 == 0 && bitSize > 0 && bitSize <= MAX_BIT_LENGTH;
     }
 
-    private static boolean isValidBitCount(int mBitSize, int nBitSize, BigInteger value) {
+    private static boolean isValidBitCount(
+            final int mBitSize, final int nBitSize, final BigInteger value) {
         return value.bitCount() <= mBitSize + nBitSize;
     }
 
-    static BigInteger convert(BigInteger m, BigInteger n) {
+    static BigInteger convert(final BigInteger m, final BigInteger n) {
         return convert(DEFAULT_BIT_LENGTH, DEFAULT_BIT_LENGTH, m, n);
     }
 
-    static BigInteger convert(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
-        BigInteger mPadded = m.shiftLeft(nBitSize);
-        int nBitLength = n.bitLength();
+    static BigInteger convert(
+            final int mBitSize, final int nBitSize, final BigInteger m, final BigInteger n) {
+        final BigInteger mPadded = m.shiftLeft(nBitSize);
+        final int nBitLength = n.bitLength();
 
         // find next multiple of 4
-        int shift = (nBitLength + 3) & ~0x03;
+        final int shift = (nBitLength + 3) & ~0x03;
         return mPadded.or(n.shiftLeft(nBitSize - shift));
     }
 }

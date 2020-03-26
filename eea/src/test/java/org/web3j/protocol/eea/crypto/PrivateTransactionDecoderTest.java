@@ -52,7 +52,7 @@ public class PrivateTransactionDecoderTest {
                         MOCK_ENCLAVE_KEY,
                         MOCK_PRIVATE_FOR,
                         RESTRICTED);
-        byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
+        final byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
         final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
@@ -83,7 +83,7 @@ public class PrivateTransactionDecoderTest {
                         MOCK_ENCLAVE_KEY,
                         MOCK_ENCLAVE_KEY,
                         RESTRICTED);
-        byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
+        final byte[] encodedMessage = PrivateTransactionEncoder.encode(rawTransaction);
         final String hexMessage = Numeric.toHexString(encodedMessage);
 
         final RawPrivateTransaction result = PrivateTransactionDecoder.decode(hexMessage);
@@ -134,7 +134,7 @@ public class PrivateTransactionDecoderTest {
         assertTrue(result instanceof SignedRawPrivateTransaction);
         final SignedRawPrivateTransaction signedResult = (SignedRawPrivateTransaction) result;
         assertNotNull(signedResult.getSignatureData());
-        Sign.SignatureData signatureData = signedResult.getSignatureData();
+        final Sign.SignatureData signatureData = signedResult.getSignatureData();
         final byte[] encodedTransaction = PrivateTransactionEncoder.encode(rawTransaction);
         final BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
         assertEquals(key, credentials.getEcKeyPair().getPublicKey());
@@ -179,7 +179,7 @@ public class PrivateTransactionDecoderTest {
         assertTrue(result instanceof SignedRawPrivateTransaction);
         final SignedRawPrivateTransaction signedResult = (SignedRawPrivateTransaction) result;
         assertNotNull(signedResult.getSignatureData());
-        Sign.SignatureData signatureData = signedResult.getSignatureData();
+        final Sign.SignatureData signatureData = signedResult.getSignatureData();
         final byte[] encodedTransaction = PrivateTransactionEncoder.encode(rawTransaction);
         final BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureData);
         assertEquals(key, credentials.getEcKeyPair().getPublicKey());
@@ -208,7 +208,7 @@ public class PrivateTransactionDecoderTest {
         final String privateKey =
                 "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
         final Credentials credentials = Credentials.create(privateKey);
-        byte[] signedMessage =
+        final byte[] signedMessage =
                 PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         final String hexMessage = Numeric.toHexString(signedMessage);
 

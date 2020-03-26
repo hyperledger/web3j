@@ -17,7 +17,7 @@ import org.web3j.abi.datatypes.generated.Int16;
 
 public final class Short extends Number<java.lang.Short> {
 
-    public Short(short value) {
+    public Short(final short value) {
         super(value);
     }
 

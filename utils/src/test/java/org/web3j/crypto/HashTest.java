@@ -22,7 +22,7 @@ public class HashTest {
 
     @Test
     public void testSha3() {
-        byte[] input =
+        final byte[] input =
                 new byte[] {
                     asByte(0x6, 0x8),
                     asByte(0x6, 0x5),
@@ -37,7 +37,7 @@ public class HashTest {
                     asByte(0x6, 0x4)
                 };
 
-        byte[] expected =
+        final byte[] expected =
                 new byte[] {
                     asByte(0x4, 0x7),
                     asByte(0x1, 0x7),
@@ -73,7 +73,7 @@ public class HashTest {
                     asByte(0xa, 0xd)
                 };
 
-        byte[] result = Hash.sha3(input);
+        final byte[] result = Hash.sha3(input);
         assertArrayEquals(result, (expected));
     }
 

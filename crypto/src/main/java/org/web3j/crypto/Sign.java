@@ -52,42 +52,43 @@ public class Sign {
 
     static final String MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
-    static byte[] getEthereumMessagePrefix(int messageLength) {
+    static byte[] getEthereumMessagePrefix(final int messageLength) {
         return MESSAGE_PREFIX.concat(String.valueOf(messageLength)).getBytes();
     }
 
-    public static byte[] getEthereumMessageHash(byte[] message) {
-        byte[] prefix = getEthereumMessagePrefix(message.length);
+    public static byte[] getEthereumMessageHash(final byte[] message) {
+        final byte[] prefix = getEthereumMessagePrefix(message.length);
 
-        byte[] result = new byte[prefix.length + message.length];
+        final byte[] result = new byte[prefix.length + message.length];
         System.arraycopy(prefix, 0, result, 0, prefix.length);
         System.arraycopy(message, 0, result, prefix.length, message.length);
 
         return Hash.sha3(result);
     }
 
-    public static SignatureData signPrefixedMessage(byte[] message, ECKeyPair keyPair) {
+    public static SignatureData signPrefixedMessage(final byte[] message, final ECKeyPair keyPair) {
         return signMessage(getEthereumMessageHash(message), keyPair, false);
     }
 
-    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
+    public static SignatureData signMessage(final byte[] message, final ECKeyPair keyPair) {
         return signMessage(message, keyPair, true);
     }
 
-    public static SignatureData signMessage(byte[] message, ECKeyPair keyPair, boolean needToHash) {
-        BigInteger publicKey = keyPair.getPublicKey();
-        byte[] messageHash;
+    public static SignatureData signMessage(
+            final byte[] message, final ECKeyPair keyPair, final boolean needToHash) {
+        final BigInteger publicKey = keyPair.getPublicKey();
+        final byte[] messageHash;
         if (needToHash) {
             messageHash = Hash.sha3(message);
         } else {
             messageHash = message;
         }
 
-        ECDSASignature sig = keyPair.sign(messageHash);
+        final ECDSASignature sig = keyPair.sign(messageHash);
         // Now we have to work backwards to figure out the recId needed to recover the signature.
         int recId = -1;
         for (int i = 0; i < 4; i++) {
-            BigInteger k = recoverFromSignature(i, sig, messageHash);
+            final BigInteger k = recoverFromSignature(i, sig, messageHash);
             if (k != null && k.equals(publicKey)) {
                 recId = i;
                 break;
@@ -98,12 +99,12 @@ public class Sign {
                     "Could not construct a recoverable key. Are your credentials valid?");
         }
 
-        int headerByte = recId + 27;
+        final int headerByte = recId + 27;
 
         // 1 header + 32 bytes for R + 32 bytes for S
-        byte[] v = new byte[] {(byte) headerByte};
-        byte[] r = Numeric.toBytesPadded(sig.r, 32);
-        byte[] s = Numeric.toBytesPadded(sig.s, 32);
+        final byte[] v = new byte[] {(byte) headerByte};
+        final byte[] r = Numeric.toBytesPadded(sig.r, 32);
+        final byte[] s = Numeric.toBytesPadded(sig.s, 32);
 
         return new SignatureData(v, r, s);
     }
@@ -129,7 +130,8 @@ public class Sign {
      * @param message Hash of the data that was signed.
      * @return An ECKey containing only the public part, or null if recovery wasn't possible.
      */
-    public static BigInteger recoverFromSignature(int recId, ECDSASignature sig, byte[] message) {
+    public static BigInteger recoverFromSignature(
+            final int recId, final ECDSASignature sig, final byte[] message) {
         verifyPrecondition(recId >= 0, "recId must be positive");
         verifyPrecondition(sig.r.signum() >= 0, "r must be positive");
         verifyPrecondition(sig.s.signum() >= 0, "s must be positive");
@@ -137,9 +139,9 @@ public class Sign {
 
         // 1.0 For j from 0 to h   (h == recId here and the loop is outside this function)
         //   1.1 Let x = r + jn
-        BigInteger n = CURVE.getN(); // Curve order.
-        BigInteger i = BigInteger.valueOf((long) recId / 2);
-        BigInteger x = sig.r.add(i.multiply(n));
+        final BigInteger n = CURVE.getN(); // Curve order.
+        final BigInteger i = BigInteger.valueOf((long) recId / 2);
+        final BigInteger x = sig.r.add(i.multiply(n));
         //   1.2. Convert the integer x to an octet string X of length mlen using the conversion
         //        routine specified in Section 2.3.7, where mlen = ⌈(log2 p)/8⌉ or mlen = ⌈m/8⌉.
         //   1.3. Convert the octet string (16 set binary digits)||X to an elliptic curve point R
@@ -147,21 +149,21 @@ public class Sign {
         //        routine outputs "invalid", then do another iteration of Step 1.
         //
         // More concisely, what these points mean is to use X as a compressed public key.
-        BigInteger prime = SecP256K1Curve.q;
+        final BigInteger prime = SecP256K1Curve.q;
         if (x.compareTo(prime) >= 0) {
             // Cannot have point co-ordinates larger than this as everything takes place modulo Q.
             return null;
         }
         // Compressed keys require you to know an extra bit of data about the y-coord as there are
         // two possibilities. So it's encoded in the recId.
-        ECPoint R = decompressKey(x, (recId & 1) == 1);
+        final ECPoint R = decompressKey(x, (recId & 1) == 1);
         //   1.4. If nR != point at infinity, then do another iteration of Step 1 (callers
         //        responsibility).
         if (!R.multiply(n).isInfinity()) {
             return null;
         }
         //   1.5. Compute e from M using Steps 2 and 3 of ECDSA signature verification.
-        BigInteger e = new BigInteger(1, message);
+        final BigInteger e = new BigInteger(1, message);
         //   1.6. For k from 1 to 2 do the following.   (loop is outside this function via
         //        iterating recId)
         //   1.6.1. Compute a candidate public key as:
@@ -176,21 +178,21 @@ public class Sign {
         // We can find the additive inverse by subtracting e from zero then taking the mod. For
         // example the additive inverse of 3 modulo 11 is 8 because 3 + 8 mod 11 = 0, and
         // -3 mod 11 = 8.
-        BigInteger eInv = BigInteger.ZERO.subtract(e).mod(n);
-        BigInteger rInv = sig.r.modInverse(n);
-        BigInteger srInv = rInv.multiply(sig.s).mod(n);
-        BigInteger eInvrInv = rInv.multiply(eInv).mod(n);
-        ECPoint q = ECAlgorithms.sumOfTwoMultiplies(CURVE.getG(), eInvrInv, R, srInv);
+        final BigInteger eInv = BigInteger.ZERO.subtract(e).mod(n);
+        final BigInteger rInv = sig.r.modInverse(n);
+        final BigInteger srInv = rInv.multiply(sig.s).mod(n);
+        final BigInteger eInvrInv = rInv.multiply(eInv).mod(n);
+        final ECPoint q = ECAlgorithms.sumOfTwoMultiplies(CURVE.getG(), eInvrInv, R, srInv);
 
-        byte[] qBytes = q.getEncoded(false);
+        final byte[] qBytes = q.getEncoded(false);
         // We remove the prefix
         return new BigInteger(1, Arrays.copyOfRange(qBytes, 1, qBytes.length));
     }
 
     /** Decompress a compressed public key (x co-ord and low-bit of y-coord). */
-    private static ECPoint decompressKey(BigInteger xBN, boolean yBit) {
-        X9IntegerConverter x9 = new X9IntegerConverter();
-        byte[] compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE.getCurve()));
+    private static ECPoint decompressKey(final BigInteger xBN, final boolean yBit) {
+        final X9IntegerConverter x9 = new X9IntegerConverter();
+        final byte[] compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE.getCurve()));
         compEnc[0] = (byte) (yBit ? 0x03 : 0x02);
         return CURVE.getCurve().decodePoint(compEnc);
     }
@@ -206,8 +208,8 @@ public class Sign {
      * @throws SignatureException If the public key could not be recovered or if there was a
      *     signature format error.
      */
-    public static BigInteger signedMessageToKey(byte[] message, SignatureData signatureData)
-            throws SignatureException {
+    public static BigInteger signedMessageToKey(
+            final byte[] message, final SignatureData signatureData) throws SignatureException {
         return signedMessageHashToKey(Hash.sha3(message), signatureData);
     }
 
@@ -222,8 +224,8 @@ public class Sign {
      * @throws SignatureException If the public key could not be recovered or if there was a
      *     signature format error.
      */
-    public static BigInteger signedPrefixedMessageToKey(byte[] message, SignatureData signatureData)
-            throws SignatureException {
+    public static BigInteger signedPrefixedMessageToKey(
+            final byte[] message, final SignatureData signatureData) throws SignatureException {
         return signedMessageHashToKey(getEthereumMessageHash(message), signatureData);
     }
 
@@ -238,28 +240,28 @@ public class Sign {
      * @throws SignatureException If the public key could not be recovered or if there was a
      *     signature format error.
      */
-    public static BigInteger signedMessageHashToKey(byte[] messageHash, SignatureData signatureData)
-            throws SignatureException {
+    public static BigInteger signedMessageHashToKey(
+            final byte[] messageHash, final SignatureData signatureData) throws SignatureException {
 
-        byte[] r = signatureData.getR();
-        byte[] s = signatureData.getS();
+        final byte[] r = signatureData.getR();
+        final byte[] s = signatureData.getS();
         verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
         verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
 
-        int header = signatureData.getV()[0] & 0xFF;
+        final int header = signatureData.getV()[0] & 0xFF;
         // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
         //                  0x1D = second key with even y, 0x1E = second key with odd y
         if (header < 27 || header > 34) {
             throw new SignatureException("Header byte out of range: " + header);
         }
 
-        ECDSASignature sig =
+        final ECDSASignature sig =
                 new ECDSASignature(
                         new BigInteger(1, signatureData.getR()),
                         new BigInteger(1, signatureData.getS()));
 
-        int recId = header - 27;
-        BigInteger key = recoverFromSignature(recId, sig, messageHash);
+        final int recId = header - 27;
+        final BigInteger key = recoverFromSignature(recId, sig, messageHash);
         if (key == null) {
             throw new SignatureException("Could not recover public key from signature");
         }
@@ -292,10 +294,10 @@ public class Sign {
      * @param privKey the private key to derive the public key from
      * @return BigInteger encoded public key
      */
-    public static BigInteger publicKeyFromPrivate(BigInteger privKey) {
-        ECPoint point = publicPointFromPrivate(privKey);
+    public static BigInteger publicKeyFromPrivate(final BigInteger privKey) {
+        final ECPoint point = publicPointFromPrivate(privKey);
 
-        byte[] encoded = point.getEncoded(false);
+        final byte[] encoded = point.getEncoded(false);
         return new BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.length)); // remove prefix
     }
 
@@ -322,7 +324,7 @@ public class Sign {
      * @param bits representing the point on the curve
      * @return BigInteger encoded public key
      */
-    public static BigInteger publicFromPoint(byte[] bits) {
+    public static BigInteger publicFromPoint(final byte[] bits) {
         return new BigInteger(1, Arrays.copyOfRange(bits, 1, bits.length)); // remove prefix
     }
 
@@ -331,11 +333,11 @@ public class Sign {
         private final byte[] r;
         private final byte[] s;
 
-        public SignatureData(byte v, byte[] r, byte[] s) {
+        public SignatureData(final byte v, final byte[] r, final byte[] s) {
             this(new byte[] {v}, r, s);
         }
 
-        public SignatureData(byte[] v, byte[] r, byte[] s) {
+        public SignatureData(final byte[] v, final byte[] r, final byte[] s) {
             this.v = v;
             this.r = r;
             this.s = s;
@@ -354,7 +356,7 @@ public class Sign {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -362,7 +364,7 @@ public class Sign {
                 return false;
             }
 
-            SignatureData that = (SignatureData) o;
+            final SignatureData that = (SignatureData) o;
 
             if (!Arrays.equals(v, that.v)) {
                 return false;

@@ -28,7 +28,8 @@ public class Bip44WalletUtils extends WalletUtils {
      * @throws CipherException if the underlying cipher is not available
      * @throws IOException if the destination cannot be written to
      */
-    public static Bip39Wallet generateBip44Wallet(String password, File destinationDirectory)
+    public static Bip39Wallet generateBip44Wallet(
+            final String password, final File destinationDirectory)
             throws CipherException, IOException {
         return generateBip44Wallet(password, destinationDirectory, false);
     }
@@ -44,47 +45,49 @@ public class Bip44WalletUtils extends WalletUtils {
      * @throws IOException if the destination cannot be written to
      */
     public static Bip39Wallet generateBip44Wallet(
-            String password, File destinationDirectory, boolean testNet)
+            final String password, final File destinationDirectory, final boolean testNet)
             throws CipherException, IOException {
-        byte[] initialEntropy = new byte[16];
+        final byte[] initialEntropy = new byte[16];
         SecureRandomUtils.secureRandom().nextBytes(initialEntropy);
 
-        String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
-        byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
+        final String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
+        final byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
 
-        Bip32ECKeyPair masterKeypair = Bip32ECKeyPair.generateKeyPair(seed);
-        Bip32ECKeyPair bip44Keypair = generateBip44KeyPair(masterKeypair, testNet);
+        final Bip32ECKeyPair masterKeypair = Bip32ECKeyPair.generateKeyPair(seed);
+        final Bip32ECKeyPair bip44Keypair = generateBip44KeyPair(masterKeypair, testNet);
 
-        String walletFile = generateWalletFile(password, bip44Keypair, destinationDirectory, false);
+        final String walletFile =
+                generateWalletFile(password, bip44Keypair, destinationDirectory, false);
 
         return new Bip39Wallet(walletFile, mnemonic);
     }
 
-    public static Bip32ECKeyPair generateBip44KeyPair(Bip32ECKeyPair master) {
+    public static Bip32ECKeyPair generateBip44KeyPair(final Bip32ECKeyPair master) {
         return generateBip44KeyPair(master, false);
     }
 
-    public static Bip32ECKeyPair generateBip44KeyPair(Bip32ECKeyPair master, boolean testNet) {
+    public static Bip32ECKeyPair generateBip44KeyPair(
+            final Bip32ECKeyPair master, final boolean testNet) {
         if (testNet) {
             // /m/44'/0'/0
-            final int[] path = {44 | HARDENED_BIT, 0 | HARDENED_BIT, 0 | HARDENED_BIT, 0};
+            final int[] path = {44 | HARDENED_BIT, HARDENED_BIT, HARDENED_BIT, 0};
             return Bip32ECKeyPair.deriveKeyPair(master, path);
         } else {
             // m/44'/60'/0'/0/0
-            final int[] path = {44 | HARDENED_BIT, 60 | HARDENED_BIT, 0 | HARDENED_BIT, 0, 0};
+            final int[] path = {44 | HARDENED_BIT, 60 | HARDENED_BIT, HARDENED_BIT, 0, 0};
             return Bip32ECKeyPair.deriveKeyPair(master, path);
         }
     }
 
-    public static Credentials loadBip44Credentials(String password, String mnemonic) {
+    public static Credentials loadBip44Credentials(final String password, final String mnemonic) {
         return loadBip44Credentials(password, mnemonic, false);
     }
 
     public static Credentials loadBip44Credentials(
-            String password, String mnemonic, boolean testNet) {
-        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
-        Bip32ECKeyPair masterKeypair = Bip32ECKeyPair.generateKeyPair(seed);
-        Bip32ECKeyPair bip44Keypair = generateBip44KeyPair(masterKeypair, testNet);
+            final String password, final String mnemonic, final boolean testNet) {
+        final byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        final Bip32ECKeyPair masterKeypair = Bip32ECKeyPair.generateKeyPair(seed);
+        final Bip32ECKeyPair bip44Keypair = generateBip44KeyPair(masterKeypair, testNet);
         return Credentials.create(bip44Keypair);
     }
 }

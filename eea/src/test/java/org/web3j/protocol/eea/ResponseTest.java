@@ -31,7 +31,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
                         + "}");
 
-        EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
+        final EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
         assertEquals(
                 ethSendTransaction.getTransactionHash(),
                 ("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));

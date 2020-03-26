@@ -25,8 +25,8 @@ public class TransactionUtils {
      * @return encoded transaction hash
      */
     public static byte[] generateTransactionHash(
-            RawTransaction rawTransaction, Credentials credentials) {
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+            final RawTransaction rawTransaction, final Credentials credentials) {
+        final byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         return Hash.sha3(signedMessage);
     }
 
@@ -39,8 +39,11 @@ public class TransactionUtils {
      * @return encoded transaction hash
      */
     public static byte[] generateTransactionHash(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
+            final RawTransaction rawTransaction,
+            final byte chainId,
+            final Credentials credentials) {
+        final byte[] signedMessage =
+                TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         return Hash.sha3(signedMessage);
     }
 
@@ -52,7 +55,7 @@ public class TransactionUtils {
      * @return transaction hash as a hex encoded string
      */
     public static String generateTransactionHashHexEncoded(
-            RawTransaction rawTransaction, Credentials credentials) {
+            final RawTransaction rawTransaction, final Credentials credentials) {
         return Numeric.toHexString(generateTransactionHash(rawTransaction, credentials));
     }
 
@@ -65,7 +68,9 @@ public class TransactionUtils {
      * @return transaction hash as a hex encoded string
      */
     public static String generateTransactionHashHexEncoded(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            final RawTransaction rawTransaction,
+            final byte chainId,
+            final Credentials credentials) {
         return Numeric.toHexString(generateTransactionHash(rawTransaction, chainId, credentials));
     }
 }

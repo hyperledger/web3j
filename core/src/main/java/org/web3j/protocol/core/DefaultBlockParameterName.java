@@ -20,9 +20,9 @@ public enum DefaultBlockParameterName implements DefaultBlockParameter {
     LATEST("latest"),
     PENDING("pending");
 
-    private String name;
+    private final String name;
 
-    DefaultBlockParameterName(String name) {
+    DefaultBlockParameterName(final String name) {
         this.name = name;
     }
 
@@ -32,9 +32,9 @@ public enum DefaultBlockParameterName implements DefaultBlockParameter {
         return name;
     }
 
-    public static DefaultBlockParameterName fromString(String name) {
+    public static DefaultBlockParameterName fromString(final String name) {
         if (name != null) {
-            for (DefaultBlockParameterName defaultBlockParameterName :
+            for (final DefaultBlockParameterName defaultBlockParameterName :
                     DefaultBlockParameterName.values()) {
                 if (name.equalsIgnoreCase(defaultBlockParameterName.name)) {
                     return defaultBlockParameterName;

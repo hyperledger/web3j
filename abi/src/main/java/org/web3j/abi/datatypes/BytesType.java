@@ -17,10 +17,10 @@ import java.util.Arrays;
 /** Binary sequence of bytes. */
 public abstract class BytesType implements Type<byte[]> {
 
-    private byte[] value;
-    private String type;
+    private final byte[] value;
+    private final String type;
 
-    public BytesType(byte[] src, String type) {
+    public BytesType(final byte[] src, final String type) {
         this.value = src;
         this.type = type;
     }
@@ -43,7 +43,7 @@ public abstract class BytesType implements Type<byte[]> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -51,7 +51,7 @@ public abstract class BytesType implements Type<byte[]> {
             return false;
         }
 
-        BytesType bytesType = (BytesType) o;
+        final BytesType bytesType = (BytesType) o;
 
         if (!Arrays.equals(value, bytesType.value)) {
             return false;

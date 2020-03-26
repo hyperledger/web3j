@@ -35,14 +35,16 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
 
     private final int pollingAttemptsPerTxHash;
 
-    private final ScheduledExecutorService scheduledExecutorService;
     private final Callback callback;
     private final BlockingQueue<RequestWrapper> pendingTransactions;
 
     public QueuingTransactionReceiptProcessor(
-            Web3j web3j, Callback callback, int pollingAttemptsPerTxHash, long pollingFrequency) {
+            final Web3j web3j,
+            final Callback callback,
+            final int pollingAttemptsPerTxHash,
+            final long pollingFrequency) {
         super(web3j);
-        this.scheduledExecutorService = Async.defaultExecutorService();
+        final ScheduledExecutorService scheduledExecutorService = Async.defaultExecutorService();
         this.callback = callback;
         this.pendingTransactions = new LinkedBlockingQueue<>();
         this.pollingAttemptsPerTxHash = pollingAttemptsPerTxHash;
@@ -55,7 +57,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(String transactionHash)
+    public TransactionReceipt waitForTransactionReceipt(final String transactionHash)
             throws IOException, TransactionException {
         pendingTransactions.add(new RequestWrapper(transactionHash));
 
@@ -63,10 +65,10 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
     }
 
     private void sendTransactionReceiptRequests() {
-        for (RequestWrapper requestWrapper : pendingTransactions) {
+        for (final RequestWrapper requestWrapper : pendingTransactions) {
             try {
-                String transactionHash = requestWrapper.getTransactionHash();
-                Optional<? extends TransactionReceipt> transactionReceipt =
+                final String transactionHash = requestWrapper.getTransactionHash();
+                final Optional<? extends TransactionReceipt> transactionReceipt =
                         sendTransactionReceiptRequest(transactionHash);
                 if (transactionReceipt.isPresent()) {
                     callback.accept(transactionReceipt.get());
@@ -84,7 +86,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
                         requestWrapper.incrementCount();
                     }
                 }
-            } catch (IOException | TransactionException e) {
+            } catch (final IOException | TransactionException e) {
                 pendingTransactions.remove(requestWrapper);
                 callback.exception(e);
             }
@@ -103,7 +105,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
         private final String transactionHash;
         private int count;
 
-        RequestWrapper(String transactionHash) {
+        RequestWrapper(final String transactionHash) {
             this.transactionHash = transactionHash;
             this.count = 0;
         }
@@ -121,7 +123,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -129,7 +131,7 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
                 return false;
             }
 
-            RequestWrapper that = (RequestWrapper) o;
+            final RequestWrapper that = (RequestWrapper) o;
 
             return transactionHash.equals(that.transactionHash);
         }

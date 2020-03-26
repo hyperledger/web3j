@@ -33,27 +33,28 @@ public class UnixDomainSocket implements IOFacade {
 
     private final UnixSocketChannel channel;
 
-    public UnixDomainSocket(String ipcSocketPath) {
+    public UnixDomainSocket(final String ipcSocketPath) {
         this(ipcSocketPath, DEFAULT_BUFFER_SIZE);
     }
 
-    public UnixDomainSocket(String ipcSocketPath, int bufferSize) {
+    public UnixDomainSocket(final String ipcSocketPath, final int bufferSize) {
         this.bufferSize = bufferSize;
 
         try {
-            UnixSocketAddress address = new UnixSocketAddress(ipcSocketPath);
+            final UnixSocketAddress address = new UnixSocketAddress(ipcSocketPath);
             channel = UnixSocketChannel.open(address);
 
             reader = new InputStreamReader(Channels.newInputStream(channel));
             writer = new PrintWriter(Channels.newOutputStream(channel));
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(
                     "Provided file socket cannot be opened: " + ipcSocketPath, e);
         }
     }
 
-    UnixDomainSocket(InputStreamReader reader, PrintWriter writer, int bufferSize) {
+    UnixDomainSocket(
+            final InputStreamReader reader, final PrintWriter writer, final int bufferSize) {
         this.bufferSize = bufferSize;
         this.writer = writer;
         this.reader = reader;
@@ -61,15 +62,15 @@ public class UnixDomainSocket implements IOFacade {
     }
 
     @Override
-    public void write(String payload) throws IOException {
+    public void write(final String payload) throws IOException {
         writer.write(payload);
         writer.flush();
     }
 
     @Override
     public String read() throws IOException {
-        CharBuffer response = CharBuffer.allocate(bufferSize);
-        StringBuilder result = new StringBuilder();
+        final CharBuffer response = CharBuffer.allocate(bufferSize);
+        final StringBuilder result = new StringBuilder();
 
         do {
             response.clear();

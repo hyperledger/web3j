@@ -29,7 +29,7 @@ public final class Tuple9<T1, T2, T3, T4, T5, T6, T7, T8, T9> implements Tuple {
 
     private final T9 value9;
 
-    public Tuple9(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8, T9 value9) {
+    public Tuple9(final T1 value1, final T2 value2, final T3 value3, final T4 value4, final T5 value5, final T6 value6, final T7 value7, final T8 value8, final T9 value9) {
         this.value1 = value1;
         this.value2 = value2;
         this.value3 = value3;
@@ -155,14 +155,14 @@ public final class Tuple9<T1, T2, T3, T4, T5, T6, T7, T8, T9> implements Tuple {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tuple9<?, ?, ?, ?, ?, ?, ?, ?, ?> tuple9 = (Tuple9<?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
+        final Tuple9<?, ?, ?, ?, ?, ?, ?, ?, ?> tuple9 = (Tuple9<?, ?, ?, ?, ?, ?, ?, ?, ?>) o;
         if (value1 != null ? !value1.equals(tuple9.value1) : tuple9.value1 != null) {
             return false;
         }

@@ -36,12 +36,14 @@ public abstract class ManagedTransaction {
 
     protected EnsResolver ensResolver;
 
-    protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
+    protected ManagedTransaction(final Web3j web3j, final TransactionManager transactionManager) {
         this(new EnsResolver(web3j), web3j, transactionManager);
     }
 
     protected ManagedTransaction(
-            EnsResolver ensResolver, Web3j web3j, TransactionManager transactionManager) {
+            final EnsResolver ensResolver,
+            final Web3j web3j,
+            final TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
         this.ensResolver = ensResolver;
         this.web3j = web3j;
@@ -71,7 +73,7 @@ public abstract class ManagedTransaction {
      *
      * @param syncThreshold the sync threshold in milliseconds
      */
-    public void setSyncThreshold(long syncThreshold) {
+    public void setSyncThreshold(final long syncThreshold) {
         ensResolver.setSyncThreshold(syncThreshold);
     }
 
@@ -89,13 +91,17 @@ public abstract class ManagedTransaction {
      * @throws IOException if there's a problem communicating with the ethereum node
      */
     public BigInteger requestCurrentGasPrice() throws IOException {
-        EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
+        final EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
 
         return ethGasPrice.getGasPrice();
     }
 
     protected TransactionReceipt send(
-            String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit)
+            final String to,
+            final String data,
+            final BigInteger value,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit)
             throws IOException, TransactionException {
 
         return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
@@ -116,12 +122,12 @@ public abstract class ManagedTransaction {
     }
 
     protected TransactionReceipt send(
-            String to,
-            String data,
-            BigInteger value,
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            boolean constructor)
+            final String to,
+            final String data,
+            final BigInteger value,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final boolean constructor)
             throws IOException, TransactionException {
 
         return transactionManager.executeTransaction(

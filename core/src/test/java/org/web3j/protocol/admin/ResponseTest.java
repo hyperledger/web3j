@@ -39,7 +39,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\":true\n"
                         + "}");
 
-        BooleanResponse booleanResponse = deserialiseResponse(BooleanResponse.class);
+        final BooleanResponse booleanResponse = deserialiseResponse(BooleanResponse.class);
         assertTrue(booleanResponse.success());
     }
 
@@ -52,7 +52,8 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"0x8f0227d45853a50eefd48dd4fec25d5b3fd2295e\"\n"
                         + "}");
 
-        NewAccountIdentifier newAccountIdentifier = deserialiseResponse(NewAccountIdentifier.class);
+        final NewAccountIdentifier newAccountIdentifier =
+                deserialiseResponse(NewAccountIdentifier.class);
         assertEquals(
                 newAccountIdentifier.getAccountId(),
                 ("0x8f0227d45853a50eefd48dd4fec25d5b3fd2295e"));
@@ -70,7 +71,8 @@ public class ResponseTest extends ResponseTester {
                         + "    ]\n"
                         + "}\n");
 
-        PersonalListAccounts personalListAccounts = deserialiseResponse(PersonalListAccounts.class);
+        final PersonalListAccounts personalListAccounts =
+                deserialiseResponse(PersonalListAccounts.class);
         assertEquals(
                 personalListAccounts.getAccountIds(),
                 (Arrays.asList(
@@ -88,7 +90,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\": \"0xf1aabd691c887ee5c98af871239534f194a51fdeb801b1601d77c45afa74dae67ddd81aa5bb8a54b7974ef5be10b55a8535b040883501f76d14cb74e05e5635d1c\"\n"
                         + "}");
 
-        PersonalSign personalSign = deserialiseResponse(PersonalSign.class);
+        final PersonalSign personalSign = deserialiseResponse(PersonalSign.class);
 
         assertEquals(
                 personalSign.getSignedMessage(),
@@ -104,7 +106,7 @@ public class ResponseTest extends ResponseTester {
                         + "    \"result\":true\n"
                         + "}");
 
-        PersonalUnlockAccount personalUnlockAccount =
+        final PersonalUnlockAccount personalUnlockAccount =
                 deserialiseResponse(PersonalUnlockAccount.class);
         assertTrue(personalUnlockAccount.accountUnlocked());
     }

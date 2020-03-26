@@ -58,23 +58,23 @@ public class MnemonicUtils {
      * @throws IllegalArgumentException If the given entropy is invalid
      * @throws IllegalStateException If the word list has not been loaded
      */
-    public static String generateMnemonic(byte[] initialEntropy) {
+    public static String generateMnemonic(final byte[] initialEntropy) {
         validateEntropy(initialEntropy);
         final List<String> words = getWords();
 
-        int ent = initialEntropy.length * 8;
-        int checksumLength = ent / 32;
+        final int ent = initialEntropy.length * 8;
+        final int checksumLength = ent / 32;
 
-        byte checksum = calculateChecksum(initialEntropy);
-        boolean[] bits = convertToBits(initialEntropy, checksum);
+        final byte checksum = calculateChecksum(initialEntropy);
+        final boolean[] bits = convertToBits(initialEntropy, checksum);
 
-        int iterations = (ent + checksumLength) / 11;
-        StringBuilder mnemonicBuilder = new StringBuilder();
+        final int iterations = (ent + checksumLength) / 11;
+        final StringBuilder mnemonicBuilder = new StringBuilder();
         for (int i = 0; i < iterations; i++) {
-            int index = toInt(nextElevenBits(bits, i));
+            final int index = toInt(nextElevenBits(bits, i));
             mnemonicBuilder.append(words.get(index));
 
-            boolean notLastIteration = i < iterations - 1;
+            final boolean notLastIteration = i < iterations - 1;
             if (notLastIteration) {
                 mnemonicBuilder.append(" ");
             }
@@ -90,7 +90,7 @@ public class MnemonicUtils {
      *     valid words
      * @return Byte array representation of the entropy
      */
-    public static byte[] generateEntropy(String mnemonic) {
+    public static byte[] generateEntropy(final String mnemonic) {
         final BitSet bits = new BitSet();
         final int size = mnemonicToBits(mnemonic, bits);
         if (size == 0) {
@@ -134,59 +134,59 @@ public class MnemonicUtils {
      * @param passphrase The passphrase which will be used as part of salt for PBKDF2 function
      * @return Byte array representation of the generated seed
      */
-    public static byte[] generateSeed(String mnemonic, String passphrase) {
+    public static byte[] generateSeed(final String mnemonic, String passphrase) {
         if (isMnemonicEmpty(mnemonic)) {
             throw new IllegalArgumentException("Mnemonic is required to generate a seed");
         }
         passphrase = passphrase == null ? "" : passphrase;
 
-        String salt = String.format("mnemonic%s", passphrase);
-        PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA512Digest());
+        final String salt = String.format("mnemonic%s", passphrase);
+        final PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA512Digest());
         gen.init(mnemonic.getBytes(UTF_8), salt.getBytes(UTF_8), SEED_ITERATIONS);
 
         return ((KeyParameter) gen.generateDerivedParameters(SEED_KEY_SIZE)).getKey();
     }
 
-    public static boolean validateMnemonic(String mnemonic) {
+    public static boolean validateMnemonic(final String mnemonic) {
         try {
             generateEntropy(mnemonic);
             return true;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             return false;
         }
     }
 
-    private static boolean isMnemonicEmpty(String mnemonic) {
+    private static boolean isMnemonicEmpty(final String mnemonic) {
         return mnemonic == null || mnemonic.trim().isEmpty();
     }
 
-    private static boolean[] nextElevenBits(boolean[] bits, int i) {
-        int from = i * 11;
-        int to = from + 11;
+    private static boolean[] nextElevenBits(final boolean[] bits, final int i) {
+        final int from = i * 11;
+        final int to = from + 11;
         return Arrays.copyOfRange(bits, from, to);
     }
 
-    private static void validateEntropy(byte[] entropy) {
+    private static void validateEntropy(final byte[] entropy) {
         if (entropy == null) {
             throw new IllegalArgumentException("Entropy is required");
         }
 
-        int ent = entropy.length * 8;
+        final int ent = entropy.length * 8;
         if (ent < 128 || ent > 256 || ent % 32 != 0) {
             throw new IllegalArgumentException(
                     "The allowed size of ENT is 128-256 bits of " + "multiples of 32");
         }
     }
 
-    private static boolean[] convertToBits(byte[] initialEntropy, byte checksum) {
-        int ent = initialEntropy.length * 8;
-        int checksumLength = ent / 32;
-        int totalLength = ent + checksumLength;
-        boolean[] bits = new boolean[totalLength];
+    private static boolean[] convertToBits(final byte[] initialEntropy, final byte checksum) {
+        final int ent = initialEntropy.length * 8;
+        final int checksumLength = ent / 32;
+        final int totalLength = ent + checksumLength;
+        final boolean[] bits = new boolean[totalLength];
 
         for (int i = 0; i < initialEntropy.length; i++) {
             for (int j = 0; j < 8; j++) {
-                byte b = initialEntropy[i];
+                final byte b = initialEntropy[i];
                 bits[8 * i + j] = toBit(b, j);
             }
         }
@@ -198,14 +198,14 @@ public class MnemonicUtils {
         return bits;
     }
 
-    private static boolean toBit(byte value, int index) {
+    private static boolean toBit(final byte value, final int index) {
         return ((value >>> (7 - index)) & 1) > 0;
     }
 
-    private static int toInt(boolean[] bits) {
+    private static int toInt(final boolean[] bits) {
         int value = 0;
         for (int i = 0; i < bits.length; i++) {
-            boolean isSet = bits[i];
+            final boolean isSet = bits[i];
             if (isSet) {
                 value += 1 << bits.length - i - 1;
             }
@@ -214,7 +214,7 @@ public class MnemonicUtils {
         return value;
     }
 
-    private static int mnemonicToBits(String mnemonic, BitSet bits) {
+    private static int mnemonicToBits(final String mnemonic, final BitSet bits) {
         int bit = 0;
         final List<String> vocabulary = getWords();
         final StringTokenizer tokenizer = new StringTokenizer(mnemonic, " ");
@@ -232,7 +232,7 @@ public class MnemonicUtils {
         return bit;
     }
 
-    private static byte readByte(BitSet bits, int startByte) {
+    private static byte readByte(final BitSet bits, final int startByte) {
         byte res = 0;
         for (int k = 0; k < 8; k++) {
             if (bits.get(startByte * 8 + k)) {
@@ -242,33 +242,33 @@ public class MnemonicUtils {
         return res;
     }
 
-    private static boolean isBitSet(int n, int k) {
+    private static boolean isBitSet(final int n, final int k) {
         return ((n >> k) & 1) == 1;
     }
 
-    public static byte calculateChecksum(byte[] initialEntropy) {
-        int ent = initialEntropy.length * 8;
-        byte mask = (byte) (0xff << 8 - ent / 32);
-        byte[] bytes = sha256(initialEntropy);
+    public static byte calculateChecksum(final byte[] initialEntropy) {
+        final int ent = initialEntropy.length * 8;
+        final byte mask = (byte) (0xff << 8 - ent / 32);
+        final byte[] bytes = sha256(initialEntropy);
 
         return (byte) (bytes[0] & mask);
     }
 
     private static List<String> populateWordList() {
-        InputStream inputStream =
+        final InputStream inputStream =
                 Thread.currentThread()
                         .getContextClassLoader()
                         .getResourceAsStream("en-mnemonic-word-list.txt");
         try {
             return readAllLines(inputStream);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new IllegalStateException(e);
         }
     }
 
-    private static List<String> readAllLines(InputStream inputStream) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        List<String> data = new ArrayList<>();
+    private static List<String> readAllLines(final InputStream inputStream) throws IOException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        final List<String> data = new ArrayList<>();
         for (String line; (line = br.readLine()) != null; ) {
             data.add(line);
         }

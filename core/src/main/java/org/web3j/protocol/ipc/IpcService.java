@@ -15,6 +15,7 @@ package org.web3j.protocol.ipc;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class IpcService extends Service {
 
     private static final Logger log = LoggerFactory.getLogger(IpcService.class);
 
-    public IpcService(boolean includeRawResponses) {
+    public IpcService(final boolean includeRawResponses) {
         super(includeRawResponses);
     }
 
@@ -39,19 +40,19 @@ public class IpcService extends Service {
     }
 
     @Override
-    protected InputStream performIO(String payload) throws IOException {
-        IOFacade io = getIO();
+    protected InputStream performIO(final String payload) throws IOException {
+        final IOFacade io = getIO();
         io.write(payload);
         log.debug(">> " + payload);
 
-        String result = io.read();
+        final String result = io.read();
         log.debug("<< " + result);
         io.close();
 
         // It's not ideal converting back into an inputStream, but we want
         // to be consistent with the HTTPService API.
         // UTF-8 (the default encoding for JSON) is explicitly used here.
-        return new ByteArrayInputStream(result.getBytes("UTF-8"));
+        return new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

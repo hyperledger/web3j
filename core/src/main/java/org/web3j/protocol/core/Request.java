@@ -24,7 +24,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.generated.RemoteFunctionCall1;
 
 public class Request<S, T extends Response<?>> {
-    private static AtomicLong nextId = new AtomicLong(0);
+    private static final AtomicLong nextId = new AtomicLong(0);
 
     private String jsonrpc = "2.0";
     private String method;
@@ -39,7 +39,11 @@ public class Request<S, T extends Response<?>> {
 
     public Request() {}
 
-    public Request(String method, List<S> params, Web3jService web3jService, Class<T> type) {
+    public Request(
+            final String method,
+            final List<S> params,
+            final Web3jService web3jService,
+            final Class<T> type) {
         this.method = method;
         this.params = params;
         this.id = nextId.getAndIncrement();
@@ -51,7 +55,7 @@ public class Request<S, T extends Response<?>> {
         return jsonrpc;
     }
 
-    public void setJsonrpc(String jsonrpc) {
+    public void setJsonrpc(final String jsonrpc) {
         this.jsonrpc = jsonrpc;
     }
 
@@ -59,7 +63,7 @@ public class Request<S, T extends Response<?>> {
         return method;
     }
 
-    public void setMethod(String method) {
+    public void setMethod(final String method) {
         this.method = method;
     }
 
@@ -67,7 +71,7 @@ public class Request<S, T extends Response<?>> {
         return params;
     }
 
-    public void setParams(List<S> params) {
+    public void setParams(final List<S> params) {
         this.params = params;
     }
 
@@ -75,7 +79,7 @@ public class Request<S, T extends Response<?>> {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 

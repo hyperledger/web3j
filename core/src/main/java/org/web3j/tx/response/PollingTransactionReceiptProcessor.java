@@ -25,21 +25,22 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
     protected final long sleepDuration;
     protected final int attempts;
 
-    public PollingTransactionReceiptProcessor(Web3j web3j, long sleepDuration, int attempts) {
+    public PollingTransactionReceiptProcessor(
+            final Web3j web3j, final long sleepDuration, final int attempts) {
         super(web3j);
         this.sleepDuration = sleepDuration;
         this.attempts = attempts;
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(String transactionHash)
+    public TransactionReceipt waitForTransactionReceipt(final String transactionHash)
             throws IOException, TransactionException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
     private TransactionReceipt getTransactionReceipt(
-            String transactionHash, long sleepDuration, int attempts)
+            final String transactionHash, final long sleepDuration, final int attempts)
             throws IOException, TransactionException {
 
         Optional<? extends TransactionReceipt> receiptOptional =
@@ -48,7 +49,7 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
             if (!receiptOptional.isPresent()) {
                 try {
                     Thread.sleep(sleepDuration);
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     throw new TransactionException(e);
                 }
 

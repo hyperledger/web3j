@@ -41,19 +41,19 @@ public abstract class ResponseTester {
         configureWeb3Service(false);
     }
 
-    protected void buildResponse(String data) {
+    protected void buildResponse(final String data) {
         responseInterceptor.setJsonResponse(data);
     }
 
-    protected void configureWeb3Service(boolean includeRawResponses) {
+    protected void configureWeb3Service(final boolean includeRawResponses) {
         web3jService = new HttpService(okHttpClient, includeRawResponses);
     }
 
-    protected <T extends Response<?>> T deserialiseResponse(Class<T> type) {
+    protected <T extends Response<?>> T deserialiseResponse(final Class<T> type) {
         T response = null;
         try {
             response = web3jService.send(new Request<>(), type);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             fail(e.getMessage());
         }
         return response;
@@ -63,12 +63,12 @@ public abstract class ResponseTester {
 
         private String jsonResponse;
 
-        public void setJsonResponse(String jsonResponse) {
+        public void setJsonResponse(final String jsonResponse) {
             this.jsonResponse = jsonResponse;
         }
 
         @Override
-        public okhttp3.Response intercept(Chain chain) {
+        public okhttp3.Response intercept(final Chain chain) {
 
             if (jsonResponse == null) {
                 throw new UnsupportedOperationException("Response has not been configured");

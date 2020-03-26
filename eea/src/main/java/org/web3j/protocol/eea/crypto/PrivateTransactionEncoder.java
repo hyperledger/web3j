@@ -67,8 +67,8 @@ public class PrivateTransactionEncoder {
         return RlpEncoder.encode(rlpList);
     }
 
-    private static byte[] longToBytes(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+    private static byte[] longToBytes(final long x) {
+        final ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(x);
         return buffer.array();
     }

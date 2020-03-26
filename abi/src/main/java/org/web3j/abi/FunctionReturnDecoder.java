@@ -46,7 +46,7 @@ public abstract class FunctionReturnDecoder {
      *     invalid response
      */
     public static List<Type<?>> decode(
-            String rawInput, List<TypeReference<Type<?>>> outputParameters) {
+            final String rawInput, final List<TypeReference<Type<?>>> outputParameters) {
         return decoder().decodeFunctionResult(rawInput, outputParameters);
     }
 
@@ -73,7 +73,7 @@ public abstract class FunctionReturnDecoder {
      * @return the decode value
      */
     public static <T extends Type<?>> Type<?> decodeIndexedValue(
-            String rawInput, TypeReference<T> typeReference) {
+            final String rawInput, final TypeReference<T> typeReference) {
         return decoder().decodeEventParameter(rawInput, typeReference);
     }
 

@@ -28,29 +28,29 @@ public class EventEncoder {
 
     private EventEncoder() {}
 
-    public static String encode(Event event) {
+    public static String encode(final Event event) {
 
-        String methodSignature = buildMethodSignature(event.getName(), event.getParameters());
+        final String methodSignature = buildMethodSignature(event.getName(), event.getParameters());
 
         return buildEventSignature(methodSignature);
     }
 
     static <T extends Type> String buildMethodSignature(
-            String methodName, List<TypeReference<T>> parameters) {
+            final String methodName, final List<TypeReference<T>> parameters) {
 
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params =
+        final String params =
                 parameters.stream().map(p -> Utils.getTypeName(p)).collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();
     }
 
-    public static String buildEventSignature(String methodSignature) {
-        byte[] input = methodSignature.getBytes();
-        byte[] hash = Hash.sha3(input);
+    public static String buildEventSignature(final String methodSignature) {
+        final byte[] input = methodSignature.getBytes();
+        final byte[] hash = Hash.sha3(input);
         return Numeric.toHexString(hash);
     }
 }

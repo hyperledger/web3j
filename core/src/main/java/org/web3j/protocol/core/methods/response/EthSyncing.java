@@ -34,7 +34,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
 
     @Override
     @JsonDeserialize(using = EthSyncing.ResponseDeserialiser.class)
-    public void setResult(EthSyncing.Result result) {
+    public void setResult(final EthSyncing.Result result) {
         super.setResult(result);
     }
 
@@ -51,7 +51,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
             return isSyncing;
         }
 
-        public void setSyncing(boolean syncing) {
+        public void setSyncing(final boolean syncing) {
             isSyncing = syncing;
         }
     }
@@ -69,11 +69,11 @@ public class EthSyncing extends Response<EthSyncing.Result> {
         public Syncing() {}
 
         public Syncing(
-                String startingBlock,
-                String currentBlock,
-                String highestBlock,
-                String knownStates,
-                String pulledStates) {
+                final String startingBlock,
+                final String currentBlock,
+                final String highestBlock,
+                final String knownStates,
+                final String pulledStates) {
             this.startingBlock = startingBlock;
             this.currentBlock = currentBlock;
             this.highestBlock = highestBlock;
@@ -85,7 +85,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
             return startingBlock;
         }
 
-        public void setStartingBlock(String startingBlock) {
+        public void setStartingBlock(final String startingBlock) {
             this.startingBlock = startingBlock;
         }
 
@@ -93,7 +93,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
             return currentBlock;
         }
 
-        public void setCurrentBlock(String currentBlock) {
+        public void setCurrentBlock(final String currentBlock) {
             this.currentBlock = currentBlock;
         }
 
@@ -101,12 +101,12 @@ public class EthSyncing extends Response<EthSyncing.Result> {
             return highestBlock;
         }
 
-        public void setHighestBlock(String highestBlock) {
+        public void setHighestBlock(final String highestBlock) {
             this.highestBlock = highestBlock;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -114,7 +114,7 @@ public class EthSyncing extends Response<EthSyncing.Result> {
                 return false;
             }
 
-            Syncing syncing = (Syncing) o;
+            final Syncing syncing = (Syncing) o;
 
             if (isSyncing() != syncing.isSyncing()) {
                 return false;
@@ -158,13 +158,13 @@ public class EthSyncing extends Response<EthSyncing.Result> {
 
     public static class ResponseDeserialiser extends JsonDeserializer<Result> {
 
-        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
+        private final ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public Result deserialize(
-                JsonParser jsonParser, DeserializationContext deserializationContext)
+                final JsonParser jsonParser, final DeserializationContext deserializationContext)
                 throws IOException {
-            Result result;
+            final Result result;
             if (jsonParser.getCurrentToken() == JsonToken.VALUE_FALSE) {
                 result = new Result();
                 result.setSyncing(jsonParser.getBooleanValue());

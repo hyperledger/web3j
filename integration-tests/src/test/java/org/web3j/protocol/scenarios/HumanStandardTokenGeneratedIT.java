@@ -47,8 +47,8 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
         final String aliceAddress = ALICE.getAddress();
         final String bobAddress = BOB.getAddress();
-        ContractGasProvider contractGasProvider = new DefaultGasProvider();
-        HumanStandardToken contract =
+        final ContractGasProvider contractGasProvider = new DefaultGasProvider();
+        final HumanStandardToken contract =
                 HumanStandardToken.deploy(
                                 web3j,
                                 ALICE,
@@ -65,16 +65,16 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
 
         assertEquals(contract.balanceOf(ALICE.getAddress()).call(), (aliceQty));
 
-        CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
-        Disposable transferEventSubscription =
+        final CountDownLatch transferEventCountDownLatch = new CountDownLatch(2);
+        final Disposable transferEventSubscription =
                 contract.transferEventFlowable(
                                 DefaultBlockParameterName.EARLIEST,
                                 DefaultBlockParameterName.LATEST)
                         .subscribe(
                                 transferEventResponse -> transferEventCountDownLatch.countDown());
 
-        CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
-        Disposable approvalEventSubscription =
+        final CountDownLatch approvalEventCountDownLatch = new CountDownLatch(1);
+        final Disposable approvalEventSubscription =
                 contract.approvalEventFlowable(
                                 DefaultBlockParameterName.EARLIEST,
                                 DefaultBlockParameterName.LATEST)
@@ -84,7 +84,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         // transfer tokens
         BigInteger transferQuantity = BigInteger.valueOf(100_000);
 
-        TransactionReceipt aliceTransferReceipt =
+        final TransactionReceipt aliceTransferReceipt =
                 contract.transfer(BOB.getAddress(), transferQuantity).send();
 
         HumanStandardToken.TransferEventResponse aliceTransferEventValues =
@@ -106,7 +106,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         assertEquals(contract.allowance(aliceAddress, bobAddress).call(), (BigInteger.ZERO));
 
         transferQuantity = BigInteger.valueOf(50);
-        TransactionReceipt approveReceipt =
+        final TransactionReceipt approveReceipt =
                 contract.approve(BOB.getAddress(), transferQuantity).send();
 
         HumanStandardToken.ApprovalEventResponse approvalEventValues =
@@ -122,11 +122,11 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         transferQuantity = BigInteger.valueOf(25);
 
         // Bob requires his own contract instance
-        HumanStandardToken bobsContract =
+        final HumanStandardToken bobsContract =
                 HumanStandardToken.load(
                         contract.getContractAddress(), web3j, BOB, STATIC_GAS_PROVIDER);
 
-        TransactionReceipt bobTransferReceipt =
+        final TransactionReceipt bobTransferReceipt =
                 bobsContract.transferFrom(aliceAddress, bobAddress, transferQuantity).send();
 
         HumanStandardToken.TransferEventResponse bobTransferEventValues =

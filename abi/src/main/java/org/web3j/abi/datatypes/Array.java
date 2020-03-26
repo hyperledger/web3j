@@ -25,27 +25,27 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
 
     @Deprecated
     @SafeVarargs
-    Array(String type, T... values) {
+    Array(final String type, final T... values) {
         this(type, Arrays.asList(values));
     }
 
     @Deprecated
     @SuppressWarnings("unchecked")
-    Array(String type, List<T> values) {
+    Array(final String type, final List<T> values) {
         this((Class<T>) AbiTypes.getType(type), values);
     }
 
     @Deprecated
-    Array(String type) {
+    Array(final String type) {
         this(type, new ArrayList<>());
     }
 
     @SafeVarargs
-    Array(Class<T> type, T... values) {
+    Array(final Class<T> type, final T... values) {
         this(type, Arrays.asList(values));
     }
 
-    Array(Class<T> type, List<T> values) {
+    Array(final Class<T> type, final List<T> values) {
         checkValid(type, values);
 
         this.type = type;
@@ -74,13 +74,13 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
     @Override
     public abstract String getTypeAsString();
 
-    private void checkValid(Class<T> type, List<T> values) {
+    private void checkValid(final Class<T> type, final List<T> values) {
         Objects.requireNonNull(type);
         Objects.requireNonNull(values);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -88,7 +88,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
             return false;
         }
 
-        Array<?> array = (Array<?>) o;
+        final Array<?> array = (Array<?>) o;
 
         if (!type.equals(array.type)) {
             return false;

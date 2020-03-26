@@ -132,7 +132,7 @@ public final class AbiTypes {
      * @param type A Solidity type.
      * @return The web3j Java class to represent this Solidity type.
      */
-    public static Class<? extends Type> getType(String type) {
+    public static Class<? extends Type> getType(final String type) {
         return getType(type, false);
     }
 
@@ -144,7 +144,7 @@ public final class AbiTypes {
      * @return The web3j Java class to represent this Solidity type.
      */
     @SuppressWarnings("unchecked")
-    public static Class<? extends Type> getType(String type, boolean primitives) {
+    public static Class<? extends Type> getType(final String type, final boolean primitives) {
         switch (type) {
             case "address":
                 return Address.class;
@@ -380,7 +380,7 @@ public final class AbiTypes {
      * name. For the tuple notation of a struct, example ((string,uint256)), think of taking an
      * instance of the struct and calling the <code>instance.getTypeAsString()</code> method.
      */
-    public static String getTypeAString(Class<? extends Type> type) {
+    public static String getTypeAString(final Class<? extends Type> type) {
         if (Utf8String.class.equals(type)) {
             return "string";
         } else if (DynamicBytes.class.equals(type)) {

@@ -34,7 +34,7 @@ public class Version {
     }
 
     private static Properties loadProperties() throws IOException {
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         properties.load(Version.class.getResourceAsStream("/web3j-version.properties"));
         return properties;
     }

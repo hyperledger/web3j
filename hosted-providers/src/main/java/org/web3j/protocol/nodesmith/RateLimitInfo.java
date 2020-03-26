@@ -23,11 +23,11 @@ import java.util.Optional;
  */
 public class RateLimitInfo {
 
-    private long limit;
-    private long remaining;
-    private Instant resetTime;
+    private final long limit;
+    private final long remaining;
+    private final Instant resetTime;
 
-    RateLimitInfo(long limit, long remaining, Instant resetTime) {
+    RateLimitInfo(final long limit, final long remaining, final Instant resetTime) {
         this.limit = limit;
         this.remaining = remaining;
         this.resetTime = resetTime;
@@ -70,15 +70,15 @@ public class RateLimitInfo {
      * @return If successful, RateLimitInfo wrapped in Optional, otherwise Optional.empty().
      */
     public static Optional<RateLimitInfo> createFromHeaders(
-            String limitValue, String remainingValue, String resetTimeValue) {
+            final String limitValue, final String remainingValue, final String resetTimeValue) {
 
         try {
-            long limit = Long.parseLong(limitValue);
-            long remaining = Long.parseLong(remainingValue);
-            long resetEpochSeconds = Long.parseLong(resetTimeValue);
-            Instant resetTime = Instant.ofEpochSecond(resetEpochSeconds);
+            final long limit = Long.parseLong(limitValue);
+            final long remaining = Long.parseLong(remainingValue);
+            final long resetEpochSeconds = Long.parseLong(resetTimeValue);
+            final Instant resetTime = Instant.ofEpochSecond(resetEpochSeconds);
             return Optional.of(new RateLimitInfo(limit, remaining, resetTime));
-        } catch (NumberFormatException ex) {
+        } catch (final NumberFormatException ex) {
             return Optional.empty();
         }
     }

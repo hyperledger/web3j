@@ -21,7 +21,7 @@ public class EventValues {
     private final List<Type<?>> indexedValues;
     private final List<Type<?>> nonIndexedValues;
 
-    public EventValues(List<Type<?>> indexedValues, List<Type<?>> nonIndexedValues) {
+    public EventValues(final List<Type<?>> indexedValues, final List<Type<?>> nonIndexedValues) {
         this.indexedValues = indexedValues;
         this.nonIndexedValues = nonIndexedValues;
     }

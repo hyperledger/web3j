@@ -21,13 +21,13 @@ public class SignedRawTransaction extends RawTransaction implements SignatureDat
     private final Sign.SignatureData signatureData;
 
     public SignedRawTransaction(
-            BigInteger nonce,
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            String to,
-            BigInteger value,
-            String data,
-            Sign.SignatureData signatureData) {
+            final BigInteger nonce,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final BigInteger value,
+            final String data,
+            final Sign.SignatureData signatureData) {
         super(nonce, gasPrice, gasLimit, to, value, data);
         this.signatureData = signatureData;
     }
@@ -42,7 +42,7 @@ public class SignedRawTransaction extends RawTransaction implements SignatureDat
     }
 
     @Override
-    public byte[] getEncodedTransaction(Long chainId) {
+    public byte[] getEncodedTransaction(final Long chainId) {
         if (null == chainId) {
             return TransactionEncoder.encode(this);
         } else {

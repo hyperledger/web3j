@@ -41,7 +41,7 @@ public class RequestTest extends RequestTester {
     private Besu web3j;
 
     @Override
-    protected void initWeb3Client(HttpService httpService) {
+    protected void initWeb3Client(final HttpService httpService) {
         web3j = Besu.build(httpService);
     }
 
@@ -115,7 +115,7 @@ public class RequestTest extends RequestTester {
     public void testDebugTraceTransaction() throws Exception {
         final String transactionHash = "0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e";
 
-        Map<String, Boolean> options = new HashMap<>();
+        final Map<String, Boolean> options = new HashMap<>();
         options.put("disableStorage", false);
         options.put("disableStack", false);
         options.put("disableMemory", true);

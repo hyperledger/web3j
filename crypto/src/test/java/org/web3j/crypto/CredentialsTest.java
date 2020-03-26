@@ -20,18 +20,18 @@ public class CredentialsTest {
 
     @Test
     public void testCredentialsFromString() {
-        Credentials credentials = Credentials.create(SampleKeys.KEY_PAIR);
+        final Credentials credentials = Credentials.create(SampleKeys.KEY_PAIR);
         verify(credentials);
     }
 
     @Test
     public void testCredentialsFromECKeyPair() {
-        Credentials credentials =
+        final Credentials credentials =
                 Credentials.create(SampleKeys.PRIVATE_KEY_STRING, SampleKeys.PUBLIC_KEY_STRING);
         verify(credentials);
     }
 
-    private void verify(Credentials credentials) {
+    private void verify(final Credentials credentials) {
         assertEquals(credentials.getAddress(), (SampleKeys.ADDRESS));
         assertEquals(credentials.getEcKeyPair(), (SampleKeys.KEY_PAIR));
     }

@@ -32,7 +32,7 @@ public class ParityAllAccountsInfo
 
         public AccountsInfo() {}
 
-        public AccountsInfo(Map<String, Object> meta, String name, String uuid) {
+        public AccountsInfo(final Map<String, Object> meta, final String name, final String uuid) {
             this.name = name;
             this.uuid = uuid;
             this.meta = meta;
@@ -42,7 +42,7 @@ public class ParityAllAccountsInfo
             return name;
         }
 
-        public void setName(String name) {
+        public void setName(final String name) {
             this.name = name;
         }
 
@@ -50,7 +50,7 @@ public class ParityAllAccountsInfo
             return uuid;
         }
 
-        public void setUuid(String uuid) {
+        public void setUuid(final String uuid) {
             this.uuid = uuid;
         }
 
@@ -58,12 +58,12 @@ public class ParityAllAccountsInfo
             return meta;
         }
 
-        public void setMeta(Map<String, Object> meta) {
+        public void setMeta(final Map<String, Object> meta) {
             this.meta = meta;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -71,7 +71,7 @@ public class ParityAllAccountsInfo
                 return false;
             }
 
-            AccountsInfo that = (AccountsInfo) o;
+            final AccountsInfo that = (AccountsInfo) o;
 
             if (name != null ? !name.equals(that.name) : that.name != null) {
                 return false;

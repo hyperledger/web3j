@@ -21,7 +21,7 @@ public class Bip39Wallet {
     /** Generated BIP-39 mnemonic for the wallet. */
     private final String mnemonic;
 
-    public Bip39Wallet(String filename, String mnemonic) {
+    public Bip39Wallet(final String filename, final String mnemonic) {
         this.filename = filename;
         this.mnemonic = mnemonic;
     }

@@ -33,32 +33,30 @@ public class NodesmithHttpService extends HttpService {
 
     private RateLimitInfo latestRateLimitInfo = null;
 
-    public NodesmithHttpService(String url, OkHttpClient httpClient) {
+    public NodesmithHttpService(final String url, final OkHttpClient httpClient) {
         super(url, httpClient);
     }
 
-    public NodesmithHttpService(String url) {
+    public NodesmithHttpService(final String url) {
         super(url);
     }
 
     public RateLimitInfo getLatestRateLimitInfo() {
-        return this.latestRateLimitInfo;
+        return latestRateLimitInfo;
     }
 
     @Override
-    protected void processHeaders(Headers headers) {
-        Optional<RateLimitInfo> info = createRateLimitFromHeaders(headers);
-        if (info.isPresent()) {
-            this.latestRateLimitInfo = info.get();
-        }
+    protected void processHeaders(final Headers headers) {
+        final Optional<RateLimitInfo> info = createRateLimitFromHeaders(headers);
+        info.ifPresent(rateLimitInfo -> latestRateLimitInfo = rateLimitInfo);
     }
 
-    static Optional<RateLimitInfo> createRateLimitFromHeaders(Headers headers) {
+    static Optional<RateLimitInfo> createRateLimitFromHeaders(final Headers headers) {
         if (headers == null) {
             return Optional.empty();
         }
 
-        Set<String> names = headers.names();
+        final Set<String> names = headers.names();
         if (!names.containsAll(
                 Arrays.asList(NS_RATELIMIT_LIMIT, NS_RATELIMIT_REMAINING, NS_RATELIMIT_RESET))) {
             return Optional.empty();

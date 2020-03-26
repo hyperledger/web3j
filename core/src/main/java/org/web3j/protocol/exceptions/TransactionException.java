@@ -25,21 +25,21 @@ public class TransactionException extends Exception {
     private String transactionHash = null;
     private TransactionReceipt transactionReceipt = null;
 
-    public TransactionException(String message) {
+    public TransactionException(final String message) {
         super(message);
     }
 
-    public TransactionException(String message, String transactionHash) {
+    public TransactionException(final String message, final String transactionHash) {
         super(message);
         this.transactionHash = transactionHash;
     }
 
-    public TransactionException(String message, TransactionReceipt transactionReceipt) {
+    public TransactionException(final String message, final TransactionReceipt transactionReceipt) {
         super(message);
         this.transactionReceipt = transactionReceipt;
     }
 
-    public TransactionException(Throwable cause) {
+    public TransactionException(final Throwable cause) {
         super(cause);
     }
 

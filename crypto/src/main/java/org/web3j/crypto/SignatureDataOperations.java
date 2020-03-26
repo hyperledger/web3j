@@ -27,28 +27,28 @@ public interface SignatureDataOperations {
     byte[] getEncodedTransaction(Long chainId);
 
     default String getFrom() throws SignatureException {
-        byte[] encodedTransaction = getEncodedTransaction(getChainId());
-        BigInteger v = Numeric.toBigInt(getSignatureData().getV());
-        byte[] r = getSignatureData().getR();
-        byte[] s = getSignatureData().getS();
-        Sign.SignatureData signatureDataV = new Sign.SignatureData(getRealV(v), r, s);
-        BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureDataV);
+        final byte[] encodedTransaction = getEncodedTransaction(getChainId());
+        final BigInteger v = Numeric.toBigInt(getSignatureData().getV());
+        final byte[] r = getSignatureData().getR();
+        final byte[] s = getSignatureData().getS();
+        final Sign.SignatureData signatureDataV = new Sign.SignatureData(getRealV(v), r, s);
+        final BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureDataV);
         return "0x" + Keys.getAddress(key);
     }
 
-    default void verify(String from) throws SignatureException {
-        String actualFrom = getFrom();
+    default void verify(final String from) throws SignatureException {
+        final String actualFrom = getFrom();
         if (!actualFrom.equals(from)) {
             throw new SignatureException("from mismatch");
         }
     }
 
-    default byte getRealV(BigInteger bv) {
-        long v = bv.longValue();
+    default byte getRealV(final BigInteger bv) {
+        final long v = bv.longValue();
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return (byte) v;
         }
-        byte realV = LOWER_REAL_V;
+        final byte realV = LOWER_REAL_V;
         int inc = 0;
         if ((int) v % 2 == 0) {
             inc = 1;
@@ -57,8 +57,8 @@ public interface SignatureDataOperations {
     }
 
     default Long getChainId() {
-        BigInteger bv = Numeric.toBigInt(getSignatureData().getV());
-        long v = bv.longValue();
+        final BigInteger bv = Numeric.toBigInt(getSignatureData().getV());
+        final long v = bv.longValue();
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return null;
         }

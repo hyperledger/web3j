@@ -21,7 +21,7 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 
 public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
-    public JsonRpc2_0Eea(Web3jService web3jService) {
+    public JsonRpc2_0Eea(final Web3jService web3jService) {
         super(web3jService);
     }
 

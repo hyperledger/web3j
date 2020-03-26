@@ -19,16 +19,16 @@ public class Strings {
 
     private Strings() {}
 
-    public static String toCsv(List<String> src) {
+    public static String toCsv(final List<String> src) {
         // return src == null ? null : String.join(", ", src.toArray(new String[0]));
         return join(src, ", ");
     }
 
-    public static String join(List<String> src, String delimiter) {
+    public static String join(final List<String> src, final String delimiter) {
         return src == null ? null : String.join(delimiter, src.toArray(new String[0]));
     }
 
-    public static String capitaliseFirstLetter(String string) {
+    public static String capitaliseFirstLetter(final String string) {
         if (string == null || string.length() == 0) {
             return string;
         } else {
@@ -36,7 +36,7 @@ public class Strings {
         }
     }
 
-    public static String lowercaseFirstLetter(String string) {
+    public static String lowercaseFirstLetter(final String string) {
         if (string == null || string.length() == 0) {
             return string;
         } else {
@@ -44,15 +44,15 @@ public class Strings {
         }
     }
 
-    public static String zeros(int n) {
+    public static String zeros(final int n) {
         return repeat('0', n);
     }
 
-    public static String repeat(char value, int n) {
+    public static String repeat(final char value, final int n) {
         return new String(new char[n]).replace("\0", String.valueOf(value));
     }
 
-    public static boolean isEmpty(String s) {
+    public static boolean isEmpty(final String s) {
         return s == null || s.length() == 0;
     }
 }

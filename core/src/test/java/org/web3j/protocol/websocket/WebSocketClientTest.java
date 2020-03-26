@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 
 public class WebSocketClientTest {
 
-    private WebSocketListener listener = mock(WebSocketListener.class);
+    private final WebSocketListener listener = mock(WebSocketListener.class);
 
     private WebSocketClient client;
 
@@ -43,7 +43,7 @@ public class WebSocketClientTest {
 
     @Test
     public void testNotifyListenerOnError() throws Exception {
-        IOException e = new IOException("123");
+        final IOException e = new IOException("123");
         client.onError(e);
 
         verify(listener).onError(e);

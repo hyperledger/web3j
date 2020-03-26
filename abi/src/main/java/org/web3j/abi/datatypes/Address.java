@@ -27,23 +27,23 @@ public class Address implements Type<String> {
 
     private final Uint value;
 
-    public Address(Uint value) {
+    public Address(final Uint value) {
         this.value = value;
     }
 
-    public Address(BigInteger value) {
+    public Address(final BigInteger value) {
         this(DEFAULT_LENGTH, value);
     }
 
-    public Address(int bitSize, BigInteger value) {
+    public Address(final int bitSize, final BigInteger value) {
         this(new Uint(bitSize, value));
     }
 
-    public Address(String hexValue) {
+    public Address(final String hexValue) {
         this(DEFAULT_LENGTH, hexValue);
     }
 
-    public Address(int bitSize, String hexValue) {
+    public Address(final int bitSize, final String hexValue) {
         this(bitSize, Numeric.toBigInt(hexValue));
     }
 
@@ -67,7 +67,7 @@ public class Address implements Type<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -75,7 +75,7 @@ public class Address implements Type<String> {
             return false;
         }
 
-        Address address = (Address) o;
+        final Address address = (Address) o;
 
         return value != null ? value.value.equals(address.value.value) : address.value == null;
     }

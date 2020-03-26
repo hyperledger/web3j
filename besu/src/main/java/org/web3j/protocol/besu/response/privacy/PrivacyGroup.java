@@ -68,14 +68,14 @@ public class PrivacyGroup {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        PrivacyGroup that = (PrivacyGroup) o;
+        final PrivacyGroup that = (PrivacyGroup) o;
         return getPrivacyGroupId().equals(that.getPrivacyGroupId())
                 && Objects.equals(getName(), that.getName())
                 && Objects.equals(getDescription(), that.getDescription())

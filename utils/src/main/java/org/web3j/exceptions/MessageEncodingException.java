@@ -14,11 +14,11 @@ package org.web3j.exceptions;
 
 /** Encoding exception. */
 public class MessageEncodingException extends RuntimeException {
-    public MessageEncodingException(String message) {
+    public MessageEncodingException(final String message) {
         super(message);
     }
 
-    public MessageEncodingException(String message, Throwable cause) {
+    public MessageEncodingException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

@@ -36,7 +36,7 @@ public class Response<T> {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -44,7 +44,7 @@ public class Response<T> {
         return jsonrpc;
     }
 
-    public void setJsonrpc(String jsonrpc) {
+    public void setJsonrpc(final String jsonrpc) {
         this.jsonrpc = jsonrpc;
     }
 
@@ -52,7 +52,7 @@ public class Response<T> {
         return result;
     }
 
-    public void setResult(T result) {
+    public void setResult(final T result) {
         this.result = result;
     }
 
@@ -60,7 +60,7 @@ public class Response<T> {
         return error;
     }
 
-    public void setError(Error error) {
+    public void setError(final Error error) {
         this.error = error;
     }
 
@@ -72,7 +72,7 @@ public class Response<T> {
         return rawResponse;
     }
 
-    public void setRawResponse(String rawResponse) {
+    public void setRawResponse(final String rawResponse) {
         this.rawResponse = rawResponse;
     }
 
@@ -85,7 +85,7 @@ public class Response<T> {
 
         public Error() {}
 
-        public Error(int code, String message) {
+        public Error(final int code, final String message) {
             this.code = code;
             this.message = message;
         }
@@ -94,7 +94,7 @@ public class Response<T> {
             return code;
         }
 
-        public void setCode(int code) {
+        public void setCode(final int code) {
             this.code = code;
         }
 
@@ -102,7 +102,7 @@ public class Response<T> {
             return message;
         }
 
-        public void setMessage(String message) {
+        public void setMessage(final String message) {
             this.message = message;
         }
 
@@ -110,12 +110,12 @@ public class Response<T> {
             return data;
         }
 
-        public void setData(String data) {
+        public void setData(final String data) {
             this.data = data;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -123,7 +123,7 @@ public class Response<T> {
                 return false;
             }
 
-            Error error = (Error) o;
+            final Error error = (Error) o;
 
             if (getCode() != error.getCode()) {
                 return false;

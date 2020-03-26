@@ -12,11 +12,11 @@ import org.web3j.abi.datatypes.Int;
 public class Int120 extends Int {
     public static final Int120 DEFAULT = new Int120(BigInteger.ZERO);
 
-    public Int120(BigInteger value) {
+    public Int120(final BigInteger value) {
         super(120, value);
     }
 
-    public Int120(long value) {
+    public Int120(final long value) {
         this(BigInteger.valueOf(value));
     }
 }

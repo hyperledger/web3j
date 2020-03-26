@@ -119,80 +119,80 @@ public class TypeEncoderTest {
 
     @Test
     public void testUintEncode() {
-        Uint zero8 = new Uint8(BigInteger.ZERO);
+        final Uint zero8 = new Uint8(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero8),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max8 = new Uint8(255);
+        final Uint max8 = new Uint8(255);
         assertEquals(
                 TypeEncoder.encodeNumeric(max8),
                 "00000000000000000000000000000000000000000000000000000000000000ff");
 
-        Uint zero16 = new Uint16(BigInteger.ZERO);
+        final Uint zero16 = new Uint16(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero16),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max16 = new Uint16(65535);
+        final Uint max16 = new Uint16(65535);
         assertEquals(
                 TypeEncoder.encodeNumeric(max16),
                 "000000000000000000000000000000000000000000000000000000000000ffff");
 
-        Uint zero24 = new Uint24(BigInteger.ZERO);
+        final Uint zero24 = new Uint24(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero24),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max24 = new Uint24(16777215);
+        final Uint max24 = new Uint24(16777215);
         assertEquals(
                 TypeEncoder.encodeNumeric(max24),
                 "0000000000000000000000000000000000000000000000000000000000ffffff");
 
-        Uint zero32 = new Uint32(BigInteger.ZERO);
+        final Uint zero32 = new Uint32(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero32),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max32 = new Uint32(BigInteger.valueOf(4294967295L));
+        final Uint max32 = new Uint32(BigInteger.valueOf(4294967295L));
         assertEquals(
                 TypeEncoder.encodeNumeric(max32),
                 "00000000000000000000000000000000000000000000000000000000ffffffff");
 
-        Uint zero40 = new Uint40(BigInteger.ZERO);
+        final Uint zero40 = new Uint40(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero40),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max40 = new Uint40(BigInteger.valueOf(1099511627775L));
+        final Uint max40 = new Uint40(BigInteger.valueOf(1099511627775L));
         assertEquals(
                 TypeEncoder.encodeNumeric(max40),
                 "000000000000000000000000000000000000000000000000000000ffffffffff");
 
-        Uint zero48 = new Uint48(BigInteger.ZERO);
+        final Uint zero48 = new Uint48(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero48),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max48 = new Uint48(BigInteger.valueOf(281474976710655L));
+        final Uint max48 = new Uint48(BigInteger.valueOf(281474976710655L));
         assertEquals(
                 TypeEncoder.encodeNumeric(max48),
                 "0000000000000000000000000000000000000000000000000000ffffffffffff");
 
-        Uint zero56 = new Uint56(BigInteger.ZERO);
+        final Uint zero56 = new Uint56(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero56),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max56 = new Uint56(BigInteger.valueOf(72057594037927935L));
+        final Uint max56 = new Uint56(BigInteger.valueOf(72057594037927935L));
         assertEquals(
                 TypeEncoder.encodeNumeric(max56),
                 "00000000000000000000000000000000000000000000000000ffffffffffffff");
 
-        Uint zero64 = new Uint64(BigInteger.ZERO);
+        final Uint zero64 = new Uint64(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero64),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Uint maxLong = new Uint64(BigInteger.valueOf(java.lang.Long.MAX_VALUE));
+        final Uint maxLong = new Uint64(BigInteger.valueOf(java.lang.Long.MAX_VALUE));
         assertEquals(
                 TypeEncoder.encodeNumeric(maxLong),
                 ("0000000000000000000000000000000000000000000000007fffffffffffffff"));
 
-        Uint maxValue64 =
+        final Uint maxValue64 =
                 new Uint(
                         new BigInteger(
                                 "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
@@ -201,7 +201,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(maxValue64),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Uint largeValue =
+        final Uint largeValue =
                 new Uint(
                         new BigInteger(
                                 "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
@@ -210,152 +210,155 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(largeValue),
                 ("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe"));
 
-        Uint zero72 = new Uint72(BigInteger.ZERO);
+        final Uint zero72 = new Uint72(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero72),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max72 = new Uint72(new BigInteger("4722366482869645213695"));
+        final Uint max72 = new Uint72(new BigInteger("4722366482869645213695"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max72),
                 "0000000000000000000000000000000000000000000000ffffffffffffffffff");
 
-        Uint zero80 = new Uint80(BigInteger.ZERO);
+        final Uint zero80 = new Uint80(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero80),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max80 = new Uint80(new BigInteger("1208925819614629174706175"));
+        final Uint max80 = new Uint80(new BigInteger("1208925819614629174706175"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max80),
                 "00000000000000000000000000000000000000000000ffffffffffffffffffff");
 
-        Uint zero88 = new Uint88(BigInteger.ZERO);
+        final Uint zero88 = new Uint88(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero88),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max88 = new Uint88(new BigInteger("309485009821345068724781055"));
+        final Uint max88 = new Uint88(new BigInteger("309485009821345068724781055"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max88),
                 "000000000000000000000000000000000000000000ffffffffffffffffffffff");
 
-        Uint zero96 = new Uint96(BigInteger.ZERO);
+        final Uint zero96 = new Uint96(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero96),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max96 = new Uint96(new BigInteger("79228162514264337593543950335"));
+        final Uint max96 = new Uint96(new BigInteger("79228162514264337593543950335"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max96),
                 "0000000000000000000000000000000000000000ffffffffffffffffffffffff");
 
-        Uint zero104 = new Uint104(BigInteger.ZERO);
+        final Uint zero104 = new Uint104(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero104),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max104 = new Uint104(new BigInteger("20282409603651670423947251286015"));
+        final Uint max104 = new Uint104(new BigInteger("20282409603651670423947251286015"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max104),
                 "00000000000000000000000000000000000000ffffffffffffffffffffffffff");
 
-        Uint zero112 = new Uint112(BigInteger.ZERO);
+        final Uint zero112 = new Uint112(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero112),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max112 = new Uint112(new BigInteger("5192296858534827628530496329220095"));
+        final Uint max112 = new Uint112(new BigInteger("5192296858534827628530496329220095"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max112),
                 "000000000000000000000000000000000000ffffffffffffffffffffffffffff");
 
-        Uint zero120 = new Uint120(BigInteger.ZERO);
+        final Uint zero120 = new Uint120(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero120),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max120 = new Uint120(new BigInteger("1329227995784915872903807060280344575"));
+        final Uint max120 = new Uint120(new BigInteger("1329227995784915872903807060280344575"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max120),
                 "0000000000000000000000000000000000ffffffffffffffffffffffffffffff");
 
-        Uint zero128 = new Uint128(BigInteger.ZERO);
+        final Uint zero128 = new Uint128(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero128),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max128 = new Uint128(new BigInteger("340282366920938463463374607431768211455"));
+        final Uint max128 = new Uint128(new BigInteger("340282366920938463463374607431768211455"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max128),
                 "00000000000000000000000000000000ffffffffffffffffffffffffffffffff");
 
-        Uint zero136 = new Uint136(BigInteger.ZERO);
+        final Uint zero136 = new Uint136(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero136),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max136 = new Uint136(new BigInteger("87112285931760246646623899502532662132735"));
+        final Uint max136 =
+                new Uint136(new BigInteger("87112285931760246646623899502532662132735"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max136),
                 "000000000000000000000000000000ffffffffffffffffffffffffffffffffff");
 
-        Uint zero144 = new Uint144(BigInteger.ZERO);
+        final Uint zero144 = new Uint144(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero144),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max144 = new Uint144(new BigInteger("22300745198530623141535718272648361505980415"));
+        final Uint max144 =
+                new Uint144(new BigInteger("22300745198530623141535718272648361505980415"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max144),
                 "0000000000000000000000000000ffffffffffffffffffffffffffffffffffff");
 
-        Uint zero152 = new Uint152(BigInteger.ZERO);
+        final Uint zero152 = new Uint152(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero152),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max152 = new Uint152(new BigInteger("5708990770823839524233143877797980545530986495"));
+        final Uint max152 =
+                new Uint152(new BigInteger("5708990770823839524233143877797980545530986495"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max152),
                 "00000000000000000000000000ffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero160 = new Uint160(BigInteger.ZERO);
+        final Uint zero160 = new Uint160(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero160),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max160 =
+        final Uint max160 =
                 new Uint160(new BigInteger("1461501637330902918203684832716283019655932542975"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max160),
                 "000000000000000000000000ffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero168 = new Uint168(BigInteger.ZERO);
+        final Uint zero168 = new Uint168(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero168),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max168 =
+        final Uint max168 =
                 new Uint168(new BigInteger("374144419156711147060143317175368453031918731001855"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max168),
                 "0000000000000000000000ffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero176 = new Uint176(BigInteger.ZERO);
+        final Uint zero176 = new Uint176(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero176),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max176 =
+        final Uint max176 =
                 new Uint176(
                         new BigInteger("95780971304118053647396689196894323976171195136475135"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max176),
                 "00000000000000000000ffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero184 = new Uint184(BigInteger.ZERO);
+        final Uint zero184 = new Uint184(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero184),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max184 =
+        final Uint max184 =
                 new Uint184(
                         new BigInteger("24519928653854221733733552434404946937899825954937634815"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max184),
                 "000000000000000000ffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero192 = new Uint192(BigInteger.ZERO);
+        final Uint zero192 = new Uint192(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero192),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max192 =
+        final Uint max192 =
                 new Uint192(
                         new BigInteger(
                                 "6277101735386680763835789423207666416102355444464034512895"));
@@ -363,11 +366,11 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max192),
                 "0000000000000000ffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero200 = new Uint200(BigInteger.ZERO);
+        final Uint zero200 = new Uint200(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero200),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max200 =
+        final Uint max200 =
                 new Uint200(
                         new BigInteger(
                                 "1606938044258990275541962092341162602522202993782792835301375"));
@@ -375,11 +378,11 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max200),
                 "00000000000000ffffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero208 = new Uint208(BigInteger.ZERO);
+        final Uint zero208 = new Uint208(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero208),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max208 =
+        final Uint max208 =
                 new Uint208(
                         new BigInteger(
                                 "411376139330301510538742295639337626245683966408394965837152255"));
@@ -387,11 +390,11 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max208),
                 "000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero216 = new Uint216(BigInteger.ZERO);
+        final Uint zero216 = new Uint216(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero216),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max216 =
+        final Uint max216 =
                 new Uint216(
                         new BigInteger(
                                 "105312291668557186697918027683670432318895095400549111254310977535"));
@@ -399,11 +402,11 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max216),
                 "0000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero224 = new Uint224(BigInteger.ZERO);
+        final Uint zero224 = new Uint224(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero224),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max224 =
+        final Uint max224 =
                 new Uint224(
                         new BigInteger(
                                 "26959946667150639794667015087019630673637144422540572481103610249215"));
@@ -411,11 +414,11 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max224),
                 "00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero232 = new Uint232(BigInteger.ZERO);
+        final Uint zero232 = new Uint232(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero232),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max232 =
+        final Uint max232 =
                 new Uint232(
                         new BigInteger(
                                 "6901746346790563787434755862277025452451108972170386555162524223799295"));
@@ -423,11 +426,11 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max232),
                 "000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero240 = new Uint232(BigInteger.ZERO);
+        final Uint zero240 = new Uint232(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero240),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max240 =
+        final Uint max240 =
                 new Uint240(
                         new BigInteger(
                                 "1766847064778384329583297500742918515827483896875618958121606201292619775"));
@@ -435,11 +438,11 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max240),
                 "0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        Uint zero248 = new Uint248(BigInteger.ZERO);
+        final Uint zero248 = new Uint248(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero248),
                 "0000000000000000000000000000000000000000000000000000000000000000");
-        Uint max248 =
+        final Uint max248 =
                 new Uint248(
                         new BigInteger(
                                 "452312848583266388373324160190187140051835877600158453279131187530910662655"));
@@ -467,365 +470,370 @@ public class TypeEncoderTest {
 
     @Test
     public void testIntEncode() {
-        Int zero8 = new Int8(BigInteger.ZERO);
+        final Int zero8 = new Int8(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero8),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max8 = new Int8(BigInteger.valueOf(127));
+        final Int max8 = new Int8(BigInteger.valueOf(127));
         assertEquals(
                 TypeEncoder.encodeNumeric(max8),
                 ("000000000000000000000000000000000000000000000000000000000000007f"));
 
-        Int min8 = new Int8(BigInteger.valueOf(-128));
+        final Int min8 = new Int8(BigInteger.valueOf(-128));
         assertEquals(
                 TypeEncoder.encodeNumeric(min8),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80"));
 
-        Int zero16 = new Int16(BigInteger.ZERO);
+        final Int zero16 = new Int16(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero16),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max16 = new Int16(BigInteger.valueOf(32767));
+        final Int max16 = new Int16(BigInteger.valueOf(32767));
         assertEquals(
                 TypeEncoder.encodeNumeric(max16),
                 ("0000000000000000000000000000000000000000000000000000000000007fff"));
 
-        Int min16 = new Int16(BigInteger.valueOf(-32768));
+        final Int min16 = new Int16(BigInteger.valueOf(-32768));
         assertEquals(
                 TypeEncoder.encodeNumeric(min16),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8000"));
 
-        Int zero24 = new Int24(BigInteger.ZERO);
+        final Int zero24 = new Int24(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero24),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max24 = new Int24(BigInteger.valueOf(8388607));
+        final Int max24 = new Int24(BigInteger.valueOf(8388607));
         assertEquals(
                 TypeEncoder.encodeNumeric(max24),
                 ("00000000000000000000000000000000000000000000000000000000007fffff"));
 
-        Int min24 = new Int24(BigInteger.valueOf(-8388608));
+        final Int min24 = new Int24(BigInteger.valueOf(-8388608));
         assertEquals(
                 TypeEncoder.encodeNumeric(min24),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff800000"));
 
-        Int zero32 = new Int32(BigInteger.ZERO);
+        final Int zero32 = new Int32(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero32),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max32 = new Int32(BigInteger.valueOf(2147483647));
+        final Int max32 = new Int32(BigInteger.valueOf(2147483647));
         assertEquals(
                 TypeEncoder.encodeNumeric(max32),
                 ("000000000000000000000000000000000000000000000000000000007fffffff"));
 
-        Int min32 = new Int32(BigInteger.valueOf(-2147483648));
+        final Int min32 = new Int32(BigInteger.valueOf(-2147483648));
         assertEquals(
                 TypeEncoder.encodeNumeric(min32),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffff80000000"));
 
-        Int zero40 = new Int40(BigInteger.ZERO);
+        final Int zero40 = new Int40(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero40),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max40 = new Int40(BigInteger.valueOf(549755813887L));
+        final Int max40 = new Int40(BigInteger.valueOf(549755813887L));
         assertEquals(
                 TypeEncoder.encodeNumeric(max40),
                 ("0000000000000000000000000000000000000000000000000000007fffffffff"));
 
-        Int min40 = new Int40(BigInteger.valueOf(-549755813888L));
+        final Int min40 = new Int40(BigInteger.valueOf(-549755813888L));
         assertEquals(
                 TypeEncoder.encodeNumeric(min40),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffffff8000000000"));
 
-        Int zero48 = new Int48(BigInteger.ZERO);
+        final Int zero48 = new Int48(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero48),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max48 = new Int48(BigInteger.valueOf(140737488355327L));
+        final Int max48 = new Int48(BigInteger.valueOf(140737488355327L));
         assertEquals(
                 TypeEncoder.encodeNumeric(max48),
                 ("00000000000000000000000000000000000000000000000000007fffffffffff"));
 
-        Int min48 = new Int48(BigInteger.valueOf(-140737488355328L));
+        final Int min48 = new Int48(BigInteger.valueOf(-140737488355328L));
         assertEquals(
                 TypeEncoder.encodeNumeric(min48),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffff800000000000"));
 
-        Int zero56 = new Int48(BigInteger.ZERO);
+        final Int zero56 = new Int48(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero56),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max56 = new Int56(BigInteger.valueOf(36028797018963967L));
+        final Int max56 = new Int56(BigInteger.valueOf(36028797018963967L));
         assertEquals(
                 TypeEncoder.encodeNumeric(max56),
                 ("000000000000000000000000000000000000000000000000007fffffffffffff"));
 
-        Int min56 = new Int56(BigInteger.valueOf(-36028797018963968L));
+        final Int min56 = new Int56(BigInteger.valueOf(-36028797018963968L));
         assertEquals(
                 TypeEncoder.encodeNumeric(min56),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffff80000000000000"));
 
-        Int zero64 = new Int64(BigInteger.ZERO);
+        final Int zero64 = new Int64(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero64),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max64 = new Int64(BigInteger.valueOf(java.lang.Long.MAX_VALUE));
+        final Int max64 = new Int64(BigInteger.valueOf(java.lang.Long.MAX_VALUE));
         assertEquals(
                 TypeEncoder.encodeNumeric(max64),
                 ("0000000000000000000000000000000000000000000000007fffffffffffffff"));
 
-        Int min64 = new Int64(BigInteger.valueOf(java.lang.Long.MIN_VALUE));
+        final Int min64 = new Int64(BigInteger.valueOf(java.lang.Long.MIN_VALUE));
         assertEquals(
                 TypeEncoder.encodeNumeric(min64),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffff8000000000000000"));
 
-        Int zero72 = new Int72(BigInteger.ZERO);
+        final Int zero72 = new Int72(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero72),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max72 = new Int72(new BigInteger("2361183241434822606847"));
+        final Int max72 = new Int72(new BigInteger("2361183241434822606847"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max72),
                 ("00000000000000000000000000000000000000000000007fffffffffffffffff"));
 
-        Int min72 = new Int72(new BigInteger("-2361183241434822606848"));
+        final Int min72 = new Int72(new BigInteger("-2361183241434822606848"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min72),
                 ("ffffffffffffffffffffffffffffffffffffffffffffff800000000000000000"));
 
-        Int zero80 = new Int80(BigInteger.ZERO);
+        final Int zero80 = new Int80(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero80),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max80 = new Int80(new BigInteger("604462909807314587353087"));
+        final Int max80 = new Int80(new BigInteger("604462909807314587353087"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max80),
                 ("000000000000000000000000000000000000000000007fffffffffffffffffff"));
 
-        Int min80 = new Int80(new BigInteger("-604462909807314587353088"));
+        final Int min80 = new Int80(new BigInteger("-604462909807314587353088"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min80),
                 ("ffffffffffffffffffffffffffffffffffffffffffff80000000000000000000"));
 
-        Int zero88 = new Int88(BigInteger.ZERO);
+        final Int zero88 = new Int88(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero88),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max88 = new Int88(new BigInteger("154742504910672534362390527"));
+        final Int max88 = new Int88(new BigInteger("154742504910672534362390527"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max88),
                 ("0000000000000000000000000000000000000000007fffffffffffffffffffff"));
 
-        Int min88 = new Int88(new BigInteger("-154742504910672534362390528"));
+        final Int min88 = new Int88(new BigInteger("-154742504910672534362390528"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min88),
                 ("ffffffffffffffffffffffffffffffffffffffffff8000000000000000000000"));
 
-        Int zero96 = new Int96(BigInteger.ZERO);
+        final Int zero96 = new Int96(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero96),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max96 = new Int96(new BigInteger("39614081257132168796771975167"));
+        final Int max96 = new Int96(new BigInteger("39614081257132168796771975167"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max96),
                 ("00000000000000000000000000000000000000007fffffffffffffffffffffff"));
 
-        Int min96 = new Int96(new BigInteger("-39614081257132168796771975168"));
+        final Int min96 = new Int96(new BigInteger("-39614081257132168796771975168"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min96),
                 ("ffffffffffffffffffffffffffffffffffffffff800000000000000000000000"));
 
-        Int zero104 = new Int104(BigInteger.ZERO);
+        final Int zero104 = new Int104(BigInteger.ZERO);
         assertEquals(
                 TypeEncoder.encodeNumeric(zero104),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max104 = new Int104(new BigInteger("10141204801825835211973625643007"));
+        final Int max104 = new Int104(new BigInteger("10141204801825835211973625643007"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max104),
                 ("000000000000000000000000000000000000007fffffffffffffffffffffffff"));
 
-        Int min104 = new Int104(new BigInteger("-10141204801825835211973625643008"));
+        final Int min104 = new Int104(new BigInteger("-10141204801825835211973625643008"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min104),
                 ("ffffffffffffffffffffffffffffffffffffff80000000000000000000000000"));
 
-        Int zero112 = new Int112(BigInteger.ZERO);
+        final Int zero112 = new Int112(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero112),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max112 = new Int112(new BigInteger("2596148429267413814265248164610047"));
+        final Int max112 = new Int112(new BigInteger("2596148429267413814265248164610047"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max112),
                 ("0000000000000000000000000000000000007fffffffffffffffffffffffffff"));
 
-        Int min112 = new Int112(new BigInteger("-2596148429267413814265248164610048"));
+        final Int min112 = new Int112(new BigInteger("-2596148429267413814265248164610048"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min112),
                 ("ffffffffffffffffffffffffffffffffffff8000000000000000000000000000"));
 
-        Int zero120 = new Int120(BigInteger.ZERO);
+        final Int zero120 = new Int120(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero120),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max120 = new Int120(new BigInteger("664613997892457936451903530140172287"));
+        final Int max120 = new Int120(new BigInteger("664613997892457936451903530140172287"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max120),
                 ("00000000000000000000000000000000007fffffffffffffffffffffffffffff"));
 
-        Int min120 = new Int120(new BigInteger("-664613997892457936451903530140172288"));
+        final Int min120 = new Int120(new BigInteger("-664613997892457936451903530140172288"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min120),
                 ("ffffffffffffffffffffffffffffffffff800000000000000000000000000000"));
 
-        Int zero128 = new Int128(BigInteger.ZERO);
+        final Int zero128 = new Int128(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero128),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max128 = new Int128(new BigInteger("170141183460469231731687303715884105727"));
+        final Int max128 = new Int128(new BigInteger("170141183460469231731687303715884105727"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max128),
                 ("000000000000000000000000000000007fffffffffffffffffffffffffffffff"));
 
-        Int min128 = new Int128(new BigInteger("-170141183460469231731687303715884105728"));
+        final Int min128 = new Int128(new BigInteger("-170141183460469231731687303715884105728"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min128),
                 ("ffffffffffffffffffffffffffffffff80000000000000000000000000000000"));
 
-        Int zero136 = new Int136(BigInteger.ZERO);
+        final Int zero136 = new Int136(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero136),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max136 = new Int136(new BigInteger("43556142965880123323311949751266331066367"));
+        final Int max136 = new Int136(new BigInteger("43556142965880123323311949751266331066367"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max136),
                 ("0000000000000000000000000000007fffffffffffffffffffffffffffffffff"));
 
-        Int min136 = new Int136(new BigInteger("-43556142965880123323311949751266331066368"));
+        final Int min136 = new Int136(new BigInteger("-43556142965880123323311949751266331066368"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min136),
                 ("ffffffffffffffffffffffffffffff8000000000000000000000000000000000"));
 
-        Int zero144 = new Int144(BigInteger.ZERO);
+        final Int zero144 = new Int144(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero144),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max144 = new Int144(new BigInteger("11150372599265311570767859136324180752990207"));
+        final Int max144 =
+                new Int144(new BigInteger("11150372599265311570767859136324180752990207"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max144),
                 ("00000000000000000000000000007fffffffffffffffffffffffffffffffffff"));
 
-        Int min144 = new Int144(new BigInteger("-11150372599265311570767859136324180752990208"));
+        final Int min144 =
+                new Int144(new BigInteger("-11150372599265311570767859136324180752990208"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min144),
                 ("ffffffffffffffffffffffffffff800000000000000000000000000000000000"));
 
-        Int zero152 = new Int152(BigInteger.ZERO);
+        final Int zero152 = new Int152(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero152),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max152 = new Int152(new BigInteger("2854495385411919762116571938898990272765493247"));
+        final Int max152 =
+                new Int152(new BigInteger("2854495385411919762116571938898990272765493247"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max152),
                 ("000000000000000000000000007fffffffffffffffffffffffffffffffffffff"));
 
-        Int min152 = new Int152(new BigInteger("-2854495385411919762116571938898990272765493248"));
+        final Int min152 =
+                new Int152(new BigInteger("-2854495385411919762116571938898990272765493248"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min152),
                 ("ffffffffffffffffffffffffff80000000000000000000000000000000000000"));
 
-        Int zero160 = new Int160(BigInteger.ZERO);
+        final Int zero160 = new Int160(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero160),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max160 = new Int160(new BigInteger("730750818665451459101842416358141509827966271487"));
+        final Int max160 =
+                new Int160(new BigInteger("730750818665451459101842416358141509827966271487"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max160),
                 ("0000000000000000000000007fffffffffffffffffffffffffffffffffffffff"));
 
-        Int min160 =
+        final Int min160 =
                 new Int160(new BigInteger("-730750818665451459101842416358141509827966271488"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min160),
                 ("ffffffffffffffffffffffff8000000000000000000000000000000000000000"));
 
-        Int zero168 = new Int168(BigInteger.ZERO);
+        final Int zero168 = new Int168(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero168),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max168 =
+        final Int max168 =
                 new Int168(new BigInteger("187072209578355573530071658587684226515959365500927"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max168),
                 ("00000000000000000000007fffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min168 =
+        final Int min168 =
                 new Int168(new BigInteger("-187072209578355573530071658587684226515959365500928"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min168),
                 ("ffffffffffffffffffffff800000000000000000000000000000000000000000"));
 
-        Int zero176 = new Int176(BigInteger.ZERO);
+        final Int zero176 = new Int176(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero176),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max176 =
+        final Int max176 =
                 new Int176(new BigInteger("47890485652059026823698344598447161988085597568237567"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max176),
                 ("000000000000000000007fffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min176 =
+        final Int min176 =
                 new Int176(
                         new BigInteger("-47890485652059026823698344598447161988085597568237568"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min176),
                 ("ffffffffffffffffffff80000000000000000000000000000000000000000000"));
 
-        Int zero184 = new Int184(BigInteger.ZERO);
+        final Int zero184 = new Int184(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero184),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max184 =
+        final Int max184 =
                 new Int184(
                         new BigInteger("12259964326927110866866776217202473468949912977468817407"));
         assertEquals(
                 TypeEncoder.encodeNumeric(max184),
                 ("0000000000000000007fffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min184 =
+        final Int min184 =
                 new Int184(
                         new BigInteger(
                                 "-12259964326927110866866776217202473468949912977468817408"));
@@ -833,13 +841,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min184),
                 ("ffffffffffffffffff8000000000000000000000000000000000000000000000"));
 
-        Int zero192 = new Int192(BigInteger.ZERO);
+        final Int zero192 = new Int192(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero192),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max192 =
+        final Int max192 =
                 new Int192(
                         new BigInteger(
                                 "3138550867693340381917894711603833208051177722232017256447"));
@@ -847,7 +855,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max192),
                 ("00000000000000007fffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min192 =
+        final Int min192 =
                 new Int192(
                         new BigInteger(
                                 "-3138550867693340381917894711603833208051177722232017256448"));
@@ -855,13 +863,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min192),
                 ("ffffffffffffffff800000000000000000000000000000000000000000000000"));
 
-        Int zero200 = new Int200(BigInteger.ZERO);
+        final Int zero200 = new Int200(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero200),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max200 =
+        final Int max200 =
                 new Int200(
                         new BigInteger(
                                 "803469022129495137770981046170581301261101496891396417650687"));
@@ -869,7 +877,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max200),
                 ("000000000000007fffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min200 =
+        final Int min200 =
                 new Int200(
                         new BigInteger(
                                 "-803469022129495137770981046170581301261101496891396417650688"));
@@ -877,13 +885,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min200),
                 ("ffffffffffffff80000000000000000000000000000000000000000000000000"));
 
-        Int zero208 = new Int208(BigInteger.ZERO);
+        final Int zero208 = new Int208(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero208),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max208 =
+        final Int max208 =
                 new Int208(
                         new BigInteger(
                                 "205688069665150755269371147819668813122841983204197482918576127"));
@@ -891,7 +899,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max208),
                 ("0000000000007fffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min208 =
+        final Int min208 =
                 new Int208(
                         new BigInteger(
                                 "-205688069665150755269371147819668813122841983204197482918576128"));
@@ -899,13 +907,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min208),
                 ("ffffffffffff8000000000000000000000000000000000000000000000000000"));
 
-        Int zero216 = new Int216(BigInteger.ZERO);
+        final Int zero216 = new Int216(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero216),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max216 =
+        final Int max216 =
                 new Int216(
                         new BigInteger(
                                 "52656145834278593348959013841835216159447547700274555627155488767"));
@@ -913,7 +921,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max216),
                 ("00000000007fffffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min216 =
+        final Int min216 =
                 new Int216(
                         new BigInteger(
                                 "-52656145834278593348959013841835216159447547700274555627155488768"));
@@ -921,13 +929,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min216),
                 ("ffffffffff800000000000000000000000000000000000000000000000000000"));
 
-        Int zero224 = new Int224(BigInteger.ZERO);
+        final Int zero224 = new Int224(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero224),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max224 =
+        final Int max224 =
                 new Int224(
                         new BigInteger(
                                 "13479973333575319897333507543509815336818572211270286240551805124607"));
@@ -935,7 +943,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max224),
                 ("000000007fffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min224 =
+        final Int min224 =
                 new Int224(
                         new BigInteger(
                                 "-13479973333575319897333507543509815336818572211270286240551805124608"));
@@ -943,13 +951,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min224),
                 ("ffffffff80000000000000000000000000000000000000000000000000000000"));
 
-        Int zero232 = new Int232(BigInteger.ZERO);
+        final Int zero232 = new Int232(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero232),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max232 =
+        final Int max232 =
                 new Int232(
                         new BigInteger(
                                 "3450873173395281893717377931138512726225554486085193277581262111899647"));
@@ -957,7 +965,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max232),
                 ("0000007fffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min232 =
+        final Int min232 =
                 new Int232(
                         new BigInteger(
                                 "-3450873173395281893717377931138512726225554486085193277581262111899648"));
@@ -965,13 +973,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min232),
                 ("ffffff8000000000000000000000000000000000000000000000000000000000"));
 
-        Int zero240 = new Int240(BigInteger.ZERO);
+        final Int zero240 = new Int240(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero240),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max240 =
+        final Int max240 =
                 new Int240(
                         new BigInteger(
                                 "883423532389192164791648750371459257913741948437809479060803100646309887"));
@@ -979,7 +987,7 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max240),
                 ("00007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min240 =
+        final Int min240 =
                 new Int240(
                         new BigInteger(
                                 "-883423532389192164791648750371459257913741948437809479060803100646309888"));
@@ -987,13 +995,13 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(min240),
                 ("ffff800000000000000000000000000000000000000000000000000000000000"));
 
-        Int zero248 = new Int248(BigInteger.ZERO);
+        final Int zero248 = new Int248(BigInteger.ZERO);
 
         assertEquals(
                 TypeEncoder.encodeNumeric(zero248),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Int max248 =
+        final Int max248 =
                 new Int248(
                         new BigInteger(
                                 "226156424291633194186662080095093570025917938800079226639565593765455331327"));
@@ -1001,14 +1009,14 @@ public class TypeEncoderTest {
                 TypeEncoder.encodeNumeric(max248),
                 ("007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
 
-        Int min248 =
+        final Int min248 =
                 new Int248(
                         new BigInteger(
                                 "-226156424291633194186662080095093570025917938800079226639565593765455331328"));
         assertEquals(
                 TypeEncoder.encodeNumeric(min248),
                 ("ff80000000000000000000000000000000000000000000000000000000000000"));
-        Int minusOne = new Int(BigInteger.valueOf(-1));
+        final Int minusOne = new Int(BigInteger.valueOf(-1));
         assertEquals(
                 TypeEncoder.encodeNumeric(minusOne),
                 ("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
@@ -1057,22 +1065,22 @@ public class TypeEncoderTest {
 
     @Test
     public void testStaticBytes() {
-        Bytes staticBytes = new Bytes6(new byte[] {0, 1, 2, 3, 4, 5});
+        final Bytes staticBytes = new Bytes6(new byte[] {0, 1, 2, 3, 4, 5});
         assertEquals(
                 TypeEncoder.encodeBytes(staticBytes),
                 ("0001020304050000000000000000000000000000000000000000000000000000"));
 
-        Bytes empty = new Bytes1(new byte[] {0});
+        final Bytes empty = new Bytes1(new byte[] {0});
         assertEquals(
                 TypeEncoder.encodeBytes(empty),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
 
-        Bytes ones = new Bytes1(new byte[] {127});
+        final Bytes ones = new Bytes1(new byte[] {127});
         assertEquals(
                 TypeEncoder.encodeBytes(ones),
                 ("7f00000000000000000000000000000000000000000000000000000000000000"));
 
-        Bytes dave = new Bytes4("dave".getBytes());
+        final Bytes dave = new Bytes4("dave".getBytes());
         assertEquals(
                 TypeEncoder.encodeBytes(dave),
                 ("6461766500000000000000000000000000000000000000000000000000000000"));
@@ -1080,25 +1088,25 @@ public class TypeEncoderTest {
 
     @Test
     public void testDynamicBytes() {
-        DynamicBytes dynamicBytes = new DynamicBytes(new byte[] {0, 1, 2, 3, 4, 5});
+        final DynamicBytes dynamicBytes = new DynamicBytes(new byte[] {0, 1, 2, 3, 4, 5});
         assertEquals(
                 TypeEncoder.encodeDynamicBytes(dynamicBytes),
                 ("0000000000000000000000000000000000000000000000000000000000000006"
                         + "0001020304050000000000000000000000000000000000000000000000000000"));
 
-        DynamicBytes empty = new DynamicBytes(new byte[] {0});
+        final DynamicBytes empty = new DynamicBytes(new byte[] {0});
         assertEquals(
                 TypeEncoder.encodeDynamicBytes(empty),
                 ("0000000000000000000000000000000000000000000000000000000000000001"
                         + "0000000000000000000000000000000000000000000000000000000000000000"));
 
-        DynamicBytes dave = new DynamicBytes("dave".getBytes());
+        final DynamicBytes dave = new DynamicBytes("dave".getBytes());
         assertEquals(
                 TypeEncoder.encodeDynamicBytes(dave),
                 ("0000000000000000000000000000000000000000000000000000000000000004"
                         + "6461766500000000000000000000000000000000000000000000000000000000"));
 
-        DynamicBytes loremIpsum =
+        final DynamicBytes loremIpsum =
                 new DynamicBytes(
                         ("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod "
                                         + "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
@@ -1129,7 +1137,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testAddress() {
-        Address address = new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338");
+        final Address address = new Address("0xbe5422d15f39373eb0a97ff8c10fbd0e40e29338");
         assertEquals(address.getTypeAsString(), ("address"));
         assertEquals(
                 TypeEncoder.encodeAddress(address),
@@ -1147,7 +1155,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testLongAddress() {
-        Address address =
+        final Address address =
                 new Address(
                         256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
         assertEquals(address.getTypeAsString(), ("address"));
@@ -1156,7 +1164,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testUtf8String() {
-        Utf8String string = new Utf8String("Hello, world!");
+        final Utf8String string = new Utf8String("Hello, world!");
         assertEquals(
                 TypeEncoder.encodeString(string),
                 ("000000000000000000000000000000000000000000000000000000000000000d"
@@ -1165,7 +1173,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testFixedArray() {
-        StaticArray<Ufixed> array =
+        final StaticArray<Ufixed> array =
                 new StaticArray2<>(
                         Ufixed.class,
                         new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
@@ -1179,7 +1187,7 @@ public class TypeEncoderTest {
 
     @Test
     public void testDynamicArray() {
-        DynamicArray<Uint> array =
+        final DynamicArray<Uint> array =
                 new DynamicArray<>(
                         Uint.class,
                         new Uint(BigInteger.ONE),
@@ -1298,7 +1306,7 @@ public class TypeEncoderTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testEmptyArray() {
-        DynamicArray<Uint> array = new DynamicArray(Uint.class);
+        final DynamicArray<Uint> array = new DynamicArray(Uint.class);
         assertEquals(
                 TypeEncoder.encodeDynamicArray(array),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
@@ -1307,7 +1315,7 @@ public class TypeEncoderTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testArrayOfBytes() {
-        DynamicArray<DynamicBytes> array =
+        final DynamicArray<DynamicBytes> array =
                 new DynamicArray<>(
                         new DynamicBytes(
                                 Numeric.hexStringToByteArray(
@@ -1320,8 +1328,8 @@ public class TypeEncoderTest {
                                 Numeric.hexStringToByteArray(
                                         "0x9215c928b97e0ebeeefd10003a4e3eea23f2eb3acba"
                                                 + "b477eeb589d7a8874d7c5")));
-        DynamicArray emptyArray = DynamicArray.empty("bytes");
-        DynamicArray<DynamicBytes> arrayOfEmptyBytes =
+        final DynamicArray emptyArray = DynamicArray.empty("bytes");
+        final DynamicArray<DynamicBytes> arrayOfEmptyBytes =
                 new DynamicArray<>(new DynamicBytes(new byte[0]), new DynamicBytes(new byte[0]));
 
         assertEquals(
@@ -1371,7 +1379,7 @@ public class TypeEncoderTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testArrayOfStrings() {
-        DynamicArray<Utf8String> array =
+        final DynamicArray<Utf8String> array =
                 new DynamicArray<>(
                         new Utf8String(
                                 "This string value is extra long so that it "
@@ -1379,8 +1387,8 @@ public class TypeEncoderTest {
                         new Utf8String("abc"),
                         new Utf8String(""),
                         new Utf8String("web3j"));
-        DynamicArray emptyArray = DynamicArray.empty("string");
-        DynamicArray<Utf8String> arrayOfEmptyStrings =
+        final DynamicArray emptyArray = DynamicArray.empty("string");
+        final DynamicArray<Utf8String> arrayOfEmptyStrings =
                 new DynamicArray<>(new Utf8String(""), new Utf8String(""));
 
         assertEquals(

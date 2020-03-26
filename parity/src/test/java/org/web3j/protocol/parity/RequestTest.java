@@ -38,7 +38,7 @@ public class RequestTest extends RequestTester {
     private Parity web3j;
 
     @Override
-    protected void initWeb3Client(HttpService httpService) {
+    protected void initWeb3Client(final HttpService httpService) {
         web3j = Parity.build(httpService);
     }
 
@@ -65,7 +65,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityDeriveAddressHash() throws Exception {
-        Derivation hashType =
+        final Derivation hashType =
                 Derivation.createDerivationHash(
                         "0x2547ea3382099c7c76d33dd468063b32d41016aacb02cbd51ebc14ff5d2b6a43",
                         "hard");
@@ -82,7 +82,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityDeriveAddressIndex() throws Exception {
-        List<Derivation> indexType = new ArrayList<>();
+        final List<Derivation> indexType = new ArrayList<>();
         indexType.add(Derivation.createDerivationIndex(1, "hard"));
         indexType.add(Derivation.createDerivationIndex(2, "soft"));
 
@@ -140,7 +140,7 @@ public class RequestTest extends RequestTester {
     }
 
     public void testParityImportGethAccounts() throws Exception {
-        ArrayList<String> gethAccounts = new ArrayList<>();
+        final ArrayList<String> gethAccounts = new ArrayList<>();
         gethAccounts.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
         web3j.parityImportGethAccounts(gethAccounts).send();
 
@@ -159,7 +159,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityListAccountsNoAccountOffsetNoBlockTag() throws Exception {
-        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        final BigInteger maxQuantityReturned = BigInteger.valueOf(100);
         web3j.parityListAccounts(maxQuantityReturned, null, null).send();
 
         verifyResult(
@@ -169,8 +169,9 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityListAccountsNoAccountOffsetWithBlockTag() throws Exception {
-        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
-        DefaultBlockParameter blockParameter = new DefaultBlockParameterNumber(BigInteger.ONE);
+        final BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        final DefaultBlockParameter blockParameter =
+                new DefaultBlockParameterNumber(BigInteger.ONE);
         web3j.parityListAccounts(maxQuantityReturned, null, blockParameter).send();
 
         verifyResult(
@@ -180,8 +181,8 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityListAccountsWithAccountOffsetWithBlockTag() throws Exception {
-        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
-        DefaultBlockParameter blockParameter = DefaultBlockParameterName.LATEST;
+        final BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        final DefaultBlockParameter blockParameter = DefaultBlockParameterName.LATEST;
         web3j.parityListAccounts(
                         maxQuantityReturned,
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
@@ -195,7 +196,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityListAccountsWithAccountOffsetNoBlockTag() throws Exception {
-        BigInteger maxQuantityReturned = BigInteger.valueOf(100);
+        final BigInteger maxQuantityReturned = BigInteger.valueOf(100);
         web3j.parityListAccounts(
                         maxQuantityReturned, "0x407d73d8a49eeb85d32cf465507dd71d507100c1", null)
                 .send();
@@ -245,20 +246,20 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParityNewAccountFromWallet() throws Exception {
-        WalletFile walletFile = new WalletFile();
+        final WalletFile walletFile = new WalletFile();
         walletFile.setAddress("0x...");
 
-        WalletFile.Crypto crypto = new WalletFile.Crypto();
+        final WalletFile.Crypto crypto = new WalletFile.Crypto();
         crypto.setCipher("CIPHER");
         crypto.setCiphertext("CIPHERTEXT");
         walletFile.setCrypto(crypto);
 
-        WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();
+        final WalletFile.CipherParams cipherParams = new WalletFile.CipherParams();
         cipherParams.setIv("IV");
         crypto.setCipherparams(cipherParams);
 
         crypto.setKdf("KDF");
-        WalletFile.ScryptKdfParams kdfParams = new WalletFile.ScryptKdfParams();
+        final WalletFile.ScryptKdfParams kdfParams = new WalletFile.ScryptKdfParams();
         kdfParams.setDklen(32);
         kdfParams.setN(1);
         kdfParams.setP(10);
@@ -287,7 +288,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParitySetAccountMeta() throws Exception {
-        Map<String, Object> meta = new HashMap<>(1);
+        final Map<String, Object> meta = new HashMap<>(1);
         meta.put("foo", "bar");
         web3j.paritySetAccountMeta("0xfc390d8a8ddb591b010fda52f4db4945742c3809", meta).send();
 
@@ -309,7 +310,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParitySetDappAddresses() throws Exception {
-        ArrayList<String> dAppAddresses = new ArrayList<>();
+        final ArrayList<String> dAppAddresses = new ArrayList<>();
         dAppAddresses.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
         web3j.paritySetDappAddresses("web", dAppAddresses).send();
 
@@ -332,7 +333,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testParitySetNewDappsAddresses() throws Exception {
-        ArrayList<String> dAppAddresses = new ArrayList<>();
+        final ArrayList<String> dAppAddresses = new ArrayList<>();
         dAppAddresses.add("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
         web3j.paritySetNewDappsAddresses(dAppAddresses).send();
 
@@ -379,7 +380,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testTraceCall() throws Exception {
-        Transaction transaction =
+        final Transaction transaction =
                 Transaction.createFunctionCallTransaction(
                         "0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e",
                         BigInteger.ONE,

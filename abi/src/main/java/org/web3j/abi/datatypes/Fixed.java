@@ -20,19 +20,20 @@ public class Fixed extends FixedPointType {
     public static final String TYPE_NAME = "fixed";
     public static final Fixed DEFAULT = new Fixed(BigInteger.ZERO);
 
-    protected Fixed(int mBitSize, int nBitSize, BigInteger value) {
+    protected Fixed(final int mBitSize, final int nBitSize, final BigInteger value) {
         super(TYPE_NAME, mBitSize, nBitSize, value);
     }
 
-    public Fixed(BigInteger value) {
+    public Fixed(final BigInteger value) {
         this(DEFAULT_BIT_LENGTH, DEFAULT_BIT_LENGTH, value);
     }
 
-    public Fixed(BigInteger m, BigInteger n) {
+    public Fixed(final BigInteger m, final BigInteger n) {
         this(convert(m, n));
     }
 
-    protected Fixed(int mBitSize, int nBitSize, BigInteger m, BigInteger n) {
+    protected Fixed(
+            final int mBitSize, final int nBitSize, final BigInteger m, final BigInteger n) {
         this(convert(mBitSize, nBitSize, m, n));
     }
 }

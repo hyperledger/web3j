@@ -32,14 +32,14 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 /** JSON-RPC 2.0 factory implementation for common Parity and Geth. */
 public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
 
-    public JsonRpc2_0Admin(Web3jService web3jService) {
+    public JsonRpc2_0Admin(final Web3jService web3jService) {
         super(web3jService);
     }
 
     public JsonRpc2_0Admin(
-            Web3jService web3jService,
-            long pollingInterval,
-            ScheduledExecutorService scheduledExecutorService) {
+            final Web3jService web3jService,
+            final long pollingInterval,
+            final ScheduledExecutorService scheduledExecutorService) {
         super(web3jService, pollingInterval, scheduledExecutorService);
     }
 
@@ -53,7 +53,7 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
     }
 
     @Override
-    public Request<?, NewAccountIdentifier> personalNewAccount(String password) {
+    public Request<?, NewAccountIdentifier> personalNewAccount(final String password) {
         return new Request<>(
                 "personal_newAccount",
                 Arrays.asList(password),
@@ -63,8 +63,8 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
 
     @Override
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(
-            String accountId, String password, BigInteger duration) {
-        List<Object> attributes = new ArrayList<>(3);
+            final String accountId, final String password, final BigInteger duration) {
+        final List<Object> attributes = new ArrayList<>(3);
         attributes.add(accountId);
         attributes.add(password);
 
@@ -83,14 +83,14 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
 
     @Override
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(
-            String accountId, String password) {
+            final String accountId, final String password) {
 
         return personalUnlockAccount(accountId, password, null);
     }
 
     @Override
     public Request<?, EthSendTransaction> personalSendTransaction(
-            Transaction transaction, String passphrase) {
+            final Transaction transaction, final String passphrase) {
         return new Request<>(
                 "personal_sendTransaction",
                 Arrays.asList(transaction, passphrase),

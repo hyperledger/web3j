@@ -34,11 +34,11 @@ import static org.mockito.Mockito.when;
 
 public class JsonRpc2_0GethTest {
 
-    private WebSocketClient webSocketClient = mock(WebSocketClient.class);
+    private final WebSocketClient webSocketClient = mock(WebSocketClient.class);
 
-    private WebSocketService webSocketService = new WebSocketService(webSocketClient, true);
+    private final WebSocketService webSocketService = new WebSocketService(webSocketClient, true);
 
-    private Geth geth = Geth.build(webSocketService);
+    private final Geth geth = Geth.build(webSocketService);
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
@@ -92,12 +92,12 @@ public class JsonRpc2_0GethTest {
                                         + "\"params\":\\[\"syncing\"],\"id\":[0-9]{1,}}"));
     }
 
-    private int getRequestId(String message) throws IOException {
-        JsonNode messageJson = objectMapper.readTree(message);
+    private int getRequestId(final String message) throws IOException {
+        final JsonNode messageJson = objectMapper.readTree(message);
         return messageJson.get("id").asInt();
     }
 
-    private void sendSubscriptionConfirmation(int requestId) throws IOException {
+    private void sendSubscriptionConfirmation(final int requestId) throws IOException {
         listener.onMessage(
                 String.format(
                         "{"

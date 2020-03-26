@@ -24,7 +24,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
  */
 public class EmptyTransactionReceipt extends TransactionReceipt {
 
-    public EmptyTransactionReceipt(String transactionHash) {
+    public EmptyTransactionReceipt(final String transactionHash) {
         super();
         this.setTransactionHash(transactionHash);
     }
@@ -35,7 +35,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setTransactionHash(String transactionHash) {
+    public void setTransactionHash(final String transactionHash) {
         super.setTransactionHash(transactionHash);
     }
 
@@ -55,7 +55,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setTransactionIndex(String transactionIndex) {
+    public void setTransactionIndex(final String transactionIndex) {
         throw unsupportedOperation();
     }
 
@@ -65,7 +65,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setBlockHash(String blockHash) {
+    public void setBlockHash(final String blockHash) {
         throw unsupportedOperation();
     }
 
@@ -80,7 +80,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setBlockNumber(String blockNumber) {
+    public void setBlockNumber(final String blockNumber) {
         throw unsupportedOperation();
     }
 
@@ -95,7 +95,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setCumulativeGasUsed(String cumulativeGasUsed) {
+    public void setCumulativeGasUsed(final String cumulativeGasUsed) {
         throw unsupportedOperation();
     }
 
@@ -110,7 +110,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setGasUsed(String gasUsed) {
+    public void setGasUsed(final String gasUsed) {
         throw unsupportedOperation();
     }
 
@@ -120,7 +120,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setContractAddress(String contractAddress) {
+    public void setContractAddress(final String contractAddress) {
         throw unsupportedOperation();
     }
 
@@ -130,7 +130,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setRoot(String root) {
+    public void setRoot(final String root) {
         throw unsupportedOperation();
     }
 
@@ -140,7 +140,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         throw unsupportedOperation();
     }
 
@@ -150,7 +150,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setFrom(String from) {
+    public void setFrom(final String from) {
         throw unsupportedOperation();
     }
 
@@ -160,7 +160,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setTo(String to) {
+    public void setTo(final String to) {
         throw unsupportedOperation();
     }
 
@@ -170,7 +170,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setLogs(List<Log> logs) {
+    public void setLogs(final List<Log> logs) {
         throw unsupportedOperation();
     }
 
@@ -180,12 +180,12 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     @Override
-    public void setLogsBloom(String logsBloom) {
+    public void setLogsBloom(final String logsBloom) {
         throw unsupportedOperation();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -193,7 +193,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
             return false;
         }
 
-        TransactionReceipt that = (TransactionReceipt) o;
+        final TransactionReceipt that = (TransactionReceipt) o;
 
         return getTransactionHash() != null
                 ? getTransactionHash().equals(that.getTransactionHash())

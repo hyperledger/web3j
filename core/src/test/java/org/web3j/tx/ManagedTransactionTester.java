@@ -47,20 +47,21 @@ public abstract class ManagedTransactionTester {
     }
 
     public TransactionManager getVerifiedTransactionManager(
-            Credentials credentials, int attempts, int sleepDuration) {
-        RawTransactionManager transactionManager =
+            final Credentials credentials, final int attempts, final int sleepDuration) {
+        final RawTransactionManager transactionManager =
                 new RawTransactionManager(web3j, credentials, attempts, sleepDuration);
         transactionManager.setTxHashVerifier(txHashVerifier);
         return transactionManager;
     }
 
-    public TransactionManager getVerifiedTransactionManager(Credentials credentials) {
-        RawTransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+    public TransactionManager getVerifiedTransactionManager(final Credentials credentials) {
+        final RawTransactionManager transactionManager =
+                new RawTransactionManager(web3j, credentials);
         transactionManager.setTxHashVerifier(txHashVerifier);
         return transactionManager;
     }
 
-    void prepareTransaction(TransactionReceipt transactionReceipt) throws IOException {
+    void prepareTransaction(final TransactionReceipt transactionReceipt) throws IOException {
         prepareNonceRequest();
         prepareTransactionRequest();
         prepareTransactionReceipt(transactionReceipt);
@@ -68,10 +69,10 @@ public abstract class ManagedTransactionTester {
 
     @SuppressWarnings("unchecked")
     void prepareNonceRequest() throws IOException {
-        EthGetTransactionCount ethGetTransactionCount = new EthGetTransactionCount();
+        final EthGetTransactionCount ethGetTransactionCount = new EthGetTransactionCount();
         ethGetTransactionCount.setResult("0x1");
 
-        Request<?, EthGetTransactionCount> transactionCountRequest = mock(Request.class);
+        final Request<?, EthGetTransactionCount> transactionCountRequest = mock(Request.class);
         when(transactionCountRequest.send()).thenReturn(ethGetTransactionCount);
         when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.PENDING))
                 .thenReturn((Request) transactionCountRequest);
@@ -79,21 +80,22 @@ public abstract class ManagedTransactionTester {
 
     @SuppressWarnings("unchecked")
     void prepareTransactionRequest() throws IOException {
-        EthSendTransaction ethSendTransaction = new EthSendTransaction();
+        final EthSendTransaction ethSendTransaction = new EthSendTransaction();
         ethSendTransaction.setResult(TRANSACTION_HASH);
 
-        Request<?, EthSendTransaction> rawTransactionRequest = mock(Request.class);
+        final Request<?, EthSendTransaction> rawTransactionRequest = mock(Request.class);
         when(rawTransactionRequest.send()).thenReturn(ethSendTransaction);
         when(web3j.ethSendRawTransaction(any(String.class)))
                 .thenReturn((Request) rawTransactionRequest);
     }
 
     @SuppressWarnings("unchecked")
-    void prepareTransactionReceipt(TransactionReceipt transactionReceipt) throws IOException {
-        EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
+    void prepareTransactionReceipt(final TransactionReceipt transactionReceipt) throws IOException {
+        final EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
         ethGetTransactionReceipt.setResult(transactionReceipt);
 
-        Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
+        final Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest =
+                mock(Request.class);
         when(getTransactionReceiptRequest.send()).thenReturn(ethGetTransactionReceipt);
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn((Request) getTransactionReceiptRequest);
@@ -101,15 +103,15 @@ public abstract class ManagedTransactionTester {
 
     @SuppressWarnings("unchecked")
     protected TransactionReceipt prepareTransfer() throws IOException {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        final TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setTransactionHash(TRANSACTION_HASH);
         transactionReceipt.setStatus("0x1");
         prepareTransaction(transactionReceipt);
 
-        EthGasPrice ethGasPrice = new EthGasPrice();
+        final EthGasPrice ethGasPrice = new EthGasPrice();
         ethGasPrice.setResult("0x1");
 
-        Request<?, EthGasPrice> gasPriceRequest = mock(Request.class);
+        final Request<?, EthGasPrice> gasPriceRequest = mock(Request.class);
         when(gasPriceRequest.send()).thenReturn(ethGasPrice);
         when(web3j.ethGasPrice()).thenReturn((Request) gasPriceRequest);
 

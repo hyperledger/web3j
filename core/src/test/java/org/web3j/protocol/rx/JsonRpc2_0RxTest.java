@@ -70,25 +70,26 @@ public class JsonRpc2_0RxTest {
     @Test
     public void testReplayBlocksFlowable() throws Exception {
 
-        List<EthBlock> ethBlocks = Arrays.asList(createBlock(0), createBlock(1), createBlock(2));
+        final List<EthBlock> ethBlocks =
+                Arrays.asList(createBlock(0), createBlock(1), createBlock(2));
 
         OngoingStubbing<EthBlock> stubbing =
                 when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
+        for (final EthBlock ethBlock : ethBlocks) {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Flowable<EthBlock> flowable =
+        final Flowable<EthBlock> flowable =
                 web3j.replayPastBlocksFlowable(
                         new DefaultBlockParameterNumber(BigInteger.ZERO),
                         new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                         false);
 
-        CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<EthBlock> results = new ArrayList<>(ethBlocks.size());
-        Disposable subscription =
+        final List<EthBlock> results = new ArrayList<>(ethBlocks.size());
+        final Disposable subscription =
                 flowable.subscribe(
                         result -> {
                             results.add(result);
@@ -109,26 +110,27 @@ public class JsonRpc2_0RxTest {
     @Test
     public void testReplayBlocksDescendingFlowable() throws Exception {
 
-        List<EthBlock> ethBlocks = Arrays.asList(createBlock(2), createBlock(1), createBlock(0));
+        final List<EthBlock> ethBlocks =
+                Arrays.asList(createBlock(2), createBlock(1), createBlock(0));
 
         OngoingStubbing<EthBlock> stubbing =
                 when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
+        for (final EthBlock ethBlock : ethBlocks) {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        Flowable<EthBlock> flowable =
+        final Flowable<EthBlock> flowable =
                 web3j.replayPastBlocksFlowable(
                         new DefaultBlockParameterNumber(BigInteger.ZERO),
                         new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
                         false,
                         false);
 
-        CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<EthBlock> results = new ArrayList<>(ethBlocks.size());
-        Disposable subscription =
+        final List<EthBlock> results = new ArrayList<>(ethBlocks.size());
+        final Disposable subscription =
                 flowable.subscribe(
                         result -> {
                             results.add(result);
@@ -148,7 +150,7 @@ public class JsonRpc2_0RxTest {
 
     @Test
     public void testReplayPastBlocksFlowable() throws Exception {
-        List<EthBlock> expected =
+        final List<EthBlock> expected =
                 Arrays.asList(
                         createBlock(0),
                         createBlock(1),
@@ -156,7 +158,7 @@ public class JsonRpc2_0RxTest {
                         createBlock(3),
                         createBlock(4));
 
-        List<EthBlock> ethBlocks =
+        final List<EthBlock> ethBlocks =
                 Arrays.asList(
                         expected.get(2), // greatest block
                         expected.get(0),
@@ -169,11 +171,11 @@ public class JsonRpc2_0RxTest {
 
         OngoingStubbing<EthBlock> stubbing =
                 when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
+        for (final EthBlock ethBlock : ethBlocks) {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        EthFilter ethFilter =
+        final EthFilter ethFilter =
                 objectMapper.readValue(
                         "{\n"
                                 + "  \"id\":1,\n"
@@ -181,13 +183,13 @@ public class JsonRpc2_0RxTest {
                                 + "  \"result\": \"0x1\"\n"
                                 + "}",
                         EthFilter.class);
-        EthLog ethLog =
+        final EthLog ethLog =
                 objectMapper.readValue(
                         "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":["
                                 + "\"0x31c2342b1e0b8ffda1507fbffddf213c4b3c1e819ff6a84b943faabb0ebf2403\""
                                 + "]}",
                         EthLog.class);
-        EthUninstallFilter ethUninstallFilter =
+        final EthUninstallFilter ethUninstallFilter =
                 objectMapper.readValue(
                         "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 
@@ -196,15 +198,15 @@ public class JsonRpc2_0RxTest {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Flowable<EthBlock> flowable =
+        final Flowable<EthBlock> flowable =
                 web3j.replayPastBlocksFlowable(
                         new DefaultBlockParameterNumber(BigInteger.ZERO), false);
 
-        CountDownLatch transactionLatch = new CountDownLatch(expected.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<EthBlock> results = new ArrayList<>(expected.size());
-        Disposable subscription =
+        final List<EthBlock> results = new ArrayList<>(expected.size());
+        final Disposable subscription =
                 flowable.subscribe(
                         result -> {
                             results.add(result);
@@ -223,7 +225,7 @@ public class JsonRpc2_0RxTest {
     }
 
     public void testReplayPastAndFutureBlocksFlowable() throws Exception {
-        List<EthBlock> expected =
+        final List<EthBlock> expected =
                 Arrays.asList(
                         createBlock(0),
                         createBlock(1),
@@ -233,7 +235,7 @@ public class JsonRpc2_0RxTest {
                         createBlock(5),
                         createBlock(6));
 
-        List<EthBlock> ethBlocks =
+        final List<EthBlock> ethBlocks =
                 Arrays.asList(
                         expected.get(2), // greatest block
                         expected.get(0),
@@ -248,11 +250,11 @@ public class JsonRpc2_0RxTest {
 
         OngoingStubbing<EthBlock> stubbing =
                 when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
+        for (final EthBlock ethBlock : ethBlocks) {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        EthFilter ethFilter =
+        final EthFilter ethFilter =
                 objectMapper.readValue(
                         "{\n"
                                 + "  \"id\":1,\n"
@@ -260,13 +262,13 @@ public class JsonRpc2_0RxTest {
                                 + "  \"result\": \"0x1\"\n"
                                 + "}",
                         EthFilter.class);
-        EthLog ethLog =
+        final EthLog ethLog =
                 objectMapper.readValue(
                         "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":["
                                 + "\"0x31c2342b1e0b8ffda1507fbffddf213c4b3c1e819ff6a84b943faabb0ebf2403\""
                                 + "]}",
                         EthLog.class);
-        EthUninstallFilter ethUninstallFilter =
+        final EthUninstallFilter ethUninstallFilter =
                 objectMapper.readValue(
                         "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
 
@@ -275,15 +277,15 @@ public class JsonRpc2_0RxTest {
         when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
                 .thenReturn(ethUninstallFilter);
 
-        Flowable<EthBlock> flowable =
+        final Flowable<EthBlock> flowable =
                 web3j.replayPastAndFutureBlocksFlowable(
                         new DefaultBlockParameterNumber(BigInteger.ZERO), false);
 
-        CountDownLatch transactionLatch = new CountDownLatch(expected.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<EthBlock> results = new ArrayList<>(expected.size());
-        Disposable subscription =
+        final List<EthBlock> results = new ArrayList<>(expected.size());
+        final Disposable subscription =
                 flowable.subscribe(
                         result -> {
                             results.add(result);
@@ -304,7 +306,7 @@ public class JsonRpc2_0RxTest {
     @Test
     public void testReplayTransactionsFlowable() throws Exception {
 
-        List<EthBlock> ethBlocks =
+        final List<EthBlock> ethBlocks =
                 Arrays.asList(
                         createBlockWithTransactions(
                                 0,
@@ -325,26 +327,26 @@ public class JsonRpc2_0RxTest {
 
         OngoingStubbing<EthBlock> stubbing =
                 when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
+        for (final EthBlock ethBlock : ethBlocks) {
             stubbing = stubbing.thenReturn(ethBlock);
         }
 
-        List<Transaction> expectedTransactions =
+        final List<Transaction> expectedTransactions =
                 ethBlocks.stream()
                         .flatMap(it -> it.getBlock().getTransactions().stream())
                         .map(it -> (Transaction) it.get())
                         .collect(Collectors.toList());
 
-        Flowable<Transaction> flowable =
+        final Flowable<Transaction> flowable =
                 web3j.replayPastTransactionsFlowable(
                         new DefaultBlockParameterNumber(BigInteger.ZERO),
                         new DefaultBlockParameterNumber(BigInteger.valueOf(2)));
 
-        CountDownLatch transactionLatch = new CountDownLatch(expectedTransactions.size());
-        CountDownLatch completedLatch = new CountDownLatch(1);
+        final CountDownLatch transactionLatch = new CountDownLatch(expectedTransactions.size());
+        final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        List<Transaction> results = new ArrayList<>(expectedTransactions.size());
-        Disposable subscription =
+        final List<Transaction> results = new ArrayList<>(expectedTransactions.size());
+        final Disposable subscription =
                 flowable.subscribe(
                         result -> {
                             results.add(result);
@@ -362,21 +364,22 @@ public class JsonRpc2_0RxTest {
         assertTrue(subscription.isDisposed());
     }
 
-    private EthBlock createBlock(int number) {
-        EthBlock ethBlock = new EthBlock();
-        EthBlock.Block block = new EthBlock.Block();
+    private EthBlock createBlock(final int number) {
+        final EthBlock ethBlock = new EthBlock();
+        final EthBlock.Block block = new EthBlock.Block();
         block.setNumber(Numeric.encodeQuantity(BigInteger.valueOf(number)));
 
         ethBlock.setResult(block);
         return ethBlock;
     }
 
-    private EthBlock createBlockWithTransactions(int blockNumber, List<Transaction> transactions) {
-        EthBlock ethBlock = new EthBlock();
-        EthBlock.Block block = new EthBlock.Block();
+    private EthBlock createBlockWithTransactions(
+            final int blockNumber, final List<Transaction> transactions) {
+        final EthBlock ethBlock = new EthBlock();
+        final EthBlock.Block block = new EthBlock.Block();
         block.setNumber(Numeric.encodeQuantity(BigInteger.valueOf(blockNumber)));
 
-        List<EthBlock.TransactionResult> transactionResults =
+        final List<EthBlock.TransactionResult> transactionResults =
                 transactions.stream()
                         .map(it -> (EthBlock.TransactionResult<Transaction>) () -> it)
                         .collect(Collectors.toList());
@@ -386,8 +389,8 @@ public class JsonRpc2_0RxTest {
         return ethBlock;
     }
 
-    private Transaction createTransaction(String transactionHash) {
-        Transaction transaction = new Transaction();
+    private Transaction createTransaction(final String transactionHash) {
+        final Transaction transaction = new Transaction();
         transaction.setHash(transactionHash);
         return transaction;
     }

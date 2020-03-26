@@ -38,7 +38,7 @@ public class ObjectMapperFactory {
         return getObjectMapper(false);
     }
 
-    public static ObjectMapper getObjectMapper(boolean shouldIncludeRawResponses) {
+    public static ObjectMapper getObjectMapper(final boolean shouldIncludeRawResponses) {
         if (!shouldIncludeRawResponses) {
             return DEFAULT_OBJECT_MAPPER;
         }
@@ -51,16 +51,16 @@ public class ObjectMapperFactory {
     }
 
     private static ObjectMapper configureObjectMapper(
-            ObjectMapper objectMapper, boolean shouldIncludeRawResponses) {
+            final ObjectMapper objectMapper, final boolean shouldIncludeRawResponses) {
         if (shouldIncludeRawResponses) {
-            SimpleModule module = new SimpleModule();
+            final SimpleModule module = new SimpleModule();
             module.setDeserializerModifier(
                     new BeanDeserializerModifier() {
                         @Override
                         public JsonDeserializer<?> modifyDeserializer(
-                                DeserializationConfig config,
-                                BeanDescription beanDesc,
-                                JsonDeserializer<?> deserializer) {
+                                final DeserializationConfig config,
+                                final BeanDescription beanDesc,
+                                final JsonDeserializer<?> deserializer) {
                             if (Response.class.isAssignableFrom(beanDesc.getBeanClass())) {
                                 return new RawResponseDeserializer(deserializer);
                             }

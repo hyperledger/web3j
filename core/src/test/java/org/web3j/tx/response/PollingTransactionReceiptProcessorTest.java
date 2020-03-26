@@ -34,26 +34,24 @@ import static org.mockito.Mockito.when;
 public class PollingTransactionReceiptProcessorTest {
     private static final String TRANSACTION_HASH = "0x00";
     private Web3j web3j;
-    private long sleepDuration;
-    private int attempts;
     private PollingTransactionReceiptProcessor processor;
 
     @BeforeEach
     public void setUp() {
         web3j = mock(Web3j.class);
-        sleepDuration = 100;
-        attempts = 3;
+        final long sleepDuration = 100;
+        final int attempts = 3;
         processor = new PollingTransactionReceiptProcessor(web3j, sleepDuration, attempts);
     }
 
     @Test
     public void returnsTransactionReceiptWhenItIsAvailableInstantly() throws Exception {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        final TransactionReceipt transactionReceipt = new TransactionReceipt();
         doReturn(requestReturning(response(transactionReceipt)))
                 .when(web3j)
                 .ethGetTransactionReceipt(TRANSACTION_HASH);
 
-        TransactionReceipt receipt = processor.waitForTransactionReceipt(TRANSACTION_HASH);
+        final TransactionReceipt receipt = processor.waitForTransactionReceipt(TRANSACTION_HASH);
 
         assertEquals(receipt, (transactionReceipt));
     }
@@ -67,7 +65,7 @@ public class PollingTransactionReceiptProcessorTest {
         try {
             processor.waitForTransactionReceipt(TRANSACTION_HASH);
             fail("call should fail with TransactionException");
-        } catch (TransactionException e) {
+        } catch (final TransactionException e) {
             assertTrue(e.getTransactionHash().isPresent());
             assertEquals(e.getTransactionHash().get(), TRANSACTION_HASH);
         }
@@ -77,14 +75,14 @@ public class PollingTransactionReceiptProcessorTest {
         Request request = mock(Request.class);
         try {
             when(request.send()).thenReturn(response);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // this will never happen
         }
         return request;
     }
 
-    private static EthGetTransactionReceipt response(TransactionReceipt transactionReceipt) {
-        EthGetTransactionReceipt response = new EthGetTransactionReceipt();
+    private static EthGetTransactionReceipt response(final TransactionReceipt transactionReceipt) {
+        final EthGetTransactionReceipt response = new EthGetTransactionReceipt();
         response.setResult(transactionReceipt);
         return response;
     }

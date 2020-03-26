@@ -25,7 +25,7 @@ import org.web3j.utils.Base64String;
 @JsonDeserialize(using = JsonDeserializer.None.class)
 public class PrivateTransactionLegacy extends PrivateTransaction {
 
-    private List<Base64String> privateFor;
+    private final List<Base64String> privateFor;
 
     @JsonCreator
     public PrivateTransactionLegacy(
@@ -65,7 +65,7 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -75,7 +75,7 @@ public class PrivateTransactionLegacy extends PrivateTransaction {
         if (!super.equals(o)) {
             return false;
         }
-        PrivateTransactionLegacy that = (PrivateTransactionLegacy) o;
+        final PrivateTransactionLegacy that = (PrivateTransactionLegacy) o;
         return getPrivateFor().equals(that.getPrivateFor());
     }
 

@@ -43,12 +43,13 @@ public abstract class TransactionManager {
     private final String fromAddress;
 
     protected TransactionManager(
-            TransactionReceiptProcessor transactionReceiptProcessor, String fromAddress) {
+            final TransactionReceiptProcessor transactionReceiptProcessor,
+            final String fromAddress) {
         this.transactionReceiptProcessor = transactionReceiptProcessor;
         this.fromAddress = fromAddress;
     }
 
-    protected TransactionManager(Web3j web3j, String fromAddress) {
+    protected TransactionManager(final Web3j web3j, final String fromAddress) {
         this(
                 new PollingTransactionReceiptProcessor(
                         web3j, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH),
@@ -56,27 +57,34 @@ public abstract class TransactionManager {
     }
 
     protected TransactionManager(
-            Web3j web3j, int attempts, long sleepDuration, String fromAddress) {
+            final Web3j web3j,
+            final int attempts,
+            final long sleepDuration,
+            final String fromAddress) {
         this(new PollingTransactionReceiptProcessor(web3j, sleepDuration, attempts), fromAddress);
     }
 
     protected TransactionReceipt executeTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value)
             throws IOException, TransactionException {
 
         return executeTransaction(gasPrice, gasLimit, to, data, value, false);
     }
 
     public TransactionReceipt executeTransaction(
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException, TransactionException {
 
-        EthSendTransaction ethSendTransaction =
+        final EthSendTransaction ethSendTransaction =
                 sendTransaction(gasPrice, gasLimit, to, data, value, constructor);
         return processResponse(ethSendTransaction);
     }
@@ -120,7 +128,11 @@ public abstract class TransactionManager {
     }
 
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value)
             throws IOException {
         return sendTransaction(gasPrice, gasLimit, to, data, value, false);
     }
@@ -168,7 +180,7 @@ public abstract class TransactionManager {
         return fromAddress;
     }
 
-    protected TransactionReceipt processResponse(EthSendTransaction transactionResponse)
+    protected TransactionReceipt processResponse(final EthSendTransaction transactionResponse)
             throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
             throw new RuntimeException(
@@ -176,12 +188,12 @@ public abstract class TransactionManager {
                             + transactionResponse.getError().getMessage());
         }
 
-        String transactionHash = transactionResponse.getTransactionHash();
+        final String transactionHash = transactionResponse.getTransactionHash();
 
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
     }
 
-    static void assertCallNotReverted(EthCall ethCall) {
+    static void assertCallNotReverted(final EthCall ethCall) {
         if (ethCall.isReverted()) {
             throw new ContractCallException(
                     String.format(REVERT_ERR_STR, ethCall.getRevertReason()));

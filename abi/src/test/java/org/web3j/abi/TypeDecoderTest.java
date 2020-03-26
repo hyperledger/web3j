@@ -913,22 +913,22 @@ public class TypeDecoderTest {
 
     @Test
     public void testStaticBytes() throws Exception {
-        byte[] testbytes = new byte[] {0, 1, 2, 3, 4, 5};
-        Bytes6 staticBytes = new Bytes6(testbytes);
+        final byte[] testbytes = new byte[] {0, 1, 2, 3, 4, 5};
+        final Bytes6 staticBytes = new Bytes6(testbytes);
         assertEquals(
                 TypeDecoder.decodeBytes(
                         "0001020304050000000000000000000000000000000000000000000000000000",
                         Bytes6.class),
                 (staticBytes));
 
-        Bytes empty = new Bytes1(new byte[] {0});
+        final Bytes empty = new Bytes1(new byte[] {0});
         assertEquals(
                 TypeDecoder.decodeBytes(
                         "0000000000000000000000000000000000000000000000000000000000000000",
                         Bytes1.class),
                 (empty));
 
-        Bytes dave = new Bytes4("dave".getBytes());
+        final Bytes dave = new Bytes4("dave".getBytes());
         assertEquals(
                 TypeDecoder.decodeBytes(
                         "6461766500000000000000000000000000000000000000000000000000000000",
@@ -940,8 +940,8 @@ public class TypeDecoderTest {
 
     @Test
     public void testDynamicBytes() throws Exception {
-        byte[] testbytes = new byte[] {0, 1, 2, 3, 4, 5};
-        DynamicBytes dynamicBytes = new DynamicBytes(testbytes);
+        final byte[] testbytes = new byte[] {0, 1, 2, 3, 4, 5};
+        final DynamicBytes dynamicBytes = new DynamicBytes(testbytes);
         assertEquals(
                 TypeDecoder.decodeDynamicBytes(
                         "0000000000000000000000000000000000000000000000000000000000000006" // length
@@ -949,7 +949,7 @@ public class TypeDecoderTest {
                         0),
                 (dynamicBytes));
 
-        DynamicBytes empty = new DynamicBytes(new byte[] {0});
+        final DynamicBytes empty = new DynamicBytes(new byte[] {0});
         assertEquals(
                 TypeDecoder.decodeDynamicBytes(
                         "0000000000000000000000000000000000000000000000000000000000000001"
@@ -957,7 +957,7 @@ public class TypeDecoderTest {
                         0),
                 (empty));
 
-        DynamicBytes dave = new DynamicBytes("dave".getBytes());
+        final DynamicBytes dave = new DynamicBytes("dave".getBytes());
         assertEquals(
                 TypeDecoder.decodeDynamicBytes(
                         "0000000000000000000000000000000000000000000000000000000000000004"
@@ -965,7 +965,7 @@ public class TypeDecoderTest {
                         0),
                 (dave));
 
-        DynamicBytes loremIpsum =
+        final DynamicBytes loremIpsum =
                 new DynamicBytes(
                         ("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod "
                                         + "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
@@ -1066,10 +1066,10 @@ public class TypeDecoderTest {
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
 
-        Type arr = TypeDecoder.instantiateType("uint256[2]", new long[] {10, Long.MAX_VALUE});
+        final Type arr = TypeDecoder.instantiateType("uint256[2]", new long[] {10, Long.MAX_VALUE});
 
         assertTrue(arr instanceof StaticArray2);
-        StaticArray2 staticArray2 = (StaticArray2) arr;
+        final StaticArray2 staticArray2 = (StaticArray2) arr;
 
         assertEquals(staticArray2.getComponentType(), Uint256.class);
 
@@ -1135,11 +1135,11 @@ public class TypeDecoderTest {
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
 
-        Type arr =
+        final Type arr =
                 TypeDecoder.instantiateType(
                         "string[]", new String[] {"Hello, world!", "world! Hello,"});
         assertTrue(arr instanceof DynamicArray);
-        DynamicArray dynamicArray = (DynamicArray) arr;
+        final DynamicArray dynamicArray = (DynamicArray) arr;
 
         assertEquals(dynamicArray.getComponentType(), Utf8String.class);
 
@@ -1151,23 +1151,23 @@ public class TypeDecoderTest {
     @SuppressWarnings("unchecked")
     @Test
     public void multiDimArrays() throws Exception {
-        byte[] bytes1d = new byte[] {1, 2, 3};
-        byte[][] bytes2d = new byte[][] {bytes1d, bytes1d, bytes1d};
+        final byte[] bytes1d = new byte[] {1, 2, 3};
+        final byte[][] bytes2d = new byte[][] {bytes1d, bytes1d, bytes1d};
         final byte[][][] bytes3d = new byte[][][] {bytes2d, bytes2d, bytes2d};
 
         assertEquals(TypeDecoder.instantiateType("bytes", bytes1d), (new DynamicBytes(bytes1d)));
 
-        Type twoDim = TypeDecoder.instantiateType("uint256[][3]", bytes2d);
+        final Type twoDim = TypeDecoder.instantiateType("uint256[][3]", bytes2d);
         assertTrue(twoDim instanceof StaticArray3);
-        StaticArray3<DynamicArray<Uint256>> staticArray3 =
+        final StaticArray3<DynamicArray<Uint256>> staticArray3 =
                 (StaticArray3<DynamicArray<Uint256>>) twoDim;
         assertEquals(staticArray3.getComponentType(), DynamicArray.class);
         DynamicArray<Uint256> row1 = staticArray3.getValue().get(1);
         assertEquals(row1.getValue().get(2), new Uint256(3));
 
-        Type threeDim = TypeDecoder.instantiateType("uint256[][3][3]", bytes3d);
+        final Type threeDim = TypeDecoder.instantiateType("uint256[][3][3]", bytes3d);
         assertTrue(threeDim instanceof StaticArray3);
-        StaticArray3<StaticArray3<DynamicArray<Uint256>>> staticArray3StaticArray3 =
+        final StaticArray3<StaticArray3<DynamicArray<Uint256>>> staticArray3StaticArray3 =
                 (StaticArray3<StaticArray3<DynamicArray<Uint256>>>) threeDim;
         assertEquals(staticArray3StaticArray3.getComponentType(), StaticArray3.class);
         row1 = staticArray3StaticArray3.getValue().get(1).getValue().get(1);

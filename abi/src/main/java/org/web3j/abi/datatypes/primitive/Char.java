@@ -17,7 +17,7 @@ import org.web3j.abi.datatypes.Utf8String;
 
 public final class Char extends PrimitiveType<Character> {
 
-    public Char(char value) {
+    public Char(final char value) {
         super(value);
     }
 

@@ -64,7 +64,7 @@ public class UnixDomainSocketTest {
 
     @Test
     public void testReadExceedsBuffer() throws IOException {
-        int bufferSize = RESPONSE.length() / 3;
+        final int bufferSize = RESPONSE.length() / 3;
 
         unixDomainSocket = new UnixDomainSocket(reader, writer, RESPONSE.length() / 3);
 
@@ -111,7 +111,7 @@ public class UnixDomainSocketTest {
 
     @Test
     public void testSlowResponse() throws Exception {
-        String response =
+        final String response =
                 "{\"jsonrpc\":\"2.0\",\"id\":1,"
                         + "\"result\":\"Geth/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n";
         unixDomainSocket = new UnixDomainSocket(reader, writer, response.length());
@@ -134,7 +134,7 @@ public class UnixDomainSocketTest {
                 .when(reader)
                 .read(any(CharBuffer.class));
 
-        IpcService ipcService =
+        final IpcService ipcService =
                 new IpcService() {
                     @Override
                     protected IOFacade getIO() {

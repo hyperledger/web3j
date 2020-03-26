@@ -52,9 +52,10 @@ public class EthCall extends Response<String> {
 
     public String getRevertReason() {
         if (isErrorInResult()) {
-            String hexRevertReason = getValue().substring(errorMethodId.length());
-            List<Type<?>> decoded = FunctionReturnDecoder.decode(hexRevertReason, revertReasonType);
-            Utf8String decodedRevertReason = (Utf8String) decoded.get(0);
+            final String hexRevertReason = getValue().substring(errorMethodId.length());
+            final List<Type<?>> decoded =
+                    FunctionReturnDecoder.decode(hexRevertReason, revertReasonType);
+            final Utf8String decodedRevertReason = (Utf8String) decoded.get(0);
             return decodedRevertReason.getValue();
         } else if (hasError()) {
             return getError().getMessage();

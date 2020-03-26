@@ -37,11 +37,11 @@ import static org.mockito.Mockito.when;
 
 public class WebSocketEventTest {
 
-    private WebSocketClient webSocketClient = mock(WebSocketClient.class);
+    private final WebSocketClient webSocketClient = mock(WebSocketClient.class);
 
-    private WebSocketService webSocketService = new WebSocketService(webSocketClient, true);
+    private final WebSocketService webSocketService = new WebSocketService(webSocketClient, true);
 
-    private Web3j web3j = Web3j.build(webSocketService);
+    private final Web3j web3j = Web3j.build(webSocketService);
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
@@ -107,12 +107,12 @@ public class WebSocketEventTest {
                                         + "\"topics\":\\[\"0x2\"]}],\"id\":[0-9]{1,}}"));
     }
 
-    private int getRequestId(String message) throws IOException {
-        JsonNode messageJson = objectMapper.readTree(message);
+    private int getRequestId(final String message) throws IOException {
+        final JsonNode messageJson = objectMapper.readTree(message);
         return messageJson.get("id").asInt();
     }
 
-    private void sendSubscriptionConfirmation(int requestId) throws IOException {
+    private void sendSubscriptionConfirmation(final int requestId) throws IOException {
         listener.onMessage(
                 String.format(
                         "{"

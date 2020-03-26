@@ -24,30 +24,30 @@ public class NameHash {
 
     private static final byte[] EMPTY = new byte[32];
 
-    public static byte[] nameHashAsBytes(String ensName) {
+    public static byte[] nameHashAsBytes(final String ensName) {
         return Numeric.hexStringToByteArray(nameHash(ensName));
     }
 
-    public static String nameHash(String ensName) {
-        String normalisedEnsName = normalise(ensName);
+    public static String nameHash(final String ensName) {
+        final String normalisedEnsName = normalise(ensName);
         return Numeric.toHexString(nameHash(normalisedEnsName.split("\\.")));
     }
 
-    private static byte[] nameHash(String[] labels) {
+    private static byte[] nameHash(final String[] labels) {
         if (labels.length == 0 || labels[0].equals("")) {
             return EMPTY;
         } else {
-            String[] tail;
+            final String[] tail;
             if (labels.length == 1) {
                 tail = new String[] {};
             } else {
                 tail = Arrays.copyOfRange(labels, 1, labels.length);
             }
 
-            byte[] remainderHash = nameHash(tail);
-            byte[] result = Arrays.copyOf(remainderHash, 64);
+            final byte[] remainderHash = nameHash(tail);
+            final byte[] result = Arrays.copyOf(remainderHash, 64);
 
-            byte[] labelHash = Hash.sha3(labels[0].getBytes(StandardCharsets.UTF_8));
+            final byte[] labelHash = Hash.sha3(labels[0].getBytes(StandardCharsets.UTF_8));
             System.arraycopy(labelHash, 0, result, 32, labelHash.length);
 
             return Hash.sha3(result);
@@ -62,10 +62,10 @@ public class NameHash {
      * @return normalised ens name
      * @throws EnsResolutionException if the name cannot be normalised
      */
-    public static String normalise(String ensName) {
+    public static String normalise(final String ensName) {
         try {
             return IDN.toASCII(ensName, IDN.USE_STD3_ASCII_RULES).toLowerCase();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             throw new EnsResolutionException("Invalid ENS name provided: " + ensName);
         }
     }

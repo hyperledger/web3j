@@ -21,16 +21,16 @@ public class RequestTest extends RequestTester {
     private Geth web3j;
 
     @Override
-    protected void initWeb3Client(HttpService httpService) {
+    protected void initWeb3Client(final HttpService httpService) {
         web3j = Geth.build(httpService);
     }
 
     @Test
     public void testPersonalImportRawKey() throws Exception {
 
-        String rawKey =
+        final String rawKey =
                 "a08165236279178312660610114131826512483935470542850824183737259708197206310322";
-        String password = "hunter2";
+        final String password = "hunter2";
         web3j.personalImportRawKey(rawKey, password).send();
 
         verifyResult(
@@ -40,7 +40,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalLockAccount() throws Exception {
-        String accountId = "0x407d73d8a49eeb85d32cf465507dd71d507100c1";
+        final String accountId = "0x407d73d8a49eeb85d32cf465507dd71d507100c1";
         web3j.personalLockAccount(accountId).send();
 
         verifyResult(

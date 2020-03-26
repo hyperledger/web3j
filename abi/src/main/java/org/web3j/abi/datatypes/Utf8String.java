@@ -18,9 +18,9 @@ public class Utf8String implements Type<String> {
     public static final String TYPE_NAME = "string";
     public static final Utf8String DEFAULT = new Utf8String("");
 
-    private String value;
+    private final String value;
 
-    public Utf8String(String value) {
+    public Utf8String(final String value) {
         this.value = value;
     }
 
@@ -48,7 +48,7 @@ public class Utf8String implements Type<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -56,7 +56,7 @@ public class Utf8String implements Type<String> {
             return false;
         }
 
-        Utf8String that = (Utf8String) o;
+        final Utf8String that = (Utf8String) o;
 
         return value != null ? value.equals(that.value) : that.value == null;
     }

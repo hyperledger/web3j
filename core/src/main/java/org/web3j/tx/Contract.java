@@ -62,11 +62,11 @@ public abstract class Contract extends ManagedTransaction {
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
 
     protected Contract(
-            String contractBinary,
-            String contractAddress,
-            Web3j web3j,
-            TransactionManager transactionManager,
-            ContractGasProvider gasProvider) {
+            final String contractBinary,
+            final String contractAddress,
+            final Web3j web3j,
+            final TransactionManager transactionManager,
+            final ContractGasProvider gasProvider) {
         this(
                 new EnsResolver(web3j),
                 contractBinary,
@@ -77,12 +77,12 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected Contract(
-            EnsResolver ensResolver,
-            String contractBinary,
-            String contractAddress,
-            Web3j web3j,
-            TransactionManager transactionManager,
-            ContractGasProvider gasProvider) {
+            final EnsResolver ensResolver,
+            final String contractBinary,
+            final String contractAddress,
+            final Web3j web3j,
+            final TransactionManager transactionManager,
+            final ContractGasProvider gasProvider) {
 
         super(ensResolver, web3j, transactionManager);
         this.contractAddress = resolveContractAddress(contractAddress);
@@ -91,11 +91,11 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected Contract(
-            String contractBinary,
-            String contractAddress,
-            Web3j web3j,
-            Credentials credentials,
-            ContractGasProvider gasProvider) {
+            final String contractBinary,
+            final String contractAddress,
+            final Web3j web3j,
+            final Credentials credentials,
+            final ContractGasProvider gasProvider) {
         this(
                 new EnsResolver(web3j),
                 contractBinary,
@@ -109,7 +109,7 @@ public abstract class Contract extends ManagedTransaction {
         return contractAddress;
     }
 
-    public void setTransactionReceipt(TransactionReceipt transactionReceipt) {
+    public void setTransactionReceipt(final TransactionReceipt transactionReceipt) {
         this.transactionReceipt = transactionReceipt;
     }
 
@@ -117,7 +117,7 @@ public abstract class Contract extends ManagedTransaction {
         return contractBinary;
     }
 
-    public void setGasProvider(ContractGasProvider gasProvider) {
+    public void setGasProvider(final ContractGasProvider gasProvider) {
         this.gasProvider = gasProvider;
     }
 
@@ -127,7 +127,7 @@ public abstract class Contract extends ManagedTransaction {
      * @param newPrice gas price to use for subsequent transactions
      * @deprecated use ContractGasProvider
      */
-    public void setGasPrice(BigInteger newPrice) {
+    public void setGasPrice(final BigInteger newPrice) {
         this.gasProvider = new StaticGasProvider(newPrice, gasProvider.getGasLimit());
     }
 
@@ -166,14 +166,14 @@ public abstract class Contract extends ManagedTransaction {
                             + "contract wrapper with web3j v2.2.0+");
         }
 
-        EthGetCode ethGetCode =
+        final EthGetCode ethGetCode =
                 transactionManager.getCode(contractAddress, DefaultBlockParameterName.LATEST);
         if (ethGetCode.hasError()) {
             return false;
         }
 
         String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
-        int metadataIndex = code.indexOf(METADATA_INDEX);
+        final int metadataIndex = code.indexOf(METADATA_INDEX);
         if (metadataIndex != -1) {
             code = code.substring(0, metadataIndex);
         }
@@ -201,18 +201,18 @@ public abstract class Contract extends ManagedTransaction {
      * @deprecated Set the block parameter on a per-call basis
      */
     @Deprecated
-    public void setDefaultBlockParameter(DefaultBlockParameter defaultBlockParameter) {
+    public void setDefaultBlockParameter(final DefaultBlockParameter defaultBlockParameter) {
         this.defaultBlockParameter = defaultBlockParameter;
     }
 
     protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
-            Class<T> type,
-            Web3j web3j,
-            Credentials credentials,
-            ContractGasProvider contractGasProvider,
-            String binary,
-            String encodedConstructor,
-            BigInteger value) {
+            final Class<T> type,
+            final Web3j web3j,
+            final Credentials credentials,
+            final ContractGasProvider contractGasProvider,
+            final String binary,
+            final String encodedConstructor,
+            final BigInteger value) {
         return new ConstructorTransaction<>(
                 web3j,
                 type,
@@ -225,12 +225,12 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
-            Class<T> type,
-            Web3j web3j,
-            Credentials credentials,
-            ContractGasProvider contractGasProvider,
-            String binary,
-            String encodedConstructor) {
+            final Class<T> type,
+            final Web3j web3j,
+            final Credentials credentials,
+            final ContractGasProvider contractGasProvider,
+            final String binary,
+            final String encodedConstructor) {
         return new ConstructorTransaction<>(
                 web3j,
                 type,
@@ -243,13 +243,13 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
-            Class<T> type,
-            Web3j web3j,
-            TransactionManager transactionManager,
-            ContractGasProvider contractGasProvider,
-            String binary,
-            String encodedConstructor,
-            BigInteger value) {
+            final Class<T> type,
+            final Web3j web3j,
+            final TransactionManager transactionManager,
+            final ContractGasProvider contractGasProvider,
+            final String binary,
+            final String encodedConstructor,
+            final BigInteger value) {
         return new ConstructorTransaction<>(
                 web3j,
                 type,
@@ -262,12 +262,12 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
-            Class<T> type,
-            Web3j web3j,
-            TransactionManager transactionManager,
-            ContractGasProvider contractGasProvider,
-            String binary,
-            String encodedConstructor) {
+            final Class<T> type,
+            final Web3j web3j,
+            final TransactionManager transactionManager,
+            final ContractGasProvider contractGasProvider,
+            final String binary,
+            final String encodedConstructor) {
         return new ConstructorTransaction<>(
                 web3j,
                 type,
@@ -279,9 +279,9 @@ public abstract class Contract extends ManagedTransaction {
                 BigInteger.ZERO);
     }
 
-    public static EventValues staticExtractEventParameters(Event event, Log log) {
+    public static EventValues staticExtractEventParameters(final Event event, final Log log) {
         final List<String> topics = log.getTopics();
-        String encodedEventSignature = EventEncoder.encode(event);
+        final String encodedEventSignature = EventEncoder.encode(event);
         if (topics == null || topics.size() == 0 || !topics.get(0).equals(encodedEventSignature)) {
             return null;
         }
@@ -292,7 +292,7 @@ public abstract class Contract extends ManagedTransaction {
 
         final List<TypeReference<Type<?>>> indexedParameters = event.getIndexedParameters();
         for (int i = 0; i < indexedParameters.size(); i++) {
-            Type<?> value =
+            final Type<?> value =
                     FunctionReturnDecoder.decodeIndexedValue(
                             topics.get(i + 1), indexedParameters.get(i));
             indexedValues.add(value);
@@ -300,33 +300,34 @@ public abstract class Contract extends ManagedTransaction {
         return new EventValues(indexedValues, nonIndexedValues);
     }
 
-    protected String resolveContractAddress(String contractAddress) {
+    protected String resolveContractAddress(final String contractAddress) {
         return ensResolver.resolve(contractAddress);
     }
 
-    protected EventValues extractEventParameters(Event event, Log log) {
+    protected EventValues extractEventParameters(final Event event, final Log log) {
         return staticExtractEventParameters(event, log);
     }
 
     protected List<EventValues> extractEventParameters(
-            Event event, TransactionReceipt transactionReceipt) {
+            final Event event, final TransactionReceipt transactionReceipt) {
         return transactionReceipt.getLogs().stream()
                 .map(log -> extractEventParameters(event, log))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
+    protected EventValuesWithLog extractEventParametersWithLog(final Event event, final Log log) {
         return staticExtractEventParametersWithLog(event, log);
     }
 
-    protected static EventValuesWithLog staticExtractEventParametersWithLog(Event event, Log log) {
+    protected static EventValuesWithLog staticExtractEventParametersWithLog(
+            final Event event, final Log log) {
         final EventValues eventValues = staticExtractEventParameters(event, log);
         return (eventValues == null) ? null : new EventValuesWithLog(eventValues, log);
     }
 
     protected List<EventValuesWithLog> extractEventParametersWithLog(
-            Event event, TransactionReceipt transactionReceipt) {
+            final Event event, final TransactionReceipt transactionReceipt) {
         return transactionReceipt.getLogs().stream()
                 .map(log -> extractEventParametersWithLog(event, log))
                 .filter(Objects::nonNull)
@@ -340,18 +341,18 @@ public abstract class Contract extends ManagedTransaction {
      * @param networkId the network id, for example "1" for the main-net, "3" for ropsten, etc.
      * @return the deployed address of the contract, if known, and null otherwise.
      */
-    protected String getStaticDeployedAddress(String networkId) {
+    protected String getStaticDeployedAddress(final String networkId) {
         return null;
     }
 
-    public final void setDeployedAddress(String networkId, String address) {
+    public final void setDeployedAddress(final String networkId, final String address) {
         if (deployedAddresses == null) {
             deployedAddresses = new HashMap<>();
         }
         deployedAddresses.put(networkId, address);
     }
 
-    public final String getDeployedAddress(String networkId) {
+    public final String getDeployedAddress(final String networkId) {
         String addr = null;
         if (deployedAddresses != null) {
             addr = deployedAddresses.get(networkId);
@@ -364,7 +365,7 @@ public abstract class Contract extends ManagedTransaction {
         private final EventValues eventValues;
         private final Log log;
 
-        private EventValuesWithLog(EventValues eventValues, Log log) {
+        private EventValuesWithLog(final EventValues eventValues, final Log log) {
             this.eventValues = eventValues;
             this.log = log;
         }

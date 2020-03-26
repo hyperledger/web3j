@@ -12,22 +12,22 @@ import org.web3j.abi.datatypes.Type;
  */
 public class StaticArray27<T extends Type> extends StaticArray<T> {
     @Deprecated
-    public StaticArray27(List<T> values) {
+    public StaticArray27(final List<T> values) {
         super(27, values);
     }
 
     @Deprecated
     @SafeVarargs
-    public StaticArray27(T... values) {
+    public StaticArray27(final T... values) {
         super(27, values);
     }
 
-    public StaticArray27(Class<T> type, List<T> values) {
+    public StaticArray27(final Class<T> type, final List<T> values) {
         super(type, 27, values);
     }
 
     @SafeVarargs
-    public StaticArray27(Class<T> type, T... values) {
+    public StaticArray27(final Class<T> type, final T... values) {
         super(type, 27, values);
     }
 }

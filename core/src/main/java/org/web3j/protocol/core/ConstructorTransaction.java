@@ -75,7 +75,7 @@ public class ConstructorTransaction<T extends Contract> implements RemoteTransac
             contract.setTransactionReceipt(transactionReceipt);
             return contract;
 
-        } catch (TransactionException | ReflectiveOperationException e) {
+        } catch (final TransactionException | ReflectiveOperationException e) {
             throw new IOException(e);
         }
     }

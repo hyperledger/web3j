@@ -31,7 +31,7 @@ public class RequestTest extends RequestTester {
     private Web3j web3j;
 
     @Override
-    protected void initWeb3Client(HttpService httpService) {
+    protected void initWeb3Client(final HttpService httpService) {
         web3j = Web3j.build(httpService);
     }
 
@@ -479,7 +479,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testEthNewFilter() throws Exception {
-        EthFilter ethFilter = new EthFilter().addSingleTopic("0x12341234");
+        final EthFilter ethFilter = new EthFilter().addSingleTopic("0x12341234");
 
         web3j.ethNewFilter(ethFilter).send();
 

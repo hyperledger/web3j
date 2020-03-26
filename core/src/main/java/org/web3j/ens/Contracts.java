@@ -21,7 +21,7 @@ public class Contracts {
     public static final String ROPSTEN = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
     public static final String RINKEBY = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
 
-    public static String resolveRegistryContract(String chainId) {
+    public static String resolveRegistryContract(final String chainId) {
         final Long chainIdLong = Long.parseLong(chainId);
         if (chainIdLong.equals(ChainIdLong.MAINNET)) {
             return MAINNET;

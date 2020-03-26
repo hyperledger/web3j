@@ -21,10 +21,10 @@ import static org.web3j.abi.Utils.convert;
 
 /** Event wrapper type. */
 public class Event {
-    private String name;
-    private List<TypeReference<Type<?>>> parameters;
+    private final String name;
+    private final List<TypeReference<Type<?>>> parameters;
 
-    public Event(String name, List<TypeReference<?>> parameters) {
+    public Event(final String name, final List<TypeReference<?>> parameters) {
         this.name = name;
         this.parameters = convert(parameters);
     }

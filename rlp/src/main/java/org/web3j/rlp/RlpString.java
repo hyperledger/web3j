@@ -23,7 +23,7 @@ public class RlpString implements RlpType {
 
     private final byte[] value;
 
-    private RlpString(byte[] value) {
+    private RlpString(final byte[] value) {
         this.value = value;
     }
 
@@ -42,20 +42,20 @@ public class RlpString implements RlpType {
         return Numeric.toHexString(value);
     }
 
-    public static RlpString create(byte[] value) {
+    public static RlpString create(final byte[] value) {
         return new RlpString(value);
     }
 
-    public static RlpString create(byte value) {
+    public static RlpString create(final byte value) {
         return new RlpString(new byte[] {value});
     }
 
-    public static RlpString create(BigInteger value) {
+    public static RlpString create(final BigInteger value) {
         // RLP encoding only supports positive integer values
         if (value == null || value.signum() < 1) {
             return new RlpString(EMPTY);
         } else {
-            byte[] bytes = value.toByteArray();
+            final byte[] bytes = value.toByteArray();
             if (bytes[0] == 0) { // remove leading zero
                 return new RlpString(Arrays.copyOfRange(bytes, 1, bytes.length));
             } else {
@@ -64,16 +64,16 @@ public class RlpString implements RlpType {
         }
     }
 
-    public static RlpString create(long value) {
+    public static RlpString create(final long value) {
         return create(BigInteger.valueOf(value));
     }
 
-    public static RlpString create(String value) {
+    public static RlpString create(final String value) {
         return new RlpString(value.getBytes());
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -81,7 +81,7 @@ public class RlpString implements RlpType {
             return false;
         }
 
-        RlpString rlpString = (RlpString) o;
+        final RlpString rlpString = (RlpString) o;
 
         return Arrays.equals(value, rlpString.value);
     }

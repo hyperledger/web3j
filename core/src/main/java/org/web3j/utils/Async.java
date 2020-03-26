@@ -28,15 +28,15 @@ public class Async {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(executor)));
     }
 
-    public static <T> CompletableFuture<T> run(Callable<T> callable) {
-        CompletableFuture<T> result = new CompletableFuture<>();
+    public static <T> CompletableFuture<T> run(final Callable<T> callable) {
+        final CompletableFuture<T> result = new CompletableFuture<>();
         CompletableFuture.runAsync(
                 () -> {
                     // we need to explicitly catch any exceptions,
                     // otherwise they will be silently discarded
                     try {
                         result.complete(callable.call());
-                    } catch (Throwable e) {
+                    } catch (final Throwable e) {
                         result.completeExceptionally(e);
                     }
                 },
@@ -56,7 +56,7 @@ public class Async {
      * @return new ScheduledExecutorService
      */
     public static ScheduledExecutorService defaultExecutorService() {
-        ScheduledExecutorService scheduledExecutorService =
+        final ScheduledExecutorService scheduledExecutorService =
                 Executors.newScheduledThreadPool(getCpuCount());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(scheduledExecutorService)));
@@ -69,7 +69,7 @@ public class Async {
      *
      * @param executorService executor service we wish to shut down.
      */
-    private static void shutdown(ExecutorService executorService) {
+    private static void shutdown(final ExecutorService executorService) {
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
@@ -78,7 +78,7 @@ public class Async {
                     System.err.println("Thread pool did not terminate");
                 }
             }
-        } catch (InterruptedException ie) {
+        } catch (final InterruptedException ie) {
             executorService.shutdownNow();
             Thread.currentThread().interrupt();
         }

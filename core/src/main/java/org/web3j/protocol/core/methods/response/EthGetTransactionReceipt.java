@@ -33,11 +33,11 @@ public class EthGetTransactionReceipt extends Response<TransactionReceipt> {
 
     public static class ResponseDeserialiser extends JsonDeserializer<TransactionReceipt> {
 
-        private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
+        private final ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
         public TransactionReceipt deserialize(
-                JsonParser jsonParser, DeserializationContext deserializationContext)
+                final JsonParser jsonParser, final DeserializationContext deserializationContext)
                 throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
                 return objectReader.readValue(jsonParser, TransactionReceipt.class);

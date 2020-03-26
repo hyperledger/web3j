@@ -62,12 +62,12 @@ public class Keys {
         return createSecp256k1KeyPair(secureRandom());
     }
 
-    static KeyPair createSecp256k1KeyPair(SecureRandom random)
+    static KeyPair createSecp256k1KeyPair(final SecureRandom random)
             throws NoSuchProviderException, NoSuchAlgorithmException,
                     InvalidAlgorithmParameterException {
 
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
-        ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
+        final KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC");
+        final ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
         if (random != null) {
             keyPairGenerator.initialize(ecGenParameterSpec, random);
         } else {
@@ -82,23 +82,23 @@ public class Keys {
         return createEcKeyPair(secureRandom());
     }
 
-    public static ECKeyPair createEcKeyPair(SecureRandom random)
+    public static ECKeyPair createEcKeyPair(final SecureRandom random)
             throws InvalidAlgorithmParameterException, NoSuchAlgorithmException,
                     NoSuchProviderException {
-        KeyPair keyPair = createSecp256k1KeyPair(random);
+        final KeyPair keyPair = createSecp256k1KeyPair(random);
         return ECKeyPair.create(keyPair);
     }
 
-    public static String getAddress(ECKeyPair ecKeyPair) {
+    public static String getAddress(final ECKeyPair ecKeyPair) {
         return getAddress(ecKeyPair.getPublicKey());
     }
 
-    public static String getAddress(BigInteger publicKey) {
+    public static String getAddress(final BigInteger publicKey) {
         return getAddress(
                 Numeric.toHexStringWithPrefixZeroPadded(publicKey, PUBLIC_KEY_LENGTH_IN_HEX));
     }
 
-    public static String getAddress(String publicKey) {
+    public static String getAddress(final String publicKey) {
         String publicKeyNoPrefix = Numeric.cleanHexPrefix(publicKey);
 
         if (publicKeyNoPrefix.length() < PUBLIC_KEY_LENGTH_IN_HEX) {
@@ -106,12 +106,12 @@ public class Keys {
                     Strings.zeros(PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length())
                             + publicKeyNoPrefix;
         }
-        String hash = Hash.sha3(publicKeyNoPrefix);
+        final String hash = Hash.sha3(publicKeyNoPrefix);
         return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX); // right most 160 bits
     }
 
-    public static byte[] getAddress(byte[] publicKey) {
-        byte[] hash = Hash.sha3(publicKey);
+    public static byte[] getAddress(final byte[] publicKey) {
+        final byte[] hash = Hash.sha3(publicKey);
         return Arrays.copyOfRange(hash, hash.length - 20, hash.length); // right most 160 bits
     }
 
@@ -122,11 +122,11 @@ public class Keys {
      * @param address a valid hex encoded address
      * @return hex encoded checksum address
      */
-    public static String toChecksumAddress(String address) {
-        String lowercaseAddress = Numeric.cleanHexPrefix(address).toLowerCase();
-        String addressHash = Numeric.cleanHexPrefix(Hash.sha3String(lowercaseAddress));
+    public static String toChecksumAddress(final String address) {
+        final String lowercaseAddress = Numeric.cleanHexPrefix(address).toLowerCase();
+        final String addressHash = Numeric.cleanHexPrefix(Hash.sha3String(lowercaseAddress));
 
-        StringBuilder result = new StringBuilder(lowercaseAddress.length() + 2);
+        final StringBuilder result = new StringBuilder(lowercaseAddress.length() + 2);
 
         result.append("0x");
 
@@ -141,22 +141,23 @@ public class Keys {
         return result.toString();
     }
 
-    public static byte[] serialize(ECKeyPair ecKeyPair) {
-        byte[] privateKey = Numeric.toBytesPadded(ecKeyPair.getPrivateKey(), PRIVATE_KEY_SIZE);
-        byte[] publicKey = Numeric.toBytesPadded(ecKeyPair.getPublicKey(), PUBLIC_KEY_SIZE);
+    public static byte[] serialize(final ECKeyPair ecKeyPair) {
+        final byte[] privateKey =
+                Numeric.toBytesPadded(ecKeyPair.getPrivateKey(), PRIVATE_KEY_SIZE);
+        final byte[] publicKey = Numeric.toBytesPadded(ecKeyPair.getPublicKey(), PUBLIC_KEY_SIZE);
 
-        byte[] result = Arrays.copyOf(privateKey, PRIVATE_KEY_SIZE + PUBLIC_KEY_SIZE);
+        final byte[] result = Arrays.copyOf(privateKey, PRIVATE_KEY_SIZE + PUBLIC_KEY_SIZE);
         System.arraycopy(publicKey, 0, result, PRIVATE_KEY_SIZE, PUBLIC_KEY_SIZE);
         return result;
     }
 
-    public static ECKeyPair deserialize(byte[] input) {
+    public static ECKeyPair deserialize(final byte[] input) {
         if (input.length != PRIVATE_KEY_SIZE + PUBLIC_KEY_SIZE) {
             throw new RuntimeException("Invalid input key size");
         }
 
-        BigInteger privateKey = Numeric.toBigInt(input, 0, PRIVATE_KEY_SIZE);
-        BigInteger publicKey = Numeric.toBigInt(input, PRIVATE_KEY_SIZE, PUBLIC_KEY_SIZE);
+        final BigInteger privateKey = Numeric.toBigInt(input, 0, PRIVATE_KEY_SIZE);
+        final BigInteger publicKey = Numeric.toBigInt(input, PRIVATE_KEY_SIZE, PUBLIC_KEY_SIZE);
 
         return new ECKeyPair(privateKey, publicKey);
     }

@@ -24,10 +24,12 @@ import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthLog.LogResult;
 
+import static org.web3j.protocol.core.methods.response.EthLog.Hash;
+
 /** Handler hashes for working with block filter requests */
 public class BlocksFilter extends Filter<List<String>> {
 
-    public BlocksFilter(Web3j web3j, Callback<List<String>> callback) {
+    public BlocksFilter(final Web3j web3j, final Callback<List<String>> callback) {
         super(web3j, callback);
     }
 
@@ -37,16 +39,16 @@ public class BlocksFilter extends Filter<List<String>> {
     }
 
     @Override
-    protected void process(List<LogResult> logResults) {
-        List<String> blockHashes = new ArrayList<>(logResults.size());
+    protected void process(final List<LogResult> logResults) {
+        final List<String> blockHashes = new ArrayList<>(logResults.size());
 
-        for (EthLog.LogResult logResult : logResults) {
-            if (!(logResult instanceof EthLog.Hash)) {
+        for (final LogResult logResult : logResults) {
+            if (!(logResult instanceof Hash)) {
                 throw new FilterException(
                         "Unexpected result type: " + logResult.get() + ", required Hash");
             }
 
-            blockHashes.add(((EthLog.Hash) logResult).get());
+            blockHashes.add(((Hash) logResult).get());
         }
 
         callback.onEvent(blockHashes);
@@ -60,7 +62,7 @@ public class BlocksFilter extends Filter<List<String>> {
      * @return Optional.empty()
      */
     @Override
-    protected Optional<Request<?, EthLog>> getFilterLogs(BigInteger filterId) {
+    protected Optional<Request<?, EthLog>> getFilterLogs(final BigInteger filterId) {
         return Optional.empty();
     }
 }
