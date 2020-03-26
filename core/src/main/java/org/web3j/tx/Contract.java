@@ -52,6 +52,7 @@ public abstract class Contract extends ManagedTransaction {
 
     public static final String BIN_NOT_PROVIDED = "Bin file was not provided";
     public static final String FUNC_DEPLOY = "deploy";
+    public static final String METADATA_INDEX = "a165627a7a72305820";
 
     protected final String contractBinary;
     protected String contractAddress;
@@ -172,7 +173,7 @@ public abstract class Contract extends ManagedTransaction {
         }
 
         String code = Numeric.cleanHexPrefix(ethGetCode.getCode());
-        int metadataIndex = code.indexOf("a165627a7a72305820");
+        int metadataIndex = code.indexOf(METADATA_INDEX);
         if (metadataIndex != -1) {
             code = code.substring(0, metadataIndex);
         }
@@ -249,7 +250,7 @@ public abstract class Contract extends ManagedTransaction {
             String binary,
             String encodedConstructor,
             BigInteger value) {
-        return new ConstructorTransaction<T>(
+        return new ConstructorTransaction<>(
                 web3j,
                 type,
                 null,

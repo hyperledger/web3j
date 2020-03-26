@@ -109,7 +109,11 @@ public class ConstructorTransaction<T extends Contract> implements RemoteTransac
             constructor.setAccessible(true);
             contract =
                     constructor.newInstance(
-                            null, contractAddress, web3j, transactionManager, contractGasProvider);
+                            binary,
+                            contractAddress,
+                            web3j,
+                            transactionManager,
+                            contractGasProvider);
         } else if (credentials != null) {
             constructor =
                     type.getDeclaredConstructor(
@@ -121,7 +125,7 @@ public class ConstructorTransaction<T extends Contract> implements RemoteTransac
             constructor.setAccessible(true);
             contract =
                     constructor.newInstance(
-                            null, contractAddress, web3j, credentials, contractGasProvider);
+                            binary, contractAddress, web3j, credentials, contractGasProvider);
         } else {
             throw new IllegalStateException(
                     "Either transaction manager or credentials"

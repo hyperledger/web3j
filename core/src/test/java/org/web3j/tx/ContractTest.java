@@ -37,6 +37,7 @@ import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.RemoteArrayFunctionCall;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.RemoteTransaction;
@@ -138,7 +139,7 @@ public class ContractTest extends ManagedTransactionTester {
     public void testContractDeployFails() throws IOException {
         TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
         prepareCall(null);
-        assertThrows(TransactionException.class, () -> deployContract(transactionReceipt));
+        assertThrows(IOException.class, () -> deployContract(transactionReceipt));
     }
 
     @Test
@@ -163,7 +164,7 @@ public class ContractTest extends ManagedTransactionTester {
     public void testIsValidSkipMetadata() throws Exception {
         prepareEthGetCode(
                 TEST_CONTRACT_BINARY
-                        + "a165627a7a72305820"
+                        + Contract.METADATA_INDEX
                         + "a9bc86938894dc250f6ea25dd823d4472fad6087edcda429a3504e3713a9fc880029");
 
         Contract contract = deployContract(createTransactionReceipt());
@@ -217,7 +218,7 @@ public class ContractTest extends ManagedTransactionTester {
                                         web3j,
                                         SampleKeys.CREDENTIALS,
                                         contractGasProvider,
-                                        "0xcafed00d",
+                                        TEST_CONTRACT_BINARY,
                                         encodedConstructor,
                                         BigInteger.ZERO)
                                 .call());
@@ -312,7 +313,7 @@ public class ContractTest extends ManagedTransactionTester {
 
                     contract.performTransaction(
                                     new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
-                            .call();
+                            .send();
                 });
     }
 
@@ -330,7 +331,7 @@ public class ContractTest extends ManagedTransactionTester {
                             contract.performTransaction(
                                             new Address(BigInteger.TEN),
                                             new Uint256(BigInteger.ONE))
-                                    .call();
+                                    .send();
                         });
 
         assertEquals(
@@ -439,8 +440,8 @@ public class ContractTest extends ManagedTransactionTester {
         final Function func =
                 new Function(
                         "test",
-                        Collections.<Type<?>>emptyList(),
-                        Collections.<TypeReference<?>>emptyList());
+                        Collections.emptyList(),
+                        Collections.emptyList());
 
         final RemoteTransaction<Void> transaction =
                 new RemoteTransaction0(
@@ -525,7 +526,7 @@ public class ContractTest extends ManagedTransactionTester {
 
     void testErrorScenario() throws Throwable {
         contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
-                .call();
+                .send();
     }
 
     private TransactionReceipt createTransactionReceipt() {
@@ -552,14 +553,14 @@ public class ContractTest extends ManagedTransactionTester {
 
         final String encodedConstructor =
                 FunctionEncoder.encodeConstructor(
-                        Collections.<Type<?>>singletonList(new Uint256(BigInteger.TEN)));
+                        Collections.singletonList(new Uint256(BigInteger.TEN)));
         final ContractGasProvider contractGasProvider = new DefaultGasProvider();
         return TestContract.deployRemoteCall(
                         TestContract.class,
                         web3j,
                         getVerifiedTransactionManager(SampleKeys.CREDENTIALS),
                         contractGasProvider,
-                        "0xcafed00d",
+                        TEST_CONTRACT_BINARY,
                         encodedConstructor,
                         BigInteger.ZERO)
                 .call();
@@ -613,7 +614,7 @@ public class ContractTest extends ManagedTransactionTester {
                     function, contractAddress, transactionManager, defaultBlockParameter);
         }
 
-        public RemoteFunctionCall<Tuple2<Uint256, Uint256>> callMultipleValue() {
+        public RemoteFunctionCall<List<Type<?>>> callMultipleValue() {
             final Function function =
                     new Function(
                             "call",
@@ -621,7 +622,7 @@ public class ContractTest extends ManagedTransactionTester {
                             Arrays.asList(
                                     new TypeReference<Uint256>() {},
                                     new TypeReference<Uint256>() {}));
-            return new RemoteFunctionCall2<>(
+            return new RemoteArrayFunctionCall(
                     function, contractAddress, transactionManager, defaultBlockParameter);
         }
 
