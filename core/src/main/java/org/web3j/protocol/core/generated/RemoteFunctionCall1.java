@@ -16,9 +16,7 @@ import java.util.List;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.protocol.core.AbstractRemoteCall;
 import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.tx.TransactionManager;
 
@@ -35,6 +33,6 @@ public class RemoteFunctionCall1<T> extends RemoteFunctionCall<T> {
     @Override
     @SuppressWarnings("unchecked")
     protected T convert(final List<Type<?>> values) {
-        return (T) values.get(0);
+        return values.isEmpty() ? null : ((T) values.get(0));
     }
 }
