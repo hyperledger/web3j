@@ -298,7 +298,7 @@ public class ContractTest extends ManagedTransactionTester {
                 transactionReceipt,
                 contract.performTransaction(
                                 new Address(BigInteger.TEN), new Uint256(BigInteger.ONE))
-                        .call());
+                        .send());
     }
 
     @Test
