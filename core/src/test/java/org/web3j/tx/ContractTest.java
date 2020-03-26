@@ -44,7 +44,6 @@ import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.generated.RemoteFunctionCall1;
-import org.web3j.protocol.core.generated.RemoteFunctionCall2;
 import org.web3j.protocol.core.generated.RemoteTransaction0;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
@@ -54,7 +53,6 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -438,13 +436,9 @@ public class ContractTest extends ManagedTransactionTester {
         contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
 
         final Function func =
-                new Function(
-                        "test",
-                        Collections.emptyList(),
-                        Collections.emptyList());
+                new Function("test", Collections.emptyList(), Collections.emptyList());
 
-        final RemoteTransaction<Void> transaction =
-                new RemoteTransaction0(
+        new RemoteTransaction0(
                         web3j,
                         func,
                         contract.contractAddress,
@@ -453,7 +447,8 @@ public class ContractTest extends ManagedTransactionTester {
                         FunctionEncoder.encode(func),
                         BigInteger.ZERO,
                         false,
-                        contract.gasProvider);
+                        contract.gasProvider)
+                .send();
 
         verify(txManager)
                 .executeTransaction(
