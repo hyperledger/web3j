@@ -14,7 +14,6 @@ package org.web3j.protocol.websocket;
 
 import java.net.URI;
 import java.util.Map;
-import java.util.Optional;
 
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -64,7 +63,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
                 reason,
                 remote);
         if (listener != null) {
-            listener.onClose();   
+            listener.onClose();
         }
     }
 

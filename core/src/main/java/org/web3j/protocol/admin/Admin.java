@@ -46,8 +46,7 @@ public interface Admin extends Web3j {
     Request<?, PersonalUnlockAccount> personalUnlockAccount(
             String address, String passphrase, BigInteger duration);
 
-    Request<?, PersonalUnlockAccount> personalUnlockAccount(
-            String address, String passphrase);
+    Request<?, PersonalUnlockAccount> personalUnlockAccount(String address, String passphrase);
 
     Request<?, EthSendTransaction> personalSendTransaction(
             Transaction transaction, String password);
