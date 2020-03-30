@@ -22,6 +22,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 
 import org.web3j.codegen.unit.gen.utils.MappingHelper;
+import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static org.web3j.codegen.unit.gen.utils.NameUtils.returnTypeAsLiteral;
@@ -38,6 +39,15 @@ public abstract class Parser {
         this.theContract = theContract;
         this.method = method;
         this.mappingHelper = mappingHelper;
+    }
+
+    protected final boolean isDeployOrLoadMethod() {
+        return getMethodReturnType().equals(theContract);
+    }
+
+    public final boolean isTransactionalMethod() {
+        return method.getReturnType().equals(RemoteTransaction.class);
+
     }
 
     protected abstract Object getDefaultValueForType(Class<?> type);
@@ -100,14 +110,20 @@ public abstract class Parser {
 
     protected final Object[] concludeMethodReturnType() {
         final Type returnType = getMethodReturnType();
-        if (returnType.equals(theContract)) {
-            return new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+        if (isDeployOrLoadMethod()) {
+            return new Object[]{toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
         } else {
-            return new Object[] {
-                returnType,
-                toCamelCase(returnTypeAsLiteral(returnType, true)),
-                toCamelCase(theContract)
-            };
+            if (isTransactionalMethod()) {
+                return new Object[]{TransactionReceipt.class,
+                        toCamelCase(theContract)
+                };
+            } else {
+                return new Object[]{
+                        returnType,
+                        toCamelCase(returnTypeAsLiteral(returnType, true)),
+                        toCamelCase(theContract)
+                };
+            }
         }
     }
 }

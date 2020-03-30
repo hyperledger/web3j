@@ -39,8 +39,8 @@ public class JavaParser extends Parser {
         final Object[] body = generatePlaceholderValues();
         final StringBuilder symbolBuilder = new StringBuilder();
         symbolBuilder.append("$T.");
-        if (returnType.equals(RemoteTransaction.class)) {
-            symbolBuilder.append("assertTrue($L.isStatusOK())");
+        if (isTransactionalMethod()) {
+            symbolBuilder.append("assertTrue(transactionReceipt.isStatusOK())");
         } else {
             symbolBuilder.append("assertEquals(");
             if (returnType.getTypeName().contains("Tuple")) {
@@ -64,16 +64,28 @@ public class JavaParser extends Parser {
     @Override
     public String generatePoetStringTypes() {
         final StringBuilder symbolBuilder = new StringBuilder();
-        if (getMethodReturnType().equals(theContract)) {
+        if (isDeployOrLoadMethod()) {
             symbolBuilder.append("$L = $T.");
         } else {
-            symbolBuilder.append("$T $L = $L.");
+            if (isTransactionalMethod()) {
+                symbolBuilder.append("$T transactionReceipt = $L.");
+
+            } else {
+                symbolBuilder.append("$T $L = $L.");
+
+            }
         }
         symbolBuilder
                 .append(method.getName())
                 .append("(")
-                .append(getPoetFormatSpecifier())
-                .append(").send()");
+                .append(getPoetFormatSpecifier());
+
+        if (isTransactionalMethod() || isDeployOrLoadMethod()) {
+            symbolBuilder.append(").send()");
+        } else {
+            symbolBuilder.append(").call()");
+        }
+
 
         return symbolBuilder.toString();
     }

@@ -48,7 +48,7 @@ public class JavaClassGenerator implements UnitClassGenerator {
         final ClassName EVM_ANNOTATION = ClassName.get("org.web3j", "EVMTest");
         final AnnotationSpec.Builder annotationSpec = AnnotationSpec.builder(EVM_ANNOTATION);
         if (JavaVersion.getJavaVersionAsDouble() < 11) {
-            final ClassName GethContainer = ClassName.get("org.web3j", "NodeType");
+            ClassName GethContainer = ClassName.get("org.web3j", "NodeType");
             annotationSpec.addMember("value", "type = $T.GETH", GethContainer);
         }
         final TypeSpec testClass =
