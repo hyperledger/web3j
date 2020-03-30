@@ -47,7 +47,6 @@ public abstract class Parser {
 
     public final boolean isTransactionalMethod() {
         return method.getReturnType().equals(RemoteTransaction.class);
-
     }
 
     protected abstract Object getDefaultValueForType(Class<?> type);
@@ -111,17 +110,15 @@ public abstract class Parser {
     protected final Object[] concludeMethodReturnType() {
         final Type returnType = getMethodReturnType();
         if (isDeployOrLoadMethod()) {
-            return new Object[]{toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
+            return new Object[] {toCamelCase(returnTypeAsLiteral(returnType, false)), returnType};
         } else {
             if (isTransactionalMethod()) {
-                return new Object[]{TransactionReceipt.class,
-                        toCamelCase(theContract)
-                };
+                return new Object[] {TransactionReceipt.class, toCamelCase(theContract)};
             } else {
-                return new Object[]{
-                        returnType,
-                        toCamelCase(returnTypeAsLiteral(returnType, true)),
-                        toCamelCase(theContract)
+                return new Object[] {
+                    returnType,
+                    toCamelCase(returnTypeAsLiteral(returnType, true)),
+                    toCamelCase(theContract)
                 };
             }
         }

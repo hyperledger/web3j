@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.web3j.codegen.unit.gen.Parser;
 import org.web3j.codegen.unit.gen.utils.MappingHelper;
-import org.web3j.protocol.core.RemoteTransaction;
 
 import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
@@ -72,20 +71,15 @@ public class JavaParser extends Parser {
 
             } else {
                 symbolBuilder.append("$T $L = $L.");
-
             }
         }
-        symbolBuilder
-                .append(method.getName())
-                .append("(")
-                .append(getPoetFormatSpecifier());
+        symbolBuilder.append(method.getName()).append("(").append(getPoetFormatSpecifier());
 
         if (isTransactionalMethod() || isDeployOrLoadMethod()) {
             symbolBuilder.append(").send()");
         } else {
             symbolBuilder.append(").call()");
         }
-
 
         return symbolBuilder.toString();
     }
