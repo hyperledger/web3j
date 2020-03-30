@@ -45,6 +45,11 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
         this.defaultBlockParameter = defaultBlockParameter;
     }
 
+    @Override
+    public Function getFunction() {
+        return function;
+    }
+
     /**
      * Perform request synchronously.
      *

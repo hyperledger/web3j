@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
 
+import org.web3j.abi.datatypes.Function;
 import org.web3j.utils.Async;
 
 /**
@@ -62,4 +63,11 @@ public interface RemoteCall<T> {
     default Flowable<T> flowable() {
         return Flowable.fromCallable(this::call);
     }
+
+    /**
+     * Provide the remote call internal function.
+     * 
+     * @return this call internal function
+     */
+    Function getFunction();
 }

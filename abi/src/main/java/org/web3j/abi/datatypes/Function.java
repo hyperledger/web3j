@@ -14,6 +14,8 @@ package org.web3j.abi.datatypes;
 
 import java.util.List;
 
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 
 import static org.web3j.abi.Utils.convert;
@@ -31,6 +33,14 @@ public class Function {
         this.name = name;
         this.inputParameters = inputParameters;
         this.outputParameters = convert(outputParameters);
+    }
+    
+    public String encoded() {
+        return FunctionEncoder.encode(this);
+    }
+    
+    public List<Type<?>> decode(final String response) {
+        return FunctionReturnDecoder.decode(response, getOutputParameters());
     }
 
     public String getName() {

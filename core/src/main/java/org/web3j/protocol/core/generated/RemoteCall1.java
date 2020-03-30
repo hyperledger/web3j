@@ -16,13 +16,13 @@ import java.util.List;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.protocol.core.AbstractRemoteCall;
 import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.tx.TransactionManager;
 
-public class RemoteFunctionCall1<T> extends RemoteFunctionCall<T> {
+public class RemoteCall1<T> extends AbstractRemoteCall<T> {
 
-    public RemoteFunctionCall1(
+    public RemoteCall1(
             final Function function,
             final String contractAddress,
             final TransactionManager transactionManager,

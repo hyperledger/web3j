@@ -24,8 +24,8 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteTransaction;
-import org.web3j.protocol.core.generated.RemoteFunctionCall1;
-import org.web3j.protocol.core.generated.RemoteFunctionCall2;
+import org.web3j.protocol.core.generated.RemoteCall1;
+import org.web3j.protocol.core.generated.RemoteCall2;
 import org.web3j.protocol.core.generated.RemoteTransaction0;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
@@ -122,7 +122,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {
                 }));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransaction<Void> setText(final byte[] node, final String key, final String value) {
@@ -144,7 +144,7 @@ public class PublicResolver extends Contract {
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
                 }, new TypeReference<DynamicBytes>() {
                 }));
-        return new RemoteFunctionCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransaction<Void> setPubkey(final byte[] node, final byte[] x, final byte[] y) {
@@ -164,7 +164,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
                 }));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> addr(final byte[] node) {
@@ -172,7 +172,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
                 }));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> text(final byte[] node, final String key) {
@@ -181,7 +181,7 @@ public class PublicResolver extends Contract {
                         new org.web3j.abi.datatypes.Utf8String(key)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                 }));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransaction<Void> setABI(final byte[] node, final BigInteger contentType, final byte[] data) {
@@ -201,7 +201,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                 }));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransaction<Void> setName(final byte[] node, final String name) {
@@ -232,7 +232,7 @@ public class PublicResolver extends Contract {
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
                 }, new TypeReference<Bytes32>() {
                 }));
-        return new RemoteFunctionCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransaction<Void> setAddr(final byte[] node, final String addr) {

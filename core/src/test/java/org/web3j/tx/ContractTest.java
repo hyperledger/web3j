@@ -43,7 +43,7 @@ import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
-import org.web3j.protocol.core.generated.RemoteFunctionCall1;
+import org.web3j.protocol.core.generated.RemoteCall1;
 import org.web3j.protocol.core.generated.RemoteTransaction0;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
@@ -606,7 +606,7 @@ public class ContractTest extends ManagedTransactionTester {
                             Collections.emptyList(),
                             Collections.singletonList(new TypeReference<Utf8String>() {}));
 
-            return new RemoteFunctionCall1<>(
+            return new RemoteCall1<>(
                     function, contractAddress, transactionManager, defaultBlockParameter);
         }
 

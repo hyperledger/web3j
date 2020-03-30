@@ -21,7 +21,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteTransaction;
-import org.web3j.protocol.core.generated.RemoteFunctionCall1;
+import org.web3j.protocol.core.generated.RemoteCall1;
 import org.web3j.protocol.core.generated.RemoteTransaction0;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
@@ -80,14 +80,14 @@ public class ENS extends Contract {
         final Function function = new Function(FUNC_RESOLVER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> owner(final byte[] node) {
         final Function function = new Function(FUNC_OWNER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransaction<Void> setSubnodeOwner(final byte[] node, final byte[] label, final String owner) {
@@ -116,7 +116,7 @@ public class ENS extends Contract {
         final Function function = new Function(FUNC_TTL, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
-        return new RemoteFunctionCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransaction<Void> setResolver(final byte[] node, final String resolver) {
