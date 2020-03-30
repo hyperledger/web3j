@@ -38,7 +38,8 @@ public abstract class RequestTester {
     @BeforeEach
     public void setUp() {
         requestInterceptor = new RequestInterceptor();
-        final OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(requestInterceptor).build();
+        final OkHttpClient httpClient =
+                new OkHttpClient.Builder().addInterceptor(requestInterceptor).build();
         final HttpService httpService = new HttpService(httpClient);
         initWeb3Client(httpService);
     }

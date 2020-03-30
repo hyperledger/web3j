@@ -24,6 +24,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 import org.junit.jupiter.api.BeforeEach;
+
 import org.web3j.protocol.http.HttpService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,13 +34,14 @@ public abstract class BatchTester {
 
     public static final MediaType JSON_MEDIA_TYPE =
             MediaType.parse("application/json; charset=utf-8");
-    
+
     private HttpInterceptor interceptor;
 
     @BeforeEach
     public void setUp() {
         interceptor = new HttpInterceptor();
-        final OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        final OkHttpClient httpClient =
+                new OkHttpClient.Builder().addInterceptor(interceptor).build();
         final HttpService httpService = new HttpService(httpClient);
         initWeb3Client(httpService);
     }

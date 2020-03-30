@@ -515,11 +515,12 @@ public class WebSocketServiceTest {
     }
 
     private Flowable<NewHeadsNotification> subscribeToEvents() {
-        final Request<Object, EthSubscribe> subscribeRequest = new Request<>(
-                "eth_subscribe",
-                Arrays.asList("newHeads", Collections.emptyMap()),
-                service,
-                EthSubscribe.class);
+        final Request<Object, EthSubscribe> subscribeRequest =
+                new Request<>(
+                        "eth_subscribe",
+                        Arrays.asList("newHeads", Collections.emptyMap()),
+                        service,
+                        EthSubscribe.class);
         subscribeRequest.setId(1);
 
         return service.subscribe(subscribeRequest, "eth_unsubscribe", NewHeadsNotification.class);

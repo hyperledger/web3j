@@ -25,7 +25,8 @@ public class InfuraHttpService extends HttpService {
 
     public InfuraHttpService(final String url, final String clientVersion, final boolean required) {
         super(url);
-        final Map<String, String> clientVersionHeader = buildClientVersionHeader(clientVersion, required);
+        final Map<String, String> clientVersionHeader =
+                buildClientVersionHeader(clientVersion, required);
         addHeaders(clientVersionHeader);
     }
 
