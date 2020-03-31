@@ -13,6 +13,7 @@
 package org.web3j.protocol.core;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
@@ -25,7 +26,7 @@ import org.web3j.utils.Async;
  *
  * @param <T> Our return type.
  */
-public interface RemoteCall<T> {
+public interface RemoteCall<T> extends Callable<T> {
 
     /**
      * Perform request synchronously.
@@ -52,7 +53,7 @@ public interface RemoteCall<T> {
      * @return a future containing our function
      */
     default CompletableFuture<T> callAsync() {
-        return Async.run(this::call);
+        return Async.run(this);
     }
 
     /**
@@ -61,12 +62,12 @@ public interface RemoteCall<T> {
      * @return an flowable
      */
     default Flowable<T> flowable() {
-        return Flowable.fromCallable(this::call);
+        return Flowable.fromCallable(this);
     }
 
     /**
      * Provide the remote call internal function.
-     * 
+     *
      * @return this call internal function
      */
     Function getFunction();
