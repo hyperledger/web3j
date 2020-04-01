@@ -29,7 +29,8 @@ public class PrivacyGroup {
 
     public enum Type {
         LEGACY,
-        PANTHEON
+        PANTHEON,
+        ONCHAIN
     }
 
     @JsonCreator
@@ -76,8 +77,8 @@ public class PrivacyGroup {
         }
         PrivacyGroup that = (PrivacyGroup) o;
         return getPrivacyGroupId().equals(that.getPrivacyGroupId())
-                && getName().equals(that.getName())
-                && getDescription().equals(that.getDescription())
+                && Objects.equals(getName(), that.getName())
+                && Objects.equals(getDescription(), that.getDescription())
                 && getType() == that.getType()
                 && getMembers().equals(that.getMembers());
     }

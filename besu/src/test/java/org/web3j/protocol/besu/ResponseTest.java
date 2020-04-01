@@ -245,6 +245,11 @@ public class ResponseTest extends ResponseTester {
                         + "            \"description\":\"PrivacyGroupDescription\",\n"
                         + "            \"type\":\"PANTHEON\",\n"
                         + "            \"members\": [\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]\n"
+                        + "         },\n"
+                        + "         {\n"
+                        + "            \"privacyGroupId\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
+                        + "            \"type\":\"ONCHAIN\",\n"
+                        + "            \"members\": [\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\"]\n"
                         + "         }\n"
                         + "    ]\n"
                         + "}");
@@ -263,10 +268,18 @@ public class ResponseTest extends ResponseTester {
                         "PrivacyGroupName",
                         "PrivacyGroupDescription",
                         Base64String.wrapList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
+        PrivacyGroup privacyGroup3 =
+                new PrivacyGroup(
+                        "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+                        PrivacyGroup.Type.ONCHAIN,
+                        null,
+                        null,
+                        Base64String.wrapList("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="));
 
         PrivFindPrivacyGroup privFindPrivacyGroup = deserialiseResponse(PrivFindPrivacyGroup.class);
         assertEquals(
-                privFindPrivacyGroup.getGroups(), (Arrays.asList(privacyGroup1, privacyGroup2)));
+                privFindPrivacyGroup.getGroups(),
+                (Arrays.asList(privacyGroup1, privacyGroup2, privacyGroup3)));
     }
 
     @Test

@@ -198,7 +198,7 @@ public class TypeDecoder {
         for (Object o : values) {
             transformedList.add(instantiateType(subTypeReference, o));
         }
-        return (Type) listcons.newInstance(ref.getClassType(), transformedList);
+        return (Type) listcons.newInstance(subTypeReference.getClassType(), transformedList);
     }
 
     static Type instantiateAtomicType(Class<?> referenceClass, Object value)

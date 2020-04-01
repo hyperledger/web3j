@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -10,25 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.codegen;
+package org.web3j.protocol;
 
-/** Command line utility classes. */
-public class Console {
-    public static void exitError(String message) {
-        System.err.println(message);
-        System.exit(1);
+public enum Network {
+    MAINNET("mainnet"),
+    ROPSTEN("ropsten"),
+    KOVAN("kovan"),
+    GORLI("gorli"),
+    RINKEBY("rinkeby");
+
+    public String getNetworkName() {
+        return network;
     }
 
-    public static void exitError(Throwable throwable) {
-        exitError(throwable.getMessage());
-    }
+    String network;
 
-    public static void exitSuccess(String message) {
-        System.out.println(message);
-        System.exit(0);
-    }
-
-    public static void exitSuccess() {
-        System.exit(0);
+    Network(final String network) {
+        this.network = network;
     }
 }
