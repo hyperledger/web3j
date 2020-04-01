@@ -17,7 +17,12 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.admin.methods.response.*;
+import org.web3j.protocol.admin.methods.response.BooleanResponse;
+import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
+import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
+import org.web3j.protocol.admin.methods.response.PersonalSign;
+import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.admin.methods.response.TxPoolContent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.Transaction;
 
-/** txqueue_content */
+/** txpool_content */
 public class TxPoolContent extends Response<TxPoolContent.TxPoolContentResult> {
     public static class TxPoolContentResult {
 

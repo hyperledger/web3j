@@ -88,7 +88,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void textTxPoolContent() throws Exception {
+    public void testTxPoolContent() throws Exception {
         web3j.txPoolContent().send();
 
         verifyResult(
