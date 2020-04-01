@@ -26,7 +26,7 @@ import org.web3j.utils.Async;
  *
  * @param <T> Our return type.
  */
-public interface RemoteCall<T> extends Callable<T>, AsyncCallable<T> {
+public interface RemoteCall<T> extends Callable<T> {
 
     /**
      * Perform request synchronously.
@@ -47,6 +47,15 @@ public interface RemoteCall<T> extends Callable<T>, AsyncCallable<T> {
      */
     T call(DefaultBlockParameter blockParameter) throws IOException;
 
+    /**
+     * Perform request asynchronously with a future.
+     *
+     * @return a future containing our function
+     */
+    default CompletableFuture<T> callAsync() {
+        return Async.run(this);
+    }
+    
     /**
      * Provide an flowable to emit result from our function.
      *

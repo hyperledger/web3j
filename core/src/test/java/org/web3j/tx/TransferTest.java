@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
@@ -29,8 +28,8 @@ public class TransferTest extends ManagedTransactionTester {
 
     protected TransactionReceipt transactionReceipt;
 
-    @BeforeEach
     @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         transactionReceipt = prepareTransfer();
@@ -38,9 +37,7 @@ public class TransferTest extends ManagedTransactionTester {
 
     @Test
     public void testSendFunds() throws Exception {
-        assertEquals(
-                sendFunds(SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.ETHER),
-                (transactionReceipt));
+        assertEquals(sendFunds(BigDecimal.TEN, Convert.Unit.ETHER), (transactionReceipt));
     }
 
     @Test
@@ -48,22 +45,13 @@ public class TransferTest extends ManagedTransactionTester {
 
         assertThrows(
                 UnsupportedOperationException.class,
-                () ->
-                        sendFunds(
-                                SampleKeys.CREDENTIALS,
-                                ADDRESS,
-                                new BigDecimal(0.1),
-                                Convert.Unit.WEI));
+                () -> sendFunds(new BigDecimal("0.1"), Convert.Unit.WEI));
     }
 
-    protected TransactionReceipt sendFunds(
-            final Credentials credentials,
-            final String toAddress,
-            final BigDecimal value,
-            final Convert.Unit unit)
+    protected TransactionReceipt sendFunds(final BigDecimal value, final Convert.Unit unit)
             throws Exception {
-        return new Transfer(web3j, getVerifiedTransactionManager(credentials))
-                .sendFunds(toAddress, value, unit)
-                .call();
+        return new Transfer(web3j, getVerifiedTransactionManager(SampleKeys.CREDENTIALS))
+                .sendFunds(ManagedTransactionTester.ADDRESS, value, unit)
+                .send();
     }
 }

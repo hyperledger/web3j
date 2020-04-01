@@ -29,8 +29,8 @@ import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
  *
  * @param <T> Our return type.
  */
-public abstract class AbstractRemoteTransaction<T> extends AbstractRemoteCall<T>
-        implements RemoteTransaction<T> {
+public abstract class AbstractRemoteTransactionCall<T> extends AbstractRemoteCall<T>
+        implements RemoteTransactionCall<T> {
 
     final Web3j web3j;
     final String data;
@@ -38,7 +38,7 @@ public abstract class AbstractRemoteTransaction<T> extends AbstractRemoteCall<T>
     final boolean constructor;
     final ContractGasProvider gasProvider;
 
-    public AbstractRemoteTransaction(
+    public AbstractRemoteTransactionCall(
             final Web3j web3j,
             final Function function,
             final String address,

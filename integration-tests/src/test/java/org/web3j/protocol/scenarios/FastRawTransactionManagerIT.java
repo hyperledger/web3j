@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.FastRawTransactionManager;
 import org.web3j.tx.Transfer;
@@ -71,7 +71,7 @@ public class FastRawTransactionManagerIT extends Scenario {
         for (int i = 0; i < COUNT; i++) {
 
             final Future<TransactionReceipt> transactionReceiptFuture =
-                    sendFunds(transfer, gasPrice).callAsync();
+                    sendFunds(transfer, gasPrice).sendAsync();
             transactionReceipts.add(transactionReceiptFuture);
         }
 
@@ -124,11 +124,10 @@ public class FastRawTransactionManagerIT extends Scenario {
                                 POLLING_FREQUENCY));
 
         final Transfer transfer = new Transfer(web3j, transactionManager);
-
         final BigInteger gasPrice = transfer.requestCurrentGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
-            final TransactionReceipt transactionReceipt = sendFunds(transfer, gasPrice).call();
+            final TransactionReceipt transactionReceipt = sendFunds(transfer, gasPrice).send();
             pendingTransactions.put(transactionReceipt.getTransactionHash(), new Object());
         }
 
@@ -147,7 +146,7 @@ public class FastRawTransactionManagerIT extends Scenario {
         assertTrue(transactionReceipts.isEmpty());
     }
 
-    private RemoteCall<TransactionReceipt> sendFunds(
+    private RemoteTransaction<TransactionReceipt> sendFunds(
             final Transfer transfer, final BigInteger gasPrice) {
         return transfer.sendFunds(
                 BOB.getAddress(),

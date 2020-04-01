@@ -47,7 +47,7 @@ public class EthCallIT extends Scenario {
             ContractGasProvider contractGasProvider)
             throws Exception {
         Scenario.web3j = web3j;
-        EthCallIT.contract = Revert.deploy(web3j, transactionManager, contractGasProvider).call();
+        EthCallIT.contract = Revert.deploy(web3j, transactionManager, contractGasProvider).send();
     }
 
     @Test

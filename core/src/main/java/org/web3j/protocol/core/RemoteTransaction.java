@@ -15,7 +15,6 @@ package org.web3j.protocol.core;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Async;
 
@@ -24,22 +23,22 @@ import org.web3j.utils.Async;
  *
  * @param <T> Our return type.
  */
-public interface RemoteTransaction<T> extends RemoteCall<T> {
+public interface RemoteTransaction<T> {
 
     /**
-     * Execute transaction synchronously.
+     * Send synchronously.
      *
-     * @return result of enclosed transaction
+     * @return result of enclosed type
      * @throws IOException if the transaction throws an exception
      */
-    TransactionReceipt send() throws IOException, TransactionException;
+    T send() throws IOException, TransactionException;
 
     /**
-     * Execute transaction asynchronously with a future.
+     * Send asynchronously with a future.
      *
-     * @return a future containing our transaction receipt
+     * @return a future containing our return type
      */
-    default CompletableFuture<TransactionReceipt> sendAsync() {
+    default CompletableFuture<T> sendAsync() {
         return Async.run(this::send);
     }
 }

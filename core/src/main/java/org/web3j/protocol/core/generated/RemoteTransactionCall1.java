@@ -18,15 +18,14 @@ import java.util.List;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.AbstractRemoteTransaction;
+import org.web3j.protocol.core.AbstractRemoteTransactionCall;
 import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
-public class RemoteTransaction1<T> extends AbstractRemoteTransaction<T> {
+public class RemoteTransactionCall1<T> extends AbstractRemoteTransactionCall<T> {
 
-    public RemoteTransaction1(
+    public RemoteTransactionCall1(
             final Web3j web3j,
             final Function function,
             final String contractAddress,

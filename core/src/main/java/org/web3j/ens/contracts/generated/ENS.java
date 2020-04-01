@@ -20,9 +20,10 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.RemoteTransactionCall;
 import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.protocol.core.generated.RemoteCall1;
-import org.web3j.protocol.core.generated.RemoteTransaction0;
+import org.web3j.protocol.core.generated.RemoteTransactionCall0;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -68,12 +69,12 @@ public class ENS extends Contract {
     public static final Event NEWTTL_EVENT = new Event("NewTTL", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint64>() {}));
 
-    protected ENS(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+    protected ENS(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider, final TransactionReceipt transactionReceipt) {
+        super(BINARY, contractAddress, web3j, credentials, contractGasProvider, transactionReceipt);
     }
 
-    protected ENS(final String contractAddress, final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
+    protected ENS(final String contractAddress, final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider, final TransactionReceipt transactionReceipt) {
+        super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider, transactionReceipt);
     }
 
     public RemoteCall<String> resolver(final byte[] node) {
@@ -90,25 +91,25 @@ public class ENS extends Contract {
         return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setSubnodeOwner(final byte[] node, final byte[] label, final String owner) {
+    public RemoteTransactionCall<Void> setSubnodeOwner(final byte[] node, final byte[] label, final String owner) {
         final Function function = new Function(
                 FUNC_SETSUBNODEOWNER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.generated.Bytes32(label), 
                 new org.web3j.abi.datatypes.Address(owner)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, 
                 false, gasProvider);
     }
 
-    public RemoteTransaction<Void> setTTL(final byte[] node, final BigInteger ttl) {
+    public RemoteTransactionCall<Void> setTTL(final byte[] node, final BigInteger ttl) {
         final Function function = new Function(
                 FUNC_SETTTL, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.generated.Uint64(ttl)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -119,31 +120,31 @@ public class ENS extends Contract {
         return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Void> setResolver(final byte[] node, final String resolver) {
+    public RemoteTransactionCall<Void> setResolver(final byte[] node, final String resolver) {
         final Function function = new Function(
                 FUNC_SETRESOLVER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.Address(resolver)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
-    public RemoteTransaction<Void> setOwner(final byte[] node, final String owner) {
+    public RemoteTransactionCall<Void> setOwner(final byte[] node, final String owner) {
         final Function function = new Function(
                 FUNC_SETOWNER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.Address(owner)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransaction0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
-    public static RemoteCall<ENS> deploy(final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {
+    public static RemoteTransaction<ENS> deploy(final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {
         return deployRemoteCall(ENS.class, web3j, credentials, contractGasProvider, BINARY, "");
     }
 
-    public static RemoteCall<ENS> deploy(final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider) {
+    public static RemoteTransaction<ENS> deploy(final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider) {
         return deployRemoteCall(ENS.class, web3j, transactionManager, contractGasProvider, BINARY, "");
     }
 
@@ -282,11 +283,11 @@ public class ENS extends Contract {
     }
     
     public static ENS load(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, credentials, contractGasProvider);
+        return new ENS(contractAddress, web3j, credentials, contractGasProvider, null);
     }
 
     public static ENS load(final String contractAddress, final Web3j web3j, final TransactionManager transactionManager, final ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, transactionManager, contractGasProvider);
+        return new ENS(contractAddress, web3j, transactionManager, contractGasProvider, null);
     }
 
     public static class NewOwnerEventResponse {

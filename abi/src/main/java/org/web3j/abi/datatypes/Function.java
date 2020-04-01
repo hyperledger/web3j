@@ -34,11 +34,11 @@ public class Function {
         this.inputParameters = inputParameters;
         this.outputParameters = convert(outputParameters);
     }
-    
+
     public String encoded() {
         return FunctionEncoder.encode(this);
     }
-    
+
     public List<Type<?>> decode(final String response) {
         return FunctionReturnDecoder.decode(response, getOutputParameters());
     }

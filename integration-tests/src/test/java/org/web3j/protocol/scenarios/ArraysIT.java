@@ -47,7 +47,7 @@ public class ArraysIT extends Scenario {
                                 new StaticGasProvider(
                                         BigInteger.valueOf(20000000000L),
                                         BigInteger.valueOf(6721975)))
-                        .call();
+                        .send();
     }
 
     @Test

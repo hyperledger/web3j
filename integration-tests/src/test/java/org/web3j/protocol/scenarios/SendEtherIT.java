@@ -96,7 +96,7 @@ public class SendEtherIT extends Scenario {
                                 BOB.getAddress(),
                                 BigDecimal.valueOf(0.2),
                                 Convert.Unit.ETHER)
-                        .call();
+                        .send();
         assertFalse(transactionReceipt.getBlockHash().isEmpty());
     }
 }

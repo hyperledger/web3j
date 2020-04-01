@@ -57,7 +57,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
                                 "web3j tokens",
                                 BigInteger.valueOf(18),
                                 "w3j$")
-                        .call();
+                        .send();
 
         assertTrue(contract.isValid());
 

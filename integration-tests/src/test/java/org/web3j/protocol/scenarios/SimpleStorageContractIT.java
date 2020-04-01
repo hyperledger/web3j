@@ -41,7 +41,7 @@ public class SimpleStorageContractIT extends Scenario {
             throws Exception {
         BigInteger value = BigInteger.valueOf(1000L);
         SimpleStorage simpleStorage =
-                SimpleStorage.deploy(web3j, ALICE, contractGasProvider).call();
+                SimpleStorage.deploy(web3j, ALICE, contractGasProvider).send();
         assertNotNull(simpleStorage.set(value).send());
         assertEquals(simpleStorage.get().call(), (value));
     }

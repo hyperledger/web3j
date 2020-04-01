@@ -21,9 +21,9 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.RemoteTransaction;
+import org.web3j.protocol.core.RemoteTransactionCall;
 import org.web3j.protocol.core.generated.RemoteCall1;
-import org.web3j.protocol.core.generated.RemoteTransaction1;
+import org.web3j.protocol.core.generated.RemoteTransactionCall1;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -75,14 +75,14 @@ public class ERC20 extends Contract {
 
     protected ERC20(
             final String contractAddress, final Web3j web3j, final Credentials credentials,
-            final ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+            final ContractGasProvider contractGasProvider, final TransactionReceipt transactionReceipt) {
+        super(BINARY, contractAddress, web3j, credentials, contractGasProvider, transactionReceipt);
     }
 
     protected ERC20(
             final String contractAddress, final Web3j web3j, final TransactionManager transactionManager,
-            final ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
+            final ContractGasProvider contractGasProvider, final TransactionReceipt transactionReceipt) {
+        super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider, transactionReceipt);
     }
 
     public RemoteCall<String> name() {
@@ -93,13 +93,13 @@ public class ERC20 extends Contract {
         return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Boolean> approve(final String _spender, final BigInteger _value) {
+    public RemoteTransactionCall<Boolean> approve(final String _spender, final BigInteger _value) {
         final Function function = new Function(
                 FUNC_APPROVE,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_spender),
                         new org.web3j.abi.datatypes.generated.Uint256(_value)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransaction1<>(web3j, function, contractAddress, transactionManager, 
+        return new RemoteTransactionCall1<>(web3j, function, contractAddress, transactionManager, 
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -111,14 +111,14 @@ public class ERC20 extends Contract {
         return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Boolean> transferFrom(final String _from, final String _to, final BigInteger _value) {
+    public RemoteTransactionCall<Boolean> transferFrom(final String _from, final String _to, final BigInteger _value) {
         final Function function = new Function(
                 FUNC_TRANSFERFROM,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_from),
                         new org.web3j.abi.datatypes.Address(_to),
                         new org.web3j.abi.datatypes.generated.Uint256(_value)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransaction1<>(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall1<>(web3j, function, contractAddress, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -146,13 +146,13 @@ public class ERC20 extends Contract {
         return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
     }
 
-    public RemoteTransaction<Boolean> transfer(final String _to, final BigInteger _value) {
+    public RemoteTransactionCall<Boolean> transfer(final String _to, final BigInteger _value) {
         final Function function = new Function(
                 FUNC_TRANSFER,
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_to),
                         new org.web3j.abi.datatypes.generated.Uint256(_value)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransaction1<>(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall1<>(web3j, function, contractAddress, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -240,13 +240,13 @@ public class ERC20 extends Contract {
     public static ERC20 load(
             final String contractAddress, final Web3j web3j, final Credentials credentials,
             final ContractGasProvider contractGasProvider) {
-        return new ERC20(contractAddress, web3j, credentials, contractGasProvider);
+        return new ERC20(contractAddress, web3j, credentials, contractGasProvider, null);
     }
 
     public static ERC20 load(
             final String contractAddress, final Web3j web3j, final TransactionManager transactionManager,
             final ContractGasProvider contractGasProvider) {
-        return new ERC20(contractAddress, web3j, transactionManager, contractGasProvider);
+        return new ERC20(contractAddress, web3j, transactionManager, contractGasProvider, null);
     }
 
     public static class TransferEventResponse {

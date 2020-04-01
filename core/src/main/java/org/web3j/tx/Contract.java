@@ -33,61 +33,55 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
 import org.web3j.ens.EnsResolver;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.ConstructorTransaction;
+import org.web3j.protocol.core.ContractDeployment;
 import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.RemoteTransaction;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.gas.ContractGasProvider;
-import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Numeric;
+
+import static org.web3j.protocol.core.DefaultBlockParameterName.LATEST;
 
 /**
  * Solidity contract type abstraction for interacting with smart contracts via native Java types.
  */
 @SuppressWarnings("WeakerAccess")
-public abstract class Contract extends ManagedTransaction {
+public abstract class Contract {
 
     public static final String BIN_NOT_PROVIDED = "Bin file was not provided";
     public static final String FUNC_DEPLOY = "deploy";
     public static final String METADATA_INDEX = "a165627a7a72305820";
 
+    protected final Web3j web3j;
+    private final EnsResolver ensResolver;
+
     protected final String contractBinary;
-    protected String contractAddress;
+    protected final String contractAddress;
+
+    protected final TransactionManager transactionManager;
+    protected final TransactionReceipt transactionReceipt;
+
+    private final Map<String, String> deployedAddresses = new HashMap<>();
+
     protected ContractGasProvider gasProvider;
-    protected TransactionReceipt transactionReceipt;
-    protected Map<String, String> deployedAddresses;
-    protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
+    protected DefaultBlockParameter defaultBlockParameter = LATEST;
 
     protected Contract(
             final String contractBinary,
             final String contractAddress,
             final Web3j web3j,
             final TransactionManager transactionManager,
-            final ContractGasProvider gasProvider) {
-        this(
-                new EnsResolver(web3j),
-                contractBinary,
-                contractAddress,
-                web3j,
-                transactionManager,
-                gasProvider);
-    }
-
-    protected Contract(
-            final EnsResolver ensResolver,
-            final String contractBinary,
-            final String contractAddress,
-            final Web3j web3j,
-            final TransactionManager transactionManager,
-            final ContractGasProvider gasProvider) {
-
-        super(ensResolver, web3j, transactionManager);
+            final ContractGasProvider gasProvider,
+            final TransactionReceipt transactionReceipt) {
         this.contractAddress = resolveContractAddress(contractAddress);
+        this.transactionManager = transactionManager;
         this.contractBinary = contractBinary;
+        this.transactionReceipt = transactionReceipt;
         this.gasProvider = gasProvider;
+        this.ensResolver = new EnsResolver(web3j);
+        this.web3j = web3j;
     }
 
     protected Contract(
@@ -95,50 +89,31 @@ public abstract class Contract extends ManagedTransaction {
             final String contractAddress,
             final Web3j web3j,
             final Credentials credentials,
-            final ContractGasProvider gasProvider) {
+            final ContractGasProvider gasProvider,
+            final TransactionReceipt transactionReceipt) {
         this(
-                new EnsResolver(web3j),
                 contractBinary,
                 contractAddress,
                 web3j,
                 new RawTransactionManager(web3j, credentials),
-                gasProvider);
+                gasProvider,
+                transactionReceipt);
     }
 
     public String getContractAddress() {
         return contractAddress;
     }
 
-    public void setTransactionReceipt(final TransactionReceipt transactionReceipt) {
-        this.transactionReceipt = transactionReceipt;
-    }
-
     public String getContractBinary() {
         return contractBinary;
     }
 
+    public ContractGasProvider getGasProvider() {
+        return gasProvider;
+    }
+
     public void setGasProvider(final ContractGasProvider gasProvider) {
         this.gasProvider = gasProvider;
-    }
-
-    /**
-     * Allow {@code gasPrice} to be set.
-     *
-     * @param newPrice gas price to use for subsequent transactions
-     * @deprecated use ContractGasProvider
-     */
-    public void setGasPrice(final BigInteger newPrice) {
-        this.gasProvider = new StaticGasProvider(newPrice, gasProvider.getGasLimit());
-    }
-
-    /**
-     * Get the current {@code gasPrice} value this contract uses when executing transactions.
-     *
-     * @return the gas price set on this contract
-     * @deprecated use ContractGasProvider
-     */
-    public BigInteger getGasPrice() {
-        return gasProvider.getGasPrice();
     }
 
     /**
@@ -166,8 +141,7 @@ public abstract class Contract extends ManagedTransaction {
                             + "contract wrapper with web3j v2.2.0+");
         }
 
-        final EthGetCode ethGetCode =
-                transactionManager.getCode(contractAddress, DefaultBlockParameterName.LATEST);
+        final EthGetCode ethGetCode = transactionManager.getCode(contractAddress, LATEST);
         if (ethGetCode.hasError()) {
             return false;
         }
@@ -193,19 +167,7 @@ public abstract class Contract extends ManagedTransaction {
         return Optional.ofNullable(transactionReceipt);
     }
 
-    /**
-     * Sets the default block parameter. This use useful if one wants to query historical state of a
-     * contract.
-     *
-     * @param defaultBlockParameter the default block parameter
-     * @deprecated Set the block parameter on a per-call basis
-     */
-    @Deprecated
-    public void setDefaultBlockParameter(final DefaultBlockParameter defaultBlockParameter) {
-        this.defaultBlockParameter = defaultBlockParameter;
-    }
-
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    protected static <T extends Contract> RemoteTransaction<T> deployRemoteCall(
             final Class<T> type,
             final Web3j web3j,
             final Credentials credentials,
@@ -213,36 +175,34 @@ public abstract class Contract extends ManagedTransaction {
             final String binary,
             final String encodedConstructor,
             final BigInteger value) {
-        return new ConstructorTransaction<>(
-                web3j,
+        return deployRemoteCall(
                 type,
-                credentials,
-                null,
+                web3j,
+                new RawTransactionManager(web3j, credentials),
                 contractGasProvider,
                 binary,
                 encodedConstructor,
                 value);
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    protected static <T extends Contract> RemoteTransaction<T> deployRemoteCall(
             final Class<T> type,
             final Web3j web3j,
             final Credentials credentials,
             final ContractGasProvider contractGasProvider,
             final String binary,
             final String encodedConstructor) {
-        return new ConstructorTransaction<>(
-                web3j,
+        return deployRemoteCall(
                 type,
-                credentials,
-                null,
+                web3j,
+                new RawTransactionManager(web3j, credentials),
                 contractGasProvider,
                 binary,
                 encodedConstructor,
-                BigInteger.ZERO);
+                null);
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    protected static <T extends Contract> RemoteTransaction<T> deployRemoteCall(
             final Class<T> type,
             final Web3j web3j,
             final TransactionManager transactionManager,
@@ -250,10 +210,9 @@ public abstract class Contract extends ManagedTransaction {
             final String binary,
             final String encodedConstructor,
             final BigInteger value) {
-        return new ConstructorTransaction<>(
+        return new ContractDeployment<>(
                 web3j,
                 type,
-                null,
                 transactionManager,
                 contractGasProvider,
                 binary,
@@ -261,22 +220,21 @@ public abstract class Contract extends ManagedTransaction {
                 value);
     }
 
-    protected static <T extends Contract> RemoteCall<T> deployRemoteCall(
+    protected static <T extends Contract> RemoteTransaction<T> deployRemoteCall(
             final Class<T> type,
             final Web3j web3j,
             final TransactionManager transactionManager,
             final ContractGasProvider contractGasProvider,
             final String binary,
             final String encodedConstructor) {
-        return new ConstructorTransaction<>(
-                web3j,
+        return deployRemoteCall(
                 type,
-                null,
+                web3j,
                 transactionManager,
                 contractGasProvider,
                 binary,
                 encodedConstructor,
-                BigInteger.ZERO);
+                null);
     }
 
     public static EventValues staticExtractEventParameters(final Event event, final Log log) {
@@ -346,17 +304,11 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     public final void setDeployedAddress(final String networkId, final String address) {
-        if (deployedAddresses == null) {
-            deployedAddresses = new HashMap<>();
-        }
         deployedAddresses.put(networkId, address);
     }
 
     public final String getDeployedAddress(final String networkId) {
-        String addr = null;
-        if (deployedAddresses != null) {
-            addr = deployedAddresses.get(networkId);
-        }
+        final String addr = deployedAddresses.get(networkId);
         return addr == null ? getStaticDeployedAddress(networkId) : addr;
     }
 

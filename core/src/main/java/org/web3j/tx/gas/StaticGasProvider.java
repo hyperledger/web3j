@@ -14,7 +14,6 @@ package org.web3j.tx.gas;
 
 import java.math.BigInteger;
 
-@SuppressWarnings("deprecation")
 public class StaticGasProvider implements ContractGasProvider {
     private final BigInteger gasPrice;
     private final BigInteger gasLimit;
@@ -30,17 +29,7 @@ public class StaticGasProvider implements ContractGasProvider {
     }
 
     @Override
-    public BigInteger getGasPrice() {
-        return gasPrice;
-    }
-
-    @Override
     public BigInteger getGasLimit(final String contractFunc) {
-        return gasLimit;
-    }
-
-    @Override
-    public BigInteger getGasLimit() {
         return gasLimit;
     }
 }

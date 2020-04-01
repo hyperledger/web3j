@@ -114,8 +114,8 @@ public class BesuPrivacyQuickstartIntegrationTest {
         final RawPrivateTransaction rawPrivateTransaction =
                 RawPrivateTransaction.createContractTransaction(
                         nonce,
-                        ZERO_GAS_PROVIDER.getGasPrice(),
-                        ZERO_GAS_PROVIDER.getGasLimit(),
+                        ZERO_GAS_PROVIDER.getGasPrice(null),
+                        ZERO_GAS_PROVIDER.getGasLimit(null),
                         HUMAN_STANDARD_TOKEN_BINARY,
                         ENCLAVE_KEY_ALICE,
                         privacyGroupId,
@@ -151,8 +151,8 @@ public class BesuPrivacyQuickstartIntegrationTest {
                                 .get();
 
         assertEquals(privateTransaction.getFrom(), (ALICE.getAddress()));
-        assertEquals(privateTransaction.getGas(), (ZERO_GAS_PROVIDER.getGasLimit()));
-        assertEquals(privateTransaction.getGasPrice(), (ZERO_GAS_PROVIDER.getGasPrice()));
+        assertEquals(privateTransaction.getGas(), (ZERO_GAS_PROVIDER.getGasLimit(null)));
+        assertEquals(privateTransaction.getGasPrice(), (ZERO_GAS_PROVIDER.getGasPrice(null)));
         assertEquals(privateTransaction.getNonce(), (nonce));
 
         final byte[] encodedTransaction =
@@ -212,7 +212,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
                                 "eea_token",
                                 BigInteger.TEN,
                                 "EEATKN")
-                        .call();
+                        .send();
 
         final HumanStandardToken tokenBob =
                 HumanStandardToken.load(
@@ -280,7 +280,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
                                 "eea_token",
                                 BigInteger.TEN,
                                 "EEATKN")
-                        .call();
+                        .send();
 
         final HumanStandardToken tokenBob =
                 HumanStandardToken.load(
