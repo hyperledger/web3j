@@ -86,4 +86,12 @@ public class RequestTest extends RequestTester {
                         + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"hunter2\",null],"
                         + "\"id\":1}");
     }
+
+    @Test
+    public void testTxPoolContent() throws Exception {
+        web3j.txPoolContent().send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"txpool_content\"," + "\"params\":[],\"id\":1}");
+    }
 }

@@ -20,6 +20,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.admin.methods.response.TxPoolContent;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -50,4 +51,6 @@ public interface Admin extends Web3j {
 
     public Request<?, EthSendTransaction> personalSendTransaction(
             Transaction transaction, String password);
+
+    public Request<?, TxPoolContent> txPoolContent();
 }

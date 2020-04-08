@@ -23,6 +23,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
+import org.web3j.protocol.admin.methods.response.TxPoolContent;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -95,5 +96,14 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Web3j implements Admin {
                 Arrays.asList(transaction, passphrase),
                 web3jService,
                 EthSendTransaction.class);
+    }
+
+    @Override
+    public Request<?, TxPoolContent> txPoolContent() {
+        return new Request<>(
+                "txpool_content",
+                Collections.<String>emptyList(),
+                web3jService,
+                TxPoolContent.class);
     }
 }
