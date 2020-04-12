@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.web3j.utils.Collection.EMPTY_STRING_ARRAY;
-import static org.web3j.utils.Collection.Function;
 import static org.web3j.utils.Collection.create;
 import static org.web3j.utils.Collection.join;
 import static org.web3j.utils.Collection.tail;
@@ -42,14 +41,6 @@ public class CollectionTest {
     }
 
     @Test
-    public void testJoin() {
-        assertEquals(join(Arrays.asList("a  ", "b ", " c "), ","), ("a,b,c"));
-        assertEquals(join(Arrays.asList("a", "b", "c", "d"), ","), ("a,b,c,d"));
-        assertEquals(join(Arrays.asList("a  ", "b ", " c "), ", "), ("a, b, c"));
-        assertEquals(join(Arrays.asList("a", "b", "c", "d"), ", "), ("a, b, c, d"));
-    }
-
-    @Test
     public void testJoinWithFunction() {
         final List<FakeSpec> specs1 =
                 Arrays.asList(new FakeSpec("a"), new FakeSpec("b"), new FakeSpec("c"));
@@ -68,7 +59,6 @@ public class CollectionTest {
         assertEquals(join(specs4, ", ", FakeSpec::getName), ("a, b, c"));
     }
 
-    /** Fake object to test {@link Collection#join(List, String, Function)}. */
     private final class FakeSpec {
         private final String name;
 

@@ -12,25 +12,16 @@
  */
 package org.web3j.protocol.rx;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.OngoingStubbing;
-
 import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jService;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -40,11 +31,24 @@ import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.utils.Numeric;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -385,5 +389,20 @@ public class JsonRpc2_0RxTest {
         Transaction transaction = new Transaction();
         transaction.setHash(transactionHash);
         return transaction;
+    }
+
+    @Test
+    void testReplayBlocksFlowable2() throws IOException {
+        Web3j web3j = mock(Web3j.class, RETURNS_DEEP_STUBS);
+        when(web3j.ethGetBlockByNumber(any(), anyBoolean()).send()).thenThrow(new IOException("fail"));
+
+        JsonRpc2_0Rx rpc = new JsonRpc2_0Rx(web3j, Executors.newSingleThreadScheduledExecutor());
+
+        Flowable<EthBlock> flowable = rpc.replayBlocksFlowable(mock(DefaultBlockParameter.class),
+                mock(DefaultBlockParameter.class), false, false);
+        EthBlock expected = mock(EthBlock.class);
+        EthBlock actual = flowable.onErrorReturnItem(expected).blockingFirst();
+
+        assertSame(expected, actual, "unexpected returned block");
     }
 }

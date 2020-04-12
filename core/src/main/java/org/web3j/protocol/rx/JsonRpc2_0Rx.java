@@ -36,6 +36,7 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.utils.Flowables;
 
+@SuppressWarnings("all")
 /** web3j reactive API implementation. */
 public class JsonRpc2_0Rx {
 
@@ -147,7 +148,7 @@ public class JsonRpc2_0Rx {
             startBlockNumber = getBlockNumber(startBlock);
             endBlockNumber = getBlockNumber(endBlock);
         } catch (IOException e) {
-            Flowable.error(e);
+            return Flowable.error(e);
         }
 
         if (ascending) {
