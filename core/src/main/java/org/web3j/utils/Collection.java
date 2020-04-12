@@ -40,6 +40,7 @@ public class Collection {
     public static <T> String join(List<T> list, String separator, Function<T, String> function) {
         return list.stream()
                 .map(function)
+                .map(String::trim)
                 .collect(Collectors.joining(separator));
     }
 }
