@@ -392,7 +392,7 @@ public class JsonRpc2_0RxTest {
     }
 
     @Test
-    void testReplayBlocksFlowable2() throws IOException {
+    void testReplayBlocksFlowableWhenIOExceptionOnBlockResolving() throws IOException {
         Web3j web3j = mock(Web3j.class, RETURNS_DEEP_STUBS);
         when(web3j.ethGetBlockByNumber(any(), anyBoolean()).send()).thenThrow(new IOException("fail"));
 
