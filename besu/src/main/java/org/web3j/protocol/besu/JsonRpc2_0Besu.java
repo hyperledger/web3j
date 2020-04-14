@@ -336,12 +336,12 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
 
     @Override
     public Request<?, EthCall> privCall(
+            String privacyGroupId,
             final Transaction transaction,
-            final DefaultBlockParameter defaultBlockParameter,
-            String privacyGroupId) {
+            final DefaultBlockParameter defaultBlockParameter) {
         return new Request<>(
                 "priv_call",
-                Arrays.asList(transaction, defaultBlockParameter, privacyGroupId),
+                Arrays.asList(privacyGroupId, transaction, defaultBlockParameter),
                 web3jService,
                 org.web3j.protocol.core.methods.response.EthCall.class);
     }

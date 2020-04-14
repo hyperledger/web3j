@@ -110,7 +110,7 @@ public interface Besu extends Eea {
             String privacyGroupId, String address, DefaultBlockParameter defaultBlockParameter);
 
     Request<?, org.web3j.protocol.core.methods.response.EthCall> privCall(
+            String privacyGroupId,
             org.web3j.protocol.core.methods.request.Transaction transaction,
-            DefaultBlockParameter defaultBlockParameter,
-            String privacyGroupId);
+            DefaultBlockParameter defaultBlockParameter);
 }
