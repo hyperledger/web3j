@@ -216,18 +216,18 @@ public class RequestTest extends RequestTester {
     @Test
     public void testEthCall() throws Exception {
         web3j.privCall(
+                        MOCK_PRIVACY_GROUP_ID.toString(),
                         Transaction.createEthCallTransaction(
                                 "0xa70e8dd61c5d32be8058bb8eb970870f07233155",
                                 "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
                                 "0x0"),
-                        DefaultBlockParameter.valueOf("latest"),
-                        MOCK_PRIVACY_GROUP_ID.toString())
+                        DefaultBlockParameter.valueOf("latest"))
                 .send();
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_call\","
-                        + "\"params\":[{\"from\":\"0xa70e8dd61c5d32be8058bb8eb970870f07233155\","
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",{\"from\":\"0xa70e8dd61c5d32be8058bb8eb970870f07233155\","
                         + "\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"data\":\"0x0\"},"
-                        + "\"latest\",\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],\"id\":1}");
+                        + "\"latest\"],\"id\":1}");
     }
 }
