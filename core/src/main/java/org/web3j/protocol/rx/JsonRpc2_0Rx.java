@@ -139,7 +139,7 @@ public class JsonRpc2_0Rx {
     private Flowable<EthBlock> replayBlocksFlowableSync(
             DefaultBlockParameter startBlock,
             DefaultBlockParameter endBlock,
-            boolean isFullObjects,
+            boolean containsFullTransactionObjects,
             boolean isAscending) {
         BigInteger startBlockNumber;
         BigInteger endBlockNumber;
@@ -152,7 +152,7 @@ public class JsonRpc2_0Rx {
 
         return Flowables.range(startBlockNumber, endBlockNumber, isAscending)
                 .map(DefaultBlockParameterNumber::new)
-                .map(number -> web3j.ethGetBlockByNumber(number, isFullObjects))
+                .map(number -> web3j.ethGetBlockByNumber(number, containsFullTransactionObjects))
                 .flatMap(Request::flowable);
     }
 
