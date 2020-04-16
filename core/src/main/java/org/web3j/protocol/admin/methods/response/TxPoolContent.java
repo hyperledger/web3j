@@ -13,16 +13,19 @@
 package org.web3j.protocol.admin.methods.response;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.Transaction;
 
 /** txpool_content */
-public class TxPoolContent extends Response<TxPoolContent.TxPoolContentResult> {
+public final class TxPoolContent extends Response<TxPoolContent.TxPoolContentResult> {
     public static class TxPoolContentResult {
 
         private Map<String, Map<BigInteger, Transaction>> pending;
@@ -33,28 +36,8 @@ public class TxPoolContent extends Response<TxPoolContent.TxPoolContentResult> {
         public TxPoolContentResult(
                 Map<String, Map<BigInteger, Transaction>> pending,
                 Map<String, Map<BigInteger, Transaction>> queued) {
-            this.pending =
-                    Collections.unmodifiableMap(
-                            pending.entrySet().stream()
-                                    .collect(
-                                            Collectors.toMap(
-                                                    (Map.Entry<String, Map<BigInteger, Transaction>>
-                                                                    i) -> i.getKey().toLowerCase(),
-                                                    (Map.Entry<String, Map<BigInteger, Transaction>>
-                                                                    i) ->
-                                                            Collections.unmodifiableMap(
-                                                                    i.getValue()))));
-            this.queued =
-                    Collections.unmodifiableMap(
-                            queued.entrySet().stream()
-                                    .collect(
-                                            Collectors.toMap(
-                                                    (Map.Entry<String, Map<BigInteger, Transaction>>
-                                                                    i) -> i.getKey().toLowerCase(),
-                                                    (Map.Entry<String, Map<BigInteger, Transaction>>
-                                                                    i) ->
-                                                            Collections.unmodifiableMap(
-                                                                    i.getValue()))));
+            this.pending = immutableCopy(pending, val -> immutableCopy(val, Function.identity()));
+            this.queued = immutableCopy(queued, val -> immutableCopy(val, Function.identity()));
         }
 
         public Map<String, Map<BigInteger, Transaction>> getPending() {
@@ -67,14 +50,26 @@ public class TxPoolContent extends Response<TxPoolContent.TxPoolContentResult> {
 
         public List<Transaction> getPendingTransactions() {
             return pending.values().stream()
-                    .flatMap(i -> i.values().stream())
+                    .map(Map::values)
+                    .flatMap(Collection::stream)
                     .collect(Collectors.toList());
         }
 
         public List<Transaction> getQueuedTransactions() {
             return queued.values().stream()
-                    .flatMap(i -> i.values().stream())
+                    .map(Map::values)
+                    .flatMap(Collection::stream)
                     .collect(Collectors.toList());
+        }
+
+        private static <K, V> Map<K, V> immutableCopy(Map<K, V> map, Function<V, V> valueMapper) {
+            Map<K, V> result = new HashMap<>();
+            for (Map.Entry<K, V> entry : map.entrySet()) {
+                K key = entry.getKey();
+                V value = entry.getValue();
+                result.put(key, valueMapper.apply(value));
+            }
+            return Collections.unmodifiableMap(result);
         }
     }
 }
