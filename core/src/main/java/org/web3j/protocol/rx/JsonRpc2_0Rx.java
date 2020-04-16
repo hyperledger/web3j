@@ -28,6 +28,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.filters.BlockFilter;
 import org.web3j.protocol.core.filters.LogFilter;
 import org.web3j.protocol.core.filters.PendingTransactionFilter;
@@ -138,35 +139,21 @@ public class JsonRpc2_0Rx {
     private Flowable<EthBlock> replayBlocksFlowableSync(
             DefaultBlockParameter startBlock,
             DefaultBlockParameter endBlock,
-            boolean fullTransactionObjects,
-            boolean ascending) {
-
-        BigInteger startBlockNumber = null;
-        BigInteger endBlockNumber = null;
+            boolean containsFullTransactionObjects,
+            boolean isAscending) {
+        BigInteger startBlockNumber;
+        BigInteger endBlockNumber;
         try {
             startBlockNumber = getBlockNumber(startBlock);
             endBlockNumber = getBlockNumber(endBlock);
         } catch (IOException e) {
-            Flowable.error(e);
+            return Flowable.error(e);
         }
 
-        if (ascending) {
-            return Flowables.range(startBlockNumber, endBlockNumber)
-                    .flatMap(
-                            i ->
-                                    web3j.ethGetBlockByNumber(
-                                                    new DefaultBlockParameterNumber(i),
-                                                    fullTransactionObjects)
-                                            .flowable());
-        } else {
-            return Flowables.range(startBlockNumber, endBlockNumber, false)
-                    .flatMap(
-                            i ->
-                                    web3j.ethGetBlockByNumber(
-                                                    new DefaultBlockParameterNumber(i),
-                                                    fullTransactionObjects)
-                                            .flowable());
-        }
+        return Flowables.range(startBlockNumber, endBlockNumber, isAscending)
+                .map(DefaultBlockParameterNumber::new)
+                .map(number -> web3j.ethGetBlockByNumber(number, containsFullTransactionObjects))
+                .flatMap(Request::flowable);
     }
 
     public Flowable<Transaction> replayTransactionsFlowable(
