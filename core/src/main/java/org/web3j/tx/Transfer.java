@@ -156,6 +156,6 @@ public class Transfer extends ManagedTransaction {
 
         String resolvedAddress = ensResolver.resolve(toAddress);
         return sendEIP1559(
-                resolvedAddress, "", weiValue.toBigIntegerExact(), gasPremium, feeCap, gasLimit);
+                resolvedAddress, "", weiValue.toBigIntegerExact(), gasLimit, gasPremium, feeCap);
     }
 }
