@@ -101,11 +101,17 @@ public abstract class PrivateTransactionManager extends TransactionManager {
 
     @Override
     protected TransactionReceipt executeTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException, TransactionException {
 
         EthSendTransaction ethSendTransaction =
-                sendTransaction(gasPrice, gasLimit, to, data, value);
+                sendTransaction(gasPrice, gasLimit, to, data, value, gasPremium, feeCap);
         return processResponse(ethSendTransaction);
     }
 
@@ -125,7 +131,9 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             final String to,
             final String data,
             final BigInteger value,
-            boolean constructor)
+            boolean constructor,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException {
 
         final BigInteger nonce =
@@ -178,7 +186,9 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             gasProvider.getGasLimit(),
                             to,
                             data,
-                            BigInteger.ZERO);
+                            BigInteger.ZERO,
+                            null,
+                            null);
             final TransactionReceipt ptr = processResponse(est);
 
             if (!ptr.isStatusOK()) {

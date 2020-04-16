@@ -124,6 +124,12 @@ public class TransactionEncoder {
         byte[] data = Numeric.hexStringToByteArray(rawTransaction.getData());
         result.add(RlpString.create(data));
 
+        // add gas premium and fee cap if this is an EIP-1559 transaction
+        if (rawTransaction.isEIP1559Transaction()) {
+            result.add(RlpString.create(rawTransaction.getGasPremium()));
+            result.add(RlpString.create(rawTransaction.getFeeCap()));
+        }
+
         if (signatureData != null) {
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getV())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));

@@ -52,7 +52,31 @@ public class Transfer extends ManagedTransaction {
             throws IOException, InterruptedException, TransactionException {
 
         BigInteger gasPrice = requestCurrentGasPrice();
-        return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
+        return send(toAddress, value, unit, gasPrice, GAS_LIMIT, null, null);
+    }
+
+    /**
+     * Given the duration required to execute a transaction, asyncronous execution is strongly
+     * recommended via {@link Transfer#sendFunds(String, BigDecimal, Convert.Unit)}.
+     *
+     * @param toAddress destination address
+     * @param value amount to send
+     * @param unit of specified send
+     * @param gasPremium to use
+     * @param feeCap to use
+     * @return {@link Optional} containing our transaction receipt
+     * @throws ExecutionException if the computation threw an exception
+     * @throws InterruptedException if the current thread was interrupted while waiting
+     * @throws TransactionException if the transaction was not mined while waiting
+     */
+    private TransactionReceipt sendEIP1559(
+            String toAddress,
+            BigDecimal value,
+            Convert.Unit unit,
+            BigInteger gasPremium,
+            BigInteger feeCap)
+            throws IOException, InterruptedException, TransactionException {
+        return send(toAddress, value, unit, null, GAS_LIMIT, gasPremium, feeCap);
     }
 
     private TransactionReceipt send(
@@ -60,7 +84,9 @@ public class Transfer extends ManagedTransaction {
             BigDecimal value,
             Convert.Unit unit,
             BigInteger gasPrice,
-            BigInteger gasLimit)
+            BigInteger gasLimit,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException, InterruptedException, TransactionException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
@@ -76,7 +102,14 @@ public class Transfer extends ManagedTransaction {
         }
 
         String resolvedAddress = ensResolver.resolve(toAddress);
-        return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
+        return send(
+                resolvedAddress,
+                "",
+                weiValue.toBigIntegerExact(),
+                gasPrice,
+                gasLimit,
+                gasPremium,
+                feeCap);
     }
 
     public static RemoteCall<TransactionReceipt> sendFunds(
@@ -91,6 +124,23 @@ public class Transfer extends ManagedTransaction {
 
         return new RemoteCall<>(
                 () -> new Transfer(web3j, transactionManager).send(toAddress, value, unit));
+    }
+
+    public static RemoteCall<TransactionReceipt> sendFundsEIP1559(
+            Web3j web3j,
+            Credentials credentials,
+            String toAddress,
+            BigDecimal value,
+            Convert.Unit unit,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
+
+        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+
+        return new RemoteCall<>(
+                () ->
+                        new Transfer(web3j, transactionManager)
+                                .sendEIP1559(toAddress, value, unit, gasPremium, feeCap));
     }
 
     /**
@@ -113,6 +163,6 @@ public class Transfer extends ManagedTransaction {
             Convert.Unit unit,
             BigInteger gasPrice,
             BigInteger gasLimit) {
-        return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, gasLimit));
+        return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, gasLimit, null, null));
     }
 }

@@ -58,8 +58,8 @@ public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     /**
-     * @deprecated ...
      * @see org.web3j.tx.gas.DefaultGasProvider
+     * @deprecated ...
      */
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
 
@@ -333,18 +333,31 @@ public abstract class Contract extends ManagedTransaction {
 
     protected TransactionReceipt executeTransaction(Function function)
             throws IOException, TransactionException {
-        return executeTransaction(function, BigInteger.ZERO);
+        return executeTransaction(function, null, null);
     }
 
-    private TransactionReceipt executeTransaction(Function function, BigInteger weiValue)
+    protected TransactionReceipt executeTransaction(
+            Function function, BigInteger gasPremium, BigInteger feeCap)
             throws IOException, TransactionException {
-        return executeTransaction(FunctionEncoder.encode(function), weiValue, function.getName());
+        return executeTransaction(function, BigInteger.ZERO, gasPremium, feeCap);
     }
 
-    TransactionReceipt executeTransaction(String data, BigInteger weiValue, String funcName)
+    private TransactionReceipt executeTransaction(
+            Function function, BigInteger weiValue, BigInteger gasPremium, BigInteger feeCap)
+            throws IOException, TransactionException {
+        return executeTransaction(
+                FunctionEncoder.encode(function), weiValue, function.getName(), gasPremium, feeCap);
+    }
+
+    TransactionReceipt executeTransaction(
+            String data,
+            BigInteger weiValue,
+            String funcName,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws TransactionException, IOException {
 
-        return executeTransaction(data, weiValue, funcName, false);
+        return executeTransaction(data, weiValue, funcName, false, gasPremium, feeCap);
     }
 
     /**
@@ -357,7 +370,12 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionException if the transaction was not mined while waiting
      */
     TransactionReceipt executeTransaction(
-            String data, BigInteger weiValue, String funcName, boolean constructor)
+            String data,
+            BigInteger weiValue,
+            String funcName,
+            boolean constructor,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws TransactionException, IOException {
 
         TransactionReceipt receipt =
@@ -367,7 +385,9 @@ public abstract class Contract extends ManagedTransaction {
                         weiValue,
                         gasProvider.getGasPrice(funcName),
                         gasProvider.getGasLimit(funcName),
-                        constructor);
+                        constructor,
+                        gasPremium,
+                        feeCap);
 
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
@@ -404,19 +424,32 @@ public abstract class Contract extends ManagedTransaction {
 
     protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(
             Function function) {
-        return new RemoteFunctionCall<>(function, () -> executeTransaction(function));
+        return new RemoteFunctionCall<>(function, () -> executeTransaction(function, null, null));
     }
 
     protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(
-            Function function, BigInteger weiValue) {
-        return new RemoteFunctionCall<>(function, () -> executeTransaction(function, weiValue));
+            Function function, BigInteger gasPremium, BigInteger feeCap) {
+        return new RemoteFunctionCall<>(
+                function, () -> executeTransaction(function, gasPremium, feeCap));
+    }
+
+    protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(
+            Function function, BigInteger weiValue, BigInteger gasPremium, BigInteger feeCap) {
+        return new RemoteFunctionCall<>(
+                function, () -> executeTransaction(function, weiValue, gasPremium, feeCap));
     }
 
     private static <T extends Contract> T create(
-            T contract, String binary, String encodedConstructor, BigInteger value)
+            T contract,
+            String binary,
+            String encodedConstructor,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException, TransactionException {
         TransactionReceipt transactionReceipt =
-                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY, true);
+                contract.executeTransaction(
+                        binary + encodedConstructor, value, FUNC_DEPLOY, true, gasPremium, feeCap);
 
         String contractAddress = transactionReceipt.getContractAddress();
         if (contractAddress == null) {
@@ -437,6 +470,29 @@ public abstract class Contract extends ManagedTransaction {
             String encodedConstructor,
             BigInteger value)
             throws RuntimeException, TransactionException {
+        return deploy(
+                type,
+                web3j,
+                credentials,
+                contractGasProvider,
+                binary,
+                encodedConstructor,
+                value,
+                null,
+                null);
+    }
+
+    protected static <T extends Contract> T deploy(
+            Class<T> type,
+            Web3j web3j,
+            Credentials credentials,
+            ContractGasProvider contractGasProvider,
+            String binary,
+            String encodedConstructor,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap)
+            throws RuntimeException, TransactionException {
 
         try {
             Constructor<T> constructor =
@@ -450,7 +506,7 @@ public abstract class Contract extends ManagedTransaction {
             // we want to use null here to ensure that "to" parameter on message is not populated
             T contract = constructor.newInstance(null, web3j, credentials, contractGasProvider);
 
-            return create(contract, binary, encodedConstructor, value);
+            return create(contract, binary, encodedConstructor, value, gasPremium, feeCap);
         } catch (TransactionException e) {
             throw e;
         } catch (Exception e) {
@@ -465,7 +521,9 @@ public abstract class Contract extends ManagedTransaction {
             ContractGasProvider contractGasProvider,
             String binary,
             String encodedConstructor,
-            BigInteger value)
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws RuntimeException, TransactionException {
 
         try {
@@ -480,7 +538,7 @@ public abstract class Contract extends ManagedTransaction {
             // we want to use null here to ensure that "to" parameter on message is not populated
             T contract =
                     constructor.newInstance(null, web3j, transactionManager, contractGasProvider);
-            return create(contract, binary, encodedConstructor, value);
+            return create(contract, binary, encodedConstructor, value, gasPremium, feeCap);
         } catch (TransactionException e) {
             throw e;
         } catch (Exception e) {
@@ -497,7 +555,9 @@ public abstract class Contract extends ManagedTransaction {
             BigInteger gasLimit,
             String binary,
             String encodedConstructor,
-            BigInteger value)
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws RuntimeException, TransactionException {
 
         return deploy(
@@ -507,7 +567,9 @@ public abstract class Contract extends ManagedTransaction {
                 new StaticGasProvider(gasPrice, gasLimit),
                 binary,
                 encodedConstructor,
-                value);
+                value,
+                gasPremium,
+                feeCap);
     }
 
     @Deprecated
@@ -519,7 +581,9 @@ public abstract class Contract extends ManagedTransaction {
             BigInteger gasLimit,
             String binary,
             String encodedConstructor,
-            BigInteger value)
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws RuntimeException, TransactionException {
 
         return deploy(
@@ -529,7 +593,9 @@ public abstract class Contract extends ManagedTransaction {
                 new StaticGasProvider(gasPrice, gasLimit),
                 binary,
                 encodedConstructor,
-                value);
+                value,
+                gasPremium,
+                feeCap);
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -541,6 +607,30 @@ public abstract class Contract extends ManagedTransaction {
             String binary,
             String encodedConstructor,
             BigInteger value) {
+        return deployRemoteCall(
+                type,
+                web3j,
+                credentials,
+                gasPrice,
+                gasLimit,
+                binary,
+                encodedConstructor,
+                value,
+                null,
+                null);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            Credentials credentials,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String binary,
+            String encodedConstructor,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
         return new RemoteCall<>(
                 () ->
                         deploy(
@@ -551,7 +641,9 @@ public abstract class Contract extends ManagedTransaction {
                                 gasLimit,
                                 binary,
                                 encodedConstructor,
-                                value));
+                                value,
+                                gasPremium,
+                                feeCap));
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -570,7 +662,31 @@ public abstract class Contract extends ManagedTransaction {
                 gasLimit,
                 binary,
                 encodedConstructor,
-                BigInteger.ZERO);
+                null,
+                null);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            Credentials credentials,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String binary,
+            String encodedConstructor,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
+        return deployRemoteCall(
+                type,
+                web3j,
+                credentials,
+                gasPrice,
+                gasLimit,
+                binary,
+                encodedConstructor,
+                BigInteger.ZERO,
+                gasPremium,
+                feeCap);
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -581,6 +697,28 @@ public abstract class Contract extends ManagedTransaction {
             String binary,
             String encodedConstructor,
             BigInteger value) {
+        return deployRemoteCall(
+                type,
+                web3j,
+                credentials,
+                contractGasProvider,
+                binary,
+                encodedConstructor,
+                value,
+                null,
+                null);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            Credentials credentials,
+            ContractGasProvider contractGasProvider,
+            String binary,
+            String encodedConstructor,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
         return new RemoteCall<>(
                 () ->
                         deploy(
@@ -590,7 +728,9 @@ public abstract class Contract extends ManagedTransaction {
                                 contractGasProvider,
                                 binary,
                                 encodedConstructor,
-                                value));
+                                value,
+                                gasPremium,
+                                feeCap));
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -600,6 +740,19 @@ public abstract class Contract extends ManagedTransaction {
             ContractGasProvider contractGasProvider,
             String binary,
             String encodedConstructor) {
+        return deployRemoteCall(
+                type, web3j, credentials, contractGasProvider, binary, encodedConstructor);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            Credentials credentials,
+            ContractGasProvider contractGasProvider,
+            String binary,
+            String encodedConstructor,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
         return new RemoteCall<>(
                 () ->
                         deploy(
@@ -609,7 +762,9 @@ public abstract class Contract extends ManagedTransaction {
                                 contractGasProvider,
                                 binary,
                                 encodedConstructor,
-                                BigInteger.ZERO));
+                                BigInteger.ZERO,
+                                gasPremium,
+                                feeCap));
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -621,6 +776,30 @@ public abstract class Contract extends ManagedTransaction {
             String binary,
             String encodedConstructor,
             BigInteger value) {
+        return deployRemoteCall(
+                type,
+                web3j,
+                transactionManager,
+                gasPrice,
+                gasLimit,
+                binary,
+                encodedConstructor,
+                value,
+                null,
+                null);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            TransactionManager transactionManager,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String binary,
+            String encodedConstructor,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
         return new RemoteCall<>(
                 () ->
                         deploy(
@@ -631,7 +810,9 @@ public abstract class Contract extends ManagedTransaction {
                                 gasLimit,
                                 binary,
                                 encodedConstructor,
-                                value));
+                                value,
+                                gasPremium,
+                                feeCap));
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -650,7 +831,31 @@ public abstract class Contract extends ManagedTransaction {
                 gasLimit,
                 binary,
                 encodedConstructor,
-                BigInteger.ZERO);
+                null,
+                null);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            TransactionManager transactionManager,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String binary,
+            String encodedConstructor,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
+        return deployRemoteCall(
+                type,
+                web3j,
+                transactionManager,
+                gasPrice,
+                gasLimit,
+                binary,
+                encodedConstructor,
+                BigInteger.ZERO,
+                gasPremium,
+                feeCap);
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -661,6 +866,28 @@ public abstract class Contract extends ManagedTransaction {
             String binary,
             String encodedConstructor,
             BigInteger value) {
+        return deployRemoteCall(
+                type,
+                web3j,
+                transactionManager,
+                contractGasProvider,
+                binary,
+                encodedConstructor,
+                value,
+                null,
+                null);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider,
+            String binary,
+            String encodedConstructor,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
         return new RemoteCall<>(
                 () ->
                         deploy(
@@ -670,7 +897,9 @@ public abstract class Contract extends ManagedTransaction {
                                 contractGasProvider,
                                 binary,
                                 encodedConstructor,
-                                value));
+                                value,
+                                gasPremium,
+                                feeCap));
     }
 
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
@@ -680,6 +909,26 @@ public abstract class Contract extends ManagedTransaction {
             ContractGasProvider contractGasProvider,
             String binary,
             String encodedConstructor) {
+        return deployRemoteCall(
+                type,
+                web3j,
+                transactionManager,
+                contractGasProvider,
+                binary,
+                encodedConstructor,
+                null,
+                null);
+    }
+
+    public static <T extends Contract> RemoteCall<T> deployRemoteCall(
+            Class<T> type,
+            Web3j web3j,
+            TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider,
+            String binary,
+            String encodedConstructor,
+            BigInteger gasPremium,
+            BigInteger feeCap) {
         return new RemoteCall<>(
                 () ->
                         deploy(
@@ -689,7 +938,9 @@ public abstract class Contract extends ManagedTransaction {
                                 contractGasProvider,
                                 binary,
                                 encodedConstructor,
-                                BigInteger.ZERO));
+                                BigInteger.ZERO,
+                                gasPremium,
+                                feeCap));
     }
 
     public static EventValues staticExtractEventParameters(Event event, Log log) {

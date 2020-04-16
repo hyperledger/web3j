@@ -75,6 +75,12 @@ public class ReadonlyTransactionManagerTest {
                 UnsupportedOperationException.class,
                 () ->
                         readonlyTransactionManager.sendTransaction(
-                                BigInteger.ZERO, BigInteger.ZERO, "", "", BigInteger.ZERO));
+                                BigInteger.ZERO,
+                                BigInteger.ZERO,
+                                "",
+                                "",
+                                BigInteger.ZERO,
+                                null,
+                                null));
     }
 }

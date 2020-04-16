@@ -61,10 +61,15 @@ public abstract class TransactionManager {
     }
 
     protected TransactionReceipt executeTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor)
             throws IOException, TransactionException {
 
-        return executeTransaction(gasPrice, gasLimit, to, data, value, false);
+        return executeTransaction(gasPrice, gasLimit, to, data, value, constructor, null, null);
     }
 
     protected TransactionReceipt executeTransaction(
@@ -73,18 +78,40 @@ public abstract class TransactionManager {
             String to,
             String data,
             BigInteger value,
-            boolean constructor)
+            BigInteger gasPremium,
+            BigInteger feeCap)
+            throws IOException, TransactionException {
+
+        return executeTransaction(gasPrice, gasLimit, to, data, value, false, gasPremium, feeCap);
+    }
+
+    protected TransactionReceipt executeTransaction(
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException, TransactionException {
 
         EthSendTransaction ethSendTransaction =
-                sendTransaction(gasPrice, gasLimit, to, data, value, constructor);
+                sendTransaction(
+                        gasPrice, gasLimit, to, data, value, constructor, gasPremium, feeCap);
         return processResponse(ethSendTransaction);
     }
 
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException {
-        return sendTransaction(gasPrice, gasLimit, to, data, value, false);
+        return sendTransaction(gasPrice, gasLimit, to, data, value, false, gasPremium, feeCap);
     }
 
     public abstract EthSendTransaction sendTransaction(
@@ -93,7 +120,9 @@ public abstract class TransactionManager {
             String to,
             String data,
             BigInteger value,
-            boolean constructor)
+            boolean constructor,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException;
 
     public abstract String sendCall(

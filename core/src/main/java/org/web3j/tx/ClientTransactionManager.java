@@ -58,7 +58,9 @@ public class ClientTransactionManager extends TransactionManager {
             String to,
             String data,
             BigInteger value,
-            boolean constructor)
+            boolean constructor,
+            BigInteger gasPremium,
+            BigInteger feeCap)
             throws IOException {
 
         Transaction transaction =
