@@ -4,6 +4,7 @@ description 'Ethereum Application Binary Interface (ABI) for working with smart 
 dependencies {
     compile project(':compat')
     compile project(':utils')
+    compile "net.sourceforge.streamsupport:streamsupport:$streamSupportVersion"
 }
 
 useReducedJdk(project)

@@ -1,10 +1,22 @@
+/*
+ * Copyright 2019 Web3 Labs Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
@@ -16,16 +28,15 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Integration test demonstrating integration with Greeter contract taken from the
- * <a href="https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial">Contract Tutorial</a>
- * on the Go Ethereum Wiki.
+ * Integration test demonstrating integration with Greeter contract taken from the <a
+ * href="https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial">Contract Tutorial</a> on
+ * the Go Ethereum Wiki.
  */
 public class GreeterContractIT extends Scenario {
 
@@ -43,10 +54,9 @@ public class GreeterContractIT extends Scenario {
         TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
-        assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
+        assertEquals(createTransactionReceipt.getTransactionHash(), (createTransactionHash));
 
-        assertFalse("Contract execution ran out of gas",
-                createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertFalse(createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
         String contractAddress = createTransactionReceipt.getContractAddress();
 
@@ -57,10 +67,10 @@ public class GreeterContractIT extends Scenario {
         String responseValue = callSmartContractFunction(getFunction, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type> response = FunctionReturnDecoder.decode(
-                responseValue, getFunction.getOutputParameters());
-        assertThat(response.size(), is(1));
-        assertThat(response.get(0).getValue(), is(VALUE));
+        List<Type> response =
+                FunctionReturnDecoder.decode(responseValue, getFunction.getOutputParameters());
+        assertEquals(response.size(), (1));
+        assertEquals(response.get(0).getValue(), (VALUE));
     }
 
     private String sendCreateContractTransaction() throws Exception {
@@ -69,31 +79,33 @@ public class GreeterContractIT extends Scenario {
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
 
-        Transaction transaction = Transaction.createContractTransaction(
-                ALICE.getAddress(),
-                nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
-                BigInteger.ZERO,
-                getGreeterSolidityBinary() + encodedConstructor);
+        Transaction transaction =
+                Transaction.createContractTransaction(
+                        ALICE.getAddress(),
+                        nonce,
+                        GAS_PRICE,
+                        GAS_LIMIT,
+                        BigInteger.ZERO,
+                        getGreeterSolidityBinary() + encodedConstructor);
 
-        org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = web3j.ethSendTransaction(transaction)
-                .sendAsync().get();
+        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
+                web3j.ethSendTransaction(transaction).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(
-            Function function, String contractAddress) throws Exception {
+    private String callSmartContractFunction(Function function, String contractAddress)
+            throws Exception {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
-                Transaction.createEthCallTransaction(
-                        ALICE.getAddress(), contractAddress, encodedFunction),
-                DefaultBlockParameterName.LATEST)
-                .sendAsync().get();
+        org.web3j.protocol.core.methods.response.EthCall response =
+                web3j.ethCall(
+                                Transaction.createEthCallTransaction(
+                                        ALICE.getAddress(), contractAddress, encodedFunction),
+                                DefaultBlockParameterName.LATEST)
+                        .sendAsync()
+                        .get();
 
         return response.getValue();
     }

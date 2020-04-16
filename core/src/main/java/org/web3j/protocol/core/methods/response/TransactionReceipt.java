@@ -1,4 +1,15 @@
-
+/*
+ * Copyright 2019 Web3 Labs Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
@@ -6,9 +17,7 @@ import java.util.List;
 
 import org.web3j.utils.Numeric;
 
-/**
- * TransactionReceipt object used by {@link EthGetTransactionReceipt}.
- */
+/** TransactionReceipt object used by {@link EthGetTransactionReceipt}. */
 public class TransactionReceipt {
     private String transactionHash;
     private String transactionIndex;
@@ -25,14 +34,25 @@ public class TransactionReceipt {
     private String to;
     private List<Log> logs;
     private String logsBloom;
+    private String revertReason;
 
-    public TransactionReceipt() {
-    }
+    public TransactionReceipt() {}
 
-    public TransactionReceipt(String transactionHash, String transactionIndex,
-                              String blockHash, String blockNumber, String cumulativeGasUsed,
-                              String gasUsed, String contractAddress, String root, String status,
-                              String from, String to, List<Log> logs, String logsBloom) {
+    public TransactionReceipt(
+            String transactionHash,
+            String transactionIndex,
+            String blockHash,
+            String blockNumber,
+            String cumulativeGasUsed,
+            String gasUsed,
+            String contractAddress,
+            String root,
+            String status,
+            String from,
+            String to,
+            List<Log> logs,
+            String logsBloom,
+            String revertReason) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -46,6 +66,7 @@ public class TransactionReceipt {
         this.to = to;
         this.logs = logs;
         this.logsBloom = logsBloom;
+        this.revertReason = revertReason;
     }
 
     public String getTransactionHash() {
@@ -137,10 +158,10 @@ public class TransactionReceipt {
     }
 
     public boolean isStatusOK() {
-        if (null == status) {
+        if (null == getStatus()) {
             return true;
         }
-        BigInteger statusQuantity = Numeric.decodeQuantity(status);
+        BigInteger statusQuantity = Numeric.decodeQuantity(getStatus());
         return BigInteger.ONE.equals(statusQuantity);
     }
 
@@ -176,6 +197,14 @@ public class TransactionReceipt {
         this.logsBloom = logsBloom;
     }
 
+    public String getRevertReason() {
+        return revertReason;
+    }
+
+    public void setRevertReason(String revertReason) {
+        this.revertReason = revertReason;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -203,7 +232,8 @@ public class TransactionReceipt {
             return false;
         }
         if (blockNumber != null
-                ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
+                ? !blockNumber.equals(that.blockNumber)
+                : that.blockNumber != null) {
             return false;
         }
         if (cumulativeGasUsed != null
@@ -219,12 +249,12 @@ public class TransactionReceipt {
                 : that.getContractAddress() != null) {
             return false;
         }
-        if (getRoot() != null
-                ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
+        if (getRoot() != null ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
             return false;
         }
         if (getStatus() != null
-                ? !getStatus().equals(that.getStatus()) : that.getStatus() != null) {
+                ? !getStatus().equals(that.getStatus())
+                : that.getStatus() != null) {
             return false;
         }
         if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
@@ -236,8 +266,14 @@ public class TransactionReceipt {
         if (getLogs() != null ? !getLogs().equals(that.getLogs()) : that.getLogs() != null) {
             return false;
         }
-        return getLogsBloom() != null
-                ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
+        if (getLogsBloom() != null
+                ? !getLogsBloom().equals(that.getLogsBloom())
+                : that.getLogsBloom() != null) {
+            return false;
+        }
+        return getRevertReason() != null
+                ? getRevertReason().equals(that.getRevertReason())
+                : that.getRevertReason() == null;
     }
 
     @Override
@@ -255,25 +291,54 @@ public class TransactionReceipt {
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getLogs() != null ? getLogs().hashCode() : 0);
         result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
+        result = 31 * result + (getRevertReason() != null ? getRevertReason().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "TransactionReceipt{"
-                + "transactionHash='" + transactionHash + '\''
-                + ", transactionIndex='" + transactionIndex + '\''
-                + ", blockHash='" + blockHash + '\''
-                + ", blockNumber='" + blockNumber + '\''
-                + ", cumulativeGasUsed='" + cumulativeGasUsed + '\''
-                + ", gasUsed='" + gasUsed + '\''
-                + ", contractAddress='" + contractAddress + '\''
-                + ", root='" + root + '\''
-                + ", status='" + status + '\''
-                + ", from='" + from + '\''
-                + ", to='" + to + '\''
-                + ", logs=" + logs
-                + ", logsBloom='" + logsBloom + '\''
+                + "transactionHash='"
+                + transactionHash
+                + '\''
+                + ", transactionIndex='"
+                + transactionIndex
+                + '\''
+                + ", blockHash='"
+                + blockHash
+                + '\''
+                + ", blockNumber='"
+                + blockNumber
+                + '\''
+                + ", cumulativeGasUsed='"
+                + cumulativeGasUsed
+                + '\''
+                + ", gasUsed='"
+                + gasUsed
+                + '\''
+                + ", contractAddress='"
+                + contractAddress
+                + '\''
+                + ", root='"
+                + root
+                + '\''
+                + ", status='"
+                + status
+                + '\''
+                + ", from='"
+                + from
+                + '\''
+                + ", to='"
+                + to
+                + '\''
+                + ", logs="
+                + logs
+                + ", logsBloom='"
+                + logsBloom
+                + '\''
+                + ", revertReason='"
+                + revertReason
+                + '\''
                 + '}';
     }
 }

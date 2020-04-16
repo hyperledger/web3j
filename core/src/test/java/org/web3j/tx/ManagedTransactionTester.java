@@ -1,8 +1,20 @@
+/*
+ * Copyright 2019 Web3 Labs Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.tx;
 
 import java.io.IOException;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
@@ -16,10 +28,9 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.TxHashVerifier;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 
 public abstract class ManagedTransactionTester {
 
@@ -28,15 +39,15 @@ public abstract class ManagedTransactionTester {
     protected Web3j web3j;
     protected TxHashVerifier txHashVerifier;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         web3j = mock(Web3j.class);
         txHashVerifier = mock(TxHashVerifier.class);
         when(txHashVerifier.verify(any(), any())).thenReturn(true);
     }
 
-    public TransactionManager getVerifiedTransactionManager(Credentials credentials,
-                                                            int attempts, int sleepDuration) {
+    public TransactionManager getVerifiedTransactionManager(
+            Credentials credentials, int attempts, int sleepDuration) {
         RawTransactionManager transactionManager =
                 new RawTransactionManager(web3j, credentials, attempts, sleepDuration);
         transactionManager.setTxHashVerifier(txHashVerifier);
@@ -61,8 +72,7 @@ public abstract class ManagedTransactionTester {
         ethGetTransactionCount.setResult("0x1");
 
         Request<?, EthGetTransactionCount> transactionCountRequest = mock(Request.class);
-        when(transactionCountRequest.send())
-                .thenReturn(ethGetTransactionCount);
+        when(transactionCountRequest.send()).thenReturn(ethGetTransactionCount);
         when(web3j.ethGetTransactionCount(SampleKeys.ADDRESS, DefaultBlockParameterName.PENDING))
                 .thenReturn((Request) transactionCountRequest);
     }
@@ -84,8 +94,7 @@ public abstract class ManagedTransactionTester {
         ethGetTransactionReceipt.setResult(transactionReceipt);
 
         Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
-        when(getTransactionReceiptRequest.send())
-                .thenReturn(ethGetTransactionReceipt);
+        when(getTransactionReceiptRequest.send()).thenReturn(ethGetTransactionReceipt);
         when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn((Request) getTransactionReceiptRequest);
     }

@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.crypto;
 
 import java.io.File;
@@ -20,9 +32,7 @@ import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
 import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 
-/**
- * Utility functions for working with Wallet files.
- */
+/** Utility functions for working with Wallet files. */
 public class WalletUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -35,28 +45,28 @@ public class WalletUtils {
 
     public static String generateFullNewWalletFile(String password, File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
-            InvalidAlgorithmParameterException, CipherException, IOException {
+                    InvalidAlgorithmParameterException, CipherException, IOException {
 
         return generateNewWalletFile(password, destinationDirectory, true);
     }
 
     public static String generateLightNewWalletFile(String password, File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
-            InvalidAlgorithmParameterException, CipherException, IOException {
+                    InvalidAlgorithmParameterException, CipherException, IOException {
 
         return generateNewWalletFile(password, destinationDirectory, false);
     }
 
     public static String generateNewWalletFile(String password, File destinationDirectory)
-            throws CipherException, InvalidAlgorithmParameterException,
-            NoSuchAlgorithmException, NoSuchProviderException, IOException {
+            throws CipherException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
+                    NoSuchProviderException, IOException {
         return generateFullNewWalletFile(password, destinationDirectory);
     }
 
     public static String generateNewWalletFile(
             String password, File destinationDirectory, boolean useFullScrypt)
             throws CipherException, IOException, InvalidAlgorithmParameterException,
-            NoSuchAlgorithmException, NoSuchProviderException {
+                    NoSuchAlgorithmException, NoSuchProviderException {
 
         ECKeyPair ecKeyPair = Keys.createEcKeyPair();
         return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
@@ -82,8 +92,9 @@ public class WalletUtils {
     }
 
     /**
-     * Generates a BIP-39 compatible Ethereum wallet. The private key for the wallet can
-     * be calculated using following algorithm:
+     * Generates a BIP-39 compatible Ethereum wallet. The private key for the wallet can be
+     * calculated using following algorithm:
+     *
      * <pre>
      *     Key = SHA-256(BIP_39_SEED(mnemonic, password))
      * </pre>
@@ -108,6 +119,27 @@ public class WalletUtils {
         return new Bip39Wallet(walletFile, mnemonic);
     }
 
+    /**
+     * Generates a BIP-39 compatible Ethereum wallet using a mnemonic passed as argument.
+     *
+     * @param password Will be used for both wallet encryption and passphrase for BIP-39 seed
+     * @param mnemonic The mnemonic that will be used to generate the seed
+     * @param destinationDirectory The directory containing the wallet
+     * @return A BIP-39 compatible Ethereum wallet
+     * @throws CipherException if the underlying cipher is not available
+     * @throws IOException if the destination cannot be written to
+     */
+    public static Bip39Wallet generateBip39WalletFromMnemonic(
+            String password, String mnemonic, File destinationDirectory)
+            throws CipherException, IOException {
+        byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
+        ECKeyPair privateKey = ECKeyPair.create(sha256(seed));
+
+        String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
+
+        return new Bip39Wallet(walletFile, mnemonic);
+    }
+
     public static Credentials loadCredentials(String password, String source)
             throws IOException, CipherException {
         return loadCredentials(password, new File(source));
@@ -122,6 +154,22 @@ public class WalletUtils {
     public static Credentials loadBip39Credentials(String password, String mnemonic) {
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         return Credentials.create(ECKeyPair.create(sha256(seed)));
+    }
+
+    /**
+     * Load credentials from JSON wallet string.
+     *
+     * @param password - password to decrypt JSON wallet string
+     * @param content - JSON wallet content string
+     * @return Ethereum credentials
+     * @throws CipherException if the underlying cipher is not available
+     * @throws IOException if a low-level I/O problem (unexpected end-of-input, network error)
+     *     occurs
+     */
+    public static Credentials loadJsonCredentials(String password, String content)
+            throws IOException, CipherException {
+        WalletFile walletFile = objectMapper.readValue(content, WalletFile.class);
+        return Credentials.create(Wallet.decrypt(password, walletFile));
     }
 
     private static String getWalletFileName(WalletFile walletFile) {
@@ -149,8 +197,8 @@ public class WalletUtils {
 
         if (osName.startsWith("mac")) {
             return String.format(
-                    "%s%sLibrary%sEthereum", System.getProperty("user.home"), File.separator,
-                    File.separator);
+                    "%s%sLibrary%sEthereum",
+                    System.getProperty("user.home"), File.separator, File.separator);
         } else if (osName.startsWith("win")) {
             return String.format("%s%sEthereum", System.getenv("APPDATA"), File.separator);
         } else {
@@ -166,9 +214,10 @@ public class WalletUtils {
     public static String getMainnetKeyDirectory() {
         return String.format("%s%skeystore", getDefaultKeyDirectory(), File.separator);
     }
-    
+
     /**
      * Get keystore destination directory for a Rinkeby network.
+     *
      * @return a String containing destination directory
      */
     public static String getRinkebyKeyDirectory() {
@@ -182,6 +231,10 @@ public class WalletUtils {
     }
 
     public static boolean isValidAddress(String input) {
+        return isValidAddress(input, ADDRESS_LENGTH_IN_HEX);
+    }
+
+    public static boolean isValidAddress(String input, int addressLength) {
         String cleanInput = Numeric.cleanHexPrefix(input);
 
         try {
@@ -190,6 +243,6 @@ public class WalletUtils {
             return false;
         }
 
-        return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
+        return cleanInput.length() == addressLength;
     }
 }

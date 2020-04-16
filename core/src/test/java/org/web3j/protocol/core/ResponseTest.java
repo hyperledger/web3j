@@ -1,3 +1,15 @@
+/*
+ * Copyright 2019 Web3 Labs Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.protocol.core;
 
 import java.io.IOException;
@@ -10,7 +22,7 @@ import java.util.Map;
 
 import java8.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
@@ -68,17 +80,14 @@ import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Core Protocol Response tests.
- */
+/** Core Protocol Response tests. */
 public class ResponseTest extends ResponseTester {
 
     @Test
@@ -92,13 +101,13 @@ public class ResponseTest extends ResponseTester {
                         + "    \"message\":\"Invalid address length, expected 40 got 64 bytes\","
                         + "    \"data\":null"
                         + "  }"
-                        + "}"
-        );
+                        + "}");
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         assertTrue(ethBlock.hasError());
-        assertThat(ethBlock.getError(), equalTo(
-                new Response.Error(-32602, "Invalid address length, expected 40 got 64 bytes")));
+        assertEquals(
+                ethBlock.getError(),
+                (new Response.Error(-32602, "Invalid address length, expected 40 got 64 bytes")));
     }
 
     @Test
@@ -112,12 +121,11 @@ public class ResponseTest extends ResponseTester {
                         + "    \"message\":\"Invalid address length, expected 40 got 64 bytes\","
                         + "    \"data\":{\"foo\":\"bar\"}"
                         + "  }"
-                        + "}"
-        );
+                        + "}");
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         assertTrue(ethBlock.hasError());
-        assertThat(ethBlock.getError().getData(), equalTo("{\"foo\":\"bar\"}"));
+        assertEquals(ethBlock.getError().getData(), ("{\"foo\":\"bar\"}"));
     }
 
     @Test
@@ -127,11 +135,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":67,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": \"Mist/v0.9.3/darwin/go1.4.1\"\n"
-                        + "}"
-        );
+                        + "}");
 
         Web3ClientVersion web3ClientVersion = deserialiseResponse(Web3ClientVersion.class);
-        assertThat(web3ClientVersion.getWeb3ClientVersion(), is("Mist/v0.9.3/darwin/go1.4.1"));
+        assertEquals(web3ClientVersion.getWeb3ClientVersion(), ("Mist/v0.9.3/darwin/go1.4.1"));
     }
 
     @Test
@@ -142,12 +149,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": "
                         + "\"0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad\"\n"
-                        + "}"
-        );
+                        + "}");
 
         Web3Sha3 web3Sha3 = deserialiseResponse(Web3Sha3.class);
-        assertThat(web3Sha3.getResult(),
-                is("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
+        assertEquals(
+                web3Sha3.getResult(),
+                ("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
     }
 
     @Test
@@ -157,11 +164,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":67,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"59\"\n"
-                        + "}"
-        );
+                        + "}");
 
         NetVersion netVersion = deserialiseResponse(NetVersion.class);
-        assertThat(netVersion.getNetVersion(), is("59"));
+        assertEquals(netVersion.getNetVersion(), ("59"));
     }
 
     @Test
@@ -171,11 +177,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":67,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\":true\n"
-                        + "}"
-        );
+                        + "}");
 
         NetListening netListening = deserialiseResponse(NetListening.class);
-        assertThat(netListening.isListening(), is(true));
+        assertEquals(netListening.isListening(), (true));
     }
 
     @Test
@@ -185,11 +190,61 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":74,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x2\"\n"
-                        + "}"
-        );
+                        + "}");
 
         NetPeerCount netPeerCount = deserialiseResponse(NetPeerCount.class);
-        assertThat(netPeerCount.getQuantity(), equalTo(BigInteger.valueOf(2L)));
+        assertEquals(netPeerCount.getQuantity(), (BigInteger.valueOf(2L)));
+    }
+
+    @Test
+    public void testAdminNodeInfo() throws Exception {
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\": \"2.0\",\n"
+                        + "    \"id\": 1,\n"
+                        + "    \"result\": {\n"
+                        + "        \"id\": \"8ae75d6795f3541f897bcbfd3b4551aaf78b932cd0e91bf75a273940375c12a3\",\n"
+                        + "        \"name\": \"Geth/v1.9.6-stable-bd059680/linux-amd64/go1.13.1\",\n"
+                        + "        \"enode\": \"enode://1672a190f8c67669590db4b094c87573cbbc9b12f63d7137f505cfaa2cd2d35bea61abe1f8c898db4eab01d6c901270d7fff601b97a78f79ccefd83016b315cc@127.0.0.1:30303\",\n"
+                        + "        \"enr\": \"enr:-Jq4QCKylmBZEJ1xizokiKyEST7FUrrOESva-sFWTkbBY6J0Xco6eUOkoc7lGOHy6yyCnjWhBEd35dr-c1FRxE3ozUEEg2V0aMrJhMs6ZLuDD8wlgmlkgnY0gmlwhH8AAAGJc2VjcDI1NmsxoQIWcqGQ-MZ2aVkNtLCUyHVzy7ybEvY9cTf1Bc-qLNLTW4N0Y3CCdl-DdWRwgnZf\",\n"
+                        + "        \"ip\": \"127.0.0.1\",\n"
+                        + "        \"ports\": {\n"
+                        + "            \"discovery\": 30303,\n"
+                        + "            \"listener\": 30303\n"
+                        + "        },\n"
+                        + "        \"listenAddr\": \"[::]:30303\",\n"
+                        + "        \"protocols\": {\n"
+                        + "            \"eth\": {\n"
+                        + "                \"network\": 4,\n"
+                        + "                \"difficulty\": 1,\n"
+                        + "                \"genesis\": \"0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177\",\n"
+                        + "                \"config\": {\n"
+                        + "                    \"chainId\": 4,\n"
+                        + "                    \"homesteadBlock\": 1,\n"
+                        + "                    \"daoForkSupport\": true,\n"
+                        + "                    \"eip150Block\": 2,\n"
+                        + "                    \"eip150Hash\": \"0x9b095b36c15eaf13044373aef8ee0bd3a382a5abb92e402afa44b8249c3a90e9\",\n"
+                        + "                    \"eip155Block\": 3,\n"
+                        + "                    \"eip158Block\": 3,\n"
+                        + "                    \"byzantiumBlock\": 1035301,\n"
+                        + "                    \"constantinopleBlock\": 3660663,\n"
+                        + "                    \"petersburgBlock\": 4321234,\n"
+                        + "                    \"istanbulBlock\": 5435345,\n"
+                        + "                    \"clique\": {\n"
+                        + "                        \"period\": 15,\n"
+                        + "                        \"epoch\": 30000\n"
+                        + "                    }\n"
+                        + "                },\n"
+                        + "                \"head\": \"0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177\"\n"
+                        + "            }\n"
+                        + "        }\n"
+                        + "    }\n"
+                        + "}");
+
+        AdminNodeInfo adminNodeInfo = deserialiseResponse(AdminNodeInfo.class);
+        assertEquals(
+                adminNodeInfo.getResult().getName(),
+                ("Geth/v1.9.6-stable-bd059680/linux-amd64/go1.13.1"));
     }
 
     @Test
@@ -199,11 +254,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":67,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"54\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthProtocolVersion ethProtocolVersion = deserialiseResponse(EthProtocolVersion.class);
-        assertThat(ethProtocolVersion.getProtocolVersion(), is("54"));
+        assertEquals(ethProtocolVersion.getProtocolVersion(), ("54"));
     }
 
     @Test
@@ -217,9 +271,7 @@ public class ResponseTest extends ResponseTester {
                         + "  \"currentBlock\": \"0x386\",\n"
                         + "  \"highestBlock\": \"0x454\"\n"
                         + "  }\n"
-                        + "}"
-        );
-
+                        + "}");
 
         // Response received from Geth node
         // "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"currentBlock\":\"0x117a\",
@@ -228,8 +280,9 @@ public class ResponseTest extends ResponseTester {
 
         EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
 
-        assertThat(ethSyncing.getResult(),
-                equalTo(new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
+        assertEquals(
+                ethSyncing.getResult(),
+                (new EthSyncing.Syncing("0x384", "0x386", "0x454", null, null)));
     }
 
     @Test
@@ -239,11 +292,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": false\n"
-                        + "}"
-        );
+                        + "}");
 
         EthSyncing ethSyncing = deserialiseResponse(EthSyncing.class);
-        assertThat(ethSyncing.isSyncing(), is(false));
+        assertEquals(ethSyncing.isSyncing(), (false));
     }
 
     @Test
@@ -253,11 +305,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":71,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         EthMining ethMining = deserialiseResponse(EthMining.class);
-        assertThat(ethMining.isMining(), is(true));
+        assertEquals(ethMining.isMining(), (true));
     }
 
     @Test
@@ -267,11 +318,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":71,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x38a\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthHashrate ethHashrate = deserialiseResponse(EthHashrate.class);
-        assertThat(ethHashrate.getHashrate(), equalTo(BigInteger.valueOf(906L)));
+        assertEquals(ethHashrate.getHashrate(), (BigInteger.valueOf(906L)));
     }
 
     @Test
@@ -281,11 +331,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":73,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x9184e72a000\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthGasPrice ethGasPrice = deserialiseResponse(EthGasPrice.class);
-        assertThat(ethGasPrice.getGasPrice(), equalTo(BigInteger.valueOf(10000000000000L)));
+        assertEquals(ethGasPrice.getGasPrice(), (BigInteger.valueOf(10000000000000L)));
     }
 
     @Test
@@ -295,12 +344,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": [\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\"]\n"
-                        + "}"
-        );
+                        + "}");
 
         EthAccounts ethAccounts = deserialiseResponse(EthAccounts.class);
-        assertThat(ethAccounts.getAccounts(),
-                equalTo(Arrays.asList("0x407d73d8a49eeb85d32cf465507dd71d507100c1")));
+        assertEquals(
+                ethAccounts.getAccounts(),
+                (Arrays.asList("0x407d73d8a49eeb85d32cf465507dd71d507100c1")));
     }
 
     @Test
@@ -310,11 +359,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":83,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x4b7\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthBlockNumber ethBlockNumber = deserialiseResponse(EthBlockNumber.class);
-        assertThat(ethBlockNumber.getBlockNumber(), equalTo(BigInteger.valueOf(1207L)));
+        assertEquals(ethBlockNumber.getBlockNumber(), (BigInteger.valueOf(1207L)));
     }
 
     @Test
@@ -324,11 +372,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x234c8a3397aab58\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthGetBalance ethGetBalance = deserialiseResponse(EthGetBalance.class);
-        assertThat(ethGetBalance.getBalance(), equalTo(BigInteger.valueOf(158972490234375000L)));
+        assertEquals(ethGetBalance.getBalance(), (BigInteger.valueOf(158972490234375000L)));
     }
 
     @Test
@@ -339,12 +386,12 @@ public class ResponseTest extends ResponseTester {
                         + "    \"id\":1,"
                         + "    \"result\":"
                         + "\"0x000000000000000000000000000000000000000000000000000000000000162e\""
-                        + "}"
-        );
+                        + "}");
 
         EthGetStorageAt ethGetStorageAt = deserialiseResponse(EthGetStorageAt.class);
-        assertThat(ethGetStorageAt.getResult(),
-                is("0x000000000000000000000000000000000000000000000000000000000000162e"));
+        assertEquals(
+                ethGetStorageAt.getResult(),
+                ("0x000000000000000000000000000000000000000000000000000000000000162e"));
     }
 
     @Test
@@ -354,12 +401,11 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x1\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthGetTransactionCount ethGetTransactionCount =
                 deserialiseResponse((EthGetTransactionCount.class));
-        assertThat(ethGetTransactionCount.getTransactionCount(), equalTo(BigInteger.valueOf(1L)));
+        assertEquals(ethGetTransactionCount.getTransactionCount(), (BigInteger.valueOf(1L)));
     }
 
     @Test
@@ -369,13 +415,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0xb\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash =
                 deserialiseResponse(EthGetBlockTransactionCountByHash.class);
-        assertThat(ethGetBlockTransactionCountByHash.getTransactionCount(),
-                equalTo(BigInteger.valueOf(11)));
+        assertEquals(
+                ethGetBlockTransactionCountByHash.getTransactionCount(), (BigInteger.valueOf(11)));
     }
 
     @Test
@@ -385,13 +430,13 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0xa\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthGetBlockTransactionCountByNumber ethGetBlockTransactionCountByNumber =
                 deserialiseResponse(EthGetBlockTransactionCountByNumber.class);
-        assertThat(ethGetBlockTransactionCountByNumber.getTransactionCount(),
-                equalTo(BigInteger.valueOf(10)));
+        assertEquals(
+                ethGetBlockTransactionCountByNumber.getTransactionCount(),
+                (BigInteger.valueOf(10)));
     }
 
     @Test
@@ -401,13 +446,11 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x1\"\n"
-                        + "}"
-        );
+                        + "}");
 
-        EthGetUncleCountByBlockHash ethGetUncleCountByBlockHash = deserialiseResponse(
-                EthGetUncleCountByBlockHash.class);
-        assertThat(ethGetUncleCountByBlockHash.getUncleCount(),
-                equalTo(BigInteger.valueOf(1)));
+        EthGetUncleCountByBlockHash ethGetUncleCountByBlockHash =
+                deserialiseResponse(EthGetUncleCountByBlockHash.class);
+        assertEquals(ethGetUncleCountByBlockHash.getUncleCount(), (BigInteger.valueOf(1)));
     }
 
     @Test
@@ -417,13 +460,11 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x1\"\n"
-                        + "}"
-        );
+                        + "}");
 
-        EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber = deserialiseResponse(
-                EthGetUncleCountByBlockNumber.class);
-        assertThat(ethGetUncleCountByBlockNumber.getUncleCount(),
-                equalTo(BigInteger.valueOf(1)));
+        EthGetUncleCountByBlockNumber ethGetUncleCountByBlockNumber =
+                deserialiseResponse(EthGetUncleCountByBlockNumber.class);
+        assertEquals(ethGetUncleCountByBlockNumber.getUncleCount(), (BigInteger.valueOf(1)));
     }
 
     @Test
@@ -434,12 +475,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x600160008035811a818181146012578301005b601b60013560255"
                         + "65b8060005260206000f25b600060078202905091905056\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthGetCode ethGetCode = deserialiseResponse(EthGetCode.class);
-        assertThat(ethGetCode.getCode(),
-                is("0x600160008035811a818181146012578301005b601b60013560255"
+        assertEquals(
+                ethGetCode.getCode(),
+                ("0x600160008035811a818181146012578301005b601b60013560255"
                         + "65b8060005260206000f25b600060078202905091905056"));
     }
 
@@ -452,12 +493,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": "
                         + "\"0xbd685c98ec39490f50d15c67ba2a8e9b5b1d6d7601fca80b295e7d717446bd8b712"
                         + "7ea4871e996cdc8cae7690408b4e800f60ddac49d2ad34180e68f1da0aaf001\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthSign ethSign = deserialiseResponse(EthSign.class);
-        assertThat(ethSign.getSignature(),
-                is("0xbd685c98ec39490f50d15c67ba2a8e9b5b1d6d7601fca80b295e7d717446bd8b7127ea4871e9"
+        assertEquals(
+                ethSign.getSignature(),
+                ("0xbd685c98ec39490f50d15c67ba2a8e9b5b1d6d7601fca80b295e7d717446bd8b7127ea4871e9"
                         + "96cdc8cae7690408b4e800f60ddac49d2ad34180e68f1da0aaf001"));
     }
 
@@ -469,12 +510,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": "
                         + "\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthSendTransaction ethSendTransaction = deserialiseResponse(EthSendTransaction.class);
-        assertThat(ethSendTransaction.getTransactionHash(),
-                is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
+        assertEquals(
+                ethSendTransaction.getTransactionHash(),
+                ("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 
     @Test
@@ -485,13 +526,13 @@ public class ResponseTest extends ResponseTester {
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": "
                         + "\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthSendRawTransaction ethSendRawTransaction =
                 deserialiseResponse(EthSendRawTransaction.class);
-        assertThat(ethSendRawTransaction.getTransactionHash(),
-                is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
+        assertEquals(
+                ethSendRawTransaction.getTransactionHash(),
+                ("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 
     @Test
@@ -501,12 +542,11 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthCall ethCall = deserialiseResponse(EthCall.class);
-        assertThat(ethCall.getValue(), is("0x"));
-        assertFalse(ethCall.reverts());
+        assertEquals(ethCall.getValue(), ("0x"));
+        assertFalse(ethCall.isReverted());
         assertNull(ethCall.getRevertReason());
     }
 
@@ -517,27 +557,28 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x08c379a0"
-                           + "0000000000000000000000000000000000000000000000000000000000000020"
-                           + "00000000000000000000000000000000000000000000000000000000000000ee"
-                           + "536f6c696469747920757365732073746174652d726576657274696e67206578"
-                           + "63657074696f6e7320746f2068616e646c65206572726f72732e205468652072"
-                           + "6571756972652066756e6374696f6e2073686f756c6420626520757365642074"
-                           + "6f20656e737572652076616c696420636f6e646974696f6e732c207375636820"
-                           + "617320696e707574732c206f7220636f6e747261637420737461746520766172"
-                           + "6961626c657320617265206d65742c206f7220746f2076616c69646174652072"
-                           + "657475726e2076616c7565732066726f6d2063616c6c7320746f206578746572"
-                           + "6e616c20636f6e7472616374732e000000000000000000000000000000000000\"\n"
-                        + "}"
-        );
+                        + "0000000000000000000000000000000000000000000000000000000000000020"
+                        + "00000000000000000000000000000000000000000000000000000000000000ee"
+                        + "536f6c696469747920757365732073746174652d726576657274696e67206578"
+                        + "63657074696f6e7320746f2068616e646c65206572726f72732e205468652072"
+                        + "6571756972652066756e6374696f6e2073686f756c6420626520757365642074"
+                        + "6f20656e737572652076616c696420636f6e646974696f6e732c207375636820"
+                        + "617320696e707574732c206f7220636f6e747261637420737461746520766172"
+                        + "6961626c657320617265206d65742c206f7220746f2076616c69646174652072"
+                        + "657475726e2076616c7565732066726f6d2063616c6c7320746f206578746572"
+                        + "6e616c20636f6e7472616374732e000000000000000000000000000000000000\"\n"
+                        + "}");
 
         EthCall ethCall = deserialiseResponse(EthCall.class);
-        assertTrue(ethCall.reverts());
-        assertThat(ethCall.getRevertReason(), is("Solidity uses state-reverting exceptions to "
-                                               + "handle errors. The require function should be "
-                                               + "used to ensure valid conditions, such as inputs, "
-                                               + "or contract state variables are met, or to "
-                                               + "validate return values from calls to "
-                                               + "external contracts."));
+        assertTrue(ethCall.isReverted());
+        assertEquals(
+                ethCall.getRevertReason(),
+                ("Solidity uses state-reverting exceptions to "
+                        + "handle errors. The require function should be "
+                        + "used to ensure valid conditions, such as inputs, "
+                        + "or contract state variables are met, or to "
+                        + "validate return values from calls to "
+                        + "external contracts."));
     }
 
     @Test
@@ -547,16 +588,15 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x5208\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthEstimateGas ethEstimateGas = deserialiseResponse(EthEstimateGas.class);
-        assertThat(ethEstimateGas.getAmountUsed(), equalTo(BigInteger.valueOf(21000)));
+        assertEquals(ethEstimateGas.getAmountUsed(), (BigInteger.valueOf(21000)));
     }
 
     @Test
     public void testEthBlockTransactionHashes() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "\"id\":1,\n"
@@ -594,53 +634,48 @@ public class ResponseTest extends ResponseTester {
                         + "       \"0x39a3eb432fbef1fc\"\n"
                         + "    ]\n"
                         + "  }\n"
-                        + "}"
-        );
-        //CHECKSTYLE:ON
+                        + "}");
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        EthBlock.Block block = new EthBlock.Block(
-                "0x1b4",
-                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-                "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
-                "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
-                "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
-                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-                "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
-                "0x4e65fda2159562a496f9f3522f89122a3088497a",
-                "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                "0x027f07",
-                "0x027f07",
-                "0x0000000000000000000000000000000000000000000000000000000000000000",
-                "0x027f07",
-                "0x9f759",
-                "0x9f759",
-                "0x54e34e8e",
-                Arrays.asList(
-                        new EthBlock.TransactionHash(
-                                "0xe670ec64341771606e55d6b4ca35a1a6b"
-                                        + "75ee3d5145a99d05921026d1527331"),
-                        new EthBlock.TransactionHash(
-                                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1df")
-                ),
-                Arrays.asList(
+        EthBlock.Block block =
+                new EthBlock.Block(
+                        "0x1b4",
+                        "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                        "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
+                        "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
                         "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"
-                ),
-                Arrays.asList(
+                        "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                        "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
+                        "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                        "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
+                        "0x4e65fda2159562a496f9f3522f89122a3088497a",
                         "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                        "0x39a3eb432fbef1fc"
-                )
-        );
-        assertThat(ethBlock.getBlock(), equalTo(block));
+                        "0x027f07",
+                        "0x027f07",
+                        "0x0000000000000000000000000000000000000000000000000000000000000000",
+                        "0x027f07",
+                        "0x9f759",
+                        "0x9f759",
+                        "0x54e34e8e",
+                        Arrays.asList(
+                                new EthBlock.TransactionHash(
+                                        "0xe670ec64341771606e55d6b4ca35a1a6b"
+                                                + "75ee3d5145a99d05921026d1527331"),
+                                new EthBlock.TransactionHash(
+                                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1df")),
+                        Arrays.asList(
+                                "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
+                        Arrays.asList(
+                                "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
+                                "0x39a3eb432fbef1fc"));
+        assertEquals(ethBlock.getBlock(), (block));
     }
 
     @Test
     public void testEthBlockFullTransactionsParity() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "\"id\":1,\n"
@@ -693,69 +728,62 @@ public class ResponseTest extends ResponseTester {
                         + "       \"0x39a3eb432fbef1fc\"\n"
                         + "    ]\n"
                         + "  }\n"
-                        + "}"
-        );
-        //CHECKSTYLE:ON
+                        + "}");
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        EthBlock.Block block = new EthBlock.Block(
-                "0x1b4",
-                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-                "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
-                "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
-                "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
-                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-                "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
-                "0x4e65fda2159562a496f9f3522f89122a3088497a",
-                "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                "0x027f07",
-                "0x027f07",
-                "0x0000000000000000000000000000000000000000000000000000000000000000",
-                "0x027f07",
-                "0x9f759",
-                "0x9f759",
-                "0x54e34e8e",
-                //CHECKSTYLE:OFF
-                Arrays.asList(new EthBlock.TransactionObject(
-                                "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
-                                "0x",
-                                "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
-                                "0x15df",
-                                "0x1",
-                                "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
-                                "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
-                                "0x7f110",
-                                "0x7f110",
-                                "0x09184e72a000",
-                                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
-                                null,
-                                "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
-                                "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
-                                "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                (byte) 0
-                        )
-                ),
-                //CHECKSTYLE:ON
-                Arrays.asList(
+        EthBlock.Block block =
+                new EthBlock.Block(
+                        "0x1b4",
+                        "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                        "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
+                        "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
                         "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"
-                ),
-                Arrays.asList(
+                        "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                        "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
+                        "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                        "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
+                        "0x4e65fda2159562a496f9f3522f89122a3088497a",
                         "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                        "0x39a3eb432fbef1fc"
-                )
-        );
-        assertThat(ethBlock.getBlock(), equalTo(block));
+                        "0x027f07",
+                        "0x027f07",
+                        "0x0000000000000000000000000000000000000000000000000000000000000000",
+                        "0x027f07",
+                        "0x9f759",
+                        "0x9f759",
+                        "0x54e34e8e",
+                        Arrays.asList(
+                                new EthBlock.TransactionObject(
+                                        "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+                                        "0x",
+                                        "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
+                                        "0x15df",
+                                        "0x1",
+                                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                                        "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                                        "0x7f110",
+                                        "0x09184e72a000",
+                                        "0x7f110",
+                                        "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                                        null,
+                                        "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
+                                        "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                                        "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
+                                        "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                                        (byte) 0)),
+                        Arrays.asList(
+                                "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
+                        Arrays.asList(
+                                "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
+                                "0x39a3eb432fbef1fc"));
+        assertEquals(ethBlock.getBlock(), (block));
     }
 
     // Remove once Geth & Parity return the same v value in transactions
     @Test
     public void testEthBlockFullTransactionsGeth() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "\"id\":1,\n"
@@ -808,72 +836,61 @@ public class ResponseTest extends ResponseTester {
                         + "       \"0x39a3eb432fbef1fc\"\n"
                         + "    ]\n"
                         + "  }\n"
-                        + "}"
-        );
-        //CHECKSTYLE:ON
+                        + "}");
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
-        EthBlock.Block block = new EthBlock.Block(
-                "0x1b4",
-                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-                "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
-                "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
-                "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
-                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
-                "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-                "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
-                "0x4e65fda2159562a496f9f3522f89122a3088497a",
-                "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                "0x027f07",
-                "0x027f07",
-                "0x0000000000000000000000000000000000000000000000000000000000000000",
-                "0x027f07",
-                "0x9f759",
-                "0x9f759",
-                "0x54e34e8e",
-                //CHECKSTYLE:OFF
-                Arrays.asList(new EthBlock.TransactionObject(
-                                "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
-                                "0x",
-                                "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
-                                "0x15df",
-                                "0x1",
-                                "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
-                                "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
-                                "0x7f110",
-                                "0x7f110",
-                                "0x09184e72a000",
-                                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
-                                null,
-                                "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
-                                "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
-                                "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                0x9d
-                        )
-                ),
-                //CHECKSTYLE:ON
-                Arrays.asList(
+        EthBlock.Block block =
+                new EthBlock.Block(
+                        "0x1b4",
+                        "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                        "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
+                        "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
                         "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"
-                ),
-                Arrays.asList(
+                        "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                        "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                        "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff",
+                        "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+                        "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6",
+                        "0x4e65fda2159562a496f9f3522f89122a3088497a",
                         "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                        "0x39a3eb432fbef1fc"
-                )
-        );
-        assertThat(ethBlock.getBlock(), equalTo(block));
+                        "0x027f07",
+                        "0x027f07",
+                        "0x0000000000000000000000000000000000000000000000000000000000000000",
+                        "0x027f07",
+                        "0x9f759",
+                        "0x9f759",
+                        "0x54e34e8e",
+                        Arrays.asList(
+                                new EthBlock.TransactionObject(
+                                        "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+                                        "0x",
+                                        "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
+                                        "0x15df",
+                                        "0x1",
+                                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                                        "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                                        "0x7f110",
+                                        "0x09184e72a000",
+                                        "0x7f110",
+                                        "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                                        null,
+                                        "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
+                                        "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                                        "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
+                                        "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                                        0x9d)),
+                        Arrays.asList(
+                                "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                                "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
+                        Arrays.asList(
+                                "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
+                                "0x39a3eb432fbef1fc"));
+        assertEquals(ethBlock.getBlock(), (block));
     }
 
     @Test
     public void testEthBlockNull() {
-        buildResponse(
-                "{\n"
-                        + "  \"result\": null\n"
-                        + "}"
-        );
+        buildResponse("{\n" + "  \"result\": null\n" + "}");
 
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         assertNull(ethBlock.getBlock());
@@ -881,7 +898,7 @@ public class ResponseTest extends ResponseTester {
 
     @Test
     public void testEthTransaction() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -905,63 +922,56 @@ public class ResponseTest extends ResponseTester {
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
                         + "        \"v\":0\n"
                         + "  }\n"
-                        + "}"
-        );
-        Transaction transaction = new Transaction(
-                "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
-                "0x",
-                "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
-                "0x15df",
-                "0x1",
-                "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
-                "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
-                "0x7f110",
-                "0x7f110",
-                "0x09184e72a000",
-                "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
-                null,
-                "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
-                "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
-                "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                (byte) 0
-        );
-        //CHECKSTYLE:ON
+                        + "}");
+        Transaction transaction =
+                new Transaction(
+                        "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
+                        "0x",
+                        "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b",
+                        "0x15df",
+                        "0x1",
+                        "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+                        "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
+                        "0x7f110",
+                        "0x7f110",
+                        "0x09184e72a000",
+                        "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
+                        null,
+                        "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b",
+                        "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                        "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
+                        "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
+                        (byte) 0);
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
-        assertThat(ethTransaction.getTransaction().get(), equalTo(transaction));
+        assertEquals(ethTransaction.getTransaction().get(), (transaction));
     }
 
     @Test
     public void testTransactionChainId() {
         Transaction transaction = new Transaction();
         transaction.setV(0x25);
-        assertThat(transaction.getChainId(), equalTo(1L));
+        assertEquals(transaction.getChainId(), (1L));
     }
 
     @Test
     public void testTransactionLongChainId() {
         Transaction transaction = new Transaction();
         transaction.setV(0x4A817C823L);
-        assertThat(transaction.getChainId(), equalTo(10000000000L));
+        assertEquals(transaction.getChainId(), (10000000000L));
     }
-
 
     @Test
     public void testEthTransactionNull() {
-        buildResponse(
-                "{\n"
-                        + "  \"result\": null\n"
-                        + "}"
-        );
+        buildResponse("{\n" + "  \"result\": null\n" + "}");
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
-        assertThat(ethTransaction.getTransaction(), is(Optional.empty()));
+        assertEquals(ethTransaction.getTransaction(), (Optional.empty()));
     }
 
     @Test
     public void testeEthGetTransactionReceiptBeforeByzantium() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -991,8 +1001,7 @@ public class ResponseTest extends ResponseTester {
                         + "        }],\n"
                         + "        \"logsBloom\":\"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"\n"
                         + "  }\n"
-                        + "}"
-        );
+                        + "}");
 
         TransactionReceipt transactionReceipt =
                 new TransactionReceipt(
@@ -1019,24 +1028,18 @@ public class ResponseTest extends ResponseTester {
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                                         "mined",
                                         Arrays.asList(
-                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
-                                        )
-                                )
-                        ),
-                        "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))),
+                        "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        null);
 
-                );
-        //CHECKSTYLE:ON
-
-        EthGetTransactionReceipt ethGetTransactionReceipt = deserialiseResponse(
-                EthGetTransactionReceipt.class);
-        assertThat(ethGetTransactionReceipt.getTransactionReceipt().get(),
-                equalTo(transactionReceipt));
+        EthGetTransactionReceipt ethGetTransactionReceipt =
+                deserialiseResponse(EthGetTransactionReceipt.class);
+        assertEquals(ethGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
     }
 
     @Test
     public void testeEthGetTransactionReceiptAfterByzantium() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -1066,8 +1069,7 @@ public class ResponseTest extends ResponseTester {
                         + "        }],\n"
                         + "        \"logsBloom\":\"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"\n"
                         + "  }\n"
-                        + "}"
-        );
+                        + "}");
 
         TransactionReceipt transactionReceipt =
                 new TransactionReceipt(
@@ -1094,33 +1096,27 @@ public class ResponseTest extends ResponseTester {
                                         "0x0000000000000000000000000000000000000000000000000000000000000000",
                                         "mined",
                                         Arrays.asList(
-                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
-                                        )
-                                )
-                        ),
-                        "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))),
+                        "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        null);
 
-                );
-        //CHECKSTYLE:ON
-
-        EthGetTransactionReceipt ethGetTransactionReceipt = deserialiseResponse(
-                EthGetTransactionReceipt.class);
-        assertThat(ethGetTransactionReceipt.getTransactionReceipt().get(),
-                equalTo(transactionReceipt));
+        EthGetTransactionReceipt ethGetTransactionReceipt =
+                deserialiseResponse(EthGetTransactionReceipt.class);
+        assertEquals(ethGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
     }
 
     @Test
     public void testTransactionReceiptIsStatusOK() {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         transactionReceipt.setStatus("0x1");
-        assertThat(transactionReceipt.isStatusOK(), equalTo(true));
+        assertEquals(transactionReceipt.isStatusOK(), (true));
 
         TransactionReceipt transactionReceiptNoStatus = new TransactionReceipt();
-        assertThat(transactionReceiptNoStatus.isStatusOK(), equalTo(true));
+        assertEquals(transactionReceiptNoStatus.isStatusOK(), (true));
 
         TransactionReceipt transactionReceiptZeroStatus = new TransactionReceipt();
         transactionReceiptZeroStatus.setStatus("0x0");
-        assertThat(transactionReceiptZeroStatus.isStatusOK(), equalTo(false));
+        assertEquals(transactionReceiptZeroStatus.isStatusOK(), (false));
     }
 
     @Test
@@ -1130,18 +1126,15 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": [\"solidity\", \"lll\", \"serpent\"]\n"
-                        + "}"
-        );
+                        + "}");
 
         EthGetCompilers ethGetCompilers = deserialiseResponse(EthGetCompilers.class);
-        assertThat(ethGetCompilers.getCompilers(), equalTo(Arrays.asList(
-                "solidity", "lll", "serpent"
-        )));
+        assertEquals(ethGetCompilers.getCompilers(), (Arrays.asList("solidity", "lll", "serpent")));
     }
 
     @Test
     public void testEthCompileSolidity() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "  \"id\":1,\n"
@@ -1185,38 +1178,38 @@ public class ResponseTest extends ResponseTester {
                         + "    }\n"
                         + "    }"
                         + "  }\n"
-                        + "}"
-        );
-        //CHECKSTYLE:OFF
+                        + "}");
 
         Map<String, EthCompileSolidity.Code> compiledSolidity = new HashMap<>(1);
-        compiledSolidity.put("test", new EthCompileSolidity.Code(
-                //CHECKSTYLE:OFF
-                "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
-                //CHECKSTYLE:ON
-                new EthCompileSolidity.SolidityInfo(
-                        "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n"
-                                + "\t\treturn a * 7;\n\t}\n}\n",
-                        "Solidity",
-                        "0",
-                        "0.8.2",
-                        "--bin --abi --userdoc --devdoc --add-std --optimize -o "
-                                + "/var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
-                        Arrays.asList(new AbiDefinition(
-                                false,
-                                Arrays.asList(new AbiDefinition.NamedType("a", "uint256")),
-                                "multiply",
-                                Arrays.asList(new AbiDefinition.NamedType("d", "uint256")),
-                                "function",
-                                false
-                        )),
-                        new EthCompileSolidity.Documentation(),
-                        new EthCompileSolidity.Documentation()
-                )
-        ));
+        compiledSolidity.put(
+                "test",
+                new EthCompileSolidity.Code(
+                        "0x605280600c6000396000f3006000357c010000000000000000000000000000000000000000000000000000000090048063c6888fa114602e57005b60376004356041565b8060005260206000f35b6000600782029050604d565b91905056",
+                        new EthCompileSolidity.SolidityInfo(
+                                "contract test {\n\tfunction multiply(uint a) returns(uint d) {\n"
+                                        + "\t\treturn a * 7;\n\t}\n}\n",
+                                "Solidity",
+                                "0",
+                                "0.8.2",
+                                "--bin --abi --userdoc --devdoc --add-std --optimize -o "
+                                        + "/var/folders/3m/_6gnl12n1tj_5kf7sc3d72dw0000gn/T/solc498936951",
+                                Arrays.asList(
+                                        new AbiDefinition(
+                                                false,
+                                                Arrays.asList(
+                                                        new AbiDefinition.NamedType(
+                                                                "a", "uint256")),
+                                                "multiply",
+                                                Arrays.asList(
+                                                        new AbiDefinition.NamedType(
+                                                                "d", "uint256")),
+                                                "function",
+                                                false)),
+                                new EthCompileSolidity.Documentation(),
+                                new EthCompileSolidity.Documentation())));
 
         EthCompileSolidity ethCompileSolidity = deserialiseResponse(EthCompileSolidity.class);
-        assertThat(ethCompileSolidity.getCompiledSolidity(), equalTo(compiledSolidity));
+        assertEquals(ethCompileSolidity.getCompiledSolidity(), (compiledSolidity));
     }
 
     @Test
@@ -1228,12 +1221,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x603880600c6000396000f3006001600060e060020a60003504806"
                         + "3c6888fa114601857005b6021600435602b565b8060005260206000f35b600081600702"
                         + "905091905056\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthCompileLLL ethCompileLLL = deserialiseResponse(EthCompileLLL.class);
-        assertThat(ethCompileLLL.getCompiledSourceCode(),
-                is("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b60"
+        assertEquals(
+                ethCompileLLL.getCompiledSourceCode(),
+                ("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b60"
                         + "21600435602b565b8060005260206000f35b600081600702905091905056"));
     }
 
@@ -1246,12 +1239,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": \"0x603880600c6000396000f3006001600060e060020a60003504806"
                         + "3c6888fa114601857005b6021600435602b565b8060005260206000f35b600081600702"
                         + "905091905056\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthCompileSerpent ethCompileSerpent = deserialiseResponse(EthCompileSerpent.class);
-        assertThat(ethCompileSerpent.getCompiledSourceCode(),
-                is("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b60"
+        assertEquals(
+                ethCompileSerpent.getCompiledSourceCode(),
+                ("0x603880600c6000396000f3006001600060e060020a600035048063c6888fa114601857005b60"
                         + "21600435602b565b8060005260206000f35b600081600702905091905056"));
     }
 
@@ -1262,11 +1255,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x1\"\n"
-                        + "}"
-        );
+                        + "}");
 
         EthFilter ethFilter = deserialiseResponse(EthFilter.class);
-        assertThat(ethFilter.getFilterId(), is(BigInteger.valueOf(1)));
+        assertEquals(ethFilter.getFilterId(), (BigInteger.valueOf(1)));
     }
 
     @Test
@@ -1276,16 +1268,15 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         EthUninstallFilter ethUninstallFilter = deserialiseResponse(EthUninstallFilter.class);
-        assertThat(ethUninstallFilter.isUninstalled(), is(true));
+        assertEquals(ethUninstallFilter.isUninstalled(), (true));
     }
 
     @Test
     public void testEthLog() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "    \"id\":1,\n"
@@ -1302,34 +1293,30 @@ public class ResponseTest extends ResponseTester {
                         + "        \"type\":\"mined\",\n"
                         + "        \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]"
                         + "    }]"
-                        + "}"
-        );
-        //CHECKSTYLE:ON
+                        + "}");
 
-        List<Log> logs = Collections.singletonList(
-                new EthLog.LogObject(
-                        false,
-                        "0x1",
-                        "0x0",
-                        "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf",
-                        "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d",
-                        "0x1b4",
-                        "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
-                        "0x0000000000000000000000000000000000000000000000000000000000000000",
-                        "mined",
-                        Collections.singletonList(
-                                "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"
-                        )
-                )
-        );
+        List<Log> logs =
+                Collections.singletonList(
+                        new EthLog.LogObject(
+                                false,
+                                "0x1",
+                                "0x0",
+                                "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf",
+                                "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                                "0x1b4",
+                                "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+                                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                "mined",
+                                Collections.singletonList(
+                                        "0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5")));
 
         EthLog ethLog = deserialiseResponse(EthLog.class);
-        assertThat(ethLog.getLogs(), is(logs));
+        assertEquals(ethLog.getLogs(), (logs));
     }
 
     @Test
     public void testEthGetWork() {
-        //CHECKSTYLE:OFF
+
         buildResponse(
                 "{\n"
                         + "  \"id\":1,\n"
@@ -1339,17 +1326,18 @@ public class ResponseTest extends ResponseTester {
                         + "      \"0x5EED00000000000000000000000000005EED0000000000000000000000000000\",\n"
                         + "      \"0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000\"\n"
                         + "    ]\n"
-                        + "}"
-        );
-        //CHECKSTYLE:ON
+                        + "}");
 
         EthGetWork ethGetWork = deserialiseResponse(EthGetWork.class);
-        assertThat(ethGetWork.getCurrentBlockHeaderPowHash(),
-                is("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"));
-        assertThat(ethGetWork.getSeedHashForDag(),
-                is("0x5EED00000000000000000000000000005EED0000000000000000000000000000"));
-        assertThat(ethGetWork.getBoundaryCondition(),
-                is("0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000"));
+        assertEquals(
+                ethGetWork.getCurrentBlockHeaderPowHash(),
+                ("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"));
+        assertEquals(
+                ethGetWork.getSeedHashForDag(),
+                ("0x5EED00000000000000000000000000005EED0000000000000000000000000000"));
+        assertEquals(
+                ethGetWork.getBoundaryCondition(),
+                ("0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000"));
     }
 
     @Test
@@ -1359,11 +1347,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         EthSubmitWork ethSubmitWork = deserialiseResponse(EthSubmitWork.class);
-        assertThat(ethSubmitWork.solutionValid(), is(true));
+        assertEquals(ethSubmitWork.solutionValid(), (true));
     }
 
     @Test
@@ -1373,11 +1360,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         EthSubmitHashrate ethSubmitHashrate = deserialiseResponse(EthSubmitHashrate.class);
-        assertThat(ethSubmitHashrate.submissionSuccessful(), is(true));
+        assertEquals(ethSubmitHashrate.submissionSuccessful(), (true));
     }
 
     @Test
@@ -1387,11 +1373,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         DbPutString dbPutString = deserialiseResponse(DbPutString.class);
-        assertThat(dbPutString.valueStored(), is(true));
+        assertEquals(dbPutString.valueStored(), (true));
     }
 
     @Test
@@ -1401,11 +1386,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": \"myString\"\n"
-                        + "}"
-        );
+                        + "}");
 
         DbGetString dbGetString = deserialiseResponse(DbGetString.class);
-        assertThat(dbGetString.getStoredValue(), is("myString"));
+        assertEquals(dbGetString.getStoredValue(), ("myString"));
     }
 
     @Test
@@ -1415,11 +1399,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         DbPutHex dbPutHex = deserialiseResponse(DbPutHex.class);
-        assertThat(dbPutHex.valueStored(), is(true));
+        assertEquals(dbPutHex.valueStored(), (true));
     }
 
     @Test
@@ -1429,11 +1412,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": \"0x68656c6c6f20776f726c64\"\n"
-                        + "}"
-        );
+                        + "}");
 
         DbGetHex dbGetHex = deserialiseResponse(DbGetHex.class);
-        assertThat(dbGetHex.getStoredValue(), is("0x68656c6c6f20776f726c64"));
+        assertEquals(dbGetHex.getStoredValue(), ("0x68656c6c6f20776f726c64"));
     }
 
     @Test
@@ -1443,11 +1425,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":67,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"2\"\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhVersion shhVersion = deserialiseResponse(ShhVersion.class);
-        assertThat(shhVersion.getVersion(), is("2"));
+        assertEquals(shhVersion.getVersion(), ("2"));
     }
 
     @Test
@@ -1457,11 +1438,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhPost shhPost = deserialiseResponse(ShhPost.class);
-        assertThat(shhPost.messageSent(), is(true));
+        assertEquals(shhPost.messageSent(), (true));
     }
 
     @Test
@@ -1473,12 +1453,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": "
                         + "\"0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b713"
                         + "5d1d6ca9007d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf\"\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhNewIdentity shhNewIdentity = deserialiseResponse(ShhNewIdentity.class);
-        assertThat(shhNewIdentity.getAddress(),
-                is("0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca9"
+        assertEquals(
+                shhNewIdentity.getAddress(),
+                ("0xc931d93e97ab07fe42d923478ba2465f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca9"
                         + "007d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf"));
     }
 
@@ -1489,11 +1469,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhHasIdentity shhHasIdentity = deserialiseResponse(ShhHasIdentity.class);
-        assertThat(shhHasIdentity.hasPrivateKeyForIdentity(), is(true));
+        assertEquals(shhHasIdentity.hasPrivateKeyForIdentity(), (true));
     }
 
     @Test
@@ -1505,12 +1484,12 @@ public class ResponseTest extends ResponseTester {
                         + "  \"result\": "
                         + "\"0xc65f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca90931d93e97ab07fe42d9"
                         + "23478ba2407d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf\"\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhNewGroup shhNewGroup = deserialiseResponse(ShhNewGroup.class);
-        assertThat(shhNewGroup.getAddress(),
-                is("0xc65f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca90931d93e97ab07fe42d923478ba24"
+        assertEquals(
+                shhNewGroup.getAddress(),
+                ("0xc65f283f440fd6cabea4dd7a2c807108f651b7135d1d6ca90931d93e97ab07fe42d923478ba24"
                         + "07d5b68aa497e4619ac10aa3b27726e1863c1fd9b570d99bbaf"));
     }
 
@@ -1521,11 +1500,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhAddToGroup shhAddToGroup = deserialiseResponse(ShhAddToGroup.class);
-        assertThat(shhAddToGroup.addedToGroup(), is(true));
+        assertEquals(shhAddToGroup.addedToGroup(), (true));
     }
 
     @Test
@@ -1535,11 +1513,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": \"0x7\"\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhNewFilter shhNewFilter = deserialiseResponse(ShhNewFilter.class);
-        assertThat(shhNewFilter.getFilterId(), is(BigInteger.valueOf(7)));
+        assertEquals(shhNewFilter.getFilterId(), (BigInteger.valueOf(7)));
     }
 
     @Test
@@ -1549,11 +1526,10 @@ public class ResponseTest extends ResponseTester {
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\":\"2.0\",\n"
                         + "  \"result\": true\n"
-                        + "}"
-        );
+                        + "}");
 
         ShhUninstallFilter shhUninstallFilter = deserialiseResponse(ShhUninstallFilter.class);
-        assertThat(shhUninstallFilter.isUninstalled(), is(true));
+        assertEquals(shhUninstallFilter.isUninstalled(), (true));
     }
 
     @Test
@@ -1574,24 +1550,22 @@ public class ResponseTest extends ResponseTester {
                         + "    \"payload\": \"0x7b2274797065223a226d657373616765222c2263686...\",\n"
                         + "    \"workProved\": \"0x0\"\n"
                         + "    }]\n"
-                        + "}"
-        );
+                        + "}");
 
-        List<ShhMessages.SshMessage> messages = Arrays.asList(
-                new ShhMessages.SshMessage(
-                        "0x33eb2da77bf3527e28f8bf493650b1879b08c4f2a362beae4ba2f71bafcd91f9",
-                        "0x3ec052fc33...",
-                        "0x87gdf76g8d7fgdfg...",
-                        "0x54caa50a",
-                        "0x64",
-                        "0x54ca9ea2",
-                        Arrays.asList("0x6578616d"),
-                        "0x7b2274797065223a226d657373616765222c2263686...",
-                        "0x0"
-                )
-        );
+        List<ShhMessages.SshMessage> messages =
+                Arrays.asList(
+                        new ShhMessages.SshMessage(
+                                "0x33eb2da77bf3527e28f8bf493650b1879b08c4f2a362beae4ba2f71bafcd91f9",
+                                "0x3ec052fc33...",
+                                "0x87gdf76g8d7fgdfg...",
+                                "0x54caa50a",
+                                "0x64",
+                                "0x54ca9ea2",
+                                Arrays.asList("0x6578616d"),
+                                "0x7b2274797065223a226d657373616765222c2263686...",
+                                "0x0"));
 
         ShhMessages shhMessages = deserialiseResponse(ShhMessages.class);
-        assertThat(shhMessages.getMessages(), equalTo(messages));
+        assertEquals(shhMessages.getMessages(), (messages));
     }
 }
