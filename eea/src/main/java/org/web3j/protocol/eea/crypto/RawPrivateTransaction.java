@@ -50,6 +50,24 @@ public class RawPrivateTransaction extends RawTransaction {
     }
 
     protected RawPrivateTransaction(
+            final BigInteger nonce,
+            final BigInteger gasPremium,
+            final BigInteger feeCap,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
+        super(nonce, null, gasLimit, to, BigInteger.ZERO, data, gasPremium, feeCap);
+        this.privateFrom = privateFrom;
+        this.privateFor = privateFor;
+        this.privacyGroupId = privacyGroupId;
+        this.restriction = restriction;
+    }
+
+    protected RawPrivateTransaction(
             final RawTransaction rawTransaction,
             final Base64String privateFrom,
             final Base64String privacyGroupId,
@@ -131,6 +149,30 @@ public class RawPrivateTransaction extends RawTransaction {
                 nonce, gasPrice, gasLimit, to, data, privateFrom, privateFor, null, restriction);
     }
 
+    public static RawPrivateTransaction createTransactionEIP1559(
+            final BigInteger nonce,
+            final BigInteger gasPremium,
+            final BigInteger feeCap,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Restriction restriction) {
+
+        return new RawPrivateTransaction(
+                nonce,
+                gasPremium,
+                feeCap,
+                gasLimit,
+                to,
+                data,
+                privateFrom,
+                privateFor,
+                null,
+                restriction);
+    }
+
     public static RawPrivateTransaction createTransaction(
             final BigInteger nonce,
             final BigInteger gasPrice,
@@ -144,6 +186,30 @@ public class RawPrivateTransaction extends RawTransaction {
         return new RawPrivateTransaction(
                 nonce,
                 gasPrice,
+                gasLimit,
+                to,
+                data,
+                privateFrom,
+                null,
+                privacyGroupId,
+                restriction);
+    }
+
+    public static RawPrivateTransaction createTransactionEIP1559(
+            final BigInteger nonce,
+            final BigInteger gasPremium,
+            final BigInteger feeCap,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final Base64String privateFrom,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
+
+        return new RawPrivateTransaction(
+                nonce,
+                gasPremium,
+                feeCap,
                 gasLimit,
                 to,
                 data,

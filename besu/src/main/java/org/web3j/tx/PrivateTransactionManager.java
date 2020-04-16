@@ -167,6 +167,56 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         return besu.eeaSendRawTransaction(rawSignedTransaction).send();
     }
 
+    public EthSendTransaction sendTransactionEIP1559(
+            BigInteger gasPremium,
+            BigInteger feeCap,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor)
+            throws IOException {
+        final BigInteger nonce =
+                besu.privGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
+                        .send()
+                        .getTransactionCount();
+
+        final Object privacyGroupIdOrPrivateFor = privacyGroupIdOrPrivateFor();
+
+        final RawPrivateTransaction transaction;
+        if (privacyGroupIdOrPrivateFor instanceof Base64String) {
+            transaction =
+                    RawPrivateTransaction.createTransactionEIP1559(
+                            nonce,
+                            gasPremium,
+                            feeCap,
+                            gasLimit,
+                            to,
+                            data,
+                            privateFrom,
+                            (Base64String) privacyGroupIdOrPrivateFor,
+                            RESTRICTED);
+        } else {
+            transaction =
+                    RawPrivateTransaction.createTransactionEIP1559(
+                            nonce,
+                            gasPremium,
+                            feeCap,
+                            gasLimit,
+                            to,
+                            data,
+                            privateFrom,
+                            (List<Base64String>) privacyGroupIdOrPrivateFor,
+                            RESTRICTED);
+        }
+
+        final String rawSignedTransaction =
+                Numeric.toHexString(
+                        PrivateTransactionEncoder.signMessage(transaction, chainId, credentials));
+
+        return besu.eeaSendRawTransaction(rawSignedTransaction).send();
+    }
+
     @Override
     public String sendCall(
             final String to, final String data, final DefaultBlockParameter defaultBlockParameter)

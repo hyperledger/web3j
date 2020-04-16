@@ -52,7 +52,7 @@ public class RlpString implements RlpType {
 
     public static RlpString create(BigInteger value) {
         // RLP encoding only supports positive integer values
-        if (value.signum() < 1) {
+        if (value == null || value.signum() < 1) {
             return new RlpString(EMPTY);
         } else {
             byte[] bytes = value.toByteArray();

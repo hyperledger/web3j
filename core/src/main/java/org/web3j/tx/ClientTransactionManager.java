@@ -68,6 +68,32 @@ public class ClientTransactionManager extends TransactionManager {
     }
 
     @Override
+    public EthSendTransaction sendTransactionEIP1559(
+            BigInteger gasPremium,
+            BigInteger feeCap,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor)
+            throws IOException {
+
+        Transaction transaction =
+                new Transaction(
+                        getFromAddress(),
+                        null,
+                        null,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        gasPremium,
+                        feeCap);
+
+        return web3j.ethSendTransaction(transaction).send();
+    }
+
+    @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         EthCall ethCall =

@@ -81,14 +81,62 @@ public abstract class TransactionManager {
         return processResponse(ethSendTransaction);
     }
 
+    protected TransactionReceipt executeTransactionEIP1559(
+            BigInteger gasPremium,
+            BigInteger feeCap,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value)
+            throws IOException, TransactionException {
+
+        return executeTransactionEIP1559(gasPremium, feeCap, gasLimit, to, data, value, false);
+    }
+
+    protected TransactionReceipt executeTransactionEIP1559(
+            BigInteger gasPremium,
+            BigInteger feeCap,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor)
+            throws IOException, TransactionException {
+
+        EthSendTransaction ethSendTransaction =
+                sendTransactionEIP1559(gasPremium, feeCap, gasLimit, to, data, value, constructor);
+        return processResponse(ethSendTransaction);
+    }
+
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
             throws IOException {
         return sendTransaction(gasPrice, gasLimit, to, data, value, false);
     }
 
+    public EthSendTransaction sendTransactionEIP1559(
+            BigInteger gasPremium,
+            BigInteger feeCap,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value)
+            throws IOException {
+        return sendTransactionEIP1559(gasPremium, feeCap, gasLimit, to, data, value, false);
+    }
+
     public abstract EthSendTransaction sendTransaction(
             BigInteger gasPrice,
+            BigInteger gasLimit,
+            String to,
+            String data,
+            BigInteger value,
+            boolean constructor)
+            throws IOException;
+
+    public abstract EthSendTransaction sendTransactionEIP1559(
+            BigInteger gasPremium,
+            BigInteger feeCap,
             BigInteger gasLimit,
             String to,
             String data,

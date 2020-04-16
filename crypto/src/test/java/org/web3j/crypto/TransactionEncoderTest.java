@@ -83,6 +83,19 @@ public class TransactionEncoderTest {
                                 + "5c9f3dc64214b297fb1966a3b6d83")));
     }
 
+    @Test
+    public void testEip1559Transaction() {
+        // https://github.com/ethereum/EIPs/issues/1559
+        Credentials credentials =
+                Credentials.create(
+                        "0x4646464646464646464646464646464646464646464646464646464646464646");
+        assertArrayEquals(
+                TransactionEncoder.signMessage(
+                        createEip1559RawTransaction(), (byte) 1, credentials),
+                (Numeric.hexStringToByteArray(
+                        "0xf866808082753094627306090abab3a6e1400e9345bc60c78a8bef577b8082162e8310c8e026a05b362f1b948135039788c28613e8009c4d38346ece108ebc2f856902d2133243a07f42ab9c3d50e2f6cce3360cba206c7a4065bac0cfca015611af8be7189730fe")));
+    }
+
     private static RawTransaction createEtherTransaction() {
         return RawTransaction.createEtherTransaction(
                 BigInteger.ZERO,
@@ -108,5 +121,15 @@ public class TransactionEncoderTest {
                 BigInteger.valueOf(21000),
                 "0x3535353535353535353535353535353535353535",
                 BigInteger.valueOf(1000000000000000000L));
+    }
+
+    private static RawTransaction createEip1559RawTransaction() {
+        return RawTransaction.createEtherTransaction(
+                BigInteger.valueOf(0),
+                BigInteger.valueOf(30000),
+                "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
+                BigInteger.valueOf(123),
+                BigInteger.valueOf(5678),
+                BigInteger.valueOf(1100000));
     }
 }
