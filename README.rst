@@ -177,20 +177,35 @@ and `web3j-maven-plugin <https://github.com/web3j/web3j-maven-plugin>`_ for deta
 Start a client
 --------------
 
-Start up an Ethereum client if you don't already have one running, such as
+Start up an Ethereum client if you don't already have one running.
+
 `Geth <https://github.com/ethereum/go-ethereum/wiki/geth>`_:
 
 .. code-block:: bash
 
    $ geth --rpcapi personal,db,eth,net,web3 --rpc --testnet
 
-Or `Parity <https://github.com/paritytech/parity>`_:
+`Besu <http://besu.hyperledger.org/>`_:
+
+
+.. code-block:: bash
+
+   $ besu ----network=dev
+
+
+
+`dev` network uses has `some handy default parameters <https://besu.hyperledger.org/en/stable/Reference/Accounts-for-Testing/#development-mode>`_.
+
+
+`Parity <https://github.com/paritytech/parity>`_:
 
 .. code-block:: bash
 
    $ parity --chain testnet
 
-Or use `Infura <https://infura.io/>`_, which provides **free clients** running in the cloud:
+
+`Infura <https://infura.io/>`_, 
+Or use which provides **free clients** running in the cloud:
 
 .. code-block:: java
 
@@ -454,12 +469,8 @@ keystore):
        // send a transaction
    }
 
-If you want to make use of Parity's
-`Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__ or
-`Trace <https://github.com/paritytech/parity/wiki/JSONRPC-trace-module>`_, or Geth's
-`Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs,
-you can use the *org.web3j:parity* and *org.web3j:geth* modules respectively.
-
+If you want to make use of Besu or Parity's `Trace Module <https://github.com/paritytech/parity/wiki/JSONRPC-trace-module>`_, or Geth
+`Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs, you can use the *org.web3j:besu*, *org.web3j:parity* or *org.web3j:geth* modules.
 
 Command line tools
 ------------------
@@ -510,6 +521,7 @@ Tested clients
 --------------
 
 - Geth
+- Besu
 - Parity
 
 You can run the integration test class
@@ -522,9 +534,9 @@ Related projects
 
 For a .NET implementation, check out `Nethereum <https://github.com/Nethereum/Nethereum>`_.
 
-For a pure Java implementation of the Ethereum client, check out
-`EthereumJ <https://github.com/ethereum/ethereumj>`_ and
-`Ethereum Harmony <https://github.com/ether-camp/ethereum-harmony>`_.
+For a pure Java implementation of an Ethereum client, check out
+`Besu <https://github.com/hyperledger/besu>`_. Note: both `EthereumJ <https://github.com/ethereum/ethereumj>`_ and
+`Ethereum Harmony <https://github.com/ether-camp/ethereum-harmony>`_ have been depracated and should not be used in production.
 
 
 Projects using web3j
@@ -568,6 +580,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `Impetus <http://www.impetus.com/>`_
 - `Argent Labs <http://www.argent.im/>`_
 - `AlphaWallet <https://www.alphawallet.com/>`_
+- `PegaSys <https://pegasys.tech/>`_
 
 
 Build instructions
