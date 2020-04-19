@@ -33,23 +33,23 @@ ext {
 
 description 'web3j base project'
 
-//[
-//    'bintray',
-//    'jacoco',
-//    'java',
-//    'javadoc',
-//    'publish',
-//    'repositories',
-//    'spotless'
-//].each { buildScript ->
-//    download {
-//        src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
-//        dest "$rootDir/gradle/$buildScript/build.gradle"
-//        overwrite true
-//        quiet true
-//        onlyIfModified true
-//    }
-//}
+[
+    'bintray',
+    'jacoco',
+    'java',
+    'javadoc',
+    'publish',
+    'repositories',
+    'spotless'
+].each { buildScript ->
+    download {
+        src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
+        dest "$rootDir/gradle/$buildScript/build.gradle"
+        overwrite true
+        quiet true
+        onlyIfModified true
+    }
+}
 
 allprojects {
     apply {
