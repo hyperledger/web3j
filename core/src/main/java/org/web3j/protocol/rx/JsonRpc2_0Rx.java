@@ -16,15 +16,14 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
-
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;

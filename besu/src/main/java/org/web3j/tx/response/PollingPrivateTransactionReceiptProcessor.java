@@ -13,8 +13,8 @@
 package org.web3j.tx.response;
 
 import java.io.IOException;
-
 import java8.util.Optional;
+
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;

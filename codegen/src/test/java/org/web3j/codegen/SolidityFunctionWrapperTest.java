@@ -288,7 +288,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "        }\n"
                         + "      });\n"
                         + "}\n";
-        //CHECKSTYLE:ON
+        // CHECKSTYLE:ON
 
         assertEquals(expected, methodSpec.toString());
     }

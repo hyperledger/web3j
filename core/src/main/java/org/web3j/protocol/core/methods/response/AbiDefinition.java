@@ -13,11 +13,11 @@
 package org.web3j.protocol.core.methods.response;
 
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java8.util.function.Function;
 import java8.util.stream.Collectors;
 import java8.util.stream.StreamSupport;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /** AbiDefinition wrapper. */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -278,11 +278,14 @@ public class AbiDefinition {
     }
 
     private static List<NamedType> clone(final List<NamedType> from) {
-        return StreamSupport.stream(from).map(new Function<NamedType, NamedType>() {
-            @Override
-            public NamedType apply(NamedType namedType) {
-                return new NamedType(namedType);
-            }
-        }).collect(Collectors.<NamedType>toList());
+        return StreamSupport.stream(from)
+                .map(
+                        new Function<NamedType, NamedType>() {
+                            @Override
+                            public NamedType apply(NamedType namedType) {
+                                return new NamedType(namedType);
+                            }
+                        })
+                .collect(Collectors.<NamedType>toList());
     }
 }

@@ -17,12 +17,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java8.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.Flowable;
-
-import java8.util.concurrent.CompletableFuture;
 
 import org.web3j.protocol.core.BatchRequest;
 import org.web3j.protocol.core.BatchResponse;
@@ -93,7 +92,7 @@ public abstract class Service implements Web3jService {
                 return null;
             }
         } finally {
-            if(result != null) {
+            if (result != null) {
                 result.close();
             }
         }

@@ -22,12 +22,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java8.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
-
-import java8.util.concurrent.CompletableFuture;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reactivestreams.Subscriber;

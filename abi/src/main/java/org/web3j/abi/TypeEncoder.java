@@ -27,8 +27,8 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.compat.Compat;
 import org.web3j.abi.datatypes.primitive.PrimitiveType;
+import org.web3j.compat.Compat;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;

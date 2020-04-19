@@ -20,7 +20,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.web3j.abi.TypeReference.StaticArrayTypeReference;
 import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
@@ -319,13 +318,15 @@ public class TypeDecoder {
     static <T extends Type> T decodeStaticArray(
             String input, int offset, TypeReference<T> typeReference, int length) {
 
-        BiFunction<List<T>, String, T> function = (elements, typeName) -> {
-            if (elements.isEmpty()) {
-                throw new UnsupportedOperationException("Zero length fixed array is invalid type");
-            } else {
-                return instantiateStaticArray(typeReference, elements, length);
-            }
-        };
+        BiFunction<List<T>, String, T> function =
+                (elements, typeName) -> {
+                    if (elements.isEmpty()) {
+                        throw new UnsupportedOperationException(
+                                "Zero length fixed array is invalid type");
+                    } else {
+                        return instantiateStaticArray(typeReference, elements, length);
+                    }
+                };
 
         return decodeArrayElements(input, offset, typeReference, length, function);
     }
@@ -417,7 +418,8 @@ public class TypeDecoder {
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
                     "Unable to access parameterized type "
-                            + Compat.getTypeName(typeReference.getType()), e);
+                            + Compat.getTypeName(typeReference.getType()),
+                    e);
         }
     }
 }

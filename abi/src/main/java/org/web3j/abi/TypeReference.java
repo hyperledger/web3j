@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
-
 import org.web3j.compat.Compat;
 
 /**

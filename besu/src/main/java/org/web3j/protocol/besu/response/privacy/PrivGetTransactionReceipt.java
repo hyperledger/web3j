@@ -13,6 +13,7 @@
 package org.web3j.protocol.besu.response.privacy;
 
 import java8.util.Optional;
+
 import org.web3j.protocol.core.Response;
 
 public class PrivGetTransactionReceipt extends Response<PrivateTransactionReceipt> {

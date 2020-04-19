@@ -26,13 +26,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java8.util.function.Function;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java8.util.function.Function;
-import java8.util.stream.Collectors;
-import java8.util.stream.Stream;
-import java8.util.stream.StreamSupport;
 import org.web3j.abi.TypeEncoder;
 import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Type;
@@ -180,13 +179,16 @@ public class StructuredDataEncoder {
     public List<Integer> getArrayDimensionsFromData(Object data) throws RuntimeException {
         List<Pair> depthsAndDimensions = getDepthsAndDimensions(data, 0);
         // groupedByDepth has key as depth and value as List(pair(Depth, Dimension))
-        Map<Object, List<Pair>> groupedByDepth = StreamSupport.stream(depthsAndDimensions)
-                .collect(Collectors.groupingBy(new Function<Pair, Object>() {
-                    @Override
-                    public Object apply(Pair pair) {
-                        return pair.getFirst();
-                    }
-                }));
+        Map<Object, List<Pair>> groupedByDepth =
+                StreamSupport.stream(depthsAndDimensions)
+                        .collect(
+                                Collectors.groupingBy(
+                                        new Function<Pair, Object>() {
+                                            @Override
+                                            public Object apply(Pair pair) {
+                                                return pair.getFirst();
+                                            }
+                                        }));
 
         // depthDimensionsMap is aimed to have key as depth and value as List(Dimension)
         Map<Integer, List<Integer>> depthDimensionsMap = new HashMap<>();
@@ -207,7 +209,8 @@ public class StructuredDataEncoder {
                                 "Depth %d of array data has more than one dimensions",
                                 entry.getKey()));
             }
-            dimensions.add(StreamSupport.stream(setOfDimensionsInParticularDepth).findFirst().get());
+            dimensions.add(
+                    StreamSupport.stream(setOfDimensionsInParticularDepth).findFirst().get());
         }
 
         return dimensions;

@@ -13,8 +13,8 @@
 package org.web3j.abi.datatypes.primitive;
 
 import java.io.Serializable;
-
 import java8.util.Objects;
+
 import org.web3j.abi.datatypes.Type;
 
 public abstract class PrimitiveType<T extends Serializable & Comparable<T>> implements Type<T> {

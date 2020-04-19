@@ -12,14 +12,15 @@
  */
 package org.web3j.account;
 
-//public class LocalWeb3jAccount {
+// public class LocalWeb3jAccount {
 //
 //    private static final Path EPIRUS_CONFIG_PATh =
 //            Paths.get(System.getProperty("user.home"), ".epirus", ".config");
 //
 //    private static String NODE_RPC_ENDPOINT = "https://%s-eth.epirus.io/%s";
 //
-//    public static HttpService getOnlineServicesHttpService(final Network network) throws Exception {
+//    public static HttpService getOnlineServicesHttpService(final Network network) throws Exception
+// {
 //        if (configExists()) {
 //
 //            final ObjectNode node = readConfigAsJson();
@@ -28,7 +29,8 @@ package org.web3j.account;
 //            }
 //        }
 //        throw new IllegalStateException(
-//                "Config file does not exist or could not be read. In order to use Web3j without a specified endpoint, you must use the CLI and log in to Web3j Cloud");
+//                "Config file does not exist or could not be read. In order to use Web3j without a
+// specified endpoint, you must use the CLI and log in to Web3j Cloud");
 //    }
 //
 //    public static boolean configExists() {
@@ -52,4 +54,4 @@ package org.web3j.account;
 //                        readConfigAsJson().get("loginToken").asText());
 //        return new HttpService(httpEndpoint);
 //    }
-//}
+// }

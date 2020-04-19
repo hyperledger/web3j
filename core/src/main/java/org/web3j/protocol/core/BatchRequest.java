@@ -15,8 +15,8 @@ package org.web3j.protocol.core;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import java8.util.concurrent.CompletableFuture;
+
 import org.web3j.protocol.Web3jService;
 
 public class BatchRequest {

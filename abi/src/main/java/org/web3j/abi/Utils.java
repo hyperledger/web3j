@@ -115,8 +115,8 @@ public class Utils {
             List<List<T>> input, Class<E> outerDestType, Class<R> innerType) {
         List<E> result = new ArrayList<>();
         try {
-            Constructor<E> constructor = outerDestType.getDeclaredConstructor(
-                    Class.class, List.class);
+            Constructor<E> constructor =
+                    outerDestType.getDeclaredConstructor(Class.class, List.class);
             for (List<T> ts : input) {
                 E e = constructor.newInstance(innerType, typeMap(ts, innerType));
                 result.add(e);

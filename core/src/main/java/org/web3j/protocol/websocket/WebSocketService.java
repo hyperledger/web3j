@@ -26,6 +26,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java8.util.concurrent.CompletableFuture;
+import java8.util.function.Consumer;
+import java8.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,10 +38,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.subjects.BehaviorSubject;
-import java8.lang.Iterables;
-import java8.util.concurrent.CompletableFuture;
-import java8.util.function.Consumer;
-import java8.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,7 +137,9 @@ public class WebSocketService implements Web3jService {
     }
 
     private void setWebSocketListener(
-            final Consumer<String> onMessage, final Consumer<Throwable> onError, final Runnable onClose) {
+            final Consumer<String> onMessage,
+            final Consumer<Throwable> onError,
+            final Runnable onClose) {
         webSocketClient.setListener(
                 new WebSocketListener() {
                     @Override
@@ -530,14 +531,18 @@ public class WebSocketService implements Web3jService {
 
     private void closeOutstandingRequests() {
         StreamSupport.stream(requestForId.values())
-                .forEach(webSocketRequest -> webSocketRequest.getOnReply()
-                        .completeExceptionally(
-                                new IOException("Connection was closed")));
+                .forEach(
+                        webSocketRequest ->
+                                webSocketRequest
+                                        .getOnReply()
+                                        .completeExceptionally(
+                                                new IOException("Connection was closed")));
     }
 
     private void closeOutstandingSubscriptions() {
         StreamSupport.stream(subscriptionForId.values())
-                .forEach(subscription ->
+                .forEach(
+                        subscription ->
                                 subscription
                                         .getSubject()
                                         .onError(new IOException("Connection was closed")));

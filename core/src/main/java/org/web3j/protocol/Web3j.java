@@ -21,14 +21,15 @@ import org.web3j.protocol.rx.Web3jRx;
 
 /** JSON-RPC Request object building factory. */
 public interface Web3j extends Ethereum, Web3jRx, Batcher {
-//
-//    static Web3j build() throws Exception {
-//        return new JsonRpc2_0Web3j(LocalWeb3jAccount.getOnlineServicesHttpService(Network.MAINNET));
-//    }
-//
-//    static Web3j build(Network network) throws Exception {
-//        return new JsonRpc2_0Web3j(LocalWeb3jAccount.getOnlineServicesHttpService(network));
-//    }
+    //
+    //    static Web3j build() throws Exception {
+    //        return new
+    // JsonRpc2_0Web3j(LocalWeb3jAccount.getOnlineServicesHttpService(Network.MAINNET));
+    //    }
+    //
+    //    static Web3j build(Network network) throws Exception {
+    //        return new JsonRpc2_0Web3j(LocalWeb3jAccount.getOnlineServicesHttpService(network));
+    //    }
 
     /**
      * Construct a new Web3j instance.

@@ -32,8 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.crypto.Hash.sha256;
 import static org.web3j.crypto.SampleKeys.CREDENTIALS;
 import static org.web3j.crypto.SampleKeys.KEY_PAIR;
-import static org.web3j.crypto.SampleKeys.PASSWORD;
 import static org.web3j.crypto.SampleKeys.MNEMONIC;
+import static org.web3j.crypto.SampleKeys.PASSWORD;
 import static org.web3j.crypto.WalletUtils.isValidAddress;
 import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
 
@@ -246,8 +246,8 @@ public class WalletUtilsTest {
         final Date date = new Date(0);
         final ZonedDateTime dateTime = ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
 
-        final DateTimeFormatter oldFormat = DateTimeFormatter.ofPattern(
-                "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+        final DateTimeFormatter oldFormat =
+                DateTimeFormatter.ofPattern("'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
 
         assertEquals(WalletUtils.timestamp(date), oldFormat.format(dateTime));
     }

@@ -13,10 +13,9 @@
 package org.web3j.protocol;
 
 import java.io.IOException;
+import java8.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
-
-import java8.util.concurrent.CompletableFuture;
 
 import org.web3j.protocol.core.BatchRequest;
 import org.web3j.protocol.core.BatchResponse;
