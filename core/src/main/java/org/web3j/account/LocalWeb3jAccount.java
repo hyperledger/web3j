@@ -12,46 +12,67 @@
  */
 package org.web3j.account;
 
-// public class LocalWeb3jAccount {
-//
-//    private static final Path EPIRUS_CONFIG_PATh =
-//            Paths.get(System.getProperty("user.home"), ".epirus", ".config");
-//
-//    private static String NODE_RPC_ENDPOINT = "https://%s-eth.epirus.io/%s";
-//
-//    public static HttpService getOnlineServicesHttpService(final Network network) throws Exception
-// {
-//        if (configExists()) {
-//
-//            final ObjectNode node = readConfigAsJson();
-//            if (loginTokenExists(node)) {
-//                return createHttpServiceWithToken(network);
-//            }
-//        }
-//        throw new IllegalStateException(
-//                "Config file does not exist or could not be read. In order to use Web3j without a
-// specified endpoint, you must use the CLI and log in to Web3j Cloud");
-//    }
-//
-//    public static boolean configExists() {
-//        return EPIRUS_CONFIG_PATh.toFile().exists();
-//    }
-//
-//    public static ObjectNode readConfigAsJson() throws IOException {
-//        String configContents = new String(Files.readAllBytes(EPIRUS_CONFIG_PATh));
-//        return new ObjectMapper().readValue(configContents, ObjectNode.class);
-//    }
-//
-//    public static boolean loginTokenExists(ObjectNode node) {
-//        return node.has("loginToken");
-//    }
-//
-//    public static HttpService createHttpServiceWithToken(Network network) throws IOException {
-//        String httpEndpoint =
-//                String.format(
-//                        NODE_RPC_ENDPOINT,
-//                        network.getNetworkName(),
-//                        readConfigAsJson().get("loginToken").asText());
-//        return new HttpService(httpEndpoint);
-//    }
-// }
+import java.io.*;
+import java.nio.charset.Charset;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.web3j.protocol.Network;
+import org.web3j.protocol.http.HttpService;
+
+public class LocalWeb3jAccount {
+
+    private static final File EPIRUS_CONFIG_FILE =
+            new File(System.getProperty("user.home"), ".epirus.config");
+
+    private static String NODE_RPC_ENDPOINT = "https://%s-eth.epirus.io/%s";
+
+    public static HttpService getOnlineServicesHttpService(final Network network) throws Exception {
+        if (configExists()) {
+
+            final ObjectNode node = readConfigAsJson();
+            if (loginTokenExists(node)) {
+                return createHttpServiceWithToken(network);
+            }
+        }
+        throw new IllegalStateException(
+                "Config file does not exist or could not be read. In order to use Web3j without a specified endpoint, you must use the CLI and log in to Web3j Cloud");
+    }
+
+    public static boolean configExists() {
+        return EPIRUS_CONFIG_FILE.exists();
+    }
+
+    public static ObjectNode readConfigAsJson() throws IOException {
+        File file = EPIRUS_CONFIG_FILE;
+        InputStream in = new FileInputStream(file);
+        byte[] b = new byte[(int) file.length()];
+        int len = b.length;
+        int total = 0;
+
+        while (total < len) {
+            int result = in.read(b, total, len - total);
+            if (result == -1) {
+                break;
+            }
+            total += result;
+        }
+
+        String configContents = new String(b, Charset.forName("UTF-8"));
+        return new ObjectMapper().readValue(configContents, ObjectNode.class);
+    }
+
+    public static boolean loginTokenExists(ObjectNode node) {
+        return node.has("loginToken");
+    }
+
+    public static HttpService createHttpServiceWithToken(Network network) throws IOException {
+        String httpEndpoint =
+                String.format(
+                        NODE_RPC_ENDPOINT,
+                        network.getNetworkName(),
+                        readConfigAsJson().get("loginToken").asText());
+        return new HttpService(httpEndpoint);
+    }
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2020 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -28,12 +28,12 @@ public class InfuraHttpServiceTest {
         assertTrue(buildClientVersionHeader(null, false).isEmpty());
 
         assertEquals(
-                buildClientVersionHeader("geth 1.4.19", true),
-                (Collections.singletonMap("Infura-Ethereum-Preferred-Client", "geth 1.4.19")));
+                Collections.singletonMap("Infura-Ethereum-Preferred-Client", "geth 1.4.19"),
+                buildClientVersionHeader("geth 1.4.19", true));
 
         assertEquals(
-                buildClientVersionHeader("geth 1.4.19", false),
-                (Collections.singletonMap(
-                        "Infura-Ethereum-Preferred-Client", "geth 1.4.19; required=false")));
+                Collections.singletonMap(
+                        "Infura-Ethereum-Preferred-Client", "geth 1.4.19; required=false"),
+                buildClientVersionHeader("geth 1.4.19", false));
     }
 }
