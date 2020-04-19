@@ -76,11 +76,7 @@ public class Scenario {
 
     public Scenario() {}
 
-<<<<<<< HEAD
-    @Before
-=======
     @BeforeEach
->>>>>>> release/4.5.17
     public void setUp() throws Exception {
         this.web3j = Admin.build(new HttpService());
     }
