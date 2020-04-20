@@ -26,8 +26,8 @@ import org.web3j.protocol.exceptions.TransactionException;
 public abstract class ManagedTransaction {
 
     /**
-     * @deprecated use ContractGasProvider
      * @see org.web3j.tx.gas.DefaultGasProvider
+     * @deprecated use ContractGasProvider
      */
     public static final BigInteger GAS_PRICE = BigInteger.valueOf(22_000_000_000L);
 
@@ -100,6 +100,19 @@ public abstract class ManagedTransaction {
             throws IOException, TransactionException {
 
         return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
+    }
+
+    protected TransactionReceipt sendEIP1559(
+            String to,
+            String data,
+            BigInteger value,
+            BigInteger gasLimit,
+            BigInteger gasPremium,
+            BigInteger feeCap)
+            throws IOException, TransactionException {
+
+        return transactionManager.executeTransactionEIP1559(
+                gasPremium, feeCap, gasLimit, to, data, value);
     }
 
     protected TransactionReceipt send(
