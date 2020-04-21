@@ -29,9 +29,12 @@ import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthAccounts;
+import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.exceptions.TransactionException;
@@ -113,4 +116,16 @@ public interface Besu extends Eea {
             String privacyGroupId,
             org.web3j.protocol.core.methods.request.Transaction transaction,
             DefaultBlockParameter defaultBlockParameter);
+
+    Request<?, EthLog> privGetLogs(
+            String privacyGroupId, org.web3j.protocol.core.methods.request.EthFilter ethFilter);
+
+    Request<?, EthFilter> privNewFilter(
+            String privacyGroupId, org.web3j.protocol.core.methods.request.EthFilter ethFilter);
+
+    Request<?, EthUninstallFilter> privUninstallFilter(String privacyGroupId, String filterId);
+
+    Request<?, EthLog> privGetFilterChanges(String privacyGroupId, String filterId);
+
+    Request<?, EthLog> privGetFilterLogs(String privacyGroupId, String filterId);
 }

@@ -22,11 +22,13 @@ import org.junit.jupiter.api.Test;
 import org.web3j.protocol.RequestTester;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Base64String;
 
 public class RequestTest extends RequestTester {
+
     private static final Base64String MOCK_ENCLAVE_KEY =
             Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=");
     private static final Base64String MOCK_ENCLAVE_KEY_2 =
@@ -214,7 +216,7 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
-    public void testEthCall() throws Exception {
+    public void testPrivCall() throws Exception {
         web3j.privCall(
                         MOCK_PRIVACY_GROUP_ID.toString(),
                         Transaction.createEthCallTransaction(
@@ -229,5 +231,65 @@ public class RequestTest extends RequestTester {
                         + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",{\"from\":\"0xa70e8dd61c5d32be8058bb8eb970870f07233155\","
                         + "\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"data\":\"0x0\"},"
                         + "\"latest\"],\"id\":1}");
+    }
+
+    @Test
+    public void testPrivGetLogs() throws Exception {
+        web3j.privGetLogs(
+                        MOCK_PRIVACY_GROUP_ID.toString(),
+                        new EthFilter()
+                                .addSingleTopic(
+                                        "0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"))
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getLogs\","
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\""
+                        + ",{\"topics\":[\"0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b\"]}],"
+                        + "\"id\":1}");
+    }
+
+    @Test
+    public void testPrivNewFilter() throws Exception {
+        EthFilter ethFilter = new EthFilter().addSingleTopic("0x12341234");
+
+        web3j.privNewFilter(MOCK_PRIVACY_GROUP_ID.toString(), ethFilter).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_newFilter\","
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",{\"topics\":[\"0x12341234\"]}],\"id\":1}");
+    }
+
+    @Test
+    public void testPrivUninstallFilter() throws Exception {
+        web3j.privUninstallFilter(
+                        MOCK_PRIVACY_GROUP_ID.toString(), "0x13e9b67497fa859338ecba166752591b")
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_uninstallFilter\","
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",\"0x13e9b67497fa859338ecba166752591b\"],\"id\":1}");
+    }
+
+    @Test
+    public void testPrivGetFilterChanges() throws Exception {
+        web3j.privGetFilterChanges(
+                        MOCK_PRIVACY_GROUP_ID.toString(), "0x13e9b67497fa859338ecba166752591b")
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getFilterChanges\","
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",\"0x13e9b67497fa859338ecba166752591b\"],\"id\":1}");
+    }
+
+    @Test
+    public void testPrivGetFilterLogs() throws Exception {
+        web3j.privGetFilterLogs(
+                        MOCK_PRIVACY_GROUP_ID.toString(), "0x13e9b67497fa859338ecba166752591b")
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getFilterLogs\","
+                        + "\"params\":[\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\",\"0x13e9b67497fa859338ecba166752591b\"],\"id\":1}");
     }
 }

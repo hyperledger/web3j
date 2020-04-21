@@ -41,7 +41,9 @@ import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.JsonRpc2_0Eea;
 import org.web3j.protocol.exceptions.TransactionException;
@@ -344,5 +346,54 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 Arrays.asList(privacyGroupId, transaction, defaultBlockParameter),
                 web3jService,
                 org.web3j.protocol.core.methods.response.EthCall.class);
+    }
+
+    @Override
+    public Request<?, EthLog> privGetLogs(
+            final String privacyGroupId,
+            final org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+        return new Request<>(
+                "priv_getLogs",
+                Arrays.asList(privacyGroupId, ethFilter),
+                web3jService,
+                EthLog.class);
+    }
+
+    @Override
+    public Request<?, org.web3j.protocol.core.methods.response.EthFilter> privNewFilter(
+            String privacyGroupId, org.web3j.protocol.core.methods.request.EthFilter ethFilter) {
+        return new Request<>(
+                "priv_newFilter",
+                Arrays.asList(privacyGroupId, ethFilter),
+                web3jService,
+                org.web3j.protocol.core.methods.response.EthFilter.class);
+    }
+
+    @Override
+    public Request<?, EthUninstallFilter> privUninstallFilter(
+            String privacyGroupId, String filterId) {
+        return new Request<>(
+                "priv_uninstallFilter",
+                Arrays.asList(privacyGroupId, filterId),
+                web3jService,
+                EthUninstallFilter.class);
+    }
+
+    @Override
+    public Request<?, EthLog> privGetFilterChanges(String privacyGroupId, String filterId) {
+        return new Request<>(
+                "priv_getFilterChanges",
+                Arrays.asList(privacyGroupId, filterId),
+                web3jService,
+                EthLog.class);
+    }
+
+    @Override
+    public Request<?, EthLog> privGetFilterLogs(String privacyGroupId, String filterId) {
+        return new Request<>(
+                "priv_getFilterLogs",
+                Arrays.asList(privacyGroupId, filterId),
+                web3jService,
+                EthLog.class);
     }
 }
