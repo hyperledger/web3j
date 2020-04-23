@@ -32,12 +32,12 @@ public class BlocksFilter extends Filter<List<String>> {
     }
 
     @Override
-    EthFilter sendRequest() throws IOException {
+    protected EthFilter sendRequest() throws IOException {
         return web3j.ethNewBlockFilter().send();
     }
 
     @Override
-    void process(List<LogResult> logResults) {
+    protected void process(List<LogResult> logResults) {
         List<String> blockHashes = new ArrayList<>(logResults.size());
 
         for (EthLog.LogResult logResult : logResults) {

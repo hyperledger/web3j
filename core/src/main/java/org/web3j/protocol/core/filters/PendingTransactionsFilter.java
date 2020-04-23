@@ -31,12 +31,12 @@ public class PendingTransactionsFilter extends Filter<List<String>> {
     }
 
     @Override
-    EthFilter sendRequest() throws IOException {
+    protected EthFilter sendRequest() throws IOException {
         return web3j.ethNewPendingTransactionFilter().send();
     }
 
     @Override
-    void process(List<EthLog.LogResult> logResults) {
+    protected void process(List<EthLog.LogResult> logResults) {
         List<String> logs = new ArrayList<>(logResults.size());
 
         for (EthLog.LogResult logResult : logResults) {

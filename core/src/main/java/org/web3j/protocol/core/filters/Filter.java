@@ -38,8 +38,8 @@ public abstract class Filter<T> {
 
     private static final Logger log = LoggerFactory.getLogger(Filter.class);
 
-    final Web3j web3j;
-    final Callback<T> callback;
+    protected final Web3j web3j;
+    protected Callback<T> callback;
 
     private volatile BigInteger filterId;
 
@@ -145,9 +145,9 @@ public abstract class Filter<T> {
         }
     }
 
-    abstract EthFilter sendRequest() throws IOException;
+    protected abstract EthFilter sendRequest() throws IOException;
 
-    abstract void process(List<EthLog.LogResult> logResults);
+    protected abstract void process(List<EthLog.LogResult> logResults);
 
     private void reinstallFilter() {
         log.warn("The filter has not been found. Filter id: " + filterId);

@@ -37,12 +37,12 @@ public class LogFilter extends Filter<Log> {
     }
 
     @Override
-    EthFilter sendRequest() throws IOException {
+    protected EthFilter sendRequest() throws IOException {
         return web3j.ethNewFilter(ethFilter).send();
     }
 
     @Override
-    void process(List<EthLog.LogResult> logResults) {
+    protected void process(List<EthLog.LogResult> logResults) {
         for (EthLog.LogResult logResult : logResults) {
             if (logResult instanceof EthLog.LogObject) {
                 Log log = ((EthLog.LogObject) logResult).get();
