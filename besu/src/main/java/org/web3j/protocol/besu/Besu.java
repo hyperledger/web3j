@@ -15,8 +15,8 @@ package org.web3j.protocol.besu;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import java.util.concurrent.ScheduledExecutorService;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
@@ -63,9 +63,9 @@ public interface Besu extends Eea, BesuRx {
      * @return new Besu instance
      */
     static Besu build(
-        Web3jService web3jService,
-        long pollingInterval,
-        ScheduledExecutorService scheduledExecutorService) {
+            Web3jService web3jService,
+            long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
         return new JsonRpc2_0Besu(web3jService, pollingInterval, scheduledExecutorService);
     }
 

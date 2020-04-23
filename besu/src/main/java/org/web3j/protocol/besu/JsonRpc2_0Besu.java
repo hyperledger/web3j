@@ -12,9 +12,6 @@
  */
 package org.web3j.protocol.besu;
 
-import static java.util.Objects.requireNonNull;
-
-import io.reactivex.Flowable;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -24,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
+
+import io.reactivex.Flowable;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
@@ -56,6 +56,8 @@ import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.utils.Async;
 import org.web3j.utils.Base64String;
 
+import static java.util.Objects.requireNonNull;
+
 public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
 
     private final JsonRpc2_0BesuRx besuRx;
@@ -65,9 +67,10 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
         this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
     }
 
-    public JsonRpc2_0Besu(Web3jService web3jService,
-        long pollingInterval,
-        ScheduledExecutorService scheduledExecutorService) {
+    public JsonRpc2_0Besu(
+            Web3jService web3jService,
+            long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
         super(web3jService, pollingInterval, scheduledExecutorService);
         this.besuRx = new JsonRpc2_0BesuRx(this, scheduledExecutorService);
         this.blockTime = pollingInterval;

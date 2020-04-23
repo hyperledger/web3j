@@ -12,10 +12,12 @@
  */
 package org.web3j.protocol.besu;
 
+import java.util.concurrent.ScheduledExecutorService;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
-import java.util.concurrent.ScheduledExecutorService;
+
 import org.web3j.protocol.besu.filters.PrivateLogFilter;
 import org.web3j.protocol.core.methods.response.Log;
 
@@ -29,21 +31,25 @@ public class JsonRpc2_0BesuRx {
         this.scheduledExecutorService = scheduledExecutorService;
     }
 
-    public Flowable<Log> privLogFlowable(String privacyGroupId,
-        org.web3j.protocol.core.methods.request.EthFilter ethFilter, long pollingInterval) {
+    public Flowable<Log> privLogFlowable(
+            String privacyGroupId,
+            org.web3j.protocol.core.methods.request.EthFilter ethFilter,
+            long pollingInterval) {
         return Flowable.create(
-            subscriber -> {
-                PrivateLogFilter logFilter = new PrivateLogFilter(besu, subscriber::onNext, privacyGroupId, ethFilter);
+                subscriber -> {
+                    PrivateLogFilter logFilter =
+                            new PrivateLogFilter(
+                                    besu, subscriber::onNext, privacyGroupId, ethFilter);
 
-                run(logFilter, subscriber, pollingInterval);
-            },
-            BackpressureStrategy.BUFFER);
+                    run(logFilter, subscriber, pollingInterval);
+                },
+                BackpressureStrategy.BUFFER);
     }
 
     private <T> void run(
-        org.web3j.protocol.core.filters.Filter<T> filter,
-        FlowableEmitter<? super T> emitter,
-        long pollingInterval) {
+            org.web3j.protocol.core.filters.Filter<T> filter,
+            FlowableEmitter<? super T> emitter,
+            long pollingInterval) {
 
         filter.run(scheduledExecutorService, pollingInterval);
         emitter.setCancellable(filter::cancel);

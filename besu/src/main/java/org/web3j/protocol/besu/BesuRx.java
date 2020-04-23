@@ -13,11 +13,11 @@
 package org.web3j.protocol.besu;
 
 import io.reactivex.Flowable;
+
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.Log;
 
 public interface BesuRx {
 
-  Flowable<Log> privLogFlowable(String privacyGroupId, EthFilter ethFilter);
-
+    Flowable<Log> privLogFlowable(String privacyGroupId, EthFilter ethFilter);
 }
