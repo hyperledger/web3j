@@ -26,7 +26,7 @@ import org.web3j.protocol.core.methods.response.Log;
 /** Log filter handler. */
 public class LogFilter extends Filter<Log> {
 
-    private final org.web3j.protocol.core.methods.request.EthFilter ethFilter;
+    protected final org.web3j.protocol.core.methods.request.EthFilter ethFilter;
 
     public LogFilter(
             Web3j web3j,

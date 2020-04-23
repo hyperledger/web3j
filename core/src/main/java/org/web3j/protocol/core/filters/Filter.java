@@ -43,7 +43,7 @@ public abstract class Filter<T> {
 
     private volatile BigInteger filterId;
 
-    private ScheduledFuture<?> schedule;
+    protected ScheduledFuture<?> schedule;
 
     private ScheduledExecutorService scheduledExecutorService;
 
@@ -159,7 +159,7 @@ public abstract class Filter<T> {
         schedule.cancel(false);
 
         try {
-            EthUninstallFilter ethUninstallFilter = web3j.ethUninstallFilter(filterId).send();
+            EthUninstallFilter ethUninstallFilter = uninstallFilter(filterId);
             if (ethUninstallFilter.hasError()) {
                 throwException(ethUninstallFilter.getError());
             }
@@ -170,6 +170,10 @@ public abstract class Filter<T> {
         } catch (IOException e) {
             throwException(e);
         }
+    }
+
+    protected EthUninstallFilter uninstallFilter(BigInteger filterId) throws IOException {
+        return web3j.ethUninstallFilter(filterId).send();
     }
 
     /**
