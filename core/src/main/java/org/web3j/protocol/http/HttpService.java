@@ -223,6 +223,10 @@ public class HttpService extends Service {
         return headers;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     @Override
     public void close() throws IOException {}
 }
