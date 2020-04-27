@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -28,7 +29,9 @@ public class LocalWeb3jAccount {
     private static final Path EPIRUS_CONFIG_PATh =
             Paths.get(System.getProperty("user.home"), ".epirus", ".config");
 
-    private static String NODE_RPC_ENDPOINT = "https://%s-eth.epirus.io/%s";
+    private static final String DEFAULT_APP_URL =
+            Optional.of(System.getenv("EPIRUS_APP_URL")).orElse("https://app.epirus.io");
+    private static final String NODE_RPC_ENDPOINT = DEFAULT_APP_URL + "/api/rpc/%s/%s/";
 
     public static HttpService getOnlineServicesHttpService(final Network network) throws Exception {
         if (configExists()) {
