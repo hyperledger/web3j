@@ -29,8 +29,8 @@ public class LocalWeb3jAccount {
     private static final Path EPIRUS_CONFIG_PATh =
             Paths.get(System.getProperty("user.home"), ".epirus", ".config");
 
-    private static final String DEFAULT_APP_URL =
-            Optional.of(System.getenv("EPIRUS_APP_URL")).orElse("https://app.epirus.io");
+    public static final String DEFAULT_APP_URL =
+            System.getenv().getOrDefault("EPIRUS_APP_URL", "https://app.epirus.io");
     private static final String NODE_RPC_ENDPOINT = DEFAULT_APP_URL + "/api/rpc/%s/%s/";
 
     public static HttpService getOnlineServicesHttpService(final Network network) throws Exception {
