@@ -32,36 +32,36 @@ public class ClientTransactionManager extends TransactionManager {
 
     private final Web3j web3j;
 
-    public ClientTransactionManager(Web3j web3j, String fromAddress) {
+    public ClientTransactionManager(final Web3j web3j, final String fromAddress) {
         super(web3j, fromAddress);
         this.web3j = web3j;
     }
 
     public ClientTransactionManager(
-            Web3j web3j, String fromAddress, int attempts, int sleepDuration) {
+            final Web3j web3j, final String fromAddress, final int attempts, final int sleepDuration) {
         super(web3j, attempts, sleepDuration, fromAddress);
         this.web3j = web3j;
     }
 
     public ClientTransactionManager(
-            Web3j web3j,
-            String fromAddress,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
+            final Web3j web3j,
+            final String fromAddress,
+            final TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, fromAddress);
         this.web3j = web3j;
     }
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException {
 
-        Transaction transaction =
+        final Transaction transaction =
                 new Transaction(getFromAddress(), null, gasPrice, gasLimit, to, value, data);
 
         return web3j.ethSendTransaction(transaction).send();
@@ -70,16 +70,16 @@ public class ClientTransactionManager extends TransactionManager {
     @Override
     public EthSendTransaction sendEIP1559Transaction(
             long chainId,
-            BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger maxPriorityFeePerGas,
+            final BigInteger maxFeePerGas,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException {
 
-        Transaction transaction =
+        final Transaction transaction =
                 new Transaction(
                         getFromAddress(),
                         null,
@@ -96,9 +96,9 @@ public class ClientTransactionManager extends TransactionManager {
     }
 
     @Override
-    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+    public String sendCall(final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        EthCall ethCall =
+        final EthCall ethCall =
                 web3j.ethCall(
                                 Transaction.createEthCallTransaction(getFromAddress(), to, data),
                                 defaultBlockParameter)

@@ -129,13 +129,13 @@ public class PrivateTransactionManager extends TransactionManager {
     @Override
     public EthSendTransaction sendEIP1559Transaction(
             long chainId,
-            BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger maxPriorityFeePerGas,
+            final BigInteger maxFeePerGas,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException {
         final BigInteger nonce =
                 besu.privGetTransactionCount(credentials.getAddress(), privacyGroupId)

@@ -49,7 +49,7 @@ public class RawTransactionManager extends TransactionManager {
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
-    public RawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
+    public RawTransactionManager(final Web3j web3j, final Credentials credentials, final long chainId) {
         super(web3j, credentials.getAddress());
 
         this.web3j = web3j;
@@ -59,10 +59,10 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j,
-            Credentials credentials,
-            long chainId,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
+            final Web3j web3j,
+            final Credentials credentials,
+            final long chainId,
+            final TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
         this.web3j = web3j;
@@ -72,7 +72,7 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, long chainId, int attempts, long sleepDuration) {
+            final Web3j web3j, final Credentials credentials, final long chainId, final int attempts, final long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
@@ -81,17 +81,17 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(Web3j web3j, Credentials credentials) {
+    public RawTransactionManager(final Web3j web3j, final Credentials credentials) {
         this(web3j, credentials, ChainId.NONE);
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
+            final Web3j web3j, final Credentials credentials, final int attempts, final int sleepDuration) {
         this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
     protected BigInteger getNonce() throws IOException {
-        EthGetTransactionCount ethGetTransactionCount =
+        final EthGetTransactionCount ethGetTransactionCount =
                 web3j.ethGetTransactionCount(
                                 credentials.getAddress(), DefaultBlockParameterName.PENDING)
                         .send();
@@ -103,23 +103,23 @@ public class RawTransactionManager extends TransactionManager {
         return txHashVerifier;
     }
 
-    public void setTxHashVerifier(TxHashVerifier txHashVerifier) {
+    public void setTxHashVerifier(final TxHashVerifier txHashVerifier) {
         this.txHashVerifier = txHashVerifier;
     }
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException {
 
-        BigInteger nonce = getNonce();
+        final BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction =
+        final RawTransaction rawTransaction =
                 RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
 
         return signAndSend(rawTransaction);
@@ -128,18 +128,18 @@ public class RawTransactionManager extends TransactionManager {
     @Override
     public EthSendTransaction sendEIP1559Transaction(
             long chainId,
-            BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger maxPriorityFeePerGas,
+            final BigInteger maxFeePerGas,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException {
 
-        BigInteger nonce = getNonce();
+        final BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction =
+        final RawTransaction rawTransaction =
                 RawTransaction.createTransaction(
                         chainId,
                         nonce,
@@ -154,9 +154,9 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     @Override
-    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+    public String sendCall(final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        EthCall ethCall =
+        final EthCall ethCall =
                 web3j.ethCall(
                                 Transaction.createEthCallTransaction(getFromAddress(), to, data),
                                 defaultBlockParameter)
@@ -177,9 +177,9 @@ public class RawTransactionManager extends TransactionManager {
      * @param rawTransaction a RawTransaction istance to be signed
      * @return The transaction signed and encoded without ever broadcasting it
      */
-    public String sign(RawTransaction rawTransaction) {
+    public String sign(final RawTransaction rawTransaction) {
 
-        byte[] signedMessage;
+        final byte[] signedMessage;
 
         if (chainId > ChainId.NONE) {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
@@ -190,13 +190,13 @@ public class RawTransactionManager extends TransactionManager {
         return Numeric.toHexString(signedMessage);
     }
 
-    public EthSendTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
-        String hexValue = sign(rawTransaction);
-        EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
+    public EthSendTransaction signAndSend(final RawTransaction rawTransaction) throws IOException {
+        final String hexValue = sign(rawTransaction);
+        final EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
 
         if (ethSendTransaction != null && !ethSendTransaction.hasError()) {
-            String txHashLocal = Hash.sha3(hexValue);
-            String txHashRemote = ethSendTransaction.getTransactionHash();
+            final String txHashLocal = Hash.sha3(hexValue);
+            final String txHashRemote = ethSendTransaction.getTransactionHash();
             if (!txHashVerifier.verify(txHashLocal, txHashRemote)) {
                 throw new TxHashMismatchException(txHashLocal, txHashRemote);
             }

@@ -32,11 +32,11 @@ import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
 public abstract class AbstractRemoteTransactionCall<T> extends AbstractRemoteCall<T>
         implements RemoteTransactionCall<T> {
 
-    final Web3j web3j;
-    final String data;
-    final BigInteger value;
-    final boolean constructor;
-    final ContractGasProvider gasProvider;
+    private final Web3j web3j;
+    private final String data;
+    private final BigInteger value;
+    private final boolean constructor;
+    private final ContractGasProvider gasProvider;
 
     public AbstractRemoteTransactionCall(
             final Web3j web3j,

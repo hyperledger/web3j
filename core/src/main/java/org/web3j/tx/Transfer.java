@@ -26,13 +26,14 @@ import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
 import static java.util.Collections.emptyList;
 
-/** Class for performing Ether transactions on the Ethereum blockchain. */
+/**
+ * Class for performing Ether transactions on the Ethereum blockchain.
+ */
 public class Transfer {
 
     // This is the cost to send Ether between parties
@@ -55,13 +56,9 @@ public class Transfer {
      * Execute the provided function as a transaction synchronously. This is intended for one-off
      * fund transfers. For multiple, create an instance.
      *
-     * <p>Given the duration required to execute a transaction, asynchronous execution is strongly
-     * recommended via {@link Transfer#sendFunds(String, BigDecimal, Convert.Unit, BigInteger,
-     * BigInteger)}.
-     *
      * @param toAddress destination address
-     * @param value amount to send
-     * @param unit of specified send
+     * @param value     amount to send
+     * @param unit      of specified send
      * @return {@link RemoteTransaction} containing executing transaction
      */
     public static RemoteTransaction<TransactionReceipt> sendFunds(
@@ -75,12 +72,26 @@ public class Transfer {
         return new Transfer(web3j, transactionManager).sendFunds(toAddress, value, unit);
     }
 
+    public static RemoteTransaction<TransactionReceipt> sendFundsEIP1559(
+            final Web3j web3j,
+            final Credentials credentials,
+            final String toAddress,
+            final BigDecimal value,
+            final Convert.Unit unit,
+            final BigInteger gasLimit,
+            final BigInteger gasPremium,
+            final BigInteger feeCap) {
+        final TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        return new Transfer(web3j, transactionManager)
+                .sendFundsEIP1559(toAddress, value, unit, gasLimit, gasPremium, feeCap);
+    }
+
     /**
      * Execute the provided function as a transaction.
      *
      * @param toAddress destination address
-     * @param value amount to send
-     * @param unit of specified send
+     * @param value     amount to send
+     * @param unit      of specified send
      * @return {@link RemoteTransaction} containing executing transaction
      */
     public RemoteTransaction<TransactionReceipt> sendFunds(
@@ -92,10 +103,10 @@ public class Transfer {
      * Execute the provided function as a transaction.
      *
      * @param toAddress destination address
-     * @param value amount to send
-     * @param unit of specified send
-     * @param gasPrice transaction gas price
-     * @param gasLimit transaction gas limit
+     * @param value     amount to send
+     * @param unit      of specified send
+     * @param gasPrice  transaction gas price
+     * @param gasLimit  transaction gas limit
      * @return {@link RemoteTransaction} containing executing transaction
      */
     public RemoteTransaction<TransactionReceipt> sendFunds(
@@ -109,19 +120,25 @@ public class Transfer {
         Objects.requireNonNull(value);
         Objects.requireNonNull(unit);
 
-        final BigDecimal weiValue = Convert.toWei(value, unit);
-        if (!Numeric.isIntegerValue(weiValue)) {
-            throw new UnsupportedOperationException(
-                    "Non decimal Wei value provided: "
-                            + value
-                            + " "
-                            + unit.toString()
-                            + " = "
-                            + weiValue
-                            + " Wei");
-        }
-
+        final BigDecimal weiValue = toWei(value, unit);
         return new TransferFunds(toAddress, weiValue.toBigIntegerExact(), gasPrice, gasLimit);
+    }
+
+    public RemoteTransaction<TransactionReceipt> sendFundsEIP1559(
+            final String toAddress,
+            final BigDecimal value,
+            final Convert.Unit unit,
+            final BigInteger gasLimit,
+            final BigInteger gasPremium,
+            final BigInteger feeCap) {
+
+        Objects.requireNonNull(toAddress);
+        Objects.requireNonNull(value);
+        Objects.requireNonNull(unit);
+
+        final BigDecimal weiValue = toWei(value, unit);
+        return new TransferFundsEIP1559(
+                toAddress, weiValue.toBigIntegerExact(), gasLimit, gasPremium, feeCap);
     }
 
     /**
@@ -141,6 +158,21 @@ public class Transfer {
         final EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
 
         return ethGasPrice.getGasPrice();
+    }
+
+    private static BigDecimal toWei(final BigDecimal value, final Convert.Unit unit) {
+        final BigDecimal weiValue = Convert.toWei(value, unit);
+        if (!Numeric.isIntegerValue(weiValue)) {
+            throw new UnsupportedOperationException(
+                    "Non decimal Wei value provided: "
+                            + value
+                            + " "
+                            + unit.toString()
+                            + " = "
+                            + weiValue
+                            + " Wei");
+        }
+        return weiValue;
     }
 
     private class TransferFunds implements RemoteTransaction<TransactionReceipt> {
@@ -170,17 +202,11 @@ public class Transfer {
             if (gasLimit == null) {
                 gasLimit = GAS_LIMIT;
             }
-            return new RemoteTransactionCall0(
-                            web3j,
-                            FUNC_TRANSFER,
-                            resolvedAddress,
-                            transactionManager,
-                            null,
-                            "",
-                            value,
-                            false,
-                            new StaticGasProvider(gasPrice, gasLimit))
-                    .send();
+            return transactionManager.executeTransaction(gasPrice,
+                    gasLimit,
+                    resolvedAddress,
+                    "",
+                    value);
         }
     }
 
@@ -220,17 +246,9 @@ public class Transfer {
             BigInteger maxFeePerGas)
             throws IOException, InterruptedException, TransactionException {
 
-        BigDecimal weiValue = Convert.toWei(value, unit);
-        if (!Numeric.isIntegerValue(weiValue)) {
-            throw new UnsupportedOperationException(
-                    "Non decimal Wei value provided: "
-                            + value
-                            + " "
-                            + unit.toString()
-                            + " = "
-                            + weiValue
-                            + " Wei");
-        }
+            if (gasLimit == null) {
+                gasLimit = GAS_LIMIT;
+            }
 
         String resolvedAddress = ensResolver.resolve(toAddress);
         return sendEIP1559(

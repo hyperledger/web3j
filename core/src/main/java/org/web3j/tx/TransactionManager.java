@@ -114,7 +114,7 @@ public abstract class TransactionManager {
             boolean constructor)
             throws IOException, TransactionException {
 
-        EthSendTransaction ethSendTransaction =
+        final EthSendTransaction ethSendTransaction =
                 sendEIP1559Transaction(
                         chainId,
                         maxPriorityFeePerGas,
@@ -139,12 +139,12 @@ public abstract class TransactionManager {
 
     public EthSendTransaction sendEIP1559Transaction(
             long chainId,
-            BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value)
+            final BigInteger maxPriorityFeePerGas,
+            final BigInteger maxFeePerGas,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value)
             throws IOException {
         return sendEIP1559Transaction(
                 chainId, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, data, value, false);

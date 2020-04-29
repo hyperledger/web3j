@@ -43,22 +43,22 @@ public class RawTransaction {
     }
 
     public static RawTransaction createContractTransaction(
-            BigInteger nonce,
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            BigInteger value,
-            String init) {
+            final BigInteger nonce,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final BigInteger value,
+            final String init) {
         return new RawTransaction(
                 LegacyTransaction.createContractTransaction(
                         nonce, gasPrice, gasLimit, value, init));
     }
 
     public static RawTransaction createEtherTransaction(
-            BigInteger nonce,
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            String to,
-            BigInteger value) {
+            final BigInteger nonce,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final BigInteger value) {
 
         return new RawTransaction(
                 LegacyTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, value));
@@ -78,17 +78,17 @@ public class RawTransaction {
     }
 
     public static RawTransaction createTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, String data) {
+            final BigInteger nonce, final BigInteger gasPrice, final BigInteger gasLimit, final String to, final String data) {
         return createTransaction(nonce, gasPrice, gasLimit, to, BigInteger.ZERO, data);
     }
 
     public static RawTransaction createTransaction(
-            BigInteger nonce,
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            String to,
-            BigInteger value,
-            String data) {
+            final BigInteger nonce,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final BigInteger value,
+            final String data) {
 
         return new RawTransaction(
                 LegacyTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data));

@@ -25,9 +25,9 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 /** Transaction manager implementation for read-only operations on smart contracts. */
 public class ReadonlyTransactionManager extends TransactionManager {
     private final Web3j web3j;
-    private String fromAddress;
+    private final String fromAddress;
 
-    public ReadonlyTransactionManager(Web3j web3j, String fromAddress) {
+    public ReadonlyTransactionManager(final Web3j web3j, final String fromAddress) {
         super(web3j, fromAddress);
         this.web3j = web3j;
         this.fromAddress = fromAddress;
@@ -35,12 +35,12 @@ public class ReadonlyTransactionManager extends TransactionManager {
 
     @Override
     public EthSendTransaction sendTransaction(
-            BigInteger gasPrice,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException {
         throw new UnsupportedOperationException(
                 "Only read operations are supported by this transaction manager");
@@ -49,22 +49,22 @@ public class ReadonlyTransactionManager extends TransactionManager {
     @Override
     public EthSendTransaction sendEIP1559Transaction(
             long chainId,
-            BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas,
-            BigInteger gasLimit,
-            String to,
-            String data,
-            BigInteger value,
-            boolean constructor)
+            final BigInteger maxPriorityFeePerGas,
+            final BigInteger maxFeePerGas,
+            final BigInteger gasLimit,
+            final String to,
+            final String data,
+            final BigInteger value,
+            final boolean constructor)
             throws IOException {
         throw new UnsupportedOperationException(
                 "Only read operations are supported by this transaction manager");
     }
 
     @Override
-    public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
+    public String sendCall(final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        EthCall ethCall =
+        final EthCall ethCall =
                 web3j.ethCall(
                                 Transaction.createEthCallTransaction(fromAddress, to, data),
                                 defaultBlockParameter)
