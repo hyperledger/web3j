@@ -55,7 +55,7 @@ public interface RemoteCall<T> extends Callable<T> {
     default CompletableFuture<T> callAsync() {
         return Async.run(this);
     }
-    
+
     /**
      * Provide an flowable to emit result from our function.
      *

@@ -78,7 +78,11 @@ public class RawTransaction {
     }
 
     public static RawTransaction createTransaction(
-            final BigInteger nonce, final BigInteger gasPrice, final BigInteger gasLimit, final String to, final String data) {
+            final BigInteger nonce,
+            final BigInteger gasPrice,
+            final BigInteger gasLimit,
+            final String to,
+            final String data) {
         return createTransaction(nonce, gasPrice, gasLimit, to, BigInteger.ZERO, data);
     }
 

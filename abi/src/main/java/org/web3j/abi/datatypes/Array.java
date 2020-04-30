@@ -12,33 +12,15 @@
  */
 package org.web3j.abi.datatypes;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 /** Fixed size array. */
-public abstract class Array<T extends Type> implements Type<List<T>> {
+public abstract class Array<T extends Type<?>> implements Type<List<T>> {
 
     private final Class<T> type;
     protected final List<T> value;
-
-    @Deprecated
-    @SafeVarargs
-    Array(final String type, final T... values) {
-        this(type, Arrays.asList(values));
-    }
-
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    Array(final String type, final List<T> values) {
-        this((Class<T>) AbiTypes.getType(type), values);
-    }
-
-    @Deprecated
-    Array(final String type) {
-        this(type, new ArrayList<>());
-    }
 
     @SafeVarargs
     Array(final Class<T> type, final T... values) {

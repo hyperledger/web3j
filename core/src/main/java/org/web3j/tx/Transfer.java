@@ -31,9 +31,7 @@ import org.web3j.utils.Numeric;
 
 import static java.util.Collections.emptyList;
 
-/**
- * Class for performing Ether transactions on the Ethereum blockchain.
- */
+/** Class for performing Ether transactions on the Ethereum blockchain. */
 public class Transfer {
 
     // This is the cost to send Ether between parties
@@ -57,8 +55,8 @@ public class Transfer {
      * fund transfers. For multiple, create an instance.
      *
      * @param toAddress destination address
-     * @param value     amount to send
-     * @param unit      of specified send
+     * @param value amount to send
+     * @param unit of specified send
      * @return {@link RemoteTransaction} containing executing transaction
      */
     public static RemoteTransaction<TransactionReceipt> sendFunds(
@@ -90,8 +88,8 @@ public class Transfer {
      * Execute the provided function as a transaction.
      *
      * @param toAddress destination address
-     * @param value     amount to send
-     * @param unit      of specified send
+     * @param value amount to send
+     * @param unit of specified send
      * @return {@link RemoteTransaction} containing executing transaction
      */
     public RemoteTransaction<TransactionReceipt> sendFunds(
@@ -103,10 +101,10 @@ public class Transfer {
      * Execute the provided function as a transaction.
      *
      * @param toAddress destination address
-     * @param value     amount to send
-     * @param unit      of specified send
-     * @param gasPrice  transaction gas price
-     * @param gasLimit  transaction gas limit
+     * @param value amount to send
+     * @param unit of specified send
+     * @param gasPrice transaction gas price
+     * @param gasLimit transaction gas limit
      * @return {@link RemoteTransaction} containing executing transaction
      */
     public RemoteTransaction<TransactionReceipt> sendFunds(
@@ -202,11 +200,8 @@ public class Transfer {
             if (gasLimit == null) {
                 gasLimit = GAS_LIMIT;
             }
-            return transactionManager.executeTransaction(gasPrice,
-                    gasLimit,
-                    resolvedAddress,
-                    "",
-                    value);
+            return transactionManager.executeTransaction(
+                    gasPrice, gasLimit, resolvedAddress, "", value);
         }
     }
 

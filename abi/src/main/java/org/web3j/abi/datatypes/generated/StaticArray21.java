@@ -6,22 +6,11 @@ import org.web3j.abi.datatypes.Type;
 
 /**
  * Auto generated code.
- * <p><strong>Do not modifiy!</strong>
+ * <p><strong>Do not modify!</strong>
  * <p>Please use org.web3j.codegen.AbiTypesGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
-public class StaticArray21<T extends Type> extends StaticArray<T> {
-    @Deprecated
-    public StaticArray21(final List<T> values) {
-        super(21, values);
-    }
-
-    @Deprecated
-    @SafeVarargs
-    public StaticArray21(final T... values) {
-        super(21, values);
-    }
-
+public class StaticArray21<T extends Type<?>> extends StaticArray<T> {
     public StaticArray21(final Class<T> type, final List<T> values) {
         super(type, 21, values);
     }

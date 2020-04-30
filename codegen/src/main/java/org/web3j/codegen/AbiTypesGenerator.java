@@ -25,6 +25,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.WildcardTypeName;
 
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.Int;
@@ -61,8 +62,7 @@ public class AbiTypesGenerator extends Generator {
         generateStaticArrayTypes(destinationDir);
     }
 
-    private <T extends Type> void generateIntTypes(final Class<T> superclass, final String path)
-            throws IOException {
+    private void generateIntTypes(final Class<?> superclass, final String path) throws IOException {
         final String packageName = createPackageName(superclass);
         ClassName className;
 
@@ -106,17 +106,16 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private <T extends Type> void generateFixedTypes(final Class<T> superclass, final String path)
+    private void generateFixedTypes(final Class<?> superclass, final String path)
             throws IOException {
         final String packageName = createPackageName(superclass);
         ClassName className;
 
         for (int mBitSize = 8; mBitSize < Type.MAX_BIT_LENGTH; mBitSize += 8) {
-            inner:
             for (int nBitSize = 8; nBitSize < Type.MAX_BIT_LENGTH; nBitSize += 8) {
 
                 if (mBitSize + nBitSize > Type.MAX_BIT_LENGTH) {
-                    break inner;
+                    break;
                 }
 
                 final MethodSpec constructorSpec1 =
@@ -166,7 +165,7 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private <T extends Type> void generateBytesTypes(final String path) throws IOException {
+    private void generateBytesTypes(final String path) throws IOException {
         final String packageName = createPackageName(Bytes.class);
         ClassName className;
 
@@ -204,35 +203,18 @@ public class AbiTypesGenerator extends Generator {
         }
     }
 
-    private <T extends Type> void generateStaticArrayTypes(final String path) throws IOException {
+    private void generateStaticArrayTypes(final String path) throws IOException {
         final String packageName = createPackageName(StaticArray.class);
         ClassName className;
 
         for (int length = 1; length <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY; length++) {
 
+            final ParameterizedTypeName parameterizedTypeName =
+                    ParameterizedTypeName.get(
+                            ClassName.get(Type.class), WildcardTypeName.subtypeOf(Object.class));
+
             final TypeVariableName typeVariableName =
-                    TypeVariableName.get("T").withBounds(Type.class);
-
-            final MethodSpec oldConstructorSpec =
-                    MethodSpec.constructorBuilder()
-                            .addAnnotation(Deprecated.class)
-                            .addModifiers(Modifier.PUBLIC)
-                            .addParameter(
-                                    ParameterizedTypeName.get(
-                                            ClassName.get(List.class), typeVariableName),
-                                    "values")
-                            .addStatement("super($L, $N)", length, "values")
-                            .build();
-
-            final MethodSpec oldArrayOverloadConstructorSpec =
-                    MethodSpec.constructorBuilder()
-                            .addAnnotation(Deprecated.class)
-                            .addAnnotation(SafeVarargs.class)
-                            .addModifiers(Modifier.PUBLIC)
-                            .addParameter(ArrayTypeName.of(typeVariableName), "values")
-                            .varargs()
-                            .addStatement("super($L, $N)", length, "values")
-                            .build();
+                    TypeVariableName.get("T").withBounds(parameterizedTypeName);
 
             final MethodSpec constructorSpec =
                     MethodSpec.constructorBuilder()
@@ -240,11 +222,13 @@ public class AbiTypesGenerator extends Generator {
                             .addParameter(
                                     ParameterizedTypeName.get(
                                             ClassName.get(Class.class), typeVariableName),
-                                    "type")
+                                    "type",
+                                    Modifier.FINAL)
                             .addParameter(
                                     ParameterizedTypeName.get(
                                             ClassName.get(List.class), typeVariableName),
-                                    "values")
+                                    "values",
+                                    Modifier.FINAL)
                             .addStatement("super(type, $L, values)", length)
                             .build();
 
@@ -255,8 +239,10 @@ public class AbiTypesGenerator extends Generator {
                             .addParameter(
                                     ParameterizedTypeName.get(
                                             ClassName.get(Class.class), typeVariableName),
-                                    "type")
-                            .addParameter(ArrayTypeName.of(typeVariableName), "values")
+                                    "type",
+                                    Modifier.FINAL)
+                            .addParameter(
+                                    ArrayTypeName.of(typeVariableName), "values", Modifier.FINAL)
                             .varargs()
                             .addStatement("super(type, $L, values)", length)
                             .build();
@@ -271,9 +257,6 @@ public class AbiTypesGenerator extends Generator {
                                     ParameterizedTypeName.get(
                                             ClassName.get(StaticArray.class), typeVariableName))
                             .addModifiers(Modifier.PUBLIC)
-                            .addMethods(
-                                    Arrays.asList(
-                                            oldConstructorSpec, oldArrayOverloadConstructorSpec))
                             .addMethods(
                                     Arrays.asList(constructorSpec, arrayOverloadConstructorSpec))
                             .build();

@@ -38,7 +38,10 @@ public class ClientTransactionManager extends TransactionManager {
     }
 
     public ClientTransactionManager(
-            final Web3j web3j, final String fromAddress, final int attempts, final int sleepDuration) {
+            final Web3j web3j,
+            final String fromAddress,
+            final int attempts,
+            final int sleepDuration) {
         super(web3j, attempts, sleepDuration, fromAddress);
         this.web3j = web3j;
     }
@@ -96,7 +99,8 @@ public class ClientTransactionManager extends TransactionManager {
     }
 
     @Override
-    public String sendCall(final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
+    public String sendCall(
+            final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         final EthCall ethCall =
                 web3j.ethCall(

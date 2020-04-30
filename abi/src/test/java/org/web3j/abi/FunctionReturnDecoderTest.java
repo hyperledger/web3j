@@ -155,7 +155,9 @@ public class FunctionReturnDecoderTest {
 
         final StaticArray2<Uint256> uint256StaticArray2 =
                 new StaticArray2<>(
-                        new Uint256(BigInteger.valueOf(55)), new Uint256(BigInteger.ONE));
+                        Uint256.class,
+                        new Uint256(BigInteger.valueOf(55)),
+                        new Uint256(BigInteger.ONE));
 
         final List<Type<?>> expected =
                 Arrays.asList(uint256StaticArray2, new Uint256(BigInteger.TEN));

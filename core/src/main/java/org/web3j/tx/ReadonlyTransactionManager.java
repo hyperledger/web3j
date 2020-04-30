@@ -62,7 +62,8 @@ public class ReadonlyTransactionManager extends TransactionManager {
     }
 
     @Override
-    public String sendCall(final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
+    public String sendCall(
+            final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         final EthCall ethCall =
                 web3j.ethCall(

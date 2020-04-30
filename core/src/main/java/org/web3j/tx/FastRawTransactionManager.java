@@ -27,7 +27,8 @@ public class FastRawTransactionManager extends RawTransactionManager {
 
     private volatile BigInteger nonce = BigInteger.valueOf(-1);
 
-    public FastRawTransactionManager(final Web3j web3j, final Credentials credentials, final long chainId) {
+    public FastRawTransactionManager(
+            final Web3j web3j, final Credentials credentials, final long chainId) {
         super(web3j, credentials, chainId);
     }
 

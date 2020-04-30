@@ -12,7 +12,7 @@
  */
 package org.web3j.ens;
 
-import org.web3j.tx.ChainIdLong;
+import org.web3j.tx.ChainId;
 
 /** ENS registry contract addresses. */
 public class Contracts {
@@ -23,11 +23,11 @@ public class Contracts {
 
     public static String resolveRegistryContract(final String chainId) {
         final Long chainIdLong = Long.parseLong(chainId);
-        if (chainIdLong.equals(ChainIdLong.MAINNET)) {
+        if (chainIdLong.equals(ChainId.MAINNET)) {
             return MAINNET;
-        } else if (chainIdLong.equals(ChainIdLong.ROPSTEN)) {
+        } else if (chainIdLong.equals(ChainId.ROPSTEN)) {
             return ROPSTEN;
-        } else if (chainIdLong.equals(ChainIdLong.RINKEBY)) {
+        } else if (chainIdLong.equals(ChainId.RINKEBY)) {
             return RINKEBY;
         } else {
             throw new EnsResolutionException(

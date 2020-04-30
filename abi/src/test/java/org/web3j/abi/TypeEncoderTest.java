@@ -1306,17 +1306,17 @@ public class TypeEncoderTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testEmptyArray() {
-        final DynamicArray<Uint> array = new DynamicArray(Uint.class);
+        final DynamicArray<Uint> array = new DynamicArray<>(Uint.class);
         assertEquals(
                 TypeEncoder.encodeDynamicArray(array),
                 ("0000000000000000000000000000000000000000000000000000000000000000"));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testArrayOfBytes() {
         final DynamicArray<DynamicBytes> array =
                 new DynamicArray<>(
+                        DynamicBytes.class,
                         new DynamicBytes(
                                 Numeric.hexStringToByteArray(
                                         "0x3c329ee8cd725a7f74f984cac52598eb170d731e7f3"
@@ -1328,9 +1328,12 @@ public class TypeEncoderTest {
                                 Numeric.hexStringToByteArray(
                                         "0x9215c928b97e0ebeeefd10003a4e3eea23f2eb3acba"
                                                 + "b477eeb589d7a8874d7c5")));
-        final DynamicArray emptyArray = DynamicArray.empty("bytes");
+        final DynamicArray<Bytes> emptyArray = new DynamicArray<>(Bytes.class);
         final DynamicArray<DynamicBytes> arrayOfEmptyBytes =
-                new DynamicArray<>(new DynamicBytes(new byte[0]), new DynamicBytes(new byte[0]));
+                new DynamicArray<>(
+                        DynamicBytes.class,
+                        new DynamicBytes(new byte[0]),
+                        new DynamicBytes(new byte[0]));
 
         assertEquals(
                 TypeEncoder.encodeDynamicArray(array),
@@ -1381,15 +1384,16 @@ public class TypeEncoderTest {
     public void testArrayOfStrings() {
         final DynamicArray<Utf8String> array =
                 new DynamicArray<>(
+                        Utf8String.class,
                         new Utf8String(
                                 "This string value is extra long so that it "
                                         + "requires more than 32 bytes"),
                         new Utf8String("abc"),
                         new Utf8String(""),
                         new Utf8String("web3j"));
-        final DynamicArray emptyArray = DynamicArray.empty("string");
+        final DynamicArray<Utf8String> emptyArray = new DynamicArray<>(Utf8String.class);
         final DynamicArray<Utf8String> arrayOfEmptyStrings =
-                new DynamicArray<>(new Utf8String(""), new Utf8String(""));
+                new DynamicArray<>(Utf8String.class, new Utf8String(""), new Utf8String(""));
 
         assertEquals(
                 TypeEncoder.encodeDynamicArray(array),

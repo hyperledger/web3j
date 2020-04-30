@@ -49,7 +49,8 @@ public class RawTransactionManager extends TransactionManager {
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
-    public RawTransactionManager(final Web3j web3j, final Credentials credentials, final long chainId) {
+    public RawTransactionManager(
+            final Web3j web3j, final Credentials credentials, final long chainId) {
         super(web3j, credentials.getAddress());
 
         this.web3j = web3j;
@@ -72,7 +73,11 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            final Web3j web3j, final Credentials credentials, final long chainId, final int attempts, final long sleepDuration) {
+            final Web3j web3j,
+            final Credentials credentials,
+            final long chainId,
+            final int attempts,
+            final long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
@@ -86,7 +91,10 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            final Web3j web3j, final Credentials credentials, final int attempts, final int sleepDuration) {
+            final Web3j web3j,
+            final Credentials credentials,
+            final int attempts,
+            final int sleepDuration) {
         this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
@@ -154,7 +162,8 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     @Override
-    public String sendCall(final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
+    public String sendCall(
+            final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         final EthCall ethCall =
                 web3j.ethCall(

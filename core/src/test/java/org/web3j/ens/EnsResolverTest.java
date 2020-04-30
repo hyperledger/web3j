@@ -27,7 +27,7 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.NetVersion;
-import org.web3j.tx.ChainIdLong;
+import org.web3j.tx.ChainId;
 import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,7 +58,7 @@ public class EnsResolverTest {
         configureLatestBlock(System.currentTimeMillis() / 1000); // block timestamp is in seconds
 
         final NetVersion netVersion = new NetVersion();
-        netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
+        netVersion.setResult(Long.toString(ChainId.MAINNET));
 
         final String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
@@ -87,7 +87,7 @@ public class EnsResolverTest {
         configureLatestBlock(System.currentTimeMillis() / 1000); // block timestamp is in seconds
 
         final NetVersion netVersion = new NetVersion();
-        netVersion.setResult(Long.toString(ChainIdLong.MAINNET));
+        netVersion.setResult(Long.toString(ChainId.MAINNET));
 
         final String resolverAddress =
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";

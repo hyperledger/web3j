@@ -15,39 +15,7 @@ package org.web3j.abi.datatypes;
 import java.util.List;
 
 /** Dynamic array type. */
-public class DynamicArray<T extends Type> extends Array<T> {
-
-    @Deprecated
-    @SafeVarargs
-    @SuppressWarnings({"unchecked"})
-    public DynamicArray(final T... values) {
-        super(
-                StructType.class.isAssignableFrom(values[0].getClass())
-                        ? (Class<T>) values[0].getClass()
-                        : (Class<T>) AbiTypes.getType(values[0].getTypeAsString()),
-                values);
-    }
-
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public DynamicArray(final List<T> values) {
-        super(
-                StructType.class.isAssignableFrom(values.get(0).getClass())
-                        ? (Class<T>) values.get(0).getClass()
-                        : (Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()),
-                values);
-    }
-
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    private DynamicArray(final String type) {
-        super((Class<T>) AbiTypes.getType(type));
-    }
-
-    @Deprecated
-    public static DynamicArray empty(final String type) {
-        return new DynamicArray(type);
-    }
+public class DynamicArray<T extends Type<?>> extends Array<T> {
 
     public DynamicArray(final Class<T> type, final List<T> values) {
         super(type, values);

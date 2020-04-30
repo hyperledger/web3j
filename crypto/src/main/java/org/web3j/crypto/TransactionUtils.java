@@ -43,7 +43,7 @@ public class TransactionUtils {
             final byte chainId,
             final Credentials credentials) {
         final byte[] signedMessage =
-                TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
+                TransactionEncoder.signMessage(rawTransaction, (long) chainId, credentials);
         return Hash.sha3(signedMessage);
     }
 

@@ -27,14 +27,14 @@ public class StaticArrayTest {
 
     @Test
     public void canBeInstantiatedWithLessThan32Elements() {
-        final StaticArray<Uint> array = new StaticArray32<>(arrayOfUints(32));
+        final StaticArray<Uint> array = new StaticArray32<>(Uint.class, arrayOfUints(32));
 
         assertEquals(array.getValue().size(), (32));
     }
 
     @Test
     public void canBeInstantiatedWithSizeMatchingType() {
-        final StaticArray<Uint> array = new StaticArray3<>(arrayOfUints(3));
+        final StaticArray<Uint> array = new StaticArray3<>(Uint.class, arrayOfUints(3));
 
         assertEquals(array.getValue().size(), (3));
     }
@@ -42,7 +42,7 @@ public class StaticArrayTest {
     @Test
     public void throwsIfSizeDoesntMatchType() {
         try {
-            new StaticArray3<>(arrayOfUints(4));
+            new StaticArray3<>(Uint.class, arrayOfUints(4));
             fail();
         } catch (final UnsupportedOperationException e) {
             assertEquals(
@@ -54,7 +54,7 @@ public class StaticArrayTest {
     @Test
     public void throwsIfSizeIsAboveMaxOf32() {
         try {
-            new StaticArray32<>(arrayOfUints(33));
+            new StaticArray32<>(Uint.class, arrayOfUints(33));
             fail();
         } catch (final UnsupportedOperationException e) {
             assertEquals(
