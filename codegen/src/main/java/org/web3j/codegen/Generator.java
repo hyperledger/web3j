@@ -31,7 +31,7 @@ class Generator {
         javaFile.writeTo(new File(destinationDir));
     }
 
-    static String buildWarning(final Class cls) {
+    static String buildWarning(final Class<?> cls) {
         return "Auto generated code.\n"
                 + "<p><strong>Do not modify!</strong>\n"
                 + "<p>Please use "
