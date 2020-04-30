@@ -19,9 +19,9 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.tx.TransactionManager;
 
-public class RemoteArrayFunctionCall<T> extends AbstractRemoteCall<List<T>> {
+public class RemoteArrayCall<T> extends AbstractRemoteCall<List<T>> {
 
-    public RemoteArrayFunctionCall(
+    public RemoteArrayCall(
             final Function function,
             final String address,
             final TransactionManager transactionManager,

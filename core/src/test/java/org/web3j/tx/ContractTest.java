@@ -37,7 +37,7 @@ import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.RemoteArrayFunctionCall;
+import org.web3j.protocol.core.RemoteArrayCall;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteTransactionCall;
 import org.web3j.protocol.core.Request;
@@ -641,7 +641,7 @@ public class ContractTest extends ManagedTransactionTester {
                             Arrays.asList(
                                     new TypeReference<Uint256>() {},
                                     new TypeReference<Uint256>() {}));
-            return new RemoteArrayFunctionCall<>(
+            return new RemoteArrayCall<>(
                     function, contractAddress, transactionManager, defaultBlockParameter);
         }
 
