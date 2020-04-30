@@ -380,7 +380,7 @@ public final class AbiTypes {
      * name. For the tuple notation of a struct, example ((string,uint256)), think of taking an
      * instance of the struct and calling the <code>instance.getTypeAsString()</code> method.
      */
-    public static String getTypeAString(final Class<? extends Type> type) {
+    public static String getTypeAString(final Class<? extends Type<?>> type) {
         if (Utf8String.class.equals(type)) {
             return "string";
         } else if (DynamicBytes.class.equals(type)) {
