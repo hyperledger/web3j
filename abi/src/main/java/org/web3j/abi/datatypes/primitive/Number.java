@@ -12,7 +12,9 @@
  */
 package org.web3j.abi.datatypes.primitive;
 
-import org.web3j.abi.datatypes.NumericType;
+import java.math.BigInteger;
+
+import org.web3j.abi.datatypes.Type;
 
 public abstract class Number<T extends java.lang.Number & Comparable<T>> extends PrimitiveType<T> {
     Number(final T value) {
@@ -20,5 +22,5 @@ public abstract class Number<T extends java.lang.Number & Comparable<T>> extends
     }
 
     @Override
-    public abstract NumericType toSolidityType();
+    public abstract Type<BigInteger> toSolidityType();
 }

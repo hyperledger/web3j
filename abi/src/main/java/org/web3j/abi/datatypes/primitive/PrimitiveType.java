@@ -37,7 +37,7 @@ public abstract class PrimitiveType<T extends Serializable & Comparable<T>> impl
         return type;
     }
 
-    public abstract Type toSolidityType();
+    public abstract Type<?> toSolidityType();
 
     @Override
     public boolean equals(final Object o) {

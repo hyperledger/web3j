@@ -12,7 +12,9 @@
  */
 package org.web3j.abi.datatypes.primitive;
 
-import org.web3j.abi.datatypes.NumericType;
+import java.math.BigInteger;
+
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Int64;
 
 public final class Long extends Number<java.lang.Long> {
@@ -22,7 +24,7 @@ public final class Long extends Number<java.lang.Long> {
     }
 
     @Override
-    public NumericType toSolidityType() {
+    public Type<BigInteger> toSolidityType() {
         return new Int64(getValue());
     }
 }

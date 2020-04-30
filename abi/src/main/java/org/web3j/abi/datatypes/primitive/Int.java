@@ -12,7 +12,9 @@
  */
 package org.web3j.abi.datatypes.primitive;
 
-import org.web3j.abi.datatypes.NumericType;
+import java.math.BigInteger;
+
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Int32;
 
 public final class Int extends Number<java.lang.Integer> {
@@ -22,7 +24,7 @@ public final class Int extends Number<java.lang.Integer> {
     }
 
     @Override
-    public NumericType toSolidityType() {
+    public Type<BigInteger> toSolidityType() {
         return new Int32(getValue());
     }
 }

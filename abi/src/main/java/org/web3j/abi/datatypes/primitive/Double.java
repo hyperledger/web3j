@@ -12,7 +12,9 @@
  */
 package org.web3j.abi.datatypes.primitive;
 
-import org.web3j.abi.datatypes.NumericType;
+import java.math.BigInteger;
+
+import org.web3j.abi.datatypes.Type;
 
 public final class Double extends Number<java.lang.Double> {
 
@@ -21,7 +23,7 @@ public final class Double extends Number<java.lang.Double> {
     }
 
     @Override
-    public NumericType toSolidityType() {
+    public Type<BigInteger> toSolidityType() {
         throw new UnsupportedOperationException("Fixed types are not supported");
     }
 }

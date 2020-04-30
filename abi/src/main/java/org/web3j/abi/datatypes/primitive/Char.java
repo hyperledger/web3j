@@ -22,7 +22,7 @@ public final class Char extends PrimitiveType<Character> {
     }
 
     @Override
-    public Type toSolidityType() {
+    public Type<String> toSolidityType() {
         return new Utf8String(String.valueOf(getValue()));
     }
 }

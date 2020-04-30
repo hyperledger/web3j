@@ -22,7 +22,7 @@ public final class Byte extends PrimitiveType<java.lang.Byte> {
     }
 
     @Override
-    public Type toSolidityType() {
+    public Type<byte[]> toSolidityType() {
         return new Bytes1(new byte[] {getValue()});
     }
 }
