@@ -124,8 +124,7 @@ import org.web3j.abi.datatypes.primitive.Short;
  * <code>uint24</code>, etc.
  */
 public final class AbiTypes {
-    private AbiTypes() {
-    }
+    private AbiTypes() {}
 
     /**
      * Returns the web3j data type for the given type, without using primitive types.
@@ -140,7 +139,7 @@ public final class AbiTypes {
     /**
      * Returns the web3j data type for the given type.
      *
-     * @param type       A Solidity type.
+     * @param type A Solidity type.
      * @param primitives Use Java primitive types to wrap contract parameters.
      * @return The web3j Java class to represent this Solidity type.
      */
