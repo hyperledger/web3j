@@ -33,7 +33,7 @@ class Generator {
 
     static String buildWarning(final Class cls) {
         return "Auto generated code.\n"
-                + "<p><strong>Do not modifiy!</strong>\n"
+                + "<p><strong>Do not modify!</strong>\n"
                 + "<p>Please use "
                 + cls.getName()
                 + " in the \n"
