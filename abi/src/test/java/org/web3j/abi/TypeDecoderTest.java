@@ -16,6 +16,7 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.abi.TypeReference.StaticArrayTypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
@@ -1043,7 +1044,7 @@ public class TypeDecoderTest {
                         "000000000000000000000000000000000000000000000000000000000000000a"
                                 + "0000000000000000000000000000000000000000000000007fffffffffffffff",
                         0,
-                        new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {},
+                        new StaticArrayTypeReference<StaticArray<Uint256>>(2) {},
                         2),
                 (new StaticArray2<>(
                         Uint256.class,
@@ -1059,17 +1060,18 @@ public class TypeDecoderTest {
                                 + "000000000000000000000000000000000000000000000000000000000000000d"
                                 + "776f726c64212048656c6c6f2c00000000000000000000000000000000000000",
                         0,
-                        new TypeReference.StaticArrayTypeReference<StaticArray<Utf8String>>(2) {},
+                        new StaticArrayTypeReference<StaticArray<Utf8String>>(2) {},
                         2),
                 (new StaticArray2<>(
                         Utf8String.class,
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
 
-        final Type arr = TypeDecoder.instantiateType("uint256[2]", new long[] {10, Long.MAX_VALUE});
+        final Type<?> arr =
+                TypeDecoder.instantiateType("uint256[2]", new long[] {10, Long.MAX_VALUE});
 
         assertTrue(arr instanceof StaticArray2);
-        final StaticArray2 staticArray2 = (StaticArray2) arr;
+        final StaticArray2<?> staticArray2 = (StaticArray2<?>) arr;
 
         assertEquals(staticArray2.getComponentType(), Uint256.class);
 
@@ -1086,8 +1088,7 @@ public class TypeDecoderTest {
                         TypeDecoder.decodeStaticArray(
                                 "0000000000000000000000000000000000000000000000000000000000000000",
                                 0,
-                                new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(
-                                        0) {},
+                                new StaticArrayTypeReference<StaticArray<Uint256>>(0) {},
                                 0));
     }
 
@@ -1135,16 +1136,15 @@ public class TypeDecoderTest {
                         new Utf8String("Hello, world!"),
                         new Utf8String("world! Hello,"))));
 
-        final Type arr =
+        final Type<?> arr =
                 TypeDecoder.instantiateType(
                         "string[]", new String[] {"Hello, world!", "world! Hello,"});
+
         assertTrue(arr instanceof DynamicArray);
-        final DynamicArray dynamicArray = (DynamicArray) arr;
+        final DynamicArray<?> dynamicArray = (DynamicArray<?>) arr;
 
         assertEquals(dynamicArray.getComponentType(), Utf8String.class);
-
         assertEquals(dynamicArray.getValue().get(0), (new Utf8String("Hello, world!")));
-
         assertEquals(dynamicArray.getValue().get(1), (new Utf8String("world! Hello,")));
     }
 
@@ -1157,7 +1157,7 @@ public class TypeDecoderTest {
 
         assertEquals(TypeDecoder.instantiateType("bytes", bytes1d), (new DynamicBytes(bytes1d)));
 
-        final Type twoDim = TypeDecoder.instantiateType("uint256[][3]", bytes2d);
+        final Type<?> twoDim = TypeDecoder.instantiateType("uint256[][3]", bytes2d);
         assertTrue(twoDim instanceof StaticArray3);
         final StaticArray3<DynamicArray<Uint256>> staticArray3 =
                 (StaticArray3<DynamicArray<Uint256>>) twoDim;
@@ -1165,7 +1165,7 @@ public class TypeDecoderTest {
         DynamicArray<Uint256> row1 = staticArray3.getValue().get(1);
         assertEquals(row1.getValue().get(2), new Uint256(3));
 
-        final Type threeDim = TypeDecoder.instantiateType("uint256[][3][3]", bytes3d);
+        final Type<?> threeDim = TypeDecoder.instantiateType("uint256[][3][3]", bytes3d);
         assertTrue(threeDim instanceof StaticArray3);
         final StaticArray3<StaticArray3<DynamicArray<Uint256>>> staticArray3StaticArray3 =
                 (StaticArray3<StaticArray3<DynamicArray<Uint256>>>) threeDim;

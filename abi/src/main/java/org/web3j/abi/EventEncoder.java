@@ -35,14 +35,14 @@ public class EventEncoder {
         return buildEventSignature(methodSignature);
     }
 
-    static <T extends Type> String buildMethodSignature(
+    static <T extends Type<?>> String buildMethodSignature(
             final String methodName, final List<TypeReference<T>> parameters) {
 
         final StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
         final String params =
-                parameters.stream().map(p -> Utils.getTypeName(p)).collect(Collectors.joining(","));
+                parameters.stream().map(Utils::getTypeName).collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();

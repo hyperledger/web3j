@@ -65,25 +65,26 @@ public class TypeDecoder {
 
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
-    public static Type instantiateType(final String solidityType, final Object value)
+    public static Type<?> instantiateType(final String solidityType, final Object value)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException,
                     IllegalAccessException, ClassNotFoundException {
         return instantiateType(makeTypeReference(solidityType), value);
     }
 
-    public static Type instantiateType(final TypeReference ref, final Object value)
+    public static <T extends Type<?>> Type<?> instantiateType(
+            final TypeReference<T> ref, final Object value)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
                     InstantiationException, ClassNotFoundException {
-        final Class rc = ref.getClassType();
-        if (Array.class.isAssignableFrom(rc)) {
+        final Class<? extends Type<?>> refClassType = ref.getClassType();
+        if (Array.class.isAssignableFrom(refClassType)) {
             return instantiateArrayType(ref, value);
         }
-        return instantiateAtomicType(rc, value);
+        return instantiateAtomicType(refClassType, value);
     }
 
-    public static <T extends Array> T decode(
+    public static <T extends Array<Type<?>>> T decode(
             final String input, final int offset, final TypeReference<T> typeReference) {
-        final Class cls = ((ParameterizedType) typeReference.getType()).getRawType().getClass();
+        final Class<?> cls = ((ParameterizedType) typeReference.getType()).getRawType().getClass();
         if (StaticArray.class.isAssignableFrom(cls)) {
             return decodeStaticArray(input, offset, typeReference, 1);
         } else if (DynamicArray.class.isAssignableFrom(cls)) {
@@ -97,7 +98,7 @@ public class TypeDecoder {
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Type> T decode(final String input, final int offset, final Class<T> type) {
+    static <T extends Type<?>> T decode(final String input, final int offset, final Class<T> type) {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
         } else if (Address.class.isAssignableFrom(type)) {
@@ -114,11 +115,11 @@ public class TypeDecoder {
             throw new UnsupportedOperationException(
                     "Array types must be wrapped in a TypeReference");
         } else {
-            throw new UnsupportedOperationException("Type cannot be encoded: " + type.getClass());
+            throw new UnsupportedOperationException("Type cannot be encoded: " + type);
         }
     }
 
-    static <T extends Type> T decode(final String input, final Class<T> type) {
+    static <T extends Type<?>> T decode(final String input, final Class<T> type) {
         return decode(input, 0, type);
     }
 
@@ -178,12 +179,14 @@ public class TypeDecoder {
         return Type.MAX_BIT_LENGTH;
     }
 
-    static Type instantiateArrayType(final TypeReference ref, final Object value)
+    @SuppressWarnings("unchecked")
+    static <T extends Type<?>> T instantiateArrayType(
+            final TypeReference<?> ref, final Object value)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
                     InstantiationException, ClassNotFoundException {
-        final List values;
+        final List<?> values;
         if (value instanceof List) {
-            values = (List) value;
+            values = (List<?>) value;
         } else if (value.getClass().isArray()) {
             values = arrayToList(value);
         } else {
@@ -192,30 +195,34 @@ public class TypeDecoder {
                             + value.getClass()
                             + " should be a list to instantiate web3j Array");
         }
-        final Constructor listcons;
+        final Constructor<?> listcons;
         final int arraySize =
                 ref instanceof TypeReference.StaticArrayTypeReference
-                        ? ((TypeReference.StaticArrayTypeReference) ref).getSize()
+                        ? ((TypeReference.StaticArrayTypeReference<?>) ref).getSize()
                         : -1;
         if (arraySize <= 0) {
             listcons = DynamicArray.class.getConstructor(Class.class, List.class);
         } else {
-            final Class<?> arrayClass =
-                    Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
+            final Class<? extends StaticArray<Type<?>>> arrayClass =
+                    (Class<? extends StaticArray<Type<?>>>)
+                            Class.forName(
+                                    "org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
             listcons = arrayClass.getConstructor(Class.class, List.class);
         }
         // create a list of arguments coerced to the correct type of sub-TypeReference
-        final ArrayList<Type<?>> transformedList = new ArrayList<Type<?>>(values.size());
-        final TypeReference subTypeReference = ref.getSubTypeReference();
+        final ArrayList<Type<?>> transformedList = new ArrayList<>(values.size());
+        final TypeReference<?> subTypeReference = ref.getSubTypeReference();
         for (final Object o : values) {
             transformedList.add(instantiateType(subTypeReference, o));
         }
-        return (Type) listcons.newInstance(subTypeReference.getClassType(), transformedList);
+        return (T) listcons.newInstance(subTypeReference.getClassType(), transformedList);
     }
 
-    static Type instantiateAtomicType(final Class<?> referenceClass, final Object value)
+    @SuppressWarnings("unchecked")
+    static <T extends Type<?>> T instantiateAtomicType(
+            final Class<T> referenceClass, final Object value)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-                    InstantiationException, ClassNotFoundException {
+                    InstantiationException {
         Object constructorArg = null;
         if (NumericType.class.isAssignableFrom(referenceClass)) {
             constructorArg = asBigInteger(value);
@@ -253,12 +260,13 @@ public class TypeDecoder {
                             + value.getClass());
         }
         final Class<?>[] types = new Class[] {constructorArg.getClass()};
-        final Constructor cons = referenceClass.getConstructor(types);
-        return (Type) cons.newInstance(constructorArg);
+        final Constructor<Type<?>> cons =
+                (Constructor<Type<?>>) referenceClass.getConstructor(types);
+        return (T) cons.newInstance(constructorArg);
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Type> int getSingleElementLength(
+    static <T extends Type<?>> int getSingleElementLength(
             final String input, final int offset, final Class<T> type) {
         if (input.length() == offset) {
             return 0;
@@ -331,14 +339,13 @@ public class TypeDecoder {
     }
 
     /** Static array length cannot be passed as a type. */
-    @SuppressWarnings("unchecked")
-    static <T extends Type> T decodeStaticArray(
+    static <T extends Array<? extends Type<?>>> T decodeStaticArray(
             final String input,
             final int offset,
             final TypeReference<T> typeReference,
             final int length) {
 
-        final BiFunction<List<T>, String, T> function =
+        final BiFunction<List<? extends Type<?>>, String, T> function =
                 (elements, typeName) -> {
                     if (elements.isEmpty()) {
                         throw new UnsupportedOperationException(
@@ -449,12 +456,12 @@ public class TypeDecoder {
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Type> T decodeDynamicArray(
+    static <T extends Array<? extends Type<?>>> T decodeDynamicArray(
             final String input, final int offset, final TypeReference<T> typeReference) {
 
         final int length = decodeUintAsInt(input, offset);
 
-        final BiFunction<List<T>, String, T> function =
+        final BiFunction<List<? extends Type<?>>, String, T> function =
                 (elements, typeName) -> (T) new DynamicArray(AbiTypes.getType(typeName), elements);
 
         final int valueOffset = offset + MAX_BYTE_LENGTH_FOR_HEX_STRING;
@@ -628,33 +635,37 @@ public class TypeDecoder {
         return null;
     }
 
-    static List arrayToList(final Object array) {
+    static List<?> arrayToList(final Object array) {
         final int len = java.lang.reflect.Array.getLength(array);
-        final ArrayList<Object> rslt = new ArrayList<Object>(len);
+        final ArrayList<Object> result = new ArrayList<>(len);
         for (int i = 0; i < len; i++) {
-            rslt.add(java.lang.reflect.Array.get(array, i));
+            result.add(java.lang.reflect.Array.get(array, i));
         }
-        return rslt;
+        return result;
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends Type> T instantiateStaticArray(List<T> elements, int length) {
+    private static <T extends Array<? extends Type<?>>> T instantiateStaticArray(List<? extends Type<?>> elements,
+             int length) {
         try {
-            final Class<? extends StaticArray> arrayClass =
-                    (Class<? extends StaticArray>)
-                            Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + length);
-            return (T) arrayClass.getConstructor(List.class).newInstance(elements);
+            final Class<? extends StaticArray<Type<?>>> arrayClass =
+                    (Class<? extends StaticArray<Type<?>>>)
+                            Class.forName(StaticArray.class.getCanonicalName() + length);
+            return (T)
+                    arrayClass
+                            .getConstructor(Class.class, List.class)
+                            .newInstance(typeReference.getClassType(), elements);
         } catch (final ReflectiveOperationException e) {
-            throw new UnsupportedOperationException(e);
+            throw new IllegalStateException(e);
         }
     }
 
-    private static <T extends Type> T decodeArrayElements(
+    private static <T extends Array<? extends Type<?>>> T decodeArrayElements(
             final String input,
             final int offset,
             final TypeReference<T> typeReference,
             final int length,
-            final BiFunction<List<T>, String, T> consumer) {
+            final BiFunction<List<? extends Type<?>>, String, T> consumer) {
 
         try {
             Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
@@ -707,7 +718,6 @@ public class TypeDecoder {
                 }
 
                 String typeName = getSimpleTypeName(cls);
-
                 return consumer.apply(elements, typeName);
             }
         } catch (final ClassNotFoundException e) {

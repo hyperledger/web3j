@@ -46,7 +46,7 @@ public class TypeEncoder {
 
     private TypeEncoder() {}
 
-    static boolean isDynamic(final Type parameter) {
+    static boolean isDynamic(final Type<?> parameter) {
         return parameter instanceof DynamicBytes
                 || parameter instanceof Utf8String
                 || parameter instanceof DynamicArray
@@ -55,8 +55,7 @@ public class TypeEncoder {
                                 ((StaticArray) parameter).getComponentType()));
     }
 
-    @SuppressWarnings("unchecked")
-    public static String encode(final Type parameter) {
+    public static String encode(final Type<?> parameter) {
         if (parameter instanceof NumericType) {
             return encodeNumeric(((NumericType) parameter));
         } else if (parameter instanceof Address) {
@@ -74,14 +73,14 @@ public class TypeEncoder {
                     ((StaticArray) parameter).getComponentType())) {
                 return encodeStaticArrayWithDynamicStruct((StaticArray) parameter);
             } else {
-                return encodeArrayValues((StaticArray) parameter);
+                return encodeArrayValues((StaticArray<?>) parameter);
             }
         } else if (parameter instanceof DynamicStruct) {
             return encodeDynamicStruct((DynamicStruct) parameter);
         } else if (parameter instanceof DynamicArray) {
-            return encodeDynamicArray((DynamicArray) parameter);
+            return encodeDynamicArray((DynamicArray<?>) parameter);
         } else if (parameter instanceof PrimitiveType) {
-            return encode(((PrimitiveType) parameter).toSolidityType());
+            return encode(((PrimitiveType<?>) parameter).toSolidityType());
         } else {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
@@ -117,9 +116,7 @@ public class TypeEncoder {
         final byte paddingValue = getPaddingValue(numericType);
         final byte[] paddedRawValue = new byte[MAX_BYTE_LENGTH];
         if (paddingValue != 0) {
-            for (int i = 0; i < paddedRawValue.length; i++) {
-                paddedRawValue[i] = paddingValue;
-            }
+            Arrays.fill(paddedRawValue, paddingValue);
         }
 
         System.arraycopy(
@@ -179,10 +176,7 @@ public class TypeEncoder {
         final String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
         final String encodedValue = encodeBytes(dynamicBytes);
 
-        final StringBuilder result = new StringBuilder();
-        result.append(encodedLength);
-        result.append(encodedValue);
-        return result.toString();
+        return encodedLength + encodedValue;
     }
 
     static String encodeString(final Utf8String string) {

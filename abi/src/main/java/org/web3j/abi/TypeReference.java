@@ -32,8 +32,9 @@ import org.web3j.abi.datatypes.StaticArray;
  * href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Type.html">Type</a> to avoid
  * working around this fundamental generics limitation.
  */
-public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
+public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
         implements Comparable<TypeReference<T>> {
+
     protected static Pattern ARRAY_SUFFIX = Pattern.compile("\\[(\\d*)]");
 
     private final Type type;
@@ -59,12 +60,12 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      *
      * @return the type wrapped by this Array TypeReference, or null if not Array
      */
-    TypeReference getSubTypeReference() {
+    TypeReference<T> getSubTypeReference() {
         return null;
     }
 
     public int compareTo(final TypeReference<T> o) {
-        // taken from the blog post comments - this results in an errror if the
+        // taken from the blog post comments - this results in an error if the
         // type parameter is left out.
         return 0;
     }
@@ -95,12 +96,12 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
     }
 
-    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
+    public static <T extends org.web3j.abi.datatypes.Type<?>> TypeReference<T> create(
             final Class<T> cls) {
         return create(cls, false);
     }
 
-    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
+    public static <T extends org.web3j.abi.datatypes.Type<?>> TypeReference<T> create(
             final Class<T> cls, final boolean indexed) {
         return new TypeReference<T>(indexed) {
             public java.lang.reflect.Type getType() {
@@ -118,7 +119,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
      * @return returns
      * @throws ClassNotFoundException when the class cannot be found.
      */
-    protected static Class<? extends org.web3j.abi.datatypes.Type> getAtomicTypeClass(
+    protected static Class<? extends org.web3j.abi.datatypes.Type<?>> getAtomicTypeClass(
             final String solidityType, final boolean primitives) throws ClassNotFoundException {
 
         if (ARRAY_SUFFIX.matcher(solidityType).find()) {
@@ -130,7 +131,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
     }
 
-    public abstract static class StaticArrayTypeReference<T extends org.web3j.abi.datatypes.Type>
+    public abstract static class StaticArrayTypeReference<T extends org.web3j.abi.datatypes.Type<?>>
             extends TypeReference<T> {
 
         private final int size;
@@ -144,40 +145,42 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
     }
 
-    public static TypeReference makeTypeReference(final String solidityType)
+    public static TypeReference<?> makeTypeReference(final String solidityType)
             throws ClassNotFoundException {
         return makeTypeReference(solidityType, false, false);
     }
 
-    public static TypeReference makeTypeReference(
+    public static TypeReference<?> makeTypeReference(
             final String solidityType, final boolean indexed, final boolean primitives)
             throws ClassNotFoundException {
 
         Matcher nextSquareBrackets = ARRAY_SUFFIX.matcher(solidityType);
         if (!nextSquareBrackets.find()) {
-            final Class<? extends org.web3j.abi.datatypes.Type> typeClass =
+            final Class<? extends org.web3j.abi.datatypes.Type<?>> typeClass =
                     getAtomicTypeClass(solidityType, primitives);
             return create(typeClass, indexed);
         }
 
         int lastReadStringPosition = nextSquareBrackets.start();
 
-        final Class<? extends org.web3j.abi.datatypes.Type> baseClass =
+        final Class<? extends org.web3j.abi.datatypes.Type<?>> baseClass =
                 getAtomicTypeClass(solidityType.substring(0, lastReadStringPosition), primitives);
 
-        TypeReference arrayWrappedType = create(baseClass, indexed);
+        TypeReference<?> arrayWrappedType = create(baseClass, indexed);
         final int len = solidityType.length();
 
         // for each [\d*], wrap the previous TypeReference in an array
         while (lastReadStringPosition < len) {
             final String arraySize = nextSquareBrackets.group(1);
-            final TypeReference baseTr = arrayWrappedType;
+            final TypeReference<?> baseTr = arrayWrappedType;
             if (arraySize == null || arraySize.equals("")) {
                 arrayWrappedType =
-                        new TypeReference<DynamicArray>(indexed) {
+                        new TypeReference<DynamicArray<?>>(indexed) {
+
                             @Override
-                            TypeReference getSubTypeReference() {
-                                return baseTr;
+                            @SuppressWarnings("unchecked")
+                            TypeReference<DynamicArray<?>> getSubTypeReference() {
+                                return (TypeReference<DynamicArray<?>>) baseTr;
                             }
 
                             @Override
@@ -201,21 +204,22 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
                             }
                         };
             } else {
-                final Class arrayclass;
+                final Class<?> arrayClass;
                 final int arraySizeInt = Integer.parseInt(arraySize);
                 if (arraySizeInt <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY) {
-                    arrayclass =
+                    arrayClass =
                             Class.forName(
                                     "org.web3j.abi.datatypes.generated.StaticArray" + arraySize);
                 } else {
-                    arrayclass = StaticArray.class;
+                    arrayClass = StaticArray.class;
                 }
                 arrayWrappedType =
-                        new TypeReference.StaticArrayTypeReference<StaticArray>(arraySizeInt) {
+                        new StaticArrayTypeReference<StaticArray<?>>(arraySizeInt) {
 
                             @Override
-                            TypeReference getSubTypeReference() {
-                                return baseTr;
+                            @SuppressWarnings("unchecked")
+                            TypeReference<StaticArray<?>> getSubTypeReference() {
+                                return (TypeReference<StaticArray<?>>) baseTr;
                             }
 
                             @Override
@@ -233,7 +237,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
 
                                     @Override
                                     public java.lang.reflect.Type getRawType() {
-                                        return arrayclass;
+                                        return arrayClass;
                                     }
 
                                     @Override

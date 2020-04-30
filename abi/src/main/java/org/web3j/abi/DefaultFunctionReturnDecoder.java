@@ -77,19 +77,20 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
         }
     }
 
-    private static List<Type<?>> build(
-            final String input, final List<TypeReference<Type<?>>> outputParameters) {
+    @SuppressWarnings("unchecked")
+    private static <T extends Type<?>> List<T> build(
+            final String input, final List<TypeReference<T>> outputParameters) {
         final List<Type<?>> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
-        for (final TypeReference<?> typeReference : outputParameters) {
+        for (final TypeReference<T> typeReference : outputParameters) {
             try {
-                int hexStringDataOffset = getDataOffset(input, offset, typeReference);
+                final int hexStringDataOffset = getDataOffset(input, offset, typeReference);
 
                 @SuppressWarnings("unchecked")
-                Class<Type<?>> classType = (Class<Type<?>>) typeReference.getClassType();
+                final Class<Type<?>> classType = (Class<Type<?>>) typeReference.getClassType();
 
-                final Type result;
+                final Type<?> result;
                 if (DynamicStruct.class.isAssignableFrom(classType)) {
                     result =
                             TypeDecoder.decodeDynamicStruct(
@@ -99,15 +100,20 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                 } else if (DynamicArray.class.isAssignableFrom(classType)) {
                     result =
                             TypeDecoder.decodeDynamicArray(
-                                    input, hexStringDataOffset, typeReference);
+                                    input,
+                                    hexStringDataOffset,
+                                    (TypeReference<Array<Type<?>>>) typeReference);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
                     final int length =
-                            ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
+                            ((TypeReference.StaticArrayTypeReference<?>) typeReference).getSize();
                     result =
                             TypeDecoder.decodeStaticArray(
-                                    input, hexStringDataOffset, typeReference, length);
+                                    input,
+                                    hexStringDataOffset,
+                                    (TypeReference<Array<Type<?>>>) typeReference,
+                                    length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else if (StaticStruct.class.isAssignableFrom(classType)) {
@@ -125,7 +131,10 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                                             .substring(StaticArray.class.getSimpleName().length()));
                     result =
                             TypeDecoder.decodeStaticArray(
-                                    input, hexStringDataOffset, typeReference, length);
+                                    input,
+                                    hexStringDataOffset,
+                                    (TypeReference<Array<Type<?>>>) typeReference,
+                                    length);
                     if (DynamicStruct.class.isAssignableFrom(
                             getParameterizedTypeFromArray(typeReference))) {
                         offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
@@ -151,10 +160,10 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                 throw new UnsupportedOperationException("Invalid class reference provided", e);
             }
         }
-        return results;
+        return (List<T>) results;
     }
 
-    public static <T extends Type> int getDataOffset(
+    public static <T extends Type<?>> int getDataOffset(
             String input, int offset, TypeReference<?> typeReference)
             throws ClassNotFoundException {
         @SuppressWarnings("unchecked")
