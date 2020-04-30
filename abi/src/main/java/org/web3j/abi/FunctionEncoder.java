@@ -51,22 +51,22 @@ public abstract class FunctionEncoder {
     }
 
     public static Function makeFunction(
-            final String fnname,
+            final String functionName,
             final List<String> solidityInputTypes,
             final List<Object> arguments,
             final List<String> solidityOutputTypes)
             throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
                     IllegalAccessException, InvocationTargetException {
         final List<Type<?>> encodedInput = new ArrayList<>();
-        final Iterator<?> argit = arguments.iterator();
-        for (final String st : solidityInputTypes) {
-            encodedInput.add(instantiateType(st, argit.next()));
+        final Iterator<?> argumentsIterator = arguments.iterator();
+        for (final String solidityType : solidityInputTypes) {
+            encodedInput.add(instantiateType(solidityType, argumentsIterator.next()));
         }
         final List<TypeReference<?>> encodedOutput = new ArrayList<>();
-        for (final String st : solidityOutputTypes) {
-            encodedOutput.add(makeTypeReference(st));
+        for (final String solidityType : solidityOutputTypes) {
+            encodedOutput.add(makeTypeReference(solidityType));
         }
-        return new Function(fnname, encodedInput, encodedOutput);
+        return new Function(functionName, encodedInput, encodedOutput);
     }
 
     protected abstract String encodeFunction(Function function);
