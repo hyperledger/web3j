@@ -1046,10 +1046,10 @@ public class TypeDecoderTest {
                         0,
                         new StaticArrayTypeReference<StaticArray<Uint256>>(2) {},
                         2),
-                (new StaticArray2<>(
+                new StaticArray2<>(
                         Uint256.class,
                         new Uint256(BigInteger.TEN),
-                        new Uint256(BigInteger.valueOf(Long.MAX_VALUE)))));
+                        new Uint256(BigInteger.valueOf(Long.MAX_VALUE))));
 
         assertEquals(
                 TypeDecoder.decodeStaticArray(
@@ -1083,7 +1083,7 @@ public class TypeDecoderTest {
     @Test
     public void testEmptyStaticArray() {
         assertThrows(
-                UnsupportedOperationException.class,
+                IllegalArgumentException.class,
                 () ->
                         TypeDecoder.decodeStaticArray(
                                 "0000000000000000000000000000000000000000000000000000000000000000",

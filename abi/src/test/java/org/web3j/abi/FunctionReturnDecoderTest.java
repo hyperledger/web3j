@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.abi.TypeReference.StaticArrayTypeReference;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Function;
@@ -142,8 +143,7 @@ public class FunctionReturnDecoderTest {
     public void testDecodeStaticArrayValue() {
         final List<TypeReference<Type<?>>> outputParameters = new ArrayList<>(1);
         outputParameters.add(
-                (TypeReference)
-                        new TypeReference.StaticArrayTypeReference<StaticArray<Uint256>>(2) {});
+                (TypeReference) new StaticArrayTypeReference<StaticArray<Uint256>>(2) {});
         outputParameters.add((TypeReference) new TypeReference<Uint256>() {});
 
         final List<Type<?>> decoded =
@@ -161,7 +161,7 @@ public class FunctionReturnDecoderTest {
 
         final List<Type<?>> expected =
                 Arrays.asList(uint256StaticArray2, new Uint256(BigInteger.TEN));
-        assertEquals(decoded, (expected));
+        assertEquals(decoded, expected);
     }
 
     @Test

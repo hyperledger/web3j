@@ -60,7 +60,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
      *
      * @return the type wrapped by this Array TypeReference, or null if not Array
      */
-    TypeReference<T> getSubTypeReference() {
+    TypeReference<T> getComponentTypeReference() {
         return null;
     }
 
@@ -143,6 +143,11 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
         public int getSize() {
             return size;
         }
+
+        @SuppressWarnings("unchecked")
+        public Class<T> getComponentType() {
+            return (Class<T>) ((ParameterizedType) getType()).getActualTypeArguments()[0];
+        }
     }
 
     public static TypeReference<?> makeTypeReference(final String solidityType)
@@ -179,7 +184,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
 
                             @Override
                             @SuppressWarnings("unchecked")
-                            TypeReference<DynamicArray<?>> getSubTypeReference() {
+                            TypeReference<DynamicArray<?>> getComponentTypeReference() {
                                 return (TypeReference<DynamicArray<?>>) baseTr;
                             }
 
@@ -218,7 +223,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
 
                             @Override
                             @SuppressWarnings("unchecked")
-                            TypeReference<StaticArray<?>> getSubTypeReference() {
+                            TypeReference<StaticArray<?>> getComponentTypeReference() {
                                 return (TypeReference<StaticArray<?>>) baseTr;
                             }
 

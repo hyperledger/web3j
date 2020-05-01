@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.abi.TypeReference.StaticArrayTypeReference;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -52,8 +53,7 @@ public class UtilsTest {
         assertEquals(Utils.getTypeName(new TypeReference<DynamicBytes>() {}), ("bytes"));
 
         assertEquals(
-                Utils.getTypeName(
-                        new TypeReference.StaticArrayTypeReference<StaticArray<Uint>>(5) {}),
+                Utils.getTypeName(new StaticArrayTypeReference<StaticArray<Uint>>(5) {}),
                 ("uint256[5]"));
         assertEquals(Utils.getTypeName(new TypeReference<DynamicArray<Uint>>() {}), ("uint256[]"));
     }
