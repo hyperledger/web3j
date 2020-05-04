@@ -30,12 +30,12 @@ public class BlockFilter extends Filter<String> {
     }
 
     @Override
-    EthFilter sendRequest() throws IOException {
+    protected EthFilter sendRequest() throws IOException {
         return web3j.ethNewBlockFilter().send();
     }
 
     @Override
-    void process(List<EthLog.LogResult> logResults) {
+    protected void process(List<EthLog.LogResult> logResults) {
         for (EthLog.LogResult logResult : logResults) {
             if (logResult instanceof EthLog.Hash) {
                 String blockHash = ((EthLog.Hash) logResult).get();

@@ -38,12 +38,12 @@ public abstract class Filter<T> {
 
     private static final Logger log = LoggerFactory.getLogger(Filter.class);
 
-    final Web3j web3j;
-    final Callback<T> callback;
+    protected final Web3j web3j;
+    protected Callback<T> callback;
 
     private volatile BigInteger filterId;
 
-    private ScheduledFuture<?> schedule;
+    protected ScheduledFuture<?> schedule;
 
     private ScheduledExecutorService scheduledExecutorService;
 
@@ -145,9 +145,9 @@ public abstract class Filter<T> {
         }
     }
 
-    abstract EthFilter sendRequest() throws IOException;
+    protected abstract EthFilter sendRequest() throws IOException;
 
-    abstract void process(List<EthLog.LogResult> logResults);
+    protected abstract void process(List<EthLog.LogResult> logResults);
 
     private void reinstallFilter() {
         log.warn("The filter has not been found. Filter id: " + filterId);
@@ -159,7 +159,7 @@ public abstract class Filter<T> {
         schedule.cancel(false);
 
         try {
-            EthUninstallFilter ethUninstallFilter = web3j.ethUninstallFilter(filterId).send();
+            EthUninstallFilter ethUninstallFilter = uninstallFilter(filterId);
             if (ethUninstallFilter.hasError()) {
                 throwException(ethUninstallFilter.getError());
             }
@@ -170,6 +170,10 @@ public abstract class Filter<T> {
         } catch (IOException e) {
             throwException(e);
         }
+    }
+
+    protected EthUninstallFilter uninstallFilter(BigInteger filterId) throws IOException {
+        return web3j.ethUninstallFilter(filterId).send();
     }
 
     /**

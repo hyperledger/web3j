@@ -19,7 +19,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
+
+import io.reactivex.Flowable;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3jService;
@@ -36,6 +39,7 @@ import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthCall;
@@ -44,17 +48,32 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.MinerStartResponse;
 import org.web3j.protocol.eea.JsonRpc2_0Eea;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
+import org.web3j.utils.Async;
 import org.web3j.utils.Base64String;
 
 import static java.util.Objects.requireNonNull;
 
 public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
-    public JsonRpc2_0Besu(Web3jService web3jService) {
-        super(web3jService);
+
+    private final JsonRpc2_0BesuRx besuRx;
+    private final long blockTime;
+
+    public JsonRpc2_0Besu(final Web3jService web3jService) {
+        this(web3jService, DEFAULT_BLOCK_TIME, Async.defaultExecutorService());
+    }
+
+    public JsonRpc2_0Besu(
+            Web3jService web3jService,
+            long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        super(web3jService, pollingInterval, scheduledExecutorService);
+        this.besuRx = new JsonRpc2_0BesuRx(this, scheduledExecutorService);
+        this.blockTime = pollingInterval;
     }
 
     @Override
@@ -395,5 +414,10 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 Arrays.asList(privacyGroupId, filterId),
                 web3jService,
                 EthLog.class);
+    }
+
+    @Override
+    public Flowable<Log> privLogFlowable(final String privacyGroupId, final EthFilter ethFilter) {
+        return besuRx.privLogFlowable(privacyGroupId, ethFilter, blockTime);
     }
 }

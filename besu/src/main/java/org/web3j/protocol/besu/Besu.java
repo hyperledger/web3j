@@ -15,6 +15,7 @@ package org.web3j.protocol.besu;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3jService;
@@ -40,9 +41,32 @@ import org.web3j.protocol.eea.Eea;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Base64String;
 
-public interface Besu extends Eea {
+public interface Besu extends Eea, BesuRx {
+
+    /**
+     * Construct a new Besu instance.
+     *
+     * @param web3jService web3j service instance - i.e. HTTP
+     * @return new Besu instance
+     */
     static Besu build(Web3jService web3jService) {
         return new JsonRpc2_0Besu(web3jService);
+    }
+
+    /**
+     * Construct a new Besu instance.
+     *
+     * @param web3jService web3j service instance - i.e. HTTP
+     * @param pollingInterval polling interval for responses from network nodes
+     * @param scheduledExecutorService executor service to use for scheduled tasks. <strong>You are
+     *     responsible for terminating this thread pool</strong>
+     * @return new Besu instance
+     */
+    static Besu build(
+            Web3jService web3jService,
+            long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        return new JsonRpc2_0Besu(web3jService, pollingInterval, scheduledExecutorService);
     }
 
     Request<?, MinerStartResponse> minerStart();

@@ -13,6 +13,7 @@
 package org.web3j.protocol.eea;
 
 import java.util.Collections;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
@@ -22,6 +23,13 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 public class JsonRpc2_0Eea extends JsonRpc2_0Web3j implements Eea {
     public JsonRpc2_0Eea(Web3jService web3jService) {
         super(web3jService);
+    }
+
+    public JsonRpc2_0Eea(
+            Web3jService web3jService,
+            long pollingInterval,
+            ScheduledExecutorService scheduledExecutorService) {
+        super(web3jService, pollingInterval, scheduledExecutorService);
     }
 
     @Override
