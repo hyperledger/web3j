@@ -14,5 +14,10 @@ package org.web3j.protocol.core;
 
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+/**
+ * A common type for wrapping both remote requests and transactions.
+ *
+ * @param <T> Our return type.
+ */
 public interface RemoteTransactionCall<T>
         extends RemoteTransaction<TransactionReceipt>, RemoteCall<T> {}
