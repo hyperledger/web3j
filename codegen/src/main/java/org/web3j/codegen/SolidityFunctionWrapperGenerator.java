@@ -182,14 +182,12 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 names = {"-b", "--binFile"},
                 description =
                         "bin file with contract compiled code "
-                                + "in order to generate deploy methods.",
-                required = false)
+                                + "in order to generate deploy methods.")
         private File binFile;
 
         @Option(
                 names = {"-c", "--contractName"},
-                description = "contract name (defaults to ABI file name).",
-                required = false)
+                description = "contract name (defaults to ABI file name).")
         private String contractName;
 
         @Option(
@@ -207,14 +205,12 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         @Option(
                 names = {"-jt", JAVA_TYPES_ARG},
                 description = "use native Java types.",
-                required = false,
                 showDefaultValue = ALWAYS)
-        private final boolean javaTypes = true;
+        private boolean javaTypes = true;
 
         @Option(
                 names = {"-st", SOLIDITY_TYPES_ARG},
-                description = "use solidity types.",
-                required = false)
+                description = "use solidity types.")
         private boolean solidityTypes;
 
         @Override
