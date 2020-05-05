@@ -75,12 +75,12 @@ public abstract class Contract {
             final TransactionManager transactionManager,
             final ContractGasProvider gasProvider,
             final TransactionReceipt transactionReceipt) {
+        this.ensResolver = new EnsResolver(web3j);
         this.contractAddress = resolveContractAddress(contractAddress);
         this.transactionManager = transactionManager;
         this.contractBinary = contractBinary;
         this.transactionReceipt = transactionReceipt;
         this.gasProvider = gasProvider;
-        this.ensResolver = new EnsResolver(web3j);
         this.web3j = web3j;
     }
 
