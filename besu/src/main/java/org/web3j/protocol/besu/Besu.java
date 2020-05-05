@@ -22,6 +22,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
 import org.web3j.protocol.besu.response.BesuFullDebugTraceResponse;
+import org.web3j.protocol.besu.response.BesuSignerMetrics;
 import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
@@ -85,6 +86,19 @@ public interface Besu extends Eea, BesuRx {
 
     Request<?, BesuFullDebugTraceResponse> debugTraceTransaction(
             String transactionHash, Map<String, Boolean> options);
+
+    Request<?, BooleanResponse> ibftDiscardValidatorVote(String address);
+
+    Request<?, BesuEthAccountsMapResponse> ibftGetPendingVotes();
+
+    Request<?, BesuSignerMetrics> ibftGetSignerMetrics();
+
+    Request<?, EthAccounts> ibftGetValidatorsByBlockNumber(
+            DefaultBlockParameter defaultBlockParameter);
+
+    Request<?, EthAccounts> ibftGetValidatorsByBlockHash(String blockHash);
+
+    Request<?, BooleanResponse> ibftProposeValidatorVote(String address, Boolean validatorAddition);
 
     Request<?, EthGetTransactionCount> privGetTransactionCount(
             final String address, final Base64String privacyGroupId);

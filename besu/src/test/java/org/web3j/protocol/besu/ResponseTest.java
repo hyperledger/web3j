@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.besu;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
+import org.web3j.protocol.besu.response.BesuSignerMetrics;
 import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
@@ -72,6 +74,32 @@ public class ResponseTest extends ResponseTester {
                 mapResponse.getAccounts().toString(),
                 ("{0x42eb768f2244c8811c63729a21a3569731535f07=false, "
                         + "0x12eb759f2222d7711c63729a45c3585731521d01=true}"));
+    }
+
+    @Test
+    public void testIbftGetValidatorMetrics() {
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\": \"2.0\",\n"
+                        + "    \"id\": 1,\n"
+                        + "    \"result\": [\n"
+                        + "{\"address\": \"0x42eb768f2244c8811c63729a21a3569731535f07\",\n"
+                        + "\"proposedBlockCount\": \"0x0\",\n"
+                        + "\"lastProposedBlockNumber\": \"0x1\"}\n"
+                        + "]\n"
+                        + "}");
+
+        BesuSignerMetrics signerMetrics = deserialiseResponse(BesuSignerMetrics.class);
+        assertEquals(
+                signerMetrics.getSignerMetrics().get(0).getAddress(),
+                "0x42eb768f2244c8811c63729a21a3569731535f07");
+
+        assertEquals(
+                signerMetrics.getSignerMetrics().get(0).getProposedBlockCount(), BigInteger.ZERO);
+
+        assertEquals(
+                signerMetrics.getSignerMetrics().get(0).getLastProposedBlockNumber(),
+                BigInteger.ONE);
     }
 
     @Test
