@@ -132,6 +132,57 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testibftDiscardValidatorVote() throws Exception {
+        final String accountId = "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
+        web3j.ibftDiscardValidatorVote(accountId).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_discardValidatorVote\","
+                        + "\"params\":[\"0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73\"],\"id\":1}");
+    }
+
+    @Test
+    public void testIbftGetPendingVotes() throws Exception {
+        web3j.ibftGetPendingVotes().send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_getPendingVotes\","
+                        + "\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testIbftGetValidatorsByBlockNumber() throws Exception {
+        final DefaultBlockParameter blockParameter = DefaultBlockParameter.valueOf("latest");
+        web3j.ibftGetValidatorsByBlockNumber(blockParameter).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_getValidatorsByBlockNumber\","
+                        + "\"params\":[\"latest\"],\"id\":1}");
+    }
+
+    @Test
+    public void testIbftGetValidatorsByBlockHash() throws Exception {
+        final String blockHash =
+                "0x98b2ddb5106b03649d2d337d42154702796438b3c74fd25a5782940e84237a48";
+        web3j.ibftGetValidatorsByBlockHash(blockHash).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_getValidatorsByBlockHash\",\"params\":"
+                        + "[\"0x98b2ddb5106b03649d2d337d42154702796438b3c74fd25a5782940e84237a48\"]"
+                        + ",\"id\":1}");
+    }
+
+    @Test
+    public void testIbftProposeValidatorVote() throws Exception {
+        final String validatorAddress = "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
+        web3j.ibftProposeValidatorVote(validatorAddress, true).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_proposeValidatorVote\","
+                        + "\"params\":[\"0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73\",true],\"id\":1}");
+    }
+
+    @Test
     public void testPrivGetTransactionCount() throws Exception {
         web3j.privGetTransactionCount(
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1", MOCK_PRIVACY_GROUP_ID)

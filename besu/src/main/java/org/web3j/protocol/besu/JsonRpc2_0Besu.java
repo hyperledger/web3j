@@ -31,6 +31,7 @@ import org.web3j.protocol.besu.privacy.OnChainPrivacyTransactionBuilder;
 import org.web3j.protocol.besu.request.CreatePrivacyGroupRequest;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
 import org.web3j.protocol.besu.response.BesuFullDebugTraceResponse;
+import org.web3j.protocol.besu.response.BesuSignerMetrics;
 import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
@@ -141,6 +142,56 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 Arrays.asList(transactionHash, options),
                 web3jService,
                 BesuFullDebugTraceResponse.class);
+    }
+
+    public Request<?, BooleanResponse> ibftDiscardValidatorVote(String address) {
+        return new Request<>(
+                "ibft_discardValidatorVote",
+                Arrays.asList(address),
+                web3jService,
+                BooleanResponse.class);
+    }
+
+    public Request<?, BesuEthAccountsMapResponse> ibftGetPendingVotes() {
+        return new Request<>(
+                "ibft_getPendingVotes",
+                Collections.<String>emptyList(),
+                web3jService,
+                BesuEthAccountsMapResponse.class);
+    }
+
+    public Request<?, BesuSignerMetrics> ibftGetSignerMetrics() {
+        return new Request<>(
+                "ibft_getSignerMetrics",
+                Collections.<String>emptyList(),
+                web3jService,
+                BesuSignerMetrics.class);
+    }
+
+    public Request<?, EthAccounts> ibftGetValidatorsByBlockNumber(
+            DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>(
+                "ibft_getValidatorsByBlockNumber",
+                Arrays.asList(defaultBlockParameter.getValue()),
+                web3jService,
+                EthAccounts.class);
+    }
+
+    public Request<?, EthAccounts> ibftGetValidatorsByBlockHash(String blockHash) {
+        return new Request<>(
+                "ibft_getValidatorsByBlockHash",
+                Arrays.asList(blockHash),
+                web3jService,
+                EthAccounts.class);
+    }
+
+    public Request<?, BooleanResponse> ibftProposeValidatorVote(
+            String address, Boolean validatorAddition) {
+        return new Request<>(
+                "ibft_proposeValidatorVote",
+                Arrays.asList(address, validatorAddition),
+                web3jService,
+                BooleanResponse.class);
     }
 
     @Override
