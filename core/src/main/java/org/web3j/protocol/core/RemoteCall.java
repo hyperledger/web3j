@@ -66,6 +66,13 @@ public interface RemoteCall<T> extends Callable<T> {
     }
 
     /**
+     * Provide the remote call internal address.
+     *
+     * @return this call internal address
+     */
+    String getAddress();
+    
+    /**
      * Provide the remote call internal function.
      *
      * @return this call internal function

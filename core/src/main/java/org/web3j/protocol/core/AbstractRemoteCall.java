@@ -29,10 +29,10 @@ import org.web3j.tx.exceptions.ContractCallException;
  */
 public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
 
-    final Function function;
-    final String address;
-    final TransactionManager transactionManager;
-    final DefaultBlockParameter defaultBlockParameter;
+    private final Function function;
+    private final String address;
+    private final TransactionManager transactionManager;
+    private final DefaultBlockParameter defaultBlockParameter;
 
     public AbstractRemoteCall(
             final Function function,
@@ -44,6 +44,9 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
         this.transactionManager = transactionManager;
         this.defaultBlockParameter = defaultBlockParameter;
     }
+
+    @Override
+    public String getAddress() { return address; }
 
     @Override
     public Function getFunction() {
@@ -75,6 +78,10 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
                 FunctionReturnDecoder.decode(value, function.getOutputParameters());
 
         return convert(values);
+    }
+
+    protected TransactionManager getTransactionManager() {
+        return transactionManager;
     }
 
     /**
