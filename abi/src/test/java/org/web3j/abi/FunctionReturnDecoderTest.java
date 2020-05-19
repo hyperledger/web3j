@@ -24,6 +24,7 @@ import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.StaticStruct;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
@@ -247,5 +248,34 @@ public class FunctionReturnDecoderTest {
                 FunctionReturnDecoder.decodeIndexedValue(
                         hash, new TypeReference<DynamicArray>() {}),
                 (new Bytes32(Numeric.hexStringToByteArray(hash))));
+    }
+
+    public static class Struct1 extends StaticStruct {
+        public BigInteger id;
+
+        public Struct1(BigInteger id) {
+            super(new Uint256(id));
+            this.id = id;
+        }
+
+        public Struct1(Uint256 id) {
+            super(id);
+            this.id = id.getValue();
+        }
+    }
+
+    @Test
+    public void testDecodeStaticStruct() {
+
+        final Function function =
+                new Function(
+                        "setBar",
+                        Collections.emptyList(),
+                        Collections.singletonList(new TypeReference<Struct1>() {}));
+        String rawInput = "0x0000000000000000000000000000000000000000000000000000000000000064";
+
+        assertEquals(
+                FunctionReturnDecoder.decode(rawInput, function.getOutputParameters()),
+                Collections.singletonList(new Struct1(BigInteger.valueOf(100))));
     }
 }

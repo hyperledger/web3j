@@ -45,6 +45,11 @@ public class DynamicArray<T extends Type> extends Array<T> {
         super(type, values);
     }
 
+    @Override
+    public int bytes32PaddedLength() {
+        return super.bytes32PaddedLength() + MAX_BYTE_LENGTH;
+    }
+
     @SafeVarargs
     public DynamicArray(Class<T> type, T... values) {
         super(type, values);

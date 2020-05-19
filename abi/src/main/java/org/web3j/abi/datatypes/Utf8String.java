@@ -25,6 +25,11 @@ public class Utf8String implements Type<String> {
     }
 
     @Override
+    public int bytes32PaddedLength() {
+        return 2 * MAX_BYTE_LENGTH;
+    }
+
+    @Override
     public String getValue() {
         return value;
     }

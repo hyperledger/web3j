@@ -14,6 +14,8 @@ package org.web3j.abi;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
@@ -22,6 +24,7 @@ import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.NumericType;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
@@ -64,6 +67,8 @@ public class TypeEncoder {
             return encodeString((Utf8String) parameter);
         } else if (parameter instanceof StaticArray) {
             return encodeArrayValues((StaticArray) parameter);
+        } else if (parameter instanceof DynamicStruct) {
+            return encodeDynamicStruct((DynamicStruct) parameter);
         } else if (parameter instanceof DynamicArray) {
             return encodeDynamicArray((DynamicArray) parameter);
         } else if (parameter instanceof PrimitiveType) {
@@ -162,6 +167,47 @@ public class TypeEncoder {
             result.append(encode(type));
         }
         return result.toString();
+    }
+
+    static String encodeDynamicStruct(final DynamicStruct value) {
+        String encodedValues = encodeDynamicStructValues(value);
+
+        StringBuilder result = new StringBuilder();
+        result.append(encodedValues);
+        return result.toString();
+    }
+
+    private static String encodeDynamicStructValues(final DynamicStruct value) {
+        int staticSize = 0;
+        for (int i = 0; i < value.getValue().size(); ++i) {
+            final Type type = value.getValue().get(i);
+            if (isDynamic(type)) {
+                staticSize += 32;
+            } else {
+                staticSize += type.bytes32PaddedLength();
+            }
+        }
+        int dynamicOffset = staticSize;
+        final List<String> offsetsAndStaticValues = new ArrayList<>();
+        final List<String> dynamicValues = new ArrayList<>();
+        for (int i = 0; i < value.getValue().size(); ++i) {
+            final Type type = value.getValue().get(i);
+            if (isDynamic(type)) {
+                offsetsAndStaticValues.add(
+                        Numeric.toHexStringNoPrefix(
+                                Numeric.toBytesPadded(
+                                        new BigInteger(Long.toString(dynamicOffset)),
+                                        MAX_BYTE_LENGTH)));
+                dynamicValues.add(encode(type));
+                dynamicOffset += type.bytes32PaddedLength();
+            } else {
+                offsetsAndStaticValues.add(encode(value.getValue().get(i)));
+            }
+        }
+        final List<String> data = new ArrayList<>();
+        data.addAll(offsetsAndStaticValues);
+        data.addAll(dynamicValues);
+        return String.join("", data);
     }
 
     static <T extends Type> String encodeDynamicArray(DynamicArray<T> value) {

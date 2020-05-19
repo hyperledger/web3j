@@ -112,6 +112,18 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testComplexStorage0425() throws Exception {
+        testCodeGenerationJvmTypes("complexstorage0.4.25", "ComplexStorage");
+        testCodeGenerationSolidityTypes("complexstorage0.4.25", "ComplexStorage");
+    }
+
+    @Test
+    public void testComplexStorage() throws Exception {
+        testCodeGenerationJvmTypes("complexstorage", "ComplexStorage");
+        testCodeGenerationSolidityTypes("complexstorage", "ComplexStorage");
+    }
+
+    @Test
     public void testDuplicateField() throws Exception {
         PrintStream console = System.out;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
