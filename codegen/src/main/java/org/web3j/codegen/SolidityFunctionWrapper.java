@@ -471,26 +471,24 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private String buildStructConstructorParameterDefinition(
-            final List<AbiDefinition.NamedType> components, final boolean useNativeJavaTypes) {
-        return components.stream()
-                .map(
-                        namedType -> {
-                            try {
-                                return (!namedType.getType().equals("tuple") && useNativeJavaTypes
-                                                ? "new "
-                                                        + buildTypeName(namedType.getType(), false)
-                                                        + "("
-                                                : "")
-                                        + (namedType.getType().equals("tuple")
-                                                ? namedType.getName()
-                                                : useNativeJavaTypes
-                                                        ? namedType.getName() + ")"
-                                                        : namedType.getName());
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException();
-                            }
-                        })
-                .collect(Collectors.joining(", "));
+            final List<AbiDefinition.NamedType> components, final boolean useNativeJavaTypes)
+            throws ClassNotFoundException {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < components.size(); i++) {
+            final AbiDefinition.NamedType component = components.get(i);
+            stringBuilder.append(i > 0 ? "," : "");
+            stringBuilder.append(
+                    (!component.getType().equals("tuple") && useNativeJavaTypes
+                            ? "new " + buildTypeName(component.getType(), false) + "("
+                            : ""));
+            stringBuilder.append(
+                    (component.getType().equals("tuple")
+                            ? component.getName()
+                            : useNativeJavaTypes
+                                    ? component.getName() + ")"
+                                    : component.getName()));
+        }
+        return stringBuilder.toString();
     }
 
     private java.util.Collection<? extends AbiDefinition.NamedType> extractNested(

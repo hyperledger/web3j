@@ -412,7 +412,7 @@ public class TypeDecoder {
     }
 
     private static <T extends Type> T instantiateStruct(
-            final TypeReference<T> typeReference, final List<T> elements) {
+            final TypeReference<T> typeReference, final List<T> parameters) {
         try {
             Constructor ctor =
                     Arrays.stream(typeReference.getClassType().getDeclaredConstructors())
@@ -424,12 +424,13 @@ public class TypeDecoder {
                             .orElseThrow(
                                     () ->
                                             new RuntimeException(
-                                                    "TypeReferenced struct must contain a constructor with types that extend Type"));
+                                                    "TypeReference struct must contain a constructor with types that extend Type"));
             ;
             ctor.setAccessible(true);
-            return (T) ctor.newInstance(elements.toArray());
+            return (T) ctor.newInstance(parameters.toArray());
         } catch (ReflectiveOperationException e) {
-            throw new UnsupportedOperationException(e);
+            throw new UnsupportedOperationException(
+                    "Constructor cannot accept" + Arrays.toString(parameters.toArray()), e);
         }
     }
 
@@ -555,13 +556,7 @@ public class TypeDecoder {
     @SuppressWarnings("unchecked")
     private static <T extends Type> int getDynamicStructDynamicParametersCount(
             final Class<?>[] cls) {
-        int dynamicParametersCount = 0;
-        for (final Class<?> cl : cls) {
-            if (isDynamic((Class<T>) cl)) {
-                dynamicParametersCount++;
-            }
-        }
-        return dynamicParametersCount;
+        return (int) Arrays.stream(cls).filter(c -> isDynamic((Class<T>) c)).count();
     }
 
     private static <T extends Type> T decodeDynamicParameterFromStruct(

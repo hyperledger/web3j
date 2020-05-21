@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.DynamicArray;
@@ -36,6 +35,7 @@ import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FunctionReturnDecoderTest {
 
@@ -330,9 +330,7 @@ public class FunctionReturnDecoderTest {
                         new AbiV2TestFixture.Nuu(new AbiV2TestFixture.Foo("id", "name"))));
     }
 
-    // Not supported
     @Test
-    @Disabled
     public void testDecodeTupleDynamicStructNested() {
         String rawInput =
                 "0x0000000000000000000000000000000000000000000000000000000000000060"
@@ -345,11 +343,19 @@ public class FunctionReturnDecoderTest {
                         + "0000000000000000000000000000000000000000000000000000000000000004"
                         + "6e616d6500000000000000000000000000000000000000000000000000000000";
 
-        assertEquals(
-                FunctionReturnDecoder.decode(
-                        rawInput, AbiV2TestFixture.getFooBarFunction.getOutputParameters()),
-                Arrays.asList(
-                        new AbiV2TestFixture.Foo("id", "name"),
-                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN)));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        FunctionReturnDecoder.decode(
+                                rawInput,
+                                AbiV2TestFixture.getFooBarFunction.getOutputParameters()));
+
+        //        assertEquals(
+        //                FunctionReturnDecoder.decode(
+        //                        rawInput,
+        // AbiV2TestFixture.getFooBarFunction.getOutputParameters()),
+        //                Arrays.asList(
+        //                        new AbiV2TestFixture.Foo("id", "name"),
+        //                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN)));
     }
 }

@@ -87,6 +87,10 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
                 Type result;
                 if (DynamicStruct.class.isAssignableFrom(classType)) {
+                    if (!outputParameters.isEmpty()) {
+                        throw new UnsupportedOperationException(
+                                "Multiple return objects containing a struct is not supported");
+                    }
                     result =
                             TypeDecoder.decodeDynamicStruct(
                                     input, hexStringDataOffset, typeReference);
