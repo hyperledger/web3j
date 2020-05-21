@@ -87,7 +87,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
                 Type result;
                 if (DynamicStruct.class.isAssignableFrom(classType)) {
-                    if (!outputParameters.isEmpty()) {
+                    if (outputParameters.size() != 1) {
                         throw new UnsupportedOperationException(
                                 "Multiple return objects containing a struct is not supported");
                     }
