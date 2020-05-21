@@ -597,12 +597,9 @@ public class TypeDecoder {
             return Numeric.toBigInt((String) arg);
         } else if (arg instanceof byte[]) {
             return Numeric.toBigInt((byte[]) arg);
-        } else if (arg instanceof Double
-                || arg instanceof Float
-                || arg instanceof java.lang.Double
-                || arg instanceof java.lang.Float) {
+        } else if (arg instanceof Double || arg instanceof Float) {
             return BigDecimal.valueOf(((Number) arg).doubleValue()).toBigInteger();
-        } else if (arg instanceof Number) {
+        } else if (Number.class.isAssignableFrom(arg.getClass())) {
             return BigInteger.valueOf(((Number) arg).longValue());
         }
         return null;
