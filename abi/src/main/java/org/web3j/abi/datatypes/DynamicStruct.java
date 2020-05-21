@@ -18,10 +18,6 @@ import java.util.List;
 
 public class DynamicStruct extends DynamicArray<Type> implements StructType {
 
-    public List<Class<Type>> getTypes() {
-        return itemTypes;
-    }
-
     private final List<Class<Type>> itemTypes = new ArrayList<>();
 
     public DynamicStruct(List<Type> values) {

@@ -18,13 +18,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.StaticStruct;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
@@ -250,32 +250,106 @@ public class FunctionReturnDecoderTest {
                 (new Bytes32(Numeric.hexStringToByteArray(hash))));
     }
 
-    public static class Struct1 extends StaticStruct {
-        public BigInteger id;
+    @Test
+    public void testDecodeStaticStruct() {
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000064";
 
-        public Struct1(BigInteger id) {
-            super(new Uint256(id));
-            this.id = id;
-        }
-
-        public Struct1(Uint256 id) {
-            super(id);
-            this.id = id.getValue();
-        }
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput, AbiV2TestFixture.getBarFunction.getOutputParameters()),
+                Collections.singletonList(
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.valueOf(100))));
     }
 
     @Test
-    public void testDecodeStaticStruct() {
-
-        final Function function =
-                new Function(
-                        "setBar",
-                        Collections.emptyList(),
-                        Collections.singletonList(new TypeReference<Struct1>() {}));
-        String rawInput = "0x0000000000000000000000000000000000000000000000000000000000000064";
+    public void testDecodeDynamicStruct() {
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "0000000000000000000000000000000000000000000000000000000000000080"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "6964000000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6e616d6500000000000000000000000000000000000000000000000000000000";
 
         assertEquals(
-                FunctionReturnDecoder.decode(rawInput, function.getOutputParameters()),
-                Collections.singletonList(new Struct1(BigInteger.valueOf(100))));
+                FunctionReturnDecoder.decode(
+                        rawInput, AbiV2TestFixture.getFooFunction.getOutputParameters()),
+                Collections.singletonList(new AbiV2TestFixture.Foo("id", "name")));
+    }
+
+    @Test
+    public void testDecodeDynamicStruct2() {
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "6964000000000000000000000000000000000000000000000000000000000000";
+
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput, AbiV2TestFixture.getBozFunction.getOutputParameters()),
+                Collections.singletonList(new AbiV2TestFixture.Boz(BigInteger.ONE, "id")));
+    }
+
+    @Test
+    public void testDecodeStaticStructNested() {
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000001"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "0000000000000000000000000000000000000000000000000000000000000001";
+
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput, AbiV2TestFixture.getFuzzFunction.getOutputParameters()),
+                Collections.singletonList(
+                        new AbiV2TestFixture.Fuzz(
+                                new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN),
+                                BigInteger.ONE)));
+    }
+
+    @Test
+    public void testDynamicStructNestedEncode() {
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000020"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "0000000000000000000000000000000000000000000000000000000000000080"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "6964000000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6e616d6500000000000000000000000000000000000000000000000000000000";
+
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput, AbiV2TestFixture.getNuuFunction.getOutputParameters()),
+                Collections.singletonList(
+                        new AbiV2TestFixture.Nuu(new AbiV2TestFixture.Foo("id", "name"))));
+    }
+
+    // Not supported
+    @Test
+    @Disabled
+    public void testDecodeTupleDynamicStructNested() {
+        String rawInput =
+                "0x0000000000000000000000000000000000000000000000000000000000000060"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "0000000000000000000000000000000000000000000000000000000000000040"
+                        + "0000000000000000000000000000000000000000000000000000000000000080"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "6964000000000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000004"
+                        + "6e616d6500000000000000000000000000000000000000000000000000000000";
+
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput, AbiV2TestFixture.getFooBarFunction.getOutputParameters()),
+                Arrays.asList(
+                        new AbiV2TestFixture.Foo("id", "name"),
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.TEN)));
     }
 }

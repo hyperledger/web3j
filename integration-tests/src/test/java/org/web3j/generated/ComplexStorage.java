@@ -1,4 +1,4 @@
-package org.web3j.unittests.java;
+package org.web3j.generated;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;

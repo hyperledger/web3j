@@ -374,27 +374,29 @@ public class TypeDecoder {
             final int length = constructor.getParameterCount();
             List<T> elements = new ArrayList<>(length);
 
-            for (int i = 0, currOffset = offset;
-                    i < length;
-                    i++,
-                            currOffset +=
-                                    getSingleElementLength(input, currOffset, classType)
-                                            * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
-
+            for (int i = 0, currOffset = 0; i < length; i++) {
                 T value;
                 final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
+
+                System.out.println(currOffset);
                 if (StaticStruct.class.isAssignableFrom(declaredField)) {
                     final int nestedStructLength =
-                            classType.getDeclaredFields()[i].getType().getDeclaredFields().length;
+                            classType
+                                            .getDeclaredFields()[i]
+                                            .getType()
+                                            .getConstructors()[0]
+                                            .getParameters()
+                                            .length
+                                    * 64;
                     value =
                             decodeStaticStruct(
-                                    input.substring(
-                                            currOffset, currOffset + 64 * nestedStructLength),
+                                    input.substring(currOffset, currOffset + nestedStructLength),
                                     0,
                                     TypeReference.create(declaredField));
-                    currOffset += 64 * (nestedStructLength - 1);
+                    currOffset += nestedStructLength;
                 } else {
                     value = decode(input.substring(currOffset, currOffset + 64), 0, declaredField);
+                    currOffset += 64;
                 }
                 elements.add(value);
             }
@@ -482,10 +484,7 @@ public class TypeDecoder {
             final int length = constructor.getParameterCount();
             final Map<Integer, T> parameters = new HashMap<>();
             int staticOffset = 0;
-            int dynamicParametersToProcess =
-                    getDynamicStructDynamicParametersCount(constructor.getParameterTypes());
             final List<Integer> parameterOffsets = new ArrayList<>();
-            final List<Integer> parameterLengths = new ArrayList<>();
             for (int i = 0; i < length; ++i) {
                 final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
                 final T value;
@@ -498,14 +497,6 @@ public class TypeDecoder {
                                     : decodeDynamicStructDynamicParameterOffset(
                                             input.substring(beginIndex, beginIndex + 64));
                     parameterOffsets.add(parameterOffset);
-                    final boolean isLastParameterInStruct = dynamicParametersToProcess == 1;
-                    parameterLengths.add(
-                            isLastParameterInStruct
-                                    ? input.length() - parameterOffset
-                                    : decodeDynamicStructDynamicParameterLength(
-                                            input.substring(
-                                                    staticOffset + 64, staticOffset + 128)));
-                    dynamicParametersToProcess--;
                     staticOffset += 64;
                 } else {
                     if (StaticStruct.class.isAssignableFrom(declaredField)) {
@@ -522,15 +513,25 @@ public class TypeDecoder {
                 }
             }
             int dynamicParametersProcessed = 0;
+            int dynamicParametersToProcess =
+                    getDynamicStructDynamicParametersCount(constructor.getParameterTypes());
             for (int i = 0; i < length; ++i) {
                 final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
                 if (isDynamic(declaredField)) {
+                    final boolean isLastParameterInStruct =
+                            dynamicParametersProcessed == (dynamicParametersToProcess - 1);
+                    final int parameterLength =
+                            isLastParameterInStruct
+                                    ? input.length()
+                                            - parameterOffsets.get(dynamicParametersProcessed)
+                                    : parameterOffsets.get(dynamicParametersProcessed + 1)
+                                            - parameterOffsets.get(dynamicParametersProcessed);
                     parameters.put(
                             i,
                             decodeDynamicParameterFromStruct(
                                     input,
                                     parameterOffsets.get(dynamicParametersProcessed),
-                                    parameterLengths.get(dynamicParametersProcessed),
+                                    parameterLength,
                                     declaredField));
                     dynamicParametersProcessed++;
                 }
@@ -580,10 +581,6 @@ public class TypeDecoder {
             value = decode(dynamicElementData, declaredField);
         }
         return value;
-    }
-
-    private static int decodeDynamicStructDynamicParameterLength(final String input) {
-        return decodeUintAsInt(input, 0) * 2;
     }
 
     private static int decodeDynamicStructDynamicParameterOffset(final String input) {

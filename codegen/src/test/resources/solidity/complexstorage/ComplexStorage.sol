@@ -91,6 +91,10 @@ contract ComplexStorage {
         naz = _naz;
     }
 
+    function setWiz(Wiz memory _toSet) public {
+        wiz = _toSet;
+    }
+
     function getFoo() public view returns (Foo memory) {
         return foo;
     }
@@ -107,8 +111,8 @@ contract ComplexStorage {
         return naz;
     }
 
-    function setWiz(Wiz memory _toSet) public {
-        wiz = _toSet;
+    function getWiz() public view returns (Wiz memory) {
+        return wiz;
     }
 
     function getFooBar() public view returns (Foo memory, Bar memory) {

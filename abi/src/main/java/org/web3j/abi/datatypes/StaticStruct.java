@@ -18,10 +18,6 @@ import java.util.List;
 
 public class StaticStruct extends StaticArray<Type> implements StructType {
 
-    public List<Class<Type>> getItemTypes() {
-        return itemTypes;
-    }
-
     private final List<Class<Type>> itemTypes = new ArrayList<>();
 
     public StaticStruct(List<Type> values) {
