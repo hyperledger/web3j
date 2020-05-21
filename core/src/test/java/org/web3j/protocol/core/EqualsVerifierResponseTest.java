@@ -71,6 +71,10 @@ public class EqualsVerifierResponseTest {
     @Test
     public void testSolidityInfo() {
         EqualsVerifier.forClass(EthCompileSolidity.SolidityInfo.class)
+                .withPrefabValues(
+                        AbiDefinition.NamedType.class,
+                        new AbiDefinition.NamedType(),
+                        new AbiDefinition.NamedType("name", "uint256"))
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -87,6 +91,10 @@ public class EqualsVerifierResponseTest {
     @Test
     public void testAbiDefinition() {
         EqualsVerifier.forClass(AbiDefinition.class)
+                .withPrefabValues(
+                        AbiDefinition.NamedType.class,
+                        new AbiDefinition.NamedType(),
+                        new AbiDefinition.NamedType("name", "uint256"))
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -95,6 +103,10 @@ public class EqualsVerifierResponseTest {
     @Test
     public void testAbiDefinitionNamedType() {
         EqualsVerifier.forClass(AbiDefinition.NamedType.class)
+                .withPrefabValues(
+                        AbiDefinition.NamedType.class,
+                        new AbiDefinition.NamedType(),
+                        new AbiDefinition.NamedType("name", "uint256"))
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -111,6 +123,10 @@ public class EqualsVerifierResponseTest {
     @Test
     public void testCode() {
         EqualsVerifier.forClass(EthCompileSolidity.Code.class)
+                .withPrefabValues(
+                        AbiDefinition.NamedType.class,
+                        new AbiDefinition.NamedType(),
+                        new AbiDefinition.NamedType("name", "uint256"))
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
@@ -127,6 +143,10 @@ public class EqualsVerifierResponseTest {
     @Test
     public void testCompiledSolidityCode() {
         EqualsVerifier.forClass(EthCompileSolidity.Code.class)
+                .withPrefabValues(
+                        AbiDefinition.NamedType.class,
+                        new AbiDefinition.NamedType(),
+                        new AbiDefinition.NamedType("name", "uint256"))
                 .suppress(Warning.NONFINAL_FIELDS)
                 .suppress(Warning.STRICT_INHERITANCE)
                 .verify();

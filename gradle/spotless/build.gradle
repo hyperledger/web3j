@@ -23,6 +23,7 @@ spotless {
             include '**/src/*/java/**/*.java'
             exclude '**/.gradle/**'
             exclude '**/generated/**'
+            exclude '**/build/install/**'
         }
         removeUnusedImports()
         googleJavaFormat("1.7").aosp()
@@ -36,6 +37,7 @@ spotless {
         target fileTree('.') {
             include '**/*.kt'
             exclude '**/.gradle/**'
+            exclude '**/build/install/**'
         }
         ktlint('0.31.0')
         trimTrailingWhitespace()

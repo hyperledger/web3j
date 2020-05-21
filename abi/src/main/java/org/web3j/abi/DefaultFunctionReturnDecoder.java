@@ -21,7 +21,9 @@ import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.StaticStruct;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes32;
@@ -79,12 +81,22 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
         for (TypeReference<?> typeReference : outputParameters) {
             try {
                 @SuppressWarnings("unchecked")
-                Class<Type> type = (Class<Type>) typeReference.getClassType();
+                Class<Type> classType = (Class<Type>) typeReference.getClassType();
 
-                int hexStringDataOffset = getDataOffset(input, offset, type);
+                int hexStringDataOffset = getDataOffset(input, offset, classType);
 
                 Type result;
-                if (DynamicArray.class.isAssignableFrom(type)) {
+                if (DynamicStruct.class.isAssignableFrom(classType)) {
+                    if (outputParameters.size() != 1) {
+                        throw new UnsupportedOperationException(
+                                "Multiple return objects containing a struct is not supported");
+                    }
+                    result =
+                            TypeDecoder.decodeDynamicStruct(
+                                    input, hexStringDataOffset, typeReference);
+                    offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
+
+                } else if (DynamicArray.class.isAssignableFrom(classType)) {
                     result =
                             TypeDecoder.decodeDynamicArray(
                                     input, hexStringDataOffset, typeReference);
@@ -97,10 +109,16 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                                     input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
-                } else if (StaticArray.class.isAssignableFrom(type)) {
+                } else if (StaticStruct.class.isAssignableFrom(classType)) {
+                    result =
+                            TypeDecoder.decodeStaticStruct(
+                                    input, hexStringDataOffset, typeReference);
+                    offset += classType.getDeclaredFields().length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                } else if (StaticArray.class.isAssignableFrom(classType)) {
                     int length =
                             Integer.parseInt(
-                                    type.getSimpleName()
+                                    classType
+                                            .getSimpleName()
                                             .substring(StaticArray.class.getSimpleName().length()));
                     result =
                             TypeDecoder.decodeStaticArray(
@@ -108,7 +126,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
                 } else {
-                    result = TypeDecoder.decode(input, hexStringDataOffset, type);
+                    result = TypeDecoder.decode(input, hexStringDataOffset, classType);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 }
                 results.add(result);

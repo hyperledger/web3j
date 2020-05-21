@@ -3,6 +3,8 @@
 targets="
 arrays/Arrays
 contracts/HumanStandardToken
+complexstorage/ComplexStorage
+complexstorage0.4.25/ComplexStorage
 fibonacci/Fibonacci
 greeter/Greeter
 misc/Misc
@@ -18,7 +20,7 @@ for target in ${targets}; do
 
     cd $dirName
     echo "Compiling Solidity files in ${dirName}:"
-    solc --bin --abi --optimize --overwrite ${fileName}.sol -o build/
+    solc --bin --abi --metadata --pretty-json --optimize --overwrite ${fileName}.sol -o build/
     echo "Complete"
 
     echo "Generating web3j bindings"
