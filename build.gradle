@@ -28,6 +28,8 @@ ext {
     logbackVersion = '1.2.3'
     mockitoJunitVersion = "3.1.0"
     junitPlatformLauncherVersion = "1.5.2"
+    systemLambdaVersion = "1.0.0"
+    wireMockVersion = "2.25.1"
 }
 
 

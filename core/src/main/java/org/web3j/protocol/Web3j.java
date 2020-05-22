@@ -14,7 +14,7 @@ package org.web3j.protocol;
 
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.web3j.account.LocalWeb3jAccount;
+import org.web3j.account.LocalEpirusAccount;
 import org.web3j.protocol.core.Batcher;
 import org.web3j.protocol.core.Ethereum;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
@@ -24,11 +24,11 @@ import org.web3j.protocol.rx.Web3jRx;
 public interface Web3j extends Ethereum, Web3jRx, Batcher {
 
     static Web3j build() throws Exception {
-        return new JsonRpc2_0Web3j(LocalWeb3jAccount.getOnlineServicesHttpService(Network.MAINNET));
+        return new JsonRpc2_0Web3j(LocalEpirusAccount.getEpirusHttpService(Network.MAINNET));
     }
 
     static Web3j build(Network network) throws Exception {
-        return new JsonRpc2_0Web3j(LocalWeb3jAccount.getOnlineServicesHttpService(network));
+        return new JsonRpc2_0Web3j(LocalEpirusAccount.getEpirusHttpService(network));
     }
 
     /**
