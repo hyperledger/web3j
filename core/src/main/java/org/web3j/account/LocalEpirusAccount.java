@@ -31,13 +31,16 @@ public class LocalEpirusAccount {
     public static HttpService getEpirusHttpService(final Network network) throws Exception {
         String envLoginToken =
                 System.getenv().getOrDefault("EPIRUS_LOGIN_TOKEN", getConfigFileLoginToken());
+        if (envLoginToken == null) {
+            throw new IllegalStateException(
+                    "Could not read your Epirus login token. In order to use Web3j without a specified endpoint, you must use the Epirus CLI and log in to the Epirus Platform.");
+        }
         return createHttpServiceWithToken(network, envLoginToken);
     }
 
     private static String getConfigFileLoginToken() throws IOException {
         if (!EPIRUS_CONFIG_PATH.toFile().exists()) {
-            throw new IllegalStateException(
-                    "Config file does not exist. In order to use Web3j without a specified endpoint, you must use the Epirus CLI and log in to the Epirus Platform.");
+            return null;
         }
         String configContents = new String(Files.readAllBytes(EPIRUS_CONFIG_PATH));
         final ObjectNode node = new ObjectMapper().readValue(configContents, ObjectNode.class);
