@@ -28,6 +28,13 @@ public final class Compat {
     private static final BigInteger LONG_MAX = BigInteger.valueOf(Long.MAX_VALUE);
     private static final BigInteger LONG_MIN = BigInteger.valueOf(Long.MIN_VALUE);
 
+    /**
+     * The number of bytes used to represent a {@code long} value in two's complement binary form.
+     *
+     * @since 1.8
+     */
+    public static final int BYTES = Long.SIZE / Byte.SIZE;
+
     private Compat() {}
 
     /** Ports {@link String#join(CharSequence, CharSequence...)}. */
@@ -86,5 +93,16 @@ public final class Compat {
     /** Ports {@link Boolean#hashCode(boolean)}. */
     public static int hashCode(boolean value) {
         return value ? 1231 : 1237;
+    }
+
+    /** Ports Objects.requireNonNull(T obj) */
+    public static <T> T requireNonNull(T obj) {
+        if (obj == null) throw new NullPointerException();
+        return obj;
+    }
+
+    /** Ports Objects.equals(Object a, Object b) */
+    public static boolean equals(Object a, Object b) {
+        return (a == b) || (a != null && a.equals(b));
     }
 }

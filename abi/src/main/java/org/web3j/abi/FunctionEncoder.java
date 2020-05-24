@@ -93,6 +93,7 @@ public abstract class FunctionEncoder {
 
     private static FunctionEncoder encoder() {
         final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
+
         return iterator.hasNext() ? iterator.next().get() : defaultEncoder();
     }
 

@@ -17,6 +17,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.web3j.compat.Compat;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -95,7 +96,7 @@ public class TransactionEncoder {
     }
 
     private static byte[] longToBytes(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        ByteBuffer buffer = ByteBuffer.allocate(Compat.BYTES);
         buffer.putLong(x);
         return buffer.array();
     }

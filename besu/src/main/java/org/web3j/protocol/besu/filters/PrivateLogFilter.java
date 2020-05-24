@@ -14,7 +14,7 @@ package org.web3j.protocol.besu.filters;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Optional;
+import java8.util.Optional;
 
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.core.Request;

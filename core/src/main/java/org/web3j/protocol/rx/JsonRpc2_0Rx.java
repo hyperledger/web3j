@@ -54,7 +54,8 @@ public class JsonRpc2_0Rx {
     public Flowable<String> ethBlockHashFlowable(long pollingInterval) {
         return Flowable.create(
                 subscriber -> {
-                    BlockFilter blockFilter = new BlockFilter(web3j, subscriber::onNext);
+                    BlockFilter blockFilter =
+                            new BlockFilter(web3j, (blockHash) -> subscriber.onNext(blockHash));
                     run(blockFilter, subscriber, pollingInterval);
                 },
                 BackpressureStrategy.BUFFER);
@@ -64,7 +65,8 @@ public class JsonRpc2_0Rx {
         return Flowable.create(
                 subscriber -> {
                     PendingTransactionFilter pendingTransactionFilter =
-                            new PendingTransactionFilter(web3j, subscriber::onNext);
+                            new PendingTransactionFilter(
+                                    web3j, (txHash) -> subscriber.onNext(txHash));
 
                     run(pendingTransactionFilter, subscriber, pollingInterval);
                 },
@@ -75,7 +77,8 @@ public class JsonRpc2_0Rx {
             org.web3j.protocol.core.methods.request.EthFilter ethFilter, long pollingInterval) {
         return Flowable.create(
                 subscriber -> {
-                    LogFilter logFilter = new LogFilter(web3j, subscriber::onNext, ethFilter);
+                    LogFilter logFilter =
+                            new LogFilter(web3j, (log) -> subscriber.onNext(log), ethFilter);
 
                     run(logFilter, subscriber, pollingInterval);
                 },
@@ -88,7 +91,7 @@ public class JsonRpc2_0Rx {
             long pollingInterval) {
 
         filter.run(scheduledExecutorService, pollingInterval);
-        emitter.setCancellable(filter::cancel);
+        emitter.setCancellable(() -> filter.cancel());
     }
 
     public Flowable<Transaction> transactionFlowable(long pollingInterval) {

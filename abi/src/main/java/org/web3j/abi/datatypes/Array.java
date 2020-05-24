@@ -15,7 +15,8 @@ package org.web3j.abi.datatypes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+
+import org.web3j.compat.Compat;
 
 /** Fixed size array. */
 public abstract class Array<T extends Type> implements Type<List<T>> {
@@ -75,8 +76,8 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
     public abstract String getTypeAsString();
 
     private void checkValid(Class<T> type, List<T> values) {
-        Objects.requireNonNull(type);
-        Objects.requireNonNull(values);
+        Compat.requireNonNull(type);
+        Compat.requireNonNull(values);
     }
 
     @Override
@@ -93,7 +94,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
         if (!type.equals(array.type)) {
             return false;
         }
-        return Objects.equals(value, array.value);
+        return Compat.equals(value, array.value);
     }
 
     @Override

@@ -13,13 +13,13 @@
 package org.web3j.protocol.admin.methods.response;
 
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java8.util.function.Function;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.Transaction;
@@ -36,8 +36,8 @@ public final class TxPoolContent extends Response<TxPoolContent.TxPoolContentRes
         public TxPoolContentResult(
                 Map<String, Map<BigInteger, Transaction>> pending,
                 Map<String, Map<BigInteger, Transaction>> queued) {
-            this.pending = immutableCopy(pending, val -> immutableCopy(val, Function.identity()));
-            this.queued = immutableCopy(queued, val -> immutableCopy(val, Function.identity()));
+            this.pending = immutableCopy(pending, val -> immutableCopy(val, t -> t));
+            this.queued = immutableCopy(queued, val -> immutableCopy(val, t -> t));
         }
 
         public Map<String, Map<BigInteger, Transaction>> getPending() {
@@ -49,16 +49,16 @@ public final class TxPoolContent extends Response<TxPoolContent.TxPoolContentRes
         }
 
         public List<Transaction> getPendingTransactions() {
-            return pending.values().stream()
+            return StreamSupport.stream(pending.values())
                     .map(Map::values)
-                    .flatMap(Collection::stream)
+                    .flatMap(StreamSupport::stream)
                     .collect(Collectors.toList());
         }
 
         public List<Transaction> getQueuedTransactions() {
-            return queued.values().stream()
+            return StreamSupport.stream(queued.values())
                     .map(Map::values)
-                    .flatMap(Collection::stream)
+                    .flatMap(StreamSupport::stream)
                     .collect(Collectors.toList());
         }
 

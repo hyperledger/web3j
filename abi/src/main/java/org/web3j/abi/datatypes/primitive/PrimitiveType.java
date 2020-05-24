@@ -13,7 +13,7 @@
 package org.web3j.abi.datatypes.primitive;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java8.util.Objects;
 
 import org.web3j.abi.datatypes.Type;
 

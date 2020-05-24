@@ -15,7 +15,8 @@ package org.web3j.protocol.core.methods.response;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -275,7 +276,7 @@ public class AbiDefinition {
 
         public int structIdentifier() {
             return ((internalType == null ? type : internalType.isEmpty() ? type : internalType)
-                            + components.stream()
+                            + StreamSupport.stream(components)
                                     .map(namedType -> String.valueOf(namedType.structIdentifier()))
                                     .collect(Collectors.joining()))
                     .hashCode();
@@ -285,7 +286,11 @@ public class AbiDefinition {
             if (getComponents().size() == 0) {
                 return 0;
             }
-            return 1 + getComponents().stream().mapToInt(NamedType::nestedness).max().getAsInt();
+            return 1
+                    + StreamSupport.stream(getComponents())
+                            .mapToInt(NamedType::nestedness)
+                            .max()
+                            .getAsInt();
         }
 
         public boolean isDynamic() {
@@ -294,7 +299,7 @@ public class AbiDefinition {
                     || getType().contains("[]")) {
                 return true;
             }
-            if (components.stream().anyMatch(NamedType::isDynamic)) {
+            if (StreamSupport.stream(components).anyMatch(NamedType::isDynamic)) {
                 return true;
             }
             return false;
@@ -350,6 +355,6 @@ public class AbiDefinition {
     }
 
     private static List<NamedType> clone(final List<NamedType> from) {
-        return from.stream().map(NamedType::new).collect(Collectors.toList());
+        return StreamSupport.stream(from).map(NamedType::new).collect(Collectors.toList());
     }
 }

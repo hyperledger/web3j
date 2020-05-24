@@ -26,7 +26,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -178,7 +179,8 @@ public class StructuredDataEncoder {
         List<Pair> depthsAndDimensions = getDepthsAndDimensions(data, 0);
         // groupedByDepth has key as depth and value as List(pair(Depth, Dimension))
         Map<Object, List<Pair>> groupedByDepth =
-                depthsAndDimensions.stream().collect(Collectors.groupingBy(Pair::getFirst));
+                StreamSupport.stream(depthsAndDimensions)
+                        .collect(Collectors.groupingBy(Pair::getFirst));
 
         // depthDimensionsMap is aimed to have key as depth and value as List(Dimension)
         Map<Integer, List<Integer>> depthDimensionsMap = new HashMap<>();
@@ -199,7 +201,8 @@ public class StructuredDataEncoder {
                                 "Depth %d of array data has more than one dimensions",
                                 entry.getKey()));
             }
-            dimensions.add(setOfDimensionsInParticularDepth.stream().findFirst().get());
+            dimensions.add(
+                    StreamSupport.stream(setOfDimensionsInParticularDepth).findFirst().get());
         }
 
         return dimensions;

@@ -2,8 +2,10 @@
 description 'Ethereum Application Binary Interface (ABI) for working with smart contracts'
 
 dependencies {
-    compile project(':compat')
-    compile project(':utils')
+    compile project(':compat'),
+            project(':utils'),
+            "net.sourceforge.streamsupport:streamsupport:$streamsupportVersion",
+            "net.sourceforge.streamsupport:streamsupport-cfuture:$streamsupportVersion"
 }
 
 useReducedJdk(project)

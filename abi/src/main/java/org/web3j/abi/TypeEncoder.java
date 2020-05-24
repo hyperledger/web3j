@@ -207,7 +207,7 @@ public class TypeEncoder {
         final List<String> data = new ArrayList<>();
         data.addAll(offsetsAndStaticValues);
         data.addAll(dynamicValues);
-        return String.join("", data);
+        return Compat.join("", data.toArray(new String[] {}));
     }
 
     static <T extends Type> String encodeDynamicArray(DynamicArray<T> value) {

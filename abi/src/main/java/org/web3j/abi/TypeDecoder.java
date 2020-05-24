@@ -22,7 +22,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java8.util.function.BiFunction;
+import java8.util.stream.StreamSupport;
 
 import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Address;
@@ -361,17 +362,23 @@ public class TypeDecoder {
         try {
             Class<T> classType = typeReference.getClassType();
             Constructor<?> constructor =
-                    Arrays.stream(classType.getDeclaredConstructors())
+                    StreamSupport.stream(Arrays.asList(classType.getDeclaredConstructors()))
                             .filter(
                                     declaredConstructor ->
-                                            Arrays.stream(declaredConstructor.getParameterTypes())
-                                                    .allMatch(Type.class::isAssignableFrom))
+                                            StreamSupport.stream(
+                                                            Arrays.asList(
+                                                                    declaredConstructor
+                                                                            .getParameterTypes()))
+                                                    .allMatch(
+                                                            cls ->
+                                                                    Type.class.isAssignableFrom(
+                                                                            cls)))
                             .findAny()
                             .orElseThrow(
                                     () ->
                                             new RuntimeException(
                                                     "TypeReferenced struct must contain a constructor with types that extend Type"));
-            final int length = constructor.getParameterCount();
+            final int length = constructor.getParameterTypes().length;
             List<T> elements = new ArrayList<>(length);
 
             for (int i = 0, currOffset = 0; i < length; i++) {
@@ -385,7 +392,7 @@ public class TypeDecoder {
                                             .getDeclaredFields()[i]
                                             .getType()
                                             .getConstructors()[0]
-                                            .getParameters()
+                                            .getParameterTypes()
                                             .length
                                     * 64;
                     value =
@@ -406,7 +413,8 @@ public class TypeDecoder {
             return consumer.apply(elements, typeName);
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type "
+                            + Compat.getTypeName(typeReference.getType()),
                     e);
         }
     }
@@ -415,11 +423,19 @@ public class TypeDecoder {
             final TypeReference<T> typeReference, final List<T> parameters) {
         try {
             Constructor ctor =
-                    Arrays.stream(typeReference.getClassType().getDeclaredConstructors())
+                    StreamSupport.stream(
+                                    Arrays.asList(
+                                            typeReference.getClassType().getDeclaredConstructors()))
                             .filter(
                                     declaredConstructor ->
-                                            Arrays.stream(declaredConstructor.getParameterTypes())
-                                                    .allMatch(Type.class::isAssignableFrom))
+                                            StreamSupport.stream(
+                                                            Arrays.asList(
+                                                                    declaredConstructor
+                                                                            .getParameterTypes()))
+                                                    .allMatch(
+                                                            cls ->
+                                                                    Type.class.isAssignableFrom(
+                                                                            cls)))
                             .findAny()
                             .orElseThrow(
                                     () ->
@@ -428,7 +444,10 @@ public class TypeDecoder {
             ;
             ctor.setAccessible(true);
             return (T) ctor.newInstance(parameters.toArray());
-        } catch (ReflectiveOperationException e) {
+        } catch (ClassNotFoundException
+                | IllegalAccessException
+                | InstantiationException
+                | InvocationTargetException e) {
             throw new UnsupportedOperationException(
                     "Constructor cannot accept" + Arrays.toString(parameters.toArray()), e);
         }
@@ -472,17 +491,23 @@ public class TypeDecoder {
         try {
             final Class<T> classType = typeReference.getClassType();
             Constructor<?> constructor =
-                    Arrays.stream(classType.getDeclaredConstructors())
+                    StreamSupport.stream(Arrays.asList(classType.getDeclaredConstructors()))
                             .filter(
                                     declaredConstructor ->
-                                            Arrays.stream(declaredConstructor.getParameterTypes())
-                                                    .allMatch(Type.class::isAssignableFrom))
+                                            StreamSupport.stream(
+                                                            Arrays.asList(
+                                                                    declaredConstructor
+                                                                            .getParameterTypes()))
+                                                    .allMatch(
+                                                            cls ->
+                                                                    Type.class.isAssignableFrom(
+                                                                            cls)))
                             .findAny()
                             .orElseThrow(
                                     () ->
                                             new RuntimeException(
                                                     "TypeReferenced struct must contain a constructor with types that extend Type"));
-            final int length = constructor.getParameterCount();
+            final int length = constructor.getParameterTypes().length;
             final Map<Integer, T> parameters = new HashMap<>();
             int staticOffset = 0;
             final List<Integer> parameterOffsets = new ArrayList<>();
@@ -548,7 +573,8 @@ public class TypeDecoder {
             return consumer.apply(elements, typeName);
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type "
+                            + Compat.getTypeName(typeReference.getType()),
                     e);
         }
     }
@@ -556,7 +582,10 @@ public class TypeDecoder {
     @SuppressWarnings("unchecked")
     private static <T extends Type> int getDynamicStructDynamicParametersCount(
             final Class<?>[] cls) {
-        return (int) Arrays.stream(cls).filter(c -> isDynamic((Class<T>) c)).count();
+        return (int)
+                StreamSupport.stream(Arrays.asList(cls))
+                        .filter(c -> isDynamic((Class<T>) c))
+                        .count();
     }
 
     private static <T extends Type> T decodeDynamicParameterFromStruct(

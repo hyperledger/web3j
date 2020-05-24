@@ -142,7 +142,7 @@ public class HttpService extends Service {
 
     private static void configureLogging(OkHttpClient.Builder builder) {
         if (log.isDebugEnabled()) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(log::debug);
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor((msg) -> log.debug(msg));
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(logging);
         }

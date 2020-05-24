@@ -14,8 +14,7 @@ package org.web3j.utils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java8.util.function.Function;
 
 /** Utility functions for working with Collections. */
 public class Collection {
@@ -38,6 +37,13 @@ public class Collection {
     }
 
     public static <T> String join(List<T> list, String separator, Function<T, String> function) {
-        return list.stream().map(function).map(String::trim).collect(Collectors.joining(separator));
+        String result = "";
+        for (int i = 0; i < list.size(); i++) {
+            result += function.apply(list.get(i)).trim();
+            if (i + 1 < list.size()) {
+                result += separator;
+            }
+        }
+        return result;
     }
 }

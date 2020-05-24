@@ -73,7 +73,8 @@ public abstract class Service implements Web3jService {
 
         String payload = objectMapper.writeValueAsString(batchRequest.getRequests());
 
-        try (InputStream result = performIO(payload)) {
+        InputStream result = performIO(payload);
+        try {
             if (result != null) {
                 ArrayNode nodes = (ArrayNode) objectMapper.readTree(result);
                 List<Response<?>> responses = new ArrayList<>(nodes.size());
@@ -89,6 +90,9 @@ public abstract class Service implements Web3jService {
             } else {
                 return null;
             }
+        } catch (IOException e) {
+            result.close();
+            throw e;
         }
     }
 
