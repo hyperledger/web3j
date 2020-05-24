@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.compat.Compat;
 
 /**
  * Type wrapper to get around limitations of Java's type erasure. This is so that we can pass around
@@ -88,10 +89,10 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     public Class<T> getClassType() throws ClassNotFoundException {
         Type clsType = getType();
 
-        if (getType() instanceof ParameterizedType) {
+        if (clsType instanceof ParameterizedType) {
             return (Class<T>) ((ParameterizedType) clsType).getRawType();
         } else {
-            return (Class<T>) Class.forName(clsType.getTypeName());
+            return (Class<T>) Class.forName(Compat.getTypeName(clsType));
         }
     }
 

@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,6 +47,7 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.abi.datatypes.primitive.Double;
 import org.web3j.abi.datatypes.primitive.Float;
+import org.web3j.compat.Compat;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.TypeReference.makeTypeReference;
@@ -317,7 +317,7 @@ public class TypeDecoder {
         DynamicBytes dynamicBytesResult = decodeDynamicBytes(input, offset);
         byte[] bytes = dynamicBytesResult.getValue();
 
-        return new Utf8String(new String(bytes, StandardCharsets.UTF_8));
+        return new Utf8String(new String(bytes, Compat.UTF_8));
     }
 
     /** Static array length cannot be passed as a type. */
@@ -626,7 +626,11 @@ public class TypeDecoder {
                             Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + length);
 
             return (T) arrayClass.getConstructor(List.class).newInstance(elements);
-        } catch (ReflectiveOperationException e) {
+        } catch (ClassNotFoundException
+                | IllegalAccessException
+                | InstantiationException
+                | InvocationTargetException
+                | NoSuchMethodException e) {
             throw new UnsupportedOperationException(e);
         }
     }
@@ -663,7 +667,8 @@ public class TypeDecoder {
             }
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException(
-                    "Unable to access parameterized type " + typeReference.getType().getTypeName(),
+                    "Unable to access parameterized type "
+                            + Compat.getTypeName(typeReference.getType()),
                     e);
         }
     }

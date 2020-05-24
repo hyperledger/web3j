@@ -13,7 +13,6 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +31,7 @@ import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.primitive.PrimitiveType;
+import org.web3j.compat.Compat;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
@@ -157,7 +157,7 @@ public class TypeEncoder {
     }
 
     static String encodeString(Utf8String string) {
-        byte[] utfEncoded = string.getValue().getBytes(StandardCharsets.UTF_8);
+        byte[] utfEncoded = string.getValue().getBytes(Compat.UTF_8);
         return encodeDynamicBytes(new DynamicBytes(utfEncoded));
     }
 

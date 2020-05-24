@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
-import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionEncoderProvider;
 import org.web3j.crypto.Hash;
+import org.web3j.utils.Collection;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.TypeDecoder.instantiateType;
@@ -79,8 +79,7 @@ public abstract class FunctionEncoder {
         final StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        final String params =
-                parameters.stream().map(Type::getTypeAsString).collect(Collectors.joining(","));
+        final String params = Collection.join(parameters, ",", Type::getTypeAsString);
         result.append(params);
         result.append(")");
         return result.toString();
