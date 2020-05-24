@@ -156,7 +156,7 @@ public class EnsResolver {
         } else {
             EthBlock ethBlock =
                     web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
-            long timestamp = ethBlock.getBlock().getTimestamp().longValueExact() * 1000;
+            long timestamp = ethBlock.getBlock().getTimestamp().longValue() * 1000;
 
             return System.currentTimeMillis() - syncThreshold < timestamp;
         }
