@@ -106,13 +106,13 @@ ext.useReducedJdk = { Project project ->
     project.tasks.withType(JavaCompile) { Task task ->
         // As tests are run on a local Java VM they don't have to be compatible with Android JDK.
         if (task.name.contains("compileTest")) return
-        options.bootstrapClasspath = files(
-                // Contains lambda-related classes such as java.lang.invoke.LambdaMetafactory.
-                // Copied from [android-sdk]/build-tools/27.0.3
-                "$rootDir/compat/libs/core-lambda-stubs.jar",
-                // Android JDK. Copied from [android-sdk]/platforms/android-15. All Android specific
-                // packages were stripped. The only kept packages are:
-                // java.*, javax.*, org.w3c.* and org.xml.*
-                "$rootDir/compat/libs/android.jar")
+            options.bootstrapClasspath = files(
+                    // Contains lambda-related classes such as java.lang.invoke.LambdaMetafactory.
+                    // Copied from [android-sdk]/build-tools/27.0.3
+                    "$rootDir/compat/libs/core-lambda-stubs.jar",
+                    // Android JDK. Copied from [android-sdk]/platforms/android-15. All Android specific
+                    // packages were stripped. The only kept packages are:
+                    // java.*, javax.*, org.w3c.* and org.xml.*
+                    "$rootDir/compat/libs/android.jar")
     }
 }
