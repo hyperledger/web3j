@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java8.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -45,11 +45,16 @@ public abstract class Service implements Web3jService {
     public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
         String payload = objectMapper.writeValueAsString(request);
 
-        try (InputStream result = performIO(payload)) {
-            if (result != null) {
-                return objectMapper.readValue(result, responseType);
+        final InputStream is = performIO(payload);
+        try {
+            if (is != null) {
+                return objectMapper.readValue(is, responseType);
             } else {
                 return null;
+            }
+        } finally {
+            if (is != null) {
+                is.close();
             }
         }
     }

@@ -14,6 +14,10 @@ package org.web3j.crypto;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -235,5 +239,16 @@ public class WalletUtilsTest {
         assertFalse(isValidAddress(""));
         assertFalse(isValidAddress(SampleKeys.ADDRESS + 'a'));
         assertFalse(isValidAddress(SampleKeys.ADDRESS.substring(1)));
+    }
+
+    @Test
+    public void testWalletTimestampHasntChanged() {
+        final Date date = new Date(0);
+        final ZonedDateTime dateTime = ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
+
+        final DateTimeFormatter oldFormat =
+                DateTimeFormatter.ofPattern("'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+
+        assertEquals(WalletUtils.timestamp(date), oldFormat.format(dateTime));
     }
 }

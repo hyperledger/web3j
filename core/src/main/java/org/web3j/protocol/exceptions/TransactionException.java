@@ -12,7 +12,7 @@
  */
 package org.web3j.protocol.exceptions;
 
-import java.util.Optional;
+import java8.util.Optional;
 
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 

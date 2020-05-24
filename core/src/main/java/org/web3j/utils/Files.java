@@ -22,11 +22,14 @@ public class Files {
     private Files() {}
 
     public static byte[] readBytes(File file) throws IOException {
-        byte[] bytes = new byte[(int) file.length()];
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            fileInputStream.read(bytes);
+        final FileInputStream is = new FileInputStream(file);
+        try {
+            final byte[] bytes = new byte[(int) file.length()];
+            is.read(bytes);
+            return bytes;
+        } finally {
+            is.close();
         }
-        return bytes;
     }
 
     public static String readString(File file) throws IOException {

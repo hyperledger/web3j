@@ -19,9 +19,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java8.util.Objects;
+import java8.util.Optional;
+import java8.util.stream.Collectors;
+import java8.util.stream.StreamSupport;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.EventValues;
@@ -725,7 +726,7 @@ public abstract class Contract extends ManagedTransaction {
 
     protected List<EventValues> extractEventParameters(
             Event event, TransactionReceipt transactionReceipt) {
-        return transactionReceipt.getLogs().stream()
+        return StreamSupport.stream(transactionReceipt.getLogs())
                 .map(log -> extractEventParameters(event, log))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -742,7 +743,7 @@ public abstract class Contract extends ManagedTransaction {
 
     protected List<EventValuesWithLog> extractEventParametersWithLog(
             Event event, TransactionReceipt transactionReceipt) {
-        return transactionReceipt.getLogs().stream()
+        return StreamSupport.stream(transactionReceipt.getLogs())
                 .map(log -> extractEventParametersWithLog(event, log))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());

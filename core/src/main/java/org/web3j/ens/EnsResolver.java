@@ -12,6 +12,7 @@
  */
 package org.web3j.ens;
 
+import org.web3j.compat.Compat;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.contracts.generated.ENS;
@@ -156,7 +157,7 @@ public class EnsResolver {
         } else {
             EthBlock ethBlock =
                     web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
-            long timestamp = ethBlock.getBlock().getTimestamp().longValue() * 1000;
+            long timestamp = Compat.longValueExact(ethBlock.getBlock().getTimestamp()) * 1000;
 
             return System.currentTimeMillis() - syncThreshold < timestamp;
         }

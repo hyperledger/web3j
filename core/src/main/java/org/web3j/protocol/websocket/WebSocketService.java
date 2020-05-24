@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -28,6 +27,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
+import java8.lang.Iterables;
+import java8.util.concurrent.CompletableFuture;
+import java8.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -341,7 +343,7 @@ public class WebSocketService implements Web3jService {
     }
 
     private <T extends Notification<?>> String getSubscriptionId(BehaviorSubject<T> subject) {
-        return subscriptionForId.entrySet().stream()
+        return StreamSupport.stream(subscriptionForId.entrySet())
                 .filter(entry -> entry.getValue().getSubject() == subject)
                 .map(Map.Entry::getKey)
                 .findFirst()
@@ -527,23 +529,20 @@ public class WebSocketService implements Web3jService {
     }
 
     private void closeOutstandingRequests() {
-        requestForId
-                .values()
-                .forEach(
-                        request ->
-                                request.getOnReply()
-                                        .completeExceptionally(
-                                                new IOException("Connection was closed")));
+        Iterables.forEach(
+                requestForId.values(),
+                request -> {
+                    request.getOnReply()
+                            .completeExceptionally(new IOException("Connection was closed"));
+                });
     }
 
     private void closeOutstandingSubscriptions() {
-        subscriptionForId
-                .values()
-                .forEach(
-                        subscription ->
-                                subscription
-                                        .getSubject()
-                                        .onError(new IOException("Connection was closed")));
+        Iterables.forEach(
+                subscriptionForId.values(),
+                subscription -> {
+                    subscription.getSubject().onError(new IOException("Connection was closed"));
+                });
     }
 
     // Method visible for unit-tests

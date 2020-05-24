@@ -14,7 +14,7 @@ package org.web3j.protocol.websocket;
 
 import java.net.URI;
 import java.util.Map;
-import java.util.Optional;
+import java8.util.Optional;
 
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;

@@ -12,7 +12,7 @@
  */
 package org.web3j.protocol.websocket;
 
-import java.util.concurrent.CompletableFuture;
+import java8.util.concurrent.CompletableFuture;
 
 /**
  * Objects necessary to process a reply for a request sent via WebSocket protocol.

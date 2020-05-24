@@ -13,7 +13,7 @@
 package org.web3j.protocol;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
+import java8.util.concurrent.CompletableFuture;
 
 import io.reactivex.Flowable;
 
