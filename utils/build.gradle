@@ -1,4 +1,9 @@
 
 description 'Minimal set of web3j utility classes'
 
-dependencies { compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion" }
+dependencies {
+    compile project(":compat")
+    compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    }
+
+useReducedJdk(project)

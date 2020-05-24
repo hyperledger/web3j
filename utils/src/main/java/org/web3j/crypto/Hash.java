@@ -23,6 +23,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.jcajce.provider.digest.Blake2b;
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 
+import org.web3j.compat.Compat;
 import org.web3j.utils.Numeric;
 
 /** Cryptographic hash functions. */
@@ -89,7 +90,7 @@ public class Hash {
      * @return hash value as hex encoded string
      */
     public static String sha3String(String utf8String) {
-        return Numeric.toHexString(sha3(utf8String.getBytes(StandardCharsets.UTF_8)));
+        return Numeric.toHexString(sha3(utf8String.getBytes(Compat.UTF_8)));
     }
 
     /**
