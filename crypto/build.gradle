@@ -3,6 +3,7 @@ description 'web3j Ethereum crypto library'
 
 dependencies {
     compile project(':abi'),
+            project(':compat'),
             project(':rlp'),
             project(':utils'),
             "org.slf4j:slf4j-api:$slf4jVersion",
