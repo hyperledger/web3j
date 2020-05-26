@@ -15,9 +15,7 @@ dependencies {
             "org.slf4j:slf4j-api:$slf4jVersion"
     testCompile project(path: ':crypto', configuration: 'testArtifacts'),
     "nl.jqno.equalsverifier:equalsverifier:$equalsverifierVersion",
-    "ch.qos.logback:logback-classic:$logbackVersion",
-    "com.github.stefanbirkner:system-lambda:$systemLambdaVersion",
-    "com.github.tomakehurst:wiremock-jre8:$wireMockVersion"
+    "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 task createProperties(dependsOn: processResources) doLast {
