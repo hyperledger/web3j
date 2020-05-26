@@ -51,3 +51,6 @@ docs/build
 **/bin
 
 web3j.asc
+
+!compat/libs/android.jar
+!compat/libs/core-lambda-stubs.jar
