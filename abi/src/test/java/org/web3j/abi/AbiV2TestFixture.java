@@ -303,4 +303,10 @@ public class AbiV2TestFixture {
                     FUNC_SETWIZ,
                     Arrays.<Type>asList(new Wiz(new Foo("id", "name"), "data")),
                     Collections.<TypeReference<?>>emptyList());
+
+    public static final org.web3j.abi.datatypes.Function getWizFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_SETWIZ,
+                    Collections.<Type>emptyList(),
+                    Arrays.<TypeReference<?>>asList(new TypeReference<Wiz>() {}));
 }
