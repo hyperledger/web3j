@@ -582,6 +582,7 @@ Please submit a pull request if you wish to include your company on the list:
 - `Argent Labs <http://www.argent.im/>`_
 - `AlphaWallet <https://www.alphawallet.com/>`_
 - `Lab10 collective <https://lab10.coop/>`_
+- `BinarApps <https://binarapps.com/>`_
 - `PegaSys <https://pegasys.tech/>`_
 
 
