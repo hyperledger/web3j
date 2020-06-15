@@ -59,7 +59,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
 
     private String jsonFileLocation;
 
-    private TruffleJsonFunctionWrapperGenerator(
+    public TruffleJsonFunctionWrapperGenerator(
             String jsonFileLocation,
             String destinationDirLocation,
             String basePackageName,

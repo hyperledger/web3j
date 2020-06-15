@@ -65,7 +65,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
     private final boolean generateSendTxForCalls;
 
-    protected SolidityFunctionWrapperGenerator(
+    public SolidityFunctionWrapperGenerator(
             File binFile,
             File abiFile,
             File destinationDir,
