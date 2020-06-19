@@ -80,7 +80,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                 credentials,
                 chainId,
                 privateFrom,
-                new PollingPrivateTransactionReceiptProcessor(besu, attempts, sleepDuration));
+                new PollingPrivateTransactionReceiptProcessor(besu, sleepDuration, attempts));
     }
 
     protected PrivateTransactionManager(
