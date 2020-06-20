@@ -263,7 +263,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         byte[] signedMessage;
 
         if (chainId > ChainIdLong.NONE) {
-            signedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
+            signedMessage =
+                    PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
             signedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
         }
@@ -272,11 +273,12 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     }
 
     public EthSendTransaction signAndSend(RawPrivateTransaction rawTransaction) throws IOException {
-        String hexValue= sign(rawTransaction);
+        String hexValue = sign(rawTransaction);
         return this.besu.eeaSendRawTransaction(hexValue).send();
     }
 
-    public PrivateEnclaveKey signAndDistribute(RawPrivateTransaction rawTransaction) throws IOException {
+    public PrivateEnclaveKey signAndDistribute(RawPrivateTransaction rawTransaction)
+            throws IOException {
         String hexValue = sign(rawTransaction);
         return this.besu.privDistributeRawTransaction(hexValue).send();
     }
