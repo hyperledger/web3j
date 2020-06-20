@@ -12,10 +12,7 @@
  */
 package org.web3j.protocol.besu;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -192,6 +189,19 @@ public class RequestTest extends RequestTester {
                 "{\"jsonrpc\":\"2.0\",\"method\":\"priv_getTransactionCount\","
                         + "\"params\":[\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\"DyAOiF/ynpc+JXa2YAGB0bCitSlOMNm+ShmB/7M6C4w=\"],"
                         + "\"id\":1}");
+    }
+
+    @Test
+    public void testPrivDistributeRawTransaction() throws Exception {
+        final String rawTx =
+                "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f"
+                        + "072445675058bb8eb970870f072445675";
+        web3j.privDistributeRawTransaction(rawTx).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_distributeRawTransaction\","
+                        + "\"params\":[\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\"],\"id\":1}");
+
     }
 
     @Test

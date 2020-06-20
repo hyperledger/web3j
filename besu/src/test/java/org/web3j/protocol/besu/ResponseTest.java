@@ -23,15 +23,7 @@ import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
 import org.web3j.protocol.besu.response.BesuSignerMetrics;
-import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
-import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
-import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
-import org.web3j.protocol.besu.response.privacy.PrivGetPrivateTransaction;
-import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
-import org.web3j.protocol.besu.response.privacy.PrivacyGroup;
-import org.web3j.protocol.besu.response.privacy.PrivateTransactionLegacy;
-import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
-import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
+import org.web3j.protocol.besu.response.privacy.*;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.utils.Base64String;
@@ -202,6 +194,22 @@ public class ResponseTest extends ResponseTester {
         PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
         assertEquals(privPrivateTransaction.getPrivateTransaction(), (Optional.empty()));
+    }
+
+    @Test
+    public void testPrivDistributeRawTransaction() {
+
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\": \"2.0\",\n"
+                        + "    \"id\": 1,\n"
+                        + "    \"result\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
+                        + "}");
+
+        PrivateEnclaveKey enclaveKey = deserialiseResponse(PrivateEnclaveKey.class);
+        assertEquals(
+                enclaveKey.getKey(),
+                ("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 
     @Test

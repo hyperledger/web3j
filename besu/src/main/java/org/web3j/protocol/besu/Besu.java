@@ -23,6 +23,7 @@ import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
 import org.web3j.protocol.besu.response.BesuFullDebugTraceResponse;
 import org.web3j.protocol.besu.response.BesuSignerMetrics;
+import org.web3j.protocol.besu.response.privacy.PrivateEnclaveKey;
 import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
@@ -104,6 +105,8 @@ public interface Besu extends Eea, BesuRx {
             final String address, final Base64String privacyGroupId);
 
     Request<?, PrivGetPrivateTransaction> privGetPrivateTransaction(final String transactionHash);
+
+    Request<?, PrivateEnclaveKey> privDistributeRawTransaction(final String signedTransactionData);
 
     Request<?, PrivGetPrivacyPrecompileAddress> privGetPrivacyPrecompileAddress();
 
