@@ -234,10 +234,10 @@ public final class Numeric {
 
     public static char[] toHexCharArray(byte[] input, int offset, int length, boolean withPrefix) {
         final char[] output = new char[length << 1];
-        for (int i = offset; i < length; i++) {
+        for (int i = offset, j = 0; i < length; i++, j++) {
             final int v = input[i] & 0xFF;
-            output[i * 2] = HEX_CHAR_MAP[v >>> 4];
-            output[i * 2 + 1] = HEX_CHAR_MAP[v & 0x0F];
+            output[j++] = HEX_CHAR_MAP[v >>> 4];
+            output[j] = HEX_CHAR_MAP[v & 0x0F];
         }
         return output;
     }
