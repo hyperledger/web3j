@@ -195,6 +195,18 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testPrivDistributeRawTransaction() throws Exception {
+        final String rawTx =
+                "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f"
+                        + "072445675058bb8eb970870f072445675";
+        web3j.privDistributeRawTransaction(rawTx).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"priv_distributeRawTransaction\","
+                        + "\"params\":[\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\"],\"id\":1}");
+    }
+
+    @Test
     public void testPrivGetPrivateTransaction() throws Exception {
         web3j.privGetPrivateTransaction("EnclaveKey").send();
 

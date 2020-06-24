@@ -29,6 +29,7 @@ import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivateTransaction;
 import org.web3j.protocol.besu.response.privacy.PrivGetTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivacyGroup;
+import org.web3j.protocol.besu.response.privacy.PrivateEnclaveKey;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionLegacy;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
@@ -202,6 +203,22 @@ public class ResponseTest extends ResponseTester {
         PrivGetPrivateTransaction privPrivateTransaction =
                 deserialiseResponse(PrivGetPrivateTransaction.class);
         assertEquals(privPrivateTransaction.getPrivateTransaction(), (Optional.empty()));
+    }
+
+    @Test
+    public void testPrivDistributeRawTransaction() {
+
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\": \"2.0\",\n"
+                        + "    \"id\": 1,\n"
+                        + "    \"result\": \"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n"
+                        + "}");
+
+        PrivateEnclaveKey enclaveKey = deserialiseResponse(PrivateEnclaveKey.class);
+        assertEquals(
+                enclaveKey.getKey(),
+                ("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 
     @Test

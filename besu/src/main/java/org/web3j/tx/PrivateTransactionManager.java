@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.besu.Besu;
+import org.web3j.protocol.besu.response.privacy.PrivateEnclaveKey;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthGetCode;
@@ -80,7 +81,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                 credentials,
                 chainId,
                 privateFrom,
-                new PollingPrivateTransactionReceiptProcessor(besu, attempts, sleepDuration));
+                new PollingPrivateTransactionReceiptProcessor(besu, sleepDuration, attempts));
     }
 
     protected PrivateTransactionManager(
@@ -160,11 +161,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             RESTRICTED);
         }
 
-        final String rawSignedTransaction =
-                Numeric.toHexString(
-                        PrivateTransactionEncoder.signMessage(transaction, chainId, credentials));
-
-        return besu.eeaSendRawTransaction(rawSignedTransaction).send();
+        return signAndSend(transaction);
     }
 
     public EthSendTransaction sendTransactionEIP1559(
@@ -210,11 +207,7 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             RESTRICTED);
         }
 
-        final String rawSignedTransaction =
-                Numeric.toHexString(
-                        PrivateTransactionEncoder.signMessage(transaction, chainId, credentials));
-
-        return besu.eeaSendRawTransaction(rawSignedTransaction).send();
+        return signAndSend(transaction);
     }
 
     @Override
@@ -263,5 +256,30 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                 .privGetCode(
                         this.getPrivacyGroupId().toString(), contractAddress, defaultBlockParameter)
                 .send();
+    }
+
+    public String sign(RawPrivateTransaction rawTransaction) {
+
+        byte[] signedMessage;
+
+        if (chainId > ChainIdLong.NONE) {
+            signedMessage =
+                    PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
+        } else {
+            signedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
+        }
+
+        return Numeric.toHexString(signedMessage);
+    }
+
+    public EthSendTransaction signAndSend(RawPrivateTransaction rawTransaction) throws IOException {
+        String hexValue = sign(rawTransaction);
+        return this.besu.eeaSendRawTransaction(hexValue).send();
+    }
+
+    public PrivateEnclaveKey signAndDistribute(RawPrivateTransaction rawTransaction)
+            throws IOException {
+        String hexValue = sign(rawTransaction);
+        return this.besu.privDistributeRawTransaction(hexValue).send();
     }
 }

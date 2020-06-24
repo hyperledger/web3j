@@ -42,15 +42,8 @@ public class BesuPrivateTransactionManager extends PrivateTransactionManager {
             final long chainId,
             final Base64String privateFrom,
             final Base64String privacyGroupId) {
-        this(
-                besu,
-                gasProvider,
-                credentials,
-                chainId,
-                privateFrom,
-                privacyGroupId,
-                DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH,
-                15 * 1000);
+        super(besu, gasProvider, credentials, chainId, privateFrom);
+        this.privacyGroupId = privacyGroupId;
     }
 
     @Override
