@@ -232,7 +232,7 @@ public final class Numeric {
         return withPrefix ? new StringBuilder(HEX_PREFIX).append(output).toString() : output;
     }
 
-    public static char[] toHexCharArray(byte[] input, int offset, int length, boolean withPrefix) {
+    private static char[] toHexCharArray(byte[] input, int offset, int length, boolean withPrefix) {
         final char[] output = new char[length << 1];
         for (int i = offset, j = 0; i < length; i++, j++) {
             final int v = input[i] & 0xFF;
