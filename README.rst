@@ -95,7 +95,7 @@ Commercial support and training is available from `web3labs.com <https://www.web
 Quickstart
 ----------
 
-Install the Web3j binary.
+Install the Epirus binary.
 
 To get the latest version on Mac OS or Linux, type the following in your terminal:
 
