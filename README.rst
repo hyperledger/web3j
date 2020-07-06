@@ -101,7 +101,7 @@ To get the latest version on Mac OS or Linux, type the following in your termina
 
 .. code-block:: bash
 
-   curl -L https://get.web3j.io | sh
+   curl -L https://get.epirus.io | sh
 
 Then follow the on-screen instructions or head `here <https://docs.web3j.io/quickstart/>`_. 
 
@@ -120,7 +120,7 @@ demonstrates a number of core features of Ethereum with web3j, including:
 Getting started
 ---------------
 
-Typically your application should depend on release versions of web3j, but you may also use snapshot dependencies
+Typically your application should depend on release versions of Web3j, but you may also use snapshot dependencies
 for early access to features and fixes, refer to the  `Snapshot Dependencies`_ section.
 
 | Add the relevant dependency to your project:
@@ -135,7 +135,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.5.12</version>
+     <version>4.6.1</version>
    </dependency>
 
 Android:
@@ -145,7 +145,7 @@ Android:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.2.0-android</version>
+     <version>4.6.0-android</version>
    </dependency>
 
 
@@ -156,13 +156,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.5.12')
+   compile ('org.web3j:core:4.6.1')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.2.0-android')
+   compile ('org.web3j:core:4.6.0-android')
 
 Plugins
 -------
@@ -176,6 +176,8 @@ and `web3j-maven-plugin <https://github.com/web3j/web3j-maven-plugin>`_ for deta
 
 Start a client
 --------------
+
+If you sign up to the [Epirus Platform](https://www.web3labs.com/epirus), you do not need to run your own client. However, if you'd like to run your own read on.
 
 Start up an Ethereum client if you don't already have one running.
 
@@ -191,8 +193,6 @@ Start up an Ethereum client if you don't already have one running.
 .. code-block:: bash
 
    $ besu ----network=dev
-
-
 
 `dev` network uses has `some handy default parameters <https://besu.hyperledger.org/en/stable/Reference/Accounts-for-Testing/#development-mode>`_.
 
