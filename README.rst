@@ -545,6 +545,7 @@ Projects using web3j
 Please submit a pull request if you wish to include your project on the list:
 
 - `AlphaWallet Android Wallet <https://github.com/AlphaWallet/alpha-wallet-android.git>`_
+- `Minerva Digital Wallet <https://github.com/lab10-coop/minerva-android-v2>`_
 - `ERC-20 RESTful Service <https://github.com/blk-io/erc20-rest-service>`_
 - `Ether Wallet <https://play.google.com/store/apps/details?id=org.vikulin.etherwallet>`_ by
   `@vikulin <https://github.com/vikulin>`_
@@ -580,6 +581,8 @@ Please submit a pull request if you wish to include your company on the list:
 - `Impetus <http://www.impetus.com/>`_
 - `Argent Labs <http://www.argent.im/>`_
 - `AlphaWallet <https://www.alphawallet.com/>`_
+- `Lab10 collective <https://lab10.coop/>`_
+- `BinarApps <https://binarapps.com/>`_
 - `PegaSys <https://pegasys.tech/>`_
 
 
