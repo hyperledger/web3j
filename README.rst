@@ -536,7 +536,7 @@ For a .NET implementation, check out `Nethereum <https://github.com/Nethereum/Ne
 
 For a pure Java implementation of an Ethereum client, check out
 `Besu <https://github.com/hyperledger/besu>`_. Note: both `EthereumJ <https://github.com/ethereum/ethereumj>`_ and
-`Ethereum Harmony <https://github.com/ether-camp/ethereum-harmony>`_ have been depracated and should not be used in production.
+`Ethereum Harmony <https://github.com/ether-camp/ethereum-harmony>`_ have been deprecated and should not be used in production.
 
 
 Projects using web3j
@@ -648,5 +648,5 @@ Thanks and credits
 - `Othera <https://www.othera.com.au/>`_ for the great things they are building on the platform
 - `Finhaus <http://finhaus.com.au/>`_ guys for putting me onto Nethereum
 - `bitcoinj <https://bitcoinj.github.io/>`_ for the reference Elliptic Curve crypto implementation
-- Everyone involved in the Ethererum project and its surrounding ecosystem
+- Everyone involved in the Ethereum project and its surrounding ecosystem
 - And of course the users of the library, who've provided valuable input & feedback
