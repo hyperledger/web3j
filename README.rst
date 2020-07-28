@@ -20,6 +20,9 @@ web3j: Web3 Java Ethereum Ðapp API
    :target: https://community.web3labs.com
    :alt: Join the chat at https://gitter.im/web3j/web3j
 
+Q3 2020 Web3j user survey! Please fill it out `here <https://forms.gle/G4PNL7jMGAMpuYxo6>`_
+----------------------------------------------------------------------------------------
+
 web3j is a lightweight, highly modular, reactive, type safe Java and Android library for working with
 Smart Contracts and integrating with clients (nodes) on the Ethereum network:
 
