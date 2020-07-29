@@ -307,9 +307,18 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private FieldSpec createBinaryDefinition(String binary) {
+        // split binary string literal longer than 65534 as it is not support by java compiler
+        int stringLiteralLimit = 65534;
+        String[] binaryArgs = binary.split("(?<=\\G.{" + stringLiteralLimit + "})");
+        StringBuilder binaryString = new StringBuilder();
+        binaryString.append("new StringBuilder()");
+        for (String s : binaryArgs) {
+            binaryString.append(".append($S)");
+        }
+        binaryString.append(".toString()");
         return FieldSpec.builder(String.class, BINARY)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                .initializer("$S", binary)
+                .initializer(binaryString.toString(), binaryArgs)
                 .build();
     }
 
