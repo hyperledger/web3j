@@ -53,8 +53,14 @@ public class JsonRpc2_0Rx {
     public Flowable<String> ethBlockHashFlowable(long pollingInterval) {
         return Flowable.create(
                 subscriber -> {
-                    BlockFilter blockFilter = new BlockFilter(web3j, subscriber::onNext);
-                    run(blockFilter, subscriber, pollingInterval);
+                    try {
+                        if(!subscriber.isCancelled()){
+                            BlockFilter blockFilter = new BlockFilter(web3j, subscriber::onNext);
+                            run(blockFilter, subscriber, pollingInterval);
+                        }
+                    }catch (Exception e){
+                        subscriber.tryOnError(e);
+                    }
                 },
                 BackpressureStrategy.BUFFER);
     }
@@ -62,10 +68,16 @@ public class JsonRpc2_0Rx {
     public Flowable<String> ethPendingTransactionHashFlowable(long pollingInterval) {
         return Flowable.create(
                 subscriber -> {
-                    PendingTransactionFilter pendingTransactionFilter =
-                            new PendingTransactionFilter(web3j, subscriber::onNext);
+                    try {
+                        if(!subscriber.isCancelled()){
+                            PendingTransactionFilter pendingTransactionFilter =
+                                    new PendingTransactionFilter(web3j, subscriber::onNext);
 
-                    run(pendingTransactionFilter, subscriber, pollingInterval);
+                            run(pendingTransactionFilter, subscriber, pollingInterval);
+                        }
+                    }catch (Exception e ){
+                        subscriber.tryOnError(e);
+                    }
                 },
                 BackpressureStrategy.BUFFER);
     }
@@ -74,9 +86,14 @@ public class JsonRpc2_0Rx {
             org.web3j.protocol.core.methods.request.EthFilter ethFilter, long pollingInterval) {
         return Flowable.create(
                 subscriber -> {
-                    LogFilter logFilter = new LogFilter(web3j, subscriber::onNext, ethFilter);
-
-                    run(logFilter, subscriber, pollingInterval);
+                   try {
+                       if(!subscriber.isCancelled()){
+                           LogFilter logFilter = new LogFilter(web3j, subscriber::onNext, ethFilter);
+                           run(logFilter, subscriber, pollingInterval);
+                       }
+                   }catch (Exception e){
+                           subscriber.tryOnError(e);
+                   }
                 },
                 BackpressureStrategy.BUFFER);
     }
