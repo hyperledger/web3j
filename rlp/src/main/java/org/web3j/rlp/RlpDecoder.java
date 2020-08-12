@@ -73,6 +73,11 @@ public class RlpDecoder {
                 return;
             }
 
+            // endPos is derived from input data during recursion, so we must validate it
+            if (endPos < 0 || endPos > data.length) {
+                throw new RuntimeException("RLP invalid parameters while decoding");
+            }
+
             while (startPos < endPos) {
 
                 int prefix = data[startPos] & 0xff;
@@ -103,7 +108,7 @@ public class RlpDecoder {
                     byte strLen = (byte) (prefix - OFFSET_SHORT_STRING);
 
                     // Input validation
-                    if (strLen > data.length - (startPos + 1)) {
+                    if (strLen > endPos - (startPos + 1)) {
                         throw new RuntimeException("RLP length mismatch");
                     }
 
@@ -125,7 +130,7 @@ public class RlpDecoder {
                     int strLen = calcLength(lenOfStrLen, data, startPos);
 
                     // Input validation
-                    if (strLen > data.length - (startPos + lenOfStrLen + 1)) {
+                    if (strLen > endPos - (startPos + lenOfStrLen + 1)) {
                         throw new RuntimeException("RLP length mismatch");
                     }
 
