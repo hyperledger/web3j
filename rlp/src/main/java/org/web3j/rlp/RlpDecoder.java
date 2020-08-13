@@ -188,7 +188,7 @@ public class RlpDecoder {
         byte pow = (byte) (lengthOfLength - 1);
         long length = 0;
         for (int i = 1; i <= lengthOfLength; ++i) {
-            length += (data[pos + i] & 0xff) << (8 * pow);
+            length += ((long) (data[pos + i] & 0xff)) << (8 * pow);
             pow--;
         }
         if (length < 0 || length > Integer.MAX_VALUE) {
