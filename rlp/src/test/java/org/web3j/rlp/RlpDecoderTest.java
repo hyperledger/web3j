@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RlpDecoderTest {
@@ -321,5 +322,15 @@ public class RlpDecoderTest {
                         .getValues()
                         .size(),
                 (9));
+
+        // Regression test: this would previously throw OutOfMemoryError as it tried to allocate 2GB
+        // for the non-existent data
+        assertThrows(
+                RuntimeException.class,
+                (() ->
+                        RlpDecoder.decode(
+                                new byte[] {
+                                    (byte) 0xbb, (byte) 0x7f, (byte) 0xff, (byte) 0xff, (byte) 0xff
+                                })));
     }
 }

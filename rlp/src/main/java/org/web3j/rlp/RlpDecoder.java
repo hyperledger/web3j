@@ -73,6 +73,11 @@ public class RlpDecoder {
                 return;
             }
 
+            // endPos is derived from input data during recursion, so we must validate it
+            if (endPos < 0 || endPos > data.length) {
+                throw new RuntimeException("RLP invalid parameters while decoding");
+            }
+
             while (startPos < endPos) {
 
                 int prefix = data[startPos] & 0xff;
@@ -102,6 +107,11 @@ public class RlpDecoder {
 
                     byte strLen = (byte) (prefix - OFFSET_SHORT_STRING);
 
+                    // Input validation
+                    if (strLen > endPos - (startPos + 1)) {
+                        throw new RuntimeException("RLP length mismatch");
+                    }
+
                     byte[] rlpData = new byte[strLen];
                     System.arraycopy(data, startPos + 1, rlpData, 0, strLen);
 
@@ -118,6 +128,11 @@ public class RlpDecoder {
 
                     byte lenOfStrLen = (byte) (prefix - OFFSET_LONG_STRING);
                     int strLen = calcLength(lenOfStrLen, data, startPos);
+
+                    // Input validation
+                    if (strLen > endPos - (startPos + lenOfStrLen + 1)) {
+                        throw new RuntimeException("RLP length mismatch");
+                    }
 
                     // now we can parse an item for data[1]..data[length]
                     byte[] rlpData = new byte[strLen];
@@ -171,11 +186,14 @@ public class RlpDecoder {
 
     private static int calcLength(int lengthOfLength, byte[] data, int pos) {
         byte pow = (byte) (lengthOfLength - 1);
-        int length = 0;
+        long length = 0;
         for (int i = 1; i <= lengthOfLength; ++i) {
-            length += (data[pos + i] & 0xff) << (8 * pow);
+            length += ((long) (data[pos + i] & 0xff)) << (8 * pow);
             pow--;
         }
-        return length;
+        if (length < 0 || length > Integer.MAX_VALUE) {
+            throw new RuntimeException("RLP too many bytes to decode");
+        }
+        return (int) length;
     }
 }
