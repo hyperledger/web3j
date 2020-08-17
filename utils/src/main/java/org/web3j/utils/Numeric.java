@@ -27,6 +27,7 @@ import org.web3j.exceptions.MessageEncodingException;
 public final class Numeric {
 
     private static final String HEX_PREFIX = "0x";
+    private static final char[] HEX_CHAR_MAP = "0123456789abcdef".toCharArray();
 
     private Numeric() {}
 
@@ -227,15 +228,18 @@ public final class Numeric {
     }
 
     public static String toHexString(byte[] input, int offset, int length, boolean withPrefix) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (withPrefix) {
-            stringBuilder.append("0x");
-        }
-        for (int i = offset; i < offset + length; i++) {
-            stringBuilder.append(String.format("%02x", input[i] & 0xFF));
-        }
+        final String output = new String(toHexCharArray(input, offset, length, withPrefix));
+        return withPrefix ? new StringBuilder(HEX_PREFIX).append(output).toString() : output;
+    }
 
-        return stringBuilder.toString();
+    private static char[] toHexCharArray(byte[] input, int offset, int length, boolean withPrefix) {
+        final char[] output = new char[length << 1];
+        for (int i = offset, j = 0; i < length; i++, j++) {
+            final int v = input[i] & 0xFF;
+            output[j++] = HEX_CHAR_MAP[v >>> 4];
+            output[j] = HEX_CHAR_MAP[v & 0x0F];
+        }
+        return output;
     }
 
     public static String toHexString(byte[] input) {
