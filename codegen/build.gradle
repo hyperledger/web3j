@@ -10,3 +10,6 @@ dependencies {
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation("org.junit.vintage:junit-vintage-engine:$junitVersion")
 }
+
+apply plugin: 'application'
+application { mainClassName = 'org.web3j.codegen.SolidityFunctionWrapperGenerator' }

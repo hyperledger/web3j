@@ -1,3 +1,10 @@
+This fork of Web3J adds a function in the generated Solidity code for
+each Solidity function: "getRLP_". The function returns the RLP encoding
+of the function selector (truncated message digest of the function signature)
+and the function parameters. This is intended to be used with Layer Two Atomic
+Cross-Blockchain Function Calls.
+
+
 .. To build this file locally ensure docutils Python package is installed and run:
    $ rst2html.py README.rst README.html
 

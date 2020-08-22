@@ -1177,6 +1177,13 @@ public class SolidityFunctionWrapper extends Generator {
             results.add(methodBuilder.build());
         }
 
+        // Create function that returns the RLP of the Solidity function call.
+        functionName = "getRLP_" + functionName;
+        methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
+        addParameters(methodBuilder, functionDefinition.getInputs());
+        buildRlpFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
+        results.add(methodBuilder.build());
+
         return results;
     }
 
@@ -1350,6 +1357,35 @@ public class SolidityFunctionWrapper extends Generator {
         } else {
             methodBuilder.addStatement("return executeRemoteCallTransaction(function)");
         }
+    }
+
+    private void buildRlpFunction(
+            AbiDefinition functionDefinition,
+            MethodSpec.Builder methodBuilder,
+            String inputParams,
+            boolean useUpperCase)
+            throws ClassNotFoundException {
+
+        if (functionDefinition.isPayable()) {
+            methodBuilder.addParameter(BigInteger.class, WEI_VALUE);
+        }
+
+        String functionName = functionDefinition.getName();
+
+        methodBuilder.returns(TypeName.get(String.class));
+
+        methodBuilder.addStatement(
+                "final $T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
+                        + ".<$T<?>>emptyList())",
+                Function.class,
+                Function.class,
+                funcNameToConst(functionName, useUpperCase),
+                Arrays.class,
+                Type.class,
+                inputParams,
+                Collections.class,
+                TypeReference.class);
+        methodBuilder.addStatement("return org.web3j.abi.FunctionEncoder.encode(function)");
     }
 
     TypeSpec buildEventResponseObject(
