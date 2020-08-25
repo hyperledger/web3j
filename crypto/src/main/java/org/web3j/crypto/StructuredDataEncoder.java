@@ -296,8 +296,7 @@ public class StructuredDataEncoder {
                 byte[] hashedValue = sha3(concatenatedArrayEncodings);
                 encTypes.add("bytes32");
                 encValues.add(hashedValue);
-            } else if (field.getType().startsWith("uint")
-                    || field.getType().startsWith("int")) {
+            } else if (field.getType().startsWith("uint") || field.getType().startsWith("int")) {
                 encTypes.add(field.getType());
                 // convert to BigInteger for ABI constructor compatibility
                 try {
@@ -307,7 +306,8 @@ public class StructuredDataEncoder {
                         encValues.add(new BigInteger(value.toString()));
                     }
                 } catch (NumberFormatException | NullPointerException e) {
-                        encValues.add(value); // value null or failed to convert, fallback to string type
+                    encValues.add(
+                            value); // value null or failed to convert, fallback to string type
                 }
             } else {
                 encTypes.add(field.getType());
