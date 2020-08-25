@@ -209,6 +209,23 @@ public class StructuredDataTest {
     }
 
     @Test
+    public void testValidStructureWithValues() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/ValidStructuredDataWithValues.json"));
+
+        assertEquals(
+                "0x19015620b3369de388efb28ffd5eeed325817be77135afdd083edcfe7eea4a329e77c064d1cdb9ecfc1653de095a49c59ada5d6979933fbc5d93566944089ac64a61",
+                Numeric.toHexString(dataEncoder.getStructuredData()));
+
+        assertEquals(
+                "0x9a321bee2df12b3b43bc4caf71d19839f05d82264b780b48f1f529bf916b5d30",
+                Numeric.toHexString(dataEncoder.hashStructuredData()));
+    }
+
+    @Test
     public void testGetArrayDimensionsFromData() throws RuntimeException, IOException {
         StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
         // [[1, 2, 3], [4, 5, 6]]

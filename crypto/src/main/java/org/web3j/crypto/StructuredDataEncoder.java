@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -295,6 +296,19 @@ public class StructuredDataEncoder {
                 byte[] hashedValue = sha3(concatenatedArrayEncodings);
                 encTypes.add("bytes32");
                 encValues.add(hashedValue);
+            } else if (field.getType().startsWith("uint")
+                    || field.getType().startsWith("int")) {
+                encTypes.add(field.getType());
+                // convert to BigInteger for ABI constructor compatibility
+                try {
+                    if (value.toString().startsWith("0x")) {
+                        encValues.add(Numeric.toBigInt(value.toString()));
+                    } else {
+                        encValues.add(new BigInteger(value.toString()));
+                    }
+                } catch (NumberFormatException | NullPointerException e) {
+                        encValues.add(value); // value null or failed to convert, fallback to string type
+                }
             } else {
                 encTypes.add(field.getType());
                 encValues.add(value);
@@ -400,6 +414,12 @@ public class StructuredDataEncoder {
     @SuppressWarnings("unchecked")
     public byte[] hashStructuredData() throws RuntimeException {
 
+        return sha3(getStructuredData());
+    }
+
+    @SuppressWarnings("unchecked")
+    public byte[] getStructuredData() throws RuntimeException {
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         final String messagePrefix = "\u0019\u0001";
@@ -415,7 +435,6 @@ public class StructuredDataEncoder {
                         (HashMap<String, Object>) jsonMessageObject.getMessage());
         baos.write(dataHash, 0, dataHash.length);
 
-        byte[] result = baos.toByteArray();
-        return sha3(result);
+        return baos.toByteArray();
     }
 }
