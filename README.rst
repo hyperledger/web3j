@@ -138,7 +138,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.6.1</version>
+     <version>4.6.3</version>
    </dependency>
 
 Android:
@@ -159,7 +159,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.6.1')
+   compile ('org.web3j:core:4.6.3')
 
 Android:
 
