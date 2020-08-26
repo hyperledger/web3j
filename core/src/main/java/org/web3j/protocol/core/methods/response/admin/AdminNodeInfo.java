@@ -13,10 +13,12 @@
 package org.web3j.protocol.core.methods.response.admin;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.annotation.JsonProperty; 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -40,15 +42,34 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
         private String ip;
         private String listenAddr;
         private String name;
+        private String consensus;
+        
+        @JsonProperty("protocols")
+        @SuppressWarnings("unchecked")
+        private void consensusDeserializer(Map<String, Object> protocols) {
+            if(protocols.containsKey("istanbul")) {
+                consensus = "istanbul";
+            } else {
+                Map<String, Object> eth = (Map<String, Object>) protocols.get("eth");
+                consensus = (String) eth.get("consensus");
+            }
+        }
 
         public NodeInfo() {}
 
-        public NodeInfo(String enode, String id, String ip, String listenAddr, String name) {
+        public NodeInfo(
+                String enode,
+                String id,
+                String ip,
+                String listenAddr,
+                String name,
+                String consensus) {
             this.enode = enode;
             this.id = id;
             this.ip = ip;
             this.listenAddr = listenAddr;
             this.name = name;
+            this.consensus = consensus;
         }
 
         public String getEnode() {
@@ -69,6 +90,10 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
 
         public String getName() {
             return name;
+        }
+        
+        public String getConsensus() {
+            return consensus;
         }
     }
 

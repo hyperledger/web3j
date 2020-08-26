@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
@@ -77,6 +78,7 @@ import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.core.methods.response.TxPoolStatus;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
@@ -217,6 +219,7 @@ public class ResponseTest extends ResponseTester {
                         + "                \"network\": 4,\n"
                         + "                \"difficulty\": 1,\n"
                         + "                \"genesis\": \"0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177\",\n"
+                        + "				   \"consensus\": \"clique\",\n"
                         + "                \"config\": {\n"
                         + "                    \"chainId\": 4,\n"
                         + "                    \"homesteadBlock\": 1,\n"
@@ -1566,5 +1569,33 @@ public class ResponseTest extends ResponseTester {
 
         ShhMessages shhMessages = deserialiseResponse(ShhMessages.class);
         assertEquals(shhMessages.getMessages(), (messages));
+    }
+    
+    @Test
+    public void testBooleanResponse() {
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\":\"2.0\",\n"
+                        + "    \"id\":22,\n"
+                        + "    \"result\":true\n"
+                        + "}");
+
+        BooleanResponse booleanResponse = deserialiseResponse(BooleanResponse.class);
+        assertTrue(booleanResponse.success());
+    }
+    
+    @Test
+    public void testTxPoolStatus() {
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\":\"2.0\",\n"
+                        + "    \"id\":22,\n"
+                        + "    \"result\":{ \"pending\": \"10\",\n"
+                        + "			\"queued\": \"7\"}\n"
+                        + "}");
+
+        TxPoolStatus status = deserialiseResponse(TxPoolStatus.class);
+        assertEquals(status.getPending(), 10);
+        assertEquals(status.getQueued(), 7);
     }
 }

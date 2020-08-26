@@ -28,6 +28,7 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.BooleanResponse;
 import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
@@ -79,6 +80,7 @@ import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.TxPoolStatus;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 import org.web3j.protocol.core.methods.response.admin.AdminPeers;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
@@ -153,6 +155,18 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, AdminPeers> adminPeers() {
         return new Request<>(
                 "admin_peers", Collections.emptyList(), web3jService, AdminPeers.class);
+    }
+    
+    @Override
+    public Request<?, BooleanResponse> adminAddPeer(String url) {
+        return new Request<>(
+                "admin_addPeer", Arrays.asList(url), web3jService, BooleanResponse.class);
+    }
+    
+    @Override
+    public Request<?, BooleanResponse> adminRemovePeer(String url) {
+        return new Request<>(
+                "admin_removePeer", Arrays.asList(url), web3jService, BooleanResponse.class);
     }
 
     @Override
@@ -650,6 +664,12 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
                 web3jService,
                 ShhMessages.class);
+    }
+    
+    @Override
+    public Request<?, TxPoolStatus> txPoolStatus() {
+        return new Request<>(
+                "txpool_status", Collections.<String>emptyList(), web3jService, TxPoolStatus.class);
     }
 
     @Override
