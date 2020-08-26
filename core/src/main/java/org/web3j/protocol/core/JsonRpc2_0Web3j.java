@@ -81,6 +81,7 @@ import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.core.methods.response.TxPoolStatus;
+import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 import org.web3j.protocol.core.methods.response.admin.AdminPeers;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
@@ -167,6 +168,12 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, BooleanResponse> adminRemovePeer(String url) {
         return new Request<>(
                 "admin_removePeer", Arrays.asList(url), web3jService, BooleanResponse.class);
+    }
+    
+    @Override
+    public Request<?, AdminDataDir> adminDataDir() {
+        return new Request<>(
+                "admin_datadir", Collections.emptyList(), web3jService, AdminDataDir.class);
     }
 
     @Override

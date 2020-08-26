@@ -49,9 +49,13 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
         private void consensusDeserializer(Map<String, Object> protocols) {
             if(protocols.containsKey("istanbul")) {
                 consensus = "istanbul";
-            } else {
+            } else if (protocols.containsKey("clique")) {
+            	consensus = "clique";
+            } else if (protocols.containsKey("eth")) {
                 Map<String, Object> eth = (Map<String, Object>) protocols.get("eth");
                 consensus = (String) eth.get("consensus");
+            } else {
+            	consensus = "unknown";
             }
         }
 

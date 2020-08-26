@@ -88,6 +88,13 @@ public class RequestTest extends RequestTester {
     }
     
     @Test
+    public void testAdminDataDir() throws Exception {
+        web3j.adminDataDir().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"admin_datadir\",\"params\":[],\"id\":1}");
+    }
+    
+    @Test
     public void testAdminRemovePeer() throws Exception {
         web3j.adminRemovePeer("url").send();
 

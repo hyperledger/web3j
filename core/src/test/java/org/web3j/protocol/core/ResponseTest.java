@@ -81,6 +81,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.TxPoolStatus;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -1582,6 +1583,19 @@ public class ResponseTest extends ResponseTester {
 
         BooleanResponse booleanResponse = deserialiseResponse(BooleanResponse.class);
         assertTrue(booleanResponse.success());
+    }
+    
+    @Test
+    public void testAdminDataDir() {
+        buildResponse(
+                "{\n"
+                        + "    \"jsonrpc\":\"2.0\",\n"
+                        + "    \"id\":22,\n"
+                        + "    \"result\":\"sampleDir\"\n"
+                        + "}");
+
+        AdminDataDir dataDir = deserialiseResponse(AdminDataDir.class);
+        assertEquals(dataDir.getDataDir(), "sampleDir");
     }
     
     @Test
