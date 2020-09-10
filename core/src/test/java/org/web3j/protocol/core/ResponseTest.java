@@ -1571,7 +1571,7 @@ public class ResponseTest extends ResponseTester {
         ShhMessages shhMessages = deserialiseResponse(ShhMessages.class);
         assertEquals(shhMessages.getMessages(), (messages));
     }
-    
+
     @Test
     public void testBooleanResponse() {
         buildResponse(
@@ -1584,7 +1584,7 @@ public class ResponseTest extends ResponseTester {
         BooleanResponse booleanResponse = deserialiseResponse(BooleanResponse.class);
         assertTrue(booleanResponse.success());
     }
-    
+
     @Test
     public void testAdminDataDir() {
         buildResponse(
@@ -1597,7 +1597,7 @@ public class ResponseTest extends ResponseTester {
         AdminDataDir dataDir = deserialiseResponse(AdminDataDir.class);
         assertEquals(dataDir.getDataDir(), "sampleDir");
     }
-    
+
     @Test
     public void testTxPoolStatus() {
         buildResponse(

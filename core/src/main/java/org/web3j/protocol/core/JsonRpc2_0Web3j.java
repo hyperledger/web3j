@@ -78,9 +78,9 @@ import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TxPoolStatus;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
-import org.web3j.protocol.core.methods.response.TxPoolStatus;
 import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 import org.web3j.protocol.core.methods.response.admin.AdminPeers;
@@ -157,19 +157,19 @@ public class JsonRpc2_0Web3j implements Web3j {
         return new Request<>(
                 "admin_peers", Collections.emptyList(), web3jService, AdminPeers.class);
     }
-    
+
     @Override
     public Request<?, BooleanResponse> adminAddPeer(String url) {
         return new Request<>(
                 "admin_addPeer", Arrays.asList(url), web3jService, BooleanResponse.class);
     }
-    
+
     @Override
     public Request<?, BooleanResponse> adminRemovePeer(String url) {
         return new Request<>(
                 "admin_removePeer", Arrays.asList(url), web3jService, BooleanResponse.class);
     }
-    
+
     @Override
     public Request<?, AdminDataDir> adminDataDir() {
         return new Request<>(
@@ -672,7 +672,7 @@ public class JsonRpc2_0Web3j implements Web3j {
                 web3jService,
                 ShhMessages.class);
     }
-    
+
     @Override
     public Request<?, TxPoolStatus> txPoolStatus() {
         return new Request<>(

@@ -63,9 +63,9 @@ import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TxPoolStatus;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
-import org.web3j.protocol.core.methods.response.TxPoolStatus;
 import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 import org.web3j.protocol.core.methods.response.admin.AdminPeers;
@@ -85,11 +85,11 @@ public interface Ethereum {
     Request<?, AdminNodeInfo> adminNodeInfo();
 
     Request<?, AdminPeers> adminPeers();
-    
+
     Request<?, BooleanResponse> adminAddPeer(String url);
-    
+
     Request<?, BooleanResponse> adminRemovePeer(String url);
-    
+
     Request<?, AdminDataDir> adminDataDir();
 
     Request<?, EthProtocolVersion> ethProtocolVersion();
@@ -224,6 +224,6 @@ public interface Ethereum {
     Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId);
 
     Request<?, ShhMessages> shhGetMessages(BigInteger filterId);
-    
+
     Request<?, TxPoolStatus> txPoolStatus();
 }

@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.annotation.JsonProperty; 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -43,19 +43,19 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
         private String listenAddr;
         private String name;
         private String consensus;
-        
+
         @JsonProperty("protocols")
         @SuppressWarnings("unchecked")
         private void consensusDeserializer(Map<String, Object> protocols) {
-            if(protocols.containsKey("istanbul")) {
+            if (protocols.containsKey("istanbul")) {
                 consensus = "istanbul";
             } else if (protocols.containsKey("clique")) {
-            	consensus = "clique";
+                consensus = "clique";
             } else if (protocols.containsKey("eth")) {
                 Map<String, Object> eth = (Map<String, Object>) protocols.get("eth");
                 consensus = (String) eth.get("consensus");
             } else {
-            	consensus = "unknown";
+                consensus = "unknown";
             }
         }
 
@@ -95,7 +95,7 @@ public class AdminNodeInfo extends Response<AdminNodeInfo.NodeInfo> {
         public String getName() {
             return name;
         }
-        
+
         public String getConsensus() {
             return consensus;
         }

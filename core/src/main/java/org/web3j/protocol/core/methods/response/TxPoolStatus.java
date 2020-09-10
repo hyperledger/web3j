@@ -12,18 +12,18 @@
  */
 package org.web3j.protocol.core.methods.response;
 
-import org.web3j.protocol.core.Response;
-
-import org.web3j.utils.Numeric;
 import java.util.Map;
+
+import org.web3j.protocol.core.Response;
+import org.web3j.utils.Numeric;
 
 /** txpool_status. */
 public class TxPoolStatus extends Response<Map<String, String>> {
-    public Integer getPending() {  	
-    	return Numeric.decodeQuantity((String) getResult().get("pending")).intValue();
+    public Integer getPending() {
+        return Numeric.decodeQuantity((String) getResult().get("pending")).intValue();
     }
-    
-    public Integer getQueued() {  	
-    	return Numeric.decodeQuantity((String) getResult().get("queued")).intValue();
+
+    public Integer getQueued() {
+        return Numeric.decodeQuantity((String) getResult().get("queued")).intValue();
     }
 }
