@@ -66,8 +66,7 @@ public class Bip44WalletUtilsTest {
                 "xpub6GoSByP58zBY8xUdR7brvCk31yhx7pPxfdnSB5VuvrB2NGqBS9eqf4pVo1xev4GEmip5Wuky9KUtJVxq4fvYfFchS6SA6C4cCRyQkLqNNjq",
                 Base58.encode(addChecksum(serializePublic(bip44Keypair))));
 
-        // Verify address according to https://iancoleman.io/bip39/
-        Credentials credentials = Bip44WalletUtils.loadBip44Credentials("", mnemonic);
+        Credentials credentials = Bip44WalletUtils.loadBip44Credentials("", mnemonic); // Verify address according to https://iancoleman.io/bip39/
         assertEquals("0xece62451ca8fba33746d6dafd0d0ebdef84778b7", credentials.getAddress().toLowerCase());
     }
 
