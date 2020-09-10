@@ -362,6 +362,10 @@ public class StructuredDataEncoder {
         data.put(
                 "verifyingContract",
                 ((HashMap<String, Object>) data.get("verifyingContract")).get("value"));
+
+        if (data.get("salt") == null) {
+            data.remove("salt");
+        }
         return sha3(encodeData("EIP712Domain", data));
     }
 
