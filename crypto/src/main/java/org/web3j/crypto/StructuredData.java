@@ -122,13 +122,13 @@ public class StructuredData {
         @Override
         public String toString() {
             return "EIP712Message{"
-                   + "primaryType='"
-                   + this.primaryType
-                   + '\''
-                   + ", message='"
-                   + this.message
-                   + '\''
-                   + '}';
+                    + "primaryType='"
+                    + this.primaryType
+                    + '\''
+                    + ", message='"
+                    + this.message
+                    + '\''
+                    + '}';
         }
     }
 }
