@@ -92,14 +92,15 @@ class CompilerClassLoader extends ClassLoader {
     }
 
     private String buildClassPath() {
-        return buildClassPath(urls) + getClassPathSeparator() + System.getProperty("java.class.path");
+        return buildClassPath(urls)
+                + getClassPathSeparator()
+                + System.getProperty("java.class.path");
     }
 
     private String getClassPathSeparator() {
-        if(isWindows()) {
+        if (isWindows()) {
             return ";";
-        }
-        else {
+        } else {
             return ":";
         }
     }
