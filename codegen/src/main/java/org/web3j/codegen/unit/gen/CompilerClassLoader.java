@@ -92,14 +92,28 @@ class CompilerClassLoader extends ClassLoader {
     }
 
     private String buildClassPath() {
-        return buildClassPath(urls) + ':' + System.getProperty("java.class.path");
+        return buildClassPath(urls)
+                + getClassPathSeparator()
+                + System.getProperty("java.class.path");
+    }
+
+    private String getClassPathSeparator() {
+        if (isWindows()) {
+            return ";";
+        } else {
+            return ":";
+        }
+    }
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().startsWith("windows");
     }
 
     private String buildClassPath(final URL... urls) {
         return Arrays.stream(urls)
                 .map(URL::toExternalForm)
                 .map(url -> url.replaceAll("file:", ""))
-                .collect(Collectors.joining(":"));
+                .collect(Collectors.joining(getClassPathSeparator()));
     }
 
     private Optional<byte[]> readBytes(final File file) {
