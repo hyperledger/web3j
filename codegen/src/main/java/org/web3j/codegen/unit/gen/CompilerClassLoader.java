@@ -64,9 +64,7 @@ class CompilerClassLoader extends ClassLoader {
             if (file.exists()) {
                 sourceFile = file;
                 break;
-            }
-
-            if (url.getFile().contains("%20")) {
+            } else if (url.getFile().contains("%20")) {
                 file = new File(url.getFile().replace("%20", " "), path + ".java");
                 if (file.exists()) {
                     sourceFile = file;
