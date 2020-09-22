@@ -15,6 +15,7 @@ package org.web3j.codegen.unit.gen;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -59,17 +60,16 @@ class CompilerClassLoader extends ClassLoader {
 
         File sourceFile = null;
         for (final URL url : urls) {
-            File file = new File(url.getFile(), path + ".java");
+            File file;
+            try {
+                file = new File(URLDecoder.decode(url.getPath(), "UTF-8"), path + ".java");
+            } catch (Exception e) {
+                file = new File(url.getFile(), path + ".java");
+            }
 
             if (file.exists()) {
                 sourceFile = file;
                 break;
-            } else if (url.getFile().contains("%20")) {
-                file = new File(url.getFile().replaceAll("%20", " "), path + ".java");
-                if (file.exists()) {
-                    sourceFile = file;
-                    break;
-                }
             }
         }
 
