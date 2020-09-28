@@ -46,7 +46,9 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
     }
 
     @Override
-    public String getAddress() { return address; }
+    public String getAddress() {
+        return address;
+    }
 
     @Override
     public Function getFunction() {

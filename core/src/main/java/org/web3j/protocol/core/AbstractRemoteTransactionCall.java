@@ -64,13 +64,14 @@ public abstract class AbstractRemoteTransactionCall<T> extends AbstractRemoteCal
      */
     public TransactionReceipt send() throws IOException, TransactionException {
         final TransactionReceipt receipt =
-                getTransactionManager().executeTransaction(
-                        gasProvider.getGasPrice(getFunction().getName()),
-                        gasProvider.getGasLimit(getFunction().getName()),
-                        getAddress(),
-                        data,
-                        value,
-                        constructor);
+                getTransactionManager()
+                        .executeTransaction(
+                                gasProvider.getGasPrice(getFunction().getName()),
+                                gasProvider.getGasLimit(getFunction().getName()),
+                                getAddress(),
+                                data,
+                                value,
+                                constructor);
 
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
