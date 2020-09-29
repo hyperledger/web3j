@@ -4,7 +4,9 @@ dependencies {
     compile project(':core'),
             "com.squareup:kotlinpoet:$kotlinPoetVersion",
             "com.squareup:javapoet:$javaPoetVersion",
-            "info.picocli:picocli:$picocliVersion"
+            "info.picocli:picocli:$picocliVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion",
+            "ch.qos.logback:logback-classic:$logbackVersion"
     testCompile project(path: ':core', configuration: 'testArtifacts')
     implementation("org.junit.platform:junit-platform-launcher:$junitPlatformLauncherVersion")
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
