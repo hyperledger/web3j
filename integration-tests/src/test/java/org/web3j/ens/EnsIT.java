@@ -25,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class EnsIT {
 
     @Test
-    public void testEns(Web3j web3j) throws Exception {
+    public void testEns(final Web3j web3j) {
 
-        EnsResolver ensResolver = new EnsResolver(web3j);
+        final EnsResolver ensResolver = new EnsResolver(web3j);
 
         assertEquals(
                 ensResolver.resolve("web3j.test"), ("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
