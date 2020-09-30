@@ -66,7 +66,7 @@ public class ArraysIT extends Scenario {
                         valueOf(2),
                         valueOf(1));
 
-        final List<?> result = contract.fixedReverse(array).call();
+        final List<BigInteger> result = contract.fixedReverse(array).call();
         array.sort(Comparator.comparing(BigInteger::intValue));
 
         assertEquals(array, result);
