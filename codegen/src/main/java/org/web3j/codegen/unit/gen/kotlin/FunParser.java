@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import org.web3j.codegen.unit.gen.utils.KotlinMappingHelper;
 import org.web3j.protocol.Web3j;
+import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
@@ -33,9 +34,9 @@ import static org.web3j.codegen.unit.gen.utils.NameUtils.toCamelCase;
 
 public class FunParser {
     private final Method method;
-    private final Class theContract;
+    private final Class<? extends Contract> theContract;
 
-    public FunParser(final Method method, final Class theContract) {
+    public FunParser(final Method method, final Class<? extends Contract> theContract) {
         this.method = method;
         this.theContract = theContract;
     }
