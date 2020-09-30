@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
-
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 
@@ -44,6 +43,7 @@ import io.reactivex.Flowable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -871,9 +871,7 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private static MethodSpec buildLoad(
-            final String className,
-            final Class<?> authType,
-            final String authName) {
+            final String className, final Class<?> authType, final String authName) {
         return MethodSpec.methodBuilder("load")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeVariableName.get(className, Type.class))
