@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
+
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 
@@ -43,7 +44,6 @@ import io.reactivex.Flowable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -88,6 +88,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String CREDENTIALS = "credentials";
     private static final String CONTRACT_GAS_PROVIDER = "contractGasProvider";
     private static final String TRANSACTION_MANAGER = "transactionManager";
+    private static final String TRANSACTION_RECEIPT = "transactionReceipt";
     private static final String INITIAL_VALUE = "initialWeiValue";
     private static final String CONTRACT_ADDRESS = "contractAddress";
     private static final String GAS_PRICE = "gasPrice";
@@ -193,12 +194,8 @@ public class SolidityFunctionWrapper extends Generator {
                         .addMember("value", "\"rawtypes\"")
                         .build());
 
-        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, false));
-        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, true));
-        classBuilder.addMethod(
-                buildConstructor(TransactionManager.class, TRANSACTION_MANAGER, false));
-        classBuilder.addMethod(
-                buildConstructor(TransactionManager.class, TRANSACTION_MANAGER, true));
+        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildConstructor(TransactionManager.class, TRANSACTION_MANAGER));
         classBuilder.addFields(buildFuncNameConstants(abi));
         classBuilder.addTypes(buildStructTypes(abi));
         buildStructsNamedTypesList(abi);
@@ -698,39 +695,23 @@ public class SolidityFunctionWrapper extends Generator {
         return fields;
     }
 
-    private static MethodSpec buildConstructor(
-            final Class<?> authType, final String authName, final boolean withGasProvider) {
-        final MethodSpec.Builder toReturn =
-                MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PROTECTED)
-                        .addParameter(String.class, CONTRACT_ADDRESS)
-                        .addParameter(Web3j.class, WEB3J)
-                        .addParameter(authType, authName);
-
-        if (withGasProvider) {
-            toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
-                    .addStatement(
-                            "super($N, $N, $N, $N, $N)",
-                            BINARY,
-                            CONTRACT_ADDRESS,
-                            WEB3J,
-                            authName,
-                            CONTRACT_GAS_PROVIDER);
-        } else {
-            toReturn.addParameter(BigInteger.class, GAS_PRICE)
-                    .addParameter(BigInteger.class, GAS_LIMIT)
-                    .addStatement(
-                            "super($N, $N, $N, $N, $N, $N)",
-                            BINARY,
-                            CONTRACT_ADDRESS,
-                            WEB3J,
-                            authName,
-                            GAS_PRICE,
-                            GAS_LIMIT)
-                    .addAnnotation(Deprecated.class);
-        }
-
-        return toReturn.build();
+    private static MethodSpec buildConstructor(final Class<?> authType, final String authName) {
+        return MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PROTECTED)
+                .addParameter(String.class, CONTRACT_ADDRESS)
+                .addParameter(Web3j.class, WEB3J)
+                .addParameter(authType, authName)
+                .addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
+                .addParameter(TransactionReceipt.class, TRANSACTION_RECEIPT)
+                .addStatement(
+                        "super($N, $N, $N, $N, $N, $N)",
+                        BINARY,
+                        CONTRACT_ADDRESS,
+                        WEB3J,
+                        authName,
+                        CONTRACT_GAS_PROVIDER,
+                        TRANSACTION_RECEIPT)
+                .build();
     }
 
     private MethodSpec buildDeploy(
