@@ -33,6 +33,6 @@ public class RemoteCall1<T> extends AbstractRemoteCall<T> {
     @Override
     @SuppressWarnings("unchecked")
     protected T convert(final List<Type<?>> values) {
-        return values.isEmpty() ? null : ((T) values.get(0));
+        return values.isEmpty() ? null : ((T) values.get(0).getValue());
     }
 }

@@ -23,8 +23,8 @@ public class RemoteCall2<T1, T2> extends AbstractRemoteCall<Tuple2<T1, T2>> {
     @SuppressWarnings("unchecked")
     protected Tuple2<T1, T2> convert(final List<Type<?>> values) {
         return new Tuple2<>(
-                (T1) values.get(0),
-                (T2) values.get(1)
+                (T1) values.get(0).getValue(),
+                (T2) values.get(1).getValue()
         );
     }
 }

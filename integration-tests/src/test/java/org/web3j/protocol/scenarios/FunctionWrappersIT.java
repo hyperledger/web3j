@@ -69,10 +69,10 @@ public class FunctionWrappersIT extends Scenario {
                         STATIC_GAS_PROVIDER);
 
         final TransactionReceipt transactionReceipt =
-                fibonacci.fibonacciNotify(BigInteger.valueOf(15)).send();
+                contract.fibonacciNotify(BigInteger.valueOf(15)).send();
 
         final Fibonacci.NotifyEventResponse result =
-                fibonacci.getNotifyEvents(transactionReceipt).get(0);
+                contract.getNotifyEvents(transactionReceipt).get(0);
 
         assertEquals(BigInteger.valueOf(15), result.input);
         assertEquals(BigInteger.valueOf(610), result.result);
