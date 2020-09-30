@@ -24,6 +24,7 @@ import com.squareup.kotlinpoet.FunSpec;
 import org.web3j.codegen.unit.gen.java.MethodParser;
 import org.web3j.codegen.unit.gen.kotlin.FunParser;
 import org.web3j.protocol.Web3j;
+import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
@@ -61,7 +62,8 @@ public class MethodFilter {
         return listOfMethodSpecs;
     }
 
-    public static List<FunSpec> generateFunctionSpecsForEachTest(final Class<?> theContract) {
+    public static List<FunSpec> generateFunctionSpecsForEachTest(
+            final Class<? extends Contract> theContract) {
         final List<FunSpec> listOfMethodSpecs = new ArrayList<>();
         extractValidMethods(theContract)
                 .forEach(
