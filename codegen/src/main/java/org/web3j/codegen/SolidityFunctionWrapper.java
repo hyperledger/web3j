@@ -101,6 +101,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String TYPE_FUNCTION = "function";
     private static final String TYPE_EVENT = "event";
     private static final String TYPE_CONSTRUCTOR = "constructor";
+    private static final String NULL = "null";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SolidityFunctionWrapper.class);
 
@@ -200,12 +201,8 @@ public class SolidityFunctionWrapper extends Generator {
         classBuilder.addTypes(buildStructTypes(abi));
         buildStructsNamedTypesList(abi);
         classBuilder.addMethods(buildFunctionDefinitions(classBuilder, abi));
-        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, false));
-        classBuilder.addMethod(
-                buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, false));
-        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, true));
-        classBuilder.addMethod(
-                buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER, true));
+        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS));
+        classBuilder.addMethod(buildLoad(className, TransactionManager.class, TRANSACTION_MANAGER));
         if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
             classBuilder.addMethods(buildDeployMethods(className, abi));
         }
@@ -876,40 +873,23 @@ public class SolidityFunctionWrapper extends Generator {
     private static MethodSpec buildLoad(
             final String className,
             final Class<?> authType,
-            final String authName,
-            final boolean withGasProvider) {
-        final MethodSpec.Builder toReturn =
-                MethodSpec.methodBuilder("load")
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .returns(TypeVariableName.get(className, Type.class))
-                        .addParameter(String.class, CONTRACT_ADDRESS)
-                        .addParameter(Web3j.class, WEB3J)
-                        .addParameter(authType, authName);
-
-        if (withGasProvider) {
-            toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
-                    .addStatement(
-                            "return new $L($L, $L, $L, $L)",
-                            className,
-                            CONTRACT_ADDRESS,
-                            WEB3J,
-                            authName,
-                            CONTRACT_GAS_PROVIDER);
-        } else {
-            toReturn.addParameter(BigInteger.class, GAS_PRICE)
-                    .addParameter(BigInteger.class, GAS_LIMIT)
-                    .addStatement(
-                            "return new $L($L, $L, $L, $L, $L)",
-                            className,
-                            CONTRACT_ADDRESS,
-                            WEB3J,
-                            authName,
-                            GAS_PRICE,
-                            GAS_LIMIT)
-                    .addAnnotation(Deprecated.class);
-        }
-
-        return toReturn.build();
+            final String authName) {
+        return MethodSpec.methodBuilder("load")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(TypeVariableName.get(className, Type.class))
+                .addParameter(String.class, CONTRACT_ADDRESS, Modifier.FINAL)
+                .addParameter(Web3j.class, WEB3J, Modifier.FINAL)
+                .addParameter(authType, authName, Modifier.FINAL)
+                .addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER, Modifier.FINAL)
+                .addStatement(
+                        "return new $L($L, $L, $L, $L, $L)",
+                        className,
+                        CONTRACT_ADDRESS,
+                        WEB3J,
+                        authName,
+                        CONTRACT_GAS_PROVIDER,
+                        NULL)
+                .build();
     }
 
     String addParameters(
