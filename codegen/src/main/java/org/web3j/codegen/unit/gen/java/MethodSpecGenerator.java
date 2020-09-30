@@ -52,17 +52,6 @@ public class MethodSpecGenerator {
         this.testMethodParameters = Collections.emptyList();
     }
 
-    public MethodSpecGenerator(
-            final String testMethodName,
-            final Map<String, Object[]> statementBody,
-            final List<ParameterSpec> testMethodParameters) {
-        this.statementBody = statementBody;
-        this.testMethodName = testMethodName;
-        this.testMethodAnnotation = Test.class;
-        this.testMethodModifier = Modifier.PUBLIC;
-        this.testMethodParameters = testMethodParameters;
-    }
-
     public MethodSpec generate() {
         return MethodSpec.methodBuilder(testMethodName)
                 .addAnnotation(testMethodAnnotation)
