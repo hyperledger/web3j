@@ -119,7 +119,6 @@ public class SolidityFunctionWrapper extends Generator {
 
     private final boolean useNativeJavaTypes;
     private final boolean useJavaPrimitiveTypes;
-    private final boolean generateSendTxForCalls;
 
     private final int addressLength;
 
@@ -132,18 +131,16 @@ public class SolidityFunctionWrapper extends Generator {
     private final GenerationReporter reporter;
 
     public SolidityFunctionWrapper(final boolean useNativeJavaTypes, final int addressLength) {
-        this(useNativeJavaTypes, false, false, addressLength);
+        this(useNativeJavaTypes, false, addressLength);
     }
 
     public SolidityFunctionWrapper(
             final boolean useNativeJavaTypes,
             final boolean useJavaPrimitiveTypes,
-            final boolean generateSendTxForCalls,
             final int addressLength) {
         this(
                 useNativeJavaTypes,
                 useJavaPrimitiveTypes,
-                generateSendTxForCalls,
                 addressLength,
                 new LogGenerationReporter(LOGGER));
     }
@@ -151,14 +148,12 @@ public class SolidityFunctionWrapper extends Generator {
     public SolidityFunctionWrapper(
             final boolean useNativeJavaTypes,
             final boolean useJavaPrimitiveTypes,
-            final boolean generateSendTxForCalls,
             final int addressLength,
             final GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
         this.addressLength = addressLength;
         this.reporter = reporter;
-        this.generateSendTxForCalls = generateSendTxForCalls;
     }
 
     public void generateJavaFiles(
@@ -771,7 +766,8 @@ public class SolidityFunctionWrapper extends Generator {
                             ContractGasProvider.class, CONTRACT_GAS_PROVIDER, Modifier.FINAL)
                     .addParameter(BigInteger.class, INITIAL_VALUE, Modifier.FINAL);
         } else {
-            return builder.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER, Modifier.FINAL);
+            return builder.addParameter(
+                    ContractGasProvider.class, CONTRACT_GAS_PROVIDER, Modifier.FINAL);
         }
     }
 
@@ -1147,21 +1143,10 @@ public class SolidityFunctionWrapper extends Generator {
         final boolean pureOrView = "pure".equals(stateMutability) || "view".equals(stateMutability);
         final boolean isFunctionDefinitionConstant = functionDefinition.isConstant() || pureOrView;
 
-        if (generateSendTxForCalls) {
-            final String funcNamePrefix;
-            if (isFunctionDefinitionConstant) {
-                funcNamePrefix = "call";
-            } else {
-                funcNamePrefix = "send";
-            }
-            // Prefix function name to avoid naming collision
-            functionName = funcNamePrefix + "_" + functionName;
-        } else {
-            // If the solidity function name is a reserved word
-            // in the current java version prepend it with "_"
-            if (!SourceVersion.isName(functionName)) {
-                functionName = "_" + functionName;
-            }
+        // If the solidity function name is a reserved word
+        // in the current java version prepend it with "_"
+        if (!SourceVersion.isName(functionName)) {
+            functionName = "_" + functionName;
         }
 
         final MethodSpec.Builder methodBuilder =
@@ -1182,11 +1167,6 @@ public class SolidityFunctionWrapper extends Generator {
                         useUpperCase);
 
                 results.add(methodBuilder.build());
-            }
-            if (generateSendTxForCalls) {
-                final AbiDefinition sendFuncDefinition = new AbiDefinition(functionDefinition);
-                sendFuncDefinition.setConstant(false);
-                results.addAll(buildFunctions(sendFuncDefinition));
             }
         }
 

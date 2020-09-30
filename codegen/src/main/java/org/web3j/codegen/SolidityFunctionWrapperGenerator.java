@@ -63,9 +63,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
     private final int addressLength;
 
-    private final boolean generateSendTxForCalls;
-
-    public SolidityFunctionWrapperGenerator(
+    protected SolidityFunctionWrapperGenerator(
             final File binFile,
             final File abiFile,
             final File destinationDir,
@@ -83,7 +81,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 basePackageName,
                 useJavaNativeTypes,
                 useJavaPrimitiveTypes,
-                false,
                 Contract.class,
                 addressLength);
     }
@@ -96,7 +93,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             final String basePackageName,
             final boolean useJavaNativeTypes,
             final boolean useJavaPrimitiveTypes,
-            final boolean generateSendTxForCalls,
             final Class<? extends Contract> contractClass,
             final int addressLength) {
 
@@ -111,7 +107,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         this.abiFile = abiFile;
         this.contractName = contractName;
         this.addressLength = addressLength;
-        this.generateSendTxForCalls = generateSendTxForCalls;
     }
 
     protected List<AbiDefinition> loadContractDefinition(final File absFile) throws IOException {
@@ -134,11 +129,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             final String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
-            new SolidityFunctionWrapper(
-                            useJavaNativeTypes,
-                            useJavaPrimitiveTypes,
-                            generateSendTxForCalls,
-                            addressLength)
+            new SolidityFunctionWrapper(useJavaNativeTypes, useJavaPrimitiveTypes, addressLength)
                     .generateJavaFiles(
                             contractClass,
                             contractName,
