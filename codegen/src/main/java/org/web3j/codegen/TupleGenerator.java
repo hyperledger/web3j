@@ -81,7 +81,7 @@ public class TupleGenerator extends Generator {
                     .addField(typeVariableName, value, Modifier.PRIVATE, Modifier.FINAL);
 
             constructorBuilder
-                    .addParameter(typeVariableName, value)
+                    .addParameter(typeVariableName, value, Modifier.FINAL)
                     .addStatement("this.$N = $N", value, value);
 
             final MethodSpec getterSpec =
@@ -135,7 +135,7 @@ public class TupleGenerator extends Generator {
                 MethodSpec.methodBuilder("equals")
                         .addAnnotation(Override.class)
                         .addModifiers(Modifier.PUBLIC)
-                        .addParameter(Object.class, "o")
+                        .addParameter(Object.class, "o", Modifier.FINAL)
                         .returns(boolean.class)
                         .beginControlFlow("if (this == o)")
                         .addStatement("return true")

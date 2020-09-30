@@ -66,7 +66,8 @@ public class MethodParser {
                         ParameterSpec.builder(Web3j.class, toCamelCase(Web3j.class)).build(),
                         ParameterSpec.builder(
                                         TransactionManager.class,
-                                        toCamelCase(TransactionManager.class))
+                                        toCamelCase(TransactionManager.class),
+                                        Modifier.FINAL)
                                 .build(),
                         ParameterSpec.builder(
                                         ContractGasProvider.class,

@@ -72,14 +72,14 @@ public class AbiTypesGenerator extends Generator {
             final MethodSpec constructorSpec =
                     MethodSpec.constructorBuilder()
                             .addModifiers(Modifier.PUBLIC)
-                            .addParameter(BigInteger.class, "value")
+                            .addParameter(BigInteger.class, "value", Modifier.FINAL)
                             .addStatement("super($L, $N)", bitSize, "value")
                             .build();
 
             final MethodSpec overideConstructorSpec =
                     MethodSpec.constructorBuilder()
                             .addModifiers(Modifier.PUBLIC)
-                            .addParameter(long.class, "value")
+                            .addParameter(long.class, "value", Modifier.FINAL)
                             .addStatement("this(BigInteger.valueOf(value))")
                             .build();
 
@@ -121,17 +121,17 @@ public class AbiTypesGenerator extends Generator {
                 final MethodSpec constructorSpec1 =
                         MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PUBLIC)
-                                .addParameter(BigInteger.class, "value")
+                                .addParameter(BigInteger.class, "value", Modifier.FINAL)
                                 .addStatement("super($L, $L, $N)", mBitSize, nBitSize, "value")
                                 .build();
 
                 final MethodSpec constructorSpec2 =
                         MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PUBLIC)
-                                .addParameter(int.class, "mBitSize")
-                                .addParameter(int.class, "nBitSize")
-                                .addParameter(BigInteger.class, "m")
-                                .addParameter(BigInteger.class, "n")
+                                .addParameter(int.class, "mBitSize", Modifier.FINAL)
+                                .addParameter(int.class, "nBitSize", Modifier.FINAL)
+                                .addParameter(BigInteger.class, "m", Modifier.FINAL)
+                                .addParameter(BigInteger.class, "n", Modifier.FINAL)
                                 .addStatement("super($L, $L, $N, $N)", mBitSize, nBitSize, "m", "n")
                                 .build();
 
@@ -174,7 +174,7 @@ public class AbiTypesGenerator extends Generator {
             final MethodSpec constructorSpec =
                     MethodSpec.constructorBuilder()
                             .addModifiers(Modifier.PUBLIC)
-                            .addParameter(byte[].class, "value")
+                            .addParameter(byte[].class, "value", Modifier.FINAL)
                             .addStatement("super($L, $N)", byteSize, "value")
                             .build();
 
