@@ -47,12 +47,11 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
         final String aliceAddress = ALICE.getAddress();
         final String bobAddress = BOB.getAddress();
-        final ContractGasProvider contractGasProvider = new DefaultGasProvider();
         final HumanStandardToken contract =
                 HumanStandardToken.deploy(
                                 web3j,
                                 ALICE,
-                                contractGasProvider,
+                                STATIC_GAS_PROVIDER,
                                 aliceQty,
                                 "web3j tokens",
                                 BigInteger.valueOf(18),

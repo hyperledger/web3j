@@ -37,6 +37,7 @@ import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -68,9 +69,8 @@ public class GreeterContractIT extends Scenario {
         final TransactionReceipt createTransactionReceipt =
                 waitForTransactionReceipt(createTransactionHash);
 
-        assertEquals(createTransactionReceipt.getTransactionHash(), (createTransactionHash));
-
-        assertFalse(createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertEquals(createTransactionHash, createTransactionReceipt.getTransactionHash());
+        assertNotEquals(GAS_LIMIT, createTransactionReceipt.getGasUsed());
 
         final String contractAddress = createTransactionReceipt.getContractAddress();
 
@@ -83,8 +83,8 @@ public class GreeterContractIT extends Scenario {
 
         final List<Type<?>> response =
                 FunctionReturnDecoder.decode(responseValue, getFunction.getOutputParameters());
-        assertEquals(response.size(), (1));
-        assertEquals(response.get(0).getValue(), (VALUE));
+        assertEquals(1, response.size());
+        assertEquals(VALUE, response.get(0).getValue());
     }
 
     private String sendCreateContractTransaction() throws Exception {
