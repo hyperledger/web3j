@@ -1511,7 +1511,8 @@ public class SolidityFunctionWrapper extends Generator {
                                 ClassName.get("", responseClassName)))
                 .beginControlFlow(
                         "for ($T eventValues : valueList)", Contract.EventValuesWithLog.class)
-                .addStatement("final $1T typedResponse = new $1T()", ClassName.get("", responseClassName))
+                .addStatement(
+                        "final $1T typedResponse = new $1T()", ClassName.get("", responseClassName))
                 .addCode(
                         buildTypedResponse(
                                 "typedResponse", indexedParameters, nonIndexedParameters, false))
