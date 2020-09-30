@@ -15,6 +15,7 @@ package org.web3j.protocol.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.tx.TransactionManager;
@@ -32,9 +33,10 @@ public class RemoteArrayCall<T> extends AbstractRemoteCall<List<T>> {
     @Override
     @SuppressWarnings("unchecked")
     protected List<T> convert(final List<Type<?>> values) {
+        final Array<?> result = (Array<?>) values.get(0);
         final List<T> out = new ArrayList<>();
-        for (final Type<?> type : values) {
-            out.add((T) type);
+        for (final Type<?> type : result.getValue()) {
+            out.add((T) type.getValue());
         }
         return out;
     }
