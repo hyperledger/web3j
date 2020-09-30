@@ -698,11 +698,11 @@ public class SolidityFunctionWrapper extends Generator {
     private static MethodSpec buildConstructor(final Class<?> authType, final String authName) {
         return MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PROTECTED)
-                .addParameter(String.class, CONTRACT_ADDRESS)
-                .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName)
-                .addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
-                .addParameter(TransactionReceipt.class, TRANSACTION_RECEIPT)
+                .addParameter(String.class, CONTRACT_ADDRESS, Modifier.FINAL)
+                .addParameter(Web3j.class, WEB3J, Modifier.FINAL)
+                .addParameter(authType, authName, Modifier.FINAL)
+                .addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER, Modifier.FINAL)
+                .addParameter(TransactionReceipt.class, TRANSACTION_RECEIPT, Modifier.FINAL)
                 .addStatement(
                         "super($N, $N, $N, $N, $N, $N)",
                         BINARY,
