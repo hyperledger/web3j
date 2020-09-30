@@ -1166,9 +1166,7 @@ public class SolidityFunctionWrapper extends Generator {
 
                 results.add(methodBuilder.build());
             }
-        }
-
-        if (!isFunctionDefinitionConstant) {
+        } else {
             buildTransactionFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
             results.add(methodBuilder.build());
         }
