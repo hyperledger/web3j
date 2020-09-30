@@ -210,7 +210,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
         @Option(
                 names = {"-st", SOLIDITY_TYPES_ARG},
-                description = "use solidity types.")
+                description = "use Solidity types.")
         private boolean solidityTypes;
 
         @Override
