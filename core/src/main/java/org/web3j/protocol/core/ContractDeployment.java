@@ -103,7 +103,6 @@ public class ContractDeployment<T extends Contract> implements RemoteTransaction
         final Constructor<T> constructor =
                 type.getDeclaredConstructor(
                         String.class,
-                        String.class,
                         Web3j.class,
                         TransactionManager.class,
                         ContractGasProvider.class,
@@ -111,7 +110,6 @@ public class ContractDeployment<T extends Contract> implements RemoteTransaction
         constructor.setAccessible(true);
 
         return constructor.newInstance(
-                binary,
                 contractAddress,
                 web3j,
                 transactionManager,
