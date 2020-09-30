@@ -69,7 +69,7 @@ public class ArraysIT extends Scenario {
         final List<?> result = contract.fixedReverse(array).call();
         array.sort(Comparator.comparing(BigInteger::intValue));
 
-        assertEquals(result, (array));
+        assertEquals(array, result);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class ArraysIT extends Scenario {
         final List<?> result = contract.dynamicReverse(array).call();
         array.sort(Comparator.comparing(BigInteger::intValue));
 
-        assertEquals(result, (array));
+        assertEquals(array, result);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class ArraysIT extends Scenario {
     public void testEmptyDynamicReverse() throws Exception {
         List<BigInteger> array1 = Collections.emptyList();
         final List<?> result = contract.dynamicReverse(array1).call();
-        assertEquals(result, (Collections.emptyList()));
+        assertEquals(Collections.emptyList(), result);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class ArraysIT extends Scenario {
                 contract.multiDynamic(java.util.Arrays.asList(array1, array2)).call();
 
         assertEquals(
-                result, (java.util.Arrays.asList(valueOf(1), valueOf(2), valueOf(3), valueOf(4))));
+                java.util.Arrays.asList(valueOf(1), valueOf(2), valueOf(3), valueOf(4)), result);
     }
 
     @Test
@@ -128,8 +128,7 @@ public class ArraysIT extends Scenario {
         final List<?> result = contract.multiFixed(input).call();
 
         assertEquals(
-                result,
-                (java.util.Arrays.asList(
+                java.util.Arrays.asList(
                         valueOf(1),
                         valueOf(2),
                         valueOf(3),
@@ -141,6 +140,7 @@ public class ArraysIT extends Scenario {
                         valueOf(9),
                         valueOf(10),
                         valueOf(11),
-                        valueOf(12))));
+                        valueOf(12)),
+                result);
     }
 }
