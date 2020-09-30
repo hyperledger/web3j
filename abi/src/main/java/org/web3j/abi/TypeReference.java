@@ -54,9 +54,9 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
     }
 
     /**
-     * Used by instantiateType to see what TypeReference is wrapped by this
-     * one. eg calling this method on a TypeReference to DynamicArray[StaticArray3[Uint256]] 
-     * would return a TypeReference to StaticArray3[Uint256].
+     * Used by instantiateType to see what TypeReference is wrapped by this one. eg calling this
+     * method on a TypeReference to DynamicArray[StaticArray3[Uint256]] would return a TypeReference
+     * to StaticArray3[Uint256].
      *
      * @return the type wrapped by this Array TypeReference, or null if not Array
      */
@@ -142,11 +142,6 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
 
         public int getSize() {
             return size;
-        }
-
-        @SuppressWarnings("unchecked")
-        public Class<T> getComponentType() {
-            return (Class<T>) ((ParameterizedType) getType()).getActualTypeArguments()[0];
         }
     }
 

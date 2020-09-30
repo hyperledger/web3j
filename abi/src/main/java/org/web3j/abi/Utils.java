@@ -200,4 +200,10 @@ public class Utils {
         return Stream.concat(canonicalFields.stream(), nestedFields.stream())
                 .collect(Collectors.toList());
     }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Type<?>> Class<T> getComponentType(
+            final TypeReference<StaticArray<T>> typeReference) {
+        return (Class<T>) ((ParameterizedType) typeReference.getType()).getActualTypeArguments()[0];
+    }
 }
