@@ -76,9 +76,7 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
             throw new ContractCallException("Empty value (0x) returned from contract");
         }
 
-        final List<Type<?>> values =
-                FunctionReturnDecoder.decode(value, function.getOutputParameters());
-
+        final List<Type<?>> values = function.decode(value);
         return convert(values);
     }
 
