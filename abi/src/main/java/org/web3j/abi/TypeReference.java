@@ -54,9 +54,9 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type<?>>
     }
 
     /**
-     * getSubTypeReference() is used by instantiateType to see what TypeReference is wrapped by this
-     * one. eg calling getSubTypeReference() on a TypeReference to
-     * DynamicArray[StaticArray3[Uint256]] would return a TypeReference to StaticArray3[Uint256]
+     * Used by instantiateType to see what TypeReference is wrapped by this
+     * one. eg calling this method on a TypeReference to DynamicArray[StaticArray3[Uint256]] 
+     * would return a TypeReference to StaticArray3[Uint256].
      *
      * @return the type wrapped by this Array TypeReference, or null if not Array
      */
