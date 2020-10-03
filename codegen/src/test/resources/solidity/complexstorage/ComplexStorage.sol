@@ -1,6 +1,6 @@
 //in order for experimental ABIEncoderV2 to be “stable” when passing structs as arguments we must
 //use at least version 0.4.19 of solidity
-pragma solidity ^0.6.5;
+pragma solidity >=0.7.1;
 pragma experimental ABIEncoderV2;
 
 contract ComplexStorage {
@@ -48,6 +48,13 @@ contract ComplexStorage {
         string data;
     }
 
+    struct Arr {
+        uint256 a;
+        bytes b;
+        uint256[] c;
+        bytes[] d;
+    }
+
     Foo foo;
     Bar bar;
     Fuzz fuzz;
@@ -56,6 +63,7 @@ contract ComplexStorage {
     Nuu nuu;
     Naz naz;
     Wiz wiz;
+    Arr arr;
 
     constructor(Foo memory _foo, Bar memory _bar) public {
         foo = _foo;
@@ -95,6 +103,10 @@ contract ComplexStorage {
         wiz = _toSet;
     }
 
+    function setArr(Arr memory _toSet) public {
+        arr = _toSet;
+    }
+
     function getFoo() public view returns (Foo memory) {
         return foo;
     }
@@ -122,6 +134,11 @@ contract ComplexStorage {
     function getFooUint() public view returns (Foo memory, uint256) {
         return (foo, 1);
     }
+
+    function getArr() public view returns (Arr memory) {
+        return (arr);
+    }
+
 
     event Access(address indexed _address, Foo _foo, Bar _bar);
 

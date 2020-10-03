@@ -400,20 +400,41 @@ public class SolidityFunctionWrapper extends Generator {
                 }
                 constructorBuilder.addStatement(
                         "this." + component.getName() + " = " + component.getName());
-                nativeConstructorBuilder.addStatement(
-                        "this."
-                                + component.getName()
-                                + " = "
-                                + component.getName()
-                                + (useNativeJavaTypes
-                                                && structClassNameMap.keySet().stream()
-                                                        .noneMatch(
-                                                                i ->
-                                                                        i
-                                                                                == component
-                                                                                        .structIdentifier())
-                                        ? ".getValue()"
-                                        : ""));
+                String type = component.getType();
+                if (component.isArrayType()) {
+                    String baseType = component.baseType();
+                    final TypeName nativeBaseTypeName =
+                            buildTypeName(baseType, useJavaPrimitiveTypes);
+                    //                    TypeName wrappedBaseTypeName =
+                    // getWrapperType(nativeBaseTypeName);
+                    nativeConstructorBuilder.addStatement(
+                            "this." + component.getName() + " = new java.util.ArrayList<>();");
+                    nativeConstructorBuilder.addStatement(
+                            "for ("
+                                    + nativeBaseTypeName.toString()
+                                    + " z: "
+                                    + component.getName()
+                                    + ".getValue()) {");
+                    nativeConstructorBuilder.addStatement(
+                            "this." + component.getName() + ".add(z.getValue());");
+                    nativeConstructorBuilder.addStatement("}");
+
+                } else {
+                    nativeConstructorBuilder.addStatement(
+                            "this."
+                                    + component.getName()
+                                    + " = "
+                                    + component.getName()
+                                    + (useNativeJavaTypes
+                                                    && structClassNameMap.keySet().stream()
+                                                            .noneMatch(
+                                                                    i ->
+                                                                            i
+                                                                                    == component
+                                                                                            .structIdentifier())
+                                            ? ".getValue()"
+                                            : ""));
+                }
             }
 
             builder.superclass(namedType.isDynamic() ? DynamicStruct.class : StaticStruct.class);
@@ -430,6 +451,55 @@ public class SolidityFunctionWrapper extends Generator {
                                                                             == component
                                                                                     .structIdentifier()))) {
                 builder.addMethod(nativeConstructorBuilder.build());
+
+                // TODO do this dynamically
+                //                static List<org.web3j.abi.datatypes.generated.Uint256>
+                // convertToUint256(List<BigInteger> proofOffset) {
+                //                    List<org.web3j.abi.datatypes.generated.Uint256> z = new
+                // ArrayList<>();
+                //                    for (BigInteger a: proofOffset) {
+                //                        z.add(new Uint256(a));
+                //                    }
+                //                    return z;
+                //                }
+                final TypeName uint256TypeName = buildTypeName("uint256[]", useJavaPrimitiveTypes);
+                final TypeName wrappedUint256TypeName = getWrapperType(uint256TypeName);
+                final MethodSpec.Builder convertToUint256Builder =
+                        MethodSpec.methodBuilder("convertTo_uint256")
+                                .addModifiers(Modifier.STATIC)
+                                .returns(ClassName.get(List.class))
+                                .addParameter(wrappedUint256TypeName, "param");
+                convertToUint256Builder.addStatement(
+                        "List<Uint256> z = new java.util.ArrayList<>()");
+                convertToUint256Builder.addStatement("for (BigInteger a: param) {");
+                convertToUint256Builder.addStatement("   z.add(new Uint256(a))");
+                convertToUint256Builder.addStatement("}");
+                convertToUint256Builder.addStatement("return z");
+                builder.addMethod(convertToUint256Builder.build());
+
+                //                static List<DynamicBytes> convertToDynamicBytes(List<byte[]>
+                // param) {
+                //                    List<DynamicBytes> z = new ArrayList<>();
+                //                    for (byte[] a: param) {
+                //                        z.add(new DynamicBytes(a));
+                //                    }
+                //                    return z;
+                //                }
+                final TypeName bytesTypeName = buildTypeName("bytes[]", useJavaPrimitiveTypes);
+                final TypeName wrappedBytesTypeName = getWrapperType(bytesTypeName);
+                final MethodSpec.Builder convertToBytesBuilder =
+                        MethodSpec.methodBuilder("convertTo_bytes")
+                                .addModifiers(Modifier.STATIC)
+                                .returns(ClassName.get(List.class))
+                                .addParameter(wrappedBytesTypeName, "param");
+                convertToBytesBuilder.addStatement(
+                        "List<org.web3j.abi.datatypes.DynamicBytes> z = new java.util.ArrayList<>()");
+                convertToBytesBuilder.addStatement("for (byte[] a: param) {");
+                convertToBytesBuilder.addStatement(
+                        "   z.add(new org.web3j.abi.datatypes.DynamicBytes(a))");
+                convertToBytesBuilder.addStatement("}");
+                convertToBytesBuilder.addStatement("return z");
+                builder.addMethod(convertToBytesBuilder.build());
             }
             structClassNameMap.put(namedType.structIdentifier(), ClassName.get("", structName));
             structs.add(builder.build());
@@ -481,12 +551,18 @@ public class SolidityFunctionWrapper extends Generator {
                     (!component.getType().equals("tuple") && useNativeJavaTypes
                             ? "new " + buildTypeName(component.getType(), false) + "("
                             : ""));
+            if (component.isArrayType() && useNativeJavaTypes) {
+                stringBuilder.append("convertTo_" + component.baseType() + "(");
+            }
             stringBuilder.append(
                     (component.getType().equals("tuple")
                             ? component.getName()
                             : useNativeJavaTypes
                                     ? component.getName() + ")"
                                     : component.getName()));
+            if (component.isArrayType() && useNativeJavaTypes) {
+                stringBuilder.append(")");
+            }
         }
         return stringBuilder.toString();
     }
@@ -1121,7 +1197,6 @@ public class SolidityFunctionWrapper extends Generator {
 
     List<MethodSpec> buildFunctions(AbiDefinition functionDefinition, boolean useUpperCase)
             throws ClassNotFoundException {
-
         List<MethodSpec> results = new ArrayList<>(2);
         String functionName = functionDefinition.getName();
 

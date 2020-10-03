@@ -245,6 +245,18 @@ public class AbiDefinition {
             return type;
         }
 
+        public boolean isArrayType() {
+            return (type.length() >= 2 && type.substring(type.length() - 2).equalsIgnoreCase("[]"));
+        }
+
+        public String baseType() {
+            if (isArrayType()) {
+                return type.substring(0, type.length() - 2);
+            } else {
+                return type;
+            }
+        }
+
         public void setType(String type) {
             this.type = type;
         }
