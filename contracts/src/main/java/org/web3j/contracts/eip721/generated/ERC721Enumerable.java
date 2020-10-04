@@ -44,7 +44,7 @@ public class ERC721Enumerable extends Contract {
         final Function function = new Function(FUNC_TOTALSUPPLY, 
                 Arrays.asList(), 
                 Arrays.asList(new TypeReference<Uint256>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<BigInteger> tokenOfOwnerByIndex(final String _owner, final BigInteger _index) {
@@ -52,14 +52,14 @@ public class ERC721Enumerable extends Contract {
                 Arrays.asList(new org.web3j.abi.datatypes.Address(_owner), 
                 new org.web3j.abi.datatypes.generated.Uint256(_index)), 
                 Arrays.asList(new TypeReference<Uint256>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<BigInteger> tokenByIndex(final BigInteger _index) {
         final Function function = new Function(FUNC_TOKENBYINDEX, 
                 Arrays.asList(new org.web3j.abi.datatypes.generated.Uint256(_index)), 
                 Arrays.asList(new TypeReference<Uint256>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public static ERC721Enumerable load(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {

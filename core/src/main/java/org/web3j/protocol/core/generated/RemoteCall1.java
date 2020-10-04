@@ -25,14 +25,15 @@ public class RemoteCall1<T> extends AbstractRemoteCall<T> {
     public RemoteCall1(
             final Function function,
             final String contractAddress,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter) {
-        super(function, contractAddress, transactionManager, defaultBlockParameter);
+        super(function, contractAddress, useNativeJavaTypes, transactionManager, defaultBlockParameter);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected T convert(final List<Type<?>> values) {
-        return values.isEmpty() ? null : ((T) values.get(0).getValue());
+        return values.isEmpty() ? null : ((T) (useNativeJavaTypes() ? values.get(0).getValue() : values.get(0)));
     }
 }

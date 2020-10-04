@@ -29,19 +29,20 @@ public class RemoteTransactionCall1<T> extends AbstractRemoteTransactionCall<T> 
             final Web3j web3j,
             final Function function,
             final String contractAddress,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter,
             final String data,
             final BigInteger weiValue,
             final boolean constructor,
             final ContractGasProvider gasProvider) {
-        super(web3j, function, contractAddress, transactionManager, 
+        super(web3j, function, contractAddress, useNativeJavaTypes, transactionManager,
                 defaultBlockParameter, data, weiValue, constructor, gasProvider);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected T convert(final List<Type<?>> values) {
-        return (T) values.get(0).getValue();
+        return (T) (useNativeJavaTypes() ? values.get(0).getValue() : values.get(0));
     }
 }

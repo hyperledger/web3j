@@ -74,6 +74,7 @@ public class ContractDeployment<T extends Contract> implements RemoteTransaction
                                 web3j,
                                 FUNC_DEPLOY,
                                 null,
+                                true,
                                 transactionManager,
                                 null,
                                 binary + encodedConstructor,

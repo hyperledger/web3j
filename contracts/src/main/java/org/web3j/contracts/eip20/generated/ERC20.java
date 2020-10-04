@@ -90,7 +90,7 @@ public class ERC20 extends Contract {
                 Arrays.<Type<?>>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Boolean> approve(final String _spender, final BigInteger _value) {
@@ -99,7 +99,7 @@ public class ERC20 extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_spender),
                         new org.web3j.abi.datatypes.generated.Uint256(_value)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall1<>(web3j, function, contractAddress, transactionManager, 
+        return new RemoteTransactionCall1<>(web3j, function, contractAddress, true, transactionManager, 
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -108,7 +108,7 @@ public class ERC20 extends Contract {
                 Arrays.<Type<?>>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Boolean> transferFrom(final String _from, final String _to, final BigInteger _value) {
@@ -118,7 +118,7 @@ public class ERC20 extends Contract {
                         new org.web3j.abi.datatypes.Address(_to),
                         new org.web3j.abi.datatypes.generated.Uint256(_value)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall1<>(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall1<>(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -127,7 +127,7 @@ public class ERC20 extends Contract {
                 Arrays.<Type<?>>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint8>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true,transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<BigInteger> balanceOf(final String _owner) {
@@ -135,7 +135,7 @@ public class ERC20 extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_owner)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> symbol() {
@@ -143,7 +143,7 @@ public class ERC20 extends Contract {
                 Arrays.<Type<?>>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Boolean> transfer(final String _to, final BigInteger _value) {
@@ -152,7 +152,7 @@ public class ERC20 extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.Address(_to),
                         new org.web3j.abi.datatypes.generated.Uint256(_value)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall1<>(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall1<>(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -162,7 +162,7 @@ public class ERC20 extends Contract {
                         new org.web3j.abi.datatypes.Address(_spender)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public List<TransferEventResponse> getTransferEvents(final TransactionReceipt transactionReceipt) {

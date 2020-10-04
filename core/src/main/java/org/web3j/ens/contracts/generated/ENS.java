@@ -81,14 +81,14 @@ public class ENS extends Contract {
         final Function function = new Function(FUNC_RESOLVER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> owner(final byte[] node) {
         final Function function = new Function(FUNC_OWNER, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Void> setSubnodeOwner(final byte[] node, final byte[] label, final String owner) {
@@ -98,7 +98,7 @@ public class ENS extends Contract {
                 new org.web3j.abi.datatypes.generated.Bytes32(label), 
                 new org.web3j.abi.datatypes.Address(owner)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, 
                 false, gasProvider);
     }
@@ -109,7 +109,7 @@ public class ENS extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.generated.Uint64(ttl)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -117,7 +117,7 @@ public class ENS extends Contract {
         final Function function = new Function(FUNC_TTL, 
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Void> setResolver(final byte[] node, final String resolver) {
@@ -126,7 +126,7 @@ public class ENS extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.Address(resolver)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 
@@ -136,7 +136,7 @@ public class ENS extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node), 
                 new org.web3j.abi.datatypes.Address(owner)), 
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO, false, gasProvider);
     }
 

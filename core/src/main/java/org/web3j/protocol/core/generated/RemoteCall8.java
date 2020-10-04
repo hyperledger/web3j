@@ -15,23 +15,24 @@ public class RemoteCall8<T1, T2, T3, T4, T5, T6, T7, T8>
     public RemoteCall8(
             final Function function,
             final String contractAddress,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter) {
-        super(function, contractAddress, transactionManager, defaultBlockParameter);
+        super(function, contractAddress, useNativeJavaTypes, transactionManager, defaultBlockParameter);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected Tuple8<T1, T2, T3, T4, T5, T6, T7, T8> convert(final List<Type<?>> values) {
         return new Tuple8<>(
-                (T1) values.get(0).getValue(),
-                (T2) values.get(1).getValue(),
-                (T3) values.get(2).getValue(),
-                (T4) values.get(3).getValue(),
-                (T5) values.get(4).getValue(),
-                (T6) values.get(5).getValue(),
-                (T7) values.get(6).getValue(),
-                (T8) values.get(7).getValue()
+                ((T1) (useNativeJavaTypes() ? values.get(0).getValue() : values.get(0))),
+                ((T2) (useNativeJavaTypes() ? values.get(1).getValue() : values.get(1))),
+                ((T3) (useNativeJavaTypes() ? values.get(2).getValue() : values.get(2))),
+                ((T4) (useNativeJavaTypes() ? values.get(3).getValue() : values.get(3))),
+                ((T5) (useNativeJavaTypes() ? values.get(4).getValue() : values.get(4))),
+                ((T6) (useNativeJavaTypes() ? values.get(5).getValue() : values.get(5))),
+                ((T7) (useNativeJavaTypes() ? values.get(6).getValue() : values.get(6))),
+                ((T8) (useNativeJavaTypes() ? values.get(7).getValue() : values.get(7)))
         );
     }
 }

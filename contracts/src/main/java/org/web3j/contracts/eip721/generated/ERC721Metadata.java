@@ -44,21 +44,21 @@ public class ERC721Metadata extends Contract {
         final Function function = new Function(FUNC_NAME, 
                 Arrays.asList(), 
                 Arrays.asList(new TypeReference<Utf8String>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> symbol() {
         final Function function = new Function(FUNC_SYMBOL, 
                 Arrays.asList(), 
                 Arrays.asList(new TypeReference<Utf8String>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> tokenURI(final BigInteger _tokenId) {
         final Function function = new Function(FUNC_TOKENURI, 
                 Arrays.asList(new org.web3j.abi.datatypes.generated.Uint256(_tokenId)), 
                 Arrays.asList(new TypeReference<Utf8String>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
     
     public static ERC721Metadata load(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {

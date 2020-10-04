@@ -445,6 +445,7 @@ public class ContractTest extends ManagedTransactionTester {
                         web3j,
                         func,
                         contract.contractAddress,
+                        true,
                         contract.transactionManager,
                         contract.defaultBlockParameter,
                         FunctionEncoder.encode(func),
@@ -630,7 +631,7 @@ public class ContractTest extends ManagedTransactionTester {
                             Collections.singletonList(new TypeReference<Utf8String>() {}));
 
             return new RemoteCall1<>(
-                    function, contractAddress, transactionManager, defaultBlockParameter);
+                    function, contractAddress, false, transactionManager, defaultBlockParameter);
         }
 
         public RemoteCall<List<Type<?>>> callMultipleValue() {
@@ -642,7 +643,7 @@ public class ContractTest extends ManagedTransactionTester {
                                     new TypeReference<Uint256>() {},
                                     new TypeReference<Uint256>() {}));
             return new RemoteArrayCall<>(
-                    function, contractAddress, transactionManager, defaultBlockParameter);
+                    function, contractAddress, false, transactionManager, defaultBlockParameter);
         }
 
         public RemoteTransactionCall<Void> performTransaction(
@@ -655,6 +656,7 @@ public class ContractTest extends ManagedTransactionTester {
                     web3j,
                     function,
                     contractAddress,
+                    true,
                     transactionManager,
                     defaultBlockParameter,
                     FunctionEncoder.encode(function),

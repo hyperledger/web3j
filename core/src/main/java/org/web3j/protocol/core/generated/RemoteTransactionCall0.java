@@ -29,13 +29,14 @@ public class RemoteTransactionCall0 extends AbstractRemoteTransactionCall<Void> 
             final Web3j web3j,
             final Function function,
             final String contractAddress,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter,
             final String data,
             final BigInteger weiValue,
             final boolean constructor,
             final ContractGasProvider gasProvider) {
-        super(web3j, function, contractAddress, transactionManager,
+        super(web3j, function, contractAddress, useNativeJavaTypes, transactionManager,
                 defaultBlockParameter, data, weiValue, constructor, gasProvider);
     }
 

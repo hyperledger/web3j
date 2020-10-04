@@ -123,7 +123,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Void> setText(final byte[] node, final String key, final String value) {
@@ -133,7 +133,7 @@ public class PublicResolver extends Contract {
                         new org.web3j.abi.datatypes.Utf8String(key),
                         new org.web3j.abi.datatypes.Utf8String(value)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
                 false, gasProvider);
     }
@@ -145,7 +145,7 @@ public class PublicResolver extends Contract {
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
                 }, new TypeReference<DynamicBytes>() {
                 }));
-        return new RemoteCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall2<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Void> setPubkey(final byte[] node, final byte[] x, final byte[] y) {
@@ -155,7 +155,7 @@ public class PublicResolver extends Contract {
                         new org.web3j.abi.datatypes.generated.Bytes32(x),
                         new org.web3j.abi.datatypes.generated.Bytes32(y)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
                 false, gasProvider);
     }
@@ -165,7 +165,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> addr(final byte[] node) {
@@ -173,7 +173,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteCall<String> text(final byte[] node, final String key) {
@@ -182,7 +182,7 @@ public class PublicResolver extends Contract {
                         new org.web3j.abi.datatypes.Utf8String(key)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Void> setABI(final byte[] node, final BigInteger contentType, final byte[] data) {
@@ -192,7 +192,7 @@ public class PublicResolver extends Contract {
                         new org.web3j.abi.datatypes.generated.Uint256(contentType),
                         new org.web3j.abi.datatypes.DynamicBytes(data)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
                 false, gasProvider);
     }
@@ -202,7 +202,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                 }));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Void> setName(final byte[] node, final String name) {
@@ -211,7 +211,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
                         new org.web3j.abi.datatypes.Utf8String(name)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
                 false, gasProvider);
     }
@@ -222,7 +222,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
                         new org.web3j.abi.datatypes.generated.Bytes32(hash)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
                 false, gasProvider);
     }
@@ -233,7 +233,7 @@ public class PublicResolver extends Contract {
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {
                 }, new TypeReference<Bytes32>() {
                 }));
-        return new RemoteCall2<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall2<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public RemoteTransactionCall<Void> setAddr(final byte[] node, final String addr) {
@@ -242,7 +242,7 @@ public class PublicResolver extends Contract {
                 Arrays.<Type<?>>asList(new org.web3j.abi.datatypes.generated.Bytes32(node),
                         new org.web3j.abi.datatypes.Address(addr)),
                 Collections.<TypeReference<?>>emptyList());
-        return new RemoteTransactionCall0(web3j, function, contractAddress, transactionManager,
+        return new RemoteTransactionCall0(web3j, function, contractAddress, true, transactionManager,
                 defaultBlockParameter, FunctionEncoder.encode(function), BigInteger.ZERO,
                 false, gasProvider);
     }

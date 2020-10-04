@@ -25,9 +25,10 @@ public class RemoteArrayCall<T> extends AbstractRemoteCall<List<T>> {
     public RemoteArrayCall(
             final Function function,
             final String address,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter) {
-        super(function, address, transactionManager, defaultBlockParameter);
+        super(function, address, useNativeJavaTypes, transactionManager, defaultBlockParameter);
     }
 
     @Override

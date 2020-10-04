@@ -42,13 +42,14 @@ public abstract class AbstractRemoteTransactionCall<T> extends AbstractRemoteCal
             final Web3j web3j,
             final Function function,
             final String address,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter,
             final String data,
             final BigInteger value,
             final boolean constructor,
             final ContractGasProvider gasProvider) {
-        super(function, address, transactionManager, defaultBlockParameter);
+        super(function, address, useNativeJavaTypes, transactionManager, defaultBlockParameter);
         this.web3j = web3j;
         this.data = data;
         this.value = value;

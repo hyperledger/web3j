@@ -98,6 +98,6 @@ public class Request<S, T extends Response<?>> {
 
     public Flowable<T> flowable() {
         // FIXME
-        return new RemoteCall1<T>(null, null, null, null).toFlowable();
+        return new RemoteCall1<T>(null, null, true, null, null).toFlowable();
     }
 }

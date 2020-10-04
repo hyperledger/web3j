@@ -14,19 +14,20 @@ public class RemoteCall4<T1, T2, T3, T4> extends AbstractRemoteCall<Tuple4<T1, T
     public RemoteCall4(
             final Function function,
             final String contractAddress,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter) {
-        super(function, contractAddress, transactionManager, defaultBlockParameter);
+        super(function, contractAddress, useNativeJavaTypes, transactionManager, defaultBlockParameter);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected Tuple4<T1, T2, T3, T4> convert(final List<Type<?>> values) {
         return new Tuple4<>(
-                (T1) values.get(0).getValue(),
-                (T2) values.get(1).getValue(),
-                (T3) values.get(2).getValue(),
-                (T4) values.get(3).getValue()
+                ((T1) (useNativeJavaTypes() ? values.get(0).getValue() : values.get(0))),
+                ((T2) (useNativeJavaTypes() ? values.get(1).getValue() : values.get(1))),
+                ((T3) (useNativeJavaTypes() ? values.get(2).getValue() : values.get(2))),
+                ((T4) (useNativeJavaTypes() ? values.get(3).getValue() : values.get(3)))
         );
     }
 }

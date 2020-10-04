@@ -40,7 +40,7 @@ public class ERC165 extends Contract {
         final Function function = new Function(FUNC_SUPPORTSINTERFACE, 
                 Arrays.asList(new org.web3j.abi.datatypes.generated.Bytes4(interfaceID)), 
                 Arrays.asList(new TypeReference<Bool>() {}));
-        return new RemoteCall1<>(function, contractAddress, transactionManager, defaultBlockParameter);
+        return new RemoteCall1<>(function, contractAddress, true, transactionManager, defaultBlockParameter);
     }
 
     public static ERC165 load(final String contractAddress, final Web3j web3j, final Credentials credentials, final ContractGasProvider contractGasProvider) {

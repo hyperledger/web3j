@@ -30,16 +30,19 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
 
     private final Function function;
     private final String address;
+    private final boolean useNativeJavaTypes;
     private final TransactionManager transactionManager;
     private final DefaultBlockParameter defaultBlockParameter;
 
     public AbstractRemoteCall(
             final Function function,
             final String address,
+            final boolean useNativeJavaTypes,
             final TransactionManager transactionManager,
             final DefaultBlockParameter defaultBlockParameter) {
         this.function = function;
         this.address = address;
+        this.useNativeJavaTypes = useNativeJavaTypes;
         this.transactionManager = transactionManager;
         this.defaultBlockParameter = defaultBlockParameter;
     }
@@ -90,4 +93,8 @@ public abstract class AbstractRemoteCall<T> implements RemoteCall<T> {
      * @return Statically typed return values
      */
     protected abstract T convert(List<Type<?>> values);
+
+    protected boolean useNativeJavaTypes() {
+        return useNativeJavaTypes;
+    }
 }

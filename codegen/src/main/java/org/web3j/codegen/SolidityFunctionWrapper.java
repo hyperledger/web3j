@@ -69,6 +69,7 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.RemoteArrayCall;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteTransaction;
+import org.web3j.protocol.core.generated.RemoteCall1;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType;
@@ -1187,7 +1188,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         if (outputParameterTypes.isEmpty()) {
             methodBuilder.addStatement(
-                    "throw new RuntimeException"
+                    "throw new UnsupportedOperationException"
                             + "(\"cannot call constant function with void return type\")");
         } else if (outputParameterTypes.size() == 1) {
 
@@ -1220,29 +1221,20 @@ public class SolidityFunctionWrapper extends Generator {
                     TypeReference.class,
                     typeName);
 
-            if (useNativeJavaTypes) {
-                if (nativeReturnTypeName.equals(ClassName.get(List.class))) {
-                    methodBuilder.addAnnotation(
-                            AnnotationSpec.builder(SuppressWarnings.class)
-                                    .addMember("value", "$S", "unchecked")
-                                    .build());
-
-                    // We return list. So all the list elements should
-                    // also be converted to native types
-                    methodBuilder.addStatement(
-                            "return new $T(function, $L, $L, $L)",
-                            buildRemoteArrayCall(TypeName.OBJECT),
-                            CONTRACT_ADDRESS,
-                            TRANSACTION_MANAGER,
-                            DEFAULT_BLOCK_PARAMETER);
-                } else {
-                    methodBuilder.addStatement(
-                            "return executeRemoteCallSingleValueReturn(function, $T.class)",
-                            nativeReturnTypeName);
-                }
+            final TypeName outputType;
+            if (nativeReturnTypeName.equals(ClassName.get(List.class))) {
+                outputType = buildRemoteArrayCall(TypeName.OBJECT);
             } else {
-                methodBuilder.addStatement("return executeRemoteCallSingleValueReturn(function)");
+                outputType = TypeName.get(RemoteCall1.class);
             }
+
+            methodBuilder.addStatement(
+                    "return new $T(function, $L, $L, $L, $L)",
+                    outputType,
+                    CONTRACT_ADDRESS,
+                    useNativeJavaTypes,
+                    TRANSACTION_MANAGER,
+                    DEFAULT_BLOCK_PARAMETER);
         } else {
             final List<TypeName> returnTypes = new ArrayList<>();
             for (int i = 0; i < functionDefinition.getOutputs().size(); ++i) {
