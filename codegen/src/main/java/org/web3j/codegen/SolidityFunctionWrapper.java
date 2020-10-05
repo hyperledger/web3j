@@ -552,7 +552,11 @@ public class SolidityFunctionWrapper extends Generator {
                             ? "new " + buildTypeName(component.getType(), false) + "("
                             : ""));
             if (component.isArrayType() && useNativeJavaTypes) {
-                stringBuilder.append("convertTo_" + component.baseType() + "(");
+                stringBuilder.append(
+                        buildTypeName(component.baseType(), false)
+                                + ".class, convertTo_"
+                                + component.baseType()
+                                + "(");
             }
             stringBuilder.append(
                     (component.getType().equals("tuple")
@@ -1139,10 +1143,12 @@ public class SolidityFunctionWrapper extends Generator {
             String type = namedTypes.get(i).getType();
 
             if (type.startsWith("tuple")) {
-                result.add(
-                        ParameterSpec.builder(
-                                        structClassNameMap.get(namedType.structIdentifier()), name)
-                                .build());
+                TypeName typeName = structClassNameMap.get(namedType.structIdentifier());
+                if (typeName == null) {
+                    throw new RuntimeException(
+                            "Type not available for : " + type + ", parameter name: " + name);
+                }
+                result.add(ParameterSpec.builder(typeName, name).build());
             } else {
                 result.add(ParameterSpec.builder(buildTypeName(type, primitives), name).build());
             }

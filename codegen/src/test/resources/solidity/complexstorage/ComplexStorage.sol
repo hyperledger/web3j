@@ -1,5 +1,6 @@
 //in order for experimental ABIEncoderV2 to be “stable” when passing structs as arguments we must
 //use at least version 0.4.19 of solidity
+// SPDX-License-Identifier: Apache-2.0
 pragma solidity >=0.7.1;
 pragma experimental ABIEncoderV2;
 
@@ -64,8 +65,9 @@ contract ComplexStorage {
     Naz naz;
     Wiz wiz;
     Arr arr;
+//    Arr[] arrayStruct;
 
-    constructor(Foo memory _foo, Bar memory _bar) public {
+    constructor(Foo memory _foo, Bar memory _bar) {
         foo = _foo;
         bar = _bar;
         emit Access(msg.sender, _foo, _bar);
@@ -106,6 +108,12 @@ contract ComplexStorage {
     function setArr(Arr memory _toSet) public {
         arr = _toSet;
     }
+
+//    function setStructArray(Arr[] memory _toSet) public {
+//        for (uint256 i; i < _toSet.length; i++) {
+//            arrayStruct.push(_toSet[i]);
+//        }
+//    }
 
     function getFoo() public view returns (Foo memory) {
         return foo;
