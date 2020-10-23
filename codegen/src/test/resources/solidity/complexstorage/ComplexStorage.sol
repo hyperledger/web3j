@@ -65,7 +65,7 @@ contract ComplexStorage {
     Naz naz;
     Wiz wiz;
     Arr arr;
-//    Arr[] arrayStruct;
+    Arr[] arrayStruct;
 
     constructor(Foo memory _foo, Bar memory _bar) {
         foo = _foo;
@@ -109,11 +109,11 @@ contract ComplexStorage {
         arr = _toSet;
     }
 
-//    function setStructArray(Arr[] memory _toSet) public {
-//        for (uint256 i; i < _toSet.length; i++) {
-//            arrayStruct.push(_toSet[i]);
-//        }
-//    }
+    function setStructArray(Arr[] memory _toSet) public {
+        for (uint256 i; i < _toSet.length; i++) {
+            arrayStruct.push(_toSet[i]);
+        }
+    }
 
     function getFoo() public view returns (Foo memory) {
         return foo;

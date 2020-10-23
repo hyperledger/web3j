@@ -32,6 +32,7 @@ import javax.lang.model.element.Modifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
@@ -963,9 +964,12 @@ public class SolidityFunctionWrapper extends Generator {
                 new ArrayList<>(inputParameterTypes.size());
 
         for (int i = 0; i < inputParameterTypes.size(); ++i) {
-            final TypeName typeName;
-            if (namedTypes.get(i).getType().equals("tuple")) {
+            TypeName typeName;
+            if (namedTypes.get(i).getType().startsWith("tuple")) {
                 typeName = structClassNameMap.get(namedTypes.get(i).structIdentifier());
+                if (namedTypes.get(i).getType().endsWith("[]")) {
+                    typeName = ArrayTypeName.of(typeName);
+                }
             } else {
                 typeName = getWrapperType(inputParameterTypes.get(i).type);
             }
@@ -1143,10 +1147,13 @@ public class SolidityFunctionWrapper extends Generator {
             String type = namedTypes.get(i).getType();
 
             if (type.startsWith("tuple")) {
-                TypeName typeName = structClassNameMap.get(namedType.structIdentifier());
-                if (typeName == null) {
-                    throw new RuntimeException(
-                            "Type not available for : " + type + ", parameter name: " + name);
+                TypeName typeName;
+                if (type.endsWith("[]")) {
+                    typeName = structClassNameMap.get(namedType.structIdentifier());
+//                    typeName = ArrayTypeName.of(typeName);
+                }
+                else {
+                    typeName = structClassNameMap.get(namedType.structIdentifier());
                 }
                 result.add(ParameterSpec.builder(typeName, name).build());
             } else {
