@@ -286,13 +286,19 @@ public class AbiDefinition {
         }
 
         public int structIdentifier() {
-            String t = internalType == null ? type :
-                    internalType.isEmpty() ? type :
-                        type.equalsIgnoreCase("tuple[]") ? internalType.substring(0, internalType.length()-2) :
-                        internalType;
-            t = t + components.stream()
-                                .map(namedType -> String.valueOf(namedType.structIdentifier()))
-                                .collect(Collectors.joining());
+            String t =
+                    internalType == null
+                            ? type
+                            : internalType.isEmpty()
+                                    ? type
+                                    : type.equalsIgnoreCase("tuple[]")
+                                            ? internalType.substring(0, internalType.length() - 2)
+                                            : internalType;
+            t =
+                    t
+                            + components.stream()
+                                    .map(namedType -> String.valueOf(namedType.structIdentifier()))
+                                    .collect(Collectors.joining());
             return t.hashCode();
         }
 

@@ -1150,9 +1150,8 @@ public class SolidityFunctionWrapper extends Generator {
                 TypeName typeName;
                 if (type.endsWith("[]")) {
                     typeName = structClassNameMap.get(namedType.structIdentifier());
-//                    typeName = ArrayTypeName.of(typeName);
-                }
-                else {
+                    //                    typeName = ArrayTypeName.of(typeName);
+                } else {
                     typeName = structClassNameMap.get(namedType.structIdentifier());
                 }
                 result.add(ParameterSpec.builder(typeName, name).build());
