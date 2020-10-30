@@ -48,17 +48,20 @@ public class StructuredData {
         private final String version;
         private final Uint256 chainId;
         private final Address verifyingContract;
+        private final String salt;
 
         @JsonCreator
         public EIP712Domain(
                 @JsonProperty(value = "name") String name,
                 @JsonProperty(value = "version") String version,
                 @JsonProperty(value = "chainId") Uint256 chainId,
-                @JsonProperty(value = "verifyingContract") Address verifyingContract) {
+                @JsonProperty(value = "verifyingContract") Address verifyingContract,
+                @JsonProperty(value = "salt") String salt) {
             this.name = name;
             this.version = version;
             this.chainId = chainId;
             this.verifyingContract = verifyingContract;
+            this.salt = salt;
         }
 
         public String getName() {
@@ -75,6 +78,10 @@ public class StructuredData {
 
         public Address getVerifyingContract() {
             return verifyingContract;
+        }
+
+        public String getSalt() {
+            return salt;
         }
     }
 

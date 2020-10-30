@@ -394,4 +394,19 @@ public class StructuredDataTest {
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }
+
+    @Test
+    public void testHashDomainWithSalt() throws RuntimeException, IOException {
+        String validStructuredDataWithSaltJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/"
+                        + "ValidStructuredDataWithSalt.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(validStructuredDataWithSaltJSONFilePath));
+        byte[] structHashDomain = dataEncoder.hashDomain();
+        String expectedDomainStructHash =
+                "0xbae4f6f7b9bfdfda060692099b0e1ccecd25d62b7c92cc9f3b907f33178b81e3";
+
+        assertEquals(Numeric.toHexString(structHashDomain), expectedDomainStructHash);
+    }
 }
