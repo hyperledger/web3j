@@ -81,6 +81,29 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testAdminAddPeer() throws Exception {
+        web3j.adminAddPeer("url").send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"admin_addPeer\",\"params\":[\"url\"],\"id\":1}");
+    }
+
+    @Test
+    public void testAdminDataDir() throws Exception {
+        web3j.adminDataDir().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"admin_datadir\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testAdminRemovePeer() throws Exception {
+        web3j.adminRemovePeer("url").send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"admin_removePeer\",\"params\":[\"url\"],\"id\":1}");
+    }
+
+    @Test
     public void testEthProtocolVersion() throws Exception {
         web3j.ethProtocolVersion().send();
 
@@ -715,5 +738,12 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"shh_getMessages\","
                         + "\"params\":[\"0x07\"],\"id\":1}");
+    }
+
+    @Test
+    public void testTxPoolStatus() throws Exception {
+        web3j.txPoolStatus().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"txpool_status\",\"params\":[],\"id\":1}");
     }
 }
