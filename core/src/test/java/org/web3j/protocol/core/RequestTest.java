@@ -564,6 +564,21 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthGetLogsWithBlockHash() throws Exception {
+        web3j.ethGetLogs(
+                        new EthFilter(
+                                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                                ""))
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getLogs\","
+                        + "\"params\":[{\"topics\":[],"
+                        + "\"blockHash\":\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\","
+                        + "\"address\":[\"\"]}],\"id\":<generatedValue>}");
+    }
+
+    @Test
     public void testEthGetWork() throws Exception {
         web3j.ethGetWork().send();
 
