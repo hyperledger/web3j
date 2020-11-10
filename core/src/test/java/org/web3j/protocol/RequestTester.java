@@ -54,7 +54,7 @@ public abstract class RequestTester {
 
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
-        assertEquals(replaceRequestId(buffer.readUtf8()), (replaceRequestId(expected)));
+        assertEquals((replaceRequestId(expected)), replaceRequestId(buffer.readUtf8()));
     }
 
     private String replaceRequestId(String json) {
