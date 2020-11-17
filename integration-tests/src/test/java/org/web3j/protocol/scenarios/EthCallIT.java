@@ -12,12 +12,10 @@
  */
 package org.web3j.protocol.scenarios;
 
-import java.math.BigInteger;
-import java.util.Collections;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -27,9 +25,13 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.tx.gas.DefaultGasProvider;
 
+import java.math.BigInteger;
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@EVMTest(type = NodeType.BESU)
 public class EthCallIT extends Scenario {
 
     private Revert contract;
@@ -51,7 +53,8 @@ public class EthCallIT extends Scenario {
     @Test
     public void testRevertWithoutMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(1L));
-
+        System.out.println(ethCall.isReverted());
+        System.out.println(ethCall.getRevertReason());
         assertTrue(ethCall.isReverted());
         assertTrue(ethCall.getRevertReason().endsWith("revert"));
     }
@@ -59,7 +62,6 @@ public class EthCallIT extends Scenario {
     @Test
     public void testRevertWithMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
-
         assertTrue(ethCall.isReverted());
         assertTrue(ethCall.getRevertReason().endsWith("revert The reason for revert"));
     }
@@ -73,9 +75,9 @@ public class EthCallIT extends Scenario {
         String encodedFunction = FunctionEncoder.encode(function);
 
         return web3j.ethCall(
-                        Transaction.createEthCallTransaction(
-                                ALICE.getAddress(), contract.getContractAddress(), encodedFunction),
-                        DefaultBlockParameterName.LATEST)
+                Transaction.createEthCallTransaction(
+                        TOM.getAddress(), contract.getContractAddress(), encodedFunction),
+                DefaultBlockParameterName.LATEST)
                 .send();
     }
 }

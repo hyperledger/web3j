@@ -14,21 +14,25 @@ package org.web3j.protocol.geth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.methods.response.TxPoolContent;
 import org.web3j.protocol.http.HttpService;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@EVMTest(type = NodeType.GETH)
 public class GethIT {
 
     private Geth web3j;
 
-    public GethIT() {}
+    public GethIT() {
+    }
 
     @BeforeEach
     public void setUp() {
-        this.web3j = Geth.build(new HttpService());
+        this.web3j = Geth.build(new HttpService("http://localhost:8545"));
     }
 
     @Test

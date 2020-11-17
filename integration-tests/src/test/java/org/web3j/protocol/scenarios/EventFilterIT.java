@@ -18,6 +18,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
@@ -39,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Filter scenario integration tests. */
+@EVMTest(type = NodeType.GETH)
 public class EventFilterIT extends Scenario {
 
     // Deployed Fibonacci contract instance in testnet

@@ -12,17 +12,7 @@
  */
 package org.web3j.protocol.scenarios;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
-
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Uint;
@@ -36,19 +26,26 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.StaticGasProvider;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.fail;
 
-/** Common methods & settings used accross scenarios. */
+/**
+ * Common methods & settings used accross scenarios.
+ */
 public class Scenario {
 
-    static final BigInteger GAS_PRICE = BigInteger.valueOf(22_000_000_000L);
-    static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
+    static final BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+    static final BigInteger GAS_LIMIT = BigInteger.valueOf(6721975);
     static final StaticGasProvider STATIC_GAS_PROVIDER =
             new StaticGasProvider(GAS_PRICE, GAS_LIMIT);
-
-    // testnet
-    private static final String WALLET_PASSWORD = "";
-
     /*
     If you want to use regular Ethereum wallet addresses, provide a WALLET address variable
     "0x..." // 20 bytes (40 hex characters) & replace instances of ALICE.getAddress() with this
@@ -56,16 +53,20 @@ public class Scenario {
     */
     static final Credentials ALICE =
             Credentials.create(
-                    "", // 32 byte hex value
-                    "0x" // 64 byte hex value
-                    );
-
+                    "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63" // 32 byte hex value
+                    // 64 byte hex value
+            );
     static final Credentials BOB =
             Credentials.create(
-                    "", // 32 byte hex value
-                    "0x" // 64 byte hex value
-                    );
+                    "0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3" // 32 byte hex value
+            );
 
+    static final Credentials TOM =
+            Credentials.create(
+                    "0xd40538460dde8bd1333395e34eeb6d85495e1a7004d9a6ec2f821909231c5aaa" // 32 byte hex value
+            );
+    // testnet
+    private static final String WALLET_PASSWORD = "";
     private static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
 
     private static final int SLEEP_DURATION = 15000;
@@ -73,17 +74,29 @@ public class Scenario {
 
     Admin web3j;
 
-    public Scenario() {}
+    public Scenario() {
+    }
+
+    static String getFibonacciSolidityBinary() throws Exception {
+        return load("/solidity/fibonacci/build/Fibonacci.bin");
+    }
+
+    static String load(String filePath) throws URISyntaxException, IOException {
+        URL url = Scenario.class.getClass().getResource(filePath);
+        byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
+        return new String(bytes);
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
-        this.web3j = Admin.build(new HttpService());
+        this.web3j = Admin.build(new HttpService("http://localhost:8545"));
     }
+
 
     boolean unlockAccount() throws Exception {
         PersonalUnlockAccount personalUnlockAccount =
                 web3j.personalUnlockAccount(
-                                ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
+                        ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
                         .sendAsync()
                         .get();
         return personalUnlockAccount.accountUnlocked();
@@ -139,16 +152,7 @@ public class Scenario {
         return new Function(
                 "fibonacciNotify",
                 Collections.singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.singletonList(new TypeReference<Uint>() {}));
-    }
-
-    static String load(String filePath) throws URISyntaxException, IOException {
-        URL url = Scenario.class.getClass().getResource(filePath);
-        byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
-        return new String(bytes);
-    }
-
-    static String getFibonacciSolidityBinary() throws Exception {
-        return load("/solidity/fibonacci/build/Fibonacci.bin");
+                Collections.singletonList(new TypeReference<Uint>() {
+                }));
     }
 }

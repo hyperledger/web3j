@@ -13,18 +13,17 @@
 package org.web3j.ens;
 
 import org.junit.jupiter.api.Test;
-
+import org.web3j.EVMTest;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.http.HttpService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@EVMTest
 public class EnsIT {
 
     @Test
-    public void testEns() throws Exception {
+    public void testEns(Web3j web3j) throws Exception {
 
-        Web3j web3j = Web3j.build(new HttpService());
         EnsResolver ensResolver = new EnsResolver(web3j);
 
         assertEquals(

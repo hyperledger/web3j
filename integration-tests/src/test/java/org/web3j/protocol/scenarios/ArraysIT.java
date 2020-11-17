@@ -24,11 +24,13 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.generated.Arrays;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.StaticGasProvider;
 
 import static java.math.BigInteger.valueOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Simple integration test to demonstrate arrays usage in web3j. */
+// Needs further implementation on Web3j-Unit Project.
 public class ArraysIT extends Scenario {
 
     private Arrays contract;
@@ -37,7 +39,7 @@ public class ArraysIT extends Scenario {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        this.contract = Arrays.deploy(web3j, ALICE, new DefaultGasProvider()).send();
+        this.contract = Arrays.deploy(web3j, ALICE, new StaticGasProvider(BigInteger.valueOf(20000000000L),BigInteger.valueOf(6721975))).send();
     }
 
     @Test

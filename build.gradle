@@ -46,7 +46,7 @@ description 'Web3j base project.'
     download {
         src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
         dest "$rootDir/gradle/$buildScript/build.gradle"
-        overwrite true
+        overwrite false
         quiet true
         onlyIfModified true
     }
