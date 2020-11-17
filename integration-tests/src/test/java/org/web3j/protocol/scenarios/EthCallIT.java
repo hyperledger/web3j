@@ -59,6 +59,8 @@ public class EthCallIT extends Scenario {
         assertTrue(ethCall.getRevertReason().endsWith("revert"));
     }
 
+
+
     @Test
     public void testRevertWithMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
