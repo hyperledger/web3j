@@ -12,22 +12,31 @@
  */
 package org.web3j.protocol.core;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Uint;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Transfer;
+import org.web3j.utils.Convert;
 
-/** Mordon Testnet Configuration. */
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Arrays;
+
+/**
+ * Web3j-Unit Embedded Testnet Configuration.
+ */
 public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {
-        https: // testnet.etherscan.io/block/1627453
-        return "0xd67e59db999c3bd78bd4c2ba54689dba0c372ebcad09c8b9677970f37d64ca46";
+        https:
+        // testnet.etherscan.io/block/1627453
+        return "0xeba1ae1115682dfa88f7c8c82bbdcb8ce5b599c05d688ce5c715383637199b15";
     }
 
     @Override
@@ -49,7 +58,12 @@ public class TestnetConfig implements IntegrationTestConfig {
     @Override
     public String validAccount() {
         // https://testnet.etherscan.io/address/0xCB10FBad79F5e602699fFf2Bb4919Fbd87AbC8CC
-        return "0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc";
+        return "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73";
+    }
+
+    @Override
+    public String validPrivateKey() {
+        return "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
     }
 
     @Override
@@ -78,6 +92,16 @@ public class TestnetConfig implements IntegrationTestConfig {
     }
 
     @Override
+    public TransactionReceipt transferEth(Web3j web3j) throws Exception {
+
+        return Transfer.sendFunds(
+                web3j, Credentials.create(validPrivateKey()), "0x000000000000000000000000000000000000dEaD",
+                BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
+
+    }
+
+
+    @Override
     public String validTransactionHash() {
         return "0xf26d441775da4e01cb557dfe35e09ab8c8a69134b2687209e34348c11ae54509";
     }
@@ -98,7 +122,9 @@ public class TestnetConfig implements IntegrationTestConfig {
                 new Event(
                         "Notify",
                         Arrays.asList(
-                                new TypeReference<Uint>(true) {}, new TypeReference<Uint>() {}));
+                                new TypeReference<Uint>(true) {
+                                }, new TypeReference<Uint>() {
+                                }));
 
         return EventEncoder.encode(event);
     }
