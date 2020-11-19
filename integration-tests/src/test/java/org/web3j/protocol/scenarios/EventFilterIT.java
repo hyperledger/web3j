@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -28,7 +29,7 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -44,18 +45,24 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @EVMTest(type = NodeType.GETH)
 public class EventFilterIT extends Scenario {
 
+    // TODO
+
     // Deployed Fibonacci contract instance in testnet
     private static final String CONTRACT_ADDRESS = "0x3c05b2564139fb55820b18b72e94b2178eaace7d";
 
+    @BeforeAll
+    public static void setUP(Web3j web3j) {
+        Scenario.web3j = web3j;
+    }
+
     @Test
     public void testEventFilter() throws Exception {
-        unlockAccount();
 
         Function function = createFibonacciFunction();
         String encodedFunction = FunctionEncoder.encode(function);
 
         BigInteger gas = estimateGas(encodedFunction);
-        String transactionHash = sendTransaction(ALICE, CONTRACT_ADDRESS, gas, encodedFunction);
+        String transactionHash = sendTransaction(gas, encodedFunction);
 
         TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
@@ -106,17 +113,15 @@ public class EventFilterIT extends Scenario {
         return ethEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
     }
 
-    private String sendTransaction(
-            Credentials credentials, String contractAddress, BigInteger gas, String encodedFunction)
-            throws Exception {
-        BigInteger nonce = getNonce(credentials.getAddress());
+    private String sendTransaction(BigInteger gas, String encodedFunction) throws Exception {
+        BigInteger nonce = getNonce(Scenario.ALICE.getAddress());
         Transaction transaction =
                 Transaction.createFunctionCallTransaction(
-                        credentials.getAddress(),
+                        Scenario.ALICE.getAddress(),
                         nonce,
                         Transaction.DEFAULT_GAS,
                         gas,
-                        contractAddress,
+                        EventFilterIT.CONTRACT_ADDRESS,
                         encodedFunction);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =

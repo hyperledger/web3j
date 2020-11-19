@@ -15,6 +15,7 @@ package org.web3j.protocol.parity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
@@ -27,9 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * JSON-RPC 2.0 Integration Tests.
- */
+/** JSON-RPC 2.0 Integration Tests. */
 @Disabled
 @EVMTest(type = NodeType.PARITY)
 public class ParityIT {
@@ -69,7 +68,7 @@ public class ParityIT {
 
         PersonalSign personalSign =
                 parity.paritySignMessage(
-                        "0xdeadbeaf", personalListAccounts.getAccountIds().get(0), "123")
+                                "0xdeadbeaf", personalListAccounts.getAccountIds().get(0), "123")
                         .send();
         // address : 0xadfc0262bbed8c1f4bd24a4a763ac616803a8c54
         assertNotNull(personalSign.getSignedMessage());

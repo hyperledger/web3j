@@ -25,15 +25,12 @@ import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Sign transaction using Ethereum node. */
 public class SignTransactionIT extends Scenario {
 
     @Test
     public void testSignTransaction() throws Exception {
-        boolean accountUnlocked = unlockAccount();
-        assertTrue(accountUnlocked);
 
         RawTransaction rawTransaction = createTransaction();
 

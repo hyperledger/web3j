@@ -12,8 +12,15 @@
  */
 package org.web3j.protocol.besu;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
 import org.web3j.crypto.Credentials;
@@ -27,12 +34,6 @@ import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
-
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -199,10 +200,10 @@ public class BesuOnChainPrivacyIntegrationTest {
                 TransactionException.class,
                 () ->
                         nodeBob.privOnChainAddToPrivacyGroup(
-                                privacyGroupId,
-                                BOB,
-                                ENCLAVE_KEY_BOB,
-                                Collections.singletonList(ENCLAVE_KEY_CHARLIE))
+                                        privacyGroupId,
+                                        BOB,
+                                        ENCLAVE_KEY_BOB,
+                                        Collections.singletonList(ENCLAVE_KEY_CHARLIE))
                                 .send());
     }
 
@@ -252,13 +253,13 @@ public class BesuOnChainPrivacyIntegrationTest {
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
-                        nodeAlice,
-                        tmAlice,
-                        ZERO_GAS_PROVIDER,
-                        BigInteger.TEN,
-                        "eea_token",
-                        BigInteger.TEN,
-                        "EEATKN")
+                                nodeAlice,
+                                tmAlice,
+                                ZERO_GAS_PROVIDER,
+                                BigInteger.TEN,
+                                "eea_token",
+                                BigInteger.TEN,
+                                "EEATKN")
                         .send();
 
         final HumanStandardToken tokenBob =

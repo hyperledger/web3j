@@ -13,6 +13,7 @@
 package org.web3j.ens;
 
 import org.junit.jupiter.api.Test;
+
 import org.web3j.EVMTest;
 import org.web3j.protocol.Web3j;
 

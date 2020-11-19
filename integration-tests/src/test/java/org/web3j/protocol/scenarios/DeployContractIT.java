@@ -15,28 +15,39 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Integration test demonstrating the full contract deployment workflow. */
+@EVMTest(type = NodeType.BESU)
 public class DeployContractIT extends Scenario {
+
+    @BeforeAll
+    public static void setup(Web3j web3j) {
+        Scenario.web3j = web3j;
+    }
 
     @Test
     public void testContractCreation() throws Exception {
-        boolean accountUnlocked = unlockAccount();
-        assertTrue(accountUnlocked);
 
         String transactionHash = sendTransaction();
         assertFalse(transactionHash.isEmpty());
@@ -65,17 +76,16 @@ public class DeployContractIT extends Scenario {
     private String sendTransaction() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
 
-        Transaction transaction =
-                Transaction.createContractTransaction(
-                        ALICE.getAddress(),
-                        nonce,
-                        GAS_PRICE,
-                        GAS_LIMIT,
-                        BigInteger.ZERO,
-                        getFibonacciSolidityBinary());
+        RawTransaction transaction =
+                RawTransaction.createContractTransaction(
+                        nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
 
-        org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
-                web3j.ethSendTransaction(transaction).sendAsync().get();
+        EthSendTransaction transactionResponse =
+                web3j.ethSendRawTransaction(
+                                Numeric.toHexString(
+                                        TransactionEncoder.signMessage(transaction, ALICE)))
+                        .sendAsync()
+                        .get();
 
         return transactionResponse.getTransactionHash();
     }

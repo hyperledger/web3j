@@ -12,28 +12,26 @@
  */
 package org.web3j.protocol.core;
 
+import java.math.BigInteger;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthBlock;
 
-import java.math.BigInteger;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Flowable callback tests.
- */
+/** Flowable callback tests. */
 @EVMTest(type = NodeType.GETH)
 public class FlowableIT {
     private static final int EVENT_COUNT = 5;
@@ -55,6 +53,7 @@ public class FlowableIT {
     public void testPendingTransactionFlowable() throws Exception {
         run(web3j.pendingTransactionFlowable());
     }
+
     @Test
     public void testTransactionFlowable() throws Exception {
         run(web3j.transactionFlowable());

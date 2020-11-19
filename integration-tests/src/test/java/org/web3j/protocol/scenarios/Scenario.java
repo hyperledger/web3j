@@ -12,20 +12,6 @@
  */
 package org.web3j.protocol.scenarios;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.admin.Admin;
-import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.gas.StaticGasProvider;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
@@ -35,11 +21,20 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.gas.StaticGasProvider;
+
 import static org.junit.jupiter.api.Assertions.fail;
 
-/**
- * Common methods & settings used accross scenarios.
- */
+/** Common methods & settings used across scenarios. */
 public class Scenario {
 
     static final BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
@@ -53,18 +48,24 @@ public class Scenario {
     */
     static final Credentials ALICE =
             Credentials.create(
-                    "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63" // 32 byte hex value
+                    "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63" // 32 byte
+                    // hex
+                    // value
                     // 64 byte hex value
-            );
+                    );
     static final Credentials BOB =
             Credentials.create(
-                    "0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3" // 32 byte hex value
-            );
+                    "0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3" // 32 byte
+                    // hex
+                    // value
+                    );
 
     static final Credentials TOM =
             Credentials.create(
-                    "0xd40538460dde8bd1333395e34eeb6d85495e1a7004d9a6ec2f821909231c5aaa" // 32 byte hex value
-            );
+                    "0xd40538460dde8bd1333395e34eeb6d85495e1a7004d9a6ec2f821909231c5aaa" // 32 byte
+                    // hex
+                    // value
+                    );
     // testnet
     private static final String WALLET_PASSWORD = "";
     private static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
@@ -72,34 +73,16 @@ public class Scenario {
     private static final int SLEEP_DURATION = 15000;
     private static final int ATTEMPTS = 40;
 
-    Admin web3j;
-
-    public Scenario() {
-    }
+    protected static Web3j web3j;
 
     static String getFibonacciSolidityBinary() throws Exception {
-        return load("/solidity/fibonacci/build/Fibonacci.bin");
+        return load("/Fibonacci.bin");
     }
 
     static String load(String filePath) throws URISyntaxException, IOException {
-        URL url = Scenario.class.getClass().getResource(filePath);
+        URL url = Scenario.class.getResource(filePath);
         byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
         return new String(bytes);
-    }
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        this.web3j = Admin.build(new HttpService("http://localhost:8545"));
-    }
-
-
-    boolean unlockAccount() throws Exception {
-        PersonalUnlockAccount personalUnlockAccount =
-                web3j.personalUnlockAccount(
-                        ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
-                        .sendAsync()
-                        .get();
-        return personalUnlockAccount.accountUnlocked();
     }
 
     TransactionReceipt waitForTransactionReceipt(String transactionHash) throws Exception {
@@ -152,7 +135,6 @@ public class Scenario {
         return new Function(
                 "fibonacciNotify",
                 Collections.singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.singletonList(new TypeReference<Uint>() {
-                }));
+                Collections.singletonList(new TypeReference<Uint>() {}));
     }
 }
