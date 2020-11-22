@@ -18,6 +18,7 @@ import org.web3j.generated.Fibonacci;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.gas.ContractGasProvider;
 
 /** Common values used by integration tests. */
 public interface IntegrationTestConfig {
@@ -46,7 +47,8 @@ public interface IntegrationTestConfig {
 
     String validContractCode();
 
-    Transaction buildTransaction();
+    Transaction buildTransaction(Web3j web3j, ContractGasProvider contractGasProvider)
+            throws Exception;
 
     TransactionReceipt transferEth(Web3j web3j) throws Exception;
 

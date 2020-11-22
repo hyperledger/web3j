@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.core;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -42,8 +43,6 @@ public class TestnetConfig implements IntegrationTestConfig {
             "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
     private final String validTransactionHash;
     private final String validContractAddress;
-    private final String validContractCode =
-            "0x60806040526004361061004b5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633c7fdc70811461005057806361047ff41461007a575b600080fd5b34801561005c57600080fd5b50610068600435610092565b60408051918252519081900360200190f35b34801561008657600080fd5b506100686004356100e0565b600061009d826100e0565b604080518481526020810183905281519293507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed929081900390910190a1919050565b60008115156100f15750600061011e565b81600114156101025750600161011e565b61010e600283036100e0565b61011a600184036100e0565b0190505b9190505600a165627a7a723058201b9d0941154b95636fb5e4225fefd5c2c460060efa5f5e40c9826dce08814af80029";
     private final String validBlockHash;
     private final BigInteger validBlockNumber;
     private final BigInteger transactionIndex;
@@ -123,14 +122,17 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validContractCode() {
-        return this.validContractCode;
+        return "608060405234801561001057600080fd5b5061014f806100206000396000f30060806040526004361061004b5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633c7fdc70811461005057806361047ff41461007a575b600080fd5b34801561005c57600080fd5b50610068600435610092565b60408051918252519081900360200190f35b34801561008657600080fd5b506100686004356100e0565b600061009d826100e0565b604080518481526020810183905281519293507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed929081900390910190a1919050565b60008115156100f15750600061011e565b81600114156101025750600161011e565b61010e600283036100e0565b61011a600184036100e0565b0190505b9190505600a165627a7a723058201b9d0941154b95636fb5e4225fefd5c2c460060efa5f5e40c9826dce08814af80029";
     }
 
     @Override
-    public Transaction buildTransaction() {
+    public Transaction buildTransaction(Web3j web3j, ContractGasProvider gasProvider)
+            throws IOException {
         return Transaction.createContractTransaction(
                 validAccount(),
-                BigInteger.ONE, // nonce
+                web3j.ethGetTransactionCount(validAccount, DefaultBlockParameterName.LATEST)
+                        .send()
+                        .getTransactionCount(), // nonce
                 Transaction.DEFAULT_GAS,
                 validContractCode());
     }

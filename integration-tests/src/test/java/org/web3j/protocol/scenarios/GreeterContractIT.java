@@ -27,10 +27,13 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -88,9 +91,8 @@ public class GreeterContractIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
-        Transaction transaction =
-                Transaction.createContractTransaction(
-                        ALICE.getAddress(),
+        RawTransaction transaction =
+                RawTransaction.createContractTransaction(
                         nonce,
                         GAS_PRICE,
                         GAS_LIMIT,
@@ -98,7 +100,11 @@ public class GreeterContractIT extends Scenario {
                         getGreeterSolidityBinary() + encodedConstructor);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
-                web3j.ethSendTransaction(transaction).sendAsync().get();
+                web3j.ethSendRawTransaction(
+                                Numeric.toHexString(
+                                        TransactionEncoder.signMessage(transaction, ALICE)))
+                        .sendAsync()
+                        .get();
 
         return transactionResponse.getTransactionHash();
     }

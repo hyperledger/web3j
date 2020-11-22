@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Filter scenario integration tests. */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class EventFilterIT extends Scenario {
 
     // TODO
@@ -105,7 +105,7 @@ public class EventFilterIT extends Scenario {
         EthEstimateGas ethEstimateGas =
                 web3j.ethEstimateGas(
                                 Transaction.createEthCallTransaction(
-                                        ALICE.getAddress(), null, encodedFunction))
+                                        ALICE.getAddress(), BOB.getAddress(), encodedFunction))
                         .sendAsync()
                         .get();
         // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388
@@ -123,6 +123,9 @@ public class EventFilterIT extends Scenario {
                         gas,
                         EventFilterIT.CONTRACT_ADDRESS,
                         encodedFunction);
+
+        //  RawTransaction rawTransaction =
+        // RawTransaction.createTransaction(nonce,Transaction.DEFAULT_GAS,gas,);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
                 web3j.ethSendTransaction(transaction).sendAsync().get();

@@ -54,9 +54,6 @@ import org.web3j.protocol.core.methods.response.EthUninstallFilter;
 import org.web3j.protocol.core.methods.response.NetListening;
 import org.web3j.protocol.core.methods.response.NetPeerCount;
 import org.web3j.protocol.core.methods.response.NetVersion;
-import org.web3j.protocol.core.methods.response.ShhNewGroup;
-import org.web3j.protocol.core.methods.response.ShhNewIdentity;
-import org.web3j.protocol.core.methods.response.ShhVersion;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
@@ -233,11 +230,9 @@ public class CoreIT {
     @Test
     public void testEthGetCode() throws Exception {
         EthGetCode ethGetCode =
-                web3j.ethGetCode(
-                                config.validContractAddress(),
-                                DefaultBlockParameter.valueOf(config.validBlockNumber()))
+                web3j.ethGetCode(config.validContractAddress(), DefaultBlockParameterName.LATEST)
                         .send();
-        assertEquals(config.validContractCode(), ethGetCode.getCode());
+        assertEquals("0x" + config.validContractCode(), ethGetCode.getCode());
     }
 
     @Disabled // TODO: Once account unlock functionality is available
@@ -246,11 +241,11 @@ public class CoreIT {
         // EthSign ethSign = web3j.ethSign();
     }
 
-    @Disabled // TODO: Once account unlock functionality is available
     @Test
-    public void testEthSendTransaction() throws Exception {
+    public void testEthSendTransaction(Web3j web3j, ContractGasProvider gasProvider)
+            throws Exception {
         EthSendTransaction ethSendTransaction =
-                web3j.ethSendTransaction(config.buildTransaction()).send();
+                web3j.ethSendTransaction(config.buildTransaction(web3j, gasProvider)).send();
         assertFalse(ethSendTransaction.getTransactionHash().isEmpty());
     }
 
@@ -259,9 +254,11 @@ public class CoreIT {
     public void testEthSendRawTransaction() throws Exception {}
 
     @Test
-    public void testEthCall() throws Exception {
+    public void testEthCall(Web3j web3j, ContractGasProvider gasProvider) throws Exception {
         EthCall ethCall =
-                web3j.ethCall(config.buildTransaction(), DefaultBlockParameter.valueOf("latest"))
+                web3j.ethCall(
+                                config.buildTransaction(web3j, gasProvider),
+                                DefaultBlockParameter.valueOf("latest"))
                         .send();
 
         assertEquals(DefaultBlockParameterName.LATEST.getValue(), ("latest"));
@@ -271,8 +268,14 @@ public class CoreIT {
     }
 
     @Test
-    public void testEthEstimateGas(Web3j web3j) throws Exception {
-        EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(config.buildTransaction()).send();
+    public void testEthEstimateGas(Web3j web3j, ContractGasProvider gasProvider) throws Exception {
+        org.web3j.protocol.core.methods.request.Transaction transaction =
+                org.web3j.protocol.core.methods.request.Transaction.createContractTransaction(
+                        config.validAccount(),
+                        BigInteger.ZERO, // nonce
+                        gasProvider.getGasPrice(),
+                        config.validContractCode());
+        EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(transaction).send();
         assertTrue(ethEstimateGas.getAmountUsed().signum() == 1);
     }
 
@@ -347,13 +350,13 @@ public class CoreIT {
 
         EthTransaction ethTransaction =
                 web3j.ethGetTransactionByBlockNumberAndIndex(
-                                DefaultBlockParameter.valueOf(config.validBlock()),
+                                DefaultBlockParameter.valueOf(config.validBlockNumber()),
                                 config.validTransactionIndex())
                         .send();
         assertTrue(ethTransaction.getTransaction().isPresent());
         Transaction transaction = ethTransaction.getTransaction().get();
         assertEquals(transaction.getBlockHash(), config.validBlockHash());
-        assertEquals(transaction.getTransactionIndex(), BigInteger.valueOf(1));
+        assertEquals(transaction.getTransactionIndex(), BigInteger.valueOf(0));
     }
 
     @Test
@@ -393,6 +396,7 @@ public class CoreIT {
     }
 
     @Test
+    @Disabled
     public void testEthCompileSolidity() throws Exception {
         String sourceCode =
                 "pragma solidity ^0.4.0;"
@@ -425,6 +429,8 @@ public class CoreIT {
 
         String eventSignature = config.encodedEvent();
         ethFilter.addSingleTopic(eventSignature);
+        Fibonacci fib = config.getValidDeployedContract();
+        fib.fibonacciNotify(BigInteger.valueOf(2)).send();
 
         // eth_newFilter
         EthFilter ethNewFilter = web3j.ethNewFilter(ethFilter).send();
@@ -459,6 +465,8 @@ public class CoreIT {
     @Test
     public void testEthGetLogs() throws Exception {
         Fibonacci fib = config.getValidDeployedContract();
+        fib.fibonacciNotify(BigInteger.valueOf(2)).send();
+
         fib.fibonacci(BigInteger.ONE).send();
         org.web3j.protocol.core.methods.request.EthFilter ethFilter =
                 new org.web3j.protocol.core.methods.request.EthFilter(
@@ -470,7 +478,6 @@ public class CoreIT {
 
         EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
         List<EthLog.LogResult> logs = ethLog.getLogs();
-
         assertFalse(logs.isEmpty());
     }
 
@@ -497,47 +504,4 @@ public class CoreIT {
 
     @Test
     public void testDbGetHex() throws Exception {}
-
-    @Test
-    public void testShhPost() throws Exception {}
-
-    @Disabled // The method shh_version does not exist/is not available
-    @Test
-    public void testShhVersion() throws Exception {
-        ShhVersion shhVersion = web3j.shhVersion().send();
-        assertNotNull(shhVersion.getVersion());
-    }
-
-    @Disabled // The method shh_newIdentity does not exist/is not available
-    @Test
-    public void testShhNewIdentity() throws Exception {
-        ShhNewIdentity shhNewIdentity = web3j.shhNewIdentity().send();
-        assertNotNull(shhNewIdentity.getAddress());
-    }
-
-    @Test
-    public void testShhHasIdentity() throws Exception {}
-
-    @Disabled // The method shh_newIdentity does not exist/is not available
-    @Test
-    public void testShhNewGroup() throws Exception {
-        ShhNewGroup shhNewGroup = web3j.shhNewGroup().send();
-        assertNotNull(shhNewGroup.getAddress());
-    }
-
-    @Disabled // The method shh_addToGroup does not exist/is not available
-    @Test
-    public void testShhAddToGroup() throws Exception {}
-
-    @Test
-    public void testShhNewFilter() throws Exception {}
-
-    @Test
-    public void testShhUninstallFilter() throws Exception {}
-
-    @Test
-    public void testShhGetFilterChanges() throws Exception {}
-
-    @Test
-    public void testShhGetMessages() throws Exception {}
 }
