@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /** Common methods & settings used across scenarios. */
 public class Scenario {
 
+    static final String UNLOCKED_ACCOUNT = "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73";
     static final BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
     static final BigInteger GAS_LIMIT = BigInteger.valueOf(6721975);
     static final StaticGasProvider STATIC_GAS_PROVIDER =

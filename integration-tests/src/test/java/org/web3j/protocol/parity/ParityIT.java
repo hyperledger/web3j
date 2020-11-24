@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
@@ -38,11 +39,13 @@ public class ParityIT {
 
     @BeforeEach
     public void setUp() {
-        this.parity = Parity.build(new HttpService());
+        this.parity = Parity.build(new HttpService("http://localhost:8545"));
     }
 
     @Test
-    public void testPersonalListAccounts() throws Exception {
+    public void testPersonalListAccounts(Web3j web3j) throws Exception {
+        web3j.web3ClientVersion().send();
+
         PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
     }

@@ -21,6 +21,9 @@ import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.generated.Fibonacci;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthAccounts;
@@ -28,8 +31,6 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthCoinbase;
-import org.web3j.protocol.core.methods.response.EthCompileLLL;
-import org.web3j.protocol.core.methods.response.EthCompileSerpent;
 import org.web3j.protocol.core.methods.response.EthCompileSolidity;
 import org.web3j.protocol.core.methods.response.EthEstimateGas;
 import org.web3j.protocol.core.methods.response.EthFilter;
@@ -38,16 +39,21 @@ import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
+import org.web3j.protocol.core.methods.response.EthGetCompilers;
 import org.web3j.protocol.core.methods.response.EthGetStorageAt;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
 import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
+import org.web3j.protocol.core.methods.response.EthGetWork;
 import org.web3j.protocol.core.methods.response.EthHashrate;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.EthMining;
 import org.web3j.protocol.core.methods.response.EthProtocolVersion;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthSign;
+import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
+import org.web3j.protocol.core.methods.response.EthSubmitWork;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.EthUninstallFilter;
@@ -60,6 +66,8 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
+import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -84,6 +92,7 @@ public class CoreIT {
         CoreIT.config = new TestnetConfig(web3j, transactionManager, gasProvider);
     }
 
+    @Disabled // Method does not exist
     @Test
     public void testWeb3ClientVersion() throws Exception {
         Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
@@ -91,6 +100,7 @@ public class CoreIT {
         assertFalse(clientVersion.isEmpty());
     }
 
+    @Disabled // Method Does not Exist
     @Test
     public void testWeb3Sha3() throws Exception {
         Web3Sha3 web3Sha3 = web3j.web3Sha3("0x68656c6c6f20776f726c64").send();
@@ -168,9 +178,7 @@ public class CoreIT {
     @Test
     public void testEthGetBalance(Web3j web3j) throws Exception {
         EthGetBalance ethGetBalance =
-                web3j.ethGetBalance(
-                                "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
-                                DefaultBlockParameter.valueOf("latest"))
+                web3j.ethGetBalance(config.validAccount(), DefaultBlockParameter.valueOf("latest"))
                         .send();
         assertEquals(ethGetBalance.getBalance().signum(), 1);
     }
@@ -232,13 +240,16 @@ public class CoreIT {
         EthGetCode ethGetCode =
                 web3j.ethGetCode(config.validContractAddress(), DefaultBlockParameterName.LATEST)
                         .send();
-        assertEquals("0x" + config.validContractCode(), ethGetCode.getCode());
+        assertEquals(
+                "0x60806040526004361061004b5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633c7fdc70811461005057806361047ff41461007a575b600080fd5b34801561005c57600080fd5b50610068600435610092565b60408051918252519081900360200190f35b34801561008657600080fd5b506100686004356100e0565b600061009d826100e0565b604080518481526020810183905281519293507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed929081900390910190a1919050565b60008115156100f15750600061011e565b81600114156101025750600161011e565b61010e600283036100e0565b61011a600184036100e0565b0190505b9190505600a165627a7a723058201b9d0941154b95636fb5e4225fefd5c2c460060efa5f5e40c9826dce08814af80029",
+                ethGetCode.getCode());
     }
 
-    @Disabled // TODO: Once account unlock functionality is available
     @Test
     public void testEthSign() throws Exception {
-        // EthSign ethSign = web3j.ethSign();
+        EthSign ethSign = web3j.ethSign(config.validAccount(), "Apples").send();
+        ethSign.getSignature();
+        assertNotNull(ethSign);
     }
 
     @Test
@@ -249,9 +260,29 @@ public class CoreIT {
         assertFalse(ethSendTransaction.getTransactionHash().isEmpty());
     }
 
-    @Disabled // TODO: Once account unlock functionality is available
     @Test
-    public void testEthSendRawTransaction() throws Exception {}
+    public void testEthSendRawTransaction() throws Exception {
+        EthGetTransactionCount transactionCount =
+                web3j.ethGetTransactionCount(
+                                config.validAccount(), DefaultBlockParameterName.LATEST)
+                        .send();
+        DefaultGasProvider gasProvider = new DefaultGasProvider();
+        RawTransaction rawTransaction =
+                RawTransaction.createEtherTransaction(
+                        transactionCount.getTransactionCount(),
+                        gasProvider.getGasPrice(),
+                        gasProvider.getGasLimit(),
+                        "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
+                        BigInteger.ONE);
+        byte[] signedMessage =
+                TransactionEncoder.signMessage(
+                        rawTransaction, Credentials.create(config.validPrivateKey()));
+        String hexValue = Numeric.toHexString(signedMessage);
+        EthSendTransaction ethSendTransaction =
+                web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+        String transactionHash = ethSendTransaction.getTransactionHash();
+        assertNotNull(transactionHash);
+    }
 
     @Test
     public void testEthCall(Web3j web3j, ContractGasProvider gasProvider) throws Exception {
@@ -388,13 +419,6 @@ public class CoreIT {
         assertNotNull(ethBlock.getBlock());
     }
 
-    @Disabled // The method eth_compileLLL does not exist/is not available
-    @Test
-    public void testEthCompileLLL() throws Exception {
-        EthCompileLLL ethCompileLLL = web3j.ethCompileLLL("(returnlll (suicide (caller)))").send();
-        assertFalse(ethCompileLLL.getCompiledSourceCode().isEmpty());
-    }
-
     @Test
     @Disabled
     public void testEthCompileSolidity() throws Exception {
@@ -410,13 +434,6 @@ public class CoreIT {
         assertEquals(
                 ethCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
                 (sourceCode));
-    }
-
-    @Disabled // The method eth_compileSerpent does not exist/is not available
-    @Test
-    public void testEthCompileSerpent() throws Exception {
-        EthCompileSerpent ethCompileSerpent = web3j.ethCompileSerpent("/* some serpent */").send();
-        assertFalse(ethCompileSerpent.getCompiledSourceCode().isEmpty());
     }
 
     @Test
@@ -481,27 +498,38 @@ public class CoreIT {
         assertFalse(logs.isEmpty());
     }
 
-    // @Test
-    // public void testEthGetWork() throws Exception {
-    //     EthGetWork ethGetWork = requestFactory.ethGetWork();
-    //     assertNotNull(ethGetWork.getResult());
-    // }
+    @Disabled // Not available
+    @Test
+    public void testEthGetWork() throws Exception {
+        EthGetWork ethGetWork = web3j.ethGetWork().send();
+        assertNotNull(ethGetWork.getResult());
+    }
+
+    @Disabled // Not available
+    @Test
+    public void testEthGetCompilers(Web3j web3j) throws Exception {
+        EthGetCompilers ethGetCompilers = web3j.ethGetCompilers().send();
+        assertNotNull(ethGetCompilers.getCompilers());
+    }
 
     @Test
-    public void testEthSubmitWork() throws Exception {}
+    public void testEthSubmitWork() throws Exception {
+        EthSubmitWork ethSubmitWork =
+                web3j.ethSubmitWork(
+                                "0x0000000000000001",
+                                "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+                                "0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000")
+                        .send();
+        assertNotNull(ethSubmitWork);
+    }
 
     @Test
-    public void testEthSubmitHashrate() throws Exception {}
-
-    @Test
-    public void testDbPutString() throws Exception {}
-
-    @Test
-    public void testDbGetString() throws Exception {}
-
-    @Test
-    public void testDbPutHex() throws Exception {}
-
-    @Test
-    public void testDbGetHex() throws Exception {}
+    public void testEthSubmitHashrate() throws Exception {
+        EthSubmitHashrate ethHashRate =
+                web3j.ethSubmitHashrate(
+                                "0x0000000000000000000000000000000000000000000000000000000000500000",
+                                "0x59daa26581d0acd1fce254fb7e85952f4c09d0915afd33d3886cd914bc7d283c")
+                        .send();
+        assertNotNull(ethHashRate);
+    }
 }

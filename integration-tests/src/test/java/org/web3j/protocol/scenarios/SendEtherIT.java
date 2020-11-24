@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Simple integration test to demonstrate sending of Ether between parties. */
-@EVMTest(type = NodeType.BESU)
+@EVMTest(type = NodeType.GETH)
 public class SendEtherIT extends Scenario {
 
     @BeforeAll

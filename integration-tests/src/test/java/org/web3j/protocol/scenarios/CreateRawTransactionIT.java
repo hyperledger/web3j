@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Create, sign and send a raw transaction. */
-@EVMTest(type = NodeType.BESU)
+@EVMTest(type = NodeType.GETH)
 public class CreateRawTransactionIT extends Scenario {
 
     @BeforeAll

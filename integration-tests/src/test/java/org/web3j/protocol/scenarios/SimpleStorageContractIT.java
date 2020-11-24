@@ -27,7 +27,7 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@EVMTest(type = NodeType.BESU)
+@EVMTest(type = NodeType.GETH)
 public class SimpleStorageContractIT extends Scenario {
 
     @BeforeAll

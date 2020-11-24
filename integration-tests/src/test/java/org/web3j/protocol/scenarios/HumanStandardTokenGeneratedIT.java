@@ -36,7 +36,7 @@ import static org.web3j.generated.HumanStandardToken.TransferEventResponse;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 
 /** Generated HumanStandardToken integration test for all supported scenarios. */
-@EVMTest(type = NodeType.BESU)
+@EVMTest(type = NodeType.GETH)
 public class HumanStandardTokenGeneratedIT extends Scenario {
 
     @BeforeAll

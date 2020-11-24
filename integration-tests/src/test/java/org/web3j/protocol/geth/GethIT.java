@@ -13,6 +13,7 @@
 package org.web3j.protocol.geth;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
@@ -34,7 +35,8 @@ public class GethIT {
         this.web3j = Geth.build(new HttpService("http://localhost:8545"));
     }
 
-    @Test
+    @Disabled
+    @Test // Method not Implemented.
     public void testWeb3ClientVersion() throws Exception {
         TxPoolContent content = web3j.txPoolContent().send();
         assertNotNull(content.getResult());

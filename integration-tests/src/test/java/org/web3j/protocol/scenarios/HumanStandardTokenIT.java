@@ -54,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * href="https://github.com/ethereum/EIPs/issues/20">EIP-20</a>. Solidity implementation is taken
  * from <a href="https://github.com/ConsenSys/Tokens">ConsenSys Tokens</a>.
  */
-@EVMTest(type = NodeType.BESU)
+@EVMTest(type = NodeType.GETH)
 public class HumanStandardTokenIT extends Scenario {
 
     @BeforeAll
@@ -67,10 +67,9 @@ public class HumanStandardTokenIT extends Scenario {
 
         // deploy contract
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
+        String contractAddress = createContract(aliceQty);
 
-        String contractAddress = createContract(ALICE, aliceQty);
-
-        assertEquals(getTotalSupply(contractAddress), (aliceQty));
+        assertEquals(getTotalSupply(contractAddress), aliceQty);
 
         confirmBalance(ALICE.getAddress(), contractAddress, aliceQty);
 
@@ -143,9 +142,8 @@ public class HumanStandardTokenIT extends Scenario {
         assertEquals(response.get(0), (new Uint256(expected)));
     }
 
-    private String createContract(Credentials credentials, BigInteger initialSupply)
-            throws Exception {
-        String createTransactionHash = sendCreateContractTransaction(credentials, initialSupply);
+    private String createContract(BigInteger initialSupply) throws Exception {
+        String createTransactionHash = sendCreateContractTransaction(initialSupply);
         assertFalse(createTransactionHash.isEmpty());
 
         TransactionReceipt createTransactionReceipt =
@@ -161,9 +159,8 @@ public class HumanStandardTokenIT extends Scenario {
         return contractAddress;
     }
 
-    private String sendCreateContractTransaction(Credentials credentials, BigInteger initialSupply)
-            throws Exception {
-        BigInteger nonce = getNonce(credentials.getAddress());
+    private String sendCreateContractTransaction(BigInteger initialSupply) throws Exception {
+        BigInteger nonce = getNonce(ALICE.getAddress());
 
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(
@@ -181,7 +178,7 @@ public class HumanStandardTokenIT extends Scenario {
                         BigInteger.ZERO,
                         getHumanStandardTokenBinary() + encodedConstructor);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse =
@@ -385,6 +382,6 @@ public class HumanStandardTokenIT extends Scenario {
     }
 
     private static String getHumanStandardTokenBinary() throws Exception {
-        return load("/Fibonacci.bin");
+        return load("/EIP20.bin");
     }
 }

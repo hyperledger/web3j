@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
 
-@EVMTest(type = NodeType.BESU)
+@EVMTest(type = NodeType.GETH)
 @BenchmarkOptions(concurrency = 1, warmupRounds = 0, benchmarkRounds = 1)
 public class FastRawTransactionManagerIT extends Scenario {
 

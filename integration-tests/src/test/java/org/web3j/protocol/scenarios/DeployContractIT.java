@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /** Integration test demonstrating the full contract deployment workflow. */
-@EVMTest(type = NodeType.BESU)
+@EVMTest(type = NodeType.GETH)
 public class DeployContractIT extends Scenario {
 
     @BeforeAll

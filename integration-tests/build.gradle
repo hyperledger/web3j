@@ -8,7 +8,7 @@ dependencies {
     testCompile "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion",
             "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion",
-            "org.web3j:web3j-unit:4.8.2-SNAPSHOT"
+            "org.web3j:web3j-unit:$web3jUnitVersion"
 }
 tasks.withType(Test) {
     useJUnitPlatform()
