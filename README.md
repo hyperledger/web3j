@@ -93,8 +93,7 @@ Create a new project by running:
 $ epirus new 
 ```
 
-Or use our plugins:
-- [Maven](https://github.com/web3j/web3j-maven-plugin) / [Gradle](https://github.com/web3j/web3j-gradle-plugin)
+Or use our [Maven](https://github.com/web3j/web3j-maven-plugin) or [Gradle](https://github.com/web3j/web3j-gradle-plugin) plugins.
 
 
 #### Please head to the [Web3j Documentation](https://docs.web3j.io) for further instructions on using Web3j.
@@ -165,4 +164,3 @@ Commercial support and training is available from
 License
 ------
 Apache 2.0
-
