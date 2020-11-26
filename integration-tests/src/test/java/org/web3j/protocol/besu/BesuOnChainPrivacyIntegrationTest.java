@@ -67,9 +67,10 @@ public class BesuOnChainPrivacyIntegrationTest {
 
     @BeforeAll
     public static void setUpOnce() {
-        nodeAlice = Besu.build(new HttpService("http://localhost:8545"));
-        nodeBob = Besu.build(new HttpService("http://localhost:8545"));
-        nodeCharlie = Besu.build(new HttpService("http://localhost:8545"));
+        HttpService httpService = new HttpService();
+        nodeAlice = Besu.build(httpService);
+        nodeBob = Besu.build(httpService);
+        nodeCharlie = Besu.build(httpService);
         processor = new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1000, 15);
     }
 

@@ -39,7 +39,7 @@ public class ParityIT {
 
     @BeforeEach
     public void setUp() {
-        this.parity = Parity.build(new HttpService("http://localhost:8545"));
+        this.parity = Parity.build(new HttpService());
     }
 
     @Test

@@ -70,7 +70,7 @@ public class TestnetConfig implements IntegrationTestConfig {
     public String validBlockHash() {
         https:
         // testnet.etherscan.io/block/1627453
-        return this.validBlockHash;
+        return validBlockHash;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class TestnetConfig implements IntegrationTestConfig {
     @Override
     public String validContractAddress() {
         // Deployed fibonacci example
-        return this.validContractAddress;
+        return validContractAddress;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validTransactionHash() {
-        return this.validTransactionHash;
+        return validTransactionHash;
     }
 
     @Override
