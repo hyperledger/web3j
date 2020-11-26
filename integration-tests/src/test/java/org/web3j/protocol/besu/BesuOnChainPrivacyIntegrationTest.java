@@ -22,6 +22,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.crypto.Credentials;
 import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.besu.response.privacy.PrivacyGroup;
@@ -34,9 +36,13 @@ import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
+@EVMTest(type = NodeType.BESU)
 public class BesuOnChainPrivacyIntegrationTest {
 
     private static final Credentials ALICE =
@@ -52,7 +58,8 @@ public class BesuOnChainPrivacyIntegrationTest {
             Base64String.wrap("Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=");
     private static final Base64String ENCLAVE_KEY_CHARLIE =
             Base64String.wrap("k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=");
-
+    private static final BesuPrivacyGasProvider ZERO_GAS_PROVIDER =
+            new BesuPrivacyGasProvider(BigInteger.valueOf(0));
     private static Besu nodeAlice;
     private static Besu nodeBob;
     private static Besu nodeCharlie;
@@ -60,9 +67,9 @@ public class BesuOnChainPrivacyIntegrationTest {
 
     @BeforeAll
     public static void setUpOnce() {
-        nodeAlice = Besu.build(new HttpService("http://localhost:20000"));
-        nodeBob = Besu.build(new HttpService("http://localhost:20002"));
-        nodeCharlie = Besu.build(new HttpService("http://localhost:20004"));
+        nodeAlice = Besu.build(new HttpService("http://localhost:8545"));
+        nodeBob = Besu.build(new HttpService("http://localhost:8545"));
+        nodeCharlie = Besu.build(new HttpService("http://localhost:8545"));
         processor = new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1000, 15);
     }
 
@@ -71,9 +78,6 @@ public class BesuOnChainPrivacyIntegrationTest {
         new SecureRandom().nextBytes(bytes);
         return bytes;
     }
-
-    private static final BesuPrivacyGasProvider ZERO_GAS_PROVIDER =
-            new BesuPrivacyGasProvider(BigInteger.valueOf(0));
 
     @Test
     public void testCreateAndFindOnChainPrivacyGroup() throws Exception {
