@@ -128,9 +128,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         }
         List<AbiDefinition> functionDefinitions = loadContractDefinition(abiFile);
 
-        if (functionDefinitions.isEmpty()) {
-            exitError("Unable to parse input ABI file");
-        } else {
+        if (!functionDefinitions.isEmpty()) {
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
