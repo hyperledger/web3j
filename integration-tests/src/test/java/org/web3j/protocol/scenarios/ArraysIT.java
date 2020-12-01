@@ -18,13 +18,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.com.test.contract.Arrays;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.EVMTest;
 import org.web3j.NodeType;
-import org.web3j.generated.Arrays;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.gas.StaticGasProvider;
 

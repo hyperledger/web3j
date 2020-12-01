@@ -14,6 +14,7 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
+import org.com.test.contract.Fibonacci;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,6 @@ import org.web3j.EVMTest;
 import org.web3j.NodeType;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
-import org.web3j.generated.Fibonacci;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;

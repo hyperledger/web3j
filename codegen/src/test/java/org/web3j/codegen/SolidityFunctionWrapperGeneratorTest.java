@@ -20,11 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
+import javax.tools.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,11 +31,8 @@ import org.web3j.utils.Strings;
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
-import static org.web3j.codegen.FunctionWrapperGenerator.PRIMITIVE_TYPES_ARG;
-import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_GENERATE;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
+import static org.web3j.codegen.FunctionWrapperGenerator.*;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.*;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
 
 public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
@@ -71,8 +64,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testHumanStandardTokenGeneration() throws Exception {
-        testCodeGenerationJvmTypes("contracts", "HumanStandardToken");
-        testCodeGenerationSolidityTypes("contracts", "HumanStandardToken");
+        testCodeGenerationJvmTypes("humanstandardtoken", "HumanStandardToken");
+        testCodeGenerationSolidityTypes("humanstandardtoken", "HumanStandardToken");
     }
 
     @Test
@@ -107,14 +100,14 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testContractsNoBin() throws Exception {
-        testCodeGeneration("contracts", "HumanStandardToken", JAVA_TYPES_ARG, false);
-        testCodeGeneration("contracts", "HumanStandardToken", SOLIDITY_TYPES_ARG, false);
+        testCodeGeneration("humanstandardtoken", "HumanStandardToken", JAVA_TYPES_ARG, false);
+        testCodeGeneration("humanstandardtoken", "HumanStandardToken", SOLIDITY_TYPES_ARG, false);
     }
 
     @Test
     public void testComplexStorage0425() throws Exception {
-        testCodeGenerationJvmTypes("complexstorage0.4.25", "ComplexStorage");
-        testCodeGenerationSolidityTypes("complexstorage0.4.25", "ComplexStorage");
+        testCodeGenerationJvmTypes("complexstoragenew", "ComplexStorageNew");
+        testCodeGenerationSolidityTypes("complexstoragenew", "ComplexStorageNew");
     }
 
     @Test
@@ -141,13 +134,13 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     public void testGenerationCommandPrefixes() throws Exception {
         testCodeGeneration(
                 Arrays.asList(COMMAND_SOLIDITY, COMMAND_GENERATE),
-                "contracts",
+                "humanstandardtoken",
                 "HumanStandardToken",
                 JAVA_TYPES_ARG,
                 true);
         testCodeGeneration(
                 Arrays.asList(COMMAND_GENERATE),
-                "contracts",
+                "humanstandardtoken",
                 "HumanStandardToken",
                 SOLIDITY_TYPES_ARG,
                 true);

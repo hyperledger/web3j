@@ -15,7 +15,7 @@ Machine-based, rapid creation of many tokens would not necessarily need these ex
 
 import "StandardToken.sol";
 
-contract HumanStandardToken is StandardToken {
+contract HumanStandardToken {
 
     function () public {
         //if ether is sent to this address, send it back.
