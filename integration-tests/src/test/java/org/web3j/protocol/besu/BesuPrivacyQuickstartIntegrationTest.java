@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import org.com.test.contract.HumanStandardToken;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.TransactionEncoder;
-import org.web3j.generated.HumanStandardToken;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;

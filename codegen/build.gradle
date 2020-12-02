@@ -5,8 +5,28 @@ dependencies {
             "com.squareup:kotlinpoet:$kotlinPoetVersion",
             "com.squareup:javapoet:$javaPoetVersion",
             "info.picocli:picocli:$picocliVersion"
-    testCompile project(path: ':core', configuration: 'testArtifacts')
+    testCompile project(':core').sourceSets.test.output
     implementation("org.junit.platform:junit-platform-launcher:$junitPlatformLauncherVersion")
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation("org.junit.vintage:junit-vintage-engine:$junitVersion")
+}
+
+
+file("src/test/resources/solidity").listFiles().each { File file ->
+    def contractFile = file.listFiles().find({
+        it.getName().endsWith(".sol")
+    })
+    if (contractFile != null) {
+        def contractName = contractFile.name.substring(0, contractFile.name.length() - 4)
+        def generateTask = tasks.register("generate${contractName}Wrapper", JavaExec) {
+            classpath = sourceSets.test.runtimeClasspath
+            main = 'org.web3j.codegen.SolidityFunctionWrapperGenerator'
+            args 'generate',
+                    '--abiFile', "${contractFile.parent}/build/${contractName}.abi",
+                    '--binFile', "${contractFile.parent}/build/${contractName}.bin",
+                    '--outputDir', "build/resources/test/java",
+                    '--package', 'org.com.test.contract'
+        }
+        test.dependsOn generateTask
+    }
 }

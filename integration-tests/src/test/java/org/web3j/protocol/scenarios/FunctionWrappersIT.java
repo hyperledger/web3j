@@ -14,13 +14,16 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
+import org.com.test.contract.Fibonacci;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.generated.Fibonacci;
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.gas.ContractGasProvider;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,13 +34,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <em>project-home</em>/src/test/resources/solidity/fibonacci.abi -o
  * <em>project-home</em>/src/integration-test/java -p org.web3j.generated
  */
+@EVMTest(type = NodeType.GETH)
 public class FunctionWrappersIT extends Scenario {
+
+    private static Fibonacci fib;
+
+    @BeforeAll
+    public static void setUp(Web3j web3j, ContractGasProvider contractGasProvider)
+            throws Exception {
+        Scenario.web3j = web3j;
+        FunctionWrappersIT.fib = Fibonacci.deploy(web3j, ALICE, contractGasProvider).send();
+    }
 
     @Test
     public void testFibonacci() throws Exception {
+
         Fibonacci fibonacci =
                 Fibonacci.load(
-                        "0x3c05b2564139fb55820b18b72e94b2178eaace7d",
+                        fib.getContractAddress(),
                         Web3j.build(new HttpService()),
                         ALICE,
                         STATIC_GAS_PROVIDER);
@@ -50,7 +64,7 @@ public class FunctionWrappersIT extends Scenario {
     public void testFibonacciNotify() throws Exception {
         Fibonacci fibonacci =
                 Fibonacci.load(
-                        "0x3c05b2564139fb55820b18b72e94b2178eaace7d",
+                        fib.getContractAddress(),
                         Web3j.build(new HttpService()),
                         ALICE,
                         STATIC_GAS_PROVIDER);
@@ -60,8 +74,8 @@ public class FunctionWrappersIT extends Scenario {
 
         Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
 
-        assertEquals(result.input, (new Uint256(BigInteger.valueOf(15))));
+        assertEquals(BigInteger.valueOf(15), result.input);
 
-        assertEquals(result.result, (new Uint256(BigInteger.valueOf(610))));
+        assertEquals(BigInteger.valueOf(610), result.result);
     }
 }

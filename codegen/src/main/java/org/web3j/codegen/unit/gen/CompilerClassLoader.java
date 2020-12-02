@@ -28,7 +28,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
 /** Class loader with compilation capabilities. */
-class CompilerClassLoader extends ClassLoader {
+public class CompilerClassLoader extends ClassLoader {
 
     private final File outputDir;
     private final URL[] urls;
@@ -39,7 +39,7 @@ class CompilerClassLoader extends ClassLoader {
      * @param outputDir Directory where classes will be compiled.
      * @param urls Classpath URLs to compile the Java sources.
      */
-    CompilerClassLoader(final File outputDir, final URL... urls) {
+    public CompilerClassLoader(final File outputDir, final URL... urls) {
         super(CompilerClassLoader.class.getClassLoader());
         this.outputDir = outputDir;
         this.urls = urls;

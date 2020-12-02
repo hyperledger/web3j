@@ -14,14 +14,23 @@ package org.web3j.protocol.core;
 
 import java.math.BigInteger;
 
+import org.com.test.contract.Fibonacci;
+
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.gas.ContractGasProvider;
 
 /** Common values used by integration tests. */
 public interface IntegrationTestConfig {
 
+    Fibonacci getValidDeployedContract();
+
     String validBlockHash();
 
     BigInteger validBlock();
+
+    BigInteger validBlockNumber();
 
     BigInteger validBlockTransactionCount();
 
@@ -29,13 +38,20 @@ public interface IntegrationTestConfig {
 
     String validAccount();
 
+    String validPrivateKey();
+
+    BigInteger validTransactionIndex();
+
     String validContractAddress();
 
     String validContractAddressPositionZero();
 
     String validContractCode();
 
-    Transaction buildTransaction();
+    Transaction buildTransaction(Web3j web3j, ContractGasProvider contractGasProvider)
+            throws Exception;
+
+    TransactionReceipt transferEth(Web3j web3j) throws Exception;
 
     String validTransactionHash();
 

@@ -23,25 +23,25 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.http.HttpService;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Flowable callback tests. */
+@EVMTest(type = NodeType.GETH)
 public class FlowableIT {
-    private static Logger log = LoggerFactory.getLogger(FlowableIT.class);
-
     private static final int EVENT_COUNT = 5;
-    private static final int TIMEOUT_MINUTES = 5;
-
+    private static final int TIMEOUT_MINUTES = 1;
+    private static final Logger log = LoggerFactory.getLogger(FlowableIT.class);
     private Web3j web3j;
 
     @BeforeEach
-    public void setUp() {
-        this.web3j = Web3j.build(new HttpService());
+    public void setUp(Web3j web3j) {
+        this.web3j = web3j;
     }
 
     @Test

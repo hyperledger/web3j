@@ -17,8 +17,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
@@ -34,6 +37,7 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -50,24 +54,29 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * href="https://github.com/ethereum/EIPs/issues/20">EIP-20</a>. Solidity implementation is taken
  * from <a href="https://github.com/ConsenSys/Tokens">ConsenSys Tokens</a>.
  */
+@EVMTest(type = NodeType.GETH)
 public class HumanStandardTokenIT extends Scenario {
+
+    @BeforeAll
+    public static void setUp(Web3j web3j) {
+        Scenario.web3j = web3j;
+    }
 
     @Test
     public void testContract() throws Exception {
 
         // deploy contract
         BigInteger aliceQty = BigInteger.valueOf(1_000_000);
+        String contractAddress = createContract(aliceQty);
 
-        String contractAddress = createContract(ALICE, aliceQty);
-
-        assertEquals(getTotalSupply(contractAddress), (aliceQty));
+        assertEquals(getTotalSupply(contractAddress), aliceQty);
 
         confirmBalance(ALICE.getAddress(), contractAddress, aliceQty);
 
         // transfer tokens
         BigInteger transferQuantity = BigInteger.valueOf(100_000);
 
-        sendTransferTokensTransaction(ALICE, BOB.getAddress(), contractAddress, transferQuantity);
+        sendTransferTokensTransaction(BOB.getAddress(), contractAddress, transferQuantity);
 
         aliceQty = aliceQty.subtract(transferQuantity);
 
@@ -81,7 +90,7 @@ public class HumanStandardTokenIT extends Scenario {
         confirmAllowance(ALICE.getAddress(), BOB.getAddress(), contractAddress, BigInteger.ZERO);
 
         transferQuantity = BigInteger.valueOf(50);
-        sendApproveTransaction(ALICE, BOB.getAddress(), transferQuantity, contractAddress);
+        sendApproveTransaction(BOB.getAddress(), transferQuantity, contractAddress);
 
         confirmAllowance(ALICE.getAddress(), BOB.getAddress(), contractAddress, transferQuantity);
 
@@ -105,7 +114,7 @@ public class HumanStandardTokenIT extends Scenario {
         List<Type> response =
                 FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
 
-        assertEquals(response.size(), (1));
+        assertEquals(1, response.size());
         return (BigInteger) response.get(0).getValue();
     }
 
@@ -133,9 +142,8 @@ public class HumanStandardTokenIT extends Scenario {
         assertEquals(response.get(0), (new Uint256(expected)));
     }
 
-    private String createContract(Credentials credentials, BigInteger initialSupply)
-            throws Exception {
-        String createTransactionHash = sendCreateContractTransaction(credentials, initialSupply);
+    private String createContract(BigInteger initialSupply) throws Exception {
+        String createTransactionHash = sendCreateContractTransaction(initialSupply);
         assertFalse(createTransactionHash.isEmpty());
 
         TransactionReceipt createTransactionReceipt =
@@ -151,9 +159,8 @@ public class HumanStandardTokenIT extends Scenario {
         return contractAddress;
     }
 
-    private String sendCreateContractTransaction(Credentials credentials, BigInteger initialSupply)
-            throws Exception {
-        BigInteger nonce = getNonce(credentials.getAddress());
+    private String sendCreateContractTransaction(BigInteger initialSupply) throws Exception {
+        BigInteger nonce = getNonce(ALICE.getAddress());
 
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(
@@ -171,7 +178,7 @@ public class HumanStandardTokenIT extends Scenario {
                         BigInteger.ZERO,
                         getHumanStandardTokenBinary() + encodedConstructor);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse =
@@ -180,12 +187,11 @@ public class HumanStandardTokenIT extends Scenario {
         return transactionResponse.getTransactionHash();
     }
 
-    private void sendTransferTokensTransaction(
-            Credentials credentials, String to, String contractAddress, BigInteger qty)
+    private void sendTransferTokensTransaction(String to, String contractAddress, BigInteger qty)
             throws Exception {
 
         Function function = transfer(to, qty);
-        String functionHash = execute(credentials, function, contractAddress);
+        String functionHash = execute(Scenario.ALICE, function, contractAddress);
 
         TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
         assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
@@ -204,7 +210,7 @@ public class HumanStandardTokenIT extends Scenario {
         // there are no indexed parameters in this example
         String encodedEventSignature = EventEncoder.encode(transferEvent);
         assertEquals(topics.get(0), (encodedEventSignature));
-        assertEquals(new Address(topics.get(1)), (new Address(credentials.getAddress())));
+        assertEquals(new Address(topics.get(1)), (new Address(Scenario.ALICE.getAddress())));
         assertEquals(new Address(topics.get(2)), (new Address(to)));
 
         // verify qty transferred
@@ -214,11 +220,10 @@ public class HumanStandardTokenIT extends Scenario {
         assertEquals(results, (Collections.singletonList(new Uint256(qty))));
     }
 
-    private void sendApproveTransaction(
-            Credentials credentials, String spender, BigInteger value, String contractAddress)
+    private void sendApproveTransaction(String spender, BigInteger value, String contractAddress)
             throws Exception {
         Function function = approve(spender, value);
-        String functionHash = execute(credentials, function, contractAddress);
+        String functionHash = execute(Scenario.ALICE, function, contractAddress);
 
         TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
         assertEquals(transferTransactionReceipt.getTransactionHash(), (functionHash));
@@ -238,7 +243,7 @@ public class HumanStandardTokenIT extends Scenario {
         // there are no indexed parameters in this example
         String encodedEventSignature = EventEncoder.encode(event);
         assertEquals(topics.get(0), (encodedEventSignature));
-        assertEquals(new Address(topics.get(1)), (new Address(credentials.getAddress())));
+        assertEquals(new Address(topics.get(1)), (new Address(Scenario.ALICE.getAddress())));
         assertEquals(new Address(topics.get(2)), (new Address(spender)));
 
         // verify our two event parameters
@@ -377,6 +382,6 @@ public class HumanStandardTokenIT extends Scenario {
     }
 
     private static String getHumanStandardTokenBinary() throws Exception {
-        return load("/solidity/contracts/build/HumanStandardToken.bin");
+        return load("/EIP20.bin");
     }
 }

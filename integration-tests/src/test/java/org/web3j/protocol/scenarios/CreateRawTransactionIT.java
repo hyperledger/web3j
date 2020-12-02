@@ -14,10 +14,15 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
+import org.com.test.contract.Fibonacci;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -29,7 +34,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Create, sign and send a raw transaction. */
+@EVMTest(type = NodeType.GETH)
 public class CreateRawTransactionIT extends Scenario {
+
+    @BeforeAll
+    public static void setUp(Web3j web3j) {
+        Scenario.web3j = web3j;
+    }
 
     @Test
     public void testTransferEther() throws Exception {
@@ -82,7 +93,7 @@ public class CreateRawTransactionIT extends Scenario {
     private static RawTransaction createSmartContractTransaction(BigInteger nonce)
             throws Exception {
         return RawTransaction.createContractTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
+                nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, Fibonacci.BINARY);
     }
 
     BigInteger getNonce(String address) throws Exception {

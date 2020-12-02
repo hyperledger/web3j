@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 
-import org.web3j.codegen.unit.gen.ClassProvider;
+import org.web3j.codegen.unit.gen.CompilerClassLoader;
 import org.web3j.codegen.unit.gen.MethodFilter;
 
 public class Setup {
@@ -53,13 +53,14 @@ public class Setup {
                         "contracts",
                         "GreeterTest.kt");
         classAsFile = new File(urlAsString);
-        File greeter = new File(urlAsString.substring(0, urlAsString.indexOf("org/")));
-        greeterContractClass =
-                new ClassProvider(greeter)
-                        .getClasses().stream()
-                                .filter(className -> className.getSimpleName().equals("Greeter"))
-                                .findAny()
-                                .orElse(null);
+        CompilerClassLoader compilerClassLoader =
+                new CompilerClassLoader(
+                        temp,
+                        org.web3j.codegen.unit.gen.java.Setup.class
+                                .getClassLoader()
+                                .getResource("java/"));
+
+        greeterContractClass = compilerClassLoader.loadClass("org.com.test.contract.Greeter");
 
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         new KotlinClassGenerator(

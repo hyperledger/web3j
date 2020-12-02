@@ -17,9 +17,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.Disposable;
+import org.com.test.contract.HumanStandardToken;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import org.web3j.generated.HumanStandardToken;
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -27,12 +31,16 @@ import org.web3j.tx.gas.DefaultGasProvider;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.web3j.generated.HumanStandardToken.ApprovalEventResponse;
-import static org.web3j.generated.HumanStandardToken.TransferEventResponse;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 
 /** Generated HumanStandardToken integration test for all supported scenarios. */
+@EVMTest(type = NodeType.GETH)
 public class HumanStandardTokenGeneratedIT extends Scenario {
+
+    @BeforeAll
+    public static void setUp(Web3j web3j) {
+        Scenario.web3j = web3j;
+    }
 
     @Test
     public void testContract() throws Exception {
@@ -79,7 +87,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         TransactionReceipt aliceTransferReceipt =
                 contract.transfer(BOB.getAddress(), transferQuantity).send();
 
-        TransferEventResponse aliceTransferEventValues =
+        HumanStandardToken.TransferEventResponse aliceTransferEventValues =
                 contract.getTransferEvents(aliceTransferReceipt).get(0);
 
         assertEquals(aliceTransferEventValues._from, (aliceAddress));
@@ -101,7 +109,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         TransactionReceipt approveReceipt =
                 contract.approve(BOB.getAddress(), transferQuantity).send();
 
-        ApprovalEventResponse approvalEventValues =
+        HumanStandardToken.ApprovalEventResponse approvalEventValues =
                 contract.getApprovalEvents(approveReceipt).get(0);
 
         assertEquals(approvalEventValues._owner, (aliceAddress));
@@ -121,7 +129,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         TransactionReceipt bobTransferReceipt =
                 bobsContract.transferFrom(aliceAddress, bobAddress, transferQuantity).send();
 
-        TransferEventResponse bobTransferEventValues =
+        HumanStandardToken.TransferEventResponse bobTransferEventValues =
                 contract.getTransferEvents(bobTransferReceipt).get(0);
         assertEquals(bobTransferEventValues._from, (aliceAddress));
         assertEquals(bobTransferEventValues._to, (bobAddress));

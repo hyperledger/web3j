@@ -13,8 +13,12 @@
 package org.web3j.protocol.parity;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
 import org.web3j.protocol.admin.methods.response.PersonalSign;
@@ -26,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** JSON-RPC 2.0 Integration Tests. */
+@Disabled
+@EVMTest(type = NodeType.PARITY)
 public class ParityIT {
 
     private static String PASSWORD = "1n5ecur3P@55w0rd";
@@ -37,7 +43,9 @@ public class ParityIT {
     }
 
     @Test
-    public void testPersonalListAccounts() throws Exception {
+    public void testPersonalListAccounts(Web3j web3j) throws Exception {
+        web3j.web3ClientVersion().send();
+
         PersonalListAccounts personalListAccounts = parity.personalListAccounts().send();
         assertNotNull(personalListAccounts.getAccountIds());
     }
