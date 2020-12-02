@@ -31,8 +31,11 @@ import org.web3j.utils.Strings;
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.web3j.codegen.FunctionWrapperGenerator.*;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.*;
+import static org.web3j.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
+import static org.web3j.codegen.FunctionWrapperGenerator.PRIMITIVE_TYPES_ARG;
+import static org.web3j.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_GENERATE;
+import static org.web3j.codegen.SolidityFunctionWrapperGenerator.COMMAND_SOLIDITY;
 import static org.web3j.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
 
 public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {

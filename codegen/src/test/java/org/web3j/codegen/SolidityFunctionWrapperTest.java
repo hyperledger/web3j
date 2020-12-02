@@ -18,19 +18,39 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.TempFileProvider;
-import org.web3j.abi.datatypes.*;
-import org.web3j.abi.datatypes.generated.*;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.abi.datatypes.generated.Int256;
+import org.web3j.abi.datatypes.generated.StaticArray10;
+import org.web3j.abi.datatypes.generated.StaticArray2;
+import org.web3j.abi.datatypes.generated.StaticArray3;
+import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.web3j.codegen.SolidityFunctionWrapper.*;
+import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
+import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
+import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
+import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
 
 public class SolidityFunctionWrapperTest extends TempFileProvider {
 

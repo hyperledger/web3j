@@ -60,7 +60,7 @@ public class Setup {
                                 .getClassLoader()
                                 .getResource("java/"));
 
-        greeterContractClass = compilerClassLoader.findClass("org.com.test.contract.Greeter");
+        greeterContractClass = compilerClassLoader.loadClass("org.com.test.contract.Greeter");
 
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         new KotlinClassGenerator(

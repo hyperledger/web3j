@@ -58,7 +58,7 @@ public class Setup {
         CompilerClassLoader compilerClassLoader =
                 new CompilerClassLoader(temp, Setup.class.getClassLoader().getResource("java/"));
 
-        greeterContractClass = compilerClassLoader.findClass("org.com.test.contract.Greeter");
+        greeterContractClass = compilerClassLoader.loadClass("org.com.test.contract.Greeter");
 
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         new JavaClassGenerator(

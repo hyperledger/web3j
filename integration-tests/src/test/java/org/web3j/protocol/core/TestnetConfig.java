@@ -69,14 +69,11 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {
-        https:
-        // testnet.etherscan.io/block/1627453
         return validBlockHash;
     }
 
     @Override
     public BigInteger validBlock() {
-        // https://testnet.etherscan.io/block/71032
         return BigInteger.valueOf(71032);
     }
 

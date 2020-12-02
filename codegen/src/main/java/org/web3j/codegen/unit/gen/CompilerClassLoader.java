@@ -46,7 +46,7 @@ public class CompilerClassLoader extends ClassLoader {
     }
 
     @Override
-    public Class<?> findClass(final String name) throws ClassNotFoundException {
+    protected Class<?> findClass(final String name) throws ClassNotFoundException {
         return compileClass(name)
                 .flatMap(this::readBytes)
                 .map(bytes -> defineClass(name, bytes, 0, bytes.length))

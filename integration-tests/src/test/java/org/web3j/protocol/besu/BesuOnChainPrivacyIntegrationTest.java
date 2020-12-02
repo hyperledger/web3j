@@ -36,7 +36,10 @@ import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
 @EVMTest(type = NodeType.BESU)
@@ -57,18 +60,14 @@ public class BesuOnChainPrivacyIntegrationTest {
             Base64String.wrap("k2zXEin4Ip/qBGlRkJejnGWdP9cjkK+DAvKNW31L2C8=");
     private static final BesuPrivacyGasProvider ZERO_GAS_PROVIDER =
             new BesuPrivacyGasProvider(BigInteger.valueOf(0));
-    private static Besu nodeAlice;
-    private static Besu nodeBob;
-    private static Besu nodeCharlie;
+    private static Besu besu;
     private static PollingPrivateTransactionReceiptProcessor processor;
 
     @BeforeAll
     public static void setUpOnce() {
         HttpService httpService = new HttpService();
-        nodeAlice = Besu.build(httpService);
-        nodeBob = Besu.build(httpService);
-        nodeCharlie = Besu.build(httpService);
-        processor = new PollingPrivateTransactionReceiptProcessor(nodeAlice, 1000, 15);
+        besu = Besu.build(httpService);
+        processor = new PollingPrivateTransactionReceiptProcessor(besu, 1000, 15);
     }
 
     static byte[] generateRandomBytes(int size) {
@@ -81,8 +80,7 @@ public class BesuOnChainPrivacyIntegrationTest {
     public void testCreateAndFindOnChainPrivacyGroup() throws Exception {
         Base64String privacyGroupId = Base64String.wrap(generateRandomBytes(32));
         final String txHash =
-                nodeAlice
-                        .privOnChainCreatePrivacyGroup(
+                besu.privOnChainCreatePrivacyGroup(
                                 privacyGroupId,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,
@@ -94,9 +92,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertTrue(receipt.isStatusOK());
 
         List<PrivacyGroup> groups =
-                nodeAlice
-                        .privOnChainFindPrivacyGroup(
-                                Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                besu.privOnChainFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
                         .send()
                         .getGroups();
 
@@ -107,8 +103,7 @@ public class BesuOnChainPrivacyIntegrationTest {
     public void testCreateAddRemoveOnChainPrivacyGroup() throws Exception {
         Base64String privacyGroupId = Base64String.wrap(generateRandomBytes(32));
         final String createTxHash =
-                nodeAlice
-                        .privOnChainCreatePrivacyGroup(
+                besu.privOnChainCreatePrivacyGroup(
                                 privacyGroupId,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,
@@ -120,8 +115,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertTrue(createReceipt.isStatusOK());
 
         final String addTxHash =
-                nodeAlice
-                        .privOnChainAddToPrivacyGroup(
+                besu.privOnChainAddToPrivacyGroup(
                                 privacyGroupId,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,
@@ -133,8 +127,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertTrue(addReceipt.isStatusOK());
 
         List<PrivacyGroup> groups =
-                nodeAlice
-                        .privOnChainFindPrivacyGroup(
+                besu.privOnChainFindPrivacyGroup(
                                 Arrays.asList(
                                         ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB, ENCLAVE_KEY_CHARLIE))
                         .send()
@@ -147,8 +140,7 @@ public class BesuOnChainPrivacyIntegrationTest {
                                                 && g.getMembers().size() == 3));
 
         final String removeTxHash =
-                nodeAlice
-                        .privOnChainRemoveFromPrivacyGroup(
+                besu.privOnChainRemoveFromPrivacyGroup(
                                 privacyGroupId, ALICE, ENCLAVE_KEY_ALICE, ENCLAVE_KEY_CHARLIE)
                         .send()
                         .getTransactionHash();
@@ -157,9 +149,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertTrue(removeReceipt.isStatusOK());
 
         List<PrivacyGroup> removedGroups =
-                nodeAlice
-                        .privOnChainFindPrivacyGroup(
-                                Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                besu.privOnChainFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
                         .send()
                         .getGroups();
         assertTrue(
@@ -174,8 +164,7 @@ public class BesuOnChainPrivacyIntegrationTest {
     public void testCannotAddToAlreadyLockedGroup() throws Exception {
         Base64String privacyGroupId = Base64String.wrap(generateRandomBytes(32));
         final String createTxHash =
-                nodeAlice
-                        .privOnChainCreatePrivacyGroup(
+                besu.privOnChainCreatePrivacyGroup(
                                 privacyGroupId,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,
@@ -187,9 +176,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertTrue(createReceipt.isStatusOK());
 
         final String lockTxHash =
-                nodeAlice
-                        .privOnChainSetGroupLockState(
-                                privacyGroupId, ALICE, ENCLAVE_KEY_ALICE, true)
+                besu.privOnChainSetGroupLockState(privacyGroupId, ALICE, ENCLAVE_KEY_ALICE, true)
                         .send()
                         .getTransactionHash();
 
@@ -199,7 +186,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertThrows(
                 TransactionException.class,
                 () ->
-                        nodeBob.privOnChainAddToPrivacyGroup(
+                        besu.privOnChainAddToPrivacyGroup(
                                         privacyGroupId,
                                         BOB,
                                         ENCLAVE_KEY_BOB,
@@ -211,8 +198,7 @@ public class BesuOnChainPrivacyIntegrationTest {
     public void testCanExecuteSmartContractsInOnChainPrivacyGroup() throws Exception {
         Base64String aliceBobGroup = Base64String.wrap(generateRandomBytes(32));
         final String createTxHash =
-                nodeAlice
-                        .privOnChainCreatePrivacyGroup(
+                besu.privOnChainCreatePrivacyGroup(
                                 aliceBobGroup,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,
@@ -225,9 +211,7 @@ public class BesuOnChainPrivacyIntegrationTest {
 
         // Find the privacy group that was built by Alice from Bob's node
         final Base64String aliceBobGroupFromBobNode =
-                nodeBob
-                        .privOnChainFindPrivacyGroup(
-                                Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
+                besu.privOnChainFindPrivacyGroup(Arrays.asList(ENCLAVE_KEY_ALICE, ENCLAVE_KEY_BOB))
                         .send().getGroups().stream()
                         .filter(g -> g.getPrivacyGroupId().equals(aliceBobGroup))
                         .findFirst()
@@ -236,15 +220,10 @@ public class BesuOnChainPrivacyIntegrationTest {
 
         final PrivateTransactionManager tmAlice =
                 new BesuPrivateTransactionManager(
-                        nodeAlice,
-                        ZERO_GAS_PROVIDER,
-                        ALICE,
-                        2018,
-                        ENCLAVE_KEY_ALICE,
-                        aliceBobGroup);
+                        besu, ZERO_GAS_PROVIDER, ALICE, 2018, ENCLAVE_KEY_ALICE, aliceBobGroup);
         final PrivateTransactionManager tmBob =
                 new BesuPrivateTransactionManager(
-                        nodeBob,
+                        besu,
                         ZERO_GAS_PROVIDER,
                         BOB,
                         2018,
@@ -253,7 +232,7 @@ public class BesuOnChainPrivacyIntegrationTest {
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
-                                nodeAlice,
+                                besu,
                                 tmAlice,
                                 ZERO_GAS_PROVIDER,
                                 BigInteger.TEN,
@@ -264,7 +243,7 @@ public class BesuOnChainPrivacyIntegrationTest {
 
         final HumanStandardToken tokenBob =
                 HumanStandardToken.load(
-                        tokenAlice.getContractAddress(), nodeBob, tmBob, ZERO_GAS_PROVIDER);
+                        tokenAlice.getContractAddress(), besu, tmBob, ZERO_GAS_PROVIDER);
 
         tokenAlice.transfer(BOB.getAddress(), BigInteger.TEN).send();
         testBalances(tokenAlice, tokenBob, BigInteger.ZERO, BigInteger.TEN);
@@ -274,8 +253,7 @@ public class BesuOnChainPrivacyIntegrationTest {
     public void testCannotAddDuplicateMemberToPrivacyGroup() throws Exception {
         Base64String privacyGroupId = Base64String.wrap(generateRandomBytes(32));
         final String txHash =
-                nodeAlice
-                        .privOnChainCreatePrivacyGroup(
+                besu.privOnChainCreatePrivacyGroup(
                                 privacyGroupId,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,
@@ -287,8 +265,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertTrue(receipt.isStatusOK());
 
         final String addTxHash =
-                nodeAlice
-                        .privOnChainAddToPrivacyGroup(
+                besu.privOnChainAddToPrivacyGroup(
                                 privacyGroupId,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,
@@ -300,8 +277,7 @@ public class BesuOnChainPrivacyIntegrationTest {
         assertTrue(addReceipt.isStatusOK());
 
         final String secondAddTxHash =
-                nodeAlice
-                        .privOnChainAddToPrivacyGroup(
+                besu.privOnChainAddToPrivacyGroup(
                                 privacyGroupId,
                                 ALICE,
                                 ENCLAVE_KEY_ALICE,

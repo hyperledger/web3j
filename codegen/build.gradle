@@ -16,16 +16,17 @@ file("src/test/resources/solidity").listFiles().each { File file ->
     def contractFile = file.listFiles().find({
         it.getName().endsWith(".sol")
     })
-
-    def contractName = contractFile.name.substring(0, contractFile.name.length() - 4)
-    def generateTask = tasks.register("generate${contractName}Wrapper", JavaExec) {
-        classpath = sourceSets.test.runtimeClasspath
-        main = 'org.web3j.codegen.SolidityFunctionWrapperGenerator'
-        args 'generate',
-                '--abiFile', "${contractFile.parent}/build/${contractName}.abi",
-                '--binFile', "${contractFile.parent}/build/${contractName}.bin",
-                '--outputDir', "build/resources/test/java",
-                '--package', 'org.com.test.contract'
+    if (contractFile != null) {
+        def contractName = contractFile.name.substring(0, contractFile.name.length() - 4)
+        def generateTask = tasks.register("generate${contractName}Wrapper", JavaExec) {
+            classpath = sourceSets.test.runtimeClasspath
+            main = 'org.web3j.codegen.SolidityFunctionWrapperGenerator'
+            args 'generate',
+                    '--abiFile', "${contractFile.parent}/build/${contractName}.abi",
+                    '--binFile', "${contractFile.parent}/build/${contractName}.bin",
+                    '--outputDir', "build/resources/test/java",
+                    '--package', 'org.com.test.contract'
+        }
+        test.dependsOn generateTask
     }
-    test.dependsOn generateTask
 }
