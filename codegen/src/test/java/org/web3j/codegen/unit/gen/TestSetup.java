@@ -36,7 +36,7 @@ public abstract class TestSetup {
     @BeforeAll
     public void setUp() throws Exception {
         greeterContractClass = new CompilerClassLoader(
-                temp, new File("build/resources/test/java").toURI().toURL()
+                temp, TestSetup.class.getClassLoader().getResource("java")
         ).loadClass("org.web3j.test.contract.Greeter");
 
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
