@@ -12,8 +12,6 @@
  */
 package org.web3j.codegen.unit.gen.kotlin;
 
-import java.io.File;
-
 import org.junit.jupiter.api.Test;
 
 import org.web3j.codegen.unit.gen.java.JavaClassGenerator;
@@ -21,11 +19,7 @@ import org.web3j.codegen.unit.gen.java.JavaClassGenerator;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class KotlinClassGeneratorTest extends Setup {
-    @Test
-    public void testThatTheClassWasSuccessfullyWritten() {
-        assertTrue(new File(pathToTest).exists());
-    }
+public class KotlinClassGeneratorTest extends KotlinTestSetup {
 
     @Test
     public void testThatExceptionIsThrownWhenAClassIsNotWritten() {

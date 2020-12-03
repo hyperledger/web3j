@@ -15,7 +15,7 @@ package org.web3j.protocol.core;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.com.test.contract.Fibonacci;
+import org.web3j.test.contract.Fibonacci;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

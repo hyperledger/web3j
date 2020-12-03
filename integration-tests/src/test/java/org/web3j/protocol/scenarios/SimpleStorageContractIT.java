@@ -14,7 +14,7 @@ package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
 
-import org.com.test.contract.SimpleStorage;
+import org.web3j.test.contract.SimpleStorage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

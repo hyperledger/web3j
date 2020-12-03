@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import org.com.test.contract.Fibonacci;
+import org.web3j.test.contract.Fibonacci;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;

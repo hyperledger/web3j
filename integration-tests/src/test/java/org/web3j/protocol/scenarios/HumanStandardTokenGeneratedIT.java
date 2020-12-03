@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.Disposable;
-import org.com.test.contract.HumanStandardToken;
+import org.web3j.test.contract.HumanStandardToken;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

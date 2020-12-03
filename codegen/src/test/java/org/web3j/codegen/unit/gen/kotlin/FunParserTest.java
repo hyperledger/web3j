@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FunParserTest extends Setup {
+public class FunParserTest extends KotlinTestSetup {
     @Test
     public void testThatDeployMethodWasGenerated() {
         Optional<Method> deployFun =
@@ -34,7 +34,7 @@ public class FunParserTest extends Setup {
                         + "  transactionManager: org.web3j.tx.TransactionManager,\n"
                         + "  contractGasProvider: org.web3j.tx.gas.ContractGasProvider\n"
                         + ") {\n"
-                        + "   greeter = org.com.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send()\n"
+                        + "   greeter = org.web3j.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send()\n"
                         + "}\n");
     }
 

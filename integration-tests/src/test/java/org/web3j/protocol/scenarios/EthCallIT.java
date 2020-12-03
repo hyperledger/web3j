@@ -15,7 +15,7 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 import java.util.Collections;
 
-import org.com.test.contract.Revert;
+import org.web3j.test.contract.Revert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

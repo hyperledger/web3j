@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import org.com.test.contract.HumanStandardToken;
+import org.web3j.test.contract.HumanStandardToken;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
