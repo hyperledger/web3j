@@ -49,7 +49,6 @@ spotless {
         greclipse().configFile("$rootDir/gradle/spotless/formatter.properties")
         endWithNewline()
         indentWithSpaces(4)
-        paddedCell()
     }
 }
 

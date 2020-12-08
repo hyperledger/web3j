@@ -7,6 +7,7 @@ plugins {
     id 'de.marcphilipp.nexus-publish' version '0.4.0'
     id 'de.undercouch.download' version '4.1.1'
     id 'com.jfrog.bintray' version '1.8.5'
+    id 'org.ajoberstar.git-publish' version '3.0.0'
 }
 
 ext {
