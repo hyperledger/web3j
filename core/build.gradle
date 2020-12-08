@@ -49,10 +49,7 @@ gitPublish {
 
     if (ghToken) {
         repoUri = "https://github.com/${docsPath}.git"
-        credentials {
-            username = ghToken
-            password = ''
-        }
+
     } else {
         repoUri = "git@github.com:${docsPath}.git"
     }

@@ -30,7 +30,7 @@ jobs:
       script: "./scripts/github-release.sh"
     - stage: javadoc release
       if: branch =~ /release/
-      script: "./gradlew core:gitPublishPush"
+      script: "./gradlew -Dorg.ajoberstar.grgit.auth.username=$GITHUB_PERSONAL_ACCESS_TOKEN core:gitPublishPush"
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 before_install:
