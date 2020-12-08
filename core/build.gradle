@@ -41,20 +41,20 @@ def getTimestamp() {
 }
 
 ext {
-    repoPath = 'web3j/web3j-docs'
+    docsPath = 'web3j/web3j-docs'
     ghToken = System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN')
 }
 
 gitPublish {
 
     if (ghToken) {
-        repoUri = "https://github.com/${repoPath}.git"
+        repoUri = "https://github.com/${docsPath}.git"
         credentials {
             username = ghToken
             password = ''
         }
     } else {
-        repoUri = "git@github.com:${repoPath}.git"
+        repoUri = "git@github.com:${docsPath}.git"
     }
 
     // branch will be created if it doesn't exist
