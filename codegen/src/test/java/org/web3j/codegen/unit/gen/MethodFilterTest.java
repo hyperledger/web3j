@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-
 import org.junit.jupiter.api.io.TempDir;
+
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -33,16 +33,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MethodFilterTest {
 
-    @TempDir
-    public static File temp;
-    
+    @TempDir public static File temp;
+
     private Class<?> greeterContractClass;
 
     @BeforeAll
     void setUp() throws Exception {
-        greeterContractClass = new CompilerClassLoader(
-                temp, TestSetup.class.getClassLoader().getResource("java")
-        ).loadClass("org.web3j.test.contract.Greeter");
+        greeterContractClass =
+                new CompilerClassLoader(temp, TestSetup.class.getClassLoader().getResource("java"))
+                        .loadClass("org.web3j.test.contract.Greeter");
     }
 
     @Test

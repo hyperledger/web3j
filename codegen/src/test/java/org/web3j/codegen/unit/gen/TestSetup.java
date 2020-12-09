@@ -26,8 +26,7 @@ import org.junit.jupiter.api.io.TempDir;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class TestSetup {
 
-    @TempDir
-    public static File temp;
+    @TempDir public static File temp;
 
     protected Class<?> greeterContractClass;
     protected List<Method> filteredMethods;
@@ -35,9 +34,9 @@ public abstract class TestSetup {
 
     @BeforeAll
     public void setUp() throws Exception {
-        greeterContractClass = new CompilerClassLoader(
-                temp, TestSetup.class.getClassLoader().getResource("java")
-        ).loadClass("org.web3j.test.contract.Greeter");
+        greeterContractClass =
+                new CompilerClassLoader(temp, TestSetup.class.getClassLoader().getResource("java"))
+                        .loadClass("org.web3j.test.contract.Greeter");
 
         filteredMethods = MethodFilter.extractValidMethods(greeterContractClass);
         buildGenerator().writeClass();
