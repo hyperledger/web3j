@@ -251,6 +251,13 @@ public class StructuredDataEncoder {
                         sha3(encodeData(field.getType(), (HashMap<String, Object>) value));
                 encTypes.add("bytes32");
                 encValues.add(hashedValue);
+            } else if (field.getType().equals("uint256")) {
+                encTypes.add("uint256");
+                if (value.getClass().equals(String.class)) {
+                    encValues.add(new BigInteger((String) value));
+                } else {
+                    encValues.add(value);
+                }
             } else if (bytesTypePattern.matcher(field.getType()).find()) {
                 encTypes.add(field.getType());
                 encValues.add(Numeric.hexStringToByteArray((String) value));
@@ -359,9 +366,13 @@ public class StructuredDataEncoder {
             data.remove("chainId");
         }
 
-        data.put(
-                "verifyingContract",
-                ((HashMap<String, Object>) data.get("verifyingContract")).get("value"));
+        if (data.get("verifyingContract") != null) {
+            data.put(
+                    "verifyingContract",
+                    ((HashMap<String, Object>) data.get("verifyingContract")).get("value"));
+        } else {
+            data.remove("verifyingContract");
+        }
 
         if (data.get("salt") == null) {
             data.remove("salt");
