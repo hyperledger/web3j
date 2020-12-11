@@ -378,7 +378,6 @@ public class TypeDecoder {
                 T value;
                 final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
 
-                System.out.println(currOffset);
                 if (StaticStruct.class.isAssignableFrom(declaredField)) {
                     final int nestedStructLength =
                             classType
