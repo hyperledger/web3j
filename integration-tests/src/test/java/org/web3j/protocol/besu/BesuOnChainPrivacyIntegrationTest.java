@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.com.test.contract.HumanStandardToken;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -30,6 +29,7 @@ import org.web3j.protocol.besu.response.privacy.PrivacyGroup;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.test.contract.HumanStandardToken;
 import org.web3j.tx.BesuPrivateTransactionManager;
 import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;

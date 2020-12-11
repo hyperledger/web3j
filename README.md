@@ -149,11 +149,20 @@ To run a full build (excluding integration tests):
 $ ./gradlew check
 ```
 
-To run the integration tests:
+To run the integration tests, you will need to set up these variables in order to pull the Docker 
+images from the Docker Hub registry:
+
+- `registry.username`
+- `registry.password`
+
+Then run the following command:
 
 ``` {.sourceCode .bash}
-$ ./gradlew  -Pintegration-tests=true :integration-tests:test
+$ ./gradlew -Pintegration-tests=true :integration-tests:test
 ```
+
+Check the [Docker client API](https://github.com/docker-java/docker-java/blob/master/docs/getting_started.md#instantiating-a-dockerclientconfig)
+for more information on configuration options.
 
 Commercial support and training
 -------------------------------

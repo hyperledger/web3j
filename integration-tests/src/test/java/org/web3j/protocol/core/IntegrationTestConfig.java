@@ -14,11 +14,10 @@ package org.web3j.protocol.core;
 
 import java.math.BigInteger;
 
-import org.com.test.contract.Fibonacci;
-
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.test.contract.Fibonacci;
 import org.web3j.tx.gas.ContractGasProvider;
 
 /** Common values used by integration tests. */

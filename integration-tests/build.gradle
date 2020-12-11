@@ -32,8 +32,7 @@ test {
     enabled = project.hasProperty('integration-tests') ?
             project.getProperty('integration-tests') : false
     dependsOn project(':codegen').getTasksByName('test', false)
-
 }
 compileTestJava{
-    dependsOn project(':codegen').getTasksByName("build",false)
+    dependsOn project(':codegen').getTasksByName("testClasses",false)
 }

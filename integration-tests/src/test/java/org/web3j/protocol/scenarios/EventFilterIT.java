@@ -16,7 +16,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.com.test.contract.Fibonacci;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +33,7 @@ import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.test.contract.Fibonacci;
 import org.web3j.tx.gas.ContractGasProvider;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

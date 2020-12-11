@@ -5,12 +5,13 @@ dependencies {
             "com.squareup:kotlinpoet:$kotlinPoetVersion",
             "com.squareup:javapoet:$javaPoetVersion",
             "info.picocli:picocli:$picocliVersion"
-    testCompile project(':core').sourceSets.test.output
+    testCompile project(':core').sourceSets.test.output,
+            "ch.qos.logback:logback-core:$logbackVersion",
+            "ch.qos.logback:logback-classic:$logbackVersion"
     implementation("org.junit.platform:junit-platform-launcher:$junitPlatformLauncherVersion")
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation("org.junit.vintage:junit-vintage-engine:$junitVersion")
 }
-
 
 file("src/test/resources/solidity").listFiles().each { File file ->
     def contractFile = file.listFiles().find({
@@ -21,11 +22,17 @@ file("src/test/resources/solidity").listFiles().each { File file ->
         def generateTask = tasks.register("generate${contractName}Wrapper", JavaExec) {
             classpath = sourceSets.test.runtimeClasspath
             main = 'org.web3j.codegen.SolidityFunctionWrapperGenerator'
-            args 'generate',
-                    '--abiFile', "${contractFile.parent}/build/${contractName}.abi",
-                    '--binFile', "${contractFile.parent}/build/${contractName}.bin",
-                    '--outputDir', "build/resources/test/java",
-                    '--package', 'org.com.test.contract'
+            args = [
+                'generate',
+                '--abiFile',
+                "${contractFile.parent}/build/${contractName}.abi",
+                '--binFile',
+                "${contractFile.parent}/build/${contractName}.bin",
+                '--outputDir',
+                'build/resources/test/java',
+                '--package',
+                'org.web3j.test.contract'
+            ]
         }
         test.dependsOn generateTask
     }
