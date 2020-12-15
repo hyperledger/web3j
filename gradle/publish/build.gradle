@@ -31,7 +31,7 @@ publishing {
             artifact testsJar
 
             pom {
-                name = 'web3j'
+                name = project.name
                 description.set(project.provider({ project.description }))
                 url = 'https://web3j.io'
 
@@ -59,13 +59,7 @@ publishing {
                         name = 'Conor Svensson'
                         email = 'conor10@gmail.com'
                     }
-                    developer {
-                        id = 'antonydenyer'
-                        name = 'Antony Denyer'
-                        email = 'antony@web3labs.com'
-                    }
                 }
-
             }
         }
     }
@@ -84,7 +78,7 @@ nexusPublishing {
 nexusStaging {
     username System.getenv('OSSRH_USERNAME')
     password System.getenv('OSSRH_PASSWORD')
-    packageGroup = "org.web3j"
+    packageGroup = rootProject.group
 }
 
 
