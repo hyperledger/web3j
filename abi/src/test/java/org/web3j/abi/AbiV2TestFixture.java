@@ -16,10 +16,10 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.web3j.abi.datatypes.DynamicStruct;
-import org.web3j.abi.datatypes.StaticStruct;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.generated.StaticArray1;
+import org.web3j.abi.datatypes.generated.StaticArray2;
+import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 
 public class AbiV2TestFixture {
@@ -31,6 +31,20 @@ public class AbiV2TestFixture {
     public static final String FUNC_GETFOOBAR = "getFooBar";
 
     public static final String FUNC_GETFOOUINT = "getFooUint";
+
+    public static final String FUNC_GETFOOSTATICARRAY1 = "getFooStaticArray1";
+
+    public static final String FUNC_GETFOOSTATICARRAY2 = "getFooStaticArray2";
+
+    public static final String FUNC_GETFOOSTATICARRAY3 = "getFooStaticArray3";
+
+    public static final String FUNC_GETFOODYNAMICARRAY = "getFooDynamicArray";
+
+    public static final String FUNC_GETFOOMULTIPLESTATICARRAY = "getFooMultipleStaticArray";
+
+    public static final String FUNC_GETFOOMULTIPLEDYNAMICARRAY = "getFooMultipleDynamicArray";
+
+    public static final String FUNC_GETFOOMULTIPLEDYNAMICSTATICARRAY = "getFooMultipleDynamicStaticArray";
 
     public static final String FUNC_GETFUZZ = "getFuzz";
 
@@ -90,6 +104,55 @@ public class AbiV2TestFixture {
                     Arrays.<Type>asList(),
                     Arrays.<TypeReference<?>>asList(
                             new TypeReference<Foo>() {}, new TypeReference<Uint256>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getFooStaticArray1Function =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETFOOSTATICARRAY1,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<StaticArray1<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getFooStaticArray2Function =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETFOOSTATICARRAY2,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<StaticArray2<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getFooStaticArray3Function =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETFOOSTATICARRAY3,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<StaticArray3<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getFooDynamicArrayFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETFOODYNAMICARRAY,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<DynamicArray<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getFooMultipleStaticArrayFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETFOOMULTIPLESTATICARRAY,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<StaticArray3<Foo>>() {}, new TypeReference<StaticArray2<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getFooMultipleDynamicArrayFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETFOOMULTIPLEDYNAMICARRAY,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<DynamicArray<Foo>>() {}, new TypeReference<DynamicArray<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getFooMultipleDynamicStaticArrayFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETFOOMULTIPLEDYNAMICSTATICARRAY,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<StaticArray3<Foo>>() {}, new TypeReference<DynamicArray<Foo>>() {}));
 
     public static class Bar extends StaticStruct {
         public BigInteger id;
