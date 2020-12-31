@@ -63,6 +63,7 @@ import org.web3j.abi.datatypes.generated.Int80;
 import org.web3j.abi.datatypes.generated.Int88;
 import org.web3j.abi.datatypes.generated.Int96;
 import org.web3j.abi.datatypes.generated.StaticArray2;
+import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint104;
 import org.web3j.abi.datatypes.generated.Uint112;
 import org.web3j.abi.datatypes.generated.Uint120;
