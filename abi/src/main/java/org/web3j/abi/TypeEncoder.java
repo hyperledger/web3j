@@ -223,12 +223,29 @@ public class TypeEncoder {
         return result.toString();
     }
 
+    /**
+     * Encodes the array values offsets of the to be encrypted dynamic array, which are in our case
+     * the heads of the encryption. Refer to
+     *
+     * @see <a
+     *     href="https://docs.soliditylang.org/en/v0.5.3/abi-spec.html#formal-specification-of-the-encoding">encoding
+     *     formal specification</a>
+     *     <h2>Dynamic structs array encryption</h2>
+     *     <p>An array of dynamic structs (ie, structs containing dynamic datatypes) is encoded in
+     *     the following way: Considering X = [struct1, struct2] for example enc(X) = head(struct1)
+     *     head(struct2) tail(struct1) tail(struct2) with: - tail(struct1) = enc(struct1) -
+     *     tail(struct2) = enc(struct2) - head(struct1) = enc(len( head(struct1) head(struct2))) =
+     *     enc(64), because the heads are 256bits - head(struct2) = enc(len( head(struct1)
+     *     head(struct2) tail(struct1)))
+     */
     private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
         StringBuilder result = new StringBuilder();
         boolean arrayOfBytes =
                 !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicBytes;
         boolean arrayOfString =
                 !value.getValue().isEmpty() && value.getValue().get(0) instanceof Utf8String;
+        boolean arrayOfDynamicStructs =
+                !value.getValue().isEmpty() && value.getValue().get(0) instanceof DynamicStruct;
         if (arrayOfBytes || arrayOfString) {
             long offset = 0;
             for (int i = 0; i < value.getValue().size(); i++) {
@@ -242,6 +259,21 @@ public class TypeEncoder {
                     int numberOfWords = (bytesLength + MAX_BYTE_LENGTH - 1) / MAX_BYTE_LENGTH;
                     int totalBytesLength = numberOfWords * MAX_BYTE_LENGTH;
                     offset += totalBytesLength + MAX_BYTE_LENGTH;
+                }
+                result.append(
+                        Numeric.toHexStringNoPrefix(
+                                Numeric.toBytesPadded(
+                                        new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
+            }
+        } else if (arrayOfDynamicStructs) {
+            long offset = value.getValue().size();
+            List<String> tailsEncoding =
+                    value.getValue().stream().map(TypeEncoder::encode).collect(Collectors.toList());
+            for (int i = 0; i < value.getValue().size(); i++) {
+                if (i == 0) {
+                    offset = offset * MAX_BYTE_LENGTH;
+                } else {
+                    offset += tailsEncoding.get(i - 1).length() / 2;
                 }
                 result.append(
                         Numeric.toHexStringNoPrefix(
