@@ -12,6 +12,10 @@
  */
 package org.web3j.tx;
 
+/**
+ * Ethereum chain ids as per <a
+ * href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md">EIP-155</a>.
+ */
 public class ChainIdLong {
     public static final long NONE = -1;
     public static final long MAINNET = 1;
