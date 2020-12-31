@@ -363,7 +363,14 @@ public final class AbiTypes {
             case "bytes32":
                 return Bytes32.class;
             default:
-                throw new UnsupportedOperationException("Unsupported type encountered: " + type);
+                {
+                    try {
+                        return (Class<? extends Type>) Class.forName(type);
+                    } catch (ClassNotFoundException e) {
+                        throw new UnsupportedOperationException(
+                                "Unsupported type encountered: " + type);
+                    }
+                }
         }
     }
 
