@@ -39,7 +39,7 @@ public class FastRawTransactionManager extends RawTransactionManager {
             Web3j web3j,
             Credentials credentials,
             TransactionReceiptProcessor transactionReceiptProcessor) {
-        super(web3j, credentials, ChainId.NONE, transactionReceiptProcessor);
+        super(web3j, credentials, ChainIdLong.NONE, transactionReceiptProcessor);
     }
 
     public FastRawTransactionManager(

@@ -82,12 +82,12 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(Web3j web3j, Credentials credentials) {
-        this(web3j, credentials, ChainId.NONE);
+        this(web3j, credentials, ChainIdLong.NONE);
     }
 
     public RawTransactionManager(
             Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
-        this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
+        this(web3j, credentials, ChainIdLong.NONE, attempts, sleepDuration);
     }
 
     protected BigInteger getNonce() throws IOException {
@@ -173,7 +173,7 @@ public class RawTransactionManager extends TransactionManager {
 
         byte[] signedMessage;
 
-        if (chainId > ChainId.NONE) {
+        if (chainId > ChainIdLong.NONE) {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
