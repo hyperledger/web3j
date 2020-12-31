@@ -665,7 +665,7 @@ public class TypeDecoder {
                                         getSingleElementLength(input, currOffset, cls)
                                                 * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
                     T value;
-                     if (DynamicStruct.class.isAssignableFrom(cls)) {
+                    if (DynamicStruct.class.isAssignableFrom(cls)) {
                         value =
                                 TypeDecoder.decodeDynamicStruct(
                                         input,

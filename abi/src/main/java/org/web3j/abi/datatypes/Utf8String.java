@@ -25,9 +25,8 @@ public class Utf8String implements Type<String> {
     }
 
     /**
-     * Returns the Bytes32 Padded length.
-     * If the string is empty, we only encode its length.
-     * Else, we concatenate its length along of its value
+     * Returns the Bytes32 Padded length. If the string is empty, we only encode its length. Else,
+     * we concatenate its length along of its value
      */
     @Override
     public int bytes32PaddedLength() {

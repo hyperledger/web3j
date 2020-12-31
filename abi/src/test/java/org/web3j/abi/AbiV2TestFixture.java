@@ -120,16 +120,13 @@ public class AbiV2TestFixture {
 
     public static final org.web3j.abi.datatypes.Function getFooFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETFOO,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<Foo>() {}));
+                    FUNC_GETFOO, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Foo>() {}));
 
     public static final org.web3j.abi.datatypes.Function getFooUintFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOUINT,
                     Arrays.<Type>asList(),
-                    Arrays.asList(
-                            new TypeReference<Foo>() {}, new TypeReference<Uint256>() {}));
+                    Arrays.asList(new TypeReference<Foo>() {}, new TypeReference<Uint256>() {}));
 
     public static final org.web3j.abi.datatypes.Function getFooStaticArray1Function =
             new org.web3j.abi.datatypes.Function(
@@ -410,8 +407,7 @@ public class AbiV2TestFixture {
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFUZZFUZZ,
                     Arrays.<Type>asList(),
-                    Arrays.asList(
-                            new TypeReference<Fuzz>() {}, new TypeReference<Fuzz>() {}));
+                    Arrays.asList(new TypeReference<Fuzz>() {}, new TypeReference<Fuzz>() {}));
 
     public static class Nuu extends DynamicStruct {
         public Foo foo;
@@ -488,15 +484,11 @@ public class AbiV2TestFixture {
 
     public static final org.web3j.abi.datatypes.Function getNazFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETNAZ,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<Naz>() {}));
+                    FUNC_GETNAZ, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Naz>() {}));
 
     public static final org.web3j.abi.datatypes.Function getNarFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETNAR,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<Nar>() {}));
+                    FUNC_GETNAR, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Nar>() {}));
 
     public static class Wiz extends DynamicStruct {
         public Foo foo;
