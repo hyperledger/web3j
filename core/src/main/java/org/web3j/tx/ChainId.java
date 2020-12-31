@@ -15,6 +15,9 @@ package org.web3j.tx;
 /**
  * Ethereum chain ids as per <a
  * href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md">EIP-155</a>.
+ *
+ * @deprecated Use {@code ChainIdLong} instead.
+ * @see org.web3j.tx.ChainIdLong
  */
 @Deprecated
 public class ChainId {
