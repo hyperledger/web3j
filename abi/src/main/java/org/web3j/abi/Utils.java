@@ -62,6 +62,9 @@ public class Utils {
             return "string";
         } else if (type.equals(DynamicBytes.class)) {
             return "bytes";
+        } else if (DynamicStruct.class.isAssignableFrom(type)
+                || StaticStruct.class.isAssignableFrom(type)) {
+            return type.getName();
         } else {
             return simpleName;
         }
