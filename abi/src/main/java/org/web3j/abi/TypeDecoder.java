@@ -255,6 +255,7 @@ public class TypeDecoder {
         return (Type) cons.newInstance(constructorArg);
     }
 
+    @SuppressWarnings("unchecked")
     static <T extends Type> int getSingleElementLength(String input, int offset, Class<T> type) {
         if (input.length() == offset) {
             return 0;
@@ -358,6 +359,7 @@ public class TypeDecoder {
         return decodeStaticStructElement(input, offset, typeReference, function);
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Type> T decodeStaticStructElement(
             final String input,
             final int offset,
@@ -383,7 +385,6 @@ public class TypeDecoder {
                 T value;
                 final Class<T> declaredField = (Class<T>) constructor.getParameterTypes()[i];
 
-                System.out.println(currOffset);
                 if (StaticStruct.class.isAssignableFrom(declaredField)) {
                     final int nestedStructLength =
                             classType
@@ -416,6 +417,7 @@ public class TypeDecoder {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Type> T instantiateStruct(
             final TypeReference<T> typeReference, final List<T> parameters) {
         try {
@@ -469,6 +471,7 @@ public class TypeDecoder {
         return decodeDynamicStructElements(input, offset, typeReference, function);
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Type> T decodeDynamicStructElements(
             final String input,
             final int offset,

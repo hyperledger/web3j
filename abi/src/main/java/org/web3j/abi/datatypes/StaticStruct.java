@@ -20,6 +20,7 @@ public class StaticStruct extends StaticArray<Type> implements StructType {
 
     private final List<Class<Type>> itemTypes = new ArrayList<>();
 
+    @SuppressWarnings("unchecked")
     public StaticStruct(List<Type> values) {
         super(Type.class, values.size(), values);
         for (Type value : values) {

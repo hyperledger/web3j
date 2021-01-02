@@ -182,6 +182,7 @@ public class Utils {
      * @param classType
      * @return Flat list of all the fields nested in the struct
      */
+    @SuppressWarnings("unchecked")
     public static List<Field> staticStructsNestedFieldsFlatList(Class<Type> classType) {
         List<Field> canonicalFields =
                 Arrays.stream(classType.getDeclaredFields())
