@@ -49,7 +49,10 @@ public class TypeEncoder {
     static boolean isDynamic(Type parameter) {
         return parameter instanceof DynamicBytes
                 || parameter instanceof Utf8String
-                || parameter instanceof DynamicArray;
+                || parameter instanceof DynamicArray
+                || (parameter instanceof StaticArray
+                        && DynamicStruct.class.isAssignableFrom(
+                                ((StaticArray) parameter).getComponentType()));
     }
 
     @SuppressWarnings("unchecked")
@@ -67,7 +70,12 @@ public class TypeEncoder {
         } else if (parameter instanceof Utf8String) {
             return encodeString((Utf8String) parameter);
         } else if (parameter instanceof StaticArray) {
-            return encodeArrayValues((StaticArray) parameter);
+            if (DynamicStruct.class.isAssignableFrom(
+                    ((StaticArray) parameter).getComponentType())) {
+                return encodeStaticArrayWithDynamicStruct((StaticArray) parameter);
+            } else {
+                return encodeArrayValues((StaticArray) parameter);
+            }
         } else if (parameter instanceof DynamicStruct) {
             return encodeDynamicStruct((DynamicStruct) parameter);
         } else if (parameter instanceof DynamicArray) {
@@ -78,6 +86,26 @@ public class TypeEncoder {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
         }
+    }
+
+    /**
+     * Encodes a static array containing a dynamic struct type. In this case, the array items are
+     * decoded as dynamic values and have their offsets at the beginning of the encoding. Example:
+     * For the following static array containing three elements: <code>StaticArray3</code>
+     * enc([struct1, struct2, struct2]) = offset(enc(struct1)) offset(enc(struct2))
+     * offset(enc(struct3)) enc(struct1) enc(struct2) enc(struct3)
+     *
+     * @param
+     * @return
+     */
+    private static <T extends Type> String encodeStaticArrayWithDynamicStruct(Array<T> value) {
+        String valuesOffsets = encodeStructsArraysOffsets(value);
+        String encodedValues = encodeArrayValues(value);
+
+        StringBuilder result = new StringBuilder();
+        result.append(valuesOffsets);
+        result.append(encodedValues);
+        return result.toString();
     }
 
     static String encodeAddress(Address address) {
@@ -267,20 +295,34 @@ public class TypeEncoder {
                                         new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
             }
         } else if (arrayOfDynamicStructs) {
-            long offset = value.getValue().size();
-            List<String> tailsEncoding =
-                    value.getValue().stream().map(TypeEncoder::encode).collect(Collectors.toList());
-            for (int i = 0; i < value.getValue().size(); i++) {
-                if (i == 0) {
-                    offset = offset * MAX_BYTE_LENGTH;
-                } else {
-                    offset += tailsEncoding.get(i - 1).length() / 2;
-                }
-                result.append(
-                        Numeric.toHexStringNoPrefix(
-                                Numeric.toBytesPadded(
-                                        new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
+            result.append(encodeStructsArraysOffsets(value));
+        }
+        return result.toString();
+    }
+
+    /**
+     * Encodes arrays of structs elements offsets. To be used when encoding a dynamic array or a
+     * static array containing dynamic structs,
+     *
+     * @param value
+     * @param <T>
+     * @return
+     */
+    private static <T extends Type> String encodeStructsArraysOffsets(Array<T> value) {
+        StringBuilder result = new StringBuilder();
+        long offset = value.getValue().size();
+        List<String> tailsEncoding =
+                value.getValue().stream().map(TypeEncoder::encode).collect(Collectors.toList());
+        for (int i = 0; i < value.getValue().size(); i++) {
+            if (i == 0) {
+                offset = offset * MAX_BYTE_LENGTH;
+            } else {
+                offset += tailsEncoding.get(i - 1).length() / 2;
             }
+            result.append(
+                    Numeric.toHexStringNoPrefix(
+                            Numeric.toBytesPadded(
+                                    new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
         }
         return result.toString();
     }
