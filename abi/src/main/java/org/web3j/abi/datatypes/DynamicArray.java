@@ -21,13 +21,23 @@ public class DynamicArray<T extends Type> extends Array<T> {
     @SafeVarargs
     @SuppressWarnings({"unchecked"})
     public DynamicArray(T... values) {
-        super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
+        super(
+                (StaticStruct.class.isAssignableFrom(values[0].getClass())
+                                || DynamicStruct.class.isAssignableFrom(values[0].getClass()))
+                        ? (Class<T>) values[0].getClass()
+                        : (Class<T>) AbiTypes.getType(values[0].getTypeAsString()),
+                values);
     }
 
     @Deprecated
     @SuppressWarnings("unchecked")
     public DynamicArray(List<T> values) {
-        super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+        super(
+                (StaticStruct.class.isAssignableFrom(values.get(0).getClass())
+                                || DynamicStruct.class.isAssignableFrom(values.get(0).getClass()))
+                        ? (Class<T>) values.get(0).getClass()
+                        : (Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()),
+                values);
     }
 
     @Deprecated

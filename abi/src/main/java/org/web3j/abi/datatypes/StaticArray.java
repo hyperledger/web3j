@@ -45,7 +45,12 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
     @Deprecated
     @SuppressWarnings("unchecked")
     public StaticArray(int expectedSize, List<T> values) {
-        super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+        super(
+                (StaticStruct.class.isAssignableFrom(values.get(0).getClass())
+                                || DynamicStruct.class.isAssignableFrom(values.get(0).getClass()))
+                        ? (Class<T>) values.get(0).getClass()
+                        : (Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()),
+                values);
         checkValid(expectedSize);
     }
 

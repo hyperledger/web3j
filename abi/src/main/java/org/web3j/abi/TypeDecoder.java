@@ -631,16 +631,7 @@ public class TypeDecoder {
             Class<? extends StaticArray> arrayClass =
                     (Class<? extends StaticArray>)
                             Class.forName("org.web3j.abi.datatypes.generated.StaticArray" + length);
-
-            if (StaticStruct.class.isAssignableFrom(elements.get(0).getClass())
-                    || DynamicStruct.class.isAssignableFrom(elements.get(0).getClass())) {
-                return (T)
-                        arrayClass
-                                .getConstructor(Class.class, List.class)
-                                .newInstance(elements.get(0).getClass(), elements);
-            } else {
-                return (T) arrayClass.getConstructor(List.class).newInstance(elements);
-            }
+            return (T) arrayClass.getConstructor(List.class).newInstance(elements);
         } catch (ReflectiveOperationException e) {
             throw new UnsupportedOperationException(e);
         }
