@@ -116,7 +116,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                             TypeDecoder.decodeStaticStruct(
                                     input, hexStringDataOffset, typeReference);
                     offset +=
-                            staticStructCanonicalFieldsCount(classType)
+                            Utils.staticStructCanonicalFieldsCount(classType)
                                     * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 } else if (StaticArray.class.isAssignableFrom(classType)) {
                     int length =
@@ -127,12 +127,12 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                     result =
                             TypeDecoder.decodeStaticArray(
                                     input, hexStringDataOffset, typeReference, length);
-                    if (isParametrizedTypeStruct(typeReference) && offset == 0) {
+                    if (Utils.isParametrizedTypeStaticArray(typeReference) && offset == 0) {
                         offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
-                    } else if (isParametrizedTypeStruct(typeReference)) {
+                    } else if (Utils.isParametrizedTypeStaticArray(typeReference)) {
                         offset +=
                                 (int)
-                                                staticStructCanonicalFieldsCount(
+                                                Utils.staticStructCanonicalFieldsCount(
                                                         Utils.getParameterizedTypeFromArray(
                                                                 typeReference))
                                         * length
@@ -151,44 +151,6 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
             }
         }
         return results;
-    }
-
-    /**
-     * Returns number of canonical fields in a static struct. Example: struct Baz { Struct Bar { int
-     * a, int b }, int c } will return three fields count.
-     *
-     * @param classType
-     * @return
-     */
-    public static long staticStructCanonicalFieldsCount(Class<Type> classType) {
-        return staticStructsNestedFieldsFlatList(classType).stream()
-                .filter(field -> Modifier.isPublic(field.getModifiers()))
-                .count();
-    }
-
-    /**
-     * Goes over a static structs and enumerates all of its fields and nested structs fields
-     * recursively.
-     *
-     * @param classType
-     * @return Flat list of all the fields nested in the struct
-     */
-    private static List<Field> staticStructsNestedFieldsFlatList(Class<Type> classType) {
-        List<Field> canonicalFields =
-                Arrays.stream(classType.getDeclaredFields())
-                        .filter(field -> !StaticStruct.class.isAssignableFrom(field.getType()))
-                        .collect(Collectors.toList());
-        List<Field> nestedFields =
-                Arrays.stream(classType.getDeclaredFields())
-                        .filter(field -> StaticStruct.class.isAssignableFrom(field.getType()))
-                        .map(
-                                field ->
-                                        staticStructsNestedFieldsFlatList(
-                                                (Class<Type>) field.getType()))
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList());
-        return Stream.concat(canonicalFields.stream(), nestedFields.stream())
-                .collect(Collectors.toList());
     }
 
     public static <T extends Type> int getDataOffset(
@@ -224,24 +186,6 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                             || (StaticStruct.class.isAssignableFrom(
                                             Utils.getParameterizedTypeFromArray(typeReference))
                                     && offset == 0));
-        } catch (ClassCastException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Checks if the parametrized type is a static struct.
-     *
-     * @param typeReference
-     * @return True if parametrized type is a struct
-     * @throws ClassNotFoundException
-     */
-    private static boolean isParametrizedTypeStruct(TypeReference<?> typeReference)
-            throws ClassNotFoundException {
-        @SuppressWarnings("unchecked")
-        Class<Type> type = (Class<Type>) typeReference.getClassType();
-        try {
-            return StaticArray.class.isAssignableFrom(type);
         } catch (ClassCastException e) {
             return false;
         }

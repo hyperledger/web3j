@@ -51,8 +51,8 @@ import org.web3j.abi.datatypes.primitive.Float;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.DefaultFunctionReturnDecoder.getDataOffset;
-import static org.web3j.abi.DefaultFunctionReturnDecoder.staticStructCanonicalFieldsCount;
 import static org.web3j.abi.TypeReference.makeTypeReference;
+import static org.web3j.abi.Utils.staticStructCanonicalFieldsCount;
 
 /**
  * Ethereum Contract Application Binary Interface (ABI) decoding for types. Decoding is not

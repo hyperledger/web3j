@@ -13,11 +13,16 @@
 package org.web3j.abi;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -156,5 +161,61 @@ public class Utils {
             }
         }
         return result;
+    }
+
+    /**
+     * Returns number of canonical fields in a static struct. Example: struct Baz { Struct Bar { int
+     * a, int b }, int c } will return three fields count.
+     *
+     * @param classType
+     * @return
+     */
+    public static long staticStructCanonicalFieldsCount(Class<Type> classType) {
+        return staticStructsNestedFieldsFlatList(classType).stream()
+                .filter(field -> Modifier.isPublic(field.getModifiers()))
+                .count();
+    }
+
+    /**
+     * Goes over a static structs and enumerates all of its fields and nested structs fields
+     * recursively.
+     *
+     * @param classType
+     * @return Flat list of all the fields nested in the struct
+     */
+    public static List<Field> staticStructsNestedFieldsFlatList(Class<Type> classType) {
+        List<Field> canonicalFields =
+                Arrays.stream(classType.getDeclaredFields())
+                        .filter(field -> !StaticStruct.class.isAssignableFrom(field.getType()))
+                        .collect(Collectors.toList());
+        List<Field> nestedFields =
+                Arrays.stream(classType.getDeclaredFields())
+                        .filter(field -> StaticStruct.class.isAssignableFrom(field.getType()))
+                        .map(
+                                field ->
+                                        staticStructsNestedFieldsFlatList(
+                                                (Class<Type>) field.getType()))
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList());
+        return Stream.concat(canonicalFields.stream(), nestedFields.stream())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Checks if the parametrized type is a static array.
+     *
+     * @param typeReference
+     * @return True if parametrized type is a static array
+     * @throws ClassNotFoundException
+     */
+    public static boolean isParametrizedTypeStaticArray(TypeReference<?> typeReference)
+            throws ClassNotFoundException {
+        @SuppressWarnings("unchecked")
+        Class<Type> type = (Class<Type>) typeReference.getClassType();
+        try {
+            return StaticArray.class.isAssignableFrom(type);
+        } catch (ClassCastException e) {
+            return false;
+        }
     }
 }
