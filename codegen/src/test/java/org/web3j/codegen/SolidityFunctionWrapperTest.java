@@ -173,7 +173,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        Arrays.asList(new NamedType("param", "uint8")),
                         "functionName",
                         Collections.emptyList(),
                         "type",
@@ -198,9 +198,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        Arrays.asList(new NamedType("param", "uint8")),
                         "functionName",
-                        Arrays.asList(new AbiDefinition.NamedType("result", "uint8")),
+                        Arrays.asList(new NamedType("result", "uint8")),
                         "type",
                         false);
 
@@ -217,7 +217,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        Arrays.asList(new NamedType("param", "uint8")),
                         "functionName",
                         Collections.emptyList(),
                         "type",
@@ -242,9 +242,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        Arrays.asList(new NamedType("param", "uint8")),
                         "functionName",
-                        Arrays.asList(new AbiDefinition.NamedType("result", "int8")),
+                        Arrays.asList(new NamedType("result", "int8")),
                         "type",
                         false);
 
@@ -266,9 +266,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        Arrays.asList(new NamedType("param", "uint8")),
                         "functionName",
-                        Arrays.asList(new AbiDefinition.NamedType("result", "address[]")),
+                        Arrays.asList(new NamedType("result", "address[]")),
                         "type",
                         false);
 
@@ -298,9 +298,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8[]")),
+                        Arrays.asList(new NamedType("param", "uint8[]")),
                         "functionName",
-                        Arrays.asList(new AbiDefinition.NamedType("result", "address[]")),
+                        Arrays.asList(new NamedType("result", "address[]")),
                         "type",
                         false);
 
@@ -332,9 +332,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8[][]")),
+                        Arrays.asList(new NamedType("param", "uint8[][]")),
                         "functionName",
-                        Arrays.asList(new AbiDefinition.NamedType("result", "address[]")),
+                        Arrays.asList(new NamedType("result", "address[]")),
                         "type",
                         false);
 
@@ -598,7 +598,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         true,
-                        Collections.singletonList(new AbiDefinition.NamedType("param", "uint8")),
+                        Collections.singletonList(new NamedType("param", "uint8")),
                         "functionName",
                         Collections.emptyList(),
                         "type",
@@ -615,12 +615,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 new AbiDefinition(
                         true,
                         Arrays.asList(
-                                new AbiDefinition.NamedType("param1", "uint8"),
-                                new AbiDefinition.NamedType("param2", "uint32")),
+                                new NamedType("param1", "uint8"),
+                                new NamedType("param2", "uint32")),
                         "functionName",
                         Arrays.asList(
-                                new AbiDefinition.NamedType("result1", "int8"),
-                                new AbiDefinition.NamedType("result2", "int32")),
+                                new NamedType("result1", "int8"),
+                                new NamedType("result2", "int32")),
                         "type",
                         false);
 
@@ -650,11 +650,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     @Test
     public void testBuildEventConstantMultipleValueReturn() throws Exception {
 
-        AbiDefinition.NamedType id = new AbiDefinition.NamedType("id", "string", true);
-        AbiDefinition.NamedType fromAddress = new AbiDefinition.NamedType("from", "address");
-        AbiDefinition.NamedType toAddress = new AbiDefinition.NamedType("to", "address");
-        AbiDefinition.NamedType value = new AbiDefinition.NamedType("value", "uint256");
-        AbiDefinition.NamedType message = new AbiDefinition.NamedType("message", "string");
+        NamedType id = new NamedType("id", "string", true);
+        NamedType fromAddress = new NamedType("from", "address");
+        NamedType toAddress = new NamedType("to", "address");
+        NamedType value = new NamedType("value", "uint256");
+        NamedType message = new NamedType("message", "string");
         fromAddress.setIndexed(true);
         toAddress.setIndexed(true);
 
@@ -735,7 +735,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
-                        Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                        Arrays.asList(new NamedType("param", "uint8")),
                         "functionName",
                         Collections.emptyList(),
                         "function",
