@@ -67,6 +67,12 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
     @Override
     public String getTypeAsString() {
-        return AbiTypes.getTypeAString(getComponentType()) + "[]";
+        String type;
+        if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
+            type = value.get(0).getTypeAsString();
+        } else {
+            type = AbiTypes.getTypeAString(getComponentType());
+        }
+        return type + "[]";
     }
 }

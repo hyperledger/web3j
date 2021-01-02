@@ -81,7 +81,13 @@ public abstract class StaticArray<T extends Type> extends Array<T> {
 
     @Override
     public String getTypeAsString() {
-        return AbiTypes.getTypeAString(getComponentType()) + "[" + value.size() + "]";
+        String type;
+        if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
+            type = value.get(0).getTypeAsString();
+        } else {
+            type = AbiTypes.getTypeAString(getComponentType());
+        }
+        return type + "[" + value.size() + "]";
     }
 
     private void checkValid(int expectedSize) {
