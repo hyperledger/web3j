@@ -26,11 +26,11 @@ import java.util.stream.Stream;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Fixed;
 import org.web3j.abi.datatypes.Int;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.StaticStruct;
+import org.web3j.abi.datatypes.StructType;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
@@ -69,8 +69,7 @@ public class Utils {
             return "string";
         } else if (type.equals(DynamicBytes.class)) {
             return "bytes";
-        } else if (DynamicStruct.class.isAssignableFrom(type)
-                || StaticStruct.class.isAssignableFrom(type)) {
+        } else if (StructType.class.isAssignableFrom(type)) {
             return type.getName();
         } else {
             return simpleName;

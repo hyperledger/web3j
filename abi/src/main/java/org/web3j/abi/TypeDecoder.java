@@ -41,6 +41,7 @@ import org.web3j.abi.datatypes.IntType;
 import org.web3j.abi.datatypes.NumericType;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.StaticStruct;
+import org.web3j.abi.datatypes.StructType;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
@@ -646,8 +647,7 @@ public class TypeDecoder {
 
         try {
             Class<T> cls = Utils.getParameterizedTypeFromArray(typeReference);
-            if (StaticStruct.class.isAssignableFrom(cls)
-                    || DynamicStruct.class.isAssignableFrom(cls)) {
+            if (StructType.class.isAssignableFrom(cls)) {
                 List<T> elements = new ArrayList<>(length);
                 for (int i = 0, currOffset = offset;
                         i < length;

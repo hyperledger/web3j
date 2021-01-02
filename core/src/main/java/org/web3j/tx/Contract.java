@@ -29,10 +29,9 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.StaticStruct;
+import org.web3j.abi.datatypes.StructType;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
 import org.web3j.ens.EnsResolver;
@@ -803,8 +802,7 @@ public abstract class Contract extends ManagedTransaction {
     protected static <S extends Type, T> List<T> convertToNative(List<S> arr) {
         List<T> out = new ArrayList<>();
         for (final S s : arr) {
-            if ((StaticStruct.class.isAssignableFrom(s.getClass())
-                    || DynamicStruct.class.isAssignableFrom(s.getClass()))) {
+            if (StructType.class.isAssignableFrom(s.getClass())) {
                 out.add((T) s);
             } else {
                 out.add((T) s.getValue());
