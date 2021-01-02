@@ -143,6 +143,7 @@ public final class AbiTypes {
      * @param primitives Use Java primitive types to wrap contract parameters.
      * @return The web3j Java class to represent this Solidity type.
      */
+    @SuppressWarnings("unchecked")
     public static Class<? extends Type> getType(String type, boolean primitives) {
         switch (type) {
             case "address":
