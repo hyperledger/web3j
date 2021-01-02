@@ -41,6 +41,7 @@ import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -359,6 +360,237 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "}\n";
 
         assertEquals(methodSpec.toString(), (expected));
+    }
+
+    @Test
+    public void testBuildFunctionStructArrayParameterAndReturn() throws Exception {
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(
+                                new NamedType(
+                                        "a",
+                                        "tuple[3]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "nuu",
+                                                        "tuple",
+                                                        Arrays.asList(
+                                                                new NamedType(
+                                                                        "foo",
+                                                                        "tuple",
+                                                                        Arrays.asList(
+                                                                                new NamedType(
+                                                                                        "id",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false),
+                                                                                new NamedType(
+                                                                                        "name",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false)),
+                                                                        "struct ComplexStorage.Foo",
+                                                                        false)),
+                                                        "struct ComplexStorage.Nuu",
+                                                        false)),
+                                        "struct ComplexStorage.Nar[3]",
+                                        false),
+                                new NamedType(
+                                        "b",
+                                        "tuple[3]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "id", "uint256", null, "uint256", false),
+                                                new NamedType(
+                                                        "data", "uint256", null, "uint256", false)),
+                                        "struct ComplexStorage.Bar[3]",
+                                        false),
+                                new NamedType(
+                                        "c",
+                                        "tuple[]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "id", "string", null, "string", false),
+                                                new NamedType(
+                                                        "name", "string", null, "string", false)),
+                                        "struct ComplexStorage.Foo[]",
+                                        false),
+                                new NamedType(
+                                        "d",
+                                        "tuple[]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "nuu",
+                                                        "tuple",
+                                                        Arrays.asList(
+                                                                new NamedType(
+                                                                        "foo",
+                                                                        "tuple",
+                                                                        Arrays.asList(
+                                                                                new NamedType(
+                                                                                        "id",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false),
+                                                                                new NamedType(
+                                                                                        "name",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false)),
+                                                                        "struct ComplexStorage.Foo",
+                                                                        false)),
+                                                        "struct ComplexStorage.Nuu",
+                                                        false)),
+                                        "struct ComplexStorage.Nar[]",
+                                        false),
+                                new NamedType(
+                                        "e",
+                                        "tuple[3]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "id", "string", null, "string", false),
+                                                new NamedType(
+                                                        "name", "string", null, "string", false)),
+                                        "struct ComplexStorage.Foo[3]",
+                                        false)),
+                        "idNarBarFooArrays",
+                        Arrays.asList(
+                                new NamedType(
+                                        "",
+                                        "tuple[3]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "nuu",
+                                                        "tuple",
+                                                        Arrays.asList(
+                                                                new NamedType(
+                                                                        "foo",
+                                                                        "tuple",
+                                                                        Arrays.asList(
+                                                                                new NamedType(
+                                                                                        "id",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false),
+                                                                                new NamedType(
+                                                                                        "name",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false)),
+                                                                        "struct ComplexStorage.Foo",
+                                                                        false)),
+                                                        "struct ComplexStorage.Nuu",
+                                                        false)),
+                                        "struct ComplexStorage.Nar[3]",
+                                        false),
+                                new NamedType(
+                                        "",
+                                        "tuple[3]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "id", "uint256", null, "uint256", false),
+                                                new NamedType(
+                                                        "data", "uint256", null, "uint256", false)),
+                                        "struct ComplexStorage.Bar[3]",
+                                        false),
+                                new NamedType(
+                                        "",
+                                        "tuple[]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "id", "string", null, "string", false),
+                                                new NamedType(
+                                                        "name", "string", null, "string", false)),
+                                        "struct ComplexStorage.Foo[]",
+                                        false),
+                                new NamedType(
+                                        "",
+                                        "tuple[]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "nuu",
+                                                        "tuple",
+                                                        Arrays.asList(
+                                                                new NamedType(
+                                                                        "foo",
+                                                                        "tuple",
+                                                                        Arrays.asList(
+                                                                                new NamedType(
+                                                                                        "id",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false),
+                                                                                new NamedType(
+                                                                                        "name",
+                                                                                        "string",
+                                                                                        null,
+                                                                                        "string",
+                                                                                        false)),
+                                                                        "struct ComplexStorage.Foo",
+                                                                        false)),
+                                                        "struct ComplexStorage.Nuu",
+                                                        false)),
+                                        "struct ComplexStorage.Nar[]",
+                                        false),
+                                new NamedType(
+                                        "",
+                                        "tuple[3]",
+                                        Arrays.asList(
+                                                new NamedType(
+                                                        "id", "string", null, "string", false),
+                                                new NamedType(
+                                                        "name", "string", null, "string", false)),
+                                        "struct ComplexStorage.Foo[3]",
+                                        false)),
+                        "function",
+                        false,
+                        "pure");
+
+        MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
+
+        String expected =
+                "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.tuples.generated.Tuple5<java.util.List<Nar>, java.util.List<Bar>, java.util.List<Foo>, java.util.List<Nar>, java.util.List<Foo>>> idNarBarFooArrays(java.util.List<Nar> a, java.util.List<Bar> b, java.util.List<Foo> c, java.util.List<Nar> d, java.util.List<Foo> e) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_IDNARBARFOOARRAYS, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.StaticArray3<Nar>(\n"
+                        + "              Nar.class,\n"
+                        + "              org.web3j.abi.Utils.typeMap(a, Nar.class)), \n"
+                        + "      new org.web3j.abi.datatypes.generated.StaticArray3<Bar>(\n"
+                        + "              Bar.class,\n"
+                        + "              org.web3j.abi.Utils.typeMap(b, Bar.class)), \n"
+                        + "      new org.web3j.abi.datatypes.DynamicArray<Foo>(\n"
+                        + "              Foo.class,\n"
+                        + "              org.web3j.abi.Utils.typeMap(c, Foo.class)), \n"
+                        + "      new org.web3j.abi.datatypes.DynamicArray<Nar>(\n"
+                        + "              Nar.class,\n"
+                        + "              org.web3j.abi.Utils.typeMap(d, Nar.class)), \n"
+                        + "      new org.web3j.abi.datatypes.generated.StaticArray3<Foo>(\n"
+                        + "              Foo.class,\n"
+                        + "              org.web3j.abi.Utils.typeMap(e, Foo.class))), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.StaticArray3<Nar>>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.StaticArray3<Bar>>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<Foo>>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicArray<Nar>>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.StaticArray3<Foo>>() {}));\n"
+                        + "  return new org.web3j.protocol.core.RemoteFunctionCall<org.web3j.tuples.generated.Tuple5<java.util.List<Nar>, java.util.List<Bar>, java.util.List<Foo>, java.util.List<Nar>, java.util.List<Foo>>>(function,\n"
+                        + "      new java.util.concurrent.Callable<org.web3j.tuples.generated.Tuple5<java.util.List<Nar>, java.util.List<Bar>, java.util.List<Foo>, java.util.List<Nar>, java.util.List<Foo>>>() {\n"
+                        + "        @java.lang.Override\n"
+                        + "        public org.web3j.tuples.generated.Tuple5<java.util.List<Nar>, java.util.List<Bar>, java.util.List<Foo>, java.util.List<Nar>, java.util.List<Foo>> call() throws java.lang.Exception {\n"
+                        + "          java.util.List<org.web3j.abi.datatypes.Type> results = executeCallMultipleValueReturn(function);\n"
+                        + "          return new org.web3j.tuples.generated.Tuple5<java.util.List<Nar>, java.util.List<Bar>, java.util.List<Foo>, java.util.List<Nar>, java.util.List<Foo>>(\n"
+                        + "              convertToNative((java.util.List<Nar>) results.get(0).getValue()), \n"
+                        + "              convertToNative((java.util.List<Bar>) results.get(1).getValue()), \n"
+                        + "              convertToNative((java.util.List<Foo>) results.get(2).getValue()), \n"
+                        + "              convertToNative((java.util.List<Nar>) results.get(3).getValue()), \n"
+                        + "              convertToNative((java.util.List<Foo>) results.get(4).getValue()));\n"
+                        + "        }\n"
+                        + "      });\n"
+                        + "}\n";
+
+        assertEquals(expected, methodSpec.toString());
     }
 
     @Test
