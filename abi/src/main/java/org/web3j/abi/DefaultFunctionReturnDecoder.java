@@ -31,6 +31,7 @@ import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+import static org.web3j.abi.Utils.getParameterizedTypeFromArray;
 
 /**
  * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
@@ -127,7 +128,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                         offset +=
                                 (int)
                                                 Utils.staticStructCanonicalFieldsCount(
-                                                        Utils.getParameterizedTypeFromArray(
+                                                        getParameterizedTypeFromArray(
                                                                 typeReference))
                                         * length
                                         * MAX_BYTE_LENGTH_FOR_HEX_STRING;
@@ -176,9 +177,9 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
         try {
             return StaticArray.class.isAssignableFrom(type)
                     && (DynamicStruct.class.isAssignableFrom(
-                                    Utils.getParameterizedTypeFromArray(typeReference))
+                                    getParameterizedTypeFromArray(typeReference))
                             || (StaticStruct.class.isAssignableFrom(
-                                            Utils.getParameterizedTypeFromArray(typeReference))
+                                            getParameterizedTypeFromArray(typeReference))
                                     && offset == 0));
         } catch (ClassCastException e) {
             return false;

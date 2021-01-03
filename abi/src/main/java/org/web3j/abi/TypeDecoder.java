@@ -53,6 +53,7 @@ import org.web3j.utils.Numeric;
 
 import static org.web3j.abi.DefaultFunctionReturnDecoder.getDataOffset;
 import static org.web3j.abi.TypeReference.makeTypeReference;
+import static org.web3j.abi.Utils.getSimpleTypeName;
 import static org.web3j.abi.Utils.staticStructCanonicalFieldsCount;
 
 /**
@@ -407,7 +408,7 @@ public class TypeDecoder {
                 elements.add(value);
             }
 
-            String typeName = Utils.getSimpleTypeName(classType);
+            String typeName = getSimpleTypeName(classType);
 
             return consumer.apply(elements, typeName);
         } catch (ClassNotFoundException e) {
@@ -550,7 +551,7 @@ public class TypeDecoder {
                 }
             }
 
-            String typeName = Utils.getSimpleTypeName(classType);
+            String typeName = getSimpleTypeName(classType);
 
             final List<T> elements = new ArrayList<>();
             for (int i = 0; i < length; ++i) {
@@ -673,7 +674,7 @@ public class TypeDecoder {
                     elements.add(value);
                 }
 
-                String typeName = Utils.getSimpleTypeName(cls);
+                String typeName = getSimpleTypeName(cls);
 
                 return consumer.apply(elements, typeName);
             } else if (Array.class.isAssignableFrom(cls)) {
@@ -693,7 +694,7 @@ public class TypeDecoder {
                     elements.add(value);
                 }
 
-                String typeName = Utils.getSimpleTypeName(cls);
+                String typeName = getSimpleTypeName(cls);
 
                 return consumer.apply(elements, typeName);
             }
