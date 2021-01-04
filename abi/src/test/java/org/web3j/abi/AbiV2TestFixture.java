@@ -16,7 +16,13 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.StaticStruct;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.StaticArray1;
 import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
