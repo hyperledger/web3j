@@ -31,6 +31,7 @@ import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
+import static org.web3j.abi.TypeDecoder.isDynamic;
 import static org.web3j.abi.Utils.getParameterizedTypeFromArray;
 
 /**
@@ -156,7 +157,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
         if (DynamicBytes.class.isAssignableFrom(type)
                 || Utf8String.class.isAssignableFrom(type)
                 || DynamicArray.class.isAssignableFrom(type)
-                || hasStructOffsetInStaticArray(typeReference, offset)) {
+                || hasDynamicOffsetInStaticArray(typeReference, offset)) {
             return TypeDecoder.decodeUintAsInt(input, offset) << 1;
         } else {
             return offset;
@@ -170,7 +171,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
      * @return
      * @throws ClassNotFoundException
      */
-    private static boolean hasStructOffsetInStaticArray(TypeReference<?> typeReference, int offset)
+    private static boolean hasDynamicOffsetInStaticArray(TypeReference<?> typeReference, int offset)
             throws ClassNotFoundException {
         @SuppressWarnings("unchecked")
         Class<Type> type = (Class<Type>) typeReference.getClassType();
@@ -180,7 +181,8 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                                     getParameterizedTypeFromArray(typeReference))
                             || (StaticStruct.class.isAssignableFrom(
                                             getParameterizedTypeFromArray(typeReference))
-                                    && offset == 0));
+                                    && offset == 0)
+                            || isDynamic(getParameterizedTypeFromArray(typeReference)));
         } catch (ClassCastException e) {
             return false;
         }

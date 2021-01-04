@@ -683,14 +683,19 @@ public class TypeDecoder {
                                 + "http://solidity.readthedocs.io/en/develop/types.html#members");
             } else {
                 List<T> elements = new ArrayList<>(length);
-
-                for (int i = 0, currOffset = offset;
-                        i < length;
-                        i++,
-                                currOffset +=
-                                        getSingleElementLength(input, currOffset, cls)
-                                                * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
-                    T value = decode(input, currOffset, cls);
+                int currOffset = offset;
+                for (int i = 0; i < length; i++) {
+                    T value;
+                    if (isDynamic(cls)) {
+                        int hexStringDataOffset = getDataOffset(input, currOffset, typeReference);
+                        value = decode(input, offset + hexStringDataOffset, cls);
+                        currOffset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                    } else {
+                        value = decode(input, currOffset, cls);
+                        currOffset +=
+                                getSingleElementLength(input, currOffset, cls)
+                                        * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                    }
                     elements.add(value);
                 }
 
