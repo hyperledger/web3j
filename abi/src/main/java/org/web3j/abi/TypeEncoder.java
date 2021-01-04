@@ -229,7 +229,7 @@ public class TypeEncoder {
                                         MAX_BYTE_LENGTH)));
                 String encodedValue = encode(type);
                 dynamicValues.add(encodedValue);
-                dynamicOffset += encodedValue.length() / 2;
+                dynamicOffset += encodedValue.length() >> 1;
             } else {
                 offsetsAndStaticValues.add(encode(value.getValue().get(i)));
             }

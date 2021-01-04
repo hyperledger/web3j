@@ -1488,4 +1488,19 @@ public class TypeEncoderTest {
                 UnsupportedOperationException.class,
                 () -> encode(new org.web3j.abi.datatypes.primitive.Double(0)));
     }
+
+    @Test
+    public void testStructContainingDynamicBytes() {
+        String expectedEncoding =
+                "0000000000000000000000000000000000000000000000000000000000000060"
+                        + "0000000000000000000000000000000000000000000000000000000000000000"
+                        + "00000000000000000000000000000000000000000000000000000000000000a0"
+                        + "0000000000000000000000000000000000000000000000000000000000000007"
+                        + "64796e616d696300000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000005"
+                        + "4279746573000000000000000000000000000000000000000000000000000000";
+        assertEquals(
+                expectedEncoding,
+                encode(AbiV2TestFixture.addDynamicBytesArrayFunction.getInputParameters().get(0)));
+    }
 }

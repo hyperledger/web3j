@@ -21,6 +21,7 @@ import org.web3j.abi.datatypes.generated.StaticArray1;
 import org.web3j.abi.datatypes.generated.StaticArray2;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint32;
 
 public class AbiV2TestFixture {
 
@@ -93,6 +94,8 @@ public class AbiV2TestFixture {
     public static final String FUNC_SETNUU = "setNuu";
 
     public static final String FUNC_SETWIZ = "setWiz";
+
+    public static final String FUNC_addDynamicBytesArray = "addDynamicBytesArray";
 
     public static class Foo extends DynamicStruct {
         public String id;
@@ -562,4 +565,37 @@ public class AbiV2TestFixture {
                     FUNC_SETWIZ,
                     Arrays.<Type>asList(new Wiz(new Foo("id", "name"), "data")),
                     Collections.emptyList());
+
+    public static class BytesStruct extends DynamicStruct {
+        public byte[] pubkey;
+
+        public BigInteger something;
+
+        public byte[] metadata;
+
+        public BytesStruct(byte[] pubkey, BigInteger something, byte[] metadata) {
+            super(
+                    new org.web3j.abi.datatypes.DynamicBytes(pubkey),
+                    new org.web3j.abi.datatypes.generated.Uint32(something),
+                    new org.web3j.abi.datatypes.DynamicBytes(metadata));
+            this.pubkey = pubkey;
+            this.something = something;
+            this.metadata = metadata;
+        }
+
+        public BytesStruct(DynamicBytes pubkey, Uint32 something, DynamicBytes metadata) {
+            super(pubkey, something, metadata);
+            this.pubkey = pubkey.getValue();
+            this.something = something.getValue();
+            this.metadata = metadata.getValue();
+        }
+    }
+
+    public static final Function addDynamicBytesArrayFunction =
+            new Function(
+                    FUNC_addDynamicBytesArray,
+                    Arrays.<Type>asList(
+                            new BytesStruct(
+                                    "dynamic".getBytes(), BigInteger.ZERO, "Bytes".getBytes())),
+                    Collections.<TypeReference<?>>emptyList());
 }
