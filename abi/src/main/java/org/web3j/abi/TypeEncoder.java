@@ -227,8 +227,9 @@ public class TypeEncoder {
                                 Numeric.toBytesPadded(
                                         new BigInteger(Long.toString(dynamicOffset)),
                                         MAX_BYTE_LENGTH)));
-                dynamicValues.add(encode(type));
-                dynamicOffset += type.bytes32PaddedLength();
+                String encodedValue = encode(type);
+                dynamicValues.add(encodedValue);
+                dynamicOffset += encodedValue.length() / 2;
             } else {
                 offsetsAndStaticValues.add(encode(value.getValue().get(i)));
             }
