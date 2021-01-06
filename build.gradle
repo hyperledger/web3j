@@ -17,7 +17,7 @@ ext {
     kotlinVersion = '1.3.72'
     kotlinPoetVersion = '1.5.0'
     jnr_unixsocketVersion = '0.21'
-    okhttpVersion = '4.3.1'
+    okhttpVersion = '4.9.0'
     rxjavaVersion = '2.2.2'
     slf4jVersion = '1.7.25'
     javaWebSocketVersion = '1.3.8'
