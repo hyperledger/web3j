@@ -53,7 +53,7 @@ public class Sign {
         return MESSAGE_PREFIX.concat(String.valueOf(messageLength)).getBytes();
     }
 
-    static byte[] getEthereumMessageHash(byte[] message) {
+    public static byte[] getEthereumMessageHash(byte[] message) {
         byte[] prefix = getEthereumMessagePrefix(message.length);
 
         byte[] result = new byte[prefix.length + message.length];
