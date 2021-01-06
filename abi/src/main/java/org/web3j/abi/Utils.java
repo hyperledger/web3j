@@ -200,17 +200,4 @@ public class Utils {
         return Stream.concat(canonicalFields.stream(), nestedFields.stream())
                 .collect(Collectors.toList());
     }
-
-    /**
-     * Checks if the parametrized type is a static struct.
-     *
-     * @param typeReference
-     * @return True if parametrized type is a static struct
-     * @throws ClassNotFoundException
-     */
-    public static boolean isParametrizedTypeStaticStruct(TypeReference<?> typeReference)
-            throws ClassNotFoundException {
-        Class<Type> type = getParameterizedTypeFromArray(typeReference);
-        return StaticStruct.class.isAssignableFrom(type);
-    }
 }
