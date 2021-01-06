@@ -157,20 +157,22 @@ public class HttpService extends Service {
         okhttp3.Request httpRequest =
                 new okhttp3.Request.Builder().url(url).headers(headers).post(requestBody).build();
 
-        okhttp3.Response response = httpClient.newCall(httpRequest).execute();
-        processHeaders(response.headers());
-        ResponseBody responseBody = response.body();
-        if (response.isSuccessful()) {
-            if (responseBody != null) {
-                return buildInputStream(responseBody);
+        try (okhttp3.Response response = httpClient.newCall(httpRequest).execute()) {
+            processHeaders(response.headers());
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                if (responseBody != null) {
+                    return buildInputStream(responseBody);
+                } else {
+                    return null;
+                }
             } else {
-                return null;
-            }
-        } else {
-            int code = response.code();
-            String text = responseBody == null ? "N/A" : responseBody.string();
+                int code = response.code();
+                String text = responseBody == null ? "N/A" : responseBody.string();
 
-            throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
+                throw new ClientConnectionException(
+                        "Invalid response received: " + code + "; " + text);
+            }
         }
     }
 
@@ -187,7 +189,7 @@ public class HttpService extends Service {
 
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // Buffer the entire body
-            Buffer buffer = source.buffer();
+            Buffer buffer = source.getBuffer();
 
             long size = buffer.size();
             if (size > Integer.MAX_VALUE) {
