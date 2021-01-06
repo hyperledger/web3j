@@ -55,4 +55,12 @@ public class ClassProvider {
             throw new IllegalStateException(e);
         }
     }
+
+    private Class<?> loadClass(final String className) {
+        try {
+            return classLoader.loadClass(className);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }
