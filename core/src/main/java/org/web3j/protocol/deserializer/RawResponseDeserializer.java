@@ -65,6 +65,9 @@ public class RawResponseDeserializer extends StdDeserializer<Response>
     }
 
     private String streamToString(InputStream input) throws IOException {
-        return new Scanner(input, StandardCharsets.UTF_8.name()).useDelimiter("\\Z").next();
+        try (Scanner scanner =
+                new Scanner(input, StandardCharsets.UTF_8.name()).useDelimiter("\\Z")) {
+            return scanner.next();
+        }
     }
 }
