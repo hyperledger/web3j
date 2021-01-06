@@ -202,20 +202,15 @@ public class Utils {
     }
 
     /**
-     * Checks if the parametrized type is a static array.
+     * Checks if the parametrized type is a static struct.
      *
      * @param typeReference
-     * @return True if parametrized type is a static array
+     * @return True if parametrized type is a static struct
      * @throws ClassNotFoundException
      */
-    public static boolean isParametrizedTypeStaticArray(TypeReference<?> typeReference)
+    public static boolean isParametrizedTypeStaticStruct(TypeReference<?> typeReference)
             throws ClassNotFoundException {
-        @SuppressWarnings("unchecked")
-        Class<Type> type = (Class<Type>) typeReference.getClassType();
-        try {
-            return StaticArray.class.isAssignableFrom(type);
-        } catch (ClassCastException e) {
-            return false;
-        }
+        Class<Type> type = getParameterizedTypeFromArray(typeReference);
+        return StaticStruct.class.isAssignableFrom(type);
     }
 }
