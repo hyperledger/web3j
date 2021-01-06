@@ -123,7 +123,8 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                     result =
                             TypeDecoder.decodeStaticArray(
                                     input, hexStringDataOffset, typeReference, length);
-                    if (offset == 0) {
+                    if (DynamicStruct.class.isAssignableFrom(
+                            getParameterizedTypeFromArray(typeReference))) {
                         offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     } else if (StaticStruct.class.isAssignableFrom(
                             getParameterizedTypeFromArray(typeReference))) {

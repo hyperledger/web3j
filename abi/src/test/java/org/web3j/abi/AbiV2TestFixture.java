@@ -74,6 +74,8 @@ public class AbiV2TestFixture {
 
     public static final String FUNC_GETNARBARFOONARFOOARRAYS = "getNarBarFooNarFooArrays";
 
+    public static final String FUNC_GETBARNARFOONARFOOARRAYS = "getBarNarFooNarFooArrays";
+
     public static final String FUNC_GETFOOMULTIPLEDYNAMICSTATICARRAY =
             "getFooMultipleDynamicStaticArray";
 
@@ -271,6 +273,28 @@ public class AbiV2TestFixture {
                             new TypeReference<DynamicArray<Foo>>() {},
                             new TypeReference<DynamicArray<Nar>>() {},
                             new TypeReference<DynamicArray<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getNarBarFooNarFooArraysFunction2 =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETNARBARFOONARFOOARRAYS,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<StaticArray3<Nar>>() {},
+                            new TypeReference<DynamicArray<Bar>>() {},
+                            new TypeReference<DynamicArray<Foo>>() {},
+                            new TypeReference<DynamicArray<Nar>>() {},
+                            new TypeReference<StaticArray3<Foo>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function getBarNarFooNarFooArraysFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_GETBARNARFOONARFOOARRAYS,
+                    Arrays.<Type>asList(),
+                    Arrays.<TypeReference<?>>asList(
+                            new TypeReference<StaticArray3<Bar>>() {},
+                            new TypeReference<StaticArray3<Nar>>() {},
+                            new TypeReference<DynamicArray<Foo>>() {},
+                            new TypeReference<DynamicArray<Nar>>() {},
+                            new TypeReference<StaticArray3<Foo>>() {}));
 
     public static final org.web3j.abi.datatypes.Function getFooMultipleDynamicStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
