@@ -33,6 +33,7 @@ import org.web3j.utils.Strings;
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
 import static org.web3j.abi.TypeDecoder.isDynamic;
 import static org.web3j.abi.Utils.getParameterizedTypeFromArray;
+import static org.web3j.abi.Utils.staticStructCanonicalFieldsCount;
 
 /**
  * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
@@ -112,7 +113,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                             TypeDecoder.decodeStaticStruct(
                                     input, hexStringDataOffset, typeReference);
                     offset +=
-                            Utils.staticStructCanonicalFieldsCount(classType)
+                            staticStructCanonicalFieldsCount(classType)
                                     * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 } else if (StaticArray.class.isAssignableFrom(classType)) {
                     int length =
@@ -130,7 +131,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                             getParameterizedTypeFromArray(typeReference))) {
                         offset +=
                                 (int)
-                                                Utils.staticStructCanonicalFieldsCount(
+                                                staticStructCanonicalFieldsCount(
                                                         getParameterizedTypeFromArray(
                                                                 typeReference))
                                         * length
@@ -169,9 +170,9 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
     /**
      * Checks if the parametrized type is offsetted in case of static array containing structs.
      *
-     * @param typeReference
-     * @return
-     * @throws ClassNotFoundException
+     * @param typeReference of static array
+     * @return true, if static array elements have dynamic offsets
+     * @throws ClassNotFoundException if class type cannot be determined
      */
     private static boolean hasDynamicOffsetInStaticArray(TypeReference<?> typeReference, int offset)
             throws ClassNotFoundException {
@@ -181,9 +182,6 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
             return StaticArray.class.isAssignableFrom(type)
                     && (DynamicStruct.class.isAssignableFrom(
                                     getParameterizedTypeFromArray(typeReference))
-                            || (StaticStruct.class.isAssignableFrom(
-                                            getParameterizedTypeFromArray(typeReference))
-                                    && offset == 0)
                             || isDynamic(getParameterizedTypeFromArray(typeReference)));
         } catch (ClassCastException e) {
             return false;
