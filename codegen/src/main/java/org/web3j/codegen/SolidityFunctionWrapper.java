@@ -50,6 +50,7 @@ import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
@@ -72,6 +73,7 @@ import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
+import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType;
 import org.web3j.protocol.core.methods.response.BaseEventResponse;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -123,8 +125,9 @@ public class SolidityFunctionWrapper extends Generator {
 
     private final int addressLength;
 
-    private final HashMap<Integer, ClassName> structClassNameMap =
-            new HashMap<Integer, ClassName>();
+    private final HashMap<Integer, ClassName> structClassNameMap = new HashMap<>();
+
+    private final List<NamedType> structsNamedTypeList = new ArrayList<>();
 
     private static final String regex = "(\\w+)(?:\\[(.*?)\\])(?:\\[(.*?)\\])?";
     private static final Pattern pattern = Pattern.compile(regex);
@@ -213,6 +216,7 @@ public class SolidityFunctionWrapper extends Generator {
                 buildConstructor(TransactionManager.class, TRANSACTION_MANAGER, true));
         classBuilder.addFields(buildFuncNameConstants(abi));
         classBuilder.addTypes(buildStructTypes(abi));
+        buildStructsNamedTypesList(abi);
         classBuilder.addMethods(buildFunctionDefinitions(className, classBuilder, abi));
         classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(
@@ -227,6 +231,40 @@ public class SolidityFunctionWrapper extends Generator {
         addAddressesSupport(classBuilder, addresses);
 
         write(basePackageName, classBuilder.build(), destinationDir);
+    }
+
+    private void buildStructsNamedTypesList(List<AbiDefinition> abi) {
+        structsNamedTypeList.addAll(
+                abi.stream()
+                        .flatMap(
+                                definition -> {
+                                    List<AbiDefinition.NamedType> parameters = new ArrayList<>();
+                                    parameters.addAll(definition.getInputs());
+                                    parameters.addAll(definition.getOutputs());
+                                    return parameters.stream()
+                                            .filter(
+                                                    namedType ->
+                                                            namedType.getType().equals("tuple"));
+                                })
+                        .collect(Collectors.toList()));
+    }
+
+    /**
+     * Verifies if the two structs are the same. Equal structs means: - They have the same field
+     * names - They have the same field types The order of declaring the fields does not matter.
+     *
+     * @return True if they are the same fields
+     */
+    private boolean isSameStruct(NamedType base, NamedType target) {
+        for (NamedType baseField : base.getComponents()) {
+            if (!target.getComponents().stream()
+                    .anyMatch(
+                            targetField ->
+                                    baseField.getType().equals(targetField.getType())
+                                            && baseField.getName().equals(targetField.getName())))
+                return false;
+        }
+        return true;
     }
 
     private void addAddressesSupport(TypeSpec.Builder classBuilder, Map<String, String> addresses) {
@@ -886,6 +924,9 @@ public class SolidityFunctionWrapper extends Generator {
             final TypeName typeName;
             if (namedTypes.get(i).getType().equals("tuple")) {
                 typeName = structClassNameMap.get(namedTypes.get(i).structIdentifier());
+            } else if (namedTypes.get(i).getType().startsWith("tuple")
+                    && namedTypes.get(i).getType().contains("[")) {
+                typeName = buildStructArrayTypeName(namedTypes.get(i), true);
             } else {
                 typeName = getWrapperType(inputParameterTypes.get(i).type);
             }
@@ -912,6 +953,38 @@ public class SolidityFunctionWrapper extends Generator {
             if (typeNames.size() != 1) {
                 throw new UnsupportedOperationException(
                         "Only a single parameterized type is supported");
+            } else if (structClassNameMap.values().stream()
+                    .map(ClassName::simpleName)
+                    .anyMatch(
+                            name ->
+                                    name.equals(
+                                            ((ClassName)
+                                                            ((ParameterizedTypeName)
+                                                                            parameterSpec.type)
+                                                                    .typeArguments.get(0))
+                                                    .simpleName()))) {
+                String structName =
+                        structClassNameMap.values().stream()
+                                .map(ClassName::simpleName)
+                                .filter(
+                                        name ->
+                                                name.equals(
+                                                        ((ClassName)
+                                                                        ((ParameterizedTypeName)
+                                                                                        parameterSpec
+                                                                                                .type)
+                                                                                .typeArguments.get(
+                                                                                        0))
+                                                                .simpleName()))
+                                .collect(Collectors.toList())
+                                .get(0);
+                return "new "
+                        + parameterSpec.type
+                        + "("
+                        + structName
+                        + ".class, "
+                        + parameterSpec.name
+                        + ")";
             } else {
                 String parameterSpecType = parameterSpec.type.toString();
                 TypeName typeName = typeNames.get(0);
@@ -1062,10 +1135,14 @@ public class SolidityFunctionWrapper extends Generator {
             String name = createValidParamName(namedType.getName(), i);
             String type = namedTypes.get(i).getType();
 
-            if (type.startsWith("tuple")) {
+            if (type.equals("tuple")) {
                 result.add(
                         ParameterSpec.builder(
                                         structClassNameMap.get(namedType.structIdentifier()), name)
+                                .build());
+            } else if (type.startsWith("tuple") && type.contains("[")) {
+                result.add(
+                        ParameterSpec.builder(buildStructArrayTypeName(namedType, primitives), name)
                                 .build());
             } else {
                 result.add(ParameterSpec.builder(buildTypeName(type, primitives), name).build());
@@ -1098,11 +1175,65 @@ public class SolidityFunctionWrapper extends Generator {
         for (AbiDefinition.NamedType namedType : namedTypes) {
             if (namedType.getType().equals("tuple")) {
                 result.add(structClassNameMap.get(namedType.structIdentifier()));
+            } else if (namedType.getType().startsWith("tuple")
+                    && namedType.getType().contains("[")) {
+                result.add(buildStructArrayTypeName(namedType, primitives));
             } else {
                 result.add(buildTypeName(namedType.getType(), primitives));
             }
         }
         return result;
+    }
+
+    /**
+     * Builds the array of struct type name. In case of using the Java native types, we return the
+     * <code>List<struct></code> class Else, we return the Web3j generated types.
+     *
+     * @param namedType Array of structs namedType
+     * @param useNativeJavaTypes Set to true for java native types
+     * @return ParametrizedTypeName of the array of structs, eg, <code>StaticArray3<StructName>
+     *     </code>
+     */
+    private TypeName buildStructArrayTypeName(NamedType namedType, Boolean useNativeJavaTypes) {
+        String structName;
+        if (namedType.getInternalType().isEmpty()) {
+            structName =
+                    structClassNameMap
+                            .get(
+                                    structsNamedTypeList.stream()
+                                            .filter(struct -> isSameStruct(namedType, struct))
+                                            .collect(Collectors.toList())
+                                            .get(0)
+                                            .structIdentifier())
+                            .simpleName();
+
+        } else {
+            structName =
+                    namedType
+                            .getInternalType()
+                            .substring(
+                                    namedType.getInternalType().lastIndexOf(".") + 1,
+                                    namedType.getInternalType().indexOf("["));
+        }
+
+        if (useNativeJavaTypes)
+            return ParameterizedTypeName.get(
+                    ClassName.get(List.class), ClassName.get("", structName));
+
+        String arrayLength =
+                namedType
+                        .getType()
+                        .substring(
+                                namedType.getType().indexOf('[') + 1,
+                                namedType.getType().indexOf(']'));
+        if (!arrayLength.isEmpty() && Integer.parseInt(arrayLength) > 0) {
+            return ParameterizedTypeName.get(
+                    ClassName.get("org.web3j.abi.datatypes.generated", "StaticArray" + arrayLength),
+                    ClassName.get("", structName));
+        } else {
+            return ParameterizedTypeName.get(
+                    ClassName.get(DynamicArray.class), ClassName.get("", structName));
+        }
     }
 
     MethodSpec buildFunction(AbiDefinition functionDefinition) throws ClassNotFoundException {
@@ -1202,6 +1333,9 @@ public class SolidityFunctionWrapper extends Generator {
                 nativeReturnTypeName =
                         structClassNameMap.get(
                                 functionDefinition.getOutputs().get(0).structIdentifier());
+            } else if (functionDefinition.getOutputs().get(0).getType().startsWith("tuple")
+                    && functionDefinition.getOutputs().get(0).getType().contains("[")) {
+                nativeReturnTypeName = ClassName.get(List.class);
             } else if (useNativeJavaTypes) {
                 nativeReturnTypeName = getWrapperRawType(typeName);
             } else {
@@ -1282,6 +1416,10 @@ public class SolidityFunctionWrapper extends Generator {
                     returnTypes.add(
                             structClassNameMap.get(
                                     functionDefinition.getOutputs().get(i).structIdentifier()));
+                } else if (functionDefinition.getOutputs().get(i).getType().startsWith("tuple")
+                        && functionDefinition.getOutputs().get(i).getType().contains("[")) {
+                    returnTypes.add(
+                            buildStructArrayTypeName(functionDefinition.getOutputs().get(i), true));
                 } else {
                     returnTypes.add(getWrapperType(outputParameterTypes.get(i)));
                 }
@@ -1366,6 +1504,9 @@ public class SolidityFunctionWrapper extends Generator {
             final TypeName typeName;
             if (namedType.getType().equals("tuple")) {
                 typeName = structClassNameMap.get(namedType.structIdentifier());
+            } else if (namedType.getType().startsWith("tuple")
+                    && namedType.getType().contains("[")) {
+                typeName = buildStructArrayTypeName(namedType.namedType, true);
             } else {
                 typeName = getIndexedEventWrapperType(namedType.typeName);
             }
@@ -1377,6 +1518,9 @@ public class SolidityFunctionWrapper extends Generator {
             final TypeName typeName;
             if (namedType.getType().equals("tuple")) {
                 typeName = structClassNameMap.get(namedType.structIdentifier());
+            } else if (namedType.getType().startsWith("tuple")
+                    && namedType.getType().contains("[")) {
+                typeName = buildStructArrayTypeName(namedType.namedType, true);
             } else {
                 typeName = getWrapperType(namedType.typeName);
             }
@@ -1529,6 +1673,9 @@ public class SolidityFunctionWrapper extends Generator {
             final TypeName typeName;
             if (namedType.getType().equals("tuple")) {
                 typeName = structClassNameMap.get(namedType.structIdentifier());
+            } else if (namedType.getType().startsWith("tuple")
+                    && namedType.getType().contains("[")) {
+                typeName = buildStructArrayTypeName(namedType, true);
             } else {
                 typeName = buildTypeName(namedType.getType(), useJavaPrimitiveTypes);
             }
@@ -1585,6 +1732,9 @@ public class SolidityFunctionWrapper extends Generator {
             final TypeName indexedEventWrapperType;
             if (namedTypeName.getType().equals("tuple")) {
                 indexedEventWrapperType = structClassNameMap.get(namedTypeName.structIdentifier());
+            } else if (namedTypeName.getType().startsWith("tuple")
+                    && namedTypeName.getType().contains("[")) {
+                indexedEventWrapperType = buildStructArrayTypeName(namedTypeName.namedType, true);
             } else {
                 indexedEventWrapperType = getIndexedEventWrapperType(namedTypeName.getTypeName());
             }
@@ -1612,6 +1762,10 @@ public class SolidityFunctionWrapper extends Generator {
             if (nonIndexedParameters.get(i).getType().equals("tuple")) {
                 nonIndexedEventWrapperType =
                         structClassNameMap.get(namedTypeName.structIdentifier());
+            } else if (nonIndexedParameters.get(i).getType().startsWith("tuple")
+                    && nonIndexedParameters.get(i).getType().contains("[")) {
+                nonIndexedEventWrapperType =
+                        buildStructArrayTypeName(namedTypeName.namedType, true);
             } else {
                 nonIndexedEventWrapperType =
                         getWrapperType(nonIndexedParameters.get(i).getTypeName());

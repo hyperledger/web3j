@@ -48,6 +48,12 @@ contract ComplexStorage {
         string data;
     }
 
+    struct Fizz {
+        Fuzz fuzz;
+        Foo foo;
+        string data;
+    }
+
     Foo foo;
     Bar bar;
     Fuzz fuzz;
@@ -55,12 +61,47 @@ contract ComplexStorage {
     Boz boz;
     Nuu nuu;
     Naz naz;
+    Nar nar;
     Wiz wiz;
+    Fizz fizz;
+    Foo[] multipleFoo;
+    Foo[3] staticMultipleFoo;
+    Foo[1] foo1;
+    Foo[2] foo2;
+    Nar[] multipleDynamicNar;
+    Nar[3] multipleStaticNar;
+    Bar[3] staticMultipleBar;
 
-    constructor(Foo memory _foo, Bar memory _bar) public {
+    constructor() public {
+        Foo memory _foo = Foo("id", "name");
+        Bar memory _bar = Bar(123,123);
         foo = _foo;
         bar = _bar;
+
+        multipleFoo.push(_foo);
+        staticMultipleFoo[0] = _foo;
+        staticMultipleFoo[1] = _foo;
+        staticMultipleFoo[2] = _foo;
+        foo1[0] = _foo;
+        foo2[0] = _foo;
+        foo2[1] = Foo("id2", "name2");
+
+        staticMultipleBar[1] = _bar;
+
+        nar = Nar(Nuu(Foo("4", "nestedFoo")));
+        fizz = Fizz(
+            fuzz,
+            Foo("id", "name"),
+            "fizz Data");
+
+        multipleDynamicNar.push(nar);
+        multipleDynamicNar.push(nar);
+        multipleDynamicNar.push(Nar(Nuu(Foo("", ""))));
+        multipleStaticNar[0] = nar;
+        multipleStaticNar[2] = nar;
+
         emit Access(msg.sender, _foo, _bar);
+        emit StructArraysAccess(msg.sender, multipleFoo, staticMultipleBar);
     }
 
     function setFoo(Foo memory _toSet) public {
@@ -119,10 +160,40 @@ contract ComplexStorage {
         return (foo, bar);
     }
 
+    function getFooBarNaz() public view returns (Foo memory, Bar memory, Naz memory) {
+        return (foo, bar, naz);
+    }
+
     function getFooUint() public view returns (Foo memory, uint256) {
         return (foo, 1);
     }
 
+    function getMultipleFoo() public view returns (Foo[] memory) {
+        return multipleFoo;
+    }
+
+    function getEmpty3Foo() public pure returns (Foo[3] memory) {
+        Foo[3] memory emptyFoo;
+        return emptyFoo;
+    }
+
+    function getStaticMultipleFoo() public view returns (Foo[3] memory) {
+        return staticMultipleFoo;
+    }
+
+    function getFoo1Foo2() public view returns (Foo[1] memory, Foo[2] memory) {
+        return (foo1, foo2);
+    }
+
+    function idNarBarFooArrays(Nar[3] memory a, Bar[3] memory b, Foo[] memory c, Nar[] memory d, Foo[3] memory e) public pure returns (Nar[3] memory, Bar[3] memory, Foo[] memory, Nar[] memory, Foo[3] memory) {
+        return (a, b, c, d, e);
+    }
+
+    function getNarBarFooArrays() public view returns (Nar[3] memory, Bar[3] memory, Foo[] memory, Nar[] memory, Foo[3] memory) {
+        return (multipleStaticNar, staticMultipleBar, multipleFoo, multipleDynamicNar, staticMultipleFoo);
+    }
+
     event Access(address indexed _address, Foo _foo, Bar _bar);
 
+    event StructArraysAccess(address indexed _address, Foo[] _fooArray, Bar[3] _barArray);
 }
