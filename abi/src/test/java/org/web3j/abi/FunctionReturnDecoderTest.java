@@ -901,7 +901,7 @@ public class FunctionReturnDecoderTest {
         assertEquals(
                 FunctionReturnDecoder.decode(
                         rawInput,
-                        AbiV2TestFixture.getNarBarFooNarFooArraysFunction.getOutputParameters()),
+                        AbiV2TestFixture.idNarBarFooNarFooArraysFunction.getOutputParameters()),
                 Arrays.asList(
                         new DynamicArray<>(
                                 AbiV2TestFixture.Nar.class,
@@ -1035,7 +1035,7 @@ public class FunctionReturnDecoderTest {
         assertEquals(
                 FunctionReturnDecoder.decode(
                         rawInput,
-                        AbiV2TestFixture.getBarNarFooNarFooArraysFunction.getOutputParameters()),
+                        AbiV2TestFixture.idBarNarFooNarFooArraysFunction.getOutputParameters()),
                 Arrays.asList(
                         new StaticArray3<>(
                                 AbiV2TestFixture.Bar.class,
@@ -1172,7 +1172,7 @@ public class FunctionReturnDecoderTest {
         assertEquals(
                 FunctionReturnDecoder.decode(
                         rawInput,
-                        AbiV2TestFixture.getNarBarFooNarFooArraysFunction2.getOutputParameters()),
+                        AbiV2TestFixture.idNarBarFooNarFooArraysFunction2.getOutputParameters()),
                 Arrays.asList(
                         new StaticArray3<>(
                                 AbiV2TestFixture.Nar.class,

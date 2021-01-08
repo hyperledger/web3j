@@ -72,9 +72,9 @@ public class AbiV2TestFixture {
 
     public static final String FUNC_GETFOOMULTIPLEDYNAMICARRAY = "getFooMultipleDynamicArray";
 
-    public static final String FUNC_GETNARBARFOONARFOOARRAYS = "getNarBarFooNarFooArrays";
+    public static final String FUNC_IDNARBARFOONARFOOARRAYS = "idNarBarFooNarFooArrays";
 
-    public static final String FUNC_GETBARNARFOONARFOOARRAYS = "getBarNarFooNarFooArrays";
+    public static final String FUNC_IDBARNARFOONARFOOARRAYS = "idBarNarFooNarFooArrays";
 
     public static final String FUNC_GETFOOMULTIPLEDYNAMICSTATICARRAY =
             "getFooMultipleDynamicStaticArray";
@@ -263,10 +263,44 @@ public class AbiV2TestFixture {
                             new TypeReference<DynamicArray<Foo>>() {},
                             new TypeReference<DynamicArray<Foo>>() {}));
 
-    public static final org.web3j.abi.datatypes.Function getNarBarFooNarFooArraysFunction =
+    public static final org.web3j.abi.datatypes.Function idNarBarFooNarFooArraysFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETNARBARFOONARFOOARRAYS,
-                    Arrays.<Type>asList(),
+                    FUNC_IDNARBARFOONARFOOARRAYS,
+                    Arrays.<Type>asList(
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Nar.class,
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("", "")))),
+                            new StaticArray3<>(
+                                    AbiV2TestFixture.Bar.class,
+                                    new AbiV2TestFixture.Bar(BigInteger.ZERO, BigInteger.ZERO),
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(123), BigInteger.valueOf(123)),
+                                    new AbiV2TestFixture.Bar(BigInteger.ZERO, BigInteger.ZERO)),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Foo.class,
+                                    new AbiV2TestFixture.Foo("id", "name")),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Nar.class,
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("", "")))),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Foo.class,
+                                    new AbiV2TestFixture.Foo("id", "name"))),
                     Arrays.<TypeReference<?>>asList(
                             new TypeReference<DynamicArray<Nar>>() {},
                             new TypeReference<StaticArray3<Bar>>() {},
@@ -274,10 +308,47 @@ public class AbiV2TestFixture {
                             new TypeReference<DynamicArray<Nar>>() {},
                             new TypeReference<DynamicArray<Foo>>() {}));
 
-    public static final org.web3j.abi.datatypes.Function getNarBarFooNarFooArraysFunction2 =
+    public static final org.web3j.abi.datatypes.Function idNarBarFooNarFooArraysFunction2 =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETNARBARFOONARFOOARRAYS,
-                    Arrays.<Type>asList(),
+                    FUNC_IDNARBARFOONARFOOARRAYS,
+                    Arrays.<Type>asList(
+                            new StaticArray3<>(
+                                    AbiV2TestFixture.Nar.class,
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("", ""))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo")))),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Bar.class,
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(123), BigInteger.valueOf(123)),
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(12), BigInteger.valueOf(33)),
+                                    new AbiV2TestFixture.Bar(BigInteger.ZERO, BigInteger.ZERO)),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Foo.class,
+                                    new AbiV2TestFixture.Foo("id", "name")),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Nar.class,
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("", "")))),
+                            new StaticArray3<>(
+                                    AbiV2TestFixture.Foo.class,
+                                    new AbiV2TestFixture.Foo("id", "name"),
+                                    new AbiV2TestFixture.Foo("id", "name"),
+                                    new AbiV2TestFixture.Foo("id", "name"))),
                     Arrays.<TypeReference<?>>asList(
                             new TypeReference<StaticArray3<Nar>>() {},
                             new TypeReference<DynamicArray<Bar>>() {},
@@ -285,10 +356,46 @@ public class AbiV2TestFixture {
                             new TypeReference<DynamicArray<Nar>>() {},
                             new TypeReference<StaticArray3<Foo>>() {}));
 
-    public static final org.web3j.abi.datatypes.Function getBarNarFooNarFooArraysFunction =
+    public static final org.web3j.abi.datatypes.Function idBarNarFooNarFooArraysFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETBARNARFOONARFOOARRAYS,
-                    Arrays.<Type>asList(),
+                    FUNC_IDBARNARFOONARFOOARRAYS,
+                    Arrays.<Type>asList(
+                            new StaticArray3<>(
+                                    AbiV2TestFixture.Bar.class,
+                                    new AbiV2TestFixture.Bar(BigInteger.ZERO, BigInteger.ZERO),
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(123), BigInteger.valueOf(123)),
+                                    new AbiV2TestFixture.Bar(BigInteger.ZERO, BigInteger.ZERO)),
+                            new StaticArray3<>(
+                                    AbiV2TestFixture.Nar.class,
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("", ""))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo")))),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Foo.class,
+                                    new AbiV2TestFixture.Foo("id", "name")),
+                            new DynamicArray<>(
+                                    AbiV2TestFixture.Nar.class,
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("4", "nestedFoo"))),
+                                    new AbiV2TestFixture.Nar(
+                                            new AbiV2TestFixture.Nuu(
+                                                    new AbiV2TestFixture.Foo("", "")))),
+                            new StaticArray3<>(
+                                    AbiV2TestFixture.Foo.class,
+                                    new AbiV2TestFixture.Foo("id", "name"),
+                                    new AbiV2TestFixture.Foo("id", "name"),
+                                    new AbiV2TestFixture.Foo("id", "name"))),
                     Arrays.<TypeReference<?>>asList(
                             new TypeReference<StaticArray3<Bar>>() {},
                             new TypeReference<StaticArray3<Nar>>() {},
