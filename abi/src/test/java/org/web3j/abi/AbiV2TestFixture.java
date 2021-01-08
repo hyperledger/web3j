@@ -62,6 +62,10 @@ public class AbiV2TestFixture {
 
     public static final String FUNC_GETBARSTATICARRAY = "getBarStaticArray";
 
+    public static final String FUNC_SETBARSTATICARRAY = "setBarStaticArray";
+
+    public static final String FUNC_SETBARDYNAMICARRAY = "setBarDynamicArray";
+
     public static final String FUNC_GETNARDYNAMICARRAY = "getNarDynamicArray";
 
     public static final String FUNC_GETNARSTATICARRAY = "getNarStaticArray";
@@ -234,6 +238,34 @@ public class AbiV2TestFixture {
                     FUNC_GETBARSTATICARRAY,
                     Arrays.<Type>asList(),
                     Arrays.asList(new TypeReference<StaticArray3<Bar>>() {}));
+
+    public static final org.web3j.abi.datatypes.Function setBarStaticArrayFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_SETBARSTATICARRAY,
+                    Arrays.<Type>asList(
+                            new StaticArray3(
+                                    AbiV2TestFixture.Bar.class,
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(0), BigInteger.valueOf(0)),
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(123), BigInteger.valueOf(123)),
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(0), BigInteger.valueOf(0)))),
+                    Arrays.asList());
+
+    public static final org.web3j.abi.datatypes.Function setBarDynamicArrayFunction =
+            new org.web3j.abi.datatypes.Function(
+                    FUNC_SETBARDYNAMICARRAY,
+                    Arrays.<Type>asList(
+                            new DynamicArray(
+                                    AbiV2TestFixture.Bar.class,
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(0), BigInteger.valueOf(0)),
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(123), BigInteger.valueOf(123)),
+                                    new AbiV2TestFixture.Bar(
+                                            BigInteger.valueOf(0), BigInteger.valueOf(0)))),
+                    Arrays.asList());
 
     public static final org.web3j.abi.datatypes.Function getNarDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
