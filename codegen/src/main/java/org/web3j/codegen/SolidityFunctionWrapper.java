@@ -1189,9 +1189,10 @@ public class SolidityFunctionWrapper extends Generator {
      * Builds the array of struct type name. In case of using the Java native types, we return the
      * <code>List<struct></code> class Else, we return the Web3j generated types.
      *
-     * @param namedType
+     * @param namedType Array of structs namedType
      * @param useNativeJavaTypes Set to true for java native types
-     * @return
+     * @return ParametrizedTypeName of the array of structs, eg, <code>StaticArray3<StructName>
+     *     </code>
      */
     private TypeName buildStructArrayTypeName(NamedType namedType, Boolean useNativeJavaTypes) {
         String structName;

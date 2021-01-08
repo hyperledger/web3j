@@ -379,9 +379,6 @@ public final class AbiTypes {
      * Returns the provided class type as a string. In case of a struct, it will return the struct
      * name. For the tuple notation of a struct, example ((string,uint256)), think of taking an
      * instance of the struct and calling the <code>instance.getTypeAsString()</code> method.
-     *
-     * @param type
-     * @return
      */
     public static String getTypeAString(Class<? extends Type> type) {
         if (Utf8String.class.equals(type)) {

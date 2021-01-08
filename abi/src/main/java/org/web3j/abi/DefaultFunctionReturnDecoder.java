@@ -131,8 +131,9 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                             getParameterizedTypeFromArray(typeReference))) {
                         offset +=
                                 staticStructNestedPublicFieldsFlatList(
-                                        getParameterizedTypeFromArray(
-                                                typeReference)).size()
+                                                        getParameterizedTypeFromArray(
+                                                                typeReference))
+                                                .size()
                                         * length
                                         * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     } else {

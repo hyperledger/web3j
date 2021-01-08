@@ -76,7 +76,9 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
                     && StaticStruct.class.isAssignableFrom(
                             ((StaticArray) type).getComponentType())) {
                 count +=
-                        staticStructNestedPublicFieldsFlatList(((StaticArray) type).getComponentType()).size()
+                        staticStructNestedPublicFieldsFlatList(
+                                                ((StaticArray) type).getComponentType())
+                                        .size()
                                 * ((StaticArray) type).getValue().size();
             } else if (type instanceof StaticArray
                     && DynamicStruct.class.isAssignableFrom(

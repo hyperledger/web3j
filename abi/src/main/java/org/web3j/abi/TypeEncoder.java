@@ -305,9 +305,8 @@ public class TypeEncoder {
      * Encodes arrays of structs elements offsets. To be used when encoding a dynamic array or a
      * static array containing dynamic structs,
      *
-     * @param value
-     * @param <T>
-     * @return
+     * @param value DynamicArray or StaticArray containing dynamic structs
+     * @return encoded array offset
      */
     private static <T extends Type> String encodeStructsArraysOffsets(Array<T> value) {
         StringBuilder result = new StringBuilder();

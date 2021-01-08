@@ -163,8 +163,8 @@ public class Utils {
     }
 
     /**
-     * Returns flat list of canonical fields in a static struct. Example: struct Baz { Struct Bar { int
-     * a, int b }, int c } will return {a, b, c}.
+     * Returns flat list of canonical fields in a static struct. Example: struct Baz { Struct Bar {
+     * int a, int b }, int c } will return {a, b, c}.
      *
      * @param classType Static struct type
      * @return Flat list of canonical fields in a nested struct

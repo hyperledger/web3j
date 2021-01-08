@@ -517,7 +517,8 @@ public class TypeDecoder {
                                         0,
                                         TypeReference.create(declaredField));
                         staticOffset +=
-                                staticStructNestedPublicFieldsFlatList((Class<Type>) classType).size()
+                                staticStructNestedPublicFieldsFlatList((Class<Type>) classType)
+                                                .size()
                                         * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     } else {
                         value = decode(input.substring(beginIndex), 0, declaredField);
