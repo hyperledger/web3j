@@ -54,7 +54,7 @@ import org.web3j.utils.Numeric;
 import static org.web3j.abi.DefaultFunctionReturnDecoder.getDataOffset;
 import static org.web3j.abi.TypeReference.makeTypeReference;
 import static org.web3j.abi.Utils.getSimpleTypeName;
-import static org.web3j.abi.Utils.staticStructCanonicalFieldsCount;
+import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
 
 /**
  * Ethereum Contract Application Binary Interface (ABI) decoding for types. Decoding is not
@@ -265,7 +265,7 @@ public class TypeDecoder {
             // length field + data value
             return (decodeUintAsInt(input, offset) / Type.MAX_BYTE_LENGTH) + 2;
         } else if (StaticStruct.class.isAssignableFrom(type)) {
-            return (int) staticStructCanonicalFieldsCount((Class<Type>) type);
+            return staticStructNestedPublicFieldsFlatList((Class<Type>) type).size();
         } else {
             return 1;
         }
@@ -517,7 +517,7 @@ public class TypeDecoder {
                                         0,
                                         TypeReference.create(declaredField));
                         staticOffset +=
-                                staticStructCanonicalFieldsCount((Class<Type>) classType)
+                                staticStructNestedPublicFieldsFlatList((Class<Type>) classType).size()
                                         * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     } else {
                         value = decode(input.substring(beginIndex), 0, declaredField);

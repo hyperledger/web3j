@@ -239,6 +239,7 @@ public class AbiV2TestFixture {
                     Arrays.<Type>asList(),
                     Arrays.asList(new TypeReference<StaticArray3<Bar>>() {}));
 
+    @SuppressWarnings("unchecked")
     public static final org.web3j.abi.datatypes.Function setBarStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBARSTATICARRAY,
@@ -253,6 +254,7 @@ public class AbiV2TestFixture {
                                             BigInteger.valueOf(0), BigInteger.valueOf(0)))),
                     Arrays.asList());
 
+    @SuppressWarnings("unchecked")
     public static final org.web3j.abi.datatypes.Function setBarDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBARDYNAMICARRAY,

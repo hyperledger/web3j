@@ -538,6 +538,7 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testDecodeDynamicStructDynamicArray() {
         String rawInput =
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
@@ -561,6 +562,7 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testDecodeStaticStructStaticArray() {
         String rawInput =
                 "0x0000000000000000000000000000000000000000000000000000000000000000"
@@ -585,6 +587,7 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testDecodeDynamicStructStaticArray() {
         String rawInput =
                 "0000000000000000000000000000000000000000000000000000000000000020"
@@ -631,6 +634,7 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testDecodeDynamicStructDynamicArray2() {
         String rawInput =
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
@@ -1211,6 +1215,7 @@ public class FunctionReturnDecoderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testDecodeStaticStructDynamicArray() {
         String rawInput =
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
