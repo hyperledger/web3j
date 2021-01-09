@@ -61,7 +61,10 @@ jobs:
         run: ./gradlew check jacocoTestReport publish
         if: github.base_ref == ''
       - name: Build and stage release
-        uses: web3j/release-action@v1.1
+        uses: web3j/release-action@v1.2
+        with:
+          version: ${GITHUB_REF#'release/'}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         if: contains(github.ref, '/release/')
       - name: After success
         run: bash <(curl -s https://codecov.io/bash)
