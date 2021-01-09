@@ -43,9 +43,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Decrypt secret key
-        run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
-        if: github.base_ref == ''
       - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
@@ -54,13 +51,15 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build pull request
+      - name: Build
         run: ./gradlew check jacocoTestReport
-        if: github.base_ref != ''
-      - name: Build master
-        run: ./gradlew check jacocoTestReport publish
+      - name: Decrypt secret key
+        run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
         if: github.base_ref == ''
-      - name: Build and stage release
+      - name: Publish master
+        run: ./gradlew publish
+        if: github.base_ref == ''
+      - name: Release
         uses: web3j/release-action@v1.2
         with:
           version: ${GITHUB_REF#'release/'}
