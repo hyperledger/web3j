@@ -73,24 +73,24 @@ generating smart contract wrappers.
 QuickStart
 ---------
 The simplest way to start your journey with Web3j is to create a project.
-We provide this functionality using the [Epirus CLI](https://docs.epirus.io/quickstart/#installation). This latter can be installed as follows:
+We provide this functionality using the [Web3j CLI](http://docs.web3j.io/latest/command_line_tools/). This latter can be installed as follows:
 
 For Unix:
 
 ```shell script
-curl -L get.epirus.io | sh && source ~/.epirus/source.sh
+curl -L get.web3j.io | sh && source ~/.web3j/source.sh
 ```
 
 For Windows, in Powershell:
 
 ```shell script
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/epirus-io/epirus-installer/master/installer.ps1'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/web3jo/web3j-installer/master/installer.ps1'))
 ```
 
 Create a new project by running:
 
 ```shell script
-$ epirus new 
+$ web3j new 
 ```
 
 Or use our [Maven](https://github.com/web3j/web3j-maven-plugin) or [Gradle](https://github.com/web3j/web3j-gradle-plugin) plugins.
@@ -107,7 +107,7 @@ Java:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.8.1</version>
+  <version>4.8.3</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ Gradle
 Java:
 
 ```
-compile ('org.web3j:core:4.7.0')
+compile ('org.web3j:core:4.8.3')
 ```
 
 Android:
