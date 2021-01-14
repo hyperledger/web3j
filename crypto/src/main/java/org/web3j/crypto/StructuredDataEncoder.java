@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,6 +50,9 @@ public class StructuredDataEncoder {
 
     final String bytesTypeRegex = "^bytes[0-9][0-9]?$";
     final Pattern bytesTypePattern = Pattern.compile(bytesTypeRegex);
+
+    final String uintTypeRegex = "^uint[1-9][0-9]*$";
+    final Pattern uintTypePattern = Pattern.compile(uintTypeRegex);
 
     // This regex tries to extract the dimensions from the
     // square brackets of an array declaration using the ``Regex Groups``.
@@ -295,6 +299,18 @@ public class StructuredDataEncoder {
                 byte[] hashedValue = sha3(concatenatedArrayEncodings);
                 encTypes.add("bytes32");
                 encValues.add(hashedValue);
+            } else if (uintTypePattern.matcher(field.getType()).find() && value instanceof String) {
+                encTypes.add(field.getType());
+                String stringValue = (String) value;
+                try {
+                    if (stringValue.startsWith("0x")) {
+                        encValues.add(new BigInteger(stringValue.substring(2), 16));
+                    } else {
+                        encValues.add(new BigInteger(stringValue));
+                    }
+                } catch (NumberFormatException e) {
+                    encValues.add(value);
+                }
             } else {
                 encTypes.add(field.getType());
                 encValues.add(value);

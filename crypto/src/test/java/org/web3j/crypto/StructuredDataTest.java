@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -408,5 +409,25 @@ public class StructuredDataTest {
                 "0xbae4f6f7b9bfdfda060692099b0e1ccecd25d62b7c92cc9f3b907f33178b81e3";
 
         assertEquals(Numeric.toHexString(structHashDomain), expectedDomainStructHash);
+    }
+
+    @Test
+    public void testValidStructuredDataWithUint256Types() throws IOException {
+        String path =
+                "build/resources/test/"
+                        + "structured_data_json_files/"
+                        + "ValidStructuredDataWithUint256Types.json";
+        StructuredDataEncoder dataEncoder = new StructuredDataEncoder(getResource(path));
+        System.out.println(Hex.toHexString(dataEncoder.hashStructuredData()));
+
+        String expectedTypeEncoding =
+                "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)";
+
+        assertEquals(
+                dataEncoder.encodeType(dataEncoder.jsonMessageObject.getPrimaryType()),
+                expectedTypeEncoding);
+        assertEquals(
+                "545da263947d741ccf1c2865d15f94e195d3cc9f1f665643b989087ad23086bc",
+                Hex.toHexString(dataEncoder.hashStructuredData()));
     }
 }
