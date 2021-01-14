@@ -157,22 +157,20 @@ public class HttpService extends Service {
         okhttp3.Request httpRequest =
                 new okhttp3.Request.Builder().url(url).headers(headers).post(requestBody).build();
 
-        try (okhttp3.Response response = httpClient.newCall(httpRequest).execute()) {
-            processHeaders(response.headers());
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                if (responseBody != null) {
-                    return buildInputStream(responseBody);
-                } else {
-                    return null;
-                }
+        okhttp3.Response response = httpClient.newCall(httpRequest).execute();
+        processHeaders(response.headers());
+        ResponseBody responseBody = response.body();
+        if (response.isSuccessful()) {
+            if (responseBody != null) {
+                return buildInputStream(responseBody);
             } else {
-                int code = response.code();
-                String text = responseBody == null ? "N/A" : responseBody.string();
-
-                throw new ClientConnectionException(
-                        "Invalid response received: " + code + "; " + text);
+                return null;
             }
+        } else {
+            int code = response.code();
+            String text = responseBody == null ? "N/A" : responseBody.string();
+
+            throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
         }
     }
 
