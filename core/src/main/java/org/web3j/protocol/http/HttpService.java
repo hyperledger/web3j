@@ -13,6 +13,7 @@
 package org.web3j.protocol.http;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -157,20 +158,22 @@ public class HttpService extends Service {
         okhttp3.Request httpRequest =
                 new okhttp3.Request.Builder().url(url).headers(headers).post(requestBody).build();
 
-        okhttp3.Response response = httpClient.newCall(httpRequest).execute();
-        processHeaders(response.headers());
-        ResponseBody responseBody = response.body();
-        if (response.isSuccessful()) {
-            if (responseBody != null) {
-                return buildInputStream(responseBody);
+        try (okhttp3.Response response = httpClient.newCall(httpRequest).execute()) {
+            processHeaders(response.headers());
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                if (responseBody != null) {
+                    return buildInputStream(responseBody);
+                } else {
+                    return null;
+                }
             } else {
-                return null;
-            }
-        } else {
-            int code = response.code();
-            String text = responseBody == null ? "N/A" : responseBody.string();
+                int code = response.code();
+                String text = responseBody == null ? "N/A" : responseBody.string();
 
-            throw new ClientConnectionException("Invalid response received: " + code + "; " + text);
+                throw new ClientConnectionException(
+                        "Invalid response received: " + code + "; " + text);
+            }
         }
     }
 
@@ -179,7 +182,7 @@ public class HttpService extends Service {
     }
 
     private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
-        InputStream inputStream = responseBody.byteStream();
+        InputStream inputStream = new ByteArrayInputStream(responseBody.bytes());
 
         if (includeRawResponse) {
             // we have to buffer the entire input payload, so that after processing

@@ -32,13 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class GethIT {
 
     private Geth web3j;
-    private String url = "http://localhost:8545";
 
     public GethIT() {}
 
     @BeforeEach
     public void setUp() {
-        this.web3j = Geth.build(new HttpService(url));
+        this.web3j = Geth.build(new HttpService());
     }
 
     @Disabled
@@ -50,7 +49,7 @@ public class GethIT {
 
     @Test
     public void testPersonalAccountCreation() throws IOException {
-        Admin admin = Admin.build(new HttpService(url));
+        Admin admin = Admin.build(new HttpService());
         NewAccountIdentifier accountId = admin.personalNewAccount("web3j-geth-IT").send();
         assertFalse(accountId.getResult().isEmpty());
     }
