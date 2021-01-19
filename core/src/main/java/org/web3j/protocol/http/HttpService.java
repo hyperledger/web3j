@@ -13,6 +13,7 @@
 package org.web3j.protocol.http;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -181,8 +182,6 @@ public class HttpService extends Service {
     }
 
     private InputStream buildInputStream(ResponseBody responseBody) throws IOException {
-        InputStream inputStream = responseBody.byteStream();
-
         if (includeRawResponse) {
             // we have to buffer the entire input payload, so that after processing
             // it can be re-read and used to populate the rawResponse field.
@@ -198,6 +197,8 @@ public class HttpService extends Service {
             }
 
             int bufferSize = (int) size;
+            InputStream inputStream = responseBody.byteStream();
+
             BufferedInputStream bufferedinputStream =
                     new BufferedInputStream(inputStream, bufferSize);
 
@@ -205,7 +206,7 @@ public class HttpService extends Service {
             return bufferedinputStream;
 
         } else {
-            return inputStream;
+            return new ByteArrayInputStream(responseBody.bytes());
         }
     }
 
