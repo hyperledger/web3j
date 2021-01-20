@@ -21,13 +21,13 @@ import org.web3j.EVMTest;
 import org.web3j.NodeType;
 import org.web3j.protocol.Web3j;
 import org.web3j.test.contract.SimpleStorage;
+import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
-import org.web3j.tx.gas.DefaultGasProvider;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class SimpleStorageContractIT extends Scenario {
 
     @BeforeAll
@@ -36,9 +36,10 @@ public class SimpleStorageContractIT extends Scenario {
     }
 
     @Test
-    public void testSimpleStorageContract() throws Exception {
+    public void testSimpleStorageContract(
+            TransactionManager transactionManager, ContractGasProvider contractGasProvider)
+            throws Exception {
         BigInteger value = BigInteger.valueOf(1000L);
-        ContractGasProvider contractGasProvider = new DefaultGasProvider();
         SimpleStorage simpleStorage =
                 SimpleStorage.deploy(web3j, ALICE, contractGasProvider).send();
         assertNotNull(simpleStorage.set(value).send());

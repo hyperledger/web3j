@@ -32,7 +32,7 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Flowable callback tests. */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class FlowableIT {
     private static final int EVENT_COUNT = 5;
     private static final int TIMEOUT_MINUTES = 1;

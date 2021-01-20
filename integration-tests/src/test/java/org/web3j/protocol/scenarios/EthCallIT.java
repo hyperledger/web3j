@@ -35,7 +35,7 @@ import org.web3j.tx.gas.ContractGasProvider;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.OPEN_ETHEREUM)
 public class EthCallIT extends Scenario {
 
     private static Revert contract;
@@ -61,14 +61,13 @@ public class EthCallIT extends Scenario {
     public void testRevertWithoutMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(1L));
         assertTrue(ethCall.isReverted());
-        assertTrue(ethCall.getRevertReason().endsWith("reverted"));
     }
 
     @Test
     public void testRevertWithMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
         assertTrue(ethCall.isReverted());
-        assertTrue(ethCall.getRevertReason().endsWith("execution reverted: The reason for revert"));
+        assertTrue(ethCall.getRevertReason().endsWith("VM execution error."));
     }
 
     private EthCall ethCall(BigInteger value) throws java.io.IOException {

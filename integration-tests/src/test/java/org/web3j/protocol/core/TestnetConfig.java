@@ -130,7 +130,7 @@ public class TestnetConfig implements IntegrationTestConfig {
                 web3j.ethGetTransactionCount(validAccount, DefaultBlockParameterName.LATEST)
                         .send()
                         .getTransactionCount(), // nonce
-                Transaction.DEFAULT_GAS,
+                gasProvider.getGasPrice(),
                 validContractCode());
     }
 
