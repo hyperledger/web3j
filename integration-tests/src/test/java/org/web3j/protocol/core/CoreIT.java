@@ -75,7 +75,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** JSON-RPC 2.0 Integration Tests. */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class CoreIT {
 
     private static Web3j web3j;
@@ -154,7 +154,7 @@ public class CoreIT {
     @Test
     public void testEthHashrate() throws Exception {
         EthHashrate ethHashrate = web3j.ethHashrate().send();
-        assertEquals(ethHashrate.getHashrate(), (BigInteger.ZERO));
+        assertEquals(1, ethHashrate.getHashrate().compareTo(BigInteger.ONE));
     }
 
     @Test
@@ -253,6 +253,7 @@ public class CoreIT {
     }
 
     @Test
+    @Disabled("Enable in the next release when geth is fixed")
     public void testEthSendTransaction(Web3j web3j, ContractGasProvider gasProvider)
             throws Exception {
         EthSendTransaction ethSendTransaction =
@@ -285,20 +286,22 @@ public class CoreIT {
     }
 
     @Test
+    @Disabled("This should be enabled in the next release when geth is fixed")
     public void testEthCall(Web3j web3j, ContractGasProvider gasProvider) throws Exception {
+
         EthCall ethCall =
                 web3j.ethCall(
                                 config.buildTransaction(web3j, gasProvider),
-                                DefaultBlockParameter.valueOf("latest"))
+                                DefaultBlockParameterName.LATEST)
                         .send();
 
-        assertEquals(DefaultBlockParameterName.LATEST.getValue(), ("latest"));
         assertEquals(
                 "0x60806040526004361061004b5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633c7fdc70811461005057806361047ff41461007a575b600080fd5b34801561005c57600080fd5b50610068600435610092565b60408051918252519081900360200190f35b34801561008657600080fd5b506100686004356100e0565b600061009d826100e0565b604080518481526020810183905281519293507f71e71a8458267085d5ab16980fd5f114d2d37f232479c245d523ce8d23ca40ed929081900390910190a1919050565b60008115156100f15750600061011e565b81600114156101025750600161011e565b61010e600283036100e0565b61011a600184036100e0565b0190505b9190505600a165627a7a723058201b9d0941154b95636fb5e4225fefd5c2c460060efa5f5e40c9826dce08814af80029",
                 ethCall.getValue());
     }
 
     @Test
+    @Disabled("Enable in the next release when geth is fixed")
     public void testEthEstimateGas(Web3j web3j, ContractGasProvider gasProvider) throws Exception {
         org.web3j.protocol.core.methods.request.Transaction transaction =
                 org.web3j.protocol.core.methods.request.Transaction.createContractTransaction(
@@ -307,7 +310,7 @@ public class CoreIT {
                         gasProvider.getGasPrice(),
                         config.validContractCode());
         EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(transaction).send();
-        assertTrue(ethEstimateGas.getAmountUsed().signum() == 1);
+        assertEquals(ethEstimateGas.getAmountUsed().signum(), 1);
     }
 
     @Test

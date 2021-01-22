@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * href="https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial">Contract Tutorial</a> on
  * the Go Ethereum Wiki.
  */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class GreeterContractIT extends Scenario {
 
     private static final String VALUE = "Greetings!";

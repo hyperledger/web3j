@@ -54,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * href="https://github.com/ethereum/EIPs/issues/20">EIP-20</a>. Solidity implementation is taken
  * from <a href="https://github.com/ConsenSys/Tokens">ConsenSys Tokens</a>.
  */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class HumanStandardTokenIT extends Scenario {
 
     @BeforeAll

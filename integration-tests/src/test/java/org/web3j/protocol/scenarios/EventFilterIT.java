@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Filter scenario integration tests. */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class EventFilterIT extends Scenario {
 
     private static Fibonacci fib;

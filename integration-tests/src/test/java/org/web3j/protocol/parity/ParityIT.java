@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** JSON-RPC 2.0 Integration Tests. */
 @Disabled
-@EVMTest(type = NodeType.PARITY)
+@EVMTest(type = NodeType.OPEN_ETHEREUM)
 public class ParityIT {
 
     private static String PASSWORD = "1n5ecur3P@55w0rd";
