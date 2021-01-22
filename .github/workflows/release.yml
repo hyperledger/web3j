@@ -34,7 +34,7 @@ jobs:
       - name: Decrypt secret key
         run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
       - name: Build and stage release
-        run: ./gradlew publish bintrayUpload -Pversion=${{ GITHUB_REF#'release/' }}
+        run: ./gradlew publish bintrayUpload -Pversion=${GITHUB_REF#'release/'}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
       - name: GitHub release
