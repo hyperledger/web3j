@@ -42,7 +42,7 @@ def getTimestamp() {
 
 ext {
     docsPath = 'web3j/web3j-docs'
-    ghToken = System.getenv('GITHUB_PERSONAL_ACCESS_TOKEN')
+    ghToken = System.getenv('GITHUB_TOKEN')
 }
 
 gitPublish {

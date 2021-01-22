@@ -1,4 +1,4 @@
-name: Web3j
+name: Build
 
 on:
   push:
@@ -30,13 +30,6 @@ jobs:
         run: ./gradlew integration-tests:test -Pintegration-tests=true
   build:
     runs-on: ubuntu-latest
-    env:
-      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-      BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
-      GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -53,18 +46,6 @@ jobs:
         run: chmod +x gradlew
       - name: Build
         run: ./gradlew check jacocoTestReport
-      - name: Decrypt secret key
-        run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
-        if: github.base_ref == ''
-      - name: Publish master
-        run: ./gradlew publish
-        if: github.base_ref == ''
-      - name: Release
-        uses: web3j/release-action@v1.2
-        with:
-          version: ${GITHUB_REF#'release/'}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        if: contains(github.ref, '/release/')
       - name: After success
         run: bash <(curl -s https://codecov.io/bash)
         if: ${{ success() }}
