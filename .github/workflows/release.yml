@@ -1,4 +1,4 @@
-name: Publish snapshot
+name: Release
 
 on:
   workflow_run:
