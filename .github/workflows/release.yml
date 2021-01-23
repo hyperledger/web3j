@@ -33,11 +33,17 @@ jobs:
         run: chmod +x gradlew
       - name: Decrypt secret key
         run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
+      - name: Release name
+        id: release_name
+        uses: web3j/substring-action@v1.0
+        with:
+          value: ${GITHUB_REF}
+          start: '8' # Remove 'release/' prefix 
       - name: Build and stage release
-        run: ./gradlew publish bintrayUpload -Pversion=${{ GITHUB_REF#'release/' }}
+        run: ./gradlew publish bintrayUpload -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
       - name: GitHub release
         run: ./scripts/github-release.sh
       - name: Javadoc release
-        run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ GITHUB_TOKEN }} core:gitPublishPush
+        run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ secrets.GITHUB_TOKEN }} core:gitPublishPush
