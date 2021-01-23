@@ -35,7 +35,7 @@ jobs:
         run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
       - name: Release name
         id: release_name
-        uses: web3j/substring-action@v1.0
+        uses: web3j/substring-action@v1
         with:
           value: ${GITHUB_REF}
           start: '8' # Remove 'release/' prefix 
