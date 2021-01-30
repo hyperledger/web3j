@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 
 /** Generated HumanStandardToken integration test for all supported scenarios. */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class HumanStandardTokenGeneratedIT extends Scenario {
 
     @BeforeAll
