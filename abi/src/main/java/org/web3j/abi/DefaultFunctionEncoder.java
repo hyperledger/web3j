@@ -15,10 +15,14 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.StaticStruct;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
+
+import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
 
 public class DefaultFunctionEncoder extends FunctionEncoder {
 
@@ -64,10 +68,23 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
         return result.toString();
     }
 
+    @SuppressWarnings("unchecked")
     private static int getLength(final List<Type> parameters) {
         int count = 0;
         for (final Type type : parameters) {
-            if (type instanceof StaticArray) {
+            if (type instanceof StaticArray
+                    && StaticStruct.class.isAssignableFrom(
+                            ((StaticArray) type).getComponentType())) {
+                count +=
+                        staticStructNestedPublicFieldsFlatList(
+                                                ((StaticArray) type).getComponentType())
+                                        .size()
+                                * ((StaticArray) type).getValue().size();
+            } else if (type instanceof StaticArray
+                    && DynamicStruct.class.isAssignableFrom(
+                            ((StaticArray) type).getComponentType())) {
+                count++;
+            } else if (type instanceof StaticArray) {
                 count += ((StaticArray) type).getValue().size();
             } else {
                 count++;

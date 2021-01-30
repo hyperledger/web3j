@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /** Sign transaction using Ethereum node. */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class SignTransactionIT extends Scenario {
     @BeforeAll
     public static void setUp(Web3j web3j) {

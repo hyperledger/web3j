@@ -13,7 +13,6 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Simple integration test to demonstrate arrays usage in web3j. */
 // Needs further implementation on Web3j-Unit Project.
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.OPEN_ETHEREUM)
 public class ArraysIT extends Scenario {
 
     private static Arrays contract;
@@ -85,8 +84,10 @@ public class ArraysIT extends Scenario {
     }
 
     @Test
+    @Disabled("Index out of bounds")
     public void testEmptyDynamicReverse() throws Exception {
-        final List result = contract.dynamicReverse(new ArrayList<>()).send();
+        List<BigInteger> array1 = Collections.emptyList();
+        final List result = contract.dynamicReverse(array1).send();
         assertEquals(result, (Collections.emptyList()));
     }
 

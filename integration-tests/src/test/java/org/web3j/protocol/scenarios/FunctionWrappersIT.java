@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <em>project-home</em>/src/test/resources/solidity/fibonacci.abi -o
  * <em>project-home</em>/src/integration-test/java -p org.web3j.generated
  */
-@EVMTest(type = NodeType.GETH)
+@EVMTest(type = NodeType.BESU)
 public class FunctionWrappersIT extends Scenario {
 
     private static Fibonacci fib;

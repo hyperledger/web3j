@@ -31,6 +31,7 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.StructType;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.crypto.Credentials;
 import org.web3j.ens.EnsResolver;
@@ -801,7 +802,11 @@ public abstract class Contract extends ManagedTransaction {
     protected static <S extends Type, T> List<T> convertToNative(List<S> arr) {
         List<T> out = new ArrayList<>();
         for (final S s : arr) {
-            out.add((T) s.getValue());
+            if (StructType.class.isAssignableFrom(s.getClass())) {
+                out.add((T) s);
+            } else {
+                out.add((T) s.getValue());
+            }
         }
         return out;
     }
