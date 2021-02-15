@@ -84,7 +84,7 @@ curl -L get.web3j.io | sh && source ~/.web3j/source.sh
 For Windows, in Powershell:
 
 ```shell script
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/web3jo/web3j-installer/master/installer.ps1'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/web3j/web3j-installer/master/installer.ps1'))
 ```
 
 Create a new project by running:
