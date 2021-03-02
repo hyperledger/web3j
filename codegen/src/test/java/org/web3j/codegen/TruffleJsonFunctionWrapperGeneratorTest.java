@@ -66,12 +66,18 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     public void testLibGeneration() throws Exception {
         testCodeGenerationJvmTypes("MetaCoin", "ConvertLib");
         testCodeGenerationSolidtyTypes("MetaCoin", "ConvertLib");
+
+        testCodeGenerationJvmTypes("ModifiedMetaCoin", "ConvertLib");
+        testCodeGenerationSolidtyTypes("ModifiedMetaCoin", "ConvertLib");
     }
 
     @Test
     public void testContractGeneration() throws Exception {
         testCodeGenerationJvmTypes("MetaCoin", "MetaCoin");
         testCodeGenerationSolidtyTypes("MetaCoin", "MetaCoin");
+
+        testCodeGenerationJvmTypes("ModifiedMetaCoin", "MetaCoin");
+        testCodeGenerationSolidtyTypes("ModifiedMetaCoin", "MetaCoin");
     }
 
     @SuppressWarnings("SameParameterValue")

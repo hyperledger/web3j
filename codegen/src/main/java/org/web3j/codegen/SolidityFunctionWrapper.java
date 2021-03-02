@@ -1669,6 +1669,7 @@ public class SolidityFunctionWrapper extends Generator {
         List<NamedTypeName> indexedParameters = new ArrayList<>();
         List<NamedTypeName> nonIndexedParameters = new ArrayList<>();
 
+        int inputCounter = 0;
         for (AbiDefinition.NamedType namedType : inputs) {
             final TypeName typeName;
             if (namedType.getType().equals("tuple")) {
@@ -1679,7 +1680,7 @@ public class SolidityFunctionWrapper extends Generator {
             } else {
                 typeName = buildTypeName(namedType.getType(), useJavaPrimitiveTypes);
             }
-            NamedTypeName parameter = new NamedTypeName(namedType, typeName);
+            NamedTypeName parameter = new NamedTypeName(namedType, typeName, inputCounter++);
             if (namedType.isIndexed()) {
                 indexedParameters.add(parameter);
             } else {
@@ -1968,14 +1969,19 @@ public class SolidityFunctionWrapper extends Generator {
 
     private static class NamedTypeName {
         private final TypeName typeName;
+        private final int parameterIndex;
         private final AbiDefinition.NamedType namedType;
 
-        NamedTypeName(AbiDefinition.NamedType namedType, TypeName typeName) {
+        NamedTypeName(AbiDefinition.NamedType namedType, TypeName typeName, int parameterIndex) {
             this.namedType = namedType;
             this.typeName = typeName;
+            this.parameterIndex = parameterIndex;
         }
 
         public String getName() {
+            if ("".equals(namedType.getName())) {
+                return "unnamed" + parameterIndex;
+            }
             return namedType.getName();
         }
 

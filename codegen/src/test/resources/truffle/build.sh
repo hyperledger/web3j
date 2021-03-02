@@ -2,6 +2,7 @@
 
 targets="
 MetaCoin/MetaCoin
+ModifiedMetaCoin/MetaCoin
 "
 
 for target in ${targets}; do
