@@ -1299,6 +1299,7 @@ public class SolidityFunctionWrapper extends Generator {
             if (generateSendTxForCalls) {
                 AbiDefinition sendFuncDefinition = new AbiDefinition(functionDefinition);
                 sendFuncDefinition.setConstant(false);
+                sendFuncDefinition.setStateMutability("nonpayable");
                 results.addAll(buildFunctions(sendFuncDefinition));
             }
         }
