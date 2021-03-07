@@ -120,6 +120,11 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testStructOnlyInArray() throws Exception {
+        testCodeGeneration("onlyinarraystruct", "OnlyInArrayStruct", JAVA_TYPES_ARG, false);
+    }
+
+    @Test
     public void testDuplicateField() throws Exception {
         PrintStream console = System.out;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -251,7 +256,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         try (StandardJavaFileManager fileManager =
-                compiler.getStandardFileManager(diagnostics, null, null)) {
+                     compiler.getStandardFileManager(diagnostics, null, null)) {
             Iterable<? extends JavaFileObject> compilationUnits =
                     fileManager.getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
             JavaCompiler.CompilationTask task =
