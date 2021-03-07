@@ -482,9 +482,10 @@ public class SolidityFunctionWrapper extends Generator {
                     namedType.getName(),
                     namedType.getType().substring(0, namedType.getType().length() - 2),
                     namedType.getComponents(),
-                    namedType.getInternalType().substring(0, namedType.getInternalType().length() - 2),
-                    namedType.isIndexed()
-            );
+                    namedType
+                            .getInternalType()
+                            .substring(0, namedType.getInternalType().length() - 2),
+                    namedType.isIndexed());
         } else {
             return namedType;
         }

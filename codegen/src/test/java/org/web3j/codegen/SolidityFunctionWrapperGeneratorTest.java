@@ -256,7 +256,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         try (StandardJavaFileManager fileManager =
-                     compiler.getStandardFileManager(diagnostics, null, null)) {
+                compiler.getStandardFileManager(diagnostics, null, null)) {
             Iterable<? extends JavaFileObject> compilationUnits =
                     fileManager.getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
             JavaCompiler.CompilationTask task =
