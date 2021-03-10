@@ -40,7 +40,7 @@ Features
     and Geth's
     [Personal](https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal)
     client APIs
--   Support for [Infura](https://infura.io/), so you don't have to run
+-   Support for [Alchemy](https://docs.alchemyapi.io/alchemy/guides/getting-started#web-3-j) and [Infura](https://infura.io/), so you don't have to run
     an Ethereum client yourself
 -   Comprehensive integration tests demonstrating a number of the above
     scenarios
