@@ -143,8 +143,7 @@ public class StructuredDataEncoder {
         // If any dimension is empty, then it's value is set to -1.
         Matcher arrayTypeMatcher = arrayTypePattern.matcher(declaration);
         arrayTypeMatcher.find();
-        String dimensionsString = arrayTypeMatcher.group(1);
-        Matcher dimensionTypeMatcher = arrayDimensionPattern.matcher(dimensionsString);
+        Matcher dimensionTypeMatcher = arrayDimensionPattern.matcher(declaration);
         List<Integer> dimensions = new ArrayList<>();
         while (dimensionTypeMatcher.find()) {
             String currentDimension = dimensionTypeMatcher.group(1);
@@ -153,10 +152,6 @@ public class StructuredDataEncoder {
             } else {
                 dimensions.add(Integer.parseInt(currentDimension));
             }
-        }
-
-        if (dimensions.size() == 0) {
-            dimensions.add(Integer.parseInt("-1"));
         }
 
         return dimensions;
