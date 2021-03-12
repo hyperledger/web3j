@@ -12,6 +12,7 @@
  */
 package org.web3j.crypto;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,12 +55,12 @@ public class StructuredData {
         public EIP712Domain(
                 @JsonProperty(value = "name") String name,
                 @JsonProperty(value = "version") String version,
-                @JsonProperty(value = "chainId") Uint256 chainId,
+                @JsonProperty(value = "chainId") String chainId,
                 @JsonProperty(value = "verifyingContract") Address verifyingContract,
                 @JsonProperty(value = "salt") String salt) {
             this.name = name;
             this.version = version;
-            this.chainId = chainId;
+            this.chainId = chainId != null ? new Uint256(new BigInteger(chainId)) : null;
             this.verifyingContract = verifyingContract;
             this.salt = salt;
         }
