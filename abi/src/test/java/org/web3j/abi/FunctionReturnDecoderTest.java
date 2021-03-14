@@ -13,6 +13,7 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1237,4 +1238,51 @@ public class FunctionReturnDecoderTest {
                                 new AbiV2TestFixture.Bar(
                                         BigInteger.valueOf(123), BigInteger.valueOf(123)))));
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testDecodeDynamicNestedArrayWithStrings() {
+        String rawInput =
+                "0000000000000000000000000000000000000000000000000000000000000020" + // first element because dynamic
+
+                        "0000000000000000000000000000000000000000000000000000000000000001" + // id
+
+                        "0000000000000000000000000000000000000000000000000000000000000080" + // offset of description
+                        "00000000000000000000000000000000000000000000000000000000000000c0" + // offset of Address struct
+                        "0000000000000000000000000000000000000000000000000000000000000180" + // offset of notary Document
+
+                        "0000000000000000000000000000000000000000000000000000000000000015" + // Description length
+                        "546869732069732061206465736372697074696f6e0000000000000000000000" + // Description
+
+                        "0000000000000000000000000000000000000000000000000000000000000040" + // offset of first element in Address struct
+                        "0000000000000000000000000000000000000000000000000000000000000080" + // offset of second element in Address struct
+
+                        "000000000000000000000000000000000000000000000000000000000000000b" + // length of Address.city
+                        "5468697320612063697479000000000000000000000000000000000000000000" + // Address.city
+
+                        "0000000000000000000000000000000000000000000000000000000000000015" + // length of Address.postalCode
+                        "54686973206973206120706f7374616c20636f64650000000000000000000000" + // address.postalCode
+
+                        "000000000000000000000000000000000000000000000000000000000000001c" + // notaryDocument length
+                        "546869732069732061206e6f746172697a656420646f63756d656e7400000000";  // notaryDocument
+
+        assertEquals(
+                FunctionReturnDecoder.decode(
+                        rawInput,
+                        AbiV2TestFixture.getStructureFunction.getOutputParameters()),
+                Arrays.asList(
+                                new AbiV2TestFixture.Structure(
+                                        BigInteger.ONE,
+                                        "This is a description",
+                                        new AbiV2TestFixture.Address(
+                                                "This a city",
+                                                "This is a postal code"
+                                        ),
+                                        "This is a notarized document".getBytes(StandardCharsets.UTF_8))
+                                )
+                );
+    }
 }
+
+
+

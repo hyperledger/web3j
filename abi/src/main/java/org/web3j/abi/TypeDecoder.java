@@ -433,7 +433,6 @@ public class TypeDecoder {
                                     () ->
                                             new RuntimeException(
                                                     "TypeReference struct must contain a constructor with types that extend Type"));
-            ;
             ctor.setAccessible(true);
             return (T) ctor.newInstance(parameters.toArray());
         } catch (ReflectiveOperationException e) {
@@ -541,13 +540,25 @@ public class TypeDecoder {
                                             - parameterOffsets.get(dynamicParametersProcessed)
                                     : parameterOffsets.get(dynamicParametersProcessed + 1)
                                             - parameterOffsets.get(dynamicParametersProcessed);
+                    T decodedValue;
+                    // When the nested struct is the first element, the input still contains the offset of the struct.
+                    // If the struct is at the middle, then the input starts at the very definition of the nested struct (doesn't have the offset to it)
+                    if (DynamicStruct.class.isAssignableFrom(declaredField) && i != 0) {
+                        decodedValue = decodeDynamicStruct(
+                                input.substring(
+                                        parameterOffsets.get(dynamicParametersProcessed), parameterOffsets.get(dynamicParametersProcessed) + parameterLength),
+                                0, TypeReference.create(declaredField));
+                    }
+                    else {
+                        decodedValue = decodeDynamicParameterFromStruct(
+                                input,
+                                parameterOffsets.get(dynamicParametersProcessed),
+                                parameterLength,
+                                declaredField);
+                    }
                     parameters.put(
                             i,
-                            decodeDynamicParameterFromStruct(
-                                    input,
-                                    parameterOffsets.get(dynamicParametersProcessed),
-                                    parameterLength,
-                                    declaredField));
+                            decodedValue);
                     dynamicParametersProcessed++;
                 }
             }
@@ -583,6 +594,8 @@ public class TypeDecoder {
 
         final T value;
         if (DynamicStruct.class.isAssignableFrom(declaredField)) {
+            // if there is nested struct inside, 64, if only basic types 0
+//            final int nextOffset = Arrays.stream(declaredField.getDeclaredFields()).anyMatch(field -> DynamicStruct.class.isAssignableFrom(field.getType())) ? 64 : 0;
             value =
                     decodeDynamicStruct(
                             dynamicElementData, 64, TypeReference.create(declaredField));

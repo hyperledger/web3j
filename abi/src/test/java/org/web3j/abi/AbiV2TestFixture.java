@@ -12,16 +12,11 @@
  */
 package org.web3j.abi;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticStruct;
-import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.StaticArray1;
 import org.web3j.abi.datatypes.generated.StaticArray2;
@@ -29,6 +24,14 @@ import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+
+@SuppressWarnings("unused")
 public class AbiV2TestFixture {
 
     public static final String FUNC_GETBAR = "getBar";
@@ -107,6 +110,8 @@ public class AbiV2TestFixture {
 
     public static final String FUNC_SETWIZ = "setWiz";
 
+    public static final String FUNC_GETSTRUCTURE = "getStructure";
+
     public static final String FUNC_addDynamicBytesArray = "addDynamicBytesArray";
 
     public static class Foo extends DynamicStruct {
@@ -132,48 +137,53 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setFooFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETFOO,
-                    Arrays.<Type>asList(new Foo("id", "name")),
-                    Collections.emptyList());
+                    singletonList(new Foo("id", "name")),
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function getFooFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETFOO, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Foo>() {}));
+                    FUNC_GETFOO, emptyList(), singletonList(new TypeReference<Foo>() {
+            }));
 
     public static final org.web3j.abi.datatypes.Function getFooUintFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOUINT,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<Foo>() {}, new TypeReference<Uint256>() {}));
+                    emptyList(),
+                    asList(new TypeReference<Foo>() {}, new TypeReference<Uint256>() {}));
 
     public static final org.web3j.abi.datatypes.Function getFooStaticArray1Function =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOSTATICARRAY1,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<StaticArray1<Foo>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<StaticArray1<Foo>>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getFooStaticArray2Function =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOSTATICARRAY2,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<StaticArray2<Foo>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<StaticArray2<Foo>>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getFooStaticArray3Function =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOSTATICARRAY3,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<StaticArray3<Foo>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<StaticArray3<Foo>>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getFooDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOODYNAMICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<DynamicArray<Foo>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<DynamicArray<Foo>>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getNarBarFooNarFooDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETNARBARFOONARFOODYNAMICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(
+                    emptyList(),
+                    asList(
                             new TypeReference<StaticArray3<Nar>>() {},
                             new TypeReference<StaticArray3<Bar>>() {},
                             new TypeReference<DynamicArray<Foo>>() {},
@@ -183,7 +193,7 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function idNarBarFooNarFooDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_IDNARBARFOONARFOODYNAMICARRAY,
-                    Arrays.asList(
+                    asList(
                             new StaticArray3<>(
                                     AbiV2TestFixture.Nar.class,
                                     new AbiV2TestFixture.Nar(
@@ -220,7 +230,7 @@ public class AbiV2TestFixture {
                                     new AbiV2TestFixture.Foo("id", "name"),
                                     new AbiV2TestFixture.Foo("id", "name"),
                                     new AbiV2TestFixture.Foo("id", "name"))),
-                    Arrays.asList(
+                    asList(
                             new TypeReference<StaticArray3<Nar>>() {},
                             new TypeReference<StaticArray3<Bar>>() {},
                             new TypeReference<DynamicArray<Foo>>() {},
@@ -230,77 +240,81 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function getBarDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETBARDYNAMICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<DynamicArray<Bar>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<DynamicArray<Bar>>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getBarStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETBARSTATICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<StaticArray3<Bar>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<StaticArray3<Bar>>() {
+                    }));
 
     @SuppressWarnings("unchecked")
     public static final org.web3j.abi.datatypes.Function setBarStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBARSTATICARRAY,
-                    Arrays.<Type>asList(
+                    singletonList(
                             new StaticArray3(
-                                    AbiV2TestFixture.Bar.class,
-                                    new AbiV2TestFixture.Bar(
+                                    Bar.class,
+                                    new Bar(
                                             BigInteger.valueOf(0), BigInteger.valueOf(0)),
-                                    new AbiV2TestFixture.Bar(
+                                    new Bar(
                                             BigInteger.valueOf(123), BigInteger.valueOf(123)),
-                                    new AbiV2TestFixture.Bar(
+                                    new Bar(
                                             BigInteger.valueOf(0), BigInteger.valueOf(0)))),
-                    Arrays.asList());
+                    emptyList());
 
     @SuppressWarnings("unchecked")
     public static final org.web3j.abi.datatypes.Function setBarDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBARDYNAMICARRAY,
-                    Arrays.<Type>asList(
+                    singletonList(
                             new DynamicArray(
-                                    AbiV2TestFixture.Bar.class,
-                                    new AbiV2TestFixture.Bar(
+                                    Bar.class,
+                                    new Bar(
                                             BigInteger.valueOf(0), BigInteger.valueOf(0)),
-                                    new AbiV2TestFixture.Bar(
+                                    new Bar(
                                             BigInteger.valueOf(123), BigInteger.valueOf(123)),
-                                    new AbiV2TestFixture.Bar(
+                                    new Bar(
                                             BigInteger.valueOf(0), BigInteger.valueOf(0)))),
-                    Arrays.asList());
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function getNarDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETNARDYNAMICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<DynamicArray<Nar>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<DynamicArray<Nar>>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getNarStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETNARSTATICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<StaticArray3<Nar>>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<StaticArray3<Nar>>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getFooMultipleStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOMULTIPLESTATICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(
+                    emptyList(),
+                    asList(
                             new TypeReference<StaticArray3<Foo>>() {},
                             new TypeReference<StaticArray2<Foo>>() {}));
 
     public static final org.web3j.abi.datatypes.Function getFooMultipleDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOMULTIPLEDYNAMICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(
+                    emptyList(),
+                    asList(
                             new TypeReference<DynamicArray<Foo>>() {},
                             new TypeReference<DynamicArray<Foo>>() {}));
 
     public static final org.web3j.abi.datatypes.Function idNarBarFooNarFooArraysFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_IDNARBARFOONARFOOARRAYS,
-                    Arrays.<Type>asList(
+                    asList(
                             new DynamicArray<>(
                                     AbiV2TestFixture.Nar.class,
                                     new AbiV2TestFixture.Nar(
@@ -335,7 +349,7 @@ public class AbiV2TestFixture {
                             new DynamicArray<>(
                                     AbiV2TestFixture.Foo.class,
                                     new AbiV2TestFixture.Foo("id", "name"))),
-                    Arrays.<TypeReference<?>>asList(
+                    asList(
                             new TypeReference<DynamicArray<Nar>>() {},
                             new TypeReference<StaticArray3<Bar>>() {},
                             new TypeReference<DynamicArray<Foo>>() {},
@@ -345,7 +359,7 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function idNarBarFooNarFooArraysFunction2 =
             new org.web3j.abi.datatypes.Function(
                     FUNC_IDNARBARFOONARFOOARRAYS,
-                    Arrays.<Type>asList(
+                    asList(
                             new StaticArray3<>(
                                     AbiV2TestFixture.Nar.class,
                                     new AbiV2TestFixture.Nar(
@@ -383,7 +397,7 @@ public class AbiV2TestFixture {
                                     new AbiV2TestFixture.Foo("id", "name"),
                                     new AbiV2TestFixture.Foo("id", "name"),
                                     new AbiV2TestFixture.Foo("id", "name"))),
-                    Arrays.<TypeReference<?>>asList(
+                    asList(
                             new TypeReference<StaticArray3<Nar>>() {},
                             new TypeReference<DynamicArray<Bar>>() {},
                             new TypeReference<DynamicArray<Foo>>() {},
@@ -393,7 +407,7 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function idBarNarFooNarFooArraysFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_IDBARNARFOONARFOOARRAYS,
-                    Arrays.<Type>asList(
+                    asList(
                             new StaticArray3<>(
                                     AbiV2TestFixture.Bar.class,
                                     new AbiV2TestFixture.Bar(BigInteger.ZERO, BigInteger.ZERO),
@@ -430,7 +444,7 @@ public class AbiV2TestFixture {
                                     new AbiV2TestFixture.Foo("id", "name"),
                                     new AbiV2TestFixture.Foo("id", "name"),
                                     new AbiV2TestFixture.Foo("id", "name"))),
-                    Arrays.<TypeReference<?>>asList(
+                    asList(
                             new TypeReference<StaticArray3<Bar>>() {},
                             new TypeReference<StaticArray3<Nar>>() {},
                             new TypeReference<DynamicArray<Foo>>() {},
@@ -440,8 +454,8 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function getFooMultipleDynamicStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOMULTIPLEDYNAMICSTATICARRAY,
-                    Arrays.<Type>asList(),
-                    Arrays.<TypeReference<?>>asList(
+                    emptyList(),
+                    asList(
                             new TypeReference<StaticArray3<Foo>>() {},
                             new TypeReference<DynamicArray<Foo>>() {}));
 
@@ -468,27 +482,28 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setBarFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBAR,
-                    Arrays.<Type>asList(new Bar(BigInteger.ONE, BigInteger.TEN)),
-                    Collections.<TypeReference<?>>emptyList());
+                    singletonList(new Bar(BigInteger.ONE, BigInteger.TEN)),
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function getBarFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETBAR,
-                    Arrays.<Type>asList(),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Bar>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<Bar>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getFooBarFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOBAR,
-                    Arrays.<Type>asList(),
-                    Arrays.<TypeReference<?>>asList(
+                    emptyList(),
+                    asList(
                             new TypeReference<Foo>() {}, new TypeReference<Bar>() {}));
 
     public static final org.web3j.abi.datatypes.Function getFooBarBarFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOBARBAR,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(
+                    emptyList(),
+                    asList(
                             new TypeReference<Foo>() {},
                             new TypeReference<Bar>() {},
                             new TypeReference<Bar>() {}));
@@ -496,8 +511,8 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function getFooFooBarBarFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFOOFOOBARBAR,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(
+                    emptyList(),
+                    asList(
                             new TypeReference<Foo>() {},
                             new TypeReference<Foo>() {},
                             new TypeReference<Bar>() {},
@@ -507,8 +522,8 @@ public class AbiV2TestFixture {
             getNarBarBarFuzzFooNarFuzzNuuFooFuzzFunction =
                     new org.web3j.abi.datatypes.Function(
                             FUNC_GETNARBARBARFUZZFOONARFUZZNUUFOOFUZZFUNCTION,
-                            Arrays.<Type>asList(),
-                            Arrays.asList(
+                            emptyList(),
+                            asList(
                                     new TypeReference<Nar>() {},
                                     new TypeReference<Bar>() {},
                                     new TypeReference<Bar>() {},
@@ -543,8 +558,8 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setBazFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBAZ,
-                    Arrays.<Type>asList(new Baz("id", BigInteger.ONE)),
-                    Collections.<TypeReference<?>>emptyList());
+                    singletonList(new Baz("id", BigInteger.ONE)),
+                    emptyList());
 
     public static class Boz extends DynamicStruct {
         public BigInteger data;
@@ -569,14 +584,15 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setBozFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBOZ,
-                    Arrays.<Type>asList(new Boz(BigInteger.ONE, "id")),
-                    Collections.<TypeReference<?>>emptyList());
+                    singletonList(new Boz(BigInteger.ONE, "id")),
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function getBozFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETBOZ,
-                    Collections.<Type>emptyList(),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Boz>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<Boz>() {
+                    }));
 
     public static class Fuzz extends StaticStruct {
         public Bar bar;
@@ -599,38 +615,39 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setFooDynamicArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETFOODYNAMICARRAY,
-                    Collections.singletonList(
+                    singletonList(
                             new DynamicArray<>(
                                     Foo.class,
                                     new Foo("", ""),
                                     new Foo("id", "name"),
                                     new Foo("", ""))),
-                    Collections.emptyList());
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function setDoubleFooStaticArrayFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETFOODYNAMICARRAY,
-                    Arrays.<Type>asList(new Foo("", ""), new Foo("id", "name"), new Foo("", "")),
-                    Collections.emptyList());
+                    Arrays.asList(new Foo("", ""), new Foo("id", "name"), new Foo("", "")),
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function setFuzzFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETFUZZ,
-                    Arrays.<Type>asList(
+                    singletonList(
                             new Fuzz(new Bar(BigInteger.ONE, BigInteger.TEN), BigInteger.ONE)),
-                    Collections.emptyList());
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function getFuzzFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFUZZ,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<Fuzz>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<Fuzz>() {
+                    }));
 
     public static final org.web3j.abi.datatypes.Function getFuzzFuzzFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_GETFUZZFUZZ,
-                    Arrays.<Type>asList(),
-                    Arrays.asList(new TypeReference<Fuzz>() {}, new TypeReference<Fuzz>() {}));
+                    emptyList(),
+                    asList(new TypeReference<Fuzz>() {}, new TypeReference<Fuzz>() {}));
 
     public static class Nuu extends DynamicStruct {
         public Foo foo;
@@ -644,14 +661,15 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setNuuFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETNUU,
-                    Arrays.<Type>asList(new Nuu(new Foo("id", "name"))),
-                    Collections.<TypeReference<?>>emptyList());
+                    singletonList(new Nuu(new Foo("id", "name"))),
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function getNuuFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETNUU,
-                    Collections.<Type>emptyList(),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Nuu>() {}));
+                    emptyList(),
+                    singletonList(new TypeReference<Nuu>() {
+                    }));
 
     public static class Nar extends DynamicStruct {
         public Nuu nuu;
@@ -701,17 +719,19 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setNazFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETNAZ,
-                    Arrays.<Type>asList(
+                    singletonList(
                             new Naz(new Nar(new Nuu(new Foo("id", "name"))), BigInteger.ONE)),
-                    Collections.emptyList());
+                    emptyList());
 
     public static final org.web3j.abi.datatypes.Function getNazFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETNAZ, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Naz>() {}));
+                    FUNC_GETNAZ, emptyList(), singletonList(new TypeReference<Naz>() {
+            }));
 
     public static final org.web3j.abi.datatypes.Function getNarFunction =
             new org.web3j.abi.datatypes.Function(
-                    FUNC_GETNAR, Arrays.<Type>asList(), Arrays.asList(new TypeReference<Nar>() {}));
+                    FUNC_GETNAR, emptyList(), singletonList(new TypeReference<Nar>() {
+            }));
 
     public static class Wiz extends DynamicStruct {
         public Foo foo;
@@ -734,8 +754,8 @@ public class AbiV2TestFixture {
     public static final org.web3j.abi.datatypes.Function setWizFunction =
             new org.web3j.abi.datatypes.Function(
                     FUNC_SETWIZ,
-                    Arrays.<Type>asList(new Wiz(new Foo("id", "name"), "data")),
-                    Collections.emptyList());
+                    singletonList(new Wiz(new Foo("id", "name"), "data")),
+                    emptyList());
 
     public static class BytesStruct extends DynamicStruct {
         public byte[] pubkey;
@@ -765,8 +785,59 @@ public class AbiV2TestFixture {
     public static final Function addDynamicBytesArrayFunction =
             new Function(
                     FUNC_addDynamicBytesArray,
-                    Arrays.<Type>asList(
+                    singletonList(
                             new BytesStruct(
                                     "dynamic".getBytes(), BigInteger.ZERO, "Bytes".getBytes())),
-                    Collections.<TypeReference<?>>emptyList());
+                    emptyList());
+
+    public static class Address extends DynamicStruct {
+        public String city;
+
+        public String postalCode;
+
+        public Address(String city, String postalCode) {
+            super(new org.web3j.abi.datatypes.Utf8String(city),new org.web3j.abi.datatypes.Utf8String(postalCode));
+            this.city = city;
+            this.postalCode = postalCode;
+        }
+
+        public Address(Utf8String city, Utf8String postalCode) {
+            super(city,postalCode);
+            this.city = city.getValue();
+            this.postalCode = postalCode.getValue();
+        }
+    }
+
+    public static class Structure extends DynamicStruct {
+        public BigInteger id;
+
+        public String description;
+
+        public Address _address;
+
+        public byte[] notaryDocument;
+
+        public Structure(BigInteger id, String description, Address _address, byte[] notaryDocument) {
+            super(new org.web3j.abi.datatypes.generated.Uint256(id),new org.web3j.abi.datatypes.Utf8String(description),_address,new org.web3j.abi.datatypes.DynamicBytes(notaryDocument));
+            this.id = id;
+            this.description = description;
+            this._address = _address;
+            this.notaryDocument = notaryDocument;
+        }
+
+        public Structure(Uint256 id, Utf8String description, Address _address, DynamicBytes notaryDocument) {
+            super(id,description,_address,notaryDocument);
+            this.id = id.getValue();
+            this.description = description.getValue();
+            this._address = _address;
+            this.notaryDocument = notaryDocument.getValue();
+        }
+    }
+
+    public static final Function getStructureFunction =
+            new Function(
+                    FUNC_GETSTRUCTURE,
+                    emptyList(),
+                    singletonList(new TypeReference<Structure>() {
+                    }));
 }
