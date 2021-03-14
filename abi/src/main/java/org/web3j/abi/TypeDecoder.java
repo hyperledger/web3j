@@ -547,8 +547,7 @@ public class TypeDecoder {
                                     parameterOffsets.get(dynamicParametersProcessed),
                                     parameterLength,
                                     declaredField,
-                                    i == 0 ? 64 : 0)
-                    );
+                                    i == 0 ? 64 : 0));
                     dynamicParametersProcessed++;
                 }
             }
@@ -575,8 +574,10 @@ public class TypeDecoder {
     }
 
     /**
-     * When the nested struct is the first element in the struct definition, the current input will still contain the offset of the struct. which means @structOffset = 64
-     * If the struct is at the middle or end, then the current input starts at the very definition of the nested struct (doesn't start with the struct offset). Then, @structOffset = 0
+     * When the nested struct is the first element in the struct definition, the current input will
+     * still contain the offset of the struct. which means @structOffset = 64. If the struct is at
+     * the middle or end, then the current input starts at the very definition of the nested struct
+     * (doesn't start with the struct offset). Then, @structOffset = 0
      */
     private static <T extends Type> T decodeDynamicParameterFromStruct(
             final String input,
