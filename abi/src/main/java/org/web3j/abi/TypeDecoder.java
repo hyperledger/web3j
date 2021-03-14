@@ -540,25 +540,15 @@ public class TypeDecoder {
                                             - parameterOffsets.get(dynamicParametersProcessed)
                                     : parameterOffsets.get(dynamicParametersProcessed + 1)
                                             - parameterOffsets.get(dynamicParametersProcessed);
-                    T decodedValue;
-                    // When the nested struct is the first element, the input still contains the offset of the struct.
-                    // If the struct is at the middle, then the input starts at the very definition of the nested struct (doesn't have the offset to it)
-                    if (DynamicStruct.class.isAssignableFrom(declaredField) && i != 0) {
-                        decodedValue = decodeDynamicStruct(
-                                input.substring(
-                                        parameterOffsets.get(dynamicParametersProcessed), parameterOffsets.get(dynamicParametersProcessed) + parameterLength),
-                                0, TypeReference.create(declaredField));
-                    }
-                    else {
-                        decodedValue = decodeDynamicParameterFromStruct(
-                                input,
-                                parameterOffsets.get(dynamicParametersProcessed),
-                                parameterLength,
-                                declaredField);
-                    }
                     parameters.put(
                             i,
-                            decodedValue);
+                            decodeDynamicParameterFromStruct(
+                                    input,
+                                    parameterOffsets.get(dynamicParametersProcessed),
+                                    parameterLength,
+                                    declaredField,
+                                    i == 0 ? 64 : 0)
+                    );
                     dynamicParametersProcessed++;
                 }
             }
@@ -584,11 +574,16 @@ public class TypeDecoder {
         return (int) Arrays.stream(cls).filter(c -> isDynamic((Class<T>) c)).count();
     }
 
+    /**
+     * When the nested struct is the first element in the struct definition, the current input will still contain the offset of the struct. which means @structOffset = 64
+     * If the struct is at the middle or end, then the current input starts at the very definition of the nested struct (doesn't start with the struct offset). Then, @structOffset = 0
+     */
     private static <T extends Type> T decodeDynamicParameterFromStruct(
             final String input,
             final int parameterOffset,
             final int parameterLength,
-            final Class<T> declaredField) {
+            final Class<T> declaredField,
+            int structOffset) {
         final String dynamicElementData =
                 input.substring(parameterOffset, parameterOffset + parameterLength);
 
@@ -596,7 +591,7 @@ public class TypeDecoder {
         if (DynamicStruct.class.isAssignableFrom(declaredField)) {
             value =
                     decodeDynamicStruct(
-                            dynamicElementData, 64, TypeReference.create(declaredField));
+                            dynamicElementData, structOffset, TypeReference.create(declaredField));
         } else {
             value = decode(dynamicElementData, declaredField);
         }
