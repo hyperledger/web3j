@@ -594,8 +594,6 @@ public class TypeDecoder {
 
         final T value;
         if (DynamicStruct.class.isAssignableFrom(declaredField)) {
-            // if there is nested struct inside, 64, if only basic types 0
-//            final int nextOffset = Arrays.stream(declaredField.getDeclaredFields()).anyMatch(field -> DynamicStruct.class.isAssignableFrom(field.getType())) ? 64 : 0;
             value =
                     decodeDynamicStruct(
                             dynamicElementData, 64, TypeReference.create(declaredField));
