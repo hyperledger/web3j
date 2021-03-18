@@ -134,11 +134,15 @@ public class HttpService extends Service {
         this(DEFAULT_URL);
     }
 
-    private static OkHttpClient createOkHttpClient() {
+    public static OkHttpClient.Builder getOkHttpClientBuilder() {
         final OkHttpClient.Builder builder =
                 new OkHttpClient.Builder().connectionSpecs(CONNECTION_SPEC_LIST);
         configureLogging(builder);
-        return builder.build();
+        return builder;
+    }
+
+    private static OkHttpClient createOkHttpClient() {
+        return getOkHttpClientBuilder().build();
     }
 
     private static void configureLogging(OkHttpClient.Builder builder) {
