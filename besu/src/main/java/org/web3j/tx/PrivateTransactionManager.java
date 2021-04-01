@@ -22,15 +22,15 @@ import org.slf4j.LoggerFactory;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.besu.response.privacy.PrivateEnclaveKey;
-import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.PrivateTransactionReceiptProcessor;
@@ -38,9 +38,9 @@ import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.utils.Restriction.RESTRICTED;
-import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
 
 public abstract class PrivateTransactionManager extends TransactionManager {
+
     private static final Logger log = LoggerFactory.getLogger(PrivateTransactionManager.class);
 
     private final PrivateTransactionReceiptProcessor transactionReceiptProcessor;
@@ -214,25 +214,15 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     public String sendCall(
             final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        try {
-            EthSendTransaction est =
-                    sendTransaction(
-                            gasProvider.getGasPrice(),
-                            gasProvider.getGasLimit(),
-                            to,
-                            data,
-                            BigInteger.ZERO);
-            final TransactionReceipt ptr = processResponse(est);
+        EthCall ethCall =
+                besu.privCall(
+                                getPrivacyGroupId().toString(),
+                                Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                                defaultBlockParameter)
+                        .send();
 
-            if (!ptr.isStatusOK()) {
-                throw new ContractCallException(
-                        String.format(REVERT_ERR_STR, extractRevertReason(ptr, data, besu, false)));
-            }
-            return ((PrivateTransactionReceipt) ptr).getOutput();
-        } catch (TransactionException e) {
-            log.error("Failed to execute call", e);
-            return null;
-        }
+        assertCallNotReverted(ethCall);
+        return ethCall.getValue();
     }
 
     private TransactionReceipt processResponse(final EthSendTransaction transactionResponse)
