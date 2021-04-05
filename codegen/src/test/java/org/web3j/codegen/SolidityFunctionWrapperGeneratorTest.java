@@ -122,10 +122,16 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testStructOnlyInArray() throws Exception {
+        testCodeGeneration("onlyinarraystruct", "OnlyInArrayStruct", JAVA_TYPES_ARG, false);
+    }
+
+    @Test
+    public void testStructOnlyInArrayCompareJavaFile() throws Exception {
         String inputFileName = "OnlyInArrayStruct";
-        String contract = "onlyinarraystruct";
-        testCodeGeneration(contract, inputFileName, JAVA_TYPES_ARG, false);
-        File fileActual = new File(tempDirPath, "org/web3j/unittests/java/OnlyInArrayStruct.java");
+        String contract = inputFileName.toLowerCase();
+        String packagePath =
+                generateCode(emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false);
+        File fileActual = new File(tempDirPath, packagePath + "/OnlyInArrayStruct.java");
         File fileExpected =
                 new File(
                         Strings.join(
@@ -216,6 +222,25 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             boolean useBin,
             boolean primitives)
             throws Exception {
+
+        String packagePath =
+                generateCode(prefixes, contractName, inputFileName, types, useBin, primitives);
+        verifyGeneratedCode(
+                tempDirPath
+                        + File.separator
+                        + packagePath
+                        + File.separator
+                        + Strings.capitaliseFirstLetter(inputFileName)
+                        + ".java");
+    }
+
+    private String generateCode(
+            List<String> prefixes,
+            String contractName,
+            String inputFileName,
+            String types,
+            boolean useBin,
+            boolean primitives) {
         String packageName = null;
         if (types.equals(JAVA_TYPES_ARG)) {
             packageName = "org.web3j.unittests.java";
@@ -258,14 +283,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         }
 
         SolidityFunctionWrapperGenerator.main(options.toArray(new String[options.size()]));
-
-        verifyGeneratedCode(
-                tempDirPath
-                        + File.separator
-                        + packageName.replace('.', File.separatorChar)
-                        + File.separator
-                        + Strings.capitaliseFirstLetter(inputFileName)
-                        + ".java");
+        return packageName.replace('.', File.separatorChar);
     }
 
     private void verifyGeneratedCode(String sourceFile) throws IOException {
