@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -121,7 +122,23 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testStructOnlyInArray() throws Exception {
-        testCodeGeneration("onlyinarraystruct", "OnlyInArrayStruct", JAVA_TYPES_ARG, false);
+        String inputFileName = "OnlyInArrayStruct";
+        String contract = "onlyinarraystruct";
+        testCodeGeneration(contract, inputFileName, JAVA_TYPES_ARG, false);
+        File fileActual = new File(tempDirPath, "org/web3j/unittests/java/OnlyInArrayStruct.java");
+        File fileExpected =
+                new File(
+                        Strings.join(
+                                Arrays.asList(
+                                        solidityBaseDir,
+                                        contract,
+                                        "build",
+                                        "java",
+                                        inputFileName + ".java"),
+                                File.separator));
+        assertEquals(
+                new String(Files.readAllBytes(fileExpected.toPath())),
+                new String(Files.readAllBytes(fileActual.toPath())));
     }
 
     @Test
