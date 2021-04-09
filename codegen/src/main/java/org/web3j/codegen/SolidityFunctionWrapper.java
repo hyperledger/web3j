@@ -476,6 +476,21 @@ public class SolidityFunctionWrapper extends Generator {
         return structs;
     }
 
+    private NamedType normalizeNamedType(NamedType namedType) {
+        if (namedType.getType().endsWith("[]") && namedType.getInternalType().endsWith("[]")) {
+            return new NamedType(
+                    namedType.getName(),
+                    namedType.getType().substring(0, namedType.getType().length() - 2),
+                    namedType.getComponents(),
+                    namedType
+                            .getInternalType()
+                            .substring(0, namedType.getInternalType().length() - 2),
+                    namedType.isIndexed());
+        } else {
+            return namedType;
+        }
+    }
+
     @NotNull
     private List<AbiDefinition.NamedType> extractStructs(
             final List<AbiDefinition> functionDefinitions) {
@@ -487,6 +502,7 @@ public class SolidityFunctionWrapper extends Generator {
                             parameters.addAll(definition.getInputs());
                             parameters.addAll(definition.getOutputs());
                             return parameters.stream()
+                                    .map(this::normalizeNamedType)
                                     .filter(namedType -> namedType.getType().equals("tuple"));
                         })
                 .forEach(
