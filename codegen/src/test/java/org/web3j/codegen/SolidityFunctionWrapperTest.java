@@ -12,20 +12,31 @@
  */
 package org.web3j.codegen;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
+import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
+import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
+import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.web3j.TempFileProvider;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
@@ -42,16 +53,6 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint64;
 import org.web3j.protocol.core.methods.response.AbiDefinition;
 import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
-import static org.web3j.codegen.SolidityFunctionWrapper.createValidParamName;
-import static org.web3j.codegen.SolidityFunctionWrapper.getEventNativeType;
-import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
 
 public class SolidityFunctionWrapperTest extends TempFileProvider {
 
@@ -752,5 +753,26 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "}\n";
 
         assertEquals(builder.build().toString(), (expected));
+    }
+
+    @Test
+    void testBuildFunctionsWithGenerateSendTxForCalls() throws ClassNotFoundException {
+        solidityFunctionWrapper =
+            new SolidityFunctionWrapper(
+                true, false, true, Address.DEFAULT_LENGTH, generationReporter);
+        AbiDefinition functionDefinition =
+            new AbiDefinition(
+                true,
+                Collections.singletonList(new NamedType("param", "uint8")),
+                "functionName",
+                Collections.emptyList(),
+                "type",
+                false,
+                "pure");
+        List<MethodSpec> methodSpecs =
+            solidityFunctionWrapper.buildFunctions(functionDefinition, true);
+        assertNotNull(methodSpecs);
+        assertEquals(1, methodSpecs.size(), "methods size");
+        assertEquals("send_functionName", methodSpecs.get(0).name, "method name");
     }
 }
