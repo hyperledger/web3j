@@ -762,17 +762,18 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                 true, false, true, Address.DEFAULT_LENGTH, generationReporter);
         AbiDefinition functionDefinition =
             new AbiDefinition(
-                true,
-                Collections.singletonList(new NamedType("param", "uint8")),
-                "functionName",
+                false,
                 Collections.emptyList(),
+                "functionName",
+                Collections.singletonList(new NamedType("param", "uint8")),
                 "type",
                 false,
                 "pure");
         List<MethodSpec> methodSpecs =
             solidityFunctionWrapper.buildFunctions(functionDefinition, true);
         assertNotNull(methodSpecs);
-        assertEquals(1, methodSpecs.size(), "methods size");
-        assertEquals("send_functionName", methodSpecs.get(0).name, "method name");
+        assertEquals(2, methodSpecs.size(), "methods size");
+        assertEquals("call_functionName", methodSpecs.get(0).name, "method name");
+        assertEquals("send_functionName", methodSpecs.get(1).name, "method name");
     }
 }
