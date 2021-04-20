@@ -18,57 +18,49 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+/** Loads all Java classes from a given directory. */
 public class ClassProvider {
     private final File pathToJavaFiles;
+    private final ClassLoader classLoader;
 
-    public ClassProvider(final File pathToJavaFiles) {
+    public ClassProvider(final File pathToJavaFiles) throws IOException {
         this.pathToJavaFiles = pathToJavaFiles;
+
+        final URL[] classPathURL = new URL[] {pathToJavaFiles.toURI().toURL()};
+        final Path outputDirectory = Files.createTempDirectory("tmp");
+
+        classLoader = new CompilerClassLoader(outputDirectory.toFile(), classPathURL);
     }
 
-    public final List<Class> getClasses() throws IOException {
-        return loadClassesToList(compileClasses());
-    }
-
-    private CompilerClassLoader compileClasses() throws IOException {
-        URL[] classPathURL = new URL[] {pathToJavaFiles.toURI().toURL()};
-        Path outputDirectory = Files.createTempDirectory("tmp");
-        return new CompilerClassLoader(
-                Objects.requireNonNull(outputDirectory).toFile(), classPathURL);
-    }
-
-    private List<Class> loadClassesToList(final CompilerClassLoader compilerClassLoader)
-            throws IOException {
-        return getFormattedClassPath().stream()
-                .map(
-                        cp -> {
-                            try {
-                                return compilerClassLoader.loadClass(
-                                        cp.replace(File.separator, "."));
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
+    public final List<Class<?>> getClasses() throws IOException {
+        return Files.walk(Paths.get(pathToJavaFiles.toURI()))
+                .filter(Files::isRegularFile)
+                .map(Path::toString)
+                .map(this::toClassName)
+                .map(this::loadClass)
                 .collect(Collectors.toList());
     }
 
-    private List<String> getFormattedClassPath() throws IOException {
-        Stream<Path> walk = Files.walk(Paths.get(pathToJavaFiles.toURI()));
-        return getClassPathFromURL(
-                walk.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList()));
+    private String toClassName(final String sourceFile) {
+        try {
+            return sourceFile
+                    .substring(
+                            pathToJavaFiles.getCanonicalPath().length() + 1,
+                            sourceFile.lastIndexOf(".java"))
+                    .replace(File.separator, ".");
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
-    private List<String> getClassPathFromURL(final List<String> listOfUrl) throws IOException {
-        int length = pathToJavaFiles.getCanonicalPath().length();
-        List<String> formattedClassPath = new ArrayList<>();
-        for (String s : listOfUrl) {
-            formattedClassPath.add(s.substring(length + 1, s.lastIndexOf(".java")));
+    private Class<?> loadClass(final String className) {
+        try {
+            return classLoader.loadClass(className);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
         }
-        return formattedClassPath;
     }
 }

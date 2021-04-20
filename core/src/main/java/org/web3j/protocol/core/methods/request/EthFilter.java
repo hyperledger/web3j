@@ -12,7 +12,7 @@
  */
 package org.web3j.protocol.core.methods.request;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -24,6 +24,7 @@ import org.web3j.protocol.core.DefaultBlockParameter;
 public class EthFilter extends Filter<EthFilter> {
     private DefaultBlockParameter fromBlock; // optional, params - defaults to latest for both
     private DefaultBlockParameter toBlock;
+    private String blockHash; // optional, cannot be used together with fromBlock/toBlock
     private List<String> address; // spec. implies this can be single address as string or list
 
     public EthFilter() {
@@ -40,7 +41,17 @@ public class EthFilter extends Filter<EthFilter> {
 
     public EthFilter(
             DefaultBlockParameter fromBlock, DefaultBlockParameter toBlock, String address) {
-        this(fromBlock, toBlock, Arrays.asList(address));
+        this(fromBlock, toBlock, Collections.singletonList(address));
+    }
+
+    public EthFilter(String blockHash) {
+        super();
+        this.blockHash = blockHash;
+    }
+
+    public EthFilter(String blockHash, String address) {
+        this(null, null, Collections.singletonList(address));
+        this.blockHash = blockHash;
     }
 
     public DefaultBlockParameter getFromBlock() {
@@ -49,6 +60,10 @@ public class EthFilter extends Filter<EthFilter> {
 
     public DefaultBlockParameter getToBlock() {
         return toBlock;
+    }
+
+    public String getBlockHash() {
+        return blockHash;
     }
 
     public List<String> getAddress() {

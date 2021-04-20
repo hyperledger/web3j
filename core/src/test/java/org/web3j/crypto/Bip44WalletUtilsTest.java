@@ -60,11 +60,18 @@ public class Bip44WalletUtilsTest {
         Bip32ECKeyPair bip44Keypair = Bip44WalletUtils.generateBip44KeyPair(masterKeypair);
 
         assertEquals(
-                "xprv9zvpunws9gusoXVkmqAXWQm5z5hjR5kY3ifRGL7M8Kpjn8kRhavkGnFLjnFWPGGS2gAUw8rP33Lmj6SwZUpwy2mn2fXRYWzGa9WRTnE8DPz",
+                "xprvA3p5nTrBJcdEvUQAK64rZ4oJTwsTiMg7JQrqNh6JNWe3VUW2tcLb7GW1wj1fNDAoymUTSFERZ2LxPxJNmqoMZPs9y3TMNMuBN8MS9eigoWq",
                 Base58.encode(addChecksum(serializePrivate(bip44Keypair))));
         assertEquals(
-                "xpub6DvBKJUkz4UB21aDsrhXsYhpY7YDpYUPQwb24iWxgfMiew5aF8EzpaZpb567bYYbMfUnPwFNuRYvVpMGQUcaGPMoXUEUZKFvx7LaU5b7zBD",
+                "xpub6GoSByP58zBY8xUdR7brvCk31yhx7pPxfdnSB5VuvrB2NGqBS9eqf4pVo1xev4GEmip5Wuky9KUtJVxq4fvYfFchS6SA6C4cCRyQkLqNNjq",
                 Base58.encode(addChecksum(serializePublic(bip44Keypair))));
+
+        Credentials credentials =
+                Bip44WalletUtils.loadBip44Credentials(
+                        "", mnemonic); // Verify address according to https://iancoleman.io/bip39/
+        assertEquals(
+                "0xece62451ca8fba33746d6dafd0d0ebdef84778b7",
+                credentials.getAddress().toLowerCase());
     }
 
     @Test

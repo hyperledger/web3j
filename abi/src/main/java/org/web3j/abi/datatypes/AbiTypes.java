@@ -143,6 +143,7 @@ public final class AbiTypes {
      * @param primitives Use Java primitive types to wrap contract parameters.
      * @return The web3j Java class to represent this Solidity type.
      */
+    @SuppressWarnings("unchecked")
     public static Class<? extends Type> getType(String type, boolean primitives) {
         switch (type) {
             case "address":
@@ -363,10 +364,22 @@ public final class AbiTypes {
             case "bytes32":
                 return Bytes32.class;
             default:
-                throw new UnsupportedOperationException("Unsupported type encountered: " + type);
+                {
+                    try {
+                        return (Class<? extends Type>) Class.forName(type);
+                    } catch (ClassNotFoundException e) {
+                        throw new UnsupportedOperationException(
+                                "Unsupported type encountered: " + type);
+                    }
+                }
         }
     }
 
+    /**
+     * Returns the provided class type as a string. In case of a struct, it will return the struct
+     * name. For the tuple notation of a struct, example ((string,uint256)), think of taking an
+     * instance of the struct and calling the <code>instance.getTypeAsString()</code> method.
+     */
     public static String getTypeAString(Class<? extends Type> type) {
         if (Utf8String.class.equals(type)) {
             return "string";

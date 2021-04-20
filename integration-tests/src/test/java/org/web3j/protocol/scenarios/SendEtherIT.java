@@ -15,33 +15,48 @@ package org.web3j.protocol.scenarios;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /** Simple integration test to demonstrate sending of Ether between parties. */
+@EVMTest(type = NodeType.BESU)
 public class SendEtherIT extends Scenario {
+
+    @BeforeAll
+    public static void beforeAll(Web3j web3j) {
+        Scenario.web3j = web3j;
+    }
 
     @Test
     public void testTransferEther() throws Exception {
-        unlockAccount();
 
         BigInteger nonce = getNonce(ALICE.getAddress());
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
-        Transaction transaction =
-                Transaction.createEtherTransaction(
-                        ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
+        RawTransaction transaction =
+                RawTransaction.createEtherTransaction(
+                        nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
+
+        byte[] signedTransaction = TransactionEncoder.signMessage(transaction, ALICE);
 
         EthSendTransaction ethSendTransaction =
-                web3j.ethSendTransaction(transaction).sendAsync().get();
+                web3j.ethSendRawTransaction(Numeric.toHexString(signedTransaction))
+                        .sendAsync()
+                        .get();
 
         String transactionHash = ethSendTransaction.getTransactionHash();
 

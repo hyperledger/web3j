@@ -128,9 +128,8 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         }
         List<AbiDefinition> functionDefinitions = loadContractDefinition(abiFile);
 
-        if (functionDefinitions.isEmpty()) {
-            exitError("Unable to parse input ABI file");
-        } else {
+        if (!functionDefinitions.isEmpty()) {
+
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.print("Generating " + basePackageName + "." + className + " ... ");
 
@@ -149,6 +148,8 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                             null);
 
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
+        } else {
+            System.out.println("Ignoring empty ABI file: " + abiFile.getName() + ".abi" + "\n");
         }
     }
 

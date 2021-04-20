@@ -12,18 +12,12 @@
  */
 package org.web3j.codegen.unit.gen.java;
 
-import java.io.File;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JavaClassGeneratorTest extends Setup {
-    @Test
-    public void testThatTheClassWasSuccessfullyWritten() {
-        assertTrue(new File(pathToTest).exists());
-    }
+public class JavaClassGeneratorTest extends JavaTestSetup {
 
     @Test
     public void testThatExceptionIsThrownWhenAClassIsNotWritten() {

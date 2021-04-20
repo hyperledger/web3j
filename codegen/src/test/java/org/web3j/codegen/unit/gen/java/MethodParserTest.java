@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MethodParserTest extends Setup {
+public class MethodParserTest extends JavaTestSetup {
     @Test
     public void testThatDeployMethodWasGenerated() {
 
@@ -31,7 +31,7 @@ public class MethodParserTest extends Setup {
         assertEquals(
                 "@org.junit.jupiter.api.BeforeAll\n"
                         + "static void deploy(org.web3j.protocol.Web3j web3j, org.web3j.tx.TransactionManager transactionManager, org.web3j.tx.gas.ContractGasProvider contractGasProvider) throws java.lang.Exception {\n"
-                        + "  greeter = org.com.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send();\n"
+                        + "  greeter = org.web3j.test.contract.Greeter.deploy(web3j, transactionManager, contractGasProvider, \"REPLACE_ME\").send();\n"
                         + "}\n",
                 deployMethodSpec.toString());
     }
