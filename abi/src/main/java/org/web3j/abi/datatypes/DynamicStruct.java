@@ -50,8 +50,7 @@ public class DynamicStruct extends DynamicArray<Type> implements StructType {
         final StringBuilder type = new StringBuilder("(");
         for (int i = 0; i < itemTypes.size(); ++i) {
             final Class<Type> cls = itemTypes.get(i);
-            if (StructType.class.isAssignableFrom(cls)
-                    || DynamicArray.class.isAssignableFrom(cls)) {
+            if (StructType.class.isAssignableFrom(cls)) {
                 type.append(getValue().get(i).getTypeAsString());
             } else {
                 type.append(AbiTypes.getTypeAString(cls));

@@ -249,7 +249,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                                 addressLength)
                         .generate();
             } catch (Exception e) {
-                e.printStackTrace();
                 exitError(e);
             }
         }

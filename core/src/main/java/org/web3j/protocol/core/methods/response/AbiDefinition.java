@@ -245,18 +245,6 @@ public class AbiDefinition {
             return type;
         }
 
-        public boolean isArrayType() {
-            return (type.length() >= 2 && type.substring(type.length() - 2).equalsIgnoreCase("[]"));
-        }
-
-        public String baseType() {
-            if (isArrayType()) {
-                return type.substring(0, type.length() - 2);
-            } else {
-                return type;
-            }
-        }
-
         public void setType(String type) {
             this.type = type;
         }
@@ -286,20 +274,11 @@ public class AbiDefinition {
         }
 
         public int structIdentifier() {
-            String t =
-                    internalType == null
-                            ? type
-                            : internalType.isEmpty()
-                                    ? type
-                                    : type.equalsIgnoreCase("tuple[]")
-                                            ? internalType.substring(0, internalType.length() - 2)
-                                            : internalType;
-            t =
-                    t
+            return ((internalType == null ? type : internalType.isEmpty() ? type : internalType)
                             + components.stream()
                                     .map(namedType -> String.valueOf(namedType.structIdentifier()))
-                                    .collect(Collectors.joining());
-            return t.hashCode();
+                                    .collect(Collectors.joining()))
+                    .hashCode();
         }
 
         public int nestedness() {

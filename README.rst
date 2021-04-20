@@ -145,7 +145,7 @@ Java 8:
    <dependency>
      <groupId>org.web3j</groupId>
      <artifactId>core</artifactId>
-     <version>4.6.3</version>
+     <version>4.6.1</version>
    </dependency>
 
 Android:
@@ -166,7 +166,7 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:4.6.3')
+   compile ('org.web3j:core:4.6.1')
 
 Android:
 
@@ -594,7 +594,6 @@ Please submit a pull request if you wish to include your company on the list:
 - `Lab10 collective <https://lab10.coop/>`_
 - `BinarApps <https://binarapps.com/>`_
 - `PegaSys <https://pegasys.tech/>`_
-- `Arkane <https://arkane.network/>`_
 
 
 Build instructions

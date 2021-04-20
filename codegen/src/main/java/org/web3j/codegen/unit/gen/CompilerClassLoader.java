@@ -15,7 +15,6 @@ package org.web3j.codegen.unit.gen;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -60,12 +59,7 @@ class CompilerClassLoader extends ClassLoader {
 
         File sourceFile = null;
         for (final URL url : urls) {
-            File file;
-            try {
-                file = new File(URLDecoder.decode(url.getPath(), "UTF-8"), path + ".java");
-            } catch (Exception e) {
-                file = new File(url.getFile(), path + ".java");
-            }
+            final File file = new File(url.getFile(), path + ".java");
 
             if (file.exists()) {
                 sourceFile = file;
@@ -98,28 +92,14 @@ class CompilerClassLoader extends ClassLoader {
     }
 
     private String buildClassPath() {
-        return buildClassPath(urls)
-                + getClassPathSeparator()
-                + System.getProperty("java.class.path");
-    }
-
-    private String getClassPathSeparator() {
-        if (isWindows()) {
-            return ";";
-        } else {
-            return ":";
-        }
-    }
-
-    private boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().startsWith("windows");
+        return buildClassPath(urls) + ':' + System.getProperty("java.class.path");
     }
 
     private String buildClassPath(final URL... urls) {
         return Arrays.stream(urls)
                 .map(URL::toExternalForm)
                 .map(url -> url.replaceAll("file:", ""))
-                .collect(Collectors.joining(getClassPathSeparator()));
+                .collect(Collectors.joining(":"));
     }
 
     private Optional<byte[]> readBytes(final File file) {
