@@ -21,13 +21,21 @@ public class DynamicArray<T extends Type> extends Array<T> {
     @SafeVarargs
     @SuppressWarnings({"unchecked"})
     public DynamicArray(T... values) {
-        super((Class<T>) AbiTypes.getType(values[0].getTypeAsString()), values);
+        super(
+                StructType.class.isAssignableFrom(values[0].getClass())
+                        ? (Class<T>) values[0].getClass()
+                        : (Class<T>) AbiTypes.getType(values[0].getTypeAsString()),
+                values);
     }
 
     @Deprecated
     @SuppressWarnings("unchecked")
     public DynamicArray(List<T> values) {
-        super((Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()), values);
+        super(
+                StructType.class.isAssignableFrom(values.get(0).getClass())
+                        ? (Class<T>) values.get(0).getClass()
+                        : (Class<T>) AbiTypes.getType(values.get(0).getTypeAsString()),
+                values);
     }
 
     @Deprecated
@@ -57,6 +65,12 @@ public class DynamicArray<T extends Type> extends Array<T> {
 
     @Override
     public String getTypeAsString() {
-        return AbiTypes.getTypeAString(getComponentType()) + "[]";
+        String type;
+        if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
+            type = value.get(0).getTypeAsString();
+        } else {
+            type = AbiTypes.getTypeAString(getComponentType());
+        }
+        return type + "[]";
     }
 }

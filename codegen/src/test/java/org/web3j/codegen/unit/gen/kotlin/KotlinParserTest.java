@@ -25,7 +25,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class KotlinParserTest extends Setup {
+public class KotlinParserTest extends KotlinTestSetup {
 
     @Test
     public void testGenerateJavaPoetStringTypesWhenReturnTypeIsContract() {

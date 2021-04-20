@@ -2,36 +2,38 @@ plugins {
     id 'java'
     id 'idea'
     id 'jacoco'
-    id "com.diffplug.gradle.spotless" version "3.25.0"
-    id 'io.codearte.nexus-staging' version '0.21.1'
-    id "de.marcphilipp.nexus-publish" version "0.4.0"
-    id "de.undercouch.download" version "4.0.0"
-    id "com.jfrog.bintray" version "1.8.4"
+    id 'com.diffplug.gradle.spotless' version '4.5.1'
+    id 'io.codearte.nexus-staging' version '0.22.0'
+    id 'de.marcphilipp.nexus-publish' version '0.4.0'
+    id 'de.undercouch.download' version '4.1.1'
+    id 'com.jfrog.bintray' version '1.8.5'
+    id 'org.ajoberstar.git-publish' version '3.0.0'
 }
 
 ext {
-    bouncycastleVersion = '1.65'
-    jacksonVersion = '2.8.11.6'
+    bouncycastleVersion = '1.68'
+    jacksonVersion = '2.10.0'
     javaPoetVersion = '1.7.0'
+    kotlinVersion = '1.3.72'
     kotlinPoetVersion = '1.5.0'
     jnr_unixsocketVersion = '0.21'
-    okhttpVersion = '4.3.1'
+    okhttpVersion = '4.9.0'
     rxjavaVersion = '2.2.2'
-    slf4jVersion = '1.7.25'
+    slf4jVersion = '1.7.30'
     javaWebSocketVersion = '1.3.8'
     picocliVersion = '3.0.0'
     web3jUnitVersion = version
     // test dependencies
-    equalsverifierVersion = '3.1.10'
+    equalsverifierVersion = '3.5.5'
     junitVersion = '5.5.2'
     junitBenchmarkVersion = '0.7.2'
     logbackVersion = '1.2.3'
-    mockitoJunitVersion = "3.1.0"
-    junitPlatformLauncherVersion = "1.5.2"
+    mockitoJunitVersion = '3.1.0'
+    junitPlatformLauncherVersion = '1.5.2'
 }
 
 
-description 'web3j base project'
+description 'Web3j base project.'
 
 [
     'bintray',
@@ -71,6 +73,20 @@ allprojects {
     dependencies {
         testCompile "org.junit.jupiter:junit-jupiter:$junitVersion"
         testCompile "org.mockito:mockito-junit-jupiter:$mockitoJunitVersion"
+
+        configurations.all {
+            resolutionStrategy {
+                force(group: "org.jetbrains.kotlin", name: "kotlin-reflect", version: kotlinVersion)
+                force(group: "org.jetbrains.kotlin", name: "kotlin-stdlib", version: kotlinVersion)
+                force(group: "org.jetbrains.kotlin", name: "kotlin-stdlib-common", version: kotlinVersion)
+                force(group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jdk7", version: kotlinVersion)
+                force(group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jdk8", version: kotlinVersion)
+                force(group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion)
+                force(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion)
+                force(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion)
+                force(group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion)
+            }
+        }
     }
 
     publishing {

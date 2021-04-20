@@ -15,30 +15,39 @@ package org.web3j.protocol.scenarios;
 import java.math.BigInteger;
 import java.util.Collections;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.generated.Revert;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.test.contract.Revert;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.gas.ContractGasProvider;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@EVMTest(type = NodeType.OPEN_ETHEREUM)
 public class EthCallIT extends Scenario {
 
-    private Revert contract;
+    private static Revert contract;
 
-    @BeforeEach
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        this.contract = Revert.deploy(web3j, ALICE, new DefaultGasProvider()).send();
+    @BeforeAll
+    public static void setUp(
+            Web3j web3j,
+            TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider)
+            throws Exception {
+        Scenario.web3j = web3j;
+        EthCallIT.contract = Revert.deploy(web3j, transactionManager, contractGasProvider).send();
     }
 
     @Test
@@ -51,17 +60,14 @@ public class EthCallIT extends Scenario {
     @Test
     public void testRevertWithoutMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(1L));
-
         assertTrue(ethCall.isReverted());
-        assertTrue(ethCall.getRevertReason().endsWith("revert"));
     }
 
     @Test
     public void testRevertWithMessage() throws Exception {
         EthCall ethCall = ethCall(BigInteger.valueOf(2L));
-
         assertTrue(ethCall.isReverted());
-        assertTrue(ethCall.getRevertReason().endsWith("revert The reason for revert"));
+        assertTrue(ethCall.getRevertReason().endsWith("VM execution error."));
     }
 
     private EthCall ethCall(BigInteger value) throws java.io.IOException {
@@ -74,7 +80,11 @@ public class EthCallIT extends Scenario {
 
         return web3j.ethCall(
                         Transaction.createEthCallTransaction(
-                                ALICE.getAddress(), contract.getContractAddress(), encodedFunction),
+                                Credentials.create(
+                                                "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63")
+                                        .getAddress(),
+                                contract.getContractAddress(),
+                                encodedFunction),
                         DefaultBlockParameterName.LATEST)
                 .send();
     }

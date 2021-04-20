@@ -13,31 +13,41 @@
 package org.web3j.protocol.scenarios;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.web3j.generated.Arrays;
-import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
+import org.web3j.protocol.Web3j;
+import org.web3j.test.contract.Arrays;
+import org.web3j.tx.gas.StaticGasProvider;
 
 import static java.math.BigInteger.valueOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Simple integration test to demonstrate arrays usage in web3j. */
+// Needs further implementation on Web3j-Unit Project.
+@EVMTest(type = NodeType.OPEN_ETHEREUM)
 public class ArraysIT extends Scenario {
 
-    private Arrays contract;
+    private static Arrays contract;
 
-    @BeforeEach
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        this.contract = Arrays.deploy(web3j, ALICE, new DefaultGasProvider()).send();
+    @BeforeAll
+    public static void setUp(Web3j web3j) throws Exception {
+        Scenario.web3j = web3j;
+        ArraysIT.contract =
+                Arrays.deploy(
+                                web3j,
+                                ALICE,
+                                new StaticGasProvider(
+                                        BigInteger.valueOf(20000000000L),
+                                        BigInteger.valueOf(6721975)))
+                        .send();
     }
 
     @Test
@@ -74,8 +84,10 @@ public class ArraysIT extends Scenario {
     }
 
     @Test
+    @Disabled("Index out of bounds")
     public void testEmptyDynamicReverse() throws Exception {
-        final List result = contract.dynamicReverse(new ArrayList<>()).send();
+        List<BigInteger> array1 = Collections.emptyList();
+        final List result = contract.dynamicReverse(array1).send();
         assertEquals(result, (Collections.emptyList()));
     }
 

@@ -16,36 +16,50 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import org.web3j.EVMTest;
+import org.web3j.NodeType;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Integration test demonstrating integration with Greeter contract taken from the <a
  * href="https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial">Contract Tutorial</a> on
  * the Go Ethereum Wiki.
  */
+@EVMTest(type = NodeType.BESU)
 public class GreeterContractIT extends Scenario {
 
     private static final String VALUE = "Greetings!";
 
+    @BeforeAll
+    public static void setUp(Web3j web3j) {
+        Scenario.web3j = web3j;
+    }
+
+    private static String getGreeterSolidityBinary() throws Exception {
+        return load("/Greeter.bin");
+    }
+
     @Test
     public void testGreeterContract() throws Exception {
-        boolean accountUnlocked = unlockAccount();
-        assertTrue(accountUnlocked);
 
         // create our smart contract
         String createTransactionHash = sendCreateContractTransaction();
@@ -75,13 +89,10 @@ public class GreeterContractIT extends Scenario {
 
     private String sendCreateContractTransaction() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
-
         String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
-
-        Transaction transaction =
-                Transaction.createContractTransaction(
-                        ALICE.getAddress(),
+        RawTransaction transaction =
+                RawTransaction.createContractTransaction(
                         nonce,
                         GAS_PRICE,
                         GAS_LIMIT,
@@ -89,7 +100,11 @@ public class GreeterContractIT extends Scenario {
                         getGreeterSolidityBinary() + encodedConstructor);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
-                web3j.ethSendTransaction(transaction).sendAsync().get();
+                web3j.ethSendRawTransaction(
+                                Numeric.toHexString(
+                                        TransactionEncoder.signMessage(transaction, ALICE)))
+                        .sendAsync()
+                        .get();
 
         return transactionResponse.getTransactionHash();
     }
@@ -108,10 +123,6 @@ public class GreeterContractIT extends Scenario {
                         .get();
 
         return response.getValue();
-    }
-
-    private static String getGreeterSolidityBinary() throws Exception {
-        return load("/solidity/greeter/build/Greeter.bin");
     }
 
     Function createGreetFunction() {

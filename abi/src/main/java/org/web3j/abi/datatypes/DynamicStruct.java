@@ -24,6 +24,7 @@ public class DynamicStruct extends DynamicArray<Type> implements StructType {
         this(Type.class, values);
     }
 
+    @SuppressWarnings("unchecked")
     private DynamicStruct(Class<Type> type, List<Type> values) {
         super(type, values);
         for (Type value : values) {

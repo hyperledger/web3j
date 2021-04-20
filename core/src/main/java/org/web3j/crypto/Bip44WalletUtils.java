@@ -70,8 +70,8 @@ public class Bip44WalletUtils extends WalletUtils {
             final int[] path = {44 | HARDENED_BIT, 0 | HARDENED_BIT, 0 | HARDENED_BIT, 0};
             return Bip32ECKeyPair.deriveKeyPair(master, path);
         } else {
-            // m/44'/60'/0'/0
-            final int[] path = {44 | HARDENED_BIT, 60 | HARDENED_BIT, 0 | HARDENED_BIT, 0};
+            // m/44'/60'/0'/0/0
+            final int[] path = {44 | HARDENED_BIT, 60 | HARDENED_BIT, 0 | HARDENED_BIT, 0, 0};
             return Bip32ECKeyPair.deriveKeyPair(master, path);
         }
     }

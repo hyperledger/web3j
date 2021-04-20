@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: [ 'Build' ]
+    branches: [ 'release/*' ]
+    types: [ completed ]
+
+jobs:
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+      BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Decrypt secret key
+        run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
+      - name: Release name
+        id: release_name
+        uses: web3j/slice-action@v1.3
+        with:
+          value: $GITHUB_REF
+          start: 8 # Remove 'release/' prefix 
+      - name: Build and stage release
+        run: ./gradlew publish bintrayUpload -Pversion=${{ steps.release_name.outputs.result }}
+      - name: Release
+        run: ./gradlew closeAndReleaseRepository
+      - name: GitHub release
+        run: ./scripts/github-release.sh
+      - name: Javadoc release
+        run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ secrets.GITHUB_TOKEN }} core:gitPublishPush

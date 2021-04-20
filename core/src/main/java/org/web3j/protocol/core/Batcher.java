@@ -14,6 +14,10 @@ package org.web3j.protocol.core;
 
 public interface Batcher {
 
-    /** Create a new {@link BatchRequest}. */
+    /**
+     * Create a new {@link BatchRequest}.
+     *
+     * @return New BatchRequest.
+     */
     BatchRequest newBatch();
 }

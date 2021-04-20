@@ -81,6 +81,29 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testAdminAddPeer() throws Exception {
+        web3j.adminAddPeer("url").send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"admin_addPeer\",\"params\":[\"url\"],\"id\":1}");
+    }
+
+    @Test
+    public void testAdminDataDir() throws Exception {
+        web3j.adminDataDir().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"admin_datadir\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testAdminRemovePeer() throws Exception {
+        web3j.adminRemovePeer("url").send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"admin_removePeer\",\"params\":[\"url\"],\"id\":1}");
+    }
+
+    @Test
     public void testEthProtocolVersion() throws Exception {
         web3j.ethProtocolVersion().send();
 
@@ -541,6 +564,21 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthGetLogsWithBlockHash() throws Exception {
+        web3j.ethGetLogs(
+                        new EthFilter(
+                                "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
+                                ""))
+                .send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getLogs\","
+                        + "\"params\":[{\"topics\":[],"
+                        + "\"blockHash\":\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\","
+                        + "\"address\":[\"\"]}],\"id\":<generatedValue>}");
+    }
+
+    @Test
     public void testEthGetWork() throws Exception {
         web3j.ethGetWork().send();
 
@@ -715,5 +753,12 @@ public class RequestTest extends RequestTester {
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"shh_getMessages\","
                         + "\"params\":[\"0x07\"],\"id\":1}");
+    }
+
+    @Test
+    public void testTxPoolStatus() throws Exception {
+        web3j.txPoolStatus().send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"txpool_status\",\"params\":[],\"id\":1}");
     }
 }

@@ -208,6 +208,48 @@ public class StructuredDataTest {
         assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
     }
 
+    // EIP712 v3
+    @Test
+    public void testValidStructureWithValues() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/ValidStructuredDataWithValues.json"));
+
+        assertEquals(
+                "0x9a321bee2df12b3b43bc4caf71d19839f05d82264b780b48f1f529bf916b5d30",
+                Numeric.toHexString(dataEncoder.hashStructuredData()));
+    }
+
+    // EIP712 v4
+    @Test
+    public void testValidStructureWithArrays() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/ValidStructuredArrayData.json")); // taken from https://danfinlay.github.io/js-eth-personal-sign-examples/
+
+        assertEquals(
+                "0xa85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2",
+                Numeric.toHexString(dataEncoder.hashStructuredData()));
+    }
+
+    // EIP712 v3 Gnosis format; Multisig Structured message with addresses blanked
+    @Test
+    public void testValidGnosisStructure() throws IOException {
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(
+                        getResource(
+                                "build/resources/test/"
+                                        + "structured_data_json_files/ValidStructuredGnosisData.json")); // typical Gnosis safe EIP712 data
+
+        assertEquals(
+                "0xb3ffe0073b0c3aecb00b19a636e4b3820cfc9692189f874312c906f70edf10bd",
+                Numeric.toHexString(dataEncoder.hashStructuredData()));
+    }
+
     @Test
     public void testGetArrayDimensionsFromData() throws RuntimeException, IOException {
         StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
@@ -393,5 +435,20 @@ public class StructuredDataTest {
         StructuredDataEncoder dataEncoder =
                 new StructuredDataEncoder(getResource(invalidStructuredDataJSONFilePath));
         assertThrows(RuntimeException.class, dataEncoder::hashStructuredData);
+    }
+
+    @Test
+    public void testHashDomainWithSalt() throws RuntimeException, IOException {
+        String validStructuredDataWithSaltJSONFilePath =
+                "build/resources/test/"
+                        + "structured_data_json_files/"
+                        + "ValidStructuredDataWithSalt.json";
+        StructuredDataEncoder dataEncoder =
+                new StructuredDataEncoder(getResource(validStructuredDataWithSaltJSONFilePath));
+        byte[] structHashDomain = dataEncoder.hashDomain();
+        String expectedDomainStructHash =
+                "0xbae4f6f7b9bfdfda060692099b0e1ccecd25d62b7c92cc9f3b907f33178b81e3";
+
+        assertEquals(Numeric.toHexString(structHashDomain), expectedDomainStructHash);
     }
 }

@@ -39,10 +39,11 @@ public class AdminPeers extends Response<List<AdminPeers.Peer>> {
     public static class Peer {
         public Peer() {}
 
-        public Peer(String id, String name, PeerNetwork network) {
+        public Peer(String id, String name, String enode, PeerNetwork network) {
             this.id = id;
             this.name = name;
             this.network = network;
+            this.enode = enode;
         }
 
         public String getId() {
@@ -53,9 +54,14 @@ public class AdminPeers extends Response<List<AdminPeers.Peer>> {
             return name;
         }
 
+        public String getEnode() {
+            return enode;
+        }
+
         private String id;
         private String name;
         private PeerNetwork network;
+        private String enode;
 
         public PeerNetwork getNetwork() {
             return network;

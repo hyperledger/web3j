@@ -34,6 +34,25 @@ public class OnChainPrivacyTransactionBuilder {
 
     private static final BesuPrivacyGasProvider ZERO_GAS_PROVIDER =
             new BesuPrivacyGasProvider(BigInteger.valueOf(0));
+    public static final String OnChainPrivacyPrecompiledContract =
+            "0x000000000000000000000000000000000000007c";
+
+    private final long chainId;
+    private final BesuPrivacyGasProvider gasProvider;
+    private final Restriction restriction;
+
+    public OnChainPrivacyTransactionBuilder(
+            final long chainId,
+            final BesuPrivacyGasProvider gasProvider,
+            final Restriction restriction) {
+        this.chainId = chainId;
+        this.gasProvider = gasProvider;
+        this.restriction = restriction;
+    }
+
+    public OnChainPrivacyTransactionBuilder() {
+        this(2018, ZERO_GAS_PROVIDER, Restriction.RESTRICTED);
+    }
 
     public static String getEncodedRemoveFromGroupFunction(
             Base64String enclaveKey, byte[] participant) {
@@ -45,13 +64,11 @@ public class OnChainPrivacyTransactionBuilder {
         return FunctionEncoder.encode(function);
     }
 
-    public static String getEncodedAddToGroupFunction(
-            Base64String enclaveKey, List<byte[]> participants) {
+    public static String getEncodedAddToGroupFunction(List<byte[]> participants) {
         final Function function =
                 new Function(
                         "addParticipants",
                         Arrays.asList(
-                                new Bytes32(enclaveKey.raw()),
                                 new DynamicArray<>(
                                         Bytes32.class, Utils.typeMap(participants, Bytes32.class))),
                         Collections.emptyList());
@@ -64,25 +81,24 @@ public class OnChainPrivacyTransactionBuilder {
         return FunctionEncoder.encode(function);
     }
 
-    public static String buildOnChainPrivateTransaction(
+    public String buildOnChainPrivateTransaction(
             Base64String privacyGroupId,
             Credentials credentials,
             Base64String enclaveKey,
             final BigInteger nonce,
             String call) {
-
         RawPrivateTransaction rawTransaction =
                 RawPrivateTransaction.createTransaction(
                         nonce,
-                        ZERO_GAS_PROVIDER.getGasPrice(),
-                        ZERO_GAS_PROVIDER.getGasLimit(),
-                        "0x000000000000000000000000000000000000007c",
+                        gasProvider.getGasPrice(),
+                        gasProvider.getGasLimit(),
+                        OnChainPrivacyPrecompiledContract,
                         call,
                         enclaveKey,
                         privacyGroupId,
-                        Restriction.RESTRICTED);
+                        restriction);
 
         return Numeric.toHexString(
-                PrivateTransactionEncoder.signMessage(rawTransaction, 2018, credentials));
+                PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials));
     }
 }

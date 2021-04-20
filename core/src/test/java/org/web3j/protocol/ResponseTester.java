@@ -76,7 +76,7 @@ public abstract class ResponseTester {
 
             okhttp3.Response response =
                     new okhttp3.Response.Builder()
-                            .body(ResponseBody.create(JSON_MEDIA_TYPE, jsonResponse))
+                            .body(ResponseBody.create(jsonResponse, JSON_MEDIA_TYPE))
                             .request(chain.request())
                             .protocol(Protocol.HTTP_2)
                             .code(200)
