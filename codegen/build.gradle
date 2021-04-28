@@ -4,10 +4,14 @@ dependencies {
     compile project(':core'),
             "com.squareup:kotlinpoet:$kotlinPoetVersion",
             "com.squareup:javapoet:$javaPoetVersion",
-            "info.picocli:picocli:$picocliVersion"
-    testCompile project(':core').sourceSets.test.output,
+            "info.picocli:picocli:$picocliVersion",
+// Put logger implementation into core so it is available for the application
             "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion"
+    testCompile project(':core').sourceSets.test.output
+//    ,
+//            "ch.qos.logback:logback-core:$logbackVersion",
+//            "ch.qos.logback:logback-classic:$logbackVersion"
     implementation("org.junit.platform:junit-platform-launcher:$junitPlatformLauncherVersion")
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation("org.junit.vintage:junit-vintage-engine:$junitVersion")
@@ -38,3 +42,5 @@ file("src/test/resources/solidity").listFiles().each { File file ->
     }
 }
 
+apply plugin: 'application'
+application { mainClassName = 'org.web3j.codegen.SolidityFunctionWrapperGenerator' }

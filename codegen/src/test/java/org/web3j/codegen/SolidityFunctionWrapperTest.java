@@ -45,6 +45,7 @@ import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.web3j.codegen.SolidityFunctionWrapper.buildTypeName;
@@ -604,9 +605,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         false);
 
         List<MethodSpec> methodSpecs = solidityFunctionWrapper.buildFunctions(functionDefinition);
-        assertEquals(
-                methodSpecs.size(),
-                1); // The normal function gen will fail. The rlp generator will work regardless.
+        assertTrue(methodSpecs.isEmpty());
     }
 
     @Test

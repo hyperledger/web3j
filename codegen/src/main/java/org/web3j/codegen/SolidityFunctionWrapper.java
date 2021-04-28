@@ -122,6 +122,7 @@ public class SolidityFunctionWrapper extends Generator {
     private final boolean useNativeJavaTypes;
     private final boolean useJavaPrimitiveTypes;
     private final boolean generateSendTxForCalls;
+    private final boolean rlpFuncs;
 
     private final int addressLength;
 
@@ -156,6 +157,22 @@ public class SolidityFunctionWrapper extends Generator {
                 useNativeJavaTypes,
                 useJavaPrimitiveTypes,
                 generateSendTxForCalls,
+                false,
+                addressLength,
+                new LogGenerationReporter(LOGGER));
+    }
+
+    public SolidityFunctionWrapper(
+            boolean useNativeJavaTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateSendTxForCalls,
+            boolean rlpFuncs,
+            int addressLength) {
+        this(
+                useNativeJavaTypes,
+                useJavaPrimitiveTypes,
+                generateSendTxForCalls,
+                rlpFuncs,
                 addressLength,
                 new LogGenerationReporter(LOGGER));
     }
@@ -166,8 +183,25 @@ public class SolidityFunctionWrapper extends Generator {
             boolean generateSendTxForCalls,
             int addressLength,
             GenerationReporter reporter) {
+        this(
+                useNativeJavaTypes,
+                useJavaPrimitiveTypes,
+                generateSendTxForCalls,
+                false,
+                addressLength,
+                reporter);
+    }
+
+    public SolidityFunctionWrapper(
+            boolean useNativeJavaTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateSendTxForCalls,
+            boolean rlpFuncs,
+            int addressLength,
+            GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
+        this.rlpFuncs = rlpFuncs;
         this.addressLength = addressLength;
         this.reporter = reporter;
         this.generateSendTxForCalls = generateSendTxForCalls;
@@ -1325,11 +1359,13 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         // Create function that returns the RLP of the Solidity function call.
-        functionName = "getRLP_" + functionName;
-        methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
-        addParameters(methodBuilder, functionDefinition.getInputs());
-        buildRlpFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
-        results.add(methodBuilder.build());
+        if (rlpFuncs) {
+            functionName = "getRLP_" + functionName;
+            methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
+            addParameters(methodBuilder, functionDefinition.getInputs());
+            buildRlpFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
+            results.add(methodBuilder.build());
+        }
 
         return results;
     }
