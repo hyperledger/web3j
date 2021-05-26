@@ -8,7 +8,7 @@ on:
 
 jobs:
   publish-snapshot:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: github.event.workflow_run.conclusion == 'success' && github.repository_owner == 'web3j'
     runs-on: ubuntu-latest
     env:
       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
