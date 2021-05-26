@@ -47,9 +47,9 @@ public class ReadonlyTransactionManager extends TransactionManager {
     }
 
     @Override
-    public EthSendTransaction sendTransactionEIP1559(
-            BigInteger gasPremium,
-            BigInteger feeCap,
+    public EthSendTransaction sendEIP1559Transaction(
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,

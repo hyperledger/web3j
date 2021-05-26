@@ -123,14 +123,20 @@ public class Transfer extends ManagedTransaction {
             BigDecimal value,
             Convert.Unit unit,
             BigInteger gasLimit,
-            BigInteger gasPremium,
-            BigInteger feeCap) {
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas) {
         TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
 
         return new RemoteCall<>(
                 () ->
                         new Transfer(web3j, transactionManager)
-                                .sendEIP1559(toAddress, value, unit, gasLimit, gasPremium, feeCap));
+                                .sendEIP1559(
+                                        toAddress,
+                                        value,
+                                        unit,
+                                        gasLimit,
+                                        maxPriorityFeePerGas,
+                                        maxFeePerGas));
     }
 
     private TransactionReceipt sendEIP1559(
@@ -138,8 +144,8 @@ public class Transfer extends ManagedTransaction {
             BigDecimal value,
             Convert.Unit unit,
             BigInteger gasLimit,
-            BigInteger gasPremium,
-            BigInteger feeCap)
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas)
             throws IOException, InterruptedException, TransactionException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
@@ -156,6 +162,11 @@ public class Transfer extends ManagedTransaction {
 
         String resolvedAddress = ensResolver.resolve(toAddress);
         return sendEIP1559(
-                resolvedAddress, "", weiValue.toBigIntegerExact(), gasLimit, gasPremium, feeCap);
+                resolvedAddress,
+                "",
+                weiValue.toBigIntegerExact(),
+                gasLimit,
+                maxPriorityFeePerGas,
+                maxFeePerGas);
     }
 }

@@ -263,6 +263,9 @@ public class Sign {
         return key;
     }
 
+    public static int getRecId(SignatureData signatureData) {
+        return (signatureData.getV()[0] & 0xFF) - 27;
+    }
     /**
      * Returns public key from the given private key.
      *

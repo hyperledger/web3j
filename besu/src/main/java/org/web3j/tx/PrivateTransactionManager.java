@@ -164,9 +164,9 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         return signAndSend(transaction);
     }
 
-    public EthSendTransaction sendTransactionEIP1559(
-            BigInteger gasPremium,
-            BigInteger feeCap,
+    public EthSendTransaction sendEIP1559Transaction(
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,
@@ -183,10 +183,11 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         final RawPrivateTransaction transaction;
         if (privacyGroupIdOrPrivateFor instanceof Base64String) {
             transaction =
-                    RawPrivateTransaction.createTransactionEIP1559(
+                    RawPrivateTransaction.createTransaction(
+                            chainId,
                             nonce,
-                            gasPremium,
-                            feeCap,
+                            maxPriorityFeePerGas,
+                            maxFeePerGas,
                             gasLimit,
                             to,
                             data,
@@ -195,10 +196,11 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             RESTRICTED);
         } else {
             transaction =
-                    RawPrivateTransaction.createTransactionEIP1559(
+                    RawPrivateTransaction.createTransaction(
+                            chainId,
                             nonce,
-                            gasPremium,
-                            feeCap,
+                            maxPriorityFeePerGas,
+                            maxFeePerGas,
                             gasLimit,
                             to,
                             data,

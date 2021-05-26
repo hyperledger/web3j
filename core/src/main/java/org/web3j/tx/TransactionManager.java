@@ -82,20 +82,21 @@ public abstract class TransactionManager {
     }
 
     protected TransactionReceipt executeTransactionEIP1559(
-            BigInteger gasPremium,
-            BigInteger feeCap,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,
             BigInteger value)
             throws IOException, TransactionException {
 
-        return executeTransactionEIP1559(gasPremium, feeCap, gasLimit, to, data, value, false);
+        return executeTransactionEIP1559(
+                maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, data, value, false);
     }
 
     protected TransactionReceipt executeTransactionEIP1559(
-            BigInteger gasPremium,
-            BigInteger feeCap,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,
@@ -104,7 +105,8 @@ public abstract class TransactionManager {
             throws IOException, TransactionException {
 
         EthSendTransaction ethSendTransaction =
-                sendTransactionEIP1559(gasPremium, feeCap, gasLimit, to, data, value, constructor);
+                sendEIP1559Transaction(
+                        maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, data, value, constructor);
         return processResponse(ethSendTransaction);
     }
 
@@ -114,15 +116,16 @@ public abstract class TransactionManager {
         return sendTransaction(gasPrice, gasLimit, to, data, value, false);
     }
 
-    public EthSendTransaction sendTransactionEIP1559(
-            BigInteger gasPremium,
-            BigInteger feeCap,
+    public EthSendTransaction sendEIP1559Transaction(
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,
             BigInteger value)
             throws IOException {
-        return sendTransactionEIP1559(gasPremium, feeCap, gasLimit, to, data, value, false);
+        return sendEIP1559Transaction(
+                maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, data, value, false);
     }
 
     public abstract EthSendTransaction sendTransaction(
@@ -134,9 +137,9 @@ public abstract class TransactionManager {
             boolean constructor)
             throws IOException;
 
-    public abstract EthSendTransaction sendTransactionEIP1559(
-            BigInteger gasPremium,
-            BigInteger feeCap,
+    public abstract EthSendTransaction sendEIP1559Transaction(
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
             BigInteger gasLimit,
             String to,
             String data,

@@ -93,7 +93,7 @@ public class TransactionEncoderTest {
                 TransactionEncoder.signMessage(
                         createEip1559RawTransaction(), (byte) 1, credentials),
                 (Numeric.hexStringToByteArray(
-                        "0xf866808082753094627306090abab3a6e1400e9345bc60c78a8bef577b8082162e8310c8e026a05b362f1b948135039788c28613e8009c4d38346ece108ebc2f856902d2133243a07f42ab9c3d50e2f6cce3360cba206c7a4065bac0cfca015611af8be7189730fe")));
+                        "02f8698206178082162e8310c8e082753094627306090abab3a6e1400e9345bc60c78a8bef577b80c00aa083cac99935549adc82c604e28635c8dc908956d822b51e7cf843cc91b23bc4e3a04cef4ed7a7d58581194a840aa4f311b4d74f6a42b7bfd73b08336dbb2e424dd2")));
     }
 
     private static RawTransaction createEtherTransaction() {
@@ -125,6 +125,7 @@ public class TransactionEncoderTest {
 
     private static RawTransaction createEip1559RawTransaction() {
         return RawTransaction.createEtherTransaction(
+                1559,
                 BigInteger.valueOf(0),
                 BigInteger.valueOf(30000),
                 "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
