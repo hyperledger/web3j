@@ -127,13 +127,13 @@ Gradle
 Java:
 
 ```
-compile ('org.web3j:core:4.8.4')
+implementation ('org.web3j:core:4.8.4')
 ```
 
 Android:
 
 ```
-compile ('org.web3j:core:4.6.0-android')
+implementation ('org.web3j:core:4.6.0-android')
 ```
 
 Build instructions
