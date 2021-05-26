@@ -87,7 +87,7 @@ public class TransactionEncoder {
     }
 
     private static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
-        List<RlpType> values = TransactionEncoder.asRlpValues(rawTransaction, signatureData);
+        List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         RlpList rlpList = new RlpList(values);
         byte[] encoded = RlpEncoder.encode(rlpList);
         if (!rawTransaction.getType().equals(TransactionType.LEGACY)) {

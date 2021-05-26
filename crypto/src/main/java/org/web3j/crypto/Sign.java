@@ -263,6 +263,12 @@ public class Sign {
         return key;
     }
 
+    /**
+     * Returns recovery ID.
+     *
+     * @param signatureData The message signature components
+     * @return int recovery ID
+     */
     public static int getRecId(SignatureData signatureData) {
         return (signatureData.getV()[0] & 0xFF) - 27;
     }
