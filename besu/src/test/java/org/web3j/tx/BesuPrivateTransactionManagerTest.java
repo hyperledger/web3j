@@ -13,7 +13,6 @@
 package org.web3j.tx;
 
 import java.io.IOException;
-import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +22,6 @@ import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.tx.exceptions.ContractCallException;
-import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.utils.Base64String;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,9 +35,6 @@ class BesuPrivateTransactionManagerTest {
 
     private static final String OWNER_REVERT_MSG_STR =
             "Only the contract owner can perform this action";
-    private static final BesuPrivacyGasProvider ZERO_GAS_PROVIDER =
-            new BesuPrivacyGasProvider(BigInteger.valueOf(0));
-    private static final long CHAIN_ID = 2018;
     private static final Base64String PRIVATE_FROM =
             Base64String.wrap("GGilEkXLaQ9yhhtbpBT03Me9iYa7U/mWXxrJhnbl1XY=");
     private static final Base64String PRIVACY_GROUP_ID =
@@ -56,14 +51,10 @@ class BesuPrivateTransactionManagerTest {
         when(response.getValue()).thenReturn("test");
         when(service.send(any(), any())).thenReturn(response);
 
-        BesuPrivateTransactionManager besuTransactionManager =
-                new BesuPrivateTransactionManager(
-                        besu,
-                        ZERO_GAS_PROVIDER,
-                        credentials,
-                        CHAIN_ID,
-                        PRIVATE_FROM,
-                        PRIVACY_GROUP_ID);
+        PrivateTransactionManager besuTransactionManager =
+                new PrivateTransactionManager.Builder(besu, credentials, PRIVATE_FROM)
+                        .setPrivacyGroupId(PRIVACY_GROUP_ID)
+                        .build();
 
         String value = besuTransactionManager.sendCall("", "", defaultBlockParameter);
         assertEquals("test", value);
@@ -75,14 +66,10 @@ class BesuPrivateTransactionManagerTest {
         when(response.getRevertReason()).thenReturn(OWNER_REVERT_MSG_STR);
         when(service.send(any(), any())).thenReturn(response);
 
-        BesuPrivateTransactionManager besuTransactionManager =
-                new BesuPrivateTransactionManager(
-                        besu,
-                        ZERO_GAS_PROVIDER,
-                        credentials,
-                        CHAIN_ID,
-                        PRIVATE_FROM,
-                        PRIVACY_GROUP_ID);
+        PrivateTransactionManager besuTransactionManager =
+                new PrivateTransactionManager.Builder(besu, credentials, PRIVATE_FROM)
+                        .setPrivacyGroupId(PRIVACY_GROUP_ID)
+                        .build();
 
         ContractCallException thrown =
                 assertThrows(

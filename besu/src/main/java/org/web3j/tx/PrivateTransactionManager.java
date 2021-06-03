@@ -16,9 +16,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.besu.response.privacy.PrivateEnclaveKey;
@@ -27,98 +24,137 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
-import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
-import org.web3j.tx.response.PrivateTransactionReceiptProcessor;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.PrivacyGroupUtils;
+import org.web3j.utils.Restriction;
 
 import static org.web3j.utils.Restriction.RESTRICTED;
 
-public abstract class PrivateTransactionManager extends TransactionManager {
-
-    private static final Logger log = LoggerFactory.getLogger(PrivateTransactionManager.class);
-
-    private final PrivateTransactionReceiptProcessor transactionReceiptProcessor;
+public class PrivateTransactionManager extends TransactionManager {
 
     private final Besu besu;
-    private final BesuPrivacyGasProvider gasProvider;
+
     private final Credentials credentials;
     private final long chainId;
+
     private final Base64String privateFrom;
 
-    protected PrivateTransactionManager(
+    private final List<Base64String> privateFor;
+    private final Base64String privacyGroupId;
+
+    private final Restriction restriction;
+
+    public PrivateTransactionManager(
             final Besu besu,
-            final BesuPrivacyGasProvider gasProvider,
             final Credentials credentials,
+            final TransactionReceiptProcessor transactionReceiptProcessor,
             final long chainId,
             final Base64String privateFrom,
-            final PrivateTransactionReceiptProcessor transactionReceiptProcessor) {
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
-        this.gasProvider = gasProvider;
         this.credentials = credentials;
         this.chainId = chainId;
         this.privateFrom = privateFrom;
-        this.transactionReceiptProcessor = transactionReceiptProcessor;
+        this.privateFor = null;
+        this.privacyGroupId = privacyGroupId;
+        this.restriction = restriction;
     }
 
-    protected PrivateTransactionManager(
+    public PrivateTransactionManager(
             final Besu besu,
-            final BesuPrivacyGasProvider gasProvider,
             final Credentials credentials,
+            final TransactionReceiptProcessor transactionReceiptProcessor,
             final long chainId,
             final Base64String privateFrom,
-            final int attempts,
-            final int sleepDuration) {
-        this(
-                besu,
-                gasProvider,
-                credentials,
-                chainId,
-                privateFrom,
-                new PollingPrivateTransactionReceiptProcessor(besu, sleepDuration, attempts));
+            final List<Base64String> privateFor,
+            final Restriction restriction) {
+        super(transactionReceiptProcessor, credentials.getAddress());
+        this.besu = besu;
+        this.credentials = credentials;
+        this.chainId = chainId;
+        this.privateFrom = privateFrom;
+        this.privateFor = privateFor;
+        this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
+        this.restriction = restriction;
     }
 
-    protected PrivateTransactionManager(
-            final Besu besu,
-            final BesuPrivacyGasProvider gasProvider,
-            final Credentials credentials,
-            final long chainId,
-            final Base64String privateFrom) {
-        this(
-                besu,
-                gasProvider,
-                credentials,
-                chainId,
-                privateFrom,
-                new PollingPrivateTransactionReceiptProcessor(
-                        besu, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
+    public static class Builder {
+        private final Besu besu;
+        private final Credentials credentials;
+        private long chainId;
+        private final Base64String privateFrom;
+        private Base64String privacyGroupId;
+        private TransactionReceiptProcessor transactionReceiptProcessor;
+        private Restriction restriction = RESTRICTED;
+        private List<Base64String> privateFor = null;
+
+        public Builder(
+                final Besu besu, final Credentials credentials, final Base64String privateFrom) {
+            this.besu = besu;
+            this.credentials = credentials;
+            this.chainId = ChainIdLong.NONE;
+            this.privateFrom = privateFrom;
+            transactionReceiptProcessor =
+                    new PollingPrivateTransactionReceiptProcessor(
+                            besu, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+        }
+
+        public Builder setRestriction(final Restriction restriction) {
+            this.restriction = restriction;
+            return this;
+        }
+
+        public Builder setTransactionReceiptProcessor(
+                final TransactionReceiptProcessor transactionReceiptProcessor) {
+            this.transactionReceiptProcessor = transactionReceiptProcessor;
+            return this;
+        }
+
+        public Builder setPrivacyGroupId(final Base64String privacyGroupId) {
+            this.privacyGroupId = privacyGroupId;
+            return this;
+        }
+
+        public Builder setPrivateFor(final List<Base64String> privateFor) {
+            this.privateFor = privateFor;
+            return this;
+        }
+
+        public Builder setChainId(final long chainId) {
+            this.chainId = chainId;
+            return this;
+        }
+
+        public PrivateTransactionManager build() {
+            if (privateFor != null) {
+                return new PrivateTransactionManager(
+                        besu,
+                        credentials,
+                        transactionReceiptProcessor,
+                        chainId,
+                        privateFrom,
+                        privateFor,
+                        restriction);
+            } else {
+                return new PrivateTransactionManager(
+                        besu,
+                        credentials,
+                        transactionReceiptProcessor,
+                        chainId,
+                        privateFrom,
+                        privacyGroupId,
+                        restriction);
+            }
+        }
     }
 
-    @Override
-    protected TransactionReceipt executeTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
-            throws IOException, TransactionException {
-
-        EthSendTransaction ethSendTransaction =
-                sendTransaction(gasPrice, gasLimit, to, data, value);
-        return processResponse(ethSendTransaction);
-    }
-
-    public Base64String getPrivateFrom() {
-        return privateFrom;
-    }
-
-    protected abstract Base64String getPrivacyGroupId();
-
-    protected abstract Object privacyGroupIdOrPrivateFor();
-
-    @SuppressWarnings("unchecked")
     @Override
     public EthSendTransaction sendTransaction(
             final BigInteger gasPrice,
@@ -126,18 +162,17 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             final String to,
             final String data,
             final BigInteger value,
-            boolean constructor)
+            final boolean constructor)
             throws IOException {
 
         final BigInteger nonce =
-                besu.privGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
+                besu.privGetTransactionCount(credentials.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
-        final Object privacyGroupIdOrPrivateFor = privacyGroupIdOrPrivateFor();
-
         final RawPrivateTransaction transaction;
-        if (privacyGroupIdOrPrivateFor instanceof Base64String) {
+
+        if (privateFor != null) {
             transaction =
                     RawPrivateTransaction.createTransaction(
                             nonce,
@@ -146,8 +181,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             to,
                             data,
                             privateFrom,
-                            (Base64String) privacyGroupIdOrPrivateFor,
-                            RESTRICTED);
+                            privateFor,
+                            restriction);
         } else {
             transaction =
                     RawPrivateTransaction.createTransaction(
@@ -157,8 +192,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             to,
                             data,
                             privateFrom,
-                            (List<Base64String>) privacyGroupIdOrPrivateFor,
-                            RESTRICTED);
+                            privacyGroupId,
+                            restriction);
         }
 
         return signAndSend(transaction);
@@ -174,14 +209,12 @@ public abstract class PrivateTransactionManager extends TransactionManager {
             boolean constructor)
             throws IOException {
         final BigInteger nonce =
-                besu.privGetTransactionCount(credentials.getAddress(), getPrivacyGroupId())
+                besu.privGetTransactionCount(credentials.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
-        final Object privacyGroupIdOrPrivateFor = privacyGroupIdOrPrivateFor();
-
         final RawPrivateTransaction transaction;
-        if (privacyGroupIdOrPrivateFor instanceof Base64String) {
+        if (privateFor != null) {
             transaction =
                     RawPrivateTransaction.createTransactionEIP1559(
                             nonce,
@@ -191,8 +224,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             to,
                             data,
                             privateFrom,
-                            (Base64String) privacyGroupIdOrPrivateFor,
-                            RESTRICTED);
+                            privateFor,
+                            restriction);
         } else {
             transaction =
                     RawPrivateTransaction.createTransactionEIP1559(
@@ -203,8 +236,8 @@ public abstract class PrivateTransactionManager extends TransactionManager {
                             to,
                             data,
                             privateFrom,
-                            (List<Base64String>) privacyGroupIdOrPrivateFor,
-                            RESTRICTED);
+                            privacyGroupId,
+                            restriction);
         }
 
         return signAndSend(transaction);
@@ -214,9 +247,9 @@ public abstract class PrivateTransactionManager extends TransactionManager {
     public String sendCall(
             final String to, final String data, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        EthCall ethCall =
+        final EthCall ethCall =
                 besu.privCall(
-                                getPrivacyGroupId().toString(),
+                                privacyGroupId.toString(),
                                 Transaction.createEthCallTransaction(getFromAddress(), to, data),
                                 defaultBlockParameter)
                         .send();
@@ -225,32 +258,18 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         return ethCall.getValue();
     }
 
-    private TransactionReceipt processResponse(final EthSendTransaction transactionResponse)
-            throws IOException, TransactionException {
-        if (transactionResponse.hasError()) {
-            throw new RuntimeException(
-                    "Error processing transaction request: "
-                            + transactionResponse.getError().getMessage());
-        }
-
-        final String transactionHash = transactionResponse.getTransactionHash();
-
-        return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
-    }
-
     @Override
     public EthGetCode getCode(
             final String contractAddress, final DefaultBlockParameter defaultBlockParameter)
             throws IOException {
         return this.besu
-                .privGetCode(
-                        this.getPrivacyGroupId().toString(), contractAddress, defaultBlockParameter)
+                .privGetCode(privacyGroupId.toString(), contractAddress, defaultBlockParameter)
                 .send();
     }
 
-    public String sign(RawPrivateTransaction rawTransaction) {
+    public String sign(final RawPrivateTransaction rawTransaction) {
 
-        byte[] signedMessage;
+        final byte[] signedMessage;
 
         if (chainId > ChainIdLong.NONE) {
             signedMessage =
@@ -262,8 +281,9 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         return Numeric.toHexString(signedMessage);
     }
 
-    public EthSendTransaction signAndSend(RawPrivateTransaction rawTransaction) throws IOException {
-        String hexValue = sign(rawTransaction);
+    public EthSendTransaction signAndSend(final RawPrivateTransaction rawTransaction)
+            throws IOException {
+        final String hexValue = sign(rawTransaction);
         return this.besu.eeaSendRawTransaction(hexValue).send();
     }
 

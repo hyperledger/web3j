@@ -15,6 +15,7 @@ package org.web3j.protocol.besu;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -29,8 +30,6 @@ import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.test.contract.HumanStandardToken;
-import org.web3j.tx.BesuPrivateTransactionManager;
-import org.web3j.tx.LegacyPrivateTransactionManager;
 import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
@@ -177,21 +176,14 @@ public class BesuPrivacyQuickstartIntegrationTest {
     @Test
     public void legacyContract() throws Exception {
         final PrivateTransactionManager tmAlice =
-                new LegacyPrivateTransactionManager(
-                        nodeAlice,
-                        ZERO_GAS_PROVIDER,
-                        ALICE,
-                        2018,
-                        ENCLAVE_KEY_ALICE,
-                        Arrays.asList(ENCLAVE_KEY_BOB));
+                new PrivateTransactionManager.Builder(nodeAlice, ALICE, ENCLAVE_KEY_ALICE)
+                        .setPrivateFor(Collections.singletonList(ENCLAVE_KEY_BOB))
+                        .build();
+
         final PrivateTransactionManager tmBob =
-                new LegacyPrivateTransactionManager(
-                        nodeBob,
-                        ZERO_GAS_PROVIDER,
-                        BOB,
-                        2018,
-                        ENCLAVE_KEY_BOB,
-                        Arrays.asList(ENCLAVE_KEY_ALICE));
+                new PrivateTransactionManager.Builder(nodeAlice, BOB, ENCLAVE_KEY_ALICE)
+                        .setPrivateFor(Collections.singletonList(ENCLAVE_KEY_ALICE))
+                        .build();
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
@@ -238,21 +230,14 @@ public class BesuPrivacyQuickstartIntegrationTest {
                         .getPrivacyGroupId();
 
         final PrivateTransactionManager tmAlice =
-                new BesuPrivateTransactionManager(
-                        nodeAlice,
-                        ZERO_GAS_PROVIDER,
-                        ALICE,
-                        2018,
-                        ENCLAVE_KEY_ALICE,
-                        aliceBobGroup);
+                new PrivateTransactionManager.Builder(nodeAlice, ALICE, ENCLAVE_KEY_ALICE)
+                        .setPrivacyGroupId(aliceBobGroup)
+                        .build();
+
         final PrivateTransactionManager tmBob =
-                new BesuPrivateTransactionManager(
-                        nodeBob,
-                        ZERO_GAS_PROVIDER,
-                        BOB,
-                        2018,
-                        ENCLAVE_KEY_BOB,
-                        aliceBobGroupFromBobNode);
+                new PrivateTransactionManager.Builder(nodeAlice, BOB, ENCLAVE_KEY_BOB)
+                        .setPrivacyGroupId(aliceBobGroupFromBobNode)
+                        .build();
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(

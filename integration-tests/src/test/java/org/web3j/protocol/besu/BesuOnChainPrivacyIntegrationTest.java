@@ -30,7 +30,6 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.test.contract.HumanStandardToken;
-import org.web3j.tx.BesuPrivateTransactionManager;
 import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
@@ -219,16 +218,14 @@ public class BesuOnChainPrivacyIntegrationTest {
                         .getPrivacyGroupId();
 
         final PrivateTransactionManager tmAlice =
-                new BesuPrivateTransactionManager(
-                        besu, ZERO_GAS_PROVIDER, ALICE, 2018, ENCLAVE_KEY_ALICE, aliceBobGroup);
+                new PrivateTransactionManager.Builder(besu, ALICE, ENCLAVE_KEY_ALICE)
+                        .setPrivacyGroupId(aliceBobGroup)
+                        .build();
+
         final PrivateTransactionManager tmBob =
-                new BesuPrivateTransactionManager(
-                        besu,
-                        ZERO_GAS_PROVIDER,
-                        BOB,
-                        2018,
-                        ENCLAVE_KEY_BOB,
-                        aliceBobGroupFromBobNode);
+                new PrivateTransactionManager.Builder(besu, BOB, ENCLAVE_KEY_BOB)
+                        .setPrivacyGroupId(aliceBobGroupFromBobNode)
+                        .build();
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
