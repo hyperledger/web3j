@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Convert;
@@ -124,8 +125,11 @@ public class Transfer extends ManagedTransaction {
             Convert.Unit unit,
             BigInteger gasLimit,
             BigInteger maxPriorityFeePerGas,
-            BigInteger maxFeePerGas) {
-        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+            BigInteger maxFeePerGas)
+            throws IOException {
+        EthChainId chainId = web3j.ethChainId().send();
+        TransactionManager transactionManager =
+                new RawTransactionManager(web3j, credentials, chainId.getChainId().longValue());
 
         return new RemoteCall<>(
                 () ->
