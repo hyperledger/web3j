@@ -15,7 +15,6 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.rlp.RlpString;
@@ -90,10 +89,6 @@ public class TransactionEncoderTest {
         Credentials credentials =
                 Credentials.create(
                         "0x4646464646464646464646464646464646464646464646464646464646464646");
-        System.out.println(
-                Hex.toHexString(
-                        TransactionEncoder.signMessage(
-                                createEip1559RawTransaction(), credentials)));
         assertArrayEquals(
                 TransactionEncoder.signMessage(createEip1559RawTransaction(), credentials),
                 (Numeric.hexStringToByteArray(
