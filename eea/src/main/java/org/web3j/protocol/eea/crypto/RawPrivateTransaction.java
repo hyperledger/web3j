@@ -163,7 +163,7 @@ public class RawPrivateTransaction extends RawTransaction {
     }
 
     public static RawPrivateTransaction createTransaction(
-            final long chainId,
+            final BigInteger chainId,
             final BigInteger nonce,
             final BigInteger maxPriorityFeePerGas,
             final BigInteger maxFeePerGas,
@@ -190,7 +190,7 @@ public class RawPrivateTransaction extends RawTransaction {
     }
 
     public static RawPrivateTransaction createTransaction(
-            final long chainId,
+            final BigInteger chainId,
             final BigInteger nonce,
             final BigInteger maxPriorityFeePerGas,
             final BigInteger maxFeePerGas,

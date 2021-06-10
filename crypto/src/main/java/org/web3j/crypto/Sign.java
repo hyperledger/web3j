@@ -270,6 +270,7 @@ public class Sign {
      * Returns recovery ID.
      *
      * @param signatureData The message signature components
+     * @param chainId of the network
      * @return int recovery ID
      */
     public static int getRecId(SignatureData signatureData, BigInteger chainId) {

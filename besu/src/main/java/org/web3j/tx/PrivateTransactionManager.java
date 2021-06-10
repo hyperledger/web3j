@@ -164,7 +164,9 @@ public abstract class PrivateTransactionManager extends TransactionManager {
         return signAndSend(transaction);
     }
 
+    @Override
     public EthSendTransaction sendEIP1559Transaction(
+            BigInteger chainId,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
             BigInteger gasLimit,
