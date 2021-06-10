@@ -128,13 +128,13 @@ public class Transfer extends ManagedTransaction {
             BigInteger maxFeePerGas)
             throws IOException {
         EthChainId chainId = web3j.ethChainId().send();
-        TransactionManager transactionManager =
-                new RawTransactionManager(web3j, credentials, chainId.getChainId().longValue());
+        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
 
         return new RemoteCall<>(
                 () ->
                         new Transfer(web3j, transactionManager)
                                 .sendEIP1559(
+                                        chainId.getChainId(),
                                         toAddress,
                                         value,
                                         unit,
@@ -144,6 +144,7 @@ public class Transfer extends ManagedTransaction {
     }
 
     private TransactionReceipt sendEIP1559(
+            BigInteger chainId,
             String toAddress,
             BigDecimal value,
             Convert.Unit unit,
@@ -166,6 +167,7 @@ public class Transfer extends ManagedTransaction {
 
         String resolvedAddress = ensResolver.resolve(toAddress);
         return sendEIP1559(
+                chainId,
                 resolvedAddress,
                 "",
                 weiValue.toBigIntegerExact(),

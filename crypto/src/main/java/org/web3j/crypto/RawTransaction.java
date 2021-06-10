@@ -65,7 +65,7 @@ public class RawTransaction {
     }
 
     public static RawTransaction createEtherTransaction(
-            long chaindId,
+            BigInteger chaindId,
             BigInteger nonce,
             BigInteger gasLimit,
             String to,
@@ -95,7 +95,7 @@ public class RawTransaction {
     }
 
     public static RawTransaction createTransaction(
-            long chaindId,
+            BigInteger chaindId,
             BigInteger nonce,
             BigInteger gasLimit,
             String to,

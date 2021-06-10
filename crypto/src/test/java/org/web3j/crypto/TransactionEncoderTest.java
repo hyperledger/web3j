@@ -15,6 +15,7 @@ package org.web3j.crypto;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.rlp.RlpString;
@@ -85,15 +86,18 @@ public class TransactionEncoderTest {
 
     @Test
     public void testEip1559Transaction() {
-        // https://github.com/ethereum/EIPs/issues/1559
+        // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
         Credentials credentials =
                 Credentials.create(
                         "0x4646464646464646464646464646464646464646464646464646464646464646");
+        System.out.println(
+                Hex.toHexString(
+                        TransactionEncoder.signMessage(
+                                createEip1559RawTransaction(), credentials)));
         assertArrayEquals(
-                TransactionEncoder.signMessage(
-                        createEip1559RawTransaction(), (byte) 1, credentials),
+                TransactionEncoder.signMessage(createEip1559RawTransaction(), credentials),
                 (Numeric.hexStringToByteArray(
-                        "02f8698206178082162e8310c8e082753094627306090abab3a6e1400e9345bc60c78a8bef577b80c00aa083cac99935549adc82c604e28635c8dc908956d822b51e7cf843cc91b23bc4e3a04cef4ed7a7d58581194a840aa4f311b4d74f6a42b7bfd73b08336dbb2e424dd2")));
+                        "02f8698206178082162e8310c8e082753094627306090abab3a6e1400e9345bc60c78a8bef577b80c001a0d1f9ee3bdde4d4e0792c7089b84059fb28e17f494556d8a775450b1dd6c318a1a038bd3e2fb9e018528e0a41f57c7a32a8d23b2693e0451aa6ef4519b234466e7f")));
     }
 
     private static RawTransaction createEtherTransaction() {
@@ -125,7 +129,7 @@ public class TransactionEncoderTest {
 
     private static RawTransaction createEip1559RawTransaction() {
         return RawTransaction.createEtherTransaction(
-                1559,
+                BigInteger.valueOf(1559),
                 BigInteger.valueOf(0),
                 BigInteger.valueOf(30000),
                 "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",

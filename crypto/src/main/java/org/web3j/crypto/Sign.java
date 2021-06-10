@@ -27,6 +27,9 @@ import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
 
 import org.web3j.utils.Numeric;
 
+import static org.bouncycastle.util.BigIntegers.TWO;
+import static org.web3j.crypto.SignatureDataOperations.CHAIN_ID_INC;
+import static org.web3j.crypto.SignatureDataOperations.LOWER_REAL_V;
 import static org.web3j.utils.Assertions.verifyPrecondition;
 
 /**
@@ -269,8 +272,18 @@ public class Sign {
      * @param signatureData The message signature components
      * @return int recovery ID
      */
-    public static int getRecId(SignatureData signatureData) {
-        return (signatureData.getV()[0] & 0xFF) - 27;
+    public static int getRecId(SignatureData signatureData, BigInteger chainId) {
+        BigInteger v = Numeric.toBigInt(signatureData.getV());
+        BigInteger lowerRealV = BigInteger.valueOf(LOWER_REAL_V);
+        BigInteger lowerRealVPlus1 = BigInteger.valueOf(LOWER_REAL_V + 1);
+        BigInteger chainIdInc = BigInteger.valueOf(CHAIN_ID_INC);
+        if (v.equals(lowerRealV) || v.equals(lowerRealVPlus1)) {
+            return v.subtract(lowerRealV).intValue();
+        } else if (v.compareTo(chainIdInc) > 0) {
+            return v.subtract(chainId.multiply(TWO)).add(chainIdInc).intValue();
+        } else {
+            throw new RuntimeException(String.format("Unsupported format exception", v));
+        }
     }
     /**
      * Returns public key from the given private key.

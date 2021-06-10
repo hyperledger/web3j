@@ -103,6 +103,7 @@ public abstract class ManagedTransaction {
     }
 
     protected TransactionReceipt sendEIP1559(
+            BigInteger chainId,
             String to,
             String data,
             BigInteger value,
@@ -112,7 +113,7 @@ public abstract class ManagedTransaction {
             throws IOException, TransactionException {
 
         return transactionManager.executeTransactionEIP1559(
-                maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, data, value);
+                chainId, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, data, value);
     }
 
     protected TransactionReceipt send(
