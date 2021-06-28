@@ -13,7 +13,6 @@
 package org.web3j.tx;
 
 import java.io.IOException;
-import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +22,8 @@ import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.tx.exceptions.ContractCallException;
-import org.web3j.tx.gas.BesuPrivacyGasProvider;
+import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,15 +31,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
+import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 import static org.web3j.tx.TransactionManager.REVERT_ERR_STR;
+import static org.web3j.utils.Restriction.RESTRICTED;
 
-class BesuPrivateTransactionManagerTest {
+class PrivateTransactionManagerTest {
 
     private static final String OWNER_REVERT_MSG_STR =
             "Only the contract owner can perform this action";
-    private static final BesuPrivacyGasProvider ZERO_GAS_PROVIDER =
-            new BesuPrivacyGasProvider(BigInteger.valueOf(0));
-    private static final long CHAIN_ID = 2018;
     private static final Base64String PRIVATE_FROM =
             Base64String.wrap("GGilEkXLaQ9yhhtbpBT03Me9iYa7U/mWXxrJhnbl1XY=");
     private static final Base64String PRIVACY_GROUP_ID =
@@ -56,14 +56,19 @@ class BesuPrivateTransactionManagerTest {
         when(response.getValue()).thenReturn("test");
         when(service.send(any(), any())).thenReturn(response);
 
-        BesuPrivateTransactionManager besuTransactionManager =
-                new BesuPrivateTransactionManager(
+        TransactionReceiptProcessor transactionReceiptProcessor =
+                new PollingPrivateTransactionReceiptProcessor(
+                        besu, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+
+        PrivateTransactionManager besuTransactionManager =
+                new PrivateTransactionManager(
                         besu,
-                        ZERO_GAS_PROVIDER,
                         credentials,
-                        CHAIN_ID,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
                         PRIVATE_FROM,
-                        PRIVACY_GROUP_ID);
+                        PRIVACY_GROUP_ID,
+                        RESTRICTED);
 
         String value = besuTransactionManager.sendCall("", "", defaultBlockParameter);
         assertEquals("test", value);
@@ -75,14 +80,19 @@ class BesuPrivateTransactionManagerTest {
         when(response.getRevertReason()).thenReturn(OWNER_REVERT_MSG_STR);
         when(service.send(any(), any())).thenReturn(response);
 
-        BesuPrivateTransactionManager besuTransactionManager =
-                new BesuPrivateTransactionManager(
+        TransactionReceiptProcessor transactionReceiptProcessor =
+                new PollingPrivateTransactionReceiptProcessor(
+                        besu, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+
+        PrivateTransactionManager besuTransactionManager =
+                new PrivateTransactionManager(
                         besu,
-                        ZERO_GAS_PROVIDER,
                         credentials,
-                        CHAIN_ID,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
                         PRIVATE_FROM,
-                        PRIVACY_GROUP_ID);
+                        PRIVACY_GROUP_ID,
+                        RESTRICTED);
 
         ContractCallException thrown =
                 assertThrows(

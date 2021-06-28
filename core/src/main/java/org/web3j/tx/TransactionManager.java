@@ -154,7 +154,7 @@ public abstract class TransactionManager {
         return fromAddress;
     }
 
-    private TransactionReceipt processResponse(EthSendTransaction transactionResponse)
+    protected TransactionReceipt processResponse(EthSendTransaction transactionResponse)
             throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
             throw new RuntimeException(
