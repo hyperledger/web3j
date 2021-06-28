@@ -26,14 +26,11 @@ import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
-import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.PrivacyGroupUtils;
 import org.web3j.utils.Restriction;
-
-import static org.web3j.utils.Restriction.RESTRICTED;
 
 public class PrivateTransactionManager extends TransactionManager {
 
@@ -83,76 +80,6 @@ public class PrivateTransactionManager extends TransactionManager {
         this.privateFor = privateFor;
         this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
         this.restriction = restriction;
-    }
-
-    public static class Builder {
-        private final Besu besu;
-        private final Credentials credentials;
-        private long chainId;
-        private final Base64String privateFrom;
-        private Base64String privacyGroupId;
-        private TransactionReceiptProcessor transactionReceiptProcessor;
-        private Restriction restriction = RESTRICTED;
-        private List<Base64String> privateFor = null;
-
-        public Builder(
-                final Besu besu, final Credentials credentials, final Base64String privateFrom) {
-            this.besu = besu;
-            this.credentials = credentials;
-            this.chainId = ChainIdLong.NONE;
-            this.privateFrom = privateFrom;
-            transactionReceiptProcessor =
-                    new PollingPrivateTransactionReceiptProcessor(
-                            besu, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
-        }
-
-        public Builder setRestriction(final Restriction restriction) {
-            this.restriction = restriction;
-            return this;
-        }
-
-        public Builder setTransactionReceiptProcessor(
-                final TransactionReceiptProcessor transactionReceiptProcessor) {
-            this.transactionReceiptProcessor = transactionReceiptProcessor;
-            return this;
-        }
-
-        public Builder setPrivacyGroupId(final Base64String privacyGroupId) {
-            this.privacyGroupId = privacyGroupId;
-            return this;
-        }
-
-        public Builder setPrivateFor(final List<Base64String> privateFor) {
-            this.privateFor = privateFor;
-            return this;
-        }
-
-        public Builder setChainId(final long chainId) {
-            this.chainId = chainId;
-            return this;
-        }
-
-        public PrivateTransactionManager build() {
-            if (privateFor != null) {
-                return new PrivateTransactionManager(
-                        besu,
-                        credentials,
-                        transactionReceiptProcessor,
-                        chainId,
-                        privateFrom,
-                        privateFor,
-                        restriction);
-            } else {
-                return new PrivateTransactionManager(
-                        besu,
-                        credentials,
-                        transactionReceiptProcessor,
-                        chainId,
-                        privateFrom,
-                        privacyGroupId,
-                        restriction);
-            }
-        }
     }
 
     @Override

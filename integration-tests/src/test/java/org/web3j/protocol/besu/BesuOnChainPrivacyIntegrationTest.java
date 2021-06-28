@@ -30,15 +30,20 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.test.contract.HumanStandardToken;
+import org.web3j.tx.ChainIdLong;
 import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
+import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
+import static org.web3j.utils.Restriction.RESTRICTED;
 
 @Disabled
 @EVMTest(type = NodeType.BESU)
@@ -217,15 +222,29 @@ public class BesuOnChainPrivacyIntegrationTest {
                         .orElseThrow(RuntimeException::new)
                         .getPrivacyGroupId();
 
-        final PrivateTransactionManager tmAlice =
-                new PrivateTransactionManager.Builder(besu, ALICE, ENCLAVE_KEY_ALICE)
-                        .setPrivacyGroupId(aliceBobGroup)
-                        .build();
+        TransactionReceiptProcessor transactionReceiptProcessor =
+                new PollingPrivateTransactionReceiptProcessor(
+                        besu, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
 
-        final PrivateTransactionManager tmBob =
-                new PrivateTransactionManager.Builder(besu, BOB, ENCLAVE_KEY_BOB)
-                        .setPrivacyGroupId(aliceBobGroupFromBobNode)
-                        .build();
+        PrivateTransactionManager tmAlice =
+                new PrivateTransactionManager(
+                        besu,
+                        ALICE,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
+                        ENCLAVE_KEY_ALICE,
+                        aliceBobGroupFromBobNode,
+                        RESTRICTED);
+
+        PrivateTransactionManager tmBob =
+                new PrivateTransactionManager(
+                        besu,
+                        BOB,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
+                        ENCLAVE_KEY_BOB,
+                        aliceBobGroupFromBobNode,
+                        RESTRICTED);
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
