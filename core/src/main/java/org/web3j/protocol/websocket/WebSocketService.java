@@ -436,12 +436,16 @@ public class WebSocketService implements Web3jService {
             if (idField.isTextual()) {
                 try {
                     return Long.parseLong(idField.asText());
-                } catch (Exception e) {
-                    throw new IOException(String.format("Textual Found 'id' that cannot be casted to long. Input : '%s'", idField.asText()));
+                } catch (NumberFormatException e) {
+                    throw new IOException(
+                            String.format(
+                                    "Found Textual 'id' that cannot be casted to long. Input : '%s'",
+                                    idField.asText()));
                 }
             } else {
                 throw new IOException(
-                        String.format("'id' expected to be long, but it is: '%s'", idField.asText()));
+                        String.format(
+                                "'id' expected to be long, but it is: '%s'", idField.asText()));
             }
         }
 
