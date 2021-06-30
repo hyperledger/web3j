@@ -134,7 +134,7 @@ public class Transfer extends ManagedTransaction {
                 () ->
                         new Transfer(web3j, transactionManager)
                                 .sendEIP1559(
-                                        chainId.getChainId(),
+                                        chainId.getChainId().longValue(),
                                         toAddress,
                                         value,
                                         unit,
@@ -144,7 +144,7 @@ public class Transfer extends ManagedTransaction {
     }
 
     private TransactionReceipt sendEIP1559(
-            BigInteger chainId,
+            long chainId,
             String toAddress,
             BigDecimal value,
             Convert.Unit unit,

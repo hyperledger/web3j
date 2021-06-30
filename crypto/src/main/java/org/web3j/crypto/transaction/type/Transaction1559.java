@@ -32,12 +32,12 @@ import static org.web3j.crypto.transaction.type.TransactionType.EIP1559;
  */
 public class Transaction1559 extends LegacyTransaction implements ITransaction {
 
-    private BigInteger chainId;
+    private long chainId;
     private BigInteger maxPriorityFeePerGas;
     private BigInteger maxFeePerGas;
 
     public Transaction1559(
-            BigInteger chainId,
+            long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
             String to,
@@ -86,7 +86,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
         result.add(new RlpList());
 
         if (signatureData != null) {
-            result.add(RlpString.create(Sign.getRecId(signatureData, chainId)));
+            result.add(RlpString.create(Sign.getRecId(signatureData, getChainId())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }
@@ -95,7 +95,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
     }
 
     public static Transaction1559 createEtherTransaction(
-            BigInteger chainId,
+            long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
             String to,
@@ -107,7 +107,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
     }
 
     public static Transaction1559 createTransaction(
-            BigInteger chainId,
+            long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
             String to,
@@ -125,7 +125,7 @@ public class Transaction1559 extends LegacyTransaction implements ITransaction {
         throw new UnsupportedOperationException("not available for 1559 transaction");
     }
 
-    public BigInteger getChainId() {
+    public long getChainId() {
         return chainId;
     }
 

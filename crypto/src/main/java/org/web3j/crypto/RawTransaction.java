@@ -65,7 +65,7 @@ public class RawTransaction {
     }
 
     public static RawTransaction createEtherTransaction(
-            BigInteger chaindId,
+            long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
             String to,
@@ -74,7 +74,7 @@ public class RawTransaction {
             BigInteger maxFeePerGas) {
         return new RawTransaction(
                 Transaction1559.createEtherTransaction(
-                        chaindId, nonce, gasLimit, to, value, maxPriorityFeePerGas, maxFeePerGas));
+                        chainId, nonce, gasLimit, to, value, maxPriorityFeePerGas, maxFeePerGas));
     }
 
     public static RawTransaction createTransaction(
@@ -95,7 +95,7 @@ public class RawTransaction {
     }
 
     public static RawTransaction createTransaction(
-            BigInteger chaindId,
+            long chainId,
             BigInteger nonce,
             BigInteger gasLimit,
             String to,
@@ -106,7 +106,7 @@ public class RawTransaction {
 
         return new RawTransaction(
                 Transaction1559.createTransaction(
-                        chaindId,
+                        chainId,
                         nonce,
                         gasLimit,
                         to,

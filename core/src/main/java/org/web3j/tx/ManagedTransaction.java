@@ -103,7 +103,7 @@ public abstract class ManagedTransaction {
     }
 
     protected TransactionReceipt sendEIP1559(
-            BigInteger chainId,
+            long chainId,
             String to,
             String data,
             BigInteger value,

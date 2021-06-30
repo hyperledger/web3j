@@ -69,7 +69,7 @@ public class ClientTransactionManager extends TransactionManager {
 
     @Override
     public EthSendTransaction sendEIP1559Transaction(
-            BigInteger chainId,
+            long chainId,
             BigInteger maxPriorityFeePerGas,
             BigInteger maxFeePerGas,
             BigInteger gasLimit,

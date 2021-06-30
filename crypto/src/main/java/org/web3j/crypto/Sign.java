@@ -273,7 +273,7 @@ public class Sign {
      * @param chainId of the network
      * @return int recovery ID
      */
-    public static int getRecId(SignatureData signatureData, BigInteger chainId) {
+    public static int getRecId(SignatureData signatureData, long chainId) {
         BigInteger v = Numeric.toBigInt(signatureData.getV());
         BigInteger lowerRealV = BigInteger.valueOf(LOWER_REAL_V);
         BigInteger lowerRealVPlus1 = BigInteger.valueOf(LOWER_REAL_V + 1);
@@ -281,7 +281,7 @@ public class Sign {
         if (v.equals(lowerRealV) || v.equals(lowerRealVPlus1)) {
             return v.subtract(lowerRealV).intValue();
         } else if (v.compareTo(chainIdInc) > 0) {
-            return v.subtract(chainId.multiply(TWO)).add(chainIdInc).intValue();
+            return v.subtract(BigInteger.valueOf(chainId).multiply(TWO)).add(chainIdInc).intValue();
         } else {
             throw new RuntimeException(String.format("Unsupported format exception", v));
         }

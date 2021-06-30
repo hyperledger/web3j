@@ -41,6 +41,11 @@ public class TransactionEncoder {
 
     public static byte[] signMessage(
             RawTransaction rawTransaction, long chainId, Credentials credentials) {
+
+        if (!rawTransaction.getType().equals(TransactionType.LEGACY)) {
+            return signMessage(rawTransaction, credentials);
+        }
+
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData =
                 Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
