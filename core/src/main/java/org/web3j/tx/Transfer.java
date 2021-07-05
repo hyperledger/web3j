@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.utils.Convert;
@@ -123,23 +124,33 @@ public class Transfer extends ManagedTransaction {
             BigDecimal value,
             Convert.Unit unit,
             BigInteger gasLimit,
-            BigInteger gasPremium,
-            BigInteger feeCap) {
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas)
+            throws IOException {
+        EthChainId chainId = web3j.ethChainId().send();
         TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
 
         return new RemoteCall<>(
                 () ->
                         new Transfer(web3j, transactionManager)
-                                .sendEIP1559(toAddress, value, unit, gasLimit, gasPremium, feeCap));
+                                .sendEIP1559(
+                                        chainId.getChainId().longValue(),
+                                        toAddress,
+                                        value,
+                                        unit,
+                                        gasLimit,
+                                        maxPriorityFeePerGas,
+                                        maxFeePerGas));
     }
 
     private TransactionReceipt sendEIP1559(
+            long chainId,
             String toAddress,
             BigDecimal value,
             Convert.Unit unit,
             BigInteger gasLimit,
-            BigInteger gasPremium,
-            BigInteger feeCap)
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas)
             throws IOException, InterruptedException, TransactionException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
@@ -156,6 +167,12 @@ public class Transfer extends ManagedTransaction {
 
         String resolvedAddress = ensResolver.resolve(toAddress);
         return sendEIP1559(
-                resolvedAddress, "", weiValue.toBigIntegerExact(), gasLimit, gasPremium, feeCap);
+                chainId,
+                resolvedAddress,
+                "",
+                weiValue.toBigIntegerExact(),
+                gasLimit,
+                maxPriorityFeePerGas,
+                maxFeePerGas);
     }
 }
