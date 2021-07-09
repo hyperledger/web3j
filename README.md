@@ -107,7 +107,7 @@ Java:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.8.5</version>
+  <version>5.0.0</version>
 </dependency>
 ```
 
