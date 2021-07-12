@@ -40,7 +40,7 @@ jobs:
           value: $GITHUB_REF
           start: 8 # Remove 'release/' prefix 
       - name: Build and stage release
-        run: ./gradlew publish bintrayUpload -Pversion=${{ steps.release_name.outputs.result }}
+        run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
       - name: GitHub release
