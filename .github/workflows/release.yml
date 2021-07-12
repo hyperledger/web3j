@@ -38,9 +38,9 @@ jobs:
         uses: web3j/slice-action@v1.3
         with:
           value: $GITHUB_REF
-          start: 8 # Remove 'release/' prefix 
+          start: 8 # Remove 'release/' prefix
       - name: Build and stage release
-        run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
+        run: ./gradlew publish
       - name: Release
         run: ./gradlew closeAndReleaseRepository
       - name: GitHub release
