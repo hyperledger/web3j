@@ -14,8 +14,6 @@ jobs:
       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
       OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-      BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2

@@ -14,8 +14,6 @@ jobs:
       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
       OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-      BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
@@ -40,7 +38,7 @@ jobs:
           value: $GITHUB_REF
           start: 8 # Remove 'release/' prefix
       - name: Build and stage release
-        run: ./gradlew publish
+        run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
       - name: GitHub release
