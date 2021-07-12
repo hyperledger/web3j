@@ -20,6 +20,7 @@ integration code for the platform.
 The [Java and the Blockchain](https://www.youtube.com/watch?v=ea3miXs_P6Y) talk provides
 an overview of blockchain, Ethereum and Web3j.
 
+
 Features
 --------
 
