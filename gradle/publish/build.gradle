@@ -32,7 +32,6 @@ publishing {
 
             version = '4.8.5'
 
-
             pom {
                 name = project.name
                 description.set(project.provider({ project.description }))
