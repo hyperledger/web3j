@@ -33,10 +33,12 @@ jobs:
         run: openssl aes-256-cbc -K ${{ secrets.GPG_KEY }} -iv ${{ secrets.GPG_IV }} -in web3j.asc.enc -out web3j.asc -d
       - name: Release name
         id: release_name
-        uses: web3j/slice-action@v1.3
+        uses: actions/github-script@v4
         with:
-          value: $GITHUB_REF
-          start: 8 # Remove 'release/' prefix
+            script: |
+              const branch_name = process.env.GITHUB_REF
+              const web3j_release_version = branch_name.substring(branch_name.lastIndexOf('/') +1 ,branch_name.length  )
+              return web3j_release_version
       - name: Build and stage release
         run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
