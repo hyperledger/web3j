@@ -78,7 +78,11 @@ jobs:
             script: |
               const branch_name = process.env.GITHUB_REF
               const web3j_release_version = branch_name.substring(branch_name.lastIndexOf('/') +1 ,branch_name.length  )
+                  id: step_two
               return web3j_release_version
+      - name: Set global version for github release script
+        run: |
+            echo "VERSION=${{steps.release_name.outputs.result}}" >> $GITHUB_ENV
       - name: Build and stage release
         run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
