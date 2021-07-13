@@ -48,7 +48,7 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash)
         if: ${{ success() }}
   release:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: build
     runs-on: ubuntu-latest
     env:
       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
