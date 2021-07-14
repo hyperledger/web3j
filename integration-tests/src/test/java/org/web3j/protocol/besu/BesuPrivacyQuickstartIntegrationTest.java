@@ -15,6 +15,7 @@ package org.web3j.protocol.besu;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -29,17 +30,19 @@ import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.test.contract.HumanStandardToken;
-import org.web3j.tx.BesuPrivateTransactionManager;
-import org.web3j.tx.LegacyPrivateTransactionManager;
+import org.web3j.tx.ChainIdLong;
 import org.web3j.tx.PrivateTransactionManager;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
 import org.web3j.tx.response.PollingPrivateTransactionReceiptProcessor;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
+import static org.web3j.tx.TransactionManager.DEFAULT_POLLING_FREQUENCY;
 import static org.web3j.utils.Restriction.RESTRICTED;
 
 /**
@@ -176,22 +179,29 @@ public class BesuPrivacyQuickstartIntegrationTest {
 
     @Test
     public void legacyContract() throws Exception {
-        final PrivateTransactionManager tmAlice =
-                new LegacyPrivateTransactionManager(
+        TransactionReceiptProcessor transactionReceiptProcessor =
+                new PollingPrivateTransactionReceiptProcessor(
+                        nodeAlice, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+
+        PrivateTransactionManager tmAlice =
+                new PrivateTransactionManager(
                         nodeAlice,
-                        ZERO_GAS_PROVIDER,
                         ALICE,
-                        2018,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
                         ENCLAVE_KEY_ALICE,
-                        Arrays.asList(ENCLAVE_KEY_BOB));
-        final PrivateTransactionManager tmBob =
-                new LegacyPrivateTransactionManager(
+                        Collections.singletonList(ENCLAVE_KEY_BOB),
+                        RESTRICTED);
+
+        PrivateTransactionManager tmBob =
+                new PrivateTransactionManager(
                         nodeBob,
-                        ZERO_GAS_PROVIDER,
                         BOB,
-                        2018,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
                         ENCLAVE_KEY_BOB,
-                        Arrays.asList(ENCLAVE_KEY_ALICE));
+                        Collections.singletonList(ENCLAVE_KEY_ALICE),
+                        RESTRICTED);
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(
@@ -237,22 +247,29 @@ public class BesuPrivacyQuickstartIntegrationTest {
                         .orElseThrow(RuntimeException::new)
                         .getPrivacyGroupId();
 
-        final PrivateTransactionManager tmAlice =
-                new BesuPrivateTransactionManager(
-                        nodeAlice,
-                        ZERO_GAS_PROVIDER,
-                        ALICE,
-                        2018,
-                        ENCLAVE_KEY_ALICE,
-                        aliceBobGroup);
-        final PrivateTransactionManager tmBob =
-                new BesuPrivateTransactionManager(
+        TransactionReceiptProcessor transactionReceiptProcessor =
+                new PollingPrivateTransactionReceiptProcessor(
+                        nodeAlice, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+
+        PrivateTransactionManager tmBob =
+                new PrivateTransactionManager(
                         nodeBob,
-                        ZERO_GAS_PROVIDER,
                         BOB,
-                        2018,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
                         ENCLAVE_KEY_BOB,
-                        aliceBobGroupFromBobNode);
+                        aliceBobGroupFromBobNode,
+                        RESTRICTED);
+
+        PrivateTransactionManager tmAlice =
+                new PrivateTransactionManager(
+                        nodeAlice,
+                        ALICE,
+                        transactionReceiptProcessor,
+                        ChainIdLong.NONE,
+                        ENCLAVE_KEY_ALICE,
+                        aliceBobGroupFromBobNode,
+                        RESTRICTED);
 
         final HumanStandardToken tokenAlice =
                 HumanStandardToken.deploy(

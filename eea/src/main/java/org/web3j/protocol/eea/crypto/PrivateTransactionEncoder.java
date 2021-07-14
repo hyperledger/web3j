@@ -78,9 +78,7 @@ public class PrivateTransactionEncoder {
             final Sign.SignatureData signatureData) {
 
         final List<RlpType> result =
-                new ArrayList<>(
-                        TransactionEncoder.asRlpValues(
-                                privateTransaction.asRawTransaction(), signatureData));
+                new ArrayList<>(TransactionEncoder.asRlpValues(privateTransaction, signatureData));
 
         result.add(privateTransaction.getPrivateFrom().asRlp());
 

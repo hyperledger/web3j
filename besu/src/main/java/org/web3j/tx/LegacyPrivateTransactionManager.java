@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2021 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -16,54 +16,41 @@ import java.util.List;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.besu.Besu;
-import org.web3j.tx.gas.BesuPrivacyGasProvider;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
-import org.web3j.utils.PrivacyGroupUtils;
+import org.web3j.utils.Restriction;
 
-/** PrivateTransactionManager implementation for using a Besu node to transact. */
+@Deprecated
 public class LegacyPrivateTransactionManager extends PrivateTransactionManager {
 
-    private final List<Base64String> privateFor;
-    private final Base64String privacyGroupId;
-
+    /**
+     * Creates a LegacyPrivateTransactionManager
+     *
+     * @deprecated
+     *     <p>Use {@link PrivateTransactionManager} instead.
+     * @param besu
+     * @param credentials
+     * @param transactionReceiptProcessor
+     * @param chainId
+     * @param privateFrom
+     * @param privateFor
+     * @param restriction
+     */
     public LegacyPrivateTransactionManager(
-            final Besu besu,
-            final BesuPrivacyGasProvider gasProvider,
-            final Credentials credentials,
-            final long chainId,
-            final Base64String privateFrom,
-            final List<Base64String> privateFor,
-            final int attempts,
-            final int sleepDuration) {
-        super(besu, gasProvider, credentials, chainId, privateFrom, attempts, sleepDuration);
-        this.privateFor = privateFor;
-        this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
-    }
-
-    public LegacyPrivateTransactionManager(
-            final Besu besu,
-            final BesuPrivacyGasProvider gasProvider,
-            final Credentials credentials,
-            final long chainId,
-            final Base64String privateFrom,
-            final List<Base64String> privateFor) {
-        this(
+            Besu besu,
+            Credentials credentials,
+            TransactionReceiptProcessor transactionReceiptProcessor,
+            long chainId,
+            Base64String privateFrom,
+            List<Base64String> privateFor,
+            Restriction restriction) {
+        super(
                 besu,
-                gasProvider,
                 credentials,
+                transactionReceiptProcessor,
                 chainId,
                 privateFrom,
                 privateFor,
-                DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH,
-                15 * 1000);
-    }
-
-    public Base64String getPrivacyGroupId() {
-        return privacyGroupId;
-    }
-
-    @Override
-    protected Object privacyGroupIdOrPrivateFor() {
-        return privateFor;
+                restriction);
     }
 }

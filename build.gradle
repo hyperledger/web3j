@@ -6,7 +6,6 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.22.0'
     id 'de.marcphilipp.nexus-publish' version '0.4.0'
     id 'de.undercouch.download' version '4.1.1'
-    id 'com.jfrog.bintray' version '1.8.5'
     id 'org.ajoberstar.git-publish' version '3.0.0'
 }
 
@@ -36,7 +35,6 @@ ext {
 description 'Web3j base project.'
 
 [
-    'bintray',
     'jacoco',
     'java',
     'javadoc',
@@ -47,7 +45,7 @@ description 'Web3j base project.'
     download {
         src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
         dest "$rootDir/gradle/$buildScript/build.gradle"
-        overwrite true
+        overwrite false
         quiet true
         onlyIfModified true
     }
@@ -89,29 +87,10 @@ allprojects {
         }
     }
 
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                pom {
-                    scm {
-                        url = "https://github.com/web3j/web3j"
-                        connection = "scm:https://github.com/web3j/web3j.git"
-                        developerConnection = "scm:git://github.com/web3j/web3j.git"
-                    }
-                }
-            }
-        }
-    }
-
     if (project.name != 'integration-tests' && project.name != 'web3j') {
         apply from: "$rootDir/gradle/publish/build.gradle"
-        apply from: "$rootDir/gradle/bintray/build.gradle"
     }
 }
 configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply from: "$rootDir/gradle/jacoco/build.gradle"
-}
-
-bintrayUpload {
-    enabled = false
 }
