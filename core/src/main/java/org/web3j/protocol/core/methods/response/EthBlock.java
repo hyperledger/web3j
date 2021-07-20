@@ -80,6 +80,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         private List<TransactionResult> transactions;
         private List<String> uncles;
         private List<String> sealFields;
+        private String baseFeePerGas;
 
         public Block() {}
 
@@ -105,7 +106,8 @@ public class EthBlock extends Response<EthBlock.Block> {
                 String timestamp,
                 List<TransactionResult> transactions,
                 List<String> uncles,
-                List<String> sealFields) {
+                List<String> sealFields,
+                String baseFeePerGas) {
             this.number = number;
             this.hash = hash;
             this.parentHash = parentHash;
@@ -128,6 +130,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.transactions = transactions;
             this.uncles = uncles;
             this.sealFields = sealFields;
+            this.baseFeePerGas = baseFeePerGas;
         }
 
         public BigInteger getNumber() {
@@ -339,6 +342,14 @@ public class EthBlock extends Response<EthBlock.Block> {
             this.sealFields = sealFields;
         }
 
+        public String getBaseFeePerGas() {
+            return baseFeePerGas;
+        }
+
+        public void setBaseFeePerGas(String baseFeePerGas) {
+            this.baseFeePerGas = baseFeePerGas;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -453,6 +464,13 @@ public class EthBlock extends Response<EthBlock.Block> {
                     : block.getUncles() != null) {
                 return false;
             }
+
+            if (getBaseFeePerGas() != null
+                    ? !getBaseFeePerGas().equals(block.getBaseFeePerGas())
+                    : block.getBaseFeePerGas() != null) {
+                return false;
+            }
+
             return getSealFields() != null
                     ? getSealFields().equals(block.getSealFields())
                     : block.getSealFields() == null;
@@ -469,8 +487,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             result =
                     31 * result
                             + (getTransactionsRoot() != null
-                                    ? getTransactionsRoot().hashCode()
-                                    : 0);
+                            ? getTransactionsRoot().hashCode()
+                            : 0);
             result = 31 * result + (getStateRoot() != null ? getStateRoot().hashCode() : 0);
             result = 31 * result + (getReceiptsRoot() != null ? getReceiptsRoot().hashCode() : 0);
             result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
@@ -480,8 +498,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             result =
                     31 * result
                             + (getTotalDifficultyRaw() != null
-                                    ? getTotalDifficultyRaw().hashCode()
-                                    : 0);
+                            ? getTotalDifficultyRaw().hashCode()
+                            : 0);
             result = 31 * result + (getExtraData() != null ? getExtraData().hashCode() : 0);
             result = 31 * result + (getSizeRaw() != null ? getSizeRaw().hashCode() : 0);
             result = 31 * result + (getGasLimitRaw() != null ? getGasLimitRaw().hashCode() : 0);
@@ -490,6 +508,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             result = 31 * result + (getTransactions() != null ? getTransactions().hashCode() : 0);
             result = 31 * result + (getUncles() != null ? getUncles().hashCode() : 0);
             result = 31 * result + (getSealFields() != null ? getSealFields().hashCode() : 0);
+            result = 31 * result + (getBaseFeePerGas() != null ? getBaseFeePerGas().hashCode() : 0);
             return result;
         }
     }
@@ -557,7 +576,10 @@ public class EthBlock extends Response<EthBlock.Block> {
                 String raw,
                 String r,
                 String s,
-                int v) {
+                int v,
+                String type,
+                String maxFeePerGas,
+                String maxPriorityFeePerGas) {
             super(
                     hash,
                     nonce,
@@ -575,7 +597,10 @@ public class EthBlock extends Response<EthBlock.Block> {
                     raw,
                     r,
                     s,
-                    v);
+                    v,
+                    type,
+                    maxFeePerGas,
+                    maxPriorityFeePerGas);
         }
 
         @Override

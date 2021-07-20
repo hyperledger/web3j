@@ -635,7 +635,8 @@ public class ResponseTest extends ResponseTester {
                         + "    \"sealFields\": [\n"
                         + "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n"
                         + "       \"0x39a3eb432fbef1fc\"\n"
-                        + "    ]\n"
+                        + "    ],\n"
+                        + "    \"baseFeePerGas\": \"0x7\"\n"
                         + "  }\n"
                         + "}");
 
@@ -672,7 +673,8 @@ public class ResponseTest extends ResponseTester {
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
                         Arrays.asList(
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                                "0x39a3eb432fbef1fc"));
+                                "0x39a3eb432fbef1fc"),
+                        "0x7");
         assertEquals(ethBlock.getBlock(), (block));
     }
 
@@ -720,7 +722,10 @@ public class ResponseTest extends ResponseTester {
                         + "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
-                        + "        \"v\":0\n"
+                        + "        \"v\":\"0\",\n"
+                        + "        \"type\":\"0x0\",\n"
+                        + "        \"maxFeePerGas\": \"0x7f110\",\n"
+                        + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
                         + "    }], \n"
                         + "    \"uncles\": [\n"
                         + "       \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n"
@@ -729,7 +734,8 @@ public class ResponseTest extends ResponseTester {
                         + "    \"sealFields\": [\n"
                         + "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n"
                         + "       \"0x39a3eb432fbef1fc\"\n"
-                        + "    ]\n"
+                        + "    ],\n"
+                        + "    \"baseFeePerGas\": \"0x7\"\n"
                         + "  }\n"
                         + "}");
 
@@ -773,13 +779,17 @@ public class ResponseTest extends ResponseTester {
                                         "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                        (byte) 0)),
+                                        (byte) 0,
+                                        "0x0",
+                                        "0x7f110",
+                                        "0x7f110")),
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
                         Arrays.asList(
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                                "0x39a3eb432fbef1fc"));
+                                "0x39a3eb432fbef1fc"),
+                        "0x7");
         assertEquals(ethBlock.getBlock(), (block));
     }
 
@@ -828,7 +838,10 @@ public class ResponseTest extends ResponseTester {
                         + "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
-                        + "        \"v\":\"0x9d\"\n"
+                        + "        \"v\":\"0x9d\",\n"
+                        + "        \"type\":\"0x0\",\n"
+                        + "        \"maxFeePerGas\": \"0x7f110\",\n"
+                        + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
                         + "    }], \n"
                         + "    \"uncles\": [\n"
                         + "       \"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\n"
@@ -837,7 +850,8 @@ public class ResponseTest extends ResponseTester {
                         + "    \"sealFields\": [\n"
                         + "       \"0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b\",\n"
                         + "       \"0x39a3eb432fbef1fc\"\n"
-                        + "    ]\n"
+                        + "    ],\n"
+                        + "    \"baseFeePerGas\": \"0x7\"\n"
                         + "  }\n"
                         + "}");
 
@@ -881,13 +895,18 @@ public class ResponseTest extends ResponseTester {
                                         "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                        0x9d)),
+                                        0x9d,
+                                        "0x0",
+                                        "0x7f110",
+                                        "0x7f110")),
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
                         Arrays.asList(
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
-                                "0x39a3eb432fbef1fc"));
+                                "0x39a3eb432fbef1fc"),
+                        "0x7");
+
         assertEquals(ethBlock.getBlock(), (block));
     }
 
@@ -923,7 +942,10 @@ public class ResponseTest extends ResponseTester {
                         + "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
-                        + "        \"v\":0\n"
+                        + "        \"v\":\"0\",\n"
+                        + "        \"type\":\"0x0\",\n"
+                        + "        \"maxFeePerGas\": \"0x7f110\",\n"
+                        + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
                         + "  }\n"
                         + "}");
         Transaction transaction =
@@ -944,7 +966,10 @@ public class ResponseTest extends ResponseTester {
                         "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                        (byte) 0);
+                        (byte) 0,
+                        "0x0",
+                        "0x7f110",
+                        "0x7f110");
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
         assertEquals(ethTransaction.getTransaction().get(), (transaction));

@@ -38,6 +38,9 @@ public class Transaction {
     private String r;
     private String s;
     private long v; // see https://github.com/web3j/web3j/issues/44
+    private String type;
+    private String maxFeePerGas;
+    private String maxPriorityFeePerGas;
 
     public Transaction() {}
 
@@ -58,7 +61,10 @@ public class Transaction {
             String raw,
             String r,
             String s,
-            long v) {
+            long v,
+            String type,
+            String maxFeePerGas,
+            String maxPriorityFeePerGas) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -76,6 +82,9 @@ public class Transaction {
         this.r = r;
         this.s = s;
         this.v = v;
+        this.type = type;
+        this.maxFeePerGas = maxFeePerGas;
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
     }
 
     public String getHash() {
@@ -259,6 +268,30 @@ public class Transaction {
         }
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getMaxFeePerGas() {
+        return maxFeePerGas;
+    }
+
+    public void setMaxFeePerGas(String maxFeePerGas) {
+        this.maxFeePerGas = maxFeePerGas;
+    }
+
+    public String getMaxPriorityFeePerGas() {
+        return maxPriorityFeePerGas;
+    }
+
+    public void setMaxPriorityFeePerGas(String maxPriorityFeePerGas) {
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -336,6 +369,15 @@ public class Transaction {
         if (getR() != null ? !getR().equals(that.getR()) : that.getR() != null) {
             return false;
         }
+        if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
+            return false;
+        }
+        if (getMaxFeePerGas() != null ? !getMaxFeePerGas().equals(that.getMaxFeePerGas()) : that.getMaxFeePerGas() != null) {
+            return false;
+        }
+        if (getMaxPriorityFeePerGas() != null ? !getMaxPriorityFeePerGas().equals(that.getMaxPriorityFeePerGas()) : that.getMaxPriorityFeePerGas() != null) {
+            return false;
+        }
         return getS() != null ? getS().equals(that.getS()) : that.getS() == null;
     }
 
@@ -348,8 +390,8 @@ public class Transaction {
         result =
                 31 * result
                         + (getTransactionIndexRaw() != null
-                                ? getTransactionIndexRaw().hashCode()
-                                : 0);
+                        ? getTransactionIndexRaw().hashCode()
+                        : 0);
         result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getValueRaw() != null ? getValueRaw().hashCode() : 0);
@@ -362,6 +404,9 @@ public class Transaction {
         result = 31 * result + (getR() != null ? getR().hashCode() : 0);
         result = 31 * result + (getS() != null ? getS().hashCode() : 0);
         result = 31 * result + BigInteger.valueOf(getV()).hashCode();
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + (getMaxFeePerGas() != null ? getMaxFeePerGas().hashCode() : 0);
+        result = 31 * result + (getMaxPriorityFeePerGas() != null ? getMaxPriorityFeePerGas().hashCode() : 0);
         return result;
     }
 }
