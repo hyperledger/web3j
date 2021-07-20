@@ -487,8 +487,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             result =
                     31 * result
                             + (getTransactionsRoot() != null
-                            ? getTransactionsRoot().hashCode()
-                            : 0);
+                                    ? getTransactionsRoot().hashCode()
+                                    : 0);
             result = 31 * result + (getStateRoot() != null ? getStateRoot().hashCode() : 0);
             result = 31 * result + (getReceiptsRoot() != null ? getReceiptsRoot().hashCode() : 0);
             result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
@@ -498,8 +498,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             result =
                     31 * result
                             + (getTotalDifficultyRaw() != null
-                            ? getTotalDifficultyRaw().hashCode()
-                            : 0);
+                                    ? getTotalDifficultyRaw().hashCode()
+                                    : 0);
             result = 31 * result + (getExtraData() != null ? getExtraData().hashCode() : 0);
             result = 31 * result + (getSizeRaw() != null ? getSizeRaw().hashCode() : 0);
             result = 31 * result + (getGasLimitRaw() != null ? getGasLimitRaw().hashCode() : 0);

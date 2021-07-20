@@ -99,12 +99,12 @@ public class Transaction {
         return Numeric.decodeQuantity(nonce);
     }
 
-    public String getNonceRaw() {
-        return nonce;
-    }
-
     public void setNonce(String nonce) {
         this.nonce = nonce;
+    }
+
+    public String getNonceRaw() {
+        return nonce;
     }
 
     public String getBlockHash() {
@@ -119,24 +119,24 @@ public class Transaction {
         return Numeric.decodeQuantity(blockNumber);
     }
 
-    public String getBlockNumberRaw() {
-        return blockNumber;
-    }
-
     public void setBlockNumber(String blockNumber) {
         this.blockNumber = blockNumber;
+    }
+
+    public String getBlockNumberRaw() {
+        return blockNumber;
     }
 
     public BigInteger getTransactionIndex() {
         return Numeric.decodeQuantity(transactionIndex);
     }
 
-    public String getTransactionIndexRaw() {
-        return transactionIndex;
-    }
-
     public void setTransactionIndex(String transactionIndex) {
         this.transactionIndex = transactionIndex;
+    }
+
+    public String getTransactionIndexRaw() {
+        return transactionIndex;
     }
 
     public String getFrom() {
@@ -159,36 +159,36 @@ public class Transaction {
         return Numeric.decodeQuantity(value);
     }
 
-    public String getValueRaw() {
-        return value;
-    }
-
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getValueRaw() {
+        return value;
     }
 
     public BigInteger getGasPrice() {
         return Numeric.decodeQuantity(gasPrice);
     }
 
-    public String getGasPriceRaw() {
-        return gasPrice;
-    }
-
     public void setGasPrice(String gasPrice) {
         this.gasPrice = gasPrice;
+    }
+
+    public String getGasPriceRaw() {
+        return gasPrice;
     }
 
     public BigInteger getGas() {
         return Numeric.decodeQuantity(gas);
     }
 
-    public String getGasRaw() {
-        return gas;
-    }
-
     public void setGas(String gas) {
         this.gas = gas;
+    }
+
+    public String getGasRaw() {
+        return gas;
     }
 
     public String getInput() {
@@ -243,18 +243,6 @@ public class Transaction {
         return v;
     }
 
-    public Long getChainId() {
-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
-            return null;
-        }
-        Long chainId = (v - CHAIN_ID_INC) / 2;
-        return chainId;
-    }
-
-    // public void setV(byte v) {
-    //     this.v = v;
-    // }
-
     // Workaround until Geth & Parity return consistent values. At present
     // Parity returns a byte value, Geth returns a hex-encoded string
     // https://github.com/ethereum/go-ethereum/issues/3339
@@ -266,6 +254,18 @@ public class Transaction {
         } else {
             this.v = (Long) v;
         }
+    }
+
+    // public void setV(byte v) {
+    //     this.v = v;
+    // }
+
+    public Long getChainId() {
+        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
+            return null;
+        }
+        Long chainId = (v - CHAIN_ID_INC) / 2;
+        return chainId;
     }
 
     public String getType() {
@@ -372,10 +372,14 @@ public class Transaction {
         if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
             return false;
         }
-        if (getMaxFeePerGas() != null ? !getMaxFeePerGas().equals(that.getMaxFeePerGas()) : that.getMaxFeePerGas() != null) {
+        if (getMaxFeePerGas() != null
+                ? !getMaxFeePerGas().equals(that.getMaxFeePerGas())
+                : that.getMaxFeePerGas() != null) {
             return false;
         }
-        if (getMaxPriorityFeePerGas() != null ? !getMaxPriorityFeePerGas().equals(that.getMaxPriorityFeePerGas()) : that.getMaxPriorityFeePerGas() != null) {
+        if (getMaxPriorityFeePerGas() != null
+                ? !getMaxPriorityFeePerGas().equals(that.getMaxPriorityFeePerGas())
+                : that.getMaxPriorityFeePerGas() != null) {
             return false;
         }
         return getS() != null ? getS().equals(that.getS()) : that.getS() == null;
@@ -390,8 +394,8 @@ public class Transaction {
         result =
                 31 * result
                         + (getTransactionIndexRaw() != null
-                        ? getTransactionIndexRaw().hashCode()
-                        : 0);
+                                ? getTransactionIndexRaw().hashCode()
+                                : 0);
         result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getValueRaw() != null ? getValueRaw().hashCode() : 0);
@@ -406,7 +410,11 @@ public class Transaction {
         result = 31 * result + BigInteger.valueOf(getV()).hashCode();
         result = 31 * result + (getType() != null ? getType().hashCode() : 0);
         result = 31 * result + (getMaxFeePerGas() != null ? getMaxFeePerGas().hashCode() : 0);
-        result = 31 * result + (getMaxPriorityFeePerGas() != null ? getMaxPriorityFeePerGas().hashCode() : 0);
+        result =
+                31 * result
+                        + (getMaxPriorityFeePerGas() != null
+                                ? getMaxPriorityFeePerGas().hashCode()
+                                : 0);
         return result;
     }
 }
