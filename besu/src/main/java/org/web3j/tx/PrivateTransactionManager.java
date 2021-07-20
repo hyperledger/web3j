@@ -17,6 +17,8 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.signer.DefaultSigner;
+import org.web3j.crypto.signer.Signer;
 import org.web3j.protocol.besu.Besu;
 import org.web3j.protocol.besu.response.privacy.PrivateEnclaveKey;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -36,7 +38,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     private final Besu besu;
 
-    private final Credentials credentials;
+    private final Signer signer;
     private final long chainId;
 
     private final Base64String privateFrom;
@@ -56,7 +58,7 @@ public class PrivateTransactionManager extends TransactionManager {
             final Restriction restriction) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
-        this.credentials = credentials;
+        this.signer = DefaultSigner.fromCredentials(credentials);
         this.chainId = chainId;
         this.privateFrom = privateFrom;
         this.privateFor = null;
@@ -64,6 +66,7 @@ public class PrivateTransactionManager extends TransactionManager {
         this.restriction = restriction;
     }
 
+    @Deprecated
     public PrivateTransactionManager(
             final Besu besu,
             final Credentials credentials,
@@ -74,12 +77,30 @@ public class PrivateTransactionManager extends TransactionManager {
             final Restriction restriction) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
-        this.credentials = credentials;
+        this.signer = DefaultSigner.fromCredentials(credentials);
         this.chainId = chainId;
         this.privateFrom = privateFrom;
         this.privateFor = privateFor;
         this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
         this.restriction = restriction;
+    }
+
+    public PrivateTransactionManager(
+            final Besu besu,
+            final Signer signer,
+            final TransactionReceiptProcessor transactionReceiptProcessor,
+            final long chainId,
+            final Base64String privateFrom,
+            final List<Base64String> privateFor,
+            final Restriction restriction) {
+        super(transactionReceiptProcessor, signer.getAddress());
+        this.besu = besu;
+        this.chainId = chainId;
+        this.privateFrom = privateFrom;
+        this.privateFor = privateFor;
+        this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
+        this.restriction = restriction;
+        this.signer = signer;
     }
 
     @Override
@@ -93,7 +114,7 @@ public class PrivateTransactionManager extends TransactionManager {
             throws IOException {
 
         final BigInteger nonce =
-                besu.privGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(signer.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
@@ -138,7 +159,7 @@ public class PrivateTransactionManager extends TransactionManager {
             boolean constructor)
             throws IOException {
         final BigInteger nonce =
-                besu.privGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(signer.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
@@ -203,10 +224,9 @@ public class PrivateTransactionManager extends TransactionManager {
         final byte[] signedMessage;
 
         if (chainId > ChainIdLong.NONE) {
-            signedMessage =
-                    PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
+            signedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, chainId, signer);
         } else {
-            signedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
+            signedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, signer);
         }
 
         return Numeric.toHexString(signedMessage);

@@ -19,6 +19,7 @@ import java.util.List;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.TransactionEncoder;
+import org.web3j.crypto.signer.Signer;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
@@ -38,12 +39,29 @@ public class PrivateTransactionEncoder {
     }
 
     public static byte[] signMessage(
+            final RawPrivateTransaction rawTransaction, final Signer signer) {
+        final byte[] encodedTransaction = encode(rawTransaction);
+        final Sign.SignatureData signatureData = signer.sign(encodedTransaction);
+        return encode(rawTransaction, signatureData);
+    }
+
+    public static byte[] signMessage(
             final RawPrivateTransaction rawTransaction,
             final long chainId,
             final Credentials credentials) {
         final byte[] encodedTransaction = encode(rawTransaction, chainId);
         final Sign.SignatureData signatureData =
                 Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
+
+        final Sign.SignatureData eip155SignatureData =
+                TransactionEncoder.createEip155SignatureData(signatureData, chainId);
+        return encode(rawTransaction, eip155SignatureData);
+    }
+
+    public static byte[] signMessage(
+            final RawPrivateTransaction rawTransaction, final long chainId, final Signer signer) {
+        final byte[] encodedTransaction = encode(rawTransaction, chainId);
+        final Sign.SignatureData signatureData = signer.sign(encodedTransaction);
 
         final Sign.SignatureData eip155SignatureData =
                 TransactionEncoder.createEip155SignatureData(signatureData, chainId);
@@ -60,7 +78,7 @@ public class PrivateTransactionEncoder {
         return encode(rawTransaction, signatureData);
     }
 
-    private static byte[] encode(
+    public static byte[] encode(
             final RawPrivateTransaction rawTransaction, final Sign.SignatureData signatureData) {
         final List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         final RlpList rlpList = new RlpList(values);

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.TransactionEncoder;
+import org.web3j.crypto.signer.DefaultSigner;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionReceipt;
 import org.web3j.protocol.besu.response.privacy.PrivateTransactionWithPrivacyGroup;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
@@ -186,7 +187,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
         PrivateTransactionManager tmAlice =
                 new PrivateTransactionManager(
                         nodeAlice,
-                        ALICE,
+                        DefaultSigner.fromCredentials(ALICE),
                         transactionReceiptProcessor,
                         ChainIdLong.NONE,
                         ENCLAVE_KEY_ALICE,
@@ -196,7 +197,7 @@ public class BesuPrivacyQuickstartIntegrationTest {
         PrivateTransactionManager tmBob =
                 new PrivateTransactionManager(
                         nodeBob,
-                        BOB,
+                        DefaultSigner.fromCredentials(BOB),
                         transactionReceiptProcessor,
                         ChainIdLong.NONE,
                         ENCLAVE_KEY_BOB,

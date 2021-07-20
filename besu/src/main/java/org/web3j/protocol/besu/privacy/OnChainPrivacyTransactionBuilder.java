@@ -23,6 +23,7 @@ import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.signer.Signer;
 import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
 import org.web3j.tx.gas.BesuPrivacyGasProvider;
@@ -81,6 +82,7 @@ public class OnChainPrivacyTransactionBuilder {
         return FunctionEncoder.encode(function);
     }
 
+    @Deprecated
     public String buildOnChainPrivateTransaction(
             Base64String privacyGroupId,
             Credentials credentials,
@@ -100,5 +102,26 @@ public class OnChainPrivacyTransactionBuilder {
 
         return Numeric.toHexString(
                 PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials));
+    }
+
+    public String buildOnChainPrivateTransaction(
+            Base64String privacyGroupId,
+            Signer signer,
+            Base64String enclaveKey,
+            final BigInteger nonce,
+            String call) {
+        RawPrivateTransaction rawTransaction =
+                RawPrivateTransaction.createTransaction(
+                        nonce,
+                        gasProvider.getGasPrice(),
+                        gasProvider.getGasLimit(),
+                        OnChainPrivacyPrecompiledContract,
+                        call,
+                        enclaveKey,
+                        privacyGroupId,
+                        restriction);
+
+        return Numeric.toHexString(
+                PrivateTransactionEncoder.signMessage(rawTransaction, chainId, signer));
     }
 }

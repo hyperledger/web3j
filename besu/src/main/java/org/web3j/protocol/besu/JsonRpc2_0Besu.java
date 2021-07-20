@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import io.reactivex.Flowable;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.signer.DefaultSigner;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.privacy.OnChainPrivacyTransactionBuilder;
@@ -278,7 +279,7 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
         String lockPrivacyGroupTransactionPayload =
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
                         privacyGroupId,
-                        credentials,
+                        DefaultSigner.fromCredentials(credentials),
                         enclaveKey,
                         transactionCount,
                         lockContractCall);
@@ -304,7 +305,7 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
         String lockPrivacyGroupTransactionPayload =
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
                         privacyGroupId,
-                        credentials,
+                        DefaultSigner.fromCredentials(credentials),
                         enclaveKey,
                         transactionCount,
                         lockContractCall);
@@ -347,7 +348,7 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
         String addToPrivacyGroupTransactionPayload =
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
                         privacyGroupId,
-                        credentials,
+                        DefaultSigner.fromCredentials(credentials),
                         enclaveKey,
                         transactionCount,
                         addToContractCall);
@@ -373,7 +374,7 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
         String removeFromGroupTransactionPayload =
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
                         privacyGroupId,
-                        credentials,
+                        DefaultSigner.fromCredentials(credentials),
                         enclaveKey,
                         transactionCount,
                         removeFromContractCall);

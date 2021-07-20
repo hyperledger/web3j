@@ -46,6 +46,10 @@ public class Credentials {
         return create(ECKeyPair.create(Numeric.toBigInt(privateKey)));
     }
 
+    public static Credentials createEmptyCredentials(String address) {
+        return new Credentials(null, address);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
