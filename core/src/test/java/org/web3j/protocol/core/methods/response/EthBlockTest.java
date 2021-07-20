@@ -12,14 +12,9 @@
  */
 package org.web3j.protocol.core.methods.response;
 
-import java.io.IOException;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.http.HttpService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,36 +39,4 @@ public class EthBlockTest {
 
         assertEquals(ethBlock.getSize(), BigInteger.valueOf(1000));
     }
-    private static final String nodeUrl = System.getenv().getOrDefault("WEB3J_NODE_URL", "https://ropsten.infura.io/v3/5501769a6f86457faadb55a129f5cbae");
-
-    @Test
-    public void testEthBlockGetBlock() throws IOException {
-        Credentials credentials = Credentials.create("8bf15e7802fe7ab126ee5dea38f3c13fa40cf09d02a233448a7601850e6ef060");
-        Web3j web3j = Web3j.build(new HttpService(nodeUrl));
-
-
-        EthBlock.Block block = web3j.ethGetBlockByNumber(
-                DefaultBlockParameter.valueOf(BigInteger.valueOf(10667671)),
-                true
-        ).send().getBlock();
-
-        System.out.println(block.getTransactions());
-        System.out.println(block.getGasLimit());
-        System.out.println(block.getGasUsed());
-
-        System.out.println("getBaseFeePerGas: "+block.getBaseFeePerGas());
-
-//        System.out.println(block.getTransactions().get(0));
-        Transaction transaction = (Transaction) block.getTransactions().get(0).get();
-        System.out.println(((Transaction) block.getTransactions().get(0).get()).getType());
-        for(EthBlock.TransactionResult transactionResult : block.getTransactions())
-        {
-            Transaction transaction1 = (Transaction) transactionResult.get();
-            System.out.println(transaction1.getType());
-            System.out.println(transaction1.getMaxFeePerGas());
-            System.out.println(transaction1.getMaxPriorityFeePerGas());
-        }
-//        System.out.println(transaction.getValue());
-    }
-
 }
