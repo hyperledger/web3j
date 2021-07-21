@@ -345,9 +345,24 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private FieldSpec createBinaryDefinition(String binary) {
+        if (binary.length() < 65534) {
+            return FieldSpec.builder(String.class, BINARY)
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                    .initializer("$S", binary)
+                    .build();
+        }
+
+        String[] argsArray = binary.split("(?<=\\G.{65534})");
+        StringBuilder stringBuilderString = new StringBuilder().append("new StringBuilder()");
+        for (String s : argsArray) {
+            stringBuilderString.append(".append(\"");
+            stringBuilderString.append(s);
+            stringBuilderString.append("\")");
+        }
+        stringBuilderString.append(".toString()");
         return FieldSpec.builder(String.class, BINARY)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                .initializer("$S", binary)
+                .initializer(CodeBlock.of(stringBuilderString.toString()))
                 .build();
     }
 
