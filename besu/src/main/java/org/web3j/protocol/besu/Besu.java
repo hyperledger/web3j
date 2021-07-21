@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.signer.Signer;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
@@ -113,6 +114,7 @@ public interface Besu extends Eea, BesuRx {
     Request<?, PrivCreatePrivacyGroup> privCreatePrivacyGroup(
             final List<Base64String> addresses, final String name, final String description);
 
+    @Deprecated
     Request<?, EthSendTransaction> privOnChainSetGroupLockState(
             final Base64String privacyGroupId,
             final Credentials credentials,
@@ -120,6 +122,14 @@ public interface Besu extends Eea, BesuRx {
             final Boolean lock)
             throws IOException;
 
+    Request<?, EthSendTransaction> privOnChainSetGroupLockState(
+            final Base64String privacyGroupId,
+            final Signer signer,
+            final Base64String enclaveKey,
+            final Boolean lock)
+            throws IOException;
+
+    @Deprecated
     Request<?, EthSendTransaction> privOnChainAddToPrivacyGroup(
             Base64String privacyGroupId,
             Credentials credentials,
@@ -127,6 +137,14 @@ public interface Besu extends Eea, BesuRx {
             List<Base64String> participants)
             throws IOException, TransactionException;
 
+    Request<?, EthSendTransaction> privOnChainAddToPrivacyGroup(
+            final Base64String privacyGroupId,
+            final Signer signer,
+            final Base64String enclaveKey,
+            final List<Base64String> participants)
+            throws IOException, TransactionException;
+
+    @Deprecated
     Request<?, EthSendTransaction> privOnChainCreatePrivacyGroup(
             Base64String privacyGroupId,
             Credentials credentials,
@@ -134,9 +152,24 @@ public interface Besu extends Eea, BesuRx {
             List<Base64String> participants)
             throws IOException;
 
+    Request<?, EthSendTransaction> privOnChainCreatePrivacyGroup(
+            final Base64String privacyGroupId,
+            final Signer signer,
+            final Base64String enclaveKey,
+            final List<Base64String> participants)
+            throws IOException;
+
+    @Deprecated
     Request<?, EthSendTransaction> privOnChainRemoveFromPrivacyGroup(
             final Base64String privacyGroupId,
             final Credentials credentials,
+            final Base64String enclaveKey,
+            final Base64String participant)
+            throws IOException;
+
+    Request<?, EthSendTransaction> privOnChainRemoveFromPrivacyGroup(
+            final Base64String privacyGroupId,
+            final Signer signer,
             final Base64String enclaveKey,
             final Base64String participant)
             throws IOException;

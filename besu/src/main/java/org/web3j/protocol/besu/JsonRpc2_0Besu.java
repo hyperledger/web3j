@@ -26,6 +26,7 @@ import io.reactivex.Flowable;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.signer.DefaultSigner;
+import org.web3j.crypto.signer.Signer;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.privacy.OnChainPrivacyTransactionBuilder;
@@ -262,14 +263,27 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 PrivCreatePrivacyGroup.class);
     }
 
+    @Deprecated
+    @Override
     public Request<?, EthSendTransaction> privOnChainSetGroupLockState(
             final Base64String privacyGroupId,
             final Credentials credentials,
             final Base64String enclaveKey,
             final Boolean lock)
             throws IOException {
+        return privOnChainSetGroupLockState(
+                privacyGroupId, DefaultSigner.fromCredentials(credentials), enclaveKey, lock);
+    }
+
+    @Override
+    public Request<?, EthSendTransaction> privOnChainSetGroupLockState(
+            final Base64String privacyGroupId,
+            final Signer signer,
+            final Base64String enclaveKey,
+            final Boolean lock)
+            throws IOException {
         BigInteger transactionCount =
-                privGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                privGetTransactionCount(signer.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
         String lockContractCall =
@@ -278,15 +292,12 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
 
         String lockPrivacyGroupTransactionPayload =
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
-                        privacyGroupId,
-                        DefaultSigner.fromCredentials(credentials),
-                        enclaveKey,
-                        transactionCount,
-                        lockContractCall);
+                        privacyGroupId, signer, enclaveKey, transactionCount, lockContractCall);
 
         return eeaSendRawTransaction(lockPrivacyGroupTransactionPayload);
     }
 
+    @Deprecated
     @Override
     public Request<?, EthSendTransaction> privOnChainAddToPrivacyGroup(
             Base64String privacyGroupId,
@@ -294,9 +305,23 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
             Base64String enclaveKey,
             List<Base64String> participants)
             throws IOException, TransactionException {
+        return privOnChainAddToPrivacyGroup(
+                privacyGroupId,
+                DefaultSigner.fromCredentials(credentials),
+                enclaveKey,
+                participants);
+    }
+
+    @Override
+    public Request<?, EthSendTransaction> privOnChainAddToPrivacyGroup(
+            Base64String privacyGroupId,
+            Signer signer,
+            Base64String enclaveKey,
+            List<Base64String> participants)
+            throws IOException, TransactionException {
 
         BigInteger transactionCount =
-                privGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                privGetTransactionCount(signer.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
         String lockContractCall =
@@ -304,11 +329,7 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
 
         String lockPrivacyGroupTransactionPayload =
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
-                        privacyGroupId,
-                        DefaultSigner.fromCredentials(credentials),
-                        enclaveKey,
-                        transactionCount,
-                        lockContractCall);
+                        privacyGroupId, signer, enclaveKey, transactionCount, lockContractCall);
 
         String lockTransactionHash =
                 eeaSendRawTransaction(lockPrivacyGroupTransactionPayload)
@@ -321,14 +342,14 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 processor.waitForTransactionReceipt(lockTransactionHash);
 
         if (receipt.isStatusOK()) {
-            return privOnChainCreatePrivacyGroup(
-                    privacyGroupId, credentials, enclaveKey, participants);
+            return privOnChainCreatePrivacyGroup(privacyGroupId, signer, enclaveKey, participants);
         } else {
             throw new TransactionException(
                     "Lock transaction failed - the group may already be locked", receipt);
         }
     }
 
+    @Deprecated
     @Override
     public Request<?, EthSendTransaction> privOnChainCreatePrivacyGroup(
             final Base64String privacyGroupId,
@@ -336,10 +357,24 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
             final Base64String enclaveKey,
             final List<Base64String> participants)
             throws IOException {
+        return privOnChainCreatePrivacyGroup(
+                privacyGroupId,
+                DefaultSigner.fromCredentials(credentials),
+                enclaveKey,
+                participants);
+    }
+
+    @Override
+    public Request<?, EthSendTransaction> privOnChainCreatePrivacyGroup(
+            final Base64String privacyGroupId,
+            final Signer signer,
+            final Base64String enclaveKey,
+            final List<Base64String> participants)
+            throws IOException {
         List<byte[]> participantsAsBytes =
                 participants.stream().map(Base64String::raw).collect(Collectors.toList());
         BigInteger transactionCount =
-                privGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                privGetTransactionCount(signer.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
         String addToContractCall =
@@ -347,15 +382,12 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
 
         String addToPrivacyGroupTransactionPayload =
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
-                        privacyGroupId,
-                        DefaultSigner.fromCredentials(credentials),
-                        enclaveKey,
-                        transactionCount,
-                        addToContractCall);
+                        privacyGroupId, signer, enclaveKey, transactionCount, addToContractCall);
 
         return eeaSendRawTransaction(addToPrivacyGroupTransactionPayload);
     }
 
+    @Deprecated
     @Override
     public Request<?, EthSendTransaction> privOnChainRemoveFromPrivacyGroup(
             final Base64String privacyGroupId,
@@ -375,6 +407,32 @@ public class JsonRpc2_0Besu extends JsonRpc2_0Eea implements Besu {
                 onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
                         privacyGroupId,
                         DefaultSigner.fromCredentials(credentials),
+                        enclaveKey,
+                        transactionCount,
+                        removeFromContractCall);
+
+        return eeaSendRawTransaction(removeFromGroupTransactionPayload);
+    }
+
+    @Override
+    public Request<?, EthSendTransaction> privOnChainRemoveFromPrivacyGroup(
+            final Base64String privacyGroupId,
+            final Signer signer,
+            final Base64String enclaveKey,
+            final Base64String participant)
+            throws IOException {
+        BigInteger transactionCount =
+                privGetTransactionCount(signer.getAddress(), privacyGroupId)
+                        .send()
+                        .getTransactionCount();
+        String removeFromContractCall =
+                OnChainPrivacyTransactionBuilder.getEncodedRemoveFromGroupFunction(
+                        enclaveKey, participant.raw());
+
+        String removeFromGroupTransactionPayload =
+                onChainPrivacyTransactionBuilder.buildOnChainPrivateTransaction(
+                        privacyGroupId,
+                        signer,
                         enclaveKey,
                         transactionCount,
                         removeFromContractCall);

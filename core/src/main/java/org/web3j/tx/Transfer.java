@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.signer.DefaultSigner;
+import org.web3j.crypto.signer.Signer;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.EthChainId;
@@ -80,6 +82,7 @@ public class Transfer extends ManagedTransaction {
         return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
     }
 
+    @Deprecated
     public static RemoteCall<TransactionReceipt> sendFunds(
             Web3j web3j,
             Credentials credentials,
@@ -87,8 +90,14 @@ public class Transfer extends ManagedTransaction {
             BigDecimal value,
             Convert.Unit unit)
             throws InterruptedException, IOException, TransactionException {
+        return sendFunds(web3j, DefaultSigner.fromCredentials(credentials), toAddress, value, unit);
+    }
 
-        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+    public static RemoteCall<TransactionReceipt> sendFunds(
+            Web3j web3j, Signer signer, String toAddress, BigDecimal value, Convert.Unit unit)
+            throws InterruptedException, IOException, TransactionException {
+
+        TransactionManager transactionManager = new RawTransactionManager(web3j, signer);
 
         return new RemoteCall<>(
                 () -> new Transfer(web3j, transactionManager).send(toAddress, value, unit));

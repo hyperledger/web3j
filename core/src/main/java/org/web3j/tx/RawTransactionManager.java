@@ -52,6 +52,7 @@ public class RawTransactionManager extends TransactionManager {
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
+    @Deprecated
     public RawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
         super(web3j, credentials.getAddress());
 
@@ -61,6 +62,16 @@ public class RawTransactionManager extends TransactionManager {
         this.signer = DefaultSigner.fromCredentials(credentials);
     }
 
+    public RawTransactionManager(Web3j web3j, Signer signer, long chainId) {
+        super(web3j, signer.getAddress());
+
+        this.web3j = web3j;
+
+        this.chainId = chainId;
+        this.signer = signer;
+    }
+
+    @Deprecated
     public RawTransactionManager(
             Web3j web3j,
             Credentials credentials,
@@ -75,6 +86,19 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
+            Web3j web3j,
+            Signer signer,
+            long chainId,
+            TransactionReceiptProcessor transactionReceiptProcessor) {
+        super(transactionReceiptProcessor, signer.getAddress());
+
+        this.web3j = web3j;
+
+        this.chainId = chainId;
+        this.signer = signer;
+    }
+
+    public RawTransactionManager(
             Web3j web3j, Credentials credentials, long chainId, int attempts, long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
@@ -84,10 +108,16 @@ public class RawTransactionManager extends TransactionManager {
         this.signer = DefaultSigner.fromCredentials(credentials);
     }
 
+    @Deprecated
     public RawTransactionManager(Web3j web3j, Credentials credentials) {
         this(web3j, credentials, ChainId.NONE);
     }
 
+    public RawTransactionManager(Web3j web3j, Signer signer) {
+        this(web3j, signer, ChainId.NONE);
+    }
+
+    @Deprecated
     public RawTransactionManager(
             Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
         this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);

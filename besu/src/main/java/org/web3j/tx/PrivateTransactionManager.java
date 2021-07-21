@@ -48,6 +48,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     private final Restriction restriction;
 
+    @Deprecated
     public PrivateTransactionManager(
             final Besu besu,
             final Credentials credentials,
@@ -59,6 +60,24 @@ public class PrivateTransactionManager extends TransactionManager {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
         this.signer = DefaultSigner.fromCredentials(credentials);
+        this.chainId = chainId;
+        this.privateFrom = privateFrom;
+        this.privateFor = null;
+        this.privacyGroupId = privacyGroupId;
+        this.restriction = restriction;
+    }
+
+    public PrivateTransactionManager(
+            final Besu besu,
+            final Signer signer,
+            final TransactionReceiptProcessor transactionReceiptProcessor,
+            final long chainId,
+            final Base64String privateFrom,
+            final Base64String privacyGroupId,
+            final Restriction restriction) {
+        super(transactionReceiptProcessor, signer.getAddress());
+        this.besu = besu;
+        this.signer = signer;
         this.chainId = chainId;
         this.privateFrom = privateFrom;
         this.privateFor = null;
