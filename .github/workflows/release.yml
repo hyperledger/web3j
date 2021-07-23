@@ -83,7 +83,17 @@ jobs:
         run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
-      - name: GitHub release
-        run: ./scripts/github-release.sh
       - name: Javadoc release
         run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ secrets.GITHUB_TOKEN }} core:gitPublishPush
+  git-release:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github Release
+      - uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: ${{"v"}} + ${{ steps.release_name.outputs.result }}
+          prerelease: false
+          files: |
+            "web3j-"+${{ steps.release_name.outputs.result }}.*
