@@ -79,15 +79,16 @@ jobs:
           script: |
             const branch_name = process.env.GITHUB_REF
             const web3j_release_version = branch_name.substring(branch_name.lastIndexOf('/') +1 ,branch_name.length  )
+            process.env.VERSION = web3j_release_version
             return web3j_release_version
-      outputs:
-        stripped_version: ${{ steps.release_name.outputs.result }}
       - name: Build and stage release
         run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
       - name: Javadoc release
         run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ secrets.GITHUB_TOKEN }} core:gitPublishPush
+    outputs:
+      stripped_version: ${{ steps.release_name.outputs.result }}
   git-release:
     needs: release
     runs-on: ubuntu-latest
