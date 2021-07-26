@@ -75,15 +75,28 @@ jobs:
         id: release_name
         uses: actions/github-script@v4
         with:
-            script: |
-              const branch_name = process.env.GITHUB_REF
-              const web3j_release_version = branch_name.substring(branch_name.lastIndexOf('/') +1 ,branch_name.length  )
-              return web3j_release_version
+          result-encoding: string
+          script: |
+            const branch_name = process.env.GITHUB_REF
+            const web3j_release_version = branch_name.substring(branch_name.lastIndexOf('/') +1 ,branch_name.length  )
+            return web3j_release_version
+      outputs:
+        stripped_version: ${{ steps.release_name.outputs.result }}
       - name: Build and stage release
         run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
-      - name: GitHub release
-        run: ./scripts/github-release.sh
       - name: Javadoc release
         run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ secrets.GITHUB_TOKEN }} core:gitPublishPush
+  git-release:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: 'v${{ needs.release.outputs.stripped_version }}'
+          prerelease: false
+          files: |
+            "web3j-"+${{ steps.release_name.outputs.result }}.*
