@@ -740,6 +740,7 @@ public class ResponseTest extends ResponseTester {
                                                         Arrays.asList(
                                                                 "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
                                                                 "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))))),
+
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
@@ -747,6 +748,7 @@ public class ResponseTest extends ResponseTester {
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
                                 "0x39a3eb432fbef1fc"),
                         "0x7");
+
 
         assertEquals(ethBlock.getBlock(), (block));
     }
@@ -870,6 +872,7 @@ public class ResponseTest extends ResponseTester {
                                                         Arrays.asList(
                                                                 "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
                                                                 "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))))),
+
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
@@ -954,6 +957,7 @@ public class ResponseTest extends ResponseTester {
                                         Arrays.asList(
                                                 "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
                                                 "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))));
+
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
         assertEquals(ethTransaction.getTransaction().get(), (transaction));

@@ -1,0 +1,472 @@
+[1mdiff --git a/core/src/main/java/org/web3j/protocol/core/methods/response/AccessListObject.java b/core/src/main/java/org/web3j/protocol/core/methods/response/AccessListObject.java[m
+[1mdeleted file mode 100644[m
+[1mindex 327ce053..00000000[m
+[1m--- a/core/src/main/java/org/web3j/protocol/core/methods/response/AccessListObject.java[m
+[1m+++ /dev/null[m
+[36m@@ -1,58 +0,0 @@[m
+[31m-/*[m
+[31m- * Copyright 2021 Web3 Labs Ltd.[m
+[31m- *[m
+[31m- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with[m
+[31m- * the License. You may obtain a copy of the License at[m
+[31m- *[m
+[31m- * http://www.apache.org/licenses/LICENSE-2.0[m
+[31m- *[m
+[31m- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on[m
+[31m- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the[m
+[31m- * specific language governing permissions and limitations under the License.[m
+[31m- */[m
+[31m-package org.web3j.protocol.core.methods.response;[m
+[31m-[m
+[31m-import java.util.List;[m
+[31m-import java.util.Objects;[m
+[31m-[m
+[31m-public class AccessListObject {[m
+[31m-    private String address;[m
+[31m-    private List<String> storageKeys;[m
+[31m-[m
+[31m-    public AccessListObject() {}[m
+[31m-[m
+[31m-    public AccessListObject(String address, List<String> storageKeys) {[m
+[31m-        this.address = address;[m
+[31m-        this.storageKeys = storageKeys;[m
+[31m-    }[m
+[31m-[m
+[31m-    public String getAddress() {[m
+[31m-        return address;[m
+[31m-    }[m
+[31m-[m
+[31m-    public void setAddress(String address) {[m
+[31m-        this.address = address;[m
+[31m-    }[m
+[31m-[m
+[31m-    public List<String> getStorageKeys() {[m
+[31m-        return storageKeys;[m
+[31m-    }[m
+[31m-[m
+[31m-    public void setStorageKeys(List<String> storageKeys) {[m
+[31m-        this.storageKeys = storageKeys;[m
+[31m-    }[m
+[31m-[m
+[31m-    @Override[m
+[31m-    public boolean equals(Object o) {[m
+[31m-        if (this == o) return true;[m
+[31m-        if (o == null || getClass() != o.getClass()) return false;[m
+[31m-        AccessListObject that = (AccessListObject) o;[m
+[31m-        return Objects.equals(getAddress(), that.getAddress())[m
+[31m-                && Objects.equals(getStorageKeys(), that.getStorageKeys());[m
+[31m-    }[m
+[31m-[m
+[31m-    @Override[m
+[31m-    public int hashCode() {[m
+[31m-        return Objects.hash(getAddress(), getStorageKeys());[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/core/src/main/java/org/web3j/protocol/core/methods/response/EthBlock.java b/core/src/main/java/org/web3j/protocol/core/methods/response/EthBlock.java[m
+[1mindex fff624c8..c26b93bc 100644[m
+[1m--- a/core/src/main/java/org/web3j/protocol/core/methods/response/EthBlock.java[m
+[1m+++ b/core/src/main/java/org/web3j/protocol/core/methods/response/EthBlock.java[m
+[36m@@ -80,7 +80,6 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+         private List<TransactionResult> transactions;[m
+         private List<String> uncles;[m
+         private List<String> sealFields;[m
+[31m-        private String baseFeePerGas;[m
+ [m
+         public Block() {}[m
+ [m
+[36m@@ -106,8 +105,7 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+                 String timestamp,[m
+                 List<TransactionResult> transactions,[m
+                 List<String> uncles,[m
+[31m-                List<String> sealFields,[m
+[31m-                String baseFeePerGas) {[m
+[32m+[m[32m                List<String> sealFields) {[m
+             this.number = number;[m
+             this.hash = hash;[m
+             this.parentHash = parentHash;[m
+[36m@@ -130,7 +128,6 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+             this.transactions = transactions;[m
+             this.uncles = uncles;[m
+             this.sealFields = sealFields;[m
+[31m-            this.baseFeePerGas = baseFeePerGas;[m
+         }[m
+ [m
+         public BigInteger getNumber() {[m
+[36m@@ -342,14 +339,6 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+             this.sealFields = sealFields;[m
+         }[m
+ [m
+[31m-        public String getBaseFeePerGas() {[m
+[31m-            return baseFeePerGas;[m
+[31m-        }[m
+[31m-[m
+[31m-        public void setBaseFeePerGas(String baseFeePerGas) {[m
+[31m-            this.baseFeePerGas = baseFeePerGas;[m
+[31m-        }[m
+[31m-[m
+         @Override[m
+         public boolean equals(Object o) {[m
+             if (this == o) {[m
+[36m@@ -464,13 +453,6 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+                     : block.getUncles() != null) {[m
+                 return false;[m
+             }[m
+[31m-[m
+[31m-            if (getBaseFeePerGas() != null[m
+[31m-                    ? !getBaseFeePerGas().equals(block.getBaseFeePerGas())[m
+[31m-                    : block.getBaseFeePerGas() != null) {[m
+[31m-                return false;[m
+[31m-            }[m
+[31m-[m
+             return getSealFields() != null[m
+                     ? getSealFields().equals(block.getSealFields())[m
+                     : block.getSealFields() == null;[m
+[36m@@ -508,7 +490,6 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+             result = 31 * result + (getTransactions() != null ? getTransactions().hashCode() : 0);[m
+             result = 31 * result + (getUncles() != null ? getUncles().hashCode() : 0);[m
+             result = 31 * result + (getSealFields() != null ? getSealFields().hashCode() : 0);[m
+[31m-            result = 31 * result + (getBaseFeePerGas() != null ? getBaseFeePerGas().hashCode() : 0);[m
+             return result;[m
+         }[m
+     }[m
+[36m@@ -576,11 +557,7 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+                 String raw,[m
+                 String r,[m
+                 String s,[m
+[31m-                int v,[m
+[31m-                String type,[m
+[31m-                String maxFeePerGas,[m
+[31m-                String maxPriorityFeePerGas,[m
+[31m-                List<AccessListObject> accessList) {[m
+[32m+[m[32m                int v) {[m
+             super([m
+                     hash,[m
+                     nonce,[m
+[36m@@ -598,11 +575,7 @@[m [mpublic class EthBlock extends Response<EthBlock.Block> {[m
+                     raw,[m
+                     r,[m
+                     s,[m
+[31m-                    v,[m
+[31m-                    type,[m
+[31m-                    maxFeePerGas,[m
+[31m-                    maxPriorityFeePerGas,[m
+[31m-                    accessList);[m
+[32m+[m[32m                    v);[m
+         }[m
+ [m
+         @Override[m
+[1mdiff --git a/core/src/main/java/org/web3j/protocol/core/methods/response/Transaction.java b/core/src/main/java/org/web3j/protocol/core/methods/response/Transaction.java[m
+[1mindex 02f6432e..030d0e25 100644[m
+[1m--- a/core/src/main/java/org/web3j/protocol/core/methods/response/Transaction.java[m
+[1m+++ b/core/src/main/java/org/web3j/protocol/core/methods/response/Transaction.java[m
+[36m@@ -13,7 +13,6 @@[m
+ package org.web3j.protocol.core.methods.response;[m
+ [m
+ import java.math.BigInteger;[m
+[31m-import java.util.List;[m
+ [m
+ import org.web3j.utils.Numeric;[m
+ [m
+[36m@@ -39,10 +38,6 @@[m [mpublic class Transaction {[m
+     private String r;[m
+     private String s;[m
+     private long v; // see https://github.com/web3j/web3j/issues/44[m
+[31m-    private String type;[m
+[31m-    private String maxFeePerGas;[m
+[31m-    private String maxPriorityFeePerGas;[m
+[31m-    private List<AccessListObject> accessList;[m
+ [m
+     public Transaction() {}[m
+ [m
+[36m@@ -63,11 +58,7 @@[m [mpublic class Transaction {[m
+             String raw,[m
+             String r,[m
+             String s,[m
+[31m-            long v,[m
+[31m-            String type,[m
+[31m-            String maxFeePerGas,[m
+[31m-            String maxPriorityFeePerGas,[m
+[31m-            List accessList) {[m
+[32m+[m[32m            long v) {[m
+         this.hash = hash;[m
+         this.nonce = nonce;[m
+         this.blockHash = blockHash;[m
+[36m@@ -85,10 +76,6 @@[m [mpublic class Transaction {[m
+         this.r = r;[m
+         this.s = s;[m
+         this.v = v;[m
+[31m-        this.type = type;[m
+[31m-        this.maxFeePerGas = maxFeePerGas;[m
+[31m-        this.maxPriorityFeePerGas = maxPriorityFeePerGas;[m
+[31m-        this.accessList = accessList;[m
+     }[m
+ [m
+     public String getHash() {[m
+[36m@@ -103,14 +90,14 @@[m [mpublic class Transaction {[m
+         return Numeric.decodeQuantity(nonce);[m
+     }[m
+ [m
+[31m-    public void setNonce(String nonce) {[m
+[31m-        this.nonce = nonce;[m
+[31m-    }[m
+[31m-[m
+     public String getNonceRaw() {[m
+         return nonce;[m
+     }[m
+ [m
+[32m+[m[32m    public void setNonce(String nonce) {[m
+[32m+[m[32m        this.nonce = nonce;[m
+[32m+[m[32m    }[m
+[32m+[m
+     public String getBlockHash() {[m
+         return blockHash;[m
+     }[m
+[36m@@ -123,26 +110,26 @@[m [mpublic class Transaction {[m
+         return Numeric.decodeQuantity(blockNumber);[m
+     }[m
+ [m
+[31m-    public void setBlockNumber(String blockNumber) {[m
+[31m-        this.blockNumber = blockNumber;[m
+[31m-    }[m
+[31m-[m
+     public String getBlockNumberRaw() {[m
+         return blockNumber;[m
+     }[m
+ [m
+[31m-    public BigInteger getTransactionIndex() {[m
+[31m-        return Numeric.decodeQuantity(transactionIndex);[m
+[32m+[m[32m    public void setBlockNumber(String blockNumber) {[m
+[32m+[m[32m        this.blockNumber = blockNumber;[m
+     }[m
+ [m
+[31m-    public void setTransactionIndex(String transactionIndex) {[m
+[31m-        this.transactionIndex = transactionIndex;[m
+[32m+[m[32m    public BigInteger getTransactionIndex() {[m
+[32m+[m[32m        return Numeric.decodeQuantity(transactionIndex);[m
+     }[m
+ [m
+     public String getTransactionIndexRaw() {[m
+         return transactionIndex;[m
+     }[m
+ [m
+[32m+[m[32m    public void setTransactionIndex(String transactionIndex) {[m
+[32m+[m[32m        this.transactionIndex = transactionIndex;[m
+[32m+[m[32m    }[m
+[32m+[m
+     public String getFrom() {[m
+         return from;[m
+     }[m
+[36m@@ -163,38 +150,38 @@[m [mpublic class Transaction {[m
+         return Numeric.decodeQuantity(value);[m
+     }[m
+ [m
+[31m-    public void setValue(String value) {[m
+[31m-        this.value = value;[m
+[31m-    }[m
+[31m-[m
+     public String getValueRaw() {[m
+         return value;[m
+     }[m
+ [m
+[31m-    public BigInteger getGasPrice() {[m
+[31m-        return Numeric.decodeQuantity(gasPrice);[m
+[32m+[m[32m    public void setValue(String value) {[m
+[32m+[m[32m        this.value = value;[m
+     }[m
+ [m
+[31m-    public void setGasPrice(String gasPrice) {[m
+[31m-        this.gasPrice = gasPrice;[m
+[32m+[m[32m    public BigInteger getGasPrice() {[m
+[32m+[m[32m        return Numeric.decodeQuantity(gasPrice);[m
+     }[m
+ [m
+     public String getGasPriceRaw() {[m
+         return gasPrice;[m
+     }[m
+ [m
+[31m-    public BigInteger getGas() {[m
+[31m-        return Numeric.decodeQuantity(gas);[m
+[32m+[m[32m    public void setGasPrice(String gasPrice) {[m
+[32m+[m[32m        this.gasPrice = gasPrice;[m
+     }[m
+ [m
+[31m-    public void setGas(String gas) {[m
+[31m-        this.gas = gas;[m
+[32m+[m[32m    public BigInteger getGas() {[m
+[32m+[m[32m        return Numeric.decodeQuantity(gas);[m
+     }[m
+ [m
+     public String getGasRaw() {[m
+         return gas;[m
+     }[m
+ [m
+[32m+[m[32m    public void setGas(String gas) {[m
+[32m+[m[32m        this.gas = gas;[m
+[32m+[m[32m    }[m
+[32m+[m
+     public String getInput() {[m
+         return input;[m
+     }[m
+[36m@@ -247,6 +234,18 @@[m [mpublic class Transaction {[m
+         return v;[m
+     }[m
+ [m
+[32m+[m[32m    public Long getChainId() {[m
+[32m+[m[32m        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {[m
+[32m+[m[32m            return null;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        Long chainId = (v - CHAIN_ID_INC) / 2;[m
+[32m+[m[32m        return chainId;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    // public void setV(byte v) {[m
+[32m+[m[32m    //     this.v = v;[m
+[32m+[m[32m    // }[m
+[32m+[m
+     // Workaround until Geth & Parity return consistent values. At present[m
+     // Parity returns a byte value, Geth returns a hex-encoded string[m
+     // https://github.com/ethereum/go-ethereum/issues/3339[m
+[36m@@ -260,50 +259,6 @@[m [mpublic class Transaction {[m
+         }[m
+     }[m
+ [m
+[31m-    // public void setV(byte v) {[m
+[31m-    //     this.v = v;[m
+[31m-    // }[m
+[31m-[m
+[31m-    public Long getChainId() {[m
+[31m-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {[m
+[31m-            return null;[m
+[31m-        }[m
+[31m-        Long chainId = (v - CHAIN_ID_INC) / 2;[m
+[31m-        return chainId;[m
+[31m-    }[m
+[31m-[m
+[31m-    public String getType() {[m
+[31m-        return type;[m
+[31m-    }[m
+[31m-[m
+[31m-    public void setType(String type) {[m
+[31m-        this.type = type;[m
+[31m-    }[m
+[31m-[m
+[31m-    public String getMaxFeePerGas() {[m
+[31m-        return maxFeePerGas;[m
+[31m-    }[m
+[31m-[m
+[31m-    public void setMaxFeePerGas(String maxFeePerGas) {[m
+[31m-        this.maxFeePerGas = maxFeePerGas;[m
+[31m-    }[m
+[31m-[m
+[31m-    public String getMaxPriorityFeePerGas() {[m
+[31m-        return maxPriorityFeePerGas;[m
+[31m-    }[m
+[31m-[m
+[31m-    public void setMaxPriorityFeePerGas(String maxPriorityFeePerGas) {[m
+[31m-        this.maxPriorityFeePerGas = maxPriorityFeePerGas;[m
+[31m-    }[m
+[31m-[m
+[31m-    public List<AccessListObject> getAccessList() {[m
+[31m-        return accessList;[m
+[31m-    }[m
+[31m-[m
+[31m-    public void setAccessList(List<AccessListObject> accessList) {[m
+[31m-        this.accessList = accessList;[m
+[31m-    }[m
+[31m-[m
+     @Override[m
+     public boolean equals(Object o) {[m
+         if (this == o) {[m
+[36m@@ -381,24 +336,6 @@[m [mpublic class Transaction {[m
+         if (getR() != null ? !getR().equals(that.getR()) : that.getR() != null) {[m
+             return false;[m
+         }[m
+[31m-        if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {[m
+[31m-            return false;[m
+[31m-        }[m
+[31m-        if (getMaxFeePerGas() != null[m
+[31m-                ? !getMaxFeePerGas().equals(that.getMaxFeePerGas())[m
+[31m-                : that.getMaxFeePerGas() != null) {[m
+[31m-            return false;[m
+[31m-        }[m
+[31m-        if (getMaxPriorityFeePerGas() != null[m
+[31m-                ? !getMaxPriorityFeePerGas().equals(that.getMaxPriorityFeePerGas())[m
+[31m-                : that.getMaxPriorityFeePerGas() != null) {[m
+[31m-            return false;[m
+[31m-        }[m
+[31m-        if (getAccessList() != null[m
+[31m-                ? !getAccessList().equals(that.getAccessList())[m
+[31m-                : that.getAccessList() != null) {[m
+[31m-            return false;[m
+[31m-        }[m
+         return getS() != null ? getS().equals(that.getS()) : that.getS() == null;[m
+     }[m
+ [m
+[36m@@ -425,14 +362,6 @@[m [mpublic class Transaction {[m
+         result = 31 * result + (getR() != null ? getR().hashCode() : 0);[m
+         result = 31 * result + (getS() != null ? getS().hashCode() : 0);[m
+         result = 31 * result + BigInteger.valueOf(getV()).hashCode();[m
+[31m-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);[m
+[31m-        result = 31 * result + (getMaxFeePerGas() != null ? getMaxFeePerGas().hashCode() : 0);[m
+[31m-        result =[m
+[31m-                31 * result[m
+[31m-                        + (getMaxPriorityFeePerGas() != null[m
+[31m-                                ? getMaxPriorityFeePerGas().hashCode()[m
+[31m-                                : 0);[m
+[31m-        result = 31 * result + (getAccessList() != null ? getAccessList().hashCode() : 0);[m
+         return result;[m
+     }[m
+ }[m
+[1mdiff --git a/core/src/test/java/org/web3j/protocol/core/ResponseTest.java b/core/src/test/java/org/web3j/protocol/core/ResponseTest.java[m
+[1mindex be714a06..0d227fb1 100644[m
+[1m--- a/core/src/test/java/org/web3j/protocol/core/ResponseTest.java[m
+[1m+++ b/core/src/test/java/org/web3j/protocol/core/ResponseTest.java[m
+[36m@@ -1,5 +1,5 @@[m
+ /*[m
+[31m- * Copyright 2021 Web3 Labs Ltd.[m
+[32m+[m[32m * Copyright 2019 Web3 Labs Ltd.[m
+  *[m
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with[m
+  * the License. You may obtain a copy of the License at[m
+[36m@@ -24,7 +24,63 @@[m [mimport java.util.Optional;[m
+ import org.junit.jupiter.api.Test;[m
+ [m
+ import org.web3j.protocol.ResponseTester;[m
+[31m-import org.web3j.protocol.core.methods.response.*;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.AbiDefinition;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.BooleanResponse;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.DbGetHex;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.DbGetString;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.DbPutHex;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.DbPutString;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthAccounts;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthBlock;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthBlockNumber;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthCall;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthCompileLLL;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthCompileSerpent;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthCompileSolidity;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthEstimateGas;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthFilter;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGasPrice;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetBalance;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetCode;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetCompilers;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetStorageAt;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetTransactionCount;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthGetWork;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthHashrate;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthLog;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthMining;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthProtocolVersion;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthSendRawTransaction;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthSendTransaction;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthSign;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthSubmitHashrate;[m
+[32m+[m[32mimport org.web3j.protocol.core.methods.response.EthSubmitWork;[m
+[32m+[m[32mimport org.web3j.protocol.core.meth
