@@ -13,6 +13,7 @@
 package org.web3j.protocol.core.methods.response;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.web3j.utils.Numeric;
 
@@ -41,6 +42,7 @@ public class Transaction {
     private String type;
     private String maxFeePerGas;
     private String maxPriorityFeePerGas;
+    private List<AccessListObject> accessList;
 
     public Transaction() {}
 
@@ -64,7 +66,8 @@ public class Transaction {
             long v,
             String type,
             String maxFeePerGas,
-            String maxPriorityFeePerGas) {
+            String maxPriorityFeePerGas,
+            List accessList) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -85,6 +88,7 @@ public class Transaction {
         this.type = type;
         this.maxFeePerGas = maxFeePerGas;
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        this.accessList = accessList;
     }
 
     public String getHash() {
@@ -292,6 +296,14 @@ public class Transaction {
         this.maxPriorityFeePerGas = maxPriorityFeePerGas;
     }
 
+    public List<AccessListObject> getAccessList() {
+        return accessList;
+    }
+
+    public void setAccessList(List<AccessListObject> accessList) {
+        this.accessList = accessList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -382,6 +394,11 @@ public class Transaction {
                 : that.getMaxPriorityFeePerGas() != null) {
             return false;
         }
+        if (getAccessList() != null
+                ? !getAccessList().equals(that.getAccessList())
+                : that.getAccessList() != null) {
+            return false;
+        }
         return getS() != null ? getS().equals(that.getS()) : that.getS() == null;
     }
 
@@ -415,6 +432,7 @@ public class Transaction {
                         + (getMaxPriorityFeePerGas() != null
                                 ? getMaxPriorityFeePerGas().hashCode()
                                 : 0);
+        result = 31 * result + (getAccessList() != null ? getAccessList().hashCode() : 0);
         return result;
     }
 }

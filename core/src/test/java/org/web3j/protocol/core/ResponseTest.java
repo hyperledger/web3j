@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2021 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -24,63 +24,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.protocol.core.methods.response.BooleanResponse;
-import org.web3j.protocol.core.methods.response.DbGetHex;
-import org.web3j.protocol.core.methods.response.DbGetString;
-import org.web3j.protocol.core.methods.response.DbPutHex;
-import org.web3j.protocol.core.methods.response.DbPutString;
-import org.web3j.protocol.core.methods.response.EthAccounts;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.core.methods.response.EthCompileLLL;
-import org.web3j.protocol.core.methods.response.EthCompileSerpent;
-import org.web3j.protocol.core.methods.response.EthCompileSolidity;
-import org.web3j.protocol.core.methods.response.EthEstimateGas;
-import org.web3j.protocol.core.methods.response.EthFilter;
-import org.web3j.protocol.core.methods.response.EthGasPrice;
-import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
-import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
-import org.web3j.protocol.core.methods.response.EthGetCode;
-import org.web3j.protocol.core.methods.response.EthGetCompilers;
-import org.web3j.protocol.core.methods.response.EthGetStorageAt;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
-import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
-import org.web3j.protocol.core.methods.response.EthGetWork;
-import org.web3j.protocol.core.methods.response.EthHashrate;
-import org.web3j.protocol.core.methods.response.EthLog;
-import org.web3j.protocol.core.methods.response.EthMining;
-import org.web3j.protocol.core.methods.response.EthProtocolVersion;
-import org.web3j.protocol.core.methods.response.EthSendRawTransaction;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.EthSign;
-import org.web3j.protocol.core.methods.response.EthSubmitHashrate;
-import org.web3j.protocol.core.methods.response.EthSubmitWork;
-import org.web3j.protocol.core.methods.response.EthSyncing;
-import org.web3j.protocol.core.methods.response.EthTransaction;
-import org.web3j.protocol.core.methods.response.EthUninstallFilter;
-import org.web3j.protocol.core.methods.response.Log;
-import org.web3j.protocol.core.methods.response.NetListening;
-import org.web3j.protocol.core.methods.response.NetPeerCount;
-import org.web3j.protocol.core.methods.response.NetVersion;
-import org.web3j.protocol.core.methods.response.ShhAddToGroup;
-import org.web3j.protocol.core.methods.response.ShhHasIdentity;
-import org.web3j.protocol.core.methods.response.ShhMessages;
-import org.web3j.protocol.core.methods.response.ShhNewFilter;
-import org.web3j.protocol.core.methods.response.ShhNewGroup;
-import org.web3j.protocol.core.methods.response.ShhNewIdentity;
-import org.web3j.protocol.core.methods.response.ShhPost;
-import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
-import org.web3j.protocol.core.methods.response.ShhVersion;
-import org.web3j.protocol.core.methods.response.Transaction;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.core.methods.response.TxPoolStatus;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.protocol.core.methods.response.Web3Sha3;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 
@@ -723,6 +667,13 @@ public class ResponseTest extends ResponseTester {
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
                         + "        \"v\":\"0\",\n"
+                        + "    \"accessList\": [{"
+                        + "        \"address\":\"0x408e41876cccdc0f92210600ef50372656052a38\",\n"
+                        + "    \"storageKeys\": ["
+                        + "        \"0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc\",\n"
+                        + "        \"0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129\"\n"
+                        + "    ] \n"
+                        + "    }], \n"
                         + "        \"type\":\"0x0\",\n"
                         + "        \"maxFeePerGas\": \"0x7f110\",\n"
                         + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
@@ -782,7 +733,13 @@ public class ResponseTest extends ResponseTester {
                                         (byte) 0,
                                         "0x0",
                                         "0x7f110",
-                                        "0x7f110")),
+                                        "0x7f110",
+                                        Arrays.asList(
+                                                new AccessListObject(
+                                                        "0x408e41876cccdc0f92210600ef50372656052a38",
+                                                        Arrays.asList(
+                                                                "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
+                                                                "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))))),
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
@@ -790,6 +747,7 @@ public class ResponseTest extends ResponseTester {
                                 "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b",
                                 "0x39a3eb432fbef1fc"),
                         "0x7");
+
         assertEquals(ethBlock.getBlock(), (block));
     }
 
@@ -838,7 +796,14 @@ public class ResponseTest extends ResponseTester {
                         + "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
-                        + "        \"v\":\"0x9d\",\n"
+                        + "        \"v\":\"0\",\n"
+                        + "    \"accessList\": [{"
+                        + "        \"address\":\"0x408e41876cccdc0f92210600ef50372656052a38\",\n"
+                        + "    \"storageKeys\": ["
+                        + "        \"0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc\",\n"
+                        + "        \"0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129\"\n"
+                        + "    ] \n"
+                        + "    }], \n"
                         + "        \"type\":\"0x0\",\n"
                         + "        \"maxFeePerGas\": \"0x7f110\",\n"
                         + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
@@ -895,10 +860,16 @@ public class ResponseTest extends ResponseTester {
                                         "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
                                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                                        0x9d,
+                                        0,
                                         "0x0",
                                         "0x7f110",
-                                        "0x7f110")),
+                                        "0x7f110",
+                                        Arrays.asList(
+                                                new AccessListObject(
+                                                        "0x408e41876cccdc0f92210600ef50372656052a38",
+                                                        Arrays.asList(
+                                                                "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
+                                                                "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))))),
                         Arrays.asList(
                                 "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
                                 "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"),
@@ -917,7 +888,7 @@ public class ResponseTest extends ResponseTester {
         EthBlock ethBlock = deserialiseResponse(EthBlock.class);
         assertNull(ethBlock.getBlock());
     }
-
+    //
     @Test
     public void testEthTransaction() {
 
@@ -943,6 +914,13 @@ public class ResponseTest extends ResponseTester {
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
                         + "        \"v\":\"0\",\n"
+                        + "    \"accessList\": [{"
+                        + "        \"address\":\"0x408e41876cccdc0f92210600ef50372656052a38\",\n"
+                        + "    \"storageKeys\": ["
+                        + "        \"0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc\",\n"
+                        + "        \"0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129\"\n"
+                        + "    ] \n"
+                        + "    }], \n"
                         + "        \"type\":\"0x0\",\n"
                         + "        \"maxFeePerGas\": \"0x7f110\",\n"
                         + "        \"maxPriorityFeePerGas\": \"0x7f110\"\n"
@@ -969,7 +947,13 @@ public class ResponseTest extends ResponseTester {
                         (byte) 0,
                         "0x0",
                         "0x7f110",
-                        "0x7f110");
+                        "0x7f110",
+                        Arrays.asList(
+                                new AccessListObject(
+                                        "0x408e41876cccdc0f92210600ef50372656052a38",
+                                        Arrays.asList(
+                                                "0x18919546fd5421b0ef1b1b8dfce80500e69f2e28ae34c4d6298172949fa77dcc",
+                                                "0x4869ff95a61ee1ded0b22e2d0e3f54f3199886a9f361e634132c95164bfc5129"))));
 
         EthTransaction ethTransaction = deserialiseResponse(EthTransaction.class);
         assertEquals(ethTransaction.getTransaction().get(), (transaction));
