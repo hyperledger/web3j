@@ -164,7 +164,7 @@ Commercial support and training
 -------------------------------
 
 Commercial support and training is available from
-[web3labs.com](https://www.web3labs.com/).
+[web3labs.com](https://www.web3labs.com/web3j-sdk).
 
 License
 ------
