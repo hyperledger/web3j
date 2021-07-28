@@ -107,7 +107,7 @@ Java:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.8.5</version>
+  <version>4.8.6</version>
 </dependency>
 ```
 
@@ -126,7 +126,7 @@ Gradle
 
 Java:
 
-implementation ('org.web3j:core:4.8.5')
+implementation ('org.web3j:core:4.8.6')
 
 Android:
 
