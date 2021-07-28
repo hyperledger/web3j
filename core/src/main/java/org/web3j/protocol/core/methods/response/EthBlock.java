@@ -579,7 +579,8 @@ public class EthBlock extends Response<EthBlock.Block> {
                 int v,
                 String type,
                 String maxFeePerGas,
-                String maxPriorityFeePerGas) {
+                String maxPriorityFeePerGas,
+                List<AccessListObject> accessList) {
             super(
                     hash,
                     nonce,
@@ -600,7 +601,8 @@ public class EthBlock extends Response<EthBlock.Block> {
                     v,
                     type,
                     maxFeePerGas,
-                    maxPriorityFeePerGas);
+                    maxPriorityFeePerGas,
+                    accessList);
         }
 
         @Override
