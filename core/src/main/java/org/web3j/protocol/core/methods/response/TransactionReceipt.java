@@ -35,6 +35,8 @@ public class TransactionReceipt {
     private List<Log> logs;
     private String logsBloom;
     private String revertReason;
+    private String type;
+    private String effectiveGasPrice;
 
     public TransactionReceipt() {}
 
@@ -52,7 +54,9 @@ public class TransactionReceipt {
             String to,
             List<Log> logs,
             String logsBloom,
-            String revertReason) {
+            String revertReason,
+            String type,
+            String effectiveGasPrice) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -67,6 +71,8 @@ public class TransactionReceipt {
         this.logs = logs;
         this.logsBloom = logsBloom;
         this.revertReason = revertReason;
+        this.type = type;
+        this.effectiveGasPrice = effectiveGasPrice;
     }
 
     public String getTransactionHash() {
@@ -205,6 +211,22 @@ public class TransactionReceipt {
         this.revertReason = revertReason;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getEffectiveGasPrice() {
+        return effectiveGasPrice;
+    }
+
+    public void setEffectiveGasPrice(String effectiveGasPrice) {
+        this.effectiveGasPrice = effectiveGasPrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -271,6 +293,15 @@ public class TransactionReceipt {
                 : that.getLogsBloom() != null) {
             return false;
         }
+        if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
+            return false;
+        }
+
+        if (getEffectiveGasPrice() != null
+                ? !getEffectiveGasPrice().equals(that.getEffectiveGasPrice())
+                : that.getEffectiveGasPrice() != null) {
+            return false;
+        }
         return getRevertReason() != null
                 ? getRevertReason().equals(that.getRevertReason())
                 : that.getRevertReason() == null;
@@ -292,6 +323,10 @@ public class TransactionReceipt {
         result = 31 * result + (getLogs() != null ? getLogs().hashCode() : 0);
         result = 31 * result + (getLogsBloom() != null ? getLogsBloom().hashCode() : 0);
         result = 31 * result + (getRevertReason() != null ? getRevertReason().hashCode() : 0);
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result =
+                31 * result
+                        + (getEffectiveGasPrice() != null ? getEffectiveGasPrice().hashCode() : 0);
         return result;
     }
 
@@ -338,6 +373,12 @@ public class TransactionReceipt {
                 + '\''
                 + ", revertReason='"
                 + revertReason
+                + '\''
+                + ", type='"
+                + type
+                + '\''
+                + ", effectiveGasPrice='"
+                + effectiveGasPrice
                 + '\''
                 + '}';
     }
