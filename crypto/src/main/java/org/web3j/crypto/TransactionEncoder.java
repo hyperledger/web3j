@@ -64,7 +64,7 @@ public class TransactionEncoder {
             Sign.SignatureData signatureData, long chainId) {
         BigInteger v = Numeric.toBigInt(signatureData.getV());
         v = v.subtract(BigInteger.valueOf(LOWER_REAL_V));
-        v = v.add(BigInteger.valueOf(chainId * 2));
+        v = v.add(BigInteger.valueOf(chainId).multiply(BigInteger.valueOf(2)));
         v = v.add(BigInteger.valueOf(CHAIN_ID_INC));
 
         return new Sign.SignatureData(v.toByteArray(), signatureData.getR(), signatureData.getS());
