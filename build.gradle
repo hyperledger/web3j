@@ -115,4 +115,3 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 bintrayUpload {
     enabled = false
 }
-
