@@ -84,6 +84,20 @@ public class TransactionEncoderTest {
     }
 
     @Test
+    public void testEip155TransactionWithLargeChainId() {
+        // https://github.com/ethereum/EIPs/issues/155
+        Credentials credentials =
+                Credentials.create(
+                        "0x4646464646464646464646464646464646464646464646464646464646464646");
+
+        assertArrayEquals(
+                TransactionEncoder.signMessage(
+                        createEip155RawTransaction(), Long.MAX_VALUE, credentials),
+                (Numeric.hexStringToByteArray(
+                        "0xf875098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008089010000000000000021a0ed14bd16ddd7788623f4439db3ddbc8bf548c241c3af87819c187a638ef40e17a03b4972ee3adb77b6b06784d12fe098c2cb84c03afd79d17b1caf8f63483101f0")));
+    }
+
+    @Test
     public void testEip1559Transaction() {
         // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
         Credentials credentials =
