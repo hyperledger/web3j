@@ -3,7 +3,6 @@ name: Release
 on:
   push:
     branches: [ 'release/**' ]
-
 jobs:
   integration-test:
     runs-on: ubuntu-latest
@@ -85,8 +84,6 @@ jobs:
         run: ./gradlew publish -Pversion=${{ steps.release_name.outputs.result }}
       - name: Release
         run: ./gradlew closeAndReleaseRepository
-      - name: Javadoc release
-        run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ secrets.GITHUB_TOKEN }} core:gitPublishPush
     outputs:
       stripped_version: ${{ steps.release_name.outputs.result }}
   git-release:
@@ -101,3 +98,8 @@ jobs:
           prerelease: false
           files: |
             "web3j-"+${{ steps.release_name.outputs.result }}.*
+  javadocs-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Javadoc release
+        run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=${{ secrets.GITHUB_TOKEN }} core:gitPublishPush
