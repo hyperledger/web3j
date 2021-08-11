@@ -16,10 +16,6 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.http.HttpService;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EthBlockTest {
@@ -42,24 +38,5 @@ public class EthBlockTest {
                         null, null, null, "0x3e8", null, null, null, null, null, null, null);
 
         assertEquals(ethBlock.getSize(), BigInteger.valueOf(1000));
-    }
-
-    @Test
-    public void testGetTransactionByHash() throws Exception {
-        String nodeUrl =
-                System.getenv()
-                        .getOrDefault(
-                                "WEB3J_NODE_URL",
-                                "https://ropsten.infura.io/v3/5501769a6f86457faadb55a129f5cbae");
-        Credentials credentials =
-                Credentials.create(
-                        "8bf15e7802fe7ab126ee5dea38f3c13fa40cf09d02a233448a7601850e6ef060");
-        Web3j web3j = Web3j.build(new HttpService(nodeUrl));
-        EthTransaction transaction =
-                web3j.ethGetTransactionByHash(
-                                "0xcd48e1dea9c9a17b66e938120348eeb8fa53e18100543a49fa7553ed20bd55b2")
-                        .send();
-        System.out.println(transaction.getTransaction().get().getChainId());
-        System.out.println(transaction.getTransaction().get().getAccessList().size());
     }
 }
