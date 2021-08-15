@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
+import org.web3j.abi.Utils;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicStruct;
@@ -84,7 +85,9 @@ import org.web3j.utils.Collection;
 import org.web3j.utils.Strings;
 import org.web3j.utils.Version;
 
-/** Generate Java Classes based on generated Solidity bin and abi files. */
+/**
+ * Generate Java Classes based on generated Solidity bin and abi files.
+ */
 public class SolidityFunctionWrapper extends Generator {
 
     private static final String BINARY = "BINARY";
@@ -424,7 +427,7 @@ public class SolidityFunctionWrapper extends Generator {
                             .addStatement(
                                     "super("
                                             + buildStructConstructorParameterDefinition(
-                                                    namedType.getComponents(), useNativeJavaTypes)
+                                            namedType.getComponents(), useNativeJavaTypes)
                                             + ")");
 
             final MethodSpec.Builder nativeConstructorBuilder =
@@ -433,7 +436,7 @@ public class SolidityFunctionWrapper extends Generator {
                             .addStatement(
                                     "super("
                                             + buildStructConstructorParameterDefinition(
-                                                    namedType.getComponents(), false)
+                                            namedType.getComponents(), false)
                                             + ")");
 
             for (AbiDefinition.NamedType component : namedType.getComponents()) {
@@ -459,14 +462,14 @@ public class SolidityFunctionWrapper extends Generator {
                                 + " = "
                                 + component.getName()
                                 + (useNativeJavaTypes
-                                                && structClassNameMap.keySet().stream()
-                                                        .noneMatch(
-                                                                i ->
-                                                                        i
-                                                                                == component
-                                                                                        .structIdentifier())
-                                        ? ".getValue()"
-                                        : ""));
+                                && structClassNameMap.keySet().stream()
+                                .noneMatch(
+                                        i ->
+                                                i
+                                                        == component
+                                                        .structIdentifier())
+                                ? ".getValue()"
+                                : ""));
             }
 
             builder.superclass(namedType.isDynamic() ? DynamicStruct.class : StaticStruct.class);
@@ -474,14 +477,14 @@ public class SolidityFunctionWrapper extends Generator {
             if (useNativeJavaTypes
                     && !namedType.getComponents().isEmpty()
                     && namedType.getComponents().stream()
-                            .anyMatch(
-                                    component ->
-                                            structClassNameMap.keySet().stream()
-                                                    .noneMatch(
-                                                            i ->
-                                                                    i
-                                                                            == component
-                                                                                    .structIdentifier()))) {
+                    .anyMatch(
+                            component ->
+                                    structClassNameMap.keySet().stream()
+                                            .noneMatch(
+                                                    i ->
+                                                            i
+                                                                    == component
+                                                                    .structIdentifier()))) {
                 builder.addMethod(nativeConstructorBuilder.build());
             }
             structClassNameMap.put(namedType.structIdentifier(), ClassName.get("", structName));
@@ -554,8 +557,8 @@ public class SolidityFunctionWrapper extends Generator {
                     (component.getType().equals("tuple")
                             ? component.getName()
                             : useNativeJavaTypes
-                                    ? component.getName() + ")"
-                                    : component.getName()));
+                            ? component.getName() + ")"
+                            : component.getName()));
         }
         return stringBuilder.toString();
     }
@@ -677,7 +680,7 @@ public class SolidityFunctionWrapper extends Generator {
         return methodSpecs;
     }
 
-    Iterable<FieldSpec> buildFuncNameConstants(List<AbiDefinition> functionDefinitions) {
+    Iterable<FieldSpec> buildFuncNameConstants(List<AbiDefinition> functionDefinitions) throws ClassNotFoundException {
         List<FieldSpec> fields = new ArrayList<>();
         Set<String> fieldNames = new HashSet<>();
         fieldNames.add(Contract.FUNC_DEPLOY);
@@ -695,7 +698,7 @@ public class SolidityFunctionWrapper extends Generator {
                 if (!fieldNames.contains(funcName)) {
                     boolean useUpperCase =
                             !duplicateFunctionNames.contains(funcNameToConst(funcName, true));
-                    FieldSpec field =
+                    FieldSpec funcNameField =
                             FieldSpec.builder(
                                             String.class,
                                             funcNameToConst(funcName, useUpperCase),
@@ -704,7 +707,38 @@ public class SolidityFunctionWrapper extends Generator {
                                             Modifier.FINAL)
                                     .initializer("$S", funcName)
                                     .build();
-                    fields.add(field);
+                    fields.add(funcNameField);
+
+                    final List<TypeName> inputParameterTypes = buildTypeNames(functionDefinition.getInputs(), false);
+                    if (!inputParameterTypes.isEmpty()) {
+                        ParameterizedTypeName typeRefType = ParameterizedTypeName.get(ClassName.get(TypeReference.class), ClassName.get(Type.class));
+                        ParameterizedTypeName listTypeRef = ParameterizedTypeName.get(ClassName.get(List.class), typeRefType);
+                        String foo = Collection.join(inputParameterTypes, ",\n", typeName -> "new $T<$T>() {}");
+
+                        List<Object> objects = new ArrayList<>();
+                        objects.add(Utils.class);
+                        objects.add("convert");
+                        objects.add(Arrays.class);
+                        objects.add(TypeReference.class);
+                        for (TypeName inputParameterType : inputParameterTypes) {
+                            objects.add(TypeReference.class);
+                            objects.add(inputParameterType);
+                        }
+
+                        FieldSpec funcInputTypes = FieldSpec.builder(
+                                        listTypeRef,
+                                        funcNameToConst(funcName, useUpperCase) + "_INPUT",
+                                        Modifier.PUBLIC,
+                                        Modifier.STATIC,
+                                        Modifier.FINAL)
+                                .initializer(CodeBlock.builder()
+                                        .addStatement("$T.$L(\n$T.<$T<?>>asList(" + foo + "))",
+                                                objects.toArray())
+                                        .build())
+                                .build();
+                        fields.add(funcInputTypes);
+                    }
+
                     fieldNames.add(funcName);
                 }
             }
@@ -990,9 +1024,9 @@ public class SolidityFunctionWrapper extends Generator {
                             name ->
                                     name.equals(
                                             ((ClassName)
-                                                            ((ParameterizedTypeName)
-                                                                            parameterSpec.type)
-                                                                    .typeArguments.get(0))
+                                                    ((ParameterizedTypeName)
+                                                            parameterSpec.type)
+                                                            .typeArguments.get(0))
                                                     .simpleName()))) {
                 String structName =
                         structClassNameMap.values().stream()
@@ -1001,11 +1035,11 @@ public class SolidityFunctionWrapper extends Generator {
                                         name ->
                                                 name.equals(
                                                         ((ClassName)
-                                                                        ((ParameterizedTypeName)
-                                                                                        parameterSpec
-                                                                                                .type)
-                                                                                .typeArguments.get(
-                                                                                        0))
+                                                                ((ParameterizedTypeName)
+                                                                        parameterSpec
+                                                                                .type)
+                                                                        .typeArguments.get(
+                                                                                0))
                                                                 .simpleName()))
                                 .collect(Collectors.toList())
                                 .get(0);
@@ -1187,7 +1221,7 @@ public class SolidityFunctionWrapper extends Generator {
      * a struct type.
      *
      * @param name parameter name
-     * @param idx parameter index
+     * @param idx  parameter index
      * @return non-empty parameter name
      */
     static String createValidParamName(String name, int idx) {
@@ -1220,10 +1254,10 @@ public class SolidityFunctionWrapper extends Generator {
      * Builds the array of struct type name. In case of using the Java native types, we return the
      * <code>List<struct></code> class Else, we return the Web3j generated types.
      *
-     * @param namedType Array of structs namedType
+     * @param namedType          Array of structs namedType
      * @param useNativeJavaTypes Set to true for java native types
      * @return ParametrizedTypeName of the array of structs, eg, <code>StaticArray3<StructName>
-     *     </code>
+     * </code>
      */
     private TypeName buildStructArrayTypeName(NamedType namedType, Boolean useNativeJavaTypes) {
         String structName;
@@ -1753,9 +1787,9 @@ public class SolidityFunctionWrapper extends Generator {
             final String nativeConversion;
             if (useNativeJavaTypes
                     && structClassNameMap.values().stream()
-                            .map(ClassName::simpleName)
-                            .noneMatch(
-                                    name -> name.equals(namedTypeName.getTypeName().toString()))) {
+                    .map(ClassName::simpleName)
+                    .noneMatch(
+                            name -> name.equals(namedTypeName.getTypeName().toString()))) {
                 nativeConversion = ".getValue()";
             } else {
                 nativeConversion = "";
@@ -1782,9 +1816,9 @@ public class SolidityFunctionWrapper extends Generator {
             final String nativeConversion;
             if (useNativeJavaTypes
                     && structClassNameMap.values().stream()
-                            .map(ClassName::simpleName)
-                            .noneMatch(
-                                    name -> name.equals(namedTypeName.getTypeName().toString()))) {
+                    .map(ClassName::simpleName)
+                    .noneMatch(
+                            name -> name.equals(namedTypeName.getTypeName().toString()))) {
                 nativeConversion = ".getValue()";
             } else {
                 nativeConversion = "";
@@ -1907,8 +1941,8 @@ public class SolidityFunctionWrapper extends Generator {
             final TypeName finalConvertTo = convertTo;
             if (useNativeJavaTypes
                     && structClassNameMap.values().stream()
-                            .map(ClassName::simpleName)
-                            .noneMatch(name -> name.equals(finalConvertTo.toString()))) {
+                    .map(ClassName::simpleName)
+                    .noneMatch(name -> name.equals(finalConvertTo.toString()))) {
                 resultStringSimple += ".getValue()";
             }
 
