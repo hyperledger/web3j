@@ -165,16 +165,20 @@ public class Transaction {
         return convert(nonce);
     }
 
-    public Long getChainId() {
-        return chainId;
+    public String getChainId() {
+        if (chainId != null) {
+            return convert(BigInteger.valueOf(chainId));
+        } else {
+            return null;
+        }
     }
 
-    public BigInteger getMaxPriorityFeePerGas() {
-        return maxPriorityFeePerGas;
+    public String getMaxPriorityFeePerGas() {
+        return convert(maxPriorityFeePerGas);
     }
 
-    public BigInteger getMaxFeePerGas() {
-        return maxFeePerGas;
+    public String getMaxFeePerGas() {
+        return convert(maxFeePerGas);
     }
 
     private static String convert(BigInteger value) {
