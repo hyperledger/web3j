@@ -1,8 +1,8 @@
-name: Publish snapshot
+name: Publish snapshot 
 
 on:
   workflow_run:
-    workflows: [ 'Build' ]
+    workflows: [ 'Build' ] 
     branches: [ master ]
     types: [ completed ]
 
