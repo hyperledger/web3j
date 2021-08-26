@@ -43,6 +43,7 @@ public class LogFilter extends Filter<Log> {
 
     @Override
     protected void process(List<EthLog.LogResult> logResults) {
+        if (logResults == null) throw new FilterException("Unexpected logResults value: null");
         for (EthLog.LogResult logResult : logResults) {
             if (logResult instanceof EthLog.LogObject) {
                 Log log = ((EthLog.LogObject) logResult).get();
