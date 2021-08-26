@@ -48,8 +48,12 @@ public class LogFilter extends Filter<Log> {
                 Log log = ((EthLog.LogObject) logResult).get();
                 callback.onEvent(log);
             } else {
-                throw new FilterException(
-                        "Unexpected result type: " + logResult.get() + " required LogObject");
+                String exceptionMessage;
+                if (logResult == null) exceptionMessage = "Unexpected null result";
+                else
+                    exceptionMessage =
+                            "Unexpected result type: " + logResult.get() + " required LogObject";
+                throw new FilterException(exceptionMessage);
             }
         }
     }
