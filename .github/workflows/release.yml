@@ -77,7 +77,7 @@ jobs:
           result-encoding: string
           script: |
             const branch_name = process.env.GITHUB_REF
-            const web3j_release_version = branch_name.substring(branch_name.lastIndexOf('/') +1 ,branch_name.length  )
+            const web3j_release_version = branch_name.substring(branch_name.lastIndexOf('/')+1, branch_name.length) + '-android'
             process.env.VERSION = web3j_release_version
             return web3j_release_version
       - name: Build and stage release
