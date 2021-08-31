@@ -1778,7 +1778,8 @@ public class SolidityFunctionWrapper extends Generator {
             }
             if (needsArrayCast) {
                 builder.addStatement(
-                        "$L.$L = ($T) (($T) eventValues.getIndexedValues().get($L))" + nativeConversion,
+                        "$L.$L = ($T) (($T) eventValues.getIndexedValues().get($L))"
+                                + nativeConversion,
                         objectName,
                         namedTypeName.getName(),
                         indexedEventWrapperType,
@@ -1826,7 +1827,8 @@ public class SolidityFunctionWrapper extends Generator {
             }
             if (needsArrayCast) {
                 builder.addStatement(
-                        "$L.$L = ($T) (($T) eventValues.getNonIndexedValues().get($L))" + nativeConversion,
+                        "$L.$L = ($T) (($T) eventValues.getNonIndexedValues().get($L))"
+                                + nativeConversion,
                         objectName,
                         namedTypeName.getName(),
                         nonIndexedEventWrapperType,
