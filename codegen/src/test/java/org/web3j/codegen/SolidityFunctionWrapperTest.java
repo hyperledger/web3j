@@ -758,7 +758,6 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertEquals(builder.build().toString(), (expected));
     }
 
-
     @Test
     public void testBuildFunctionTransactionAndCall() throws Exception {
         AbiDefinition functionDefinition =
@@ -770,7 +769,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        List<MethodSpec> methodSpecs = solidityFunctionWrapperBoth.buildFunctions(functionDefinition);
+        List<MethodSpec> methodSpecs =
+                solidityFunctionWrapperBoth.buildFunctions(functionDefinition);
 
         String expectedSend =
                 "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> send_functionName(java.math.BigInteger param) {\n"
@@ -805,7 +805,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         "type",
                         false);
 
-        List<MethodSpec> methodSpecs = solidityFunctionWrapperBoth.buildFunctions(functionDefinition);
+        List<MethodSpec> methodSpecs =
+                solidityFunctionWrapperBoth.buildFunctions(functionDefinition);
 
         String expectedCall =
                 "public org.web3j.protocol.core.RemoteFunctionCall<java.math.BigInteger> call_functionName(java.math.BigInteger param) {\n"
@@ -828,5 +829,4 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         assertEquals(expectedCall, methodSpecs.get(0).toString());
         assertEquals(expectedSend, methodSpecs.get(1).toString());
     }
-
 }

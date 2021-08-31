@@ -1286,7 +1286,8 @@ public class SolidityFunctionWrapper extends Generator {
         return buildFunctions(functionDefinition, useUpperCase, false);
     }
 
-    List<MethodSpec> buildFunctions(AbiDefinition functionDefinition, boolean useUpperCase, boolean generateViceversa)
+    List<MethodSpec> buildFunctions(
+            AbiDefinition functionDefinition, boolean useUpperCase, boolean generateViceversa)
             throws ClassNotFoundException {
 
         List<MethodSpec> results = new ArrayList<>(2);
@@ -1333,7 +1334,12 @@ public class SolidityFunctionWrapper extends Generator {
                 results.add(methodBuilder.build());
             }
         } else {
-            buildTransactionFunction(functionDefinition, methodBuilder, inputParams, useUpperCase, generateViceversa);
+            buildTransactionFunction(
+                    functionDefinition,
+                    methodBuilder,
+                    inputParams,
+                    useUpperCase,
+                    generateViceversa);
             results.add(methodBuilder.build());
         }
 
