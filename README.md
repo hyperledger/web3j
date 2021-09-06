@@ -117,7 +117,7 @@ Android:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.6.7-android</version>
+  <version>4.8.7-android</version>
 </dependency>
 ```
 
@@ -126,11 +126,11 @@ Gradle
 
 Java:
 
-implementation ('org.web3j:core:4.8.6')
+implementation ('org.web3j:core:4.8.7')
 
 Android:
 
-implementation ('org.web3j:core:4.6.0-android')
+implementation ('org.web3j:core:4.8.7-android')
 
 Build instructions
 ------------------
