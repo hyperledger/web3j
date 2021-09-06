@@ -107,7 +107,7 @@ Java:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.8.6</version>
+  <version>4.8.7</version>
 </dependency>
 ```
 
@@ -117,7 +117,7 @@ Android:
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
-  <version>4.6.0-android</version>
+  <version>4.6.7-android</version>
 </dependency>
 ```
 
