@@ -14,16 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Workflow Dispatch
-          uses: convictional/trigger-workflow-and-wait@v1.3.0
-          with:
-            owner: conor10
-            repo: web3j
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            workflow_file_name: build.yml
-            wait_interval: 10
-            propagate_failure: true
-            trigger_workflow: true
-            wait_workflow: true
+        uses: convictional/trigger-workflow-and-wait@v1.3.0
+        with:
+          owner: conor10
+          repo: web3j
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow_file_name: build.yml
+          wait_interval: 10
+          propagate_failure: true
+          trigger_workflow: true
+          wait_workflow: true
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
