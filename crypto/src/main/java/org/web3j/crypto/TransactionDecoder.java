@@ -12,14 +12,14 @@
  */
 package org.web3j.crypto;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+
 import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.utils.Numeric;
-
-import java.math.BigInteger;
-import java.util.Arrays;
 
 public class TransactionDecoder {
     private static final int UNSIGNED_EIP1559TX_RLP_LIST_SIZE = 9;
@@ -35,8 +35,7 @@ public class TransactionDecoder {
     private static TransactionType getTransactionType(final byte[] transaction) {
         // The first byte indicates a transaction type.
         byte firstByte = transaction[0];
-        if (firstByte == TransactionType.EIP1559.getRlpType())
-            return TransactionType.EIP1559;
+        if (firstByte == TransactionType.EIP1559.getRlpType()) return TransactionType.EIP1559;
         return TransactionType.LEGACY;
     }
 
@@ -45,24 +44,37 @@ public class TransactionDecoder {
         final RlpList rlpList = RlpDecoder.decode(encodedTx);
         final RlpList values = (RlpList) rlpList.getValues().get(0);
 
-        final long chainId = ((RlpString) values.getValues().get(0)).asPositiveBigInteger().longValue();
+        final long chainId =
+                ((RlpString) values.getValues().get(0)).asPositiveBigInteger().longValue();
         final BigInteger nonce = ((RlpString) values.getValues().get(1)).asPositiveBigInteger();
-        final BigInteger maxPriorityFeePerGas = ((RlpString) values.getValues().get(2)).asPositiveBigInteger();
-        final BigInteger maxFeePerGas = ((RlpString) values.getValues().get(3)).asPositiveBigInteger();
+        final BigInteger maxPriorityFeePerGas =
+                ((RlpString) values.getValues().get(2)).asPositiveBigInteger();
+        final BigInteger maxFeePerGas =
+                ((RlpString) values.getValues().get(3)).asPositiveBigInteger();
         final BigInteger gasLimit = ((RlpString) values.getValues().get(4)).asPositiveBigInteger();
         final String to = ((RlpString) values.getValues().get(5)).asString();
 
         final BigInteger value = ((RlpString) values.getValues().get(6)).asPositiveBigInteger();
         final String data = ((RlpString) values.getValues().get(7)).asString();
 
-        final RawTransaction rawTransaction = RawTransaction.createTransaction(chainId, nonce, gasLimit, to, value, data,
-                maxPriorityFeePerGas, maxFeePerGas);
+        final RawTransaction rawTransaction =
+                RawTransaction.createTransaction(
+                        chainId,
+                        nonce,
+                        gasLimit,
+                        to,
+                        value,
+                        data,
+                        maxPriorityFeePerGas,
+                        maxFeePerGas);
 
         if (values.getValues().size() == UNSIGNED_EIP1559TX_RLP_LIST_SIZE) {
             return rawTransaction;
         } else {
-            final byte[] v = Sign.getVFromRecId(
-                    Numeric.toBigInt(((RlpString) values.getValues().get(9)).getBytes()).intValue());
+            final byte[] v =
+                    Sign.getVFromRecId(
+                            Numeric.toBigInt(((RlpString) values.getValues().get(9)).getBytes())
+                                    .intValue());
             final byte[] r =
                     Numeric.toBytesPadded(
                             Numeric.toBigInt(((RlpString) values.getValues().get(10)).getBytes()),

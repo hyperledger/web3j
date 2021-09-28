@@ -12,12 +12,13 @@
  */
 package org.web3j.crypto;
 
-import org.junit.jupiter.api.Test;
-import org.web3j.crypto.transaction.type.Transaction1559;
-import org.web3j.utils.Numeric;
-
 import java.math.BigInteger;
 import java.security.SignatureException;
+
+import org.junit.jupiter.api.Test;
+
+import org.web3j.crypto.transaction.type.Transaction1559;
+import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -134,7 +135,9 @@ public class TransactionDecoderTest {
         assertEquals(transaction1559.getChainId(), resultTransaction1559.getChainId());
         assertEquals(transaction1559.getNonce(), resultTransaction1559.getNonce());
         assertEquals(transaction1559.getMaxFeePerGas(), resultTransaction1559.getMaxFeePerGas());
-        assertEquals(transaction1559.getMaxPriorityFeePerGas(), resultTransaction1559.getMaxPriorityFeePerGas());
+        assertEquals(
+                transaction1559.getMaxPriorityFeePerGas(),
+                resultTransaction1559.getMaxPriorityFeePerGas());
         assertEquals(transaction1559.getGasLimit(), resultTransaction1559.getGasLimit());
         assertEquals(transaction1559.getTo(), resultTransaction1559.getTo());
         assertEquals(transaction1559.getValue(), resultTransaction1559.getValue());
@@ -150,7 +153,6 @@ public class TransactionDecoderTest {
                 TransactionEncoder.signMessage(rawTransaction, SampleKeys.CREDENTIALS);
         final String signedHexMessage = Numeric.toHexString(signedMessage);
 
-
         final RawTransaction result = TransactionDecoder.decode(signedHexMessage);
         assertTrue(result.getTransaction() instanceof Transaction1559);
         final Transaction1559 resultTransaction1559 = (Transaction1559) result.getTransaction();
@@ -159,7 +161,9 @@ public class TransactionDecoderTest {
         assertEquals(transaction1559.getChainId(), resultTransaction1559.getChainId());
         assertEquals(transaction1559.getNonce(), resultTransaction1559.getNonce());
         assertEquals(transaction1559.getMaxFeePerGas(), resultTransaction1559.getMaxFeePerGas());
-        assertEquals(transaction1559.getMaxPriorityFeePerGas(), resultTransaction1559.getMaxPriorityFeePerGas());
+        assertEquals(
+                transaction1559.getMaxPriorityFeePerGas(),
+                resultTransaction1559.getMaxPriorityFeePerGas());
         assertEquals(transaction1559.getGasLimit(), resultTransaction1559.getGasLimit());
         assertEquals(transaction1559.getTo(), resultTransaction1559.getTo());
         assertEquals(transaction1559.getValue(), resultTransaction1559.getValue());
