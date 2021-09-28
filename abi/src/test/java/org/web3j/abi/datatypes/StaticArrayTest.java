@@ -66,11 +66,11 @@ public class StaticArrayTest {
     }
 
     @Test
-    public void testEmptyStaticArray()  {
+    public void testEmptyStaticArray() {
         StaticArray<Address> empty = new StaticArray0<>(Address.class, Collections.emptyList());
         String type = empty.getTypeAsString();
 
-        assertEquals(Address.TYPE_NAME+"[0]", type);
+        assertEquals(Address.TYPE_NAME + "[0]", type);
     }
 
     private Uint[] arrayOfUints(int length) {
