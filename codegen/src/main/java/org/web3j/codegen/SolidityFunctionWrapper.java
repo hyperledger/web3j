@@ -121,7 +121,7 @@ public class SolidityFunctionWrapper extends Generator {
 
     private final boolean useNativeJavaTypes;
     private final boolean useJavaPrimitiveTypes;
-    private final boolean generateSendTxForCalls;
+    private final boolean generateBothCallAndSend;
 
     private final int addressLength;
 
@@ -143,19 +143,19 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     public SolidityFunctionWrapper(
-            boolean useNativeJavaTypes, int addressLength, boolean generateSendTxForCalls) {
-        this(useNativeJavaTypes, generateSendTxForCalls, false, addressLength);
+            boolean useNativeJavaTypes, int addressLength, boolean generateBothCallAndSend) {
+        this(useNativeJavaTypes, false, generateBothCallAndSend, addressLength);
     }
 
     public SolidityFunctionWrapper(
             boolean useNativeJavaTypes,
             boolean useJavaPrimitiveTypes,
-            boolean generateSendTxForCalls,
+            boolean generateBothCallAndSend,
             int addressLength) {
         this(
                 useNativeJavaTypes,
                 useJavaPrimitiveTypes,
-                generateSendTxForCalls,
+                generateBothCallAndSend,
                 addressLength,
                 new LogGenerationReporter(LOGGER));
     }
@@ -163,14 +163,14 @@ public class SolidityFunctionWrapper extends Generator {
     public SolidityFunctionWrapper(
             boolean useNativeJavaTypes,
             boolean useJavaPrimitiveTypes,
-            boolean generateSendTxForCalls,
+            boolean generateBothCallAndSend,
             int addressLength,
             GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
         this.addressLength = addressLength;
         this.reporter = reporter;
-        this.generateSendTxForCalls = generateSendTxForCalls;
+        this.generateBothCallAndSend = generateBothCallAndSend;
     }
 
     public void generateJavaFiles(
@@ -1283,6 +1283,12 @@ public class SolidityFunctionWrapper extends Generator {
 
     List<MethodSpec> buildFunctions(AbiDefinition functionDefinition, boolean useUpperCase)
             throws ClassNotFoundException {
+        return buildFunctions(functionDefinition, useUpperCase, false);
+    }
+
+    List<MethodSpec> buildFunctions(
+            AbiDefinition functionDefinition, boolean useUpperCase, boolean generateViceversa)
+            throws ClassNotFoundException {
 
         List<MethodSpec> results = new ArrayList<>(2);
         String functionName = functionDefinition.getName();
@@ -1291,9 +1297,9 @@ public class SolidityFunctionWrapper extends Generator {
         boolean pureOrView = "pure".equals(stateMutability) || "view".equals(stateMutability);
         boolean isFunctionDefinitionConstant = functionDefinition.isConstant() || pureOrView;
 
-        if (generateSendTxForCalls) {
+        if (generateBothCallAndSend) {
             final String funcNamePrefix;
-            if (isFunctionDefinitionConstant) {
+            if (isFunctionDefinitionConstant ^ generateViceversa) {
                 funcNamePrefix = "call";
             } else {
                 funcNamePrefix = "send";
@@ -1315,7 +1321,7 @@ public class SolidityFunctionWrapper extends Generator {
         final List<TypeName> outputParameterTypes =
                 buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
 
-        if (isFunctionDefinitionConstant) {
+        if (isFunctionDefinitionConstant ^ generateViceversa) {
             // Avoid generating runtime exception call
             if (functionDefinition.hasOutputs()) {
                 buildConstantFunction(
@@ -1327,16 +1333,18 @@ public class SolidityFunctionWrapper extends Generator {
 
                 results.add(methodBuilder.build());
             }
-            if (generateSendTxForCalls) {
-                AbiDefinition sendFuncDefinition = new AbiDefinition(functionDefinition);
-                sendFuncDefinition.setConstant(false);
-                results.addAll(buildFunctions(sendFuncDefinition));
-            }
+        } else {
+            buildTransactionFunction(
+                    functionDefinition,
+                    methodBuilder,
+                    inputParams,
+                    useUpperCase,
+                    generateViceversa);
+            results.add(methodBuilder.build());
         }
 
-        if (!isFunctionDefinitionConstant) {
-            buildTransactionFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
-            results.add(methodBuilder.build());
+        if (generateBothCallAndSend && !generateViceversa) {
+            results.addAll(buildFunctions(functionDefinition, useUpperCase, true));
         }
 
         return results;
@@ -1483,10 +1491,11 @@ public class SolidityFunctionWrapper extends Generator {
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             String inputParams,
-            boolean useUpperCase)
+            boolean useUpperCase,
+            boolean isViceversa)
             throws ClassNotFoundException {
 
-        if (functionDefinition.hasOutputs()) {
+        if (functionDefinition.hasOutputs() && !isViceversa) {
             reporter.report(
                     String.format(
                             "Definition of the function %s returns a value but is not defined as a view function. "
