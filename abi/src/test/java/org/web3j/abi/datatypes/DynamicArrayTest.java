@@ -26,26 +26,25 @@ public class DynamicArrayTest {
 
     @Test
     public void testEmptyDynamicArray() {
-        DynamicArray<Address> empty = new DynamicArray<>(Address.class, Collections.emptyList());
-        String type = empty.getTypeAsString();
-        assertEquals(Address.TYPE_NAME + "[]", type);
+        final DynamicArray<Address> array =
+                new DynamicArray<>(Address.class, Collections.emptyList());
+
+        assertEquals(Address.TYPE_NAME + "[]", array.getTypeAsString());
     }
 
     @Test
     public void testDynamicArrayWithDynamicStruct() {
-        List<DynamicStruct> list = Collections.singletonList(new DynamicStruct());
-        DynamicArray<DynamicStruct> empty = new DynamicArray<>(DynamicStruct.class, list);
-        String type = empty.getTypeAsString();
+        final List<DynamicStruct> list = Collections.singletonList(new DynamicStruct());
+        final DynamicArray<DynamicStruct> array = new DynamicArray<>(DynamicStruct.class, list);
 
-        assertEquals("()[]", type);
+        assertEquals("()[]", array.getTypeAsString());
     }
 
     @Test
     public void testDynamicArrayWithAbiType() {
-        DynamicArray<Uint> empty = new DynamicArray<>(Uint.class, arrayOfUints(1));
-        String type = empty.getTypeAsString();
+        final DynamicArray<Uint> array = new DynamicArray<>(Uint.class, arrayOfUints(1));
 
-        assertEquals(Uint.TYPE_NAME + "[]", type);
+        assertEquals(Uint.TYPE_NAME + "[]", array.getTypeAsString());
     }
 
     private Uint[] arrayOfUints(int length) {
