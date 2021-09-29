@@ -286,6 +286,17 @@ public class Sign {
             throw new RuntimeException(String.format("Unsupported format exception", v));
         }
     }
+
+    /**
+     * Returns the header 'v'.
+     *
+     * @param recId The recovery id.
+     * @return byte[] header 'v'.
+     */
+    public static byte[] getVFromRecId(int recId) {
+        return new byte[] {(byte) (LOWER_REAL_V + recId)};
+    }
+
     /**
      * Returns public key from the given private key.
      *
