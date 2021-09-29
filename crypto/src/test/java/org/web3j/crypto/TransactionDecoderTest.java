@@ -20,7 +20,10 @@ import org.junit.jupiter.api.Test;
 import org.web3j.crypto.transaction.type.Transaction1559;
 import org.web3j.utils.Numeric;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionDecoderTest {
 
