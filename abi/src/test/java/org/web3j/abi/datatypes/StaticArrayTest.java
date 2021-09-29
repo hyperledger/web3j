@@ -12,10 +12,12 @@
  */
 package org.web3j.abi.datatypes;
 
+import java.util.Collections;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.abi.datatypes.generated.StaticArray0;
 import org.web3j.abi.datatypes.generated.StaticArray3;
 import org.web3j.abi.datatypes.generated.StaticArray32;
 import org.web3j.abi.datatypes.generated.Uint8;
@@ -61,6 +63,14 @@ public class StaticArrayTest {
                     e.getMessage(),
                     ("Static arrays with a length greater than 32 are not supported."));
         }
+    }
+
+    @Test
+    public void testEmptyStaticArray() {
+        final StaticArray<Address> array =
+                new StaticArray0<>(Address.class, Collections.emptyList());
+
+        assertEquals(Address.TYPE_NAME + "[0]", array.getTypeAsString());
     }
 
     private Uint[] arrayOfUints(int length) {

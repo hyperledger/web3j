@@ -1092,13 +1092,6 @@ public class TypeDecoderTest {
     }
 
     @Test
-    public void testEmptyStaticArrayInstantiateType() {
-        assertThrows(
-                ClassNotFoundException.class,
-                () -> TypeDecoder.instantiateType("uint256[0]", new long[] {}));
-    }
-
-    @Test
     public void testDynamicArray() throws Exception {
         assertEquals(
                 TypeDecoder.decodeDynamicArray(
