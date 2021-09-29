@@ -252,7 +252,9 @@ public class Transaction {
     // https://github.com/ethereum/go-ethereum/issues/3339
     public void setV(Object v) {
         if (v instanceof String) {
-            this.v = Numeric.toBigInt((String) v).longValueExact();
+            // longValueExact() is not implemented on android 11 or later only on 12 so it was
+            // replaced with longValue.
+            this.v = Numeric.toBigInt((String) v).longValue();
         } else if (v instanceof Integer) {
             this.v = ((Integer) v).longValue();
         } else {
@@ -260,9 +262,9 @@ public class Transaction {
         }
     }
 
-    // public void setV(byte v) {
-    //     this.v = v;
-    // }
+    //    public void setV(byte v) {
+    //        this.v = v;
+    //    }
 
     public Long getChainId() {
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
