@@ -155,7 +155,7 @@ public abstract class Filter<T> {
 
     private void reinstallFilter() {
         log.warn("The filter has not been found. Filter id: " + filterId);
-        schedule.cancel(true);
+        schedule.cancel(false);
         this.run(scheduledExecutorService, blockTime);
     }
 
