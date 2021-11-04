@@ -40,7 +40,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
     public static final String COMMAND_PREFIX = COMMAND_SOLIDITY + " " + COMMAND_GENERATE;
 
     /*
-     * Usage: solidity generate [-hV] [-jt] [-st] [-r] -a=<abiFile> [-b=<binFile>]
+     * Usage: solidity generate [-hV] [-jt] [-st] [-B] [-r] -a=<abiFile> [-b=<binFile>]
      * -o=<destinationFileDir> -p=<packageName>
      * -h, --help                 Show this help message and exit.
      * -V, --version              Print version information and exit.
@@ -54,6 +54,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
      * -jt, --javaTypes       use native java types.
      * Default: true
      * -st, --solidityTypes   use solidity types.
+     * -B, --generateBoth     generate both call and send functions.
      * -r, --abiFuncs             ABI encoded function call getters.
      */
 
@@ -64,7 +65,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
     private final int addressLength;
 
-    private final boolean generateSendTxForCalls;
+    private final boolean generateBothCallAndSend;
 
     public SolidityFunctionWrapperGenerator(
             File binFile,
@@ -123,7 +124,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             String basePackageName,
             boolean useJavaNativeTypes,
             boolean useJavaPrimitiveTypes,
-            boolean generateSendTxForCalls,
+            boolean generateBothCallAndSend,
             Class<? extends Contract> contractClass,
             int addressLength,
             boolean abiFuncs) {
@@ -140,7 +141,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         this.abiFile = abiFile;
         this.contractName = contractName;
         this.addressLength = addressLength;
-        this.generateSendTxForCalls = generateSendTxForCalls;
+        this.generateBothCallAndSend = generateBothCallAndSend;
     }
 
     protected List<AbiDefinition> loadContractDefinition(File absFile) throws IOException {
@@ -165,8 +166,8 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             new SolidityFunctionWrapper(
                             useJavaNativeTypes,
                             useJavaPrimitiveTypes,
-                            generateSendTxForCalls,
-                    abiFuncs,
+                            generateBothCallAndSend,
+                            abiFuncs,
                             addressLength)
                     .generateJavaFiles(
                             contractClass,
@@ -259,6 +260,13 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         private boolean primitiveTypes = false;
 
         @Option(
+                names = {"-B", "--generateBoth"},
+                description = "generate both call and send functions.",
+                required = false)
+        private boolean generateBothCallAndSend;
+
+
+        @Option(
                 names = {"-r", ABI_FUNCS},
                 description = "ABI encoded function call getters.",
                 required = false)
@@ -283,8 +291,10 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                                 packageName,
                                 useJavaTypes,
                                 primitiveTypes,
+                                generateBothCallAndSend,
+                                Contract.class,
                                 addressLength,
-                        abiFuncs)
+                                abiFuncs)
                         .generate();
             } catch (Exception e) {
                 exitError(e);

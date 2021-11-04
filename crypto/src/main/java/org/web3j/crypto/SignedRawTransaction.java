@@ -14,6 +14,8 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 
+import org.web3j.crypto.transaction.type.ITransaction;
+
 public class SignedRawTransaction extends RawTransaction implements SignatureDataOperations {
 
     private final Sign.SignatureData signatureData;
@@ -27,6 +29,11 @@ public class SignedRawTransaction extends RawTransaction implements SignatureDat
             String data,
             Sign.SignatureData signatureData) {
         super(nonce, gasPrice, gasLimit, to, value, data);
+        this.signatureData = signatureData;
+    }
+
+    public SignedRawTransaction(ITransaction transaction, Sign.SignatureData signatureData) {
+        super(transaction);
         this.signatureData = signatureData;
     }
 

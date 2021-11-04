@@ -2,9 +2,10 @@ name: Build
 
 on:
   push:
-    branches: [ master, 'release/*' ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   integration-test:

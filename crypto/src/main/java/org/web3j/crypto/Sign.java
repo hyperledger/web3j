@@ -27,6 +27,9 @@ import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
 
 import org.web3j.utils.Numeric;
 
+import static org.bouncycastle.util.BigIntegers.TWO;
+import static org.web3j.crypto.SignatureDataOperations.CHAIN_ID_INC;
+import static org.web3j.crypto.SignatureDataOperations.LOWER_REAL_V;
 import static org.web3j.utils.Assertions.verifyPrecondition;
 
 /**
@@ -261,6 +264,37 @@ public class Sign {
             throw new SignatureException("Could not recover public key from signature");
         }
         return key;
+    }
+
+    /**
+     * Returns recovery ID.
+     *
+     * @param signatureData The message signature components
+     * @param chainId of the network
+     * @return int recovery ID
+     */
+    public static int getRecId(SignatureData signatureData, long chainId) {
+        BigInteger v = Numeric.toBigInt(signatureData.getV());
+        BigInteger lowerRealV = BigInteger.valueOf(LOWER_REAL_V);
+        BigInteger lowerRealVPlus1 = BigInteger.valueOf(LOWER_REAL_V + 1);
+        BigInteger chainIdInc = BigInteger.valueOf(CHAIN_ID_INC);
+        if (v.equals(lowerRealV) || v.equals(lowerRealVPlus1)) {
+            return v.subtract(lowerRealV).intValue();
+        } else if (v.compareTo(chainIdInc) > 0) {
+            return v.subtract(BigInteger.valueOf(chainId).multiply(TWO)).add(chainIdInc).intValue();
+        } else {
+            throw new RuntimeException(String.format("Unsupported format exception", v));
+        }
+    }
+
+    /**
+     * Returns the header 'v'.
+     *
+     * @param recId The recovery id.
+     * @return byte[] header 'v'.
+     */
+    public static byte[] getVFromRecId(int recId) {
+        return new byte[] {(byte) (LOWER_REAL_V + recId)};
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Web3 Labs Ltd.
+ * Copyright 2021 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -14,45 +14,41 @@ package org.web3j.tx;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.besu.Besu;
-import org.web3j.tx.gas.BesuPrivacyGasProvider;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
+import org.web3j.utils.Restriction;
 
-/** PrivateTransactionManager implementation for using a Besu node to transact. */
+@Deprecated
 public class BesuPrivateTransactionManager extends PrivateTransactionManager {
 
-    private final Base64String privacyGroupId;
-
+    /**
+     * Creates a LegacyPrivateTransactionManager
+     *
+     * @deprecated
+     *     <p>Use {@link PrivateTransactionManager} instead.
+     * @param besu
+     * @param credentials
+     * @param transactionReceiptProcessor
+     * @param chainId
+     * @param privateFrom
+     * @param privacyGroupId
+     * @param restriction
+     */
     public BesuPrivateTransactionManager(
-            final Besu besu,
-            final BesuPrivacyGasProvider gasProvider,
-            final Credentials credentials,
-            final long chainId,
-            final Base64String privateFrom,
-            final Base64String privacyGroupId,
-            final int attempts,
-            final int sleepDuration) {
-        super(besu, gasProvider, credentials, chainId, privateFrom, attempts, sleepDuration);
-        this.privacyGroupId = privacyGroupId;
-    }
-
-    public BesuPrivateTransactionManager(
-            final Besu besu,
-            final BesuPrivacyGasProvider gasProvider,
-            final Credentials credentials,
-            final long chainId,
-            final Base64String privateFrom,
-            final Base64String privacyGroupId) {
-        super(besu, gasProvider, credentials, chainId, privateFrom);
-        this.privacyGroupId = privacyGroupId;
-    }
-
-    @Override
-    public Base64String getPrivacyGroupId() {
-        return privacyGroupId;
-    }
-
-    @Override
-    protected Object privacyGroupIdOrPrivateFor() {
-        return privacyGroupId;
+            Besu besu,
+            Credentials credentials,
+            TransactionReceiptProcessor transactionReceiptProcessor,
+            long chainId,
+            Base64String privateFrom,
+            Base64String privacyGroupId,
+            Restriction restriction) {
+        super(
+                besu,
+                credentials,
+                transactionReceiptProcessor,
+                chainId,
+                privateFrom,
+                privacyGroupId,
+                restriction);
     }
 }

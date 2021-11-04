@@ -155,4 +155,44 @@ public class PrivateTransactionReceipt extends TransactionReceipt {
                 status,
                 revertReason);
     }
+
+    @Override
+    public String toString() {
+        return "PrivateTransactionReceipt{"
+                + "contractAddress='"
+                + contractAddress
+                + '\''
+                + ", from='"
+                + from
+                + '\''
+                + ", to='"
+                + to
+                + '\''
+                + ", output='"
+                + output
+                + '\''
+                + ", logs="
+                + logs
+                + ", commitmentHash='"
+                + commitmentHash
+                + '\''
+                + ", transactionHash='"
+                + transactionHash
+                + '\''
+                + ", privateFrom='"
+                + privateFrom
+                + '\''
+                + ", privateFor="
+                + privateFor
+                + ", privacyGroupId='"
+                + privacyGroupId
+                + '\''
+                + ", status='"
+                + status
+                + '\''
+                + ", revertReason='"
+                + revertReason
+                + '\''
+                + '}';
+    }
 }

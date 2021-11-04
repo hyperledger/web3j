@@ -56,6 +56,7 @@ import static org.web3j.codegen.SolidityFunctionWrapper.getNativeType;
 public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     private SolidityFunctionWrapper solidityFunctionWrapper;
+    private SolidityFunctionWrapper solidityFunctionWrapperBoth;
 
     private GenerationReporter generationReporter;
 
@@ -67,6 +68,9 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         solidityFunctionWrapper =
                 new SolidityFunctionWrapper(
                         true, false, false, Address.DEFAULT_LENGTH, generationReporter);
+        solidityFunctionWrapperBoth =
+                new SolidityFunctionWrapper(
+                        true, false, true, Address.DEFAULT_LENGTH, generationReporter);
     }
 
     @Test
@@ -752,5 +756,77 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "}\n";
 
         assertEquals(builder.build().toString(), (expected));
+    }
+
+    @Test
+    public void testBuildFunctionTransactionAndCall() throws Exception {
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        false,
+                        Arrays.asList(new NamedType("param", "uint8")),
+                        "functionName",
+                        Arrays.asList(new NamedType("result", "int8")),
+                        "type",
+                        false);
+
+        List<MethodSpec> methodSpecs =
+                solidityFunctionWrapperBoth.buildFunctions(functionDefinition);
+
+        String expectedSend =
+                "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> send_functionName(java.math.BigInteger param) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
+                        + "      FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
+                        + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
+                        + "  return executeRemoteCallTransaction(function);\n"
+                        + "}\n";
+
+        String expectedCall =
+                "public org.web3j.protocol.core.RemoteFunctionCall<java.math.BigInteger> call_functionName(java.math.BigInteger param) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n"
+                        + "  return executeRemoteCallSingleValueReturn(function, java.math.BigInteger.class);\n"
+                        + "}\n";
+
+        assertEquals(2, methodSpecs.size());
+        assertEquals(expectedSend, methodSpecs.get(0).toString());
+        assertEquals(expectedCall, methodSpecs.get(1).toString());
+    }
+
+    @Test
+    public void testBuildFunctionConstantSingleValueReturnAndTransaction() throws Exception {
+        AbiDefinition functionDefinition =
+                new AbiDefinition(
+                        true,
+                        Arrays.asList(new NamedType("param", "uint8")),
+                        "functionName",
+                        Arrays.asList(new NamedType("result", "int8")),
+                        "type",
+                        false);
+
+        List<MethodSpec> methodSpecs =
+                solidityFunctionWrapperBoth.buildFunctions(functionDefinition);
+
+        String expectedCall =
+                "public org.web3j.protocol.core.RemoteFunctionCall<java.math.BigInteger> call_functionName(java.math.BigInteger param) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Int8>() {}));\n"
+                        + "  return executeRemoteCallSingleValueReturn(function, java.math.BigInteger.class);\n"
+                        + "}\n";
+
+        String expectedSend =
+                "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> send_functionName(java.math.BigInteger param) {\n"
+                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
+                        + "      FUNC_FUNCTIONNAME, \n"
+                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
+                        + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
+                        + "  return executeRemoteCallTransaction(function);\n"
+                        + "}\n";
+
+        assertEquals(2, methodSpecs.size());
+        assertEquals(expectedCall, methodSpecs.get(0).toString());
+        assertEquals(expectedSend, methodSpecs.get(1).toString());
     }
 }

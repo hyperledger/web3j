@@ -116,6 +116,10 @@ public abstract class Filter<T> {
                 ethLog.setResult(Collections.emptyList());
             }
 
+            if (ethLog.hasError()) {
+                throwException(ethLog.getError());
+            }
+
             process(ethLog.getLogs());
 
         } catch (IOException e) {
@@ -151,7 +155,7 @@ public abstract class Filter<T> {
 
     private void reinstallFilter() {
         log.warn("The filter has not been found. Filter id: " + filterId);
-        schedule.cancel(true);
+        schedule.cancel(false);
         this.run(scheduledExecutorService, blockTime);
     }
 

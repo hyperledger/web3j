@@ -208,7 +208,7 @@ public class AbiTypesGenerator extends Generator {
         String packageName = createPackageName(StaticArray.class);
         ClassName className;
 
-        for (int length = 1; length <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY; length++) {
+        for (int length = 0; length <= StaticArray.MAX_SIZE_OF_STATIC_ARRAY; length++) {
 
             TypeVariableName typeVariableName = TypeVariableName.get("T").withBounds(Type.class);
 

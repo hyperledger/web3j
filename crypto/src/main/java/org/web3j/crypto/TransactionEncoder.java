@@ -14,14 +14,12 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.web3j.crypto.transaction.type.TransactionType;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
-import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 
 /**
@@ -43,6 +41,11 @@ public class TransactionEncoder {
 
     public static byte[] signMessage(
             RawTransaction rawTransaction, long chainId, Credentials credentials) {
+
+        if (!rawTransaction.getType().equals(TransactionType.LEGACY)) {
+            return signMessage(rawTransaction, credentials);
+        }
+
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData =
                 Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
@@ -61,7 +64,7 @@ public class TransactionEncoder {
             Sign.SignatureData signatureData, long chainId) {
         BigInteger v = Numeric.toBigInt(signatureData.getV());
         v = v.subtract(BigInteger.valueOf(LOWER_REAL_V));
-        v = v.add(BigInteger.valueOf(chainId * 2));
+        v = v.add(BigInteger.valueOf(chainId).multiply(BigInteger.valueOf(2)));
         v = v.add(BigInteger.valueOf(CHAIN_ID_INC));
 
         return new Sign.SignatureData(v.toByteArray(), signatureData.getR(), signatureData.getS());
@@ -91,7 +94,14 @@ public class TransactionEncoder {
     private static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
         List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         RlpList rlpList = new RlpList(values);
-        return RlpEncoder.encode(rlpList);
+        byte[] encoded = RlpEncoder.encode(rlpList);
+        if (!rawTransaction.getType().equals(TransactionType.LEGACY)) {
+            return ByteBuffer.allocate(encoded.length + 1)
+                    .put(rawTransaction.getType().getRlpType())
+                    .put(encoded)
+                    .array();
+        }
+        return encoded;
     }
 
     private static byte[] longToBytes(long x) {
@@ -102,40 +112,6 @@ public class TransactionEncoder {
 
     public static List<RlpType> asRlpValues(
             RawTransaction rawTransaction, Sign.SignatureData signatureData) {
-        List<RlpType> result = new ArrayList<>();
-
-        result.add(RlpString.create(rawTransaction.getNonce()));
-        result.add(RlpString.create(rawTransaction.getGasPrice()));
-        result.add(RlpString.create(rawTransaction.getGasLimit()));
-
-        // an empty to address (contract creation) should not be encoded as a numeric 0 value
-        String to = rawTransaction.getTo();
-        if (to != null && to.length() > 0) {
-            // addresses that start with zeros should be encoded with the zeros included, not
-            // as numeric values
-            result.add(RlpString.create(Numeric.hexStringToByteArray(to)));
-        } else {
-            result.add(RlpString.create(""));
-        }
-
-        result.add(RlpString.create(rawTransaction.getValue()));
-
-        // value field will already be hex encoded, so we need to convert into binary first
-        byte[] data = Numeric.hexStringToByteArray(rawTransaction.getData());
-        result.add(RlpString.create(data));
-
-        // add gas premium and fee cap if this is an EIP-1559 transaction
-        if (rawTransaction.isEIP1559Transaction()) {
-            result.add(RlpString.create(rawTransaction.getGasPremium()));
-            result.add(RlpString.create(rawTransaction.getFeeCap()));
-        }
-
-        if (signatureData != null) {
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getV())));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
-        }
-
-        return result;
+        return rawTransaction.getTransaction().asRlpValues(signatureData);
     }
 }
