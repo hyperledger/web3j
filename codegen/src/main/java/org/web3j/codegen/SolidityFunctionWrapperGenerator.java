@@ -265,7 +265,6 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 required = false)
         private boolean generateBothCallAndSend;
 
-
         @Option(
                 names = {"-r", ABI_FUNCS},
                 description = "ABI encoded function call getters.",
