@@ -54,7 +54,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
      * -jt, --javaTypes       use native java types.
      * Default: true
      * -st, --solidityTypes   use solidity types.
-     * -r, --rlpFuncs: RLP encoded function call getters.
+     * -r, --abiFuncs             ABI encoded function call getters.
      */
 
     private final File binFile;
@@ -99,7 +99,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             boolean useJavaNativeTypes,
             boolean useJavaPrimitiveTypes,
             int addressLength,
-            boolean rlpFuncs) {
+            boolean abiFuncs) {
 
         this(
                 binFile,
@@ -112,7 +112,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 false,
                 Contract.class,
                 addressLength,
-                rlpFuncs);
+                abiFuncs);
     }
 
     protected SolidityFunctionWrapperGenerator(
@@ -126,7 +126,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
             boolean generateSendTxForCalls,
             Class<? extends Contract> contractClass,
             int addressLength,
-            boolean rlpFuncs) {
+            boolean abiFuncs) {
 
         super(
                 contractClass,
@@ -134,7 +134,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 basePackageName,
                 useJavaNativeTypes,
                 useJavaPrimitiveTypes,
-                rlpFuncs);
+                abiFuncs);
 
         this.binFile = binFile;
         this.abiFile = abiFile;
@@ -166,7 +166,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                             useJavaNativeTypes,
                             useJavaPrimitiveTypes,
                             generateSendTxForCalls,
-                            rlpFuncs,
+                    abiFuncs,
                             addressLength)
                     .generateJavaFiles(
                             contractClass,
@@ -259,10 +259,10 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         private boolean primitiveTypes = false;
 
         @Option(
-                names = {"-r", RLP_FUNCS},
-                description = "RLP encoded function call getters.",
+                names = {"-r", ABI_FUNCS},
+                description = "ABI encoded function call getters.",
                 required = false)
-        private boolean rlpFuncs = false;
+        private boolean abiFuncs = false;
 
         @Override
         public void run() {
@@ -284,7 +284,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                                 useJavaTypes,
                                 primitiveTypes,
                                 addressLength,
-                                rlpFuncs)
+                        abiFuncs)
                         .generate();
             } catch (Exception e) {
                 exitError(e);

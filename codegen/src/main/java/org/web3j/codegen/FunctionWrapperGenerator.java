@@ -25,13 +25,13 @@ abstract class FunctionWrapperGenerator {
     static final String JAVA_TYPES_ARG = "--javaTypes";
     static final String SOLIDITY_TYPES_ARG = "--solidityTypes";
     static final String PRIMITIVE_TYPES_ARG = "--primitiveTypes";
-    static final String RLP_FUNCS = "--rlpFuncs";
+    static final String ABI_FUNCS = "--abiFuncs";
 
     final File destinationDirLocation;
     final String basePackageName;
     final boolean useJavaNativeTypes;
     final boolean useJavaPrimitiveTypes;
-    final boolean rlpFuncs;
+    final boolean abiFuncs;
 
     final Class<? extends Contract> contractClass;
 
@@ -53,14 +53,14 @@ abstract class FunctionWrapperGenerator {
             String basePackageName,
             boolean useJavaNativeTypes,
             boolean useJavaPrimitiveTypes,
-            boolean rlpFuncs) {
+            boolean abiFuncs) {
 
         this.destinationDirLocation = destinationDirLocation;
         this.basePackageName = basePackageName;
         this.useJavaNativeTypes = useJavaNativeTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
         this.contractClass = contractClass;
-        this.rlpFuncs = rlpFuncs;
+        this.abiFuncs = abiFuncs;
     }
 
     public abstract void generate() throws IOException, ClassNotFoundException;

@@ -122,7 +122,7 @@ public class SolidityFunctionWrapper extends Generator {
     private final boolean useNativeJavaTypes;
     private final boolean useJavaPrimitiveTypes;
     private final boolean generateSendTxForCalls;
-    private final boolean rlpFuncs;
+    private final boolean abiFuncs;
 
     private final int addressLength;
 
@@ -166,13 +166,13 @@ public class SolidityFunctionWrapper extends Generator {
             boolean useNativeJavaTypes,
             boolean useJavaPrimitiveTypes,
             boolean generateSendTxForCalls,
-            boolean rlpFuncs,
+            boolean abiFuncs,
             int addressLength) {
         this(
                 useNativeJavaTypes,
                 useJavaPrimitiveTypes,
                 generateSendTxForCalls,
-                rlpFuncs,
+                abiFuncs,
                 addressLength,
                 new LogGenerationReporter(LOGGER));
     }
@@ -196,12 +196,12 @@ public class SolidityFunctionWrapper extends Generator {
             boolean useNativeJavaTypes,
             boolean useJavaPrimitiveTypes,
             boolean generateSendTxForCalls,
-            boolean rlpFuncs,
+            boolean abiFuncs,
             int addressLength,
             GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
-        this.rlpFuncs = rlpFuncs;
+        this.abiFuncs = abiFuncs;
         this.addressLength = addressLength;
         this.reporter = reporter;
         this.generateSendTxForCalls = generateSendTxForCalls;
@@ -1358,12 +1358,12 @@ public class SolidityFunctionWrapper extends Generator {
             results.add(methodBuilder.build());
         }
 
-        // Create function that returns the RLP of the Solidity function call.
-        if (rlpFuncs) {
-            functionName = "getRLP_" + functionName;
+        // Create function that returns the ABI encoding of the Solidity function call.
+        if (abiFuncs) {
+            functionName = "getABI_" + functionName;
             methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
             addParameters(methodBuilder, functionDefinition.getInputs());
-            buildRlpFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
+            buildAbiFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
             results.add(methodBuilder.build());
         }
 
@@ -1549,7 +1549,7 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    private void buildRlpFunction(
+    private void buildAbiFunction(
             AbiDefinition functionDefinition,
             MethodSpec.Builder methodBuilder,
             String inputParams,
