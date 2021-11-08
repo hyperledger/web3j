@@ -282,7 +282,11 @@ public class Transaction {
         this.type = type;
     }
 
-    public String getMaxFeePerGas() {
+    public BigInteger getMaxFeePerGas() {
+        return Numeric.decodeQuantity(maxFeePerGas);
+    }
+
+    public String getMaxFeePerGasRaw() {
         return maxFeePerGas;
     }
 
@@ -290,8 +294,12 @@ public class Transaction {
         this.maxFeePerGas = maxFeePerGas;
     }
 
-    public String getMaxPriorityFeePerGas() {
+    public String getMaxPriorityFeePerGasRaw() {
         return maxPriorityFeePerGas;
+    }
+
+    public BigInteger getMaxPriorityFeePerGas() {
+        return Numeric.decodeQuantity(maxPriorityFeePerGas);
     }
 
     public void setMaxPriorityFeePerGas(String maxPriorityFeePerGas) {
@@ -386,14 +394,14 @@ public class Transaction {
         if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
             return false;
         }
-        if (getMaxFeePerGas() != null
-                ? !getMaxFeePerGas().equals(that.getMaxFeePerGas())
-                : that.getMaxFeePerGas() != null) {
+        if (getMaxFeePerGasRaw() != null
+                ? !getMaxFeePerGasRaw().equals(that.getMaxFeePerGasRaw())
+                : that.getMaxFeePerGasRaw() != null) {
             return false;
         }
-        if (getMaxPriorityFeePerGas() != null
-                ? !getMaxPriorityFeePerGas().equals(that.getMaxPriorityFeePerGas())
-                : that.getMaxPriorityFeePerGas() != null) {
+        if (getMaxPriorityFeePerGasRaw() != null
+                ? !getMaxPriorityFeePerGasRaw().equals(that.getMaxPriorityFeePerGasRaw())
+                : that.getMaxPriorityFeePerGasRaw() != null) {
             return false;
         }
         if (getAccessList() != null
@@ -428,11 +436,11 @@ public class Transaction {
         result = 31 * result + (getS() != null ? getS().hashCode() : 0);
         result = 31 * result + BigInteger.valueOf(getV()).hashCode();
         result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-        result = 31 * result + (getMaxFeePerGas() != null ? getMaxFeePerGas().hashCode() : 0);
+        result = 31 * result + (getMaxFeePerGasRaw() != null ? getMaxFeePerGasRaw().hashCode() : 0);
         result =
                 31 * result
-                        + (getMaxPriorityFeePerGas() != null
-                                ? getMaxPriorityFeePerGas().hashCode()
+                        + (getMaxPriorityFeePerGasRaw() != null
+                                ? getMaxPriorityFeePerGasRaw().hashCode()
                                 : 0);
         result = 31 * result + (getAccessList() != null ? getAccessList().hashCode() : 0);
         return result;
