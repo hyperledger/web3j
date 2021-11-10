@@ -66,10 +66,16 @@ public class DynamicArray<T extends Type> extends Array<T> {
     @Override
     public String getTypeAsString() {
         String type;
-        if (!value.isEmpty() && StructType.class.isAssignableFrom(value.get(0).getClass())) {
-            type = value.get(0).getTypeAsString();
-        } else {
+        // Handle dynamic array of zero length. This will fail if the dynamic array
+        // is an array of structs.
+        if (value.isEmpty()) {
             type = AbiTypes.getTypeAString(getComponentType());
+        } else {
+            if (StructType.class.isAssignableFrom(value.get(0).getClass())) {
+                type = value.get(0).getTypeAsString();
+            } else {
+                type = AbiTypes.getTypeAString(getComponentType());
+            }
         }
         return type + "[]";
     }

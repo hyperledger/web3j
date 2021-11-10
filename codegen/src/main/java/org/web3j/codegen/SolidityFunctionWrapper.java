@@ -122,7 +122,7 @@ public class SolidityFunctionWrapper extends Generator {
     private final boolean useNativeJavaTypes;
     private final boolean useJavaPrimitiveTypes;
     private final boolean generateBothCallAndSend;
-
+    private final boolean abiFuncs;
     private final int addressLength;
 
     private final HashMap<Integer, ClassName> structClassNameMap = new HashMap<>();
@@ -156,6 +156,22 @@ public class SolidityFunctionWrapper extends Generator {
                 useNativeJavaTypes,
                 useJavaPrimitiveTypes,
                 generateBothCallAndSend,
+                false,
+                addressLength,
+                new LogGenerationReporter(LOGGER));
+    }
+
+    public SolidityFunctionWrapper(
+            boolean useNativeJavaTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateBothCallAndSend,
+            boolean abiFuncs,
+            int addressLength) {
+        this(
+                useNativeJavaTypes,
+                useJavaPrimitiveTypes,
+                generateBothCallAndSend,
+                abiFuncs,
                 addressLength,
                 new LogGenerationReporter(LOGGER));
     }
@@ -166,8 +182,25 @@ public class SolidityFunctionWrapper extends Generator {
             boolean generateBothCallAndSend,
             int addressLength,
             GenerationReporter reporter) {
+        this(
+                useNativeJavaTypes,
+                useJavaPrimitiveTypes,
+                generateBothCallAndSend,
+                false,
+                addressLength,
+                reporter);
+    }
+
+    public SolidityFunctionWrapper(
+            boolean useNativeJavaTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateBothCallAndSend,
+            boolean abiFuncs,
+            int addressLength,
+            GenerationReporter reporter) {
         this.useNativeJavaTypes = useNativeJavaTypes;
         this.useJavaPrimitiveTypes = useJavaPrimitiveTypes;
+        this.abiFuncs = abiFuncs;
         this.addressLength = addressLength;
         this.reporter = reporter;
         this.generateBothCallAndSend = generateBothCallAndSend;
@@ -1347,6 +1380,15 @@ public class SolidityFunctionWrapper extends Generator {
             results.addAll(buildFunctions(functionDefinition, useUpperCase, true));
         }
 
+        // Create function that returns the ABI encoding of the Solidity function call.
+        if (abiFuncs) {
+            functionName = "getABI_" + functionName;
+            methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
+            addParameters(methodBuilder, functionDefinition.getInputs());
+            buildAbiFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
+            results.add(methodBuilder.build());
+        }
+
         return results;
     }
 
@@ -1528,6 +1570,35 @@ public class SolidityFunctionWrapper extends Generator {
         } else {
             methodBuilder.addStatement("return executeRemoteCallTransaction(function)");
         }
+    }
+
+    private void buildAbiFunction(
+            AbiDefinition functionDefinition,
+            MethodSpec.Builder methodBuilder,
+            String inputParams,
+            boolean useUpperCase)
+            throws ClassNotFoundException {
+
+        if (functionDefinition.isPayable()) {
+            methodBuilder.addParameter(BigInteger.class, WEI_VALUE);
+        }
+
+        String functionName = functionDefinition.getName();
+
+        methodBuilder.returns(TypeName.get(String.class));
+
+        methodBuilder.addStatement(
+                "final $T function = new $T(\n$N, \n$T.<$T>asList($L), \n$T"
+                        + ".<$T<?>>emptyList())",
+                Function.class,
+                Function.class,
+                funcNameToConst(functionName, useUpperCase),
+                Arrays.class,
+                Type.class,
+                inputParams,
+                Collections.class,
+                TypeReference.class);
+        methodBuilder.addStatement("return org.web3j.abi.FunctionEncoder.encode(function)");
     }
 
     TypeSpec buildEventResponseObject(
