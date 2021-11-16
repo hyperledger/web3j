@@ -12,16 +12,16 @@
  */
 package org.web3j.crypto;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.web3j.crypto.Keys.ADDRESS_SIZE;
 
@@ -57,15 +57,16 @@ public class ContractUtils {
     }
 
     /**
-     * Generate a CREATE2 smart contract address. <a
-     * href="https://eips.ethereum.org/EIPS/eip-1014</a>.
+     * Generate a CREATE2 smart contract address. Further details are available <a
+     * href="https://eips.ethereum.org/EIPS/eip-1014">here</a>.
      *
-     * @param address  The address which is creating this new address
-     * @param salt     A 32 bytes salt
+     * @param address The address which is creating this new address
+     * @param salt A 32 bytes salt
      * @param initCode The init code of the contract being created
      * @return the generated CREATE2 smart contract address
      */
-    public static byte[] generateCreate2ContractAddress(byte[] address, byte[] salt, byte[] initCode) {
+    public static byte[] generateCreate2ContractAddress(
+            byte[] address, byte[] salt, byte[] initCode) {
         if (address.length != ADDRESS_BYTE_SIZE) {
             throw new RuntimeException("Invalid address size");
         }
@@ -87,8 +88,11 @@ public class ContractUtils {
         return Arrays.copyOfRange(hashed, 12, hashed.length);
     }
 
-    public static String generateCreate2ContractAddress(String address, byte[] salt, byte[] initCode) {
-        byte[] result = generateCreate2ContractAddress(Numeric.hexStringToByteArray(address), salt, initCode);
+    public static String generateCreate2ContractAddress(
+            String address, byte[] salt, byte[] initCode) {
+        byte[] result =
+                generateCreate2ContractAddress(
+                        Numeric.hexStringToByteArray(address), salt, initCode);
         return Numeric.toHexString(result);
     }
 }
