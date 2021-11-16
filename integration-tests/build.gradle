@@ -1,5 +1,19 @@
 description 'web3j integration tests'
 
+
+repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://hyperledger.jfrog.io/artifactory/besu-maven/" }
+    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
+    maven { url "https://splunk.jfrog.io/splunk/ext-releases-local" }
+    maven { url "https://dl.cloudsmith.io/public/consensys/quorum-mainnet-launcher/maven/" }
+}
+ext {
+    besuPluginVersion = '21.7.2'
+    besuInternalVersion = '21.7.2'
+    besuCryptoDepVersion = '0.3.0'
+}
 dependencies {
     compile project(':core'),
             project(':besu'),
@@ -9,7 +23,20 @@ dependencies {
     testCompile "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion",
             "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion",
-            "org.web3j:web3j-unit:4.8.3"
+            "org.web3j:web3j-unit:4.8.8"
+    testImplementation "org.hyperledger.besu:plugin-api:$besuPluginVersion"
+    testImplementation "org.hyperledger.besu.internal:besu:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:api:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:config:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:core:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:crypto:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:rlp:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:kvstore:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:metrics-core:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:trie:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu.internal:util:$besuInternalVersion"
+    testImplementation "org.hyperledger.besu:bls12-381:$besuCryptoDepVersion"
+    testImplementation "org.hyperledger.besu:secp256k1:$besuCryptoDepVersion"
 }
 tasks.withType(Test) {
     useJUnitPlatform()
