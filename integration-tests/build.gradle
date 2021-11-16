@@ -1,16 +1,51 @@
 description 'web3j integration tests'
 
+
+repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://hyperledger.jfrog.io/artifactory/besu-maven/" }
+    maven { url "https://artifacts.consensys.net/public/maven/maven/" }
+    maven { url "https://splunk.jfrog.io/splunk/ext-releases-local" }
+    maven { url "https://dl.cloudsmith.io/public/consensys/quorum-mainnet-launcher/maven/" }
+}
+ext {
+    besuPluginVersion = '21.7.2'
+    besuInternalVersion = '21.7.2'
+    besuCryptoDepVersion = '0.3.0'
+}
+
+def withoutAbi = { exclude group: 'org.web3j', module: 'abi' }
+
 dependencies {
-    compile project(':core'),
+    testCompile project(':core'),
             project(':besu'),
             project(':parity'),
             project(':geth'),
             project(':codegen')
-    testCompile "ch.qos.logback:logback-core:$logbackVersion",
-            "ch.qos.logback:logback-classic:$logbackVersion",
-            "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion",
-            "org.web3j:web3j-unit:4.8.3"
+    testImplementation "ch.qos.logback:logback-core:$logbackVersion"
+    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
+    testImplementation "com.carrotsearch:junit-benchmarks:$junitBenchmarkVersion"
+    testImplementation('org.web3j:web3j-unit:4.8.8') {
+        // We dont want to pull the web3j version from unit
+        exclude group: 'org.web3j'
+    }
+    testImplementation "org.hyperledger.besu:plugin-api:$besuPluginVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:besu:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:api:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:config:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:core:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:crypto:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:rlp:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:kvstore:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:metrics-core:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:trie:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu.internal:util:$besuInternalVersion",withoutAbi
+    testImplementation "org.hyperledger.besu:bls12-381:$besuCryptoDepVersion",withoutAbi
+    testImplementation "org.hyperledger.besu:secp256k1:$besuCryptoDepVersion",withoutAbi
 }
+
+
 tasks.withType(Test) {
     useJUnitPlatform()
     systemProperties = [
@@ -33,6 +68,6 @@ test {
             project.getProperty('integration-tests') : false
     dependsOn project(':codegen').getTasksByName('test', false)
 }
-compileTestJava{
-    dependsOn project(':codegen').getTasksByName("testClasses",false)
+compileTestJava {
+    dependsOn project(':codegen').getTasksByName("testClasses", false)
 }
