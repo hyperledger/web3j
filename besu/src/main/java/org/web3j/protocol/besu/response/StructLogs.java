@@ -12,12 +12,12 @@
  */
 package org.web3j.protocol.besu.response;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StructLogs {
 

@@ -12,10 +12,10 @@
  */
 package org.web3j.protocol.besu.response;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
 
 public class FullDebugTraceInfo {
 
@@ -29,8 +29,7 @@ public class FullDebugTraceInfo {
             @JsonProperty("gas") int gas,
             @JsonProperty("failed") boolean failed,
             @JsonProperty("returnValue") String returnValue,
-            @JsonProperty("structLogs") List<StructLogs> structLogs
-    ) {
+            @JsonProperty("structLogs") List<StructLogs> structLogs) {
         this.gas = gas;
         this.failed = failed;
         this.returnValue = returnValue;
