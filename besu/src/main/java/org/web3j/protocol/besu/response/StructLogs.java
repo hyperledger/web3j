@@ -12,6 +12,9 @@
  */
 package org.web3j.protocol.besu.response;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +30,16 @@ public class StructLogs {
     private List<String> memory;
     private Map<BigInteger, String> storage;
 
+    @JsonCreator
     public StructLogs(
-            int pc,
-            String op,
-            int gas,
-            int gasCost,
-            int depth,
-            List<String> stack,
-            List<String> memory,
-            Map<BigInteger, String> storage) {
+            @JsonProperty("pc") int pc,
+            @JsonProperty("op") String op,
+            @JsonProperty("gas") int gas,
+            @JsonProperty("gasCost") int gasCost,
+            @JsonProperty("depth") int depth,
+            @JsonProperty("stack") List<String> stack,
+            @JsonProperty("memory") List<String> memory,
+            @JsonProperty("storage") Map<BigInteger, String> storage) {
         this.pc = pc;
         this.op = op;
         this.gas = gas;

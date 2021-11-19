@@ -22,7 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.web3j.protocol.ResponseTester;
 import org.web3j.protocol.admin.methods.response.BooleanResponse;
 import org.web3j.protocol.besu.response.BesuEthAccountsMapResponse;
+import org.web3j.protocol.besu.response.BesuFullDebugTraceResponse;
 import org.web3j.protocol.besu.response.BesuSignerMetrics;
+import org.web3j.protocol.besu.response.FullDebugTraceInfo;
 import org.web3j.protocol.besu.response.privacy.PrivCreatePrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivFindPrivacyGroup;
 import org.web3j.protocol.besu.response.privacy.PrivGetPrivacyPrecompileAddress;
@@ -38,6 +40,7 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.utils.Base64String;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ResponseTest extends ResponseTester {
 
@@ -391,4 +394,36 @@ public class ResponseTest extends ResponseTester {
 
         assertEquals(privGetTransactionReceipt.getTransactionReceipt().get(), (transactionReceipt));
     }
+
+    @Test
+    public void testFullDebugTraceInfo() {
+        buildResponse(
+                "{\n"
+                        + "\"jsonrpc\": \"2.0\",\n"
+                        + "\"id\": 1,\n"
+                        + "\"result\": {\n"
+                        + "  \"gas\":35956,"
+                        + "  \"returnValue\":\"1\","
+                        + "  \"structLogs\":[\n"
+                        + "      {\"depth\":0,\"error\":\"\",\"gas\":1478712,\"gasCost\":3,\"memory\":[],\"op\":\"PUSH1\",\"pc\":0,\"stack\":[],\"storage\":{}},"
+                        + "      {\"depth\":0,\"error\":\"\",\"gas\":1478709,\"gasCost\":3,\"memory\":[],\"op\":\"PUSH1\",\"pc\":2,\"stack\":[\"0000000000000000000000000000000000000000000000000000000000000080\"],\"storage\":{}},"
+                        + "      {\"depth\":0,\"error\":\"\",\"gas\":1477248,\"gasCost\":3,\"memory\":[\"0000000000000000000000000000000000000000000000000000000000000000\",\"0000000000000000000000000000000000000000000000000000000000000000\",\"0000000000000000000000000000000000000000000000000000000000000080\"],\"op\":\"DUP3\",\"pc\":6173,\"stack\":[\"00000000000000000000000000000000000000000000000000000000a0712d68\",\"0000000000000000000000000000000000000000000000000000000000000279\",\"00000000000000000000000000000000000000000000016929fc579f2cf60000\",\"00000000000000000000000000000000000000000000000000000000000006e5\",\"000000000000000000000000bed92733f5549af6411355d5fe12781744248f96\",\"00000000000000000000000000000000000000000000016929fc579f2cf60000\",\"00000000000000000000000000000000000000000000016929fc579f2cf60000\",\"0000000000000000000000000000000000000000000000000000000000000002\",\"0000000000000000000000000000000000000000000000000000000000000000\",\"0000000000000000000000000000000000000000000000000000000000000f31\",\"00000000000000000000000000000000000000000000016929fc579f2cf60000\",\"000000000000000000000000000000000000000000544a2efc54e6eb8bd90400\",\"0000000000000000000000000000000000000000000000000000000000000000\",\"fffffffffffffffffffffffffffffffffffffffffffffe96d603a860d309ffff\"],\"storage\":{\"0000000000000000000000000000000000000000000000000000000000000002\":\"000000000000000000000000000000000000000000544a2efc54e6eb8bd90400\"}}"
+                        + "  ]"
+                        + "}\n"
+                + "}"
+        );
+
+        BesuFullDebugTraceResponse response = deserialiseResponse(BesuFullDebugTraceResponse.class);
+        FullDebugTraceInfo result = response.getResult();
+
+        assertFalse(result.getFailed());
+        assertEquals(result.getGas(), 35956);
+        assertEquals(result.getReturnValue(), "1");
+        assertEquals(result.getStructLogs().get(0).getPc(), 0);
+        assertEquals(result.getStructLogs().get(2).getStorage().get(
+                new BigInteger("0000000000000000000000000000000000000000000000000000000000000002")),
+                "000000000000000000000000000000000000000000544a2efc54e6eb8bd90400"
+        );
+    }
+
 }
