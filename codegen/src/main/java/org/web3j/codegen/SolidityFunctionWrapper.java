@@ -50,6 +50,7 @@ import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Event;
@@ -1831,12 +1832,18 @@ public class SolidityFunctionWrapper extends Generator {
         for (int i = 0; i < indexedParameters.size(); i++) {
             final NamedTypeName namedTypeName = indexedParameters.get(i);
             final String nativeConversion;
+            boolean needsArrayCast = false;
             if (useNativeJavaTypes
                     && structClassNameMap.values().stream()
                             .map(ClassName::simpleName)
                             .noneMatch(
                                     name -> name.equals(namedTypeName.getTypeName().toString()))) {
-                nativeConversion = ".getValue()";
+                if (namedTypeName.typeName instanceof ParameterizedTypeName) {
+                    nativeConversion = ".getNativeValueCopy()";
+                    needsArrayCast = true;
+                } else {
+                    nativeConversion = ".getValue()";
+                }
             } else {
                 nativeConversion = "";
             }
@@ -1849,23 +1856,40 @@ public class SolidityFunctionWrapper extends Generator {
             } else {
                 indexedEventWrapperType = getIndexedEventWrapperType(namedTypeName.getTypeName());
             }
-            builder.addStatement(
-                    "$L.$L = ($T) eventValues.getIndexedValues().get($L)" + nativeConversion,
-                    objectName,
-                    namedTypeName.getName(),
-                    indexedEventWrapperType,
-                    i);
+            if (needsArrayCast) {
+                builder.addStatement(
+                        "$L.$L = ($T) (($T) eventValues.getIndexedValues().get($L))"
+                                + nativeConversion,
+                        objectName,
+                        namedTypeName.getName(),
+                        indexedEventWrapperType,
+                        Array.class,
+                        i);
+            } else {
+                builder.addStatement(
+                        "$L.$L = ($T) eventValues.getIndexedValues().get($L)" + nativeConversion,
+                        objectName,
+                        namedTypeName.getName(),
+                        indexedEventWrapperType,
+                        i);
+            }
         }
 
         for (int i = 0; i < nonIndexedParameters.size(); i++) {
             final NamedTypeName namedTypeName = nonIndexedParameters.get(i);
             final String nativeConversion;
+            boolean needsArrayCast = false;
             if (useNativeJavaTypes
                     && structClassNameMap.values().stream()
                             .map(ClassName::simpleName)
                             .noneMatch(
                                     name -> name.equals(namedTypeName.getTypeName().toString()))) {
-                nativeConversion = ".getValue()";
+                if (namedTypeName.typeName instanceof ParameterizedTypeName) {
+                    nativeConversion = ".getNativeValueCopy()";
+                    needsArrayCast = true;
+                } else {
+                    nativeConversion = ".getValue()";
+                }
             } else {
                 nativeConversion = "";
             }
@@ -1881,12 +1905,23 @@ public class SolidityFunctionWrapper extends Generator {
                 nonIndexedEventWrapperType =
                         getWrapperType(nonIndexedParameters.get(i).getTypeName());
             }
-            builder.addStatement(
-                    "$L.$L = ($T) eventValues.getNonIndexedValues().get($L)" + nativeConversion,
-                    objectName,
-                    namedTypeName.getName(),
-                    nonIndexedEventWrapperType,
-                    i);
+            if (needsArrayCast) {
+                builder.addStatement(
+                        "$L.$L = ($T) (($T) eventValues.getNonIndexedValues().get($L))"
+                                + nativeConversion,
+                        objectName,
+                        namedTypeName.getName(),
+                        nonIndexedEventWrapperType,
+                        Array.class,
+                        i);
+            } else {
+                builder.addStatement(
+                        "$L.$L = ($T) eventValues.getNonIndexedValues().get($L)" + nativeConversion,
+                        objectName,
+                        namedTypeName.getName(),
+                        nonIndexedEventWrapperType,
+                        i);
+            }
         }
         return builder.build();
     }
