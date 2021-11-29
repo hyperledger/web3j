@@ -872,17 +872,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "  return executeRemoteCallSingleValueReturn(function, java.math.BigInteger.class);\n"
                         + "}\n";
 
-        String expectedSend =
-                "public org.web3j.protocol.core.RemoteFunctionCall<org.web3j.protocol.core.methods.response.TransactionReceipt> send_functionName(java.math.BigInteger param) {\n"
-                        + "  final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(\n"
-                        + "      FUNC_FUNCTIONNAME, \n"
-                        + "      java.util.Arrays.<org.web3j.abi.datatypes.Type>asList(new org.web3j.abi.datatypes.generated.Uint8(param)), \n"
-                        + "      java.util.Collections.<org.web3j.abi.TypeReference<?>>emptyList());\n"
-                        + "  return executeRemoteCallTransaction(function);\n"
-                        + "}\n";
-
-        assertEquals(2, methodSpecs.size());
+        assertEquals(1, methodSpecs.size());
         assertEquals(expectedCall, methodSpecs.get(0).toString());
-        assertEquals(expectedSend, methodSpecs.get(1).toString());
     }
 }

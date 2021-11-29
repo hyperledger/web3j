@@ -1333,7 +1333,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         if (generateBothCallAndSend) {
             final String funcNamePrefix;
-            if (isFunctionDefinitionConstant ^ generateViceversa) {
+            if (isFunctionDefinitionConstant || generateViceversa) {
                 funcNamePrefix = "call";
             } else {
                 funcNamePrefix = "send";
@@ -1355,7 +1355,7 @@ public class SolidityFunctionWrapper extends Generator {
         final List<TypeName> outputParameterTypes =
                 buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
 
-        if (isFunctionDefinitionConstant ^ generateViceversa) {
+        if (isFunctionDefinitionConstant || generateViceversa) {
             // Avoid generating runtime exception call
             if (functionDefinition.hasOutputs()) {
                 buildConstantFunction(
@@ -1377,7 +1377,7 @@ public class SolidityFunctionWrapper extends Generator {
             results.add(methodBuilder.build());
         }
 
-        if (generateBothCallAndSend && !generateViceversa) {
+        if (generateBothCallAndSend && !generateViceversa && !isFunctionDefinitionConstant) {
             results.addAll(buildFunctions(functionDefinition, useUpperCase, true));
         }
 

@@ -116,7 +116,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 abiFuncs);
     }
 
-    protected SolidityFunctionWrapperGenerator(
+    public SolidityFunctionWrapperGenerator(
             File binFile,
             File abiFile,
             File destinationDir,
