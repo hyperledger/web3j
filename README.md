@@ -5,6 +5,8 @@ Web3j: Web3 Java Ethereum Ðapp API
 [![Build Status](https://travis-ci.org/web3j/web3j.svg?branch=master)](https://travis-ci.org/web3j/web3j)
 [![codecov](https://codecov.io/gh/web3j/web3j/branch/master/graph/badge.svg)](https://codecov.io/gh/web3j/web3j)
 [![Join the chat at https://gitter.im/web3j/web3j](https://img.shields.io/discourse/users?server=https%3A%2F%2Fcommunity.web3labs.com)](https://community.web3labs.com)
+[![Discord](https://img.shields.io/discord/779382027614158919?label=discord)](https://discord.gg/A9UXfPF2tS)
+
 
 
 Web3j is a lightweight, highly modular, reactive, type safe Java and
