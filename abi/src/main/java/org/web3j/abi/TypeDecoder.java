@@ -586,6 +586,10 @@ public class TypeDecoder {
             value =
                     decodeDynamicStruct(
                             dynamicElementData, 64, TypeReference.create(declaredField));
+        } else if (DynamicArray.class.isAssignableFrom(declaredField)) {
+            value =
+                    decodeDynamicArray(
+                            dynamicElementData, 0, TypeReference.create(declaredField));
         } else {
             value = decode(dynamicElementData, declaredField);
         }

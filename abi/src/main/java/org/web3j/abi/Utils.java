@@ -35,6 +35,7 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Bytes32;
 
 /** Utility functions. */
 public class Utils {
@@ -104,6 +105,9 @@ public class Utils {
             throws ClassNotFoundException {
 
         java.lang.reflect.Type type = typeReference.getType();
+        if (!(type instanceof ParameterizedType)) {
+            return (Class<T>) Bytes32.class;
+        }
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();
 
