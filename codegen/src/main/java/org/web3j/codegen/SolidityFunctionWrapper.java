@@ -445,7 +445,9 @@ public class SolidityFunctionWrapper extends Generator {
             if (internalType == null || internalType.isEmpty()) {
                 structName = "Struct" + structCounter;
             } else {
-                structName = internalType.substring(internalType.lastIndexOf(".") + 1);
+                final String fullStructName =
+                        internalType.substring(internalType.lastIndexOf(" ") + 1);
+                structName = fullStructName.substring(fullStructName.lastIndexOf(".") + 1);
             }
 
             final TypeSpec.Builder builder =
