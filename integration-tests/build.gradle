@@ -10,8 +10,8 @@ repositories {
     maven { url "https://dl.cloudsmith.io/public/consensys/quorum-mainnet-launcher/maven/" }
 }
 ext {
-    besuPluginVersion = '21.7.2'
-    besuInternalVersion = '21.7.2'
+    besuPluginVersion = '21.10.3'
+    besuInternalVersion = '21.10.3'
     besuCryptoDepVersion = '0.3.0'
 }
 
