@@ -23,8 +23,13 @@ import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
+import static org.web3j.crypto.Keys.ADDRESS_SIZE;
+
 /** Smart Contract utility functions. */
 public class ContractUtils {
+
+    public static final int SALT_SIZE = 32;
+    public static final int ADDRESS_BYTE_SIZE = ADDRESS_SIZE / 8;
 
     /**
      * Generate a smart contract address. This enables you to identify what address a smart contract
@@ -48,6 +53,46 @@ public class ContractUtils {
 
     public static String generateContractAddress(String address, BigInteger nonce) {
         byte[] result = generateContractAddress(Numeric.hexStringToByteArray(address), nonce);
+        return Numeric.toHexString(result);
+    }
+
+    /**
+     * Generate a CREATE2 smart contract address. Further details are available <a
+     * href="https://eips.ethereum.org/EIPS/eip-1014">here</a>.
+     *
+     * @param address The address which is creating this new address
+     * @param salt A 32 bytes salt
+     * @param initCode The init code of the contract being created
+     * @return the generated CREATE2 smart contract address
+     */
+    public static byte[] generateCreate2ContractAddress(
+            byte[] address, byte[] salt, byte[] initCode) {
+        if (address.length != ADDRESS_BYTE_SIZE) {
+            throw new RuntimeException("Invalid address size");
+        }
+        if (salt.length != SALT_SIZE) {
+            throw new RuntimeException("Invalid salt size");
+        }
+        byte[] hashedInitCode = Hash.sha3(initCode);
+        byte[] buffer = new byte[1 + address.length + salt.length + hashedInitCode.length];
+
+        buffer[0] = (byte) 0xff;
+        int offset = 1;
+        System.arraycopy(address, 0, buffer, offset, address.length);
+        offset += address.length;
+        System.arraycopy(salt, 0, buffer, offset, salt.length);
+        offset += salt.length;
+        System.arraycopy(hashedInitCode, 0, buffer, offset, hashedInitCode.length);
+
+        byte[] hashed = Hash.sha3(buffer);
+        return Arrays.copyOfRange(hashed, 12, hashed.length);
+    }
+
+    public static String generateCreate2ContractAddress(
+            String address, byte[] salt, byte[] initCode) {
+        byte[] result =
+                generateCreate2ContractAddress(
+                        Numeric.hexStringToByteArray(address), salt, initCode);
         return Numeric.toHexString(result);
     }
 }
