@@ -512,7 +512,7 @@ public class RequestTest extends RequestTester {
 
         verifyResult(
                 "{\"jsonrpc\":\"2.0\",\"method\":\"eth_uninstallFilter\","
-                        + "\"params\":[\"0x0b\"],\"id\":1}");
+                        + "\"params\":[\"0xb\"],\"id\":1}");
     }
 
     @Test
