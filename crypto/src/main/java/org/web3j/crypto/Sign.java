@@ -28,8 +28,6 @@ import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
 import org.web3j.utils.Numeric;
 
 import static org.bouncycastle.util.BigIntegers.TWO;
-import static org.web3j.crypto.SignatureDataOperations.CHAIN_ID_INC;
-import static org.web3j.crypto.SignatureDataOperations.LOWER_REAL_V;
 import static org.web3j.utils.Assertions.verifyPrecondition;
 
 /**
@@ -42,6 +40,8 @@ import static org.web3j.utils.Assertions.verifyPrecondition;
 public class Sign {
 
     public static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
+    public static final int CHAIN_ID_INC = 35;
+    public static final int LOWER_REAL_V = 27;
     static final ECDomainParameters CURVE =
             new ECDomainParameters(
                     CURVE_PARAMS.getCurve(),

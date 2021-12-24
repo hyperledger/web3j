@@ -17,11 +17,11 @@ import java.util.List;
 
 import org.web3j.utils.Numeric;
 
+import static org.web3j.crypto.Sign.CHAIN_ID_INC;
+import static org.web3j.crypto.Sign.LOWER_REAL_V;
+
 /** Transaction object used by both {@link EthTransaction} and {@link EthBlock}. */
 public class Transaction {
-    private static final int CHAIN_ID_INC = 35;
-    private static final int LOWER_REAL_V = 27;
-
     private String hash;
     private String nonce;
     private String blockHash;

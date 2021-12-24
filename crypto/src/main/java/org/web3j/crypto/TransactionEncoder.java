@@ -22,15 +22,14 @@ import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpType;
 import org.web3j.utils.Numeric;
 
+import static org.web3j.crypto.Sign.CHAIN_ID_INC;
+import static org.web3j.crypto.Sign.LOWER_REAL_V;
+
 /**
  * Create RLP encoded transaction, implementation as per p4 of the <a
  * href="http://gavwood.com/paper.pdf">yellow paper</a>.
  */
 public class TransactionEncoder {
-
-    private static final int CHAIN_ID_INC = 35;
-    private static final int LOWER_REAL_V = 27;
-
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
         Sign.SignatureData signatureData =

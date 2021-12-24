@@ -28,6 +28,8 @@ import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.web3j.crypto.Sign.CHAIN_ID_INC;
+import static org.web3j.crypto.Sign.LOWER_REAL_V;
 
 public class SignTest {
 
@@ -83,7 +85,7 @@ public class SignTest {
     @MethodSource("recIdArguments")
     public void testGetRecIdForEip155(
             final long chainId, final long recId, final boolean isEip155) {
-        final long testV = isEip155 ? 35 + chainId * 2 + recId : 27 + recId;
+        final long testV = isEip155 ? CHAIN_ID_INC + chainId * 2 + recId : LOWER_REAL_V + recId;
         final Sign.SignatureData signedMsg =
                 new Sign.SignatureData((byte) testV, new byte[] {}, new byte[] {});
 
