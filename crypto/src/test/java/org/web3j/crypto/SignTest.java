@@ -83,8 +83,7 @@ public class SignTest {
 
     @ParameterizedTest
     @MethodSource("recIdArguments")
-    public void testGetRecIdForEip155(
-            final long chainId, final long recId, final boolean isEip155) {
+    public void testGetRecId(final long chainId, final long recId, final boolean isEip155) {
         final long testV = isEip155 ? CHAIN_ID_INC + chainId * 2 + recId : LOWER_REAL_V + recId;
         final Sign.SignatureData signedMsg =
                 new Sign.SignatureData((byte) testV, new byte[] {}, new byte[] {});
