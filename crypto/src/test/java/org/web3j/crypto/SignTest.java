@@ -81,7 +81,7 @@ public class SignTest {
         assertEquals(Sign.publicFromPoint(point.getEncoded(false)), (SampleKeys.PUBLIC_KEY));
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "testGetRecId(chainId={0}, recId={1}, isEip155={2})")
     @MethodSource("recIdArguments")
     public void testGetRecId(final long chainId, final long recId, final boolean isEip155) {
         final long testV = isEip155 ? CHAIN_ID_INC + chainId * 2 + recId : LOWER_REAL_V + recId;
