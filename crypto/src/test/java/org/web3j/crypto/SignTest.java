@@ -14,9 +14,15 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.security.SignatureException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bouncycastle.math.ec.ECPoint;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import org.web3j.utils.Numeric;
 
@@ -71,5 +77,34 @@ public class SignTest {
     public void testPublicKeyFromPrivatePoint() {
         ECPoint point = Sign.publicPointFromPrivate(SampleKeys.PRIVATE_KEY);
         assertEquals(Sign.publicFromPoint(point.getEncoded(false)), (SampleKeys.PUBLIC_KEY));
+    }
+
+    @ParameterizedTest
+    @MethodSource("recIdArguments")
+    public void testGetRecIdForEip155(
+            final long chainId, final long recId, final boolean isEip155) {
+        final long testV = isEip155 ? 35 + chainId * 2 + recId : 27 + recId;
+        final Sign.SignatureData signedMsg =
+                new Sign.SignatureData((byte) testV, new byte[] {}, new byte[] {});
+
+        int recoveredRecId = Sign.getRecId(signedMsg, chainId);
+        assertEquals(recId, recoveredRecId);
+    }
+
+    public static List<Arguments> recIdArguments() {
+        final List<Long> chainIds = Arrays.asList(1L, 2L, 100L);
+        final List<Long> recIds = Arrays.asList(0L, 1L);
+        final List<Boolean> isEip155Options = Arrays.asList(true, false);
+
+        final List<Arguments> args = new ArrayList<>();
+        for (Long chainId : chainIds) {
+            for (Long recId : recIds) {
+                for (Boolean isEip155Option : isEip155Options) {
+                    args.add(Arguments.of(chainId, recId, isEip155Option));
+                }
+            }
+        }
+
+        return args;
     }
 }

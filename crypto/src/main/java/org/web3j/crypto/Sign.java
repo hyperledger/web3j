@@ -281,7 +281,9 @@ public class Sign {
         if (v.equals(lowerRealV) || v.equals(lowerRealVPlus1)) {
             return v.subtract(lowerRealV).intValue();
         } else if (v.compareTo(chainIdInc) > 0) {
-            return v.subtract(BigInteger.valueOf(chainId).multiply(TWO)).add(chainIdInc).intValue();
+            return v.subtract(BigInteger.valueOf(chainId).multiply(TWO))
+                    .subtract(chainIdInc)
+                    .intValue();
         } else {
             throw new RuntimeException(String.format("Unsupported format exception", v));
         }
