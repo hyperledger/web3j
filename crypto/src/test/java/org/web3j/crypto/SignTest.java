@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.web3j.crypto.Sign.CHAIN_ID_INC;
 import static org.web3j.crypto.Sign.LOWER_REAL_V;
+import static org.web3j.crypto.Sign.REPLAY_PROTECTED_V_MIN;
 
 public class SignTest {
 
@@ -92,6 +93,18 @@ public class SignTest {
         assertEquals(recId, recoveredRecId);
     }
 
+    @ParameterizedTest(name = "testGetRecIdWithInvalidVParam(v = {0})")
+    @MethodSource("invalidVSigningParams")
+    public void testGetRecIdWithInvalidVParam(final long invalidV) {
+        final Sign.SignatureData signedMsg =
+                new Sign.SignatureData((byte) invalidV, new byte[] {}, new byte[] {});
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Sign.getRecId(signedMsg, 1),
+                "Unsupported v parameter: " + invalidV);
+    }
+
     public static List<Arguments> recIdArguments() {
         final List<Long> chainIds = Arrays.asList(1L, 2L, 100L);
         final List<Long> recIds = Arrays.asList(0L, 1L);
@@ -104,6 +117,18 @@ public class SignTest {
                     args.add(Arguments.of(chainId, recId, isEip155Option));
                 }
             }
+        }
+
+        return args;
+    }
+
+    public static List<Arguments> invalidVSigningParams() {
+        final List<Arguments> args = new ArrayList<>();
+        for (int i = 0; i < LOWER_REAL_V; i++) {
+            args.add(Arguments.of(i));
+        }
+        for (int i = LOWER_REAL_V + 2; i < REPLAY_PROTECTED_V_MIN.intValue(); i++) {
+            args.add(Arguments.of(i));
         }
 
         return args;

@@ -42,6 +42,9 @@ public class Sign {
     public static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
     public static final int CHAIN_ID_INC = 35;
     public static final int LOWER_REAL_V = 27;
+    // The v signature parameter starts at 37 because 1 is the first valid chainId so:
+    // chainId >= 1 implies that 2 * chainId + CHAIN_ID_INC >= 37.
+    static final BigInteger REPLAY_PROTECTED_V_MIN = BigInteger.valueOf(37);
     static final ECDomainParameters CURVE =
             new ECDomainParameters(
                     CURVE_PARAMS.getCurve(),
@@ -280,12 +283,12 @@ public class Sign {
         BigInteger chainIdInc = BigInteger.valueOf(CHAIN_ID_INC);
         if (v.equals(lowerRealV) || v.equals(lowerRealVPlus1)) {
             return v.subtract(lowerRealV).intValue();
-        } else if (v.compareTo(chainIdInc) > 0) {
+        } else if (v.compareTo(REPLAY_PROTECTED_V_MIN) >= 0) {
             return v.subtract(BigInteger.valueOf(chainId).multiply(TWO))
                     .subtract(chainIdInc)
                     .intValue();
         } else {
-            throw new RuntimeException(String.format("Unsupported format exception", v));
+            throw new IllegalArgumentException(String.format("Unsupported v parameter: %s", v));
         }
     }
 
