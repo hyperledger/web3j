@@ -106,7 +106,9 @@ public class Utils {
 
         java.lang.reflect.Type type = typeReference.getType();
         if (!(type instanceof ParameterizedType)) {
-            return (Class<T>) Bytes32.class;
+            // how to get item type
+//                return (Class<T>) Utf8String.class;
+                return (Class<T>) Bytes32.class;
         }
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();

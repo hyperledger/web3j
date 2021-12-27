@@ -12,21 +12,21 @@
  */
 package org.web3j.abi;
 
-import java.math.BigInteger;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.DynamicStruct;
 import org.web3j.abi.datatypes.Int;
 import org.web3j.abi.datatypes.StaticArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes1;
+import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.abi.datatypes.generated.Bytes6;
 import org.web3j.abi.datatypes.generated.Int104;
@@ -95,6 +95,11 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.abi.datatypes.generated.Uint80;
 import org.web3j.abi.datatypes.generated.Uint88;
 import org.web3j.abi.datatypes.generated.Uint96;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -1165,5 +1170,93 @@ public class TypeDecoderTest {
         assertEquals(staticArray3StaticArray3.getComponentType(), StaticArray3.class);
         row1 = staticArray3StaticArray3.getValue().get(1).getValue().get(1);
         assertEquals(row1.getValue().get(1), (new Uint256(2)));
+    }
+
+    public static class ProposalInfo extends DynamicStruct {
+        public BigInteger id;
+        public String title;
+        public List<String> optionTitles;
+
+        public ProposalInfo(Uint256 id, Utf8String title, DynamicArray<Bytes32> optionTitles) {
+            super(id, title, optionTitles);
+            this.id = id.getValue();
+            this.title = title.getValue();
+            this.optionTitles = new ArrayList<>();
+            for (Bytes32 option : optionTitles.getValue()) {
+                this.optionTitles.add(Arrays.toString(option.getValue()));
+            }
+        }
+    }
+
+    public static class ProposalInfo2 extends DynamicStruct {
+        public BigInteger id;
+        public String title;
+        public List<String> optionTitles;
+
+        public ProposalInfo2(Uint256 id, Utf8String title, DynamicArray<Utf8String> optionTitles) {
+            super(id, title, optionTitles);
+            this.id = id.getValue();
+            this.title = title.getValue();
+            this.optionTitles = new ArrayList<>();
+            for (Utf8String option : optionTitles.getValue()) {
+                this.optionTitles.add(option.getValue());
+            }
+        }
+    }
+
+    @Test
+    public void testDynamicArrayOfDynamicStruct() {
+        // change #getParameterizedTypeFromArray to return "(Class<T>) Bytes32.class;"
+        List<String> tmpTitles = new ArrayList<>();
+        tmpTitles.add("Option A");
+        tmpTitles.add("Option B");
+        tmpTitles.add("Option C");
+        List<Bytes32> optionTitles = new ArrayList<>();
+        for (String item : tmpTitles) {
+            optionTitles.add(new Bytes32(buildBytesByEnd(32, item.getBytes())));
+        }
+
+        ProposalInfo proposalInfo = new ProposalInfo(
+                new Uint256(BigInteger.valueOf(101)),
+                new Utf8String("Hello, world!"),
+                new DynamicArray<>(optionTitles));
+        String encodeContent = TypeEncoder.encode(proposalInfo);
+        Assertions.assertEquals(encodeContent, "0000000000000000000000000000000000000000000000000000000000000065000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000d48656c6c6f2c20776f726c64210000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000004f7074696f6e20410000000000000000000000000000000000000000000000004f7074696f6e20420000000000000000000000000000000000000000000000004f7074696f6e2043");
+
+        Assertions.assertEquals(
+                TypeDecoder.decodeDynamicStruct(encodeContent,
+                        0,
+                        new TypeReference<ProposalInfo>() {
+                        }),
+                proposalInfo);
+    }
+
+    public static byte[] buildBytesByEnd(int len, byte[] data) {
+        byte[] out = new byte[len];
+        System.arraycopy(data, 0, out, len - data.length, data.length);
+        return out;
+    }
+
+    @Test
+    public void testDynamicArrayOfDynamicStruct2() {
+        // change #getParameterizedTypeFromArray to "return (Class<T>) Utf8String.class;"
+        List<Utf8String> optionTitles = new ArrayList<>();
+        optionTitles.add(new Utf8String("Option A greasonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"));
+        optionTitles.add(new Utf8String("Option greasonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"));
+        optionTitles.add(new Utf8String("Option C greasonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"));
+
+        ProposalInfo2 proposalInfo = new ProposalInfo2(
+                new Uint256(BigInteger.valueOf(101)),
+                new Utf8String("Hello, world!"),
+                new DynamicArray<>(optionTitles));
+        String encodeContent = TypeEncoder.encode(proposalInfo);
+        Assertions.assertEquals(encodeContent, "0000000000000000000000000000000000000000000000000000000000000065000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000d48656c6c6f2c20776f726c6421000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000004b4f7074696f6e20412067726561736f6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000494f7074696f6e2067726561736f6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004b4f7074696f6e20432067726561736f6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e000000000000000000000000000000000000000000");
+
+        Assertions.assertEquals(
+                TypeDecoder.decodeDynamicStruct(encodeContent,
+                        0,
+                        new TypeReference<ProposalInfo2>() {
+                        }),
+                proposalInfo);
     }
 }
