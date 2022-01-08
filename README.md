@@ -164,7 +164,7 @@ $ ./gradlew -Pintegration-tests=true :integration-tests:test
 If you do not want the integration test to run:
 
 ``` {.sourceCode .bash}
-$ ./gradlew :test
+$ ./gradlew -Pintegration-tests=false :test
 ```
 
 Check the [Docker client API](https://github.com/docker-java/docker-java/blob/master/docs/getting_started.md#instantiating-a-dockerclientconfig)
