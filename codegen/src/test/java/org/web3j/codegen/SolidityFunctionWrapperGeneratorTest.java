@@ -153,6 +153,28 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @Test
+    public void testArraysInStructCompareJavaFileTest() throws Exception {
+        String inputFileName = "ArraysInStruct";
+        String contract = inputFileName.toLowerCase();
+        String packagePath =
+                generateCode(emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false);
+        File fileActual = new File(tempDirPath, packagePath + "/ArraysInStruct.java");
+        File fileExpected =
+                new File(
+                        Strings.join(
+                                Arrays.asList(
+                                        solidityBaseDir,
+                                        contract,
+                                        "build",
+                                        "java",
+                                        inputFileName + ".java"),
+                                File.separator));
+        assertEquals(
+                new String(Files.readAllBytes(fileExpected.toPath())),
+                new String(Files.readAllBytes(fileActual.toPath())));
+    }
+
+    @Test
     public void testDuplicateField() throws Exception {
         PrintStream console = System.out;
         ByteArrayOutputStream out = new ByteArrayOutputStream();

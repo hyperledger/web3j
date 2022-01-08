@@ -459,8 +459,10 @@ public class SolidityFunctionWrapper extends Generator {
                             .addModifiers(Modifier.PUBLIC)
                             .addStatement(
                                     "super("
-                                            + buildStructConstructorParameterDefinition(
-                                                    namedType.getComponents(), useNativeJavaTypes)
+                                            + addParameters(
+                                                    MethodSpec.constructorBuilder(),
+                                                    namedType.getComponents(),
+                                                    useNativeJavaTypes)
                                             + ")");
 
             final MethodSpec.Builder nativeConstructorBuilder =
@@ -468,8 +470,10 @@ public class SolidityFunctionWrapper extends Generator {
                             .addModifiers(Modifier.PUBLIC)
                             .addStatement(
                                     "super("
-                                            + buildStructConstructorParameterDefinition(
-                                                    namedType.getComponents(), false)
+                                            + addParameters(
+                                                    MethodSpec.constructorBuilder(),
+                                                    namedType.getComponents(),
+                                                    false)
                                             + ")");
 
             for (AbiDefinition.NamedType component : namedType.getComponents()) {
@@ -573,27 +577,6 @@ public class SolidityFunctionWrapper extends Generator {
         return structMap.values().stream()
                 .sorted(Comparator.comparingInt(AbiDefinition.NamedType::nestedness))
                 .collect(Collectors.toList());
-    }
-
-    private String buildStructConstructorParameterDefinition(
-            final List<AbiDefinition.NamedType> components, final boolean useNativeJavaTypes)
-            throws ClassNotFoundException {
-        final StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < components.size(); i++) {
-            final AbiDefinition.NamedType component = components.get(i);
-            stringBuilder.append(i > 0 ? "," : "");
-            stringBuilder.append(
-                    (!component.getType().equals("tuple") && useNativeJavaTypes
-                            ? "new " + buildTypeName(component.getType(), false) + "("
-                            : ""));
-            stringBuilder.append(
-                    (component.getType().equals("tuple")
-                            ? component.getName()
-                            : useNativeJavaTypes
-                                    ? component.getName() + ")"
-                                    : component.getName()));
-        }
-        return stringBuilder.toString();
     }
 
     private java.util.Collection<? extends AbiDefinition.NamedType> extractNested(
@@ -980,6 +963,14 @@ public class SolidityFunctionWrapper extends Generator {
 
     String addParameters(MethodSpec.Builder methodBuilder, List<AbiDefinition.NamedType> namedTypes)
             throws ClassNotFoundException {
+        return addParameters(methodBuilder, namedTypes, this.useNativeJavaTypes);
+    }
+
+    String addParameters(
+            MethodSpec.Builder methodBuilder,
+            List<AbiDefinition.NamedType> namedTypes,
+            boolean useNativeJavaTypes)
+            throws ClassNotFoundException {
 
         final List<ParameterSpec> inputParameterTypes =
                 buildParameterTypes(namedTypes, useJavaPrimitiveTypes);
@@ -988,15 +979,7 @@ public class SolidityFunctionWrapper extends Generator {
                 new ArrayList<>(inputParameterTypes.size());
 
         for (int i = 0; i < inputParameterTypes.size(); ++i) {
-            final TypeName typeName;
-            if (namedTypes.get(i).getType().equals("tuple")) {
-                typeName = structClassNameMap.get(namedTypes.get(i).structIdentifier());
-            } else if (namedTypes.get(i).getType().startsWith("tuple")
-                    && namedTypes.get(i).getType().contains("[")) {
-                typeName = buildStructArrayTypeName(namedTypes.get(i), true);
-            } else {
-                typeName = getWrapperType(inputParameterTypes.get(i).type);
-            }
+            final TypeName typeName = getTypenameForArray(namedTypes.get(i), useJavaPrimitiveTypes);
             nativeInputParameterTypes.add(
                     ParameterSpec.builder(typeName, inputParameterTypes.get(i).name).build());
         }
@@ -1012,6 +995,20 @@ public class SolidityFunctionWrapper extends Generator {
         } else {
             return Collection.join(inputParameterTypes, ", ", parameterSpec -> parameterSpec.name);
         }
+    }
+
+    private TypeName getTypenameForArray(
+            AbiDefinition.NamedType namedType, boolean useJavaPrimitiveTypes)
+            throws ClassNotFoundException {
+        final TypeName typeName;
+        if (namedType.getType().equals("tuple")) {
+            typeName = structClassNameMap.get(namedType.structIdentifier());
+        } else if (namedType.getType().startsWith("tuple") && namedType.getType().contains("[")) {
+            typeName = buildStructArrayTypeName(namedType, true);
+        } else {
+            typeName = getWrapperType(buildParameterType(namedType, useJavaPrimitiveTypes).type);
+        }
+        return typeName;
     }
 
     private String createMappedParameterTypes(ParameterSpec parameterSpec) {
@@ -1189,6 +1186,18 @@ public class SolidityFunctionWrapper extends Generator {
         } else {
             return getNativeType(typeName);
         }
+    }
+
+    private ParameterSpec buildParameterType(AbiDefinition.NamedType namedType, boolean primitives)
+            throws ClassNotFoundException {
+        List<ParameterSpec> parameterSpecs =
+                buildParameterTypes(Collections.singletonList(namedType), primitives);
+
+        if (parameterSpecs.isEmpty()) {
+            throw new ClassNotFoundException();
+        }
+
+        return parameterSpecs.get(0);
     }
 
     private List<ParameterSpec> buildParameterTypes(
