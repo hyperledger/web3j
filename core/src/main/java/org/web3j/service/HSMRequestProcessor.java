@@ -15,7 +15,19 @@ package org.web3j.service;
 import org.web3j.crypto.HSMPass;
 import org.web3j.crypto.Sign;
 
+/**
+ * Request processor to a HSM (hardware security module).
+ *
+ * @param <T> Object with required parameters to perform request to a HSM.
+ */
 public interface HSMRequestProcessor<T extends HSMPass> {
 
+    /**
+     * Call a HSM (hardware security module)
+     *
+     * @param dataToSign message hash to sign.
+     * @param pass Object with required parameters to perform request to a HSM.
+     * @return SignatureData v | r | s
+     */
     Sign.SignatureData callHSM(byte[] dataToSign, T pass);
 }

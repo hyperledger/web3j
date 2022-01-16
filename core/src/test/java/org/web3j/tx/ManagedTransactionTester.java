@@ -13,10 +13,12 @@
 package org.web3j.tx;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import org.junit.jupiter.api.BeforeEach;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -34,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 public abstract class ManagedTransactionTester {
 
-    static final String ADDRESS = "0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a";
+    public static final String ADDRESS = "0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a";
     static final String TRANSACTION_HASH = "0xHASH";
     protected Web3j web3j;
     protected TxHashVerifier txHashVerifier;
@@ -60,10 +62,22 @@ public abstract class ManagedTransactionTester {
         return transactionManager;
     }
 
-    void prepareTransaction(TransactionReceipt transactionReceipt) throws IOException {
+    public void prepareTransaction(TransactionReceipt transactionReceipt) throws IOException {
         prepareNonceRequest();
         prepareTransactionRequest();
         prepareTransactionReceipt(transactionReceipt);
+    }
+
+    public RawTransaction createRawTx() {
+        BigInteger nonce = BigInteger.ZERO;
+        BigInteger gasPrice = BigInteger.ONE;
+        BigInteger gasLimit = BigInteger.TEN;
+        String to = "0x0add5355";
+        BigInteger value = BigInteger.valueOf(Long.MAX_VALUE);
+        RawTransaction rawTransaction =
+                RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, value);
+
+        return rawTransaction;
     }
 
     @SuppressWarnings("unchecked")

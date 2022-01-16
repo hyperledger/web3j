@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.HSMPass;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.protocol.Web3j;
@@ -27,8 +26,6 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.service.HSMRequestProcessor;
-import org.web3j.service.TxHSMSignService;
 import org.web3j.service.TxSignService;
 import org.web3j.service.TxSignServiceImpl;
 import org.web3j.tx.exceptions.TxHashMismatchException;
@@ -60,12 +57,11 @@ public class RawTransactionManager extends TransactionManager {
         this.txSignService = new TxSignServiceImpl(credentials);
     }
 
-    public RawTransactionManager(
-            Web3j web3j, HSMPass hsmPass, HSMRequestProcessor hsmRequestProcessor, long chainId) {
-        super(web3j, hsmPass.getAddress());
+    public RawTransactionManager(Web3j web3j, TxSignService txSignService, long chainId) {
+        super(web3j, txSignService.getAddress());
         this.web3j = web3j;
         this.chainId = chainId;
-        this.txSignService = new TxHSMSignService(hsmRequestProcessor, hsmPass);
+        this.txSignService = txSignService;
     }
 
     public RawTransactionManager(

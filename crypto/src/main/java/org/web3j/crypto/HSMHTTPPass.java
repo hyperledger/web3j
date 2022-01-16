@@ -14,8 +14,10 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 
+/** Object with required parameters to perform request to a HSM through the HTTP */
 public class HSMHTTPPass extends HSMPass {
 
+    /** HSM URL */
     private String url;
 
     public HSMHTTPPass(String address, BigInteger publicKey, String url) {

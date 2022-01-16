@@ -12,8 +12,11 @@
  */
 package org.web3j.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +37,11 @@ import org.web3j.dto.HSMHTTPRequestDTO;
 import org.web3j.protocol.exceptions.ClientConnectionException;
 import org.web3j.utils.Numeric;
 
+/**
+ * Request processor to a HSM through the HTTP
+ *
+ * @param <T> Object with required parameters to perform request to a HSM
+ */
 public class HSMHTTPRequestProcessor<T extends HSMHTTPPass>
         implements HSMRequestProcessor<HSMHTTPPass> {
 
@@ -55,12 +63,11 @@ public class HSMHTTPRequestProcessor<T extends HSMHTTPPass>
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 if (responseBody != null) {
-                    Scanner s = new Scanner(responseBody.byteStream()).useDelimiter("\\A");
-                    String signHex = s.hasNext() ? s.next() : "";
-                    byte[] messageHash = Numeric.hexStringToByteArray(signHex);
-                    ECDSASignature signature = CryptoUtils.fromDerFormat(messageHash);
+                    String signHex = readResponse(responseBody.byteStream());
+                    byte[] signBytes = Numeric.hexStringToByteArray(signHex);
+                    ECDSASignature signature = CryptoUtils.fromDerFormat(signBytes);
 
-                    return Sign.createSignatureData(signature, pass.getPublicKey(), messageHash);
+                    return Sign.createSignatureData(signature, pass.getPublicKey(), dataToSign);
                 } else {
                     return null;
                 }
@@ -77,8 +84,9 @@ public class HSMHTTPRequestProcessor<T extends HSMHTTPPass>
         return null;
     }
 
-    public Request createRequest(byte[] dataToSign, HSMHTTPPass pass) {
-        HSMHTTPRequestDTO requestDto = new HSMHTTPRequestDTO(Numeric.toHexString(dataToSign));
+    protected Request createRequest(byte[] dataToSign, HSMHTTPPass pass) {
+        HSMHTTPRequestDTO requestDto =
+                new HSMHTTPRequestDTO(Numeric.toHexStringNoPrefix(dataToSign));
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
         String json;
@@ -93,5 +101,11 @@ public class HSMHTTPRequestProcessor<T extends HSMHTTPPass>
                 .url(pass.getUrl())
                 .post(RequestBody.create(json, JSON))
                 .build();
+    }
+
+    protected String readResponse(InputStream responseData) {
+        return new BufferedReader(new InputStreamReader(responseData))
+                .lines()
+                .collect(Collectors.joining("\n"));
     }
 }

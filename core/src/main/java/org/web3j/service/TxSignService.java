@@ -14,9 +14,22 @@ package org.web3j.service;
 
 import org.web3j.crypto.RawTransaction;
 
+/** Service to sign transaction. */
 public interface TxSignService {
 
+    /**
+     * Sign raw transaction.
+     *
+     * @param rawTransaction Raw transaction
+     * @param chainId Ethereum chain id, -1 is NONE
+     * @return Transaction signature
+     */
     byte[] sign(RawTransaction rawTransaction, long chainId);
 
+    /**
+     * Get key address of the current wallet
+     *
+     * @return Wallet address
+     */
     String getAddress();
 }

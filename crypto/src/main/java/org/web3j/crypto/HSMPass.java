@@ -14,6 +14,7 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 
+/** Object with required parameters to perform request to a HSM. */
 public class HSMPass {
 
     /** Key address */

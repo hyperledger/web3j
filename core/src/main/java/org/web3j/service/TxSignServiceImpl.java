@@ -17,6 +17,7 @@ import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.tx.ChainId;
 
+/** Service to base sign transaction. */
 public class TxSignServiceImpl implements TxSignService {
 
     private final Credentials credentials;
