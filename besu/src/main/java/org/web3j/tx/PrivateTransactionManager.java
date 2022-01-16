@@ -24,8 +24,9 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.eea.crypto.PrivateTransactionEncoder;
 import org.web3j.protocol.eea.crypto.RawPrivateTransaction;
+import org.web3j.service.TxSignService;
+import org.web3j.service.TxSignServiceImpl;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Base64String;
 import org.web3j.utils.Numeric;
@@ -36,7 +37,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     private final Besu besu;
 
-    private final Credentials credentials;
+    private final TxSignService txSignService;
     private final long chainId;
 
     private final Base64String privateFrom;
@@ -56,12 +57,12 @@ public class PrivateTransactionManager extends TransactionManager {
             final Restriction restriction) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
-        this.credentials = credentials;
         this.chainId = chainId;
         this.privateFrom = privateFrom;
         this.privateFor = null;
         this.privacyGroupId = privacyGroupId;
         this.restriction = restriction;
+        this.txSignService = new TxSignServiceImpl(credentials);
     }
 
     public PrivateTransactionManager(
@@ -74,12 +75,12 @@ public class PrivateTransactionManager extends TransactionManager {
             final Restriction restriction) {
         super(transactionReceiptProcessor, credentials.getAddress());
         this.besu = besu;
-        this.credentials = credentials;
         this.chainId = chainId;
         this.privateFrom = privateFrom;
         this.privateFor = privateFor;
         this.privacyGroupId = PrivacyGroupUtils.generateLegacyGroup(privateFrom, privateFor);
         this.restriction = restriction;
+        this.txSignService = new TxSignServiceImpl(credentials);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class PrivateTransactionManager extends TransactionManager {
             throws IOException {
 
         final BigInteger nonce =
-                besu.privGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(txSignService.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
@@ -138,7 +139,7 @@ public class PrivateTransactionManager extends TransactionManager {
             boolean constructor)
             throws IOException {
         final BigInteger nonce =
-                besu.privGetTransactionCount(credentials.getAddress(), privacyGroupId)
+                besu.privGetTransactionCount(txSignService.getAddress(), privacyGroupId)
                         .send()
                         .getTransactionCount();
 
@@ -200,14 +201,7 @@ public class PrivateTransactionManager extends TransactionManager {
 
     public String sign(final RawPrivateTransaction rawTransaction) {
 
-        final byte[] signedMessage;
-
-        if (chainId > ChainIdLong.NONE) {
-            signedMessage =
-                    PrivateTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
-        } else {
-            signedMessage = PrivateTransactionEncoder.signMessage(rawTransaction, credentials);
-        }
+        final byte[] signedMessage = txSignService.sign(rawTransaction, chainId);
 
         return Numeric.toHexString(signedMessage);
     }

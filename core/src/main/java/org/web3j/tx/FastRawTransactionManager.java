@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.HSMPass;
 import org.web3j.protocol.Web3j;
+import org.web3j.service.HSMRequestProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 
 /**
@@ -29,6 +31,16 @@ public class FastRawTransactionManager extends RawTransactionManager {
 
     public FastRawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
         super(web3j, credentials, chainId);
+    }
+
+    public FastRawTransactionManager(
+            Web3j web3j,
+            HSMPass hsmPass,
+            HSMRequestProcessor hsmRequestProcessor,
+            long chainId,
+            BigInteger nonce) {
+        super(web3j, hsmPass, hsmRequestProcessor, chainId);
+        this.nonce = nonce;
     }
 
     public FastRawTransactionManager(Web3j web3j, Credentials credentials) {
