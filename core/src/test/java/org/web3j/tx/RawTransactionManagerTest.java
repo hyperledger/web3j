@@ -61,7 +61,7 @@ public class RawTransactionManagerTest extends ManagedTransactionTester {
     }
 
     @Test
-    public void testSignRawTxWithHMS() throws IOException {
+    public void testSignRawTxWithHSM() throws IOException {
         TransactionReceipt transactionReceipt = prepareTransfer();
         prepareTransaction(transactionReceipt);
 
