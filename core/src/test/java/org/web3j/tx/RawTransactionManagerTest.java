@@ -82,7 +82,7 @@ public class RawTransactionManagerTest extends ManagedTransactionTester {
         when(okHttpClient.newCall(any())).thenReturn(call);
 
         HSMHTTPRequestProcessor<HSMHTTPPass> hsmRequestProcessor =
-                new HSMHTTPRequestProcessor<>(okHttpClient);
+                new HSMHTTPRequestProcessorTestImpl<>(okHttpClient);
         HSMHTTPPass hsmhttpPass =
                 new HSMHTTPPass(
                         SampleKeys.CREDENTIALS.getAddress(),

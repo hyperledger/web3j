@@ -12,19 +12,12 @@
  */
 package org.web3j.service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +26,6 @@ import org.web3j.crypto.CryptoUtils;
 import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.HSMHTTPPass;
 import org.web3j.crypto.Sign;
-import org.web3j.dto.HSMHTTPRequestDTO;
 import org.web3j.protocol.exceptions.ClientConnectionException;
 import org.web3j.utils.Numeric;
 
@@ -42,7 +34,7 @@ import org.web3j.utils.Numeric;
  *
  * @param <T> Object with required parameters to perform request to a HSM
  */
-public class HSMHTTPRequestProcessor<T extends HSMHTTPPass>
+public abstract class HSMHTTPRequestProcessor<T extends HSMHTTPPass>
         implements HSMRequestProcessor<HSMHTTPPass> {
 
     private static final Logger log = LoggerFactory.getLogger(HSMHTTPRequestProcessor.class);
@@ -84,28 +76,7 @@ public class HSMHTTPRequestProcessor<T extends HSMHTTPPass>
         return null;
     }
 
-    protected Request createRequest(byte[] dataToSign, HSMHTTPPass pass) {
-        HSMHTTPRequestDTO requestDto =
-                new HSMHTTPRequestDTO(Numeric.toHexStringNoPrefix(dataToSign));
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    protected abstract Request createRequest(byte[] dataToSign, HSMHTTPPass pass);
 
-        String json;
-        try {
-            json = ow.writeValueAsString(requestDto);
-        } catch (JsonProcessingException e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-
-        return new Request.Builder()
-                .url(pass.getUrl())
-                .post(RequestBody.create(json, JSON))
-                .build();
-    }
-
-    protected String readResponse(InputStream responseData) {
-        return new BufferedReader(new InputStreamReader(responseData))
-                .lines()
-                .collect(Collectors.joining("\n"));
-    }
+    protected abstract String readResponse(InputStream responseData);
 }
