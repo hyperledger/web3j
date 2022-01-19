@@ -326,6 +326,10 @@ public class Transaction {
         return TransactionUtils.deriveChainId(v);
     }
 
+    public String getChainIdRaw() {
+        return this.chainId;
+    }
+
     public String getType() {
         return type;
     }
@@ -393,6 +397,13 @@ public class Transaction {
                 : that.getBlockHash() != null) {
             return false;
         }
+
+        if (getChainIdRaw() != null
+                ? !getChainIdRaw().equals(that.getChainIdRaw())
+                : that.getChainIdRaw() != null) {
+            return false;
+        }
+
         if (getBlockNumberRaw() != null
                 ? !getBlockNumberRaw().equals(that.getBlockNumberRaw())
                 : that.getBlockNumberRaw() != null) {
@@ -470,6 +481,7 @@ public class Transaction {
         result = 31 * result + (getNonceRaw() != null ? getNonceRaw().hashCode() : 0);
         result = 31 * result + (getBlockHash() != null ? getBlockHash().hashCode() : 0);
         result = 31 * result + (getBlockNumberRaw() != null ? getBlockNumberRaw().hashCode() : 0);
+        result = 31 * result + (getChainIdRaw() != null ? getChainIdRaw().hashCode() : 0);
         result =
                 31 * result
                         + (getTransactionIndexRaw() != null
