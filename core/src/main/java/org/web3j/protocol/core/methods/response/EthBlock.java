@@ -567,9 +567,7 @@ public class EthBlock extends Response<EthBlock.Block> {
             implements TransactionResult<Transaction> {
         public TransactionObject() {}
 
-        /**
-         * Use constructor with ChainId
-         */
+        /** Use constructor with ChainId */
         @Deprecated
         public TransactionObject(
                 String hash,

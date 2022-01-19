@@ -37,14 +37,13 @@ public class TransactionUtilsTest {
                 ("0x568c7f6920c1cee8332e245c473657b9c53044eb96ed7532f5550f1139861e9e"));
     }
 
-
     @Test
     void deriveChainIdWhenMainNet() {
         long v = 37;
 
         long chainId = TransactionUtils.deriveChainId(v);
 
-        assertEquals(1 , chainId);
+        assertEquals(1, chainId);
     }
 
     @Test
@@ -53,7 +52,7 @@ public class TransactionUtilsTest {
 
         long chainId = TransactionUtils.deriveChainId(v);
 
-        assertEquals(3 , chainId);
+        assertEquals(3, chainId);
     }
 
     @Test
@@ -64,7 +63,7 @@ public class TransactionUtilsTest {
         long chainId_1 = TransactionUtils.deriveChainId(v1);
         long chainId_2 = TransactionUtils.deriveChainId(v2);
 
-        assertEquals(0 , chainId_1);
-        assertEquals(0 , chainId_2);
+        assertEquals(0, chainId_1);
+        assertEquals(0, chainId_2);
     }
 }

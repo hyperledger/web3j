@@ -71,16 +71,16 @@ public class TransactionUtils {
         return Numeric.toHexString(generateTransactionHash(rawTransaction, chainId, credentials));
     }
 
-
     /**
      * Utility method to derive chain id from v parameter
+     *
      * @param v recovery identifier
      * @return Chain id
      */
-    public static long deriveChainId(long v){
+    public static long deriveChainId(long v) {
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return 0L;
         }
-        return  (v - CHAIN_ID_INC) / 2;
+        return (v - CHAIN_ID_INC) / 2;
     }
 }

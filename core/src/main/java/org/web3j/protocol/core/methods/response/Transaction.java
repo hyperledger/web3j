@@ -45,9 +45,7 @@ public class Transaction {
 
     public Transaction() {}
 
-    /**
-     * Use constructor with ChainId
-     */
+    /** Use constructor with ChainId */
     @Deprecated
     public Transaction(
             String hash,
