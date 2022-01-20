@@ -19,7 +19,7 @@ ext {
     okhttpVersion = '4.9.0'
     rxjavaVersion = '2.2.2'
     slf4jVersion = '1.7.30'
-    javaWebSocketVersion = '1.3.8'
+    javaWebSocketVersion = '1.5.2'
     picocliVersion = '3.0.0'
     web3jUnitVersion = version
     // test dependencies
