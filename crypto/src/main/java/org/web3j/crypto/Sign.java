@@ -84,6 +84,12 @@ public class Sign {
         }
 
         ECDSASignature sig = keyPair.sign(messageHash);
+
+        return createSignatureData(sig, publicKey, messageHash);
+    }
+
+    public static Sign.SignatureData createSignatureData(
+            ECDSASignature sig, BigInteger publicKey, byte[] messageHash) {
         // Now we have to work backwards to figure out the recId needed to recover the signature.
         int recId = -1;
         for (int i = 0; i < 4; i++) {
@@ -105,7 +111,7 @@ public class Sign {
         byte[] r = Numeric.toBytesPadded(sig.r, 32);
         byte[] s = Numeric.toBytesPadded(sig.s, 32);
 
-        return new SignatureData(v, r, s);
+        return new Sign.SignatureData(v, r, s);
     }
 
     /**
