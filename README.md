@@ -68,6 +68,7 @@ It has five runtime dependencies:
     crypto
 -   [Jnr-unixsocket](https://github.com/jnr/jnr-unixsocket) for \*nix
     IPC (not available on Android)
+-   [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)
 
 It also uses [JavaPoet](https://github.com/square/javapoet) for
 generating smart contract wrappers.
