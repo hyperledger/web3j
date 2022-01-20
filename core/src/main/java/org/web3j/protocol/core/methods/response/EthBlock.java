@@ -567,6 +567,8 @@ public class EthBlock extends Response<EthBlock.Block> {
             implements TransactionResult<Transaction> {
         public TransactionObject() {}
 
+        /** Use constructor with ChainId */
+        @Deprecated
         public TransactionObject(
                 String hash,
                 String nonce,
@@ -584,7 +586,7 @@ public class EthBlock extends Response<EthBlock.Block> {
                 String raw,
                 String r,
                 String s,
-                int v,
+                long v,
                 String type,
                 String maxFeePerGas,
                 String maxPriorityFeePerGas,
@@ -594,6 +596,54 @@ public class EthBlock extends Response<EthBlock.Block> {
                     nonce,
                     blockHash,
                     blockNumber,
+                    transactionIndex,
+                    from,
+                    to,
+                    value,
+                    gas,
+                    gasPrice,
+                    input,
+                    creates,
+                    publicKey,
+                    raw,
+                    r,
+                    s,
+                    v,
+                    type,
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                    accessList);
+        }
+
+        public TransactionObject(
+                String hash,
+                String nonce,
+                String blockHash,
+                String blockNumber,
+                String chainId,
+                String transactionIndex,
+                String from,
+                String to,
+                String value,
+                String gasPrice,
+                String gas,
+                String input,
+                String creates,
+                String publicKey,
+                String raw,
+                String r,
+                String s,
+                long v,
+                String type,
+                String maxFeePerGas,
+                String maxPriorityFeePerGas,
+                List<AccessListObject> accessList) {
+            super(
+                    hash,
+                    nonce,
+                    blockHash,
+                    blockNumber,
+                    chainId,
                     transactionIndex,
                     from,
                     to,

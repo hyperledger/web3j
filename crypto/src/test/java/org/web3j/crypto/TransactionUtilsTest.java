@@ -36,4 +36,34 @@ public class TransactionUtilsTest {
                         SampleKeys.CREDENTIALS),
                 ("0x568c7f6920c1cee8332e245c473657b9c53044eb96ed7532f5550f1139861e9e"));
     }
+
+    @Test
+    void deriveChainIdWhenMainNet() {
+        long v = 37;
+
+        long chainId = TransactionUtils.deriveChainId(v);
+
+        assertEquals(1, chainId);
+    }
+
+    @Test
+    void deriveChainIdWhenRopstenNet() {
+        long v = 42;
+
+        long chainId = TransactionUtils.deriveChainId(v);
+
+        assertEquals(3, chainId);
+    }
+
+    @Test
+    void deriveChainIdWhenLegacySignature() {
+        long v1 = 27;
+        long v2 = 28;
+
+        long chainId_1 = TransactionUtils.deriveChainId(v1);
+        long chainId_2 = TransactionUtils.deriveChainId(v2);
+
+        assertEquals(0, chainId_1);
+        assertEquals(0, chainId_2);
+    }
 }
