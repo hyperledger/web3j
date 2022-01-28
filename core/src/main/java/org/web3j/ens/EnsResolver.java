@@ -86,8 +86,7 @@ public class EnsResolver {
 
     public String resolve(String ensName) {
 
-        if (Strings.isEmpty(ensName.trim())
-                || (ensName.trim().length() == 1 && ensName.contains("."))) {
+        if (Strings.isBlank(ensName) || (ensName.trim().length() == 1 && ensName.contains("."))) {
             return null;
         }
 
