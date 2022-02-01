@@ -37,6 +37,12 @@ public abstract class ManagedTransaction {
 
     protected EnsResolver ensResolver;
 
+    /**
+     * empty constructor to enable use of web3j without a connection to a network node e.g. no ENS
+     * resolution
+     */
+    protected ManagedTransaction() {}
+
     protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
         this(new EnsResolver(web3j), web3j, transactionManager);
     }

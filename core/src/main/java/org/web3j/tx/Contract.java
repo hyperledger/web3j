@@ -74,6 +74,14 @@ public abstract class Contract extends ManagedTransaction {
     protected Map<String, String> deployedAddresses;
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
 
+    /**
+     * empty constructor to enable use of web3j without a connection to a network node e.g. no ENS
+     * resolution
+     */
+    protected Contract(String contractBinary) {
+        this.contractBinary = contractBinary;
+    }
+
     protected Contract(
             String contractBinary,
             String contractAddress,
