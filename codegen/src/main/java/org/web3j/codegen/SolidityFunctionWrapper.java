@@ -242,6 +242,9 @@ public class SolidityFunctionWrapper extends Generator {
                         .addMember("value", "\"rawtypes\"")
                         .build());
 
+        // add empty constructor for library use without a network
+        classBuilder.addMethod(buildConstructor());
+
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, true));
         classBuilder.addMethod(
@@ -763,6 +766,19 @@ public class SolidityFunctionWrapper extends Generator {
                     .addAnnotation(Deprecated.class);
         }
 
+        return toReturn.build();
+    }
+
+    // empty constructor
+    private static MethodSpec buildConstructor() {
+        MethodSpec.Builder toReturn =
+                MethodSpec.constructorBuilder()
+                        .addModifiers(Modifier.PROTECTED)
+                        .addStatement(
+                                "super($N)",
+                                BINARY
+)
+                ;
         return toReturn.build();
     }
 
@@ -1363,6 +1379,8 @@ public class SolidityFunctionWrapper extends Generator {
                 MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
 
         final String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
+        final String outputParams = addParameters(methodBuilder, functionDefinition.getOutputs());
+
         final List<TypeName> outputParameterTypes =
                 buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
 
@@ -1394,11 +1412,23 @@ public class SolidityFunctionWrapper extends Generator {
 
         // Create function that returns the ABI encoding of the Solidity function call.
         if (abiFuncs) {
-            functionName = "getABI_" + functionName;
-            methodBuilder = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
+            String getFunctionName = "getABI_" + functionName;
+            methodBuilder = MethodSpec.methodBuilder(getFunctionName).addModifiers(Modifier.PUBLIC);
             addParameters(methodBuilder, functionDefinition.getInputs());
             buildAbiFunction(functionDefinition, methodBuilder, inputParams, useUpperCase);
             results.add(methodBuilder.build());
+
+            // add a function to decode response if there are any outputs
+            if (functionDefinition.getOutputs().size() > 0) {
+                String decodeFunctionName = "decodeABI_" + functionName;
+                methodBuilder =
+                        MethodSpec.methodBuilder(decodeFunctionName).addModifiers(Modifier.PUBLIC);
+                // add an input parameter to pass the abi to decode
+                methodBuilder.addParameter(String.class, "abiToDecode");
+                buildDecodeAbiFunction(
+                        functionDefinition, methodBuilder, outputParameterTypes, useUpperCase);
+                results.add(methodBuilder.build());
+            }
         }
 
         return results;
@@ -1611,6 +1641,59 @@ public class SolidityFunctionWrapper extends Generator {
                 Collections.class,
                 TypeReference.class);
         methodBuilder.addStatement("return org.web3j.abi.FunctionEncoder.encode(function)");
+    }
+
+    private void buildDecodeAbiFunction(
+            AbiDefinition functionDefinition,
+            MethodSpec.Builder methodBuilder,
+            List<TypeName> outputParameterTypes,
+            boolean useUpperCase)
+            throws ClassNotFoundException {
+
+        String functionName = functionDefinition.getName();
+
+        ParameterizedTypeName parameterizedTypeName =
+                ParameterizedTypeName.get(
+                        List.class, Type.class);
+
+        methodBuilder.returns(parameterizedTypeName);
+
+        if (outputParameterTypes.isEmpty()) {
+            methodBuilder.addStatement(
+                    "throw new RuntimeException"
+                            + "(\"cannot call constant function with void return type\")");
+        } else if (outputParameterTypes.size() == 1) {
+            TypeName typeName = outputParameterTypes.get(0);
+
+            methodBuilder.addStatement(
+                    "final $T function = "
+                            + "new $T($N, \nArrays.asList(), "
+                            + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
+                    Function.class,
+                    Function.class,
+                    funcNameToConst(functionName, useUpperCase),
+                    Arrays.class,
+                    TypeReference.class,
+                    TypeReference.class,
+                    typeName);
+        } else {
+            //TODO: Likely a better way of doing this ?
+            String asListParams =
+                    Collection.join(outputParameterTypes, ", ", typeName -> "new " + TypeReference.class.getSimpleName() + " <" + typeName + ">() {}");
+
+            methodBuilder.addStatement(
+                    "final $T function = "
+                            + "new $T($N, \nArrays.asList(), "
+                            + "\n$T.<$T<?>>asList(" + asListParams + "))",
+                    Function.class,
+                    Function.class,
+                    funcNameToConst(functionName, useUpperCase),
+                    Arrays.class,
+                    TypeReference.class);
+        }
+
+        methodBuilder.addStatement(
+                "return FunctionReturnDecoder.decode(abiToDecode, function.getOutputParameters())");
     }
 
     TypeSpec buildEventResponseObject(
