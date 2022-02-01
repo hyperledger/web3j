@@ -16,7 +16,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import org.web3j.crypto.transaction.type.TransactionType;
+import org.web3j.crypto.exception.CryptoWeb3jException;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpType;
@@ -31,6 +31,12 @@ public class TransactionEncoder {
     private static final int CHAIN_ID_INC = 35;
     private static final int LOWER_REAL_V = 27;
 
+    /**
+     * Use for new transactions Eip1559 (this txs has a new field chainId) or an old one before
+     * Eip155
+     *
+     * @return signature
+     */
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
         Sign.SignatureData signatureData =
@@ -39,10 +45,16 @@ public class TransactionEncoder {
         return encode(rawTransaction, signatureData);
     }
 
+    /**
+     * Use for legacy txs (after Eip155 before Eip1559)
+     *
+     * @return signature
+     */
     public static byte[] signMessage(
             RawTransaction rawTransaction, long chainId, Credentials credentials) {
 
-        if (!rawTransaction.getType().equals(TransactionType.LEGACY)) {
+        // Eip1559: Tx has ChainId inside
+        if (rawTransaction.getType().isEip1559()) {
             return signMessage(rawTransaction, credentials);
         }
 
@@ -80,7 +92,16 @@ public class TransactionEncoder {
         return encode(rawTransaction, null);
     }
 
+    /**
+     * Encode transaction with chainId together, it make sense only for Legacy transactions
+     *
+     * @return encoded bytes
+     */
     public static byte[] encode(RawTransaction rawTransaction, long chainId) {
+        if (!rawTransaction.getType().isLegacy()) {
+            throw new CryptoWeb3jException("Incorrect transaction type. Tx type should be Legacy.");
+        }
+
         Sign.SignatureData signatureData =
                 new Sign.SignatureData(longToBytes(chainId), new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
@@ -95,7 +116,8 @@ public class TransactionEncoder {
         List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         RlpList rlpList = new RlpList(values);
         byte[] encoded = RlpEncoder.encode(rlpList);
-        if (!rawTransaction.getType().equals(TransactionType.LEGACY)) {
+
+        if (rawTransaction.getType().isEip1559()) {
             return ByteBuffer.allocate(encoded.length + 1)
                     .put(rawTransaction.getType().getRlpType())
                     .put(encoded)

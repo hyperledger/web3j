@@ -25,8 +25,9 @@ import org.web3j.tx.ClientTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
+import org.web3j.utils.Strings;
 
-/** Resolution logic for contract addresses. */
+/** Resolution logic for contract addresses. According to https://eips.ethereum.org/EIPS/eip-2544 */
 public class EnsResolver {
 
     public static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
@@ -83,25 +84,31 @@ public class EnsResolver {
         }
     }
 
-    public String resolve(String contractId) {
-        if (isValidEnsName(contractId, addressLength)) {
-            PublicResolver resolver = obtainPublicResolver(contractId);
+    public String resolve(String ensName) {
 
-            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
-            String contractAddress = null;
+        if (Strings.isBlank(ensName) || (ensName.trim().length() == 1 && ensName.contains("."))) {
+            return null;
+        }
+
+        if (isValidEnsName(ensName, addressLength)) {
+            PublicResolver resolver = obtainPublicResolver(ensName);
+
+            byte[] nameHash = NameHash.nameHashAsBytes(ensName);
+            String contractAddress;
             try {
                 contractAddress = resolver.addr(nameHash).send();
             } catch (Exception e) {
-                throw new RuntimeException("Unable to execute Ethereum request", e);
+                throw new RuntimeException(
+                        "ENS resolver exception, unable to execute request: ", e);
             }
 
             if (!WalletUtils.isValidAddress(contractAddress)) {
-                throw new RuntimeException("Unable to resolve address for name: " + contractId);
+                throw new RuntimeException("Unable to resolve address for name: " + ensName);
             } else {
                 return contractAddress;
             }
         } else {
-            return contractId;
+            return ensName;
         }
     }
 
