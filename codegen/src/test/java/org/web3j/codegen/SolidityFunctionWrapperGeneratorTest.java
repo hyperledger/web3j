@@ -135,7 +135,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         String inputFileName = "OnlyInArrayStruct";
         String contract = inputFileName.toLowerCase();
         String packagePath =
-                generateCode(emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
+                generateCode(
+                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
         File fileActual = new File(tempDirPath, packagePath + "/OnlyInArrayStruct.java");
         File fileExpected =
                 new File(
@@ -157,7 +158,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         String inputFileName = "ArraysInStruct";
         String contract = inputFileName.toLowerCase();
         String packagePath =
-                generateCode(emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
+                generateCode(
+                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
         File fileActual = new File(tempDirPath, packagePath + "/ArraysInStruct.java");
         File fileExpected =
                 new File(
@@ -211,14 +213,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testABIFlag() throws Exception {
-        testCodeGeneration(emptyList(),
-                "primitive",
-                "Primitive",
-                JAVA_TYPES_ARG,
-                true,
-                true,
-                true
-        );
+        testCodeGeneration(emptyList(), "primitive", "Primitive", JAVA_TYPES_ARG, true, true, true);
     }
 
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)
@@ -264,7 +259,8 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             throws Exception {
 
         String packagePath =
-                generateCode(prefixes, contractName, inputFileName, types, useBin, primitives, abiFuncs);
+                generateCode(
+                        prefixes, contractName, inputFileName, types, useBin, primitives, abiFuncs);
         verifyGeneratedCode(
                 tempDirPath
                         + File.separator
@@ -281,8 +277,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
             String types,
             boolean useBin,
             boolean primitives,
-            boolean abiFuncs
-    ) {
+            boolean abiFuncs) {
         String packageName = null;
         if (types.equals(JAVA_TYPES_ARG)) {
             packageName = "org.web3j.unittests.java";
@@ -336,7 +331,7 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         try (StandardJavaFileManager fileManager =
-                     compiler.getStandardFileManager(diagnostics, null, null)) {
+                compiler.getStandardFileManager(diagnostics, null, null)) {
             Iterable<? extends JavaFileObject> compilationUnits =
                     fileManager.getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
             JavaCompiler.CompilationTask task =
