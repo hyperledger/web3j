@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
@@ -430,6 +431,7 @@ public class SolidityFunctionWrapper extends Generator {
                 String functionName = funcNameToConst(functionDefinition.getName(), true);
                 boolean useUpperCase = !duplicateFunctionNames.contains(functionName);
                 methodSpecs.addAll(buildFunctions(functionDefinition, useUpperCase));
+                buildFunctionReturnClass(functionDefinition, classBuilder);
             } else if (functionDefinition.getType().equals(TYPE_EVENT)) {
                 methodSpecs.addAll(buildEventFunctions(functionDefinition, classBuilder));
             }
@@ -1651,10 +1653,10 @@ public class SolidityFunctionWrapper extends Generator {
             throws ClassNotFoundException {
 
         String functionName = functionDefinition.getName();
+        List<AbiDefinition.NamedType> outputs = functionDefinition.getOutputs();
 
-        ParameterizedTypeName parameterizedTypeName =
-                ParameterizedTypeName.get(
-                        List.class, Type.class);
+        String responseClassName = Strings.capitaliseFirstLetter(functionName) + "FunctionResponse";
+        ClassName parameterizedTypeName = ClassName.get("", responseClassName);
 
         methodBuilder.returns(parameterizedTypeName);
 
@@ -1693,8 +1695,66 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         methodBuilder.addStatement(
-                "return FunctionReturnDecoder.decode(abiToDecode, function.getOutputParameters())");
+                "List<Type> response = $T.decode(abiToDecode, function.getOutputParameters())",
+                FunctionReturnDecoder.class);
+        methodBuilder.addStatement(
+                "$N $N = new $N()",
+                responseClassName,
+                Strings.lowercaseFirstLetter(responseClassName),
+                responseClassName
+        );
+
+        int parameterIndex = 0;
+        for (AbiDefinition.NamedType namedType : outputs) {
+            parameterIndex += 1;
+            String parameterName = namedType.getName();
+            if ("".equals(parameterName)) {
+                parameterName = "return".concat(String.valueOf(parameterIndex));
+            }
+            methodBuilder.addStatement("$N.$N = ($T) response.get($L)",
+                    Strings.lowercaseFirstLetter(responseClassName),
+                    parameterName,
+                    outputParameterTypes.get(parameterIndex-1),
+                    parameterIndex-1
+            );
+        }
+
+        methodBuilder.addStatement(
+                "return $N",
+                Strings.lowercaseFirstLetter(responseClassName)
+        );
     }
+
+    TypeSpec buildFunctionResponseObject(
+            String className,
+            List<org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName> outputParameters) {
+
+        TypeSpec.Builder builder =
+                TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+
+        int fieldIndex = 0;
+        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType :
+                outputParameters) {
+            final TypeName typeName;
+            fieldIndex += 1;
+            if (namedType.getType().equals("tuple")) {
+                typeName = structClassNameMap.get(namedType.structIdentifier());
+            } else if (namedType.getType().startsWith("tuple")
+                    && namedType.getType().contains("[")) {
+                typeName = buildStructArrayTypeName(namedType.namedType, true);
+            } else {
+                typeName = getIndexedEventWrapperType(namedType.typeName);
+            }
+            if ("".equals(namedType.getName())) {
+                builder.addField(typeName, "return".concat(String.valueOf(fieldIndex)), Modifier.PUBLIC);
+            } else {
+                builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
+            }
+        }
+
+        return builder.build();
+    }
+
 
     TypeSpec buildEventResponseObject(
             String className,
@@ -1862,6 +1922,39 @@ public class SolidityFunctionWrapper extends Generator {
 
         transactionMethodBuilder.addStatement("return responses");
         return transactionMethodBuilder.build();
+    }
+
+    void buildFunctionReturnClass(
+            AbiDefinition functionDefinition, TypeSpec.Builder classBuilder)
+            throws ClassNotFoundException {
+        String functionName = functionDefinition.getName();
+        List<AbiDefinition.NamedType> outputs = functionDefinition.getOutputs();
+        String responseClassName = Strings.capitaliseFirstLetter(functionName) + "FunctionResponse";
+
+        if (outputs.size() == 0) {
+            return;
+        }
+
+        List<NamedTypeName> parameters = new ArrayList<>();
+
+        for (AbiDefinition.NamedType namedType : outputs) {
+            final TypeName typeName;
+            if (namedType.getType().equals("tuple")) {
+                typeName = structClassNameMap.get(namedType.structIdentifier());
+            } else if (namedType.getType().startsWith("tuple")
+                    && namedType.getType().contains("[")) {
+                typeName = buildStructArrayTypeName(namedType, true);
+            } else {
+                typeName = buildTypeName(namedType.getType(), useJavaPrimitiveTypes);
+            }
+            NamedTypeName parameter = new NamedTypeName(namedType, typeName);
+            parameters.add(parameter);
+        }
+
+
+        classBuilder.addType(
+                buildFunctionResponseObject(
+                        responseClassName, parameters));
     }
 
     List<MethodSpec> buildEventFunctions(
