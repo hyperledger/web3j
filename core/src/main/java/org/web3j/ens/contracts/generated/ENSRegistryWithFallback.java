@@ -37,10 +37,12 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Generated with web3j version 1.4.1.
  */
 @SuppressWarnings("rawtypes")
-public class ENS extends Contract {
+public class ENSRegistryWithFallback extends Contract {
     public static final String BINARY = "Bin file was not provided";
 
     public static final String FUNC_ISAPPROVEDFORALL = "isApprovedForAll";
+
+    public static final String FUNC_OLD = "old";
 
     public static final String FUNC_OWNER = "owner";
 
@@ -85,20 +87,20 @@ public class ENS extends Contract {
     ;
 
     @Deprecated
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    protected ENSRegistryWithFallback(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected ENSRegistryWithFallback(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     @Deprecated
-    protected ENS(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    protected ENSRegistryWithFallback(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    protected ENS(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected ENSRegistryWithFallback(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
@@ -279,6 +281,13 @@ public class ENS extends Contract {
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
+    public RemoteFunctionCall<String> old() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OLD, 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+        return executeRemoteCallSingleValueReturn(function, String.class);
+    }
+
     public RemoteFunctionCall<String> owner(byte[] node) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OWNER, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(node)), 
@@ -377,21 +386,21 @@ public class ENS extends Contract {
     }
 
     @Deprecated
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return new ENS(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    public static ENSRegistryWithFallback load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return new ENSRegistryWithFallback(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
-    public static ENS load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        return new ENS(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    public static ENSRegistryWithFallback load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+        return new ENSRegistryWithFallback(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, credentials, contractGasProvider);
+    public static ENSRegistryWithFallback load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        return new ENSRegistryWithFallback(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static ENS load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, transactionManager, contractGasProvider);
+    public static ENSRegistryWithFallback load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        return new ENSRegistryWithFallback(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public static class ApprovalForAllEventResponse extends BaseEventResponse {
