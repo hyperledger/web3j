@@ -36,6 +36,10 @@ public class OnlyInArrayStruct extends Contract {
 
     public static final String FUNC_SETFOO = "setFoo";
 
+    protected OnlyInArrayStruct() {
+        super(BINARY);
+    }
+
     @Deprecated
     protected OnlyInArrayStruct(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
@@ -112,5 +116,9 @@ public class OnlyInArrayStruct extends Contract {
             this.id = id.getValue();
             this.name = name.getValue();
         }
+    }
+
+    public static class GetFooFunctionResponse {
+        public List<Foo> return1;
     }
 }
