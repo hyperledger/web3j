@@ -155,8 +155,7 @@ public class EnsResolver {
             try {
                 contractAddress = resolver.addr(nameHash).send();
             } catch (Exception e) {
-                throw new RuntimeException(
-                        "ENS resolver exception, unable to execute request: ", e);
+                throw new RuntimeException("Unable to execute Ethereum request: ", e);
             }
 
             if (!WalletUtils.isValidAddress(contractAddress)) {
