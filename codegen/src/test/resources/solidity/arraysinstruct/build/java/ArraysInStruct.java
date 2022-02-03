@@ -41,6 +41,10 @@ public class ArraysInStruct extends Contract {
 
     public static final String FUNC_CALLFUNCTION = "callFunction";
 
+    protected ArraysInStruct() {
+        super(BINARY);
+    }
+
     @Deprecated
     protected ArraysInStruct(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
