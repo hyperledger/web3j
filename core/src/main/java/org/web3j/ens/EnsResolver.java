@@ -126,8 +126,7 @@ public class EnsResolver {
             try {
                 response = resolver.resolve(nameHash, callData).send();
             } catch (Exception e) {
-                throw new RuntimeException(
-                        "ENS resolver exception, unable to execute request: ", e);
+                throw new RuntimeException("Unable to execute Ethereum request: ", e);
             }
 
             return response;
