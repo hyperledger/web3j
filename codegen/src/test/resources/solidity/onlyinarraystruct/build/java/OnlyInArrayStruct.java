@@ -117,8 +117,4 @@ public class OnlyInArrayStruct extends Contract {
             this.name = name.getValue();
         }
     }
-
-    public static class GetFooFunctionResponse {
-        public List<Foo> return1;
-    }
 }
