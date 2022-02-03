@@ -15,6 +15,7 @@ package org.web3j.ens;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.contracts.generated.ENS;
+import org.web3j.ens.contracts.generated.OffchainResolver;
 import org.web3j.ens.contracts.generated.PublicResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -78,14 +79,70 @@ public class EnsResolver {
             } catch (Exception e) {
                 throw new EnsResolutionException("Unable to determine sync status of node", e);
             }
-
         } else {
             throw new EnsResolutionException("EnsName is invalid: " + ensName);
         }
     }
 
-    public String resolve(String ensName) {
+    /**
+     * Provides an access to a valid offchain resolver in order to access other API methods.
+     *
+     * @param ensName our user input ENS name
+     * @return OffchainResolver
+     */
+    protected OffchainResolver obtainOffchainResolver(String ensName) {
+        if (isValidEnsName(ensName, addressLength)) {
+            try {
+                if (!isSynced()) {
+                    throw new EnsResolutionException("Node is not currently synced");
+                } else {
+                    return lookupOffchainResolver(ensName);
+                }
+            } catch (Exception e) {
+                throw new EnsResolutionException("Unable to determine sync status of node", e);
+            }
+        } else {
+            throw new EnsResolutionException("EnsName is invalid: " + ensName);
+        }
+    }
 
+    /**
+     * Resolves a name, as specified by ENSIP 10.
+     *
+     * @param ensName The DNS-encoded name to resolve.
+     * @param callData The ABI encoded data for the underlying resolution function.
+     * @return The return data, ABI encoded identically to the underlying function.
+     */
+    public byte[] resolve(String ensName, byte[] callData) {
+        if (Strings.isBlank(ensName) || (ensName.trim().length() == 1 && ensName.contains("."))) {
+            return null;
+        }
+
+        if (isValidEnsName(ensName, addressLength)) {
+            OffchainResolver resolver = obtainOffchainResolver(ensName);
+
+            byte[] nameHash = NameHash.nameHashAsBytes(ensName);
+            byte[] response;
+            try {
+                response = resolver.resolve(nameHash, callData).send();
+            } catch (Exception e) {
+                throw new RuntimeException(
+                        "ENS resolver exception, unable to execute request: ", e);
+            }
+
+            return response;
+        } else {
+            throw new EnsException("ENS name is not valid");
+        }
+    }
+
+    /**
+     * Returns the address of the resolver for the specified node.
+     *
+     * @param ensName The specified node.
+     * @return address of the resolver.
+     */
+    public String resolve(String ensName) {
         if (Strings.isBlank(ensName) || (ensName.trim().length() == 1 && ensName.contains("."))) {
             return null;
         }
@@ -143,6 +200,16 @@ public class EnsResolver {
     }
 
     private PublicResolver lookupResolver(String ensName) throws Exception {
+        return PublicResolver.load(
+                getResolverAddress(ensName), web3j, transactionManager, new DefaultGasProvider());
+    }
+
+    private OffchainResolver lookupOffchainResolver(String ensName) throws Exception {
+        return OffchainResolver.load(
+                getResolverAddress(ensName), web3j, transactionManager, new DefaultGasProvider());
+    }
+
+    private String getResolverAddress(String ensName) throws Exception {
         NetVersion netVersion = web3j.netVersion().send();
         String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
@@ -150,10 +217,7 @@ public class EnsResolver {
                 ENS.load(registryContract, web3j, transactionManager, new DefaultGasProvider());
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
-        String resolverAddress = ensRegistry.resolver(nameHash).send();
-
-        return PublicResolver.load(
-                resolverAddress, web3j, transactionManager, new DefaultGasProvider());
+        return ensRegistry.resolver(nameHash).send();
     }
 
     boolean isSynced() throws Exception {
