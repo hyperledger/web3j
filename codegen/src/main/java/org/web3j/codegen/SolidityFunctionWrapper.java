@@ -1687,7 +1687,7 @@ public class SolidityFunctionWrapper extends Generator {
         String functionName = functionDefinition.getName();
         List<AbiDefinition.NamedType> outputs = functionDefinition.getOutputs();
 
-        String responseClassName = Strings.capitaliseFirstLetter(functionName) + "FunctionResponse";
+        String responseClassName = "FunctionResponse_".concat(functionName);
         ClassName parameterizedTypeName = ClassName.get("", responseClassName);
 
         methodBuilder.returns(parameterizedTypeName);
@@ -1974,8 +1974,7 @@ public class SolidityFunctionWrapper extends Generator {
             throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
         List<AbiDefinition.NamedType> outputs = functionDefinition.getOutputs();
-        String responseClassName = Strings.capitaliseFirstLetter(functionName) + "FunctionResponse";
-
+        String responseClassName = "FunctionResponse_".concat(functionName);
         if (outputs.size() == 0) {
             return;
         }
