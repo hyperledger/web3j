@@ -1413,7 +1413,7 @@ public class SolidityFunctionWrapper extends Generator {
                 MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
 
         final String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
-        final String outputParams = addParameters(methodBuilder, functionDefinition.getOutputs());
+//        final String outputParams = addParameters(methodBuilder, functionDefinition.getOutputs());
 
         final List<TypeName> outputParameterTypes =
                 buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
