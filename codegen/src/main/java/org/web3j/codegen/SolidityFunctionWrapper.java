@@ -1701,7 +1701,7 @@ public class SolidityFunctionWrapper extends Generator {
 
             methodBuilder.addStatement(
                     "final $T function = "
-                            + "new $T($N, \nArrays.asList(), "
+                            + "new $T($N, \nCollections.<Type>emptyList(), "
                             + "\n$T.<$T<?>>asList(new $T<$T>() {}))",
                     Function.class,
                     Function.class,
@@ -1727,7 +1727,8 @@ public class SolidityFunctionWrapper extends Generator {
         }
 
         methodBuilder.addStatement(
-                "List<Type> response = $T.decode(abiToDecode, function.getOutputParameters())",
+                "$T<Type> response = $T.decode(abiToDecode, function.getOutputParameters())",
+                List.class,
                 FunctionReturnDecoder.class);
         methodBuilder.addStatement(
                 "$N $N = new $N()",
