@@ -383,6 +383,10 @@ public class SolidityFunctionWrapper extends Generator {
     }
 
     private FieldSpec createBinaryDefinition(String binary) {
+        // remove any cr or lf
+        binary = binary.replaceAll("(\\r|\\n)", "");
+
+
         if (binary.length() < 65534) {
             return FieldSpec.builder(String.class, BINARY)
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
