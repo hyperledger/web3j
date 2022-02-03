@@ -1994,10 +1994,11 @@ public class SolidityFunctionWrapper extends Generator {
             NamedTypeName parameter = new NamedTypeName(namedType, typeName);
             parameters.add(parameter);
         }
-
-        classBuilder.addType(
-                buildFunctionResponseObject(
-                        responseClassName, parameters));
+        if (abiFuncs) {
+            classBuilder.addType(
+                    buildFunctionResponseObject(
+                            responseClassName, parameters));
+        }
     }
 
     List<MethodSpec> buildEventFunctions(
