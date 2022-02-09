@@ -15,6 +15,7 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,10 @@ public class TypeEncoder {
                 || (parameter instanceof StaticArray
                         && DynamicStruct.class.isAssignableFrom(
                                 ((StaticArray) parameter).getComponentType()));
+    }
+
+    public static String encode(Type... parameters){
+        return Arrays.stream(parameters).map(p -> encode(p)).peek(p-> System.out.println(p)).collect(Collectors.joining());
     }
 
     @SuppressWarnings("unchecked")

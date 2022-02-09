@@ -95,6 +95,7 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.abi.datatypes.generated.Uint80;
 import org.web3j.abi.datatypes.generated.Uint88;
 import org.web3j.abi.datatypes.generated.Uint96;
+import org.web3j.abi.datatypes.generated.*;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Long;
@@ -106,6 +107,71 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.web3j.abi.TypeEncoder.encode;
 
 public class TypeEncoderTest {
+
+    @Test
+    public void testArrayOfTypesEncodePacked(){
+    Address address = new Address("0x9A734f85fE7676096979503f8CEd26EA387138b4");
+    assertEquals(
+            TypeEncoder.encode(address),
+            "0000000000000000000000009a734f85fe7676096979503f8ced26ea387138b4");
+    }
+
+    @Test
+    public void testArrayOfTypesEncode(){
+        Utf8String string8one = new Utf8String("first");
+        Utf8String string8two = new Utf8String("second");
+        assertEquals(
+                TypeEncoder.encode(string8one, string8two),
+                "0000000000000000000000000000000000000000000000000000000000000005"//length
+                        + "6669727374000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000000000000000000000000000000000000000000006"//length
+                        + "7365636f6e640000000000000000000000000000000000000000000000000000");
+
+        Address address = new Address("0x9A734f85fE7676096979503f8CEd26EA387138b4");
+        assertEquals(
+                TypeEncoder.encode(address, string8one),
+                "0000000000000000000000009a734f85fe7676096979503f8ced26ea387138b4"
+                        + "0000000000000000000000000000000000000000000000000000000000000005"
+                        + "6669727374000000000000000000000000000000000000000000000000000000");
+        assertEquals(
+                TypeEncoder.encode(string8one, address),
+                "0000000000000000000000000000000000000000000000000000000000000005"
+                        + "6669727374000000000000000000000000000000000000000000000000000000"
+                        + "0000000000000000000000009a734f85fe7676096979503f8ced26ea387138b4");
+
+        Uint256 int256 = new Uint256(BigInteger.valueOf(22222L));
+        assertEquals(
+                TypeEncoder.encode(string8one, int256),
+                "0000000000000000000000000000000000000000000000000000000000000005"
+                        + "6669727374000000000000000000000000000000000000000000000000000000"
+                        + "00000000000000000000000000000000000000000000000000000000000056ce");
+        assertEquals(
+                TypeEncoder.encode(string8one, int256, address),
+                "0000000000000000000000000000000000000000000000000000000000000005"
+                        + "6669727374000000000000000000000000000000000000000000000000000000"
+                        + "00000000000000000000000000000000000000000000000000000000000056ce"
+                        + "0000000000000000000000009a734f85fe7676096979503f8ced26ea387138b4"
+        );
+
+        DynamicArray<Uint> array =
+                new DynamicArray<>(
+                        Uint.class,
+                        new Uint(BigInteger.ONE),
+                        new Uint(BigInteger.valueOf(2)),
+                        new Uint(BigInteger.valueOf(3)));
+
+        assertEquals(
+                TypeEncoder.encode(string8one, int256, address, array),
+                "0000000000000000000000000000000000000000000000000000000000000005"
+                        + "6669727374000000000000000000000000000000000000000000000000000000"
+                        + "00000000000000000000000000000000000000000000000000000000000056ce"
+                        + "0000000000000000000000009a734f85fe7676096979503f8ced26ea387138b4"
+                        + "0000000000000000000000000000000000000000000000000000000000000003"
+                        + "0000000000000000000000000000000000000000000000000000000000000001"
+                        + "0000000000000000000000000000000000000000000000000000000000000002"
+                        + "0000000000000000000000000000000000000000000000000000000000000003"
+        );
+    }
 
     @Test
     public void testBoolEncode() {
