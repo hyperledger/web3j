@@ -243,9 +243,6 @@ public class SolidityFunctionWrapper extends Generator {
                         .addMember("value", "\"rawtypes\"")
                         .build());
 
-        // add empty constructor for library use without a network
-        classBuilder.addMethod(buildConstructor());
-
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, false));
         classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, true));
         classBuilder.addMethod(
