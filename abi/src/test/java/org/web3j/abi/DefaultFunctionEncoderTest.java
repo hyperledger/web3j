@@ -81,6 +81,15 @@ public class DefaultFunctionEncoderTest {
     }
 
     @Test
+    public void testEncodeConstructorPacked_multipleParameters() {
+        assertEquals("0000004501",
+                FunctionEncoder.encodeConstructorPacked(
+                        Arrays.asList(
+                                new Uint32(BigInteger.valueOf(69)),
+                                new Bool(true))));
+    }
+
+    @Test
     public void testFunctionSimpleEncode() {
         Function function =
                 new Function(

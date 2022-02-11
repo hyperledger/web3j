@@ -15,24 +15,10 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.Bytes;
-import org.web3j.abi.datatypes.BytesType;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.DynamicStruct;
-import org.web3j.abi.datatypes.NumericType;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.primitive.PrimitiveType;
 import org.web3j.utils.Numeric;
 
@@ -56,8 +42,33 @@ public class TypeEncoder {
                                 ((StaticArray) parameter).getComponentType()));
     }
 
-    public static String encode(Type... parameters){
-        return Arrays.stream(parameters).map(p -> encode(p)).peek(p-> System.out.println(p)).collect(Collectors.joining());
+    public static String encodePacked(Type parameter) {
+        return removePadding(encode(parameter), parameter);
+    }
+
+    private static String removePadding(String wordHexStrig, Type parameter) {
+        if (parameter instanceof NumericType) {
+            return removeNumericPadding(wordHexStrig, parameter);
+        } else if (parameter instanceof Address) {
+            return wordHexStrig.substring(64 - Address.DEFAULT_LENGTH / 4, 64);
+        } else if (parameter instanceof Bool) {
+            return wordHexStrig.substring(62, 64);
+        }
+        if (parameter instanceof Bytes) {
+            return wordHexStrig.substring(0, ((BytesType) parameter).getValue().length * 2);
+        }
+        if (parameter instanceof Utf8String) {
+            int length = ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
+            return wordHexStrig.substring(64, 64 + length * 2);
+        }
+        return wordHexStrig;
+    }
+
+    private static String removeNumericPadding(String wordHexStrig, Type parameter) {
+        if (parameter instanceof Ufixed || parameter instanceof Fixed) {
+            return wordHexStrig;
+        }
+        return wordHexStrig.substring(64 - ((IntType) parameter).getBitSize() / 4, 64);
     }
 
     @SuppressWarnings("unchecked")
