@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.primitive.PrimitiveType;
@@ -42,8 +43,36 @@ public class TypeEncoder {
                                 ((StaticArray) parameter).getComponentType()));
     }
 
+    @SuppressWarnings("unchecked")
     public static String encodePacked(Type parameter) {
-        return removePadding(encode(parameter), parameter);
+        if (parameter instanceof Utf8String) {
+            return removePadding(encode(parameter), parameter);
+        } else if (parameter instanceof DynamicBytes) {
+            return encode(parameter).substring(64);
+        } else if (parameter instanceof DynamicArray) {
+            if (canBeEncodedPacked((DynamicArray) parameter)) {
+                return encode(parameter).substring(64);
+            }
+        } else if (parameter instanceof StaticArray) {
+            if (canBeEncodedPacked((StaticArray) parameter)) {
+                return encode(parameter);
+            }
+        } else {
+            return removePadding(encode(parameter), parameter);
+        }
+        throw new UnsupportedOperationException("abi.encodePacked not supported for this type of data by the Solidity compiler");
+    }
+
+
+    private static <T extends Type> boolean canBeEncodedPacked(Array<T> value) {
+        if (!value.getValue().isEmpty() &&
+                (value.getValue().get(0) instanceof Utf8String ||
+                        value.getValue().get(0) instanceof DynamicStruct ||
+                        value.getValue().get(0) instanceof StaticStruct ||
+                        value.getValue().get(0) instanceof DynamicBytes)) {
+            return false;
+        }
+        return true;
     }
 
     private static String removePadding(String wordHexStrig, Type parameter) {
@@ -60,8 +89,10 @@ public class TypeEncoder {
         if (parameter instanceof Utf8String) {
             int length = ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
             return wordHexStrig.substring(64, 64 + length * 2);
+        } else {
+            throw new UnsupportedOperationException(
+                    "Type cannot be encoded: " + parameter.getClass());
         }
-        return wordHexStrig;
     }
 
     private static String removeNumericPadding(String wordHexStrig, Type parameter) {

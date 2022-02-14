@@ -82,11 +82,12 @@ public class DefaultFunctionEncoderTest {
 
     @Test
     public void testEncodeConstructorPacked_multipleParameters() {
-        assertEquals("0000004501",
+        assertEquals("00000045014772656574696e677321",
                 FunctionEncoder.encodeConstructorPacked(
                         Arrays.asList(
                                 new Uint32(BigInteger.valueOf(69)),
-                                new Bool(true))));
+                                new Bool(true),
+                                new Utf8String("Greetings!"))));
     }
 
     @Test
