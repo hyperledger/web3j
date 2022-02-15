@@ -17,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.primitive.PrimitiveType;
@@ -41,67 +40,6 @@ public class TypeEncoder {
                 || (parameter instanceof StaticArray
                         && DynamicStruct.class.isAssignableFrom(
                                 ((StaticArray) parameter).getComponentType()));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static String encodePacked(Type parameter) {
-        if (parameter instanceof Utf8String) {
-            return removePadding(encode(parameter), parameter);
-        } else if (parameter instanceof DynamicBytes) {
-            return encode(parameter).substring(64);
-        } else if (parameter instanceof DynamicArray) {
-            if (canBeEncodedPacked((DynamicArray) parameter)) {
-                return encode(parameter).substring(64);
-            }
-        } else if (parameter instanceof StaticArray) {
-            if (canBeEncodedPacked((StaticArray) parameter)) {
-                return encode(parameter);
-            }
-        } else if (parameter instanceof PrimitiveType) {
-            return encodePacked(((PrimitiveType) parameter).toSolidityType());
-        } else {
-            return removePadding(encode(parameter), parameter);
-        }
-        throw new UnsupportedOperationException("abi.encodePacked not supported for this type of data by the Solidity compiler");
-    }
-
-
-    private static <T extends Type> boolean canBeEncodedPacked(Array<T> value) {
-        if (!value.getValue().isEmpty() &&
-                (value.getValue().get(0) instanceof Utf8String ||
-                        value.getValue().get(0) instanceof DynamicStruct ||
-                        value.getValue().get(0) instanceof StaticStruct ||
-                        value.getValue().get(0) instanceof DynamicBytes)) {
-            return false;
-        }
-        return true;
-    }
-
-    private static String removePadding(String wordHexStrig, Type parameter) {
-        if (parameter instanceof NumericType) {
-            return removeNumericPadding(wordHexStrig, parameter);
-        } else if (parameter instanceof Address) {
-            return wordHexStrig.substring(64 - Address.DEFAULT_LENGTH / 4, 64);
-        } else if (parameter instanceof Bool) {
-            return wordHexStrig.substring(62, 64);
-        }
-        if (parameter instanceof Bytes) {
-            return wordHexStrig.substring(0, ((BytesType) parameter).getValue().length * 2);
-        }
-        if (parameter instanceof Utf8String) {
-            int length = ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
-            return wordHexStrig.substring(64, 64 + length * 2);
-        } else {
-            throw new UnsupportedOperationException(
-                    "Type cannot be encoded: " + parameter.getClass());
-        }
-    }
-
-    private static String removeNumericPadding(String wordHexStrig, Type parameter) {
-        if (parameter instanceof Ufixed || parameter instanceof Fixed) {
-            return wordHexStrig;
-        }
-        return wordHexStrig.substring(64 - ((IntType) parameter).getBitSize() / 4, 64);
     }
 
     @SuppressWarnings("unchecked")
@@ -135,6 +73,29 @@ public class TypeEncoder {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static String encodePacked(Type parameter) {
+        if (parameter instanceof Utf8String) {
+            return removePadding(encode(parameter), parameter);
+        } else if (parameter instanceof DynamicBytes) {
+            return encode(parameter).substring(64);
+        } else if (parameter instanceof DynamicArray) {
+            if (isSupportingEncodedPacked((DynamicArray) parameter)) {
+                return encode(parameter).substring(64);
+            }
+        } else if (parameter instanceof StaticArray) {
+            if (isSupportingEncodedPacked((StaticArray) parameter)) {
+                return encode(parameter);
+            }
+        } else if (parameter instanceof PrimitiveType) {
+            return encodePacked(((PrimitiveType) parameter).toSolidityType());
+        } else {
+            return removePadding(encode(parameter), parameter);
+        }
+        throw new UnsupportedOperationException(
+                "Type cannot be packed encoded: " + parameter.getClass());
     }
 
     /**
@@ -374,5 +335,40 @@ public class TypeEncoder {
                                     new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
         }
         return result.toString();
+    }
+
+    private static <T extends Type> boolean isSupportingEncodedPacked(Array<T> value) {
+        if (!value.getValue().isEmpty() &&
+                (value.getValue().get(0) instanceof Utf8String ||
+                        value.getValue().get(0) instanceof DynamicStruct ||
+                        value.getValue().get(0) instanceof DynamicArray ||
+                        value.getValue().get(0) instanceof StaticStruct ||
+                        value.getValue().get(0) instanceof DynamicBytes)) {
+            return false;
+        }
+        return true;
+    }
+
+    private static String removePadding(String wordHexStrig, Type parameter) {
+        if (parameter instanceof NumericType) {
+            if (parameter instanceof Ufixed || parameter instanceof Fixed) {
+                return wordHexStrig;
+            }
+            return wordHexStrig.substring(64 - ((NumericType) parameter).getBitSize() / 4, 64);
+        } else if (parameter instanceof Address) {
+            return wordHexStrig.substring(64 - ((Address) parameter).toUint().getBitSize() / 4, 64);
+        } else if (parameter instanceof Bool) {
+            return wordHexStrig.substring(62, 64);
+        }
+        if (parameter instanceof Bytes) {
+            return wordHexStrig.substring(0, ((BytesType) parameter).getValue().length * 2);
+        }
+        if (parameter instanceof Utf8String) {
+            int length = ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
+            return wordHexStrig.substring(64, 64 + length * 2);
+        } else {
+            throw new UnsupportedOperationException(
+                    "Type cannot be encoded: " + parameter.getClass());
+        }
     }
 }

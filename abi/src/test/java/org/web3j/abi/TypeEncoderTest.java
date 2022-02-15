@@ -13,13 +13,21 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import org.web3j.abi.AbiV2TestFixture.Bar;
 import org.web3j.abi.AbiV2TestFixture.Foo;
-import org.web3j.abi.datatypes.*;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.Bytes;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.Int;
+import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.Ufixed;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes1;
 import org.web3j.abi.datatypes.generated.Bytes4;
 import org.web3j.abi.datatypes.generated.Bytes6;
@@ -87,12 +95,10 @@ import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.abi.datatypes.generated.Uint80;
 import org.web3j.abi.datatypes.generated.Uint88;
 import org.web3j.abi.datatypes.generated.Uint96;
-import org.web3j.abi.datatypes.generated.*;
 import org.web3j.abi.datatypes.primitive.Byte;
 import org.web3j.abi.datatypes.primitive.Char;
 import org.web3j.abi.datatypes.primitive.Long;
 import org.web3j.abi.datatypes.primitive.Short;
-import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -100,51 +106,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.web3j.abi.TypeEncoder.encode;
 
 public class TypeEncoderTest {
-
-    @Test
-    public void testArrayOfTypesEncodePacked(){
-
-    Address address = new Address("0x9A734f85fE7676096979503f8CEd26EA387138b4");
-    assertEquals(
-            TypeEncoder.encode(address),
-            "0000000000000000000000009a734f85fe7676096979503f8ced26ea387138b4");
-    }
-
-    @Test
-    public void testAbiSpec() {
-        Uint256 uint256 = new Uint256(0x123);
-
-        System.out.println("Test Fixed");
-        DefaultFunctionEncoder encoder = new DefaultFunctionEncoder();
-        assertEquals(
-                TypeEncoder.encode(uint256),
-                "0000000000000000000000000000000000000000000000000000000000000123");
-
-
-        System.out.println("Test sha3 on fixed");
-        assertEquals(Hash.sha3(TypeEncoder.encode(uint256)), "0xee3b935d7f03553d4093862eaede5628b5e9d11f7b1b2b8b8122026394b17812");
-
-
-        Utf8String string = new Utf8String("first");
-        //assert without offset
-        assertEquals(
-                encoder.encodeParameters(Arrays.asList(string, new Utf8String("second"))),
-                "0000000000000000000000000000000000000000000000000000000000000040"//offset
-                        + "0000000000000000000000000000000000000000000000000000000000000080"//offset
-                        + "0000000000000000000000000000000000000000000000000000000000000005"//length
-                        + "6669727374000000000000000000000000000000000000000000000000000000"
-                        + "0000000000000000000000000000000000000000000000000000000000000006"//length
-                        + "7365636f6e640000000000000000000000000000000000000000000000000000");
-
-        System.out.println("Test sha3 on dynamic with offset");
-        assertEquals(Hash.sha3(
-                "0000000000000000000000000000000000000000000000000000000000000020"//offset
-                        + TypeEncoder.encode(string)),
-                "0x27d1f32464ad94d5c119ee2fdda274040b38caa84b7ffcfca2d0681034133454");
-
-        System.out.println("Test sha3 on dynamic default");
-        assertEquals(Hash.sha3(encoder.encodeParameters(Arrays.asList(string))), "0x27d1f32464ad94d5c119ee2fdda274040b38caa84b7ffcfca2d0681034133454");
-    }
 
     @Test
     public void testBoolEncode() {
