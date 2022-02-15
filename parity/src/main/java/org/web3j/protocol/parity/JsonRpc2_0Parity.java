@@ -15,6 +15,7 @@ package org.web3j.protocol.parity;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -322,6 +323,21 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
                 Arrays.asList(transaction, traces, blockParameter),
                 web3jService,
                 ParityFullTraceResponse.class);
+    }
+
+    public Request<?, ParityFullTraceResponse> traceCallMany(
+        Collection<Transaction> transactions, List<String> traces, DefaultBlockParameter blockParameter) {
+        List<Object> transactionPayload =
+            transactions
+                .stream()
+                .map(transaction -> Arrays.asList(transaction, traces))
+                .collect(Collectors.toList());
+
+        return new Request<>(
+            "trace_callMany",
+            Arrays.asList(transactionPayload, blockParameter),
+            web3jService,
+            ParityFullTraceResponse.class);
     }
 
     @Override
