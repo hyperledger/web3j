@@ -57,6 +57,8 @@ public class TypeEncoder {
             if (canBeEncodedPacked((StaticArray) parameter)) {
                 return encode(parameter);
             }
+        } else if (parameter instanceof PrimitiveType) {
+            return encodePacked(((PrimitiveType) parameter).toSolidityType());
         } else {
             return removePadding(encode(parameter), parameter);
         }

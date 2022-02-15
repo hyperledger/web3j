@@ -4,10 +4,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.*;
+import org.web3j.abi.datatypes.primitive.Byte;
+import org.web3j.abi.datatypes.primitive.Char;
+import org.web3j.abi.datatypes.primitive.Long;
+import org.web3j.abi.datatypes.primitive.Short;
 
 import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.web3j.abi.TypeEncoder.encode;
 
 class TypeEncoderPackedTest {
 
@@ -1046,5 +1051,84 @@ class TypeEncoderPackedTest {
 
         Assertions.assertThrows(UnsupportedOperationException.class,
                 () -> TypeEncoder.encodePacked(strings));
+    }
+
+    @Test
+    public void testPrimitiveByteEncodePacked() {
+        assertEquals(
+                "00",
+                TypeEncoder.encodePacked(new Byte((byte) 0)));
+        assertEquals(
+                ("7f"),
+                TypeEncoder.encodePacked(new Byte((byte) 127)));
+    }
+
+    @Test
+    public void testPrimitiveCharEncodePacked() {
+        assertEquals(
+                "61",
+                TypeEncoder.encodePacked(new Char('a')));
+        assertEquals(
+                "20",
+                TypeEncoder.encodePacked(new Char(' ')));
+    }
+
+    @Test
+    public void testPrimitiveIntEncodePacked() {
+        assertEquals(
+                "00000000",
+                TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Int(0)));
+
+        assertEquals(
+                "80000000",
+                TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Int(Integer.MIN_VALUE)));
+
+        assertEquals(
+                "7fffffff",
+                TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Int(Integer.MAX_VALUE)));
+    }
+
+    @Test
+    public void testPrimitiveShortEncodePacked() {
+        assertEquals(
+                "0000",
+                TypeEncoder.encodePacked(new Short((short) 0)));
+
+        assertEquals(
+                "8000",
+                TypeEncoder.encodePacked(new Short(java.lang.Short.MIN_VALUE)));
+
+        assertEquals(
+                "7fff",
+                TypeEncoder.encodePacked(new Short(java.lang.Short.MAX_VALUE)));
+    }
+
+    @Test
+    public void testPrimitiveLongEncodePacked() {
+        assertEquals(
+                "0000000000000000",
+                TypeEncoder.encodePacked(new Long(0)));
+
+        assertEquals(
+                "8000000000000000",
+                TypeEncoder.encodePacked(new Long(java.lang.Long.MIN_VALUE)));
+
+        assertEquals(
+                "7fffffffffffffff",
+                TypeEncoder.encodePacked(new Long(java.lang.Long.MAX_VALUE)));
+    }
+
+    @Test
+    public void testPrimitiveFloatEncodePacked() {
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Float(0)));
+    }
+
+    @Test
+    public void testPrimitiveDouble() {
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Double(0)));
     }
 }
