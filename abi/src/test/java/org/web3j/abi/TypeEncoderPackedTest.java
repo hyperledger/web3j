@@ -376,349 +376,223 @@ class TypeEncoderPackedTest {
     @Test
     public void testIntEncodePacked() {
         Int zero8 = new Int8(BigInteger.ZERO);
-        assertEquals(
-                "00",
-                TypeEncoder.encodePacked(zero8));
+        assertEquals("00", TypeEncoder.encodePacked(zero8));
 
         Int max8 = new Int8(BigInteger.valueOf(127));
-        assertEquals(
-                "7f",
-                TypeEncoder.encodePacked(max8));
+        assertEquals("7f", TypeEncoder.encodePacked(max8));
 
         Int min8 = new Int8(BigInteger.valueOf(-128));
-        assertEquals(
-                "80",
-                TypeEncoder.encodePacked(min8));
+        assertEquals("80", TypeEncoder.encodePacked(min8));
 
         Int zero16 = new Int16(BigInteger.ZERO);
-        assertEquals(
-                "0000",
-                TypeEncoder.encodePacked(zero16));
+        assertEquals("0000", TypeEncoder.encodePacked(zero16));
 
         Int max16 = new Int16(BigInteger.valueOf(32767));
-        assertEquals(
-                "7fff",
-                TypeEncoder.encodePacked(max16));
+        assertEquals("7fff", TypeEncoder.encodePacked(max16));
 
         Int min16 = new Int16(BigInteger.valueOf(-32768));
-        assertEquals(
-                "8000",
-                TypeEncoder.encodePacked(min16));
+        assertEquals("8000", TypeEncoder.encodePacked(min16));
 
         Int zero24 = new Int24(BigInteger.ZERO);
-        assertEquals(
-                "000000",
-                TypeEncoder.encodePacked(zero24));
+        assertEquals("000000", TypeEncoder.encodePacked(zero24));
 
         Int max24 = new Int24(BigInteger.valueOf(8388607));
-        assertEquals(
-                "7fffff",
-                TypeEncoder.encodePacked(max24));
+        assertEquals("7fffff", TypeEncoder.encodePacked(max24));
 
         Int min24 = new Int24(BigInteger.valueOf(-8388608));
-        assertEquals(
-                "800000",
-                TypeEncoder.encodePacked(min24));
+        assertEquals("800000", TypeEncoder.encodePacked(min24));
 
         Int zero32 = new Int32(BigInteger.ZERO);
-        assertEquals(
-                "00000000",
-                TypeEncoder.encodePacked(zero32));
+        assertEquals("00000000", TypeEncoder.encodePacked(zero32));
 
         Int max32 = new Int32(BigInteger.valueOf(2147483647));
-        assertEquals(
-                "7fffffff",
-                TypeEncoder.encodePacked(max32));
+        assertEquals("7fffffff", TypeEncoder.encodePacked(max32));
 
         Int min32 = new Int32(BigInteger.valueOf(-2147483648));
-        assertEquals(
-                "80000000",
-                TypeEncoder.encodePacked(min32));
+        assertEquals("80000000", TypeEncoder.encodePacked(min32));
 
         Int zero40 = new Int40(BigInteger.ZERO);
-        assertEquals(
-                "0000000000",
-                TypeEncoder.encodePacked(zero40));
+        assertEquals("0000000000", TypeEncoder.encodePacked(zero40));
 
         Int max40 = new Int40(BigInteger.valueOf(549755813887L));
-        assertEquals(
-                "7fffffffff",
-                TypeEncoder.encodePacked(max40));
+        assertEquals("7fffffffff", TypeEncoder.encodePacked(max40));
 
         Int min40 = new Int40(BigInteger.valueOf(-549755813888L));
-        assertEquals(
-                "8000000000",
-                TypeEncoder.encodePacked(min40));
+        assertEquals("8000000000", TypeEncoder.encodePacked(min40));
 
         Int zero48 = new Int48(BigInteger.ZERO);
-        assertEquals(
-                "000000000000",
-                TypeEncoder.encodePacked(zero48));
+        assertEquals("000000000000", TypeEncoder.encodePacked(zero48));
 
         Int max48 = new Int48(BigInteger.valueOf(140737488355327L));
-        assertEquals(
-                "7fffffffffff",
-                TypeEncoder.encodePacked(max48));
+        assertEquals("7fffffffffff", TypeEncoder.encodePacked(max48));
 
         Int min48 = new Int48(BigInteger.valueOf(-140737488355328L));
-        assertEquals(
-                "800000000000",
-                TypeEncoder.encodePacked(min48));
+        assertEquals("800000000000", TypeEncoder.encodePacked(min48));
 
         Int zero56 = new Int56(BigInteger.ZERO);
-        assertEquals(
-                "00000000000000",
-                TypeEncoder.encodePacked(zero56));
+        assertEquals("00000000000000", TypeEncoder.encodePacked(zero56));
 
         Int max56 = new Int56(BigInteger.valueOf(36028797018963967L));
-        assertEquals(
-                "7fffffffffffff",
-                TypeEncoder.encodePacked(max56));
+        assertEquals("7fffffffffffff", TypeEncoder.encodePacked(max56));
 
         Int min56 = new Int56(BigInteger.valueOf(-36028797018963968L));
-        assertEquals(
-                "80000000000000",
-                TypeEncoder.encodePacked(min56));
+        assertEquals("80000000000000", TypeEncoder.encodePacked(min56));
 
         Int zero64 = new Int64(BigInteger.ZERO);
-        assertEquals(
-                "0000000000000000",
-                TypeEncoder.encodePacked(zero64));
+        assertEquals("0000000000000000", TypeEncoder.encodePacked(zero64));
 
         Int max64 = new Int64(BigInteger.valueOf(java.lang.Long.MAX_VALUE));
-        assertEquals(
-                "7fffffffffffffff",
-                TypeEncoder.encodePacked(max64));
+        assertEquals("7fffffffffffffff", TypeEncoder.encodePacked(max64));
 
         Int min64 = new Int64(BigInteger.valueOf(java.lang.Long.MIN_VALUE));
-        assertEquals(
-                "8000000000000000",
-                TypeEncoder.encodePacked(min64));
+        assertEquals("8000000000000000", TypeEncoder.encodePacked(min64));
 
         Int zero72 = new Int72(BigInteger.ZERO);
-        assertEquals(
-                "000000000000000000",
-                TypeEncoder.encodePacked(zero72));
+        assertEquals("000000000000000000", TypeEncoder.encodePacked(zero72));
 
         Int max72 = new Int72(new BigInteger("2361183241434822606847"));
-        assertEquals(
-                "7fffffffffffffffff",
-                TypeEncoder.encodePacked(max72));
+        assertEquals("7fffffffffffffffff", TypeEncoder.encodePacked(max72));
 
         Int min72 = new Int72(new BigInteger("-2361183241434822606848"));
-        assertEquals(
-                "800000000000000000",
-                TypeEncoder.encodePacked(min72));
+        assertEquals("800000000000000000", TypeEncoder.encodePacked(min72));
 
         Int zero80 = new Int80(BigInteger.ZERO);
-        assertEquals(
-                "00000000000000000000",
-                TypeEncoder.encodePacked(zero80));
+        assertEquals("00000000000000000000", TypeEncoder.encodePacked(zero80));
 
         Int max80 = new Int80(new BigInteger("604462909807314587353087"));
-        assertEquals(
-                "7fffffffffffffffffff",
-                TypeEncoder.encodePacked(max80));
+        assertEquals("7fffffffffffffffffff", TypeEncoder.encodePacked(max80));
 
         Int min80 = new Int80(new BigInteger("-604462909807314587353088"));
-        assertEquals(
-                "80000000000000000000",
-                TypeEncoder.encodePacked(min80));
+        assertEquals("80000000000000000000", TypeEncoder.encodePacked(min80));
 
         Int zero88 = new Int88(BigInteger.ZERO);
-        assertEquals(
-                "0000000000000000000000",
-                TypeEncoder.encodePacked(zero88));
+        assertEquals("0000000000000000000000", TypeEncoder.encodePacked(zero88));
 
         Int max88 = new Int88(new BigInteger("154742504910672534362390527"));
-        assertEquals(
-                "7fffffffffffffffffffff",
-                TypeEncoder.encodePacked(max88));
+        assertEquals("7fffffffffffffffffffff", TypeEncoder.encodePacked(max88));
 
         Int min88 = new Int88(new BigInteger("-154742504910672534362390528"));
-        assertEquals(
-                "8000000000000000000000",
-                TypeEncoder.encodePacked(min88));
+        assertEquals("8000000000000000000000", TypeEncoder.encodePacked(min88));
 
         Int zero96 = new Int96(BigInteger.ZERO);
-        assertEquals(
-                "000000000000000000000000",
-                TypeEncoder.encodePacked(zero96));
+        assertEquals("000000000000000000000000", TypeEncoder.encodePacked(zero96));
 
         Int max96 = new Int96(new BigInteger("39614081257132168796771975167"));
-        assertEquals(
-                "7fffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max96));
+        assertEquals("7fffffffffffffffffffffff", TypeEncoder.encodePacked(max96));
 
         Int min96 = new Int96(new BigInteger("-39614081257132168796771975168"));
-        assertEquals(
-                "800000000000000000000000",
-                TypeEncoder.encodePacked(min96));
+        assertEquals("800000000000000000000000", TypeEncoder.encodePacked(min96));
 
         Int zero104 = new Int104(BigInteger.ZERO);
-        assertEquals(
-                "00000000000000000000000000",
-                TypeEncoder.encodePacked(zero104));
+        assertEquals("00000000000000000000000000", TypeEncoder.encodePacked(zero104));
 
         Int max104 = new Int104(new BigInteger("10141204801825835211973625643007"));
-        assertEquals(
-                "7fffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max104));
+        assertEquals("7fffffffffffffffffffffffff", TypeEncoder.encodePacked(max104));
 
         Int min104 = new Int104(new BigInteger("-10141204801825835211973625643008"));
-        assertEquals(
-                "80000000000000000000000000",
-                TypeEncoder.encodePacked(min104));
+        assertEquals("80000000000000000000000000", TypeEncoder.encodePacked(min104));
 
         Int zero112 = new Int112(BigInteger.ZERO);
 
-        assertEquals(
-                "0000000000000000000000000000",
-                TypeEncoder.encodePacked(zero112));
+        assertEquals("0000000000000000000000000000", TypeEncoder.encodePacked(zero112));
 
         Int max112 = new Int112(new BigInteger("2596148429267413814265248164610047"));
-        assertEquals(
-                "7fffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max112));
+        assertEquals("7fffffffffffffffffffffffffff", TypeEncoder.encodePacked(max112));
 
         Int min112 = new Int112(new BigInteger("-2596148429267413814265248164610048"));
-        assertEquals(
-                "8000000000000000000000000000",
-                TypeEncoder.encodePacked(min112));
+        assertEquals("8000000000000000000000000000", TypeEncoder.encodePacked(min112));
 
         Int zero120 = new Int120(BigInteger.ZERO);
 
-        assertEquals(
-                "000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero120));
+        assertEquals("000000000000000000000000000000", TypeEncoder.encodePacked(zero120));
 
         Int max120 = new Int120(new BigInteger("664613997892457936451903530140172287"));
-        assertEquals(
-                "7fffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max120));
+        assertEquals("7fffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max120));
 
         Int min120 = new Int120(new BigInteger("-664613997892457936451903530140172288"));
-        assertEquals(
-                "800000000000000000000000000000",
-                TypeEncoder.encodePacked(min120));
+        assertEquals("800000000000000000000000000000", TypeEncoder.encodePacked(min120));
 
         Int zero128 = new Int128(BigInteger.ZERO);
 
-        assertEquals(
-                "00000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero128));
+        assertEquals("00000000000000000000000000000000", TypeEncoder.encodePacked(zero128));
 
         Int max128 = new Int128(new BigInteger("170141183460469231731687303715884105727"));
-        assertEquals(
-                "7fffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max128));
+        assertEquals("7fffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max128));
 
         Int min128 = new Int128(new BigInteger("-170141183460469231731687303715884105728"));
-        assertEquals(
-                "80000000000000000000000000000000",
-                TypeEncoder.encodePacked(min128));
+        assertEquals("80000000000000000000000000000000", TypeEncoder.encodePacked(min128));
 
         Int zero136 = new Int136(BigInteger.ZERO);
 
-        assertEquals(
-                "0000000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero136));
+        assertEquals("0000000000000000000000000000000000", TypeEncoder.encodePacked(zero136));
 
         Int max136 = new Int136(new BigInteger("43556142965880123323311949751266331066367"));
-        assertEquals(
-                "7fffffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max136));
+        assertEquals("7fffffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max136));
 
         Int min136 = new Int136(new BigInteger("-43556142965880123323311949751266331066368"));
-        assertEquals(
-                "8000000000000000000000000000000000",
-                TypeEncoder.encodePacked(min136));
+        assertEquals("8000000000000000000000000000000000", TypeEncoder.encodePacked(min136));
 
         Int zero144 = new Int144(BigInteger.ZERO);
 
-        assertEquals(
-                "000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero144));
+        assertEquals("000000000000000000000000000000000000", TypeEncoder.encodePacked(zero144));
 
         Int max144 = new Int144(new BigInteger("11150372599265311570767859136324180752990207"));
-        assertEquals(
-                "7fffffffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max144));
+        assertEquals("7fffffffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max144));
 
         Int min144 = new Int144(new BigInteger("-11150372599265311570767859136324180752990208"));
-        assertEquals(
-                "800000000000000000000000000000000000",
-                TypeEncoder.encodePacked(min144));
+        assertEquals("800000000000000000000000000000000000", TypeEncoder.encodePacked(min144));
 
         Int zero152 = new Int152(BigInteger.ZERO);
 
-        assertEquals(
-                "00000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero152));
+        assertEquals("00000000000000000000000000000000000000", TypeEncoder.encodePacked(zero152));
 
         Int max152 = new Int152(new BigInteger("2854495385411919762116571938898990272765493247"));
-        assertEquals(
-                "7fffffffffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max152));
+        assertEquals("7fffffffffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max152));
 
         Int min152 = new Int152(new BigInteger("-2854495385411919762116571938898990272765493248"));
-        assertEquals(
-                "80000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(min152));
+        assertEquals("80000000000000000000000000000000000000", TypeEncoder.encodePacked(min152));
 
         Int zero160 = new Int160(BigInteger.ZERO);
 
-        assertEquals(
-                "0000000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero160));
+        assertEquals("0000000000000000000000000000000000000000", TypeEncoder.encodePacked(zero160));
 
         Int max160 = new Int160(new BigInteger("730750818665451459101842416358141509827966271487"));
-        assertEquals(
-                "7fffffffffffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max160));
+        assertEquals("7fffffffffffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max160));
 
         Int min160 =
                 new Int160(new BigInteger("-730750818665451459101842416358141509827966271488"));
-        assertEquals(
-                "8000000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(min160));
+        assertEquals("8000000000000000000000000000000000000000", TypeEncoder.encodePacked(min160));
 
         Int zero168 = new Int168(BigInteger.ZERO);
 
         assertEquals(
-                "000000000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero168));
+                "000000000000000000000000000000000000000000", TypeEncoder.encodePacked(zero168));
 
         Int max168 =
                 new Int168(new BigInteger("187072209578355573530071658587684226515959365500927"));
         assertEquals(
-                "7fffffffffffffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max168));
+                "7fffffffffffffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max168));
 
         Int min168 =
                 new Int168(new BigInteger("-187072209578355573530071658587684226515959365500928"));
         assertEquals(
-                "800000000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(min168));
+                "800000000000000000000000000000000000000000", TypeEncoder.encodePacked(min168));
 
         Int zero176 = new Int176(BigInteger.ZERO);
 
         assertEquals(
-                "00000000000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(zero176));
+                "00000000000000000000000000000000000000000000", TypeEncoder.encodePacked(zero176));
 
         Int max176 =
                 new Int176(new BigInteger("47890485652059026823698344598447161988085597568237567"));
         assertEquals(
-                "7fffffffffffffffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max176));
+                "7fffffffffffffffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max176));
 
         Int min176 =
                 new Int176(
                         new BigInteger("-47890485652059026823698344598447161988085597568237568"));
         assertEquals(
-                "80000000000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(min176));
+                "80000000000000000000000000000000000000000000", TypeEncoder.encodePacked(min176));
 
         Int zero184 = new Int184(BigInteger.ZERO);
 
@@ -730,16 +604,14 @@ class TypeEncoderPackedTest {
                 new Int184(
                         new BigInteger("12259964326927110866866776217202473468949912977468817407"));
         assertEquals(
-                "7fffffffffffffffffffffffffffffffffffffffffffff",
-                TypeEncoder.encodePacked(max184));
+                "7fffffffffffffffffffffffffffffffffffffffffffff", TypeEncoder.encodePacked(max184));
 
         Int min184 =
                 new Int184(
                         new BigInteger(
                                 "-12259964326927110866866776217202473468949912977468817408"));
         assertEquals(
-                "8000000000000000000000000000000000000000000000",
-                TypeEncoder.encodePacked(min184));
+                "8000000000000000000000000000000000000000000000", TypeEncoder.encodePacked(min184));
 
         Int zero192 = new Int192(BigInteger.ZERO);
 
@@ -924,40 +796,31 @@ class TypeEncoderPackedTest {
 
     @Test
     public void testStaticBytesEncodePacked() {
-        Bytes staticBytes = new Bytes6(new byte[]{0, 1, 2, 3, 4, 5});
-        assertEquals(
-                TypeEncoder.encodePacked(staticBytes),
-                ("000102030405"));
+        Bytes staticBytes = new Bytes6(new byte[] {0, 1, 2, 3, 4, 5});
+        assertEquals(TypeEncoder.encodePacked(staticBytes), ("000102030405"));
 
-        Bytes empty = new Bytes1(new byte[]{0});
-        assertEquals(
-                TypeEncoder.encodePacked(empty),
-                ("00"));
+        Bytes empty = new Bytes1(new byte[] {0});
+        assertEquals(TypeEncoder.encodePacked(empty), ("00"));
 
-        Bytes ones = new Bytes1(new byte[]{127});
-        assertEquals(
-                TypeEncoder.encodePacked(ones),
-                ("7f"));
+        Bytes ones = new Bytes1(new byte[] {127});
+        assertEquals(TypeEncoder.encodePacked(ones), ("7f"));
 
         Bytes dave = new Bytes4("dave".getBytes());
-        assertEquals(
-                TypeEncoder.encodePacked(dave),
-                ("64617665"));
+        assertEquals(TypeEncoder.encodePacked(dave), ("64617665"));
     }
 
     @Test
     public void testUtf8StringEncodePacked() {
         Utf8String string = new Utf8String("Hello, world!");
-        assertEquals(
-                "48656c6c6f2c20776f726c6421",
-                TypeEncoder.encodePacked(string));
+        assertEquals("48656c6c6f2c20776f726c6421", TypeEncoder.encodePacked(string));
 
         Utf8String largeString = new Utf8String("Very long string value for test!");
         assertEquals(
                 "56657279206c6f6e6720737472696e672076616c756520666f72207465737421",
                 TypeEncoder.encodePacked(largeString));
 
-        Utf8String veryLargeString = new Utf8String("Very long string value for test!Very long string value for test!");
+        Utf8String veryLargeString =
+                new Utf8String("Very long string value for test!Very long string value for test!");
         assertEquals(
                 "56657279206c6f6e6720737472696e672076616c756520666f722074657374"
                         + "2156657279206c6f6e6720737472696e672076616c756520666f72207465737421",
@@ -966,27 +829,19 @@ class TypeEncoderPackedTest {
 
     @Test
     public void testStaticArrayEncodePacked() {
-        StaticArray0<Uint16> empty =
-                new StaticArray0<>(Uint16.class);
+        StaticArray0<Uint16> empty = new StaticArray0<>(Uint16.class);
 
-        assertEquals(
-                "",
-                TypeEncoder.encodePacked(empty)
-        );
+        assertEquals("", TypeEncoder.encodePacked(empty));
 
         StaticArray3<Uint16> array =
                 new StaticArray3<>(
-                        Uint16.class,
-                        new Uint16(0x45),
-                        new Uint16(0x7),
-                        new Uint16(65535));
+                        Uint16.class, new Uint16(0x45), new Uint16(0x7), new Uint16(65535));
 
         assertEquals(
                 "0000000000000000000000000000000000000000000000000000000000000045"
                         + "0000000000000000000000000000000000000000000000000000000000000007"
                         + "000000000000000000000000000000000000000000000000000000000000ffff",
-                TypeEncoder.encodePacked(array)
-        );
+                TypeEncoder.encodePacked(array));
 
         StaticArray3<Utf8String> strings =
                 new StaticArray3<>(
@@ -995,8 +850,8 @@ class TypeEncoderPackedTest {
                         new Utf8String("test"),
                         new Utf8String("test"));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(strings));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(strings));
 
         StaticArray3<AbiV2TestFixture.Foo> dynamicStuct =
                 new StaticArray3<>(
@@ -1004,8 +859,8 @@ class TypeEncoderPackedTest {
                         new AbiV2TestFixture.Foo("", ""),
                         new AbiV2TestFixture.Foo("id", "name"),
                         new AbiV2TestFixture.Foo("", ""));
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(dynamicStuct));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(dynamicStuct));
 
         StaticArray3<AbiV2TestFixture.Bar> staticStruct =
                 new StaticArray3<>(
@@ -1014,8 +869,8 @@ class TypeEncoderPackedTest {
                         new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO),
                         new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(staticStruct));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(staticStruct));
 
         StaticArray<Ufixed> ufixed =
                 new StaticArray2<>(
@@ -1023,8 +878,8 @@ class TypeEncoderPackedTest {
                         new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
                         new Ufixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(ufixed));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(ufixed));
 
         StaticArray<Fixed> fixed =
                 new StaticArray2<>(
@@ -1032,8 +887,8 @@ class TypeEncoderPackedTest {
                         new Fixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
                         new Fixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(fixed));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(fixed));
 
         StaticArray<DynamicBytes> arrayOfEmptyBytes =
                 new StaticArray2<>(
@@ -1041,18 +896,19 @@ class TypeEncoderPackedTest {
                         new DynamicBytes(new byte[0]),
                         new DynamicBytes(new byte[0]));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
+        Assertions.assertThrows(
+                UnsupportedOperationException.class,
                 () -> TypeEncoder.encodePacked(arrayOfEmptyBytes));
     }
 
     @Test
     public void testDynamicBytesEncodePacked() {
-        DynamicBytes dynamicBytes = new DynamicBytes(new byte[]{0, 1, 2, 3, 4, 5});
+        DynamicBytes dynamicBytes = new DynamicBytes(new byte[] {0, 1, 2, 3, 4, 5});
         assertEquals(
                 "0001020304050000000000000000000000000000000000000000000000000000",
                 TypeEncoder.encodePacked(dynamicBytes));
 
-        DynamicBytes empty = new DynamicBytes(new byte[]{0});
+        DynamicBytes empty = new DynamicBytes(new byte[] {0});
         assertEquals(
                 "0000000000000000000000000000000000000000000000000000000000000000",
                 TypeEncoder.encodePacked(empty));
@@ -1065,12 +921,12 @@ class TypeEncoderPackedTest {
         DynamicBytes loremIpsum =
                 new DynamicBytes(
                         ("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod "
-                                + "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
-                                + "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
-                                + "ea commodo consequat. Duis aute irure dolor in reprehenderit in "
-                                + "voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
-                                + "sint occaecat cupidatat non proident, sunt in culpa qui officia "
-                                + "deserunt mollit anim id est laborum.")
+                                        + "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+                                        + "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+                                        + "ea commodo consequat. Duis aute irure dolor in reprehenderit in "
+                                        + "voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
+                                        + "sint occaecat cupidatat non proident, sunt in culpa qui officia "
+                                        + "deserunt mollit anim id est laborum.")
                                 .getBytes());
         assertEquals(
                 ("4c6f72656d20697073756d20646f6c6f722073697420616d65742c20636f6e73"
@@ -1092,12 +948,9 @@ class TypeEncoderPackedTest {
 
     @Test
     public void testDynamicArrayEncodePacked() {
-        DynamicArray<Uint> empty =
-                new DynamicArray<>(Uint.class);
+        DynamicArray<Uint> empty = new DynamicArray<>(Uint.class);
 
-        assertEquals(
-                "",
-                TypeEncoder.encodePacked(empty));
+        assertEquals("", TypeEncoder.encodePacked(empty));
 
         DynamicArray<Uint> array =
                 new DynamicArray<>(
@@ -1130,8 +983,8 @@ class TypeEncoderPackedTest {
                         new Utf8String("two"),
                         new Utf8String("three"));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(strings));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(strings));
 
         DynamicArray<AbiV2TestFixture.Foo> dynamicStuct =
                 new DynamicArray<>(
@@ -1139,8 +992,8 @@ class TypeEncoderPackedTest {
                         new AbiV2TestFixture.Foo("", ""),
                         new AbiV2TestFixture.Foo("id", "name"),
                         new AbiV2TestFixture.Foo("", ""));
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(dynamicStuct));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(dynamicStuct));
 
         DynamicArray<AbiV2TestFixture.Bar> staticStruct =
                 new DynamicArray<>(
@@ -1149,8 +1002,8 @@ class TypeEncoderPackedTest {
                         new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO),
                         new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(staticStruct));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(staticStruct));
 
         DynamicArray<Ufixed> ufixed =
                 new DynamicArray<>(
@@ -1158,8 +1011,8 @@ class TypeEncoderPackedTest {
                         new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
                         new Ufixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(ufixed));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(ufixed));
 
         DynamicArray<Fixed> fixed =
                 new DynamicArray<>(
@@ -1167,8 +1020,8 @@ class TypeEncoderPackedTest {
                         new Fixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
                         new Fixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> TypeEncoder.encodePacked(fixed));
+        Assertions.assertThrows(
+                UnsupportedOperationException.class, () -> TypeEncoder.encodePacked(fixed));
 
         DynamicArray<DynamicBytes> arrayOfEmptyBytes =
                 new DynamicArray<>(
@@ -1176,73 +1029,57 @@ class TypeEncoderPackedTest {
                         new DynamicBytes(new byte[0]),
                         new DynamicBytes(new byte[0]));
 
-        Assertions.assertThrows(UnsupportedOperationException.class,
+        Assertions.assertThrows(
+                UnsupportedOperationException.class,
                 () -> TypeEncoder.encodePacked(arrayOfEmptyBytes));
     }
 
     @Test
     public void testPrimitiveByteEncodePacked() {
-        assertEquals(
-                "00",
-                TypeEncoder.encodePacked(new Byte((byte) 0)));
-        assertEquals(
-                ("7f"),
-                TypeEncoder.encodePacked(new Byte((byte) 127)));
+        assertEquals("00", TypeEncoder.encodePacked(new Byte((byte) 0)));
+        assertEquals("7f", TypeEncoder.encodePacked(new Byte((byte) 127)));
     }
 
     @Test
     public void testPrimitiveCharEncodePacked() {
-        assertEquals(
-                "61",
-                TypeEncoder.encodePacked(new Char('a')));
-        assertEquals(
-                "20",
-                TypeEncoder.encodePacked(new Char(' ')));
+        assertEquals("61", TypeEncoder.encodePacked(new Char('a')));
+        assertEquals("20", TypeEncoder.encodePacked(new Char(' ')));
     }
 
     @Test
     public void testPrimitiveIntEncodePacked() {
         assertEquals(
-                "00000000",
-                TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Int(0)));
+                "00000000", TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Int(0)));
 
         assertEquals(
                 "80000000",
-                TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Int(Integer.MIN_VALUE)));
+                TypeEncoder.encodePacked(
+                        new org.web3j.abi.datatypes.primitive.Int(Integer.MIN_VALUE)));
 
         assertEquals(
                 "7fffffff",
-                TypeEncoder.encodePacked(new org.web3j.abi.datatypes.primitive.Int(Integer.MAX_VALUE)));
+                TypeEncoder.encodePacked(
+                        new org.web3j.abi.datatypes.primitive.Int(Integer.MAX_VALUE)));
     }
 
     @Test
     public void testPrimitiveShortEncodePacked() {
-        assertEquals(
-                "0000",
-                TypeEncoder.encodePacked(new Short((short) 0)));
+        assertEquals("0000", TypeEncoder.encodePacked(new Short((short) 0)));
 
-        assertEquals(
-                "8000",
-                TypeEncoder.encodePacked(new Short(java.lang.Short.MIN_VALUE)));
+        assertEquals("8000", TypeEncoder.encodePacked(new Short(java.lang.Short.MIN_VALUE)));
 
-        assertEquals(
-                "7fff",
-                TypeEncoder.encodePacked(new Short(java.lang.Short.MAX_VALUE)));
+        assertEquals("7fff", TypeEncoder.encodePacked(new Short(java.lang.Short.MAX_VALUE)));
     }
 
     @Test
     public void testPrimitiveLongEncodePacked() {
-        assertEquals(
-                "0000000000000000",
-                TypeEncoder.encodePacked(new Long(0)));
+        assertEquals("0000000000000000", TypeEncoder.encodePacked(new Long(0)));
 
         assertEquals(
-                "8000000000000000",
-                TypeEncoder.encodePacked(new Long(java.lang.Long.MIN_VALUE)));
+                "8000000000000000", TypeEncoder.encodePacked(new Long(java.lang.Long.MIN_VALUE)));
 
         assertEquals(
-                "7fffffffffffffff",
-                TypeEncoder.encodePacked(new Long(java.lang.Long.MAX_VALUE)));
+                "7fffffffffffffff", TypeEncoder.encodePacked(new Long(java.lang.Long.MAX_VALUE)));
     }
 
     @Test
