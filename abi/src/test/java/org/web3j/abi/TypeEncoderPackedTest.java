@@ -25,7 +25,7 @@ class TypeEncoderPackedTest {
 
 
         Address addressLong = new Address(
-                        256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
+                256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f");
         assertEquals(
                 "a04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f",
                 TypeEncoder.encodePacked(addressLong));
@@ -962,6 +962,14 @@ class TypeEncoderPackedTest {
 
     @Test
     public void testStaticArrayEncodePacked() {
+        StaticArray0<Uint16> empty =
+                new StaticArray0<>(Uint16.class);
+
+        assertEquals(
+                "",
+                TypeEncoder.encodePacked(empty)
+        );
+
         StaticArray3<Uint16> array =
                 new StaticArray3<>(
                         Uint16.class,
@@ -975,6 +983,62 @@ class TypeEncoderPackedTest {
                         + "000000000000000000000000000000000000000000000000000000000000ffff",
                 TypeEncoder.encodePacked(array)
         );
+
+        StaticArray3<Utf8String> strings =
+                new StaticArray3<>(
+                        Utf8String.class,
+                        new Utf8String("test"),
+                        new Utf8String("test"),
+                        new Utf8String("test"));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(strings));
+
+        StaticArray3<AbiV2TestFixture.Foo> dynamicStuct =
+                new StaticArray3<>(
+                        AbiV2TestFixture.Foo.class,
+                        new AbiV2TestFixture.Foo("", ""),
+                        new AbiV2TestFixture.Foo("id", "name"),
+                        new AbiV2TestFixture.Foo("", ""));
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(dynamicStuct));
+
+        StaticArray3<AbiV2TestFixture.Bar> staticStruct =
+                new StaticArray3<>(
+                        AbiV2TestFixture.Bar.class,
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO),
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO),
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(staticStruct));
+
+        StaticArray<Ufixed> ufixed =
+                new StaticArray2<>(
+                        Ufixed.class,
+                        new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
+                        new Ufixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(ufixed));
+
+        StaticArray<Fixed> fixed =
+                new StaticArray2<>(
+                        Fixed.class,
+                        new Fixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
+                        new Fixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(fixed));
+
+        StaticArray<DynamicBytes> arrayOfEmptyBytes =
+                new StaticArray2<>(
+                        DynamicBytes.class,
+                        new DynamicBytes(new byte[0]),
+                        new DynamicBytes(new byte[0]));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(arrayOfEmptyBytes));
     }
 
     @Test
@@ -1024,6 +1088,13 @@ class TypeEncoderPackedTest {
 
     @Test
     public void testDynamicArrayEncodePacked() {
+        DynamicArray<Uint> empty =
+                new DynamicArray<>(Uint.class);
+
+        assertEquals(
+                "",
+                TypeEncoder.encodePacked(empty));
+
         DynamicArray<Uint> array =
                 new DynamicArray<>(
                         Uint.class,
@@ -1057,6 +1128,52 @@ class TypeEncoderPackedTest {
 
         Assertions.assertThrows(UnsupportedOperationException.class,
                 () -> TypeEncoder.encodePacked(strings));
+
+        DynamicArray<AbiV2TestFixture.Foo> dynamicStuct =
+                new DynamicArray<>(
+                        AbiV2TestFixture.Foo.class,
+                        new AbiV2TestFixture.Foo("", ""),
+                        new AbiV2TestFixture.Foo("id", "name"),
+                        new AbiV2TestFixture.Foo("", ""));
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(dynamicStuct));
+
+        DynamicArray<AbiV2TestFixture.Bar> staticStruct =
+                new DynamicArray<>(
+                        AbiV2TestFixture.Bar.class,
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO),
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO),
+                        new AbiV2TestFixture.Bar(BigInteger.ONE, BigInteger.ZERO));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(staticStruct));
+
+        DynamicArray<Ufixed> ufixed =
+                new DynamicArray<>(
+                        Ufixed.class,
+                        new Ufixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
+                        new Ufixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(ufixed));
+
+        DynamicArray<Fixed> fixed =
+                new DynamicArray<>(
+                        Fixed.class,
+                        new Fixed(BigInteger.valueOf(0x2), BigInteger.valueOf(0x2)),
+                        new Fixed(BigInteger.valueOf(0x8), BigInteger.valueOf(0x8)));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(fixed));
+
+        DynamicArray<DynamicBytes> arrayOfEmptyBytes =
+                new DynamicArray<>(
+                        DynamicBytes.class,
+                        new DynamicBytes(new byte[0]),
+                        new DynamicBytes(new byte[0]));
+
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> TypeEncoder.encodePacked(arrayOfEmptyBytes));
     }
 
     @Test

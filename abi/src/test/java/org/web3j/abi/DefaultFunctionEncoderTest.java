@@ -18,15 +18,7 @@ import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.DynamicStruct;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.StaticStruct;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Bytes10;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint32;
@@ -88,6 +80,17 @@ public class DefaultFunctionEncoderTest {
                                 new Uint32(BigInteger.valueOf(69)),
                                 new Bool(true),
                                 new Utf8String("Greetings!"))));
+
+        assertEquals("783139457468657265756d205369676e6564204d6573736167653a"
+                        + "663e27adc18d862da9a82f060310621d379e469a"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "31323334353637383930",
+                FunctionEncoder.encodeConstructorPacked(
+                        Arrays.asList(
+                                new Utf8String("x19Ethereum Signed Message:"),
+                                new Address("0x663e27AdC18d862dA9A82f060310621D379e469a"),
+                                new Uint256(BigInteger.TEN),
+                                new Bytes10("1234567890".getBytes()))));
     }
 
     @Test
