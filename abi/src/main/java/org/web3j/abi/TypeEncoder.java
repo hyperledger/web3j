@@ -92,10 +92,11 @@ public class TypeEncoder {
     }
 
     /**
-     * Returns abi.encodePacked hex value for the supported types.
-     * First the value is encoded and after the padding or length, in arrays cases,
-     * is removed resulting the packed encode hex value
-     * @param parameter
+     * Returns abi.encodePacked hex value for the supported types. First the value is encoded and
+     * after the padding or length, in arrays cases, is removed resulting the packed encode hex
+     * value
+     *
+     * @param parameter Value to be encoded
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -119,7 +120,7 @@ public class TypeEncoder {
      * Remove padding from the static types and {@link Utf8String} after the encode was applied
      *
      * @param encodedValue Encoded value of the parameter
-     * @param parameter    Value which was encoded
+     * @param parameter Value which was encoded
      * @return The encoded value without padding
      */
     static String removePadding(String encodedValue, Type parameter) {
@@ -137,7 +138,8 @@ public class TypeEncoder {
             return encodedValue.substring(0, ((BytesType) parameter).getValue().length * 2);
         }
         if (parameter instanceof Utf8String) {
-            int length = ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
+            int length =
+                    ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
             return encodedValue.substring(64, 64 + length * 2);
         } else {
             throw new UnsupportedOperationException(
@@ -385,20 +387,20 @@ public class TypeEncoder {
     }
 
     /**
-     * Checks if the received array doesn't contain any element that can make
-     * the array unsupported for abi.encodePacked
+     * Checks if the received array doesn't contain any element that can make the array unsupported
+     * for abi.encodePacked
      *
      * @param value Array to which the abi.encodePacked should be applied
-     * @param <T>   Types of elements from the array
+     * @param <T> Types of elements from the array
      * @return if the encodePacked is supported for the given array
      */
     private static <T extends Type> boolean isSupportingEncodedPacked(Array<T> value) {
-        if (Utf8String.class.isAssignableFrom(value.getComponentType()) ||
-                DynamicStruct.class.isAssignableFrom(value.getComponentType()) ||
-                DynamicArray.class.isAssignableFrom(value.getComponentType()) ||
-                StaticStruct.class.isAssignableFrom(value.getComponentType()) ||
-                FixedPointType.class.isAssignableFrom(value.getComponentType()) ||
-                DynamicBytes.class.isAssignableFrom(value.getComponentType())) {
+        if (Utf8String.class.isAssignableFrom(value.getComponentType())
+                || DynamicStruct.class.isAssignableFrom(value.getComponentType())
+                || DynamicArray.class.isAssignableFrom(value.getComponentType())
+                || StaticStruct.class.isAssignableFrom(value.getComponentType())
+                || FixedPointType.class.isAssignableFrom(value.getComponentType())
+                || DynamicBytes.class.isAssignableFrom(value.getComponentType())) {
             return false;
         }
         return true;
