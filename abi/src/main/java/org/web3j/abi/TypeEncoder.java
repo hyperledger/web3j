@@ -99,7 +99,6 @@ public class TypeEncoder {
      * @param parameter Value to be encoded
      * @return
      */
-    @SuppressWarnings("unchecked")
     public static String encodePacked(Type parameter) {
         if (parameter instanceof Utf8String) {
             return removePadding(encode(parameter), parameter);
