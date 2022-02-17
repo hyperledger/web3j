@@ -1,7 +1,0 @@
-description 'Hedera Support'
-
-dependencies {
-    compile project(':eea')
-    compile "com.google.protobuf:protobuf-javalite:3.19.3"
-    testCompile project(path: ':core', configuration: 'testArtifacts')
-}
