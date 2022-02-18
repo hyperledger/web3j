@@ -326,18 +326,19 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     }
 
     public Request<?, ParityFullTraceResponse> traceCallMany(
-        Collection<Transaction> transactions, List<String> traces, DefaultBlockParameter blockParameter) {
+            Collection<Transaction> transactions,
+            List<String> traces,
+            DefaultBlockParameter blockParameter) {
         List<Object> transactionPayload =
-            transactions
-                .stream()
-                .map(transaction -> Arrays.asList(transaction, traces))
-                .collect(Collectors.toList());
+                transactions.stream()
+                        .map(transaction -> Arrays.asList(transaction, traces))
+                        .collect(Collectors.toList());
 
         return new Request<>(
-            "trace_callMany",
-            Arrays.asList(transactionPayload, blockParameter),
-            web3jService,
-            ParityFullTraceResponse.class);
+                "trace_callMany",
+                Arrays.asList(transactionPayload, blockParameter),
+                web3jService,
+                ParityFullTraceResponse.class);
     }
 
     @Override

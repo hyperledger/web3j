@@ -6,8 +6,10 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.22.0'
     id 'de.marcphilipp.nexus-publish' version '0.4.0'
     id 'de.undercouch.download' version '4.1.1'
-    id 'org.ajoberstar.git-publish' version '3.0.0'
+    id 'org.ajoberstar.git-publish' version '3.0.1'
 }
+
+
 
 ext {
     bouncycastleVersion = '1.68'
