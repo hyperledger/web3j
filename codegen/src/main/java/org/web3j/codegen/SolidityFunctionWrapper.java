@@ -1634,8 +1634,7 @@ public class SolidityFunctionWrapper extends Generator {
                 typeName = getIndexedEventWrapperType(namedType.typeName);
             }
             String name =
-                    createValidParamName(namedType.getName(),
-                            (indexedParameters.indexOf(namedType) + nonIndexedParameters.size()));
+                    createValidParamName(namedType.getName(), indexedParameters.indexOf(namedType));
             builder.addField(typeName, name, Modifier.PUBLIC);
         }
 
@@ -1651,7 +1650,8 @@ public class SolidityFunctionWrapper extends Generator {
                 typeName = getWrapperType(namedType.typeName);
             }
             String name =
-                    createValidParamName(namedType.getName(),
+                    createValidParamName(
+                            namedType.getName(),
                             (nonIndexedParameters.indexOf(namedType) + indexedParameters.size()));
             builder.addField(typeName, name, Modifier.PUBLIC);
         }
@@ -1878,7 +1878,7 @@ public class SolidityFunctionWrapper extends Generator {
                         "$L.$L = ($T) (($T) eventValues.getIndexedValues().get($L))"
                                 + nativeConversion,
                         objectName,
-                        createValidParamName(namedTypeName.getName(), i + nonIndexedParameters.size()),
+                        createValidParamName(namedTypeName.getName(), i),
                         indexedEventWrapperType,
                         Array.class,
                         i);
@@ -1886,7 +1886,7 @@ public class SolidityFunctionWrapper extends Generator {
                 builder.addStatement(
                         "$L.$L = ($T) eventValues.getIndexedValues().get($L)" + nativeConversion,
                         objectName,
-                        createValidParamName(namedTypeName.getName(), i + nonIndexedParameters.size()),
+                        createValidParamName(namedTypeName.getName(), i),
                         indexedEventWrapperType,
                         i);
             }

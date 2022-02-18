@@ -738,17 +738,18 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     public void testBuildEventWithNamedAndNoNamedParameters() throws Exception {
 
         NamedType id = new NamedType("id", "string", true);
-        NamedType fromAddress = new NamedType("from", "address");
+        NamedType fromAddress = new NamedType("", "address");
         NamedType toAddress = new NamedType("to", "address");
         NamedType value = new NamedType("", "uint256");
-        NamedType message = new NamedType("", "string");
+        NamedType message = new NamedType("message", "string");
+        NamedType bytesVal = new NamedType("", "bytes10");
         fromAddress.setIndexed(true);
         toAddress.setIndexed(true);
 
         AbiDefinition functionDefinition =
                 new AbiDefinition(
                         false,
-                        Arrays.asList(id, fromAddress, toAddress, value, message),
+                        Arrays.asList(id, fromAddress, toAddress, bytesVal, value, message),
                         "Transfer",
                         new ArrayList<>(),
                         "event",
@@ -761,7 +762,7 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         String expected =
                 "class testClass {\n"
                         + "  public static final org.web3j.abi.datatypes.Event TRANSFER_EVENT = new org.web3j.abi.datatypes.Event(\"Transfer\", \n"
-                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n  ;\n\n"
+                        + "      java.util.Arrays.<org.web3j.abi.TypeReference<?>>asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>(true) {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Bytes10>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}, new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {}));\n  ;\n\n"
                         + "  public java.util.List<TransferEventResponse> getTransferEvents(org.web3j.protocol.core.methods.response.TransactionReceipt transactionReceipt) {\n"
                         + "    java.util.List<org.web3j.tx.Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);\n"
                         + "    java.util.ArrayList<TransferEventResponse> responses = new java.util.ArrayList<TransferEventResponse>(valueList.size());\n"
@@ -769,10 +770,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "      TransferEventResponse typedResponse = new TransferEventResponse();\n"
                         + "      typedResponse.log = eventValues.getLog();\n"
                         + "      typedResponse.id = (byte[]) eventValues.getIndexedValues().get(0).getValue();\n"
-                        + "      typedResponse.from = (java.lang.String) eventValues.getIndexedValues().get(1).getValue();\n"
+                        + "      typedResponse.param1 = (java.lang.String) eventValues.getIndexedValues().get(1).getValue();\n"
                         + "      typedResponse.to = (java.lang.String) eventValues.getIndexedValues().get(2).getValue();\n"
-                        + "      typedResponse.param3 = (java.math.BigInteger) eventValues.getNonIndexedValues().get(0).getValue();\n"
-                        + "      typedResponse.param4 = (java.lang.String) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "      typedResponse.param3 = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();\n"
+                        + "      typedResponse.param4 = (java.math.BigInteger) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "      typedResponse.message = (java.lang.String) eventValues.getNonIndexedValues().get(2).getValue();\n"
                         + "      responses.add(typedResponse);\n"
                         + "    }\n"
                         + "    return responses;\n"
@@ -786,10 +788,11 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "        TransferEventResponse typedResponse = new TransferEventResponse();\n"
                         + "        typedResponse.log = log;\n"
                         + "        typedResponse.id = (byte[]) eventValues.getIndexedValues().get(0).getValue();\n"
-                        + "        typedResponse.from = (java.lang.String) eventValues.getIndexedValues().get(1).getValue();\n"
+                        + "        typedResponse.param1 = (java.lang.String) eventValues.getIndexedValues().get(1).getValue();\n"
                         + "        typedResponse.to = (java.lang.String) eventValues.getIndexedValues().get(2).getValue();\n"
-                        + "        typedResponse.param3 = (java.math.BigInteger) eventValues.getNonIndexedValues().get(0).getValue();\n"
-                        + "        typedResponse.param4 = (java.lang.String) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "        typedResponse.param3 = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();\n"
+                        + "        typedResponse.param4 = (java.math.BigInteger) eventValues.getNonIndexedValues().get(1).getValue();\n"
+                        + "        typedResponse.message = (java.lang.String) eventValues.getNonIndexedValues().get(2).getValue();\n"
                         + "        return typedResponse;\n"
                         + "      }\n"
                         + "    });\n"
@@ -804,17 +807,19 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
                         + "  public static class TransferEventResponse extends org.web3j.protocol.core.methods.response.BaseEventResponse {\n"
                         + "    public byte[] id;\n"
                         + "\n"
-                        + "    public java.lang.String from;\n"
+                        + "    public java.lang.String param1;\n"
                         + "\n"
                         + "    public java.lang.String to;\n"
                         + "\n"
-                        + "    public java.math.BigInteger param3;\n"
+                        + "    public byte[] param3;\n"
                         + "\n"
-                        + "    public java.lang.String param4;\n"
+                        + "    public java.math.BigInteger param4;\n"
+                        + "\n"
+                        + "    public java.lang.String message;\n"
                         + "  }\n"
                         + "}\n";
 
-        assertEquals(builder.build().toString(), (expected));
+        assertEquals((expected), builder.build().toString());
     }
 
     @Test
