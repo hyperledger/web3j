@@ -182,8 +182,13 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testEventParametersNoNamed() throws Exception {
-        testCodeGeneration("eventparameters", "EventParametersNoNamed", JAVA_TYPES_ARG, false);
-        testCodeGeneration("eventparameters", "EventParametersNoNamed", SOLIDITY_TYPES_ARG, false);
+        testCodeGeneration("eventparameters", "EventParameters", JAVA_TYPES_ARG, false);
+        testCodeGeneration("eventparameters", "EventParameters", SOLIDITY_TYPES_ARG, false);
+    }
+
+    @Test
+    public void testEventParametersNoNamedCompareJavaFile() throws Exception {
+        compareJavaFile("EventParameters");
     }
 
     private void compareJavaFile(String inputFileName) throws Exception {
