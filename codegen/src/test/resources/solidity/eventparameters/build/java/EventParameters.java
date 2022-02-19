@@ -5,16 +5,19 @@ import io.reactivex.functions.Function;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.BaseEventResponse;
 import org.web3j.protocol.core.methods.response.Log;
@@ -36,7 +39,13 @@ import org.web3j.tx.gas.ContractGasProvider;
 public class EventParameters extends Contract {
     public static final String BINARY = "Bin file was not provided";
 
-    public static final Event CONTRACTCREATED_EVENT = new Event("ContractCreated", 
+    public static final String FUNC__CONTRACTNUMBER = "_contractNumber";
+
+    public static final String FUNC__TESTADDRESS = "_testAddress";
+
+    public static final String FUNC_TESTEVENT = "testEvent";
+
+    public static final Event TESTEVENT_EVENT = new Event("TestEvent", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Uint256>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Address>() {}));
     ;
 
@@ -58,11 +67,11 @@ public class EventParameters extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public List<ContractCreatedEventResponse> getContractCreatedEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(CONTRACTCREATED_EVENT, transactionReceipt);
-        ArrayList<ContractCreatedEventResponse> responses = new ArrayList<ContractCreatedEventResponse>(valueList.size());
+    public List<TestEventEventResponse> getTestEventEvents(TransactionReceipt transactionReceipt) {
+        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TESTEVENT_EVENT, transactionReceipt);
+        ArrayList<TestEventEventResponse> responses = new ArrayList<TestEventEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
-            ContractCreatedEventResponse typedResponse = new ContractCreatedEventResponse();
+            TestEventEventResponse typedResponse = new TestEventEventResponse();
             typedResponse.log = eventValues.getLog();
             typedResponse._contractNumber = (BigInteger) eventValues.getIndexedValues().get(0).getValue();
             typedResponse.param1 = (byte[]) eventValues.getIndexedValues().get(1).getValue();
@@ -73,12 +82,12 @@ public class EventParameters extends Contract {
         return responses;
     }
 
-    public Flowable<ContractCreatedEventResponse> contractCreatedEventFlowable(EthFilter filter) {
-        return web3j.ethLogFlowable(filter).map(new Function<Log, ContractCreatedEventResponse>() {
+    public Flowable<TestEventEventResponse> testEventEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(new Function<Log, TestEventEventResponse>() {
             @Override
-            public ContractCreatedEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(CONTRACTCREATED_EVENT, log);
-                ContractCreatedEventResponse typedResponse = new ContractCreatedEventResponse();
+            public TestEventEventResponse apply(Log log) {
+                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TESTEVENT_EVENT, log);
+                TestEventEventResponse typedResponse = new TestEventEventResponse();
                 typedResponse.log = log;
                 typedResponse._contractNumber = (BigInteger) eventValues.getIndexedValues().get(0).getValue();
                 typedResponse.param1 = (byte[]) eventValues.getIndexedValues().get(1).getValue();
@@ -89,10 +98,32 @@ public class EventParameters extends Contract {
         });
     }
 
-    public Flowable<ContractCreatedEventResponse> contractCreatedEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<TestEventEventResponse> testEventEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
-        filter.addSingleTopic(EventEncoder.encode(CONTRACTCREATED_EVENT));
-        return contractCreatedEventFlowable(filter);
+        filter.addSingleTopic(EventEncoder.encode(TESTEVENT_EVENT));
+        return testEventEventFlowable(filter);
+    }
+
+    public RemoteFunctionCall<BigInteger> _contractNumber() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC__CONTRACTNUMBER, 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
+    }
+
+    public RemoteFunctionCall<String> _testAddress() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC__TESTADDRESS, 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
+        return executeRemoteCallSingleValueReturn(function, String.class);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> testEvent() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_TESTEVENT, 
+                Arrays.<Type>asList(), 
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
     }
 
     @Deprecated
@@ -113,7 +144,7 @@ public class EventParameters extends Contract {
         return new EventParameters(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public static class ContractCreatedEventResponse extends BaseEventResponse {
+    public static class TestEventEventResponse extends BaseEventResponse {
         public BigInteger _contractNumber;
 
         public byte[] param1;

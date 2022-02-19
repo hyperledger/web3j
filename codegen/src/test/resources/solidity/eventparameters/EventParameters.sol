@@ -6,7 +6,7 @@ contract EventParameters{
 
     event TestEvent(address, uint256 indexed _contractNumber, string indexed, address);
 
-    function testEvent(address) public  {
+    function testEvent() public  {
         emit TestEvent(address(this), _contractNumber, "Function: testEvent", _testAddress);
     }
 }
