@@ -23,7 +23,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version none.
@@ -55,8 +55,8 @@ public class OnlyInArrayStruct extends Contract {
     }
 
     public RemoteFunctionCall<List> getFoo() {
-        final Function function = new Function(FUNC_GETFOO,
-                Arrays.<Type>asList(),
+        final Function function = new Function(FUNC_GETFOO, 
+                Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Foo>>() {}));
         return new RemoteFunctionCall<List>(function,
                 new Callable<List>() {
@@ -71,8 +71,8 @@ public class OnlyInArrayStruct extends Contract {
 
     public RemoteFunctionCall<TransactionReceipt> setFoo(List<Foo> foo) {
         final Function function = new Function(
-                FUNC_SETFOO,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicArray<Foo>(Foo.class, foo)),
+                FUNC_SETFOO, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.DynamicArray<Foo>(Foo.class, foo)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -101,7 +101,7 @@ public class OnlyInArrayStruct extends Contract {
         public String name;
 
         public Foo(String id, String name) {
-            super(new org.web3j.abi.datatypes.Utf8String(id),
+            super(new org.web3j.abi.datatypes.Utf8String(id), 
                     new org.web3j.abi.datatypes.Utf8String(name));
             this.id = id;
             this.name = name;
