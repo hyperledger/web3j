@@ -129,6 +129,28 @@ public abstract class ManagedTransaction {
                 gasPrice, gasLimit, to, data, value, constructor);
     }
 
+    protected TransactionReceipt sendEIP1559(
+            long chainId,
+            String to,
+            String data,
+            BigInteger value,
+            BigInteger gasLimit,
+            BigInteger maxPriorityFeePerGas,
+            BigInteger maxFeePerGas,
+            boolean constructor)
+            throws IOException, TransactionException {
+
+        return transactionManager.executeTransactionEIP1559(
+                chainId,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                gasLimit,
+                to,
+                data,
+                value,
+                constructor);
+    }
+
     protected String call(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
 

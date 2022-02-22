@@ -45,6 +45,7 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
+import org.web3j.tx.gas.ContractEIP1559GasProvider;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Numeric;
@@ -363,14 +364,33 @@ public abstract class Contract extends ManagedTransaction {
             String data, BigInteger weiValue, String funcName, boolean constructor)
             throws TransactionException, IOException {
 
-        TransactionReceipt receipt =
-                send(
-                        contractAddress,
-                        data,
-                        weiValue,
-                        gasProvider.getGasPrice(funcName),
-                        gasProvider.getGasLimit(funcName),
-                        constructor);
+        TransactionReceipt receipt = null;
+        if (gasProvider instanceof ContractEIP1559GasProvider) {
+            ContractEIP1559GasProvider eip1559GasProvider =
+                    (ContractEIP1559GasProvider) gasProvider;
+            if (eip1559GasProvider.isEIP1559Enabled()) {
+                receipt =
+                        sendEIP1559(
+                                eip1559GasProvider.getChainId(),
+                                contractAddress,
+                                data,
+                                weiValue,
+                                eip1559GasProvider.getGasLimit(funcName),
+                                eip1559GasProvider.getMaxPriorityFeePerGas(funcName),
+                                eip1559GasProvider.getMaxFeePerGas(funcName),
+                                constructor);
+            }
+        }
+        if (receipt == null) {
+            receipt =
+                    send(
+                            contractAddress,
+                            data,
+                            weiValue,
+                            gasProvider.getGasPrice(funcName),
+                            gasProvider.getGasLimit(funcName),
+                            constructor);
+        }
 
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
