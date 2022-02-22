@@ -101,7 +101,7 @@ public class OnlyInArrayStruct extends Contract {
         public String name;
 
         public Foo(String id, String name) {
-            super(new org.web3j.abi.datatypes.Utf8String(id), 
+            super(new org.web3j.abi.datatypes.Utf8String(id),
                     new org.web3j.abi.datatypes.Utf8String(name));
             this.id = id;
             this.name = name;
