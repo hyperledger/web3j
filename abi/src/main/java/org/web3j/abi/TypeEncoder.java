@@ -26,8 +26,11 @@ import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.DynamicStruct;
+import org.web3j.abi.datatypes.Fixed;
+import org.web3j.abi.datatypes.FixedPointType;
 import org.web3j.abi.datatypes.NumericType;
 import org.web3j.abi.datatypes.StaticArray;
+import org.web3j.abi.datatypes.StaticStruct;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
@@ -82,6 +85,61 @@ public class TypeEncoder {
             return encodeDynamicArray((DynamicArray) parameter);
         } else if (parameter instanceof PrimitiveType) {
             return encode(((PrimitiveType) parameter).toSolidityType());
+        } else {
+            throw new UnsupportedOperationException(
+                    "Type cannot be encoded: " + parameter.getClass());
+        }
+    }
+
+    /**
+     * Returns abi.encodePacked hex value for the supported types. First the value is encoded and
+     * after the padding or length, in arrays cases, is removed resulting the packed encode hex
+     * value
+     *
+     * @param parameter Value to be encoded
+     * @return
+     */
+    public static String encodePacked(Type parameter) {
+        if (parameter instanceof Utf8String) {
+            return removePadding(encode(parameter), parameter);
+        } else if (parameter instanceof DynamicBytes) {
+            return encode(parameter).substring(64);
+        } else if (parameter instanceof DynamicArray) {
+            return arrayEncodePacked((DynamicArray) parameter);
+        } else if (parameter instanceof StaticArray) {
+            return arrayEncodePacked((StaticArray) parameter);
+        } else if (parameter instanceof PrimitiveType) {
+            return encodePacked(((PrimitiveType) parameter).toSolidityType());
+        } else {
+            return removePadding(encode(parameter), parameter);
+        }
+    }
+
+    /**
+     * Remove padding from the static types and {@link Utf8String} after the encode was applied
+     *
+     * @param encodedValue Encoded value of the parameter
+     * @param parameter Value which was encoded
+     * @return The encoded value without padding
+     */
+    static String removePadding(String encodedValue, Type parameter) {
+        if (parameter instanceof NumericType) {
+            if (parameter instanceof Ufixed || parameter instanceof Fixed) {
+                return encodedValue;
+            }
+            return encodedValue.substring(64 - ((NumericType) parameter).getBitSize() / 4, 64);
+        } else if (parameter instanceof Address) {
+            return encodedValue.substring(64 - ((Address) parameter).toUint().getBitSize() / 4, 64);
+        } else if (parameter instanceof Bool) {
+            return encodedValue.substring(62, 64);
+        }
+        if (parameter instanceof Bytes) {
+            return encodedValue.substring(0, ((BytesType) parameter).getValue().length * 2);
+        }
+        if (parameter instanceof Utf8String) {
+            int length =
+                    ((Utf8String) parameter).getValue().getBytes(StandardCharsets.UTF_8).length;
+            return encodedValue.substring(64, 64 + length * 2);
         } else {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
@@ -325,5 +383,40 @@ public class TypeEncoder {
                                     new BigInteger(Long.toString(offset)), MAX_BYTE_LENGTH)));
         }
         return result.toString();
+    }
+
+    /**
+     * Checks if the received array doesn't contain any element that can make the array unsupported
+     * for abi.encodePacked
+     *
+     * @param value Array to which the abi.encodePacked should be applied
+     * @param <T> Types of elements from the array
+     * @return if the encodePacked is supported for the given array
+     */
+    private static <T extends Type> boolean isSupportingEncodedPacked(Array<T> value) {
+        if (Utf8String.class.isAssignableFrom(value.getComponentType())
+                || DynamicStruct.class.isAssignableFrom(value.getComponentType())
+                || DynamicArray.class.isAssignableFrom(value.getComponentType())
+                || StaticStruct.class.isAssignableFrom(value.getComponentType())
+                || FixedPointType.class.isAssignableFrom(value.getComponentType())
+                || DynamicBytes.class.isAssignableFrom(value.getComponentType())) {
+            return false;
+        }
+        return true;
+    }
+
+    private static <T extends Type> String arrayEncodePacked(Array<T> values) {
+        if (isSupportingEncodedPacked(values)) {
+            if (values.getValue().isEmpty()) {
+                return "";
+            }
+            if (values instanceof DynamicArray) {
+                return encode(values).substring(64);
+            } else if (values instanceof StaticArray) {
+                return encode(values);
+            }
+        }
+        throw new UnsupportedOperationException(
+                "Type cannot be packed encoded: " + values.getClass());
     }
 }

@@ -44,6 +44,15 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
         return encodeParameters(parameters, new StringBuilder());
     }
 
+    @Override
+    protected String encodePackedParameters(List<Type> parameters) {
+        final StringBuilder result = new StringBuilder();
+        for (Type parameter : parameters) {
+            result.append(TypeEncoder.encodePacked(parameter));
+        }
+        return result.toString();
+    }
+
     private static String encodeParameters(
             final List<Type> parameters, final StringBuilder result) {
 
