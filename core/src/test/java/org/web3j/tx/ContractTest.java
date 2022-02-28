@@ -44,6 +44,7 @@ import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.JsonRpcError;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -64,7 +65,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -392,6 +395,42 @@ public class ContractTest extends ManagedTransactionTester {
         when(web3j.ethSendRawTransaction(any(String.class)))
                 .thenReturn((Request) rawTransactionRequest);
         assertThrows(RuntimeException.class, this::testErrorScenario);
+    }
+
+    @Test
+    public void testJsonRpcError() throws IOException {
+        EthSendTransaction ethSendTransaction = new EthSendTransaction();
+        Response.Error error = new Response.Error(1, "Invalid Transaction");
+        error.setData("Additional data");
+        ethSendTransaction.setError(error);
+
+        TransactionManager txManager =
+                spy(new RawTransactionManager(web3j, SampleKeys.CREDENTIALS));
+        doReturn(ethSendTransaction)
+                .when(txManager)
+                .sendTransaction(
+                        any(BigInteger.class),
+                        any(BigInteger.class),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean());
+
+        JsonRpcError exception =
+                assertThrows(
+                        JsonRpcError.class,
+                        () ->
+                                txManager.executeTransaction(
+                                        BigInteger.ZERO,
+                                        BigInteger.ZERO,
+                                        "",
+                                        "",
+                                        BigInteger.ZERO,
+                                        false));
+
+        assertEquals(error.getCode(), exception.getCode());
+        assertEquals(error.getMessage(), exception.getMessage());
+        assertEquals(error.getData(), exception.getData());
     }
 
     @Test
