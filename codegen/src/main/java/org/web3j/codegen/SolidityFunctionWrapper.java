@@ -1340,11 +1340,10 @@ public class SolidityFunctionWrapper extends Generator {
 
         String stateMutability = functionDefinition.getStateMutability();
         boolean pureOrView = "pure".equals(stateMutability) || "view".equals(stateMutability);
-        boolean isFunctionDefinitionConstant = functionDefinition.isConstant() || pureOrView;
 
         if (generateBothCallAndSend) {
             final String funcNamePrefix;
-            if (isFunctionDefinitionConstant ^ generateViceversa) {
+            if (pureOrView ^ generateViceversa) {
                 funcNamePrefix = "call";
             } else {
                 funcNamePrefix = "send";
@@ -1366,7 +1365,7 @@ public class SolidityFunctionWrapper extends Generator {
         final List<TypeName> outputParameterTypes =
                 buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
 
-        if (isFunctionDefinitionConstant ^ generateViceversa) {
+        if (pureOrView ^ generateViceversa) {
             // Avoid generating runtime exception call
             if (functionDefinition.hasOutputs()) {
                 buildConstantFunction(

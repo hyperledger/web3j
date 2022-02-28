@@ -22,19 +22,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /** AbiDefinition wrapper. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AbiDefinition {
-    private boolean constant;
     private List<NamedType> inputs = new ArrayList<>();
     private String name;
     private List<NamedType> outputs = new ArrayList<>();
     private String type;
-    private boolean payable;
 
     /**
      * The stateMutability function modifier.
-     *
-     * <p>this does not factor into the <code>#hashCode()</code> or <code>#equals()</code> logic
-     * since multiple functions with the same signature that only differ in mutability are not
-     * allowed in Solidity.
      *
      * <p>Valid values are:
      *
@@ -51,12 +45,12 @@ public class AbiDefinition {
 
     public AbiDefinition(AbiDefinition from) {
         this(
-                from.constant,
+                from.isConstant(),
                 clone(from.inputs),
                 from.name,
                 clone(from.outputs),
                 from.type,
-                from.payable,
+                from.isPayable(),
                 from.stateMutability);
     }
 
@@ -78,21 +72,19 @@ public class AbiDefinition {
             String type,
             boolean payable,
             String stateMutability) {
-        this.constant = constant;
         this.inputs = inputs;
         this.name = name;
         this.outputs = outputs;
         this.type = type;
-        this.payable = payable;
-        this.stateMutability = stateMutability;
+        this.stateMutability = payable ? "payable" : constant ? "pure" : stateMutability;
     }
 
     public boolean isConstant() {
-        return constant;
+        return "pure".equals(stateMutability);
     }
 
     public void setConstant(boolean constant) {
-        this.constant = constant;
+        this.stateMutability = "pure";
     }
 
     public List<NamedType> getInputs() {
@@ -132,11 +124,11 @@ public class AbiDefinition {
     }
 
     public boolean isPayable() {
-        return payable;
+        return "payable".equals(stateMutability);
     }
 
     public void setPayable(boolean payable) {
-        this.payable = payable;
+        this.stateMutability = "payable";
     }
 
     public String getStateMutability() {
