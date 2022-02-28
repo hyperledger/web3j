@@ -383,7 +383,6 @@ public class SolidityFunctionWrapper extends Generator {
         // remove any cr or lf
         binary = binary.replaceAll("(\\r|\\n)", "");
 
-
         if (binary.length() < 65534) {
             return FieldSpec.builder(String.class, BINARY)
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
@@ -657,10 +656,7 @@ public class SolidityFunctionWrapper extends Generator {
                                 false));
 
                 if (abiFuncs && functionDefinition.getInputs().size() > 0) {
-                    methodSpecs.add(
-                            buildConstructorAbiGet(
-                                    functionDefinition))
-                    ;
+                    methodSpecs.add(buildConstructorAbiGet(functionDefinition));
                 }
             }
         }
@@ -779,25 +775,12 @@ public class SolidityFunctionWrapper extends Generator {
         return toReturn.build();
     }
 
-    // empty constructor
-    private static MethodSpec buildConstructor() {
-        MethodSpec.Builder toReturn =
-                MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PROTECTED)
-                        .addStatement(
-                                "super($N)",
-                                BINARY
-)
-                ;
-        return toReturn.build();
-    }
-
-    private MethodSpec buildConstructorAbiGet(
-            AbiDefinition functionDefinition)
+    private MethodSpec buildConstructorAbiGet(AbiDefinition functionDefinition)
             throws ClassNotFoundException {
 
         String functionName = "getABI_Constructor";
-        MethodSpec.Builder methodBuilder  = MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
+        MethodSpec.Builder methodBuilder =
+                MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
         String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
 
         if (functionDefinition.isPayable()) {
@@ -1414,7 +1397,6 @@ public class SolidityFunctionWrapper extends Generator {
                 MethodSpec.methodBuilder(functionName).addModifiers(Modifier.PUBLIC);
 
         final String inputParams = addParameters(methodBuilder, functionDefinition.getInputs());
-//        final String outputParams = addParameters(methodBuilder, functionDefinition.getOutputs());
 
         final List<TypeName> outputParameterTypes =
                 buildTypeNames(functionDefinition.getOutputs(), useJavaPrimitiveTypes);
@@ -1712,14 +1694,24 @@ public class SolidityFunctionWrapper extends Generator {
                     TypeReference.class,
                     typeName);
         } else {
-            //TODO: Likely a better way of doing this ?
+            // TODO: Likely a better way of doing this ?
             String asListParams =
-                    Collection.join(outputParameterTypes, ", ", typeName -> "new " + TypeReference.class.getSimpleName() + " <" + typeName + ">() {}");
+                    Collection.join(
+                            outputParameterTypes,
+                            ", ",
+                            typeName ->
+                                    "new "
+                                            + TypeReference.class.getSimpleName()
+                                            + " <"
+                                            + typeName
+                                            + ">() {}");
 
             methodBuilder.addStatement(
                     "final $T function = "
                             + "new $T($N, \nArrays.asList(), "
-                            + "\n$T.<$T<?>>asList(" + asListParams + "))",
+                            + "\n$T.<$T<?>>asList("
+                            + asListParams
+                            + "))",
                     Function.class,
                     Function.class,
                     funcNameToConst(functionName, useUpperCase),
@@ -1735,37 +1727,31 @@ public class SolidityFunctionWrapper extends Generator {
                 "$N $N = new $N()",
                 responseClassName,
                 Strings.lowercaseFirstLetter(responseClassName),
-                responseClassName
-        );
+                responseClassName);
 
         int parameterIndex = 0;
         for (AbiDefinition.NamedType namedType : outputs) {
-            parameterIndex += 1;
-            String parameterName = namedType.getName();
-            if ("".equals(parameterName)) {
-                parameterName = "return".concat(String.valueOf(parameterIndex));
-            }
+            String name = createValidParamName(namedType.getName(), parameterIndex);
+
             if (useNativeJavaTypes) {
-                methodBuilder.addStatement("$N.$N = ($T) response.get($L).getValue()",
+                methodBuilder.addStatement(
+                        "$N.$N = ($T) response.get($L).getValue()",
                         Strings.lowercaseFirstLetter(responseClassName),
-                        parameterName,
-                        getNativeType(outputParameterTypes.get(parameterIndex-1)),
-                        parameterIndex-1
-                );
+                        name,
+                        getNativeType(outputParameterTypes.get(parameterIndex)),
+                        parameterIndex - 1);
             } else {
-                methodBuilder.addStatement("$N.$N = ($T) response.get($L)",
+                methodBuilder.addStatement(
+                        "$N.$N = ($T) response.get($L)",
                         Strings.lowercaseFirstLetter(responseClassName),
-                        parameterName,
-                        outputParameterTypes.get(parameterIndex-1),
-                        parameterIndex-1
-                );
+                        name,
+                        outputParameterTypes.get(parameterIndex),
+                        parameterIndex - 1);
             }
+            parameterIndex += 1;
         }
 
-        methodBuilder.addStatement(
-                "return $N",
-                Strings.lowercaseFirstLetter(responseClassName)
-        );
+        methodBuilder.addStatement("return $N", Strings.lowercaseFirstLetter(responseClassName));
     }
 
     TypeSpec buildFunctionResponseObject(
@@ -1776,8 +1762,7 @@ public class SolidityFunctionWrapper extends Generator {
                 TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
         int fieldIndex = 0;
-        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType :
-                outputParameters) {
+        for (org.web3j.codegen.SolidityFunctionWrapper.NamedTypeName namedType : outputParameters) {
             final TypeName typeName;
             fieldIndex += 1;
             if (namedType.getType().equals("tuple")) {
@@ -1792,16 +1777,14 @@ public class SolidityFunctionWrapper extends Generator {
                     typeName = namedType.typeName;
                 }
             }
-            if ("".equals(namedType.getName())) {
-                builder.addField(typeName, "return".concat(String.valueOf(fieldIndex)), Modifier.PUBLIC);
-            } else {
-                builder.addField(typeName, namedType.getName(), Modifier.PUBLIC);
-            }
+            String name =
+                    createValidParamName(namedType.getName(), outputParameters.indexOf(namedType));
+
+            builder.addField(typeName, name, Modifier.PUBLIC);
         }
 
         return builder.build();
     }
-
 
     TypeSpec buildEventResponseObject(
             String className,
@@ -1977,8 +1960,7 @@ public class SolidityFunctionWrapper extends Generator {
         return transactionMethodBuilder.build();
     }
 
-    void buildFunctionReturnClass(
-            AbiDefinition functionDefinition, TypeSpec.Builder classBuilder)
+    void buildFunctionReturnClass(AbiDefinition functionDefinition, TypeSpec.Builder classBuilder)
             throws ClassNotFoundException {
         String functionName = functionDefinition.getName();
         List<AbiDefinition.NamedType> outputs = functionDefinition.getOutputs();
@@ -2003,9 +1985,7 @@ public class SolidityFunctionWrapper extends Generator {
             parameters.add(parameter);
         }
         if (abiFuncs) {
-            classBuilder.addType(
-                    buildFunctionResponseObject(
-                            responseClassName, parameters));
+            classBuilder.addType(buildFunctionResponseObject(responseClassName, parameters));
         }
     }
 
