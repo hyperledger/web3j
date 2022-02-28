@@ -82,7 +82,7 @@ public abstract class FunctionReturnDecoder {
     protected abstract <T extends Type> Type decodeEventParameter(
             String rawInput, TypeReference<T> typeReference);
 
-    private static FunctionReturnDecoder decoder() {
+    private static synchronized FunctionReturnDecoder decoder() {
         final Iterator<FunctionReturnDecoderProvider> iterator = loader.iterator();
         return iterator.hasNext() ? iterator.next().get() : defaultDecoder();
     }
