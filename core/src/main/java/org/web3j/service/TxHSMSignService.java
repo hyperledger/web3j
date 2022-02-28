@@ -38,10 +38,12 @@ public class TxHSMSignService<T extends HSMPass> implements TxSignService {
         byte[] finalBytes;
         byte[] encodedTransaction;
         Sign.SignatureData signatureData;
-        boolean isNewTx =
+        // Legacy tx is tx before Eip1559, should have chainId as an additional parameter.
+        // After Eip1559 chainId is a part of tx.
+        boolean isLegacy =
                 chainId > ChainId.NONE && rawTransaction.getType().equals(TransactionType.LEGACY);
 
-        if (isNewTx) {
+        if (isLegacy) {
             encodedTransaction = encode(rawTransaction, chainId);
         } else {
             encodedTransaction = encode(rawTransaction);
@@ -51,7 +53,7 @@ public class TxHSMSignService<T extends HSMPass> implements TxSignService {
 
         signatureData = hsmRequestProcessor.callHSM(messageHash, hsmPass);
 
-        if (isNewTx) {
+        if (isLegacy) {
             signatureData = createEip155SignatureData(signatureData, chainId);
         }
 

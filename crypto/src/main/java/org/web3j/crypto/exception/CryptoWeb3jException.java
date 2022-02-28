@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Web3 Labs Ltd.
+ * Copyright 2022 Web3 Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -10,27 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.web3j.crypto.transaction.type;
+package org.web3j.crypto.exception;
 
-public enum TransactionType {
-    LEGACY(null),
-    EIP1559(((byte) 0x02));
+public class CryptoWeb3jException extends RuntimeException {
 
-    Byte type;
+    public CryptoWeb3jException() {}
 
-    TransactionType(final Byte type) {
-        this.type = type;
+    public CryptoWeb3jException(String message) {
+        super(message);
     }
 
-    public Byte getRlpType() {
-        return type;
-    }
-
-    public boolean isLegacy() {
-        return this.equals(TransactionType.LEGACY);
-    }
-
-    public boolean isEip1559() {
-        return this.equals(TransactionType.EIP1559);
+    public CryptoWeb3jException(String message, Throwable cause) {
+        super(message, cause);
     }
 }
