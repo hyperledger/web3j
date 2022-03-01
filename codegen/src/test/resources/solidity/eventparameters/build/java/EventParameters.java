@@ -67,8 +67,8 @@ public class EventParameters extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public List<TestEventEventResponse> getTestEventEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TESTEVENT_EVENT, transactionReceipt);
+    public static List<TestEventEventResponse> getTestEventEvents(TransactionReceipt transactionReceipt) {
+        List<Contract.EventValuesWithLog> valueList = staticExtractEventParametersWithLog(TESTEVENT_EVENT, transactionReceipt);
         ArrayList<TestEventEventResponse> responses = new ArrayList<TestEventEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
             TestEventEventResponse typedResponse = new TestEventEventResponse();
