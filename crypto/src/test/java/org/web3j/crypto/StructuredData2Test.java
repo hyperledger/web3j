@@ -12,6 +12,10 @@
  */
 package org.web3j.crypto;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.web3j.utils.Numeric;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -23,22 +27,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import org.web3j.utils.Numeric;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StructuredDataTest {
+public class StructuredData2Test {
 
     private static String jsonMessageString;
 
     @BeforeEach
     public void validSetUp() throws IOException, RuntimeException {
         String validStructuredDataJSONFilePath =
-                "build/resources/test/" + "structured_data_json_files/ValidStructuredData.json";
+                "build/resources/test/" + "structured_data_json_files/ValidStructuredDataTest.json";
         jsonMessageString = getResource(validStructuredDataJSONFilePath);
     }
 
@@ -85,7 +84,7 @@ public class StructuredDataTest {
         StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
         String expectedTypeEncoding =
                 "Mail(Person from,Person to,string contents)"
-                        + "Person(string name,address wallet)";
+                        + "Person(string name,int256[] wallet)";
 
         assertEquals(
                 dataEncoder.encodeType(dataEncoder.jsonMessageObject.getPrimaryType()),
@@ -96,7 +95,7 @@ public class StructuredDataTest {
     public void testTypeHash() throws IOException, RuntimeException {
         StructuredDataEncoder dataEncoder = new StructuredDataEncoder(jsonMessageString);
         String expectedTypeHashHex =
-                "0xa0cedeb2dc280ba39b857546d74f5549c" + "3a1d7bdc2dd96bf881f76108e23dac2";
+                "0xfee4bf61c0482eba5ca8ed057c37304c58b41402720bb116547c789487afb12a";
 
         assertEquals(
                 Numeric.toHexString(
@@ -131,7 +130,7 @@ public class StructuredDataTest {
                         dataEncoder.jsonMessageObject.getPrimaryType(),
                         (HashMap<String, Object>) dataEncoder.jsonMessageObject.getMessage());
         String expectedMessageStructHash =
-                "0xc52c0ee5d84264471806290a3f2c4cecf" + "c5490626bf912d01f240d7a274b371e";
+                "0xcb17902c9c17a6dcd53fd8f86998b923fef28d8183f5ebf0684ec53361e63dda";
 
         assertEquals(Numeric.toHexString(dataHash), expectedMessageStructHash);
     }

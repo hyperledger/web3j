@@ -36,6 +36,7 @@ import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.utils.Numeric;
 
+import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
 import static org.web3j.crypto.Hash.sha3;
 import static org.web3j.crypto.Hash.sha3String;
 
@@ -227,7 +228,21 @@ public class StructuredDataEncoder {
         try {
             if (baseType.toLowerCase().startsWith("uint")
                     || baseType.toLowerCase().startsWith("int")) {
-                hashBytes = convertToBigInt(data).toByteArray();
+//                hashBytes = convertToBigInt(data).toByteArray();
+                hashBytes = Numeric.toBytesPadded(convertToBigInt(data), 32);
+//                BigInteger value = convertToBigInt(data);
+//                if (value.signum() >= 0) {
+//                    hashBytes = Numeric.toBytesPadded(convertToBigInt(data), MAX_BYTE_LENGTH);
+//                } else {
+//                    byte signPadding = (byte) 0xff;
+//                    byte[] rawValue = convertToBigInt(data).toByteArray();
+//                    hashBytes = new byte[MAX_BYTE_LENGTH];
+//                    for (int i = 0; i < hashBytes.length; i++) {
+//                        hashBytes[i] = signPadding;
+//                    }
+//                    System.arraycopy(
+//                            rawValue, 0, hashBytes, MAX_BYTE_LENGTH - rawValue.length, rawValue.length);
+//                }
             } else if (baseType.equals("string")) {
                 hashBytes = ((String) data).getBytes();
             } else if (baseType.equals("bytes")) {
@@ -352,6 +367,8 @@ public class StructuredDataEncoder {
             }
         }
 
+
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < encTypes.size(); i++) {
             Class<Type> typeClazz = (Class<Type>) AbiTypes.getType(encTypes.get(i));
@@ -392,6 +409,16 @@ public class StructuredDataEncoder {
         return baos.toByteArray();
     }
 
+    private String bytesToHex(byte[] bytes) {
+        final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+
+        char[] chars = new char[2 * bytes.length];
+        for (int i = 0; i < bytes.length; ++i) {
+            chars[2 * i] = HEX_CHARS[(bytes[i] & 0xF0) >>> 4];
+            chars[2 * i + 1] = HEX_CHARS[bytes[i] & 0x0F];
+        }
+        return new String(chars);
+    }
     private BigInteger convertToBigInt(Object value)
             throws NumberFormatException, NullPointerException {
         if (value.toString().startsWith("0x")) {
