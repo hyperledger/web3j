@@ -229,21 +229,21 @@ public class StructuredDataTest {
                 new StructuredDataEncoder(
                         getResource(
                                 "build/resources/test/"
-                                        + "structured_data_json_files/ValidStructuredArrayData.json")); // taken from https://danfinlay.github.io/js-eth-personal-sign-examples/
+                                        + "structured_data_json_files/ValidStructuredArrayData.json")); // taken from https://danfinlay.github.io/js-eth-personal-sign-examples/ and updated to int,uint arrays
+
+        byte[] dataHash =
+                dataEncoder.hashMessage(
+                        dataEncoder.jsonMessageObject.getPrimaryType(),
+                        (HashMap<String, Object>) dataEncoder.jsonMessageObject.getMessage());
+
+        String expectedMessageStructHash =
+                "0xc1c7d7b7dab9a65b30a6e951923b2d54536778329712e2239ed8a3f2f5f2329f";
+
+        assertEquals(expectedMessageStructHash, Numeric.toHexString(dataHash));
 
         assertEquals(
-                "0xa85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2",
+                "0x935426a6009a3798ee87cd16ebeb9cea26b29d2d3762ac0951166d032f55d522",
                 Numeric.toHexString(dataEncoder.hashStructuredData()));
-
-//        StructuredDataEncoder dataEncoder =
-//                new StructuredDataEncoder(
-//                        getResource(
-//                                "build/resources/test/"
-//                                        + "structured_data_json_files/ValidStructuredDataWithArrays.json"));
-//
-//        assertEquals(
-//                "0xa85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2",
-//                Numeric.toHexString(dataEncoder.hashStructuredData()));
     }
 
     // EIP712 v3 Gnosis format; Multisig Structured message with addresses blanked
