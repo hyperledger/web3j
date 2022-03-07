@@ -409,17 +409,6 @@ public class StructuredDataEncoder {
         return baos.toByteArray();
     }
 
-    private String bytesToHex(byte[] bytes) {
-        final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
-
-        char[] chars = new char[2 * bytes.length];
-        for (int i = 0; i < bytes.length; ++i) {
-            chars[2 * i] = HEX_CHARS[(bytes[i] & 0xF0) >>> 4];
-            chars[2 * i + 1] = HEX_CHARS[bytes[i] & 0x0F];
-        }
-        return new String(chars);
-    }
-
     private BigInteger convertToBigInt(Object value)
             throws NumberFormatException, NullPointerException {
         if (value.toString().startsWith("0x")) {
