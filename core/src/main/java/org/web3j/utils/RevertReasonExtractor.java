@@ -13,6 +13,7 @@
 package org.web3j.utils;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -31,6 +32,7 @@ public class RevertReasonExtractor {
      * @param data the reverted transaction data
      * @param web3j Web3j instance
      * @param revertReasonCallEnabled flag of reason retrieval via additional call
+     * @param weiValue the value sent in the reverted transaction
      * @return the reverted transaction error reason if exists or null otherwise
      * @throws IOException if the call to the node fails
      */
@@ -38,19 +40,69 @@ public class RevertReasonExtractor {
             TransactionReceipt transactionReceipt,
             String data,
             Web3j web3j,
-            Boolean revertReasonCallEnabled)
+            Boolean revertReasonCallEnabled,
+            BigInteger weiValue)
             throws IOException {
 
         if (transactionReceipt.getRevertReason() != null) {
             return transactionReceipt.getRevertReason();
         } else if (revertReasonCallEnabled) {
-            String revertReason = retrieveRevertReason(transactionReceipt, data, web3j);
+            String revertReason = retrieveRevertReason(transactionReceipt, data, web3j, weiValue);
             if (revertReason != null) {
                 transactionReceipt.setRevertReason(revertReason);
                 return revertReason;
             }
         }
         return MISSING_REASON;
+    }
+
+    /**
+     * Extracts the error reason of a reverted transaction (if one exists and enabled).
+     *
+     * @param transactionReceipt the reverted transaction receipt
+     * @param data the reverted transaction data
+     * @param web3j Web3j instance
+     * @param revertReasonCallEnabled flag of reason retrieval via additional call
+     * @return the reverted transaction error reason if exists or null otherwise
+     * @throws IOException if the call to the node fails
+     */
+    @Deprecated
+    public static String extractRevertReason(
+            TransactionReceipt transactionReceipt,
+            String data,
+            Web3j web3j,
+            Boolean revertReasonCallEnabled)
+            throws IOException {
+
+        return extractRevertReason(transactionReceipt, data, web3j, revertReasonCallEnabled, null);
+    }
+
+    /**
+     * Retrieves the error reason of a reverted transaction (if one exists).
+     *
+     * @param transactionReceipt the reverted transaction receipt
+     * @param data the reverted transaction data
+     * @param web3j Web3j instance
+     * @param weiValue the value sent in the reverted transaction
+     * @return the reverted transaction error reason if exists or null otherwise
+     * @throws IOException if the call to the node fails
+     */
+    public static String retrieveRevertReason(
+            TransactionReceipt transactionReceipt, String data, Web3j web3j, BigInteger weiValue)
+            throws IOException {
+
+        if (transactionReceipt.getBlockNumber() == null) {
+            return null;
+        }
+        return web3j.ethCall(
+                        Transaction.createEthCallTransaction(
+                                transactionReceipt.getFrom(),
+                                transactionReceipt.getTo(),
+                                data,
+                                weiValue),
+                        DefaultBlockParameter.valueOf(transactionReceipt.getBlockNumber()))
+                .send()
+                .getRevertReason();
     }
 
     /**
@@ -62,17 +114,10 @@ public class RevertReasonExtractor {
      * @return the reverted transaction error reason if exists or null otherwise
      * @throws IOException if the call to the node fails
      */
+    @Deprecated
     public static String retrieveRevertReason(
             TransactionReceipt transactionReceipt, String data, Web3j web3j) throws IOException {
 
-        if (transactionReceipt.getBlockNumber() == null) {
-            return null;
-        }
-        return web3j.ethCall(
-                        Transaction.createEthCallTransaction(
-                                transactionReceipt.getFrom(), transactionReceipt.getTo(), data),
-                        DefaultBlockParameter.valueOf(transactionReceipt.getBlockNumber()))
-                .send()
-                .getRevertReason();
+        return retrieveRevertReason(transactionReceipt, data, web3j, null);
     }
 }
