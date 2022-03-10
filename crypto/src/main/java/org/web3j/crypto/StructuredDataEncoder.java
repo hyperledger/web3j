@@ -36,6 +36,7 @@ import org.web3j.abi.datatypes.AbiTypes;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.utils.Numeric;
 
+import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
 import static org.web3j.crypto.Hash.sha3;
 import static org.web3j.crypto.Hash.sha3String;
 
@@ -227,7 +228,23 @@ public class StructuredDataEncoder {
         try {
             if (baseType.toLowerCase().startsWith("uint")
                     || baseType.toLowerCase().startsWith("int")) {
-                hashBytes = convertToBigInt(data).toByteArray();
+                BigInteger value = convertToBigInt(data);
+                if (value.signum() >= 0) {
+                    hashBytes = Numeric.toBytesPadded(convertToBigInt(data), MAX_BYTE_LENGTH);
+                } else {
+                    byte signPadding = (byte) 0xff;
+                    byte[] rawValue = convertToBigInt(data).toByteArray();
+                    hashBytes = new byte[MAX_BYTE_LENGTH];
+                    for (int i = 0; i < hashBytes.length; i++) {
+                        hashBytes[i] = signPadding;
+                    }
+                    System.arraycopy(
+                            rawValue,
+                            0,
+                            hashBytes,
+                            MAX_BYTE_LENGTH - rawValue.length,
+                            rawValue.length);
+                }
             } else if (baseType.equals("string")) {
                 hashBytes = ((String) data).getBytes();
             } else if (baseType.equals("bytes")) {
