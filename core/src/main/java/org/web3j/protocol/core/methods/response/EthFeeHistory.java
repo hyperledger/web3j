@@ -14,8 +14,8 @@ package org.web3j.protocol.core.methods.response;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -73,16 +73,13 @@ public class EthFeeHistory extends Response<EthFeeHistory.FeeHistory> {
         }
 
         public List<List<BigInteger>> getReward() {
-            List<List<BigInteger>> retValue = new ArrayList<>(reward.size());
-            for (int i = 0; i < reward.size(); i++) {
-                List<String> r = reward.get(i);
-                List<BigInteger> tmp = new ArrayList<>(r.size());
-                for (int j = 0; j < r.size(); j++) {
-                    tmp.add(Numeric.decodeQuantity(r.get(j)));
-                }
-                retValue.add(tmp);
-            }
-            return retValue;
+            return reward.stream()
+                    .map(
+                            rewardPercentile ->
+                                    rewardPercentile.stream()
+                                            .map(Numeric::decodeQuantity)
+                                            .collect(Collectors.toList()))
+                    .collect(Collectors.toList());
         }
 
         public void setReward(List<List<String>> reward) {
@@ -94,11 +91,7 @@ public class EthFeeHistory extends Response<EthFeeHistory.FeeHistory> {
         }
 
         public List<BigInteger> getBaseFeePerGas() {
-            List<BigInteger> retValue = new ArrayList<>(baseFeePerGas.size());
-            for (int i = 0; i < baseFeePerGas.size(); i++) {
-                retValue.add(Numeric.decodeQuantity(baseFeePerGas.get(i)));
-            }
-            return retValue;
+            return baseFeePerGas.stream().map(Numeric::decodeQuantity).collect(Collectors.toList());
         }
 
         public void setBaseFeePerGas(List<String> baseFeePerGas) {
