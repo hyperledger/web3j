@@ -57,6 +57,7 @@ import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
 import org.web3j.protocol.core.methods.response.EthGetWork;
 import org.web3j.protocol.core.methods.response.EthHashrate;
 import org.web3j.protocol.core.methods.response.EthLog;
+import org.web3j.protocol.core.methods.response.EthMaxPriorityFeePerGas;
 import org.web3j.protocol.core.methods.response.EthMining;
 import org.web3j.protocol.core.methods.response.EthProtocolVersion;
 import org.web3j.protocol.core.methods.response.EthSign;
@@ -219,6 +220,12 @@ public class JsonRpc2_0Web3j implements Web3j {
     public Request<?, EthGasPrice> ethGasPrice() {
         return new Request<>(
                 "eth_gasPrice", Collections.<String>emptyList(), web3jService, EthGasPrice.class);
+    }
+
+    @Override
+    public Request<?, EthMaxPriorityFeePerGas> ethMaxPriorityFeePerGas() {
+        return new Request<>(
+            "eth_maxPriorityFeePerGas", Collections.<String>emptyList(), web3jService, EthMaxPriorityFeePerGas.class);
     }
 
     @Override
