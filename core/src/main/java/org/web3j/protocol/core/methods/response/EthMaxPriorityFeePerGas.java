@@ -10,17 +10,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 package org.web3j.protocol.core.methods.response;
+
+import java.math.BigInteger;
 
 import org.web3j.protocol.core.Response;
 import org.web3j.utils.Numeric;
 
-import java.math.BigInteger;
-
 /** eth_maxPriorityFeePerGas. */
 public class EthMaxPriorityFeePerGas extends Response<String> {
     public BigInteger getMaxPriorityFeePerGas() {
-        return Numeric.decodeQuantity(this.getResult());
+        return Numeric.decodeQuantity(getResult());
     }
 }

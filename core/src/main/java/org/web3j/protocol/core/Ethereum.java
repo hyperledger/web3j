@@ -13,7 +13,6 @@
 package org.web3j.protocol.core;
 
 import java.math.BigInteger;
-import java.util.Collections;
 
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.response.BooleanResponse;

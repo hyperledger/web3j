@@ -150,7 +150,8 @@ public class RequestTest extends RequestTester {
     public void testEthMaxPriorityFeePerGas() throws Exception {
         web3j.ethMaxPriorityFeePerGas().send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_maxPriorityFeePerGas\",\"params\":[],\"id\":1}");
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_maxPriorityFeePerGas\",\"params\":[],\"id\":1}");
     }
 
     @Test

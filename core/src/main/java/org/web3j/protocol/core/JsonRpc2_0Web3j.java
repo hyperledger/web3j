@@ -225,7 +225,10 @@ public class JsonRpc2_0Web3j implements Web3j {
     @Override
     public Request<?, EthMaxPriorityFeePerGas> ethMaxPriorityFeePerGas() {
         return new Request<>(
-            "eth_maxPriorityFeePerGas", Collections.<String>emptyList(), web3jService, EthMaxPriorityFeePerGas.class);
+                "eth_maxPriorityFeePerGas",
+                Collections.<String>emptyList(),
+                web3jService,
+                EthMaxPriorityFeePerGas.class);
     }
 
     @Override
