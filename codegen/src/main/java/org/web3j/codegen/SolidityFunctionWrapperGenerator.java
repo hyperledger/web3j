@@ -116,6 +116,32 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
                 abiFuncs);
     }
 
+    public SolidityFunctionWrapperGenerator(
+            File binFile,
+            File abiFile,
+            File destinationDir,
+            String contractName,
+            String basePackageName,
+            boolean useJavaNativeTypes,
+            boolean useJavaPrimitiveTypes,
+            boolean generateBothCallAndSend,
+            int addressLength,
+            boolean abiFuncs) {
+
+        this(
+                binFile,
+                abiFile,
+                destinationDir,
+                contractName,
+                basePackageName,
+                useJavaNativeTypes,
+                useJavaPrimitiveTypes,
+                generateBothCallAndSend,
+                Contract.class,
+                addressLength,
+                abiFuncs);
+    }
+
     protected SolidityFunctionWrapperGenerator(
             File binFile,
             File abiFile,
