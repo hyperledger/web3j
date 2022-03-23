@@ -147,6 +147,22 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testEthMaxPriorityFeePerGas() throws Exception {
+        web3j.ethMaxPriorityFeePerGas().send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_maxPriorityFeePerGas\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testEthFeeHistory() throws Exception {
+        web3j.ethFeeHistory(1, DefaultBlockParameterName.LATEST, null).send();
+
+        verifyResult(
+                "{\"jsonrpc\":\"2.0\",\"method\":\"eth_feeHistory\",\"params\":[1,\"latest\",null],\"id\":1}");
+    }
+
+    @Test
     public void testEthAccounts() throws Exception {
         web3j.ethAccounts().send();
 

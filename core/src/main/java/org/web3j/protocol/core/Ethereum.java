@@ -13,6 +13,7 @@
 package org.web3j.protocol.core;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.response.BooleanResponse;
@@ -29,6 +30,7 @@ import org.web3j.protocol.core.methods.response.EthCompileLLL;
 import org.web3j.protocol.core.methods.response.EthCompileSerpent;
 import org.web3j.protocol.core.methods.response.EthCompileSolidity;
 import org.web3j.protocol.core.methods.response.EthEstimateGas;
+import org.web3j.protocol.core.methods.response.EthFeeHistory;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
@@ -44,6 +46,7 @@ import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
 import org.web3j.protocol.core.methods.response.EthGetWork;
 import org.web3j.protocol.core.methods.response.EthHashrate;
 import org.web3j.protocol.core.methods.response.EthLog;
+import org.web3j.protocol.core.methods.response.EthMaxPriorityFeePerGas;
 import org.web3j.protocol.core.methods.response.EthMining;
 import org.web3j.protocol.core.methods.response.EthProtocolVersion;
 import org.web3j.protocol.core.methods.response.EthSign;
@@ -105,6 +108,11 @@ public interface Ethereum {
     Request<?, EthHashrate> ethHashrate();
 
     Request<?, EthGasPrice> ethGasPrice();
+
+    Request<?, EthMaxPriorityFeePerGas> ethMaxPriorityFeePerGas();
+
+    Request<?, EthFeeHistory> ethFeeHistory(
+            int blockCount, DefaultBlockParameter newestBlock, List<Double> rewardPercentiles);
 
     Request<?, EthAccounts> ethAccounts();
 
