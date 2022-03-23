@@ -32,10 +32,15 @@ import org.web3j.abi.spi.FunctionReturnDecoderProvider;
  */
 public abstract class FunctionReturnDecoder {
 
-    private static FunctionReturnDecoder DEFAULT_DECODER;
+    private static final FunctionReturnDecoder decoder;
 
-    private static final ServiceLoader<FunctionReturnDecoderProvider> loader =
-            ServiceLoader.load(FunctionReturnDecoderProvider.class);
+    static {
+        ServiceLoader<FunctionReturnDecoderProvider> loader =
+                ServiceLoader.load(FunctionReturnDecoderProvider.class);
+        final Iterator<FunctionReturnDecoderProvider> iterator = loader.iterator();
+
+        decoder = iterator.hasNext() ? iterator.next().get() : new DefaultFunctionReturnDecoder();
+    }
 
     /**
      * Decode ABI encoded return values from smart contract function call.
@@ -46,7 +51,7 @@ public abstract class FunctionReturnDecoder {
      *     invalid response
      */
     public static List<Type> decode(String rawInput, List<TypeReference<Type>> outputParameters) {
-        return decoder().decodeFunctionResult(rawInput, outputParameters);
+        return decoder.decodeFunctionResult(rawInput, outputParameters);
     }
 
     /**
@@ -73,7 +78,7 @@ public abstract class FunctionReturnDecoder {
      */
     public static <T extends Type> Type decodeIndexedValue(
             String rawInput, TypeReference<T> typeReference) {
-        return decoder().decodeEventParameter(rawInput, typeReference);
+        return decoder.decodeEventParameter(rawInput, typeReference);
     }
 
     protected abstract List<Type> decodeFunctionResult(
@@ -81,16 +86,4 @@ public abstract class FunctionReturnDecoder {
 
     protected abstract <T extends Type> Type decodeEventParameter(
             String rawInput, TypeReference<T> typeReference);
-
-    private static FunctionReturnDecoder decoder() {
-        final Iterator<FunctionReturnDecoderProvider> iterator = loader.iterator();
-        return iterator.hasNext() ? iterator.next().get() : defaultDecoder();
-    }
-
-    private static FunctionReturnDecoder defaultDecoder() {
-        if (DEFAULT_DECODER == null) {
-            DEFAULT_DECODER = new DefaultFunctionReturnDecoder();
-        }
-        return DEFAULT_DECODER;
-    }
 }
