@@ -134,7 +134,7 @@ public class WebSocketServiceTest {
         // reconnectBlocking() should be called if 1st attempt was failed, if we call
         // connectBlocking() for a second time, we will get IllegalStateException with real
         // webSocketClient
-        verify(webSocketClient, times(1)).reconnectBlocking();
+        verify(webSocketClient, atMostOnce()).reconnectBlocking();
     }
 
     @Test
