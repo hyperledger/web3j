@@ -49,6 +49,7 @@ import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.StaticEIP1559GasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Async;
 import org.web3j.utils.Numeric;
@@ -475,6 +476,42 @@ public class ContractTest extends ManagedTransactionTester {
 
         verify(txManager)
                 .executeTransaction(
+                        eq(BigInteger.TEN),
+                        eq(BigInteger.ONE),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean());
+    }
+
+    @Test
+    public void testStaticEIP1559GasProvider() throws IOException, TransactionException {
+        StaticEIP1559GasProvider gasProvider =
+                new StaticEIP1559GasProvider(1L, BigInteger.TEN, BigInteger.ZERO, BigInteger.ONE);
+        TransactionManager txManager = mock(TransactionManager.class);
+
+        when(txManager.executeTransaction(
+                        any(BigInteger.class),
+                        any(BigInteger.class),
+                        anyString(),
+                        anyString(),
+                        any(BigInteger.class),
+                        anyBoolean()))
+                .thenReturn(new TransactionReceipt());
+
+        contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
+
+        Function func =
+                new Function(
+                        "test",
+                        Collections.<Type>emptyList(),
+                        Collections.<TypeReference<?>>emptyList());
+        contract.executeTransaction(func);
+
+        verify(txManager)
+                .executeTransactionEIP1559(
+                        eq(1L),
+                        eq(BigInteger.ZERO),
                         eq(BigInteger.TEN),
                         eq(BigInteger.ONE),
                         anyString(),
