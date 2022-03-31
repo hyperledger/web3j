@@ -108,6 +108,7 @@ public class SolidityFunctionWrapper extends Generator {
 
     private static final ClassName LOG = ClassName.get(Log.class);
     private static final Logger LOGGER = LoggerFactory.getLogger(SolidityFunctionWrapper.class);
+    private static final Pattern ARRAY_SUFFIX = Pattern.compile("\\[(\\d*)]");
 
     private static final String CODEGEN_WARNING =
             "<p>Auto generated code.\n"
@@ -505,8 +506,11 @@ public class SolidityFunctionWrapper extends Generator {
                                                                         i
                                                                                 == component
                                                                                         .structIdentifier())
-                                        ? ".getValue()"
-                                        : ""));
+                                        ? ARRAY_SUFFIX.matcher(component.getType()).find()
+                                                ? ".getValue().stream().map(v -> v.getValue()).collect($T.toList())"
+                                                : ".getValue()"
+                                        : ""),
+                        Collectors.class);
             }
 
             builder.superclass(namedType.isDynamic() ? DynamicStruct.class : StaticStruct.class);
