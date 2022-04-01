@@ -94,7 +94,7 @@ public abstract class Filter<T> {
                                     // All exceptions must be caught, otherwise our job terminates
                                     // without
                                     // any notification
-                                    log.error("Error sending request", e);
+                                    log.warn("Error sending request", e);
                                 }
                             },
                             0,
