@@ -115,16 +115,16 @@ public class ResponseTest extends ResponseTester {
                         + "    \"jsonrpc\":\"2.0\",\n"
                         + "    \"result\": {\n"
                         + "        \"hash\":\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n"
-                        + "        \"nonce\":\"0x00\",\n"
+                        + "        \"nonce\":\"0x0\",\n"
                         + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"value\":\"0x7f110\",\n"
                         + "        \"gas\": \"0x7f110\",\n"
-                        + "        \"gasPrice\":\"0x09184e72a000\",\n"
+                        + "        \"gasPrice\":\"0x9184e72a000\",\n"
                         + "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\",\n"
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
-                        + "        \"v\":\"0x00\",\n"
+                        + "        \"v\":\"0x0\",\n"
                         + "        \"privateFrom\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
                         + "        \"privateFor\":[\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\"Ko2bVqD+nNlNYL5EE7y3IdOnviftjiizpjRt+HTuFBs=\"],\n"
                         + "        \"restriction\":\"restricted\""
@@ -133,16 +133,16 @@ public class ResponseTest extends ResponseTester {
         PrivateTransactionLegacy privateTransaction =
                 new PrivateTransactionLegacy(
                         "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
-                        "0x00",
+                        "0x0",
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
                         "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
                         "0x7f110",
                         "0x7f110",
-                        "0x09184e72a000",
+                        "0x9184e72a000",
                         "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                        "0x00",
+                        "0x0",
                         Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="),
                         Base64String.wrapList(
                                 "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
@@ -162,16 +162,16 @@ public class ResponseTest extends ResponseTester {
                         + "    \"jsonrpc\":\"2.0\",\n"
                         + "    \"result\": {\n"
                         + "        \"hash\":\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n"
-                        + "        \"nonce\":\"0x00\",\n"
+                        + "        \"nonce\":\"0x0\",\n"
                         + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n"
                         + "        \"value\":\"0x7f110\",\n"
                         + "        \"gas\": \"0x7f110\",\n"
-                        + "        \"gasPrice\":\"0x09184e72a000\",\n"
+                        + "        \"gasPrice\":\"0x9184e72a000\",\n"
                         + "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\",\n"
                         + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n"
                         + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n"
-                        + "        \"v\":\"0x00\",\n"
+                        + "        \"v\":\"0x0\",\n"
                         + "        \"privateFrom\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
                         + "        \"privateFor\":\"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=\",\n"
                         + "        \"restriction\":\"restricted\""
@@ -180,16 +180,16 @@ public class ResponseTest extends ResponseTester {
         PrivateTransactionWithPrivacyGroup privateTransaction =
                 new PrivateTransactionWithPrivacyGroup(
                         "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b",
-                        "0x00",
+                        "0x0",
                         "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
                         "0x85h43d8a49eeb85d32cf465507dd71d507100c1",
                         "0x7f110",
                         "0x7f110",
-                        "0x09184e72a000",
+                        "0x9184e72a000",
                         "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360",
                         "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc",
                         "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62",
-                        "0x00",
+                        "0x0",
                         Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="),
                         Base64String.wrap("A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="),
                         "restricted");
