@@ -16,11 +16,16 @@
     },
     "to": [
       {
-        "name": "Bob",
-        "wallets": [
-          "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-          "0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57",
-          "0xB0B0b0b0b0b0B000000000000000000000000000"
+        "name": "Group A",
+        "members": [
+          {
+            "name": "Bob",
+            "wallets": [
+              "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+              "0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57",
+              "0xB0B0b0b0b0b0B000000000000000000000000000"
+            ]
+          }
         ]
       }
     ]
@@ -62,7 +67,7 @@
       },
       {
         "name": "to",
-        "type": "Person[]"
+        "type": "Group[]"
       },
       {
         "name": "contents",

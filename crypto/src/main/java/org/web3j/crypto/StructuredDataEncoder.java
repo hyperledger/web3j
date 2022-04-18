@@ -88,14 +88,15 @@ public class StructuredDataEncoder {
             remainingTypes.remove(remainingTypes.size() - 1);
             deps.add(structName);
 
-            for (StructuredData.Entry entry : types.get(primaryType)) {
-                if (!types.containsKey(entry.getType())) {
+            for (StructuredData.Entry entry : types.get(structName)) {
+                String baseDeclarationTypeName = getBaseTypeNameFromDeclaration(entry.getType());
+                if (!types.containsKey(baseDeclarationTypeName)) {
                     // Don't expand on non-user defined types
-                } else if (deps.contains(entry.getType())) {
+                } else if (deps.contains(baseDeclarationTypeName)) {
                     // Skip types which are already expanded
                 } else {
                     // Encountered a user defined type
-                    remainingTypes.add(entry.getType());
+                    remainingTypes.add(baseDeclarationTypeName);
                 }
             }
         }
@@ -156,6 +157,15 @@ public class StructuredDataEncoder {
         }
 
         return dimensions;
+    }
+
+
+    public String getBaseTypeNameFromDeclaration(String declaration) {
+        if (arrayTypePattern.matcher(declaration).find()) {
+            return declaration.substring(0, declaration.indexOf('['));
+        } else {
+            return declaration;
+        }
     }
 
     @SuppressWarnings("unchecked")
