@@ -90,7 +90,11 @@ public class StructuredDataEncoder {
 
             for (StructuredData.Entry entry : types.get(structName)) {
                 String declarationFieldTypeName = entry.getType();
-                String baseDeclarationTypeName = arrayTypePattern.matcher(declarationFieldTypeName).find() ? declarationFieldTypeName.substring(0, declarationFieldTypeName.indexOf('[')) : declarationFieldTypeName;
+                String baseDeclarationTypeName =
+                        arrayTypePattern.matcher(declarationFieldTypeName).find()
+                                ? declarationFieldTypeName.substring(
+                                        0, declarationFieldTypeName.indexOf('['))
+                                : declarationFieldTypeName;
                 if (!types.containsKey(baseDeclarationTypeName)) {
                     // Don't expand on non-user defined types
                 } else if (deps.contains(baseDeclarationTypeName)) {
@@ -159,7 +163,6 @@ public class StructuredDataEncoder {
 
         return dimensions;
     }
-
 
     @SuppressWarnings("unchecked")
     public List<Pair> getDepthsAndDimensions(Object data, int depth) {

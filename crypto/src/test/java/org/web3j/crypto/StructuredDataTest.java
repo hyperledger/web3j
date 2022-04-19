@@ -222,7 +222,6 @@ public class StructuredDataTest {
                 Numeric.toHexString(dataEncoder.hashStructuredData()));
     }
 
-
     // EIP712 v4
     @Test
     public void testEncodeTypeWithArrays() throws IOException {
@@ -231,16 +230,15 @@ public class StructuredDataTest {
                         getResource(
                                 "build/resources/test/"
                                         + "structured_data_json_files/ValidStructuredDataWithArrays.json")); // taken from https://danfinlay.github.io/js-eth-personal-sign-examples/ and updated to int,uint arrays
-        String expectedMailType = "Mail(Person from,Group[] to,string contents)"
-                + "Group(string name,Person[] members)"
-                + "Person(string name,address[] wallets)";
-
+        String expectedMailType =
+                "Mail(Person from,Group[] to,string contents)"
+                        + "Group(string name,Person[] members)"
+                        + "Person(string name,address[] wallets)";
 
         assertEquals(dataEncoder.encodeType("Mail"), expectedMailType);
 
-        String expectedGroupType = "Group(string name,Person[] members)"
-                + "Person(string name,address[] wallets)";
-
+        String expectedGroupType =
+                "Group(string name,Person[] members)" + "Person(string name,address[] wallets)";
 
         assertEquals(dataEncoder.encodeType("Group"), expectedGroupType);
     }
