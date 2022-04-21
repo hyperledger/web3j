@@ -132,48 +132,12 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
 
     @Test
     public void testStructOnlyInArrayCompareJavaFile() throws Exception {
-        String inputFileName = "OnlyInArrayStruct";
-        String contract = inputFileName.toLowerCase();
-        String packagePath =
-                generateCode(
-                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
-        File fileActual = new File(tempDirPath, packagePath + "/OnlyInArrayStruct.java");
-        File fileExpected =
-                new File(
-                        Strings.join(
-                                Arrays.asList(
-                                        solidityBaseDir,
-                                        contract,
-                                        "build",
-                                        "java",
-                                        inputFileName + ".java"),
-                                File.separator));
-        assertEquals(
-                new String(Files.readAllBytes(fileExpected.toPath())),
-                new String(Files.readAllBytes(fileActual.toPath())));
+        compareJavaFile("OnlyInArrayStruct");
     }
 
     @Test
     public void testArraysInStructCompareJavaFileTest() throws Exception {
-        String inputFileName = "ArraysInStruct";
-        String contract = inputFileName.toLowerCase();
-        String packagePath =
-                generateCode(
-                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
-        File fileActual = new File(tempDirPath, packagePath + "/ArraysInStruct.java");
-        File fileExpected =
-                new File(
-                        Strings.join(
-                                Arrays.asList(
-                                        solidityBaseDir,
-                                        contract,
-                                        "build",
-                                        "java",
-                                        inputFileName + ".java"),
-                                File.separator));
-        assertEquals(
-                new String(Files.readAllBytes(fileExpected.toPath())),
-                new String(Files.readAllBytes(fileActual.toPath())));
+        compareJavaFile("ArraysInStruct");
     }
 
     @Test
@@ -214,6 +178,38 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
     @Test
     public void testABIFlag() throws Exception {
         testCodeGeneration(emptyList(), "primitive", "Primitive", JAVA_TYPES_ARG, true, true, true);
+    }
+
+    @Test
+    public void testEventParametersNoNamed() throws Exception {
+        testCodeGeneration("eventparameters", "EventParameters", JAVA_TYPES_ARG, false);
+        testCodeGeneration("eventparameters", "EventParameters", SOLIDITY_TYPES_ARG, false);
+    }
+
+    @Test
+    public void testEventParametersNoNamedCompareJavaFile() throws Exception {
+        compareJavaFile("EventParameters");
+    }
+
+    private void compareJavaFile(String inputFileName) throws Exception {
+        String contract = inputFileName.toLowerCase();
+        String packagePath =
+                generateCode(
+                        emptyList(), contract, inputFileName, JAVA_TYPES_ARG, false, false, false);
+        File fileActual = new File(tempDirPath, packagePath + "/" + inputFileName + ".java");
+        File fileExpected =
+                new File(
+                        Strings.join(
+                                Arrays.asList(
+                                        solidityBaseDir,
+                                        contract,
+                                        "build",
+                                        "java",
+                                        inputFileName + ".java"),
+                                File.separator));
+        assertEquals(
+                new String(Files.readAllBytes(fileExpected.toPath())),
+                new String(Files.readAllBytes(fileActual.toPath())));
     }
 
     private void testCodeGenerationJvmTypes(String contractName, String inputFileName)

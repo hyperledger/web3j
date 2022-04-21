@@ -136,6 +136,9 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                                                 .size()
                                         * length
                                         * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                    } else if (Utf8String.class.isAssignableFrom(
+                            getParameterizedTypeFromArray(typeReference))) {
+                        offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     } else {
                         offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                     }

@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -78,6 +79,29 @@ public class DefaultFunctionEncoderTest {
                 FunctionEncoder.encodeConstructor(
                         Arrays.asList(
                                 new Uint(BigInteger.ONE), new Uint(BigInteger.valueOf(0x20)))));
+    }
+
+    @Test
+    public void testEncodeConstructorPacked_multipleParameters() {
+        assertEquals(
+                "00000045014772656574696e677321",
+                FunctionEncoder.encodeConstructorPacked(
+                        Arrays.asList(
+                                new Uint32(BigInteger.valueOf(69)),
+                                new Bool(true),
+                                new Utf8String("Greetings!"))));
+
+        assertEquals(
+                "783139457468657265756d205369676e6564204d6573736167653a"
+                        + "663e27adc18d862da9a82f060310621d379e469a"
+                        + "000000000000000000000000000000000000000000000000000000000000000a"
+                        + "31323334353637383930",
+                FunctionEncoder.encodeConstructorPacked(
+                        Arrays.asList(
+                                new Utf8String("x19Ethereum Signed Message:"),
+                                new Address("0x663e27AdC18d862dA9A82f060310621D379e469a"),
+                                new Uint256(BigInteger.TEN),
+                                new Bytes10("1234567890".getBytes()))));
     }
 
     @Test

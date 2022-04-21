@@ -108,7 +108,7 @@ Maven
 
 Java:
 
-```
+```xml
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
@@ -118,7 +118,7 @@ Java:
 
 Android:
 
-```
+```xml
 <dependency>
   <groupId>org.web3j</groupId>
   <artifactId>core</artifactId>
@@ -131,11 +131,15 @@ Gradle
 
 Java:
 
+```groovy
 implementation ('org.web3j:core:4.8.7')
+```
 
 Android:
 
+```groovy
 implementation ('org.web3j:core:4.8.7-android')
+```
 
 Build instructions
 ------------------

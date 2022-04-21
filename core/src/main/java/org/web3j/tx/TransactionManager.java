@@ -21,6 +21,7 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.JsonRpcError;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.exceptions.ContractCallException;
 import org.web3j.tx.response.PollingTransactionReceiptProcessor;
@@ -171,9 +172,7 @@ public abstract class TransactionManager {
     protected TransactionReceipt processResponse(EthSendTransaction transactionResponse)
             throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
-            throw new RuntimeException(
-                    "Error processing transaction request: "
-                            + transactionResponse.getError().getMessage());
+            throw new JsonRpcError(transactionResponse.getError());
         }
 
         String transactionHash = transactionResponse.getTransactionHash();
