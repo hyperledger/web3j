@@ -12,8 +12,10 @@
  */
 package org.web3j.protocol.exceptions;
 
+import java.io.IOException;
+
 /** Client connection exception. */
-public class ClientConnectionException extends RuntimeException {
+public class ClientConnectionException extends IOException {
     public ClientConnectionException(String message) {
         super(message);
     }
