@@ -17,10 +17,10 @@ import java.security.SignatureException;
 
 import org.web3j.utils.Numeric;
 
-public interface SignatureDataOperations {
+import static org.web3j.crypto.Sign.CHAIN_ID_INC;
+import static org.web3j.crypto.Sign.LOWER_REAL_V;
 
-    int CHAIN_ID_INC = 35;
-    int LOWER_REAL_V = 27;
+public interface SignatureDataOperations {
 
     Sign.SignatureData getSignatureData();
 
